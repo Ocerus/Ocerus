@@ -214,6 +214,10 @@
 						RelativePath=".\src\EntitySystem\ComponentMgr\Component.cpp"
 						>
 					</File>
+					<File
+						RelativePath=".\src\EntitySystem\ComponentMgr\ComponentMgr.cpp"
+						>
+					</File>
 				</Filter>
 			</Filter>
 			<Filter

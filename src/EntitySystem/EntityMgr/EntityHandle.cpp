@@ -2,11 +2,6 @@
 
 using namespace EntitySystem;
 
-EntityHandle::EntityHandle(const EntityHandle& handle): 
-	mEntityID(handle.mEntityID), 
-	mParent(handle.mParent),
-	mNextSibling(; }
-
 EntityHandle& EntityHandle::operator=(const EntityHandle& rhs)
 { 
 	if (this != &rhs)

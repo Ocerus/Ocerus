@@ -1,10 +1,13 @@
 #ifndef _ENTITYHANDLE_H_
 #define _ENTITYHANDLE_H_
 
-#include "../Utility/Settings.h"
+#include "../../Utility/Settings.h"
 
 namespace EntitySystem
 {
+
+	typedef uint32 EntityID;
+
 	// forward declaration
 	class EntityMgr;
 
@@ -22,14 +25,14 @@ namespace EntitySystem
 	private:
 		friend EntityMgr;
 
-		EntityHandle(uint32 ID): mEntityID(ID) {}
+		EntityHandle(EntityID ID): mEntityID(ID) {}
 		EntityHandle CreateUniqueHandle();
 
-		uint32 mEntityID;
-		static uint32 sLastID;
+		EntityID mEntityID;
+		static EntityID sLastID;
 	};
 
-	uint32 EntityHandle::sLastID = 0;
+	EntityID EntityHandle::sLastID = 0;
 }
 
 #endif
