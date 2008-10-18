@@ -271,6 +271,34 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 		</Filter>
+		<Filter
+			Name="ResourceSystem"
+			>
+			<Filter
+				Name="inc"
+				>
+				<File
+					RelativePath=".\src\ResourceSystem\ImageResource.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\ResourceSystem\Resource.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\ResourceSystem\ResourceLoadingListener.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\ResourceSystem\ResourceMgr.h"
+					>
+				</File>
+			</Filter>
+		</Filter>
+		<File
+			RelativePath=".\src\Common.h"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>
