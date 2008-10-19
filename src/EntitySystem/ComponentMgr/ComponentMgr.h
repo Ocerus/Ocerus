@@ -8,6 +8,7 @@
 namespace EntitySystem
 {
 
+	class EntityComponentsIterator;
 	class Component;
 	typedef Component* (*ComponentCreationMethod)(void);
 
@@ -17,11 +18,13 @@ namespace EntitySystem
 		ComponentMgr();
 		~ComponentMgr();
 		
-
+		EntityComponentsIterator GetEntityComponents(EntityHandle h);
 		void LoadResourcesForActiveComponents(); // calls LoadResource of all instantiated components
 		void ReleaseResourcesForAllComponents();
 
 	private:
+		friend EntityComponentsIterator;
+
 		// static component data
 		ComponentCreationMethod mComponentCreationMethod[NUM_COMPONENT_TYPES];
 

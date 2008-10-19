@@ -4,6 +4,7 @@
 #include "EntityHandle.h"
 #include "EntityNode.h"
 #include "EntityMessage.h"
+#include "../ComponentMgr/ComponentMgr.h"
 
 namespace EntitySystem
 {
@@ -14,14 +15,14 @@ namespace EntitySystem
 		~EntityMgr();
 
 		MessageHandle CreateEntity(const EntityDescription& desc);
-		void DestroyEntity(const MessageHandle& h);
-		void PostMessage(const EntityHandle& h, const EntityMessage& msg);
+		void DestroyEntity(MessageHandle h);
+		void PostMessage(EntityHandle h, const EntityMessage& msg);
 		void BroadcastMessage(const EntityMessage& msg);
-		void RemoveAllEntities();
-		
+		void RemoveAllEntities();	
 
 
 	private:
+		ComponentMgr* mComponentMgr;
 
 
 }

@@ -24,6 +24,8 @@ namespace EntitySystem
 
 	private:
 		friend EntityMgr;
+		friend ComponentMgr;
+		friend ComponentByObjectIterator;
 
 		EntityHandle(EntityID ID): mEntityID(ID) {}
 		EntityHandle CreateUniqueHandle();
