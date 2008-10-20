@@ -1,31 +1,24 @@
 #ifndef _RESOURCEMGR_H_
 #define _RESOURCEMGR_H_
 
-#include "ResourceGroup.h"
+#include "../Common.h"
 #include "Resource.h"
+
+#define gResourceMgr ResourceSystem::ResourceMgr::GetSingleton()
 
 namespace ResourceSystem
 {
-	class ResourceLoadingListener;
-
-	enum eResourceTypes { RESTYPE_IMAGE=0, NUM_RESOURCE_TYPES,	RESTYPE_AUTODETECT };
-
-	struct ResourceGroup
-	{
-		string mName;
-		vector<ResourcePtr> mResources;
-	};
+	class IResourceLoadingListener;
 
 	class ResourceMgr : public Singleton<ResourceMgr>
 	{
 	public:
-		//TODO all creating CreateMe methods of all res types should be inited in the ctor
-		ResourceMgr();
+		ResourceMgr(const string& basedir);
 		~ResourceMgr();
 
 		// in this case the resource types will be autodetected
-		void AddResourceDirToGroup(const string& path, const string& group, const string& includeRegexp = "*.*", const string& excludeRegexp = "");
-		void AddResourceFileToGroup(const string& filepath, const string& group, eResourceType type = RESTYPE_AUTODETECT);
+		bool AddResourceDirToGroup(const string& path, const string& group, const string& includeRegexp = "*.*", const string& excludeRegexp = "");
+		bool AddResourceFileToGroup(const string& filepath, const string& group, Resource::eType type = Resource::TYPE_AUTODETECT);
 		// load all resources in this group
 		// doesn't need to be called, resources are loaded on-the-fly if someone needs them
 		void LoadResourcesInGroup(const string& group);
@@ -33,21 +26,22 @@ namespace ResourceSystem
 		void ClearGroup(const string& group);
 		void UnloadUnusedResources(void);
 
-		void SetLoadingListener(ResourceLoadingListener* listener);
+		void SetLoadingListener(IResourceLoadingListener* listener);
 
 		// name = group name/resource's filename
 		ResourcePtr GetResource(const string& name);
-		ResourcePtr GetResource(const string& group, name);
+		ResourcePtr GetResource(const string& group, const string& name);
 
 	private:
-		map<string, ResourceGroup*> mResourceGroups;
-		ResourceLoadingListener* mListener;
-
 		typedef ResourcePtr (*ResourceCreationMethod)();
-		ResourceCreationMethod mResourceCreationMethods[NUM_RESOURCE_TYPES];
-		void RegisterResourceCreationMethods(void);
+		typedef map<string, vector<ResourcePtr> > ResourceGroupMap;
+		typedef map<string, Resource::eType> ExtToTypeMap;
 
-
+		string mBaseDir;
+		ResourceGroupMap mResourceGroups;
+		ExtToTypeMap mExtToTypeMap;
+		IResourceLoadingListener* mListener;
+		ResourceCreationMethod mResourceCreationMethods[Resource::NUM_TYPES];
 	};
 }
 

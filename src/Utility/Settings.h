@@ -12,4 +12,20 @@ typedef float float32;
 #define	FLOAT32_MIN	FLT_MIN
 #define	FLOAT32_EPSILON	FLT_EPSILON
 
+#define NEW new
+#define NEW_T(T) new T
+#define DELETE delete
+#define DELETE_ARRAY delete[]
+
+#include <string>
+#include <ios>
+typedef std::string string;
+typedef std::istream istream;
+
+#include <vector>
+#include <map>
+// hack cos the compiler can't typedef templates
+#define vector std::vector
+#define map std::map
+
 #endif

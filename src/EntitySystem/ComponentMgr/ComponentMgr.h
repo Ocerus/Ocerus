@@ -3,13 +3,15 @@
 
 #include <map>
 #include "ComponentEnums.h"
+#include "Component.h"
 #include "../EntityMgr/EntityHandle.h"
+#include "../../Utility/Singleton.h"
+
+#define gComponentMgr EntitySystem::ComponentMgr::GetSingleton()
 
 namespace EntitySystem
 {
-
 	class EntityComponentsIterator;
-	class Component;
 	typedef Component* (*ComponentCreationMethod)(void);
 
 	class ComponentMgr : public Singleton<ComponentMgr>
@@ -29,8 +31,8 @@ namespace EntitySystem
 		ComponentCreationMethod mComponentCreationMethod[NUM_COMPONENT_TYPES];
 
 		// dynamic component data
-		std::map<EntityID, Component*> mEntityComponentMap[NUM_COMPONENT_TYPES];
-	}
+		map<EntityID, Component*> mEntityComponentMap[NUM_COMPONENT_TYPES];
+	};
 }
 
 #endif

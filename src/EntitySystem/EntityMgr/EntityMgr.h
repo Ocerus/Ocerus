@@ -1,10 +1,12 @@
 #ifndef _ENTITYMGR_H_
 #define _ENTITYMGR_H_
 
+#include "EntityDescription.h"
 #include "EntityHandle.h"
-#include "EntityNode.h"
 #include "EntityMessage.h"
 #include "../ComponentMgr/ComponentMgr.h"
+
+#define gEntityMgr EntitySystem::EntityMgr::GetSingleton()
 
 namespace EntitySystem
 {
@@ -14,8 +16,8 @@ namespace EntitySystem
 		EntityMgr();
 		~EntityMgr();
 
-		MessageHandle CreateEntity(const EntityDescription& desc);
-		void DestroyEntity(MessageHandle h);
+		EntityHandle CreateEntity(const EntityDescription& desc);
+		void DestroyEntity(EntityHandle h);
 		void PostMessage(EntityHandle h, const EntityMessage& msg);
 		void BroadcastMessage(const EntityMessage& msg);
 		void RemoveAllEntities();	
@@ -24,7 +26,7 @@ namespace EntitySystem
 	private:
 		ComponentMgr* mComponentMgr;
 
-
+	};
 }
 
 #endif

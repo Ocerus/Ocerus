@@ -6,7 +6,7 @@ namespace EntitySystem
 {
 	class ComponentDescription
 	{
-	}
+	};
 }
 
 #endif

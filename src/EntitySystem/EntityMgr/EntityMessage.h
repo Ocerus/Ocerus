@@ -8,7 +8,7 @@ namespace EntitySystem
 
 	struct EntityMessage
 	{
-	}
+	};
 }
 
 #endif

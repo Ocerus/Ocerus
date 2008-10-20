@@ -6,7 +6,7 @@ namespace EntitySystem
 	class EntityDescription
 	{
 		//TODO list of ComponentDescriptions
-	}
+	};
 }
 
 #endif

@@ -9,7 +9,7 @@ namespace EntitySystem
 
 		NUM_COMPONENT_TYPES,
 		CT_INVALID
-	}
+	};
 }
 
 #endif
