@@ -27,39 +27,48 @@ ResourceMgr::~ResourceMgr() {}
 
 bool ResourceMgr::AddResourceDirToGroup(const string& path, const string& group, const string& includeRegexp, const string& excludeRegexp)
 {
-  /*if ( !exists( dir_path ) ) return false;
-  directory_iterator end_itr; // default construction yields past-the-end
-  for ( directory_iterator itr( dir_path );
-        itr != end_itr;
-        ++itr )
-  {
-    if ( is_directory(itr->status()) )
-    {
-      if ( find_file( itr->path(), file_name, path_found ) ) return true;
-    }
-    else if ( itr->leaf() == file_name ) // see below
-    {
-      path_found = itr->path();
-      return true;
-    }
-  }
-  return false;*/
-  //boost::filesystem::directory_iterator 
-	return true;
+	//TODO add support for regexps
+
+	bool result = true;
+	boost::filesystem::directory_iterator iend;
+	for (boost::filesystem::directory_iterator i(mBaseDir + path); i!=iend; ++i)
+	{
+		if (boost::filesystem::is_directory(i->status()))
+		{
+			if (!AddResourceDirToGroup(i->path().string(), group, includeRegexp, excludeRegexp))
+				result = false;
+		}
+		else
+		{
+			if (!AddResourceFileToGroup(i->path().string(), group, Resource::TYPE_AUTODETECT, false))
+				result = false;
+		}
+	}
+	return result;
 }
 
-bool ResourceMgr::AddResourceFileToGroup(const string& filepath, const string& group, Resource::eType type)
+bool ResourceMgr::AddResourceFileToGroup(const string& filepath, const string& group, Resource::eType type, bool pathRelative)
 {
-	if (!boost::filesystem::exists(mBaseDir + filepath))
+	boost::filesystem::path boostPath;
+	if (pathRelative)
+		boostPath = mBaseDir + filepath;
+	else
+		boostPath = filepath;
+	if (!boost::filesystem::exists(boostPath))
 		return false;
 	if (type == Resource::TYPE_AUTODETECT)
 	{
-		ExtToTypeMap::const_iterator i = mExtToTypeMap.find(boost::filesystem::extension(filepath));
+		ExtToTypeMap::const_iterator i = mExtToTypeMap.find(boostPath.extension());
 		if (i != mExtToTypeMap.end())
 			type = i->second;
 	}
 	if (type == Resource::TYPE_AUTODETECT)
 		return false;
+	ResourcePtr r = mResourceCreationMethods[type]();
+	string name = boostPath.filename();
+	r->SetName(name);
+	r->SetFilepath(boostPath.string());
+	mResourceGroups[group][name] = r;
 	return true;
 }
 

@@ -26,10 +26,13 @@ namespace ResourceSystem
 		string GetName() { return mName; }
 
 	protected:
+		friend class ResourceMgr;
+
 		eType mType;
 		eState mState;
 		string mName;
 		string mFilePath;
+
 
 		void SetName(const string& name) { mName = name; }
 		void SetFilepath(const string& filepath) { mFilePath = filepath; }

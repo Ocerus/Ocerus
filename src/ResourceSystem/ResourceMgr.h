@@ -18,7 +18,7 @@ namespace ResourceSystem
 
 		// in this case the resource types will be autodetected
 		bool AddResourceDirToGroup(const string& path, const string& group, const string& includeRegexp = "*.*", const string& excludeRegexp = "");
-		bool AddResourceFileToGroup(const string& filepath, const string& group, Resource::eType type = Resource::TYPE_AUTODETECT);
+		bool AddResourceFileToGroup(const string& filepath, const string& group, Resource::eType type = Resource::TYPE_AUTODETECT, bool pathRelative = true);
 		// load all resources in this group
 		// doesn't need to be called, resources are loaded on-the-fly if someone needs them
 		void LoadResourcesInGroup(const string& group);
@@ -34,7 +34,7 @@ namespace ResourceSystem
 
 	private:
 		typedef ResourcePtr (*ResourceCreationMethod)();
-		typedef map<string, vector<ResourcePtr> > ResourceGroupMap;
+		typedef map<string, map<string, ResourcePtr> > ResourceGroupMap;
 		typedef map<string, Resource::eType> ExtToTypeMap;
 
 		string mBaseDir;
