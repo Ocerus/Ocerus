@@ -300,10 +300,6 @@
 				Name="inc"
 				>
 				<File
-					RelativePath=".\src\ResourceSystem\ImageResource.h"
-					>
-				</File>
-				<File
 					RelativePath=".\src\ResourceSystem\IResourceLoadingListener.h"
 					>
 				</File>
@@ -323,6 +319,26 @@
 					RelativePath=".\src\ResourceSystem\ResourceMgr.cpp"
 					>
 				</File>
+			</Filter>
+		</Filter>
+		<Filter
+			Name="GfxSystem"
+			>
+			<Filter
+				Name="inc"
+				>
+				<File
+					RelativePath=".\src\GfxSystem\GfxRenderer.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\GfxSystem\Texture.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="src"
+				>
 			</Filter>
 		</Filter>
 		<File

@@ -11,7 +11,7 @@ namespace ResourceSystem
 	{
 	public:
 		enum eState { STATE_UNINITIALIZED, STATE_INITIALIZED, STATE_LOADING, STATE_LOADED, STATE_PREPARING, STATE_UNLOADING };
-		enum eType { TYPE_IMAGE=0, NUM_TYPES,	TYPE_AUTODETECT };
+		enum eType { TYPE_TEXTURE=0, NUM_TYPES,	TYPE_AUTODETECT };
 
 		Resource(): mState(STATE_UNINITIALIZED) {}
 		virtual ~Resource();

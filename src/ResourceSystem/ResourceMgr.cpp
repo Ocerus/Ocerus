@@ -2,7 +2,7 @@
 #include <boost/filesystem.hpp>
 #include "ResourceMgr.h"
 #include "../Common.h"
-#include "ImageResource.h"
+#include "../GfxSystem/Texture.h"
 
 #pragma warning(disable: 4996)
 
@@ -14,7 +14,7 @@ ResourceMgr::ResourceMgr(const string& basedir):
 	mResourceCreationMethods[Resource::NUM_TYPES-1] = 0; // safety reasons
 
 	// register resource types
-	mResourceCreationMethods[Resource::TYPE_IMAGE] = ImageResource::CreateMe;
+	mResourceCreationMethods[Resource::TYPE_IMAGE] = Texture::CreateMe;
 	mExtToTypeMap["png"] = Resource::TYPE_IMAGE;
 	mExtToTypeMap["bmp"] = Resource::TYPE_IMAGE;
 	mExtToTypeMap["jpg"] = Resource::TYPE_IMAGE;
