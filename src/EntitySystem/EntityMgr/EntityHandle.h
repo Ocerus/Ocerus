@@ -23,6 +23,8 @@ namespace EntitySystem
 		//TODO possibly we could add a smartpointer to EntityNode holding this Handle
 
 	private:
+		friend class ComponentMgr;
+
 		EntityHandle(EntityID ID): mEntityID(ID) {}
 		EntityHandle CreateUniqueHandle();
 

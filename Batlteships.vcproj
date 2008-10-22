@@ -205,10 +205,6 @@
 						>
 					</File>
 					<File
-						RelativePath=".\src\EntitySystem\ComponentMgr\ComponentIterators.h"
-						>
-					</File>
-					<File
 						RelativePath=".\src\EntitySystem\ComponentMgr\ComponentMgr.h"
 						>
 					</File>
@@ -218,10 +214,6 @@
 					>
 					<File
 						RelativePath=".\src\EntitySystem\ComponentMgr\Component.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\src\EntitySystem\ComponentMgr\ComponentIterators.cpp"
 						>
 					</File>
 					<File

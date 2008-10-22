@@ -23,9 +23,6 @@ namespace EntitySystem
 
 		ComponentsList& GetEntityComponents(EntityHandle h);
 
-		void LoadResourcesForActiveComponents(void); 
-		void ReleaseResourcesForAllComponents(void);
-
 	private:
 		friend EntityComponentsIterator;
 

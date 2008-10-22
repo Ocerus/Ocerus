@@ -12,11 +12,13 @@ namespace EntitySystem
 		virtual void Init(const ComponentDescription& desc) = 0;
 		virtual void Deinit(void) = 0;
 
-		virtual eEntityMessageResult HandleMessage(const EntityMessage& msg) = 0;
+		virtual eEntityMessageResult HandleMessage(const EntityMessage& msg);
+
+		//TODO add a mechanism to allow components state which resources they will need. This way we could preload them.
 
 	protected:
-		Component(void) {}
-		virtual ~Component(void) {}
+		Component(void);
+		virtual ~Component(void);
 	};
 }
 

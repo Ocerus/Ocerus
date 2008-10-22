@@ -21,3 +21,4 @@ ComponentMgr::ComponentsList& ComponentMgr::GetEntityComponents(EntityHandle h)
 	assert(eci != mEntityComponentsMap.end());
 	return eci->second;
 }
+
