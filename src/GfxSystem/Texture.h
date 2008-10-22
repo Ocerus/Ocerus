@@ -8,7 +8,7 @@ namespace GfxSystem
 	class Texture : public ResourceSystem::Resource
 	{
 	public:
-		virtual ~ImageResource() {}
+		virtual ~Texture() {}
 
 		static ResourceSystem::ResourcePtr CreateMe();
 
@@ -24,7 +24,7 @@ namespace GfxSystem
 	public:
 		explicit TexturePtr(Texture* pointer): SmartPointer<Texture>(pointer) {}
 		TexturePtr(const TexturePtr& r): SmartPointer<Texture>(r) {}
-		TexturePtr(const ResourcePtr& r): SmartPointer<Texture>() {	Recreate(r); }
+		TexturePtr(const ResourceSystem::ResourcePtr& r): SmartPointer<Texture>() {	Recreate(r); }
 		TexturePtr& operator=(const TexturePtr& r)
 		{
 			if (mPointer == static_cast<Texture*>(r.GetPointer()))

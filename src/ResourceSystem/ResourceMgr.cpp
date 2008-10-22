@@ -14,11 +14,11 @@ ResourceMgr::ResourceMgr(const string& basedir):
 	mResourceCreationMethods[Resource::NUM_TYPES-1] = 0; // safety reasons
 
 	// register resource types
-	mResourceCreationMethods[Resource::TYPE_IMAGE] = Texture::CreateMe;
-	mExtToTypeMap["png"] = Resource::TYPE_IMAGE;
-	mExtToTypeMap["bmp"] = Resource::TYPE_IMAGE;
-	mExtToTypeMap["jpg"] = Resource::TYPE_IMAGE;
-	mExtToTypeMap["gif"] = Resource::TYPE_IMAGE;
+	mResourceCreationMethods[Resource::TYPE_TEXTURE] = GfxSystem::Texture::CreateMe;
+	mExtToTypeMap["png"] = Resource::TYPE_TEXTURE;
+	mExtToTypeMap["bmp"] = Resource::TYPE_TEXTURE;
+	mExtToTypeMap["jpg"] = Resource::TYPE_TEXTURE;
+	mExtToTypeMap["gif"] = Resource::TYPE_TEXTURE;
 
 	assert(mResourceCreationMethods[Resource::NUM_TYPES-1]);
 }
@@ -72,3 +72,53 @@ bool ResourceMgr::AddResourceFileToGroup(const string& filepath, const string& g
 	return true;
 }
 
+void ResourceMgr::LoadResourcesInGroup(const string& group)
+{
+	ResourceGroupMap::const_iterator gi = mResourceGroups.find(group);
+	assert(gi != mResourceGroups.end() && "Unknown group");
+	const ResourceMap& resmap = gi->second;
+	for (ResourceMap::const_iterator ri = resmap.begin(); ri != resmap.end(); ++ri)
+		if (ri->second->GetState() == Resource::STATE_INITIALIZED)
+			ri->second->Load();
+}
+
+void ResourceMgr::UnloadResourcesInGroup(const string& group)
+{
+	ResourceGroupMap::const_iterator gi = mResourceGroups.find(group);
+	assert(gi != mResourceGroups.end() && "Unknown group");
+	const ResourceMap& resmap = gi->second;
+	for (ResourceMap::const_iterator ri = resmap.begin(); ri != resmap.end(); ++ri)
+		if (ri->second->GetState() >= Resource::STATE_LOADING)
+			ri->second->Unload();
+}
+
+void ResourceMgr::ClearGroup(const string& group)
+{
+	if (mResourceGroups.find(group) == mResourceGroups.end())
+		return;
+	UnloadResourcesInGroup(group);
+	mResourceGroups.erase(group);
+}
+
+void ResourceMgr::SetLoadingListener(IResourceLoadingListener* listener)
+{
+	mListener = listener;
+}
+
+ResourcePtr ResourceMgr::GetResource(const string& groupSlashName)
+{
+	string::size_type slashPos = groupSlashName.find('/');
+	return GetResource(groupSlashName.substr(0, slashPos), groupSlashName.substr(slashPos+1));
+}
+
+ResourcePtr ResourceMgr::GetResource(const string& group, const string& name)
+{
+	ResourceGroupMap::const_iterator gi = mResourceGroups.find(group);
+	if (gi == mResourceGroups.end())
+		return ResourcePtr(); // null
+	const ResourceMap& resmap = gi->second;
+	ResourceMap::const_iterator ri = resmap.find(name);
+	if (ri == resmap.end())
+		return ResourcePtr(); // null
+	return ri->second;
+}

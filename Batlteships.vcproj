@@ -339,6 +339,10 @@
 			<Filter
 				Name="src"
 				>
+				<File
+					RelativePath=".\src\GfxSystem\GfxRenderer.cpp"
+					>
+				</File>
 			</Filter>
 		</Filter>
 		<File

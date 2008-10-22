@@ -22,19 +22,23 @@ namespace ResourceSystem
 		// load all resources in this group
 		// doesn't need to be called, resources are loaded on-the-fly if someone needs them
 		void LoadResourcesInGroup(const string& group);
+		// unloads all resources in this group, but it can be reloaded
+		void UnloadResourcesInGroup(const string& group);
 		// delete all resources in this group
 		void ClearGroup(const string& group);
-		void UnloadUnusedResources(void);
+		//TODO think about this method. It can be dangerous to release resources with UseCount==1.
+		// void UnloadUnusedResources(void);
 
 		void SetLoadingListener(IResourceLoadingListener* listener);
 
 		// name = group name/resource's filename
-		ResourcePtr GetResource(const string& name);
+		ResourcePtr GetResource(const string& groupSlashName);
 		ResourcePtr GetResource(const string& group, const string& name);
 
 	private:
 		typedef ResourcePtr (*ResourceCreationMethod)();
-		typedef map<string, map<string, ResourcePtr> > ResourceGroupMap;
+		typedef map<string, ResourcePtr> ResourceMap;
+		typedef map<string, ResourceMap> ResourceGroupMap;
 		typedef map<string, Resource::eType> ExtToTypeMap;
 
 		string mBaseDir;

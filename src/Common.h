@@ -6,5 +6,6 @@
 #include "Utility/Settings.h"
 #include "EntitySystem/EntityMgr/EntityMgr.h"
 #include "ResourceSystem/ResourceMgr.h"
+#include "GfxSystem/GfxRenderer.h"
 
 #endif

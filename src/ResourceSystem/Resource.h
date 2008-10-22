@@ -10,20 +10,20 @@ namespace ResourceSystem
 	class Resource
 	{
 	public:
-		enum eState { STATE_UNINITIALIZED, STATE_INITIALIZED, STATE_LOADING, STATE_LOADED, STATE_PREPARING, STATE_UNLOADING };
+		enum eState { STATE_UNINITIALIZED=0, STATE_INITIALIZED, STATE_UNLOADING, STATE_LOADING, STATE_LOADED, STATE_PREPARING, STATE_PREPARED };
 		enum eType { TYPE_TEXTURE=0, NUM_TYPES,	TYPE_AUTODETECT };
 
-		Resource(): mState(STATE_UNINITIALIZED) {}
-		virtual ~Resource();
+		Resource(void): mState(STATE_UNINITIALIZED) {}
+		virtual ~Resource(void);
 
-		virtual istream& Open();
+		virtual istream& Open(void);
 
-		virtual void Load() = 0;
-		virtual void Unload() = 0;
+		virtual void Load(void) = 0;
+		virtual void Unload(void) = 0;
 
-		eType GetType() { return mType; }
-		eState GetState() { return mState; }
-		string GetName() { return mName; }
+		inline eType GetType(void) const { return mType; }
+		inline eState GetState(void) const { return mState; }
+		inline string GetName(void) const { return mName; }
 
 	protected:
 		friend class ResourceMgr;
