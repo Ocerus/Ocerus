@@ -1,7 +1,6 @@
 #ifndef _COMPONENTMGR_H_
 #define _COMPONENTMGR_H_
 
-#include <map>
 #include "ComponentEnums.h"
 #include "Component.h"
 #include "../EntityMgr/EntityHandle.h"
@@ -17,21 +16,26 @@ namespace EntitySystem
 	class ComponentMgr : public Singleton<ComponentMgr>
 	{
 	public:
-		ComponentMgr();
-		~ComponentMgr();
+		ComponentMgr(void);
+		~ComponentMgr(void);
 		
-		EntityComponentsIterator GetEntityComponents(EntityHandle h);
-		void LoadResourcesForActiveComponents(); // calls LoadResource of all instantiated components
-		void ReleaseResourcesForAllComponents();
+		typedef vector<Component*> ComponentsList;
+
+		ComponentsList& GetEntityComponents(EntityHandle h);
+
+		void LoadResourcesForActiveComponents(void); 
+		void ReleaseResourcesForAllComponents(void);
 
 	private:
 		friend EntityComponentsIterator;
+
+		typedef map<EntityID, ComponentsList> EntityComponentsMap;
 
 		// static component data
 		ComponentCreationMethod mComponentCreationMethod[NUM_COMPONENT_TYPES];
 
 		// dynamic component data
-		map<EntityID, Component*> mEntityComponentMap[NUM_COMPONENT_TYPES];
+		EntityComponentsMap mEntityComponentsMap;
 	};
 }
 

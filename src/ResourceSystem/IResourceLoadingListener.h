@@ -5,13 +5,14 @@ namespace ResourceSystem
 {
 	class IResourceLoadingListener
 	{
+	public:
 		IResourceLoadingListener() {}
 		virtual ~IResourceLoadingListener() {}
 
-		virtual void ResourceGroupLoadStarted(const String& groupName, uint32 resourceCount) = 0;
+		virtual void ResourceGroupLoadStarted(const string& groupName, uint32 resourceCount) = 0;
 		virtual void ResourceLoadStarted(const ResourcePtr& resource) = 0;
         virtual void ResourceLoadEnded(void) = 0;
-		virtual void ResourceGroupLoadEnded(void);
+		virtual void ResourceGroupLoadEnded(void) = 0;
 	};
 }
 

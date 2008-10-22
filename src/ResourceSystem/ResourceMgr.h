@@ -1,8 +1,8 @@
 #ifndef _RESOURCEMGR_H_
 #define _RESOURCEMGR_H_
 
-#include "../Common.h"
 #include "Resource.h"
+#include "../Utility/Singleton.h"
 
 #define gResourceMgr ResourceSystem::ResourceMgr::GetSingleton()
 

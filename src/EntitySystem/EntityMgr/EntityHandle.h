@@ -15,7 +15,7 @@ namespace EntitySystem
 	{
 	public:
 		EntityHandle(const EntityHandle& handle) { mEntityID = handle.mEntityID; }
-		~EntityHandle();
+		~EntityHandle(void);
 
 		EntityHandle& operator=(const EntityHandle& rhs);
 

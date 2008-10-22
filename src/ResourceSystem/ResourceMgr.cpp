@@ -3,6 +3,7 @@
 #include "ResourceMgr.h"
 #include "../Common.h"
 #include "../GfxSystem/Texture.h"
+#include "IResourceLoadingListener.h"
 
 #pragma warning(disable: 4996)
 
@@ -77,9 +78,19 @@ void ResourceMgr::LoadResourcesInGroup(const string& group)
 	ResourceGroupMap::const_iterator gi = mResourceGroups.find(group);
 	assert(gi != mResourceGroups.end() && "Unknown group");
 	const ResourceMap& resmap = gi->second;
+	if (mListener)
+		mListener->ResourceGroupLoadStarted(group, static_cast<uint32>(resmap.size()));
 	for (ResourceMap::const_iterator ri = resmap.begin(); ri != resmap.end(); ++ri)
 		if (ri->second->GetState() == Resource::STATE_INITIALIZED)
+		{
+			if (mListener)
+				mListener->ResourceLoadStarted(ri->second);
 			ri->second->Load();
+			if (mListener)
+				mListener->ResourceLoadEnded();
+		}
+	if (mListener)
+		mListener->ResourceGroupLoadEnded();
 }
 
 void ResourceMgr::UnloadResourcesInGroup(const string& group)

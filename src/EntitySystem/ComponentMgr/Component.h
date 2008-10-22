@@ -2,6 +2,7 @@
 #define _COMPONENT_H_
 
 #include "ComponentDescription.h"
+#include "../EntityMgr/EntityMessage.h"
 
 namespace EntitySystem
 {
@@ -11,11 +12,11 @@ namespace EntitySystem
 		virtual void Init(const ComponentDescription& desc) = 0;
 		virtual void Deinit(void) = 0;
 
-		virtual eEntityMessageResult HandleMessage(const EntityMessage& msg);
+		virtual eEntityMessageResult HandleMessage(const EntityMessage& msg) = 0;
 
-	private:
-		Component();
-		virtual ~Component();
+	protected:
+		Component(void) {}
+		virtual ~Component(void) {}
 	};
 }
 

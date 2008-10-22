@@ -8,14 +8,15 @@ namespace GfxSystem
 	class Texture : public ResourceSystem::Resource
 	{
 	public:
-		virtual ~Texture() {}
+		virtual ~Texture(void) {}
 
-		static ResourceSystem::ResourcePtr CreateMe();
+		static ResourceSystem::ResourcePtr CreateMe(void);
 
-		/*library specific texture*/ void _GetTexture();
+		/*library specific texture*/ void _GetTexture(void);
 
-		virtual void Load();
-		virtual void Unload();
+	protected:
+		virtual bool LoadImpl(void);
+		virtual bool UnloadImpl(void);
 	};
 
 

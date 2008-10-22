@@ -13,14 +13,14 @@ namespace EntitySystem
 	class EntityMgr : public Singleton<EntityMgr>
 	{
 	public:
-		EntityMgr();
-		~EntityMgr();
+		EntityMgr(void);
+		~EntityMgr(void);
 
 		EntityHandle CreateEntity(const EntityDescription& desc);
 		void DestroyEntity(EntityHandle h);
 		void PostMessage(EntityHandle h, const EntityMessage& msg);
 		void BroadcastMessage(const EntityMessage& msg);
-		void RemoveAllEntities();	
+		void RemoveAllEntities(void);	
 
 
 	private:

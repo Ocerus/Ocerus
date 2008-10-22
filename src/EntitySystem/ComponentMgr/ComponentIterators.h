@@ -9,15 +9,15 @@ namespace EntitySystem
 	{
 	public:
 		EntityComponentsIterator(EntityHandle h);
-		EntityComponentsIterator& operator++();
+		EntityComponentsIterator& operator++(void);
 		EntityComponentsIterator operator++(int);
 		inline Component operator*() { return GetComponent(); }
 
-		bool HasMore() const;
-		Component* GetComponent() const;
+		bool HasMore(void) const;
+		Component* GetComponent(void) const;
 
 	private:
-		void SetToFirstValidComponent();
+		void SetToFirstValidComponent(void);
 
 		EntityID mEntityID;
 		int32 mIndex;

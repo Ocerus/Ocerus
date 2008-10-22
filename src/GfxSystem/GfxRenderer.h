@@ -1,7 +1,7 @@
 #ifndef _GFXRENDERER_H_
 #define _GFXRENDERER_H_
 
-#include "../Common.h"
+#include "../Utility/Settings.h"
 #include "../Utility/Singleton.h"
 
 namespace GfxSystem

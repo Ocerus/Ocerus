@@ -316,6 +316,10 @@
 				Name="src"
 				>
 				<File
+					RelativePath=".\src\ResourceSystem\Resource.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\src\ResourceSystem\ResourceMgr.cpp"
 					>
 				</File>
@@ -341,6 +345,10 @@
 				>
 				<File
 					RelativePath=".\src\GfxSystem\GfxRenderer.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\GfxSystem\Texture.cpp"
 					>
 				</File>
 			</Filter>

@@ -20,12 +20,12 @@ typedef float float32;
 #include <string>
 #include <ios>
 typedef std::string string;
-typedef std::istream istream;
+typedef std::istream InputStream;
 
-#include <vector>
-#include <map>
 // hack cos the compiler can't typedef templates
+#include <vector>
 #define vector std::vector
+#include <map>
 #define map std::map
 
 #endif

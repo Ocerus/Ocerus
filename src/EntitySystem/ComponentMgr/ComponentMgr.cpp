@@ -12,3 +12,12 @@ ComponentMgr::ComponentMgr()
 
 	assert(mComponentCreationMethod[NUM_COMPONENT_TYPES-1]);
 }
+
+ComponentMgr::~ComponentMgr() {}
+
+ComponentMgr::ComponentsList& ComponentMgr::GetEntityComponents(EntityHandle h)
+{
+	EntityComponentsMap::const_iterator eci = mEntityComponentsMap.find(h.mEntityID);
+	assert(eci != mEntityComponentsMap.end());
+	return eci->second;
+}

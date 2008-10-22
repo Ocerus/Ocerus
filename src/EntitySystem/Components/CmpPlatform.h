@@ -8,12 +8,18 @@ namespace EntitySystem
 	class CmpPlatform : public Component
 	{
 	public:
-		static Component* CreateMe() { return new CmpPlatform(); }
+		static Component* CreateMe(void) { return new CmpPlatform(); }
 
-	private:
-		CmpPlatform() {}
-		virtual ~CmpPlatform() {}
+		virtual void Init(const ComponentDescription& desc);
+		virtual void Deinit(void);
+		virtual eEntityMessageResult HandleMessage(const EntityMessage& msg);
+
+	protected:
+		CmpPlatform(void) {}
+		virtual ~CmpPlatform(void) {}
 
 
-	}
+	};
 }
+
+#endif
