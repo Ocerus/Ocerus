@@ -18,14 +18,18 @@ namespace EntitySystem
 
 		EntityHandle CreateEntity(const EntityDescription& desc);
 		void DestroyEntity(EntityHandle h);
-		void PostMessage(EntityHandle h, const EntityMessage& msg);
+		inline EntityMessage::eResult PostMessage(EntityHandle h, const EntityMessage& msg) { return PostMessage(h.mEntityID, msg); }
 		void BroadcastMessage(const EntityMessage& msg);
-		void RemoveAllEntities(void);	
+		void DestroyAllEntities(void);	
 
 
 	private:
-		ComponentMgr* mComponentMgr;
+		typedef set<EntityID> EntitySet;
 
+		ComponentMgr* mComponentMgr;
+		EntitySet mEntitySet;
+
+		EntityMessage::eResult PostMessage(EntityID id, const EntityMessage& msg);
 	};
 }
 

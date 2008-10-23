@@ -24,9 +24,10 @@ namespace EntitySystem
 
 	private:
 		friend class ComponentMgr;
+		friend class EntityMgr;
 
 		EntityHandle(EntityID ID): mEntityID(ID) {}
-		EntityHandle CreateUniqueHandle();
+		static EntityHandle CreateUniqueHandle();
 
 		EntityID mEntityID;
 		static EntityID sLastID;

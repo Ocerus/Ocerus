@@ -1,27 +1,27 @@
-#ifndef _COMPONENTITERATORS_H_
-#define _COMPONENTITERATORS_H_
+#ifndef ComponentIterators_h__
+#define ComponentIterators_h__
 
-#include "../EntityMgr/EntityHandle.h"
+#include "../../Utility/Settings.h"
 
 namespace EntitySystem 
 {
-	class EntityComponentsIterator
+	typedef vector<Component*> ComponentsList;
+
+	class EntityComponentsIterator : public ComponentsList::const_iterator
 	{
 	public:
-		EntityComponentsIterator(EntityHandle h);
-		EntityComponentsIterator& operator++(void);
-		EntityComponentsIterator operator++(int);
-		inline Component operator*() { return GetComponent(); }
+		EntityComponentsIterator(const ComponentsList& componentsList):
+			mComponentsList(componentsList),
+			ComponentsList::const_iterator(componentsList.begin())
+		{
+		}
 
-		bool HasMore(void) const;
-		Component* GetComponent(void) const;
+		virtual ~EntityComponentsIterator() {}
 
+		bool HasMore() { return operator!=(mComponentsList.end()); }
 	private:
-		void SetToFirstValidComponent(void);
-
-		EntityID mEntityID;
-		int32 mIndex;
+		const ComponentsList& mComponentsList;
 	};
 }
 
-#endif
+#endif // ComponentIterators_h__

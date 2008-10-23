@@ -1,11 +1,16 @@
 #ifndef _ENTITYDESCRIPTION_H_
 #define _ENTITYDESCRIPTION_H_
 
+#include "../../Utility/Settings.h"
+#include "../ComponentMgr/ComponentDescription.h"
+
 namespace EntitySystem
 {
-	class EntityDescription
+	struct EntityDescription
 	{
-		//TODO list of ComponentDescriptions
+		typedef vector<ComponentDescription*> ComponentDescriptionsList;
+
+		ComponentDescriptionsList mComponentDescriptions;
 	};
 }
 

@@ -3,6 +3,8 @@
 
 #include "ComponentEnums.h"
 #include "Component.h"
+#include "ComponentDescription.h"
+#include "ComponentIterators.h"
 #include "../EntityMgr/EntityHandle.h"
 #include "../../Utility/Singleton.h"
 
@@ -10,7 +12,6 @@
 
 namespace EntitySystem
 {
-	class EntityComponentsIterator;
 	typedef Component* (*ComponentCreationMethod)(void);
 
 	class ComponentMgr : public Singleton<ComponentMgr>
@@ -19,13 +20,13 @@ namespace EntitySystem
 		ComponentMgr(void);
 		~ComponentMgr(void);
 		
-		typedef vector<Component*> ComponentsList;
-
-		ComponentsList& GetEntityComponents(EntityHandle h);
+		bool CreateComponent(EntityHandle h, const ComponentDescription& desc);
+		inline void DestroyEntityComponents(EntityHandle h) { DestroyEntityComponents(h.mEntityID); }
+		void DestroyEntityComponents(EntityID id);
+		EntityComponentsIterator GetEntityComponents(EntityHandle h) { return GetEntityComponents(h.mEntityID); }
+		EntityComponentsIterator GetEntityComponents(EntityID id);
 
 	private:
-		friend EntityComponentsIterator;
-
 		typedef map<EntityID, ComponentsList> EntityComponentsMap;
 
 		// static component data
@@ -33,6 +34,7 @@ namespace EntitySystem
 
 		// dynamic component data
 		EntityComponentsMap mEntityComponentsMap;
+
 	};
 }
 

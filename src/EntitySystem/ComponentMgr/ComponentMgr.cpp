@@ -15,10 +15,10 @@ ComponentMgr::ComponentMgr()
 
 ComponentMgr::~ComponentMgr() {}
 
-ComponentMgr::ComponentsList& ComponentMgr::GetEntityComponents(EntityHandle h)
+EntityComponentsIterator ComponentMgr::GetEntityComponents(EntityID id)
 {
-	EntityComponentsMap::const_iterator eci = mEntityComponentsMap.find(h.mEntityID);
+	EntityComponentsMap::iterator eci = mEntityComponentsMap.find(id);
 	assert(eci != mEntityComponentsMap.end());
-	return eci->second;
+	return EntityComponentsIterator(eci->second);
 }
 

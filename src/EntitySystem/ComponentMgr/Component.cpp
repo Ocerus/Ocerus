@@ -6,7 +6,7 @@ Component::Component() {}
 
 Component::~Component() {}
 
-eEntityMessageResult Component::HandleMessage(const EntityMessage& msg)
+EntityMessage::eResult Component::HandleMessage(const EntityMessage& msg)
 {
-	return EMR_IGNORED;
+	return EntityMessage::RESULT_IGNORED;
 }

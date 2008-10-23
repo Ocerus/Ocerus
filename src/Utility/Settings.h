@@ -27,5 +27,7 @@ typedef std::istream InputStream;
 #define vector std::vector
 #include <map>
 #define map std::map
+#include <set>
+#define set std::set
 
 #endif

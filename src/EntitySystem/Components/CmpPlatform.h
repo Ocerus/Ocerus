@@ -1,7 +1,7 @@
 #ifndef _CMPPLATFORM_H_
 #define _CMPPLATFORM_H_
 
-#include "Component.h"
+#include "../ComponentMgr/Component.h"
 
 namespace EntitySystem
 {
@@ -12,12 +12,11 @@ namespace EntitySystem
 
 		virtual void Init(const ComponentDescription& desc);
 		virtual void Deinit(void);
-		virtual eEntityMessageResult HandleMessage(const EntityMessage& msg);
+		virtual EntityMessage::eResult HandleMessage(const EntityMessage& msg);
 
 	protected:
 		CmpPlatform(void) {}
 		virtual ~CmpPlatform(void) {}
-
 
 	};
 }

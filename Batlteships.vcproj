@@ -185,6 +185,14 @@
 						>
 					</File>
 				</Filter>
+				<Filter
+					Name="src"
+					>
+					<File
+						RelativePath=".\src\EntitySystem\Components\CmpPlatform.cpp"
+						>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="ComponentMgr"
@@ -202,6 +210,10 @@
 					</File>
 					<File
 						RelativePath=".\src\EntitySystem\ComponentMgr\ComponentEnums.h"
+						>
+					</File>
+					<File
+						RelativePath=".\src\EntitySystem\ComponentMgr\ComponentIterators.h"
 						>
 					</File>
 					<File
