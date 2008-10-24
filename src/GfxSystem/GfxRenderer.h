@@ -39,6 +39,9 @@ namespace GfxSystem
 
 	class GfxRenderer : public Singleton<GfxRenderer>
 	{
+	private:
+		HGE* g; 
+
 	public:
 		GfxRenderer(const Point& resolution, bool fullscreen);
 		~GfxRenderer(void);
