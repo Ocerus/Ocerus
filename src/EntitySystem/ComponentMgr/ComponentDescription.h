@@ -4,6 +4,8 @@
 
 namespace EntitySystem
 {
+	
+
 	class ComponentDescription
 	{
 	};

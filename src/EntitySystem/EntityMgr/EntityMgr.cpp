@@ -39,6 +39,7 @@ EntityHandle EntityMgr::CreateEntity(const EntityDescription& desc)
 	EntityDescription::ComponentDescriptionsList::const_iterator i = desc.mComponentDescriptions.begin();
 	assert(i!=desc.mComponentDescriptions.end());
 	EntityHandle h = EntityHandle::CreateUniqueHandle();
+	//TODO check if the handle is really unique
 	for (; i!=desc.mComponentDescriptions.end(); ++i)
 	{
 		bool created = mComponentMgr->CreateComponent(h, **i); // fuj

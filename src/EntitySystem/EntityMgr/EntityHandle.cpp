@@ -12,7 +12,6 @@ EntityHandle& EntityHandle::operator=(const EntityHandle& rhs)
 
 EntityHandle EntityHandle::CreateUniqueHandle()
 {
-	//TODO this should check if the sLastID+1 entity exists
 	return EntityHandle(++sLastID);
 }
 
