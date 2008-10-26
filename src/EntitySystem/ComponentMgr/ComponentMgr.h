@@ -1,14 +1,13 @@
 #ifndef _COMPONENTMGR_H_
 #define _COMPONENTMGR_H_
 
+#include <map>
 #include "ComponentEnums.h"
 #include "Component.h"
 #include "ComponentDescription.h"
 #include "ComponentIterators.h"
 #include "../EntityMgr/EntityHandle.h"
 #include "../../Utility/Singleton.h"
-
-#define gComponentMgr EntitySystem::ComponentMgr::GetSingleton()
 
 namespace EntitySystem
 {
@@ -27,7 +26,7 @@ namespace EntitySystem
 		EntityComponentsIterator GetEntityComponents(EntityID id);
 
 	private:
-		typedef map<EntityID, ComponentsList> EntityComponentsMap;
+		typedef std::map<EntityID, ComponentsList> EntityComponentsMap;
 
 		// static component data
 		ComponentCreationMethod mComponentCreationMethod[NUM_COMPONENT_TYPES];

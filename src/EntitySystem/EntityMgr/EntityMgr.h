@@ -1,6 +1,7 @@
 #ifndef _ENTITYMGR_H_
 #define _ENTITYMGR_H_
 
+#include <set>
 #include "EntityDescription.h"
 #include "EntityHandle.h"
 #include "EntityMessage.h"
@@ -24,7 +25,7 @@ namespace EntitySystem
 
 
 	private:
-		typedef set<EntityID> EntitySet;
+		typedef std::set<EntityID> EntitySet;
 
 		ComponentMgr* mComponentMgr;
 		EntitySet mEntitySet;

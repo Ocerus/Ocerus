@@ -40,6 +40,7 @@ namespace ResourceSystem
 
 		void SetName(const string& name) { mName = name; }
 		void SetFilepath(const string& filepath) { mFilePath = filepath; }
+		void EnsureLoaded(void); // to be called in Get method
 	};
 
 	typedef SmartPointer<Resource> ResourcePtr;

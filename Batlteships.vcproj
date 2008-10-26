@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="externalLibs/boost/inc;externalLibs/hge181/include"
+				AdditionalIncludeDirectories="externalLibs/boost/inc;externalLibs/hge/inc;externalLibs/ois/inc"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -63,8 +63,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="OIS_static_d.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="externalLibs/boost/lib;externalLibs/hge181/lib/vc"
+				AdditionalLibraryDirectories="externalLibs/boost/lib;externalLibs/hge/lib/vc;externalLibs/ois/lib"
+				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				RandomizedBaseAddress="1"
@@ -229,6 +231,10 @@
 						>
 					</File>
 					<File
+						RelativePath=".\src\EntitySystem\ComponentMgr\ComponentDescription.cpp"
+						>
+					</File>
+					<File
 						RelativePath=".\src\EntitySystem\ComponentMgr\ComponentMgr.cpp"
 						>
 					</File>
@@ -261,6 +267,10 @@
 					Name="src"
 					>
 					<File
+						RelativePath=".\src\EntitySystem\EntityMgr\EntityDescription.cpp"
+						>
+					</File>
+					<File
 						RelativePath=".\src\EntitySystem\EntityMgr\EntityHandle.cpp"
 						>
 					</File>
@@ -287,6 +297,26 @@
 				</File>
 				<File
 					RelativePath=".\src\Utility\SmartPointer.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Utility\StateMachine.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Utility\StringConverter.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Utility\Timer.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="src"
+				>
+				<File
+					RelativePath=".\src\Utility\Timer.cpp"
 					>
 				</File>
 			</Filter>
@@ -353,6 +383,82 @@
 				</File>
 				<File
 					RelativePath=".\src\GfxSystem\Texture.cpp"
+					>
+				</File>
+			</Filter>
+		</Filter>
+		<Filter
+			Name="Core"
+			>
+			<Filter
+				Name="inc"
+				>
+				<File
+					RelativePath=".\src\Core\Application.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Core\Game.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Core\LoadingScreen.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="src"
+				>
+				<File
+					RelativePath=".\src\Core\Application.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Core\Game.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Core\LoadingScreen.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Core\main.cpp"
+					>
+				</File>
+			</Filter>
+		</Filter>
+		<Filter
+			Name="InputSystem"
+			>
+			<Filter
+				Name="inc"
+				>
+				<File
+					RelativePath=".\src\InputSystem\IInputListener.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\InputSystem\InputActions.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\InputSystem\InputMgr.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\InputSystem\OISListener.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="src"
+				>
+				<File
+					RelativePath=".\src\InputSystem\InputMgr.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\InputSystem\OISListener.cpp"
 					>
 				</File>
 			</Filter>

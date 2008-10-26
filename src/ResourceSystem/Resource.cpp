@@ -11,7 +11,7 @@ Resource::~Resource()
 {
 	if (mInputStream)
 	{
-		DELETE mInputStream;
+		DYN_DELETE mInputStream;
 		mInputStream = 0;
 	}
 }
@@ -20,7 +20,7 @@ InputStream& Resource::OpenInputStream()
 {
 	assert(mState != STATE_UNINITIALIZED);
 	assert(boost::filesystem::exists(mFilePath) && "Resource file not found.");
-	mInputStream = NEW boost::filesystem::ifstream(mFilePath);
+	mInputStream = DYN_NEW boost::filesystem::ifstream(mFilePath);
 	assert(mInputStream);
 	return *mInputStream;
 }
@@ -30,7 +30,7 @@ void Resource::CloseInputStream()
 	assert(mState != STATE_UNINITIALIZED);
 	assert(mInputStream);
 	mInputStream->close();
-	DELETE mInputStream;
+	DYN_DELETE mInputStream;
 	mInputStream = 0;
 }
 
@@ -52,4 +52,10 @@ bool Resource::Unload()
 	bool result = UnloadImpl();
 	mState = STATE_INITIALIZED;
 	return result;
+}
+
+void ResourceSystem::Resource::EnsureLoaded( void )
+{
+	if (mState != STATE_LOADED)
+		Load();
 }

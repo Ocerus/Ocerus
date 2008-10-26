@@ -1,27 +1,109 @@
 #include "GfxRenderer.h"
 #include "../Common.h"
 
+namespace GfxSystem
+{ 
+	#include <hge.h>
+}
+
 using namespace GfxSystem;
 
 Pen Pen::NullPen(Color(0,0,0,0));
 
 GfxRenderer::GfxRenderer(const Point& resolution, bool fullscreen) 
 {
-	g = hgeCreate(HGE_VERSION);
+	//mHGE = hgeCreate(HGE_VERSION);
+	//TODO create window
 }
 
-void GfxRenderer::BeginRendering(void) 
+GfxRenderer::~GfxRenderer() {}
+
+uint64 GfxSystem::GfxRenderer::_GetWindowHandle()
 {
-	assert(g->Gfx_beginScene());
+	//TODO
+	return 0;
 }
-void GfxRenderer::EndRendering(void) 
+
+void GfxRenderer::ChangeResolution( const Point& resolution )
 {
-	assert(g->Gfx_endScene());
+	//TODO
+
+
+	gInputMgr._SetResolution(resolution.x, resolution.y);
+}
+
+Point GfxRenderer::GetResolution() const
+{
+	//TODO
+	return Point(0,0);
+}
+
+void GfxRenderer::SetFullscreen(bool fullscreen)
+{
+	//TODO
+}
+
+bool GfxRenderer::BeginRendering(void) 
+{
+	return mHGE->Gfx_BeginScene();
+}
+
+bool GfxRenderer::EndRendering(void) 
+{
+	mHGE->Gfx_EndScene();
+	return true;
+}
+
+bool GfxRenderer::ClearScreen(const Color& color)
+{
+	//TODO
+	return false;
 }
 
 bool GfxRenderer::DrawLine(int x1, int y1, int x2, int y2, const Pen& pen) 
 {
 	// TODO colour 
 	//g->Gfx_RenderLine(x1,y1,x2,y2
+	return true;
+}
+
+bool GfxRenderer::DrawLine( const Point& begin, const Point& end, const Pen& pen )
+{
+	return false;
+}
+
+bool GfxSystem::GfxRenderer::DrawImage( const TexturePtr& image, int32 x, int32 y, uint8 anchor /*= ANCHOR_VCENTER|ANCHOR_HCENTER*/, float32 angle /*= 0.0f*/, uint8 alpha /*= 255*/, float32 scale /*= 1.0f*/ )
+{
+	return false;
+}
+
+bool GfxSystem::GfxRenderer::DrawImage( const TexturePtr& image, const Point& pos, uint8 anchor /*= ANCHOR_VCENTER|ANCHOR_HCENTER*/, float32 angle /*= 0.0f*/, uint8 alpha /*= 255*/, float32 scale /*= 1.0f*/ )
+{
+	return false;
+}
+
+bool GfxSystem::GfxRenderer::DrawImage( const TexturePtr& image, const Rect& destRect, uint8 alpha /*= 255*/ )
+{
+	return false;
+}
+
+bool GfxSystem::GfxRenderer::DrawPolygon( Point* vertices, int vertices_len, const TexturePtr& texture, const Pen& outline, float32 angle /*= 0.0f*/, uint8 alpha /*= 255*/, float32 scale /*= 1.0f*/, float32 textureAngle /*= 0.0f*/, float32 textureScale /*= 1.0f*/ )
+{
+	return false;
+}
+
+bool GfxSystem::GfxRenderer::DrawPolygon( const std::vector<Point>& vertices, const TexturePtr& texture, const Pen& outline, float32 angle /*= 0.0f*/, uint8 alpha /*= 255*/, float32 scale /*= 1.0f*/, float32 textureAngle /*= 0.0f*/, float32 textureScale /*= 1.0f*/ )
+{
+	return false;
+}
+
+bool GfxSystem::GfxRenderer::DrawPolygon( Point* vertices, int vertices_len, const Color& fillColor, const Pen& outline, float32 angle /*= 0.0f*/, float32 scale /*= 1.0f*/, float32 textureAngle /*= 0.0f*/, float32 textureScale /*= 1.0f*/ )
+{
+	return false;
+}
+
+bool GfxSystem::GfxRenderer::DrawPolygon( const std::vector<Point>& vertices, const Color& fillColor, const Pen& outline, float32 angle /*= 0.0f*/, float32 scale /*= 1.0f*/, float32 textureAngle /*= 0.0f*/, float32 textureScale /*= 1.0f*/ )
+{
+	return false;
 }
 

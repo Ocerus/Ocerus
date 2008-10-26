@@ -15,7 +15,7 @@ namespace EntitySystem
 	{
 	public:
 		EntityHandle(const EntityHandle& handle) { mEntityID = handle.mEntityID; }
-		~EntityHandle(void);
+		~EntityHandle(void) {}
 
 		EntityHandle& operator=(const EntityHandle& rhs);
 
@@ -32,8 +32,6 @@ namespace EntitySystem
 		EntityID mEntityID;
 		static EntityID sLastID;
 	};
-
-	EntityID EntityHandle::sLastID = 0;
 }
 
 #endif

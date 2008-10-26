@@ -1,11 +1,12 @@
 #ifndef ComponentIterators_h__
 #define ComponentIterators_h__
 
+#include <vector>
 #include "../../Utility/Settings.h"
 
 namespace EntitySystem 
 {
-	typedef vector<Component*> ComponentsList;
+	typedef std::vector<Component*> ComponentsList;
 
 	class EntityComponentsIterator : public ComponentsList::const_iterator
 	{

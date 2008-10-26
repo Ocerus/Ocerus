@@ -4,12 +4,12 @@ using namespace GfxSystem;
 
 ResourceSystem::ResourcePtr Texture::CreateMe()
 {
-	return ResourceSystem::ResourcePtr(NEW Texture());
+	return ResourceSystem::ResourcePtr(DYN_NEW Texture());
 }
 
 void Texture::_GetTexture()
 {
-
+	EnsureLoaded();
 }
 
 bool Texture::LoadImpl()

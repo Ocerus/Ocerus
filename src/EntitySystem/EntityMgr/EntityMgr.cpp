@@ -4,14 +4,14 @@ using namespace EntitySystem;
 
 EntityMgr::EntityMgr()
 {
-	mComponentMgr = NEW ComponentMgr();
+	mComponentMgr = DYN_NEW ComponentMgr();
 }
 
 EntityMgr::~EntityMgr()
 {
 	DestroyAllEntities();
 	assert(mComponentMgr);
-	DELETE mComponentMgr;
+	DYN_DELETE mComponentMgr;
 }
 
 EntityMessage::eResult EntityMgr::PostMessage(EntityID id, const EntityMessage& msg)

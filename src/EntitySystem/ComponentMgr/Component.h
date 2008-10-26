@@ -17,6 +17,8 @@ namespace EntitySystem
 		//TODO add a mechanism to allow components state which resources they will need. This way we could preload them.
 
 	protected:
+		friend class ComponentMgr;
+
 		Component(void);
 		virtual ~Component(void);
 	};

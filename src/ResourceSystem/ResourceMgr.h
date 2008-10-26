@@ -1,6 +1,7 @@
 #ifndef _RESOURCEMGR_H_
 #define _RESOURCEMGR_H_
 
+#include <map>
 #include "Resource.h"
 #include "../Utility/Singleton.h"
 
@@ -37,9 +38,9 @@ namespace ResourceSystem
 
 	private:
 		typedef ResourcePtr (*ResourceCreationMethod)();
-		typedef map<string, ResourcePtr> ResourceMap;
-		typedef map<string, ResourceMap> ResourceGroupMap;
-		typedef map<string, Resource::eType> ExtToTypeMap;
+		typedef std::map<string, ResourcePtr> ResourceMap;
+		typedef std::map<string, ResourceMap> ResourceGroupMap;
+		typedef std::map<string, Resource::eType> ExtToTypeMap;
 
 		string mBaseDir;
 		ResourceGroupMap mResourceGroups;

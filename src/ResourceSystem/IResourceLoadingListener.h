@@ -1,6 +1,8 @@
 #ifndef _IRESOURCELOADINGLISTENER_H_
 #define _IRESOURCELOADINGLISTENER_H_
 
+#include "Resource.h"
+
 namespace ResourceSystem
 {
 	class IResourceLoadingListener

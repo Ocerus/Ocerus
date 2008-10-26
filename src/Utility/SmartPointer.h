@@ -12,7 +12,7 @@ public:
 	SmartPointer(): mPointer(0), mUseCountPtr(0) {}
 
     template< class Y>
-	explicit SmartPointer(Y* pointer): mPointer(pointer), mUseCountPtr(NEW_T(uint32)(1)) {}
+	explicit SmartPointer(Y* pointer): mPointer(pointer), mUseCountPtr(DYN_NEW_T(uint32)(1)) {}
 		
 	SmartPointer(const SmartPointer& r): mPointer(0), mUseCountPtr(0)
 	{
@@ -94,8 +94,8 @@ protected:
     {
 		// IF YOU GET A CRASH HERE, YOU FORGOT TO FREE UP POINTERS BEFORE SHUTTING DOWN
         // Use SetNull() before shutdown or make sure your pointer goes out of scope to avoid this.
-		DELETE mPointer;
-		DELETE mUseCountPtr;
+		DYN_DELETE mPointer;
+		DYN_DELETE mUseCountPtr;
     }
 	
 	virtual void Swap(SmartPointer<T> &other) 
