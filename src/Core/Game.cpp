@@ -29,6 +29,6 @@ void Core::Game::Update( float32 delta )
 
 void Core::Game::Draw()
 {
-	gGfxRenderer.ClearScreen(GfxSystem::Color(0,255,0));
+	gGfxRenderer.ClearScreen(GfxSystem::Color(0,0,0));
 }
 

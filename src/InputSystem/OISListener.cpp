@@ -13,7 +13,7 @@ InputSystem::OISListener::OISListener()
 
 	OIS::ParamList pl;
 	uint64 hWnd = GfxSystem::GfxRenderer::GetSingleton()._GetWindowHandle();
-	pl.insert(OIS::ParamList::value_type("WINDOW", StringConverter::NumToStr(hWnd)));
+	pl.insert(OIS::ParamList::value_type("WINDOW", /*StringConverter::NumToStr(hWnd)*/"0"));
 	mOIS = OIS::InputManager::createInputSystem(pl);
 	mMouse = static_cast<OIS::Mouse*>(mOIS->createInputObject(OIS::OISMouse, true));
 	mKeyboard = static_cast<OIS::Keyboard*>(mOIS->createInputObject(OIS::OISKeyboard, true));
@@ -23,10 +23,6 @@ InputSystem::OISListener::OISListener()
 
 InputSystem::OISListener::~OISListener()
 {
-	assert(mMouse);
-	DYN_DELETE mMouse;
-	assert(mKeyboard);
-	DYN_DELETE mKeyboard;
 	assert(mOIS);
 	OIS::InputManager::destroyInputSystem(mOIS);
 }

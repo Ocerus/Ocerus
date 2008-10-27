@@ -14,6 +14,9 @@ Application::Application(): StateMachine<eAppState>(AS_INITING), mFrameSmoothing
 
 	mLoadingScreen = DYN_NEW LoadingScreen();
 	mGame = DYN_NEW Game();
+
+	RequestStateChange(AS_LOADING);
+	UpdateState();
 }
 
 Application::~Application()

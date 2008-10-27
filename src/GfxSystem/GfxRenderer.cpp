@@ -18,6 +18,7 @@ GfxRenderer::GfxRenderer(const Point& resolution, bool fullscreen)
 	mHGE->System_SetState(HGE_SCREENHEIGHT, resolution.y);
 	mHGE->System_SetState(HGE_WINDOWED, !fullscreen);
 	mHGE->System_SetState(HGE_USESOUND, false);
+	mHGE->System_SetState(HGE_SHOWSPLASH, false);
 	bool success = mHGE->System_Initiate();
 	assert(success);
 }
