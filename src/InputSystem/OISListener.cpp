@@ -7,18 +7,18 @@
 using namespace InputSystem;
 
 
-InputSystem::OISListener::OISListener()
+InputSystem::OISListener::OISListener(): mMouse(0), mKeyboard(0), mOIS(0)
 {
 	mMgr = InputMgr::GetSingletonPtr();
 
 	OIS::ParamList pl;
 	uint64 hWnd = GfxSystem::GfxRenderer::GetSingleton()._GetWindowHandle();
-	pl.insert(OIS::ParamList::value_type("WINDOW", /*StringConverter::NumToStr(hWnd)*/"0"));
+	pl.insert(OIS::ParamList::value_type("WINDOW", StringConverter::NumToStr(hWnd)));
 	mOIS = OIS::InputManager::createInputSystem(pl);
-	mMouse = static_cast<OIS::Mouse*>(mOIS->createInputObject(OIS::OISMouse, true));
 	mKeyboard = static_cast<OIS::Keyboard*>(mOIS->createInputObject(OIS::OISKeyboard, true));
-	mMouse->setEventCallback(this);
+	mMouse = static_cast<OIS::Mouse*>(mOIS->createInputObject(OIS::OISMouse, true));
 	mKeyboard->setEventCallback(this);
+	mMouse->setEventCallback(this);
 }
 
 InputSystem::OISListener::~OISListener()

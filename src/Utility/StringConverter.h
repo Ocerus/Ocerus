@@ -12,6 +12,8 @@ namespace StringConverter
 		out << val;
 		return out.str();
 	}
+
+
 }
 
 #endif // StringConverter_h__

@@ -17,13 +17,19 @@ GfxRenderer::GfxRenderer(const Point& resolution, bool fullscreen)
 	mHGE->System_SetState(HGE_SCREENWIDTH, resolution.x);
 	mHGE->System_SetState(HGE_SCREENHEIGHT, resolution.y);
 	mHGE->System_SetState(HGE_WINDOWED, !fullscreen);
+	mHGE->System_SetState(HGE_LOGFILE, "hgelog.txt");
+	mHGE->System_SetState(HGE_HIDEMOUSE, false);
 	mHGE->System_SetState(HGE_USESOUND, false);
 	mHGE->System_SetState(HGE_SHOWSPLASH, false);
 	bool success = mHGE->System_Initiate();
 	assert(success);
 }
 
-GfxRenderer::~GfxRenderer() {}
+GfxRenderer::~GfxRenderer()
+{
+	assert(mHGE);
+	mHGE->System_Shutdown();
+}
 
 uint64 GfxSystem::GfxRenderer::_GetWindowHandle()
 {
@@ -53,7 +59,7 @@ void GfxRenderer::SetFullscreen(bool fullscreen)
 
 bool GfxRenderer::BeginRendering(void) 
 {
-	return mHGE->Gfx_BeginScene();
+	return /*mHGE->Gfx_BeginScene()*/false;
 }
 
 bool GfxRenderer::EndRendering(void) 

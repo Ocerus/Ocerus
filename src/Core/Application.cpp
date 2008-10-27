@@ -34,7 +34,10 @@ void Application::runMainLoop()
 {
 	while (GetState() != AS_SHUTDOWN)
 	{
-		// lock input state
+		MessagePump();
+
+		// process input events
+		mInputMgr->CaptureInput();
 
 		// calculate time since last frame
 		float32 delta = CalculateFrameDeltaTime();
@@ -65,21 +68,7 @@ void Application::runMainLoop()
 			break;
 		}
 
-		MSG msg;
-		while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
-		{
-			if (msg.message == WM_QUIT)
-			{
-				RequestStateChange(AS_SHUTDOWN, true);				
-			}
-			else
-			{
-				TranslateMessage(&msg);
-				DispatchMessage(&msg);
-			}
-		}
-
-		// update state
+		// update app state machine
 		UpdateState();
 	}
 }
@@ -110,4 +99,21 @@ float32 Application::CalculateFrameDeltaTime( void )
 
 	// average and convert to seconds
 	return (float32)(mFrameDeltaTimes.back() - mFrameDeltaTimes.front()) / ((mFrameDeltaTimes.size()-1)*1000);
+}
+
+void Application::MessagePump( void )
+{
+	MSG msg;
+	while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+	{
+		if (msg.message == WM_QUIT)
+		{
+			RequestStateChange(AS_SHUTDOWN, true);				
+		}
+		else
+		{
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
+	}
 }

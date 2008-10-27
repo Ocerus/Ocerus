@@ -43,6 +43,8 @@ namespace Core
 		float32 mFrameSmoothingTime; // during this time (in seconds) the frame delta time will be averaged
 
 		float32 CalculateFrameDeltaTime(void);
+
+		void MessagePump(void);
 	};
 }
 

@@ -1,7 +1,7 @@
 #include <Windows.h>
 #include "Application.h"
 #include <exception>
-#include <iostream>
+#include "../Utility/Settings.h"
 
 INT WINAPI WinMain (HINSTANCE hInstance, 
 					HINSTANCE hPrevInstance,
@@ -17,8 +17,7 @@ INT WINAPI WinMain (HINSTANCE hInstance,
 	catch (std::exception& e)
 	{
 		//TODO write into log
-		//TODO zobrazit konzoli, at to je videt i za behu
-		std::cout << e.what();
+		MessageBox(NULL,  e.what(), "An exception has occured!", MB_OK | MB_ICONERROR | MB_TASKMODAL);
 		return 1;
 	}
 	return 0;
