@@ -25,14 +25,14 @@ namespace InputSystem
 		InputMgr(void);
 		~InputMgr(void);
 
-		inline void CaptureInput(void);
-		inline bool IsKeyDown(eKeyCode k);
+		void CaptureInput(void);
+		bool IsKeyDown(eKeyCode k);
 
 		void AddInputListener(IInputListener* listener);
 		void RemoveInputListener(IInputListener* listener);
 		void RemoveAllInputListeners(void);
 
-		inline void _SetResolution(uint32 width, uint32 height);
+		void _SetResolution(uint32 width, uint32 height);
 	private:
 		friend class OISListener;
 		typedef std::vector<IInputListener*> ListenersList;

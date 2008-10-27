@@ -5,7 +5,10 @@
 #include "../Utility/StateMachine.h"
 #include "../Utility/Settings.h"
 #include "../Utility/Timer.h"
+#include "../Utility/Singleton.h"
 #include <deque>
+
+#define gApp Core::Application::GetSingleton()
 
 namespace Core
 {
@@ -15,7 +18,7 @@ namespace Core
 
 	enum eAppState { AS_INITING=0, AS_LOADING, AS_GAME, AS_SHUTDOWN };
 
-	class Application : public StateMachine<eAppState>
+	class Application : public StateMachine<eAppState>, public Singleton<Application>
 	{
 	public:
 		Application(void);

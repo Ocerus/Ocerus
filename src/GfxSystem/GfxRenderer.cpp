@@ -12,16 +12,23 @@ Pen Pen::NullPen(Color(0,0,0,0));
 
 GfxRenderer::GfxRenderer(const Point& resolution, bool fullscreen) 
 {
-	//mHGE = hgeCreate(HGE_VERSION);
-	//TODO create window
+	mHGE = hgeCreate(HGE_VERSION);
+	mHGE->System_SetState(HGE_TITLE, "Battleships");
+	mHGE->System_SetState(HGE_SCREENWIDTH, resolution.x);
+	mHGE->System_SetState(HGE_SCREENHEIGHT, resolution.y);
+	mHGE->System_SetState(HGE_WINDOWED, !fullscreen);
+	mHGE->System_SetState(HGE_USESOUND, false);
+	bool success = mHGE->System_Initiate();
+	assert(success);
 }
 
 GfxRenderer::~GfxRenderer() {}
 
 uint64 GfxSystem::GfxRenderer::_GetWindowHandle()
 {
-	//TODO
-	return 0;
+	HWND hWnd = mHGE->System_GetState(HGE_HWND);
+	assert(hWnd);
+	return (uint64)(hWnd);
 }
 
 void GfxRenderer::ChangeResolution( const Point& resolution )
@@ -54,10 +61,15 @@ bool GfxRenderer::EndRendering(void)
 	return true;
 }
 
+DWORD GetHGEColor(const Color& color)
+{
+	return ((DWORD(color.a)<<24) + (DWORD(color.r)<<16) + (DWORD(color.g)<<8) + DWORD(color.b));
+}
+
 bool GfxRenderer::ClearScreen(const Color& color)
 {
-	//TODO
-	return false;
+	mHGE->Gfx_Clear(GetHGEColor(color));
+	return true;
 }
 
 bool GfxRenderer::DrawLine(int x1, int y1, int x2, int y2, const Pen& pen) 

@@ -63,7 +63,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="OIS_static_d.lib"
+				AdditionalDependencies="OIS_static_d.lib hge.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="externalLibs/boost/lib;externalLibs/hge/lib/vc;externalLibs/ois/lib"
 				IgnoreDefaultLibraryNames=""
