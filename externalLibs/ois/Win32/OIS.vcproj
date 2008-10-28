@@ -44,7 +44,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\includes; ..\src"
+				AdditionalIncludeDirectories="..\includes;..\src;../../dx9/inc"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_STLP_DEBUG"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -71,7 +71,7 @@
 				Name="VCLibrarianTool"
 				AdditionalDependencies="dxguid.lib dinput8.lib"
 				OutputFile="$(OutDir)/OIS_static_d.lib"
-				AdditionalLibraryDirectories="..\src\win32\extras\WiiMote"
+				AdditionalLibraryDirectories="..\src\win32\extras\WiiMote;..\..\dx9\lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -117,7 +117,7 @@
 				Optimization="2"
 				InlineFunctionExpansion="1"
 				OmitFramePointers="true"
-				AdditionalIncludeDirectories="..\includes; ..\src"
+				AdditionalIncludeDirectories="..\includes;..\src;../../dx9/inc"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -144,7 +144,7 @@
 				Name="VCLibrarianTool"
 				AdditionalDependencies="dxguid.lib dinput8.lib"
 				OutputFile="$(OutDir)/OIS_static.lib"
-				AdditionalLibraryDirectories="..\src\win32\extras\WiiMote"
+				AdditionalLibraryDirectories="..\src\win32\extras\WiiMote;..\..\dx9\lib"
 			/>
 			<Tool
 				Name="VCALinkTool"

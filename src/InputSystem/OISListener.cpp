@@ -2,6 +2,7 @@
 #include "../GfxSystem/GfxRenderer.h"
 #include "../Utility/StringConverter.h"
 #include "IInputListener.h"
+#include "../Common.h"
 #include <OISInputManager.h>
 
 using namespace InputSystem;
@@ -9,6 +10,8 @@ using namespace InputSystem;
 
 InputSystem::OISListener::OISListener(): mMouse(0), mKeyboard(0), mOIS(0)
 {
+	mLogMgr.LogMessage("Initing OIS");
+
 	mMgr = InputMgr::GetSingletonPtr();
 
 	OIS::ParamList pl;
@@ -20,8 +23,11 @@ InputSystem::OISListener::OISListener(): mMouse(0), mKeyboard(0), mOIS(0)
 	pl.insert(std::make_pair(std::string("w32_mouse"), std::string("DISCL_NONEXCLUSIVE")));
 
 	mOIS = OIS::InputManager::createInputSystem(pl);
+	mLogMgr.LogMessage("OIS created");
 	mKeyboard = static_cast<OIS::Keyboard*>(mOIS->createInputObject(OIS::OISKeyboard, true));
+	mLogMgr.LogMessage("OIS keyboard inited");
 	mMouse = static_cast<OIS::Mouse*>(mOIS->createInputObject(OIS::OISMouse, true));
+	mLogMgr.LogMessage("OIS mouse inited");
 	mKeyboard->setEventCallback(this);
 	mMouse->setEventCallback(this);
 }

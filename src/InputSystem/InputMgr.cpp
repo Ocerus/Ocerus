@@ -9,6 +9,7 @@ using namespace InputSystem;
 
 InputSystem::InputMgr::InputMgr( void )
 {
+	gLogMgr.LogMessage("*** InputMgr init ***");
 	mOISListener = DYN_NEW OISListener();
 	_SetResolution(gGfxRenderer.GetResolution().x, gGfxRenderer.GetResolution().y);
 }

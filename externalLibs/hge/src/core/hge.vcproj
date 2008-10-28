@@ -76,7 +76,7 @@
 				Name="VCLibrarianTool"
 				AdditionalDependencies="d3d8.lib d3dx8.lib winmm.lib"
 				OutputFile="..\..\lib\$(ProjectName)_d.lib"
-				AdditionalLibraryDirectories="..\..\externalLibs"
+				AdditionalLibraryDirectories="..\..\..\dx9\lib"
 				IgnoreDefaultLibraryNames="libci.lib"
 			/>
 			<Tool
@@ -132,7 +132,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="externalLibs/dx9/inc"
+				AdditionalIncludeDirectories="../../../dx9/inc"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;HGEDLL"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -159,7 +159,7 @@
 				Name="VCLibrarianTool"
 				AdditionalDependencies="d3d8.lib d3dx8.lib winmm.lib"
 				OutputFile="..\..\lib\$(ProjectName).lib"
-				AdditionalLibraryDirectories="..\..\externalLibs"
+				AdditionalLibraryDirectories="..\..\..\dx9\lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
