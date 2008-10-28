@@ -46,10 +46,14 @@ uint64 GfxSystem::GfxRenderer::_GetWindowHandle()
 
 void GfxRenderer::ChangeResolution( const Point& resolution )
 {
+	gLogMgr.LogMessage("Changing resolution to ", resolution.x, resolution.y);
+
 	mHGE->System_SetState(HGE_SCREENWIDTH,resolution.x);
 	mHGE->System_SetState(HGE_SCREENHEIGHT,resolution.y);
 
 	gInputMgr._SetResolution(resolution.x, resolution.y);
+
+	gLogMgr.LogMessage("Resolution changed");
 }
 
 Point GfxRenderer::GetResolution() const
@@ -59,7 +63,9 @@ Point GfxRenderer::GetResolution() const
 
 void GfxRenderer::SetFullscreen(bool fullscreen)
 {
+	gLogMgr.LogMessage("Changing fullscreen/dindowed" + fullscreen);
 	mHGE->System_SetState(HGE_WINDOWED,fullscreen);	
+	gLogMgr.LogMessage("Fullscreen changed");
 }
 
 bool GfxRenderer::BeginRendering(void) 

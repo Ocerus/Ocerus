@@ -1,9 +1,12 @@
 #include "EntityMgr.h"
+#include "../../Common.h"
 
 using namespace EntitySystem;
 
 EntityMgr::EntityMgr()
 {
+	gLogMgr.LogMessage("*** EntityMgr init ***");
+
 	mComponentMgr = DYN_NEW ComponentMgr();
 }
 

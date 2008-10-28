@@ -13,7 +13,11 @@ Core::Game::~Game()
 
 void Core::Game::Init()
 {
+	gLogMgr.LogMessage("Game init");
+
 	gApp.ResetStats();
+
+	gLogMgr.LogMessage("Game inited");
 }
 
 void Core::Game::Deinit()
