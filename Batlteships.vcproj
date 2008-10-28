@@ -42,7 +42,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="externalLibs/boost/inc;externalLibs/hge/include;externalLibs/ois/includes;externalLibs/cegui/include"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;CEGUI_STATIC"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -63,6 +63,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="freetype_D.lib pcre_d.lib CEGUIBase_Static_d.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="externalLibs/boost/lib;externalLibs/cegui/lib;externalLibs/cegui/dependencies/lib"
 				IgnoreDefaultLibraryNames="libci.lib"
@@ -138,7 +139,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="OIS_static.lib"
+				AdditionalDependencies="OIS_static.lib freetype_D.lib pcre_d.lib CEGUIBase_Static_d.lib CEGUIExpatParser_Static_d.lib expat_d.lib CEGUITGAImageCodec_Static_d.lib CEGUISILLYImageCodec_Static_d.lib SILLY_d.lib CEGUIDevILImageCodec_Static_d.lib CEGUIFreeImageImageCodec_Static_d.lib CEGUICoronaImageCodec_Static_d.lib OpenGLGUIRenderer_Static_d.lib DirectX9GUIRenderer_Static_d.lib DirectX10GUIRenderer_Static_d.lib IrrlichtRenderer_Static_d.lib CEGUIFalagardWRBase_Static_d.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="externalLibs/boost/lib;externalLibs/ois/lib"
 				IgnoreDefaultLibraryNames="libci.lib"
