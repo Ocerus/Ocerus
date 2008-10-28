@@ -1,6 +1,8 @@
 #include "LogMgr.h"
+#include "../Core/Application.h"
 #include <sstream>
 #include <iomanip>
+#include <iostream>
 
 using namespace LogSystem;
 
@@ -8,6 +10,8 @@ using namespace LogSystem;
 LogSystem::LogMgr::LogMgr(const string& name, eLogSeverity severityLevel): mSeverityLevel(severityLevel)
 {
 	mOutStream.open(name.c_str());
+
+	gLogMgr.LogMessage("Log created", LOG_INFO);
 }
 
 LogSystem::LogMgr::~LogMgr()
@@ -15,25 +19,28 @@ LogSystem::LogMgr::~LogMgr()
 	mOutStream.close();
 }
 
-void LogSystem::LogMgr::WriteCurTime(void)
-{
-	#pragma warning(disable: 4996)
-	struct tm* locTime;
-	time_t ctime;
-	time(&ctime);
-	locTime = localtime(&ctime);
-	mOutStream << std::setw(2) << std::setfill('0') << locTime->tm_hour
-		<< ":" << std::setw(2) << std::setfill('0') << locTime->tm_min
-		<< ":" << std::setw(2) << std::setfill('0') << locTime->tm_sec
-		<< ":" ;
-}
-
 void LogSystem::LogMgr::LogMessage(const string& msg, eLogSeverity severity)
 {
 	if (severity >= mSeverityLevel)
 	{
-		WriteCurTime();
-		mOutStream << msg << std::endl;
+		#pragma warning(disable: 4996)
+		struct tm* locTime;
+		time_t ctime;
+		time(&ctime);
+		locTime = localtime(&ctime);
+
+		std::stringstream ss;
+		if (severity == LOG_ERROR)
+			ss << "!! ERROR !! ";
+		ss << std::setw(2) << std::setfill('0') << locTime->tm_hour
+			<< ":" << std::setw(2) << std::setfill('0') << locTime->tm_min
+			<< ":" << std::setw(2) << std::setfill('0') << locTime->tm_sec
+			<< ":" << msg << std::endl;
+		string& str = ss.str();
+		
+		gApp.WriteToConsole(str);
+
+		mOutStream << str;
 		mOutStream.flush();
 	}
 }

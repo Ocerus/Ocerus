@@ -48,7 +48,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;C:\Program Files\Microsoft DirectX 9.0 SDK (October 2004)\Include&quot;"
+				AdditionalIncludeDirectories="../../../dx9/inc"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;HGEDLL"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -132,7 +132,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="&quot;C:\Program Files\Microsoft DirectX 9.0 SDK (October 2004)\Include&quot;"
+				AdditionalIncludeDirectories="externalLibs/dx9/inc"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;HGEDLL"
 				StringPooling="true"
 				RuntimeLibrary="2"

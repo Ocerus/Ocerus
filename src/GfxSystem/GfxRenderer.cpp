@@ -15,6 +15,7 @@ GfxRenderer::GfxRenderer(const Point& resolution, bool fullscreen)
 	mHGE = hgeCreate(HGE_VERSION);
 	mHGE->System_SetState(HGE_TITLE, "Battleships");
 	mHGE->System_SetState(HGE_SCREENWIDTH, resolution.x);
+	mHGE->System_SetState(HGE_SCREENWIDTH, resolution.x);
 	mHGE->System_SetState(HGE_SCREENHEIGHT, resolution.y);
 	mHGE->System_SetState(HGE_WINDOWED, !fullscreen);
 	mHGE->System_SetState(HGE_LOGFILE, "HgeLog.txt");

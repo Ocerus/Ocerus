@@ -112,8 +112,8 @@ bool CALL HGE_Impl::System_Initiate()
 	width=nScreenWidth + GetSystemMetrics(SM_CXFIXEDFRAME)*2;
 	height=nScreenHeight + GetSystemMetrics(SM_CYFIXEDFRAME)*2 + GetSystemMetrics(SM_CYCAPTION);
 
-	rectW.left=(GetSystemMetrics(SM_CXSCREEN)-width)/2;
-	rectW.top=(GetSystemMetrics(SM_CYSCREEN)-height)/2;
+	rectW.left=/*(GetSystemMetrics(SM_CXSCREEN)-width)/2*/0;
+	rectW.top=/*(GetSystemMetrics(SM_CYSCREEN)-height)/2*/0;
 	rectW.right=rectW.left+width;
 	rectW.bottom=rectW.top+height;
 	styleW=WS_POPUP|WS_CAPTION|WS_SYSMENU|WS_MINIMIZEBOX|WS_VISIBLE; //WS_OVERLAPPED | WS_SYSMENU | WS_MINIMIZEBOX;
@@ -499,7 +499,7 @@ void CALL HGE_Impl::System_SetStateString(hgeStringState state, const char *valu
 								break;
 		case HGE_LOGFILE:		if(value)
 								{
-									strcpy(szLogFile,Resource_MakePath(value));
+									strcpy(szLogFile,/*Resource_MakePath(value)*/value); //HRDW changed to current dir
 									hf=fopen(szLogFile, "w");
 									if(!hf) szLogFile[0]=0;
 									else fclose(hf);

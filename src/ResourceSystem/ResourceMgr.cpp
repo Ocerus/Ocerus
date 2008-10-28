@@ -12,6 +12,9 @@ using namespace ResourceSystem;
 ResourceMgr::ResourceMgr(const string& basedir): 
 	mListener(0), mBaseDir(basedir)
 {
+	gLogMgr.LogMessage("*** ResourceMgr init ***", LOG_INFO);
+	gLogMgr.LogMessage("Base directory  = " + basedir, LOG_INFO);
+
 	mResourceCreationMethods[Resource::NUM_TYPES-1] = 0; // safety reasons
 
 	// register resource types
@@ -22,6 +25,8 @@ ResourceMgr::ResourceMgr(const string& basedir):
 	mExtToTypeMap["gif"] = Resource::TYPE_TEXTURE;
 
 	assert(mResourceCreationMethods[Resource::NUM_TYPES-1]);
+
+	gLogMgr.LogMessage("Resource types registered", LOG_INFO);
 }
 
 ResourceMgr::~ResourceMgr() {}

@@ -7,15 +7,20 @@ using namespace Core;
 
 Application::Application(): StateMachine<eAppState>(AS_INITING), mFrameSmoothingTime(0.5f)
 {
+	ShowConsole(); // debug window
+
+	// create singletons
+	mLogMgr = DYN_NEW LogSystem::LogMgr("CoreLog.txt", LOG_TRIVIAL);
 	mResourceMgr = DYN_NEW ResourceSystem::ResourceMgr("data");
 	mGfxRenderer = DYN_NEW GfxSystem::GfxRenderer(GfxSystem::Point(1024,768), false);
 	mInputMgr = DYN_NEW InputSystem::InputMgr();
 	mEntityMgr = DYN_NEW EntitySystem::EntityMgr();
-	mLogMgr = DYN_NEW LogSystem::LogMgr("CoreLog.txt", LOG_TRIVIAL);
 
+	// create core states
 	mLoadingScreen = DYN_NEW LoadingScreen();
 	mGame = DYN_NEW Game();
 
+	// init finished, now loading
 	RequestStateChange(AS_LOADING);
 	UpdateState();
 
@@ -32,6 +37,8 @@ Application::~Application()
 
 	DYN_DELETE mLoadingScreen;
 	DYN_DELETE mGame;
+
+	HideConsole();
 }
 
 void Application::runMainLoop()
@@ -74,7 +81,6 @@ void Application::runMainLoop()
 
 		// update FPS and other performance counters
 		UpdateStats();
-		gLogMgr.LogMessage("AvgFPS", mAvgFPS, LOG_TRIVIAL);
 
 		// update app state machine
 		UpdateState();
@@ -149,4 +155,20 @@ void Application::UpdateStats()
 		mLastSecond = curTimeMillis;
 		mFrameCount = 0;
 	}
+}
+
+void Core::Application::ShowConsole( void )
+{
+	AllocConsole();
+}
+
+void Core::Application::HideConsole( void )
+{
+	FreeConsole();
+}
+
+void Core::Application::WriteToConsole( const string& str )
+{
+	LPDWORD writtenChars = 0;
+	WriteConsole(GetStdHandle(STD_OUTPUT_HANDLE), str.c_str(), str.length(), writtenChars, NULL);	
 }

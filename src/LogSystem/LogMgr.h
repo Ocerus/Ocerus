@@ -18,15 +18,13 @@ namespace LogSystem
 		LogMgr(const string& name, eLogSeverity severityLevel);
 		~LogMgr(void);
 
-		void LogMessage(const string& msg, eLogSeverity severity);
+		void LogMessage(const string& msg, eLogSeverity severity = LOG_INFO);
 		void LogMessage(const string& msg, const int32 num, eLogSeverity severity);
 		void LogMessage(const string& msg, const float32 num, eLogSeverity severity);
 
 	private:
 		boost::filesystem::ofstream mOutStream;
 		eLogSeverity mSeverityLevel;
-
-		void WriteCurTime(void);
 	};
 }
 

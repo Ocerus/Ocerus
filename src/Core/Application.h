@@ -29,6 +29,11 @@ namespace Core
 		void ResetStats(void);
 		inline float32 GetAvgFPS(void) { return mAvgFPS; }
 		inline float32 GetLastFPS(void) { return mLastFPS; }
+
+		// console debug window
+		void ShowConsole(void);
+		void WriteToConsole(const string& str);
+		void HideConsole(void);
 	private:
 		// singletons
 		ResourceSystem::ResourceMgr* mResourceMgr;
