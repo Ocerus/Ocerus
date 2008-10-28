@@ -486,6 +486,14 @@
 				</File>
 			</Filter>
 		</Filter>
+		<Filter
+			Name="GUISystem"
+			>
+			<Filter
+				Name="FontMgr"
+				>
+			</Filter>
+		</Filter>
 		<File
 			RelativePath=".\src\Common.h"
 			>
