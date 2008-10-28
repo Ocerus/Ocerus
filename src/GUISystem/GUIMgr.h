@@ -8,7 +8,7 @@
 
 //#pragma once
 
-namespace GUIMgr {
+namespace GUISystem {
 
 	typedef CEGUI::DirectX81Renderer DirectX81Renderer;
 	typedef CEGUI::DirectX9Renderer DirectX9Renderer;

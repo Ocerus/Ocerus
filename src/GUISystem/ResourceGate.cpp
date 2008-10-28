@@ -1,7 +1,9 @@
 #include "ResourceGate.h"
 
 namespace GUISystem {
-	ResourceGate::ResourceGate();
+	ResourceGate::ResourceGate() {
+	}
+
 	virtual ~ResourceGate::ResourceGate(void) {
 	}
 
@@ -12,5 +14,6 @@ namespace GUISystem {
 	}
 
 	virtual void ResourceGate::unloadRawDataContainer(RawDataContainer& data) {
+	
 	}
 }

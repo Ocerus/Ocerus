@@ -3,7 +3,7 @@
 
 #include "../Utility/Settings.h"
 #include "../Common.h"
-#include "CEGUISystem.h"
+#include "CEGUIResourceProvider.h"
 //#pragma once
 
 namespace GUISystem {
