@@ -3,9 +3,10 @@
 
 #include "../Utility/Settings.h"
 #include "../Common.h"
-#include "CEGUIResourceProvider.h"
+#include "CEGUI.h"
+//#include "CEGUIResourceProvider.h"
 #include "CEGUIDataContainer.h"
-#include "CEGUIString.h"
+//#include "CEGUIString.h"
 #include <string>
 //#pragma once
 
