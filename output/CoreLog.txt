@@ -1,0 +1,4 @@
+14:41:06:Log created
+14:41:06:*** ResourceMgr init ***
+14:41:06:Base directory  = data
+14:41:06:Resource types registered
