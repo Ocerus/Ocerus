@@ -28,6 +28,8 @@ author:		Jonathan Welch (Based on Code by David Durant)
 #ifndef _CEGUITreeItem_h_
 #define _CEGUITreeItem_h_
 
+#pragma warning(disable: 4251)
+
 #include "CEGUIBase.h"
 #include "CEGUIString.h"
 #include "CEGUIColourRect.h"
