@@ -1,19 +1,13 @@
 #include "ResourceGate.h"
 
 namespace GUISystem {
-	ResourceGate::ResourceGate() {
+
+	void ResourceGate::loadRawDataContainer(const CEGUI::String& filename, CEGUI::RawDataContainer& output,
+		const CEGUI::String& resourceGroup) {
+
 	}
 
-	virtual ~ResourceGate::ResourceGate(void) {
-	}
-
-	virtual ResourceGate::getDefaultResourceGroup(void) const {
-	}
-
-	virtual void ResourceGate::loadRawDataContainer(const String& filename, RawDataContainer& output, const String& resourceGroup) {
-	}
-
-	virtual void ResourceGate::unloadRawDataContainer(RawDataContainer& data) {
+	void ResourceGate::unloadRawDataContainer(CEGUI::RawDataContainer& data) {
 	
 	}
 }

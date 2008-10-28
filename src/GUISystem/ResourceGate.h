@@ -4,17 +4,16 @@
 #include "../Utility/Settings.h"
 #include "../Common.h"
 #include "CEGUIResourceProvider.h"
+#include <string>
 //#pragma once
 
 namespace GUISystem {
-	class ResourceGate : public ResourceProvider
+	class ResourceGate : public CEGUI::ResourceProvider
 	{
-		ResourceGate();
-		virtual ~ResourceGate(void);
-		virtual getDefaultResourceGroup(void) const;
-		virtual void loadRawDataContainer(const String& filename, RawDataContainer& output, const String& resourceGroup);
-		virtual void unloadRawDataContainer(RawDataContainer& data);
-	}
+		virtual void loadRawDataContainer(const CEGUI::String& filename, CEGUI::RawDataContainer& output,
+			const CEGUI::String& resourceGroup);
+		virtual void unloadRawDataContainer(CEGUI::RawDataContainer& data);
+	};
 }
 
 #endif
