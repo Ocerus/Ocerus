@@ -9,7 +9,7 @@
 //#pragma once
 
 namespace GUISystem {
-	class ResourceGate : public 
+	class ResourceGate {}
 }
 
 #endif
