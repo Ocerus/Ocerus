@@ -10,9 +10,9 @@ INT WINAPI WinMain (HINSTANCE hInstance,
 {	
 	try
 	{
-		Core::Application* app = new Core::Application();
+		Core::Application* app = DYN_NEW Core::Application();
 		app->runMainLoop();
-		delete app;
+		DYN_DELETE app;
 	}
 	catch (std::exception& e)
 	{

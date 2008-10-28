@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Batlteships", "Batlteships.vcproj", "{685FB3A5-4080-4FA7-8C69-AF6406E38DA5}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Battleships", "Battleships.vcproj", "{685FB3A5-4080-4FA7-8C69-AF6406E38DA5}"
 	ProjectSection(ProjectDependencies) = postProject
 		{FB1A9503-D67D-4311-AB3B-113DAD7D6F9F} = {FB1A9503-D67D-4311-AB3B-113DAD7D6F9F}
 		{6541DC36-B249-4986-AF71-72CAAE29D71F} = {6541DC36-B249-4986-AF71-72CAAE29D71F}

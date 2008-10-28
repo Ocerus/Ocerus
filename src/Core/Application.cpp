@@ -169,6 +169,7 @@ void Core::Application::HideConsole( void )
 
 void Core::Application::WriteToConsole( const string& str )
 {
-	LPDWORD writtenChars = 0;
+	DWORD* writtenChars = DYN_NEW DWORD;
 	WriteConsole(GetStdHandle(STD_OUTPUT_HANDLE), str.c_str(), str.length(), writtenChars, NULL);	
+	DYN_DELETE writtenChars;
 }

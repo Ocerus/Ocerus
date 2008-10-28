@@ -37,7 +37,7 @@ void LogSystem::LogMgr::LogMessage(const string& msg, eLogSeverity severity)
 			<< ":" << std::setw(2) << std::setfill('0') << locTime->tm_sec
 			<< ":" << msg << std::endl;
 		string& str = ss.str();
-		
+
 		gApp.WriteToConsole(str);
 
 		mOutStream << str;
