@@ -1,10 +1,8 @@
-#ifndef _GUIMGR_H_
-#define _GUIMGR_H_
+#ifndef _RESOURCEGATE_H_
+#define _RESOURCEGATE_H_
 
 #include "../Utility/Settings.h"
 #include "../Common.h"
-
-#define gGUIMgr GUISystem::GUIMgr::GetSingleton()
 
 //#pragma once
 
