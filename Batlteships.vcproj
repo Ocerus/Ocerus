@@ -502,6 +502,10 @@
 					Name="inc"
 					>
 					<File
+						RelativePath=".\src\GUISystem\CEGUIResource.h"
+						>
+					</File>
+					<File
 						RelativePath=".\src\GUISystem\ResourceGate.h"
 						>
 					</File>
@@ -509,6 +513,10 @@
 				<Filter
 					Name="src"
 					>
+					<File
+						RelativePath=".\src\GUISystem\CEGUIResource.cpp"
+						>
+					</File>
 					<File
 						RelativePath=".\src\GUISystem\ResourceGate.cpp"
 						>
