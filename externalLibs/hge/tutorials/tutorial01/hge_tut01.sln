@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hge_tut01", "hge_tut01.vcproj", "{298D7F0F-3213-4C83-AAE9-C863EDCEEA6F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{298D7F0F-3213-4C83-AAE9-C863EDCEEA6F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{298D7F0F-3213-4C83-AAE9-C863EDCEEA6F}.Debug|Win32.Build.0 = Debug|Win32
+		{298D7F0F-3213-4C83-AAE9-C863EDCEEA6F}.Release|Win32.ActiveCfg = Release|Win32
+		{298D7F0F-3213-4C83-AAE9-C863EDCEEA6F}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

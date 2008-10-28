@@ -11,12 +11,15 @@ Application::Application(): StateMachine<eAppState>(AS_INITING), mFrameSmoothing
 	mGfxRenderer = DYN_NEW GfxSystem::GfxRenderer(GfxSystem::Point(1024,768), false);
 	mInputMgr = DYN_NEW InputSystem::InputMgr();
 	mEntityMgr = DYN_NEW EntitySystem::EntityMgr();
+	mLogMgr = DYN_NEW LogSystem::LogMgr("CoreLog.txt", LOG_TRIVIAL);
 
 	mLoadingScreen = DYN_NEW LoadingScreen();
 	mGame = DYN_NEW Game();
 
 	RequestStateChange(AS_LOADING);
 	UpdateState();
+
+	ResetStats();
 }
 
 Application::~Application()
@@ -25,6 +28,7 @@ Application::~Application()
 	DYN_DELETE mGfxRenderer;
 	DYN_DELETE mInputMgr;
 	DYN_DELETE mEntityMgr;
+	DYN_DELETE mLogMgr;
 
 	DYN_DELETE mLoadingScreen;
 	DYN_DELETE mGame;
@@ -67,6 +71,10 @@ void Application::runMainLoop()
 			}
 			break;
 		}
+
+		// update FPS and other performance counters
+		UpdateStats();
+		gLogMgr.LogMessage("AvgFPS", mAvgFPS, LOG_TRIVIAL);
 
 		// update app state machine
 		UpdateState();
@@ -115,5 +123,30 @@ void Application::MessagePump( void )
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}
+	}
+}
+
+void Application::ResetStats()
+{
+	mLastFPS = 0.0f;
+	mAvgFPS = 0.0f;
+	mFrameCount = 0;
+	mLastSecond = mTimer.GetMilliseconds();
+}
+
+void Application::UpdateStats()
+{
+	++mFrameCount;
+	uint64 curTimeMillis = mTimer.GetMilliseconds();
+	// update only once per second
+	if (curTimeMillis - mLastSecond > 1000)
+	{
+		mLastFPS = 1000.0f * (float32)mFrameCount / (float32)(curTimeMillis - mLastSecond);
+		if (mAvgFPS == 0)
+			mAvgFPS = mLastFPS;
+		else
+			mAvgFPS = (mAvgFPS + mLastFPS) / 2; // approximation
+		mLastSecond = curTimeMillis;
+		mFrameCount = 0;
 	}
 }

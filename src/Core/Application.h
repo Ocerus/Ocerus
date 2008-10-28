@@ -25,26 +25,37 @@ namespace Core
 		virtual ~Application(void);
 
 		void runMainLoop(void);
+
+		void ResetStats(void);
+		inline float32 GetAvgFPS(void) { return mAvgFPS; }
+		inline float32 GetLastFPS(void) { return mLastFPS; }
 	private:
 		// singletons
 		ResourceSystem::ResourceMgr* mResourceMgr;
 		InputSystem::InputMgr* mInputMgr;
 		GfxSystem::GfxRenderer* mGfxRenderer;
 		EntitySystem::EntityMgr* mEntityMgr;
+		LogSystem::LogMgr* mLogMgr;
 
 		LoadingScreen* mLoadingScreen;
-
 		Game* mGame;
+
+		void MessagePump(void);
 
 		// frame delta times
 		typedef std::deque<uint64> TimesList;
 		TimesList mFrameDeltaTimes;
 		Timer mTimer;
 		float32 mFrameSmoothingTime; // during this time (in seconds) the frame delta time will be averaged
-
 		float32 CalculateFrameDeltaTime(void);
 
-		void MessagePump(void);
+		// performance stats
+		uint64 mLastSecond;
+		uint64 mFrameCount;
+		float32 mLastFPS;
+		float32 mAvgFPS;
+		void UpdateStats();
+
 	};
 }
 

@@ -13,7 +13,7 @@ Core::Game::~Game()
 
 void Core::Game::Init()
 {
-
+	gApp.ResetStats();
 }
 
 void Core::Game::Deinit()

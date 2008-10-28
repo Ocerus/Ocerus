@@ -6,5 +6,6 @@
 #include "ResourceSystem/ResourceMgr.h"
 #include "GfxSystem/GfxRenderer.h"
 #include "InputSystem/InputMgr.h"
+#include "LogSystem/LogMgr.h"
 
 #endif

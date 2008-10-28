@@ -14,6 +14,11 @@ InputSystem::OISListener::OISListener(): mMouse(0), mKeyboard(0), mOIS(0)
 	OIS::ParamList pl;
 	uint64 hWnd = GfxSystem::GfxRenderer::GetSingleton()._GetWindowHandle();
 	pl.insert(OIS::ParamList::value_type("WINDOW", StringConverter::NumToStr(hWnd)));
+
+	// let the standard mouse cursor be
+	pl.insert(std::make_pair(std::string("w32_mouse"), std::string("DISCL_FOREGROUND" )));
+	pl.insert(std::make_pair(std::string("w32_mouse"), std::string("DISCL_NONEXCLUSIVE")));
+
 	mOIS = OIS::InputManager::createInputSystem(pl);
 	mKeyboard = static_cast<OIS::Keyboard*>(mOIS->createInputObject(OIS::OISKeyboard, true));
 	mMouse = static_cast<OIS::Mouse*>(mOIS->createInputObject(OIS::OISMouse, true));

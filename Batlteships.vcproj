@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="externalLibs/boost/inc;externalLibs/hge/inc;externalLibs/ois/inc"
+				AdditionalIncludeDirectories="externalLibs/boost/inc;externalLibs/hge/include;externalLibs/ois/includes"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -63,10 +63,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="OIS_static_d.lib hge.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="externalLibs/boost/lib;externalLibs/hge/lib/vc;externalLibs/ois/lib"
-				IgnoreDefaultLibraryNames=""
+				AdditionalLibraryDirectories="externalLibs/boost/lib"
+				IgnoreDefaultLibraryNames="libci.lib"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				RandomizedBaseAddress="1"
@@ -100,7 +99,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			CharacterSet="1"
+			CharacterSet="0"
 			WholeProgramOptimization="1"
 			>
 			<Tool
@@ -120,11 +119,12 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories="externalLibs/boost/inc;externalLibs/hge/include;externalLibs/ois/includes"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
+				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="3"
 			/>
 			<Tool
@@ -138,7 +138,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="OIS_static.lib"
 				LinkIncremental="1"
+				AdditionalLibraryDirectories="externalLibs/boost/lib;externalLibs/ois/lib"
+				IgnoreDefaultLibraryNames="libci.lib"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
@@ -459,6 +462,26 @@
 				</File>
 				<File
 					RelativePath=".\src\InputSystem\OISListener.cpp"
+					>
+				</File>
+			</Filter>
+		</Filter>
+		<Filter
+			Name="LogSystem"
+			>
+			<Filter
+				Name="inc"
+				>
+				<File
+					RelativePath=".\src\LogSystem\LogMgr.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="src"
+				>
+				<File
+					RelativePath=".\src\LogSystem\LogMgr.cpp"
 					>
 				</File>
 			</Filter>

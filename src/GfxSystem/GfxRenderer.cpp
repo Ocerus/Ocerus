@@ -17,7 +17,7 @@ GfxRenderer::GfxRenderer(const Point& resolution, bool fullscreen)
 	mHGE->System_SetState(HGE_SCREENWIDTH, resolution.x);
 	mHGE->System_SetState(HGE_SCREENHEIGHT, resolution.y);
 	mHGE->System_SetState(HGE_WINDOWED, !fullscreen);
-	mHGE->System_SetState(HGE_LOGFILE, "hgelog.txt");
+	mHGE->System_SetState(HGE_LOGFILE, "HgeLog.txt");
 	mHGE->System_SetState(HGE_HIDEMOUSE, false);
 	mHGE->System_SetState(HGE_USESOUND, false);
 	mHGE->System_SetState(HGE_SHOWSPLASH, false);
