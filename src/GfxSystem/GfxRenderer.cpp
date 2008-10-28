@@ -12,7 +12,7 @@ Pen Pen::NullPen(Color(0,0,0,0));
 
 GfxRenderer::GfxRenderer(const Point& resolution, bool fullscreen) 
 {
-	mLogMgr.LogMessage("*** GfxRenderer init ***");
+	gLogMgr.LogMessage("*** GfxRenderer init ***");
 
 	mHGE = hgeCreate(HGE_VERSION);
 	mHGE->System_SetState(HGE_TITLE, "Battleships");
@@ -28,7 +28,7 @@ GfxRenderer::GfxRenderer(const Point& resolution, bool fullscreen)
 
 	assert(success);
 	if (success)
-		mLogMgr.LogMessage("HGE inited; logfile="+mHGE->System_GetState(HGE_LOGFILE));
+		gLogMgr.LogMessage("HGE inited; logfile=", mHGE->System_GetState(HGE_LOGFILE));
 }
 
 GfxRenderer::~GfxRenderer()

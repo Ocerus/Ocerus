@@ -10,7 +10,7 @@ using namespace InputSystem;
 
 InputSystem::OISListener::OISListener(): mMouse(0), mKeyboard(0), mOIS(0)
 {
-	mLogMgr.LogMessage("Initing OIS");
+	gLogMgr.LogMessage("Initing OIS");
 
 	mMgr = InputMgr::GetSingletonPtr();
 
@@ -23,11 +23,11 @@ InputSystem::OISListener::OISListener(): mMouse(0), mKeyboard(0), mOIS(0)
 	pl.insert(std::make_pair(std::string("w32_mouse"), std::string("DISCL_NONEXCLUSIVE")));
 
 	mOIS = OIS::InputManager::createInputSystem(pl);
-	mLogMgr.LogMessage("OIS created");
+	gLogMgr.LogMessage("OIS created");
 	mKeyboard = static_cast<OIS::Keyboard*>(mOIS->createInputObject(OIS::OISKeyboard, true));
-	mLogMgr.LogMessage("OIS keyboard inited");
+	gLogMgr.LogMessage("OIS keyboard inited");
 	mMouse = static_cast<OIS::Mouse*>(mOIS->createInputObject(OIS::OISMouse, true));
-	mLogMgr.LogMessage("OIS mouse inited");
+	gLogMgr.LogMessage("OIS mouse inited");
 	mKeyboard->setEventCallback(this);
 	mMouse->setEventCallback(this);
 }

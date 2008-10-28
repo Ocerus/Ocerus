@@ -1,4 +1,11 @@
-14:41:06:Log created
-14:41:06:*** ResourceMgr init ***
-14:41:06:Base directory  = data
-14:41:06:Resource types registered
+15:36:50:Log created
+15:36:50:*** ResourceMgr init ***
+15:36:50:Base directory  = data
+15:36:50:All resource types registered
+15:36:50:*** GfxRenderer init ***
+15:36:50:HGE inited; logfile=HgeLog.txt
+15:36:50:*** InputMgr init ***
+15:36:50:Initing OIS
+15:36:51:OIS created
+15:36:51:OIS keyboard inited
+15:36:51:OIS mouse inited

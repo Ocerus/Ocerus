@@ -59,3 +59,9 @@ void LogSystem::LogMgr::LogMessage( const string& msg, const float32 num, eLogSe
 	LogMessage(ss.str(), severity);
 }
 
+void LogSystem::LogMgr::LogMessage( const string& msg, const string& msg2, eLogSeverity severity )
+{
+	std::stringstream ss;
+	ss << msg << msg2;
+	LogMessage(ss.str(), severity);
+}

@@ -1,7 +1,7 @@
 HGE Started..
 
 HGE version: 1.80
-Date: 28.10.2008, 14:41:06
+Date: 28.10.2008, 15:36:50
 
 Application: Battleships
 OS: Windows 5.1.2600
