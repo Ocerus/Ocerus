@@ -4,6 +4,7 @@
 #include "../Utility/Settings.h"
 #include "../Common.h"
 #include "CEGUIResourceProvider.h"
+#include "CEGUIDataContainer.h"
 #include <string>
 //#pragma once
 
