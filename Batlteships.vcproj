@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="externalLibs/boost/inc;externalLibs/hge/include;externalLibs/ois/includes"
+				AdditionalIncludeDirectories="externalLibs/boost/inc;externalLibs/hge/include;externalLibs/ois/includes;externalLibs/cegui/include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -64,7 +64,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="externalLibs/boost/lib"
+				AdditionalLibraryDirectories="externalLibs/boost/lib;externalLibs/cegui/lib"
 				IgnoreDefaultLibraryNames="libci.lib"
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -494,6 +494,26 @@
 			<Filter
 				Name="FontMgr"
 				>
+			</Filter>
+			<Filter
+				Name="ResourceGate"
+				>
+				<Filter
+					Name="inc"
+					>
+					<File
+						RelativePath=".\src\GUISystem\ResourceGate.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="src"
+					>
+					<File
+						RelativePath=".\src\GUISystem\ResourceGate.cpp"
+						>
+					</File>
+				</Filter>
 			</Filter>
 		</Filter>
 		<File
