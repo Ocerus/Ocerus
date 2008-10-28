@@ -6,14 +6,14 @@
 #include "../ResourceSystem/Resource.h"
 
 namespace GUISystem {
-	class CEGUIResource : public Resource
+	class CEGUIResource : public ResourceSystem::Resource
 	{
 	public:
 		enum eState { STATE_UNINITIALIZED=0, STATE_INITIALIZED, STATE_UNLOADING, STATE_LOADING, STATE_LOADED };
 		enum eType { TYPE_TEXTURE=0, NUM_TYPES,	TYPE_AUTODETECT };
 
-		Resource(void);
-		virtual ~Resource(void);
+		CEGUIResource(void);
+		virtual ~CEGUIResource(void);
 
 		virtual bool Load(void);
 		virtual bool Unload(void);

@@ -64,7 +64,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="externalLibs/boost/lib;externalLibs/cegui/lib"
+				AdditionalLibraryDirectories="externalLibs/boost/lib;externalLibs/cegui/lib;externalLibs/cegui/dependencies/lib"
 				IgnoreDefaultLibraryNames="libci.lib"
 				GenerateDebugInformation="true"
 				SubSystem="2"

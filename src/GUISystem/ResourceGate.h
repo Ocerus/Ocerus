@@ -5,6 +5,7 @@
 #include "../Common.h"
 #include "CEGUIResourceProvider.h"
 #include "CEGUIDataContainer.h"
+#include "CEGUIString.h"
 #include <string>
 //#pragma once
 
