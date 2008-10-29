@@ -4,6 +4,7 @@
 #include "../Utility/SmartPointer.h"
 #include "../Utility/Settings.h"
 #include <boost/filesystem/fstream.hpp>
+#include <ios>
 
 namespace ResourceSystem
 {
@@ -35,7 +36,8 @@ namespace ResourceSystem
 		virtual bool LoadImpl(void) = 0;
 		virtual bool UnloadImpl(void) = 0;
 
-		InputStream& OpenInputStream(void);
+		InputStream& OpenInputStream();
+		InputStream& OpenInputStream(std::ios_base::openmode mode);
 		void CloseInputStream(void);
 
 		void SetName(const string& name) { mName = name; }

@@ -6,40 +6,55 @@
 #include "../ResourceSystem/Resource.h"
 
 namespace GUISystem {
+	struct DataBlock {
+		DataBlock* prev;
+		DataBlock* next;
+		uint8* payload;
+	};
+
 	class CEGUIResource : public ResourceSystem::Resource
 	{
 	public:
-		enum eState { STATE_UNINITIALIZED=0, STATE_INITIALIZED, STATE_UNLOADING, STATE_LOADING, STATE_LOADED };
-		enum eType { TYPE_TEXTURE=0, NUM_TYPES,	TYPE_AUTODETECT };
+		virtual ~CEGUIResource(void) {}
 
-		CEGUIResource(void);
-		virtual ~CEGUIResource(void);
+		static ResourceSystem::ResourcePtr CreateMe(void);
 
-		virtual bool Load(void);
-		virtual bool Unload(void);
-
-		inline eType GetType(void) const { return mType; }
-		inline eState GetState(void) const { return mState; }
-		inline string GetName(void) const { return mName; }
+		/*library specific CEGUIResource*/ void _GetCEGUIResource(void);
 
 	protected:
-		friend class ResourceMgr;
+		virtual bool LoadImpl(void);
+		virtual bool UnloadImpl(void);
 
-		eType mType;
-		eState mState;
-		string mName;
-		string mFilePath;
-		boost::filesystem::ifstream* mInputStream;
+		DataBlock * AddNewDataBlock(void);
+		DataBlock * AddNewDataBlock(int size);
 
-		virtual bool LoadImpl(void) = 0;
-		virtual bool UnloadImpl(void) = 0;
+		DataBlock* mDataBlocks;
+		DataBlock* mLastDataBlock;
+	};
 
-		InputStream& OpenInputStream(void);
-		void CloseInputStream(void);
 
-		void SetName(const string& name) { mName = name; }
-		void SetFilepath(const string& filepath) { mFilePath = filepath; }
-		void EnsureLoaded(void); // to be called in Get method		
+	class CEGUIResourcePtr : public SmartPointer<CEGUIResource>
+	{
+	public:
+		explicit CEGUIResourcePtr(CEGUIResource* pointer): SmartPointer<CEGUIResource>(pointer) {}
+		CEGUIResourcePtr(const CEGUIResourcePtr& r): SmartPointer<CEGUIResource>(r) {}
+		CEGUIResourcePtr(const ResourceSystem::ResourcePtr& r): SmartPointer<CEGUIResource>() {	Recreate(r); }
+		CEGUIResourcePtr& operator=(const CEGUIResourcePtr& r)
+		{
+			if (mPointer == static_cast<CEGUIResource*>(r.GetPointer()))
+				return *this;
+			Release();
+			Recreate(r);
+			return *this;
+		}
+	private:
+		void Recreate(const CEGUIResourcePtr& r)
+		{
+			mPointer = static_cast<CEGUIResource*>(r.GetPointer());
+			mUseCountPtr = r.GetUseCountPtr();
+			if (mUseCountPtr)
+				++(*mUseCountPtr);
+		}
 	};
 }
 

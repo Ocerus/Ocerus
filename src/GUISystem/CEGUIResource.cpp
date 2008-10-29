@@ -1,58 +1,75 @@
 #include "CEGUIResource.h"
+#include <boost/filesystem/fstream.hpp>
+#include <boost/filesystem/operations.hpp>
 
 using namespace GUISystem;
+namespace fs = boost::filesystem;
 
-CEGUIResource::CEGUIResource(): mState(STATE_UNINITIALIZED), mInputStream(0) {}
-
-CEGUIResource::~CEGUIResource()
+ResourceSystem::ResourcePtr CEGUIResource::CreateMe()
 {
-	if (mInputStream)
-	{
-		DYN_DELETE mInputStream;
-		mInputStream = 0;
+	return ResourceSystem::ResourcePtr(DYN_NEW CEGUIResource());
+}
+
+void CEGUIResource::_GetCEGUIResource()
+{
+	EnsureLoaded();
+}
+
+//returns new datablock reference
+DataBlock * CEGUIResource::AddNewDataBlock(void) {
+	return AddNewDataBlock(INT_MAX);
+}
+
+DataBlock * CEGUIResource::AddNewDataBlock(int size) {
+	if (mDataBlocks == 0) {		
+		mLastDataBlock = mDataBlocks = DYN_NEW DataBlock;
+		mDataBlocks->payload = DYN_NEW uint8[size];
+		mDataBlocks->prev = 0;
+	} else {
+		mLastDataBlock->next = DYN_NEW DataBlock;
+		mLastDataBlock->next->prev = mLastDataBlock;
+		mLastDataBlock = mLastDataBlock->next;
+		mLastDataBlock->payload = DYN_NEW uint8[size];
 	}
+	mDataBlocks->next = 0;
+	return mLastDataBlock;
 }
 
-InputStream& CEGUIResource::OpenInputStream()
+bool CEGUIResource::LoadImpl()
 {
-	assert(mState != STATE_UNINITIALIZED);
-	assert(boost::filesystem::exists(mFilePath) && "Resource file not found.");
-	mInputStream = DYN_NEW boost::filesystem::ifstream(mFilePath);
-	assert(mInputStream);
-	return *mInputStream;
+	boost::uintmax_t filesize;
+	OpenInputStream(std::ios_base::binary);
+
+	
+	fs::path p(mFilePath, fs::native);
+
+	assert(fs::exists(p) && fs::is_regular (p));
+
+	filesize = fs::file_size( p );	
+	mDataBlocks = 0;
+	while (filesize > 0) {
+		if (filesize > INT_MAX) {
+			mLastDataBlock = AddNewDataBlock();
+			mInputStream->read((char*)(mLastDataBlock->payload), INT_MAX);
+		} else {
+			mLastDataBlock = AddNewDataBlock((int)filesize);
+			mInputStream->read((char*)(mLastDataBlock->payload), (int)filesize);
+		}
+		filesize -= INT_MAX;
+	}
+
+	CloseInputStream();
+	return true;
 }
 
-void CEGUIResource::CloseInputStream()
+bool CEGUIResource::UnloadImpl()
 {
-	assert(mState != STATE_UNINITIALIZED);
-	assert(mInputStream);
-	mInputStream->close();
-	DYN_DELETE mInputStream;
-	mInputStream = 0;
-}
-
-bool CEGUIResource::Load()
-{
-	assert(mState == STATE_INITIALIZED);
-	mState = STATE_LOADING;
-	bool result = LoadImpl();
-	mState = STATE_LOADED;
-	return result;
-}
-
-bool CEGUIResource::Unload()
-{
-	assert(mState != STATE_UNINITIALIZED);
-	if (mState == STATE_INITIALIZED)
-		return true; // true as the data are not loaded
-	mState = STATE_UNLOADING;
-	bool result = UnloadImpl();
-	mState = STATE_INITIALIZED;
-	return result;
-}
-
-void CEGUIResource::EnsureLoaded( void )
-{
-	if (mState != STATE_LOADED)
-		Load();
+	while (mDataBlocks) {
+		DataBlock * last;
+		DYN_DELETE_ARRAY mDataBlocks->payload;
+		last = mDataBlocks;
+		mDataBlocks = mDataBlocks->next;
+		DYN_DELETE last;
+	}
+	return true;
 }
