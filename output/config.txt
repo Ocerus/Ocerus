@@ -1,7 +1,0 @@
-[Windows]
-ConsoleX = 1298
-ConsoleY = 75
-ConsoleW = 665
-ConsoleH = 766
-WindowX = 0
-WindowY = 0

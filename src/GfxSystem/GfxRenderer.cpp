@@ -37,8 +37,10 @@ GfxRenderer::GfxRenderer(const Point& resolution, bool fullscreen)
 GfxRenderer::~GfxRenderer()
 {
 	assert(mHGE);
-	gApp.GetGlobalConfig()->SetInt32("WindowX", mHGE->System_GetState(HGE_WINDOWX), "Windows");
-	gApp.GetGlobalConfig()->SetInt32("WindowY", mHGE->System_GetState(HGE_WINDOWY), "Windows");
+	RECT windowRect;
+	GetWindowRect(mHGE->System_GetState(HGE_HWND), &windowRect);
+	gApp.GetGlobalConfig()->SetInt32("WindowX", windowRect.left, "Windows");
+	gApp.GetGlobalConfig()->SetInt32("WindowY", windowRect.top, "Windows");
 	mHGE->System_Shutdown();
 }
 
