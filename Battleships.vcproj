@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="externalLibs/boost/inc;externalLibs/hge/include;externalLibs/ois/includes;externalLibs/cegui/include"
+				AdditionalIncludeDirectories="externalLibs/boost/inc;externalLibs/hge/include;externalLibs/ois/includes;externalLibs/cegui/include;externalLibs/rudeconfig/include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;CEGUI_STATIC"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -120,7 +120,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="externalLibs/boost/inc;externalLibs/hge/include;externalLibs/ois/includes;externalLibs/cegui/include"
+				AdditionalIncludeDirectories="externalLibs/boost/inc;externalLibs/hge/include;externalLibs/ois/includes;externalLibs/cegui/include;externalLibs/rudeconfig/include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;CEGUI_STATIC"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -404,6 +404,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\Core\Config.h"
+					>
+				</File>
+				<File
 					RelativePath=".\src\Core\Game.h"
 					>
 				</File>
@@ -417,6 +421,10 @@
 				>
 				<File
 					RelativePath=".\src\Core\Application.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Core\Config.cpp"
 					>
 				</File>
 				<File
@@ -527,6 +535,10 @@
 		</Filter>
 		<File
 			RelativePath=".\src\Common.h"
+			>
+		</File>
+		<File
+			RelativePath=".\externalLibs\rudeconfig\RudeConfig.vcproj"
 			>
 		</File>
 	</Files>

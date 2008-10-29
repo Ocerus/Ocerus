@@ -5,6 +5,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Battleships", "Battleships.
 	ProjectSection(ProjectDependencies) = postProject
 		{FB1A9503-D67D-4311-AB3B-113DAD7D6F9F} = {FB1A9503-D67D-4311-AB3B-113DAD7D6F9F}
 		{6541DC36-B249-4986-AF71-72CAAE29D71F} = {6541DC36-B249-4986-AF71-72CAAE29D71F}
+		{ABD59B39-A335-43E3-8087-0CEB68C4BEEA} = {ABD59B39-A335-43E3-8087-0CEB68C4BEEA}
 		{9CC704CB-4956-4479-BDEC-57CBC03F700E} = {9CC704CB-4956-4479-BDEC-57CBC03F700E}
 	EndProjectSection
 EndProject
@@ -13,6 +14,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OIS", "externalLibs\ois\Win32\OIS.vcproj", "{9CC704CB-4956-4479-BDEC-57CBC03F700E}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hgehelp", "externalLibs\hge\src\helpers\hgehelp.vcproj", "{6541DC36-B249-4986-AF71-72CAAE29D71F}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RudeConfig", "externalLibs\RudeConfig\RudeConfig.vcproj", "{ABD59B39-A335-43E3-8087-0CEB68C4BEEA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,6 +39,10 @@ Global
 		{6541DC36-B249-4986-AF71-72CAAE29D71F}.Debug|Win32.Build.0 = Debug|Win32
 		{6541DC36-B249-4986-AF71-72CAAE29D71F}.Release|Win32.ActiveCfg = Release|Win32
 		{6541DC36-B249-4986-AF71-72CAAE29D71F}.Release|Win32.Build.0 = Release|Win32
+		{ABD59B39-A335-43E3-8087-0CEB68C4BEEA}.Debug|Win32.ActiveCfg = Debug|Win32
+		{ABD59B39-A335-43E3-8087-0CEB68C4BEEA}.Debug|Win32.Build.0 = Debug|Win32
+		{ABD59B39-A335-43E3-8087-0CEB68C4BEEA}.Release|Win32.ActiveCfg = Release|Win32
+		{ABD59B39-A335-43E3-8087-0CEB68C4BEEA}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

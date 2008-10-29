@@ -5,7 +5,9 @@
 
 using namespace Core;
 
-Application::Application(): StateMachine<eAppState>(AS_INITING), mFrameSmoothingTime(0.5f)
+Application::Application(): 
+	StateMachine<eAppState>(AS_INITING), mFrameSmoothingTime(0.5f), 
+	mConsoleX(0), mConsoleY(0), mConsoleHeight(768)
 {
 	ShowConsole(); // debug window
 
@@ -160,6 +162,21 @@ void Application::UpdateStats()
 void Core::Application::ShowConsole( void )
 {
 	AllocConsole();
+
+	// get hwnd
+	const char* uniqueName = "3248962941235952";
+	SetConsoleTitle(uniqueName);
+	Sleep(40);
+	mConsoleHandle = FindWindow(NULL, uniqueName);
+
+	// set title
+	SetConsoleTitle("Battleships Debug Log");
+
+	// set position
+	if (mConsoleHandle)
+	{
+		MoveWindow(mConsoleHandle, mConsoleX, mConsoleY, 1024, mConsoleHeight, true);
+	}
 }
 
 void Core::Application::HideConsole( void )
@@ -169,7 +186,6 @@ void Core::Application::HideConsole( void )
 
 void Core::Application::WriteToConsole( const string& str )
 {
-	DWORD* writtenChars = DYN_NEW DWORD;
-	WriteConsole(GetStdHandle(STD_OUTPUT_HANDLE), str.c_str(), str.length(), writtenChars, NULL);	
-	DYN_DELETE writtenChars;
+	DWORD writtenChars = 0;
+	WriteConsole(GetStdHandle(STD_OUTPUT_HANDLE), str.c_str(), str.length(), &writtenChars, NULL);	
 }

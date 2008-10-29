@@ -6,13 +6,23 @@
 
 namespace StringConverter
 {
-	string NumToStr(uint64 val)
+	template<typename T>
+	string ToString(T val)
 	{
-		std::stringstream out;
+		std::ostringstream out;
 		out << val;
 		return out.str();
 	}
 
+	template<typename T>
+	T FromString(const string& str)
+	{
+		T result;
+		std::istringstream iss(str);
+		if (!(iss >> result))
+			return T(); // return default value
+		return result;
+	}
 
 }
 

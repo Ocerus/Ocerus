@@ -61,6 +61,12 @@ namespace Core
 		float32 mAvgFPS;
 		void UpdateStats();
 
+		// console handle
+		HWND mConsoleHandle;
+		int32 mConsoleX;
+		int32 mConsoleY;
+		int32 mConsoleHeight;
+
 	};
 }
 
