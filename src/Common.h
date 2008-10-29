@@ -8,4 +8,6 @@
 #include "InputSystem/InputMgr.h"
 #include "LogSystem/LogMgr.h"
 
+// note: Application.h not included cos it subincludes Windows.h
+
 #endif

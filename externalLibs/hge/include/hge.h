@@ -41,11 +41,11 @@
 /*
 ** Common data types
 */
-#ifndef DWORD
+/*#ifndef DWORD
 typedef unsigned long       DWORD;
 typedef unsigned short      WORD;
 typedef unsigned char       BYTE;
-#endif
+#endif*/
 
 
 /*
@@ -152,6 +152,9 @@ enum hgeIntState
 	HGE_FPS				= 24,	// int		fixed fps			(default: HGEFPS_UNLIMITED)
 
 	HGE_POWERSTATUS		= 25,   // int		battery life percent + status
+
+	HGE_WINDOWX			= 26,
+	HGE_WINDOWY			= 27,
 	
 	HGEINTSTATE_FORCE_DWORD = 0x7FFFFFF
 };

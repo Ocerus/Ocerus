@@ -112,8 +112,8 @@ bool CALL HGE_Impl::System_Initiate()
 	width=nScreenWidth + GetSystemMetrics(SM_CXFIXEDFRAME)*2;
 	height=nScreenHeight + GetSystemMetrics(SM_CYFIXEDFRAME)*2 + GetSystemMetrics(SM_CYCAPTION);
 
-	rectW.left=/*(GetSystemMetrics(SM_CXSCREEN)-width)/2*/0;
-	rectW.top=/*(GetSystemMetrics(SM_CYSCREEN)-height)/2*/0;
+	rectW.left=nWindowX;
+	rectW.top=nWindowY;
 	rectW.right=rectW.left+width;
 	rectW.bottom=rectW.top+height;
 	styleW=WS_POPUP|WS_CAPTION|WS_SYSMENU|WS_MINIMIZEBOX|WS_VISIBLE; //WS_OVERLAPPED | WS_SYSMENU | WS_MINIMIZEBOX;
@@ -437,6 +437,10 @@ void CALL HGE_Impl::System_SetStateInt(hgeIntState state, int value)
 
 		case HGE_SCREENHEIGHT:	if(!pD3DDevice) nScreenHeight=value; break;
 
+		case HGE_WINDOWX:		nWindowX = value; break;
+
+		case HGE_WINDOWY:		nWindowY = value; break;
+
 		case HGE_SCREENBPP:		if(!pD3DDevice) nScreenBPP=value; break;
 
 		case HGE_SAMPLERATE:	if(!hBass) nSampleRate=value;
@@ -559,6 +563,8 @@ int CALL HGE_Impl::System_GetStateInt(hgeIntState state)
 	{
 		case HGE_SCREENWIDTH:	return nScreenWidth;
 		case HGE_SCREENHEIGHT:	return nScreenHeight;
+		case HGE_WINDOWX:		return nWindowX;
+		case HGE_WINDOWY:		return nWindowY;
 		case HGE_SCREENBPP:		return nScreenBPP;
 		case HGE_SAMPLERATE:	return nSampleRate;
 		case HGE_FXVOLUME:		return nFXVolume;
@@ -692,6 +698,8 @@ HGE_Impl::HGE_Impl()
 	nScreenWidth=800;
 	nScreenHeight=600;
 	nScreenBPP=32;
+	nWindowX=0;
+	nWindowY=0;
 	bWindowed=false;
 	bZBuffer=false;
 	bTextureFilter=true;

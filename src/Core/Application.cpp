@@ -6,13 +6,24 @@
 using namespace Core;
 
 Application::Application(): 
-	StateMachine<eAppState>(AS_INITING), mFrameSmoothingTime(0.5f), 
-	mConsoleX(0), mConsoleY(0), mConsoleHeight(768)
+	StateMachine<eAppState>(AS_INITING), mFrameSmoothingTime(0.5f), mConsoleHandle(0)
 {
-	ShowConsole(); // debug window
+	// create basic singletons
+	mLogMgr = DYN_NEW LogSystem::LogMgr("CoreLog.txt", LOG_TRIVIAL);
+
+	// get access to config file
+	mGlobalConfig = new Config("config.txt");
+
+	// load console properties
+	mConsoleX = mGlobalConfig->GetInt32("ConsoleX", 0, "Windows");
+	mConsoleY = mGlobalConfig->GetInt32("ConsoleY", 0, "Windows");
+	mConsoleWidth = mGlobalConfig->GetInt32("ConsoleW", 1024, "Windows");
+	mConsoleHeight = mGlobalConfig->GetInt32("ConsoleH", 768, "Windows");
+
+	// debug window
+	ShowConsole(); 
 
 	// create singletons
-	mLogMgr = DYN_NEW LogSystem::LogMgr("CoreLog.txt", LOG_TRIVIAL);
 	mResourceMgr = DYN_NEW ResourceSystem::ResourceMgr("data");
 	mGfxRenderer = DYN_NEW GfxSystem::GfxRenderer(GfxSystem::Point(1024,768), false);
 	mInputMgr = DYN_NEW InputSystem::InputMgr();
@@ -26,21 +37,25 @@ Application::Application():
 	RequestStateChange(AS_LOADING);
 	UpdateState();
 
+	// FPS counter init
 	ResetStats();
 }
 
 Application::~Application()
 {
-	DYN_DELETE mResourceMgr;
-	DYN_DELETE mGfxRenderer;
-	DYN_DELETE mInputMgr;
-	DYN_DELETE mEntityMgr;
-	DYN_DELETE mLogMgr;
+	HideConsole();
 
 	DYN_DELETE mLoadingScreen;
 	DYN_DELETE mGame;
 
-	HideConsole();
+	DYN_DELETE mResourceMgr;
+	DYN_DELETE mGfxRenderer;
+	DYN_DELETE mInputMgr;
+	DYN_DELETE mEntityMgr;
+
+	// must come last
+	DYN_DELETE mGlobalConfig;
+	DYN_DELETE mLogMgr;
 }
 
 void Application::runMainLoop()
@@ -175,12 +190,22 @@ void Core::Application::ShowConsole( void )
 	// set position
 	if (mConsoleHandle)
 	{
-		MoveWindow(mConsoleHandle, mConsoleX, mConsoleY, 1024, mConsoleHeight, true);
+		MoveWindow(mConsoleHandle, mConsoleX, mConsoleY, mConsoleWidth, mConsoleHeight, true);
 	}
 }
 
 void Core::Application::HideConsole( void )
 {
+	// save console settings first
+	RECT windowRect;
+	if (GetWindowRect(mConsoleHandle, &windowRect))
+	{
+		mGlobalConfig->SetInt32("ConsoleX", windowRect.left, "Windows");
+		mGlobalConfig->SetInt32("ConsoleY", windowRect.top, "Windows");
+		mGlobalConfig->SetInt32("ConsoleW", windowRect.right-windowRect.left, "Windows");
+		mGlobalConfig->SetInt32("ConsoleH", windowRect.bottom-windowRect.top, "Windows");
+	}
+
 	FreeConsole();
 }
 

@@ -1,5 +1,6 @@
 #include "GfxRenderer.h"
 #include "../Common.h"
+#include "../Core/Application.h"
 
 namespace GfxSystem
 { 
@@ -19,6 +20,8 @@ GfxRenderer::GfxRenderer(const Point& resolution, bool fullscreen)
 	mHGE->System_SetState(HGE_SCREENWIDTH, resolution.x);
 	mHGE->System_SetState(HGE_SCREENWIDTH, resolution.x);
 	mHGE->System_SetState(HGE_SCREENHEIGHT, resolution.y);
+	mHGE->System_SetState(HGE_WINDOWX, gApp.GetGlobalConfig()->GetInt32("WindowX", 0, "Windows"));
+	mHGE->System_SetState(HGE_WINDOWY, gApp.GetGlobalConfig()->GetInt32("WindowY", 0, "Windows"));
 	mHGE->System_SetState(HGE_WINDOWED, !fullscreen);
 	mHGE->System_SetState(HGE_LOGFILE, "HgeLog.txt");
 	mHGE->System_SetState(HGE_HIDEMOUSE, false);
@@ -34,6 +37,8 @@ GfxRenderer::GfxRenderer(const Point& resolution, bool fullscreen)
 GfxRenderer::~GfxRenderer()
 {
 	assert(mHGE);
+	gApp.GetGlobalConfig()->SetInt32("WindowX", mHGE->System_GetState(HGE_WINDOWX), "Windows");
+	gApp.GetGlobalConfig()->SetInt32("WindowY", mHGE->System_GetState(HGE_WINDOWY), "Windows");
 	mHGE->System_Shutdown();
 }
 

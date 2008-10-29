@@ -6,6 +6,7 @@
 #include "../Utility/Settings.h"
 #include "../Utility/Timer.h"
 #include "../Utility/Singleton.h"
+#include "Config.h"
 #include <deque>
 
 #define gApp Core::Application::GetSingleton()
@@ -34,6 +35,9 @@ namespace Core
 		void ShowConsole(void);
 		void WriteToConsole(const string& str);
 		void HideConsole(void);
+
+		inline Config* GetGlobalConfig(void) { return mGlobalConfig; }
+
 	private:
 		// singletons
 		ResourceSystem::ResourceMgr* mResourceMgr;
@@ -44,6 +48,7 @@ namespace Core
 
 		LoadingScreen* mLoadingScreen;
 		Game* mGame;
+		Config* mGlobalConfig;
 
 		void MessagePump(void);
 
@@ -65,6 +70,7 @@ namespace Core
 		HWND mConsoleHandle;
 		int32 mConsoleX;
 		int32 mConsoleY;
+		int32 mConsoleWidth;
 		int32 mConsoleHeight;
 
 	};

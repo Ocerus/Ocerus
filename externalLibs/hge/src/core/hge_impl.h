@@ -219,6 +219,8 @@ public:
 	int					nScreenWidth;
 	int					nScreenHeight;
 	int					nScreenBPP;
+	int					nWindowX;
+	int					nWindowY;
 	bool				bWindowed;
 	bool				bZBuffer;
 	bool				bTextureFilter;

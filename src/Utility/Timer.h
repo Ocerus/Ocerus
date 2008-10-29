@@ -2,7 +2,7 @@
 #define Timer_h__
 
 #include "Settings.h"
-#include "Windows.h"
+#include <Windows.h>
 
 class Timer
 {

@@ -43,6 +43,7 @@
 				Optimization="0"
 				AdditionalIncludeDirectories="externalLibs/boost/inc;externalLibs/hge/include;externalLibs/ois/includes;externalLibs/cegui/include;externalLibs/rudeconfig/include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;CEGUI_STATIC"
+				GeneratePreprocessedFile="0"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -535,10 +536,6 @@
 		</Filter>
 		<File
 			RelativePath=".\src\Common.h"
-			>
-		</File>
-		<File
-			RelativePath=".\externalLibs\rudeconfig\RudeConfig.vcproj"
 			>
 		</File>
 	</Files>
