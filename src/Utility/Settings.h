@@ -25,5 +25,17 @@ typedef float float32;
 #include <ios>
 typedef std::string string;
 typedef std::istream InputStream;
+enum eInputStreamMode { ISM_TEXT, ISM_BINARY };
+inline std::ios_base::openmode InputStreamMode(eInputStreamMode mode)
+{
+	switch (mode)
+	{
+	case ISM_TEXT:
+		return std::ios_base::in;
+	case ISM_BINARY:
+		return std::ios_base::in | std::ios_base::binary;
+	}
+	return std::ios_base::in | std::ios_base::binary;
+}
 
 #endif

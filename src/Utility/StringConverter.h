@@ -19,7 +19,7 @@ namespace StringConverter
 	{
 		T result;
 		std::istringstream iss(str);
-		if (!(iss >> result))
+		if (!(iss >> result).fail())
 			return T(); // return default value
 		return result;
 	}

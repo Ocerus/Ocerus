@@ -2,7 +2,6 @@
 #define _CEGUIRESOURCE_H_
 
 #include "../Utility/Settings.h"
-#include "../Common.h"
 #include "../ResourceSystem/Resource.h"
 
 namespace GUISystem {

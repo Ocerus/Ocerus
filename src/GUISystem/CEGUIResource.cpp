@@ -38,7 +38,7 @@ DataBlock * CEGUIResource::AddNewDataBlock(int size) {
 bool CEGUIResource::LoadImpl()
 {
 	boost::uintmax_t filesize;
-	OpenInputStream(std::ios_base::binary);
+	OpenInputStream(ISM_BINARY);
 
 	
 	fs::path p(mFilePath, fs::native);
