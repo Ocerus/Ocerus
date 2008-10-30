@@ -34,31 +34,8 @@ namespace GUISystem {
 		uint32 mDataBlockSize;
 	};
 
-	//typedef SmartPointer<CEGUIResource> CEGUIResourcePtr;
 
-	class CEGUIResourcePtr : public SmartPointer<CEGUIResource>
-	{
-	public:
-		explicit CEGUIResourcePtr(CEGUIResource* pointer): SmartPointer<CEGUIResource>(pointer) {}
-		CEGUIResourcePtr(const CEGUIResourcePtr& r): SmartPointer<CEGUIResource>(r) {}
-		CEGUIResourcePtr(const ResourceSystem::ResourcePtr& r): SmartPointer<CEGUIResource>() {	Recreate(r); }
-		CEGUIResourcePtr& operator=(const ResourceSystem::ResourcePtr& r)
-		{
-			if (mPointer == static_cast<CEGUIResource*>(r.GetPointer()))
-				return *this;
-			Release();
-			Recreate(r);
-			return *this;
-		}
-	private:
-		void Recreate(const CEGUIResourcePtr& r)
-		{
-			mPointer = static_cast<CEGUIResource*>(r.GetPointer());
-			mUseCountPtr = r.GetUseCountPtr();
-			if (mUseCountPtr)
-				++(*mUseCountPtr);
-		}
-	};
+	typedef SmartPointer<CEGUIResource> CEGUIResourcePtr;
 }
 
 #endif
