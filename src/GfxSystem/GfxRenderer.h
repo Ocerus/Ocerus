@@ -4,12 +4,12 @@
 #include <vector>
 #include "../Utility/Settings.h"
 #include "../Utility/Singleton.h"
+#include "Texture.h"
 
 #define gGfxRenderer GfxSystem::GfxRenderer::GetSingleton()
 
 namespace GfxSystem
 {
-	class TexturePtr;
 	class HGE;
 
 	struct Point
