@@ -8,8 +8,8 @@ namespace InputSystem
 	class IInputListener
 	{
 	public:
-		IInputListener(void);
-		virtual ~IInputListener(void);
+		IInputListener(void) {}
+		virtual ~IInputListener(void) {}
 
 		virtual void KeyPressed(const KeyInfo& ke) = 0;
 		virtual void KeyReleased(const KeyInfo& ke) = 0;
