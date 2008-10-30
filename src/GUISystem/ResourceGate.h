@@ -2,14 +2,8 @@
 #define _RESOURCEGATE_H_
 
 #include "../Utility/Settings.h"
-// Common.h v headerech radsi neincludovat, pak vznikaji jeste vetsi zavislosti
-#include "../Common.h"
+#include "../ResourceSystem/ResourceMgr.h"
 #include "CEGUI.h"
-//#include "CEGUIResourceProvider.h"
-#include "CEGUIDataContainer.h"
-//#include "CEGUIString.h"
-//#include <string> misto toho naincludovat Settings.h
-#include "../Utility/Settings.h"
 //#pragma once
 
 namespace GUISystem {

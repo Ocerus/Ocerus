@@ -64,7 +64,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="CEGUIBase_Static_d.lib"
+				AdditionalDependencies="CEGUIBase_Static_d.lib freetype_d.lib pcre_d.lib CEGUIExpatParser_d.lib CEGUIFalagardWRBase_Static_d.lib "
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="externalLibs/boost/lib;externalLibs/cegui/lib;externalLibs/cegui/dependencies/lib"
 				IgnoreDefaultLibraryNames="libci.lib"
@@ -502,6 +502,26 @@
 			Name="GUISystem"
 			>
 			<Filter
+				Name="GUIMgr"
+				>
+				<Filter
+					Name="inc"
+					>
+					<File
+						RelativePath=".\src\GUISystem\GUIMgr.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="src"
+					>
+					<File
+						RelativePath=".\src\GUISystem\GUIMgr.cpp"
+						>
+					</File>
+				</Filter>
+			</Filter>
+			<Filter
 				Name="ResourceGate"
 				>
 				<Filter
@@ -525,26 +545,6 @@
 					</File>
 					<File
 						RelativePath=".\src\GUISystem\ResourceGate.cpp"
-						>
-					</File>
-				</Filter>
-			</Filter>
-			<Filter
-				Name="InputGate"
-				>
-				<Filter
-					Name="inc"
-					>
-					<File
-						RelativePath=".\src\GUISystem\InputGate.h"
-						>
-					</File>
-				</Filter>
-				<Filter
-					Name="src"
-					>
-					<File
-						RelativePath=".\src\GUISystem\InputGate.cpp"
 						>
 					</File>
 				</Filter>

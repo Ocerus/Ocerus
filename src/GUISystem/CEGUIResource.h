@@ -3,13 +3,9 @@
 
 #include "../Utility/Settings.h"
 #include "../ResourceSystem/Resource.h"
+#pragma warning(disable: 4717)
 
 namespace GUISystem {
-	struct DataBlock {
-		DataBlock* prev;
-		DataBlock* next;
-		uint8* payload;
-	};
 
 	class CEGUIResource : public ResourceSystem::Resource
 	{
