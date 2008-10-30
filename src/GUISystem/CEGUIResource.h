@@ -18,19 +18,23 @@ namespace GUISystem {
 
 		static ResourceSystem::ResourcePtr CreateMe(void);
 
-		/*library specific CEGUIResource*/ void _GetCEGUIResource(void);
+		inline uint8* GetResource(uint32& Size) {
+			EnsureLoaded();
+			Size = mDataBlockSize;
+			return mDataBlock;
+		}
 
 	protected:
+		friend class ResourceMgr;
+
 		virtual bool LoadImpl(void);
 		virtual bool UnloadImpl(void);
 
-		DataBlock * AddNewDataBlock(void);
-		DataBlock * AddNewDataBlock(int size);
-
-		DataBlock* mDataBlocks;
-		DataBlock* mLastDataBlock;
+		uint8* mDataBlock;
+		uint32 mDataBlockSize;
 	};
 
+	//typedef SmartPointer<CEGUIResource> CEGUIResourcePtr;
 
 	class CEGUIResourcePtr : public SmartPointer<CEGUIResource>
 	{
@@ -38,7 +42,7 @@ namespace GUISystem {
 		explicit CEGUIResourcePtr(CEGUIResource* pointer): SmartPointer<CEGUIResource>(pointer) {}
 		CEGUIResourcePtr(const CEGUIResourcePtr& r): SmartPointer<CEGUIResource>(r) {}
 		CEGUIResourcePtr(const ResourceSystem::ResourcePtr& r): SmartPointer<CEGUIResource>() {	Recreate(r); }
-		CEGUIResourcePtr& operator=(const CEGUIResourcePtr& r)
+		CEGUIResourcePtr& operator=(const ResourceSystem::ResourcePtr& r)
 		{
 			if (mPointer == static_cast<CEGUIResource*>(r.GetPointer()))
 				return *this;
