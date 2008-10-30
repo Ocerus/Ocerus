@@ -502,10 +502,6 @@
 			Name="GUISystem"
 			>
 			<Filter
-				Name="FontMgr"
-				>
-			</Filter>
-			<Filter
 				Name="ResourceGate"
 				>
 				<Filter
@@ -529,6 +525,26 @@
 					</File>
 					<File
 						RelativePath=".\src\GUISystem\ResourceGate.cpp"
+						>
+					</File>
+				</Filter>
+			</Filter>
+			<Filter
+				Name="InputGate"
+				>
+				<Filter
+					Name="inc"
+					>
+					<File
+						RelativePath=".\src\GUISystem\InputGate.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="src"
+					>
+					<File
+						RelativePath=".\src\GUISystem\InputGate.cpp"
 						>
 					</File>
 				</Filter>
