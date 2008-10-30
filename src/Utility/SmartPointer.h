@@ -37,7 +37,7 @@ public:
 	template< class Y>
 	SmartPointer(const SmartPointer<Y>& r): mPointer(0), mUseCountPtr(0)
 	{
-	    mPointer = r.GetPointer();
+	    mPointer = static_cast<T*>(r.GetPointer());
 		mUseCountPtr = r.GetUseCountPtr();
 	    // Handle zero pointer gracefully to manage STL containers
 	    if(mUseCountPtr)
