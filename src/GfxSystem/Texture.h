@@ -20,29 +20,7 @@ namespace GfxSystem
 	};
 
 
-	class TexturePtr : public SmartPointer<Texture>
-	{
-	public:
-		explicit TexturePtr(Texture* pointer): SmartPointer<Texture>(pointer) {}
-		TexturePtr(const TexturePtr& r): SmartPointer<Texture>(r) {}
-		TexturePtr(const ResourceSystem::ResourcePtr& r): SmartPointer<Texture>() {	Recreate(r); }
-		TexturePtr& operator=(const ResourceSystem::ResourcePtr& r)
-		{
-			if (mPointer == static_cast<Texture*>(r.GetPointer()))
-				return *this;
-			Release();
-			Recreate(r);
-			return *this;
-		}
-	private:
-		void Recreate(const TexturePtr& r)
-		{
-			mPointer = static_cast<Texture*>(r.GetPointer());
-			mUseCountPtr = r.GetUseCountPtr();
-			if (mUseCountPtr)
-				++(*mUseCountPtr);
-		}
-	};
+	typedef SmartPointer<Texture> TexturePtr;
 }
 
 #endif
