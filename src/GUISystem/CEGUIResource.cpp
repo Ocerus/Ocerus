@@ -1,6 +1,5 @@
 #include "CEGUIResource.h"
-#include <ios>
-#include <sstream>
+#include "../Utility/DataContainer.h"
 
 using namespace GUISystem;
 
@@ -11,19 +10,10 @@ ResourceSystem::ResourcePtr CEGUIResource::CreateMe()
 
 bool CEGUIResource::LoadImpl()
 {
-	InputStream& input = OpenInputStream(ISM_BINARY);
-	std::stringstream sstr;	
-	mDataBlockSize = 0;
-
-	while (input.good()) {
-		sstr << input;
-		mDataBlockSize += input.gcount();
-	}
-	
-	mDataBlock = DYN_NEW uint8[mDataBlockSize];
-	sstr.read((char *)mDataBlock, mDataBlockSize);
-	
-	CloseInputStream();
+	DataContainer dc;
+	GetRawInputData(dc);
+	mDataBlock = dc.GetData();
+	mDataBlockSize = dc.GetSize();
 	return true;
 }
 
@@ -31,4 +21,11 @@ bool CEGUIResource::UnloadImpl()
 {
 	DYN_DELETE_ARRAY mDataBlock;
 	return true;
+}
+
+void CEGUIResource::GetResource( CEGUI::RawDataContainer& outData )
+{
+	EnsureLoaded();
+	outData.setData(mDataBlock);
+	outData.setSize(mDataBlockSize);
 }

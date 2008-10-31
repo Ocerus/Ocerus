@@ -24,7 +24,7 @@ ResourceMgr::ResourceMgr(const string& basedir):
 	mExtToTypeMap["jpg"] = Resource::TYPE_TEXTURE;
 	mExtToTypeMap["gif"] = Resource::TYPE_TEXTURE;
 
-	assert(mResourceCreationMethods[Resource::NUM_TYPES-1]);
+	assert(mResourceCreationMethods[Resource::NUM_TYPES-1] && "Not all resource types are registered");
 
 	gLogMgr.LogMessage("All resource types registered");
 }
@@ -75,6 +75,7 @@ bool ResourceMgr::AddResourceFileToGroup(const string& filepath, const string& g
 	if (type == Resource::TYPE_AUTODETECT)
 		return false;
 	ResourcePtr r = mResourceCreationMethods[type]();
+	r->SetState(Resource::STATE_INITIALIZED);
 	string name = boostPath.filename();
 	r->SetName(name);
 	r->SetFilepath(boostPath.string());

@@ -299,6 +299,10 @@
 				Name="inc"
 				>
 				<File
+					RelativePath=".\src\Utility\DataContainer.h"
+					>
+				</File>
+				<File
 					RelativePath=".\src\Utility\Settings.h"
 					>
 				</File>

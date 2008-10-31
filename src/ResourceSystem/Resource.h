@@ -5,6 +5,8 @@
 #include "../Utility/Settings.h"
 #include <boost/filesystem/fstream.hpp>
 
+class DataContainer;
+
 namespace ResourceSystem
 {
 	class Resource
@@ -24,23 +26,27 @@ namespace ResourceSystem
 		inline string GetName(void) const { return mName; }
 
 	protected:
-		friend class ResourceMgr;
-
-		eType mType;
 		eState mState;
-		string mName;
-		string mFilePath;
-		boost::filesystem::ifstream* mInputStream;
 
 		virtual bool LoadImpl(void) = 0;
 		virtual bool UnloadImpl(void) = 0;
 
 		InputStream& OpenInputStream(eInputStreamMode = ISM_BINARY );
 		void CloseInputStream(void);
-
-		void SetName(const string& name) { mName = name; }
-		void SetFilepath(const string& filepath) { mFilePath = filepath; }
+		void GetRawInputData(DataContainer& outData);
 		void EnsureLoaded(void); // to be called in Get method
+
+	private:
+		friend class ResourceMgr;
+		string mFilePath;
+		boost::filesystem::ifstream* mInputStream;
+		eType mType;
+		string mName;
+
+		inline void SetName(const string& name) { mName = name; }
+		inline void SetFilepath(const string& filepath) { mFilePath = filepath; }
+		inline void SetState(const eState newState) { mState = newState; }
+		inline void SetType(const eType newType) { mType = newType; }
 	};
 
 	typedef SmartPointer<Resource> ResourcePtr;

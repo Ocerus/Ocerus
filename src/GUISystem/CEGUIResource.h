@@ -3,7 +3,8 @@
 
 #include "../Utility/Settings.h"
 #include "../ResourceSystem/Resource.h"
-//#pragma warning(disable: 4717)
+
+namespace CEGUI { class RawDataContainer; }
 
 namespace GUISystem {
 
@@ -14,11 +15,7 @@ namespace GUISystem {
 
 		static ResourceSystem::ResourcePtr CreateMe(void);
 
-		inline uint8* GetResource(uint32& Size) {
-			EnsureLoaded();
-			Size = mDataBlockSize;
-			return mDataBlock;
-		}
+		void GetResource(CEGUI::RawDataContainer& outData);
 
 	protected:
 		friend class ResourceMgr;
