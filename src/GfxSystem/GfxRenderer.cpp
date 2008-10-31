@@ -111,15 +111,18 @@ bool GfxRenderer::DrawLine( const Point& begin, const Point& end, const Pen& pen
 }
 
 bool GfxSystem::GfxRenderer::DrawImage( const TexturePtr& image, int32 x, int32 y, uint8 anchor /*= ANCHOR_VCENTER|ANCHOR_HCENTER*/, float32 angle /*= 0.0f*/, uint8 alpha /*= 255*/, float32 scale /*= 1.0f*/ )
-{
-	//TODO get texture size
-	/*hgeQuad q;
+{	
+	hgeQuad q;
 	q.v[0].x = (float) x;
 	q.v[0].y = (float) y;
-	
+	q.v[1].x = (float) x + image->GetWidth();
+	q.v[1].y = (float) y;
+	q.v[2].x = (float) x + image->GetWidth();
+	q.v[2].y = (float) y + image->GetHeight();
+	q.v[3].x = (float) x;
+	q.v[3].y = (float) y + image->GetHeight();
 
-
-	mHGE->Gfx_RenderQuad(&q);*/
+	mHGE->Gfx_RenderQuad(&q);
 	return false;
 }
 
@@ -130,17 +133,17 @@ bool GfxSystem::GfxRenderer::DrawImage( const TexturePtr& image, const Point& po
 
 bool GfxSystem::GfxRenderer::DrawImage( const TexturePtr& image, const Rect& destRect, uint8 alpha /*= 255*/ )
 {
-	//TODO textures
-	/*
 	hgeQuad q;
-	q.v[0].x = destRect.x;
-	q.v[0].y = destRect.y;
-	q.v[1].x = destRect.x + destRect.w;
-	q.v[1].y = destRect.y;
-	q.v[2].x = destRect.x + destRect.w;
-	q.v[2].y = destRect.y + destRect.h;
-	q.v[3].x = destRect.x;
-	q.v[3].y = destRect.y + destRect.h;*/
+	q.v[0].x = (float) destRect.x;
+	q.v[0].y = (float) destRect.y;
+	q.v[1].x = (float) destRect.x + destRect.w;
+	q.v[1].y = (float) destRect.y;
+	q.v[2].x = (float) destRect.x + destRect.w;
+	q.v[2].y = (float) destRect.y + destRect.h;
+	q.v[3].x = (float) destRect.x;
+	q.v[3].y = (float) destRect.y + destRect.h;
+
+	mHGE->Gfx_RenderQuad(&q);
 
 	return false;
 }

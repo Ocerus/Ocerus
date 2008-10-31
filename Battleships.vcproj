@@ -377,6 +377,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\GfxSystem\HgeTexture.h"
+					>
+				</File>
+				<File
 					RelativePath=".\src\GfxSystem\Texture.h"
 					>
 				</File>
