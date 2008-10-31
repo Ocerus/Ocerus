@@ -3,16 +3,18 @@
 
 #include "../Utility/Settings.h"
 #include "CEGUIRenderer.h"
+#include <queue>
 
 namespace GUISystem {
 	class RendererGate : public CEGUI::Renderer
 	{
 	public:
-		// add's a quad to the list to be rendered
+		// add's a quad to the list to be rendered - Pokud Santhos neda tak bude jen vykreslovat
 		virtual	void addQuad(const CEGUI::Rect& dest_rect, float z, const CEGUI::Texture* tex,
 			const CEGUI::Rect& texture_rect, const CEGUI::ColourRect& colours, CEGUI::QuadSplitMode quad_split_mode);
 
-		// perform final rendering for all queued renderable quads.
+		// perform final rendering for all queued renderable quads. - Pokud Santhos da tak addQuad bude opravdu jen
+		// pridavat a todle jen vykreslovat
 		virtual	void doRender(void);
 
 		// clear the queue
@@ -52,8 +54,7 @@ namespace GUISystem {
 
 		const CEGUI::String& getIdentifierString() const;
 
-		virtual CEGUI::ResourceProvider* createResourceProvider(void);
-
+		virtual CEGUI::ResourceProvider* createResourceProvider(void);	
 	};
 }
 
