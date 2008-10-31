@@ -568,6 +568,10 @@
 					Name="inc"
 					>
 					<File
+						RelativePath=".\src\GUISystem\CEGUITextureWrapper.h"
+						>
+					</File>
+					<File
 						RelativePath=".\src\GUISystem\RendererGate.h"
 						>
 					</File>
@@ -575,6 +579,10 @@
 				<Filter
 					Name="src"
 					>
+					<File
+						RelativePath=".\src\GUISystem\CEGUITextureWrapper.cpp"
+						>
+					</File>
 					<File
 						RelativePath=".\src\GUISystem\RendererGate.cpp"
 						>
