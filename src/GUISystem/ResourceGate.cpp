@@ -8,8 +8,6 @@ namespace GUISystem {
 		
 		uint32 res_size;
 
-		assert(ResourceSystem::ResourceMgr::GetSingleton());
-
 		ResourceSystem::ResourceMgr::GetSingleton().AddResourceFileToGroup(resourceGroup.c_str(), filename.c_str());
 
 		CEGUIResourcePtr res = (CEGUIResourcePtr)ResourceSystem::ResourceMgr::GetSingleton()
