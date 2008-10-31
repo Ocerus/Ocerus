@@ -27,6 +27,9 @@
 				Name="VCPreBuildEventTool"
 			/>
 			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
 				Name="VCXMLDataGeneratorTool"
 			/>
 			<Tool
@@ -61,7 +64,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="CEGUIBase_d.lib freetype_d.lib pcre_d.lib CEGUIExpatParser_d.lib CEGUIFalagardWRBase_Static_d.lib "
+				AdditionalDependencies="CEGUIBase_d.lib freetype_d.lib pcre_d.lib CEGUIExpatParser_d.lib CEGUIFalagardWRBase_Static_d.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="externalLibs/boost/lib;externalLibs/cegui/lib;externalLibs/cegui/dependencies/lib"
 				IgnoreAllDefaultLibraries="false"
@@ -92,7 +95,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy /V /Y /B externalLibs\cegui\bin\CEGUIBase_d.dll Debug&#x0D;&#x0A;copy /V /Y /B externalLibs\cegui\bin\CEGUIBase_d.dll output"
+				CommandLine="copy /V /Y /B externalLibs\cegui\bin\Debug\*.dll Debug&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -174,7 +177,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Copying release file to output dir..."
-				CommandLine="copy &quot;$(OutDir)\$(TargetFileName)&quot; &quot;output&quot;&#x0D;&#x0A;copy /V /Y /B externalLibs\cegui\bin\CEGUIBase.dll Release&#x0D;&#x0A;copy /V /Y /B externalLibs\cegui\bin\CEGUIBase.dll output"
+				CommandLine="copy &quot;$(OutDir)\$(TargetFileName)&quot; &quot;output&quot;&#x0D;&#x0A;copy /V /Y /B externalLibs\cegui\bin\Release\*.dll Release&#x0D;&#x0A;copy /V /Y /B externalLibs\cegui\bin\Release\*.dll output&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>
