@@ -3,7 +3,7 @@
 
 #include "../Utility/Settings.h"
 #include "../ResourceSystem/Resource.h"
-#pragma warning(disable: 4717)
+//#pragma warning(disable: 4717)
 
 namespace GUISystem {
 
