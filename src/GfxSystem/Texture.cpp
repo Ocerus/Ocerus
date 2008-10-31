@@ -22,12 +22,12 @@ bool Texture::UnloadImpl()
 	return false;
 }
 
-float Texture::GetWidth()
+uint32 Texture::GetWidth()
 {
-	return 0.0f;
+	return 0;
 }
 
-float Texture::GetHeight()
+uint32 Texture::GetHeight()
 {
-	return 0.0f;
+	return 0;
 }
