@@ -23,6 +23,12 @@ typedef float float32;
 
 #include <string>
 #include <ios>
+#include <cmath>
+
+inline uint32 round(double num) {
+  return static_cast<uint32>(floor(num+0.5));
+}
+
 typedef std::string string;
 typedef std::istream InputStream;
 enum eInputStreamMode { ISM_TEXT, ISM_BINARY };

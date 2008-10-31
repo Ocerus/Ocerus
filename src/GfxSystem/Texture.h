@@ -15,8 +15,8 @@ namespace GfxSystem
 
 		/*library specific texture*/ void _GetTexture(void);
 
-		virtual float GetWidth();
-		virtual float GetHeight();
+		virtual uint32 GetWidth();
+		virtual uint32 GetHeight();
 		
 	protected:
 		virtual bool LoadImpl(void);

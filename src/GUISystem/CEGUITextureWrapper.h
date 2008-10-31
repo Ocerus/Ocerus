@@ -6,6 +6,7 @@
 #include "CEGUITexture.h"
 #include "CEGUIString.h"
 #include "../GfxSystem/Texture.h"
+#include "RendererGate.h"
 
 namespace GUISystem {
 	class CEGUITextureWrapper : public CEGUI::Texture
@@ -54,10 +55,13 @@ namespace GUISystem {
 		virtual void loadFromMemory(const void* buffPtr, CEGUI::uint buffWidth,
 			CEGUI::uint buffHeight, CEGUI::Texture::PixelFormat pixelFormat);
 
+		inline virtual void setTexture(GfxSystem::TexturePtr p) { mTexture = p; }
+
 		CEGUI::Renderer* getRenderer(void) const {return d_owner;}
 
 		inline virtual GfxSystem::TexturePtr getTexture() { return mTexture; }
 
+		CEGUITextureWrapper(RendererGate * gate);
 	protected:
 		// Destructor for Texture base class.  This is never called by client code.
 		virtual ~CEGUITextureWrapper(void) {}

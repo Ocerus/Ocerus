@@ -1,4 +1,5 @@
 #include "CEGUIResource.h"
+#include "CEGUIDataContainer.h"
 #include "../Utility/DataContainer.h"
 
 using namespace GUISystem;
