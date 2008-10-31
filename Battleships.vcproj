@@ -27,9 +27,6 @@
 				Name="VCPreBuildEventTool"
 			/>
 			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
 				Name="VCXMLDataGeneratorTool"
 			/>
 			<Tool
@@ -42,7 +39,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="externalLibs/boost/inc;externalLibs/hge/include;externalLibs/ois/includes;externalLibs/cegui/include;externalLibs/rudeconfig/include"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;CEGUI_STATIC"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -64,9 +61,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="CEGUIBase_Static_d.lib freetype_d.lib pcre_d.lib CEGUIExpatParser_d.lib CEGUIFalagardWRBase_Static_d.lib "
+				AdditionalDependencies="CEGUIBase_d.lib freetype_d.lib pcre_d.lib CEGUIExpatParser_d.lib CEGUIFalagardWRBase_Static_d.lib "
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="externalLibs/boost/lib;externalLibs/cegui/lib;externalLibs/cegui/dependencies/lib"
+				IgnoreAllDefaultLibraries="false"
 				IgnoreDefaultLibraryNames="libci.lib"
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -94,6 +92,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="copy /V /Y /B externalLibs\cegui\bin\CEGUIBase_d.dll Debug&#x0D;&#x0A;copy /V /Y /B externalLibs\cegui\bin\CEGUIBase_d.dll output"
 			/>
 		</Configuration>
 		<Configuration
@@ -109,6 +108,8 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
+				CommandLine=""
+				Outputs=""
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -122,7 +123,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="externalLibs/boost/inc;externalLibs/hge/include;externalLibs/ois/includes;externalLibs/cegui/include;externalLibs/rudeconfig/include"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;CEGUI_STATIC"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
@@ -140,7 +141,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="CEGUIBase_Static.lib"
+				AdditionalDependencies="CEGUIBase.lib freetype.lib pcre.lib CEGUIExpatParser.lib CEGUIFalagardWRBase_Static.lib "
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="externalLibs/boost/lib;externalLibs/cegui/lib;externalLibs/cegui/dependencies/lib"
 				IgnoreDefaultLibraryNames="libci.lib"
@@ -173,7 +174,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Copying release file to output dir..."
-				CommandLine="copy &quot;$(OutDir)\$(TargetFileName)&quot; &quot;output&quot;"
+				CommandLine="copy &quot;$(OutDir)\$(TargetFileName)&quot; &quot;output&quot;&#x0D;&#x0A;copy /V /Y /B externalLibs\cegui\bin\CEGUIBase.dll Release&#x0D;&#x0A;copy /V /Y /B externalLibs\cegui\bin\CEGUIBase.dll output"
 			/>
 		</Configuration>
 	</Configurations>
@@ -551,6 +552,18 @@
 						RelativePath=".\src\GUISystem\ResourceGate.cpp"
 						>
 					</File>
+				</Filter>
+			</Filter>
+			<Filter
+				Name="RendererGate"
+				>
+				<Filter
+					Name="inc"
+					>
+				</Filter>
+				<Filter
+					Name="src"
+					>
 				</Filter>
 			</Filter>
 		</Filter>
