@@ -10,7 +10,7 @@ namespace GUISystem {
 
 		ResourceSystem::ResourceMgr::GetSingleton().AddResourceFileToGroup(resourceGroup.c_str(), filename.c_str());
 
-		CEGUIResourcePtr res = (CEGUIResourcePtr)ResourceSystem::ResourceMgr::GetSingleton()
+		CEGUIResourcePtr res = ResourceSystem::ResourceMgr::GetSingleton()
 			.GetResource(resourceGroup.c_str(), filename.c_str());
 
 
