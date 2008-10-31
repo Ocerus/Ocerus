@@ -563,10 +563,18 @@
 				<Filter
 					Name="inc"
 					>
+					<File
+						RelativePath=".\src\GUISystem\RendererGate.h"
+						>
+					</File>
 				</Filter>
 				<Filter
 					Name="src"
 					>
+					<File
+						RelativePath=".\src\GUISystem\RendererGate.cpp"
+						>
+					</File>
 				</Filter>
 			</Filter>
 		</Filter>
