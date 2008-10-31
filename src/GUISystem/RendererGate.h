@@ -22,7 +22,7 @@ namespace GUISystem {
 
 		virtual	CEGUI::Texture* createTexture(void);
 
-		virtual	CEGUI::Texture* createTexture(const String& filename, const String& resourceGroup);
+		virtual	CEGUI::Texture* createTexture(const CEGUI::String& filename, const CEGUI::String& resourceGroup);
 
 		virtual	CEGUI::Texture* createTexture(float size);
 
@@ -54,7 +54,7 @@ namespace GUISystem {
 
 		virtual CEGUI::ResourceProvider* createResourceProvider(void);
 
-	}
+	};
 }
 
 #endif
