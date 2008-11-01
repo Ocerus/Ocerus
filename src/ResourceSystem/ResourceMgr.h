@@ -27,6 +27,7 @@ namespace ResourceSystem
 		void UnloadResourcesInGroup(const string& group);
 		// delete all resources in this group
 		void ClearGroup(const string& group);
+		void DeleteResource(const string& group, const string& name);
 		//TODO think about this method. It can be dangerous to release resources with UseCount==1.
 		// void UnloadUnusedResources(void);
 

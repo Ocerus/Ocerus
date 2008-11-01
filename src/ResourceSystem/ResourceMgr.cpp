@@ -29,7 +29,11 @@ ResourceMgr::ResourceMgr(const string& basedir):
 	gLogMgr.LogMessage("All resource types registered");
 }
 
-ResourceMgr::~ResourceMgr() {}
+ResourceMgr::~ResourceMgr()
+{
+	for (ResourceGroupMap::const_iterator i=mResourceGroups.begin(); i!=mResourceGroups.end(); ++i)
+		UnloadResourcesInGroup(i->first);
+}
 
 bool ResourceMgr::AddResourceDirToGroup(const string& path, const string& group, const string& includeRegexp, const string& excludeRegexp)
 {
@@ -164,4 +168,22 @@ ResourcePtr ResourceMgr::GetResource(const string& group, const string& name)
 	if (ri == resmap.end())
 		return ResourcePtr(); // null
 	return ri->second;
+}
+
+void ResourceSystem::ResourceMgr::DeleteResource( const string& group, const string& name )
+{
+	ResourceGroupMap::iterator gi = mResourceGroups.find(group);
+
+	if (gi==mResourceGroups.end())
+		gLogMgr.LogMessage("Unknown group '"+group+"'", LOG_ERROR);
+	assert(gi != mResourceGroups.end() && "Unknown group");
+
+	ResourceMap& resmap = gi->second;
+	ResourceMap::const_iterator ri = resmap.find(name);
+	if (ri==resmap.end())
+		gLogMgr.LogMessage("Unknown resource '"+name+"' in group '"+group+"'", LOG_ERROR);
+	assert(ri != resmap.end() && "Unknown resource");
+	if (ri->second->GetState() >= Resource::STATE_LOADING)
+		ri->second->Unload();
+	resmap.erase(ri);
 }

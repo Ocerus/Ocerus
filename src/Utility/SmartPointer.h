@@ -83,11 +83,14 @@ protected:
 
 	inline void Release(void)
     {
-		bool destroyThis = false;
-		if (--(*mUseCountPtr) == 0) 
-			destroyThis = true;
-		if (destroyThis)
-			Destroy();
+		if (mPointer)
+		{
+			bool destroyThis = false;
+			if (--(*mUseCountPtr) == 0) 
+				destroyThis = true;
+			if (destroyThis)
+				Destroy();
+		}
     }
     
 	virtual void Destroy(void)
