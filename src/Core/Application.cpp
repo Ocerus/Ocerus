@@ -185,7 +185,7 @@ void Core::Application::ShowConsole( void )
 	mConsoleHandle = FindWindow(NULL, uniqueName);
 
 	// set title
-	SetConsoleTitle("Battleships Debug Log");
+	SetConsoleTitle("Betmyhips Debug Log");
 
 	// set position
 	if (mConsoleHandle)

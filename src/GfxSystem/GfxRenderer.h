@@ -8,10 +8,10 @@
 
 #define gGfxRenderer GfxSystem::GfxRenderer::GetSingleton()
 
+class HGE;
+
 namespace GfxSystem
 {
-	class HGE;
-
 	struct Point
 	{
 		Point(int32 _x, int32 _y): x(_x), y(_y) {}
@@ -45,6 +45,8 @@ namespace GfxSystem
 	{
 	private:
 		HGE* mHGE; 
+
+		friend class Texture;
 
 	public:
 		GfxRenderer(const Point& resolution, bool fullscreen);

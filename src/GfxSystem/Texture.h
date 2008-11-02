@@ -13,14 +13,21 @@ namespace GfxSystem
 
 		static ResourceSystem::ResourcePtr CreateMe(void);
 
-		/*library specific texture*/ void _GetTexture(void);
+		/*library specific texture type _GetTexture(void); */
+		uint64 GetTexture(void);	// hge's DWORD = uint64
 
-		virtual uint32 GetWidth();
-		virtual uint32 GetHeight();
+		virtual uint32 GetWidth(void);
+		virtual uint32 GetHeight(void);
 		
 	protected:
 		virtual bool LoadImpl(void);
 		virtual bool UnloadImpl(void);
+
+		void Init(void);
+
+		uint64 mHandle;
+
+		friend class GfxRenderer;
 	};
 
 

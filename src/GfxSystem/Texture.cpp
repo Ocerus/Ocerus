@@ -1,4 +1,7 @@
 #include "Texture.h"
+#include "../Utility/DataContainer.h"
+#include "GfxRenderer.h"
+#include <hge.h>
 
 using namespace GfxSystem;
 
@@ -7,27 +10,47 @@ ResourceSystem::ResourcePtr Texture::CreateMe()
 	return ResourceSystem::ResourcePtr(DYN_NEW Texture());
 }
 
-void Texture::_GetTexture()
+void Texture::Init()
 {
-	EnsureLoaded();
+	mHandle = 0;
 }
 
 bool Texture::LoadImpl()
 {
-	return false;
+	// get texture data
+	DataContainer dc;
+	GetRawInputData(dc);
+
+	// load it to HGE
+	mHandle = gGfxRenderer.mHGE->Texture_Load((const char*)dc.GetData(),dc.GetSize(),false);
+
+	return true;
 }
 
 bool Texture::UnloadImpl()
 {
-	return false;
+	// free texture from HGE
+	gGfxRenderer.mHGE->Texture_Free(mHandle);
+
+	// set ini value
+	mHandle = 0;
+	
+	return true;
 }
 
 uint32 Texture::GetWidth()
 {
-	return 0;
+	return gGfxRenderer.mHGE->Texture_GetWidth(mHandle,true);
 }
 
 uint32 Texture::GetHeight()
 {
-	return 0;
+	return gGfxRenderer.mHGE->Texture_GetHeight(mHandle,true);
+}
+
+uint64 Texture::GetTexture()
+{
+	EnsureLoaded();
+
+	return mHandle;
 }

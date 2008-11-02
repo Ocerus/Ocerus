@@ -1,11 +1,7 @@
 #include "GfxRenderer.h"
 #include "../Common.h"
 #include "../Core/Application.h"
-
-namespace GfxSystem
-{ 
-	#include <hge.h>
-}
+#include <hge.h>
 
 using namespace GfxSystem;
 
@@ -100,52 +96,57 @@ bool GfxRenderer::ClearScreen(const Color& color)
 
 bool GfxRenderer::DrawLine(int x1, int y1, int x2, int y2, const Pen& pen) 
 {	
-	mHGE->Gfx_RenderLine((float) x1,(float) y1,(float) x2,(float) y2,GetHGEColor(pen.color));
+	mHGE->Gfx_RenderLine((float32) x1,(float32) y1,(float32) x2,(float32) y2,GetHGEColor(pen.color));
 	return true;
 }
 
 bool GfxRenderer::DrawLine( const Point& begin, const Point& end, const Pen& pen )
 {
-	mHGE->Gfx_RenderLine((float) begin.x,(float) begin.y,(float) end.x,(float) end.y,GetHGEColor(pen.color));
+	mHGE->Gfx_RenderLine((float32) begin.x,(float32) begin.y,(float32) end.x,(float32) end.y,GetHGEColor(pen.color));
 	return false;
+}
+
+void InitQuad(hgeQuad& q,uint64 hTex, int32 x, int32 y,int32 w,int32 h)
+{
+	// set size
+	q.v[0].x = (float32) x;
+	q.v[0].y = (float32) y;
+	q.v[1].x = (float32) x + w;
+	q.v[1].y = (float32) y;
+	q.v[2].x = (float32) x + w;
+	q.v[2].y = (float32) y + h;
+	q.v[3].x = (float32) x;
+	q.v[3].y = (float32) y + h;
+
+	// set texture
+	q.tex = hTex;
 }
 
 bool GfxSystem::GfxRenderer::DrawImage( const TexturePtr& image, int32 x, int32 y, uint8 anchor /*= ANCHOR_VCENTER|ANCHOR_HCENTER*/, float32 angle /*= 0.0f*/, uint8 alpha /*= 255*/, float32 scale /*= 1.0f*/ )
 {	
 	hgeQuad q;
-	q.v[0].x = (float) x;
-	q.v[0].y = (float) y;
-	q.v[1].x = (float) x + image->GetWidth();
-	q.v[1].y = (float) y;
-	q.v[2].x = (float) x + image->GetWidth();
-	q.v[2].y = (float) y + image->GetHeight();
-	q.v[3].x = (float) x;
-	q.v[3].y = (float) y + image->GetHeight();
+	InitQuad(q,image->GetTexture(),x,y,image->GetWidth(),image->GetHeight());
 
 	mHGE->Gfx_RenderQuad(&q);
-	return false;
+	return true;
 }
 
 bool GfxSystem::GfxRenderer::DrawImage( const TexturePtr& image, const Point& pos, uint8 anchor /*= ANCHOR_VCENTER|ANCHOR_HCENTER*/, float32 angle /*= 0.0f*/, uint8 alpha /*= 255*/, float32 scale /*= 1.0f*/ )
 {
-	return false;
+	hgeQuad q;
+	InitQuad(q,image->GetTexture(),pos.x,pos.y,image->GetWidth(),image->GetHeight());
+
+	mHGE->Gfx_RenderQuad(&q);
+	return true;
 }
 
 bool GfxSystem::GfxRenderer::DrawImage( const TexturePtr& image, const Rect& destRect, uint8 alpha /*= 255*/ )
 {
 	hgeQuad q;
-	q.v[0].x = (float) destRect.x;
-	q.v[0].y = (float) destRect.y;
-	q.v[1].x = (float) destRect.x + destRect.w;
-	q.v[1].y = (float) destRect.y;
-	q.v[2].x = (float) destRect.x + destRect.w;
-	q.v[2].y = (float) destRect.y + destRect.h;
-	q.v[3].x = (float) destRect.x;
-	q.v[3].y = (float) destRect.y + destRect.h;
+	InitQuad(q,image->GetTexture(),destRect.x,destRect.y,destRect.w,destRect.h);
 
 	mHGE->Gfx_RenderQuad(&q);
-
-	return false;
+	return true;
 }
 
 bool GfxSystem::GfxRenderer::DrawPolygon( Point* vertices, int vertices_len, const TexturePtr& texture, const Pen& outline, float32 angle /*= 0.0f*/, uint8 alpha /*= 255*/, float32 scale /*= 1.0f*/, float32 textureAngle /*= 0.0f*/, float32 textureScale /*= 1.0f*/ )
