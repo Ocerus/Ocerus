@@ -24,7 +24,7 @@ Application::Application():
 	ShowConsole(); 
 
 	// create singletons
-	mResourceMgr = DYN_NEW ResourceSystem::ResourceMgr("data");
+	mResourceMgr = DYN_NEW ResourceSystem::ResourceMgr("data/");
 	mGfxRenderer = DYN_NEW GfxSystem::GfxRenderer(GfxSystem::Point(1024,768), false);
 	mInputMgr = DYN_NEW InputSystem::InputMgr();
 	mEntityMgr = DYN_NEW EntitySystem::EntityMgr();

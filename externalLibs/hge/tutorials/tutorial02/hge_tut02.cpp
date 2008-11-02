@@ -63,10 +63,15 @@ bool FrameFunc()
 	if(y<16) {y=16+16-y;dy=-dy;boom();}
 
 	// Set up quad's screen coordinates
-	quad.v[0].x=x-16; quad.v[0].y=y-16;
+	/*quad.v[0].x=x-16; quad.v[0].y=y-16;
 	quad.v[1].x=x+16; quad.v[1].y=y-16;
 	quad.v[2].x=x+16; quad.v[2].y=y+16;
-	quad.v[3].x=x-16; quad.v[3].y=y+16;
+	quad.v[3].x=x-16; quad.v[3].y=y+16;*/
+	
+	quad.v[0].x=0; quad.v[0].y=0;
+	quad.v[1].x=64; quad.v[1].y=0;
+	quad.v[2].x=64; quad.v[2].y=64;
+	quad.v[3].x=0; quad.v[3].y=64;
 
 	// Continue execution
 	return false;
@@ -87,7 +92,28 @@ bool RenderFunc()
 
 	// Render quads here. This time just
 	// one of them will serve our needs.
-	hge->Gfx_RenderQuad(&quad);
+	//hge->Gfx_RenderQuad(&quad);
+
+	hgeQuad q;
+	q.tex=0;
+	q.blend=BLEND_ALPHAADD | BLEND_COLORMUL | BLEND_ZWRITE;
+	q.v[0].x=0;
+	q.v[0].y=0;
+	q.v[0].z=0.5f;
+	q.v[0].col=0xFFFFFFFF;
+	q.v[1].x=64;
+	q.v[1].y=0;
+	q.v[1].z=0.5f;
+	q.v[1].col=0xFFFFFFFF;
+	q.v[2].x=64;
+	q.v[2].y=64;
+	q.v[2].z=0.5f;
+	q.v[2].col=0xFFFFFFFF;
+	q.v[3].x=0;
+	q.v[3].y=64;
+	q.v[3].z=0.5f;
+	q.v[3].col=0xFFFFFFFF;
+	hge->Gfx_RenderQuad(&q);
 
 	// End rendering and update the screen
 	hge->Gfx_EndScene();
@@ -107,12 +133,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	hge->System_SetState(HGE_FRAMEFUNC, FrameFunc);
 	hge->System_SetState(HGE_RENDERFUNC, RenderFunc);
 	hge->System_SetState(HGE_TITLE, "HGE Tutorial 02 - Using input, sound and rendering");
+	hge->System_SetState(HGE_SHOWSPLASH, false);
 
 	// Set up video mode
 	hge->System_SetState(HGE_WINDOWED, true);
 	hge->System_SetState(HGE_SCREENWIDTH, 800);
 	hge->System_SetState(HGE_SCREENHEIGHT, 600);
 	hge->System_SetState(HGE_SCREENBPP, 32);
+
 
 	if(hge->System_Initiate())
 	{
@@ -128,6 +156,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 			hge->Release();
 			return 0;
 		}
+		quad.tex=0;
 
 		// Set up quad which we will use for rendering sprite
 		quad.blend=BLEND_ALPHAADD | BLEND_COLORMUL | BLEND_ZWRITE;
@@ -137,16 +166,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 			// Set up z-coordinate of vertices
 			quad.v[i].z=0.5f;
 			// Set up color. The format of DWORD col is 0xAARRGGBB
-			quad.v[i].col=0xFFFFA000;
+			quad.v[i].col=0xFFFFFFFF;
 		}
 
 		// Set up quad's texture coordinates.
 		// 0,0 means top left corner and 1,1 -
 		// bottom right corner of the texture.
-		quad.v[0].tx=96.0/128.0; quad.v[0].ty=64.0/128.0; 
+		/*quad.v[0].tx=96.0/128.0; quad.v[0].ty=64.0/128.0; 
 		quad.v[1].tx=128.0/128.0; quad.v[1].ty=64.0/128.0; 
 		quad.v[2].tx=128.0/128.0; quad.v[2].ty=96.0/128.0; 
-		quad.v[3].tx=96.0/128.0; quad.v[3].ty=96.0/128.0; 
+		quad.v[3].tx=96.0/128.0; quad.v[3].ty=96.0/128.0;*/ 
 
 		// Let's rock now!
 		hge->System_Start();

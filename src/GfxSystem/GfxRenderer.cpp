@@ -14,8 +14,8 @@ GfxRenderer::GfxRenderer(const Point& resolution, bool fullscreen)
 	mHGE = hgeCreate(HGE_VERSION);
 	mHGE->System_SetState(HGE_TITLE, "Battleships");
 	mHGE->System_SetState(HGE_SCREENWIDTH, resolution.x);
-	mHGE->System_SetState(HGE_SCREENWIDTH, resolution.x);
 	mHGE->System_SetState(HGE_SCREENHEIGHT, resolution.y);
+	mHGE->System_SetState(HGE_SCREENBPP, 32);
 	mHGE->System_SetState(HGE_WINDOWX, gApp.GetGlobalConfig()->GetInt32("WindowX", 0, "Windows"));
 	mHGE->System_SetState(HGE_WINDOWY, gApp.GetGlobalConfig()->GetInt32("WindowY", 0, "Windows"));
 	mHGE->System_SetState(HGE_WINDOWED, !fullscreen);
@@ -103,27 +103,52 @@ bool GfxRenderer::DrawLine(int x1, int y1, int x2, int y2, const Pen& pen)
 bool GfxRenderer::DrawLine( const Point& begin, const Point& end, const Pen& pen )
 {
 	mHGE->Gfx_RenderLine((float32) begin.x,(float32) begin.y,(float32) end.x,(float32) end.y,GetHGEColor(pen.color));
-	return false;
+	return true;
 }
 
 void InitQuad(hgeQuad& q,uint64 hTex, int32 x, int32 y,int32 w,int32 h)
 {
 	// set size
-	q.v[0].x = (float32) x;
-	q.v[0].y = (float32) y;
-	q.v[1].x = (float32) x + w;
-	q.v[1].y = (float32) y;
-	q.v[2].x = (float32) x + w;
-	q.v[2].y = (float32) y + h;
-	q.v[3].x = (float32) x;
-	q.v[3].y = (float32) y + h;
+	q.v[0].x = (float32)(x);
+	q.v[0].y = (float32)(y);
+	q.v[0].z = 0;
+	q.v[0].tx = 0.0f;
+	q.v[0].ty = 0.0f;
+	q.v[0].col = 0xFFFFFFFF;
+
+	q.v[1].x = (float32)(x+w);
+	q.v[1].y = (float32)(y);
+	q.v[1].z = 0;
+	q.v[1].tx = 1.0f;
+	q.v[1].ty = 0.0f;
+	q.v[1].col = 0xFFFFFFFF;
+
+	q.v[2].x = (float32)(x+w);
+	q.v[2].y = (float32)(y+h);
+	q.v[2].z = 0;
+	q.v[2].tx = 1.0f;
+	q.v[2].ty = 1.0f;
+	q.v[2].col = 0xFFFFFFFF;
+
+	q.v[3].x = (float32)(x);
+	q.v[3].y = (float32)(y+h);
+	q.v[3].z = 0;
+	q.v[3].tx = 0.0f;
+	q.v[3].ty = 1.0f;
+	q.v[3].col = 0xFFFFFFFF;
 
 	// set texture
 	q.tex = hTex;
+	q.blend = BLEND_ALPHAADD | BLEND_COLORMUL | BLEND_ZWRITE;
 }
 
 bool GfxSystem::GfxRenderer::DrawImage( const TexturePtr& image, int32 x, int32 y, uint8 anchor /*= ANCHOR_VCENTER|ANCHOR_HCENTER*/, float32 angle /*= 0.0f*/, uint8 alpha /*= 255*/, float32 scale /*= 1.0f*/ )
 {	
+	if (image.IsNull())
+	{
+		gLogMgr.LogMessage("DrawImage: texture is null", LOG_ERROR);
+		return false;
+	}
 	hgeQuad q;
 	InitQuad(q,image->GetTexture(),x,y,image->GetWidth(),image->GetHeight());
 
@@ -133,6 +158,11 @@ bool GfxSystem::GfxRenderer::DrawImage( const TexturePtr& image, int32 x, int32 
 
 bool GfxSystem::GfxRenderer::DrawImage( const TexturePtr& image, const Point& pos, uint8 anchor /*= ANCHOR_VCENTER|ANCHOR_HCENTER*/, float32 angle /*= 0.0f*/, uint8 alpha /*= 255*/, float32 scale /*= 1.0f*/ )
 {
+	if (image.IsNull())
+	{
+		gLogMgr.LogMessage("DrawImage: texture is null", LOG_ERROR);
+		return false;
+	}
 	hgeQuad q;
 	InitQuad(q,image->GetTexture(),pos.x,pos.y,image->GetWidth(),image->GetHeight());
 
@@ -142,6 +172,11 @@ bool GfxSystem::GfxRenderer::DrawImage( const TexturePtr& image, const Point& po
 
 bool GfxSystem::GfxRenderer::DrawImage( const TexturePtr& image, const Rect& destRect, uint8 alpha /*= 255*/ )
 {
+	if (image.IsNull())
+	{
+		gLogMgr.LogMessage("DrawImage: texture is null", LOG_ERROR);
+		return false;
+	}
 	hgeQuad q;
 	InitQuad(q,image->GetTexture(),destRect.x,destRect.y,destRect.w,destRect.h);
 
@@ -151,6 +186,7 @@ bool GfxSystem::GfxRenderer::DrawImage( const TexturePtr& image, const Rect& des
 
 bool GfxSystem::GfxRenderer::DrawPolygon( Point* vertices, int vertices_len, const TexturePtr& texture, const Pen& outline, float32 angle /*= 0.0f*/, uint8 alpha /*= 255*/, float32 scale /*= 1.0f*/, float32 textureAngle /*= 0.0f*/, float32 textureScale /*= 1.0f*/ )
 {
+	//TODO pokud je textura IsNull, tak zapsat neco do logu, ale vykreslit aspon outlinu
 	return false;
 }
 

@@ -1,11 +1,11 @@
 HGE Started..
 
 HGE version: 1.80
-Date: 02.11.2008, 17:48:42
+Date: 02.11.2008, 18:40:51
 
 Application: HGE Tutorial 02 - Using input, sound and rendering
 OS: Windows 5.1.2600
-Memory: 1048052K total, 296640K free
+Memory: 1048052K total, 377128K free
 
 D3D Driver: nv4_disp.dll
 Description: NVIDIA GeForce3 Ti 200
@@ -17,8 +17,6 @@ Sample rate: 44100
 
 Init done.
 
-Can't load resource: menu.wav
-Can't load resource: particles.png
 
 Finishing..
 The End.

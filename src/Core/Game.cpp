@@ -15,6 +15,9 @@ void Core::Game::Init()
 {
 	gLogMgr.LogMessage("Game init");
 
+	gResourceMgr.AddResourceFileToGroup("zazaka.png", "test");
+	gResourceMgr.LoadResourcesInGroup("test");
+
 	gApp.ResetStats();
 
 	gLogMgr.LogMessage("Game inited");
@@ -34,5 +37,7 @@ void Core::Game::Update( float32 delta )
 void Core::Game::Draw()
 {
 	gGfxRenderer.ClearScreen(GfxSystem::Color(0,0,0));
+	gGfxRenderer.DrawLine(0,0,100,100,GfxSystem::Pen(GfxSystem::Color(255,0,0)));
+	gGfxRenderer.DrawImage(gResourceMgr.GetResource("test/zazaka.png"), 50, 100);
 }
 

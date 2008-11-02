@@ -22,9 +22,9 @@ namespace ResourceSystem
 	{
 	public:
 		/** All resource types must be registered inside this ctor, so don't forget to add new types there!
-			Basedir is a directory where all resources can be found if readed from disk.
+			Basepath is a path to directory where all resources can be found if readed from disk.
 		*/
-		ResourceMgr(const string& basedir);
+		ResourceMgr(const string& basepath);
 		~ResourceMgr();
 
 		/// Assings resources in a directory to a group. In this case the resource types will be autodetected.
@@ -49,7 +49,7 @@ namespace ResourceSystem
 		/** Retrieves a resource from the manager. If the resource can't be found, null ResourcePtr is returned.
 		*/
 		//@{
-		@param groupSlashName group name/resource's filename
+		/// @param groupSlashName group name/resource's filename
 		ResourcePtr GetResource(const string& groupSlashName);
 		ResourcePtr GetResource(const string& group, const string& name);
 		//@}
@@ -60,7 +60,7 @@ namespace ResourceSystem
 		typedef std::map<string, ResourceMap> ResourceGroupMap;
 		typedef std::map<string, Resource::eType> ExtToTypeMap;
 
-		string mBaseDir;
+		string mBasePath;
 		ResourceGroupMap mResourceGroups;
 		ExtToTypeMap mExtToTypeMap;
 		IResourceLoadingListener* mListener;

@@ -9,11 +9,11 @@
 
 using namespace ResourceSystem;
 
-ResourceMgr::ResourceMgr(const string& basedir): 
-	mListener(0), mBaseDir(basedir)
+ResourceMgr::ResourceMgr(const string& basepath): 
+	mListener(0), mBasePath(basepath)
 {
 	gLogMgr.LogMessage("*** ResourceMgr init ***");
-	gLogMgr.LogMessage("Base directory = " + basedir);
+	gLogMgr.LogMessage("Base directory = " + basepath);
 
 	mResourceCreationMethods[Resource::NUM_TYPES-1] = 0; // safety reasons
 
@@ -43,7 +43,7 @@ bool ResourceMgr::AddResourceDirToGroup(const string& path, const string& group,
 
 	bool result = true;
 	boost::filesystem::directory_iterator iend;
-	for (boost::filesystem::directory_iterator i(mBaseDir + path); i!=iend; ++i)
+	for (boost::filesystem::directory_iterator i(mBasePath + path); i!=iend; ++i)
 	{
 		if (boost::filesystem::is_directory(i->status()))
 		{
@@ -65,16 +65,18 @@ bool ResourceMgr::AddResourceFileToGroup(const string& filepath, const string& g
 
 	boost::filesystem::path boostPath;
 	if (pathRelative)
-		boostPath = mBaseDir + filepath;
+		boostPath = mBasePath + filepath;
 	else
 		boostPath = filepath;
-	if (!boost::filesystem::exists(boostPath))
+	if (!boost::filesystem::exists(boostPath)){
+		gLogMgr.LogMessage("Resource located at '" + boostPath.string() +"' not found", LOG_ERROR);
 		return false;
+	}
 
 	// detect resource type
 	if (type == Resource::TYPE_AUTODETECT)
 	{
-		ExtToTypeMap::const_iterator i = mExtToTypeMap.find(boostPath.extension());
+		ExtToTypeMap::const_iterator i = mExtToTypeMap.find(boostPath.extension().substr(1));
 		if (i != mExtToTypeMap.end())
 			type = i->second;
 	}
