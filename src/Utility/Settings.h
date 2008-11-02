@@ -3,6 +3,8 @@
 
 #include <assert.h>
 
+/// Global basic types. Only these should be used.
+//@{
 typedef signed char	int8;
 typedef signed short int16;
 typedef signed int int32;
@@ -15,6 +17,7 @@ typedef float float32;
 #define	FLOAT32_MAX	FLT_MAX
 #define	FLOAT32_MIN	FLT_MIN
 #define	FLOAT32_EPSILON	FLT_EPSILON
+//@}
 
 #define DYN_NEW new
 #define DYN_NEW_T(T) new T

@@ -62,6 +62,7 @@ void Application::runMainLoop()
 {
 	while (GetState() != AS_SHUTDOWN)
 	{
+		// process window events
 		MessagePump();
 
 		// process input events
@@ -176,6 +177,7 @@ void Application::UpdateStats()
 
 void Core::Application::ShowConsole( void )
 {
+	// create the window
 	AllocConsole();
 
 	// get hwnd
@@ -185,7 +187,7 @@ void Core::Application::ShowConsole( void )
 	mConsoleHandle = FindWindow(NULL, uniqueName);
 
 	// set title
-	SetConsoleTitle("Betmyhips Debug Log");
+	SetConsoleTitle("Debug Log");
 
 	// set position
 	if (mConsoleHandle)
@@ -206,6 +208,7 @@ void Core::Application::HideConsole( void )
 		mGlobalConfig->SetInt32("ConsoleH", windowRect.bottom-windowRect.top, "Windows");
 	}
 
+	// destroy the window
 	FreeConsole();
 }
 

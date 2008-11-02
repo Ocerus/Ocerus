@@ -9,24 +9,33 @@
 
 namespace InputSystem
 {
+	/** OIS library specific wrapper to hide its implementation.
+	*/
 	class OISListener : public OIS::MouseListener, public OIS::KeyListener
 	{
 	public:
 		OISListener();
 		virtual ~OISListener();
 
-		// MouseListener
+		/// MouseListener
+		//@{
 		virtual bool mouseMoved(const OIS::MouseEvent &evt);
 		virtual bool mousePressed(const OIS::MouseEvent &evt, OIS::MouseButtonID);
 		virtual bool mouseReleased(const OIS::MouseEvent &evt, OIS::MouseButtonID);
+		//@}
 
-		// KeyListener
+		/// KeyListener
+		//@{
 		virtual bool keyPressed(const OIS::KeyEvent &evt);
 		virtual bool keyReleased(const OIS::KeyEvent &evt);
+		//@}
 
+		/// Process OIS events.
 		void CaptureInput();
+		/// True if the specified key is down.
 		bool IsKeyDown(eKeyCode k);
 
+		/// Sets resolution of the screen.
 		void SetResolution(uint32 width, uint32 height);
 
 	private:
@@ -36,6 +45,7 @@ namespace InputSystem
 		OIS::Mouse* mMouse;
 		OIS::Keyboard* mKeyboard;
 
+		/// Conversion function.
 		eMouseButton OisToMbtn(OIS::MouseButtonID id);
 	};
 }

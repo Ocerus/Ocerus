@@ -4,14 +4,19 @@
 #include "Settings.h"
 #include <Windows.h>
 
+/** This class measures time.
+*/
 class Timer
 {
 public:
 	Timer(void);
 	~Timer(void);
 
+	/// Resets the counter.
 	void Reset(void);
+	/// Returns time since reset in milliseconds.
 	uint64 GetMilliseconds(void);
+	/// Returns time since reset in microseconds.
 	uint64 GetMicroseconds(void);
 
 private:

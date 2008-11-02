@@ -8,6 +8,8 @@ namespace Core
 {
 	enum eGameState { GS_NORMAL=0 };
 
+	/** This class holds all info related directly to the game and takes care about rendering, input and game logic.
+	*/
 	class Game : public StateMachine<eGameState>
 	{
 	public:

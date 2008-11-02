@@ -7,37 +7,49 @@
 
 namespace EntitySystem
 {
+	/** This class represents a specific data element.
+	*/
 	class ComponentDescriptionItem
 	{
 	public:
-		ComponentDescriptionItem(void);
 		ComponentDescriptionItem(const int8 data);
 		ComponentDescriptionItem(const int16 data);
 		ComponentDescriptionItem(const int32 data);
 		ComponentDescriptionItem(const string& data);
 		~ComponentDescriptionItem(void);
 
-		inline bool IsDefined(void) const { return mIsDefined; }
-
+		/// Getters.
+		//@{
 		int8 GetInt8(void) const;
 		int16 GetInt16(void) const;
 		int32 GetInt32(void) const;
-		string& GetString(void) const;
+		string GetString(void) const;
+		//@}
 	private:
-		bool mIsDefined;
+		/// Pointer to the actual data.
 		void* mData;	
+		/// For internal security checks.
+		//@{
 		enum eType { TYPE_INT8, TYPE_INT16, TYPE_INT32, TYPE_STRING };
-		eType mType; // for internal security checks
+		eType mType; 
+		//@}
 	};
 
+	/** This class holds info needed to create one specific component along with its type.
+	*/
 	class ComponentDescription
 	{
 	public:
 		ComponentDescription(eComponentType type);
 		~ComponentDescription(void);
 
+		/// Getters.
 		inline eComponentType GetType() const { return mType; }
+
+		/// Adds a data item into this description.
 		void AddItem(ComponentDescriptionItem* item);
+
+		/// Returns next item in the list. For internal use by the component.
 		ComponentDescriptionItem* GetNextItem(void);
 
 	private:

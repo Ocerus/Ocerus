@@ -24,6 +24,7 @@ uint64 Timer::GetMicroseconds()
 {
 	LARGE_INTEGER curTime;
 	QueryPerformanceCounter(&curTime);
+	// time since last reset
 	LONGLONG newTime = curTime.QuadPart - mStartTime.QuadPart;
 	// scale up to get milliseconds
 	uint64 newTicks = (uint64) (1000 * newTime / mFrequency.QuadPart);

@@ -39,7 +39,7 @@ bool Core::Config::Save( void )
 
 string Core::Config::GetString( const string& key, const string& defaultValue, const string& section )
 {
-	mRudeConfig.setSection(section.c_str());
+	mRudeConfig.setSection(section.c_str()); // sets working section...all subsequent calls are related to this section.
 	if (mRudeConfig.exists(key.c_str()))
 		return mRudeConfig.getStringValue(key.c_str());
 	return defaultValue;

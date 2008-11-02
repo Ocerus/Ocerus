@@ -7,7 +7,6 @@
 
 using namespace InputSystem;
 
-
 InputSystem::InputMgr::InputMgr( void )
 {
 	gLogMgr.LogMessage("*** InputMgr init ***");

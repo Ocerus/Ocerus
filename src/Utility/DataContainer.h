@@ -3,19 +3,27 @@
 
 #include "Settings.h"
 
+/** This class stores a pointer to a data buffer and its size. It is used to retrieve data from a function where it is passed via reference.
+*/
 class DataContainer
 {
 public:
-	DataContainer(): mData(0), mSize(0)	{}
+	DataContainer(void): mData(0), mSize(0)	{}
 
-	~DataContainer(void) { Release(); }
+	/// Note that the dtor should NOT destroy contained data.
+	~DataContainer(void) {}
 
+	/// Set the actual data.
 	void SetData(uint8* data, int32 size) { mData = data; mSize = size; }
 
+	/// Data getters.
+	//@{
 	uint8* GetData(void) { return mData; }
 	const uint8* GetData(void) const { return mData; }
 	int32 GetSize(void) const { return mSize; }
+	//@}
 
+	/// Destroy the data.
 	void Release(void)
 	{
 		if (!mData)

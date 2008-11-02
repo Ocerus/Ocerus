@@ -2,11 +2,7 @@
 
 using namespace EntitySystem;
 
-ComponentDescriptionItem::ComponentDescriptionItem(): mIsDefined(false), mData(0)
-{
-}
-
-ComponentDescriptionItem::ComponentDescriptionItem(const int8 data): mData(0), mIsDefined(true)
+ComponentDescriptionItem::ComponentDescriptionItem(const int8 data): mData(0)
 {
 	mData = DYN_NEW int8(data);
 	mType = TYPE_INT8;
@@ -18,7 +14,7 @@ int8 ComponentDescriptionItem::GetInt8() const
 	return *static_cast<int8*>(mData);
 }
 
-ComponentDescriptionItem::ComponentDescriptionItem(const int16 data): mData(0), mIsDefined(true)
+ComponentDescriptionItem::ComponentDescriptionItem(const int16 data): mData(0)
 {
 	mData = DYN_NEW int16(data);
 	mType = TYPE_INT16;
@@ -30,7 +26,7 @@ int16 ComponentDescriptionItem::GetInt16() const
 	return *static_cast<int16*>(mData);
 }
 
-ComponentDescriptionItem::ComponentDescriptionItem(const int32 data): mData(0), mIsDefined(true)
+ComponentDescriptionItem::ComponentDescriptionItem(const int32 data): mData(0)
 {
 	mData = DYN_NEW int32(data);
 	mType = TYPE_INT32;
@@ -42,13 +38,13 @@ int32 ComponentDescriptionItem::GetInt32() const
 	return *static_cast<int32*>(mData);
 }
 
-ComponentDescriptionItem::ComponentDescriptionItem(const string& data): mData(0), mIsDefined(true)
+ComponentDescriptionItem::ComponentDescriptionItem(const string& data): mData(0)
 {
 	mData = DYN_NEW string(data);
 	mType = TYPE_STRING;
 }
 
-string& ComponentDescriptionItem::GetString() const
+string ComponentDescriptionItem::GetString() const
 {
 	assert(mType == TYPE_STRING && "Wrong component item type.");
 	return *static_cast<string*>(mData);
@@ -64,7 +60,11 @@ ComponentDescriptionItem::~ComponentDescriptionItem()
 
 ComponentDescription::ComponentDescription(eComponentType type): mType(type), mIndex(0) {}
 
-ComponentDescription::~ComponentDescription() {}
+ComponentDescription::~ComponentDescription()
+{
+	for (DescriptionItems::const_iterator i=mItems.begin(); i!=mItems.end(); ++i)
+		DYN_DELETE (*i);
+}
 
 void ComponentDescription::AddItem(ComponentDescriptionItem* item)
 {

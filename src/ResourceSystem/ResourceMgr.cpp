@@ -13,7 +13,7 @@ ResourceMgr::ResourceMgr(const string& basedir):
 	mListener(0), mBaseDir(basedir)
 {
 	gLogMgr.LogMessage("*** ResourceMgr init ***");
-	gLogMgr.LogMessage("Base directory  = " + basedir);
+	gLogMgr.LogMessage("Base directory = " + basedir);
 
 	mResourceCreationMethods[Resource::NUM_TYPES-1] = 0; // safety reasons
 
@@ -70,14 +70,21 @@ bool ResourceMgr::AddResourceFileToGroup(const string& filepath, const string& g
 		boostPath = filepath;
 	if (!boost::filesystem::exists(boostPath))
 		return false;
+
+	// detect resource type
 	if (type == Resource::TYPE_AUTODETECT)
 	{
 		ExtToTypeMap::const_iterator i = mExtToTypeMap.find(boostPath.extension());
 		if (i != mExtToTypeMap.end())
 			type = i->second;
 	}
+	// error
 	if (type == Resource::TYPE_AUTODETECT)
+	{
+		gLogMgr.LogMessage("Can't detect type of resource '" + filepath + "'", LOG_ERROR);
 		return false;
+	}
+
 	ResourcePtr r = mResourceCreationMethods[type]();
 	r->SetState(Resource::STATE_INITIALIZED);
 	string name = boostPath.filename();

@@ -20,6 +20,7 @@ Resource::~Resource()
 
 InputStream& Resource::OpenInputStream(eInputStreamMode mode)
 {
+	// currently opens the stream from a file
 	assert(mState != STATE_UNINITIALIZED);
 	assert(boost::filesystem::exists(mFilePath) && "Resource file not found.");
 	mInputStream = DYN_NEW boost::filesystem::ifstream(mFilePath, InputStreamMode(mode));
@@ -38,6 +39,7 @@ void Resource::CloseInputStream()
 
 bool Resource::Load()
 {
+	// wraps around LoadImpl and does some additional work
 	assert(mState == STATE_INITIALIZED);
 	mState = STATE_LOADING;
 	bool result = LoadImpl();
@@ -55,6 +57,7 @@ bool Resource::Load()
 
 bool Resource::Unload()
 {
+	// wraps around UnloadImpl and does some additional work
 	assert(mState != STATE_UNINITIALIZED);
 	if (mState == STATE_INITIALIZED)
 		return true; // true as the data are not loaded
@@ -63,7 +66,7 @@ bool Resource::Unload()
 	mState = STATE_INITIALIZED;
 	if (!result)
 	{
-		// we have a problem
+		// we have a real problem if we can't dealloc a resource
 		gLogMgr.LogMessage("Resource '" + mName + "' could NOT be unloaded", LOG_ERROR);
 		assert(result && "Resource could NOT be unloaded");
 	}
@@ -78,6 +81,7 @@ void ResourceSystem::Resource::EnsureLoaded( void )
 
 void ResourceSystem::Resource::GetRawInputData( DataContainer& outData )
 {
+	// reads data from a stream into a buffer
 	outData.Release();
 	InputStream& is = OpenInputStream(ISM_BINARY);
 	std::vector<uint8> tmp;

@@ -8,12 +8,15 @@ namespace EntitySystem
 
 	typedef uint32 EntityID;
 
-	// forward declaration
+	/// Forward declaration.
 	class EntityMgr;
 
+	/** This class represents one unique entity in the entity system.
+	*/
 	class EntityHandle
 	{
 	public:
+		/// Only copy ctor is enabled. We want new entities to be added only by EntityMgr.
 		EntityHandle(const EntityHandle& handle) { mEntityID = handle.mEntityID; }
 		~EntityHandle(void) {}
 
@@ -26,10 +29,15 @@ namespace EntitySystem
 		friend class ComponentMgr;
 		friend class EntityMgr;
 
+		/// New entities can be created only by the EntityMgr.
+		//@{
 		EntityHandle(EntityID ID): mEntityID(ID) {}
 		static EntityHandle CreateUniqueHandle();
+		//@}
 
+		/// ID identifying this entity.
 		EntityID mEntityID;
+		/// Last ID which was assigned to an entity.
 		static EntityID sLastID;
 	};
 }

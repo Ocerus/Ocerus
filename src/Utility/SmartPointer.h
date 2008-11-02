@@ -3,6 +3,9 @@
 
 #include "Settings.h"
 
+/** SmartPointer pattern implementation. This pointer counts uses and deletes the data it is pointing to only if nobody
+	points to them. This prevents use of invalid pointers. Use whenever you acces a shared resource.
+*/
 template<class T> class SmartPointer
 {
 protected:

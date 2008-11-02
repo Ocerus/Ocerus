@@ -8,6 +8,8 @@ namespace EntitySystem
 {
 	typedef std::vector<Component*> ComponentsList;
 
+	/** Enables iterating over a collection of components.
+	*/
 	class EntityComponentsIterator : public ComponentsList::const_iterator
 	{
 	public:
@@ -19,6 +21,7 @@ namespace EntitySystem
 
 		virtual ~EntityComponentsIterator() {}
 
+		/// Use this method as a loop condition instead of comparing the iterator to a collection end().
 		bool HasMore() { return operator!=(mComponentsList.end()); }
 	private:
 		const ComponentsList& mComponentsList;

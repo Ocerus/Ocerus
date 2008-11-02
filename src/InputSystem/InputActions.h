@@ -6,7 +6,7 @@
 namespace InputSystem
 {
 
-	// copied from OIS
+	/// Codes copied from OIS, so you can cast the type from and to.
 	enum eKeyCode
 	{
 		KC_UNASSIGNED  = 0x00,
@@ -158,21 +158,34 @@ namespace InputSystem
 
 	struct KeyInfo
 	{
+		/// Enum value of the key.
 		eKeyCode keyAction;
+		/// Character of the key pressed.
 		uint32 keyCode;
 	};
 
 	struct MouseInfo
 	{
-		int32 x, dx;
-		int32 y, dy;
+		/// Position of the cursor.
+		//@{
+		int32 x;
+		int32 y;
+		//@}
+
+		/// Delta position since last update.
+		//@{
+		int32 dx;
+		int32 dy;
+		//@}
+
+		/// Wheel position.
 		int32 wheel;
+
+		/// Delta position of the wheel since last update.
 		int32 wheelDelta;
 	};
 
 	enum eMouseButton { MBTN_LEFT=0, MBTN_RIGHT, MBTN_MIDDLE, MBTN_UNKNOWN };
-
-
 
 }
 

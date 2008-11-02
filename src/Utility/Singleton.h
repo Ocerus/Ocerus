@@ -3,10 +3,12 @@
 
 #include <cassert>
 
-// disable VS warning
+// disable VS warnings
 #pragma warning (disable : 4311)
 #pragma warning (disable : 4312)
 
+/** Singleton pattern implementation taken from GPG.
+*/
 template <typename T> class Singleton
 {
     static T* msSingleton;

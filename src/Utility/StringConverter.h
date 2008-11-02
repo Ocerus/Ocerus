@@ -4,6 +4,8 @@
 #include "Settings.h"
 #include <sstream>
 
+/** Set of functions for converting different values to and from a string.
+*/
 namespace StringConverter
 {
 	template<typename T>
