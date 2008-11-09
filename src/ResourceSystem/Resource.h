@@ -22,7 +22,7 @@ namespace ResourceSystem
 		/// State of a resource.
 		enum eState { STATE_UNINITIALIZED=0, STATE_INITIALIZED, STATE_UNLOADING, STATE_LOADING, STATE_LOADED };
 		/// Type of a resource. Add your custom types here!
-		enum eType { TYPE_TEXTURE=0, NUM_TYPES,	TYPE_AUTODETECT };
+		enum eType { TYPE_TEXTURE=0, TYPE_CEGUIRESOURCE, NUM_TYPES,	TYPE_AUTODETECT };
 
 		/// No need to override.
 		Resource(void);

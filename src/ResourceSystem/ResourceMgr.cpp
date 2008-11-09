@@ -3,6 +3,7 @@
 #include "ResourceMgr.h"
 #include "../Common.h"
 #include "../GfxSystem/Texture.h"
+#include "../GUISystem/CEGUIResource.h"
 #include "IResourceLoadingListener.h"
 
 #pragma warning(disable: 4996)
@@ -19,10 +20,17 @@ ResourceMgr::ResourceMgr(const string& basepath):
 
 	// register resource types
 	mResourceCreationMethods[Resource::TYPE_TEXTURE] = GfxSystem::Texture::CreateMe;
+	mResourceCreationMethods[Resource::TYPE_CEGUIRESOURCE] = GUISystem::CEGUIResource::CreateMe;
 	mExtToTypeMap["png"] = Resource::TYPE_TEXTURE;
 	mExtToTypeMap["bmp"] = Resource::TYPE_TEXTURE;
 	mExtToTypeMap["jpg"] = Resource::TYPE_TEXTURE;
 	mExtToTypeMap["gif"] = Resource::TYPE_TEXTURE;
+	mExtToTypeMap["layout"] = Resource::TYPE_CEGUIRESOURCE;
+	mExtToTypeMap["imageset"] = Resource::TYPE_CEGUIRESOURCE;
+	mExtToTypeMap["font"] = Resource::TYPE_CEGUIRESOURCE;
+	mExtToTypeMap["scheme"] = Resource::TYPE_CEGUIRESOURCE;
+	mExtToTypeMap["tga"] = Resource::TYPE_TEXTURE;
+	mExtToTypeMap["ttf"] = Resource::TYPE_CEGUIRESOURCE;
 
 	assert(mResourceCreationMethods[Resource::NUM_TYPES-1] && "Not all resource types are registered");
 
