@@ -7,11 +7,11 @@ namespace GUISystem {
 		gLogMgr.LogMessage("******** GUIMgr init *********");
 		mCegui = DYN_NEW CEGUI::System( mRendererGate = DYN_NEW RendererGate(), mResourceGate = DYN_NEW ResourceGate() );
 
-		gResourceMgr.AddResourceDirToGroup("gui/schemes/", "schemes");
-		gResourceMgr.AddResourceDirToGroup("gui/imagesets/", "imagesets");
-		gResourceMgr.AddResourceDirToGroup("gui/fonts/", "fonts");
-		gResourceMgr.AddResourceDirToGroup("gui/layouts/", "layouts");
-		gResourceMgr.AddResourceDirToGroup("gui/looknfeel/", "looknfeels");
+		gResourceMgr.AddResourceDirToGroup("gui/schemes", "schemes");
+		gResourceMgr.AddResourceDirToGroup("gui/imagesets", "imagesets");
+		gResourceMgr.AddResourceDirToGroup("gui/fonts", "fonts");
+		gResourceMgr.AddResourceDirToGroup("gui/layouts", "layouts");
+		gResourceMgr.AddResourceDirToGroup("gui/looknfeel", "looknfeels");
 
 		CEGUI::Imageset::setDefaultResourceGroup("imagesets");
 		CEGUI::Font::setDefaultResourceGroup("fonts");

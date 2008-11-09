@@ -8,6 +8,10 @@ using namespace Core;
 Application::Application(): 
 	StateMachine<eAppState>(AS_INITING), mFrameSmoothingTime(0.5f), mConsoleHandle(0)
 {
+}
+
+void Application::Init()
+{
 	// create basic singletons
 	mLogMgr = DYN_NEW LogSystem::LogMgr("CoreLog.txt", LOG_TRIVIAL);
 
@@ -60,7 +64,7 @@ Application::~Application()
 	DYN_DELETE mLogMgr;
 }
 
-void Application::runMainLoop()
+void Application::RunMainLoop()
 {
 	while (GetState() != AS_SHUTDOWN)
 	{

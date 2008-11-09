@@ -14,7 +14,8 @@ INT WINAPI WinMain (HINSTANCE hInstance,
 	try
 	{
 		Core::Application* app = DYN_NEW Core::Application();
-		app->runMainLoop();
+		app->Init();
+		app->RunMainLoop();
 		DYN_DELETE app;
 	}
 	catch (std::exception& e)

@@ -34,8 +34,11 @@ namespace Core
 		/// Cleans up everything.
 		virtual ~Application(void);
 
+		/// Inits the application (creates singletons, ...)
+		void Init(void);
+
 		/// Main loop of the whole project.
-		void runMainLoop(void);
+		void RunMainLoop(void);
 
 		/// Reset FPS counters and other stats measured in the main loop.
 		void ResetStats(void);

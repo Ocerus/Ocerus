@@ -41,9 +41,16 @@ bool ResourceMgr::AddResourceDirToGroup(const string& path, const string& group,
 
 	gLogMgr.LogMessage("Adding dir '" + path+"' to group '"+ group +"'");
 
+	boost::filesystem::path boostPath = mBasePath + path;
+	if (!boost::filesystem::exists(boostPath))
+	{
+		gLogMgr.LogMessage("Path does not exist '" + boostPath.string() + "'", LOG_ERROR);
+		return false;
+	}
+
 	bool result = true;
 	boost::filesystem::directory_iterator iend;
-	for (boost::filesystem::directory_iterator i(mBasePath + path); i!=iend; ++i)
+	for (boost::filesystem::directory_iterator i(boostPath); i!=iend; ++i)
 	{
 		if (boost::filesystem::is_directory(i->status()))
 		{

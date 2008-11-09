@@ -30,12 +30,13 @@ void LogSystem::LogMgr::LogMessage(const string& msg, eLogSeverity severity)
 		locTime = localtime(&ctime);
 
 		std::stringstream ss;
-		if (severity == LOG_ERROR)
-			ss << "!! ERROR !! ";
 		ss << std::setw(2) << std::setfill('0') << locTime->tm_hour
 			<< ":" << std::setw(2) << std::setfill('0') << locTime->tm_min
 			<< ":" << std::setw(2) << std::setfill('0') << locTime->tm_sec
-			<< ":" << msg << std::endl;
+			<< ":";
+		if (severity == LOG_ERROR)
+			ss << " !! ERROR !! ";
+		ss << msg << std::endl;
 		string& str = ss.str();
 
 		gApp.WriteToConsole(str);
