@@ -46,7 +46,7 @@ namespace GfxSystem
 
 	class IScreenResolutionChangeListener {
 	public:
-		virtual void EventResolutionChanged(int x, int y);
+		virtual void EventResolutionChanged(int x, int y) = 0;
 	};
 
 	class GfxRenderer : public Singleton<GfxRenderer>
