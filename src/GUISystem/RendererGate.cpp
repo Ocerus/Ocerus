@@ -15,6 +15,7 @@ namespace GUISystem {
 	}
 
 	RendererGate::RendererGate() : mQueueing(false) {
+		this->d_identifierString = "Black_Hand's wrapper around that disgusting piece of code created by Santhos :PPP";
 	}
 
 	RendererGate::~RendererGate() {

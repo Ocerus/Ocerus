@@ -31,6 +31,7 @@ ResourceMgr::ResourceMgr(const string& basepath):
 	mExtToTypeMap["scheme"] = Resource::TYPE_CEGUIRESOURCE;
 	mExtToTypeMap["tga"] = Resource::TYPE_TEXTURE;
 	mExtToTypeMap["ttf"] = Resource::TYPE_CEGUIRESOURCE;
+	mExtToTypeMap["looknfeel"] = Resource::TYPE_CEGUIRESOURCE;
 
 	assert(mResourceCreationMethods[Resource::NUM_TYPES-1] && "Not all resource types are registered");
 
