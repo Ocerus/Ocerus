@@ -28,6 +28,7 @@ Application::Application():
 	mGfxRenderer = DYN_NEW GfxSystem::GfxRenderer(GfxSystem::Point(1024,768), false);
 	mInputMgr = DYN_NEW InputSystem::InputMgr();
 	mEntityMgr = DYN_NEW EntitySystem::EntityMgr();
+	mGUIMgr = DYN_NEW GUISystem::GUIMgr();
 
 	// create core states
 	mLoadingScreen = DYN_NEW LoadingScreen();
@@ -52,6 +53,7 @@ Application::~Application()
 	DYN_DELETE mGfxRenderer;
 	DYN_DELETE mInputMgr;
 	DYN_DELETE mEntityMgr;
+	DYN_DELETE mGUIMgr;
 
 	// must come last
 	DYN_DELETE mGlobalConfig;
@@ -83,6 +85,9 @@ void Application::runMainLoop()
 		case AS_GAME:
 			mGame->Update(delta);
 			break;
+		case AS_GUI:
+			mGUIMgr->Update(delta);
+			break;
 		}
 
 		// draw
@@ -92,6 +97,13 @@ void Application::runMainLoop()
 			if (gGfxRenderer.BeginRendering())
 			{
 				mGame->Draw();
+				gGfxRenderer.EndRendering();
+			}
+			break;
+		case AS_GUI:
+			if (gGfxRenderer.BeginRendering())
+			{
+				mGUIMgr->RenderGUI();
 				gGfxRenderer.EndRendering();
 			}
 			break;

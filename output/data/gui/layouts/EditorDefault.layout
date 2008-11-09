@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<GUILayout >
+    <Window Type="DefaultWindow" Name="Root" >
+        <Property Name="InheritsAlpha" Value="False" />
+        <Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}" />
+        <Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{1,0},{1,0}}" />
+        <Window Type="TaharezLook/FrameWindow" Name="TextDemo" >
+            <Property Name="Text" Value="Welcome" />
+            <Property Name="Alpha" Value="0.75" />
+            <Property Name="TitlebarFont" Value="Commonwealth-10" />
+            <Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}" />
+            <Property Name="TitlebarEnabled" Value="True" />
+            <Property Name="UnifiedAreaRect" Value="{{0.0267616,0},{0.0261314,0},{0.34105,0},{0.654268,0}}" />
+            <Window Type="TaharezLook/StaticText" Name="TextDemo/StaticText" >
+                <Property Name="Text" >Welcome to the layout editor for the CEGUI system. For your convenience, this utility launches with a default setup, which allows you to create layouts with the default resource files.
+
+However if you want to use you own files, you should open the CELayoutEditor.ini file, and point the &apos;datafiles&apos; paths to your directories.
+
+For more information please click the &apos;about&apos; box.</Property>
+                <Property Name="HorzFormatting" Value="WordWrapLeftAligned" />
+                <Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}" />
+                <Property Name="VertFormatting" Value="TopAligned" />
+                <Property Name="UnifiedAreaRect" Value="{{0.0264938,0},{0.0837853,0},{0.971278,0},{0.973106,0}}" />
+            </Window>
+        </Window>
+        <Window Type="TaharezLook/FrameWindow" Name="Root/Frame" >
+            <Property Name="Alpha" Value="0.75" />
+            <Property Name="AlwaysOnTop" Value="True" />
+            <Property Name="TitlebarFont" Value="Commonwealth-10" />
+            <Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}" />
+            <Property Name="TitlebarEnabled" Value="True" />
+            <Property Name="UnifiedAreaRect" Value="{{0.35,0},{0.041989,0},{0.68125,0},{0.738398,0}}" />
+            <Window Type="TaharezLook/MultiLineEditbox" Name="Root/Frame/Writeon" >
+                <Property Name="Text" >
+blaaah
+</Property>
+                <Property Name="MaxTextLength" Value="1073741823" />
+                <Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}" />
+                <Property Name="UnifiedAreaRect" Value="{{0.0283015,0},{0.0684252,0},{0.976415,0},{0.991174,0}}" />
+            </Window>
+        </Window>
+    </Window>
+</GUILayout>
