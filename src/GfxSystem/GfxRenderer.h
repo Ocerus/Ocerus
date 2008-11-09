@@ -67,10 +67,10 @@ namespace GfxSystem
 		Point GetResolution(void) const;
 		void SetFullscreen(bool fullscreen);
 
-		inline virtual void SubscribeResolutionChangeListener(IScreenResolutionChangeListener * listener) {
+		inline virtual void AddResolutionChangeListener(IScreenResolutionChangeListener * listener) {
 			mResChangeListeners.insert(listener);
 		}
-		inline virtual void UnsubscribeResolutionChangeListener(IScreenResolutionChangeListener * listener) {
+		inline virtual void RemoveResolutionChangeListener(IScreenResolutionChangeListener * listener) {
 			mResChangeListeners.erase(listener);
 		}
 
