@@ -54,8 +54,10 @@ bool ResourceMgr::AddResourceDirToGroup(const string& path, const string& group,
 	{
 		if (boost::filesystem::is_directory(i->status()))
 		{
-			if (!AddResourceDirToGroup(i->path().string(), group, includeRegexp, excludeRegexp))
-				result = false;
+			string dirStr = i->path().filename();
+			if (dirStr.compare(".svn")!=0)
+				if (!AddResourceDirToGroup(i->path().string(), group, includeRegexp, excludeRegexp))
+					result = false;
 		}
 		else
 		{
