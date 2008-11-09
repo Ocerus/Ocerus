@@ -5,6 +5,8 @@
 #include "../Utility/Settings.h"
 #include "../InputSystem/IInputListener.h"
 #include "../InputSystem/InputActions.h"
+#include "../Utility/Settings.h"
+#include "RendererGate.h"
 #include "CEGUI.h"
 
 #define gGUIMgr GUISystem::GUIMgr::GetSingleton()
@@ -28,6 +30,7 @@ namespace GUISystem {
 		virtual ~GUIMgr();
 	protected:
 		CEGUI::System * mCegui;
+		friend class RendererGate;
 	};
 }
 #endif

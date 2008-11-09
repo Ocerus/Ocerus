@@ -6,12 +6,13 @@
 #include "ResourceGate.h"
 #include "CEGUITextureWrapper.h"
 #include "CEGUIRenderer.h"
+#include "GUIMgr.h"
 #include <limits>
 #include <queue>
 #include <set>
 
 namespace GUISystem {
-	class CEGUITextureWrapper;
+	//class CEGUITextureWrapper;
 
 	struct Quad_info {
 		GfxSystem::Rect dest_rect;
@@ -23,7 +24,7 @@ namespace GUISystem {
 		Quad_info(GfxSystem::Rect dest_rect, float32 z, GfxSystem::TexturePtr tex, GfxSystem::Rect texture_rect);
 	};
 
-	class RendererGate : public CEGUI::Renderer
+	class RendererGate : public CEGUI::Renderer, GfxSystem::IScreenResolutionChangeListener
 	{
 	public:
 		RendererGate();
@@ -81,6 +82,10 @@ namespace GUISystem {
 			ResourceGate * provider = new ResourceGate();
 			mGivenResourceProviders.push_back(provider);
 			return provider;
+		}
+
+		inline virtual void EventResolutionChanged(int x, int y) const {
+			gGUIMgr.mCegui->fireEvent(EventDisplaySizeChanged, CEGUI::EventArgs());
 		}
 
 	protected:

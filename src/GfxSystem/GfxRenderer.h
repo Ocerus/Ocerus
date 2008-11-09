@@ -59,6 +59,8 @@ namespace GfxSystem
 	protected:
 		std::set<IScreenResolutionChangeListener*> mResChangeListeners;
 
+		virtual void ClearResolutionChangeListeners();
+
 	public:
 		GfxRenderer(const Point& resolution, bool fullscreen);
 		~GfxRenderer(void);

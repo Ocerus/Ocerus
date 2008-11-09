@@ -32,12 +32,17 @@ GfxRenderer::GfxRenderer(const Point& resolution, bool fullscreen)
 
 GfxRenderer::~GfxRenderer()
 {
+	ClearResolutionChangeListeners();
 	assert(mHGE);
 	RECT windowRect;
 	GetWindowRect(mHGE->System_GetState(HGE_HWND), &windowRect);
 	gApp.GetGlobalConfig()->SetInt32("WindowX", windowRect.left, "Windows");
 	gApp.GetGlobalConfig()->SetInt32("WindowY", windowRect.top, "Windows");
 	mHGE->System_Shutdown();
+}
+
+void GfxRenderer::ClearResolutionChangeListeners() {
+	mResChangeListeners.clear();
 }
 
 uint64 GfxSystem::GfxRenderer::_GetWindowHandle()
