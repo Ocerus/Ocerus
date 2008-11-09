@@ -90,11 +90,11 @@ namespace GfxSystem
 		bool DrawLine(int x1, int y1, int x2, int y2, const Pen& pen);
 		bool DrawLine(const Point& begin, const Point& end, const Pen& pen);
 
-		bool DrawPolygon(Point* vertices, int vertices_len, const TexturePtr& texture, const Pen& outline, float32 angle = 0.0f, uint8 alpha = 255, float32 scale = 1.0f, float32 textureAngle = 0.0f, float32 textureScale = 1.0f);
-		bool DrawPolygon(const std::vector<Point>& vertices, const TexturePtr& texture, const Pen& outline, float32 angle = 0.0f, uint8 alpha = 255, float32 scale = 1.0f, float32 textureAngle = 0.0f, float32 textureScale = 1.0f);
+		bool DrawPolygon(Point* vertices, int vertices_len, const TexturePtr& image, const Pen& outline, float32 angle = 0.0f, uint8 alpha = 255, float32 scale = 1.0f, float32 textureAngle = 0.0f, float32 textureScale = 1.0f);
+		bool DrawPolygon(const std::vector<Point>& vertices, const TexturePtr& image, const Pen& outline, float32 angle = 0.0f, uint8 alpha = 255, float32 scale = 1.0f, float32 textureAngle = 0.0f, float32 textureScale = 1.0f);
 
-		bool DrawPolygon(Point* vertices, int vertices_len, const Color& fillColor, const Pen& outline, float32 angle = 0.0f, float32 scale = 1.0f, float32 textureAngle = 0.0f, float32 textureScale = 1.0f);
-		bool DrawPolygon(const std::vector<Point>& vertices, const Color& fillColor, const Pen& outline, float32 angle = 0.0f, float32 scale = 1.0f, float32 textureAngle = 0.0f, float32 textureScale = 1.0f);
+		bool DrawPolygon(Point* vertices, int vertices_len, const Color& fillColor/*, const Pen& outline*/);
+		bool DrawPolygon(const std::vector<Point>& vertices, const Color& fillColor/*, const Pen& outline*/);
 
 		//TODO add font param
 		//bool DrawText(const string& str, font, int32 x, int32 y, uint8 anchor = ANCHOR_VCENTER|ANCHOR_HCENTER, float32 angle = 0.0f, uint8 alpha = 255);

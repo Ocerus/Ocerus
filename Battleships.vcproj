@@ -95,7 +95,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy &quot;$(OutDir)\$(TargetFileName)&quot; &quot;output&quot;&#x0D;&#x0A;copy /V /Y /B externalLibs\cegui\bin\Debug\*.dll Debug&#x0D;&#x0A;copy /V /Y /B externalLibs\cegui\bin\Debug\*.dll output"
+				CommandLine="copy &quot;$(OutDir)\$(TargetFileName)&quot; &quot;output&quot;&#x0D;&#x0A;copy /V /Y /B externalLibs\cegui\bin\Debug\*.dll Debug&#x0D;&#x0A;copy /V /Y /B externalLibs\cegui\bin\Debug\*.dll output&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -388,6 +388,10 @@
 					RelativePath=".\src\GfxSystem\Texture.h"
 					>
 				</File>
+				<File
+					RelativePath=".\src\GfxSystem\Triangulate.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="src"
@@ -398,6 +402,10 @@
 				</File>
 				<File
 					RelativePath=".\src\GfxSystem\Texture.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\GfxSystem\Triangulate.cpp"
 					>
 				</File>
 			</Filter>

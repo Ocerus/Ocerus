@@ -2,6 +2,7 @@
 #include "../Common.h"
 #include "../Core/Application.h"
 #include <hge.h>
+#include "Triangulate.h"
 
 using namespace GfxSystem;
 
@@ -196,25 +197,100 @@ bool GfxSystem::GfxRenderer::DrawImage( const TexturePtr& image, const Rect& src
 	return true;
 }
 
-bool GfxSystem::GfxRenderer::DrawPolygon( Point* vertices, int vertices_len, const TexturePtr& texture, const Pen& outline, float32 angle /*= 0.0f*/, uint8 alpha /*= 255*/, float32 scale /*= 1.0f*/, float32 textureAngle /*= 0.0f*/, float32 textureScale /*= 1.0f*/ )
-{
-	//TODO pokud je textura IsNull, tak zapsat neco do logu, ale vykreslit aspon outlinu
-	return false;
-}
-
-bool GfxSystem::GfxRenderer::DrawPolygon( const std::vector<Point>& vertices, const TexturePtr& texture, const Pen& outline, float32 angle /*= 0.0f*/, uint8 alpha /*= 255*/, float32 scale /*= 1.0f*/, float32 textureAngle /*= 0.0f*/, float32 textureScale /*= 1.0f*/ )
-{
-	return false;
-}
-
-bool GfxSystem::GfxRenderer::DrawPolygon( Point* vertices, int vertices_len, const Color& fillColor, const Pen& outline, float32 angle /*= 0.0f*/, float32 scale /*= 1.0f*/, float32 textureAngle /*= 0.0f*/, float32 textureScale /*= 1.0f*/ )
-{
-	return false;
-}
-
-bool GfxSystem::GfxRenderer::DrawPolygon( const std::vector<Point>& vertices, const Color& fillColor, const Pen& outline, float32 angle /*= 0.0f*/, float32 scale /*= 1.0f*/, float32 textureAngle /*= 0.0f*/, float32 textureScale /*= 1.0f*/ )
-{
+bool createTriangles(const std::vector<Point>& vertices,std::vector<Point>& triangles)
+{	
+	Vector2dVector a;
+	for(std::vector<Point>::const_iterator i = vertices.begin();i != vertices.end();++i)
+	{
+		a.push_back(Vector2d((float)(i->x),(float)(i->y)));
+	}
 	
+	Vector2dVector result;
+	Triangulate::Process(a,result);
+
+	for(std::vector<Vector2d>::const_iterator i = result.begin();i != result.end();++i)
+	{
+		triangles.push_back(Point(round(i->GetX()),round(i->GetY())));
+	}
+
+	return true;
+}
+
+void InitTriple(hgeTriple& t,uint64 hTex,int32 x1,int32 y1,int32 x2,int32 y2,int32 x3,int32 y3,uint64 col = 0xFFFFFFFF)
+{
+	// set size
+	t.v[0].x = (float32)(x1);
+	t.v[0].y = (float32)(y1);
+	t.v[0].z = 0;
+	t.v[0].tx = 0.0f;
+	t.v[0].ty = 0.0f;
+	t.v[0].col = col;
+
+	t.v[1].x = (float32)(x2);
+	t.v[1].y = (float32)(y2);
+	t.v[1].z = 0;
+	t.v[1].tx = 1.0f;
+	t.v[1].ty = 0.0f;
+	t.v[1].col = col;
+
+	t.v[2].x = (float32)(x3);
+	t.v[2].y = (float32)(y3);
+	t.v[2].z = 0;
+	t.v[2].tx = 1.0f;
+	t.v[2].ty = 1.0f;
+	t.v[2].col = col;
+
+	// set texture
+	t.tex = hTex;
+	t.blend = BLEND_ALPHAADD | BLEND_COLORMUL | BLEND_ZWRITE;
+}
+
+bool GfxSystem::GfxRenderer::DrawPolygon( Point* vertices, int vertices_len, const TexturePtr& image, const Pen& outline, float32 angle /*= 0.0f*/, uint8 alpha /*= 255*/, float32 scale /*= 1.0f*/, float32 textureAngle /*= 0.0f*/, float32 textureScale /*= 1.0f*/ )
+{
 	return false;
+}
+
+bool GfxSystem::GfxRenderer::DrawPolygon( const std::vector<Point>& vertices, const TexturePtr& image, const Pen& outline, float32 angle /*= 0.0f*/, uint8 alpha /*= 255*/, float32 scale /*= 1.0f*/, float32 textureAngle /*= 0.0f*/, float32 textureScale /*= 1.0f*/ )
+{
+	if (image.IsNull())
+	{
+		gLogMgr.LogMessage("DrawPolygon: texture is null", LOG_ERROR);
+		return false;
+	}
+
+	return false;
+}
+
+bool GfxSystem::GfxRenderer::DrawPolygon( Point* vertices, int vertices_len, const Color& fillColor/*, const Pen& outline  = 0 */)
+{
+	return false;
+}
+
+bool GfxSystem::GfxRenderer::DrawPolygon( const std::vector<Point>& vertices, const Color& fillColor/*, const Pen& outline   = 0 */)
+{
+	// get triangles from points
+	std::vector<Point> triangles;
+	createTriangles(vertices,triangles);
+
+	// draw filled triangles
+	int32 pre2[2][2];
+	int x = 0;
+	hgeTriple t;
+	for(std::vector<Point>::iterator i = triangles.begin();i<triangles.end();++i)
+	{
+		int m = x % 3;
+		if (m == 2)		
+			InitTriple(t,0,pre2[0][0],pre2[0][1],pre2[1][0],pre2[1][1],i->x,i->y,GetHGEColor(fillColor));
+		else
+		{			
+			pre2[m][0] = i->x;
+			pre2[m][1] = i->y;
+		}
+		
+		mHGE->Gfx_RenderTriple(&t);
+		++x;
+	}	
+		
+	return true;
 }
 
