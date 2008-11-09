@@ -22,7 +22,7 @@ namespace Core
 	//@}
 
 	/// State which the application can be in.
-	enum eAppState { AS_INITING=0, AS_LOADING, AS_GAME, AS_SHUTDOWN };
+	enum eAppState { AS_INITING=0, AS_LOADING, AS_GAME, AS_SHUTDOWN, AS_GUI };
 
 	/** Main class of the whole project. One instance is created at startup and the runMainLoop method is invoked.
 	*/
@@ -64,6 +64,7 @@ namespace Core
 		GfxSystem::GfxRenderer* mGfxRenderer;
 		EntitySystem::EntityMgr* mEntityMgr;
 		LogSystem::LogMgr* mLogMgr;
+		GUISystem::GUIMgr* mGUIMgr;
 		//@}
 
 		/// Application state screens.

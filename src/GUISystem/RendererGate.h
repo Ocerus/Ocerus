@@ -12,7 +12,8 @@
 #include <set>
 
 namespace GUISystem {
-	//class CEGUITextureWrapper;
+	class CEGUITextureWrapper;
+	class GUIMgr;
 
 	struct Quad_info {
 		GfxSystem::Rect dest_rect;
@@ -84,9 +85,7 @@ namespace GUISystem {
 			return provider;
 		}
 
-		inline virtual void EventResolutionChanged(int x, int y) const {
-			gGUIMgr.mCegui->fireEvent(EventDisplaySizeChanged, CEGUI::EventArgs());
-		}
+		virtual void EventResolutionChanged(int x, int y);
 
 	protected:
 		virtual void DrawQuad(const Quad_info & quad) const;

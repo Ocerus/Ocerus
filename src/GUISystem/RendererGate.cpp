@@ -97,4 +97,8 @@ namespace GUISystem {
 			mGivenResourceProviders.pop_back();
 		}
 	}
+
+	void RendererGate::EventResolutionChanged(int x, int y) {
+		gGUIMgr.mCegui->fireEvent(EventDisplaySizeChanged, CEGUI::EventArgs());
+	}
 }
