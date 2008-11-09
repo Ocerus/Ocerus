@@ -95,7 +95,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy /V /Y /B externalLibs\cegui\bin\Debug\*.dll Debug&#x0D;&#x0A;"
+				CommandLine="copy &quot;$(OutDir)\$(TargetFileName)&quot; &quot;output&quot;&#x0D;&#x0A;copy /V /Y /B externalLibs\cegui\bin\Debug\*.dll Debug&#x0D;&#x0A;copy /V /Y /B externalLibs\cegui\bin\Debug\*.dll output"
 			/>
 		</Configuration>
 		<Configuration
