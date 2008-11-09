@@ -2,6 +2,7 @@
 #define _GFXRENDERER_H_
 
 #include <vector>
+#include <set>
 #include "../Utility/Settings.h"
 #include "../Utility/Singleton.h"
 #include "Texture.h"
@@ -41,12 +42,22 @@ namespace GfxSystem
 
 	enum eAnchor { ANCHOR_VCENTER=1<<0, ANCHOR_TOP=1<<1, ANCHOR_BOTTOM=1<<2, ANCHOR_LEFT=1<<3, ANCHOR_RIGHT=1<<4, ANCHOR_HCENTER=1<<5 };
 
+	// kvi kvi kviiiiii chro chro chro
+
+	class IScreenResolutionChangeListener {
+	public:
+		virtual void EventResolutionChanged(int x, int y) const;
+	};
+
 	class GfxRenderer : public Singleton<GfxRenderer>
 	{
 	private:
 		HGE* mHGE; 
 
 		friend class Texture;
+
+	protected:
+		std::set<IScreenResolutionChangeListener*> mResChangeListeners;
 
 	public:
 		GfxRenderer(const Point& resolution, bool fullscreen);
@@ -56,6 +67,13 @@ namespace GfxSystem
 		Point GetResolution(void) const;
 		void SetFullscreen(bool fullscreen);
 
+		inline virtual void SubscribeResolutionChangeListener(IScreenResolutionChangeListener * listener) {
+			mResChangeListeners.insert(listener);
+		}
+		inline virtual void UnsubscribeResolutionChangeListener(IScreenResolutionChangeListener * listener) {
+			mResChangeListeners.erase(listener);
+		}
+
 		bool BeginRendering(void);
 		bool EndRendering(void);
 
@@ -64,7 +82,8 @@ namespace GfxSystem
 		// note that anchor determines the rotation/scaling pivot
 		bool DrawImage(const TexturePtr& image, int32 x, int32 y, uint8 anchor = ANCHOR_VCENTER|ANCHOR_HCENTER, float32 angle = 0.0f, uint8 alpha = 255, float32 scale = 1.0f);
 		bool DrawImage(const TexturePtr& image, const Point& pos, uint8 anchor = ANCHOR_VCENTER|ANCHOR_HCENTER, float32 angle = 0.0f, uint8 alpha = 255, float32 scale = 1.0f);
-		bool DrawImage(const TexturePtr& image, const Rect& destRect, uint8 alpha = 255);
+		// todoooo Santhos: add functionality to srcRect, needed for CEGUI, as well as other stuff we might have to do
+		bool DrawImage(const TexturePtr& image, const Rect& srcRect, const Rect& destRect, uint8 alpha = 255);
 
 		bool DrawLine(int x1, int y1, int x2, int y2, const Pen& pen);
 		bool DrawLine(const Point& begin, const Point& end, const Pen& pen);

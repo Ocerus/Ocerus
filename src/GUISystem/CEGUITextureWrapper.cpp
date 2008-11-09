@@ -9,16 +9,12 @@
 #include "RendererGate.h"
 
 namespace GUISystem {
-	void CEGUITextureWrapper::loadFromFile(const CEGUI::String& filename, const CEGUI::String& resourceGroup) {	
+	void CEGUITextureWrapper::loadFromFile(const CEGUI::String& filename, const CEGUI::String& resourceGroup) {
+		mTexture.SetNull();
 		mTexture = (GfxSystem::TexturePtr)gResourceMgr.GetResource(resourceGroup.c_str(), filename.c_str());
 	}
-/*
-	CEGUITextureWrapper::CEGUITextureWrapper(float size) : CEGUI::Texture(0){
-		mTexture = gResourceMgr.GetResource("gui", "placeholder"); // co ja vim
-	}
-*/
 
-	CEGUITextureWrapper::CEGUITextureWrapper(RendererGate * gate) : CEGUI::Texture(gate){
+	CEGUITextureWrapper::CEGUITextureWrapper(RendererGate * gate) : CEGUI::Texture(gate) {
 	}
 
 	void CEGUITextureWrapper::loadFromMemory(const void* buffPtr, CEGUI::uint buffWidth,
@@ -30,5 +26,9 @@ namespace GUISystem {
 			mTexture = TexturePtr( DYN_NEW GfxSystem::Texture( TODO ) );
 			*/
 			assert(!"WE ARE DOOMED");
+	}
+
+	CEGUITextureWrapper::~CEGUITextureWrapper(void) {
+		mTexture.SetNull();
 	}
 }

@@ -2,13 +2,33 @@
 #define _RENDERERGATE_H_
 
 #include "../Utility/Settings.h"
+#include "../GfxSystem/GfxRenderer.h"
+#include "ResourceGate.h"
+#include "CEGUITextureWrapper.h"
 #include "CEGUIRenderer.h"
+#include <limits>
 #include <queue>
+#include <set>
 
 namespace GUISystem {
+	class CEGUITextureWrapper;
+
+	struct Quad_info {
+		GfxSystem::Rect dest_rect;
+		float32 z;
+		GfxSystem::TexturePtr tex;
+		GfxSystem::Rect texture_rect;
+
+		Quad_info();
+		Quad_info(GfxSystem::Rect dest_rect, float32 z, GfxSystem::TexturePtr tex, GfxSystem::Rect texture_rect);
+	};
+
 	class RendererGate : public CEGUI::Renderer
 	{
 	public:
+		RendererGate();
+		~RendererGate();
+
 		// add's a quad to the list to be rendered - Pokud Santhos neda tak bude jen vykreslovat
 		virtual	void addQuad(const CEGUI::Rect& dest_rect, float z, const CEGUI::Texture* tex,
 			const CEGUI::Rect& texture_rect, const CEGUI::ColourRect& colours, CEGUI::QuadSplitMode quad_split_mode);
@@ -20,7 +40,7 @@ namespace GUISystem {
 		// clear the queue
 		virtual	void clearRenderList(void);
 
-		virtual void setQueueingEnabled(bool setting);
+		inline virtual void setQueueingEnabled(bool setting) { mQueueing = setting; }
 
 		virtual	CEGUI::Texture* createTexture(void);
 
@@ -32,29 +52,49 @@ namespace GUISystem {
 
 		virtual void destroyAllTextures(void);
 
-		virtual bool isQueueingEnabled(void) const;
+		inline virtual bool isQueueingEnabled(void) const { return mQueueing; }
 
-		virtual float getWidth(void) const;
+		inline virtual float getWidth(void) const { return (float)gGfxRenderer.GetResolution().x; };
 
-		virtual float getHeight(void) const;
+		inline virtual float getHeight(void) const { return (float)gGfxRenderer.GetResolution().y; };
 
 		// Return the size of the display in pixels
-		virtual CEGUI::Size getSize(void) const;
+		inline virtual CEGUI::Size getSize(void) const {
+			GfxSystem::Point pt = gGfxRenderer.GetResolution();
+			return CEGUI::Size((float)pt.x, (float)pt.y);
+		}
 
 		// Return a Rect describing the screen
-		virtual CEGUI::Rect getRect(void) const;
+		inline virtual CEGUI::Rect getRect(void) const {
+			return CEGUI::Rect(0.0f, 0.0f, getWidth(), getHeight());
+		}
 
-		virtual	CEGUI::uint getMaxTextureSize(void) const;
+		inline virtual CEGUI::uint getMaxTextureSize(void) const { return UINT_MAX; }
 
 		// Return the horizontal display resolution dpi
-		virtual	CEGUI::uint getHorzScreenDPI(void) const;
+		inline virtual CEGUI::uint getHorzScreenDPI(void) const { assert(!"We're doomed again, why would ANYONE want horzDPI"); return 0; }
 
 		// Return the vertical display resolution dpi
-		virtual	CEGUI::uint getVertScreenDPI(void) const;
+		inline virtual CEGUI::uint getVertScreenDPI(void) const { assert(!"We're doomed again, why would ANYONE want vertDPI"); return 0; }
 
-		const CEGUI::String& getIdentifierString() const;
+		inline virtual CEGUI::ResourceProvider* createResourceProvider(void) {
+			ResourceGate * provider = new ResourceGate();
+			mGivenResourceProviders.push_back(provider);
+			return provider;
+		}
 
-		virtual CEGUI::ResourceProvider* createResourceProvider(void);	
+	protected:
+		virtual void DrawQuad(const Quad_info & quad) const;
+
+		std::set<CEGUITextureWrapper*> mTextures;
+		std::queue<Quad_info> mQuads;
+		
+		// later on try to check if one will be enough for cegui
+		std::vector<CEGUI::ResourceProvider*> mGivenResourceProviders;
+
+		void ClearProviders();
+
+		bool mQueueing;		
 	};
 }
 

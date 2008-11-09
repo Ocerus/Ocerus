@@ -9,6 +9,8 @@
 #include "RendererGate.h"
 
 namespace GUISystem {
+	class RendererGate;
+
 	class CEGUITextureWrapper : public CEGUI::Texture
 	{
 	public:
@@ -62,10 +64,10 @@ namespace GUISystem {
 		inline virtual GfxSystem::TexturePtr getTexture() { return mTexture; }
 
 		CEGUITextureWrapper(RendererGate * gate);
-	protected:
-		// Destructor for Texture base class.  This is never called by client code.
-		virtual ~CEGUITextureWrapper(void) {}
 
+		virtual ~CEGUITextureWrapper(void);
+
+	protected:
 		GfxSystem::TexturePtr mTexture;
 
 	private:

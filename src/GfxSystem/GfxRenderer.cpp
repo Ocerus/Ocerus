@@ -49,12 +49,19 @@ uint64 GfxSystem::GfxRenderer::_GetWindowHandle()
 
 void GfxRenderer::ChangeResolution( const Point& resolution )
 {
+	std::set<IScreenResolutionChangeListener*>::iterator iter = mResChangeListeners.begin();
+
 	gLogMgr.LogMessage("Changing resolution to ", resolution.x, resolution.y);
 
 	mHGE->System_SetState(HGE_SCREENWIDTH,resolution.x);
 	mHGE->System_SetState(HGE_SCREENHEIGHT,resolution.y);
 
 	gInputMgr._SetResolution(resolution.x, resolution.y);
+
+	while (iter != mResChangeListeners.end()) {
+		(*iter)->EventResolutionChanged(resolution.x, resolution.y);
+		++iter;
+	}
 
 	gLogMgr.LogMessage("Resolution changed");
 }
@@ -170,7 +177,7 @@ bool GfxSystem::GfxRenderer::DrawImage( const TexturePtr& image, const Point& po
 	return true;
 }
 
-bool GfxSystem::GfxRenderer::DrawImage( const TexturePtr& image, const Rect& destRect, uint8 alpha /*= 255*/ )
+bool GfxSystem::GfxRenderer::DrawImage( const TexturePtr& image, const Rect& srcRect, const Rect& destRect, uint8 alpha /*= 255*/ )
 {
 	if (image.IsNull())
 	{
