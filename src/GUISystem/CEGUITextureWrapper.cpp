@@ -12,6 +12,9 @@
 
 namespace GUISystem {
 
+	uint32 CEGUITextureWrapper::mTextureIndex = 0;
+	const std::string CEGUITextureWrapper::mResourceGroupName = "CEGUI_created";
+
 	void CEGUITextureWrapper::loadFromFile(const CEGUI::String& filename, const CEGUI::String& resourceGroup) {
 		mTexture.SetNull();
 		mTexture = (GfxSystem::TexturePtr)gResourceMgr.GetResource(resourceGroup.c_str(), filename.c_str());

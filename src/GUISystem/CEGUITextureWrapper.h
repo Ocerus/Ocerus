@@ -77,10 +77,6 @@ namespace GUISystem {
 	private:
 		CEGUI::Renderer* d_owner;		//<! Renderer object that created and owns this texture		
 	};
-
-	uint32 CEGUITextureWrapper::mTextureIndex = 0;
-	const std::string CEGUITextureWrapper::mResourceGroupName = "CEGUI_created";
-
 }
 
 #endif
