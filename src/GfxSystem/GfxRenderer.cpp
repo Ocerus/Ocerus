@@ -206,12 +206,11 @@ bool createTriangles(const std::vector<Point>& vertices,std::vector<Point>& tria
 	}
 	
 	Vector2dVector result;
-	Triangulate::Process(a,result);
-
-	for(std::vector<Vector2d>::const_iterator i = result.begin();i != result.end();++i)
-	{
-		triangles.push_back(Point(round(i->GetX()),round(i->GetY())));
-	}
+	if (Triangulate::Process(a,result))
+		for(std::vector<Vector2d>::const_iterator i = result.begin();i != result.end();++i)
+			triangles.push_back(Point(round(i->GetX()),round(i->GetY())));
+	else
+		return false;
 
 	return true;
 }
@@ -262,34 +261,51 @@ bool GfxSystem::GfxRenderer::DrawPolygon( const std::vector<Point>& vertices, co
 }
 
 bool GfxSystem::GfxRenderer::DrawPolygon( Point* vertices, int vertices_len, const Color& fillColor/*, const Pen& outline  = 0 */)
-{
-	return false;
+{	
+	// init vector
+	std::vector<Point> v;
+	for(int i = 0;i < vertices_len;i++)
+		v.push_back(vertices[i]);
+
+	// draw polygon using the method beneath this
+	if (DrawPolygon(v,fillColor))
+		return true;
+	else
+		return false;
 }
 
 bool GfxSystem::GfxRenderer::DrawPolygon( const std::vector<Point>& vertices, const Color& fillColor/*, const Pen& outline   = 0 */)
-{
-	// get triangles from points
+{	
 	std::vector<Point> triangles;
-	createTriangles(vertices,triangles);
-
-	// draw filled triangles
-	int32 pre2[2][2];
-	int x = 0;
-	hgeTriple t;
-	for(std::vector<Point>::iterator i = triangles.begin();i<triangles.end();++i)
+	if (createTriangles(vertices,triangles)) // get triangles from points
 	{
-		int m = x % 3;
-		if (m == 2)		
-			InitTriple(t,0,pre2[0][0],pre2[0][1],pre2[1][0],pre2[1][1],i->x,i->y,GetHGEColor(fillColor));
-		else
-		{			
-			pre2[m][0] = i->x;
-			pre2[m][1] = i->y;
+		// draw filled triangles
+		int32 pre2[2][2]; // to store two first points of triangle
+		int x = 0;  // simple counter
+		hgeTriple t; // triangle
+		for(std::vector<Point>::iterator i = triangles.begin();i<triangles.end();++i)
+		{
+			int m = x % 3;
+			if (m == 2) // current vertex is the third needed
+			{ 
+				// init triangle with the two stored vertices and the current vertex
+				InitTriple(t,0,pre2[0][0],pre2[0][1],pre2[1][0],pre2[1][1],i->x,i->y,GetHGEColor(fillColor));
+				mHGE->Gfx_RenderTriple(&t); // render it
+			}
+			else
+			{			
+				// init first and second triangle vertex
+				pre2[m][0] = i->x;
+				pre2[m][1] = i->y;
+			}					
+			++x; // update counter
 		}
-		
-		mHGE->Gfx_RenderTriple(&t);
-		++x;
-	}	
+	}
+	else 
+	{
+		gLogMgr.LogMessage("DrawPolygon: Unable to triangulate the polygon", LOG_ERROR);
+		return false;
+	}
 		
 	return true;
 }

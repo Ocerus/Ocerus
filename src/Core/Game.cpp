@@ -41,10 +41,14 @@ void Core::Game::Draw()
 	gGfxRenderer.ClearScreen(GfxSystem::Color(0,0,0));
 	gGfxRenderer.DrawLine(0,0,100,100,GfxSystem::Pen(GfxSystem::Color(255,0,0)));
 	gGfxRenderer.DrawImage(gResourceMgr.GetResource("test/zazaka.png"), 50, 100);
-	/*std::vector<GfxSystem::Point> test;
+	// creatig pentagon
+	std::vector<GfxSystem::Point> test;
 	test.push_back(GfxSystem::Point(300,300));
-	test.push_back(GfxSystem::Point(300,400));
-	test.push_back(GfxSystem::Point(400,300));
-	gGfxRenderer.DrawPolygon(test,GfxSystem::Color(255,135,0));*/
+	test.push_back(GfxSystem::Point(350,300));
+	test.push_back(GfxSystem::Point(350,400));
+	test.push_back(GfxSystem::Point(325,450));
+	test.push_back(GfxSystem::Point(250,380));
+	// rendering pentagon
+	gGfxRenderer.DrawPolygon(test,GfxSystem::Color(255,135,0));
 }
 
