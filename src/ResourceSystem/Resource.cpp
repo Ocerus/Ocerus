@@ -4,17 +4,23 @@
 #include "../Common.h"
 #include "../Utility/DataContainer.h"
 #include <vector>
+#include <string>
 
 using namespace ResourceSystem;
 
-Resource::Resource(): mState(STATE_UNINITIALIZED), mInputStream(0) {}
+Resource::Resource(): mState(STATE_UNINITIALIZED), mInputFileStream(0), mInputMemoryStream(0), mMemoryLoc(0), mMemoryLen(0) {}
 
 Resource::~Resource()
 {
-	if (mInputStream)
+	if (mInputFileStream)
 	{
-		DYN_DELETE mInputStream;
-		mInputStream = 0;
+		DYN_DELETE mInputFileStream;
+		mInputFileStream = 0;
+	}
+	if (mInputMemoryStream)
+	{
+		DYN_DELETE mInputMemoryStream;
+		mInputMemoryStream = 0;
 	}
 }
 
@@ -22,19 +28,37 @@ InputStream& Resource::OpenInputStream(eInputStreamMode mode)
 {
 	// currently opens the stream from a file
 	assert(mState != STATE_UNINITIALIZED);
-	assert(boost::filesystem::exists(mFilePath) && "Resource file not found.");
-	mInputStream = DYN_NEW boost::filesystem::ifstream(mFilePath, InputStreamMode(mode));
-	assert(mInputStream);
-	return *mInputStream;
+	if (mMemoryLoc)
+	{
+		mInputMemoryStream = DYN_NEW InputMemoryStream(std::string(static_cast<char*>(mMemoryLoc), mMemoryLen));
+		assert(mInputMemoryStream);
+		return *mInputMemoryStream;
+	}
+	else
+	{
+		assert(boost::filesystem::exists(mFilePath) && "Resource file not found.");
+		mInputFileStream = DYN_NEW boost::filesystem::ifstream(mFilePath, InputStreamMode(mode));
+		assert(mInputFileStream);
+		return *mInputFileStream;
+	}
 }
 
 void Resource::CloseInputStream()
 {
 	assert(mState != STATE_UNINITIALIZED);
-	assert(mInputStream);
-	mInputStream->close();
-	DYN_DELETE mInputStream;
-	mInputStream = 0;
+	if (mMemoryLoc)
+	{
+		assert(mInputMemoryStream);
+		DYN_DELETE mInputMemoryStream;
+		mInputMemoryStream = 0;
+	}
+	else
+	{
+		assert(mInputFileStream);
+		mInputFileStream->close();
+		DYN_DELETE mInputFileStream;
+		mInputFileStream = 0;
+	}
 }
 
 bool Resource::Load()
@@ -81,16 +105,25 @@ void ResourceSystem::Resource::EnsureLoaded( void )
 
 void ResourceSystem::Resource::GetRawInputData( DataContainer& outData )
 {
-	// reads data from a stream into a buffer
-	outData.Release();
-	InputStream& is = OpenInputStream(ISM_BINARY);
-	std::vector<uint8> tmp;
-	while (is.good())
-		tmp.push_back(is.get());
-	uint8* buffer = DYN_NEW uint8[tmp.size()-1];
-	uint8* bufferPos = buffer;
-	for (std::vector<uint8>::const_iterator i=tmp.begin(); i + 1!=tmp.end(); ++i)
-		*(bufferPos++) = *i;
-	uint8* c = buffer+tmp.size();
-	outData.SetData(buffer, tmp.size()-1);
+	if (mMemoryLoc)
+	{
+		// if we point to a memory location, then fill this in
+		uint8* tmpbuf = DYN_NEW uint8[mMemoryLen];
+		memcpy(tmpbuf, mMemoryLoc, mMemoryLen);
+		outData.SetData(tmpbuf, mMemoryLen);
+	}
+	else
+	{
+		// otherwise read data from a stream into a buffer
+		outData.Release();
+		InputStream& is = OpenInputStream(ISM_BINARY);
+		std::vector<uint8> tmp;
+		while (is.good())
+			tmp.push_back(is.get());
+		uint8* buffer = DYN_NEW uint8[tmp.size()];
+		uint8* bufferPos = buffer;
+		for (std::vector<uint8>::const_iterator i=tmp.begin(); i!=tmp.end(); ++i)
+			*(bufferPos++) = *i;
+		outData.SetData(buffer, tmp.size());
+	}
 }

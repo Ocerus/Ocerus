@@ -26,6 +26,7 @@ typedef float float32;
 
 #include <string>
 #include <ios>
+//TODO zmenit na math.h a double nahradit float32
 #include <cmath>
 
 inline uint32 round(double num) {

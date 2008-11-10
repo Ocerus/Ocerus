@@ -4,6 +4,7 @@
 #include "../Utility/SmartPointer.h"
 #include "../Utility/Settings.h"
 #include <boost/filesystem/fstream.hpp>
+#include <sstream>
 
 /// Forward declaration.
 class DataContainer;
@@ -66,14 +67,23 @@ namespace ResourceSystem
 	private:
 		friend class ResourceMgr;
 		string mFilePath;
-		boost::filesystem::ifstream* mInputStream;
+		void* mMemoryLoc;
+		uint32 mMemoryLen;
 		eType mType;
 		string mName;
+		/// Used by the impl of OpenInputStream
+		//@{
+		boost::filesystem::ifstream* mInputFileStream;
+		typedef std::istringstream InputMemoryStream;
+		InputMemoryStream* mInputMemoryStream;
+		//@}
+
 
 		/// For internal use by the resource manager.
 		//@{
 		inline void SetName(const string& name) { mName = name; }
 		inline void SetFilepath(const string& filepath) { mFilePath = filepath; }
+		inline void SetMemory(void* memoryLoc, uint32 memoryLen) { mMemoryLoc = memoryLoc; mMemoryLen = memoryLen; }
 		inline void SetState(const eState newState) { mState = newState; }
 		inline void SetType(const eType newType) { mType = newType; }
 		//@}

@@ -116,6 +116,21 @@ bool ResourceMgr::AddResourceFileToGroup(const string& filepath, const string& g
 	return true;
 }
 
+bool ResourceMgr::AddResourceMemoryToGroup( void* memoryLocation, uint32 memoryLength, const string& name, const string& group, Resource::eType type /*= Resource::TYPE_AUTODETECT*/ )
+{
+	// error
+	assert(type != Resource::TYPE_AUTODETECT && "Memory resource must define its type");
+
+	ResourcePtr r = mResourceCreationMethods[type]();
+	r->SetState(Resource::STATE_INITIALIZED);
+	r->SetName(name);
+	r->SetMemory(memoryLocation, memoryLength);
+	mResourceGroups[group][name] = r;
+
+	gLogMgr.LogMessage("Resource added");
+	return true;
+}
+
 void ResourceMgr::LoadResourcesInGroup(const string& group)
 {
 	gLogMgr.LogMessage("Loading resource group '"+group+"'");
@@ -214,3 +229,4 @@ void ResourceSystem::ResourceMgr::DeleteResource( const string& group, const str
 		ri->second->Unload();
 	resmap.erase(ri);
 }
+
