@@ -32,7 +32,7 @@ namespace ResourceSystem
 		/// Assigns a resource to a group.
 		bool AddResourceFileToGroup(const string& filepath, const string& group, Resource::eType type = Resource::TYPE_AUTODETECT, bool pathRelative = true);
 		/// Assigns a resource to a group.
-		bool AddResourceMemoryToGroup(void* memoryLocation, uint32 memoryLength, const string& name, const string& group, Resource::eType type = Resource::TYPE_AUTODETECT);
+		bool AddResourceMemoryToGroup(const void* memoryLocation, uint32 memoryLength, const string& name, const string& group, Resource::eType type /*= Resource::TYPE_AUTODETECT*/);
 		/** Loads all resources in the specified group.
 			Doesn't need to be called, resources are loaded on-the-fly if someone needs them.
 		*/

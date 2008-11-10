@@ -70,9 +70,17 @@ namespace GUISystem {
 	protected:
 		GfxSystem::TexturePtr mTexture;
 
+		static uint32 mTextureIndex;
+		static const std::string mResourceGroupName;
+		static std::string GetNextTextureName();
+
 	private:
 		CEGUI::Renderer* d_owner;		//<! Renderer object that created and owns this texture		
 	};
+
+	uint32 CEGUITextureWrapper::mTextureIndex = 0;
+	const std::string CEGUITextureWrapper::mResourceGroupName = "CEGUI_created";
+
 }
 
 #endif

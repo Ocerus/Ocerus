@@ -30,7 +30,7 @@ InputStream& Resource::OpenInputStream(eInputStreamMode mode)
 	assert(mState != STATE_UNINITIALIZED);
 	if (mMemoryLoc)
 	{
-		mInputMemoryStream = DYN_NEW InputMemoryStream(std::string(static_cast<char*>(mMemoryLoc), mMemoryLen));
+		mInputMemoryStream = DYN_NEW InputMemoryStream(std::string(static_cast<const char*>(mMemoryLoc), mMemoryLen));
 		assert(mInputMemoryStream);
 		return *mInputMemoryStream;
 	}

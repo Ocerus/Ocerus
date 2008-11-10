@@ -116,7 +116,7 @@ bool ResourceMgr::AddResourceFileToGroup(const string& filepath, const string& g
 	return true;
 }
 
-bool ResourceMgr::AddResourceMemoryToGroup( void* memoryLocation, uint32 memoryLength, const string& name, const string& group, Resource::eType type /*= Resource::TYPE_AUTODETECT*/ )
+bool ResourceMgr::AddResourceMemoryToGroup( const void* memoryLocation, uint32 memoryLength, const string& name, const string& group, Resource::eType type /*= Resource::TYPE_AUTODETECT*/ )
 {
 	// error
 	assert(type != Resource::TYPE_AUTODETECT && "Memory resource must define its type");

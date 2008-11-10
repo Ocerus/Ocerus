@@ -67,7 +67,7 @@ namespace ResourceSystem
 	private:
 		friend class ResourceMgr;
 		string mFilePath;
-		void* mMemoryLoc;
+		const void* mMemoryLoc;
 		uint32 mMemoryLen;
 		eType mType;
 		string mName;
@@ -83,7 +83,7 @@ namespace ResourceSystem
 		//@{
 		inline void SetName(const string& name) { mName = name; }
 		inline void SetFilepath(const string& filepath) { mFilePath = filepath; }
-		inline void SetMemory(void* memoryLoc, uint32 memoryLen) { mMemoryLoc = memoryLoc; mMemoryLen = memoryLen; }
+		inline void SetMemory(const void* memoryLoc, uint32 memoryLen) { mMemoryLoc = memoryLoc; mMemoryLen = memoryLen; }
 		inline void SetState(const eState newState) { mState = newState; }
 		inline void SetType(const eType newType) { mType = newType; }
 		//@}
