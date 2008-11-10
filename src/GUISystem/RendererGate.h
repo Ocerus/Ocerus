@@ -80,6 +80,7 @@ namespace GUISystem {
 		inline virtual CEGUI::uint getVertScreenDPI(void) const { return 96; }
 
 		inline virtual CEGUI::ResourceProvider* createResourceProvider(void) {
+			assert(mGivenResourceProviders.size() == 0);
 			ResourceGate * provider = new ResourceGate();
 			mGivenResourceProviders.push_back(provider);
 			return provider;
