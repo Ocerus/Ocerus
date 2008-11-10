@@ -87,9 +87,10 @@ void ResourceSystem::Resource::GetRawInputData( DataContainer& outData )
 	std::vector<uint8> tmp;
 	while (is.good())
 		tmp.push_back(is.get());
-	uint8* buffer = DYN_NEW uint8[tmp.size()];
+	uint8* buffer = DYN_NEW uint8[tmp.size()-1];
 	uint8* bufferPos = buffer;
-	for (std::vector<uint8>::const_iterator i=tmp.begin(); i!=tmp.end(); ++i)
+	for (std::vector<uint8>::const_iterator i=tmp.begin(); i + 1!=tmp.end(); ++i)
 		*(bufferPos++) = *i;
-	outData.SetData(buffer, tmp.size());
+	uint8* c = buffer+tmp.size();
+	outData.SetData(buffer, tmp.size()-1);
 }

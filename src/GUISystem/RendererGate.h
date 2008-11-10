@@ -73,11 +73,11 @@ namespace GUISystem {
 
 		inline virtual CEGUI::uint getMaxTextureSize(void) const { return UINT_MAX; }
 
-		// Return the horizontal display resolution dpi
-		inline virtual CEGUI::uint getHorzScreenDPI(void) const { assert(!"We're doomed again, why would ANYONE want horzDPI"); return 0; }
+		// Return the horizontal display resolution dpi; 96 is from directx renderer headers
+		inline virtual CEGUI::uint getHorzScreenDPI(void) const { return 96; }
 
-		// Return the vertical display resolution dpi
-		inline virtual CEGUI::uint getVertScreenDPI(void) const { assert(!"We're doomed again, why would ANYONE want vertDPI"); return 0; }
+		// Return the vertical display resolution dpi; 96 is from directx renderer headers
+		inline virtual CEGUI::uint getVertScreenDPI(void) const { return 96; }
 
 		inline virtual CEGUI::ResourceProvider* createResourceProvider(void) {
 			ResourceGate * provider = new ResourceGate();
