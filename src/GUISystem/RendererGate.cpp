@@ -51,7 +51,7 @@ namespace GUISystem {
 
 	// clear the queue
 	void RendererGate::clearRenderList(void) {
-		mQuads.pop();
+		while (!mQuads.empty()) mQuads.pop();
 	}
 
 	CEGUI::Texture* RendererGate::createTexture(void) {

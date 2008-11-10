@@ -39,6 +39,8 @@ namespace GUISystem {
 	GUIMgr::~GUIMgr() {
 		gInputMgr.RemoveInputListener(this);
 		DYN_DELETE mCegui;
+		DYN_DELETE mRendererGate;
+		DYN_DELETE mResourceGate;
 	}
 
 /*
