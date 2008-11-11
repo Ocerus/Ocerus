@@ -82,7 +82,7 @@ namespace GfxSystem
 		bool ClearScreen(const Color& color);
 
 		// note that anchor determines the rotation/scaling pivot
-		bool DrawImage(const TexturePtr& image, int32 x, int32 y, uint8 anchor = ANCHOR_VCENTER|ANCHOR_HCENTER, float32 angle = 0.0f, uint8 alpha = 255, float32 scale = 1.0f);
+		bool DrawImage(const TexturePtr& image, int32 x, int32 y, uint8 anchor = ANCHOR_VCENTER|ANCHOR_HCENTER, float32 angle = 0.0f, uint8 alpha = 255, float32 scale = 1.0f, int32 width = 0, int32 height = 0);
 		bool DrawImage(const TexturePtr& image, const Point& pos, uint8 anchor = ANCHOR_VCENTER|ANCHOR_HCENTER, float32 angle = 0.0f, uint8 alpha = 255, float32 scale = 1.0f);
 		// todoooo Santhos: add functionality to srcRect, needed for CEGUI, as well as other stuff we might have to do
 		bool DrawImage(const TexturePtr& image, const Rect& srcRect, const Rect& destRect, uint8 alpha = 255);
