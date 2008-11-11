@@ -20,6 +20,7 @@ bool CEGUIResource::LoadImpl()
 
 bool CEGUIResource::UnloadImpl()
 {
+	// needs fixing!!!
 	DYN_DELETE_ARRAY mDataBlock;
 	return true;
 }

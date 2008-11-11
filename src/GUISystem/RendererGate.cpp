@@ -42,9 +42,8 @@ namespace GUISystem {
 
 	// perform final rendering for all queued renderable quads.
 	void RendererGate::doRender(void) {
-		Quad_info q;
-		while (!mQuads.empty()) {
-			DrawQuad(q);
+		while (!mQuads.empty()) {			
+			DrawQuad(mQuads.front());
 			mQuads.pop();
 		}
 	}

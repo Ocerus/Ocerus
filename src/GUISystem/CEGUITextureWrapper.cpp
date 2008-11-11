@@ -40,7 +40,8 @@ namespace GUISystem {
 	}
 
 	std::string CEGUITextureWrapper::GetNextTextureName() {
-		std::stringstream sstream("CEGUI_CUSTOM_TEXTURE_");
+		std::stringstream sstream;
+		sstream << "CEGUI_CUSTOM_TEXTURE_";
 		sstream << mTextureIndex++;
 		return sstream.str();
 	}
