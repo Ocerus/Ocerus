@@ -32,14 +32,17 @@ namespace ResourceSystem
 
 		/// Enforces this resource to be loaded. Do not override this!
 		virtual bool Load(void);
-		/// Enforces this resource to be unloaded. Do not override this!
-		virtual bool Unload(void);
+		/** Enforces this resource to be unloaded. Do not override this!
+			\param allowManual If allowManual is true, the resource will be unloaded even if it was manually created.
+		*/
+		virtual bool Unload(bool allowManual = false);
 
 		/// Getters.
 		//@{
 		inline eType GetType(void) const { return mType; }
 		inline eState GetState(void) const { return mState; }
 		inline string GetName(void) const { return mName; }
+		inline bool IsManual(void) const { return mIsManual; }
 		//@}
 
 	protected:
@@ -63,19 +66,18 @@ namespace ResourceSystem
 		void GetRawInputData(DataContainer& outData);
 		/// Call this whenever you need to make sure the data is loaded.
 		void EnsureLoaded(void);
+		/// Set the current state of the resource.
+		inline void SetState(const eState newState) { mState = newState; }
 
 	private:
 		friend class ResourceMgr;
 		string mFilePath;
-		const void* mMemoryLoc;
-		uint32 mMemoryLen;
+		bool mIsManual;
 		eType mType;
 		string mName;
 		/// Used by the impl of OpenInputStream
 		//@{
 		boost::filesystem::ifstream* mInputFileStream;
-		typedef std::istringstream InputMemoryStream;
-		InputMemoryStream* mInputMemoryStream;
 		//@}
 
 
@@ -83,8 +85,7 @@ namespace ResourceSystem
 		//@{
 		inline void SetName(const string& name) { mName = name; }
 		inline void SetFilepath(const string& filepath) { mFilePath = filepath; }
-		inline void SetMemory(const void* memoryLoc, uint32 memoryLen) { mMemoryLoc = memoryLoc; mMemoryLen = memoryLen; }
-		inline void SetState(const eState newState) { mState = newState; }
+		inline void SetManual(bool manual) { mIsManual = manual; }
 		inline void SetType(const eType newType) { mType = newType; }
 		//@}
 	};

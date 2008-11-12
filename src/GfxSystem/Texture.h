@@ -13,6 +13,10 @@ namespace GfxSystem
 
 		static ResourceSystem::ResourcePtr CreateMe(void);
 
+		enum ePixelFormat { FORMAT_RGB, FORMAT_ARGB };
+
+		bool LoadFromBitmap(const void* pixels, uint32 pixelsLength, uint32 width, uint32 height, ePixelFormat format);
+
 		/*library specific texture type _GetTexture(void); */
 		uint64 GetTexture(void);	// hge's DWORD = uint64
 

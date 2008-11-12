@@ -116,15 +116,16 @@ bool ResourceMgr::AddResourceFileToGroup(const string& filepath, const string& g
 	return true;
 }
 
-bool ResourceMgr::AddResourceMemoryToGroup( const void* memoryLocation, uint32 memoryLength, const string& name, const string& group, Resource::eType type /*= Resource::TYPE_AUTODETECT*/ )
+bool ResourceSystem::ResourceMgr::AddManualResourceToGroup( const string& name, const string& group, Resource::eType type )
 {
-	// error
-	assert(type != Resource::TYPE_AUTODETECT && "Memory resource must define its type");
+	gLogMgr.LogMessage("Adding resource '" + name +"' to group '"+ group +"'");
+
+	assert(type != Resource::TYPE_AUTODETECT && "Must specify resource type when creating it manually");
 
 	ResourcePtr r = mResourceCreationMethods[type]();
 	r->SetState(Resource::STATE_INITIALIZED);
 	r->SetName(name);
-	r->SetMemory(memoryLocation, memoryLength);
+	r->SetManual(true);
 	mResourceGroups[group][name] = r;
 
 	gLogMgr.LogMessage("Resource added");
@@ -161,7 +162,7 @@ void ResourceMgr::LoadResourcesInGroup(const string& group)
 	gLogMgr.LogMessage("Resource group loaded '"+group+"'");
 }
 
-void ResourceMgr::UnloadResourcesInGroup(const string& group)
+void ResourceMgr::UnloadResourcesInGroup(const string& group, bool allowManual)
 {
 	gLogMgr.LogMessage("Unloading resource group '"+group+"'");
 
@@ -174,16 +175,16 @@ void ResourceMgr::UnloadResourcesInGroup(const string& group)
 	const ResourceMap& resmap = gi->second;
 	for (ResourceMap::const_iterator ri = resmap.begin(); ri != resmap.end(); ++ri)
 		if (ri->second->GetState() >= Resource::STATE_LOADING)
-			ri->second->Unload();
+			ri->second->Unload(allowManual);
 
 	gLogMgr.LogMessage("Resource group '"+group+"' unloaded");
 }
 
-void ResourceMgr::ClearGroup(const string& group)
+void ResourceMgr::DeleteGroup(const string& group)
 {
 	if (mResourceGroups.find(group) == mResourceGroups.end())
 		return;
-	UnloadResourcesInGroup(group);
+	UnloadResourcesInGroup(group, true);
 	mResourceGroups.erase(group);
 }
 
@@ -194,7 +195,7 @@ void ResourceMgr::SetLoadingListener(IResourceLoadingListener* listener)
 
 ResourcePtr ResourceMgr::GetResource(const string& groupSlashName)
 {
-	string::size_type slashPos = groupSlashName.find('/');
+	string::size_type slashPos = groupSlashName.find_last_of('/');
 	return GetResource(groupSlashName.substr(0, slashPos), groupSlashName.substr(slashPos+1));
 }
 
@@ -214,6 +215,8 @@ ResourcePtr ResourceMgr::GetResource(const string& group, const string& name)
 
 void ResourceSystem::ResourceMgr::DeleteResource( const string& group, const string& name )
 {
+	gLogMgr.LogMessage("Deleting resource '"+name+"' in group '"+group+"'");
+
 	ResourceGroupMap::iterator gi = mResourceGroups.find(group);
 
 	if (gi==mResourceGroups.end())
@@ -225,8 +228,9 @@ void ResourceSystem::ResourceMgr::DeleteResource( const string& group, const str
 	if (ri==resmap.end())
 		gLogMgr.LogMessage("Unknown resource '"+name+"' in group '"+group+"'", LOG_ERROR);
 	assert(ri != resmap.end() && "Unknown resource");
-	if (ri->second->GetState() >= Resource::STATE_LOADING)
-		ri->second->Unload();
+	ri->second->Unload(true);
 	resmap.erase(ri);
+
+	gLogMgr.LogMessage("Resource deleted");
 }
 

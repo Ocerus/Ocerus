@@ -31,16 +31,18 @@ namespace ResourceSystem
 		bool AddResourceDirToGroup(const string& path, const string& group, const string& includeRegexp = "*.*", const string& excludeRegexp = "");
 		/// Assigns a resource to a group.
 		bool AddResourceFileToGroup(const string& filepath, const string& group, Resource::eType type = Resource::TYPE_AUTODETECT, bool pathRelative = true);
-		/// Assigns a resource to a group.
-		bool AddResourceMemoryToGroup(const void* memoryLocation, uint32 memoryLength, const string& name, const string& group, Resource::eType type /*= Resource::TYPE_AUTODETECT*/);
+		/// Assigns a resource to a group. Note that if you create the resource this way you must manually delete it later.
+		bool AddManualResourceToGroup(const string& name, const string& group, Resource::eType type);
 		/** Loads all resources in the specified group.
 			Doesn't need to be called, resources are loaded on-the-fly if someone needs them.
 		*/
 		void LoadResourcesInGroup(const string& group);
-		/// Unloads all resources in the specified group, but they can be still reloaded.
-		void UnloadResourcesInGroup(const string& group);
+		/** Unloads all resources in the specified group, but they can be still reloaded.
+			\param allowManual If allowManual is true, manually created resources will be unloaded as well. It is not recommended to do that!
+		*/
+		void UnloadResourcesInGroup(const string& group, bool allowManual = false);
 		/// Unloads and then deletes all resources in the specified group. They can't be reloaded.
-		void ClearGroup(const string& group);
+		void DeleteGroup(const string& group);
 		/// Unloads and deletes one specific resource.
 		void DeleteResource(const string& group, const string& name);
 		//TODO think about this method. It can be dangerous to release resources with UseCount==1.

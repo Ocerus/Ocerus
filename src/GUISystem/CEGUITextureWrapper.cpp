@@ -28,10 +28,10 @@ namespace GUISystem {
 
 		uint32 bytesize = ((buffWidth * sizeof(uint32)) * buffHeight); 
 		std::string name = GetNextTextureName();
-		gResourceMgr.AddResourceMemoryToGroup(buffPtr, bytesize, name, mResourceGroupName, ResourceSystem::Resource::TYPE_TEXTURE);
+		gResourceMgr.AddManualResourceToGroup(name, mResourceGroupName, ResourceSystem::Resource::TYPE_TEXTURE);
 						
-		mTexture.SetNull();
 		mTexture = (GfxSystem::TexturePtr)gResourceMgr.GetResource(mResourceGroupName, name);		
+		mTexture->LoadFromBitmap(buffPtr, bytesize, buffWidth, buffHeight, (GfxSystem::Texture::ePixelFormat)pixelFormat);
 
 	}
 

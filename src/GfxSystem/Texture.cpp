@@ -54,3 +54,11 @@ uint64 Texture::GetTexture()
 
 	return mHandle;
 }
+
+bool Texture::LoadFromBitmap( const void* pixels, uint32 pixelsLength, uint32 width, uint32 height, ePixelFormat format )
+{
+	SetState(STATE_LOADING);
+	//TODO
+	SetState(STATE_LOADED);
+	return false;
+}
