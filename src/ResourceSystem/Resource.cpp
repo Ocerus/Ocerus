@@ -47,10 +47,12 @@ bool Resource::Load()
 	if (mIsManual)
 		return false; // manual resources must be loaded by the user
 	mState = STATE_LOADING;
+	gLogMgr.LogMessage("Loading resource '"+mName+"'");
 	bool result = LoadImpl();
 	if (result)
 	{
 		mState = STATE_LOADED;
+		gLogMgr.LogMessage("Resource '"+mName+"' loaded");
 	}
 	else
 	{
@@ -67,8 +69,12 @@ bool Resource::Unload(bool allowManual)
 	if (mState == STATE_INITIALIZED)
 		return true; // true as the data are not loaded
 	if (mIsManual && !allowManual)
+	{
+		gLogMgr.LogMessage("Can't unloade manual resource '"+mName+"'");
 		return false; // we can't unload manual resources as we won't be able to reload them later
+	}
 	mState = STATE_UNLOADING;
+	gLogMgr.LogMessage("Unloading resource '"+mName+"'");
 	bool result = UnloadImpl();
 	mState = STATE_INITIALIZED;
 	if (!result)
@@ -76,6 +82,9 @@ bool Resource::Unload(bool allowManual)
 		// we have a real problem if we can't dealloc a resource
 		gLogMgr.LogMessage("Resource '" + mName + "' could NOT be unloaded", LOG_ERROR);
 		assert(result && "Resource could NOT be unloaded");
+	} else 
+	{
+		gLogMgr.LogMessage("Resource '"+mName+"' unloaded");
 	}
 	return result;
 }

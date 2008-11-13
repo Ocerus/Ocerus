@@ -150,9 +150,7 @@ void ResourceMgr::LoadResourcesInGroup(const string& group)
 		{
 			if (mListener)
 				mListener->ResourceLoadStarted(ri->second);
-			gLogMgr.LogMessage("Loading resource '"+ri->second->GetName()+"'");
 			ri->second->Load();
-			gLogMgr.LogMessage("Resource loaded");
 			if (mListener)
 				mListener->ResourceLoadEnded();
 		}
