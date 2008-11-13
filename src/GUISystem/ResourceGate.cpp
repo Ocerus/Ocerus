@@ -11,11 +11,10 @@ namespace GUISystem {
 		CEGUIResourcePtr res = ResourceSystem::ResourceMgr::GetSingleton()
 			.GetResource(resourceGroup.c_str(), filename.c_str());
 
-
 		res->GetResource(output);
 	}
 
-	void ResourceGate::unloadRawDataContainer(CEGUI::RawDataContainer& data) {
-		//ResourceSystem::ResourceMgr::GetSingleton().AddResourceFileToGroup(resourceGroup.c_str(), filename.c_str());		
+	void ResourceGate::unloadRawDataContainer(CEGUI::RawDataContainer& data) {		
+		//ResourceSystem::ResourceMgr::GetSingleton().DeleteResource(resourceGroup.c_str(), filename.c_str());
 	}
 }

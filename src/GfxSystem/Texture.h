@@ -13,15 +13,15 @@ namespace GfxSystem
 
 		static ResourceSystem::ResourcePtr CreateMe(void);
 
-		enum ePixelFormat { FORMAT_RGB, FORMAT_ARGB };
+		enum ePixelFormat { FORMAT_RGB, FORMAT_RGBA };
 
 		bool LoadFromBitmap(const void* pixels, uint32 pixelsLength, uint32 width, uint32 height, ePixelFormat format);
 
 		/*library specific texture type _GetTexture(void); */
 		uint64 GetTexture(void);	// hge's DWORD = uint64
 
-		virtual uint32 GetWidth(void);
-		virtual uint32 GetHeight(void);
+		virtual uint32 GetWidth(bool bOriginal = false);
+		virtual uint32 GetHeight(bool bOriginal = false);
 		
 	protected:
 		virtual bool LoadImpl(void);
@@ -30,6 +30,7 @@ namespace GfxSystem
 		void Init(void);
 
 		uint64 mHandle;
+		ePixelFormat mFormat;
 
 		friend class GfxRenderer;
 	};

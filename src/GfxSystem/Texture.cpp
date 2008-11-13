@@ -38,14 +38,14 @@ bool Texture::UnloadImpl()
 	return true;
 }
 
-uint32 Texture::GetWidth()
+uint32 Texture::GetWidth(bool bOriginal/* = false*/)
 {
-	return gGfxRenderer.mHGE->Texture_GetWidth(mHandle,true);
+	return gGfxRenderer.mHGE->Texture_GetWidth(mHandle, bOriginal);
 }
 
-uint32 Texture::GetHeight()
+uint32 Texture::GetHeight(bool bOriginal/* = false*/)
 {
-	return gGfxRenderer.mHGE->Texture_GetHeight(mHandle,true);
+	return gGfxRenderer.mHGE->Texture_GetHeight(mHandle, bOriginal);
 }
 
 uint64 Texture::GetTexture()
@@ -58,7 +58,22 @@ uint64 Texture::GetTexture()
 bool Texture::LoadFromBitmap( const void* pixels, uint32 pixelsLength, uint32 width, uint32 height, ePixelFormat format )
 {
 	SetState(STATE_LOADING);
-	//TODO
+	
+	this->mFormat = format;
+	const DWORD* pixel_data = (const DWORD*)pixels;
+	HTEXTURE tex = gGfxRenderer.mHGE->Texture_Create(width, height);
+	mHandle = tex;
+	DWORD* texture_data = gGfxRenderer.mHGE->Texture_Lock(tex, false);
+
+	uint32 i = 0;
+	uint32 max = width * height;
+	while (i < max) {
+		*(texture_data++) = *(pixel_data++);
+		++i;
+	}
+	gGfxRenderer.mHGE->Texture_Unlock(tex);
+	
 	SetState(STATE_LOADED);
-	return false;
+
+	return (tex != 0)?true:false;
 }

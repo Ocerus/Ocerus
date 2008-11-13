@@ -30,9 +30,10 @@ namespace GUISystem {
 		std::string name = GetNextTextureName();
 		gResourceMgr.AddManualResourceToGroup(name, mResourceGroupName, ResourceSystem::Resource::TYPE_TEXTURE);
 						
-		mTexture = (GfxSystem::TexturePtr)gResourceMgr.GetResource(mResourceGroupName, name);		
+		mTexture = (GfxSystem::TexturePtr)gResourceMgr.GetResource(mResourceGroupName, name);
+		// warning, medved error, medved thought that position of A doesnt matter :)
 		mTexture->LoadFromBitmap(buffPtr, bytesize, buffWidth, buffHeight, (GfxSystem::Texture::ePixelFormat)pixelFormat);
-
+		
 	}
 
 	CEGUITextureWrapper::~CEGUITextureWrapper(void) {

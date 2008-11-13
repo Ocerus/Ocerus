@@ -20,8 +20,6 @@ bool CEGUIResource::LoadImpl()
 
 bool CEGUIResource::UnloadImpl()
 {
-	// needs fixing!!!
-	DYN_DELETE_ARRAY mDataBlock;
 	return true;
 }
 
@@ -30,4 +28,5 @@ void CEGUIResource::GetResource( CEGUI::RawDataContainer& outData )
 	EnsureLoaded();
 	outData.setData(mDataBlock);
 	outData.setSize(mDataBlockSize);
+	Unload(true);
 }
