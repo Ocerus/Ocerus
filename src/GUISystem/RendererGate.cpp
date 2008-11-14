@@ -3,6 +3,8 @@
 #include "../GfxSystem/GfxRenderer.h"
 #include "../GfxSystem/Texture.h"
 #include "../ResourceSystem/ResourceMgr.h"
+#include "../LogSystem/LogMgr.h"
+#include <math.h>
 
 namespace GUISystem {
 
@@ -31,8 +33,12 @@ namespace GUISystem {
 		GfxSystem::Rect conv_dest_rect(round(dest_rect.d_left), round(dest_rect.d_top),
 			round(dest_rect.getHeight()), round(dest_rect.getWidth()));
 		GfxSystem::TexturePtr conv_tex = ((CEGUITextureWrapper*)tex)->getTexture();
-		GfxSystem::Rect conv_texture_rect(round(texture_rect.d_left), round(texture_rect.d_top),
-			round(texture_rect.getHeight()), round(texture_rect.getWidth()));
+		GfxSystem::Rect conv_texture_rect;
+
+		conv_texture_rect.x = (texture_rect.d_left != HUGE_VAL)?round(texture_rect.d_left*texture_rect.getHeight()):0;
+		conv_texture_rect.y = (texture_rect.d_top != HUGE_VAL)?round(texture_rect.d_top*texture_rect.getHeight()):0;
+		conv_texture_rect.w = (texture_rect.d_right != HUGE_VAL)?round(texture_rect.d_right*conv_tex->GetHeight(true) - texture_rect.d_left*conv_tex->GetWidth(true)):conv_tex->GetHeight(true);
+		conv_texture_rect.h = (texture_rect.d_bottom != HUGE_VAL)?round(texture_rect.d_bottom*conv_tex->GetWidth(true) - texture_rect.d_top*conv_tex->GetWidth(true)):conv_tex->GetWidth(true);
 
 		if (mQueueing)
 			mQuads.push(Quad_info(conv_dest_rect, z, conv_tex, conv_texture_rect));
@@ -42,6 +48,7 @@ namespace GUISystem {
 
 	// perform final rendering for all queued renderable quads.
 	void RendererGate::doRender(void) {
+		gGfxRenderer.ClearScreen(GfxSystem::Color(0,0,0));
 		while (!mQuads.empty()) {			
 			DrawQuad(mQuads.front());
 			mQuads.pop();

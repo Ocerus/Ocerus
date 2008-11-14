@@ -40,11 +40,13 @@ bool Texture::UnloadImpl()
 
 uint32 Texture::GetWidth(bool bOriginal/* = false*/)
 {
+	EnsureLoaded();
 	return gGfxRenderer.mHGE->Texture_GetWidth(mHandle, bOriginal);
 }
 
 uint32 Texture::GetHeight(bool bOriginal/* = false*/)
 {
+	EnsureLoaded();
 	return gGfxRenderer.mHGE->Texture_GetHeight(mHandle, bOriginal);
 }
 

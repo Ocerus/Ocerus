@@ -23,7 +23,9 @@ namespace GfxSystem
 	{
 		Rect(int32 _x, int32 _y, int32 _w, int32 _h): x(_x), y(_y), w(_w), h(_h) {}
 		int32 x, y, w, h;
-
+		
+		/// default constructor for Rect:
+		Rect(): x(0), y(y), w(w), h(h) {}
 		static Rect NullRect;
 	};
 

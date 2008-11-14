@@ -20,12 +20,18 @@ bool CEGUIResource::LoadImpl()
 
 bool CEGUIResource::UnloadImpl()
 {
+	//DYN_DELETE_ARRAY mDataBlock;
 	return true;
 }
 
 void CEGUIResource::GetResource( CEGUI::RawDataContainer& outData )
 {
 	EnsureLoaded();
+	/*
+	uint8* mDataBlockCopy = new uint8[mDataBlockSize];
+	memcpy(mDataBlockCopy, mDataBlock, mDataBlockSize);
+	outData.setData(mDataBlockCopy);
+	*/
 	outData.setData(mDataBlock);
 	outData.setSize(mDataBlockSize);
 	Unload(true);

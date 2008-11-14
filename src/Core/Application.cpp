@@ -55,9 +55,9 @@ Application::~Application()
 
 	DYN_DELETE mResourceMgr;
 	DYN_DELETE mGfxRenderer;
-	DYN_DELETE mInputMgr;
-	DYN_DELETE mEntityMgr;
 	DYN_DELETE mGUIMgr;
+	DYN_DELETE mInputMgr;
+	DYN_DELETE mEntityMgr;	
 
 	// must come last
 	DYN_DELETE mGlobalConfig;
