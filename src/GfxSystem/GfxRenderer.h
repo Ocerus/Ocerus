@@ -23,6 +23,8 @@ namespace GfxSystem
 	{
 		Rect(int32 _x, int32 _y, int32 _w, int32 _h): x(_x), y(_y), w(_w), h(_h) {}
 		int32 x, y, w, h;
+
+		static Rect NullRect;
 	};
 
 	struct Color
@@ -82,10 +84,10 @@ namespace GfxSystem
 		bool ClearScreen(const Color& color);
 
 		// note that anchor determines the rotation/scaling pivot
-		bool DrawImage(const TexturePtr& image, int32 x, int32 y, uint8 anchor = ANCHOR_VCENTER|ANCHOR_HCENTER, float32 angle = 0.0f, uint8 alpha = 255, float32 scale = 1.0f, int32 width = 0, int32 height = 0);
+		bool DrawImage(const TexturePtr& image, int32 x, int32 y, uint8 anchor = ANCHOR_VCENTER|ANCHOR_HCENTER, float32 angle = 0.0f, uint8 alpha = 255, float32 scale = 1.0f, int32 width = 0, int32 height = 0, const Rect& textureRect = Rect::NullRect);
 		bool DrawImage(const TexturePtr& image, const Point& pos, uint8 anchor = ANCHOR_VCENTER|ANCHOR_HCENTER, float32 angle = 0.0f, uint8 alpha = 255, float32 scale = 1.0f);
 		// todoooo Santhos: add functionality to srcRect, needed for CEGUI, as well as other stuff we might have to do
-		bool DrawImage(const TexturePtr& image, const Rect& srcRect, const Rect& destRect, uint8 alpha = 255);
+		bool DrawImage(const TexturePtr& image, const Rect& textureRect, const Rect& destRect, uint8 alpha = 255);
 
 		bool DrawLine(int x1, int y1, int x2, int y2, const Pen& pen);
 		bool DrawLine(const Point& begin, const Point& end, const Pen& pen);

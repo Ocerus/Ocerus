@@ -6,7 +6,9 @@
 
 using namespace GfxSystem;
 
+// init null values
 Pen Pen::NullPen(Color(0,0,0,0));
+Rect Rect::NullRect(0,0,0,0);
 
 GfxRenderer::GfxRenderer(const Point& resolution, bool fullscreen) 
 {
@@ -119,57 +121,66 @@ bool GfxRenderer::DrawLine( const Point& begin, const Point& end, const Pen& pen
 	return true;
 }
 
-void InitQuad(hgeQuad& q,uint64 hTex, int32 x, int32 y,int32 w,int32 h,uint8 alpha)
+void InitQuad(hgeQuad& q,const TexturePtr& image, int32 x, int32 y,int32 w,int32 h,uint8 alpha,const Rect& textureRect)
 {
 	uint64 col = 0xFFFFFFFF + (alpha << 24);
+
+	if (w == 0)
+		w = image->GetWidth();
+	if (h == 0)
+		h = image->GetHeight();
+		
+	float32 tw = (float32) (image->GetWidth());
+	float32 th = (float32) (image->GetHeight());
+
+	// check whether user wants the whole texture or its section
+	Rect tr(0,0,image->GetWidth(),image->GetHeight());
+	if (&textureRect != &Rect::NullRect)		
+		tr = textureRect;
 
 	// set size
 	q.v[0].x = (float32)(x);
 	q.v[0].y = (float32)(y);
 	q.v[0].z = 0;
-	q.v[0].tx = 0.0f;
-	q.v[0].ty = 0.0f;
+	q.v[0].tx = tr.x / tw;
+	q.v[0].ty = tr.y / th;
 	q.v[0].col = col;
 
 	q.v[1].x = (float32)(x+w);
 	q.v[1].y = (float32)(y);
 	q.v[1].z = 0;
-	q.v[1].tx = 1.0f;
-	q.v[1].ty = 0.0f;
+	q.v[1].tx = (tr.x + tr.w) / tw;
+	q.v[1].ty = tr.y / th;
 	q.v[1].col = col;
 
 	q.v[2].x = (float32)(x+w);
 	q.v[2].y = (float32)(y+h);
 	q.v[2].z = 0;
-	q.v[2].tx = 1.0f;
-	q.v[2].ty = 1.0f;
+	q.v[2].tx = (tr.x + tr.w) / tw;
+	q.v[2].ty = (tr.y + tr.h) / th;
 	q.v[2].col = col;
 
 	q.v[3].x = (float32)(x);
 	q.v[3].y = (float32)(y+h);
 	q.v[3].z = 0;
-	q.v[3].tx = 0.0f;
-	q.v[3].ty = 1.0f;
+	q.v[3].tx = tr.x / tw;
+	q.v[3].ty = (tr.y + tr.h) / th;
 	q.v[3].col = col;
 
 	// set texture
-	q.tex = hTex;
+	q.tex = image->GetTexture();
 	q.blend = BLEND_ALPHAADD | BLEND_COLORMUL | BLEND_ZWRITE;
 }
 
-bool GfxSystem::GfxRenderer::DrawImage( const TexturePtr& image, int32 x, int32 y, uint8 anchor /*= ANCHOR_VCENTER|ANCHOR_HCENTER*/, float32 angle /*= 0.0f*/, uint8 alpha /*= 255*/, float32 scale /*= 1.0f*/, int32 width /* = 0 */,int32 height /* = 0 */)
+bool GfxSystem::GfxRenderer::DrawImage( const TexturePtr& image, int32 x, int32 y, uint8 anchor /*= ANCHOR_VCENTER|ANCHOR_HCENTER*/, float32 angle /*= 0.0f*/, uint8 alpha /*= 255*/, float32 scale /*= 1.0f*/, int32 width /* = 0 */,int32 height /* = 0 */, const Rect& textureRect /* = 0 */)
 {	
 	if (image.IsNull())
 	{
 		gLogMgr.LogMessage("DrawImage: texture is null", LOG_ERROR);
 		return false;
 	}
-	hgeQuad q;
-	if (width == 0)
-		width = image->GetWidth();
-	if (height == 0)
-		height = image->GetHeight();
-	InitQuad(q,image->GetTexture(),x,y,width,height,alpha);
+	hgeQuad q;		
+	InitQuad(q,image,x,y,width,height,alpha,textureRect);
 
 	mHGE->Gfx_RenderQuad(&q);
 	return true;
@@ -183,9 +194,9 @@ bool GfxSystem::GfxRenderer::DrawImage( const TexturePtr& image, const Point& po
 		return false;
 }
 
-bool GfxSystem::GfxRenderer::DrawImage( const TexturePtr& image, const Rect& srcRect, const Rect& destRect, uint8 alpha /*= 255*/ )
+bool GfxSystem::GfxRenderer::DrawImage( const TexturePtr& image, const Rect& textureRect, const Rect& destRect, uint8 alpha /*= 255*/ )
 {
-	if (DrawImage(image,destRect.x,destRect.y,0,0,alpha,0,destRect.w,destRect.h))
+	if (DrawImage(image,destRect.x,destRect.y,0,0,alpha,0,destRect.w,destRect.h,textureRect))
 		return true;
 	else
 		return false;
