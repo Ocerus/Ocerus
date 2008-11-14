@@ -60,17 +60,11 @@ bool Texture::LoadFromBitmap( const void* pixels, uint32 pixelsLength, uint32 wi
 	SetState(STATE_LOADING);
 	
 	this->mFormat = format;
-	const DWORD* pixel_data = (const DWORD*)pixels;
 	HTEXTURE tex = gGfxRenderer.mHGE->Texture_Create(width, height);
 	mHandle = tex;
 	DWORD* texture_data = gGfxRenderer.mHGE->Texture_Lock(tex, false);
 
-	uint32 i = 0;
-	uint32 max = width * height;
-	while (i < max) {
-		*(texture_data++) = *(pixel_data++);
-		++i;
-	}
+	memcpy(texture_data, pixels, pixelsLength);
 	gGfxRenderer.mHGE->Texture_Unlock(tex);
 	
 	SetState(STATE_LOADED);
