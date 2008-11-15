@@ -80,10 +80,9 @@ namespace GUISystem {
 		inline virtual CEGUI::uint getVertScreenDPI(void) const { return 96; }
 
 		inline virtual CEGUI::ResourceProvider* createResourceProvider(void) {
-			assert(mGivenResourceProviders.size() == 0);
-			ResourceGate * provider = new ResourceGate();
-			mGivenResourceProviders.push_back(provider);
-			return provider;
+			if (!d_resourceProvider)
+				d_resourceProvider = new ResourceGate();
+			return d_resourceProvider;
 		}
 
 		virtual void EventResolutionChanged(int x, int y);
@@ -93,11 +92,8 @@ namespace GUISystem {
 
 		std::set<CEGUITextureWrapper*> mTextures;
 		std::queue<Quad_info> mQuads;
-		
-		// later on try to check if one will be enough for cegui
-		std::vector<CEGUI::ResourceProvider*> mGivenResourceProviders;
 
-		void ClearProviders();
+		//void ClearProviders();
 
 		bool mQueueing;		
 	};

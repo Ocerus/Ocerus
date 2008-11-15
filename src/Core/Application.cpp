@@ -52,12 +52,17 @@ Application::~Application()
 
 	DYN_DELETE mLoadingScreen;
 	DYN_DELETE mGame;
-
-	DYN_DELETE mResourceMgr;
-	DYN_DELETE mGfxRenderer;
+	
 	DYN_DELETE mGUIMgr;
-	DYN_DELETE mInputMgr;
-	DYN_DELETE mEntityMgr;	
+
+	mResourceMgr->UnloadAllResources();
+
+	DYN_DELETE mEntityMgr;
+	DYN_DELETE mInputMgr;		
+	DYN_DELETE mGfxRenderer;
+	DYN_DELETE mResourceMgr;
+	
+		
 
 	// must come last
 	DYN_DELETE mGlobalConfig;

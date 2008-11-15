@@ -40,6 +40,11 @@ ResourceMgr::ResourceMgr(const string& basepath):
 
 ResourceMgr::~ResourceMgr()
 {
+	//assert(mResourceGroups.empty());	
+}
+
+void ResourceMgr::UnloadAllResources()
+{
 	for (ResourceGroupMap::const_iterator i=mResourceGroups.begin(); i!=mResourceGroups.end(); ++i)
 		UnloadResourcesInGroup(i->first);
 }

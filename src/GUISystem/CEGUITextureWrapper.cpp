@@ -26,6 +26,8 @@ namespace GUISystem {
 	void CEGUITextureWrapper::loadFromMemory(const void* buffPtr, CEGUI::uint buffWidth,
 		CEGUI::uint buffHeight, CEGUI::Texture::PixelFormat pixelFormat) {
 
+		mTexture.SetNull();
+
 		uint32 bytesize = ((buffWidth * sizeof(uint32)) * buffHeight);
 
 		std::string name = GetNextTextureName();
@@ -39,8 +41,7 @@ namespace GUISystem {
 		const uint32* buffPtrCast = (const uint32*)buffPtr;
 
 		for (const uint32* stop = buffPtrCast + buffWidth*buffHeight; buffPtrCast < stop; ++buffPtrCast, ++color_sb_pos) {
-			uint32 mask = 0x000000FF;
-			uint32 alpha = ((*buffPtrCast)&mask) << 24;
+			uint32 alpha = (*buffPtrCast) << 24;
 
 			*color_sb_pos = ((*buffPtrCast) >> 8) | alpha;
 		}
@@ -50,7 +51,8 @@ namespace GUISystem {
 	}
 
 	CEGUITextureWrapper::~CEGUITextureWrapper(void) {
-		mTexture.SetNull();
+		mTexture->Unload(true);
+		mTexture.SetNull();		
 	}
 
 	std::string CEGUITextureWrapper::GetNextTextureName() {

@@ -17,11 +17,13 @@ namespace GUISystem {
 	}
 
 	RendererGate::RendererGate() : mQueueing(false) {
+		d_resourceProvider = new ResourceGate();
 		this->d_identifierString = "Black_Hand's wrapper around that disgusting piece of code created by Santhos :PPP";
 	}
 
 	RendererGate::~RendererGate() {
-		ClearProviders();
+		//ClearProviders();
+		//DYN_DELETE d_resourceProvider;
 		clearRenderList();
 		destroyAllTextures();
 	}
@@ -68,8 +70,9 @@ namespace GUISystem {
 	}
 
 	CEGUI::Texture* RendererGate::createTexture(const CEGUI::String& filename, const CEGUI::String& resourceGroup) {
-		CEGUI::Texture * wrap = createTexture();
+		CEGUITextureWrapper * wrap = (CEGUITextureWrapper *)createTexture();
 		wrap->loadFromFile(filename, resourceGroup);
+
 		return wrap;
 	}
 
@@ -92,19 +95,20 @@ namespace GUISystem {
 			DYN_DELETE *iter;
 			++iter;
 		}
+		mTextures.clear();
 	}
 
 	void RendererGate::DrawQuad(const Quad_info & quad) const {
 		gGfxRenderer.DrawImage(quad.tex, quad.texture_rect, quad.dest_rect);
 	}
-
+/*
 	void RendererGate::ClearProviders() {
 		while (!mGivenResourceProviders.empty()) {
 			DYN_DELETE mGivenResourceProviders.back();
 			mGivenResourceProviders.pop_back();
 		}
 	}
-
+*/
 	void RendererGate::EventResolutionChanged(int x, int y) {
 		gGUIMgr.mCegui->fireEvent(EventDisplaySizeChanged, CEGUI::EventArgs());
 	}
