@@ -29,6 +29,7 @@ void Application::Init()
 
 	// create singletons
 	mResourceMgr = DYN_NEW ResourceSystem::ResourceMgr("data/");
+	mStringMgr = DYN_NEW StringSystem::StringMgr(); //fuco
 	mGfxRenderer = DYN_NEW GfxSystem::GfxRenderer(GfxSystem::Point(1024,768), false);
 	mInputMgr = DYN_NEW InputSystem::InputMgr();
 	mEntityMgr = DYN_NEW EntitySystem::EntityMgr();
@@ -52,17 +53,14 @@ Application::~Application()
 
 	DYN_DELETE mLoadingScreen;
 	DYN_DELETE mGame;
-	
-	DYN_DELETE mGUIMgr;
 
 	mResourceMgr->UnloadAllResources();
-
-	DYN_DELETE mEntityMgr;
-	DYN_DELETE mInputMgr;		
-	DYN_DELETE mGfxRenderer;
+	DYN_DELETE mStringMgr; //fuco
 	DYN_DELETE mResourceMgr;
-	
-		
+	DYN_DELETE mGfxRenderer;
+	DYN_DELETE mGUIMgr;
+	DYN_DELETE mInputMgr;
+	DYN_DELETE mEntityMgr;		
 
 	// must come last
 	DYN_DELETE mGlobalConfig;

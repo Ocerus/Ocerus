@@ -1,0 +1,51 @@
+#################
+# STRING FILE, v 0.1
+# Fuco
+#
+# ':' denotes a key (should be in upper case with _ instead of spaces)
+# Keys are single-line
+#
+# After key goes value (on the next line)
+# Values can't normally start with ':' (however you can enclose such value into {- -} block
+#
+# Values can be multiline
+# If you want to use multiline value, you have to enclose it with {- -},
+# otherwise, empty lines will be ignored.
+#
+# Do not nest {- -}, parser won't load it correctly!
+
+:MAIN_MENU
+Hlavni Menu
+:QUIT
+Konec
+# empty lines are ignored
+
+
+:HELLO
+# notice is ignored by parser
+vitajte
+:MONDAY
+pondeli
+
+
+:ABOUT
+{-
+The game is a 2D topdown massively multiplayer online tactical battleship
+simulator with RPG elements. The game differs from other games in the
+genre by the high rate of simulation. The game also allows players to use
+their creativity to produce their ships and equipment from scratch and sell
+it to other players.
+
+The game retakes basics of its gameplay from Battleships Forever (1).
+The game allows players to cooperate and play in parties by allowing them to
+control specifc sections of one ship. This is to overcome issues of Battleships
+Forever, whose gameplay is so fast that the player can't control the ship
+effciently. This will also force players to cooperate with other players - thus
+supporting the multiplayer spirit of the game.
+-}
+
+#################
+# Remember to always add empty block to the end, to signalize end of file
+# It makes implementation of parser easier, and 1 byte won't kill us
+# However, file format will probably change over time
+:

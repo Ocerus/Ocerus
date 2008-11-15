@@ -44,4 +44,4 @@ void ComponentMgr::DestroyEntityComponents(EntityID id)
 		DYN_DELETE (*i);
 	}
 	mEntityComponentsMap.erase(iter);
-}
+} 

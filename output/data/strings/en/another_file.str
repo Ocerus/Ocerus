@@ -1,0 +1,8 @@
+#############
+# Czech characters are not supported yet (dunno how to fix it -- maybe its std::string limitation?)
+
+:CZECH_TEXT
+Celkem je online 9 uživatelù :: 8 registrovaných, 0 skrytých a 1 návštìvník (Tato data jsou založena na uživatelích aktivních za posledních 5 minut)
+
+#endblock
+:

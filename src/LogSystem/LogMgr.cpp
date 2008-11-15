@@ -19,6 +19,7 @@ LogSystem::LogMgr::~LogMgr()
 	mOutStream.close();
 }
 
+
 void LogSystem::LogMgr::LogMessage(const string& msg, eLogSeverity severity)
 {
 	if (severity >= mSeverityLevel)

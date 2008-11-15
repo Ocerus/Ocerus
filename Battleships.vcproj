@@ -594,6 +594,38 @@
 				</Filter>
 			</Filter>
 		</Filter>
+		<Filter
+			Name="StringSystem"
+			>
+			<Filter
+				Name="inc"
+				>
+				<File
+					RelativePath=".\src\StringSystem\StringKey.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\StringSystem\StringMgr.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\StringSystem\TextResource.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="src"
+				>
+				<File
+					RelativePath=".\src\StringSystem\StringMgr.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\StringSystem\TextResource.cpp"
+					>
+				</File>
+			</Filter>
+		</Filter>
 		<File
 			RelativePath=".\BattleShipsClassDiagram.cd"
 			>

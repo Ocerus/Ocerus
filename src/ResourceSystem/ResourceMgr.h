@@ -2,6 +2,7 @@
 #define _RESOURCEMGR_H_
 
 #include <map>
+#include <vector>
 #include "Resource.h"
 #include "../Utility/Singleton.h"
 
@@ -60,6 +61,12 @@ namespace ResourceSystem
 		ResourcePtr GetResource(const string& groupSlashName);
 		ResourcePtr GetResource(const string& group, const string& name);
 		//@}
+
+		/** Retrieves a specified group of resources from the manager. If the group can't be found,
+		    empty vector is returned.
+		    (14.11.2008) Fuco
+		*/
+		std::vector<ResourcePtr> GetResourceGroup(const string& group);
 
 	private:
 		typedef ResourcePtr (*ResourceCreationMethod)();

@@ -63,6 +63,7 @@ namespace Core
 		/// Singletons.
 		//@{
 		ResourceSystem::ResourceMgr* mResourceMgr;
+		StringSystem::StringMgr* mStringMgr; //fuco
 		InputSystem::InputMgr* mInputMgr;
 		GfxSystem::GfxRenderer* mGfxRenderer;
 		EntitySystem::EntityMgr* mEntityMgr;

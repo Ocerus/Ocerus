@@ -156,6 +156,21 @@
   </Class>
   <Class Name="Core::Application" Collapsed="true">
     <Position X="2.5" Y="1.5" Width="1.5" />
+    <InheritanceLine Type="StateMachine&lt;T&gt;" ManuallyRouted="true">
+      <Path>
+        <Point X="1.25" Y="1.009" />
+        <Point X="1.25" Y="1.354" />
+        <Point X="3.25" Y="1.354" />
+        <Point X="3.25" Y="1.5" />
+      </Path>
+    </InheritanceLine>
+    <InheritanceLine Type="Singleton&lt;T&gt;" FixedToPoint="true">
+      <Path>
+        <Point X="1.25" Y="2.75" />
+        <Point X="1.25" Y="1.938" />
+        <Point X="2.5" Y="1.938" />
+      </Path>
+    </InheritanceLine>
     <TypeIdentifier>
       <HashCode>AEgBAwBAEhBEAAIBIAAgAAgAgEDCoQAYAEACAAiAEIA=</HashCode>
       <FileName>src\Core\Application.h</FileName>
@@ -205,6 +220,13 @@
   </Class>
   <Class Name="LogSystem::LogMgr" Collapsed="true">
     <Position X="2.5" Y="5.75" Width="1.5" />
+    <InheritanceLine Type="Singleton&lt;T&gt;" ManuallyRouted="true">
+      <Path>
+        <Point X="1.25" Y="3.259" />
+        <Point X="1.25" Y="6.065" />
+        <Point X="2.5" Y="6.065" />
+      </Path>
+    </InheritanceLine>
     <TypeIdentifier>
       <HashCode>AAAAAQAAAAAAAAAAEAAAAAQAAAAAAAAIAIAAAAAAAAA=</HashCode>
       <FileName>src\LogSystem\LogMgr.h</FileName>
@@ -212,6 +234,19 @@
   </Class>
   <Class Name="GUISystem::GUIMgr" Collapsed="true">
     <Position X="2.5" Y="7.5" Width="1.5" />
+    <InheritanceLine Type="Singleton&lt;T&gt;" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="1.25" Y="3.259" />
+        <Point X="1.25" Y="7.562" />
+        <Point X="2.5" Y="7.562" />
+      </Path>
+    </InheritanceLine>
+    <InheritanceLine Type="InputSystem::IInputListener" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="2" Y="8.062" />
+        <Point X="2.5" Y="8.062" />
+      </Path>
+    </InheritanceLine>
     <TypeIdentifier>
       <HashCode>BAQEAAAAAAAAAAAAACAAAAAIAAAQAgAAAAAIABBgAAA=</HashCode>
       <FileName>src\GUISystem\GUIMgr.h</FileName>

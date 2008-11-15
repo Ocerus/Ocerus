@@ -8,6 +8,8 @@
 #include "InputSystem/InputMgr.h"
 #include "LogSystem/LogMgr.h"
 #include "GUISystem/GUIMgr.h"
+//fuco
+#include "StringSystem/StringMgr.h" 
 
 // note: Application.h not included cos it subincludes Windows.h
 

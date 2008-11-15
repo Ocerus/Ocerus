@@ -85,7 +85,7 @@ Point GfxRenderer::GetResolution() const
 
 void GfxRenderer::SetFullscreen(bool fullscreen)
 {
-	gLogMgr.LogMessage("Changing fullscreen/dindowed" + fullscreen);
+	gLogMgr.LogMessage("Changing fullscreen/windowed" + fullscreen);
 	mHGE->System_SetState(HGE_WINDOWED,fullscreen);	
 	gLogMgr.LogMessage("Fullscreen changed");
 }

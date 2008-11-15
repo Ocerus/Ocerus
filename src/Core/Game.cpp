@@ -18,9 +18,20 @@ void Core::Game::Init()
 	gResourceMgr.AddResourceFileToGroup("zazaka.png", "test");
 	gResourceMgr.LoadResourcesInGroup("test");
 
+	gStringMgr.LoadStrings();
+
 	gApp.ResetStats();
 
 	gLogMgr.LogMessage("Game inited");
+
+	gLogMgr.LogMessage("-- STRING MANAGER DEMO START --");
+	gLogMgr.LogMessage(gStringMgr.GetTextData("MAIN_MENU"));
+	gLogMgr.LogMessage(gStringMgr.GetTextData("QUIT"));
+	gLogMgr.LogMessage(gStringMgr.GetTextData("HELLO"));
+	gLogMgr.LogMessage(gStringMgr.GetTextData("MONDAY"));
+	gLogMgr.LogMessage(gStringMgr.GetTextData("ABOUT"));
+	gLogMgr.LogMessage(gStringMgr.GetTextData("CZECH_TEXT"));
+	gLogMgr.LogMessage("-- STRING MANAGER DEMO END --");
 }
 
 void Core::Game::Deinit()
