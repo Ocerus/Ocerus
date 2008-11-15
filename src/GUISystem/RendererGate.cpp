@@ -25,7 +25,7 @@ namespace GUISystem {
 
 	RendererGate::~RendererGate() {
 		//ClearProviders();
-		//DYN_DELETE d_resourceProvider;
+		DYN_DELETE d_resourceProvider;
 		clearRenderList();
 		destroyAllTextures();
 	}
