@@ -80,6 +80,8 @@ namespace GfxSystem
 			mResChangeListeners.erase(listener);
 		}
 
+		virtual void HideMouseCursor(bool hide);
+
 		bool BeginRendering(void);
 		bool EndRendering(void);
 

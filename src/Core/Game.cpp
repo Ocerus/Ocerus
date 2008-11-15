@@ -32,8 +32,10 @@ void Core::Game::Update( float32 delta )
 {
 	if (gInputMgr.IsKeyDown(InputSystem::KC_ESCAPE))
 		gApp.RequestStateChange(AS_SHUTDOWN, true);
-	if (gInputMgr.IsKeyDown(InputSystem::KC_G))
+	if (gInputMgr.IsKeyDown(InputSystem::KC_G)) {
+		gGfxRenderer.HideMouseCursor(true);
 		gApp.RequestStateChange(AS_GUI, true);
+	}
 }
 
 void Core::Game::Draw()

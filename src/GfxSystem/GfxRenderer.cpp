@@ -33,6 +33,10 @@ GfxRenderer::GfxRenderer(const Point& resolution, bool fullscreen)
 		gLogMgr.LogMessage("HGE inited; logfile=", mHGE->System_GetState(HGE_LOGFILE));
 }
 
+void GfxRenderer::HideMouseCursor(bool hide) {
+	mHGE->System_SetState(HGE_HIDEMOUSE, hide);
+}
+
 GfxRenderer::~GfxRenderer()
 {
 	ClearResolutionChangeListeners();
