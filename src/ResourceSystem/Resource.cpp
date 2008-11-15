@@ -1,7 +1,7 @@
+#include "Common.h"
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
 #include "Resource.h"
-#include "../Common.h"
 #include "../Utility/DataContainer.h"
 #include <vector>
 #include <string>

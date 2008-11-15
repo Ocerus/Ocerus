@@ -1,16 +1,26 @@
 #ifndef APPLICATION_h__
 #define APPLICATION_h__
 
-#include "../Common.h"
 #include "../Utility/StateMachine.h"
 #include "../Utility/Settings.h"
 #include "../Utility/Timer.h"
 #include "../Utility/Singleton.h"
-#include "Config.h"
 #include <deque>
 
 /// Macro for easier use.
 #define gApp Core::Application::GetSingleton()
+
+/// Forward declarations
+//@{
+namespace ResourceSystem { class ResourceMgr; }
+namespace InputSystem { class InputMgr; }
+namespace GfxSystem { class GfxRenderer; }
+namespace EntitySystem { class EntityMgr; }
+namespace LogSystem { class LogMgr; }
+namespace GUISystem { class GUIMgr; }
+namespace StringSystem { class StringMgr; }
+class Timer;
+//@}
 
 namespace Core
 {
@@ -19,6 +29,7 @@ namespace Core
 	//@{
 	class LoadingScreen;
 	class Game;
+	class Config;
 	//@}
 
 	/// State which the application can be in.
@@ -39,6 +50,9 @@ namespace Core
 
 		/// Main loop of the whole project.
 		void RunMainLoop(void);
+
+		/// Shuts the application down and clean everything
+		void Shutdown(void);
 
 		/// Reset FPS counters and other stats measured in the main loop.
 		void ResetStats(void);
@@ -63,7 +77,7 @@ namespace Core
 		/// Singletons.
 		//@{
 		ResourceSystem::ResourceMgr* mResourceMgr;
-		StringSystem::StringMgr* mStringMgr; //fuco
+		StringSystem::StringMgr* mStringMgr;
 		InputSystem::InputMgr* mInputMgr;
 		GfxSystem::GfxRenderer* mGfxRenderer;
 		EntitySystem::EntityMgr* mEntityMgr;
@@ -103,7 +117,7 @@ namespace Core
 
 		/// Debug console stuff.
 		//@{
-		HWND mConsoleHandle;
+		uint32 mConsoleHandle;
 		int32 mConsoleX;
 		int32 mConsoleY;
 		int32 mConsoleWidth;

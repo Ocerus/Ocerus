@@ -1,3 +1,4 @@
+#include "Common.h"
 #include <Windows.h>
 #include "Application.h"
 #include <exception>

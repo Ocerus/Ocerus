@@ -9,10 +9,14 @@
 
 #define gGfxRenderer GfxSystem::GfxRenderer::GetSingleton()
 
+/// Forward declarations
+//@{
 class HGE;
+//@}
 
 namespace GfxSystem
 {
+
 	struct Point
 	{
 		Point(int32 _x, int32 _y): x(_x), y(_y) {}
@@ -46,8 +50,6 @@ namespace GfxSystem
 
 	enum eAnchor { ANCHOR_VCENTER=1<<0, ANCHOR_TOP=1<<1, ANCHOR_BOTTOM=1<<2, ANCHOR_LEFT=1<<3, ANCHOR_RIGHT=1<<4, ANCHOR_HCENTER=1<<5 };
 
-	// kvi kvi kviiiiii chro chro chro
-
 	class IScreenResolutionChangeListener {
 	public:
 		virtual void EventResolutionChanged(int x, int y) = 0;
@@ -55,16 +57,6 @@ namespace GfxSystem
 
 	class GfxRenderer : public Singleton<GfxRenderer>
 	{
-	private:
-		HGE* mHGE; 
-
-		friend class Texture;
-
-	protected:
-		std::set<IScreenResolutionChangeListener*> mResChangeListeners;
-
-		virtual void ClearResolutionChangeListeners();
-
 	public:
 		GfxRenderer(const Point& resolution, bool fullscreen);
 		~GfxRenderer(void);
@@ -73,16 +65,17 @@ namespace GfxSystem
 		Point GetResolution(void) const;
 		void SetFullscreen(bool fullscreen);
 
-		inline virtual void AddResolutionChangeListener(IScreenResolutionChangeListener * listener) {
+		inline virtual void AddResolutionChangeListener(IScreenResolutionChangeListener * listener)
+		{
 			mResChangeListeners.insert(listener);
 		}
-		inline virtual void RemoveResolutionChangeListener(IScreenResolutionChangeListener * listener) {
+
+		inline virtual void RemoveResolutionChangeListener(IScreenResolutionChangeListener * listener)
+		{
 			mResChangeListeners.erase(listener);
 		}
 
-		virtual void HideMouseCursor(bool hide);
-
-		bool BeginRendering(void);
+ 		bool BeginRendering(void);
 		bool EndRendering(void);
 
 		bool ClearScreen(const Color& color);
@@ -90,7 +83,6 @@ namespace GfxSystem
 		// note that anchor determines the rotation/scaling pivot
 		bool DrawImage(const TexturePtr& image, int32 x, int32 y, uint8 anchor = ANCHOR_VCENTER|ANCHOR_HCENTER, float32 angle = 0.0f, uint8 alpha = 255, float32 scale = 1.0f, int32 width = 0, int32 height = 0, const Rect& textureRect = Rect::NullRect);
 		bool DrawImage(const TexturePtr& image, const Point& pos, uint8 anchor = ANCHOR_VCENTER|ANCHOR_HCENTER, float32 angle = 0.0f, uint8 alpha = 255, float32 scale = 1.0f);
-		// todoooo Santhos: add functionality to srcRect, needed for CEGUI, as well as other stuff we might have to do
 		bool DrawImage(const TexturePtr& image, const Rect& textureRect, const Rect& destRect, uint8 alpha = 255);
 
 		bool DrawLine(int x1, int y1, int x2, int y2, const Pen& pen);
@@ -105,7 +97,17 @@ namespace GfxSystem
 		//TODO add font param
 		//bool DrawText(const string& str, font, int32 x, int32 y, uint8 anchor = ANCHOR_VCENTER|ANCHOR_HCENTER, float32 angle = 0.0f, uint8 alpha = 255);
 
-		uint64 _GetWindowHandle();
+		uint32 _GetWindowHandle(void);
+
+	private:
+		HGE* mHGE; 
+
+		friend class Texture;
+		friend bool HgeExitFunction(void);
+
+		std::set<IScreenResolutionChangeListener*> mResChangeListeners;
+
+		virtual void ClearResolutionChangeListeners(void);
 
 	};
 }

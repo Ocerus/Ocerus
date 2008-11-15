@@ -1,5 +1,5 @@
+#include "Common.h"
 #include "EntityMgr.h"
-#include "../../Common.h"
 
 using namespace EntitySystem;
 

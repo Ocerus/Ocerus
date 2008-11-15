@@ -1,3 +1,4 @@
+#include "Common.h"
 #include "ComponentMgr.h"
 #include "../Components/CmpPlatform.h"
 

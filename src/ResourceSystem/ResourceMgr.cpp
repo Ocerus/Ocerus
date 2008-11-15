@@ -1,7 +1,7 @@
+#include "Common.h"
 #include <stdio.h>
 #include <boost/filesystem.hpp>
 #include "ResourceMgr.h"
-#include "../Common.h"
 #include "../GfxSystem/Texture.h"
 #include "../GUISystem/CEGUIResource.h"
 #include "../StringSystem/TextResource.h"
@@ -22,7 +22,6 @@ ResourceMgr::ResourceMgr(const string& basepath):
 	// register resource types
 	mResourceCreationMethods[Resource::TYPE_TEXTURE] = GfxSystem::Texture::CreateMe;
 	mResourceCreationMethods[Resource::TYPE_CEGUIRESOURCE] = GUISystem::CEGUIResource::CreateMe;
-	// (14.11.2008) Fuco -- added TextResource support
 	mResourceCreationMethods[Resource::TYPE_TEXTRESOURCE] = StringSystem::TextResource::CreateMe;
 	mExtToTypeMap["png"] = Resource::TYPE_TEXTURE;
 	mExtToTypeMap["bmp"] = Resource::TYPE_TEXTURE;
@@ -220,15 +219,13 @@ ResourcePtr ResourceMgr::GetResource(const string& group, const string& name)
 	return ri->second;
 }
 
-/// (14.11.2008) Fuco
 std::vector<ResourcePtr> ResourceMgr::GetResourceGroup(const string& group)
 {
 	std::vector<ResourcePtr> rv; // return vector
 
 	ResourceGroupMap::const_iterator gi = mResourceGroups.find(group);
-	if (gi == mResourceGroups.end()){
+	if (gi == mResourceGroups.end())
 		return rv; // empty vector
-	}
 	const ResourceMap& resmap = gi->second;
 	ResourceMap::const_iterator ri = resmap.begin();
 	for (ri; ri != resmap.end(); ri++)

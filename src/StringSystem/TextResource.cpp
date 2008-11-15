@@ -1,5 +1,5 @@
+#include "Common.h"
 #include "TextResource.h"
-#include "../Common.h"
 #include "../Utility/DataContainer.h"
 #include <string>
 

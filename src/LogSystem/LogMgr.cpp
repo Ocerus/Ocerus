@@ -1,5 +1,5 @@
+#include "Common.h"
 #include "LogMgr.h"
-#include "../Core/Application.h"
 #include <sstream>
 #include <iomanip>
 #include <iostream>

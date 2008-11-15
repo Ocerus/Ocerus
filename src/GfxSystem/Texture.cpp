@@ -1,9 +1,13 @@
+#include "Common.h"
 #include "Texture.h"
 #include "../Utility/DataContainer.h"
-#include "GfxRenderer.h"
 #include <hge.h>
 
 using namespace GfxSystem;
+
+Texture::Texture( void ): mHandle(0) {}
+
+Texture::~Texture( void ) {}
 
 ResourceSystem::ResourcePtr Texture::CreateMe()
 {
@@ -38,19 +42,19 @@ bool Texture::UnloadImpl()
 	return true;
 }
 
-uint32 Texture::GetWidth(bool bOriginal/* = false*/)
+uint32 Texture::GetWidth()
 {
 	EnsureLoaded();
-	return gGfxRenderer.mHGE->Texture_GetWidth(mHandle, bOriginal);
+	return gGfxRenderer.mHGE->Texture_GetWidth(mHandle, true);
 }
 
-uint32 Texture::GetHeight(bool bOriginal/* = false*/)
+uint32 Texture::GetHeight()
 {
 	EnsureLoaded();
-	return gGfxRenderer.mHGE->Texture_GetHeight(mHandle, bOriginal);
+	return gGfxRenderer.mHGE->Texture_GetHeight(mHandle, true);
 }
 
-uint64 Texture::GetTexture()
+uint32 Texture::GetTexture()
 {
 	EnsureLoaded();
 
@@ -73,3 +77,4 @@ bool Texture::LoadFromBitmap( const void* pixels, uint32 pixelsLength, uint32 wi
 
 	return (tex != 0)?true:false;
 }
+

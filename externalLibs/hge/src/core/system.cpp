@@ -789,7 +789,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 		case WM_SYSKEYDOWN:
 			if(wparam == VK_F4)
 			{
-				if(pHGE->procExitFunc && !pHGE->procExitFunc()) return FALSE;
+				//if(pHGE->procExitFunc && !pHGE->procExitFunc()) return FALSE; // deleted cos it's called in WM_SYSCOMMAND
 				return DefWindowProc(hwnd, msg, wparam, lparam);
 			}
 			else if(wparam == VK_RETURN)

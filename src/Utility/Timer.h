@@ -2,7 +2,6 @@
 #define Timer_h__
 
 #include "Settings.h"
-#include <Windows.h>
 
 /** This class measures time.
 */
@@ -20,10 +19,10 @@ public:
 	uint64 GetMicroseconds(void);
 
 private:
-	LARGE_INTEGER mStartTime;
-	LARGE_INTEGER mFrequency;
-	DWORD mStartTick;
-	LONGLONG mLastTime;
+	int64 mStartTime;
+	int64 mFrequency;
+	uint32 mStartTick;
+	int64 mLastTime;
 };
 
 #endif // Timer_h__

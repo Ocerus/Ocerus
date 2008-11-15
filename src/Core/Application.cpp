@@ -1,7 +1,9 @@
+#include "Common.h"
 #include "Application.h"
 #include <Windows.h>
 #include "LoadingScreen.h"
 #include "Game.h"
+#include "Config.h"
 
 using namespace Core;
 
@@ -53,15 +55,17 @@ Application::~Application()
 
 	DYN_DELETE mLoadingScreen;
 	DYN_DELETE mGame;
+	
+	DYN_DELETE mGUIMgr;
 
 	mResourceMgr->UnloadAllResources();
-	DYN_DELETE mStringMgr; //fuco
-	DYN_DELETE mResourceMgr;
-	DYN_DELETE mGfxRenderer;
-	DYN_DELETE mGUIMgr;
-	DYN_DELETE mInputMgr;
-	DYN_DELETE mEntityMgr;		
 
+	DYN_DELETE mEntityMgr;
+	DYN_DELETE mInputMgr;		
+	DYN_DELETE mGfxRenderer;
+	DYN_DELETE mStringMgr;
+	DYN_DELETE mResourceMgr;
+	
 	// must come last
 	DYN_DELETE mGlobalConfig;
 	DYN_DELETE mLogMgr;
@@ -203,7 +207,7 @@ void Core::Application::ShowConsole( void )
 	const char* uniqueName = "3248962941235952";
 	SetConsoleTitle(uniqueName);
 	Sleep(40);
-	mConsoleHandle = FindWindow(NULL, uniqueName);
+	mConsoleHandle = (uint32)(FindWindow(NULL, uniqueName));
 
 	// set title
 	SetConsoleTitle("Debug Log");
@@ -211,7 +215,7 @@ void Core::Application::ShowConsole( void )
 	// set position
 	if (mConsoleHandle)
 	{
-		MoveWindow(mConsoleHandle, mConsoleX, mConsoleY, mConsoleWidth, mConsoleHeight, true);
+		MoveWindow((HWND)mConsoleHandle, mConsoleX, mConsoleY, mConsoleWidth, mConsoleHeight, true);
 	}
 }
 
@@ -219,7 +223,7 @@ void Core::Application::HideConsole( void )
 {
 	// save console settings first
 	RECT windowRect;
-	if (GetWindowRect(mConsoleHandle, &windowRect))
+	if (GetWindowRect((HWND)mConsoleHandle, &windowRect))
 	{
 		mGlobalConfig->SetInt32("ConsoleX", windowRect.left, "Windows");
 		mGlobalConfig->SetInt32("ConsoleY", windowRect.top, "Windows");
@@ -235,4 +239,9 @@ void Core::Application::WriteToConsole( const string& str )
 {
 	DWORD writtenChars = 0;
 	WriteConsole(GetStdHandle(STD_OUTPUT_HANDLE), str.c_str(), str.length(), &writtenChars, NULL);	
+}
+
+void Core::Application::Shutdown( void )
+{
+	RequestStateChange(AS_SHUTDOWN);
 }

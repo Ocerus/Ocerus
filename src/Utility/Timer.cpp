@@ -1,4 +1,6 @@
+#include "Common.h"
 #include "Timer.h"
+#include <Windows.h>
 
 Timer::Timer()
 {
@@ -9,8 +11,11 @@ Timer::~Timer() {}
 
 void Timer::Reset()
 {
-	QueryPerformanceFrequency(&mFrequency);
-	QueryPerformanceCounter(&mStartTime);
+	LARGE_INTEGER large;
+	QueryPerformanceFrequency(&large);
+	mFrequency = large.QuadPart;
+	QueryPerformanceCounter(&large);
+	mStartTime = large.QuadPart;
 	mStartTick = GetTickCount();
 	mLastTime = 0;
 }
@@ -25,9 +30,9 @@ uint64 Timer::GetMicroseconds()
 	LARGE_INTEGER curTime;
 	QueryPerformanceCounter(&curTime);
 	// time since last reset
-	LONGLONG newTime = curTime.QuadPart - mStartTime.QuadPart;
+	LONGLONG newTime = curTime.QuadPart - mStartTime;
 	// scale up to get milliseconds
-	uint64 newTicks = (uint64) (1000 * newTime / mFrequency.QuadPart);
+	uint64 newTicks = (uint64) (1000 * newTime / mFrequency);
 
 	// detect and compensate for performance counter leaps
 	// (surprisingly common, see Microsoft KB: Q274323)
@@ -36,18 +41,18 @@ uint64 Timer::GetMicroseconds()
 	if (msecOff < -100 || msecOff > 100)
 	{
 		// We must keep the timer running forward :)
-		LONGLONG adjust = (std::min)(msecOff * mFrequency.QuadPart / 1000, newTime - mLastTime);
-		mStartTime.QuadPart += adjust;
+		int64 adjust = (std::min)(msecOff * mFrequency / 1000, newTime - mLastTime);
+		mStartTime += adjust;
 		newTime -= adjust;
 
 		// Re-calculate milliseconds
-		newTicks = (uint64) (1000 * newTime / mFrequency.QuadPart);
+		newTicks = (uint64) (1000 * newTime / mFrequency);
 	}
 
 	// Record last time for adjust
 	mLastTime = newTime;
 
-	uint64 micro = (uint64) (1000000 * newTime / mFrequency.QuadPart);
+	uint64 micro = (uint64) (1000000 * newTime / mFrequency);
 
 	return micro;
 }

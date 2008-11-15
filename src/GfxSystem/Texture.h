@@ -9,7 +9,8 @@ namespace GfxSystem
 	class Texture : public ResourceSystem::Resource
 	{
 	public:
-		virtual ~Texture(void) {}
+		Texture(void);
+		virtual ~Texture(void);
 
 		static ResourceSystem::ResourcePtr CreateMe(void);
 
@@ -18,10 +19,10 @@ namespace GfxSystem
 		bool LoadFromBitmap(const void* pixels, uint32 pixelsLength, uint32 width, uint32 height, ePixelFormat format);
 
 		/*library specific texture type _GetTexture(void); */
-		uint64 GetTexture(void);	// hge's DWORD = uint64
+		uint32 GetTexture(void);	// hge's DWORD = uint32
 
-		virtual uint32 GetWidth(bool bOriginal = false);
-		virtual uint32 GetHeight(bool bOriginal = false);
+		virtual uint32 GetWidth();
+		virtual uint32 GetHeight();
 		
 	protected:
 		virtual bool LoadImpl(void);
@@ -29,7 +30,7 @@ namespace GfxSystem
 
 		void Init(void);
 
-		uint64 mHandle;
+		uint32 mHandle;
 		ePixelFormat mFormat;
 
 		friend class GfxRenderer;

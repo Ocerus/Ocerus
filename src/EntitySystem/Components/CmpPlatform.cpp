@@ -1,3 +1,4 @@
+#include "Common.h"
 #include "CmpPlatform.h"
 
 using namespace EntitySystem;

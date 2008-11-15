@@ -1,8 +1,8 @@
+#include "Common.h"
 #include "InputMgr.h"
 #include "IInputListener.h"
 #include "OISListener.h"
 #include "../GfxSystem/GfxRenderer.h"
-#include "../Common.h"
 #include <algorithm>
 
 using namespace InputSystem;

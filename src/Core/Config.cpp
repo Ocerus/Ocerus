@@ -1,6 +1,5 @@
+#include "Common.h"
 #include "Config.h"
-#include "../Utility/Settings.h"
-#include "../Common.h"
 #include "rudeconfig/config.h"
 
 using namespace Core;

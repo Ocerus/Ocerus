@@ -1,3 +1,4 @@
+#include "Common.h"
 #include "ComponentDescription.h"
 
 using namespace EntitySystem;

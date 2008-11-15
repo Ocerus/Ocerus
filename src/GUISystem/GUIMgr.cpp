@@ -1,4 +1,4 @@
-#include "../LogSystem/LogMgr.h"
+#include "Common.h"
 #include "GUIMgr.h"
 #include "CEGUI.h"
 

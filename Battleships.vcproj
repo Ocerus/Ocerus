@@ -41,13 +41,14 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="externalLibs/boost/inc;externalLibs/hge/include;externalLibs/ois/includes;externalLibs/cegui/include;externalLibs/rudeconfig/include"
+				AdditionalIncludeDirectories="src/Precompiled;externalLibs/boost/inc;externalLibs/hge/include;externalLibs/ois/includes;externalLibs/cegui/include;externalLibs/rudeconfig/include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
-				UsePrecompiledHeader="0"
+				UsePrecompiledHeader="2"
+				PrecompiledHeaderThrough="Common.h"
 				WarningLevel="3"
 				WarnAsError="true"
 				Detect64BitPortabilityProblems="false"
@@ -95,7 +96,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy &quot;$(OutDir)\$(TargetFileName)&quot; &quot;output&quot;&#x0D;&#x0A;copy /V /Y /B externalLibs\cegui\bin\Debug\*.dll Debug&#x0D;&#x0A;copy /V /Y /B externalLibs\cegui\bin\Debug\*.dll output&#x0D;&#x0A;"
+				CommandLine="copy /V /Y /B externalLibs\cegui\bin\Debug\*.dll Debug&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -240,6 +241,14 @@
 					<File
 						RelativePath=".\src\EntitySystem\ComponentMgr\Component.cpp"
 						>
+						<FileConfiguration
+							Name="Debug|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								UsePrecompiledHeader="1"
+							/>
+						</FileConfiguration>
 					</File>
 					<File
 						RelativePath=".\src\EntitySystem\ComponentMgr\ComponentDescription.cpp"
@@ -631,7 +640,19 @@
 			>
 		</File>
 		<File
-			RelativePath=".\src\Common.h"
+			RelativePath=".\src\Precompiled\Common.cpp"
+			>
+			<FileConfiguration
+				Name="Debug|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					UsePrecompiledHeader="1"
+				/>
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath=".\src\Precompiled\Common.h"
 			>
 		</File>
 	</Files>

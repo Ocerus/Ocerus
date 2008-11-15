@@ -1,3 +1,4 @@
+#include "Common.h"
 #include "CEGUITextureWrapper.h"
 #include "../Utility/Settings.h"
 #include "CEGUIBase.h"

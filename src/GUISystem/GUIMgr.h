@@ -13,8 +13,6 @@
 
 #define gGUIMgr GUISystem::GUIMgr::GetSingleton()
 
-//#pragma once
-
 namespace GUISystem {
 	class ResourceGate;
 	class RendererGate;

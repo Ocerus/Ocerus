@@ -1,3 +1,4 @@
+#include "Common.h"
 #include "EntityHandle.h"
 
 using namespace EntitySystem;

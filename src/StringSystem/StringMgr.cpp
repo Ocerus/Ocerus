@@ -1,5 +1,5 @@
+#include "Common.h"
 #include "StringMgr.h"
-#include "../Common.h"
 
 using namespace StringSystem;
 

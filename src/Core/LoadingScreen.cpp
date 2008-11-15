@@ -1,5 +1,5 @@
+#include "Common.h"
 #include "LoadingScreen.h"
-#include "../Common.h"
 
 using namespace Core;
 

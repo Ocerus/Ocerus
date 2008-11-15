@@ -1,6 +1,5 @@
+#include "Common.h"
 #include "GfxRenderer.h"
-#include "../Common.h"
-#include "../Core/Application.h"
 #include <hge.h>
 #include "Triangulate.h"
 
@@ -9,6 +8,29 @@ using namespace GfxSystem;
 // init null values
 Pen Pen::NullPen(Color(0,0,0,0));
 Rect Rect::NullRect(0,0,0,0);
+
+namespace GfxSystem
+{
+	/** This function is called whenever the HGE was notified that the application requested the shutdown.
+		Returning false will prevent the application from being shut down. It's advices to return true.
+	*/
+	bool HgeExitFunction(void)
+	{
+		static bool alreadyDone = false;
+		if (alreadyDone)
+			return true;
+		alreadyDone = true;
+
+		// we need to save the current position of the window so that we can restore it on next startup
+		RECT windowRect;
+		if (GetWindowRect(gGfxRenderer.mHGE->System_GetState(HGE_HWND), &windowRect))
+		{
+			gApp.GetGlobalConfig()->SetInt32("WindowX", windowRect.left, "Windows");
+			gApp.GetGlobalConfig()->SetInt32("WindowY", windowRect.top, "Windows");
+		}
+		return true;
+	}
+}
 
 GfxRenderer::GfxRenderer(const Point& resolution, bool fullscreen) 
 {
@@ -22,6 +44,7 @@ GfxRenderer::GfxRenderer(const Point& resolution, bool fullscreen)
 	mHGE->System_SetState(HGE_WINDOWX, gApp.GetGlobalConfig()->GetInt32("WindowX", 0, "Windows"));
 	mHGE->System_SetState(HGE_WINDOWY, gApp.GetGlobalConfig()->GetInt32("WindowY", 0, "Windows"));
 	mHGE->System_SetState(HGE_WINDOWED, !fullscreen);
+	mHGE->System_SetState(HGE_EXITFUNC, (hgeCallback)(&HgeExitFunction));
 	mHGE->System_SetState(HGE_LOGFILE, "HgeLog.txt");
 	mHGE->System_SetState(HGE_HIDEMOUSE, false);
 	mHGE->System_SetState(HGE_USESOUND, false);
@@ -33,18 +56,11 @@ GfxRenderer::GfxRenderer(const Point& resolution, bool fullscreen)
 		gLogMgr.LogMessage("HGE inited; logfile=", mHGE->System_GetState(HGE_LOGFILE));
 }
 
-void GfxRenderer::HideMouseCursor(bool hide) {
-	mHGE->System_SetState(HGE_HIDEMOUSE, hide);
-}
-
 GfxRenderer::~GfxRenderer()
 {
 	ClearResolutionChangeListeners();
 	assert(mHGE);
-	RECT windowRect;
-	GetWindowRect(mHGE->System_GetState(HGE_HWND), &windowRect);
-	gApp.GetGlobalConfig()->SetInt32("WindowX", windowRect.left, "Windows");
-	gApp.GetGlobalConfig()->SetInt32("WindowY", windowRect.top, "Windows");
+	HgeExitFunction();
 	mHGE->System_Shutdown();
 }
 
@@ -52,11 +68,11 @@ void GfxRenderer::ClearResolutionChangeListeners() {
 	mResChangeListeners.clear();
 }
 
-uint64 GfxSystem::GfxRenderer::_GetWindowHandle()
+uint32 GfxSystem::GfxRenderer::_GetWindowHandle()
 {
 	HWND hWnd = mHGE->System_GetState(HGE_HWND);
 	assert(hWnd);
-	return (uint64)(hWnd);
+	return (uint32)hWnd;
 }
 
 void GfxRenderer::ChangeResolution( const Point& resolution )
@@ -127,7 +143,7 @@ bool GfxRenderer::DrawLine( const Point& begin, const Point& end, const Pen& pen
 
 void InitQuad(hgeQuad& q,const TexturePtr& image, int32 x, int32 y,int32 w,int32 h,uint8 alpha,const Rect& textureRect)
 {
-	uint64 col = 0xFFFFFFFF + (alpha << 24);
+	uint32 col = 0xFFFFFFFF + (alpha << 24);
 
 	if (w == 0)
 		w = image->GetWidth();
@@ -224,7 +240,7 @@ bool createTriangles(const std::vector<Point>& vertices,std::vector<Point>& tria
 	return true;
 }
 
-void InitTriple(hgeTriple& t,uint64 hTex,int32 x1,int32 y1,int32 x2,int32 y2,int32 x3,int32 y3,uint64 col = 0xFFFFFFFF)
+void InitTriple(hgeTriple& t,uint32 hTex,int32 x1,int32 y1,int32 x2,int32 y2,int32 x3,int32 y3,uint32 col = 0xFFFFFFFF)
 {
 	// set size
 	t.v[0].x = (float32)(x1);

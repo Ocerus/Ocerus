@@ -1,3 +1,4 @@
+#include "Common.h"
 #include "RendererGate.h"
 #include "CEGUITextureWrapper.h"
 #include "../GfxSystem/GfxRenderer.h"
@@ -38,10 +39,10 @@ namespace GUISystem {
 		GfxSystem::TexturePtr conv_tex = ((CEGUITextureWrapper*)tex)->getTexture();
 		GfxSystem::Rect conv_texture_rect;
 
-		conv_texture_rect.x = (texture_rect.d_left != HUGE_VAL)?round(texture_rect.d_left*conv_tex->GetHeight(true)):0;
-		conv_texture_rect.y = (texture_rect.d_top != HUGE_VAL)?round(texture_rect.d_top*conv_tex->GetWidth(true)):0;
-		conv_texture_rect.w = (texture_rect.d_right != HUGE_VAL)?round(texture_rect.d_right*conv_tex->GetHeight(true) - conv_texture_rect.x):conv_tex->GetHeight(true);
-		conv_texture_rect.h = (texture_rect.d_bottom != HUGE_VAL)?round(texture_rect.d_bottom*conv_tex->GetWidth(true) - conv_texture_rect.y):conv_tex->GetWidth(true);
+		conv_texture_rect.x = (texture_rect.d_left != HUGE_VAL)?round(texture_rect.d_left*texture_rect.getHeight()):0;
+		conv_texture_rect.y = (texture_rect.d_top != HUGE_VAL)?round(texture_rect.d_top*texture_rect.getHeight()):0;
+		conv_texture_rect.w = (texture_rect.d_right != HUGE_VAL)?round(texture_rect.d_right*conv_tex->GetHeight() - texture_rect.d_left*conv_tex->GetWidth()):conv_tex->GetHeight();
+		conv_texture_rect.h = (texture_rect.d_bottom != HUGE_VAL)?round(texture_rect.d_bottom*conv_tex->GetWidth() - texture_rect.d_top*conv_tex->GetWidth()):conv_tex->GetWidth();
 
 		if (mQueueing)
 			mQuads.push(Quad_info(conv_dest_rect, z, conv_tex, conv_texture_rect));

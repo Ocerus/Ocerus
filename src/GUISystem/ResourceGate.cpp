@@ -1,3 +1,4 @@
+#include "Common.h"
 #include "ResourceGate.h"
 #include "CEGUIResource.h"
 
