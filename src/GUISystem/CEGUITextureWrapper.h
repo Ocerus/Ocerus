@@ -4,13 +4,18 @@
 #include "../Utility/Settings.h"
 #include "CEGUIBase.h"
 #include "CEGUITexture.h"
-#include "CEGUIString.h"
 #include "../GfxSystem/Texture.h"
 #include "RendererGate.h"
+
+/// Forward declarations.
+//@{
+namespace CEGUI { class String; }
+//@}
 
 namespace GUISystem {
 	class RendererGate;
 
+	//TODO presunou funkce do CPP, at se odstrani zavislosti
 	class CEGUITextureWrapper : public CEGUI::Texture
 	{
 	public:
@@ -66,7 +71,7 @@ namespace GUISystem {
 
 		CEGUI::Renderer* getRenderer(void) const {return d_owner;}
 
-		inline virtual GfxSystem::TexturePtr getTexture() { return mTexture; }
+		inline virtual GfxSystem::TexturePtr getTexture() const { return mTexture; }
 
 		CEGUITextureWrapper(RendererGate * gate);
 

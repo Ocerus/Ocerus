@@ -2,15 +2,21 @@
 #define _COMPONENTMGR_H_
 
 #include <map>
-#include "ComponentEnums.h"
-#include "Component.h"
-#include "ComponentDescription.h"
-#include "ComponentIterators.h"
 #include "../EntityMgr/EntityHandle.h"
 #include "../../Utility/Singleton.h"
+#include "ComponentIterators.h"
+#include "ComponentEnums.h"
 
 namespace EntitySystem
 {
+
+	/// Forward declarations
+	//@{
+	class Component;
+	class ComponentDescription;
+	//#}
+
+	/// Type used for registration function individual components.
 	typedef Component* (*ComponentCreationMethod)(void);
 
 	/** This class manages instances of all entity components in the system.

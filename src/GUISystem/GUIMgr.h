@@ -3,20 +3,21 @@
 
 #include "../Utility/Singleton.h"
 #include "../Utility/Settings.h"
-#include "../InputSystem/InputMgr.h"
 #include "../InputSystem/IInputListener.h"
-#include "../InputSystem/InputActions.h"
 #include "../Utility/Settings.h"
-#include "RendererGate.h"
-#include "ResourceGate.h"
 #include "CEGUI.h"
 
 #define gGUIMgr GUISystem::GUIMgr::GetSingleton()
 
 namespace GUISystem {
+
+	/// Forward declarations.
+	//@{
 	class ResourceGate;
 	class RendererGate;
+	//@}
 
+	//TODO vsechny inlinovany funkce premistit do CPP a odinlinovat, at se zbavime includovani CEGUI.h
 	inline CEGUI::MouseButton ConvertMouseButtonEnum(const InputSystem::eMouseButton btn) {
 		switch (btn) {
 			case InputSystem::MBTN_LEFT:
@@ -55,7 +56,7 @@ namespace GUISystem {
 			CEGUI::System::getSingleton().injectMouseButtonUp( ConvertMouseButtonEnum(btn) );
 		}
 
-		inline virtual void RenderGUI() { mCegui->renderGUI(); }
+		inline virtual void RenderGUI() const { mCegui->renderGUI(); }
 
 		virtual void Update(float32 delta);
 

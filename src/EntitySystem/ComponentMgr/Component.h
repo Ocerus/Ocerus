@@ -1,11 +1,14 @@
 #ifndef _COMPONENT_H_
 #define _COMPONENT_H_
 
-#include "ComponentDescription.h"
-#include "../EntityMgr/EntityMessage.h"
-
 namespace EntitySystem
 {
+
+	/// Forward declarations
+	//@{
+	class ComponentDescription;
+	struct EntityMessage;
+
 	/** Abstract class representing one component. All concrete components must derive from this class.
 	*/
 	class Component

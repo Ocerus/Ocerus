@@ -51,7 +51,7 @@ void InputSystem::InputMgr::_SetResolution( uint32 width, uint32 height )
 	mOISListener->SetResolution(width, height);
 }
 
-bool InputSystem::InputMgr::IsKeyDown( eKeyCode k )
+bool InputSystem::InputMgr::IsKeyDown( eKeyCode k ) const
 {
 	assert(mOISListener);
 	return mOISListener->IsKeyDown(k);

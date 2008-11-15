@@ -23,8 +23,7 @@ namespace ResourceSystem
 		/// State of a resource.
 		enum eState { STATE_UNINITIALIZED=0, STATE_INITIALIZED, STATE_UNLOADING, STATE_LOADING, STATE_LOADED };
 		/// Type of a resource. Add your custom types here!
-		/// (14.11.2008) Fuco -- Added TYPE_TEXTSTRING = 3
-		enum eType { TYPE_TEXTURE=0, TYPE_CEGUIRESOURCE, NUM_TYPES, TYPE_TEXTRESOURCE, TYPE_AUTODETECT };
+		enum eType { TYPE_TEXTURE=0, TYPE_CEGUIRESOURCE, TYPE_TEXTRESOURCE,		NUM_TYPES, TYPE_AUTODETECT };
 
 		/// No need to override.
 		Resource(void);

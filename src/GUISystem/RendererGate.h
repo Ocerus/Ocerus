@@ -3,15 +3,15 @@
 
 #include "../Utility/Settings.h"
 #include "../GfxSystem/GfxRenderer.h"
-#include "ResourceGate.h"
-#include "CEGUITextureWrapper.h"
+#include "../GfxSystem/IScreenResolutionChangeListener.h"
 #include "CEGUIRenderer.h"
-#include "GUIMgr.h"
+#include "ResourceGate.h"
 #include <limits>
 #include <queue>
 #include <set>
 
 namespace GUISystem {
+
 	class CEGUITextureWrapper;
 	class GUIMgr;
 

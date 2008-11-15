@@ -1,6 +1,10 @@
 #include "Common.h"
 #include "GUIMgr.h"
 #include "CEGUI.h"
+#include "../InputSystem/InputMgr.h"
+#include "../InputSystem/InputActions.h"
+#include "RendererGate.h"
+#include "ResourceGate.h"
 
 namespace GUISystem {
 	GUIMgr::GUIMgr() {

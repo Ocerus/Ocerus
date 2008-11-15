@@ -3,12 +3,17 @@
 
 #include <OISMouse.h>
 #include <OISKeyboard.h>
-#include "InputMgr.h"
-#include "InputActions.h"
 #include "../Utility/Settings.h"
 
 namespace InputSystem
 {
+
+	/// Forward declarations.
+	//@{
+	class InputMgr;
+	enum eKeyCode;
+	//@}
+
 	/** OIS library specific wrapper to hide its implementation.
 	*/
 	class OISListener : public OIS::MouseListener, public OIS::KeyListener
@@ -33,7 +38,7 @@ namespace InputSystem
 		/// Process OIS events.
 		void CaptureInput();
 		/// True if the specified key is down.
-		bool IsKeyDown(eKeyCode k);
+		bool IsKeyDown(eKeyCode k) const;
 
 		/// Sets resolution of the screen.
 		void SetResolution(uint32 width, uint32 height);

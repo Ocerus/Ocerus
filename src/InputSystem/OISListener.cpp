@@ -1,4 +1,5 @@
 #include "Common.h"
+#include "InputMgr.h"
 #include "OISListener.h"
 #include "../GfxSystem/GfxRenderer.h"
 #include "../Utility/StringConverter.h"
@@ -119,7 +120,7 @@ InputSystem::eMouseButton InputSystem::OISListener::OisToMbtn( OIS::MouseButtonI
 	return MBTN_UNKNOWN;
 }
 
-bool InputSystem::OISListener::IsKeyDown( eKeyCode k )
+bool InputSystem::OISListener::IsKeyDown( eKeyCode k ) const
 {
 	assert(mKeyboard);
 	return mKeyboard->isKeyDown(static_cast<OIS::KeyCode>(k));

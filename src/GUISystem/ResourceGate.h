@@ -2,8 +2,7 @@
 #define _RESOURCEGATE_H_
 
 #include "../Utility/Settings.h"
-#include "../ResourceSystem/ResourceMgr.h"
-#include "CEGUI.h"
+#include "CEGUIResourceProvider.h"
 //#pragma once
 
 namespace GUISystem {

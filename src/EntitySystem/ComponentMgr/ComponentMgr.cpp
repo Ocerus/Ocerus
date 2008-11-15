@@ -1,5 +1,8 @@
 #include "Common.h"
 #include "ComponentMgr.h"
+#include "Component.h"
+#include "ComponentDescription.h"
+
 #include "../Components/CmpPlatform.h"
 
 using namespace EntitySystem;
@@ -16,7 +19,7 @@ ComponentMgr::ComponentMgr()
 
 ComponentMgr::~ComponentMgr() 
 {
-	assert(mEntityComponentsMap.size()==0 && "ComponentsMap not empty. (EntityMgr shold erase it before deleting ComponentMgr)");
+	assert(mEntityComponentsMap.size()==0 && "ComponentsMap not empty. (EntityMgr should erase it before deleting ComponentMgr)");
 }
 
 EntityComponentsIterator ComponentMgr::GetEntityComponents(EntityID id)

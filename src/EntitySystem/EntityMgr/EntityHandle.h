@@ -20,6 +20,7 @@ namespace EntitySystem
 		EntityHandle(const EntityHandle& handle) { mEntityID = handle.mEntityID; }
 		~EntityHandle(void) {}
 
+		/// Enables comparing handles.
 		EntityHandle& operator=(const EntityHandle& rhs);
 
 		//TODO possibility to add helper methods for accessing components or sending messages

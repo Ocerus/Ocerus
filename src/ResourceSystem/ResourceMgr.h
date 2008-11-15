@@ -49,9 +49,10 @@ namespace ResourceSystem
 		//TODO think about this method. It can be dangerous to release resources with UseCount==1.
 		// void UnloadUnusedResources(void);
 
-		// Unloads all resources from all groups, call before destructing this object
+		/// Unloads all resources from all groups, call before destructing this object
 		void UnloadAllResources();
 
+		/// Loading listener receives callbacks from the manager when a resource is being loaded.
 		void SetLoadingListener(IResourceLoadingListener* listener);
 
 		/** Retrieves a resource from the manager. If the resource can't be found, null ResourcePtr is returned.

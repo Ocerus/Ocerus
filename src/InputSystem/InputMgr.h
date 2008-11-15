@@ -39,7 +39,7 @@ namespace InputSystem
 		void CaptureInput(void);
 		
 		/// Returns true if a specified key is down.
-		bool IsKeyDown(eKeyCode k);
+		bool IsKeyDown(eKeyCode k) const;
 
 		/// Registers/unregisters event listeners.
 		//@{

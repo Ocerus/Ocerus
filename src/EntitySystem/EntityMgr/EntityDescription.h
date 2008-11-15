@@ -3,10 +3,15 @@
 
 #include <vector>
 #include "../../Utility/Settings.h"
-#include "../ComponentMgr/ComponentDescription.h"
 
 namespace EntitySystem
 {
+
+	/// Forward declarations
+	//@{
+	class ComponentDescription;
+	//@}
+
 	/** This class contains all info needed to create one instance of an entity. It is basically a collection of
 		component descriptions.
 	*/

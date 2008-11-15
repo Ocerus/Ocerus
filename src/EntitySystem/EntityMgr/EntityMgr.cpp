@@ -1,5 +1,8 @@
 #include "Common.h"
 #include "EntityMgr.h"
+#include "EntityDescription.h"
+#include "../ComponentMgr/ComponentMgr.h"
+#include "../ComponentMgr/Component.h"
 
 using namespace EntitySystem;
 

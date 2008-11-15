@@ -2,16 +2,22 @@
 #define _ENTITYMGR_H_
 
 #include <set>
-#include "EntityDescription.h"
 #include "EntityHandle.h"
 #include "EntityMessage.h"
-#include "../ComponentMgr/ComponentMgr.h"
 
 /// Macro for easier use.
 #define gEntityMgr EntitySystem::EntityMgr::GetSingleton()
 
 namespace EntitySystem
 {
+
+	/// Forward declarations.
+	//@{
+	class ComponentMgr;
+	class EntityDescription;
+	struct EntityMessage;
+	//@}
+
 	/** This class manages all game entities like weapons, enemy ships, projectiles, etc. Manipulation of entities is
 		done via entity handles.
 	*/

@@ -2,8 +2,11 @@
 #define Config_h__
 
 #include "../Utility/Settings.h"
-#include "rudeconfig/config.h"
 
+/// Forward declarations
+//@{
+namespace rude { class Config; }
+//@}
 
 namespace Core
 {
@@ -42,7 +45,7 @@ namespace Core
 		string mFilePath;
 
 		/// Helper.
-		rude::Config mRudeConfig;
+		rude::Config* mRudeConfig;
 
 	};
 }

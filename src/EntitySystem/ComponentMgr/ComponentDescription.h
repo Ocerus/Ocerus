@@ -12,10 +12,13 @@ namespace EntitySystem
 	class ComponentDescriptionItem
 	{
 	public:
+		/// Constructors taking data to be held by this item.
+		//@{
 		ComponentDescriptionItem(const int8 data);
 		ComponentDescriptionItem(const int16 data);
 		ComponentDescriptionItem(const int32 data);
 		ComponentDescriptionItem(const string& data);
+		//@}
 		~ComponentDescriptionItem(void);
 
 		/// Getters.
@@ -40,6 +43,7 @@ namespace EntitySystem
 	class ComponentDescription
 	{
 	public:
+		/// Component types are located in ComponentEnums.h
 		ComponentDescription(eComponentType type);
 		~ComponentDescription(void);
 

@@ -41,10 +41,7 @@ ResourceMgr::ResourceMgr(const string& basepath):
 	gLogMgr.LogMessage("All resource types registered");
 }
 
-ResourceMgr::~ResourceMgr()
-{
-	//assert(mResourceGroups.empty());	
-}
+ResourceMgr::~ResourceMgr() {}
 
 void ResourceMgr::UnloadAllResources()
 {

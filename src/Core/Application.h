@@ -59,8 +59,8 @@ namespace Core
 		
 		/// Stats getters.
 		//@{
-		inline float32 GetAvgFPS(void) { return mAvgFPS; }
-		inline float32 GetLastFPS(void) { return mLastFPS; }
+		inline float32 GetAvgFPS(void) const { return mAvgFPS; }
+		inline float32 GetLastFPS(void) const { return mLastFPS; }
 		//@}
 
 		/// Console debug window stuff.
@@ -71,7 +71,7 @@ namespace Core
 		//@}
 
 		/// Provides access to the global config functionality.
-		inline Config* GetGlobalConfig(void) { return mGlobalConfig; }
+		inline Config* GetGlobalConfig(void) const { return mGlobalConfig; }
 
 	private:
 		/// Singletons.

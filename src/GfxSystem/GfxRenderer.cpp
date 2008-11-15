@@ -2,6 +2,8 @@
 #include "GfxRenderer.h"
 #include <hge.h>
 #include "Triangulate.h"
+#include "Texture.h"
+#include "IScreenResolutionChangeListener.h"
 
 using namespace GfxSystem;
 
@@ -68,7 +70,7 @@ void GfxRenderer::ClearResolutionChangeListeners() {
 	mResChangeListeners.clear();
 }
 
-uint32 GfxSystem::GfxRenderer::_GetWindowHandle()
+uint32 GfxSystem::GfxRenderer::_GetWindowHandle() const
 {
 	HWND hWnd = mHGE->System_GetState(HGE_HWND);
 	assert(hWnd);
@@ -106,12 +108,12 @@ void GfxRenderer::SetFullscreen(bool fullscreen)
 	gLogMgr.LogMessage("Fullscreen changed");
 }
 
-bool GfxRenderer::BeginRendering(void) 
+bool GfxRenderer::BeginRendering(void) const
 {
 	return mHGE->Gfx_BeginScene();
 }
 
-bool GfxRenderer::EndRendering(void) 
+bool GfxRenderer::EndRendering(void) const
 {
 	mHGE->Gfx_EndScene();
 	return true;
@@ -123,19 +125,19 @@ DWORD GetHGEColor(const Color& color)
 	return ((DWORD(color.a)<<24) + (DWORD(color.r)<<16) + (DWORD(color.g)<<8) + DWORD(color.b));
 }
 
-bool GfxRenderer::ClearScreen(const Color& color)
+bool GfxRenderer::ClearScreen(const Color& color) const
 {
 	mHGE->Gfx_Clear(GetHGEColor(color));
 	return true;
 }
 
-bool GfxRenderer::DrawLine(int x1, int y1, int x2, int y2, const Pen& pen) 
+bool GfxRenderer::DrawLine(int x1, int y1, int x2, int y2, const Pen& pen) const
 {	
 	mHGE->Gfx_RenderLine((float32) x1,(float32) y1,(float32) x2,(float32) y2,GetHGEColor(pen.color));
 	return true;
 }
 
-bool GfxRenderer::DrawLine( const Point& begin, const Point& end, const Pen& pen )
+bool GfxRenderer::DrawLine( const Point& begin, const Point& end, const Pen& pen ) const
 {
 	mHGE->Gfx_RenderLine((float32) begin.x,(float32) begin.y,(float32) end.x,(float32) end.y,GetHGEColor(pen.color));
 	return true;
@@ -192,7 +194,7 @@ void InitQuad(hgeQuad& q,const TexturePtr& image, int32 x, int32 y,int32 w,int32
 	q.blend = BLEND_ALPHAADD | BLEND_COLORMUL | BLEND_ZWRITE;
 }
 
-bool GfxSystem::GfxRenderer::DrawImage( const TexturePtr& image, int32 x, int32 y, uint8 anchor /*= ANCHOR_VCENTER|ANCHOR_HCENTER*/, float32 angle /*= 0.0f*/, uint8 alpha /*= 255*/, float32 scale /*= 1.0f*/, int32 width /* = 0 */,int32 height /* = 0 */, const Rect& textureRect /* = 0 */)
+bool GfxSystem::GfxRenderer::DrawImage( const TexturePtr& image, int32 x, int32 y, uint8 anchor /*= ANCHOR_VCENTER|ANCHOR_HCENTER*/, float32 angle /*= 0.0f*/, uint8 alpha /*= 255*/, float32 scale /*= 1.0f*/, int32 width /* = 0 */,int32 height /* = 0 */, const Rect& textureRect /* = 0 */) const
 {	
 	if (image.IsNull())
 	{
@@ -206,7 +208,7 @@ bool GfxSystem::GfxRenderer::DrawImage( const TexturePtr& image, int32 x, int32 
 	return true;
 }
 
-bool GfxSystem::GfxRenderer::DrawImage( const TexturePtr& image, const Point& pos, uint8 anchor /*= ANCHOR_VCENTER|ANCHOR_HCENTER*/, float32 angle /*= 0.0f*/, uint8 alpha /*= 255*/, float32 scale /*= 1.0f*/ )
+bool GfxSystem::GfxRenderer::DrawImage( const TexturePtr& image, const Point& pos, uint8 anchor /*= ANCHOR_VCENTER|ANCHOR_HCENTER*/, float32 angle /*= 0.0f*/, uint8 alpha /*= 255*/, float32 scale /*= 1.0f*/ ) const
 {
 	if (DrawImage(image,pos.x,pos.y,anchor,angle,alpha,scale,image->GetWidth(),image->GetHeight()))
 		return true;
@@ -214,7 +216,7 @@ bool GfxSystem::GfxRenderer::DrawImage( const TexturePtr& image, const Point& po
 		return false;
 }
 
-bool GfxSystem::GfxRenderer::DrawImage( const TexturePtr& image, const Rect& textureRect, const Rect& destRect, uint8 alpha /*= 255*/ )
+bool GfxSystem::GfxRenderer::DrawImage( const TexturePtr& image, const Rect& textureRect, const Rect& destRect, uint8 alpha /*= 255*/ ) const
 {
 	if (DrawImage(image,destRect.x,destRect.y,0,0,alpha,0,destRect.w,destRect.h,textureRect))
 		return true;
@@ -269,12 +271,12 @@ void InitTriple(hgeTriple& t,uint32 hTex,int32 x1,int32 y1,int32 x2,int32 y2,int
 	t.blend = BLEND_ALPHAADD | BLEND_COLORMUL | BLEND_ZWRITE;
 }
 
-bool GfxSystem::GfxRenderer::DrawPolygon( Point* vertices, int vertices_len, const TexturePtr& image, const Pen& outline, float32 angle /*= 0.0f*/, uint8 alpha /*= 255*/, float32 scale /*= 1.0f*/, float32 textureAngle /*= 0.0f*/, float32 textureScale /*= 1.0f*/ )
+bool GfxSystem::GfxRenderer::DrawPolygon( Point* vertices, int vertices_len, const TexturePtr& image, const Pen& outline, float32 angle /*= 0.0f*/, uint8 alpha /*= 255*/, float32 scale /*= 1.0f*/, float32 textureAngle /*= 0.0f*/, float32 textureScale /*= 1.0f*/ ) const
 {
 	return false;
 }
 
-bool GfxSystem::GfxRenderer::DrawPolygon( const std::vector<Point>& vertices, const TexturePtr& image, const Pen& outline, float32 angle /*= 0.0f*/, uint8 alpha /*= 255*/, float32 scale /*= 1.0f*/, float32 textureAngle /*= 0.0f*/, float32 textureScale /*= 1.0f*/ )
+bool GfxSystem::GfxRenderer::DrawPolygon( const std::vector<Point>& vertices, const TexturePtr& image, const Pen& outline, float32 angle /*= 0.0f*/, uint8 alpha /*= 255*/, float32 scale /*= 1.0f*/, float32 textureAngle /*= 0.0f*/, float32 textureScale /*= 1.0f*/ ) const
 {
 	if (image.IsNull())
 	{
@@ -285,7 +287,7 @@ bool GfxSystem::GfxRenderer::DrawPolygon( const std::vector<Point>& vertices, co
 	return false;
 }
 
-bool GfxSystem::GfxRenderer::DrawPolygon( Point* vertices, int vertices_len, const Color& fillColor/*, const Pen& outline  = 0 */)
+bool GfxSystem::GfxRenderer::DrawPolygon( Point* vertices, int vertices_len, const Color& fillColor/*, const Pen& outline  = 0 */) const
 {	
 	// init vector
 	std::vector<Point> v;
@@ -299,7 +301,7 @@ bool GfxSystem::GfxRenderer::DrawPolygon( Point* vertices, int vertices_len, con
 		return false;
 }
 
-bool GfxSystem::GfxRenderer::DrawPolygon( const std::vector<Point>& vertices, const Color& fillColor/*, const Pen& outline   = 0 */)
+bool GfxSystem::GfxRenderer::DrawPolygon( const std::vector<Point>& vertices, const Color& fillColor/*, const Pen& outline   = 0 */) const
 {	
 	std::vector<Point> triangles;
 	if (createTriangles(vertices,triangles)) // get triangles from points

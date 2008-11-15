@@ -17,6 +17,11 @@ class HGE;
 namespace GfxSystem
 {
 
+	/// Forward declarations.
+	//@{
+	class IScreenResolutionChangeListener;
+	//@}
+
 	struct Point
 	{
 		Point(int32 _x, int32 _y): x(_x), y(_y) {}
@@ -50,11 +55,6 @@ namespace GfxSystem
 
 	enum eAnchor { ANCHOR_VCENTER=1<<0, ANCHOR_TOP=1<<1, ANCHOR_BOTTOM=1<<2, ANCHOR_LEFT=1<<3, ANCHOR_RIGHT=1<<4, ANCHOR_HCENTER=1<<5 };
 
-	class IScreenResolutionChangeListener {
-	public:
-		virtual void EventResolutionChanged(int x, int y) = 0;
-	};
-
 	class GfxRenderer : public Singleton<GfxRenderer>
 	{
 	public:
@@ -75,29 +75,30 @@ namespace GfxSystem
 			mResChangeListeners.erase(listener);
 		}
 
- 		bool BeginRendering(void);
-		bool EndRendering(void);
+ 		bool BeginRendering(void) const;
+		bool EndRendering(void) const;
 
-		bool ClearScreen(const Color& color);
+
+		bool ClearScreen(const Color& color) const;
 
 		// note that anchor determines the rotation/scaling pivot
-		bool DrawImage(const TexturePtr& image, int32 x, int32 y, uint8 anchor = ANCHOR_VCENTER|ANCHOR_HCENTER, float32 angle = 0.0f, uint8 alpha = 255, float32 scale = 1.0f, int32 width = 0, int32 height = 0, const Rect& textureRect = Rect::NullRect);
-		bool DrawImage(const TexturePtr& image, const Point& pos, uint8 anchor = ANCHOR_VCENTER|ANCHOR_HCENTER, float32 angle = 0.0f, uint8 alpha = 255, float32 scale = 1.0f);
-		bool DrawImage(const TexturePtr& image, const Rect& textureRect, const Rect& destRect, uint8 alpha = 255);
+		bool DrawImage(const TexturePtr& image, int32 x, int32 y, uint8 anchor = ANCHOR_VCENTER|ANCHOR_HCENTER, float32 angle = 0.0f, uint8 alpha = 255, float32 scale = 1.0f, int32 width = 0, int32 height = 0, const Rect& textureRect = Rect::NullRect) const;
+		bool DrawImage(const TexturePtr& image, const Point& pos, uint8 anchor = ANCHOR_VCENTER|ANCHOR_HCENTER, float32 angle = 0.0f, uint8 alpha = 255, float32 scale = 1.0f) const;
+		bool DrawImage(const TexturePtr& image, const Rect& textureRect, const Rect& destRect, uint8 alpha = 255) const;
 
-		bool DrawLine(int x1, int y1, int x2, int y2, const Pen& pen);
-		bool DrawLine(const Point& begin, const Point& end, const Pen& pen);
+		bool DrawLine(int x1, int y1, int x2, int y2, const Pen& pen) const;
+		bool DrawLine(const Point& begin, const Point& end, const Pen& pen) const;
 
-		bool DrawPolygon(Point* vertices, int vertices_len, const TexturePtr& image, const Pen& outline, float32 angle = 0.0f, uint8 alpha = 255, float32 scale = 1.0f, float32 textureAngle = 0.0f, float32 textureScale = 1.0f);
-		bool DrawPolygon(const std::vector<Point>& vertices, const TexturePtr& image, const Pen& outline, float32 angle = 0.0f, uint8 alpha = 255, float32 scale = 1.0f, float32 textureAngle = 0.0f, float32 textureScale = 1.0f);
+		bool DrawPolygon(Point* vertices, int vertices_len, const TexturePtr& image, const Pen& outline, float32 angle = 0.0f, uint8 alpha = 255, float32 scale = 1.0f, float32 textureAngle = 0.0f, float32 textureScale = 1.0f) const;
+		bool DrawPolygon(const std::vector<Point>& vertices, const TexturePtr& image, const Pen& outline, float32 angle = 0.0f, uint8 alpha = 255, float32 scale = 1.0f, float32 textureAngle = 0.0f, float32 textureScale = 1.0f) const;
 
-		bool DrawPolygon(Point* vertices, int vertices_len, const Color& fillColor/*, const Pen& outline*/);
-		bool DrawPolygon(const std::vector<Point>& vertices, const Color& fillColor/*, const Pen& outline*/);
+		bool DrawPolygon(Point* vertices, int vertices_len, const Color& fillColor/*, const Pen& outline*/) const;
+		bool DrawPolygon(const std::vector<Point>& vertices, const Color& fillColor/*, const Pen& outline*/) const;
 
 		//TODO add font param
 		//bool DrawText(const string& str, font, int32 x, int32 y, uint8 anchor = ANCHOR_VCENTER|ANCHOR_HCENTER, float32 angle = 0.0f, uint8 alpha = 255);
 
-		uint32 _GetWindowHandle(void);
+		uint32 _GetWindowHandle(void) const;
 
 	private:
 		HGE* mHGE; 
