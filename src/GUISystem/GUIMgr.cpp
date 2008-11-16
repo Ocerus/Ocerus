@@ -60,8 +60,8 @@ namespace GUISystem {
 - bool injectTimePulse( float timeElapsed ); - bude v jine casti
 */
 
-	void GUIMgr::Update( float32 delta ) {
-		
+	void GUIMgr::Update( float32 delta ) {		
+		mCegui->injectTimePulse( delta );
 	}
 
 }

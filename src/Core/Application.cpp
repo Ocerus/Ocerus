@@ -112,8 +112,8 @@ void Application::RunMainLoop()
 			}
 			break;
 		case AS_GUI:
-			if (gGfxRenderer.BeginRendering())
-			{
+			if (gGfxRenderer.BeginRendering()) {
+				gGfxRenderer.ClearScreen(GfxSystem::Color(0,0,0));
 				mGUIMgr->RenderGUI();
 				gGfxRenderer.EndRendering();
 			}

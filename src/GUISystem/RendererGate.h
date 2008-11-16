@@ -23,6 +23,7 @@ namespace GUISystem {
 
 		Quad_info();
 		Quad_info(GfxSystem::Rect dest_rect, float32 z, GfxSystem::TexturePtr tex, GfxSystem::Rect texture_rect);
+		virtual ~Quad_info();
 	};
 
 	class RendererGate : public CEGUI::Renderer, GfxSystem::IScreenResolutionChangeListener
@@ -85,13 +86,15 @@ namespace GUISystem {
 			return d_resourceProvider;
 		}
 
-		virtual void EventResolutionChanged(int x, int y);
+		inline virtual void EventResolutionChanged(int x, int y) {
+			gGUIMgr.mCegui->fireEvent(EventDisplaySizeChanged, CEGUI::EventArgs());
+		}
 
 	protected:
 		virtual void DrawQuad(const Quad_info & quad) const;
 
 		std::set<CEGUITextureWrapper*> mTextures;
-		std::queue<Quad_info> mQuads;
+		std::vector<Quad_info> mQuads;
 
 		//void ClearProviders();
 

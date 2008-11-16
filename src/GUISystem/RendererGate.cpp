@@ -14,7 +14,12 @@ namespace GUISystem {
 	}
 
 	Quad_info::Quad_info(GfxSystem::Rect dest_rect, float32 z, GfxSystem::TexturePtr tex, GfxSystem::Rect texture_rect) :
-		dest_rect(dest_rect), z(z), tex(tex), texture_rect(texture_rect) {
+		dest_rect(dest_rect), z(z), tex(tex), texture_rect(texture_rect)
+	{
+	}
+
+	Quad_info::~Quad_info() {
+		tex.SetNull();
 	}
 
 	RendererGate::RendererGate() : mQueueing(false) {
@@ -35,7 +40,7 @@ namespace GUISystem {
 			const CEGUI::Rect& texture_rect, const CEGUI::ColourRect& colours, CEGUI::QuadSplitMode quad_split_mode) {		
 
 		GfxSystem::Rect conv_dest_rect(round(dest_rect.d_left), round(dest_rect.d_top),
-			round(dest_rect.getHeight()), round(dest_rect.getWidth()));
+			round(dest_rect.getWidth()), round(dest_rect.getHeight()));
 		GfxSystem::TexturePtr conv_tex = ((CEGUITextureWrapper*)tex)->getTexture();
 		GfxSystem::Rect conv_texture_rect;
 
@@ -45,23 +50,23 @@ namespace GUISystem {
 		conv_texture_rect.h = (texture_rect.d_bottom != HUGE_VAL)?round(texture_rect.d_bottom*conv_tex->GetHeight() - texture_rect.d_top*conv_tex->GetHeight()):conv_tex->GetHeight();
 
 		if (mQueueing)
-			mQuads.push(Quad_info(conv_dest_rect, z, conv_tex, conv_texture_rect));
+			mQuads.push_back(Quad_info(conv_dest_rect, z, conv_tex, conv_texture_rect));
 		else
 			DrawQuad(Quad_info(conv_dest_rect, z, conv_tex, conv_texture_rect));
 	}
 
 	// perform final rendering for all queued renderable quads.
-	void RendererGate::doRender(void) {
-		gGfxRenderer.ClearScreen(GfxSystem::Color(0,0,0));
-		while (!mQuads.empty()) {			
-			DrawQuad(mQuads.front());
-			mQuads.pop();
+	void RendererGate::doRender() {
+		std::vector<Quad_info>::const_iterator iter = mQuads.begin();
+		while (iter != mQuads.end()) {			
+			DrawQuad(*iter);
+			++iter;
 		}
 	}
 
 	// clear the queue
 	void RendererGate::clearRenderList(void) {
-		while (!mQuads.empty()) mQuads.pop();
+		mQuads.clear();
 	}
 
 	CEGUI::Texture* RendererGate::createTexture(void) {
@@ -111,7 +116,4 @@ namespace GUISystem {
 		}
 	}
 */
-	void RendererGate::EventResolutionChanged(int x, int y) {
-		gGUIMgr.mCegui->fireEvent(EventDisplaySizeChanged, CEGUI::EventArgs());
-	}
 }

@@ -56,7 +56,9 @@ namespace GUISystem {
 			CEGUI::System::getSingleton().injectMouseButtonUp( ConvertMouseButtonEnum(btn) );
 		}
 
-		inline virtual void RenderGUI() const { mCegui->renderGUI(); }
+		inline virtual void RenderGUI() const {						
+			mCegui->renderGUI();
+		}
 
 		virtual void Update(float32 delta);
 
