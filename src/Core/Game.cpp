@@ -44,7 +44,6 @@ void Core::Game::Update( float32 delta )
 	if (gInputMgr.IsKeyDown(InputSystem::KC_ESCAPE))
 		gApp.Shutdown();
 	if (gInputMgr.IsKeyDown(InputSystem::KC_G)) {
-		gGfxRenderer.ClearScreen(GfxSystem::Color(0,0,0));
 		gApp.RequestStateChange(AS_GUI, true);
 	}
 }
