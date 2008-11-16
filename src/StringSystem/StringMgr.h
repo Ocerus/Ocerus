@@ -21,7 +21,7 @@ namespace StringSystem
 	public:
 		/// @param basepath for string data. Root is in the ResMgr's basepath
 		StringMgr(const string& basepath = "strings/");
-		~StringMgr();
+		~StringMgr(void);
 
 		/** Load all strings for a given language.
 		    Every language's strings should be stored in a separate directory, preferabely using 
@@ -44,14 +44,14 @@ namespace StringSystem
 		//@}
 
 		/// unload all the data (using UnloadResourcesInGroup)
-		bool UnloadData();
+		bool UnloadData(void);
 
 		/// return pointer to text data
-		TextData* GetTextDataPtr(const StringKey& key);
+		const TextData* GetTextDataPtr(const StringKey& key);
 		/** Return text data. Note that this may be slow if strings are long. (It has to copy
 		    whole TextData structure). Returning a ptr should be preffered way to access data.
 		*/
-		TextData GetTextData(const StringKey& key);
+		const TextData GetTextData(const StringKey& key);
 	private:
 		/// container used to store data (same type used in TextRes!)
 		TextDataMap mTextDataMap;

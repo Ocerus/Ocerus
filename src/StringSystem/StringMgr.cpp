@@ -10,7 +10,7 @@ StringMgr::StringMgr(const string& basepath)
 	gLogMgr.LogMessage("*** StringMgr init ***");
 }
 
-StringMgr::~StringMgr()
+StringMgr::~StringMgr(void)
 {
 	gLogMgr.LogMessage("*** StringMgr deinit ***");
 	UnloadData();
@@ -31,17 +31,16 @@ bool StringMgr::LoadDataFromDir(const string& path, const string& includeRegexp,
 	result = gResourceMgr.AddResourceDirToGroup(mBasePath + path, "strings", includeRegexp, excludeRegexp);
 	gResourceMgr.LoadResourcesInGroup("strings");
 	
-	gLogMgr.LogMessage("StringMgr: Loading data from resource");
+	gLogMgr.LogMessage("StringMgr: Loading data from resource group ""strings""");
 	std::vector<ResourceSystem::ResourcePtr> ResourceGroup = gResourceMgr.GetResourceGroup("strings");
-	assert(ResourceGroup.size());
-
+	
 	std::vector<ResourceSystem::ResourcePtr>::iterator it;
 	
 	for (it = ResourceGroup.begin(); it != ResourceGroup.end(); it++)
 	{
 		TextResourcePtr tp = static_cast<TextResourcePtr>(*it);
-		TextDataMap dm = tp->GetTextDataMap();
-		mTextDataMap.insert(dm.begin(), dm.end());
+		const TextDataMap* dm = tp->GetTextDataMap();
+		mTextDataMap.insert(dm->begin(), dm->end());
 	}
 
 	gResourceMgr.UnloadResourcesInGroup("strings");
@@ -54,36 +53,43 @@ bool StringMgr::LoadDataFromFile(const string& filepath, ResourceSystem::Resourc
 	result = gResourceMgr.AddResourceFileToGroup(mBasePath + filepath, "strings", type, pathRelative);
 	gResourceMgr.LoadResourcesInGroup("strings");
 
-	gLogMgr.LogMessage("StringMgr: Loading data from resource");
+	gLogMgr.LogMessage("StringMgr: Loading data from resource group ""strings""");
 	std::vector<ResourceSystem::ResourcePtr> ResourceGroup = gResourceMgr.GetResourceGroup("strings");
-	assert(ResourceGroup.size());
 
 	std::vector<ResourceSystem::ResourcePtr>::iterator it;
 
 	for (it = ResourceGroup.begin(); it != ResourceGroup.end(); it++)
 	{
 		TextResourcePtr tp = static_cast<TextResourcePtr>(*it);
-		TextDataMap dm = tp->GetTextDataMap();
-		mTextDataMap.insert(dm.begin(), dm.end());
+		const TextDataMap* dm = tp->GetTextDataMap();
+		mTextDataMap.insert(dm->begin(), dm->end());
 	}
 
 	gResourceMgr.UnloadResourcesInGroup("strings");
 	return result;
 }
 
-bool StringMgr::UnloadData()
+bool StringMgr::UnloadData(void)
 {
 	mTextDataMap.clear();
 	return true;
 }
 
 
-TextData* StringMgr::GetTextDataPtr(const StringKey& key)
+const TextData* StringMgr::GetTextDataPtr(const StringKey& key)
 {
-	return &mTextDataMap[key];
+	const TextData* returnValue = &mTextDataMap[key];
+	if (*returnValue == "") {
+		gLogMgr.LogMessage("StringMgr: Index " + key + " doesn't exist. Return value set to empty TextData", LOG_ERROR);
+	}
+	return returnValue;
 }
 
-TextData StringMgr::GetTextData(const StringKey& key)
+const TextData StringMgr::GetTextData(const StringKey& key)
 {
-	return mTextDataMap[key];
+	const TextData returnValue = mTextDataMap[key];
+	if (returnValue == "") {
+		gLogMgr.LogMessage("StringMgr: Index " + key + " doesn't exist. Return value set to empty TextData", LOG_ERROR);
+	}
+	return returnValue;
 }

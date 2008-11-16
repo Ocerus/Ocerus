@@ -30,7 +30,9 @@ void Core::Game::Init()
 	gLogMgr.LogMessage(gStringMgr.GetTextData("HELLO"));
 	gLogMgr.LogMessage(gStringMgr.GetTextData("MONDAY"));
 	gLogMgr.LogMessage(gStringMgr.GetTextData("ABOUT"));
-	gLogMgr.LogMessage(gStringMgr.GetTextData("CZECH_TEXT"));
+	// we can return data with Ptr too
+	gLogMgr.LogMessage(*gStringMgr.GetTextDataPtr("ABOUT"));
+	gLogMgr.LogMessage(gStringMgr.GetTextData("CZECH_ASDSAD"));
 	gLogMgr.LogMessage("-- STRING MANAGER DEMO END --");
 }
 

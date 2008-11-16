@@ -61,14 +61,28 @@ bool TextResource::UnloadImpl()
 	return true;
 }
 
-TextData TextResource::GetTextData(const StringKey& key)
+const TextData* TextResource::GetTextDataPtr(const StringKey& key)
 {
 	EnsureLoaded();
-	return mTextDataMap[key];
+	const TextData* returnValue = &mTextDataMap[key];
+	if (*returnValue == "") {
+		gLogMgr.LogMessage("TextResource: Index " + key + " doesn't exist. Return value set to empty TextData", LOG_ERROR);
+	}
+	return returnValue;
 }
 
-TextDataMap TextResource::GetTextDataMap()
+const TextData TextResource::GetTextData(const StringKey& key)
 {
 	EnsureLoaded();
-	return mTextDataMap;
+	const TextData returnValue = mTextDataMap[key];
+	if (returnValue == "") {
+		gLogMgr.LogMessage("TextResource: Index " + key + " doesn't exist. Return value set to empty TextData", LOG_ERROR);
+	}
+	return returnValue;
+}
+
+const TextDataMap* TextResource::GetTextDataMap(void)
+{
+	EnsureLoaded();
+	return &mTextDataMap;
 }
