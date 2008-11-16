@@ -25,7 +25,8 @@ namespace GUISystem {
 
 	RendererGate::~RendererGate() {
 		//ClearProviders();
-		DYN_DELETE d_resourceProvider;
+		// Hardwire: I had to comment this out as it was causing access violation during the shutdown
+		//DYN_DELETE d_resourceProvider;
 		clearRenderList();
 		destroyAllTextures();
 	}
