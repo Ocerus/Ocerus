@@ -1,6 +1,5 @@
 #include "Common.h"
 #include "TextResource.h"
-#include "../Utility/DataContainer.h"
 #include <string>
 
 using namespace StringSystem;
@@ -21,7 +20,7 @@ bool TextResource::LoadImpl()
 	while (is.good())
 	{
 		is.getline(buf, 4096);
-		/// gLogMgr.LogMessage(" !! RAW LINE DATA !! " + (string)buf);
+		// gLogMgr.LogMessage(" !! RAW LINE DATA !! " + (string)buf);
 		if (buf[0] == '{' && buf[1] == '-')
 		{
 			multiline = true;
@@ -37,19 +36,19 @@ bool TextResource::LoadImpl()
 				if (store) 
 				{
 					text.resize(text.size()-1);
-					/// gLogMgr.LogMessage("StringMgr: Saving key: " + key + " and data: " + text);
-					mTextDataMap.insert(std::pair<string, TextData>(key,text));
+					// gLogMgr.LogMessage("StringMgr: Saving key: " + key + " and data: " + text);
+					mTextDataMap.insert(std::pair<StringKey, TextData>(key,text));
 					text.clear();
 					key.clear();
 				}
 				key = buf+1;
-				/// gLogMgr.LogMessage("StringMgr: Loading key: " + key);
+				// gLogMgr.LogMessage("StringMgr: Loading key: " + key);
 				store = true;
 			}
 			else
 			{
 				text = text + buf + '\n';
-				/// gLogMgr.LogMessage("StringMgr: Loading data: " + text);
+				// gLogMgr.LogMessage("StringMgr: Loading data: " + text);
 			}
 		}
 	}
@@ -62,12 +61,14 @@ bool TextResource::UnloadImpl()
 	return true;
 }
 
-TextData TextResource::GetTextData(const string& key)
+TextData TextResource::GetTextData(const StringKey& key)
 {
+	EnsureLoaded();
 	return mTextDataMap[key];
 }
 
 TextDataMap TextResource::GetTextDataMap()
 {
+	EnsureLoaded();
 	return mTextDataMap;
 }

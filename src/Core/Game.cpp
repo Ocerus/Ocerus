@@ -18,7 +18,7 @@ void Core::Game::Init()
 	gResourceMgr.AddResourceFileToGroup("zazaka.png", "test");
 	gResourceMgr.LoadResourcesInGroup("test");
 
-	gStringMgr.LoadStrings();
+	gStringMgr.LoadLanguagePack();
 
 	gApp.ResetStats();
 

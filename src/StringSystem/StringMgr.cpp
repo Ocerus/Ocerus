@@ -4,8 +4,9 @@
 using namespace StringSystem;
 
 
-StringMgr::StringMgr()
+StringMgr::StringMgr(const string& basepath)
 {
+	mBasePath = basepath;
 	gLogMgr.LogMessage("*** StringMgr init ***");
 }
 
@@ -16,7 +17,7 @@ StringMgr::~StringMgr()
 	gLogMgr.LogMessage("*** StringMgr unloaded ***");
 }
 
-bool StringMgr::LoadStrings(const string& lang)
+bool StringMgr::LoadLanguagePack(const string& lang)
 {
 	bool result = true;
 	result = LoadDataFromDir(lang);
@@ -27,7 +28,7 @@ bool StringMgr::LoadStrings(const string& lang)
 bool StringMgr::LoadDataFromDir(const string& path, const string& includeRegexp, const string& excludeRegexp)
 {
 	bool result = true;
-	result = gResourceMgr.AddResourceDirToGroup(BASE_PATH + path, "strings", includeRegexp, excludeRegexp);
+	result = gResourceMgr.AddResourceDirToGroup(mBasePath + path, "strings", includeRegexp, excludeRegexp);
 	gResourceMgr.LoadResourcesInGroup("strings");
 	
 	gLogMgr.LogMessage("StringMgr: Loading data from resource");
@@ -50,7 +51,7 @@ bool StringMgr::LoadDataFromDir(const string& path, const string& includeRegexp,
 bool StringMgr::LoadDataFromFile(const string& filepath, ResourceSystem::Resource::eType type, bool pathRelative)
 {
 	bool result = true;
-	result = gResourceMgr.AddResourceFileToGroup(BASE_PATH + filepath, "strings", type, pathRelative);
+	result = gResourceMgr.AddResourceFileToGroup(mBasePath + filepath, "strings", type, pathRelative);
 	gResourceMgr.LoadResourcesInGroup("strings");
 
 	gLogMgr.LogMessage("StringMgr: Loading data from resource");
@@ -77,12 +78,12 @@ bool StringMgr::UnloadData()
 }
 
 
-TextData* StringMgr::GetTextDataPtr(const string& key)
+TextData* StringMgr::GetTextDataPtr(const StringKey& key)
 {
 	return &mTextDataMap[key];
 }
 
-TextData StringMgr::GetTextData(const string& key)
+TextData StringMgr::GetTextData(const StringKey& key)
 {
 	return mTextDataMap[key];
 }
