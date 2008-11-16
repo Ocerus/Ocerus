@@ -1,0 +1,1 @@
+1) In project properties / Debugging set the Working Directory to "output"
