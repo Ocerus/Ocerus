@@ -29,5 +29,7 @@
 
 #include "../Core/Config.h"
 
+#include "../Utility/Properties.h"
+
 
 #endif

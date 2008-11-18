@@ -314,6 +314,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\Utility\Hash.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Utility\Properties.h"
+					>
+				</File>
+				<File
 					RelativePath=".\src\Utility\Settings.h"
 					>
 				</File>
@@ -342,9 +350,77 @@
 				Name="src"
 				>
 				<File
+					RelativePath=".\src\Utility\Hash.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\src\Utility\Timer.cpp"
 					>
 				</File>
+			</Filter>
+			<Filter
+				Name="RTTI"
+				>
+				<Filter
+					Name="inc"
+					>
+					<File
+						RelativePath=".\src\Utility\RTTI\RTTI.h"
+						>
+					</File>
+					<File
+						RelativePath=".\src\Utility\RTTI\RTTIBaseClass.h"
+						>
+					</File>
+					<File
+						RelativePath=".\src\Utility\RTTI\RTTIGlue.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="src"
+					>
+					<File
+						RelativePath=".\src\Utility\RTTI\RTTI.cpp"
+						>
+					</File>
+				</Filter>
+			</Filter>
+			<Filter
+				Name="Properties"
+				>
+				<Filter
+					Name="inc"
+					>
+					<File
+						RelativePath=".\src\Utility\Properties\AbstractProperty.h"
+						>
+					</File>
+					<File
+						RelativePath=".\src\Utility\Properties\Property.h"
+						>
+					</File>
+					<File
+						RelativePath=".\src\Utility\Properties\PropertySystem.h"
+						>
+					</File>
+					<File
+						RelativePath=".\src\Utility\Properties\PropertyTypes.h"
+						>
+					</File>
+					<File
+						RelativePath=".\src\Utility\Properties\TypedProperty.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="src"
+					>
+					<File
+						RelativePath=".\src\Utility\Properties\PropertySystem.cpp"
+						>
+					</File>
+				</Filter>
 			</Filter>
 		</Filter>
 		<Filter

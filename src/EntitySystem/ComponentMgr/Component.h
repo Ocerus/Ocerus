@@ -1,6 +1,8 @@
 #ifndef _COMPONENT_H_
 #define _COMPONENT_H_
 
+#include "../Utility/Properties.h"
+
 namespace EntitySystem
 {
 
@@ -11,7 +13,7 @@ namespace EntitySystem
 
 	/** Abstract class representing one component. All concrete components must derive from this class.
 	*/
-	class Component
+	class Component : public RTTINullClass
 	{
 	public:
 		/// Called after the component is created.
@@ -25,13 +27,13 @@ namespace EntitySystem
 		//TODO add a mechanism to allow components state which resources they will need. This way we could preload them.
 		// But maybe we can just let it to be done by the user by assigning resources to groups.
 
-	protected:
-		friend class ComponentMgr;
-
-		/// We don't want anyone except the CompoenentMgr to create new components.
+		/// We don't want anyone except the ComponentMgr to create new components, but it has to be public cos of RTTI.
 		Component(void);
 		/// Don't forget to override!
 		virtual ~Component(void);
+	protected:
+		friend class ComponentMgr;
+
 	};
 }
 

@@ -65,9 +65,8 @@ namespace ResourceSystem
 
 		/** Retrieves a specified group of resources from the manager. If the group can't be found,
 		    empty vector is returned.
-		    (14.11.2008) Fuco
 		*/
-		std::vector<ResourcePtr> GetResourceGroup(const string& group);
+		void GetResourceGroup(const string& group, std::vector<ResourcePtr>& output);
 
 	private:
 		typedef ResourcePtr (*ResourceCreationMethod)();

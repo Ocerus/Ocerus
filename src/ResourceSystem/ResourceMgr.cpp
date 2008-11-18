@@ -219,18 +219,15 @@ ResourcePtr ResourceMgr::GetResource(const string& group, const string& name)
 	return ri->second;
 }
 
-std::vector<ResourcePtr> ResourceMgr::GetResourceGroup(const string& group)
+void ResourceMgr::GetResourceGroup(const string& group, std::vector<ResourcePtr>& output)
 {
-	std::vector<ResourcePtr> rv; // return vector
-
 	ResourceGroupMap::const_iterator gi = mResourceGroups.find(group);
 	if (gi == mResourceGroups.end())
-		return rv; // empty vector
+		return; // empty vector
 	const ResourceMap& resmap = gi->second;
-	ResourceMap::const_iterator ri = resmap.begin();
-	for (ri; ri != resmap.end(); ri++)
-		rv.push_back(ri->second); 
-	return rv;
+	for (ResourceMap::const_iterator ri = resmap.begin(); ri != resmap.end(); ri++)
+		output.push_back(ri->second); 
+	return;
 }
 
 void ResourceSystem::ResourceMgr::DeleteResource( const string& group, const string& name )

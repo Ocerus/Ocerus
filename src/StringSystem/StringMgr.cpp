@@ -32,11 +32,12 @@ bool StringMgr::LoadDataFromDir(const string& path, const string& includeRegexp,
 	gResourceMgr.LoadResourcesInGroup("strings");
 	
 	gLogMgr.LogMessage("StringMgr: Loading data from resource group ""strings""");
-	std::vector<ResourceSystem::ResourcePtr> ResourceGroup = gResourceMgr.GetResourceGroup("strings");
+	std::vector<ResourceSystem::ResourcePtr> resourceGroup;
+	gResourceMgr.GetResourceGroup("strings", resourceGroup);
 	
 	std::vector<ResourceSystem::ResourcePtr>::iterator it;
 	
-	for (it = ResourceGroup.begin(); it != ResourceGroup.end(); it++)
+	for (it = resourceGroup.begin(); it != resourceGroup.end(); it++)
 	{
 		TextResourcePtr tp = static_cast<TextResourcePtr>(*it);
 		const TextDataMap* dm = tp->GetTextDataMap();
@@ -54,11 +55,12 @@ bool StringMgr::LoadDataFromFile(const string& filepath, ResourceSystem::Resourc
 	gResourceMgr.LoadResourcesInGroup("strings");
 
 	gLogMgr.LogMessage("StringMgr: Loading data from resource group ""strings""");
-	std::vector<ResourceSystem::ResourcePtr> ResourceGroup = gResourceMgr.GetResourceGroup("strings");
+	std::vector<ResourceSystem::ResourcePtr> resourceGroup;
+	gResourceMgr.GetResourceGroup("strings", resourceGroup);
 
 	std::vector<ResourceSystem::ResourcePtr>::iterator it;
 
-	for (it = ResourceGroup.begin(); it != ResourceGroup.end(); it++)
+	for (it = resourceGroup.begin(); it != resourceGroup.end(); it++)
 	{
 		TextResourcePtr tp = static_cast<TextResourcePtr>(*it);
 		const TextDataMap* dm = tp->GetTextDataMap();
