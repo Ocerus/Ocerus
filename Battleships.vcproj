@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="src/Precompiled;externalLibs/boost/inc;externalLibs/hge/include;externalLibs/ois/includes;externalLibs/cegui/include;externalLibs/rudeconfig/include"
+				AdditionalIncludeDirectories="src/Precompiled;externalLibs/boost/inc;externalLibs/hge/include;externalLibs/ois/includes;externalLibs/cegui/include;externalLibs/rudeconfig/include;externalLibs/Box2D/Include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="true"
@@ -127,7 +127,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="externalLibs/boost/inc;externalLibs/hge/include;externalLibs/ois/includes;externalLibs/cegui/include;externalLibs/rudeconfig/include"
+				AdditionalIncludeDirectories="externalLibs/boost/inc;externalLibs/hge/include;externalLibs/ois/includes;externalLibs/cegui/include;externalLibs/rudeconfig/include;externalLibs/Box2D/Include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
@@ -197,7 +197,27 @@
 					Name="inc"
 					>
 					<File
-						RelativePath=".\src\EntitySystem\Components\CmpPlatform.h"
+						RelativePath=".\src\EntitySystem\Components\CmpMaterial.h"
+						>
+					</File>
+					<File
+						RelativePath=".\src\EntitySystem\Components\CmpPlatformLinks.h"
+						>
+					</File>
+					<File
+						RelativePath=".\src\EntitySystem\Components\CmpPlatformParams.h"
+						>
+					</File>
+					<File
+						RelativePath=".\src\EntitySystem\Components\CmpPlatformPhysics.h"
+						>
+					</File>
+					<File
+						RelativePath=".\src\EntitySystem\Components\CmpPlatformStats.h"
+						>
+					</File>
+					<File
+						RelativePath=".\src\EntitySystem\Components\CmpPlatformVisual.h"
 						>
 					</File>
 				</Filter>
@@ -205,7 +225,27 @@
 					Name="src"
 					>
 					<File
-						RelativePath=".\src\EntitySystem\Components\CmpPlatform.cpp"
+						RelativePath=".\src\EntitySystem\Components\CmpMaterial.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\EntitySystem\Components\CmpPlatformLinks.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\EntitySystem\Components\CmpPlatformParams.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\EntitySystem\Components\CmpPlatformPhysics.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\EntitySystem\Components\CmpPlatformStats.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\EntitySystem\Components\CmpPlatformVisual.cpp"
 						>
 					</File>
 				</Filter>

@@ -13,7 +13,7 @@ CRTTI::CRTTI(	uint8 dwStub, ClassID CLID, const char* szClassName, CRTTI* pBaseC
 	m_pObjectFactory( pFactory			)
 {
 	assert( CLID != 0 );
-	assert( strlen(szClassName) <= CLASSNAME_LENGTH );
+	assert( strlen(szClassName) <= CLASSNAME_LENGTH && "Class name too long" );
 	#pragma warning(disable: 4996)
 	strcpy( m_szClassName, szClassName );
 

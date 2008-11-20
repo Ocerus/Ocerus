@@ -29,15 +29,15 @@ namespace EntitySystem
 		~ComponentMgr(void);
 		
 		/// Creates a component and attaches it to an entity.
-		bool CreateComponent(EntityHandle h, const ComponentDescription& desc);
+		bool CreateComponent(EntityHandle h, ComponentDescription& desc);
 		/// Destroys all components of a specified entity.
 		//@{
-		inline void DestroyEntityComponents(EntityHandle h) { DestroyEntityComponents(h.mEntityID); }
+		inline void DestroyEntityComponents(EntityHandle h) { DestroyEntityComponents(h.GetID()); }
 		void DestroyEntityComponents(EntityID id);
 		//@}
 		/// Returns a collection of components (represented by an iterator) of a specified entity.
 		//@{
-		EntityComponentsIterator GetEntityComponents(EntityHandle h) { return GetEntityComponents(h.mEntityID); }
+		EntityComponentsIterator GetEntityComponents(EntityHandle h) { return GetEntityComponents(h.GetID()); }
 		EntityComponentsIterator GetEntityComponents(EntityID id);
 		//@}
 

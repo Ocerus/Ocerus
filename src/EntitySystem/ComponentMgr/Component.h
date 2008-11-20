@@ -17,7 +17,7 @@ namespace EntitySystem
 	{
 	public:
 		/// Called after the component is created.
-		virtual void Init(const ComponentDescription& desc) = 0;
+		virtual void Init(ComponentDescription& desc) = 0;
 		/// Called before the component is destroyed.
 		virtual void Deinit(void) = 0;
 
@@ -32,8 +32,9 @@ namespace EntitySystem
 		/// Don't forget to override!
 		virtual ~Component(void);
 	protected:
-		friend class ComponentMgr;
-
+		
+		/// Helper method for easier Init.
+		void InitProperties(const ComponentDescription& desc);
 	};
 }
 

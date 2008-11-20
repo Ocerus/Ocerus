@@ -6,7 +6,12 @@ namespace EntitySystem
 	/// A set of types of all components in the system.
 	enum eComponentType
 	{
-		CT_PLATFORM = 0,
+		CT_PLATFORM_STATS = 0,
+		CT_PLATFORM_PARAMS,
+		CT_PLATFORM_PHYSICS,
+		CT_PLATFORM_VISUAL,
+		CT_PLATFORM_LINKS,
+		CT_MATERIAL,
 
 		NUM_COMPONENT_TYPES,
 		CT_INVALID

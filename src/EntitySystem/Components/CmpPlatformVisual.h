@@ -1,0 +1,28 @@
+#ifndef CmpPlatformVisual_h__
+#define CmpPlatformVisual_h__
+
+#include "../ComponentMgr/Component.h"
+#include "../Utility/Properties.h"
+#include <vector>
+
+namespace EntitySystem
+{
+	class CmpPlatformVisual : public RTTIGlue<CmpPlatformVisual, Component>
+	{
+	public:
+		static Component* CreateMe(void) { return new CmpPlatformVisual(); }
+
+		virtual void Init( ComponentDescription& desc);
+		virtual void Deinit(void);
+		virtual EntityMessage::eResult HandleMessage(const EntityMessage& msg);
+
+		static void RegisterReflection();
+
+		/// Just to make sure virtual functions work ok.
+		virtual ~CmpPlatformVisual(void) {}
+	private:
+
+	};
+}
+
+#endif // CmpPlatformVisual_h__

@@ -19,6 +19,10 @@ typedef float float32;
 #define	FLOAT32_EPSILON	FLT_EPSILON
 //@}
 
+#include "../Source/Common/b2Math.h"
+
+typedef b2Vec2 Vector2;
+
 #define DYN_NEW new
 #define DYN_NEW_T(T) new T
 #define DYN_DELETE delete

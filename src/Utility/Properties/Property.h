@@ -36,6 +36,7 @@ public:
 	// Determines the value of this property.
 	virtual T		GetValue( RTTIBaseClass* pObject );
 	virtual void	SetValue( RTTIBaseClass* pObject, T Value );
+	inline uint8	GetAccessFlags( void ) const { return m_accessFlags; }
 
 protected:
 

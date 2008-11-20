@@ -32,7 +32,7 @@ namespace EntitySystem
 		/// Destroys a specified entity if it exists.
 		void DestroyEntity(EntityHandle h);
 		/// Posts a message to an entity. It is the only way entities can communicate with each other.
-		inline EntityMessage::eResult PostMessage(EntityHandle h, const EntityMessage& msg) { return PostMessage(h.mEntityID, msg); }
+		inline EntityMessage::eResult PostMessage(EntityHandle h, const EntityMessage& msg) { return PostMessage(h.GetID(), msg); }
 		/// Sends a message to all entities.
 		void BroadcastMessage(const EntityMessage& msg);
 		/// Destroys all entities in the manager.

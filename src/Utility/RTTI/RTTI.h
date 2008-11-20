@@ -21,7 +21,7 @@ typedef RTTIBaseClass*	(*ClassFactoryFunc)( ClassID );
 typedef bool			(*RegisterReflectionFunc)();
 
 //-------------------------------------------------------------------------------------------------
-const uint32 CLASSNAME_LENGTH = 32;
+const uint32 CLASSNAME_LENGTH = 48;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //

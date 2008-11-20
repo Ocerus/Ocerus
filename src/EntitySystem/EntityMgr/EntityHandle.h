@@ -16,8 +16,10 @@ namespace EntitySystem
 	class EntityHandle
 	{
 	public:
+		/// Default ctor will init the handle to an invalid state
+		EntityHandle(void);
 		/// Only copy ctor is enabled. We want new entities to be added only by EntityMgr.
-		EntityHandle(const EntityHandle& handle) { mEntityID = handle.mEntityID; }
+		EntityHandle(const EntityHandle& handle);
 		~EntityHandle(void) {}
 
 		/// Enables comparing handles.
@@ -36,6 +38,8 @@ namespace EntitySystem
 		static EntityHandle CreateUniqueHandle();
 		//@}
 
+		/// Getter
+		EntityID GetID(void);
 		/// ID identifying this entity.
 		EntityID mEntityID;
 		/// Last ID which was assigned to an entity.

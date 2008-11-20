@@ -51,7 +51,7 @@ EntityHandle EntityMgr::CreateEntity(const EntityDescription& desc)
 		bool created = mComponentMgr->CreateComponent(h, **i); // fuj
 		assert(created);
 	}
-	mEntitySet.insert(h.mEntityID);
+	mEntitySet.insert(h.GetID());
 	return h;
 }
 
@@ -60,7 +60,7 @@ void EntityMgr::DestroyEntity(EntityHandle h)
 {
 	assert(mComponentMgr);
 	mComponentMgr->DestroyEntityComponents(h);
-	mEntitySet.erase(h.mEntityID);
+	mEntitySet.erase(h.GetID());
 }
 
 void EntityMgr::DestroyAllEntities()
