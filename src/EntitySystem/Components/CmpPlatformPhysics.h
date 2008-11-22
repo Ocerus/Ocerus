@@ -7,6 +7,7 @@
 /// Forward declarations
 //@{
 class b2Body;
+class b2Shape;
 //@}
 
 namespace EntitySystem
@@ -24,11 +25,14 @@ namespace EntitySystem
 
 		Vector2& GetPosition(void) const;
 		void SetPosition(Vector2& pos);
+		float32 GetAngle(void) const;
+		void SetAngle(const float32 angle);
 
 		/// Just to make sure virtual functions work ok.
 		virtual ~CmpPlatformPhysics(void) {}
 	private:
 		b2Body* mBody;
+		b2Shape* mShape;
 
 	};
 }

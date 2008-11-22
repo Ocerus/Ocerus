@@ -25,8 +25,8 @@ template <class OwnerType, class T> class CProperty : public CTypedProperty<T>
 public:
 
 	//----------------------------------------------------------------------------------------------
-	typedef T		(OwnerType::*GetterType)( void ) const;				// Getter function
-	typedef void	(OwnerType::*SetterType)( T Value );	// Setter function
+	typedef T		(OwnerType::*GetterType)( void ) const;		// Getter function
+	typedef void	(OwnerType::*SetterType)( T Value );		// Setter function
 
 	//----------------------------------------------------------------------------------------------
 	// Constructor. Takes in property's name, getter and setter functions.

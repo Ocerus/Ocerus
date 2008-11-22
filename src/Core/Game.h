@@ -4,6 +4,8 @@
 #include "../Utility/StateMachine.h"
 #include "../Utility/Settings.h"
 
+class b2World;
+
 namespace Core
 {
 	enum eGameState { GS_NORMAL=0 };
@@ -20,6 +22,11 @@ namespace Core
 		void Deinit();
 		void Update(float32 delta);
 		void Draw();
+
+		b2World* GetPhysics(void) const { assert (mPhysics); return mPhysics; }
+
+	private:
+		b2World* mPhysics;
 	};
 }
 

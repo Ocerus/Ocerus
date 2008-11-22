@@ -21,7 +21,7 @@ namespace EntitySystem
 		/// Just to make sure virtual functions work ok.
 		virtual ~CmpPlatformVisual(void) {}
 	private:
-
+		void Draw(void) const;
 	};
 }
 

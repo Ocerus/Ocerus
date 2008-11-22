@@ -107,6 +107,9 @@ struct b2Vec2
 	/// Set this vector to some specified coordinates.
 	void Set(float32 x_, float32 y_) { x = x_; y = y_; }
 
+	/// HRDW: I added this for easier use
+	void Set(const b2Vec2& v) { x = v.x; y = v.y; }
+
 	/// Negate this vector.
 	b2Vec2 operator -() const { b2Vec2 v; v.Set(-x, -y); return v; }
 	

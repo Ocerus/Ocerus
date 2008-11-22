@@ -23,6 +23,7 @@ namespace EntitySystem
 		/// Just to make sure virtual functions work ok.
 		virtual ~CmpPlatformStats(void) {}
 	private:
+		//TODO pokud tu bude jen tenhle field, tak to presunou do jiny komponenty (napr. Logic)
 		uint32 mHitpoints;
 
 	};

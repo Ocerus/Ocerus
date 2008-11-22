@@ -34,8 +34,10 @@ namespace EntitySystem
 		EntityHandle mFirstPlatform;
 		EntityHandle mSecondPlatform;
 		float32 mDetachingChance;
-		std::vector< std::pair<Vector2, Vector2> > mAnchors;
+		typedef std::vector< std::pair<Vector2, Vector2> > AnchorsList;
+		AnchorsList mAnchors;
 
+		void Draw(void) const;
 		void ComputeDetachingChance(void);
 	};
 }

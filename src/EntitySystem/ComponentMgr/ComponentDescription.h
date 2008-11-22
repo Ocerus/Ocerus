@@ -48,7 +48,20 @@ namespace EntitySystem
 		void* mData;	
 		/// For internal security checks.
 		//@{
-		enum eType { TYPE_INT8, TYPE_INT16, TYPE_INT32, TYPE_INT64, TYPE_UINT8, TYPE_UINT16, TYPE_UINT32, TYPE_UINT64, TYPE_FLOAT32, TYPE_ENTITYHANDLE, TYPE_STRING };
+		enum eType 
+		{ 
+			TYPE_INT8,
+			TYPE_INT16, 
+			TYPE_INT32, 
+			TYPE_INT64, 
+			TYPE_UINT8, 
+			TYPE_UINT16,
+			TYPE_UINT32,
+			TYPE_UINT64, 
+			TYPE_FLOAT32, 
+			TYPE_ENTITYHANDLE,
+			TYPE_STRING
+		};
 		eType mType; 
 		//@}
 	};

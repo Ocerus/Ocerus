@@ -10,10 +10,24 @@ namespace EntitySystem
 		enum eResult { RESULT_IGNORED, RESULT_OK, RESULT_ERROR };
 
 		/// Define user types of messages here.
-		enum eType { TYPE_DRAW=0, TYPE_UPDATE_PHYSICS_SERVER, TYPE_UPDATE_PHYSICS_CLIENT, NUM_TYPES };
-		eType type;
+		enum eType
+		{ 
+			TYPE_DRAW=0,
+			TYPE_DRAW_INNER, // used for drawing inner elements of an entity
+			TYPE_UPDATE_PHYSICS_SERVER,
+			TYPE_UPDATE_PHYSICS_CLIENT,
+			TYPE_GET_POSITION,
+			TYPE_GET_ANGLE,
+			TYPE_GET_POLYSHAPE,
+			TYPE_PLATFORM_DETACH,
 
-		EntityMessage(eType _type): type(_type) {}
+			NUM_TYPES
+		};
+		eType type;
+		void* data;
+
+		EntityMessage(eType _type): type(_type), data(0) {}
+		EntityMessage(eType _type, void* _data): type(_type), data(_data) {}
 	};
 }
 

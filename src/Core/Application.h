@@ -73,6 +73,11 @@ namespace Core
 		/// Provides access to the global config functionality.
 		inline Config* GetGlobalConfig(void) const { return mGlobalConfig; }
 
+		/// State getters
+		//@{
+		Game* GetCurrentGame(void) const { assert(mGame); return mGame; }
+		//@}
+
 	private:
 		/// Singletons.
 		//@{

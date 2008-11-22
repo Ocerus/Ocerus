@@ -42,6 +42,7 @@ EntityComponentsIterator ComponentMgr::GetEntityComponents(EntityID id)
 bool ComponentMgr::CreateComponent(EntityHandle h, ComponentDescription& desc)
 {
 	Component* cmp = mComponentCreationMethod[desc.GetType()]();
+	cmp->SetOwner(h);
 	cmp->Init(desc);
 	mEntityComponentsMap[h.GetID()].push_back(cmp);
 	return true;

@@ -78,20 +78,39 @@ namespace GfxSystem
  		bool BeginRendering(void) const;
 		bool EndRendering(void) const;
 
+		inline void SetCameraX(const float32 x) { mCameraX = x; }
+		inline void SetCameraY(const float32 y) { mCameraY = y; }
+		inline void SetCameraPos(const Vector2& pos) { mCameraX = pos.x; mCameraY = pos.y; }
+		inline void SetCameraScale(const float32 s) { mCameraScale = s; }
+		int32 WorldToScreenX(const float32 x) const;
+		int32 WorldToScreenY(const float32 y) const;
+		inline float32 WorldToScreenS(const float32 scale) const { return mCameraScale*scale; }
+		Point WorldToScreen(const Vector2& pos) const;
 
 		bool ClearScreen(const Color& color) const;
 
 		// note that anchor determines the rotation/scaling pivot
 		bool DrawImage(const TexturePtr& image, int32 x, int32 y, uint8 anchor = ANCHOR_VCENTER|ANCHOR_HCENTER, float32 angle = 0.0f, uint8 alpha = 255, float32 scale = 1.0f, int32 width = 0, int32 height = 0, const Rect& textureRect = Rect::NullRect) const;
 		bool DrawImage(const TexturePtr& image, const Point& pos, uint8 anchor = ANCHOR_VCENTER|ANCHOR_HCENTER, float32 angle = 0.0f, uint8 alpha = 255, float32 scale = 1.0f) const;
+		/// This version does a conversion from world space
+		bool DrawImageWithConversion(const TexturePtr& image, const Vector2& pos, uint8 anchor = ANCHOR_VCENTER|ANCHOR_HCENTER, float32 angle = 0.0f, uint8 alpha = 255, float32 scale = 1.0f) const;
+		/// This version is made specially to support GUI
 		bool DrawImage(const TexturePtr& image, const Rect& textureRect, const Rect& destRect, uint8 alpha = 255) const;
 
 		bool DrawLine(int x1, int y1, int x2, int y2, const Pen& pen) const;
 		bool DrawLine(const Point& begin, const Point& end, const Pen& pen) const;
+		/// This version does a conversion from world space
+		bool DrawLineWithConversion(const Vector2& begin, const Vector2& end, const Pen& pen) const;
 
 		bool DrawPolygon(Point* vertices, int vertices_len, const TexturePtr& image, const Pen& outline, float32 angle = 0.0f, uint8 alpha = 255, float32 scale = 1.0f, float32 textureAngle = 0.0f, float32 textureScale = 1.0f) const;
 		bool DrawPolygon(const std::vector<Point>& vertices, const TexturePtr& image, const Pen& outline, float32 angle = 0.0f, uint8 alpha = 255, float32 scale = 1.0f, float32 textureAngle = 0.0f, float32 textureScale = 1.0f) const;
 
+		/// This version does a conversion from world space
+		//TODO dodelat podobne verze DrawPolygon
+		bool DrawPolygonWithConversion(Vector2* vertices, int vertices_len, const Color& fillColor, const Pen& outline = Pen::NullPen) const;
+		
+
+		//TODO proc tu neni outline?
 		bool DrawPolygon(Point* vertices, int vertices_len, const Color& fillColor/*, const Pen& outline*/) const;
 		bool DrawPolygon(const std::vector<Point>& vertices, const Color& fillColor/*, const Pen& outline*/) const;
 
@@ -102,6 +121,9 @@ namespace GfxSystem
 
 	private:
 		HGE* mHGE; 
+		float32 mCameraX;
+		float32 mCameraY;
+		float32 mCameraScale;
 
 		friend class Texture;
 		friend bool HgeExitFunction(void);

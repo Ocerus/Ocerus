@@ -2,6 +2,7 @@
 #define _COMPONENT_H_
 
 #include "../Utility/Properties.h"
+#include "../EntityMgr/EntityHandle.h"
 
 namespace EntitySystem
 {
@@ -10,6 +11,7 @@ namespace EntitySystem
 	//@{
 	class ComponentDescription;
 	struct EntityMessage;
+	//@}
 
 	/** Abstract class representing one component. All concrete components must derive from this class.
 	*/
@@ -24,6 +26,8 @@ namespace EntitySystem
 		/// Called when a new message arrives. To be overriden.
 		virtual EntityMessage::eResult HandleMessage(const EntityMessage& msg);
 
+		inline EntityHandle GetOwner(void) const { return mOwner; }
+
 		//TODO add a mechanism to allow components state which resources they will need. This way we could preload them.
 		// But maybe we can just let it to be done by the user by assigning resources to groups.
 
@@ -35,6 +39,10 @@ namespace EntitySystem
 		
 		/// Helper method for easier Init.
 		void InitProperties(const ComponentDescription& desc);
+	private:
+		EntityHandle mOwner;
+		friend class ComponentMgr;
+		inline void SetOwner(const EntityHandle owner) { mOwner = owner; }
 	};
 }
 
