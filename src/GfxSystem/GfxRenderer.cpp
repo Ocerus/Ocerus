@@ -152,15 +152,19 @@ bool GfxRenderer::DrawLineWithConversion( const Vector2& begin, const Vector2& e
 	return DrawLine(WorldToScreen(begin), WorldToScreen(end), pen);
 }
 
-void InitQuad(hgeQuad& q,const TexturePtr& image, int32 x, int32 y,int32 w,int32 h,uint8 alpha,const Rect& textureRect)
+void InitQuad(hgeQuad& q,const TexturePtr& image, int32 x, int32 y,int32 w,int32 h,uint8 alpha,const Rect& textureRect,uint8 anchor)
 {
-	uint32 col = 0xFFFFFFFF + (alpha << 24);
-
+	// set default of weight and height
 	if (w == 0)
 		w = image->GetWidth();
 	if (h == 0)
 		h = image->GetHeight();
+
+	// set alpha
+	uint32 col = 0xFFFFFFFF + (alpha << 24);
 		
+	/* init texture region */ 
+	// texture width and height
 	float32 tw = (float32) (image->GetWidth());
 	float32 th = (float32) (image->GetHeight());
 
@@ -169,36 +173,52 @@ void InitQuad(hgeQuad& q,const TexturePtr& image, int32 x, int32 y,int32 w,int32
 	if (&textureRect != &Rect::NullRect)		
 		tr = textureRect;
 
-	// set size
-	q.v[0].x = (float32)(x);
-	q.v[0].y = (float32)(y);
+	/* set float position of top left corner minding the anchor */
+	float32 fX = (float32)(x);
+	float32 fY = (float32)(y);
+
+	if (ANCHOR_VCENTER & anchor)
+		fY -= (float32)(h)/2;
+	// anchor top is default value
+	if (ANCHOR_BOTTOM & anchor)
+		fY -= (float32)(h);
+	// anchor left is default value
+	if (ANCHOR_RIGHT & anchor)
+		fX -= (float32)(w);
+	if (ANCHOR_HCENTER & anchor)
+		fX -= (float32)(w)/2;
+
+	/* init vertices - set texture position, position, colour (alpha only) */
+	// z position is 0, because we have 2d world
+	q.v[0].x = fX;
+	q.v[0].y = fY;
 	q.v[0].z = 0;
 	q.v[0].tx = tr.x / tw;
 	q.v[0].ty = tr.y / th;
 	q.v[0].col = col;
 
-	q.v[1].x = (float32)(x+w);
-	q.v[1].y = (float32)(y);
+	q.v[1].x = fX + w;
+	q.v[1].y = fY;
 	q.v[1].z = 0;
 	q.v[1].tx = (tr.x + tr.w) / tw;
 	q.v[1].ty = tr.y / th;
 	q.v[1].col = col;
 
-	q.v[2].x = (float32)(x+w);
-	q.v[2].y = (float32)(y+h);
+	q.v[2].x = fX + w;
+	q.v[2].y = fY + h;
 	q.v[2].z = 0;
 	q.v[2].tx = (tr.x + tr.w) / tw;
 	q.v[2].ty = (tr.y + tr.h) / th;
 	q.v[2].col = col;
 
-	q.v[3].x = (float32)(x);
-	q.v[3].y = (float32)(y+h);
+	q.v[3].x = fX;
+	q.v[3].y = fY + h;
 	q.v[3].z = 0;
 	q.v[3].tx = tr.x / tw;
 	q.v[3].ty = (tr.y + tr.h) / th;
 	q.v[3].col = col;
 
-	// set texture
+	// set quad's texture
 	q.tex = image->GetTexture();
 	q.blend = BLEND_ALPHABLEND | BLEND_COLORMUL | BLEND_ZWRITE;
 }
@@ -211,7 +231,7 @@ bool GfxSystem::GfxRenderer::DrawImage( const TexturePtr& image, int32 x, int32 
 		return false;
 	}
 	hgeQuad q;		
-	InitQuad(q,image,x,y,width,height,alpha,textureRect);
+	InitQuad(q,image,x,y,width,height,alpha,textureRect,anchor);
 
 	mHGE->Gfx_RenderQuad(&q);
 	return true;
@@ -304,7 +324,7 @@ bool GfxSystem::GfxRenderer::DrawPolygon( const std::vector<Point>& vertices, co
 	return false;
 }
 
-bool GfxSystem::GfxRenderer::DrawPolygon( Point* vertices, int vertices_len, const Color& fillColor/*, const Pen& outline  = 0 */) const
+bool GfxSystem::GfxRenderer::DrawPolygon( Point* vertices, int vertices_len, const Color& fillColor, const Pen& outline /* = Pen::NullPen */) const
 {	
 	// init vector
 	std::vector<Point> v;
@@ -312,27 +332,13 @@ bool GfxSystem::GfxRenderer::DrawPolygon( Point* vertices, int vertices_len, con
 		v.push_back(vertices[i]);
 
 	// draw polygon using the method beneath this
-	if (DrawPolygon(v,fillColor))
+	if (DrawPolygon(v,fillColor,outline))
 		return true;
 	else
 		return false;
 }
 
-bool GfxSystem::GfxRenderer::DrawPolygonWithConversion( Vector2* vertices, int vertices_len, const Color& fillColor, const Pen& outline) const
-{	
-	// init vector
-	std::vector<Point> v;
-	for(int i = 0;i < vertices_len;i++)
-		v.push_back(WorldToScreen(vertices[i]));
-
-	// draw polygon using the method beneath this
-	if (DrawPolygon(v,fillColor))
-		return true;
-	else
-		return false;
-}
-
-bool GfxSystem::GfxRenderer::DrawPolygon( const std::vector<Point>& vertices, const Color& fillColor/*, const Pen& outline   = 0 */) const
+bool GfxSystem::GfxRenderer::DrawPolygon( const std::vector<Point>& vertices, const Color& fillColor, const Pen& outline /* = Pen::NullPen */) const
 {	
 	std::vector<Point> triangles;
 	if (createTriangles(vertices,triangles)) // get triangles from points
@@ -358,6 +364,14 @@ bool GfxSystem::GfxRenderer::DrawPolygon( const std::vector<Point>& vertices, co
 			}					
 			++x; // update counter
 		}
+		
+		//draw outline
+		if(&outline != &Pen::NullPen)
+		{
+			for(std::vector<Point>::const_iterator i = vertices.begin();i<vertices.end() - 1;++i)
+				DrawLine(*i, *(i + 1), outline);
+			DrawLine(*(vertices.end() - 1),vertices[0],outline);
+		}
 	}
 	else 
 	{
@@ -366,6 +380,20 @@ bool GfxSystem::GfxRenderer::DrawPolygon( const std::vector<Point>& vertices, co
 	}
 		
 	return true;
+}
+
+bool GfxSystem::GfxRenderer::DrawPolygonWithConversion( Vector2* vertices, int vertices_len, const Color& fillColor, const Pen& outline /* = Pen::NullPen */) const
+{	
+	// init vector
+	std::vector<Point> v;
+	for(int i = 0;i < vertices_len;i++)
+		v.push_back(WorldToScreen(vertices[i]));
+
+	// draw polygon using the method beneath this
+	if (DrawPolygon(v,fillColor,outline))
+		return true;
+	else
+		return false;
 }
 
 int32 GfxSystem::GfxRenderer::WorldToScreenX( const float32 x ) const

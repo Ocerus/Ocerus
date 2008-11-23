@@ -53,11 +53,11 @@ void Core::Game::Update( float32 delta )
 void Core::Game::Draw()
 {
 	gGfxRenderer.ClearScreen(GfxSystem::Color(0,0,0));
-	gGfxRenderer.DrawLine(0,0,100,100,GfxSystem::Pen(GfxSystem::Color(255,0,0)));		
-	gGfxRenderer.DrawImage(gResourceMgr.GetResource("test/zazaka.png"),0, 50,100,0);
-	gGfxRenderer.DrawImage(gResourceMgr.GetResource("test/zazaka.png"),100, 50,100,0,130);
-	GfxSystem::Rect textureRect(20,35,10,10);
-	GfxSystem::Rect destRect(0,200,200,200);
+	gGfxRenderer.DrawLine(0,0,100,100,GfxSystem::Pen(GfxSystem::Color(255,0,0)));	
+	uint8 topLeft = GfxSystem::ANCHOR_TOP | GfxSystem::ANCHOR_LEFT;
+	uint8 centre = GfxSystem::ANCHOR_VCENTER | GfxSystem::ANCHOR_HCENTER;	
+	gGfxRenderer.DrawImage(gResourceMgr.GetResource("test/zazaka.png"),0, 50,topLeft);
+	gGfxRenderer.DrawImage(gResourceMgr.GetResource("test/zazaka.png"),100, 50,centre,0,100);	
 	// creatig pentagon
 	std::vector<GfxSystem::Point> test;
 	test.push_back(GfxSystem::Point(300,300));
@@ -66,6 +66,6 @@ void Core::Game::Draw()
 	test.push_back(GfxSystem::Point(325,450));
 	test.push_back(GfxSystem::Point(250,380));
 	// rendering pentagon
-	gGfxRenderer.DrawPolygon(test,GfxSystem::Color(255,135,0));
+	gGfxRenderer.DrawPolygon(test,GfxSystem::Color(255,135,0),GfxSystem::Pen(GfxSystem::Color(255,255,255)));
 }
 

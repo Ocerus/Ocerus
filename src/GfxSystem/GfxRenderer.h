@@ -104,15 +104,13 @@ namespace GfxSystem
 
 		bool DrawPolygon(Point* vertices, int vertices_len, const TexturePtr& image, const Pen& outline, float32 angle = 0.0f, uint8 alpha = 255, float32 scale = 1.0f, float32 textureAngle = 0.0f, float32 textureScale = 1.0f) const;
 		bool DrawPolygon(const std::vector<Point>& vertices, const TexturePtr& image, const Pen& outline, float32 angle = 0.0f, uint8 alpha = 255, float32 scale = 1.0f, float32 textureAngle = 0.0f, float32 textureScale = 1.0f) const;
+		
+		bool DrawPolygon(Point* vertices, int vertices_len, const Color& fillColor, const Pen& outline = Pen::NullPen) const;
+		bool DrawPolygon(const std::vector<Point>& vertices, const Color& fillColor, const Pen& outline = Pen::NullPen) const;
 
 		/// This version does a conversion from world space
 		//TODO dodelat podobne verze DrawPolygon
-		bool DrawPolygonWithConversion(Vector2* vertices, int vertices_len, const Color& fillColor, const Pen& outline = Pen::NullPen) const;
-		
-
-		//TODO proc tu neni outline?
-		bool DrawPolygon(Point* vertices, int vertices_len, const Color& fillColor/*, const Pen& outline*/) const;
-		bool DrawPolygon(const std::vector<Point>& vertices, const Color& fillColor/*, const Pen& outline*/) const;
+		bool DrawPolygonWithConversion(Vector2* vertices, int vertices_len, const Color& fillColor, const Pen& outline = Pen::NullPen = Pen::NullPen) const;
 
 		//TODO add font param
 		//bool DrawText(const string& str, font, int32 x, int32 y, uint8 anchor = ANCHOR_VCENTER|ANCHOR_HCENTER, float32 angle = 0.0f, uint8 alpha = 255);
