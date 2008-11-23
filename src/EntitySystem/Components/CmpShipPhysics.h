@@ -17,7 +17,7 @@ namespace EntitySystem
 		virtual void Deinit(void);
 		virtual EntityMessage::eResult HandleMessage(const EntityMessage& msg);
 
-		static void RegisterReflection();
+		static void RegisterReflection(void);
 
 		/// Just to make sure virtual functions work ok.
 		virtual ~CmpShipPhysics(void) {}

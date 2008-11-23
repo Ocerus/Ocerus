@@ -4,17 +4,34 @@
 
 using namespace EntitySystem;
 
-EntityDescription::EntityDescription(): mIndex(0) {}
+EntityDescription::EntityDescription() 
+{
+	Reset();
+}
 
 EntityDescription::~EntityDescription()
 {
-	for (ComponentDescriptionsList::const_iterator iter = mComponentDescriptions.begin(); iter!=mComponentDescriptions.end(); ++iter)
-		DYN_DELETE (*iter);
+	Clear();
 }
 
-void EntityDescription::AddComponentDescription(ComponentDescription* desc)
+void EntityDescription::Clear(void)
 {
-	mComponentDescriptions.push_back(desc);
+	for (ComponentDescriptionsList::const_iterator iter = mComponentDescriptions.begin(); iter!=mComponentDescriptions.end(); ++iter)
+		DYN_DELETE (*iter);
+	mComponentDescriptions.clear();
+}
+
+void EntityDescription::Reset(void)
+{
+	Clear();
+	mIndex = 0;
+}
+
+void EntityDescription::AddComponentDescription(ComponentDescription& desc)
+{
+	assert(desc.GetType() != CT_INVALID && "Invalid component description type");
+	mComponentDescriptions.push_back(DYN_NEW ComponentDescription(desc.GetType(), desc.GetItems()));
+	desc.Invalidate();
 }
 
 ComponentDescription* EntityDescription::GetNextComponentDescription()

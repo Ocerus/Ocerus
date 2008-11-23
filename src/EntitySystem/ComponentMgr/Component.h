@@ -3,6 +3,7 @@
 
 #include "../Utility/Properties.h"
 #include "../EntityMgr/EntityHandle.h"
+#include "ComponentDescriptionItem.h"
 
 namespace EntitySystem
 {
@@ -26,7 +27,11 @@ namespace EntitySystem
 		/// Called when a new message arrives. To be overriden.
 		virtual EntityMessage::eResult HandleMessage(const EntityMessage& msg);
 
+		/// Returns a handle to the owner of this component (an entity). It returns a reference cos we need sometimes a pointer to the handle.
+		//@{
 		inline EntityHandle GetOwner(void) const { return mOwner; }
+		inline EntityHandle* GetOwnerPtr(void) { return &mOwner; }
+		//@}
 
 		//TODO add a mechanism to allow components state which resources they will need. This way we could preload them.
 		// But maybe we can just let it to be done by the user by assigning resources to groups.

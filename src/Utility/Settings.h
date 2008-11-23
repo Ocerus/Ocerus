@@ -2,6 +2,7 @@
 #define _SETTINGS_H_
 
 #include <assert.h>
+#include "../Source/Common/b2Math.h"
 
 /// Global basic types. Only these should be used.
 //@{
@@ -17,30 +18,25 @@ typedef float float32;
 #define	FLOAT32_MAX	FLT_MAX
 #define	FLOAT32_MIN	FLT_MIN
 #define	FLOAT32_EPSILON	FLT_EPSILON
+typedef b2Vec2 Vector2;
+typedef b2Mat22 Matrix22;
+typedef b2XForm XForm;
 //@}
 
-#include "../Source/Common/b2Math.h"
-
-typedef b2Vec2 Vector2;
-
+/// Allocation.
 #define DYN_NEW new
 #define DYN_NEW_T(T) new T
 #define DYN_DELETE delete
 #define DYN_DELETE_ARRAY delete[]
 
+
+/// Math.
+#include "MathUtils.h"
+
+
+/// Streams.
 #include <string>
 #include <ios>
-//TODO zmenit na math.h a double nahradit float32
-#include <cmath>
-
-inline uint32 round(double num) {
-  return static_cast<uint32>(floor(num+0.5));
-}
-
-inline uint32 round(float32 num) {
-  return static_cast<uint32>(floor(num+0.5));
-}
-
 typedef std::string string;
 typedef std::istream InputStream;
 enum eInputStreamMode { ISM_TEXT, ISM_BINARY };

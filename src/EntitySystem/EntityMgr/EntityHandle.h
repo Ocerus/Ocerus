@@ -25,6 +25,9 @@ namespace EntitySystem
 		/// Enables comparing handles.
 		EntityHandle& operator=(const EntityHandle& rhs);
 
+		/// Returns true if this handle is valid (not null).
+		bool IsValid(void) const { return mEntityID != 0; }
+
 		//TODO possibility to add helper methods for accessing components or sending messages
 		//TODO possibly we could add a smartpointer to EntityNode holding this Handle
 

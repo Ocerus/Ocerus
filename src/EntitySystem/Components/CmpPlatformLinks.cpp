@@ -6,8 +6,8 @@ using namespace EntitySystem;
 
 void EntitySystem::CmpPlatformLinks::Init( ComponentDescription& desc )
 {
-	SetFirstPlatform(desc.GetNextItem()->GetEntityHandle());
-	SetSecondPlatform(desc.GetNextItem()->GetEntityHandle());
+	SetFirstPlatform(desc.GetNextItem()->GetData<EntityHandle>());
+	SetSecondPlatform(desc.GetNextItem()->GetData<EntityHandle>());
 	ComputeDetachingChance();
 	//TODO vytvorit linky
 }
@@ -21,7 +21,7 @@ EntityMessage::eResult EntitySystem::CmpPlatformLinks::HandleMessage( const Enti
 {
 	switch(msg.type)
 	{
-	case EntityMessage::TYPE_DRAW:
+	case EntityMessage::TYPE_DRAW_INNER:
 		Draw();
 		return EntityMessage::RESULT_OK;
 	}

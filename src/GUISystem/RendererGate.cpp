@@ -37,17 +37,17 @@ namespace GUISystem {
 
 	// add's a quad to the list to be rendered
 	void RendererGate::addQuad(const CEGUI::Rect& dest_rect, float z, const CEGUI::Texture* tex,
-			const CEGUI::Rect& texture_rect, const CEGUI::ColourRect& colours, CEGUI::QuadSplitMode quad_split_mode) {		
-
-		GfxSystem::Rect conv_dest_rect(round(dest_rect.d_left), round(dest_rect.d_top),
-			round(dest_rect.getWidth()), round(dest_rect.getHeight()));
+			const CEGUI::Rect& texture_rect, const CEGUI::ColourRect& colours, CEGUI::QuadSplitMode quad_split_mode) 
+	{		
+		GfxSystem::Rect conv_dest_rect(MathUtils::Round(dest_rect.d_left), MathUtils::Round(dest_rect.d_top),
+			MathUtils::Round(dest_rect.getWidth()), MathUtils::Round(dest_rect.getHeight()));
 		GfxSystem::TexturePtr conv_tex = ((CEGUITextureWrapper*)tex)->getTexture();
 		GfxSystem::Rect conv_texture_rect;
 
-		conv_texture_rect.x = (texture_rect.d_left != HUGE_VAL)?round(texture_rect.d_left*conv_tex->GetWidth()):0;
-		conv_texture_rect.y = (texture_rect.d_top != HUGE_VAL)?round(texture_rect.d_top*conv_tex->GetHeight()):0;
-		conv_texture_rect.w = (texture_rect.d_right != HUGE_VAL)?round(texture_rect.d_right*conv_tex->GetWidth() - texture_rect.d_left*conv_tex->GetWidth()):conv_tex->GetWidth();
-		conv_texture_rect.h = (texture_rect.d_bottom != HUGE_VAL)?round(texture_rect.d_bottom*conv_tex->GetHeight() - texture_rect.d_top*conv_tex->GetHeight()):conv_tex->GetHeight();
+		conv_texture_rect.x = (texture_rect.d_left != HUGE_VAL)?MathUtils::Round(texture_rect.d_left*conv_tex->GetWidth()):0;
+		conv_texture_rect.y = (texture_rect.d_top != HUGE_VAL)?MathUtils::Round(texture_rect.d_top*conv_tex->GetHeight()):0;
+		conv_texture_rect.w = (texture_rect.d_right != HUGE_VAL)?MathUtils::Round(texture_rect.d_right*conv_tex->GetWidth() - texture_rect.d_left*conv_tex->GetWidth()):conv_tex->GetWidth();
+		conv_texture_rect.h = (texture_rect.d_bottom != HUGE_VAL)?MathUtils::Round(texture_rect.d_bottom*conv_tex->GetHeight() - texture_rect.d_top*conv_tex->GetHeight()):conv_tex->GetHeight();
 
 		if (mQueueing)
 			mQuads.push_back(Quad_info(conv_dest_rect, z, conv_tex, conv_texture_rect));

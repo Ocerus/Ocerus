@@ -110,7 +110,7 @@ namespace GfxSystem
 
 		/// This version does a conversion from world space
 		//TODO dodelat podobne verze DrawPolygon
-		bool DrawPolygonWithConversion(Vector2* vertices, int vertices_len, const Color& fillColor, const Pen& outline = Pen::NullPen = Pen::NullPen) const;
+		bool DrawPolygonWithConversion(const Vector2* vertices, int vertices_len, const Vector2& offsetPosition, const float32 offsetAngle, const Color& fillColor, const Pen& outline = Pen::NullPen) const;
 
 		//TODO add font param
 		//bool DrawText(const string& str, font, int32 x, int32 y, uint8 anchor = ANCHOR_VCENTER|ANCHOR_HCENTER, float32 angle = 0.0f, uint8 alpha = 255);

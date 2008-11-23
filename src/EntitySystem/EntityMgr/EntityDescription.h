@@ -21,8 +21,11 @@ namespace EntitySystem
 		EntityDescription(void);
 		~EntityDescription(void);
 
+		/// Call this before each subsequent filling of the description.
+		void Reset(void);
+
 		/// Add new component descriptions using this method.
-		void AddComponentDescription(ComponentDescription* desc);
+		void AddComponentDescription(ComponentDescription& desc);
 
 		/// For internal use by the ComponentMgr.
 		ComponentDescription* GetNextComponentDescription(void);
@@ -34,6 +37,9 @@ namespace EntitySystem
 		ComponentDescriptionsList mComponentDescriptions;
 		/// Index of current component description.
 		uint32 mIndex;
+
+		/// Clears everything
+		void Clear(void);
 	};
 }
 

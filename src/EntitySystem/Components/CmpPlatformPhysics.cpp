@@ -2,14 +2,68 @@
 #include "CmpPlatformPhysics.h"
 #include "Box2D.h"
 #include "../../Utility/DataContainer.h"
+#include "../../Core/Game.h"
 
 using namespace EntitySystem;
-
 
 void EntitySystem::CmpPlatformPhysics::Init( ComponentDescription& desc )
 {
 	mBody = 0;
 	mShape = 0;
+	EntityHandle ship;
+	gEntityMgr.PostMessage(GetOwner(), EntityMessage(EntityMessage::TYPE_GET_PARENT, &ship));
+
+	// create body
+	if (ship.IsValid())
+	{
+		gEntityMgr.PostMessage(ship, EntityMessage(EntityMessage::TYPE_GET_PHYSICS_BODY, &mBody));
+	}
+	else
+	{
+		b2BodyDef bodyDef;
+		bodyDef.position = desc.GetNextItem()->GetData<Vector2>();
+		bodyDef.angle = desc.GetNextItem()->GetData<float32>();
+		bodyDef.userData = GetOwnerPtr();
+		mBody = gApp.GetCurrentGame()->GetPhysics()->CreateBody(&bodyDef);
+	}
+
+	// create shape
+	b2PolygonDef shapeDef;
+	EntityHandle blueprints;
+	gEntityMgr.PostMessage(GetOwner(), EntityMessage(EntityMessage::TYPE_GET_BLUEPRINTS, &blueprints));
+	EntityHandle material;
+	gEntityMgr.PostMessage(blueprints, EntityMessage(EntityMessage::TYPE_GET_MATERIAL, &material));
+	// set density
+	float32 density;
+	gEntityMgr.PostMessage(blueprints, EntityMessage(EntityMessage::TYPE_GET_DENSITY, &density));
+	shapeDef.density = density;
+	// retrieve original shape
+	DataContainer cont;
+	gEntityMgr.PostMessage(blueprints, EntityMessage(EntityMessage::TYPE_GET_POLYSHAPE, &cont));
+	Vector2* poly = (Vector2*)cont.GetData();
+	uint32 polyLen = cont.GetSize();
+	// retrieve shape transformation info
+	Vector2 relPos = b2Vec2_zero;
+	if (ship.IsValid())
+		relPos = desc.GetNextItem()->GetData<Vector2>();
+	bool flip = desc.GetNextItem()->GetData<bool>();
+	float32 angle = desc.GetNextItem()->GetData<float32>();
+	b2XForm xform(relPos, b2Mat22(angle));
+	// create the shape
+	for (uint32 i=0; i<polyLen; ++i)
+	{
+		Vector2 vec = poly[i];
+		if (flip)
+		{
+			vec.x = -vec.x;
+			vec.y = -vec.y;
+		}
+		shapeDef.vertices[shapeDef.vertexCount++] = b2Mul(xform, vec);
+	}
+	// set the entity handle so that we can identify the shape later
+	shapeDef.userData = GetOwnerPtr();
+
+	mShape = mBody->CreateShape(&shapeDef);
 }
 
 void EntitySystem::CmpPlatformPhysics::Deinit( void )

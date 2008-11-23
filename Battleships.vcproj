@@ -289,6 +289,10 @@
 						>
 					</File>
 					<File
+						RelativePath=".\src\EntitySystem\ComponentMgr\ComponentDescriptionItem.h"
+						>
+					</File>
+					<File
 						RelativePath=".\src\EntitySystem\ComponentMgr\ComponentEnums.h"
 						>
 					</File>
@@ -382,6 +386,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\Utility\MathUtils.h"
+					>
+				</File>
+				<File
 					RelativePath=".\src\Utility\Properties.h"
 					>
 				</File>
@@ -415,6 +423,10 @@
 				>
 				<File
 					RelativePath=".\src\Utility\Hash.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Utility\MathUtils.cpp"
 					>
 				</File>
 				<File

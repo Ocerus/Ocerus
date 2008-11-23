@@ -16,7 +16,7 @@ namespace EntitySystem
 		virtual void Deinit(void);
 		virtual EntityMessage::eResult HandleMessage(const EntityMessage& msg);
 
-		static void RegisterReflection();
+		static void RegisterReflection(void);
 
 		EntityHandle GetFirstPlatform(void) const { return mFirstPlatform; }
 		void SetFirstPlatform(const EntityHandle first) { mFirstPlatform = first; }

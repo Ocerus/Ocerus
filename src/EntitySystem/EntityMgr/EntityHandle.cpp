@@ -3,7 +3,7 @@
 
 using namespace EntitySystem;
 
-EntityID EntityHandle::sLastID = 1;
+EntityID EntityHandle::sLastID = 0;
 
 EntityHandle& EntityHandle::operator=(const EntityHandle& rhs)
 { 

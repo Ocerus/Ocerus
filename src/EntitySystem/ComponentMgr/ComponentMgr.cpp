@@ -9,6 +9,9 @@
 #include "../Components/CmpPlatformPhysics.h"
 #include "../Components/CmpPlatformStats.h"
 #include "../Components/CmpPlatformVisual.h"
+#include "../Components/CmpShipLogic.h"
+#include "../Components/CmpShipPhysics.h"
+#include "../Components/CmpShipVisual.h"
 
 using namespace EntitySystem;
 
@@ -23,6 +26,9 @@ ComponentMgr::ComponentMgr()
 	mComponentCreationMethod[CT_PLATFORM_PHYSICS] = CmpPlatformPhysics::CreateMe;
 	mComponentCreationMethod[CT_PLATFORM_STATS] = CmpPlatformStats::CreateMe;
 	mComponentCreationMethod[CT_PLATFORM_VISUAL] = CmpPlatformVisual::CreateMe;
+	mComponentCreationMethod[CT_SHIP_LOGIC] = CmpShipLogic::CreateMe;
+	mComponentCreationMethod[CT_SHIP_PHYSICS] = CmpShipPhysics::CreateMe;
+	mComponentCreationMethod[CT_SHIP_VISUAL] = CmpShipVisual::CreateMe;
 
 	assert(mComponentCreationMethod[NUM_COMPONENT_TYPES-1]);
 }
@@ -41,6 +47,7 @@ EntityComponentsIterator ComponentMgr::GetEntityComponents(EntityID id)
 
 bool ComponentMgr::CreateComponent(EntityHandle h, ComponentDescription& desc)
 {
+	assert(desc.GetType() < NUM_COMPONENT_TYPES && desc.GetType() >= 0);
 	Component* cmp = mComponentCreationMethod[desc.GetType()]();
 	cmp->SetOwner(h);
 	cmp->Init(desc);

@@ -19,6 +19,17 @@ EntityMessage::eResult EntitySystem::CmpPlatformVisual::HandleMessage( const Ent
 	switch(msg.type)
 	{
 	case EntityMessage::TYPE_DRAW:
+		{
+			EntityHandle ship;
+			gEntityMgr.PostMessage(GetOwner(), EntityMessage(EntityMessage::TYPE_GET_PARENT, &ship));
+			if (!ship.IsValid())
+			{
+				Draw();
+				return EntityMessage::RESULT_OK;
+			}
+		}
+		return EntityMessage::RESULT_IGNORED;
+	case EntityMessage::TYPE_DRAW_INNER:
 		Draw();
 		return EntityMessage::RESULT_OK;
 	}
@@ -34,5 +45,9 @@ void EntitySystem::CmpPlatformVisual::Draw( void ) const
 {
 	DataContainer cont;
 	gEntityMgr.PostMessage(GetOwner(), EntityMessage(EntityMessage::TYPE_GET_POLYSHAPE, &cont));
-	gGfxRenderer.DrawPolygonWithConversion((Vector2*)cont.GetData(), cont.GetSize(), GfxSystem::Color(0,255,0));
+	Vector2 pos;
+	gEntityMgr.PostMessage(GetOwner(), EntityMessage(EntityMessage::TYPE_GET_POSITION, &pos));
+	float32 angle;
+	gEntityMgr.PostMessage(GetOwner(), EntityMessage(EntityMessage::TYPE_GET_ANGLE, &angle));
+	gGfxRenderer.DrawPolygonWithConversion((Vector2*)cont.GetData(), cont.GetSize(), pos, angle, GfxSystem::Color(0,255,0));
 }

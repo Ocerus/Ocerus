@@ -3,9 +3,15 @@
 
 #include "../ComponentMgr/Component.h"
 #include "../Utility/Properties.h"
+#include "../Utility/Settings.h"
+#include <vector>
 
 namespace EntitySystem
 {
+	#define HITPOINTS_RATIO 1.0f
+	#define SLOTS_RATIO 1.0f
+	#define LINKSLOTS_RATIO 1.0f
+
 	class CmpPlatformParams : public RTTIGlue<CmpPlatformParams, Component>
 	{
 	public:
@@ -15,7 +21,7 @@ namespace EntitySystem
 		virtual void Deinit(void);
 		virtual EntityMessage::eResult HandleMessage(const EntityMessage& msg);
 
-		static void RegisterReflection();
+		static void RegisterReflection(void);
 
 		EntityHandle GetMaterial(void) const { return mMaterial; }
 		void SetMaterial(const EntityHandle mat) { mMaterial = mat; }
@@ -31,6 +37,10 @@ namespace EntitySystem
 		void SetMass(const float32 mass) { mMass = mass; }
 		float32 GetBaseDetachingChance(void) const { return mBaseDetachingChance; }
 		void SetBaseDetachingChance(const float32 chance) { mBaseDetachingChance = chance; }
+		uint32 GetShapeLength(void) const { return mShapeLength; }
+		void SetShapeLength(const uint32 len) { mShapeLength = len; }
+		Vector2* GetShape(void) const { return mShape; }
+		void SetShape(Vector2* shape);
 
 		/// Just to make sure virtual functions work ok.
 		virtual ~CmpPlatformParams(void) {}
@@ -42,7 +52,10 @@ namespace EntitySystem
 		float32 mArea;
 		float32 mMass;
 		float32 mBaseDetachingChance;
-
+		uint32 mShapeLength;
+		Vector2* mShape;
+			
+		void ComputeParams(void);
 	};
 }
 

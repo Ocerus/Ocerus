@@ -37,7 +37,7 @@ namespace GfxSystem
 GfxRenderer::GfxRenderer(const Point& resolution, bool fullscreen):
 	mCameraX(0),
 	mCameraY(0),
-	mCameraScale(1.0f),
+	mCameraScale(50.0f),
 	mHGE(0)
 {
 	gLogMgr.LogMessage("*** GfxRenderer init ***");
@@ -272,7 +272,7 @@ bool createTriangles(const std::vector<Point>& vertices,std::vector<Point>& tria
 	Vector2dVector result;
 	if (Triangulate::Process(a,result))
 		for(std::vector<Vector2d>::const_iterator i = result.begin();i != result.end();++i)
-			triangles.push_back(Point(round(i->GetX()),round(i->GetY())));
+			triangles.push_back(Point(MathUtils::Round(i->GetX()),MathUtils::Round(i->GetY())));
 	else
 		return false;
 
@@ -338,7 +338,22 @@ bool GfxSystem::GfxRenderer::DrawPolygon( Point* vertices, int vertices_len, con
 		return false;
 }
 
-bool GfxSystem::GfxRenderer::DrawPolygon( const std::vector<Point>& vertices, const Color& fillColor, const Pen& outline /* = Pen::NullPen */) const
+bool GfxSystem::GfxRenderer::DrawPolygonWithConversion( const Vector2* vertices, int vertices_len, const Vector2& offsetPosition, const float32 offsetAngle, const Color& fillColor, const Pen& outline) const
+{	
+	// init vector
+	std::vector<Point> v;
+	XForm xf(offsetPosition, Matrix22(offsetAngle));
+	for(int i = 0;i < vertices_len;i++)
+		v.push_back(WorldToScreen(MathUtils::Multiply(xf, vertices[i])));
+
+	// draw polygon using the method beneath this
+	if (DrawPolygon(v,fillColor))
+		return true;
+	else
+		return false;
+}
+
+bool GfxSystem::GfxRenderer::DrawPolygon( const std::vector<Point>& vertices, const Color& fillColor, const Pen& outline) const
 {	
 	std::vector<Point> triangles;
 	if (createTriangles(vertices,triangles)) // get triangles from points
@@ -380,20 +395,6 @@ bool GfxSystem::GfxRenderer::DrawPolygon( const std::vector<Point>& vertices, co
 	}
 		
 	return true;
-}
-
-bool GfxSystem::GfxRenderer::DrawPolygonWithConversion( Vector2* vertices, int vertices_len, const Color& fillColor, const Pen& outline /* = Pen::NullPen */) const
-{	
-	// init vector
-	std::vector<Point> v;
-	for(int i = 0;i < vertices_len;i++)
-		v.push_back(WorldToScreen(vertices[i]));
-
-	// draw polygon using the method beneath this
-	if (DrawPolygon(v,fillColor,outline))
-		return true;
-	else
-		return false;
 }
 
 int32 GfxSystem::GfxRenderer::WorldToScreenX( const float32 x ) const

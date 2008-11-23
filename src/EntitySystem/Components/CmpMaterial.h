@@ -15,7 +15,7 @@ namespace EntitySystem
 		virtual void Deinit(void);
 		virtual EntityMessage::eResult HandleMessage(const EntityMessage& msg);
 
-		static void RegisterReflection();
+		static void RegisterReflection(void);
 
 		float32 GetDurabilityRatio(void) const { return mDurabilityRatio; }
 		void SetDurabilityRatio(const float32 ratio) { mDurabilityRatio = ratio; }
