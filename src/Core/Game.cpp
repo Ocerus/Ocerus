@@ -65,7 +65,55 @@ void Core::Game::Init()
 	entityDesc.AddComponentDescription(compDesc);
 	EntitySystem::EntityHandle platform0 = gEntityMgr.CreateEntity(entityDesc);
 
-	// create a ships
+	// create a ship
+	entityDesc.Reset();
+	compDesc.Init(EntitySystem::CT_SHIP_LOGIC);
+	entityDesc.AddComponentDescription(compDesc);
+	compDesc.Init(EntitySystem::CT_SHIP_PHYSICS);
+	// body position and angle
+	compDesc.AddItem(Vector2(20.0f,20.0f));
+	compDesc.AddItem(0.0f);
+	entityDesc.AddComponentDescription(compDesc);
+	compDesc.Init(EntitySystem::CT_SHIP_VISUAL);
+	entityDesc.AddComponentDescription(compDesc);
+	EntitySystem::EntityHandle ship0 = gEntityMgr.CreateEntity(entityDesc);
+
+	// create a platform and attach it to the ship
+	entityDesc.Reset();
+	compDesc.Init(EntitySystem::CT_PLATFORM_STATS);
+	compDesc.AddItem(platformType0); // blueprints
+	compDesc.AddItem(ship0); // pass our ship
+	entityDesc.AddComponentDescription(compDesc);
+	compDesc.Init(EntitySystem::CT_PLATFORM_PHYSICS);
+	// pass position relative to the ship center
+	compDesc.AddItem(Vector2(0.0f,-1.0f));
+	// pass additional shape info
+	compDesc.AddItem(false); // flip the shape?
+	compDesc.AddItem(0.0f); // shape angle relative to original shape
+	entityDesc.AddComponentDescription(compDesc);
+	compDesc.Init(EntitySystem::CT_PLATFORM_VISUAL);
+	entityDesc.AddComponentDescription(compDesc);
+	EntitySystem::EntityHandle platform1 = gEntityMgr.CreateEntity(entityDesc);
+
+	// create another platform and attach it to the ship
+	entityDesc.Reset();
+	compDesc.Init(EntitySystem::CT_PLATFORM_STATS);
+	compDesc.AddItem(platformType0); // blueprints
+	compDesc.AddItem(ship0); // pass our ship
+	entityDesc.AddComponentDescription(compDesc);
+	compDesc.Init(EntitySystem::CT_PLATFORM_PHYSICS);
+	// pass position relative to the ship center
+	compDesc.AddItem(Vector2(0.0f,1.0f));
+	// pass additional shape info
+	compDesc.AddItem(true); // flip the shape?
+	compDesc.AddItem(0.0f); // shape angle relative to original shape
+	entityDesc.AddComponentDescription(compDesc);
+	compDesc.Init(EntitySystem::CT_PLATFORM_VISUAL);
+	entityDesc.AddComponentDescription(compDesc);
+	EntitySystem::EntityHandle platform2 = gEntityMgr.CreateEntity(entityDesc);
+
+
+
 
 
 	gResourceMgr.AddResourceFileToGroup("zazaka.png", "test");

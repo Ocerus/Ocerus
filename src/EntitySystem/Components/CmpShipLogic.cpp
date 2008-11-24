@@ -19,10 +19,10 @@ EntityMessage::eResult EntitySystem::CmpShipLogic::HandleMessage( const EntityMe
 	switch (msg.type)
 	{
 	case EntityMessage::TYPE_DRAW:
-		for (EntityList::const_iterator i=mPlatforms.begin(); i!=mPlatforms.end(); ++i)
-			gEntityMgr.PostMessage(*i, EntityMessage::TYPE_DRAW_INNER);
-		for (EntityList::const_iterator i=mLinks.begin(); i!=mLinks.end(); ++i)
-			gEntityMgr.PostMessage(*i, EntityMessage::TYPE_DRAW_INNER);
+		for (EntityList::iterator i=mPlatforms.begin(); i!=mPlatforms.end(); ++i)
+			i->PostMessage(EntityMessage::TYPE_DRAW_INNER);
+		for (EntityList::iterator i=mLinks.begin(); i!=mLinks.end(); ++i)
+			i->PostMessage(EntityMessage::TYPE_DRAW_INNER);
 		return EntityMessage::RESULT_OK;
 	}
 	return EntityMessage::RESULT_IGNORED;

@@ -28,3 +28,9 @@ EntitySystem::EntityID EntitySystem::EntityHandle::GetID( void )
 	assert(mEntityID && "Invalid entity handle");
 	return mEntityID;
 }
+
+EntityMessage::eResult EntityHandle::PostMessage(const EntityMessage::eType type, void* data)
+{
+	assert(IsValid());
+	return gEntityMgr.PostMessage(*this, EntityMessage(type, data));
+}

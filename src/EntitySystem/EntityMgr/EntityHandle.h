@@ -2,6 +2,7 @@
 #define _ENTITYHANDLE_H_
 
 #include "../../Utility/Settings.h"
+#include "EntityMessage.h"
 
 namespace EntitySystem
 {
@@ -28,7 +29,9 @@ namespace EntitySystem
 		/// Returns true if this handle is valid (not null).
 		bool IsValid(void) const { return mEntityID != 0; }
 
-		//TODO possibility to add helper methods for accessing components or sending messages
+		/// Sends a message to this entity
+		EntityMessage::eResult PostMessage(const EntityMessage::eType type, void* data = 0);
+
 		//TODO possibly we could add a smartpointer to EntityNode holding this Handle
 
 	private:

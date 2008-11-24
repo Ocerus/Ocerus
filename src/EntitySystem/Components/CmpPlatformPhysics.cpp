@@ -11,12 +11,12 @@ void EntitySystem::CmpPlatformPhysics::Init( ComponentDescription& desc )
 	mBody = 0;
 	mShape = 0;
 	EntityHandle ship;
-	gEntityMgr.PostMessage(GetOwner(), EntityMessage(EntityMessage::TYPE_GET_PARENT, &ship));
+	GetOwner().PostMessage(EntityMessage::TYPE_GET_PARENT, &ship);
 
 	// create body
 	if (ship.IsValid())
 	{
-		gEntityMgr.PostMessage(ship, EntityMessage(EntityMessage::TYPE_GET_PHYSICS_BODY, &mBody));
+		ship.PostMessage(EntityMessage::TYPE_GET_PHYSICS_BODY, &mBody);
 	}
 	else
 	{
@@ -30,16 +30,16 @@ void EntitySystem::CmpPlatformPhysics::Init( ComponentDescription& desc )
 	// create shape
 	b2PolygonDef shapeDef;
 	EntityHandle blueprints;
-	gEntityMgr.PostMessage(GetOwner(), EntityMessage(EntityMessage::TYPE_GET_BLUEPRINTS, &blueprints));
+	GetOwner().PostMessage(EntityMessage::TYPE_GET_BLUEPRINTS, &blueprints);
 	EntityHandle material;
-	gEntityMgr.PostMessage(blueprints, EntityMessage(EntityMessage::TYPE_GET_MATERIAL, &material));
+	blueprints.PostMessage(EntityMessage::TYPE_GET_MATERIAL, &material);
 	// set density
 	float32 density;
-	gEntityMgr.PostMessage(blueprints, EntityMessage(EntityMessage::TYPE_GET_DENSITY, &density));
+	material.PostMessage(EntityMessage::TYPE_GET_DENSITY, &density);
 	shapeDef.density = density;
 	// retrieve original shape
 	DataContainer cont;
-	gEntityMgr.PostMessage(blueprints, EntityMessage(EntityMessage::TYPE_GET_POLYSHAPE, &cont));
+	blueprints.PostMessage(EntityMessage::TYPE_GET_POLYSHAPE, &cont);
 	Vector2* poly = (Vector2*)cont.GetData();
 	uint32 polyLen = cont.GetSize();
 	// retrieve shape transformation info

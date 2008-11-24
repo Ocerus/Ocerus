@@ -6,7 +6,7 @@ using namespace EntitySystem;
 void CmpPlatformStats::Init(ComponentDescription& desc)
 {
 	SetBlueprints(desc.GetNextItem()->GetData<EntityHandle>());
-	gEntityMgr.PostMessage(mBlueprints, EntityMessage(EntityMessage::TYPE_GET_MAX_HITPOINTS, &mHitpoints));
+	mBlueprints.PostMessage(EntityMessage::TYPE_GET_MAX_HITPOINTS, &mHitpoints);
 	SetParentShip(desc.GetNextItem()->GetData<EntityHandle>());
 }
 

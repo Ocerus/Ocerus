@@ -42,10 +42,10 @@ void CmpPlatformParams::ComputeParams()
 {
 	mArea = MathUtils::ComputePolygonArea(mShape, mShapeLength);
 	float32 density;
-	gEntityMgr.PostMessage(mMaterial, EntityMessage(EntityMessage::TYPE_GET_DENSITY, &density));
+	mMaterial.PostMessage(EntityMessage::TYPE_GET_DENSITY, &density);
 	mMass = mArea * density;
 	float32 durabilityRatio;
-	gEntityMgr.PostMessage(mMaterial, EntityMessage(EntityMessage::TYPE_GET_DURABILITY_RATIO, &durabilityRatio));
+	mMaterial.PostMessage(EntityMessage::TYPE_GET_DURABILITY_RATIO, &durabilityRatio);
 	mMaxHitpoints = MathUtils::Round(HITPOINTS_RATIO * durabilityRatio * MathUtils::Sqrt(mArea));
 	mNumSlots = MathUtils::Round(SLOTS_RATIO * mMass);
 
