@@ -21,7 +21,7 @@ namespace EntitySystem
 		virtual void Deinit(void);
 		virtual EntityMessage::eResult HandleMessage(const EntityMessage& msg);
 
-		static void RegisterReflection();
+		static void RegisterReflection(void);
 
 		Vector2& GetPosition(void) const;
 		void SetPosition(Vector2& pos);

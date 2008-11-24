@@ -17,6 +17,7 @@ void EntitySystem::CmpPlatformPhysics::Init( ComponentDescription& desc )
 	if (ship.IsValid())
 	{
 		ship.PostMessage(EntityMessage::TYPE_GET_PHYSICS_BODY, &mBody);
+		ship.PostMessage(EntityMessage::TYPE_ADD_PLATFORM, GetOwnerPtr());
 	}
 	else
 	{
@@ -50,14 +51,11 @@ void EntitySystem::CmpPlatformPhysics::Init( ComponentDescription& desc )
 	float32 angle = desc.GetNextItem()->GetData<float32>();
 	b2XForm xform(relPos, b2Mat22(angle));
 	// create the shape
-	for (uint32 i=0; i<polyLen; ++i)
+	for (int i=flip?(polyLen-1):(0); flip?(i>=0):(i<(int)polyLen); flip?(--i):(++i))
 	{
 		Vector2 vec = poly[i];
 		if (flip)
-		{
-			vec.x = -vec.x;
 			vec.y = -vec.y;
-		}
 		shapeDef.vertices[shapeDef.vertexCount++] = b2Mul(xform, vec);
 	}
 	// set the entity handle so that we can identify the shape later

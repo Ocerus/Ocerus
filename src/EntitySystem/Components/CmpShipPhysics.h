@@ -19,6 +19,11 @@ namespace EntitySystem
 
 		static void RegisterReflection(void);
 
+		Vector2& GetPosition(void) const;
+		void SetPosition(Vector2& pos);
+		float32 GetAngle(void) const;
+		void SetAngle(const float32 angle);
+
 		/// Just to make sure virtual functions work ok.
 		virtual ~CmpShipPhysics(void) {}
 	private:

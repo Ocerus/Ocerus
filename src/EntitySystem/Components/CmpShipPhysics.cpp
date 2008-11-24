@@ -25,6 +25,14 @@ EntityMessage::eResult EntitySystem::CmpShipPhysics::HandleMessage( const Entity
 {
 	switch(msg.type)
 	{
+	case EntityMessage::TYPE_GET_POSITION:
+		assert(msg.data);
+		((Vector2*)msg.data)->Set(GetPosition());
+		return EntityMessage::RESULT_OK;
+	case EntityMessage::TYPE_GET_ANGLE:
+		assert(msg.data);
+		*(float32*)msg.data = GetAngle();
+		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_PHYSICS_BODY:
 		assert(msg.data);
 		assert(mBody);
@@ -36,5 +44,30 @@ EntityMessage::eResult EntitySystem::CmpShipPhysics::HandleMessage( const Entity
 
 void EntitySystem::CmpShipPhysics::RegisterReflection()
 {
+	RegisterProperty<Vector2&>("Position", &GetPosition, &SetPosition, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<float32>("Angle", &GetAngle, &SetAngle, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+}
 
+Vector2& EntitySystem::CmpShipPhysics::GetPosition( void ) const
+{
+	assert(mBody);
+	return const_cast<Vector2&>(mBody->GetPosition());
+}
+
+void EntitySystem::CmpShipPhysics::SetPosition( Vector2& pos )
+{
+	assert(mBody);
+	mBody->SetXForm(pos, mBody->GetAngle());
+}
+
+float32 EntitySystem::CmpShipPhysics::GetAngle( void ) const
+{
+	assert(mBody);
+	return mBody->GetAngle();
+}
+
+void EntitySystem::CmpShipPhysics::SetAngle( const float32 angle )
+{
+	assert(mBody);
+	mBody->SetXForm(mBody->GetPosition(), angle);
 }

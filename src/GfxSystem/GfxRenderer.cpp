@@ -347,7 +347,7 @@ bool GfxSystem::GfxRenderer::DrawPolygonWithConversion( const Vector2* vertices,
 		v.push_back(WorldToScreen(MathUtils::Multiply(xf, vertices[i])));
 
 	// draw polygon using the method beneath this
-	if (DrawPolygon(v,fillColor))
+	if (DrawPolygon(v,fillColor, outline))
 		return true;
 	else
 		return false;

@@ -6,6 +6,8 @@
 
 namespace MathUtils
 {
+	const float32 PI = b2_pi;
+
 	inline uint32 Round(const float32 num) { return static_cast<uint32>(floor(num+0.5)); }
 
 	inline float32 Sqrt(const float32 num) { return b2Sqrt(num); }

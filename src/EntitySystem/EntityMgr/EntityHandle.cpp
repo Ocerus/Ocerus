@@ -29,6 +29,10 @@ EntitySystem::EntityID EntitySystem::EntityHandle::GetID( void )
 	return mEntityID;
 }
 
+bool EntitySystem::EntityHandle::operator==( const EntityHandle& rhs )
+{
+	return mEntityID == rhs.mEntityID;
+}
 EntityMessage::eResult EntityHandle::PostMessage(const EntityMessage::eType type, void* data)
 {
 	assert(IsValid());

@@ -24,6 +24,18 @@ EntityMessage::eResult EntitySystem::CmpShipLogic::HandleMessage( const EntityMe
 		for (EntityList::iterator i=mLinks.begin(); i!=mLinks.end(); ++i)
 			i->PostMessage(EntityMessage::TYPE_DRAW_INNER);
 		return EntityMessage::RESULT_OK;
+	case EntityMessage::TYPE_ADD_PLATFORM:
+		assert(msg.data);
+		mPlatforms.push_back(*(EntityHandle*)msg.data);
+		return EntityMessage::RESULT_OK;
+	case EntityMessage::TYPE_LINK_PLATFORMS:
+		assert(msg.data);
+		{
+			EntityHandle links = *(EntityHandle*)msg.data;
+			assert(links.IsValid());
+			mLinks.push_back(links);
+		}
+		return EntityMessage::RESULT_OK;
 	}
 	return EntityMessage::RESULT_IGNORED;
 }

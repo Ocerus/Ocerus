@@ -24,7 +24,12 @@ namespace EntitySystem
 		void SetSecondPlatform(const EntityHandle second) { mSecondPlatform = second; }
 		float32 GetDetachingChance(void) const { return mDetachingChance; }
 		void SetDetachingChance(const float32 chance) { mDetachingChance = chance; }
-		uint32 GetNumLinks(void) const { return mAnchors.size(); }
+		uint32 GetNumLinks(void) const { return mAnchorsLength; }
+		void SetNumLinks(const uint32 num) { mAnchorsLength = num; }
+		Vector2* GetFirstAnchors(void) const { return mFirstAnchors; }
+		void SetFirstAnchors(Vector2* anchors);
+		Vector2* GetSecondAnchors(void) const { return mSecondAnchors; }
+		void SetSecondAnchors(Vector2* anchors);
 
 		/// We don't want anyone except the ComponentMgr to create new components, but it has to be public cos of RTTI.
 		CmpPlatformLinks(void) {}
@@ -34,10 +39,11 @@ namespace EntitySystem
 		EntityHandle mFirstPlatform;
 		EntityHandle mSecondPlatform;
 		float32 mDetachingChance;
-		typedef std::vector< std::pair<Vector2, Vector2> > AnchorsList;
-		AnchorsList mAnchors;
+		uint32 mAnchorsLength;
+		Vector2* mFirstAnchors;
+		Vector2* mSecondAnchors;
 
-		void Draw(void) const;
+		void Draw(void);
 		void ComputeDetachingChance(void);
 	};
 }

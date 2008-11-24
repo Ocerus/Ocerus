@@ -41,14 +41,14 @@ void Core::Game::Init()
 	entityDesc.Reset();
 	compDesc.Init(EntitySystem::CT_PLATFORM_PARAMS);
 	compDesc.AddItem(material0);
-	Vector2 shape[] = {Vector2(-1.0f,-1.0f),Vector2(0.5f,-1.0f),Vector2(1.0f,-0.5f),Vector2(1.0f,1.0f),Vector2(-1.0f,1.0f)};
+	Vector2 shape[] = {Vector2(-1.0f,-1.0f),Vector2(0.5f,-1.0f),Vector2(1.0f,-0.5f),Vector2(1.0f,0.5f),Vector2(-1.0f,0.5f)};
 	compDesc.AddItem((uint32)5); // shape length
 	compDesc.AddItem(shape);
 	entityDesc.AddComponentDescription(compDesc);
 	EntitySystem::EntityHandle platformType0 = gEntityMgr.CreateEntity(entityDesc);
 
 	// create free platforms
-	entityDesc.Reset();
+	/*entityDesc.Reset();
 	compDesc.Init(EntitySystem::CT_PLATFORM_STATS);
 	compDesc.AddItem(platformType0); // blueprints
 	compDesc.AddItem(EntitySystem::EntityHandle()); // pass null ship handle to indicate this platform is free
@@ -56,14 +56,14 @@ void Core::Game::Init()
 	compDesc.Init(EntitySystem::CT_PLATFORM_PHYSICS);
 	// pass body position and rotation cos it's a free platform
 	compDesc.AddItem(Vector2(5.0f,5.0f)); // position
-	compDesc.AddItem(0.0f); // angle
+	compDesc.AddItem(0.3f); // angle
 	// pass shape info
 	compDesc.AddItem(false); // flip the shape?
 	compDesc.AddItem(0.0f); // shape angle relative to original shape
 	entityDesc.AddComponentDescription(compDesc);
 	compDesc.Init(EntitySystem::CT_PLATFORM_VISUAL);
 	entityDesc.AddComponentDescription(compDesc);
-	EntitySystem::EntityHandle platform0 = gEntityMgr.CreateEntity(entityDesc);
+	EntitySystem::EntityHandle platform0 = gEntityMgr.CreateEntity(entityDesc);*/
 
 	// create a ship
 	entityDesc.Reset();
@@ -71,8 +71,8 @@ void Core::Game::Init()
 	entityDesc.AddComponentDescription(compDesc);
 	compDesc.Init(EntitySystem::CT_SHIP_PHYSICS);
 	// body position and angle
-	compDesc.AddItem(Vector2(20.0f,20.0f));
-	compDesc.AddItem(0.0f);
+	compDesc.AddItem(Vector2(10.0f,10.0f));
+	compDesc.AddItem(-1.0f);
 	entityDesc.AddComponentDescription(compDesc);
 	compDesc.Init(EntitySystem::CT_SHIP_VISUAL);
 	entityDesc.AddComponentDescription(compDesc);
@@ -86,7 +86,7 @@ void Core::Game::Init()
 	entityDesc.AddComponentDescription(compDesc);
 	compDesc.Init(EntitySystem::CT_PLATFORM_PHYSICS);
 	// pass position relative to the ship center
-	compDesc.AddItem(Vector2(0.0f,-1.0f));
+	compDesc.AddItem(Vector2(0.0f,-0.55f));
 	// pass additional shape info
 	compDesc.AddItem(false); // flip the shape?
 	compDesc.AddItem(0.0f); // shape angle relative to original shape
@@ -103,7 +103,7 @@ void Core::Game::Init()
 	entityDesc.AddComponentDescription(compDesc);
 	compDesc.Init(EntitySystem::CT_PLATFORM_PHYSICS);
 	// pass position relative to the ship center
-	compDesc.AddItem(Vector2(0.0f,1.0f));
+	compDesc.AddItem(Vector2(0.0f,0.55f));
 	// pass additional shape info
 	compDesc.AddItem(true); // flip the shape?
 	compDesc.AddItem(0.0f); // shape angle relative to original shape
@@ -111,6 +111,19 @@ void Core::Game::Init()
 	compDesc.Init(EntitySystem::CT_PLATFORM_VISUAL);
 	entityDesc.AddComponentDescription(compDesc);
 	EntitySystem::EntityHandle platform2 = gEntityMgr.CreateEntity(entityDesc);
+
+	// link platforms together
+	entityDesc.Reset();
+	compDesc.Init(EntitySystem::CT_PLATFORM_LINKS);
+	compDesc.AddItem(platform1); // first platform
+	compDesc.AddItem(platform2); // second platform
+	compDesc.AddItem((uint32)3); // number of links
+	Vector2 anchors1[] = {Vector2(-0.5f,0.45f),Vector2(0.0f,0.45f),Vector2(0.5f,0.45f)};
+	Vector2 anchors2[] = {Vector2(-0.5f,-0.45f),Vector2(0.0f,-0.45f),Vector2(0.5f,-0.45f)};
+	compDesc.AddItem(anchors1);
+	compDesc.AddItem(anchors2);
+	entityDesc.AddComponentDescription(compDesc);
+	gEntityMgr.CreateEntity(entityDesc);
 
 
 

@@ -23,8 +23,11 @@ namespace EntitySystem
 		EntityHandle(const EntityHandle& handle);
 		~EntityHandle(void) {}
 
-		/// Enables comparing handles.
+		/// Enables assigning handles.
 		EntityHandle& operator=(const EntityHandle& rhs);
+
+		/// Enables comparing handles.
+		bool operator==(const EntityHandle& rhs);
 
 		/// Returns true if this handle is valid (not null).
 		bool IsValid(void) const { return mEntityID != 0; }
