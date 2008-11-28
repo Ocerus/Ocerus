@@ -1,16 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
-  <Class Name="EntitySystem::CmpPlatform" Collapsed="true">
-    <Position X="2.5" Y="11" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAABAAAAAAAAAAAAAAQAAIAAAAAAIAAACABAAAAA=</HashCode>
-      <FileName>src\EntitySystem\Components\CmpPlatform.h</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="EntitySystem::Component" Collapsed="true">
     <Position X="0.5" Y="11" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAgAABAAAAAAAAAAAAAAAAAAAAAAAAAAABCABAAAAA=</HashCode>
+      <HashCode>EAAgAABIAIAAAAAAAAAAAACAAAAAAAAAAABCABAAAAA=</HashCode>
       <FileName>src\EntitySystem\ComponentMgr\Component.h</FileName>
     </TypeIdentifier>
   </Class>
@@ -129,7 +122,7 @@
   <Class Name="ResourceSystem::ResourceMgr" Collapsed="true">
     <Position X="2.5" Y="4.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAgAgAIAABAAAAAAAAAAkAAAQAAQAAACEACQAAgDA=</HashCode>
+      <HashCode>AAAAgAkAIAABAAAAAAAAAAkAAAQAAQAAACEACQIAgDA=</HashCode>
       <FileName>src\ResourceSystem\ResourceMgr.h</FileName>
     </TypeIdentifier>
   </Class>
@@ -137,20 +130,20 @@
     <Position X="0.5" Y="12" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>src\GfxSystem\GfxRenderer.h</FileName>
+      <FileName>src\GfxSystem\IScreenResolutionChangeListener.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="GfxSystem::GfxRenderer" Collapsed="true">
     <Position X="2.5" Y="3.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>EFAAAAAACgQCEIAQAAAAAEAAAAAAAQAIAFAACACAAAA=</HashCode>
+      <HashCode>EFAAABCADgSCEaAUAAAACEAQAAAAAYANAHAICACAAAA=</HashCode>
       <FileName>src\GfxSystem\GfxRenderer.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="GfxSystem::Texture" Collapsed="true">
     <Position X="2.5" Y="10" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAADAAAAkAAAAAAAAQBAAAAAAAAgAAACAEgAAQA=</HashCode>
+      <HashCode>AAAAAAADAAAAkAAAAAAAAQBAAAAAAAAgAAICAEgAAQA=</HashCode>
       <FileName>src\GfxSystem\Texture.h</FileName>
     </TypeIdentifier>
   </Class>
@@ -172,7 +165,7 @@
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AEgBAwBAEhBEAAIBIAAgAAgAgEDCoQAYAEACAAiAEIA=</HashCode>
+      <HashCode>AEgBAwBAkhBEAAIBIAAgAQgAgEDCoQAYAEACEAiAEIA=</HashCode>
       <FileName>src\Core\Application.h</FileName>
     </TypeIdentifier>
   </Class>
@@ -186,7 +179,7 @@
   <Class Name="Core::Game" Collapsed="true">
     <Position X="2.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQAAAAAAAAAAgAAAAAAAAAAAAiAAAAAAAACABAAAAA=</HashCode>
+      <HashCode>AAQAAAAAAAAgAgAAAAAAAAAAAAiAAIAAAAACABAAAAA=</HashCode>
       <FileName>src\Core\Game.h</FileName>
     </TypeIdentifier>
   </Class>
@@ -248,7 +241,7 @@
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>BAQEAAAAAAAAAAAAACAAAAAIAAAQAgAAAAAIABBgAAA=</HashCode>
+      <HashCode>BAQEAAAAQAAAAAAAACAAAAAIAAAQAgAAAAAIABBgAAA=</HashCode>
       <FileName>src\GUISystem\GUIMgr.h</FileName>
     </TypeIdentifier>
   </Class>
@@ -276,14 +269,14 @@
   <Class Name="GUISystem::CEGUITextureWrapper" Collapsed="true">
     <Position X="5" Y="10.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>QAAAAAAJAEAAAgBBAAAACAAAAAAEQIAhABAwAAAAAAA=</HashCode>
+      <HashCode>QAAAAAAJAEAAAgBBAAAACCAAAAAEYIAhABAwAAAAAAA=</HashCode>
       <FileName>src\GUISystem\CEGUITextureWrapper.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="GUISystem::RendererGate" Collapsed="true">
     <Position X="2.5" Y="12" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>wAEYAAAAIKASgABAQAAAAACAAIEAQAAAAEBAAAoBAAo=</HashCode>
+      <HashCode>wAEYAAAAIKASgAAAQAAAAACAAIEAQAAAAEBAAAoBAAI=</HashCode>
       <FileName>src\GUISystem\RendererGate.h</FileName>
     </TypeIdentifier>
   </Class>
@@ -304,7 +297,7 @@
   <Struct Name="GfxSystem::Rect" Collapsed="true">
     <Position X="11.75" Y="3.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAQAhgAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAABAAAAAAAAAAAAAAAACAAAAAAQAhgAAAAAAA=</HashCode>
       <FileName>src\GfxSystem\GfxRenderer.h</FileName>
     </TypeIdentifier>
   </Struct>
@@ -339,7 +332,7 @@
   <Struct Name="GUISystem::Quad_info" Collapsed="true">
     <Position X="11.75" Y="2.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAAQQAAAAAAAAQAAIAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAAQQACAAAAAAQAAJAA=</HashCode>
       <FileName>src\GUISystem\RendererGate.h</FileName>
     </TypeIdentifier>
   </Struct>

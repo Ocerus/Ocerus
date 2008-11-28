@@ -32,19 +32,14 @@ namespace GUISystem {
 		  CEGUI::FontManager::getSingleton().createFont( "Commonwealth-10.font" );
 
 		mCegui->setDefaultFont( "Commonwealth-10" );
-		//CEGUI::System::getSingleton().setDefaultMouseCursor( "Vanilla", "MouseArrow" );
+		CEGUI::System::getSingleton().setDefaultMouseCursor( "TaharezLook", "MouseArrow" );
 		
 		std::string layout = gApp.GetGlobalConfig()->GetString("Layout", "Battleships.layout", "CEGUI");
 
 		CEGUI::Window* CurrentWindowRoot =
 			CEGUI::WindowManager::getSingleton().loadWindowLayout( layout.c_str() );
-
 		
-		CEGUI::ImagesetManager::ImagesetIterator iter = CEGUI::ImagesetManager::getSingleton().getIterator();
-
 		CEGUI::System::getSingleton().setGUISheet( CurrentWindowRoot );
-
-		//CurrentWindowRoot->setProperty("Image", CEGUI::PropertyHelper::imageToString(space));
 
 		gInputMgr.AddInputListener(this);		
 	}
@@ -55,19 +50,6 @@ namespace GUISystem {
 		DYN_DELETE mRendererGate;
 		DYN_DELETE mResourceGate;
 	}
-
-/*
-// bool injectMouseMove( float delta_x, float delta_y );
-+ bool injectMousePosition( float x_pos, float y_pos );
-// bool injectMouseLeaves( void );
-+ bool injectMouseButtonDown( MouseButton button );
-+ bool injectMouseButtonUp( MouseButton button );
-+ bool injectKeyDown( uint key_code );
-+ bool injectKeyUp( uint key_code );
-// bool injectChar( utf32 code_point );
-+ bool injectMouseWheelChange( float delta );
-- bool injectTimePulse( float timeElapsed ); - bude v jine casti
-*/
 
 	void GUIMgr::Update( float32 delta ) {		
 		mCegui->injectTimePulse( delta );
