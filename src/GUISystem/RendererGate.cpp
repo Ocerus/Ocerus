@@ -13,8 +13,9 @@ namespace GUISystem {
 		tex.SetNull();
 	}
 
-	Quad_info::Quad_info(GfxSystem::Rect dest_rect, float32 z, GfxSystem::TexturePtr tex, GfxSystem::Rect texture_rect) :
-		dest_rect(dest_rect), z(z), tex(tex), texture_rect(texture_rect)
+	Quad_info::Quad_info(const GfxSystem::Rect& dest_rect, float32 z, GfxSystem::TexturePtr tex, const GfxSystem::Rect& texture_rect,
+			const GfxSystem::ColorRect& colors) :
+		dest_rect(dest_rect), z(z), tex(tex), texture_rect(texture_rect), colors(colors)
 	{
 	}
 
@@ -37,7 +38,7 @@ namespace GUISystem {
 
 	// add's a quad to the list to be rendered
 	void RendererGate::addQuad(const CEGUI::Rect& dest_rect, float z, const CEGUI::Texture* tex,
-			const CEGUI::Rect& texture_rect, const CEGUI::ColourRect& colours, CEGUI::QuadSplitMode quad_split_mode) 
+			const CEGUI::Rect& texture_rect, const CEGUI::ColourRect& colors, CEGUI::QuadSplitMode quad_split_mode) 
 	{		
 		GfxSystem::Rect conv_dest_rect(MathUtils::Round(dest_rect.d_left), MathUtils::Round(dest_rect.d_top),
 			MathUtils::Round(dest_rect.getWidth()), MathUtils::Round(dest_rect.getHeight()));
@@ -48,11 +49,18 @@ namespace GUISystem {
 		conv_texture_rect.y = (texture_rect.d_top != HUGE_VAL)?MathUtils::Round(texture_rect.d_top*conv_tex->GetHeight(false)):0;
 		conv_texture_rect.w = (texture_rect.d_right != HUGE_VAL)?MathUtils::Round(texture_rect.d_right*conv_tex->GetWidth(false) - texture_rect.d_left*conv_tex->GetWidth(false)):conv_tex->GetWidth(false);
 		conv_texture_rect.h = (texture_rect.d_bottom != HUGE_VAL)?MathUtils::Round(texture_rect.d_bottom*conv_tex->GetHeight(false) - texture_rect.d_top*conv_tex->GetHeight(false)):conv_tex->GetHeight(false);
-		
+
+		Quad_info info(conv_dest_rect, z, conv_tex, conv_texture_rect,
+			GfxSystem::ColorRect(colors.d_top_left.getARGB(),
+				colors.d_top_right.getARGB(),
+				colors.d_bottom_left.getARGB(),
+				colors.d_bottom_right.getARGB())
+		);
+
 		if (mQueueing)
-			mQuads.push_back(Quad_info(conv_dest_rect, z, conv_tex, conv_texture_rect));
+			mQuads.push_back(info);
 		else
-			DrawQuad(Quad_info(conv_dest_rect, z, conv_tex, conv_texture_rect));
+			DrawQuad(info);
 	}
 
 	// perform final rendering for all queued renderable quads.
@@ -106,7 +114,7 @@ namespace GUISystem {
 	}
 
 	void RendererGate::DrawQuad(const Quad_info & quad) const {
-		gGfxRenderer.DrawImage(quad.tex, quad.texture_rect, quad.dest_rect);
+		gGfxRenderer.DrawImage(quad.tex, quad.dest_rect, quad.texture_rect, quad.colors);
 	}
 /*
 	void RendererGate::ClearProviders() {

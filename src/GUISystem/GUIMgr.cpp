@@ -24,20 +24,46 @@ namespace GUISystem {
 		CEGUI::WindowManager::setDefaultResourceGroup("layouts");
 
 		// load in the scheme file, which auto-loads the TaharezLook imageset
-		CEGUI::SchemeManager::getSingleton().loadScheme( "TaharezLook.scheme", "schemes" );
-		//CEGUI::SchemeManager::getSingleton().loadScheme( "BGGUI.scheme", "schemes" );
-		//CEGUI::SchemeManager::getSingleton().loadScheme( "BGGUI.scheme", "schemes" );
-		//CEGUI::SchemeManager::getSingleton().loadScheme( "VanillaSkin.scheme", "schemes" );
+		CEGUI::SchemeManager::getSingleton().loadScheme( "TaharezLook.scheme");
+		CEGUI::SchemeManager::getSingleton().loadScheme( "BGGUI.scheme");
 
 		// load in a font.  The first font loaded automatically becomes the default font.
-		if(! CEGUI::FontManager::getSingleton().isFontPresent( "Commonwealth-10" ) )
-		  CEGUI::FontManager::getSingleton().createFont( "Commonwealth-10.font", "fonts" );
+		if( !CEGUI::FontManager::getSingleton().isFontPresent( "Commonwealth-10" ) )
+		  CEGUI::FontManager::getSingleton().createFont( "Commonwealth-10.font" );
 
-		CEGUI::System::getSingleton().setDefaultFont( "Commonwealth-10" );
+		mCegui->setDefaultFont( "Commonwealth-10" );
 		//CEGUI::System::getSingleton().setDefaultMouseCursor( "Vanilla", "MouseArrow" );
+		
+		std::string layout = gApp.GetGlobalConfig()->GetString("Layout", "Battleships.layout", "CEGUI");
 
-		CEGUI::Window* CurrentWindowRoot = CEGUI::WindowManager::getSingleton().loadWindowLayout( "EditorDefault-Kopie.layout" );
+		CEGUI::Window* CurrentWindowRoot =
+			CEGUI::WindowManager::getSingleton().loadWindowLayout( layout.c_str() );
+
+		
+		CEGUI::ImagesetManager::ImagesetIterator iter = CEGUI::ImagesetManager::getSingleton().getIterator();
+
+		CEGUI::Image * space;
+
+		while (!iter.isAtEnd()) {
+			gLogMgr.LogMessage("Imageset Key: " + std::string(iter.getCurrentKey().c_str()));
+			CEGUI::Imageset::ImageIterator image_iter = iter.getCurrentValue()->getIterator();			
+			
+			while (!image_iter.isAtEnd()) {
+				if (iter.getCurrentKey() == "BGImage")
+					space = &(image_iter.getCurrentValue());
+
+				gLogMgr.LogMessage("Image Key: " + std::string(image_iter.getCurrentKey().c_str()));
+				++image_iter;
+			}
+
+			++iter;
+		}
+
 		CEGUI::System::getSingleton().setGUISheet( CurrentWindowRoot );
+
+		//CurrentWindowRoot->setProperty("Image", CEGUI::PropertyHelper::imageToString(space));
+
+		gLogMgr.LogMessage(CEGUI::PropertyHelper::imageToString(space).c_str());
 
 		gInputMgr.AddInputListener(this);		
 	}

@@ -20,9 +20,11 @@ namespace GUISystem {
 		float32 z;
 		GfxSystem::TexturePtr tex;
 		GfxSystem::Rect texture_rect;
+		GfxSystem::ColorRect colors;
 
 		Quad_info();
-		Quad_info(GfxSystem::Rect dest_rect, float32 z, GfxSystem::TexturePtr tex, GfxSystem::Rect texture_rect);
+		Quad_info(const GfxSystem::Rect& dest_rect, float32 z, GfxSystem::TexturePtr tex, const GfxSystem::Rect& texture_rect,
+			const GfxSystem::ColorRect& colors);
 		virtual ~Quad_info();
 	};
 
@@ -34,7 +36,7 @@ namespace GUISystem {
 
 		// add's a quad to the list to be rendered - Pokud Santhos neda tak bude jen vykreslovat
 		virtual	void addQuad(const CEGUI::Rect& dest_rect, float z, const CEGUI::Texture* tex,
-			const CEGUI::Rect& texture_rect, const CEGUI::ColourRect& colours, CEGUI::QuadSplitMode quad_split_mode);
+			const CEGUI::Rect& texture_rect, const CEGUI::ColourRect& colors, CEGUI::QuadSplitMode quad_split_mode);
 
 		// perform final rendering for all queued renderable quads. - Pokud Santhos da tak addQuad bude opravdu jen
 		// pridavat a todle jen vykreslovat

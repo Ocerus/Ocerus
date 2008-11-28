@@ -13,6 +13,11 @@ Rect Rect::NullRect(0,0,0,0);
 
 namespace GfxSystem
 {
+
+	inline DWORD ConvertColorToDWORD(const Color& color) {
+		return ARGB(color.a, color.r, color.g, color.b);
+	}
+
 	/** This function is called whenever the HGE was notified that the application requested the shutdown.
 		Returning false will prevent the application from being shut down. It's advices to return true.
 	*/
@@ -152,17 +157,14 @@ bool GfxRenderer::DrawLineWithConversion( const Vector2& begin, const Vector2& e
 	return DrawLine(WorldToScreen(begin), WorldToScreen(end), pen);
 }
 
-void InitQuad(hgeQuad& q,const TexturePtr& image, int32 x, int32 y,int32 w,int32 h,uint8 alpha,const Rect& textureRect,uint8 anchor)
+void InitQuad(hgeQuad& q,const TexturePtr& image, Rect destRect, const Rect& textureRect, const ColorRect& colors, uint8 anchor)
 {
 	// set default of weight and height
-	if (w == 0)
-		w = image->GetWidth(false);
-	if (h == 0)
-		h = image->GetHeight(false);
-
-	// set alpha
-	uint32 col = 0xFFFFFFFF + (alpha << 24);
-		
+	if (destRect.w == 0)
+		destRect.w = image->GetWidth(false);
+	if (destRect.h == 0)
+		destRect.h = image->GetHeight(false);
+	
 	/* init texture region */ 
 	// texture width and height
 	float32 tw = (float32) (image->GetWidth(false));
@@ -174,19 +176,19 @@ void InitQuad(hgeQuad& q,const TexturePtr& image, int32 x, int32 y,int32 w,int32
 		tr = textureRect;
 
 	/* set float position of top left corner minding the anchor */
-	float32 fX = (float32)(x);
-	float32 fY = (float32)(y);
+	float32 fX = (float32)(destRect.x);
+	float32 fY = (float32)(destRect.y);
 
 	if (ANCHOR_VCENTER & anchor)
-		fY -= (float32)(h)/2;
+		fY -= (float32)(destRect.h)/2;
 	// anchor top is default value
 	if (ANCHOR_BOTTOM & anchor)
-		fY -= (float32)(h);
+		fY -= (float32)(destRect.h);
 	// anchor left is default value
 	if (ANCHOR_RIGHT & anchor)
-		fX -= (float32)(w);
+		fX -= (float32)(destRect.w);
 	if (ANCHOR_HCENTER & anchor)
-		fX -= (float32)(w)/2;
+		fX -= (float32)(destRect.w)/2;
 
 	/* init vertices - set texture position, position, colour (alpha only) */
 	// z position is 0, because we have 2d world
@@ -195,46 +197,49 @@ void InitQuad(hgeQuad& q,const TexturePtr& image, int32 x, int32 y,int32 w,int32
 	q.v[0].z = 0;
 	q.v[0].tx = tr.x / tw;
 	q.v[0].ty = tr.y / th;
-	q.v[0].col = col;
+	q.v[0].col = ConvertColorToDWORD(colors.TopLeft);
 
-	q.v[1].x = fX + w;
+	q.v[1].x = fX + destRect.w;
 	q.v[1].y = fY;
 	q.v[1].z = 0;
 	q.v[1].tx = (tr.x + tr.w) / tw;
 	q.v[1].ty = tr.y / th;
-	q.v[1].col = col;
+	q.v[1].col = ConvertColorToDWORD(colors.TopRight);
 
-	q.v[2].x = fX + w;
-	q.v[2].y = fY + h;
+	q.v[2].x = fX + destRect.w;
+	q.v[2].y = fY + destRect.h;
 	q.v[2].z = 0;
 	q.v[2].tx = (tr.x + tr.w) / tw;
 	q.v[2].ty = (tr.y + tr.h) / th;
-	q.v[2].col = col;
+	q.v[2].col = ConvertColorToDWORD(colors.BottomRight);
 
 	q.v[3].x = fX;
-	q.v[3].y = fY + h;
+	q.v[3].y = fY + destRect.h;
 	q.v[3].z = 0;
 	q.v[3].tx = tr.x / tw;
 	q.v[3].ty = (tr.y + tr.h) / th;
-	q.v[3].col = col;
+	q.v[3].col = ConvertColorToDWORD(colors.BottomLeft);
 
 	// set quad's texture
 	q.tex = image->GetTexture();
 	q.blend = BLEND_ALPHABLEND | BLEND_COLORMUL | BLEND_ZWRITE;
 }
 
+void InitQuad(hgeQuad& q,const TexturePtr& image, const Rect& destRect, uint8 alpha,const Rect& textureRect,uint8 anchor)
+{
+	ColorRect placeholder;
+	InitQuad(q,image, destRect, textureRect, placeholder, anchor);
+}
+
 bool GfxSystem::GfxRenderer::DrawImage( const TexturePtr& image, int32 x, int32 y, uint8 anchor /*= ANCHOR_VCENTER|ANCHOR_HCENTER*/, float32 angle /*= 0.0f*/, uint8 alpha /*= 255*/, float32 scale /*= 1.0f*/, int32 width /* = 0 */,int32 height /* = 0 */, const Rect& textureRect /* = 0 */) const
 {	
-	if (image.IsNull())
-	{
-		gLogMgr.LogMessage("DrawImage: texture is null", LOG_ERROR);
+	Color alphacolor = Color(255, 255, 255, alpha);
+	ColorRect alphas(alphacolor, alphacolor, alphacolor, alphacolor);
+	if (DrawImage(image, Rect(x, y, width, height), 
+		Rect(0, 0, image->GetWidth(false), image->GetHeight(false)), alphas, anchor, angle, scale))
+		return true;
+	else
 		return false;
-	}
-	hgeQuad q;		
-	InitQuad(q,image,x,y,width,height,alpha,textureRect,anchor);
-
-	mHGE->Gfx_RenderQuad(&q);
-	return true;
 }
 
 bool GfxSystem::GfxRenderer::DrawImage( const TexturePtr& image, const Point& pos, uint8 anchor /*= ANCHOR_VCENTER|ANCHOR_HCENTER*/, float32 angle /*= 0.0f*/, uint8 alpha /*= 255*/, float32 scale /*= 1.0f*/ ) const
@@ -253,12 +258,18 @@ bool GfxSystem::GfxRenderer::DrawImageWithConversion( const TexturePtr& image, c
 		return false;
 }
 
-bool GfxSystem::GfxRenderer::DrawImage( const TexturePtr& image, const Rect& textureRect, const Rect& destRect, uint8 alpha /*= 255*/ ) const
+bool GfxSystem::GfxRenderer::DrawImage( const TexturePtr& image, const Rect& destRect, const Rect& textureRect, const ColorRect& colors, uint8 anchor /*= ANCHOR_VCENTER|ANCHOR_HCENTER*/, float32 angle /*= 0.0f*/, float32 scale /*= 1.0f*/ ) const
 {
-	if (DrawImage(image,destRect.x,destRect.y,0,0,alpha,0,destRect.w,destRect.h,textureRect))
-		return true;
-	else
+	if (image.IsNull())
+	{
+		gLogMgr.LogMessage("DrawImage: texture is null", LOG_ERROR);
 		return false;
+	}
+	hgeQuad q;		
+	InitQuad(q, image, destRect, textureRect, colors, anchor);
+
+	mHGE->Gfx_RenderQuad(&q);
+	return true;
 }
 
 bool createTriangles(const std::vector<Point>& vertices,std::vector<Point>& triangles)

@@ -41,7 +41,19 @@ namespace GfxSystem
 	struct Color
 	{
 		Color(uint8 _r, uint8 _g, uint8 _b, uint8 _a = 255): r(_r), g(_g), b(_b), a(_a) {}
+		Color(uint32 color) : a((uint8)(color >> 24)), r((uint8)( (color >> 16)&0x000000FF )),
+			g((uint8)( (color >> 8)&0x000000FF )), b((uint8)( color&0x000000FF )) {}
+		Color(): r(0), g(0), b(0), a(255) {}
 		uint8 r, g, b, a;
+	};
+
+	struct ColorRect
+	{
+		Color TopLeft, TopRight, BottomLeft, BottomRight;
+		ColorRect(const Color& TopLeft, const Color& TopRight, const Color& BottomLeft, const Color& BottomRight):
+			TopLeft(TopLeft), TopRight(TopRight), BottomLeft(BottomLeft), BottomRight(BottomRight) {};
+		
+		ColorRect() {}
 	};
 
 	struct Pen
@@ -90,12 +102,12 @@ namespace GfxSystem
 		bool ClearScreen(const Color& color) const;
 
 		// note that anchor determines the rotation/scaling pivot
-		bool DrawImage(const TexturePtr& image, int32 x, int32 y, uint8 anchor = ANCHOR_VCENTER|ANCHOR_HCENTER, float32 angle = 0.0f, uint8 alpha = 255, float32 scale = 1.0f, int32 width = 0, int32 height = 0, const Rect& textureRect = Rect::NullRect) const;
-		bool DrawImage(const TexturePtr& image, const Point& pos, uint8 anchor = ANCHOR_VCENTER|ANCHOR_HCENTER, float32 angle = 0.0f, uint8 alpha = 255, float32 scale = 1.0f) const;
+		bool DrawImage(const TexturePtr& image, int32 x, int32 y, uint8 anchor = 0, float32 angle = 0.0f, uint8 alpha = 255, float32 scale = 1.0f, int32 width = 0, int32 height = 0, const Rect& textureRect = Rect::NullRect) const;
+		bool DrawImage(const TexturePtr& image, const Point& pos, uint8 anchor = 0, float32 angle = 0.0f, uint8 alpha = 255, float32 scale = 1.0f) const;
 		/// This version does a conversion from world space
-		bool DrawImageWithConversion(const TexturePtr& image, const Vector2& pos, uint8 anchor = ANCHOR_VCENTER|ANCHOR_HCENTER, float32 angle = 0.0f, uint8 alpha = 255, float32 scale = 1.0f) const;
+		bool DrawImageWithConversion(const TexturePtr& image, const Vector2& pos, uint8 anchor = 0, float32 angle = 0.0f, uint8 alpha = 255, float32 scale = 1.0f) const;
 		/// This version is made specially to support GUI
-		bool DrawImage(const TexturePtr& image, const Rect& textureRect, const Rect& destRect, uint8 alpha = 255) const;
+		bool DrawImage(const TexturePtr& image, const Rect& textureRect, const Rect& destRect, const ColorRect& colors, uint8 anchor = 0, float32 angle = 0.0f, float32 scale = 1.0f ) const;
 
 		bool DrawLine(int x1, int y1, int x2, int y2, const Pen& pen) const;
 		bool DrawLine(const Point& begin, const Point& end, const Pen& pen) const;
