@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <GUILayout >
-    <Window Type="TaharezLook/DefaultWindow" Name="Root" >
+    <Window Type="TaharezLook/StaticImage" Name="Root" >
+        <Property Image="set:Background image:Background" />
+        <Property Name="UnifiedSize" Value="{{1.0,0},{1.0,0}}" />                              
         <Property Name="InheritsAlpha" Value="False" />
         <Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}" />
         <Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{1,0},{1,0}}" />
@@ -30,7 +32,6 @@ For more information please click the &apos;about&apos; box.</Property>
         <Window Type="TaharezLook/FrameWindow" Name="Root/Frame" >
             <Property Name="Font" Value="Commonwealth-10" />
             <Property Name="Alpha" Value="0.75" />
-            <Property Name="AlwaysOnTop" Value="True" />
             <Property Name="TitlebarFont" Value="Commonwealth-10" />
             <Property Name="RollUpEnabled" Value="False" />
             <Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}" />

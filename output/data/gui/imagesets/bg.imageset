@@ -1,0 +1,5 @@
+<?xml version="1.0"  ?>
+
+<Imageset Name="Background" Imagefile="GPN-2000-001437.tga" NativeHorzRes="800" NativeVertRes="600" AutoScaled="true">
+	<Image Name="Background" XPos="0.0" YPos="0.0" Width="512" Height="512" />
+</Imageset>

@@ -156,20 +156,20 @@ void InitQuad(hgeQuad& q,const TexturePtr& image, int32 x, int32 y,int32 w,int32
 {
 	// set default of weight and height
 	if (w == 0)
-		w = image->GetWidth();
+		w = image->GetWidth(false);
 	if (h == 0)
-		h = image->GetHeight();
+		h = image->GetHeight(false);
 
 	// set alpha
 	uint32 col = 0xFFFFFFFF + (alpha << 24);
 		
 	/* init texture region */ 
 	// texture width and height
-	float32 tw = (float32) (image->GetWidth());
-	float32 th = (float32) (image->GetHeight());
+	float32 tw = (float32) (image->GetWidth(false));
+	float32 th = (float32) (image->GetHeight(false));
 
 	// check whether user wants the whole texture or its section
-	Rect tr(0,0,image->GetWidth(),image->GetHeight());
+	Rect tr(0,0,image->GetWidth(false),image->GetHeight(false));
 	if (&textureRect != &Rect::NullRect)		
 		tr = textureRect;
 
@@ -239,7 +239,7 @@ bool GfxSystem::GfxRenderer::DrawImage( const TexturePtr& image, int32 x, int32 
 
 bool GfxSystem::GfxRenderer::DrawImage( const TexturePtr& image, const Point& pos, uint8 anchor /*= ANCHOR_VCENTER|ANCHOR_HCENTER*/, float32 angle /*= 0.0f*/, uint8 alpha /*= 255*/, float32 scale /*= 1.0f*/ ) const
 {
-	if (DrawImage(image,pos.x,pos.y,anchor,angle,alpha,scale,image->GetWidth(),image->GetHeight()))
+	if (DrawImage(image,pos.x,pos.y,anchor,angle,alpha,scale,image->GetWidth(false),image->GetHeight(false)))
 		return true;
 	else
 		return false;

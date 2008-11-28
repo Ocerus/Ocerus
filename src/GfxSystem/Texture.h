@@ -21,8 +21,8 @@ namespace GfxSystem
 		/*library specific texture type _GetTexture(void); */
 		uint32 GetTexture(void);	// hge's DWORD = uint32
 
-		virtual uint32 GetWidth();
-		virtual uint32 GetHeight();
+		virtual uint32 GetWidth(bool bOriginal = true);
+		virtual uint32 GetHeight(bool bOriginal = true);
 		
 	protected:
 		virtual bool LoadImpl(void);

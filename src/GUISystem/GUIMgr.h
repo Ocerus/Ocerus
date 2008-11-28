@@ -37,6 +37,7 @@ namespace GUISystem {
 
 		inline virtual void KeyPressed(const InputSystem::KeyInfo& ke) {
 			CEGUI::System::getSingleton().injectKeyDown(ke.keyCode);
+			CEGUI::System::getSingleton().injectChar(ke.keyCode);
 		}
 
 		inline virtual void KeyReleased(const InputSystem::KeyInfo& ke) {
@@ -56,8 +57,10 @@ namespace GUISystem {
 			CEGUI::System::getSingleton().injectMouseButtonUp( ConvertMouseButtonEnum(btn) );
 		}
 
-		inline virtual void RenderGUI() const {						
+		inline virtual void RenderGUI() const {
 			mCegui->renderGUI();
+			//gGfxRenderer.DrawImage((GfxSystem::TexturePtr)gResourceMgr.GetResource("imagesets/GPN-2000-001437.tga"),
+			//	0, 0);
 		}
 
 		virtual void Update(float32 delta);
@@ -65,6 +68,7 @@ namespace GUISystem {
 		virtual ~GUIMgr();
 	protected:
 		CEGUI::System * mCegui;
+		CEGUI::Window * CurrentWindowRoot;
 		ResourceGate * mResourceGate;
 		RendererGate * mRendererGate;
 		friend class RendererGate;

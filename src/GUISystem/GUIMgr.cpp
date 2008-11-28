@@ -25,17 +25,19 @@ namespace GUISystem {
 
 		// load in the scheme file, which auto-loads the TaharezLook imageset
 		CEGUI::SchemeManager::getSingleton().loadScheme( "TaharezLook.scheme", "schemes" );
+		//CEGUI::SchemeManager::getSingleton().loadScheme( "BGGUI.scheme", "schemes" );
+		//CEGUI::SchemeManager::getSingleton().loadScheme( "BGGUI.scheme", "schemes" );
+		//CEGUI::SchemeManager::getSingleton().loadScheme( "VanillaSkin.scheme", "schemes" );
 
 		// load in a font.  The first font loaded automatically becomes the default font.
 		if(! CEGUI::FontManager::getSingleton().isFontPresent( "Commonwealth-10" ) )
 		  CEGUI::FontManager::getSingleton().createFont( "Commonwealth-10.font", "fonts" );
 
 		CEGUI::System::getSingleton().setDefaultFont( "Commonwealth-10" );
-		CEGUI::System::getSingleton().setDefaultMouseCursor( "TaharezLook", "MouseArrow" );
-		CEGUI::System::getSingleton().setDefaultTooltip( "TaharezLook/Tooltip" );
+		//CEGUI::System::getSingleton().setDefaultMouseCursor( "Vanilla", "MouseArrow" );
 
-		CEGUI::Window* myRoot = CEGUI::WindowManager::getSingleton().loadWindowLayout( "EditorDefault.layout" );
-		CEGUI::System::getSingleton().setGUISheet( myRoot );
+		CEGUI::Window* CurrentWindowRoot = CEGUI::WindowManager::getSingleton().loadWindowLayout( "EditorDefault-Kopie.layout" );
+		CEGUI::System::getSingleton().setGUISheet( CurrentWindowRoot );
 
 		gInputMgr.AddInputListener(this);		
 	}

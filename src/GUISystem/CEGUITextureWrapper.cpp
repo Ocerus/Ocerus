@@ -19,6 +19,8 @@ namespace GUISystem {
 	void CEGUITextureWrapper::loadFromFile(const CEGUI::String& filename, const CEGUI::String& resourceGroup) {
 		mTexture.SetNull();
 		mTexture = (GfxSystem::TexturePtr)gResourceMgr.GetResource(resourceGroup.c_str(), filename.c_str());		
+		mOriginalHeight = mTexture->GetHeight();
+		mOriginalWidth = mTexture->GetWidth();		
 	}
 
 	CEGUITextureWrapper::CEGUITextureWrapper(RendererGate * gate) : CEGUI::Texture(gate) {
@@ -36,7 +38,7 @@ namespace GUISystem {
 						
 		mTexture = (GfxSystem::TexturePtr)gResourceMgr.GetResource(mResourceGroupName, name);
 		// warning, medved error, medved thought that position of A doesnt matter :)
-
+/*
 		uint32* color_shift_buff = DYN_NEW uint32[bytesize];
 		uint32* color_sb_pos = color_shift_buff;
 		const uint32* buffPtrCast = (const uint32*)buffPtr;
@@ -49,6 +51,10 @@ namespace GUISystem {
 
 		mTexture->LoadFromBitmap(color_shift_buff, bytesize, buffWidth, buffHeight, (GfxSystem::Texture::ePixelFormat)pixelFormat);
 		DYN_DELETE_ARRAY color_shift_buff;
+*/
+		mTexture->LoadFromBitmap(buffPtr, bytesize, buffWidth, buffHeight, (GfxSystem::Texture::ePixelFormat)pixelFormat);		
+		mOriginalHeight = buffHeight;
+		mOriginalWidth = buffWidth;
 	}
 
 	CEGUITextureWrapper::~CEGUITextureWrapper(void) {
