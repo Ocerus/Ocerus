@@ -42,28 +42,9 @@ namespace GUISystem {
 		
 		CEGUI::ImagesetManager::ImagesetIterator iter = CEGUI::ImagesetManager::getSingleton().getIterator();
 
-		CEGUI::Image * space;
-
-		while (!iter.isAtEnd()) {
-			gLogMgr.LogMessage("Imageset Key: " + std::string(iter.getCurrentKey().c_str()));
-			CEGUI::Imageset::ImageIterator image_iter = iter.getCurrentValue()->getIterator();			
-			
-			while (!image_iter.isAtEnd()) {
-				if (iter.getCurrentKey() == "BGImage")
-					space = &(image_iter.getCurrentValue());
-
-				gLogMgr.LogMessage("Image Key: " + std::string(image_iter.getCurrentKey().c_str()));
-				++image_iter;
-			}
-
-			++iter;
-		}
-
 		CEGUI::System::getSingleton().setGUISheet( CurrentWindowRoot );
 
 		//CurrentWindowRoot->setProperty("Image", CEGUI::PropertyHelper::imageToString(space));
-
-		gLogMgr.LogMessage(CEGUI::PropertyHelper::imageToString(space).c_str());
 
 		gInputMgr.AddInputListener(this);		
 	}
