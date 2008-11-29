@@ -2,6 +2,7 @@
 
 <GUILayout >
     <Window Type="TaharezLook/StaticImage" Name="Root" >
+        <Property Name="Image" Value="set:BGImage image:Space" />
         <Property Name="FrameEnabled" Value="False" />
         <Property Name="InheritsAlpha" Value="False" />
         <Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}" />
