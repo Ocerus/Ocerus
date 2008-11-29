@@ -41,7 +41,9 @@ namespace GUISystem {
 		
 		CEGUI::System::getSingleton().setGUISheet( CurrentWindowRoot );
 
-		gInputMgr.AddInputListener(this);		
+		RegisterEvents();
+
+		gInputMgr.AddInputListener(this);
 	}
 
 	GUIMgr::~GUIMgr() {
@@ -49,6 +51,18 @@ namespace GUISystem {
 		DYN_DELETE mCegui;
 		DYN_DELETE mRendererGate;
 		DYN_DELETE mResourceGate;
+	}
+
+	void GUIMgr::RegisterEvents() {
+		assert(mCegui && CurrentWindowRoot);
+		CEGUI::Window* quit_button = CEGUI::WindowManager::getSingleton().getWindow("Root/QuitButton");		
+		quit_button->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&GUIMgr::QuitEvent, this));
+	}
+
+	bool GUIMgr::QuitEvent(const CEGUI::EventArgs& e)
+	{
+		gApp.RequestStateChange(Core::AS_SHUTDOWN);
+		return true;
 	}
 
 	void GUIMgr::Update( float32 delta ) {		

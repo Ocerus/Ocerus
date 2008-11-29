@@ -2,12 +2,10 @@
 
 <GUILayout >
     <Window Type="TaharezLook/StaticImage" Name="Root" >
-        <Property Name="Image" Value="set:BGImage image:Space" />
-        <Property Name="UnifiedSize" Value="{{1.0,0},{1.0,0}}" />                              
+        <Property Name="FrameEnabled" Value="False" />
         <Property Name="InheritsAlpha" Value="False" />
         <Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}" />
         <Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{1,0},{1,0}}" />
-        <Property Name="FrameEnabled" Value="False" /> 
         <Window Type="TaharezLook/FrameWindow" Name="TextDemo" >
             <Property Name="Font" Value="Commonwealth-10" />
             <Property Name="Text" Value="Welcome" />
@@ -46,6 +44,14 @@ For more information please click the &apos;about&apos; box.</Property>
                 <Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}" />
                 <Property Name="UnifiedAreaRect" Value="{{0.0283015,0},{0.0684252,0},{0.976415,0},{0.991174,0}}" />
             </Window>
+        </Window>
+        <Window Type="TaharezLook/Button" Name="Root/QuitButton" >
+            <Property Name="Font" Value="Commonwealth-10" />
+            <Property Name="Text" Value="Quit" />
+            <Property Name="Tooltip" Value="Quit the game" />
+            <Property Name="AlwaysOnTop" Value="True" />
+            <Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}" />
+            <Property Name="UnifiedAreaRect" Value="{{0.916407,0},{0,5},{1,-5},{0.031768,0}}" />
         </Window>
     </Window>
 </GUILayout>

@@ -55,18 +55,19 @@ namespace GUISystem {
 
 		inline virtual void MouseButtonReleased(const InputSystem::eMouseButton btn) {
 			CEGUI::System::getSingleton().injectMouseButtonUp( ConvertMouseButtonEnum(btn) );
-		}
+		}		
 
 		inline virtual void RenderGUI() const {
 			mCegui->renderGUI();
-			//gGfxRenderer.DrawImage((GfxSystem::TexturePtr)gResourceMgr.GetResource("imagesets/GPN-2000-001437.tga"),
-			//	0, 0);
 		}
 
 		virtual void Update(float32 delta);
 
 		virtual ~GUIMgr();
 	protected:
+		void RegisterEvents();
+		bool QuitEvent(const CEGUI::EventArgs& e);
+
 		CEGUI::System * mCegui;
 		CEGUI::Window * CurrentWindowRoot;
 		ResourceGate * mResourceGate;
