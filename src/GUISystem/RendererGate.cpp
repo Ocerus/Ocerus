@@ -45,10 +45,10 @@ namespace GUISystem {
 		GfxSystem::TexturePtr conv_tex = ((CEGUITextureWrapper*)tex)->getTexture();
 		GfxSystem::Rect conv_texture_rect;
 
-		conv_texture_rect.x = (texture_rect.d_left != HUGE_VAL)?MathUtils::Round(texture_rect.d_left*conv_tex->GetWidth(false)):0;
-		conv_texture_rect.y = (texture_rect.d_top != HUGE_VAL)?MathUtils::Round(texture_rect.d_top*conv_tex->GetHeight(false)):0;
-		conv_texture_rect.w = (texture_rect.d_right != HUGE_VAL)?MathUtils::Round(texture_rect.d_right*conv_tex->GetWidth(false) - texture_rect.d_left*conv_tex->GetWidth(false)):conv_tex->GetWidth(false);
-		conv_texture_rect.h = (texture_rect.d_bottom != HUGE_VAL)?MathUtils::Round(texture_rect.d_bottom*conv_tex->GetHeight(false) - texture_rect.d_top*conv_tex->GetHeight(false)):conv_tex->GetHeight(false);
+		conv_texture_rect.x = (texture_rect.d_left != HUGE_VAL)?MathUtils::Round(texture_rect.d_left*conv_tex->GetWidth()):0;
+		conv_texture_rect.y = (texture_rect.d_top != HUGE_VAL)?MathUtils::Round(texture_rect.d_top*conv_tex->GetHeight()):0;
+		conv_texture_rect.w = (texture_rect.d_right != HUGE_VAL)?MathUtils::Round(texture_rect.d_right*conv_tex->GetWidth() - texture_rect.d_left*conv_tex->GetWidth()):conv_tex->GetWidth();
+		conv_texture_rect.h = (texture_rect.d_bottom != HUGE_VAL)?MathUtils::Round(texture_rect.d_bottom*conv_tex->GetHeight() - texture_rect.d_top*conv_tex->GetHeight()):conv_tex->GetHeight();
 
 		Quad_info info(conv_dest_rect, z, conv_tex, conv_texture_rect,
 			GfxSystem::ColorRect(colors.d_top_left.getARGB(),

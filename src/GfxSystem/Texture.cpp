@@ -42,22 +42,21 @@ bool Texture::UnloadImpl()
 	return true;
 }
 
-uint32 Texture::GetWidth(bool bOriginal)
+uint32 Texture::GetWidth(/*bool bOriginal*/)
 {
 	EnsureLoaded();
-	return gGfxRenderer.mHGE->Texture_GetWidth(mHandle, bOriginal);
+	return gGfxRenderer.mHGE->Texture_GetWidth(mHandle, false);
 }
 
-uint32 Texture::GetHeight(bool bOriginal )
+uint32 Texture::GetHeight(/*bool bOriginal */)
 {
 	EnsureLoaded();
-	return gGfxRenderer.mHGE->Texture_GetHeight(mHandle, bOriginal);
+	return gGfxRenderer.mHGE->Texture_GetHeight(mHandle, false);
 }
 
 uint32 Texture::GetTexture()
 {
 	EnsureLoaded();
-
 	return mHandle;
 }
 
@@ -65,7 +64,7 @@ bool Texture::LoadFromBitmap( const void* pixels, uint32 pixelsLength, uint32 wi
 {
 	SetState(STATE_LOADING);
 	
-	this->mFormat = format;
+	mFormat = format;
 	HTEXTURE tex = gGfxRenderer.mHGE->Texture_Create(width, height);
 	mHandle = tex;
 	DWORD* texture_data = gGfxRenderer.mHGE->Texture_Lock(tex, false);

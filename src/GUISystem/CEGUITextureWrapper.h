@@ -21,10 +21,10 @@ namespace GUISystem {
 	public:
 
 		// Returns the current pixel width of the texture
-		inline virtual CEGUI::ushort getWidth(void) const { return mTexture->GetWidth(false); }
+		inline virtual CEGUI::ushort getWidth(void) const { return mTexture->GetWidth(); }
 
 		// Returns the current pixel height of the texture
-		inline virtual CEGUI::ushort getHeight(void) const { return mTexture->GetHeight(false); }
+		inline virtual CEGUI::ushort getHeight(void) const { return mTexture->GetHeight(); }
 
 		//TODO hardwire: I removed params from GetWidth/GetHeight as it caused problems inside HGE
 		inline virtual CEGUI::ushort getOriginalHeight(void) const { return mOriginalHeight; }
@@ -80,13 +80,14 @@ namespace GUISystem {
 	protected:
 		GfxSystem::TexturePtr mTexture;
 
+		uint32 mOriginalHeight, mOriginalWidth;
+
 		static uint32 mTextureIndex;
 		static const std::string mResourceGroupName;
 		static std::string GetNextTextureName();
 
 	private:
 		CEGUI::Renderer* d_owner;		//<! Renderer object that created and owns this texture		
-		int mOriginalHeight, mOriginalWidth;
 	};
 }
 
