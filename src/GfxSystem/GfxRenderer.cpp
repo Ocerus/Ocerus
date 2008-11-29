@@ -7,6 +7,8 @@
 
 using namespace GfxSystem;
 
+#define DEFAULT_IMAGE_WORLD_SCALE 0.02f
+
 // init null values
 Pen Pen::NullPen(Color(0,0,0,0));
 Rect Rect::NullRect(0,0,0,0);
@@ -97,7 +99,8 @@ void GfxRenderer::ChangeResolution( const Point& resolution )
 
 	gInputMgr._SetResolution(resolution.x, resolution.y);
 
-	while (iter != mResChangeListeners.end()) {
+	while (iter != mResChangeListeners.end())
+	{
 		(*iter)->EventResolutionChanged(resolution.x, resolution.y);
 		++iter;
 	}
@@ -157,14 +160,8 @@ bool GfxRenderer::DrawLineWithConversion( const Vector2& begin, const Vector2& e
 	return DrawLine(WorldToScreen(begin), WorldToScreen(end), pen);
 }
 
-void InitQuad(hgeQuad& q,const TexturePtr& image, Rect destRect, const Rect& textureRect, const ColorRect& colors, uint8 anchor)
+void InitQuad(hgeQuad& q,const TexturePtr& image, const Rect& textureRect, const ColorRect& colors )
 {
-	// set default of weight and height
-	if (destRect.w == 0)
-		destRect.w = image->GetWidth();
-	if (destRect.h == 0)
-		destRect.h = image->GetHeight();
-	
 	/* init texture region */ 
 	// texture width and height
 	float32 tw = (float32) (image->GetWidth());
@@ -175,46 +172,31 @@ void InitQuad(hgeQuad& q,const TexturePtr& image, Rect destRect, const Rect& tex
 	if (&textureRect != &Rect::NullRect)		
 		tr = textureRect;
 
-	/* set float position of top left corner minding the anchor */
-	float32 fX = (float32)(destRect.x);
-	float32 fY = (float32)(destRect.y);
-
-	if (ANCHOR_VCENTER & anchor)
-		fY -= (float32)(destRect.h)/2;
-	// anchor top is default value
-	if (ANCHOR_BOTTOM & anchor)
-		fY -= (float32)(destRect.h);
-	// anchor left is default value
-	if (ANCHOR_RIGHT & anchor)
-		fX -= (float32)(destRect.w);
-	if (ANCHOR_HCENTER & anchor)
-		fX -= (float32)(destRect.w)/2;
-
 	/* init vertices - set texture position, position, colour (alpha only) */
 	// z position is 0, because we have 2d world
-	q.v[0].x = fX;
-	q.v[0].y = fY;
+	q.v[0].x = 0;
+	q.v[0].y = 0;
 	q.v[0].z = 0;
 	q.v[0].tx = tr.x / tw;
 	q.v[0].ty = tr.y / th;
 	q.v[0].col = ConvertColorToDWORD(colors.TopLeft);
 
-	q.v[1].x = fX + destRect.w;
-	q.v[1].y = fY;
+	q.v[1].x = tw;
+	q.v[1].y = 0;
 	q.v[1].z = 0;
 	q.v[1].tx = (tr.x + tr.w) / tw;
 	q.v[1].ty = tr.y / th;
 	q.v[1].col = ConvertColorToDWORD(colors.TopRight);
 
-	q.v[2].x = fX + destRect.w;
-	q.v[2].y = fY + destRect.h;
+	q.v[2].x = tw;
+	q.v[2].y = th;
 	q.v[2].z = 0;
 	q.v[2].tx = (tr.x + tr.w) / tw;
 	q.v[2].ty = (tr.y + tr.h) / th;
 	q.v[2].col = ConvertColorToDWORD(colors.BottomRight);
 
-	q.v[3].x = fX;
-	q.v[3].y = fY + destRect.h;
+	q.v[3].x = 0;
+	q.v[3].y = th;
 	q.v[3].z = 0;
 	q.v[3].tx = tr.x / tw;
 	q.v[3].ty = (tr.y + tr.h) / th;
@@ -225,40 +207,86 @@ void InitQuad(hgeQuad& q,const TexturePtr& image, Rect destRect, const Rect& tex
 	q.blend = BLEND_ALPHABLEND | BLEND_COLORMUL | BLEND_ZWRITE;
 }
 
-void InitQuad(hgeQuad& q,const TexturePtr& image, const Rect& destRect, uint8 alpha,const Rect& textureRect,uint8 anchor)
-{
-	ColorRect placeholder;
-	InitQuad(q,image, destRect, textureRect, placeholder, anchor);
-}
-
 bool GfxSystem::GfxRenderer::DrawImage( const TexturePtr& image, int32 x, int32 y, uint8 anchor /*= ANCHOR_VCENTER|ANCHOR_HCENTER*/, float32 angle /*= 0.0f*/, uint8 alpha /*= 255*/, float32 scale /*= 1.0f*/, int32 width /* = 0 */,int32 height /* = 0 */, const Rect& textureRect /* = 0 */) const
 {	
+	if (image.IsNull())
+	{
+		gLogMgr.LogMessage("DrawImage: texture is null", LOG_ERROR);
+		return false;
+	}
+
 	Color alphacolor = Color(255, 255, 255, alpha);
 	ColorRect alphas(alphacolor, alphacolor, alphacolor, alphacolor);
-	if (DrawImage(image, Rect(x, y, width, height), 
-		Rect(0, 0, image->GetWidth(), image->GetHeight()), alphas, anchor, angle, scale))
-		return true;
-	else
-		return false;
+	hgeQuad q;
+	uint32 imgW = image->GetWidth();
+	uint32 imgH = image->GetHeight();
+	InitQuad(q, image, Rect(0, 0, imgW, imgH), alphas);
+
+	// scaling
+	imgW = MathUtils::Round(scale*imgW);
+	imgH = MathUtils::Round(scale*imgH);
+	float32 imgW_half = 0.5f*imgW;
+	float32 imgH_half = 0.5f*imgH;
+
+	// basic positioning of the quad
+	float32 qx = -imgW_half;
+	float32 qy = -imgH_half;
+
+	// anchoring
+	assert(!(anchor&ANCHOR_LEFT)||!(anchor&ANCHOR_RIGHT)||!(anchor&ANCHOR_HCENTER) && "Coliding anchors");
+	assert(!(anchor&ANCHOR_TOP)||!(anchor&ANCHOR_BOTTOM)||!(anchor&ANCHOR_VCENTER) && "Coliding anchors");
+	if (anchor & ANCHOR_LEFT)
+		qx += imgW_half;
+	else if (anchor & ANCHOR_RIGHT)
+		qx -= imgW_half;
+	else { assert((anchor&ANCHOR_HCENTER) && "Wrong anchor"); }
+	if (anchor & ANCHOR_TOP)
+		qy += imgH_half;
+	else if (anchor & ANCHOR_BOTTOM)
+		qy -= imgH_half;
+	else { assert((anchor&ANCHOR_VCENTER) && "Wrong anchor"); }
+
+	// position the quad
+	q.v[0].x = qx;
+	q.v[0].y = qy;
+	q.v[1].x = qx + imgW;
+	q.v[1].y = qy;
+	q.v[2].x = qx + imgW;
+	q.v[2].y = qy + imgH;
+	q.v[3].x = qx;
+	q.v[3].y = qy + imgH;
+
+	// rotate the quad around 0,0
+	Matrix22 rot(angle);
+	for (int i=0; i<4; ++i)
+	{
+		Vector2 res = MathUtils::Multiply(rot, Vector2(q.v[i].x, q.v[i].y));
+		q.v[i].x = res.x;
+		q.v[i].y = res.y;
+	}
+
+	// move the quad to the correct position
+	for (int i=0; i<4; ++i)
+	{
+		q.v[i].x += x;
+		q.v[i].y += y;
+	}
+
+	mHGE->Gfx_RenderQuad(&q);
+	return true;
 }
 
 bool GfxSystem::GfxRenderer::DrawImage( const TexturePtr& image, const Point& pos, uint8 anchor /*= ANCHOR_VCENTER|ANCHOR_HCENTER*/, float32 angle /*= 0.0f*/, uint8 alpha /*= 255*/, float32 scale /*= 1.0f*/ ) const
 {
-	if (DrawImage(image,pos.x,pos.y,anchor,angle,alpha,scale,image->GetWidth(),image->GetHeight()))
-		return true;
-	else
-		return false;
+	return DrawImage(image, pos.x, pos.y, anchor, angle, alpha, scale, image->GetWidth(), image->GetHeight());
 }
 
 bool GfxSystem::GfxRenderer::DrawImageWithConversion( const TexturePtr& image, const Vector2& pos, uint8 anchor /*= ANCHOR_VCENTER|ANCHOR_HCENTER*/, float32 angle /*= 0.0f*/, uint8 alpha /*= 255*/, float32 scale /*= 1.0f*/ ) const
 {
-	if (DrawImage(image, WorldToScreenX(pos.x),WorldToScreenY(pos.y),anchor,angle,alpha,WorldToScreenS(scale),image->GetWidth(),image->GetHeight()))
-		return true;
-	else
-		return false;
+	return DrawImage(image, WorldToScreenX(pos.x), WorldToScreenY(pos.y), anchor, angle, alpha, WorldToScreenImageS(scale), image->GetWidth(), image->GetHeight());
 }
 
-bool GfxSystem::GfxRenderer::DrawImage( const TexturePtr& image, const Rect& destRect, const Rect& textureRect, const ColorRect& colors, uint8 anchor /*= ANCHOR_VCENTER|ANCHOR_HCENTER*/, float32 angle /*= 0.0f*/, float32 scale /*= 1.0f*/ ) const
+bool GfxSystem::GfxRenderer::DrawImage( const TexturePtr& image, const Rect& textureRect, const Rect& destRect, const ColorRect& colors ) const
 {
 	if (image.IsNull())
 	{
@@ -266,7 +294,16 @@ bool GfxSystem::GfxRenderer::DrawImage( const TexturePtr& image, const Rect& des
 		return false;
 	}
 	hgeQuad q;		
-	InitQuad(q, image, destRect, textureRect, colors, anchor);
+	InitQuad(q, image, textureRect, colors);
+
+	q.v[0].x = (float32)(destRect.x);
+	q.v[0].y = (float32)(destRect.y);
+	q.v[1].x = (float32)(destRect.x + destRect.w);
+	q.v[1].y = (float32)(destRect.y);
+	q.v[2].x = (float32)(destRect.x + destRect.w);
+	q.v[2].y = (float32)(destRect.y + destRect.h);
+	q.v[3].x = (float32)(destRect.x);
+	q.v[3].y = (float32)(destRect.y + destRect.h);
 
 	mHGE->Gfx_RenderQuad(&q);
 	return true;
@@ -421,4 +458,9 @@ int32 GfxSystem::GfxRenderer::WorldToScreenY( const float32 y ) const
 GfxSystem::Point GfxSystem::GfxRenderer::WorldToScreen( const Vector2& pos ) const
 {
 	return GfxSystem::Point(WorldToScreenX(pos.x), WorldToScreenY(pos.y));
+}
+
+float32 GfxSystem::GfxRenderer::WorldToScreenImageS( const float32 scale ) const
+{
+	return DEFAULT_IMAGE_WORLD_SCALE * scale * mCameraScale;
 }

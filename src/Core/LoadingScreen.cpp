@@ -14,6 +14,8 @@ void Core::LoadingScreen::DoLoading( eType type )
 	case TYPE_BASIC_RESOURCES:
 		break;
 	case TYPE_GENERAL_RESOURCES:
+		gResourceMgr.AddResourceDirToGroup("engines", "ShipParts");
+		gResourceMgr.LoadResourcesInGroup("ShipParts");
 		break;
 	}
 }

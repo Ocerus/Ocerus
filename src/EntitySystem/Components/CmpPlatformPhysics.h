@@ -23,8 +23,9 @@ namespace EntitySystem
 
 		static void RegisterReflection(void);
 
-		Vector2& GetPosition(void) const;
-		void SetPosition(Vector2& pos);
+		Vector2& GetRelativePosition(void) const { return const_cast<Vector2&>(mRelativePosition); }
+		Vector2 GetAbsolutePosition(void) const;
+		void SetAbsolutePosition(Vector2 pos);
 		float32 GetAngle(void) const;
 		void SetAngle(const float32 angle);
 
@@ -33,6 +34,7 @@ namespace EntitySystem
 	private:
 		b2Body* mBody;
 		b2Shape* mShape;
+		Vector2 mRelativePosition;
 
 	};
 }

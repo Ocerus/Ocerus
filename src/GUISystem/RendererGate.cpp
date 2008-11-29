@@ -114,7 +114,7 @@ namespace GUISystem {
 	}
 
 	void RendererGate::DrawQuad(const Quad_info & quad) const {
-		gGfxRenderer.DrawImage(quad.tex, quad.dest_rect, quad.texture_rect, quad.colors);
+		gGfxRenderer.DrawImage(quad.tex, quad.texture_rect, quad.dest_rect, quad.colors);
 	}
 /*
 	void RendererGate::ClearProviders() {

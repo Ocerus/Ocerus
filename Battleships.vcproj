@@ -197,11 +197,27 @@
 					Name="inc"
 					>
 					<File
+						RelativePath=".\src\EntitySystem\Components\CmpEngine.h"
+						>
+					</File>
+					<File
+						RelativePath=".\src\EntitySystem\Components\CmpEngineParams.h"
+						>
+					</File>
+					<File
 						RelativePath=".\src\EntitySystem\Components\CmpMaterial.h"
 						>
 					</File>
 					<File
+						RelativePath=".\src\EntitySystem\Components\CmpPlatformItem.h"
+						>
+					</File>
+					<File
 						RelativePath=".\src\EntitySystem\Components\CmpPlatformLinks.h"
+						>
+					</File>
+					<File
+						RelativePath=".\src\EntitySystem\Components\CmpPlatformLogic.h"
 						>
 					</File>
 					<File
@@ -210,10 +226,6 @@
 					</File>
 					<File
 						RelativePath=".\src\EntitySystem\Components\CmpPlatformPhysics.h"
-						>
-					</File>
-					<File
-						RelativePath=".\src\EntitySystem\Components\CmpPlatformStats.h"
 						>
 					</File>
 					<File
@@ -237,11 +249,27 @@
 					Name="src"
 					>
 					<File
+						RelativePath=".\src\EntitySystem\Components\CmpEngine.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\EntitySystem\Components\CmpEngineParams.cpp"
+						>
+					</File>
+					<File
 						RelativePath=".\src\EntitySystem\Components\CmpMaterial.cpp"
 						>
 					</File>
 					<File
+						RelativePath=".\src\EntitySystem\Components\CmpPlatformItem.cpp"
+						>
+					</File>
+					<File
 						RelativePath=".\src\EntitySystem\Components\CmpPlatformLinks.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\EntitySystem\Components\CmpPlatformLogic.cpp"
 						>
 					</File>
 					<File
@@ -250,10 +278,6 @@
 					</File>
 					<File
 						RelativePath=".\src\EntitySystem\Components\CmpPlatformPhysics.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\src\EntitySystem\Components\CmpPlatformStats.cpp"
 						>
 					</File>
 					<File

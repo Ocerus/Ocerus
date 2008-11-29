@@ -44,12 +44,12 @@ void EntitySystem::CmpPlatformPhysics::Init( ComponentDescription& desc )
 	Vector2* poly = (Vector2*)cont.GetData();
 	uint32 polyLen = cont.GetSize();
 	// retrieve shape transformation info
-	Vector2 relPos = b2Vec2_zero;
+	mRelativePosition = b2Vec2_zero;
 	if (ship.IsValid())
-		relPos = desc.GetNextItem()->GetData<Vector2>();
+		mRelativePosition = desc.GetNextItem()->GetData<Vector2>();
 	bool flip = desc.GetNextItem()->GetData<bool>();
 	float32 angle = desc.GetNextItem()->GetData<float32>();
-	b2XForm xform(relPos, b2Mat22(angle));
+	b2XForm xform(mRelativePosition, b2Mat22(angle));
 	// create the shape
 	for (int i=flip?(polyLen-1):(0); flip?(i>=0):(i<(int)polyLen); flip?(--i):(++i))
 	{
@@ -73,9 +73,14 @@ EntityMessage::eResult EntitySystem::CmpPlatformPhysics::HandleMessage( const En
 {
 	switch(msg.type)
 	{
+	case EntityMessage::TYPE_GET_BODY_POSITION: // I need this for drawing
+		assert(msg.data);
+		assert(mBody);
+		((Vector2*)msg.data)->Set(mBody->GetPosition());
+		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_POSITION:
 		assert(msg.data);
-		((Vector2*)msg.data)->Set(GetPosition());
+		((Vector2*)msg.data)->Set(GetAbsolutePosition());
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_ANGLE:
 		assert(msg.data);
@@ -99,19 +104,23 @@ EntityMessage::eResult EntitySystem::CmpPlatformPhysics::HandleMessage( const En
 
 void EntitySystem::CmpPlatformPhysics::RegisterReflection()
 {
-	RegisterProperty<Vector2&>("Position", &GetPosition, &SetPosition, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<Vector2&>("RelativePosition", &GetRelativePosition, 0, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<Vector2>("AbsolutePosition", &GetAbsolutePosition, &SetAbsolutePosition, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<float32>("Angle", &GetAngle, &SetAngle, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 }
 
-Vector2& EntitySystem::CmpPlatformPhysics::GetPosition( void ) const
+Vector2 EntitySystem::CmpPlatformPhysics::GetAbsolutePosition( void ) const
 {
 	assert(mBody);
-	return const_cast<Vector2&>(mBody->GetPosition());
+	return mBody->GetPosition() + MathUtils::Multiply(Matrix22(mBody->GetAngle()), mRelativePosition);
 }
 
-void EntitySystem::CmpPlatformPhysics::SetPosition( Vector2& pos )
+void EntitySystem::CmpPlatformPhysics::SetAbsolutePosition( Vector2 pos )
 {
 	assert(mBody);
+	EntityHandle ship;
+	GetOwner().PostMessage(EntityMessage::TYPE_GET_PARENT, &ship);
+	assert(!ship.IsValid() && "SetAbsolutePosition can be used for free platforms only");
 	mBody->SetXForm(pos, mBody->GetAngle());
 }
 

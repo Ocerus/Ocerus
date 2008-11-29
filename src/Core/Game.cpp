@@ -29,7 +29,7 @@ void Core::Game::Init()
 	EntitySystem::EntityDescription entityDesc;
 	EntitySystem::ComponentDescription compDesc;
 
-	// create a materials
+	// create a material
 	entityDesc.Reset();
 	compDesc.Init(EntitySystem::CT_MATERIAL);
 	compDesc.AddItem(1.0f); // durability ratio
@@ -37,7 +37,7 @@ void Core::Game::Init()
 	entityDesc.AddComponentDescription(compDesc);
 	EntitySystem::EntityHandle material0 = gEntityMgr.CreateEntity(entityDesc);
 
-	// create a platform types
+	// create a platform type
 	entityDesc.Reset();
 	compDesc.Init(EntitySystem::CT_PLATFORM_PARAMS);
 	compDesc.AddItem(material0);
@@ -47,9 +47,19 @@ void Core::Game::Init()
 	entityDesc.AddComponentDescription(compDesc);
 	EntitySystem::EntityHandle platformType0 = gEntityMgr.CreateEntity(entityDesc);
 
+	// create an engine type
+	entityDesc.Reset();
+	compDesc.Init(EntitySystem::CT_ENGINE_PARAMS);
+	compDesc.AddItem(material0);
+	compDesc.AddItem(-0.5f*MathUtils::PI); // min angle
+	compDesc.AddItem(0.5f*MathUtils::PI); // max angle
+	compDesc.AddItem(1.0f); // angular speed
+	entityDesc.AddComponentDescription(compDesc);
+	EntitySystem::EntityHandle engineType0 = gEntityMgr.CreateEntity(entityDesc);
+
 	// create free platforms
 	/*entityDesc.Reset();
-	compDesc.Init(EntitySystem::CT_PLATFORM_STATS);
+	compDesc.Init(EntitySystem::CT_PLATFORM_LOGIC);
 	compDesc.AddItem(platformType0); // blueprints
 	compDesc.AddItem(EntitySystem::EntityHandle()); // pass null ship handle to indicate this platform is free
 	entityDesc.AddComponentDescription(compDesc);
@@ -80,7 +90,7 @@ void Core::Game::Init()
 
 	// create a platform and attach it to the ship
 	entityDesc.Reset();
-	compDesc.Init(EntitySystem::CT_PLATFORM_STATS);
+	compDesc.Init(EntitySystem::CT_PLATFORM_LOGIC);
 	compDesc.AddItem(platformType0); // blueprints
 	compDesc.AddItem(ship0); // pass our ship
 	entityDesc.AddComponentDescription(compDesc);
@@ -95,9 +105,22 @@ void Core::Game::Init()
 	entityDesc.AddComponentDescription(compDesc);
 	EntitySystem::EntityHandle platform1 = gEntityMgr.CreateEntity(entityDesc);
 
+	// create an engine and attach it to the platform
+	entityDesc.Reset();
+	compDesc.Init(EntitySystem::CT_PLATFORM_ITEM);
+	compDesc.AddItem(engineType0); // blueprints
+	compDesc.AddItem(platform1); // parent
+	compDesc.AddItem(Vector2(-1.0f, 0.0f)); // position relative to the platform
+	entityDesc.AddComponentDescription(compDesc);
+	compDesc.Init(EntitySystem::CT_ENGINE);
+	compDesc.AddItem(MathUtils::PI); // default angle
+	compDesc.AddItem(0.0f); // relative angle
+	entityDesc.AddComponentDescription(compDesc);
+	EntitySystem::EntityHandle engine0 = gEntityMgr.CreateEntity(entityDesc);
+
 	// create another platform and attach it to the ship
 	entityDesc.Reset();
-	compDesc.Init(EntitySystem::CT_PLATFORM_STATS);
+	compDesc.Init(EntitySystem::CT_PLATFORM_LOGIC);
 	compDesc.AddItem(platformType0); // blueprints
 	compDesc.AddItem(ship0); // pass our ship
 	entityDesc.AddComponentDescription(compDesc);

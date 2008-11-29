@@ -6,10 +6,10 @@
 
 namespace EntitySystem
 {
-	class CmpPlatformStats : public RTTIGlue<CmpPlatformStats, Component>
+	class CmpPlatformLogic : public RTTIGlue<CmpPlatformLogic, Component>
 	{
 	public:
-		static Component* CreateMe(void) { return new CmpPlatformStats(); }
+		static Component* CreateMe(void) { return new CmpPlatformLogic(); }
 
 		virtual void Init(ComponentDescription& desc);
 		virtual void Deinit(void);
@@ -25,12 +25,13 @@ namespace EntitySystem
 		void SetParentShip(const EntityHandle parentShip) { mParentShip = parentShip; }
 	
 		/// Just to make sure virtual functions work ok.
-		virtual ~CmpPlatformStats(void) {}
+		virtual ~CmpPlatformLogic(void) {}
 	private:
-		//TODO mozna prejmenovat na PlatformLogic
 		EntityHandle mBlueprints;
 		EntityHandle mParentShip; // if null, it means this platform is free
 		uint32 mHitpoints;
+		typedef std::vector<EntityHandle> EntityList;
+		EntityList mItems;
 
 	};
 }

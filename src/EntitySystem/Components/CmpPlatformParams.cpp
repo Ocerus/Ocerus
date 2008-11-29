@@ -3,6 +3,9 @@
 
 using namespace EntitySystem;
 
+#define HITPOINTS_RATIO 1.0f
+#define SLOTS_RATIO 1.0f
+#define LINKSLOTS_RATIO 1.0f
 
 void EntitySystem::CmpPlatformParams::Init( ComponentDescription& desc )
 {
@@ -29,6 +32,10 @@ EntityMessage::eResult EntitySystem::CmpPlatformParams::HandleMessage( const Ent
 	case EntityMessage::TYPE_GET_POLYSHAPE:
 		assert(msg.data);
 		((DataContainer*)msg.data)->SetData((uint8*)mShape, mShapeLength);
+		return EntityMessage::RESULT_OK;
+	case EntityMessage::TYPE_GET_MAX_HITPOINTS:
+		assert(msg.data);
+		*(uint32*)msg.data = GetMaxHitpoints();
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_MATERIAL:
 		assert(msg.data);

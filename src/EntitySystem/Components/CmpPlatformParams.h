@@ -8,10 +8,6 @@
 
 namespace EntitySystem
 {
-	#define HITPOINTS_RATIO 1.0f
-	#define SLOTS_RATIO 1.0f
-	#define LINKSLOTS_RATIO 1.0f
-
 	class CmpPlatformParams : public RTTIGlue<CmpPlatformParams, Component>
 	{
 	public:

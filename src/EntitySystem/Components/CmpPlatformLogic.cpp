@@ -1,21 +1,21 @@
 #include "Common.h"
-#include "CmpPlatformStats.h"
+#include "CmpPlatformLogic.h"
 
 using namespace EntitySystem;
 
-void CmpPlatformStats::Init(ComponentDescription& desc)
+void CmpPlatformLogic::Init(ComponentDescription& desc)
 {
 	SetBlueprints(desc.GetNextItem()->GetData<EntityHandle>());
 	mBlueprints.PostMessage(EntityMessage::TYPE_GET_MAX_HITPOINTS, &mHitpoints);
 	SetParentShip(desc.GetNextItem()->GetData<EntityHandle>());
 }
 
-void CmpPlatformStats::Deinit() 
+void CmpPlatformLogic::Deinit() 
 {
 
 }
 
-EntityMessage::eResult CmpPlatformStats::HandleMessage(const EntityMessage& msg)
+EntityMessage::eResult CmpPlatformLogic::HandleMessage(const EntityMessage& msg)
 {
 	switch(msg.type)
 	{
@@ -27,11 +27,23 @@ EntityMessage::eResult CmpPlatformStats::HandleMessage(const EntityMessage& msg)
 		assert(msg.data);
 		*(EntityHandle*)msg.data = GetParentShip();
 		return EntityMessage::RESULT_OK;
+	case EntityMessage::TYPE_GET_HITPOINTS:
+		assert(msg.data);
+		*(uint32*)msg.data = GetHitpoints();
+		return EntityMessage::RESULT_OK;
+	case EntityMessage::TYPE_DRAW:
+		for (EntityList::iterator i=mItems.begin(); i!=mItems.end(); ++i)
+			i->PostMessage(EntityMessage::TYPE_DRAW_INNER);
+		return EntityMessage::RESULT_OK;
+	case EntityMessage::TYPE_ADD_PLATFORM_ITEM:
+		assert(msg.data);
+		mItems.push_back(*(EntityHandle*)msg.data);
+		return EntityMessage::RESULT_OK;
 	}
 	return EntityMessage::RESULT_IGNORED;
 }
 
-void CmpPlatformStats::RegisterReflection()
+void CmpPlatformLogic::RegisterReflection()
 {
 	RegisterProperty<uint32>("Hitpoints", &GetHitpoints, &SetHitpoints, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<EntityHandle>("Blueprints", &GetBlueprints, &SetBlueprints, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);

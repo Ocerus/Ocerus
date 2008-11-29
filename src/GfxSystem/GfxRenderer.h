@@ -97,6 +97,7 @@ namespace GfxSystem
 		int32 WorldToScreenX(const float32 x) const;
 		int32 WorldToScreenY(const float32 y) const;
 		inline float32 WorldToScreenS(const float32 scale) const { return mCameraScale*scale; }
+		inline float32 WorldToScreenImageS(const float32 scale) const;
 		Point WorldToScreen(const Vector2& pos) const;
 
 		bool ClearScreen(const Color& color) const;
@@ -107,7 +108,7 @@ namespace GfxSystem
 		/// This version does a conversion from world space
 		bool DrawImageWithConversion(const TexturePtr& image, const Vector2& pos, uint8 anchor = 0, float32 angle = 0.0f, uint8 alpha = 255, float32 scale = 1.0f) const;
 		/// This version is made specially to support GUI
-		bool DrawImage(const TexturePtr& image, const Rect& textureRect, const Rect& destRect, const ColorRect& colors, uint8 anchor = 0, float32 angle = 0.0f, float32 scale = 1.0f ) const;
+		bool DrawImage(const TexturePtr& image, const Rect& textureRect, const Rect& destRect, const ColorRect& colors ) const;
 
 		bool DrawLine(int x1, int y1, int x2, int y2, const Pen& pen) const;
 		bool DrawLine(const Point& begin, const Point& end, const Pen& pen) const;
