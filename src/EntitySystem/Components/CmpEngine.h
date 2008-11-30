@@ -33,6 +33,7 @@ namespace EntitySystem
 		float32 mRelativeAngle;
 
 		void Draw(void) const;
+		void DrawHoverOverlay(void) const;
 
 	};
 }

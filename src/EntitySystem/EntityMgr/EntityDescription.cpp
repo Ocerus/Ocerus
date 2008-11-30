@@ -4,10 +4,7 @@
 
 using namespace EntitySystem;
 
-EntityDescription::EntityDescription() 
-{
-	Reset();
-}
+EntityDescription::EntityDescription() {}
 
 EntityDescription::~EntityDescription()
 {
@@ -21,10 +18,11 @@ void EntityDescription::Clear(void)
 	mComponentDescriptions.clear();
 }
 
-void EntityDescription::Reset(void)
+void EntityDescription::Init(const eEntityType type)
 {
 	Clear();
 	mIndex = 0;
+	mType = type;
 }
 
 void EntityDescription::AddComponentDescription(ComponentDescription& desc)

@@ -10,8 +10,11 @@ namespace InputSystem
 	class IInputListener
 	{
 	public:
+		/// These do nothing.
+		//@{
 		IInputListener(void) {}
 		virtual ~IInputListener(void) {}
+		//@}
 
 		/// Called when a keyboard key is pressed/released.
 		//@{

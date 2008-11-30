@@ -125,3 +125,19 @@ bool InputSystem::OISListener::IsKeyDown( eKeyCode k ) const
 	assert(mKeyboard);
 	return mKeyboard->isKeyDown(static_cast<OIS::KeyCode>(k));
 }
+
+void InputSystem::OISListener::GetMouseState( InputSystem::MouseState& state )
+{
+	assert(mMouse);
+	const OIS::MouseState& oisstate = mMouse->getMouseState();
+	state.x = oisstate.X.abs;
+	state.y = oisstate.Y.abs;
+	state.wheel = oisstate.Z.abs;
+	state.buttons = MBTN_UNKNOWN;
+	if (oisstate.buttonDown(OIS::MB_Left))
+		state.buttons |= MBTN_LEFT;
+	if (oisstate.buttonDown(OIS::MB_Right))
+		state.buttons |= MBTN_RIGHT;
+	if (oisstate.buttonDown(OIS::MB_Middle))
+		state.buttons |= MBTN_MIDDLE;
+}

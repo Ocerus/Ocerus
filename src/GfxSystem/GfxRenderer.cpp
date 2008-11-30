@@ -12,6 +12,7 @@ using namespace GfxSystem;
 // init null values
 Pen Pen::NullPen(Color(0,0,0,0));
 Rect Rect::NullRect(0,0,0,0);
+Color Color::NullColor(0,0,0,0);
 
 namespace GfxSystem
 {
@@ -67,6 +68,8 @@ GfxRenderer::GfxRenderer(const Point& resolution, bool fullscreen):
 	assert(success);
 	if (success)
 		gLogMgr.LogMessage("HGE inited; logfile=", mHGE->System_GetState(HGE_LOGFILE));
+
+	mCameraScaleInv = 1.0f / mCameraScale;
 }
 
 GfxRenderer::~GfxRenderer()
@@ -283,7 +286,7 @@ bool GfxSystem::GfxRenderer::DrawImage( const TexturePtr& image, const Point& po
 
 bool GfxSystem::GfxRenderer::DrawImageWithConversion( const TexturePtr& image, const Vector2& pos, uint8 anchor /*= ANCHOR_VCENTER|ANCHOR_HCENTER*/, float32 angle /*= 0.0f*/, uint8 alpha /*= 255*/, float32 scale /*= 1.0f*/ ) const
 {
-	return DrawImage(image, WorldToScreenX(pos.x), WorldToScreenY(pos.y), anchor, angle, alpha, WorldToScreenImageS(scale), image->GetWidth(), image->GetHeight());
+	return DrawImage(image, WorldToScreenX(pos.x), WorldToScreenY(pos.y), anchor, angle, alpha, WorldToScreenImageScale(scale), image->GetWidth(), image->GetHeight());
 }
 
 bool GfxSystem::GfxRenderer::DrawImage( const TexturePtr& image, const Rect& textureRect, const Rect& destRect, const ColorRect& colors ) const
@@ -445,14 +448,33 @@ bool GfxSystem::GfxRenderer::DrawPolygon( const std::vector<Point>& vertices, co
 	return true;
 }
 
+bool GfxSystem::GfxRenderer::DrawCircle( const Point& center, const int32 radius, const Color& fillColor, const Pen& outline ) const
+{
+	const float32 numSegments = 20;
+	float32 eachAngle = 2.0f / numSegments * MathUtils::PI;
+	int32 x = (int32)radius; 
+	int32 y = 0; 
+	int32 oldX, oldY;
+
+	for(float32 a=0.0f; a<=(2.0f*MathUtils::PI+eachAngle); a+=eachAngle)
+	{ 
+		oldX = x;
+		oldY = y;
+		x = MathUtils::Round(radius * MathUtils::Cos(a)); 
+		y = MathUtils::Round(radius * MathUtils::Sin(a)); 
+		DrawLine(oldX + center.x, oldY + center.y, x + center.x, y + center.y, outline);
+	} 
+	return true;
+}
+
 int32 GfxSystem::GfxRenderer::WorldToScreenX( const float32 x ) const
 {
-	return (int32)((x-mCameraX)*mCameraScale);
+	return MathUtils::Round((x-mCameraX)*mCameraScale);
 }
 
 int32 GfxSystem::GfxRenderer::WorldToScreenY( const float32 y ) const
 {
-	return (int32)((y-mCameraY)*mCameraScale);
+	return MathUtils::Round((y-mCameraY)*mCameraScale);
 }
 
 GfxSystem::Point GfxSystem::GfxRenderer::WorldToScreen( const Vector2& pos ) const
@@ -460,7 +482,22 @@ GfxSystem::Point GfxSystem::GfxRenderer::WorldToScreen( const Vector2& pos ) con
 	return GfxSystem::Point(WorldToScreenX(pos.x), WorldToScreenY(pos.y));
 }
 
-float32 GfxSystem::GfxRenderer::WorldToScreenImageS( const float32 scale ) const
+float32 GfxSystem::GfxRenderer::WorldToScreenImageScale( const float32 scale ) const
 {
 	return DEFAULT_IMAGE_WORLD_SCALE * scale * mCameraScale;
+}
+
+float32 GfxSystem::GfxRenderer::ScreenToWorldX( const int32 x ) const
+{
+	return mCameraScaleInv*x + mCameraX;
+}
+
+float32 GfxSystem::GfxRenderer::ScreenToWorldY( const int32 y ) const
+{
+	return mCameraScaleInv*y + mCameraY;
+}
+
+Vector2 GfxSystem::GfxRenderer::ScreenToWorld( const Point& pos ) const
+{
+	return Vector2(ScreenToWorldX(pos.x), ScreenToWorldY(pos.y));
 }

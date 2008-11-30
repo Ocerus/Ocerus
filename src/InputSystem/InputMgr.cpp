@@ -56,3 +56,9 @@ bool InputSystem::InputMgr::IsKeyDown( eKeyCode k ) const
 	assert(mOISListener);
 	return mOISListener->IsKeyDown(k);
 }
+
+MouseState& InputSystem::InputMgr::GetMouseState( void )
+{
+	mOISListener->GetMouseState(mMouseStateCache);
+	return mMouseStateCache;
+}

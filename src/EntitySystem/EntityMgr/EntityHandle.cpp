@@ -33,6 +33,12 @@ bool EntitySystem::EntityHandle::operator==( const EntityHandle& rhs )
 {
 	return mEntityID == rhs.mEntityID;
 }
+
+EntitySystem::eEntityType EntitySystem::EntityHandle::GetType( void ) const
+{
+	return gEntityMgr.GetEntityType(*this);
+}
+
 EntityMessage::eResult EntityHandle::PostMessage(const EntityMessage::eType type, void* data)
 {
 	assert(IsValid());

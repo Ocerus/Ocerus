@@ -185,7 +185,22 @@ namespace InputSystem
 		int32 wheelDelta;
 	};
 
-	enum eMouseButton { MBTN_LEFT=0, MBTN_RIGHT, MBTN_MIDDLE, MBTN_UNKNOWN };
+	enum eMouseButton { MBTN_LEFT=1<<1, MBTN_RIGHT=1<<2, MBTN_MIDDLE=1<<3, MBTN_UNKNOWN=0 };
+
+	struct MouseState
+	{
+		/// Position of the cursor.
+		//@{
+		int32 x;
+		int32 y;
+		//@}
+
+		/// Wheel position.
+		int32 wheel;
+
+		/// Pressed buttons.
+		uint8 buttons;
+	};
 
 }
 

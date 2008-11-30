@@ -41,6 +41,9 @@ namespace InputSystem
 		/// Returns true if a specified key is down.
 		bool IsKeyDown(eKeyCode k) const;
 
+		/// Returns current state of the mouse.
+		MouseState& GetMouseState(void);
+
 		/// Registers/unregisters event listeners.
 		//@{
 		void AddInputListener(IInputListener* listener);
@@ -56,6 +59,9 @@ namespace InputSystem
 		friend class OISListener;
 		OISListener* mOISListener;
 		//@}
+
+		/// Mouse state cache.
+		MouseState mMouseStateCache;
 
 		/// Collection of input event listeners.
 		//@{

@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "../../Utility/Settings.h"
+#include "EntityEnums.h"
 
 namespace EntitySystem
 {
@@ -22,7 +23,7 @@ namespace EntitySystem
 		~EntityDescription(void);
 
 		/// Call this before each subsequent filling of the description.
-		void Reset(void);
+		void Init(const eEntityType type);
 
 		/// Add new component descriptions using this method.
 		void AddComponentDescription(ComponentDescription& desc);
@@ -34,9 +35,14 @@ namespace EntitySystem
 
 		typedef std::vector<ComponentDescription*> ComponentDescriptionsList;
 
+		/// List of descriptions of invidivual components this entity will consist of.
 		ComponentDescriptionsList mComponentDescriptions;
+
 		/// Index of current component description.
 		uint32 mIndex;
+
+		/// Type of this entity.
+		eEntityType mType;
 
 		/// Clears everything
 		void Clear(void);

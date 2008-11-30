@@ -11,6 +11,9 @@ EntityMgr::EntityMgr()
 	gLogMgr.LogMessage("*** EntityMgr init ***");
 
 	mComponentMgr = DYN_NEW ComponentMgr();
+
+	// this assumes EntityMgr is a singleton
+	EntityPicker::SetupPriorities();
 }
 
 EntityMgr::~EntityMgr()
@@ -35,8 +38,8 @@ EntityMessage::eResult EntityMgr::PostMessage(EntityID id, const EntityMessage& 
 
 void EntityMgr::BroadcastMessage(const EntityMessage& msg)
 {
-	for (EntitySet::const_iterator i = mEntitySet.begin(); i!=mEntitySet.end(); ++i)
-		PostMessage(*i, msg);
+	for (EntityMap::const_iterator i = mEntities.begin(); i!=mEntities.end(); ++i)
+		PostMessage(i->first, msg);
 }
 
 EntityHandle EntityMgr::CreateEntity(const EntityDescription& desc)
@@ -51,7 +54,7 @@ EntityHandle EntityMgr::CreateEntity(const EntityDescription& desc)
 		bool created = mComponentMgr->CreateComponent(h, **i); // fuj
 		assert(created);
 	}
-	mEntitySet.insert(h.GetID());
+	mEntities.insert(std::pair<EntityID, eEntityType>(h.GetID(), desc.mType));
 	return h;
 }
 
@@ -60,13 +63,24 @@ void EntityMgr::DestroyEntity(EntityHandle h)
 {
 	assert(mComponentMgr);
 	mComponentMgr->DestroyEntityComponents(h);
-	mEntitySet.erase(h.GetID());
+	mEntities.erase(h.GetID());
 }
 
 void EntityMgr::DestroyAllEntities()
 {
 	assert(mComponentMgr);
-	for (EntitySet::const_iterator i = mEntitySet.begin(); i!=mEntitySet.end(); ++i)
-		mComponentMgr->DestroyEntityComponents(*i);
-	mEntitySet.clear();
+	for (EntityMap::const_iterator i = mEntities.begin(); i!=mEntities.end(); ++i)
+		mComponentMgr->DestroyEntityComponents(i->first);
+	mEntities.clear();
+}
+
+EntitySystem::eEntityType EntitySystem::EntityMgr::GetEntityType( EntityHandle h ) const
+{
+	EntityMap::const_iterator ei = mEntities.find(h.GetID());
+	if (ei == mEntities.end())
+	{
+		gLogMgr.LogMessage("Can't find entity");
+		return ET_UNKNOWN;
+	}
+	return ei->second;
 }

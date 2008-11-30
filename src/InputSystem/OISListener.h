@@ -37,8 +37,12 @@ namespace InputSystem
 
 		/// Process OIS events.
 		void CaptureInput();
+
 		/// True if the specified key is down.
 		bool IsKeyDown(eKeyCode k) const;
+
+		/// Returns current state of the mouse.
+		void GetMouseState(MouseState& state);
 
 		/// Sets resolution of the screen.
 		void SetResolution(uint32 width, uint32 height);

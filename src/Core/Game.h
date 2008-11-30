@@ -3,6 +3,8 @@
 
 #include "../Utility/StateMachine.h"
 #include "../Utility/Settings.h"
+#include "../InputSystem/IInputListener.h"
+#include "../EntitySystem/EntityMgr/EntityHandle.h"
 
 class b2World;
 
@@ -12,7 +14,7 @@ namespace Core
 
 	/** This class holds all info related directly to the game and takes care about rendering, input and game logic.
 	*/
-	class Game : public StateMachine<eGameState>
+	class Game : public StateMachine<eGameState>, public InputSystem::IInputListener
 	{
 	public:
 		Game();
@@ -25,8 +27,24 @@ namespace Core
 
 		b2World* GetPhysics(void) const { assert (mPhysics); return mPhysics; }
 
+		/// Called when a keyboard key is pressed/released.
+		//@{
+		virtual void KeyPressed(const InputSystem::KeyInfo& ke);
+		virtual void KeyReleased(const InputSystem::KeyInfo& ke);
+		//@}
+
+		/// Called when the mouse moves. Cursor position and other info is passed via parameter.
+		virtual void MouseMoved(const InputSystem::MouseInfo& mi);
+		/// Called when a mouse button is pressed.
+		virtual void MouseButtonPressed(const InputSystem::eMouseButton btn);
+		/// Called when a mouse button is released.
+		virtual void MouseButtonReleased(const InputSystem::eMouseButton btn);
+
+
 	private:
 		b2World* mPhysics;
+
+		EntitySystem::EntityHandle mHoveredEntity;
 	};
 }
 

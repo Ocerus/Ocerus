@@ -45,6 +45,8 @@ namespace GfxSystem
 			g((uint8)( (color >> 8)&0x000000FF )), b((uint8)( color&0x000000FF )) {}
 		Color(): r(0), g(0), b(0), a(255) {}
 		uint8 r, g, b, a;
+
+		static Color NullColor;
 	};
 
 	struct ColorRect
@@ -93,12 +95,16 @@ namespace GfxSystem
 		inline void SetCameraX(const float32 x) { mCameraX = x; }
 		inline void SetCameraY(const float32 y) { mCameraY = y; }
 		inline void SetCameraPos(const Vector2& pos) { mCameraX = pos.x; mCameraY = pos.y; }
-		inline void SetCameraScale(const float32 s) { mCameraScale = s; }
+		inline void SetCameraScale(const float32 s) { mCameraScale = s; mCameraScaleInv = 1.0f/s; }
 		int32 WorldToScreenX(const float32 x) const;
 		int32 WorldToScreenY(const float32 y) const;
-		inline float32 WorldToScreenS(const float32 scale) const { return mCameraScale*scale; }
-		inline float32 WorldToScreenImageS(const float32 scale) const;
+		inline float32 WorldToScreenScale(const float32 scale) const { return mCameraScale*scale; }
+		inline int32 WorldToScreenScalar(const float32 scalar) const { return MathUtils::Round(mCameraScale*scalar); }
+		inline float32 WorldToScreenImageScale(const float32 scale) const;
 		Point WorldToScreen(const Vector2& pos) const;
+		float32 ScreenToWorldX(const int32 x) const;
+		float32 ScreenToWorldY(const int32 y) const;
+		Vector2 ScreenToWorld(const Point& pos) const;
 
 		bool ClearScreen(const Color& color) const;
 
@@ -125,6 +131,8 @@ namespace GfxSystem
 		//TODO dodelat podobne verze DrawPolygon
 		bool DrawPolygonWithConversion(const Vector2* vertices, int vertices_len, const Vector2& offsetPosition, const float32 offsetAngle, const Color& fillColor, const Pen& outline = Pen::NullPen) const;
 
+		bool DrawCircle(const Point& center, const int32 radius, const Color& fillColor, const Pen& outline = Pen::NullPen) const;
+
 		//TODO add font param
 		//bool DrawText(const string& str, font, int32 x, int32 y, uint8 anchor = ANCHOR_VCENTER|ANCHOR_HCENTER, float32 angle = 0.0f, uint8 alpha = 255);
 
@@ -135,6 +143,7 @@ namespace GfxSystem
 		float32 mCameraX;
 		float32 mCameraY;
 		float32 mCameraScale;
+		float32 mCameraScaleInv;
 
 		friend class Texture;
 		friend bool HgeExitFunction(void);

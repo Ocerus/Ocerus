@@ -365,6 +365,10 @@
 						>
 					</File>
 					<File
+						RelativePath=".\src\EntitySystem\EntityMgr\EntityEnums.h"
+						>
+					</File>
+					<File
 						RelativePath=".\src\EntitySystem\EntityMgr\EntityHandle.h"
 						>
 					</File>
@@ -374,6 +378,10 @@
 					</File>
 					<File
 						RelativePath=".\src\EntitySystem\EntityMgr\EntityMgr.h"
+						>
+					</File>
+					<File
+						RelativePath=".\src\EntitySystem\EntityMgr\EntityPicker.h"
 						>
 					</File>
 				</Filter>
@@ -390,6 +398,10 @@
 					</File>
 					<File
 						RelativePath=".\src\EntitySystem\EntityMgr\EntityMgr.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\EntitySystem\EntityMgr\EntityPicker.cpp"
 						>
 					</File>
 				</Filter>
