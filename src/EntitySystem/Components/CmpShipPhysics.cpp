@@ -38,6 +38,10 @@ EntityMessage::eResult EntitySystem::CmpShipPhysics::HandleMessage( const Entity
 		assert(mBody);
 		*(b2Body**)msg.data = mBody;
 		return EntityMessage::RESULT_OK;
+	case EntityMessage::TYPE_PHYSICS_UPDATE_MASS:
+		assert(mBody);
+		mBody->SetMassFromShapes();
+		return EntityMessage::RESULT_OK;
 	}
 	return EntityMessage::RESULT_IGNORED;
 }

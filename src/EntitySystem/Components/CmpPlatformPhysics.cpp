@@ -62,6 +62,10 @@ void EntitySystem::CmpPlatformPhysics::Init( ComponentDescription& desc )
 	shapeDef.userData = GetOwnerPtr();
 
 	mShape = mBody->CreateShape(&shapeDef);
+
+	// compute mass
+	if (!ship.IsValid())
+		mBody->SetMassFromShapes();
 }
 
 void EntitySystem::CmpPlatformPhysics::Deinit( void )
@@ -93,6 +97,11 @@ EntityMessage::eResult EntitySystem::CmpPlatformPhysics::HandleMessage( const En
 			b2PolygonShape* polyshape = (b2PolygonShape*)mShape;
 			((DataContainer*)msg.data)->SetData((uint8*)polyshape->GetVertices(), polyshape->GetVertexCount());
 		}
+		return EntityMessage::RESULT_OK;
+	case EntityMessage::TYPE_GET_PHYSICS_BODY:
+		assert(msg.data);
+		assert(mBody);
+		*(b2Body**)msg.data = mBody;
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_PLATFORM_DETACH:
 		assert(mBody);

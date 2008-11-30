@@ -1,5 +1,6 @@
 #include "Common.h"
 #include "CmpEngine.h"
+#include "Box2D.h"
 
 using namespace EntitySystem;
 
@@ -21,6 +22,18 @@ EntityMessage::eResult EntitySystem::CmpEngine::HandleMessage( const EntityMessa
 {
 	switch (msg.type)
 	{
+	case EntityMessage::TYPE_UPDATE_PHYSICS_SERVER:
+		{
+			EntityHandle platform;
+			GetOwner().PostMessage(EntityMessage::TYPE_GET_PARENT, &platform);
+			b2Body* platformBody;
+			platform.PostMessage(EntityMessage::TYPE_GET_PHYSICS_BODY, &platformBody);
+			Vector2 myPos;
+			GetOwner().PostMessage(EntityMessage::TYPE_GET_POSITION, &myPos);
+			Vector2 force = MathUtils::Multiply(Matrix22(GetAbsoluteAngle()), Vector2(-0.00001f, 0.0f));
+			platformBody->ApplyForce(force, myPos);
+		}
+		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_DRAW_INNER:
 		Draw();
 		return EntityMessage::RESULT_OK;

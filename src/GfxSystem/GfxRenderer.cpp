@@ -256,7 +256,7 @@ bool GfxSystem::GfxRenderer::DrawImage( const TexturePtr& image, int32 x, int32 
 	q.v[3].x = qx;
 	q.v[3].y = qy + imgH;
 
-	// rotate the quad around 0,0
+	// rotate the quad around anchor
 	Matrix22 rot(angle);
 	for (int i=0; i<4; ++i)
 	{

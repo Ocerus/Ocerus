@@ -5,6 +5,9 @@
 
 using namespace Core;
 
+#define PHYSICS_TIMESTEP 1.0f
+#define PHYSICS_ITERATIONS 10
+
 Core::Game::Game(): StateMachine<eGameState>(GS_NORMAL), mPhysics(0) {}
 
 Core::Game::~Game()
@@ -135,6 +138,19 @@ void Core::Game::Init()
 	entityDesc.AddComponentDescription(compDesc);
 	EntitySystem::EntityHandle platform2 = gEntityMgr.CreateEntity(entityDesc);
 
+	// create another engine and attach it to the second platform
+	entityDesc.Reset();
+	compDesc.Init(EntitySystem::CT_PLATFORM_ITEM);
+	compDesc.AddItem(engineType0); // blueprints
+	compDesc.AddItem(platform2); // parent
+	compDesc.AddItem(Vector2(-1.0f, 0.0f)); // position relative to the platform
+	entityDesc.AddComponentDescription(compDesc);
+	compDesc.Init(EntitySystem::CT_ENGINE);
+	compDesc.AddItem(MathUtils::PI); // default angle
+	compDesc.AddItem(0.0f); // relative angle
+	entityDesc.AddComponentDescription(compDesc);
+	EntitySystem::EntityHandle engine1 = gEntityMgr.CreateEntity(entityDesc);
+
 	// link platforms together
 	entityDesc.Reset();
 	compDesc.Init(EntitySystem::CT_PLATFORM_LINKS);
@@ -147,6 +163,9 @@ void Core::Game::Init()
 	compDesc.AddItem(anchors2);
 	entityDesc.AddComponentDescription(compDesc);
 	gEntityMgr.CreateEntity(entityDesc);
+
+	// recompute mass of the ship's body
+	ship0.PostMessage(EntitySystem::EntityMessage::TYPE_PHYSICS_UPDATE_MASS);
 
 
 
@@ -174,6 +193,7 @@ void Core::Game::Update( float32 delta )
 
 	gEntityMgr.BroadcastMessage(EntitySystem::EntityMessage(EntitySystem::EntityMessage::TYPE_UPDATE_PHYSICS_SERVER));
 	gEntityMgr.BroadcastMessage(EntitySystem::EntityMessage(EntitySystem::EntityMessage::TYPE_UPDATE_PHYSICS_CLIENT));
+	mPhysics->Step(PHYSICS_TIMESTEP, PHYSICS_ITERATIONS);
 }
 
 void Core::Game::Draw()
