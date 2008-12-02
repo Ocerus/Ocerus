@@ -50,7 +50,7 @@ EntityMessage::eResult EntitySystem::CmpEngine::HandleMessage( const EntityMessa
 			platformBody->ApplyForce(force, myPos);
 		}
 		return EntityMessage::RESULT_OK;
-	case EntityMessage::TYPE_SET_TARGET_ANGLE:
+	case EntityMessage::TYPE_SET_ABSOLUTE_TARGET_ANGLE:
 		// note: the angle is absolute, but I need to convert it to an angle relative to the default angle
 		assert(msg.data);
 		{
@@ -58,14 +58,19 @@ EntityMessage::eResult EntitySystem::CmpEngine::HandleMessage( const EntityMessa
 			EntityHandle blueprints;
 			GetOwner().PostMessage(EntityMessage::TYPE_GET_BLUEPRINTS, &blueprints);
 			blueprints.PostMessage(EntityMessage::TYPE_GET_ARC_ANGLE, &arcAngle);
-			float32 relAngle = MathUtils::WrapAngle((*(float32*)msg.data) - GetAbsoluteDefaultAngle());
+			float32 relAngle = *(float32*)msg.data;
+			relAngle = -relAngle + GetAbsoluteDefaultAngle();
 			if (MathUtils::IsAngleInRange(relAngle, -arcAngle, arcAngle))
-				mTargetAngle = relAngle;
+				mTargetAngle = MathUtils::WrapAngle(relAngle);
 			else if (MathUtils::AngleDistance(relAngle, -arcAngle) < MathUtils::AngleDistance(relAngle, arcAngle))
 				mTargetAngle = MathUtils::WrapAngle(-arcAngle);
 			else
 				mTargetAngle = MathUtils::WrapAngle(arcAngle);
 		}
+		return EntityMessage::RESULT_OK;
+	case EntityMessage::TYPE_GET_ABSOLUTE_TARGET_ANGLE:
+		assert(msg.data);
+		*(float32*)msg.data = GetAbsoluteTargetAngle();
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_SET_TARGET_POWER_RATIO:
 		assert(msg.data);
@@ -85,18 +90,16 @@ EntityMessage::eResult EntitySystem::CmpEngine::HandleMessage( const EntityMessa
 			((EntityPicker*)msg.data)->Update(GetOwner(), pos, PICK_CIRCLE_RADIUS);
 		}
 		return EntityMessage::RESULT_OK;
-	case EntityMessage::TYPE_DRAW_SELECTION_UNDERLAY:
-	case EntityMessage::TYPE_DRAW_HOVER_UNDERLAY:
-		DrawSelectionUnderlay();
+	case EntityMessage::TYPE_DRAW_UNDERLAY:
+		assert(msg.data);
+		DrawSelectionUnderlay(*(bool*)msg.data);
 		return EntityMessage::RESULT_OK;
-	case EntityMessage::TYPE_DRAW_INNER:
+	case EntityMessage::TYPE_DRAW_PLATFORM_ITEM:
 		Draw();
 		return EntityMessage::RESULT_OK;
-	case EntityMessage::TYPE_DRAW_HOVER_OVERLAY:
-		DrawSelectionOverlay(true);
-		return EntityMessage::RESULT_OK;
-	case EntityMessage::TYPE_DRAW_SELECTION_OVERLAY:
-		DrawSelectionOverlay(false);
+	case EntityMessage::TYPE_DRAW_OVERLAY:
+		assert(msg.data);
+		DrawSelectionOverlay(*(bool*)msg.data);
 		return EntityMessage::RESULT_OK;
 	}
 	return EntityMessage::RESULT_IGNORED;
@@ -108,6 +111,8 @@ void EntitySystem::CmpEngine::RegisterReflection( void )
 	RegisterProperty<float32>("RelativeAngle", &GetRelativeAngle, &SetRelativeAngle, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<float32>("DefaultAngle", &GetDefaultAngle, &SetDefaultAngle, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<float32>("AbsoluteAngle", &GetAbsoluteAngle, 0, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<float32>("AbsoluteDefaultAngle", &GetAbsoluteDefaultAngle, 0, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<float32>("AbsoluteTargetAngle", &GetAbsoluteTargetAngle, 0, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 }
 
 void EntitySystem::CmpEngine::Draw( void ) const
@@ -138,7 +143,7 @@ void EntitySystem::CmpEngine::DrawSelectionOverlay( const bool hover ) const
 		GfxSystem::Color::NullColor, GfxSystem::Pen(color));
 }
 
-void EntitySystem::CmpEngine::DrawSelectionUnderlay( void ) const
+void EntitySystem::CmpEngine::DrawSelectionUnderlay( const bool hover ) const
 {
 	// draw an arch designating possible power and angle
 	Vector2 pos;
@@ -147,9 +152,18 @@ void EntitySystem::CmpEngine::DrawSelectionUnderlay( void ) const
 	GetOwner().PostMessage(EntityMessage::TYPE_GET_BLUEPRINTS, &blueprints);
 	float32 angleDiver;
 	blueprints.PostMessage(EntityMessage::TYPE_GET_ARC_ANGLE, &angleDiver);
-	GfxSystem::Color color(10,10,80,80);
+	GfxSystem::Color color(10,10,80,90);
 	float32 defAngle = GetAbsoluteDefaultAngle();
-	gGfxRenderer.DrawCircle(gGfxRenderer.WorldToScreen(pos), gApp.GetCurrentGame()->GetEnginePowerCircleRadius(), color, /*GfxSystem::Pen::NullPen*/GfxSystem::Pen(color), defAngle - angleDiver, defAngle + angleDiver);
+	int32 circleRadius = gApp.GetCurrentGame()->GetEnginePowerCircleRadius();
+	GfxSystem::Point screenPos = gGfxRenderer.WorldToScreen(pos);
+	gGfxRenderer.DrawCircle(screenPos, circleRadius, color, GfxSystem::Pen::NullPen/*GfxSystem::Pen(color)*/, defAngle - angleDiver, defAngle + angleDiver);
+
+	// draw target angle and power vector
+	uint32 maxPower;
+	blueprints.PostMessage(EntityMessage::TYPE_GET_MAX_POWER, &maxPower);
+	Vector2 indicator = MathUtils::VectorFromAngle(GetAbsoluteTargetAngle(), (float32)circleRadius*(float32)mPower/(float32)maxPower);
+	GfxSystem::Pen indicatorPen(GfxSystem::Color(200,0,20,200));
+	gGfxRenderer.DrawLine(screenPos.x, screenPos.y, screenPos.x + MathUtils::Round(indicator.x), screenPos.y + MathUtils::Round(indicator.y), indicatorPen);
 }
 
 float32 EntitySystem::CmpEngine::GetAbsoluteDefaultAngle( void ) const
@@ -159,4 +173,14 @@ float32 EntitySystem::CmpEngine::GetAbsoluteDefaultAngle( void ) const
 	float32 platformAngle;
 	platform.PostMessage(EntityMessage::TYPE_GET_ANGLE, &platformAngle);
 	return platformAngle + mDefaultAngle;	
+}
+
+float32 EntitySystem::CmpEngine::GetAbsoluteTargetAngle( void ) const
+{
+	EntityHandle platform;
+	GetOwner().PostMessage(EntityMessage::TYPE_GET_PARENT, &platform);
+	float32 platformAngle;
+	platform.PostMessage(EntityMessage::TYPE_GET_ANGLE, &platformAngle);
+	return platformAngle + mDefaultAngle + mTargetAngle;	
+	
 }

@@ -54,5 +54,21 @@ float32 MathUtils::AngleDistance( const float32 angle1, const float32 angle2 )
 bool MathUtils::IsAngleInRange( const float32 angle, const float32 min, const float32 max )
 {
 	float32 normAng = WrapAngle(angle);
-	return normAng >= WrapAngle(min) && normAng <= WrapAngle(max);
+	float32 normMin = WrapAngle(min);
+	float32 normMax = WrapAngle(max);
+	bool swapped = false;
+	if (normMin > normMax)
+	{
+		swapped = true;
+		Swap(normMin, normMax);
+	}
+	bool result = normAng >= normMin && normAng <= normMax;
+	if (swapped)
+		result = !result;
+	return result;
+}
+
+Vector2 MathUtils::VectorFromAngle( const float32 angle, const float32 size /*= 1.0f*/ )
+{
+	return Multiply(Matrix22(angle), Vector2(size, 0.0f));
 }

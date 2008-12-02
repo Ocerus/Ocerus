@@ -26,6 +26,7 @@ namespace EntitySystem
 		void SetDefaultAngle(const float32 angle) { mDefaultAngle = angle; }
 		float32 GetAbsoluteAngle(void) const;
 		float32 GetAbsoluteDefaultAngle(void) const;
+		float32 GetAbsoluteTargetAngle(void) const;
 
 		/// Just to make sure virtual functions work ok.
 		virtual ~CmpEngine(void) {}
@@ -40,7 +41,7 @@ namespace EntitySystem
 
 		void Draw(void) const;
 		void DrawSelectionOverlay(const bool hover) const;
-		void DrawSelectionUnderlay(void) const;
+		void DrawSelectionUnderlay(const bool hover) const;
 
 	};
 }

@@ -33,7 +33,7 @@ EntityMessage::eResult EntitySystem::CmpPlatformLinks::HandleMessage( const Enti
 {
 	switch(msg.type)
 	{
-	case EntityMessage::TYPE_DRAW_INNER:
+	case EntityMessage::TYPE_DRAW_PLATFORM_LINK:
 		Draw();
 		return EntityMessage::RESULT_OK;
 	}

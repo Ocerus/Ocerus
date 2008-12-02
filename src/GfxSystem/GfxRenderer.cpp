@@ -450,22 +450,40 @@ bool GfxSystem::GfxRenderer::DrawPolygon( const std::vector<Point>& vertices, co
 
 bool GfxSystem::GfxRenderer::DrawCircle( const Point& center, const int32 radius, const Color& fillColor, const Pen& outline, const float32 minAng, const float32 maxAng ) const
 {
-	//TODO neumi se plnit barvou
-	float32 minAngle = MathUtils::Wrap(minAng, 0.0f, MathUtils::TWO_PI);
-	float32 maxAngle = MathUtils::Wrap(maxAng, 0.0f, MathUtils::TWO_PI);
-	const float32 numSegments = 20;
+	float32 minAngle = MathUtils::WrapAngle(minAng);
+	float32 maxAngle = MathUtils::WrapAngle(maxAng);
+	if (maxAngle < minAngle)
+		maxAngle += MathUtils::TWO_PI;
+	const float32 numSegments = 16;
 	const float32 eachAngle = MathUtils::TWO_PI / numSegments;
 	int32 x, y, oldX, oldY;
 
-	for(float32 a=minAngle; a<=maxAngle+eachAngle; a+=eachAngle)
+	bool fill = &fillColor != &Color::NullColor;
+	std::vector<Point> points;
+	if (fill)
+		points.push_back(center);	
+
+	bool exit = false;
+	for(float32 a=minAngle; !exit; a+=eachAngle)
 	{ 
+		if (a >= maxAngle)
+		{
+			a = maxAngle;
+			exit = true;
+		}
 		x = MathUtils::Round(radius * MathUtils::Cos(a)); 
 		y = MathUtils::Round(radius * MathUtils::Sin(a)); 
+		if (fill)
+			points.push_back(Point(x + center.x, y + center.y));
 		if (a != minAngle)
 			DrawLine(oldX + center.x, oldY + center.y, x + center.x, y + center.y, outline);
 		oldX = x;
 		oldY = y;
 	} 
+
+	if (fill)
+		DrawPolygon(points, fillColor);
+
 	return true;
 }
 

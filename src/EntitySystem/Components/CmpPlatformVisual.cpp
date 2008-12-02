@@ -18,18 +18,7 @@ EntityMessage::eResult EntitySystem::CmpPlatformVisual::HandleMessage( const Ent
 {
 	switch(msg.type)
 	{
-	case EntityMessage::TYPE_DRAW:
-		{
-			EntityHandle ship;
-			GetOwner().PostMessage(EntityMessage::TYPE_GET_PARENT, &ship);
-			if (!ship.IsValid())
-			{
-				Draw();
-				return EntityMessage::RESULT_OK;
-			}
-		}
-		return EntityMessage::RESULT_IGNORED;
-	case EntityMessage::TYPE_DRAW_INNER:
+	case EntityMessage::TYPE_DRAW_PLATFORM:
 		Draw();
 		return EntityMessage::RESULT_OK;
 	}

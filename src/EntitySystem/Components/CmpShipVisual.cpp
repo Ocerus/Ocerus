@@ -16,7 +16,6 @@ void EntitySystem::CmpShipVisual::Deinit( void )
 
 EntityMessage::eResult EntitySystem::CmpShipVisual::HandleMessage( const EntityMessage& msg )
 {
-	// note: platform drawing is invoked from inside ShipLogic component
 	return EntityMessage::RESULT_IGNORED;
 }
 

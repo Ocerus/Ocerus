@@ -5,10 +5,11 @@
 
 using namespace Core;
 using namespace EntitySystem;
+using namespace InputSystem;
 
 #define PHYSICS_TIMESTEP 1.0f
 #define PHYSICS_ITERATIONS 10
-#define ENGINE_VISIBLE_MAX_POWER 40
+#define ENGINE_VISIBLE_MAX_POWER 80
 
 Core::Game::Game(): StateMachine<eGameState>(GS_NORMAL), mPhysics(0), mHoveredEntity() {}
 
@@ -188,9 +189,9 @@ void Core::Game::Deinit()
 
 void Core::Game::Update( float32 delta )
 {
-	if (gInputMgr.IsKeyDown(InputSystem::KC_ESCAPE))
+	if (gInputMgr.IsKeyDown(KC_ESCAPE))
 		gApp.Shutdown();
-	if (gInputMgr.IsKeyDown(InputSystem::KC_G))
+	if (gInputMgr.IsKeyDown(KC_G))
 		gApp.RequestStateChange(AS_GUI, true);
 
 	gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::TYPE_UPDATE_PHYSICS_SERVER));
@@ -206,12 +207,15 @@ void Core::Game::Draw()
 	gGfxRenderer.DrawImage(gResourceMgr.GetResource("test/zazaka.png"),0, 0,topLeft);
 	gGfxRenderer.DrawImage(gResourceMgr.GetResource("test/zazaka.png"),100, 50,centre,0,100);	
 
+	gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::TYPE_DRAW_PLATFORM));
+	gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::TYPE_DRAW_PLATFORM_LINK));
+
 	if (mSelectedEntities.size() > 0)
 	{
 		// display selection of engines
 		if (mSelectedEntities[0].GetType() == ET_ENGINE)
 		{
-			InputSystem::MouseState& mouse = gInputMgr.GetMouseState();
+			MouseState& mouse = gInputMgr.GetMouseState();
 			GfxSystem::Pen pen(GfxSystem::Color(100,100,100,180));
 			Vector2 pos;
 			for (EntityList::iterator i=mSelectedEntities.begin(); i!=mSelectedEntities.end(); ++i)
@@ -224,54 +228,73 @@ void Core::Game::Draw()
 	}
 
 	bool hoverAlsoSelected = false;
+	bool hover = false;
 	for (EntityList::iterator i=mSelectedEntities.begin(); i!=mSelectedEntities.end(); ++i)
 	{
-		// calling this to avoid ignored messages
-		gEntityMgr.PostMessage(*i, EntityMessage(EntityMessage::TYPE_DRAW_SELECTION_UNDERLAY));
+		// calling via EntityMgr to avoid ignored messages
+		gEntityMgr.PostMessage(*i, EntityMessage(EntityMessage::TYPE_DRAW_UNDERLAY, &hover));
 		if (mHoveredEntity == *i)
 			hoverAlsoSelected = true;
 	}
 
+	hover = true;
 	if (!hoverAlsoSelected && mHoveredEntity.IsValid())
-		gEntityMgr.PostMessage(mHoveredEntity, EntityMessage(EntityMessage::TYPE_DRAW_HOVER_UNDERLAY));
+		gEntityMgr.PostMessage(mHoveredEntity, EntityMessage(EntityMessage::TYPE_DRAW_UNDERLAY, &hover));
 
-	gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::TYPE_DRAW));
+	gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::TYPE_DRAW_PLATFORM_ITEM));
 
+	hover = false;
 	for (EntityList::iterator i=mSelectedEntities.begin(); i!=mSelectedEntities.end(); ++i)
-		gEntityMgr.PostMessage(*i, EntityMessage(EntityMessage::TYPE_DRAW_SELECTION_OVERLAY));
+		gEntityMgr.PostMessage(*i, EntityMessage(EntityMessage::TYPE_DRAW_OVERLAY, &hover));
 
+	hover = true;
 	if (!hoverAlsoSelected && mHoveredEntity.IsValid())
-		gEntityMgr.PostMessage(mHoveredEntity, EntityMessage(EntityMessage::TYPE_DRAW_HOVER_OVERLAY));
+		gEntityMgr.PostMessage(mHoveredEntity, EntityMessage(EntityMessage::TYPE_DRAW_OVERLAY, &hover));
 
 }
 
-void Core::Game::KeyPressed( const InputSystem::KeyInfo& ke )
+void Core::Game::KeyPressed( const KeyInfo& ke )
 {
 
 }
 
-void Core::Game::KeyReleased( const InputSystem::KeyInfo& ke )
+void Core::Game::KeyReleased( const KeyInfo& ke )
 {
 
 }
 
-void Core::Game::MouseMoved( const InputSystem::MouseInfo& mi )
+void Core::Game::MouseMoved( const MouseInfo& mi )
 {
 	// pick hover entity
 	EntityPicker picker(mi.x, mi.y);
 	gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::TYPE_MOUSE_PICK, &picker));
 	mHoveredEntity = picker.GetResult();
+
+	// we want to do certain action even when the right button is still down
+	MouseState& mouse = gInputMgr.GetMouseState();
+	if ((mouse.buttons & MBTN_RIGHT) && mSelectedEntities.size()>0 
+		&& mSelectedEntities[0].GetType()==ET_ENGINE)
+		MouseButtonPressed(mi, MBTN_RIGHT);
 }
 
-void Core::Game::MouseButtonPressed( const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn )
+void Core::Game::MouseButtonPressed( const MouseInfo& mi, const eMouseButton btn )
 {
-	if (btn == InputSystem::MBTN_LEFT)
+	if (btn == MBTN_LEFT)
 	{
-		mSelectedEntities.clear();
-		if (mHoveredEntity.IsValid())
-			mSelectedEntities.push_back(mHoveredEntity);
+		// add to the current selection if SHIFT down
+		if (mSelectedEntities.size()>0 && (gInputMgr.IsKeyDown(KC_RSHIFT) || gInputMgr.IsKeyDown(KC_LSHIFT)))
+		{
+			if (mHoveredEntity.IsValid() && mHoveredEntity.GetType() == mSelectedEntities[0].GetType())
+				mSelectedEntities.push_back(mHoveredEntity);
+		}
+		else
+		{
+			mSelectedEntities.clear();
+			if (mHoveredEntity.IsValid())
+				mSelectedEntities.push_back(mHoveredEntity);
+		}
 	}
-	else if (btn == InputSystem::MBTN_RIGHT)
+	else if (btn == MBTN_RIGHT)
 	{
 		if (mSelectedEntities.size() > 0)
 		{
@@ -284,18 +307,24 @@ void Core::Game::MouseButtonPressed( const InputSystem::MouseInfo& mi, const Inp
 					Vector2 pos;
 					i->PostMessage(EntityMessage::TYPE_GET_POSITION, &pos);
 					Vector2 dir = cursor - pos;
-					int32 screenDist = gGfxRenderer.WorldToScreenScalar(dir.Length());
-					float32 powerRatio = GetEnginePowerCircleRadius() / ((float32)screenDist);
 					float32 angle = MathUtils::Angle(dir);
+					i->PostMessage(EntityMessage::TYPE_SET_ABSOLUTE_TARGET_ANGLE, &angle);
+					// get back the clamped value
+					i->PostMessage(EntityMessage::TYPE_GET_ABSOLUTE_TARGET_ANGLE, &angle);
+					Vector2 unitDir = MathUtils::VectorFromAngle(angle);
+					// project the target vector onto the correct direction vector
+					dir = MathUtils::Dot(dir, unitDir) * unitDir;
+
+					int32 screenDist = gGfxRenderer.WorldToScreenScalar(dir.Length());
+					float32 powerRatio = (float32)screenDist / (float32)GetEnginePowerCircleRadius();
 					i->PostMessage(EntityMessage::TYPE_SET_TARGET_POWER_RATIO, &powerRatio);
-					i->PostMessage(EntityMessage::TYPE_SET_TARGET_ANGLE, &angle);
 				}
 			}
 		}
 	}
 }
 
-void Core::Game::MouseButtonReleased( const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn )
+void Core::Game::MouseButtonReleased( const MouseInfo& mi, const eMouseButton btn )
 {
 
 }

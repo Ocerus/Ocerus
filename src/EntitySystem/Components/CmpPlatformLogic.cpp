@@ -31,10 +31,6 @@ EntityMessage::eResult CmpPlatformLogic::HandleMessage(const EntityMessage& msg)
 		assert(msg.data);
 		*(uint32*)msg.data = GetHitpoints();
 		return EntityMessage::RESULT_OK;
-	case EntityMessage::TYPE_DRAW:
-		for (EntityList::iterator i=mItems.begin(); i!=mItems.end(); ++i)
-			i->PostMessage(EntityMessage::TYPE_DRAW_INNER);
-		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_ADD_PLATFORM_ITEM:
 		assert(msg.data);
 		mItems.push_back(*(EntityHandle*)msg.data);
@@ -49,11 +45,9 @@ EntityMessage::eResult CmpPlatformLogic::HandleMessage(const EntityMessage& msg)
 			((EntityPicker*)msg.data)->Update(GetOwner(), MathUtils::Multiply(Matrix22(angle), mPickCircleCenter) + pos, mPickCircleRadius);
 		}
 		return EntityMessage::RESULT_OK;
-	case EntityMessage::TYPE_DRAW_HOVER_OVERLAY:
-		DrawSelectionOverlay(true);
-		return EntityMessage::RESULT_OK;
-	case EntityMessage::TYPE_DRAW_SELECTION_OVERLAY:
-		DrawSelectionOverlay(false);
+	case EntityMessage::TYPE_DRAW_OVERLAY:
+		assert(msg.data);
+		DrawSelectionOverlay(*(bool*)msg.data);
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_POST_INIT:
 		{
