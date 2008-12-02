@@ -139,8 +139,8 @@ float32 Application::CalculateFrameDeltaTime( void )
 	uint64 discardThreshold = static_cast<uint64>(mFrameSmoothingTime*1000.0f);
 
 	// discard times older then smoothing time
-	TimesList::const_iterator it = mFrameDeltaTimes.begin();
-	TimesList::const_iterator iend = mFrameDeltaTimes.end() - 2; // need at least 2 times
+	TimesList::iterator it = mFrameDeltaTimes.begin();
+	TimesList::iterator iend = mFrameDeltaTimes.end() - 2; // need at least 2 times
 	while (it != iend)
 	{
 		if (curTime - *it > discardThreshold)

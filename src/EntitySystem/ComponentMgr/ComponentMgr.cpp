@@ -63,10 +63,10 @@ bool ComponentMgr::CreateComponent(EntityHandle h, ComponentDescription& desc)
 
 void ComponentMgr::DestroyEntityComponents(EntityID id)
 {
-	EntityComponentsMap::const_iterator iter = mEntityComponentsMap.find(id);
+	EntityComponentsMap::iterator iter = mEntityComponentsMap.find(id);
 	assert(iter!=mEntityComponentsMap.end());
-	const ComponentsList& cmpList = iter->second;
-	for (ComponentsList::const_iterator i=cmpList.begin(); i!=cmpList.end(); ++i)
+	ComponentsList& cmpList = iter->second;
+	for (ComponentsList::iterator i=cmpList.begin(); i!=cmpList.end(); ++i)
 	{
 		(*i)->Deinit();
 		DYN_DELETE (*i);

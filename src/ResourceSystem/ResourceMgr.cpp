@@ -241,7 +241,7 @@ void ResourceSystem::ResourceMgr::DeleteResource( const string& group, const str
 	assert(gi != mResourceGroups.end() && "Unknown group");
 
 	ResourceMap& resmap = gi->second;
-	ResourceMap::const_iterator ri = resmap.find(name);
+	ResourceMap::iterator ri = resmap.find(name);
 	if (ri==resmap.end())
 		gLogMgr.LogMessage("Unknown resource '"+name+"' in group '"+group+"'", LOG_ERROR);
 	assert(ri != resmap.end() && "Unknown resource");

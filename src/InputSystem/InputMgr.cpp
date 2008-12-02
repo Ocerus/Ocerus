@@ -35,7 +35,7 @@ void InputSystem::InputMgr::AddInputListener( IInputListener* listener )
 void InputSystem::InputMgr::RemoveInputListener( IInputListener* listener )
 {
 	assert(listener);
-	ListenersList::const_iterator it = std::find(mListeners.begin(), mListeners.end(), listener);
+	ListenersList::iterator it = std::find(mListeners.begin(), mListeners.end(), listener);
 	if (it != mListeners.end())
 		mListeners.erase(it);
 }
