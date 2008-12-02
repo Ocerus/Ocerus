@@ -448,21 +448,23 @@ bool GfxSystem::GfxRenderer::DrawPolygon( const std::vector<Point>& vertices, co
 	return true;
 }
 
-bool GfxSystem::GfxRenderer::DrawCircle( const Point& center, const int32 radius, const Color& fillColor, const Pen& outline ) const
+bool GfxSystem::GfxRenderer::DrawCircle( const Point& center, const int32 radius, const Color& fillColor, const Pen& outline, const float32 minAng, const float32 maxAng ) const
 {
+	//TODO neumi se plnit barvou
+	float32 minAngle = MathUtils::Wrap(minAng, 0.0f, MathUtils::TWO_PI);
+	float32 maxAngle = MathUtils::Wrap(maxAng, 0.0f, MathUtils::TWO_PI);
 	const float32 numSegments = 20;
-	float32 eachAngle = 2.0f / numSegments * MathUtils::PI;
-	int32 x = (int32)radius; 
-	int32 y = 0; 
-	int32 oldX, oldY;
+	const float32 eachAngle = MathUtils::TWO_PI / numSegments;
+	int32 x, y, oldX, oldY;
 
-	for(float32 a=0.0f; a<=(2.0f*MathUtils::PI+eachAngle); a+=eachAngle)
+	for(float32 a=minAngle; a<=maxAngle+eachAngle; a+=eachAngle)
 	{ 
-		oldX = x;
-		oldY = y;
 		x = MathUtils::Round(radius * MathUtils::Cos(a)); 
 		y = MathUtils::Round(radius * MathUtils::Sin(a)); 
-		DrawLine(oldX + center.x, oldY + center.y, x + center.x, y + center.y, outline);
+		if (a != minAngle)
+			DrawLine(oldX + center.x, oldY + center.y, x + center.x, y + center.y, outline);
+		oldX = x;
+		oldY = y;
 	} 
 	return true;
 }

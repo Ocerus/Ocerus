@@ -86,6 +86,10 @@ EntityMessage::eResult EntitySystem::CmpPlatformPhysics::HandleMessage( const En
 		assert(msg.data);
 		((Vector2*)msg.data)->Set(GetAbsolutePosition());
 		return EntityMessage::RESULT_OK;
+	case EntityMessage::TYPE_GET_RELATIVE_POSITION:
+		assert(msg.data);
+		((Vector2*)msg.data)->Set(GetRelativePosition());
+		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_ANGLE:
 		assert(msg.data);
 		*(float32*)msg.data = GetAngle();

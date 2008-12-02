@@ -20,10 +20,12 @@ namespace EntitySystem
 		uint32 GetPower(void) const { return mPower; }
 		void SetPower(const uint32 pow) { mPower = pow; }
 		float32 GetRelativeAngle(void) const { return mRelativeAngle; }
-		void SetRelativeAngle(const float32 angle) { mRelativeAngle = angle; }
+		void SetRelativeAngle(const float32 angle) { mTargetAngle = mRelativeAngle = angle; }
+		/// Center angle of the engine relative to the current ship angle.
 		float32 GetDefaultAngle(void) const { return mDefaultAngle; }
 		void SetDefaultAngle(const float32 angle) { mDefaultAngle = angle; }
 		float32 GetAbsoluteAngle(void) const;
+		float32 GetAbsoluteDefaultAngle(void) const;
 
 		/// Just to make sure virtual functions work ok.
 		virtual ~CmpEngine(void) {}
@@ -32,8 +34,13 @@ namespace EntitySystem
 		float32 mDefaultAngle;
 		float32 mRelativeAngle;
 
+		// inner vars
+		uint32 mTargetPower;
+		float32 mTargetAngle;
+
 		void Draw(void) const;
-		void DrawHoverOverlay(void) const;
+		void DrawSelectionOverlay(const bool hover) const;
+		void DrawSelectionUnderlay(void) const;
 
 	};
 }

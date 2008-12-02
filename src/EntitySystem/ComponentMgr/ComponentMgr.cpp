@@ -55,9 +55,9 @@ bool ComponentMgr::CreateComponent(EntityHandle h, ComponentDescription& desc)
 {
 	assert(desc.GetType() < NUM_COMPONENT_TYPES && desc.GetType() >= 0);
 	Component* cmp = mComponentCreationMethod[desc.GetType()]();
+	mEntityComponentsMap[h.GetID()].push_back(cmp);
 	cmp->SetOwner(h);
 	cmp->Init(desc);
-	mEntityComponentsMap[h.GetID()].push_back(cmp);
 	return true;
 }
 

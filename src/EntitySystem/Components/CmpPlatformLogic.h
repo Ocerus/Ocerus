@@ -33,6 +33,12 @@ namespace EntitySystem
 		typedef std::vector<EntityHandle> EntityList;
 		EntityList mItems;
 
+		/// support data
+		Vector2 mPickCircleCenter;
+		float32 mPickCircleRadius;
+
+		void DrawSelectionOverlay(const bool hover) const;
+
 	};
 }
 

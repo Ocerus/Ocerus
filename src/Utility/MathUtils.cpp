@@ -8,3 +8,51 @@ float32 MathUtils::ComputePolygonArea(const Vector2* poly, const uint32 len)
 		area += poly[i].x * (poly[j].y-poly[k].y);
 	return 0.5f * area;
 }
+
+float32 MathUtils::Angle( const Vector2& a, const Vector2& b )
+{
+	float32 cos = Dot(a, b) / (a.Length()*b.Length());
+	cos = Clamp(cos, -1.0f, 1.0f);
+	if (Cross(a, b) < 0)
+		return -acosf(cos);
+	return acosf(cos);
+}
+
+float32 MathUtils::Clamp( const float32 num, const float32 min, const float32 max )
+{
+	assert(max>=min);
+	float32 res = num;
+	if (res > max)
+		res = max;
+	else if (res < min)
+		res = min;
+	return res;
+}
+
+float32 MathUtils::Wrap( const float32 num, const float32 min, const float32 max )
+{
+	assert(max>=min);
+	float32 res = num;
+	float32 d = max - min;
+	while (res > max)
+		res -= d;
+	while (res < min)
+		res += d;
+	return res;
+}
+
+float32 MathUtils::AngleDistance( const float32 angle1, const float32 angle2 )
+{
+	float32 normAng1 = WrapAngle(angle1);
+	float32 normAng2 = WrapAngle(angle2);
+	float32 d1 = Abs(normAng1 - normAng2);
+	float32 d2 = Abs(normAng1 - TWO_PI - normAng2);
+	float32 d3 = Abs(normAng1 + TWO_PI - normAng2);
+	return Min(Min(d1, d2), d3);
+}
+
+bool MathUtils::IsAngleInRange( const float32 angle, const float32 min, const float32 max )
+{
+	float32 normAng = WrapAngle(angle);
+	return normAng >= WrapAngle(min) && normAng <= WrapAngle(max);
+}

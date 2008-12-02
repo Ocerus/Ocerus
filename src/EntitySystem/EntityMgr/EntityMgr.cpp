@@ -55,6 +55,7 @@ EntityHandle EntityMgr::CreateEntity(const EntityDescription& desc)
 		assert(created);
 	}
 	mEntities.insert(std::pair<EntityID, eEntityType>(h.GetID(), desc.mType));
+	PostMessage(h.GetID(), EntityMessage(EntityMessage::TYPE_POST_INIT));
 	return h;
 }
 

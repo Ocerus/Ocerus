@@ -57,17 +57,31 @@ bool InputSystem::OISListener::mouseMoved( const OIS::MouseEvent &evt )
 
 bool InputSystem::OISListener::mousePressed( const OIS::MouseEvent &evt, OIS::MouseButtonID id )
 {
+	MouseInfo mi;
+	mi.dx = 0;
+	mi.dy = 0;
+	mi.wheelDelta = 0;
+	mi.x = evt.state.X.abs;
+	mi.y = evt.state.Y.abs;
+	mi.wheel = evt.state.Z.abs;
 	eMouseButton btn = OisToMbtn(id);
 	for (InputMgr::ListenersList::const_iterator i=mMgr->mListeners.begin(); i!=mMgr->mListeners.end(); ++i)
-		(*i)->MouseButtonPressed(btn);
+		(*i)->MouseButtonPressed(mi, btn);
 	return true;
 }
 
 bool InputSystem::OISListener::mouseReleased( const OIS::MouseEvent &evt, OIS::MouseButtonID id )
 {
+	MouseInfo mi;
+	mi.dx = 0;
+	mi.dy = 0;
+	mi.wheelDelta = 0;
+	mi.x = evt.state.X.abs;
+	mi.y = evt.state.Y.abs;
+	mi.wheel = evt.state.Z.abs;
 	eMouseButton btn = OisToMbtn(id);
 	for (InputMgr::ListenersList::const_iterator i=mMgr->mListeners.begin(); i!=mMgr->mListeners.end(); ++i)
-		(*i)->MouseButtonReleased(btn);
+		(*i)->MouseButtonReleased(mi, btn);
 	return true;
 }
 

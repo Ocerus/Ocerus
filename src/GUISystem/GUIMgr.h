@@ -49,11 +49,11 @@ namespace GUISystem {
 			CEGUI::System::getSingleton().injectMouseWheelChange(float(mi.wheelDelta));
 		}
 
-		inline virtual void MouseButtonPressed(const InputSystem::eMouseButton btn) {
+		inline virtual void MouseButtonPressed(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn) {
 			CEGUI::System::getSingleton().injectMouseButtonDown( ConvertMouseButtonEnum(btn) );
 		}
 
-		inline virtual void MouseButtonReleased(const InputSystem::eMouseButton btn) {
+		inline virtual void MouseButtonReleased(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn) {
 			CEGUI::System::getSingleton().injectMouseButtonUp( ConvertMouseButtonEnum(btn) );
 		}		
 

@@ -8,6 +8,7 @@ using namespace EntitySystem;
 
 #define PHYSICS_TIMESTEP 1.0f
 #define PHYSICS_ITERATIONS 10
+#define ENGINE_VISIBLE_MAX_POWER 40
 
 Core::Game::Game(): StateMachine<eGameState>(GS_NORMAL), mPhysics(0), mHoveredEntity() {}
 
@@ -55,8 +56,7 @@ void Core::Game::Init()
 	entityDesc.Init(ET_UNKNOWN);
 	compDesc.Init(CT_ENGINE_PARAMS);
 	compDesc.AddItem(material0);
-	compDesc.AddItem(-0.5f*MathUtils::PI); // min angle
-	compDesc.AddItem(0.5f*MathUtils::PI); // max angle
+	compDesc.AddItem(0.5f*MathUtils::PI); // arc angle
 	compDesc.AddItem(1.0f); // angular speed
 	entityDesc.AddComponentDescription(compDesc);
 	EntityHandle engineType0 = gEntityMgr.CreateEntity(entityDesc);
@@ -86,7 +86,7 @@ void Core::Game::Init()
 	compDesc.Init(CT_SHIP_PHYSICS);
 	// body position and angle
 	compDesc.AddItem(Vector2(10.0f,10.0f));
-	compDesc.AddItem(-1.0f);
+	compDesc.AddItem(-0.0f*MathUtils::PI);
 	entityDesc.AddComponentDescription(compDesc);
 	compDesc.Init(CT_SHIP_VISUAL);
 	entityDesc.AddComponentDescription(compDesc);
@@ -171,7 +171,6 @@ void Core::Game::Init()
 
 
 
-
 	gResourceMgr.AddResourceFileToGroup("zazaka.png", "test");
 	gResourceMgr.LoadResourcesInGroup("test");
 
@@ -194,11 +193,6 @@ void Core::Game::Update( float32 delta )
 	if (gInputMgr.IsKeyDown(InputSystem::KC_G))
 		gApp.RequestStateChange(AS_GUI, true);
 
-	InputSystem::MouseState& mouse = gInputMgr.GetMouseState();
-	EntityPicker picker(mouse.x, mouse.y);
-	gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::TYPE_MOUSE_PICK, &picker));
-	mHoveredEntity = picker.GetResult();
-
 	gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::TYPE_UPDATE_PHYSICS_SERVER));
 	gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::TYPE_UPDATE_PHYSICS_CLIENT));
 	mPhysics->Step(PHYSICS_TIMESTEP, PHYSICS_ITERATIONS);
@@ -211,26 +205,44 @@ void Core::Game::Draw()
 	uint8 centre = GfxSystem::ANCHOR_VCENTER | GfxSystem::ANCHOR_HCENTER;	
 	gGfxRenderer.DrawImage(gResourceMgr.GetResource("test/zazaka.png"),0, 0,topLeft);
 	gGfxRenderer.DrawImage(gResourceMgr.GetResource("test/zazaka.png"),100, 50,centre,0,100);	
-	/*
-	// creatig pentagon
-	std::vector<GfxSystem::Point> test;
-	test.push_back(GfxSystem::Point(300,300));
-	test.push_back(GfxSystem::Point(350,300));
-	test.push_back(GfxSystem::Point(350,400));
-	test.push_back(GfxSystem::Point(325,450));
-	test.push_back(GfxSystem::Point(250,380));
-	// rendering pentagon
-	gGfxRenderer.DrawPolygon(test,GfxSystem::Color(255,135,0));*/
 
-	//TODO predtim by se jeste melo poslat TYPE_DRAW_SELECTED "vybranym" entitam. Ty si zavolaji Draw s parametrem "selected"
-	//	nastavenym na true a poznaci si, ze pri zprave TYPE_DRAW se nemaji vykreslit (a tento priznak zrusi). Nutno jen
-	//	pro entity, kterym nestaci overlay pro selection
+	if (mSelectedEntities.size() > 0)
+	{
+		// display selection of engines
+		if (mSelectedEntities[0].GetType() == ET_ENGINE)
+		{
+			InputSystem::MouseState& mouse = gInputMgr.GetMouseState();
+			GfxSystem::Pen pen(GfxSystem::Color(100,100,100,180));
+			Vector2 pos;
+			for (EntityList::iterator i=mSelectedEntities.begin(); i!=mSelectedEntities.end(); ++i)
+			{
+				assert(i->GetType()==ET_ENGINE);
+				i->PostMessage(EntityMessage::TYPE_GET_POSITION, &pos);
+				gGfxRenderer.DrawLine(mouse.x, mouse.y, gGfxRenderer.WorldToScreenX(pos.x), gGfxRenderer.WorldToScreenY(pos.y), pen);
+			}
+		}
+	}
+
+	bool hoverAlsoSelected = false;
+	for (EntityList::iterator i=mSelectedEntities.begin(); i!=mSelectedEntities.end(); ++i)
+	{
+		// calling this to avoid ignored messages
+		gEntityMgr.PostMessage(*i, EntityMessage(EntityMessage::TYPE_DRAW_SELECTION_UNDERLAY));
+		if (mHoveredEntity == *i)
+			hoverAlsoSelected = true;
+	}
+
+	if (!hoverAlsoSelected && mHoveredEntity.IsValid())
+		gEntityMgr.PostMessage(mHoveredEntity, EntityMessage(EntityMessage::TYPE_DRAW_HOVER_UNDERLAY));
 
 	gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::TYPE_DRAW));
 
-	// draw selection overlays above selected entities
-	if (mHoveredEntity.IsValid())
-		mHoveredEntity.PostMessage(EntityMessage::TYPE_DRAW_HOVER_OVERLAY);
+	for (EntityList::iterator i=mSelectedEntities.begin(); i!=mSelectedEntities.end(); ++i)
+		gEntityMgr.PostMessage(*i, EntityMessage(EntityMessage::TYPE_DRAW_SELECTION_OVERLAY));
+
+	if (!hoverAlsoSelected && mHoveredEntity.IsValid())
+		gEntityMgr.PostMessage(mHoveredEntity, EntityMessage(EntityMessage::TYPE_DRAW_HOVER_OVERLAY));
+
 }
 
 void Core::Game::KeyPressed( const InputSystem::KeyInfo& ke )
@@ -245,15 +257,50 @@ void Core::Game::KeyReleased( const InputSystem::KeyInfo& ke )
 
 void Core::Game::MouseMoved( const InputSystem::MouseInfo& mi )
 {
-
+	// pick hover entity
+	EntityPicker picker(mi.x, mi.y);
+	gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::TYPE_MOUSE_PICK, &picker));
+	mHoveredEntity = picker.GetResult();
 }
 
-void Core::Game::MouseButtonPressed( const InputSystem::eMouseButton btn )
+void Core::Game::MouseButtonPressed( const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn )
+{
+	if (btn == InputSystem::MBTN_LEFT)
+	{
+		mSelectedEntities.clear();
+		if (mHoveredEntity.IsValid())
+			mSelectedEntities.push_back(mHoveredEntity);
+	}
+	else if (btn == InputSystem::MBTN_RIGHT)
+	{
+		if (mSelectedEntities.size() > 0)
+		{
+			// set the engine power and angle if selected
+			if (mSelectedEntities[0].GetType() == ET_ENGINE)
+			{
+				Vector2 cursor = gGfxRenderer.ScreenToWorld(GfxSystem::Point(mi.x, mi.y));
+				for (EntityList::iterator i=mSelectedEntities.begin(); i!=mSelectedEntities.end(); ++i)
+				{
+					Vector2 pos;
+					i->PostMessage(EntityMessage::TYPE_GET_POSITION, &pos);
+					Vector2 dir = cursor - pos;
+					int32 screenDist = gGfxRenderer.WorldToScreenScalar(dir.Length());
+					float32 powerRatio = GetEnginePowerCircleRadius() / ((float32)screenDist);
+					float32 angle = MathUtils::Angle(dir);
+					i->PostMessage(EntityMessage::TYPE_SET_TARGET_POWER_RATIO, &powerRatio);
+					i->PostMessage(EntityMessage::TYPE_SET_TARGET_ANGLE, &angle);
+				}
+			}
+		}
+	}
+}
+
+void Core::Game::MouseButtonReleased( const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn )
 {
 
 }
 
-void Core::Game::MouseButtonReleased( const InputSystem::eMouseButton btn )
+int32 Core::Game::GetEnginePowerCircleRadius( void ) const
 {
-
+	return ENGINE_VISIBLE_MAX_POWER;
 }

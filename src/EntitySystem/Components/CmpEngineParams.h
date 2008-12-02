@@ -23,10 +23,8 @@ namespace EntitySystem
 		void SetMaxPower(const uint32 power) { mMaxPower = power; }
 		EntityHandle GetMaterial(void) const { return mMaterial; }
 		void SetMaterial(const EntityHandle mat) { mMaterial = mat; }
-		float32 GetMinAngle(void) const { return mMinAngle; }
-		void SetMinAngle(const float32 ang) { mMinAngle = ang; }
-		float32 GetMaxAngle(void) const { return mMaxAngle; }
-		void SetMaxAngle(const float32 ang) { mMaxAngle = ang; }
+		float32 GetArcAngle(void) const { return mArcAngle; }
+		void SetArcAngle(const float32 ang) { mArcAngle = ang; }
 		float32 GetAngularSpeed(void) const { return mAngularSpeed; }
 		void SetAngularSpeed(const float32 angspeed) { mAngularSpeed = angspeed; }
 
@@ -36,8 +34,7 @@ namespace EntitySystem
 		EntityHandle mMaterial;
 		uint32 mMaxHitpoints;
 		uint32 mMaxPower;
-		float32 mMinAngle;
-		float32 mMaxAngle;
+		float32 mArcAngle;
 		float32 mAngularSpeed;
 
 		void ComputeParams(void);

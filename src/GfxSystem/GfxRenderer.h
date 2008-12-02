@@ -131,7 +131,7 @@ namespace GfxSystem
 		//TODO dodelat podobne verze DrawPolygon
 		bool DrawPolygonWithConversion(const Vector2* vertices, int vertices_len, const Vector2& offsetPosition, const float32 offsetAngle, const Color& fillColor, const Pen& outline = Pen::NullPen) const;
 
-		bool DrawCircle(const Point& center, const int32 radius, const Color& fillColor, const Pen& outline = Pen::NullPen) const;
+		bool DrawCircle(const Point& center, const int32 radius, const Color& fillColor, const Pen& outline = Pen::NullPen, const float32 minAngle = 0.0f, const float32 maxAngle = MathUtils::TWO_PI) const;
 
 		//TODO add font param
 		//bool DrawText(const string& str, font, int32 x, int32 y, uint8 anchor = ANCHOR_VCENTER|ANCHOR_HCENTER, float32 angle = 0.0f, uint8 alpha = 255);

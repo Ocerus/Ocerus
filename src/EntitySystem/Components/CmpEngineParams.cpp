@@ -9,8 +9,7 @@ using namespace EntitySystem;
 void EntitySystem::CmpEngineParams::Init( ComponentDescription& desc )
 {
 	SetMaterial(desc.GetNextItem()->GetData<EntityHandle>());
-	SetMinAngle(desc.GetNextItem()->GetData<float32>());
-	SetMaxAngle(desc.GetNextItem()->GetData<float32>());
+	SetArcAngle(desc.GetNextItem()->GetData<float32>());
 	SetAngularSpeed(desc.GetNextItem()->GetData<float32>());
 	ComputeParams();
 }
@@ -27,6 +26,14 @@ EntityMessage::eResult EntitySystem::CmpEngineParams::HandleMessage( const Entit
 	case EntityMessage::TYPE_GET_MAX_HITPOINTS:
 		assert(msg.data);
 		*(uint32*)msg.data = GetMaxHitpoints();
+		return EntityMessage::RESULT_OK;
+	case EntityMessage::TYPE_GET_ANGULAR_SPEED:
+		assert(msg.data);
+		*(float32*)msg.data = GetAngularSpeed();
+		return EntityMessage::RESULT_OK;
+	case EntityMessage::TYPE_GET_ARC_ANGLE:
+		assert(msg.data);
+		*(float32*)msg.data = GetArcAngle();
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_MAX_POWER:
 		assert(msg.data);
@@ -45,8 +52,7 @@ void EntitySystem::CmpEngineParams::RegisterReflection( void )
 	RegisterProperty<EntityHandle>("Material", &GetMaterial, &SetMaterial, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<uint32>("MaxHitpoints", &GetMaxHitpoints, &SetMaxHitpoints, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<uint32>("MaxPower", &GetMaxPower, &SetMaxPower, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
-	RegisterProperty<float32>("MinAngle", &GetMinAngle, &SetMinAngle, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
-	RegisterProperty<float32>("MaxAngle", &GetMaxAngle, &SetMaxAngle, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<float32>("ArcAngle", &GetArcAngle, &SetArcAngle, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<float32>("AngularSpeed", &GetAngularSpeed, &SetAngularSpeed, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 }
 

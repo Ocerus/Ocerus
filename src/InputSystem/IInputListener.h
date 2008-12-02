@@ -25,9 +25,9 @@ namespace InputSystem
 		/// Called when the mouse moves. Cursor position and other info is passed via parameter.
 		virtual void MouseMoved(const MouseInfo& mi) = 0;
 		/// Called when a mouse button is pressed.
-		virtual void MouseButtonPressed(const eMouseButton btn) = 0;
+		virtual void MouseButtonPressed(const MouseInfo& mi, const eMouseButton btn) = 0;
 		/// Called when a mouse button is released.
-		virtual void MouseButtonReleased(const eMouseButton btn) = 0;
+		virtual void MouseButtonReleased(const MouseInfo& mi, const eMouseButton btn) = 0;
 
 	};
 }

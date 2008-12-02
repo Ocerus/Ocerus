@@ -5,6 +5,7 @@
 #include "../Utility/Settings.h"
 #include "../InputSystem/IInputListener.h"
 #include "../EntitySystem/EntityMgr/EntityHandle.h"
+#include <vector>
 
 class b2World;
 
@@ -36,15 +37,19 @@ namespace Core
 		/// Called when the mouse moves. Cursor position and other info is passed via parameter.
 		virtual void MouseMoved(const InputSystem::MouseInfo& mi);
 		/// Called when a mouse button is pressed.
-		virtual void MouseButtonPressed(const InputSystem::eMouseButton btn);
+		virtual void MouseButtonPressed(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn);
 		/// Called when a mouse button is released.
-		virtual void MouseButtonReleased(const InputSystem::eMouseButton btn);
+		virtual void MouseButtonReleased(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn);
 
+		/// Returns the size of the circle used for setting engine power.
+		int32 GetEnginePowerCircleRadius(void) const;
 
 	private:
 		b2World* mPhysics;
 
 		EntitySystem::EntityHandle mHoveredEntity;
+		typedef std::vector<EntitySystem::EntityHandle> EntityList;
+		EntityList mSelectedEntities;
 	};
 }
 
