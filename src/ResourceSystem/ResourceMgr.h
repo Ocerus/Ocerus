@@ -26,7 +26,7 @@ namespace ResourceSystem
 			Basepath is a path to directory where all resources can be found if readed from disk.
 		*/
 		ResourceMgr(const string& basepath);
-		~ResourceMgr();
+		~ResourceMgr(void);
 
 		/// Assings resources in a directory to a group. In this case the resource types will be autodetected.
 		bool AddResourceDirToGroup(const string& path, const string& group, const string& includeRegexp = "*.*", const string& excludeRegexp = "");

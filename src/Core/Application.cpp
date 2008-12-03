@@ -107,7 +107,7 @@ void Application::RunMainLoop()
 		case AS_GAME:
 			if (gGfxRenderer.BeginRendering())
 			{
-				mGame->Draw();
+				mGame->Draw(delta);
 				gGfxRenderer.EndRendering();
 			}
 			break;

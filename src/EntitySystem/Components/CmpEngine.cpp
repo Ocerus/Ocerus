@@ -6,7 +6,8 @@
 using namespace EntitySystem;
 
 #define PICK_CIRCLE_RADIUS 0.5f
-#define POWER_RATIO -0.00000002f
+#define POWER_RATIO 0.003f
+#define PICTURE_SCALE 0.5f
 
 void EntitySystem::CmpEngine::Init( ComponentDescription& desc )
 {
@@ -46,7 +47,7 @@ EntityMessage::eResult EntitySystem::CmpEngine::HandleMessage( const EntityMessa
 			platform.PostMessage(EntityMessage::TYPE_GET_PHYSICS_BODY, &platformBody);
 			Vector2 myPos;
 			GetOwner().PostMessage(EntityMessage::TYPE_GET_POSITION, &myPos);
-			Vector2 force = MathUtils::Multiply(Matrix22(GetAbsoluteAngle()), Vector2(POWER_RATIO * mPower, 0.0f));
+			Vector2 force = MathUtils::VectorFromAngle(GetAbsoluteAngle(), -POWER_RATIO * mPower);
 			platformBody->ApplyForce(force, myPos);
 		}
 		return EntityMessage::RESULT_OK;
@@ -59,7 +60,7 @@ EntityMessage::eResult EntitySystem::CmpEngine::HandleMessage( const EntityMessa
 			GetOwner().PostMessage(EntityMessage::TYPE_GET_BLUEPRINTS, &blueprints);
 			blueprints.PostMessage(EntityMessage::TYPE_GET_ARC_ANGLE, &arcAngle);
 			float32 relAngle = *(float32*)msg.data;
-			relAngle = -relAngle + GetAbsoluteDefaultAngle();
+			relAngle = relAngle - GetAbsoluteDefaultAngle();
 			if (MathUtils::IsAngleInRange(relAngle, -arcAngle, arcAngle))
 				mTargetAngle = MathUtils::WrapAngle(relAngle);
 			else if (MathUtils::AngleDistance(relAngle, -arcAngle) < MathUtils::AngleDistance(relAngle, arcAngle))
@@ -120,7 +121,8 @@ void EntitySystem::CmpEngine::Draw( void ) const
 	Vector2 pos;
 	GetOwner().PostMessage(EntityMessage::TYPE_GET_POSITION, &pos);
 	GfxSystem::TexturePtr img = gResourceMgr.GetResource("ShipParts/engine0.png");
-	gGfxRenderer.DrawImageWithConversion(img, pos, GfxSystem::ANCHOR_HCENTER|GfxSystem::ANCHOR_VCENTER, GetAbsoluteAngle());
+	gGfxRenderer.DrawImageWithConversion(img, pos, GfxSystem::ANCHOR_HCENTER|GfxSystem::ANCHOR_VCENTER, 
+		GetAbsoluteAngle(), 255, PICTURE_SCALE);
 }
 
 float32 EntitySystem::CmpEngine::GetAbsoluteAngle( void ) const

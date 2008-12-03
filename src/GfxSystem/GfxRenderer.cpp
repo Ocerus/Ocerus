@@ -13,6 +13,7 @@ using namespace GfxSystem;
 Pen Pen::NullPen(Color(0,0,0,0));
 Rect Rect::NullRect(0,0,0,0);
 Color Color::NullColor(0,0,0,0);
+Color Color::FullColor(255,255,255,255);
 
 namespace GfxSystem
 {
@@ -45,7 +46,7 @@ namespace GfxSystem
 GfxRenderer::GfxRenderer(const Point& resolution, bool fullscreen):
 	mCameraX(0),
 	mCameraY(0),
-	mCameraScale(50.0f),
+	mCameraScale(1.0f),
 	mHGE(0)
 {
 	gLogMgr.LogMessage("*** GfxRenderer init ***");
@@ -84,7 +85,7 @@ void GfxRenderer::ClearResolutionChangeListeners() {
 	mResChangeListeners.clear();
 }
 
-uint32 GfxSystem::GfxRenderer::_GetWindowHandle() const
+uint32 GfxRenderer::_GetWindowHandle() const
 {
 	HWND hWnd = mHGE->System_GetState(HGE_HWND);
 	assert(hWnd);
@@ -113,7 +114,17 @@ void GfxRenderer::ChangeResolution( const Point& resolution )
 
 Point GfxRenderer::GetResolution() const
 {
-	return Point(mHGE->System_GetState(HGE_SCREENWIDTH),mHGE->System_GetState(HGE_SCREENHEIGHT));
+	return Point(GetScreenWidth(), GetScreenHeight());
+}
+
+int32 GfxRenderer::GetScreenWidth( void ) const
+{
+	return mHGE->System_GetState(HGE_SCREENWIDTH);
+}
+
+int32 GfxRenderer::GetScreenHeight( void ) const
+{
+	return mHGE->System_GetState(HGE_SCREENHEIGHT);
 }
 
 void GfxRenderer::SetFullscreen(bool fullscreen)
@@ -210,7 +221,7 @@ void InitQuad(hgeQuad& q,const TexturePtr& image, const Rect& textureRect, const
 	q.blend = BLEND_ALPHABLEND | BLEND_COLORMUL | BLEND_ZWRITE;
 }
 
-bool GfxSystem::GfxRenderer::DrawImage( const TexturePtr& image, int32 x, int32 y, uint8 anchor /*= ANCHOR_VCENTER|ANCHOR_HCENTER*/, float32 angle /*= 0.0f*/, uint8 alpha /*= 255*/, float32 scale /*= 1.0f*/, int32 width /* = 0 */,int32 height /* = 0 */, const Rect& textureRect /* = 0 */) const
+bool GfxRenderer::DrawImage( const TexturePtr& image, int32 x, int32 y, uint8 anchor /*= ANCHOR_VCENTER|ANCHOR_HCENTER*/, float32 angle /*= 0.0f*/, uint8 alpha /*= 255*/, float32 scale /*= 1.0f*/, int32 width /* = 0 */,int32 height /* = 0 */, const Rect& textureRect /* = 0 */) const
 {	
 	if (image.IsNull())
 	{
@@ -279,17 +290,22 @@ bool GfxSystem::GfxRenderer::DrawImage( const TexturePtr& image, int32 x, int32 
 	return true;
 }
 
-bool GfxSystem::GfxRenderer::DrawImage( const TexturePtr& image, const Point& pos, uint8 anchor /*= ANCHOR_VCENTER|ANCHOR_HCENTER*/, float32 angle /*= 0.0f*/, uint8 alpha /*= 255*/, float32 scale /*= 1.0f*/ ) const
+bool GfxRenderer::DrawImage( const TexturePtr& image, const Point& pos, uint8 anchor /*= ANCHOR_VCENTER|ANCHOR_HCENTER*/, float32 angle /*= 0.0f*/, uint8 alpha /*= 255*/, float32 scale /*= 1.0f*/ ) const
 {
 	return DrawImage(image, pos.x, pos.y, anchor, angle, alpha, scale, image->GetWidth(), image->GetHeight());
 }
 
-bool GfxSystem::GfxRenderer::DrawImageWithConversion( const TexturePtr& image, const Vector2& pos, uint8 anchor /*= ANCHOR_VCENTER|ANCHOR_HCENTER*/, float32 angle /*= 0.0f*/, uint8 alpha /*= 255*/, float32 scale /*= 1.0f*/ ) const
+bool GfxRenderer::DrawImageWithConversion( const TexturePtr& image, const Vector2& pos, uint8 anchor /*= ANCHOR_VCENTER|ANCHOR_HCENTER*/, float32 angle /*= 0.0f*/, uint8 alpha /*= 255*/, float32 scale /*= 1.0f*/ ) const
 {
 	return DrawImage(image, WorldToScreenX(pos.x), WorldToScreenY(pos.y), anchor, angle, alpha, WorldToScreenImageScale(scale), image->GetWidth(), image->GetHeight());
 }
 
-bool GfxSystem::GfxRenderer::DrawImage( const TexturePtr& image, const Rect& textureRect, const Rect& destRect, const ColorRect& colors ) const
+bool GfxRenderer::DrawImage( const TexturePtr& image, const Rect& destRect ) const
+{
+	return DrawImage(image, Rect(0,0,image->GetWidth(),image->GetHeight()), destRect);
+}
+
+bool GfxRenderer::DrawImage( const TexturePtr& image, const Rect& textureRect, const Rect& destRect, const ColorRect& colors ) const
 {
 	if (image.IsNull())
 	{
@@ -359,12 +375,12 @@ void InitTriple(hgeTriple& t,uint32 hTex,int32 x1,int32 y1,int32 x2,int32 y2,int
 	t.blend = BLEND_ALPHABLEND | BLEND_COLORMUL | BLEND_ZWRITE;
 }
 
-bool GfxSystem::GfxRenderer::DrawPolygon( Point* vertices, int vertices_len, const TexturePtr& image, const Pen& outline, float32 angle /*= 0.0f*/, uint8 alpha /*= 255*/, float32 scale /*= 1.0f*/, float32 textureAngle /*= 0.0f*/, float32 textureScale /*= 1.0f*/ ) const
+bool GfxRenderer::DrawPolygon( Point* vertices, int vertices_len, const TexturePtr& image, const Pen& outline, float32 angle /*= 0.0f*/, uint8 alpha /*= 255*/, float32 scale /*= 1.0f*/, float32 textureAngle /*= 0.0f*/, float32 textureScale /*= 1.0f*/ ) const
 {
 	return false;
 }
 
-bool GfxSystem::GfxRenderer::DrawPolygon( const std::vector<Point>& vertices, const TexturePtr& image, const Pen& outline, float32 angle /*= 0.0f*/, uint8 alpha /*= 255*/, float32 scale /*= 1.0f*/, float32 textureAngle /*= 0.0f*/, float32 textureScale /*= 1.0f*/ ) const
+bool GfxRenderer::DrawPolygon( const std::vector<Point>& vertices, const TexturePtr& image, const Pen& outline, float32 angle /*= 0.0f*/, uint8 alpha /*= 255*/, float32 scale /*= 1.0f*/, float32 textureAngle /*= 0.0f*/, float32 textureScale /*= 1.0f*/ ) const
 {
 	if (image.IsNull())
 	{
@@ -375,7 +391,7 @@ bool GfxSystem::GfxRenderer::DrawPolygon( const std::vector<Point>& vertices, co
 	return false;
 }
 
-bool GfxSystem::GfxRenderer::DrawPolygon( Point* vertices, int vertices_len, const Color& fillColor, const Pen& outline /* = Pen::NullPen */) const
+bool GfxRenderer::DrawPolygon( Point* vertices, int vertices_len, const Color& fillColor, const Pen& outline /* = Pen::NullPen */) const
 {	
 	// init vector
 	std::vector<Point> v;
@@ -389,7 +405,7 @@ bool GfxSystem::GfxRenderer::DrawPolygon( Point* vertices, int vertices_len, con
 		return false;
 }
 
-bool GfxSystem::GfxRenderer::DrawPolygonWithConversion( const Vector2* vertices, int vertices_len, const Vector2& offsetPosition, const float32 offsetAngle, const Color& fillColor, const Pen& outline) const
+bool GfxRenderer::DrawPolygonWithConversion( const Vector2* vertices, int vertices_len, const Vector2& offsetPosition, const float32 offsetAngle, const Color& fillColor, const Pen& outline) const
 {	
 	// init vector
 	std::vector<Point> v;
@@ -404,8 +420,11 @@ bool GfxSystem::GfxRenderer::DrawPolygonWithConversion( const Vector2* vertices,
 		return false;
 }
 
-bool GfxSystem::GfxRenderer::DrawPolygon( const std::vector<Point>& vertices, const Color& fillColor, const Pen& outline) const
+bool GfxRenderer::DrawPolygon( const std::vector<Point>& vertices, const Color& fillColor, const Pen& outline) const
 {	
+	//TODO tahle funkce musi bejt schopna neco vykreslit i kdyz je polygon degenerovanej a nejde triangulovat
+	//TODO prozkoumat, jestli nejde pres DirectX kreslit polygon lip a pripadne implementovat prislusnou funkci dovnitr HGE
+
 	std::vector<Point> triangles;
 	if (createTriangles(vertices,triangles)) // get triangles from points
 	{
@@ -448,7 +467,7 @@ bool GfxSystem::GfxRenderer::DrawPolygon( const std::vector<Point>& vertices, co
 	return true;
 }
 
-bool GfxSystem::GfxRenderer::DrawCircle( const Point& center, const int32 radius, const Color& fillColor, const Pen& outline, const float32 minAng, const float32 maxAng ) const
+bool GfxRenderer::DrawCircle( const Point& center, const int32 radius, const Color& fillColor, const Pen& outline, const float32 minAng, const float32 maxAng ) const
 {
 	float32 minAngle = MathUtils::WrapAngle(minAng);
 	float32 maxAngle = MathUtils::WrapAngle(maxAng);
@@ -456,7 +475,7 @@ bool GfxSystem::GfxRenderer::DrawCircle( const Point& center, const int32 radius
 		maxAngle += MathUtils::TWO_PI;
 	const float32 numSegments = 16;
 	const float32 eachAngle = MathUtils::TWO_PI / numSegments;
-	int32 x, y, oldX, oldY;
+	int32 x, y, oldX=-1, oldY=-1;
 
 	bool fill = &fillColor != &Color::NullColor;
 	std::vector<Point> points;
@@ -473,7 +492,7 @@ bool GfxSystem::GfxRenderer::DrawCircle( const Point& center, const int32 radius
 		}
 		x = MathUtils::Round(radius * MathUtils::Cos(a)); 
 		y = MathUtils::Round(radius * MathUtils::Sin(a)); 
-		if (fill)
+		if (fill && (x != oldX || y != oldY))
 			points.push_back(Point(x + center.x, y + center.y));
 		if (a != minAngle)
 			DrawLine(oldX + center.x, oldY + center.y, x + center.x, y + center.y, outline);
@@ -487,37 +506,60 @@ bool GfxSystem::GfxRenderer::DrawCircle( const Point& center, const int32 radius
 	return true;
 }
 
-int32 GfxSystem::GfxRenderer::WorldToScreenX( const float32 x ) const
+int32 GfxRenderer::WorldToScreenX( const float32 x ) const
 {
-	return MathUtils::Round((x-mCameraX)*mCameraScale);
+	return MathUtils::Round((x-mCameraX)*mCameraScale) + GetScreenWidthHalf();
 }
 
-int32 GfxSystem::GfxRenderer::WorldToScreenY( const float32 y ) const
+int32 GfxRenderer::WorldToScreenY( const float32 y ) const
 {
-	return MathUtils::Round((y-mCameraY)*mCameraScale);
+	return MathUtils::Round((y-mCameraY)*mCameraScale) + GetScreenHeightHalf();
 }
 
-GfxSystem::Point GfxSystem::GfxRenderer::WorldToScreen( const Vector2& pos ) const
+Point GfxRenderer::WorldToScreen( const Vector2& pos ) const
 {
-	return GfxSystem::Point(WorldToScreenX(pos.x), WorldToScreenY(pos.y));
+	return Point(WorldToScreenX(pos.x), WorldToScreenY(pos.y));
 }
 
-float32 GfxSystem::GfxRenderer::WorldToScreenImageScale( const float32 scale ) const
+float32 GfxRenderer::WorldToScreenImageScale( const float32 scale ) const
 {
 	return DEFAULT_IMAGE_WORLD_SCALE * scale * mCameraScale;
 }
 
-float32 GfxSystem::GfxRenderer::ScreenToWorldX( const int32 x ) const
+float32 GfxRenderer::ScreenToWorldX( const int32 x ) const
 {
-	return mCameraScaleInv*x + mCameraX;
+	return mCameraScaleInv*(x-GetScreenWidthHalf()) + mCameraX;
 }
 
-float32 GfxSystem::GfxRenderer::ScreenToWorldY( const int32 y ) const
+float32 GfxRenderer::ScreenToWorldY( const int32 y ) const
 {
-	return mCameraScaleInv*y + mCameraY;
+	return mCameraScaleInv*(y-GetScreenHeightHalf()) + mCameraY;
 }
 
-Vector2 GfxSystem::GfxRenderer::ScreenToWorld( const Point& pos ) const
+Vector2 GfxRenderer::ScreenToWorld( const Point& pos ) const
 {
 	return Vector2(ScreenToWorldX(pos.x), ScreenToWorldY(pos.y));
 }
+
+void GfxRenderer::ZoomCamera( const float32 delta )
+{
+	// zooms around the screen center
+	SetCameraScale(mCameraScale + delta);
+}
+
+void GfxRenderer::MoveCamera( const float32 dx, const float32 dy )
+{
+	mCameraX += dx;
+	mCameraY += dy;
+}
+
+Vector2 GfxRenderer::GetCameraWorldBoxTopLeft( void ) const
+{
+	return Vector2(ScreenToWorldX(0),ScreenToWorldY(0));
+}
+
+Vector2 GfxRenderer::GetCameraWorldBoxBotRight( void ) const
+{
+	return Vector2(ScreenToWorldX(GetScreenWidth()),ScreenToWorldY(GetScreenHeight()));
+}
+

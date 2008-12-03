@@ -16,7 +16,9 @@ namespace MathUtils
 
 	inline void Swap(float32& num1, float32& num2) { b2Swap(num1, num2); }
 
-	inline uint32 Round(const float32 num) { return static_cast<uint32>(floor(num+0.5)); }
+	inline int32 Round(const float32 num) { return static_cast<int32>(floorf(num<0?(num-0.5f):(num+0.5f))); }
+
+	inline int32 Floor(const float32 num) { return static_cast<int32>(floorf(num)); }
 
 	inline float32 Sqr(const float32 num) { return num*num; }
 

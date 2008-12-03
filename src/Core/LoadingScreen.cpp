@@ -15,6 +15,9 @@ void Core::LoadingScreen::DoLoading( eType type )
 		break;
 	case TYPE_GENERAL_RESOURCES:
 		gResourceMgr.AddResourceDirToGroup("engines", "ShipParts");
+		gResourceMgr.AddResourceFileToGroup("water.png", "Backgrounds");
+
+		gResourceMgr.LoadResourcesInGroup("Backgrounds");
 		gResourceMgr.LoadResourcesInGroup("ShipParts");
 		break;
 	}

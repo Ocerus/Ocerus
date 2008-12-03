@@ -7,7 +7,7 @@
 
 namespace EntitySystem
 {
-	/// Logic and layout.
+	/// Logic and layout of a specific ship.
 	class CmpShipLogic : public RTTIGlue<CmpShipLogic, Component>
 	{
 	public:

@@ -7,11 +7,14 @@ using namespace Core;
 using namespace EntitySystem;
 using namespace InputSystem;
 
-#define PHYSICS_TIMESTEP 1.0f
+#define PHYSICS_TIMESTEP 0.016f
 #define PHYSICS_ITERATIONS 10
 #define ENGINE_VISIBLE_MAX_POWER 80
+#define CAMERA_SPEED_RATIO 10.0f
+#define CAMERA_SCALE_RATIO 0.001f
+#define WATER_TEXTURE_SCALE 0.01f
 
-Core::Game::Game(): StateMachine<eGameState>(GS_NORMAL), mPhysics(0), mHoveredEntity() {}
+Core::Game::Game(): StateMachine<eGameState>(GS_NORMAL), mPhysics(0) {}
 
 Core::Game::~Game()
 {
@@ -22,6 +25,9 @@ void Core::Game::Init()
 {
 	gLogMgr.LogMessage("Game init");
 
+	// basic init stuff
+	mHoveredEntity.Invalidate();
+
 	// init physics engine
 	b2AABB worldAABB;
 	//TODO chtelo by to nekonecny rozmery, nebo vymyslet nejak jinak
@@ -29,6 +35,9 @@ void Core::Game::Init()
 	worldAABB.upperBound.Set(100.0f, 100.0f);
 	// turn off sleeping as we are moving in a space with no gravity
 	mPhysics = DYN_NEW b2World(worldAABB, b2Vec2(0.0f, 0.0f), false);
+	mPhysicsResidualDelta = 0.0f;
+
+
 
 	//// TEST ////
 
@@ -47,7 +56,7 @@ void Core::Game::Init()
 	entityDesc.Init(ET_UNKNOWN);
 	compDesc.Init(CT_PLATFORM_PARAMS);
 	compDesc.AddItem(material0);
-	Vector2 shape[] = {Vector2(-1.0f,-1.0f),Vector2(0.5f,-1.0f),Vector2(1.0f,-0.5f),Vector2(1.0f,0.5f),Vector2(-1.0f,0.5f)};
+	Vector2 shape[] = {Vector2(-0.5f,-0.5f),Vector2(0.25f,-0.5f),Vector2(0.5f,-0.25f),Vector2(0.5f,0.25f),Vector2(-0.5f,0.25f)};
 	compDesc.AddItem((uint32)5); // shape length
 	compDesc.AddItem(shape);
 	entityDesc.AddComponentDescription(compDesc);
@@ -87,7 +96,7 @@ void Core::Game::Init()
 	compDesc.Init(CT_SHIP_PHYSICS);
 	// body position and angle
 	compDesc.AddItem(Vector2(10.0f,10.0f));
-	compDesc.AddItem(-0.0f*MathUtils::PI);
+	compDesc.AddItem(-0.3f*MathUtils::PI);
 	entityDesc.AddComponentDescription(compDesc);
 	compDesc.Init(CT_SHIP_VISUAL);
 	entityDesc.AddComponentDescription(compDesc);
@@ -101,7 +110,7 @@ void Core::Game::Init()
 	entityDesc.AddComponentDescription(compDesc);
 	compDesc.Init(CT_PLATFORM_PHYSICS);
 	// pass position relative to the ship center
-	compDesc.AddItem(Vector2(0.0f,-0.55f));
+	compDesc.AddItem(Vector2(0.0f,-0.25f));
 	// pass additional shape info
 	compDesc.AddItem(false); // flip the shape?
 	compDesc.AddItem(0.0f); // shape angle relative to original shape
@@ -115,7 +124,7 @@ void Core::Game::Init()
 	compDesc.Init(CT_PLATFORM_ITEM);
 	compDesc.AddItem(engineType0); // blueprints
 	compDesc.AddItem(platform1); // parent
-	compDesc.AddItem(Vector2(-1.0f, 0.0f)); // position relative to the platform
+	compDesc.AddItem(Vector2(-0.5f, -0.25f)); // position relative to the platform
 	entityDesc.AddComponentDescription(compDesc);
 	compDesc.Init(CT_ENGINE);
 	compDesc.AddItem(MathUtils::PI); // default angle
@@ -131,7 +140,7 @@ void Core::Game::Init()
 	entityDesc.AddComponentDescription(compDesc);
 	compDesc.Init(CT_PLATFORM_PHYSICS);
 	// pass position relative to the ship center
-	compDesc.AddItem(Vector2(0.0f,0.55f));
+	compDesc.AddItem(Vector2(0.0f,0.25f));
 	// pass additional shape info
 	compDesc.AddItem(true); // flip the shape?
 	compDesc.AddItem(0.0f); // shape angle relative to original shape
@@ -145,7 +154,7 @@ void Core::Game::Init()
 	compDesc.Init(CT_PLATFORM_ITEM);
 	compDesc.AddItem(engineType0); // blueprints
 	compDesc.AddItem(platform2); // parent
-	compDesc.AddItem(Vector2(-1.0f, 0.0f)); // position relative to the platform
+	compDesc.AddItem(Vector2(-0.5f, 0.25f)); // position relative to the platform
 	entityDesc.AddComponentDescription(compDesc);
 	compDesc.Init(CT_ENGINE);
 	compDesc.AddItem(MathUtils::PI); // default angle
@@ -159,8 +168,8 @@ void Core::Game::Init()
 	compDesc.AddItem(platform1); // first platform
 	compDesc.AddItem(platform2); // second platform
 	compDesc.AddItem((uint32)3); // number of links
-	Vector2 anchors1[] = {Vector2(-0.5f,0.45f),Vector2(0.0f,0.45f),Vector2(0.5f,0.45f)};
-	Vector2 anchors2[] = {Vector2(-0.5f,-0.45f),Vector2(0.0f,-0.45f),Vector2(0.5f,-0.45f)};
+	Vector2 anchors1[] = {Vector2(-0.25f,0.2f),Vector2(0.0f,0.2f),Vector2(0.25f,0.2f)};
+	Vector2 anchors2[] = {Vector2(-0.25f,-0.2f),Vector2(0.0f,-0.2f),Vector2(0.25f,-0.2f)};
 	compDesc.AddItem(anchors1);
 	compDesc.AddItem(anchors2);
 	entityDesc.AddComponentDescription(compDesc);
@@ -172,8 +181,14 @@ void Core::Game::Init()
 
 
 
-	gResourceMgr.AddResourceFileToGroup("zazaka.png", "test");
-	gResourceMgr.LoadResourcesInGroup("test");
+	// set camera
+	Vector2 shipPos;
+	ship0.PostMessage(EntityMessage::TYPE_GET_POSITION, &shipPos);
+	gGfxRenderer.SetCameraPos(shipPos);
+	//gGfxRenderer.SetCameraX(50.0f* gGfxRenderer.GetScreenWidthHalf());
+	//gGfxRenderer.SetCameraY(50.0f* gGfxRenderer.GetScreenHeightHalf());
+	gGfxRenderer.SetCameraScale(50.0f);
+	mCameraFocus.Invalidate();
 
 	gInputMgr.AddInputListener(this);
 
@@ -187,26 +202,77 @@ void Core::Game::Deinit()
 
 }
 
-void Core::Game::Update( float32 delta )
+void Core::Game::Update( const float32 delta )
 {
 	if (gInputMgr.IsKeyDown(KC_ESCAPE))
 		gApp.Shutdown();
 	if (gInputMgr.IsKeyDown(KC_G))
-		gApp.RequestStateChange(AS_GUI, true);
+		gApp.RequestStateChange(AS_GUI);
 
-	gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::TYPE_UPDATE_PHYSICS_SERVER));
-	gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::TYPE_UPDATE_PHYSICS_CLIENT));
-	mPhysics->Step(PHYSICS_TIMESTEP, PHYSICS_ITERATIONS);
+	float32 physicsDelta = delta + mPhysicsResidualDelta;
+	while (physicsDelta > PHYSICS_TIMESTEP)
+	{
+		gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::TYPE_UPDATE_PHYSICS_SERVER));
+		gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::TYPE_UPDATE_PHYSICS_CLIENT));
+		mPhysics->Step(PHYSICS_TIMESTEP, PHYSICS_ITERATIONS);
+		physicsDelta -= PHYSICS_TIMESTEP;
+	}
+	mPhysicsResidualDelta = physicsDelta;
 }
 
-void Core::Game::Draw()
+void Core::Game::Draw( const float32 delta)
 {
-	gGfxRenderer.ClearScreen(GfxSystem::Color(0,0,0));
-	uint8 topLeft = GfxSystem::ANCHOR_TOP | GfxSystem::ANCHOR_LEFT;
-	uint8 centre = GfxSystem::ANCHOR_VCENTER | GfxSystem::ANCHOR_HCENTER;	
-	gGfxRenderer.DrawImage(gResourceMgr.GetResource("test/zazaka.png"),0, 0,topLeft);
-	gGfxRenderer.DrawImage(gResourceMgr.GetResource("test/zazaka.png"),100, 50,centre,0,100);	
+	// move camera in reaction to the user input
+	if (gInputMgr.IsKeyDown(KC_LEFT))
+	{
+		gGfxRenderer.MoveCamera(-CAMERA_SPEED_RATIO * delta, 0.0f);
+		mCameraFocus.Invalidate();
+	}
+	if (gInputMgr.IsKeyDown(KC_RIGHT))
+	{
+		gGfxRenderer.MoveCamera(CAMERA_SPEED_RATIO * delta, 0.0f);
+		mCameraFocus.Invalidate();
+	}
+	if (gInputMgr.IsKeyDown(KC_UP))
+	{
+		gGfxRenderer.MoveCamera(0.0f, -CAMERA_SPEED_RATIO * delta);
+		mCameraFocus.Invalidate();
+	}
+	if (gInputMgr.IsKeyDown(KC_DOWN))
+	{
+		gGfxRenderer.MoveCamera(0.0f, CAMERA_SPEED_RATIO * delta);
+		mCameraFocus.Invalidate();
+	}
 
+	if (mCameraFocus.IsValid())
+	{
+		Vector2 pos;
+		mCameraFocus.PostMessage(EntityMessage::TYPE_GET_POSITION, &pos);
+		gGfxRenderer.SetCameraPos(pos);
+	}
+
+	// clear the screen
+	gGfxRenderer.ClearScreen(GfxSystem::Color(0,0,0));
+
+	// draw the water
+	GfxSystem::TexturePtr waterTex = gResourceMgr.GetResource("Backgrounds", "water.png");
+	float32 texW_ws = WATER_TEXTURE_SCALE * waterTex->GetWidth();
+	float32 texH_ws = WATER_TEXTURE_SCALE * waterTex->GetHeight();
+	int32 texW = gGfxRenderer.WorldToScreenScalar(texW_ws);
+	int32 texH = gGfxRenderer.WorldToScreenScalar(texH_ws);
+	Vector2 topleft = gGfxRenderer.GetCameraWorldBoxTopLeft();
+	int32 x, y;
+	x = - gGfxRenderer.WorldToScreenScalar(topleft.x - MathUtils::Floor(topleft.x / texW_ws) * texW_ws);
+	y = - gGfxRenderer.WorldToScreenScalar(topleft.y - MathUtils::Floor(topleft.y / texH_ws) * texH_ws);
+	int32 screenW = gGfxRenderer.GetScreenWidth();
+	int32 screenH = gGfxRenderer.GetScreenHeight();
+	int32 oldY = y;
+	for (; x<screenW; x+=texW)
+		for (y=oldY; y<screenH; y+=texH)
+			gGfxRenderer.DrawImage(waterTex, GfxSystem::Rect(x, y, texW, texH));
+
+
+	// draw ships
 	gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::TYPE_DRAW_PLATFORM));
 	gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::TYPE_DRAW_PLATFORM_LINK));
 
@@ -265,6 +331,10 @@ void Core::Game::KeyReleased( const KeyInfo& ke )
 
 void Core::Game::MouseMoved( const MouseInfo& mi )
 {
+	// zoom camera
+	if (mi.wheelDelta)
+		gGfxRenderer.ZoomCamera(CAMERA_SCALE_RATIO * gGfxRenderer.GetCameraScale() * mi.wheelDelta);
+
 	// pick hover entity
 	EntityPicker picker(mi.x, mi.y);
 	gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::TYPE_MOUSE_PICK, &picker));
@@ -275,18 +345,26 @@ void Core::Game::MouseMoved( const MouseInfo& mi )
 	if ((mouse.buttons & MBTN_RIGHT) && mSelectedEntities.size()>0 
 		&& mSelectedEntities[0].GetType()==ET_ENGINE)
 		MouseButtonPressed(mi, MBTN_RIGHT);
+
 }
 
 void Core::Game::MouseButtonPressed( const MouseInfo& mi, const eMouseButton btn )
 {
 	if (btn == MBTN_LEFT)
 	{
+		// use the hover entity as a focus
+		if (gInputMgr.IsKeyDown(KC_RCONTROL) || gInputMgr.IsKeyDown(KC_LCONTROL))
+		{
+			if (mHoveredEntity.IsValid())
+				mCameraFocus = mHoveredEntity;
+		}
 		// add to the current selection if SHIFT down
-		if (mSelectedEntities.size()>0 && (gInputMgr.IsKeyDown(KC_RSHIFT) || gInputMgr.IsKeyDown(KC_LSHIFT)))
+		else if (mSelectedEntities.size()>0 && (gInputMgr.IsKeyDown(KC_RSHIFT) || gInputMgr.IsKeyDown(KC_LSHIFT)))
 		{
 			if (mHoveredEntity.IsValid() && mHoveredEntity.GetType() == mSelectedEntities[0].GetType())
 				mSelectedEntities.push_back(mHoveredEntity);
 		}
+		// clear the selection and add the hovered one if any
 		else
 		{
 			mSelectedEntities.clear();

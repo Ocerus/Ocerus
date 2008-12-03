@@ -7,10 +7,12 @@
 #include "../EntitySystem/EntityMgr/EntityHandle.h"
 #include <vector>
 
+/// Forward declaration.
 class b2World;
 
 namespace Core
 {
+	/// Inner states of the game state.
 	enum eGameState { GS_NORMAL=0 };
 
 	/** This class holds all info related directly to the game and takes care about rendering, input and game logic.
@@ -18,14 +20,15 @@ namespace Core
 	class Game : public StateMachine<eGameState>, public InputSystem::IInputListener
 	{
 	public:
-		Game();
-		virtual ~Game();
+		Game(void);
+		virtual ~Game(void);
 
-		void Init();
-		void Deinit();
-		void Update(float32 delta);
-		void Draw();
+		void Init(void);
+		void Deinit(void);
+		void Update(const float32 delta);
+		void Draw(const float32 delta);
 
+		/// Returns a pointer to an object representing the physics system.
 		b2World* GetPhysics(void) const { assert (mPhysics); return mPhysics; }
 
 		/// Called when a keyboard key is pressed/released.
@@ -45,11 +48,20 @@ namespace Core
 		int32 GetEnginePowerCircleRadius(void) const;
 
 	private:
+		/// This object represents the physics engine.
 		b2World* mPhysics;
+		/// Part of the timestep delta we didn't use for the physics update last Update.
+		float32 mPhysicsResidualDelta;
 
+		/// Selections stuff.
+		//@{
 		EntitySystem::EntityHandle mHoveredEntity;
 		typedef std::vector<EntitySystem::EntityHandle> EntityList;
 		EntityList mSelectedEntities;
+		//@}
+
+		/// Camera stuff.
+		EntitySystem::EntityHandle mCameraFocus;
 	};
 }
 

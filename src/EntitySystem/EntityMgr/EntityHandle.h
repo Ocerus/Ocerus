@@ -33,6 +33,9 @@ namespace EntitySystem
 		/// Returns true if this handle is valid (not null).
 		bool IsValid(void) const { return mEntityID != 0; }
 
+		/// Sets this handle to invalid state.
+		void Invalidate(void) { mEntityID = 0; }
+
 		/// Sends a message to this entity.
 		EntityMessage::eResult PostMessage(const EntityMessage::eType type, void* data = 0);
 

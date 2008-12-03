@@ -11,9 +11,10 @@ float32 MathUtils::ComputePolygonArea(const Vector2* poly, const uint32 len)
 
 float32 MathUtils::Angle( const Vector2& a, const Vector2& b )
 {
-	float32 cos = Dot(a, b) / (a.Length()*b.Length());
+	// note: I flipped a,b cos I need the angle in an inverse manner
+	float32 cos = Dot(b, a) / (b.Length()*a.Length());
 	cos = Clamp(cos, -1.0f, 1.0f);
-	if (Cross(a, b) < 0)
+	if (Cross(b, a) < 0)
 		return -acosf(cos);
 	return acosf(cos);
 }

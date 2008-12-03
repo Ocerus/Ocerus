@@ -6,6 +6,7 @@
 
 namespace EntitySystem
 {
+	/// Handles logic of one specific platform.
 	class CmpPlatformLogic : public RTTIGlue<CmpPlatformLogic, Component>
 	{
 	public:
@@ -17,12 +18,21 @@ namespace EntitySystem
 
 		static void RegisterReflection(void);
 
+		/// Current hitpoints in absolute units.
+		//@{
 		uint32 GetHitpoints(void) const { return mHitpoints; }
 		void SetHitpoints(const uint32 hp) { mHitpoints = hp; }
+		//@}
+		/// Platform type of this platform.
+		//@{
 		EntityHandle GetBlueprints(void) const { return mBlueprints; }
 		void SetBlueprints(const EntityHandle blueprints) { mBlueprints = blueprints; }
+		//@}
+		/// Link to a parent ship owning this platform. Can be null (invalid).
+		//@{
 		EntityHandle GetParentShip(void) const { return mParentShip; }
 		void SetParentShip(const EntityHandle parentShip) { mParentShip = parentShip; }
+		//@}
 	
 		/// Just to make sure virtual functions work ok.
 		virtual ~CmpPlatformLogic(void) {}

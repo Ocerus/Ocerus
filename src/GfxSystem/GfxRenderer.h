@@ -33,8 +33,7 @@ namespace GfxSystem
 		Rect(int32 _x, int32 _y, int32 _w, int32 _h): x(_x), y(_y), w(_w), h(_h) {}
 		int32 x, y, w, h;
 		
-		/// default constructor for Rect:
-		Rect(): x(0), y(y), w(w), h(h) {}
+		Rect(void): x(0), y(y), w(w), h(h) {}
 		static Rect NullRect;
 	};
 
@@ -43,19 +42,30 @@ namespace GfxSystem
 		Color(uint8 _r, uint8 _g, uint8 _b, uint8 _a = 255): r(_r), g(_g), b(_b), a(_a) {}
 		Color(uint32 color) : a((uint8)(color >> 24)), r((uint8)( (color >> 16)&0x000000FF )),
 			g((uint8)( (color >> 8)&0x000000FF )), b((uint8)( color&0x000000FF )) {}
-		Color(): r(0), g(0), b(0), a(255) {}
+		Color(void): r(0), g(0), b(0), a(255) {}
 		uint8 r, g, b, a;
 
 		static Color NullColor;
+		static Color FullColor;
 	};
 
 	struct ColorRect
 	{
 		Color TopLeft, TopRight, BottomLeft, BottomRight;
 		ColorRect(const Color& TopLeft, const Color& TopRight, const Color& BottomLeft, const Color& BottomRight):
-			TopLeft(TopLeft), TopRight(TopRight), BottomLeft(BottomLeft), BottomRight(BottomRight) {};
+			TopLeft(TopLeft), TopRight(TopRight), BottomLeft(BottomLeft), BottomRight(BottomRight)
+		{
+
+		}
 		
-		ColorRect() {}
+		ColorRect(void):
+				TopLeft(Color::FullColor),
+				TopRight(Color::FullColor),
+				BottomLeft(Color::FullColor),
+				BottomRight(Color::FullColor)
+		{
+
+		}
 	};
 
 	struct Pen
@@ -77,6 +87,10 @@ namespace GfxSystem
 
 		void ChangeResolution(const Point& resolution);
 		Point GetResolution(void) const;
+		int32 GetScreenWidth(void) const;
+		int32 GetScreenHeight(void) const;
+		inline int32 GetScreenWidthHalf(void) const { return GetScreenWidth() >> 1; }
+		inline int32 GetScreenHeightHalf(void) const { return GetScreenHeight() >> 1; }
 		void SetFullscreen(bool fullscreen);
 
 		inline virtual void AddResolutionChangeListener(IScreenResolutionChangeListener * listener)
@@ -96,6 +110,9 @@ namespace GfxSystem
 		inline void SetCameraY(const float32 y) { mCameraY = y; }
 		inline void SetCameraPos(const Vector2& pos) { mCameraX = pos.x; mCameraY = pos.y; }
 		inline void SetCameraScale(const float32 s) { mCameraScale = s; mCameraScaleInv = 1.0f/s; }
+		inline float32 GetCameraScale(void) const { return mCameraScale; }
+		void ZoomCamera(const float32 delta);
+		void MoveCamera(const float32 dx, const float32 dy);
 		int32 WorldToScreenX(const float32 x) const;
 		int32 WorldToScreenY(const float32 y) const;
 		inline float32 WorldToScreenScale(const float32 scale) const { return mCameraScale*scale; }
@@ -105,6 +122,8 @@ namespace GfxSystem
 		float32 ScreenToWorldX(const int32 x) const;
 		float32 ScreenToWorldY(const int32 y) const;
 		Vector2 ScreenToWorld(const Point& pos) const;
+		Vector2 GetCameraWorldBoxTopLeft(void) const;
+		Vector2 GetCameraWorldBoxBotRight(void) const;
 
 		bool ClearScreen(const Color& color) const;
 
@@ -114,7 +133,8 @@ namespace GfxSystem
 		/// This version does a conversion from world space
 		bool DrawImageWithConversion(const TexturePtr& image, const Vector2& pos, uint8 anchor = 0, float32 angle = 0.0f, uint8 alpha = 255, float32 scale = 1.0f) const;
 		/// This version is made specially to support GUI
-		bool DrawImage(const TexturePtr& image, const Rect& textureRect, const Rect& destRect, const ColorRect& colors ) const;
+		bool DrawImage(const TexturePtr& image, const Rect& textureRect, const Rect& destRect, const ColorRect& colors = ColorRect() ) const;
+		bool DrawImage(const TexturePtr& image, const Rect& destRect) const;
 
 		bool DrawLine(int x1, int y1, int x2, int y2, const Pen& pen) const;
 		bool DrawLine(const Point& begin, const Point& end, const Pen& pen) const;
@@ -140,10 +160,18 @@ namespace GfxSystem
 
 	private:
 		HGE* mHGE; 
+
+		/// Camera center position.
+		//@{
 		float32 mCameraX;
 		float32 mCameraY;
+		//@}
+
+		/// Camera zoom ratio.
+		//@{
 		float32 mCameraScale;
 		float32 mCameraScaleInv;
+		//@}
 
 		friend class Texture;
 		friend bool HgeExitFunction(void);

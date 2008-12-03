@@ -6,6 +6,7 @@
 
 namespace EntitySystem
 {
+	/// Platform item - engine. Handles rendering as well as logic and physics.
 	class CmpEngine : public RTTIGlue<CmpEngine, Component>
 	{
 	public:
@@ -17,15 +18,26 @@ namespace EntitySystem
 
 		static void RegisterReflection(void);
 
+		/// Current power going out of the engine.
+		//@{
 		uint32 GetPower(void) const { return mPower; }
 		void SetPower(const uint32 pow) { mPower = pow; }
+		//@}
+		/// Current angle of the engine relative to the default angle.
+		//@{
 		float32 GetRelativeAngle(void) const { return mRelativeAngle; }
 		void SetRelativeAngle(const float32 angle) { mTargetAngle = mRelativeAngle = angle; }
+		//@}
 		/// Center angle of the engine relative to the current ship angle.
+		//@{
 		float32 GetDefaultAngle(void) const { return mDefaultAngle; }
 		void SetDefaultAngle(const float32 angle) { mDefaultAngle = angle; }
+		//@}
+		/// Current angle of the engine in absolute coords.
 		float32 GetAbsoluteAngle(void) const;
+		/// Default angle of the engine in absolute coords.
 		float32 GetAbsoluteDefaultAngle(void) const;
+		/// Target angle of the engine (current angle will move to this angle) in absolute coords.
 		float32 GetAbsoluteTargetAngle(void) const;
 
 		/// Just to make sure virtual functions work ok.
