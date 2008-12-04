@@ -150,7 +150,7 @@
 				AdditionalDependencies="CEGUIBase.lib freetype.lib pcre.lib CEGUIExpatParser.lib CEGUIFalagardWRBase_Static.lib "
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="externalLibs/boost/lib;externalLibs/cegui/lib;externalLibs/cegui/dependencies/lib"
-				IgnoreDefaultLibraryNames="libci.lib"
+				IgnoreDefaultLibraryNames="libci.lib;libcmtd.lib"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"

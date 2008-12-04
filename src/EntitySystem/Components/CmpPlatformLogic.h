@@ -2,7 +2,6 @@
 #define _CMPPLATFORM_H_
 
 #include "../ComponentMgr/Component.h"
-#include "../../Utility/Properties.h"
 
 namespace EntitySystem
 {

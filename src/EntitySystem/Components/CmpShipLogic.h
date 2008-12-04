@@ -2,7 +2,6 @@
 #define CmpShipLogic_h__
 
 #include "../ComponentMgr/Component.h"
-#include "../../Utility/Properties.h"
 #include <vector>
 
 namespace EntitySystem

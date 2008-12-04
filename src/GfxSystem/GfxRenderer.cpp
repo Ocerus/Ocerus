@@ -469,6 +469,7 @@ bool GfxRenderer::DrawPolygon( const std::vector<Point>& vertices, const Color& 
 
 bool GfxRenderer::DrawCircle( const Point& center, const int32 radius, const Color& fillColor, const Pen& outline, const float32 minAng, const float32 maxAng ) const
 {
+	//TODO tohle je hrozne pomaly
 	float32 minAngle = MathUtils::WrapAngle(minAng);
 	float32 maxAngle = MathUtils::WrapAngle(maxAng);
 	if (maxAngle < minAngle)

@@ -2,7 +2,6 @@
 #define CmpShipPhysics_h__
 
 #include "../ComponentMgr/Component.h"
-#include "../../Utility/Properties.h"
 
 class b2Body;
 
