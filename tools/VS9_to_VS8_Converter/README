@@ -1,0 +1,4 @@
+DO NOT FORGET TO PREPARE YOUR DEBUG SETTINGS A WORKING DIRECTORY BOTH IN DEBUG AND RELEASE!!!!
+both: working $(SolutionDir)/output
+debug: command $(TargetPath)
+release: command $(SolutionDir)/output/$(TargetFileName)
