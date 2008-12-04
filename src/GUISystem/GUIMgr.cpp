@@ -51,12 +51,12 @@ namespace GUISystem {
 
 	GUIMgr::~GUIMgr() {
 		gInputMgr.RemoveInputListener(this);
-		assert(mCegui);
-		DYN_DELETE mCegui;
-		assert(mRendererGate);
-		DYN_DELETE mRendererGate;
-		assert(mResourceGate);
-		DYN_DELETE mResourceGate;
+		if (mCegui)
+			DYN_DELETE mCegui;
+		if (mRendererGate)
+			DYN_DELETE mRendererGate;
+		if (mResourceGate)
+			DYN_DELETE mResourceGate;
 	}
 
 	void GUIMgr::RegisterEvents() {
