@@ -4,7 +4,7 @@
 	Version="9,00"
 	Name="Battleships"
 	ProjectGUID="{685FB3A5-4080-4FA7-8C69-AF6406E38DA5}"
-	RootNamespace="Batlteships"
+	RootNamespace="Battleships"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="131072"
 	>
