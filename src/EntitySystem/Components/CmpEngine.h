@@ -2,7 +2,7 @@
 #define CmpEngine_h__
 
 #include "../ComponentMgr/Component.h"
-#include "../Utility/Properties.h"
+#include "../../Utility/Properties.h"
 
 namespace EntitySystem
 {

@@ -1,7 +1,7 @@
 #ifndef _COMPONENT_H_
 #define _COMPONENT_H_
 
-#include "../Utility/Properties.h"
+#include "../../Utility/Properties.h"
 #include "../EntityMgr/EntityHandle.h"
 #include "ComponentDescriptionItem.h"
 

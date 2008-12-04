@@ -2,7 +2,7 @@
 #define CmpPlatformPhysics_h__
 
 #include "../ComponentMgr/Component.h"
-#include "../Utility/Properties.h"
+#include "../../Utility/Properties.h"
 
 /// Forward declarations
 //@{

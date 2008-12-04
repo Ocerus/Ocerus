@@ -2,8 +2,8 @@
 #define CmpPlatformParams_h__
 
 #include "../ComponentMgr/Component.h"
-#include "../Utility/Properties.h"
-#include "../Utility/Settings.h"
+#include "../../Utility/Properties.h"
+#include "../../Utility/Settings.h"
 #include <vector>
 
 namespace EntitySystem

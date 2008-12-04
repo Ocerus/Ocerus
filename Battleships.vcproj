@@ -97,7 +97,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy /V /Y /B externalLibs\cegui\bin\Debug\*.dll Debug&#x0D;&#x0A;"
+				CommandLine="copy /V /Y /B externalLibs\cegui\bin\vs9\Debug\*.dll Debug&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -180,7 +180,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Copying release file to output dir..."
-				CommandLine="copy &quot;$(OutDir)\$(TargetFileName)&quot; &quot;output&quot;&#x0D;&#x0A;copy /V /Y /B externalLibs\cegui\bin\Release\*.dll Release&#x0D;&#x0A;copy /V /Y /B externalLibs\cegui\bin\Release\*.dll output&#x0D;&#x0A;"
+				CommandLine="copy &quot;$(OutDir)\$(TargetFileName)&quot; &quot;output&quot;&#x0D;&#x0A;copy /V /Y /B externalLibs\cegui\bin\vs9\Release\*.dll Release&#x0D;&#x0A;copy /V /Y /B externalLibs\cegui\bin\vs9\Release\*.dll output&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>

@@ -7,7 +7,10 @@
 #include "ResourceGate.h"
 
 namespace GUISystem {
-	GUIMgr::GUIMgr() {
+	GUIMgr::GUIMgr() : mCegui(0), mRendererGate(0), mResourceGate(0) {
+	}
+
+	void GUIMgr::LoadGUI() {
 		gLogMgr.LogMessage("******** GUIMgr init *********");
 		mCegui = DYN_NEW CEGUI::System( mRendererGate = DYN_NEW RendererGate(), mResourceGate = DYN_NEW ResourceGate() );
 
@@ -48,15 +51,19 @@ namespace GUISystem {
 
 	GUIMgr::~GUIMgr() {
 		gInputMgr.RemoveInputListener(this);
+		assert(mCegui);
 		DYN_DELETE mCegui;
+		assert(mRendererGate);
 		DYN_DELETE mRendererGate;
+		assert(mResourceGate);
 		DYN_DELETE mResourceGate;
 	}
 
 	void GUIMgr::RegisterEvents() {
 		assert(mCegui && CurrentWindowRoot);
-		CEGUI::Window* quit_button = CEGUI::WindowManager::getSingleton().getWindow("Root/QuitButton");		
-		quit_button->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&GUIMgr::QuitEvent, this));
+		CEGUI::Window* quit_button = CEGUI::WindowManager::getSingleton().getWindow("Root/QuitButton");
+		if (quit_button)
+			quit_button->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&GUIMgr::QuitEvent, this));
 	}
 
 	bool GUIMgr::QuitEvent(const CEGUI::EventArgs& e)
@@ -65,7 +72,8 @@ namespace GUISystem {
 		return true;
 	}
 
-	void GUIMgr::Update( float32 delta ) {		
+	void GUIMgr::Update( float32 delta ) {
+		assert(mCegui);
 		mCegui->injectTimePulse( delta );
 	}
 

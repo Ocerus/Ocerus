@@ -33,31 +33,42 @@ namespace GUISystem {
 	class GUIMgr : public Singleton<GUIMgr>, public InputSystem::IInputListener
 	{
 	public:	
-		GUIMgr(void);
+		GUIMgr();
 
+		/// DO NOT CHANGE TO const METHODS!! these methods override IInputListener's methods
+		//@{
 		inline virtual void KeyPressed(const InputSystem::KeyInfo& ke) {
-			CEGUI::System::getSingleton().injectKeyDown(ke.keyCode);
-			CEGUI::System::getSingleton().injectChar(ke.keyCode);
+			assert(mCegui);
+			mCegui->injectKeyDown(ke.keyCode);
+			mCegui->injectChar(ke.keyCode);
 		}
 
 		inline virtual void KeyReleased(const InputSystem::KeyInfo& ke) {
-			CEGUI::System::getSingleton().injectKeyUp(ke.keyCode);
+			assert(mCegui);
+			mCegui->injectKeyUp(ke.keyCode);
 		}
 
 		inline virtual void MouseMoved(const InputSystem::MouseInfo& mi) {
-			CEGUI::System::getSingleton().injectMousePosition(float(mi.x), float(mi.y));
-			CEGUI::System::getSingleton().injectMouseWheelChange(float(mi.wheelDelta));
+			assert(mCegui);
+			mCegui->injectMousePosition(float(mi.x), float(mi.y));
+			mCegui->injectMouseWheelChange(float(mi.wheelDelta));
 		}
 
 		inline virtual void MouseButtonPressed(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn) {
-			CEGUI::System::getSingleton().injectMouseButtonDown( ConvertMouseButtonEnum(btn) );
+			assert(mCegui);
+			mCegui->injectMouseButtonDown( ConvertMouseButtonEnum(btn) );
 		}
 
 		inline virtual void MouseButtonReleased(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn) {
-			CEGUI::System::getSingleton().injectMouseButtonUp( ConvertMouseButtonEnum(btn) );
-		}		
+			assert(mCegui);
+			mCegui->injectMouseButtonUp( ConvertMouseButtonEnum(btn) );
+		}
+		//@}
+
+		virtual void LoadGUI();
 
 		inline virtual void RenderGUI() const {
+			assert(mCegui);
 			mCegui->renderGUI();
 		}
 
