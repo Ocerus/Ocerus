@@ -6,8 +6,9 @@
 using namespace EntitySystem;
 
 #define PICK_CIRCLE_RADIUS 0.5f
-#define POWER_RATIO 0.003f
+#define POWER_RATIO 0.005f
 #define PICTURE_SCALE 0.5f
+#define STABILIZATION_RATIO 0.2f
 
 void EntitySystem::CmpEngine::Init( ComponentDescription& desc )
 {
@@ -47,8 +48,11 @@ EntityMessage::eResult EntitySystem::CmpEngine::HandleMessage( const EntityMessa
 			platform.PostMessage(EntityMessage::TYPE_GET_PHYSICS_BODY, &platformBody);
 			Vector2 myPos;
 			PostMessage(EntityMessage::TYPE_GET_POSITION, &myPos);
-			Vector2 force = MathUtils::VectorFromAngle(GetAbsoluteAngle(), -POWER_RATIO * mPower);
-			platformBody->ApplyForce(force, myPos);
+			Vector2 forceDir = MathUtils::VectorFromAngle(GetAbsoluteAngle());
+			platformBody->ApplyForce(-POWER_RATIO * mPower * forceDir, myPos);
+			Vector2 perpDir(-forceDir.y, forceDir.x);
+			float32 perpVel = MathUtils::Dot(perpDir, platformBody->GetLinearVelocity());
+			platformBody->ApplyForce(-STABILIZATION_RATIO * perpVel * perpDir, platformBody->GetWorldCenter());
 		}
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_SET_ABSOLUTE_TARGET_ANGLE:
