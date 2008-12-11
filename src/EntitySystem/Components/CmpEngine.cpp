@@ -14,7 +14,7 @@ void EntitySystem::CmpEngine::Init( ComponentDescription& desc )
 	SetDefaultAngle(desc.GetNextItem()->GetData<float32>());
 	SetRelativeAngle(desc.GetNextItem()->GetData<float32>());
 	EntityHandle blueprints;
-	GetOwner().PostMessage(EntityMessage::TYPE_GET_BLUEPRINTS, &blueprints);
+	PostMessage(EntityMessage::TYPE_GET_BLUEPRINTS, &blueprints);
 	mPower = 0;
 
 	mTargetPower = mPower;
@@ -33,7 +33,7 @@ EntityMessage::eResult EntitySystem::CmpEngine::HandleMessage( const EntityMessa
 	case EntityMessage::TYPE_UPDATE_PHYSICS_SERVER:
 		{
 			EntityHandle blueprints;
-			GetOwner().PostMessage(EntityMessage::TYPE_GET_BLUEPRINTS, &blueprints);
+			PostMessage(EntityMessage::TYPE_GET_BLUEPRINTS, &blueprints);
 			float32 angularSpeed;
 			blueprints.PostMessage(EntityMessage::TYPE_GET_ANGULAR_SPEED, &angularSpeed);
 			//TODO brat v potaz rychlost otaceni
@@ -42,11 +42,11 @@ EntityMessage::eResult EntitySystem::CmpEngine::HandleMessage( const EntityMessa
 			mPower = mTargetPower;
 
 			EntityHandle platform;
-			GetOwner().PostMessage(EntityMessage::TYPE_GET_PARENT, &platform);
+			PostMessage(EntityMessage::TYPE_GET_PARENT, &platform);
 			b2Body* platformBody;
 			platform.PostMessage(EntityMessage::TYPE_GET_PHYSICS_BODY, &platformBody);
 			Vector2 myPos;
-			GetOwner().PostMessage(EntityMessage::TYPE_GET_POSITION, &myPos);
+			PostMessage(EntityMessage::TYPE_GET_POSITION, &myPos);
 			Vector2 force = MathUtils::VectorFromAngle(GetAbsoluteAngle(), -POWER_RATIO * mPower);
 			platformBody->ApplyForce(force, myPos);
 		}
@@ -57,7 +57,7 @@ EntityMessage::eResult EntitySystem::CmpEngine::HandleMessage( const EntityMessa
 		{
 			float32 arcAngle;
 			EntityHandle blueprints;
-			GetOwner().PostMessage(EntityMessage::TYPE_GET_BLUEPRINTS, &blueprints);
+			PostMessage(EntityMessage::TYPE_GET_BLUEPRINTS, &blueprints);
 			blueprints.PostMessage(EntityMessage::TYPE_GET_ARC_ANGLE, &arcAngle);
 			float32 relAngle = *(float32*)msg.data;
 			relAngle = relAngle - GetAbsoluteDefaultAngle();
@@ -78,7 +78,7 @@ EntityMessage::eResult EntitySystem::CmpEngine::HandleMessage( const EntityMessa
 		{
 			uint32 maxPower;
 			EntityHandle blueprints;
-			GetOwner().PostMessage(EntityMessage::TYPE_GET_BLUEPRINTS, &blueprints);
+			PostMessage(EntityMessage::TYPE_GET_BLUEPRINTS, &blueprints);
 			blueprints.PostMessage(EntityMessage::TYPE_GET_MAX_POWER, &maxPower);
 			mTargetPower = MathUtils::Round(maxPower * MathUtils::Clamp(*(float32*)msg.data, 0.0f, 1.0f));
 		}
@@ -87,7 +87,7 @@ EntityMessage::eResult EntitySystem::CmpEngine::HandleMessage( const EntityMessa
 		assert(msg.data);
 		{
 			Vector2 pos;
-			GetOwner().PostMessage(EntityMessage::TYPE_GET_POSITION, &pos);
+			PostMessage(EntityMessage::TYPE_GET_POSITION, &pos);
 			((EntityPicker*)msg.data)->Update(GetOwner(), pos, PICK_CIRCLE_RADIUS);
 		}
 		return EntityMessage::RESULT_OK;
@@ -119,7 +119,7 @@ void EntitySystem::CmpEngine::RegisterReflection( void )
 void EntitySystem::CmpEngine::Draw( void ) const
 {
 	Vector2 pos;
-	GetOwner().PostMessage(EntityMessage::TYPE_GET_POSITION, &pos);
+	PostMessage(EntityMessage::TYPE_GET_POSITION, &pos);
 	GfxSystem::TexturePtr img = gResourceMgr.GetResource("ShipParts/engine0.png");
 	gGfxRenderer.DrawImageWithConversion(img, pos, GfxSystem::ANCHOR_HCENTER|GfxSystem::ANCHOR_VCENTER, 
 		GetAbsoluteAngle(), 255, PICTURE_SCALE);
@@ -128,7 +128,7 @@ void EntitySystem::CmpEngine::Draw( void ) const
 float32 EntitySystem::CmpEngine::GetAbsoluteAngle( void ) const
 {
 	EntityHandle platform;
-	GetOwner().PostMessage(EntityMessage::TYPE_GET_PARENT, &platform);
+	PostMessage(EntityMessage::TYPE_GET_PARENT, &platform);
 	float32 platformAngle;
 	platform.PostMessage(EntityMessage::TYPE_GET_ANGLE, &platformAngle);
 	return platformAngle + mDefaultAngle + mRelativeAngle;	
@@ -137,7 +137,7 @@ float32 EntitySystem::CmpEngine::GetAbsoluteAngle( void ) const
 void EntitySystem::CmpEngine::DrawSelectionOverlay( const bool hover ) const
 {
 	Vector2 pos;
-	GetOwner().PostMessage(EntityMessage::TYPE_GET_POSITION, &pos);
+	PostMessage(EntityMessage::TYPE_GET_POSITION, &pos);
 	GfxSystem::Color color(255,0,0,180);
 	if (hover)
 		color = GfxSystem::Color(255,255,255,180);
@@ -149,9 +149,9 @@ void EntitySystem::CmpEngine::DrawSelectionUnderlay( const bool hover ) const
 {
 	// draw an arch designating possible power and angle
 	Vector2 pos;
-	GetOwner().PostMessage(EntityMessage::TYPE_GET_POSITION, &pos);
+	PostMessage(EntityMessage::TYPE_GET_POSITION, &pos);
 	EntityHandle blueprints;
-	GetOwner().PostMessage(EntityMessage::TYPE_GET_BLUEPRINTS, &blueprints);
+	PostMessage(EntityMessage::TYPE_GET_BLUEPRINTS, &blueprints);
 	float32 angleDiver;
 	blueprints.PostMessage(EntityMessage::TYPE_GET_ARC_ANGLE, &angleDiver);
 	GfxSystem::Color color(10,10,80,90);
@@ -171,7 +171,7 @@ void EntitySystem::CmpEngine::DrawSelectionUnderlay( const bool hover ) const
 float32 EntitySystem::CmpEngine::GetAbsoluteDefaultAngle( void ) const
 {
 	EntityHandle platform;
-	GetOwner().PostMessage(EntityMessage::TYPE_GET_PARENT, &platform);
+	PostMessage(EntityMessage::TYPE_GET_PARENT, &platform);
 	float32 platformAngle;
 	platform.PostMessage(EntityMessage::TYPE_GET_ANGLE, &platformAngle);
 	return platformAngle + mDefaultAngle;	
@@ -180,7 +180,7 @@ float32 EntitySystem::CmpEngine::GetAbsoluteDefaultAngle( void ) const
 float32 EntitySystem::CmpEngine::GetAbsoluteTargetAngle( void ) const
 {
 	EntityHandle platform;
-	GetOwner().PostMessage(EntityMessage::TYPE_GET_PARENT, &platform);
+	PostMessage(EntityMessage::TYPE_GET_PARENT, &platform);
 	float32 platformAngle;
 	platform.PostMessage(EntityMessage::TYPE_GET_ANGLE, &platformAngle);
 	return platformAngle + mDefaultAngle + mTargetAngle;	

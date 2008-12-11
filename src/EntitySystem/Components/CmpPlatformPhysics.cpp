@@ -6,12 +6,15 @@
 
 using namespace EntitySystem;
 
+#define LINEAR_DAMPING 0.1f
+#define ANGULAR_DAMPING 0.5f
+
 void EntitySystem::CmpPlatformPhysics::Init( ComponentDescription& desc )
 {
 	mBody = 0;
 	mShape = 0;
 	EntityHandle ship;
-	GetOwner().PostMessage(EntityMessage::TYPE_GET_PARENT, &ship);
+	PostMessage(EntityMessage::TYPE_GET_PARENT, &ship);
 
 	// create body
 	if (ship.IsValid())
@@ -25,13 +28,15 @@ void EntitySystem::CmpPlatformPhysics::Init( ComponentDescription& desc )
 		bodyDef.position = desc.GetNextItem()->GetData<Vector2>();
 		bodyDef.angle = desc.GetNextItem()->GetData<float32>();
 		bodyDef.userData = GetOwnerPtr();
+		bodyDef.angularDamping = ANGULAR_DAMPING;
+		bodyDef.linearDamping = LINEAR_DAMPING;
 		mBody = gApp.GetCurrentGame()->GetPhysics()->CreateBody(&bodyDef);
 	}
 
 	// create shape
 	b2PolygonDef shapeDef;
 	EntityHandle blueprints;
-	GetOwner().PostMessage(EntityMessage::TYPE_GET_BLUEPRINTS, &blueprints);
+	PostMessage(EntityMessage::TYPE_GET_BLUEPRINTS, &blueprints);
 	EntityHandle material;
 	blueprints.PostMessage(EntityMessage::TYPE_GET_MATERIAL, &material);
 	// set density
@@ -132,7 +137,7 @@ void EntitySystem::CmpPlatformPhysics::SetAbsolutePosition( Vector2 pos )
 {
 	assert(mBody);
 	EntityHandle ship;
-	GetOwner().PostMessage(EntityMessage::TYPE_GET_PARENT, &ship);
+	PostMessage(EntityMessage::TYPE_GET_PARENT, &ship);
 	assert(!ship.IsValid() && "SetAbsolutePosition can be used for free platforms only");
 	mBody->SetXForm(pos, mBody->GetAngle());
 }

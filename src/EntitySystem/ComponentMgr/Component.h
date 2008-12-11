@@ -33,6 +33,9 @@ namespace EntitySystem
 		inline EntityHandle* GetOwnerPtr(void) { return &mOwner; }
 		//@}
 
+		/// Posts a message to the entity owning this component.
+		inline EntityMessage::eResult PostMessage(const EntityMessage::eType type, void* data = 0) const { return GetOwner().PostMessage(type, data); }
+
 		//TODO add a mechanism to allow components state which resources they will need. This way we could preload them.
 		// But maybe we can just let it to be done by the user by assigning resources to groups.
 

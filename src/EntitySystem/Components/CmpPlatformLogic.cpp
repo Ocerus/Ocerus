@@ -39,9 +39,9 @@ EntityMessage::eResult CmpPlatformLogic::HandleMessage(const EntityMessage& msg)
 		assert(msg.data);
 		{
 			Vector2 pos;
-			GetOwner().PostMessage(EntityMessage::TYPE_GET_BODY_POSITION, &pos);
+			PostMessage(EntityMessage::TYPE_GET_BODY_POSITION, &pos);
 			float32 angle;
-			GetOwner().PostMessage(EntityMessage::TYPE_GET_ANGLE, &angle);
+			PostMessage(EntityMessage::TYPE_GET_ANGLE, &angle);
 			((EntityPicker*)msg.data)->Update(GetOwner(), MathUtils::Multiply(Matrix22(angle), mPickCircleCenter) + pos, mPickCircleRadius);
 		}
 		return EntityMessage::RESULT_OK;
@@ -53,7 +53,7 @@ EntityMessage::eResult CmpPlatformLogic::HandleMessage(const EntityMessage& msg)
 		{
 			// compute pick stuff
 			DataContainer cont;
-			GetOwner().PostMessage(EntityMessage::TYPE_GET_POLYSHAPE, &cont);
+			PostMessage(EntityMessage::TYPE_GET_POLYSHAPE, &cont);
 			Vector2* shape = (Vector2*)cont.GetData();
 			int32 shapeLen = cont.GetSize();
 			// compute center
@@ -86,9 +86,9 @@ void CmpPlatformLogic::RegisterReflection()
 void EntitySystem::CmpPlatformLogic::DrawSelectionOverlay( const bool hover ) const
 {
 	Vector2 pos;
-	GetOwner().PostMessage(EntityMessage::TYPE_GET_BODY_POSITION, &pos);
+	PostMessage(EntityMessage::TYPE_GET_BODY_POSITION, &pos);
 	float32 angle;
-	GetOwner().PostMessage(EntityMessage::TYPE_GET_ANGLE, &angle);
+	PostMessage(EntityMessage::TYPE_GET_ANGLE, &angle);
 	GfxSystem::Color color(255,0,0,180);
 	if (hover)
 		color = GfxSystem::Color(255,255,255,180);

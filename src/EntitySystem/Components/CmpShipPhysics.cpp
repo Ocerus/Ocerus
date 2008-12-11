@@ -5,6 +5,8 @@
 
 using namespace EntitySystem;
 
+#define LINEAR_DAMPING 0.1f
+#define ANGULAR_DAMPING 0.5f
 
 void EntitySystem::CmpShipPhysics::Init( ComponentDescription& desc )
 {
@@ -13,6 +15,8 @@ void EntitySystem::CmpShipPhysics::Init( ComponentDescription& desc )
 	bodyDef.position = desc.GetNextItem()->GetData<Vector2>();
 	bodyDef.angle = desc.GetNextItem()->GetData<float32>();
 	bodyDef.userData = GetOwnerPtr();
+	bodyDef.angularDamping = ANGULAR_DAMPING;
+	bodyDef.linearDamping = LINEAR_DAMPING;
 	mBody = gApp.GetCurrentGame()->GetPhysics()->CreateBody(&bodyDef);
 }
 

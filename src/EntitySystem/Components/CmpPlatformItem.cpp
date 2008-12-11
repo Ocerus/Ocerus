@@ -54,7 +54,7 @@ void EntitySystem::CmpPlatformItem::RegisterReflection( void )
 Vector2 EntitySystem::CmpPlatformItem::GetAbsolutePosition( void ) const
 {
 	EntityHandle platform;
-	GetOwner().PostMessage(EntityMessage::TYPE_GET_PARENT, &platform);
+	PostMessage(EntityMessage::TYPE_GET_PARENT, &platform);
 	Vector2 platformPos;
 	platform.PostMessage(EntityMessage::TYPE_GET_POSITION, &platformPos);
 	float32 platformAngle;
