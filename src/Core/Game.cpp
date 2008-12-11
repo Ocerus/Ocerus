@@ -67,7 +67,7 @@ void Core::Game::Init()
 	compDesc.Init(CT_ENGINE_PARAMS);
 	compDesc.AddItem(material0);
 	compDesc.AddItem(0.5f*MathUtils::PI); // arc angle
-	compDesc.AddItem(1.0f); // angular speed
+	compDesc.AddItem((uint32)1000); // stabil. ratio
 	entityDesc.AddComponentDescription(compDesc);
 	EntityHandle engineType0 = gEntityMgr.CreateEntity(entityDesc);
 
@@ -388,16 +388,16 @@ void Core::Game::MouseButtonPressed( const MouseInfo& mi, const eMouseButton btn
 					i->PostMessage(EntityMessage::TYPE_GET_POSITION, &pos);
 					Vector2 dir = cursor - pos;
 					float32 angle = MathUtils::Angle(dir);
-					i->PostMessage(EntityMessage::TYPE_SET_ABSOLUTE_TARGET_ANGLE, &angle);
+					i->PostMessage(EntityMessage::TYPE_SET_ANGLE, &angle);
 					// get back the clamped value
-					i->PostMessage(EntityMessage::TYPE_GET_ABSOLUTE_TARGET_ANGLE, &angle);
+					i->PostMessage(EntityMessage::TYPE_GET_ANGLE, &angle);
 					Vector2 unitDir = MathUtils::VectorFromAngle(angle);
 					// project the target vector onto the correct direction vector
 					dir = MathUtils::Dot(dir, unitDir) * unitDir;
 
 					int32 screenDist = gGfxRenderer.WorldToScreenScalar(dir.Length());
 					float32 powerRatio = (float32)screenDist / (float32)GetEnginePowerCircleRadius();
-					i->PostMessage(EntityMessage::TYPE_SET_TARGET_POWER_RATIO, &powerRatio);
+					i->PostMessage(EntityMessage::TYPE_SET_POWER_RATIO, &powerRatio);
 				}
 			}
 		}

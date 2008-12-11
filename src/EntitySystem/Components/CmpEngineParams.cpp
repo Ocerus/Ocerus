@@ -10,7 +10,7 @@ void EntitySystem::CmpEngineParams::Init( ComponentDescription& desc )
 {
 	SetMaterial(desc.GetNextItem()->GetData<EntityHandle>());
 	SetArcAngle(desc.GetNextItem()->GetData<float32>());
-	SetAngularSpeed(desc.GetNextItem()->GetData<float32>());
+	SetStabilizationRatio(desc.GetNextItem()->GetData<uint32>());
 	ComputeParams();
 }
 
@@ -27,10 +27,6 @@ EntityMessage::eResult EntitySystem::CmpEngineParams::HandleMessage( const Entit
 		assert(msg.data);
 		*(uint32*)msg.data = GetMaxHitpoints();
 		return EntityMessage::RESULT_OK;
-	case EntityMessage::TYPE_GET_ANGULAR_SPEED:
-		assert(msg.data);
-		*(float32*)msg.data = GetAngularSpeed();
-		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_ARC_ANGLE:
 		assert(msg.data);
 		*(float32*)msg.data = GetArcAngle();
@@ -43,6 +39,10 @@ EntityMessage::eResult EntitySystem::CmpEngineParams::HandleMessage( const Entit
 		assert(msg.data);
 		*(EntityHandle*)msg.data = mMaterial;
 		return EntityMessage::RESULT_OK;
+	case EntityMessage::TYPE_GET_STABILIZATION_RATIO:
+		assert(msg.data);
+		*(uint32*)msg.data = GetStabilizationRatio();
+		return EntityMessage::RESULT_OK;
 	}
 	return EntityMessage::RESULT_IGNORED;
 }
@@ -53,7 +53,7 @@ void EntitySystem::CmpEngineParams::RegisterReflection( void )
 	RegisterProperty<uint32>("MaxHitpoints", &GetMaxHitpoints, &SetMaxHitpoints, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<uint32>("MaxPower", &GetMaxPower, &SetMaxPower, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<float32>("ArcAngle", &GetArcAngle, &SetArcAngle, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
-	RegisterProperty<float32>("AngularSpeed", &GetAngularSpeed, &SetAngularSpeed, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<uint32>("StabilizationRatio", &GetStabilizationRatio, &SetStabilizationRatio, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 }
 
 void EntitySystem::CmpEngineParams::ComputeParams( void )

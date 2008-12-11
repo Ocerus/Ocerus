@@ -25,7 +25,7 @@ namespace EntitySystem
 		/// Current angle of the engine relative to the default angle.
 		//@{
 		float32 GetRelativeAngle(void) const { return mRelativeAngle; }
-		void SetRelativeAngle(const float32 angle) { mTargetAngle = mRelativeAngle = angle; }
+		void SetRelativeAngle(const float32 angle) { mRelativeAngle = angle; }
 		//@}
 		/// Center angle of the engine relative to the current ship angle.
 		//@{
@@ -36,8 +36,6 @@ namespace EntitySystem
 		float32 GetAbsoluteAngle(void) const;
 		/// Default angle of the engine in absolute coords.
 		float32 GetAbsoluteDefaultAngle(void) const;
-		/// Target angle of the engine (current angle will move to this angle) in absolute coords.
-		float32 GetAbsoluteTargetAngle(void) const;
 
 		/// Just to make sure virtual functions work ok.
 		virtual ~CmpEngine(void) {}
@@ -45,10 +43,6 @@ namespace EntitySystem
 		uint32 mPower;
 		float32 mDefaultAngle;
 		float32 mRelativeAngle;
-
-		// inner vars
-		uint32 mTargetPower;
-		float32 mTargetAngle;
 
 		void Draw(void) const;
 		void DrawSelectionOverlay(const bool hover) const;

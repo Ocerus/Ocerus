@@ -37,10 +37,10 @@ namespace EntitySystem
 		float32 GetArcAngle(void) const { return mArcAngle; }
 		void SetArcAngle(const float32 ang) { mArcAngle = ang; }
 		//@}
-		/// Angular speed of the engine. It's constant.
+		/// Stabilization ratio determines how fast the engine will prevent the ship from moving perpendicular to it's current direction.
 		//@{
-		float32 GetAngularSpeed(void) const { return mAngularSpeed; }
-		void SetAngularSpeed(const float32 angspeed) { mAngularSpeed = angspeed; }
+		uint32 GetStabilizationRatio(void) const { return mStabilizationRatio; }
+		void SetStabilizationRatio(const uint32 ratio) { mStabilizationRatio = ratio; }
 		//@}
 
 		/// Just to make sure virtual functions work ok.
@@ -49,8 +49,8 @@ namespace EntitySystem
 		EntityHandle mMaterial;
 		uint32 mMaxHitpoints;
 		uint32 mMaxPower;
+		uint32 mStabilizationRatio;
 		float32 mArcAngle;
-		float32 mAngularSpeed;
 
 		void ComputeParams(void);
 

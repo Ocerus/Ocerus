@@ -8,7 +8,7 @@ using namespace EntitySystem;
 #define PICK_CIRCLE_RADIUS 0.5f
 #define POWER_RATIO 0.005f
 #define PICTURE_SCALE 0.5f
-#define STABILIZATION_RATIO 0.2f
+#define STABILIZATION_RATIO 0.0002f
 
 void EntitySystem::CmpEngine::Init( ComponentDescription& desc )
 {
@@ -17,9 +17,6 @@ void EntitySystem::CmpEngine::Init( ComponentDescription& desc )
 	EntityHandle blueprints;
 	PostMessage(EntityMessage::TYPE_GET_BLUEPRINTS, &blueprints);
 	mPower = 0;
-
-	mTargetPower = mPower;
-	mTargetAngle = mRelativeAngle;
 }
 
 void EntitySystem::CmpEngine::Deinit( void )
@@ -33,15 +30,6 @@ EntityMessage::eResult EntitySystem::CmpEngine::HandleMessage( const EntityMessa
 	{
 	case EntityMessage::TYPE_UPDATE_PHYSICS_SERVER:
 		{
-			EntityHandle blueprints;
-			PostMessage(EntityMessage::TYPE_GET_BLUEPRINTS, &blueprints);
-			float32 angularSpeed;
-			blueprints.PostMessage(EntityMessage::TYPE_GET_ANGULAR_SPEED, &angularSpeed);
-			//TODO brat v potaz rychlost otaceni
-			mRelativeAngle = mTargetAngle;
-
-			mPower = mTargetPower;
-
 			EntityHandle platform;
 			PostMessage(EntityMessage::TYPE_GET_PARENT, &platform);
 			b2Body* platformBody;
@@ -52,10 +40,14 @@ EntityMessage::eResult EntitySystem::CmpEngine::HandleMessage( const EntityMessa
 			platformBody->ApplyForce(-POWER_RATIO * mPower * forceDir, myPos);
 			Vector2 perpDir(-forceDir.y, forceDir.x);
 			float32 perpVel = MathUtils::Dot(perpDir, platformBody->GetLinearVelocity());
-			platformBody->ApplyForce(-STABILIZATION_RATIO * perpVel * perpDir, platformBody->GetWorldCenter());
+			EntityHandle blueprints;
+			PostMessage(EntityMessage::TYPE_GET_BLUEPRINTS, &blueprints);
+			uint32 stabRatio;
+			blueprints.PostMessage(EntityMessage::TYPE_GET_STABILIZATION_RATIO, &stabRatio);
+			platformBody->ApplyForce(-STABILIZATION_RATIO * stabRatio * perpVel * perpDir, platformBody->GetWorldCenter());
 		}
 		return EntityMessage::RESULT_OK;
-	case EntityMessage::TYPE_SET_ABSOLUTE_TARGET_ANGLE:
+	case EntityMessage::TYPE_SET_ANGLE:
 		// note: the angle is absolute, but I need to convert it to an angle relative to the default angle
 		assert(msg.data);
 		{
@@ -66,25 +58,25 @@ EntityMessage::eResult EntitySystem::CmpEngine::HandleMessage( const EntityMessa
 			float32 relAngle = *(float32*)msg.data;
 			relAngle = relAngle - GetAbsoluteDefaultAngle();
 			if (MathUtils::IsAngleInRange(relAngle, -arcAngle, arcAngle))
-				mTargetAngle = MathUtils::WrapAngle(relAngle);
+				mRelativeAngle = MathUtils::WrapAngle(relAngle);
 			else if (MathUtils::AngleDistance(relAngle, -arcAngle) < MathUtils::AngleDistance(relAngle, arcAngle))
-				mTargetAngle = MathUtils::WrapAngle(-arcAngle);
+				mRelativeAngle = MathUtils::WrapAngle(-arcAngle);
 			else
-				mTargetAngle = MathUtils::WrapAngle(arcAngle);
+				mRelativeAngle = MathUtils::WrapAngle(arcAngle);
 		}
 		return EntityMessage::RESULT_OK;
-	case EntityMessage::TYPE_GET_ABSOLUTE_TARGET_ANGLE:
+	case EntityMessage::TYPE_GET_ANGLE:
 		assert(msg.data);
-		*(float32*)msg.data = GetAbsoluteTargetAngle();
+		*(float32*)msg.data = GetAbsoluteAngle();
 		return EntityMessage::RESULT_OK;
-	case EntityMessage::TYPE_SET_TARGET_POWER_RATIO:
+	case EntityMessage::TYPE_SET_POWER_RATIO:
 		assert(msg.data);
 		{
 			uint32 maxPower;
 			EntityHandle blueprints;
 			PostMessage(EntityMessage::TYPE_GET_BLUEPRINTS, &blueprints);
 			blueprints.PostMessage(EntityMessage::TYPE_GET_MAX_POWER, &maxPower);
-			mTargetPower = MathUtils::Round(maxPower * MathUtils::Clamp(*(float32*)msg.data, 0.0f, 1.0f));
+			mPower = MathUtils::Round(maxPower * MathUtils::Clamp(*(float32*)msg.data, 0.0f, 1.0f));
 		}
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_MOUSE_PICK:
@@ -117,7 +109,6 @@ void EntitySystem::CmpEngine::RegisterReflection( void )
 	RegisterProperty<float32>("DefaultAngle", &GetDefaultAngle, &SetDefaultAngle, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<float32>("AbsoluteAngle", &GetAbsoluteAngle, 0, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<float32>("AbsoluteDefaultAngle", &GetAbsoluteDefaultAngle, 0, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
-	RegisterProperty<float32>("AbsoluteTargetAngle", &GetAbsoluteTargetAngle, 0, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 }
 
 void EntitySystem::CmpEngine::Draw( void ) const
@@ -167,7 +158,7 @@ void EntitySystem::CmpEngine::DrawSelectionUnderlay( const bool hover ) const
 	// draw target angle and power vector
 	uint32 maxPower;
 	blueprints.PostMessage(EntityMessage::TYPE_GET_MAX_POWER, &maxPower);
-	Vector2 indicator = MathUtils::VectorFromAngle(GetAbsoluteTargetAngle(), (float32)circleRadius*(float32)mPower/(float32)maxPower);
+	Vector2 indicator = MathUtils::VectorFromAngle(GetAbsoluteAngle(), (float32)circleRadius*(float32)mPower/(float32)maxPower);
 	GfxSystem::Pen indicatorPen(GfxSystem::Color(200,0,20,200));
 	gGfxRenderer.DrawLine(screenPos.x, screenPos.y, screenPos.x + MathUtils::Round(indicator.x), screenPos.y + MathUtils::Round(indicator.y), indicatorPen);
 }
@@ -181,12 +172,3 @@ float32 EntitySystem::CmpEngine::GetAbsoluteDefaultAngle( void ) const
 	return platformAngle + mDefaultAngle;	
 }
 
-float32 EntitySystem::CmpEngine::GetAbsoluteTargetAngle( void ) const
-{
-	EntityHandle platform;
-	PostMessage(EntityMessage::TYPE_GET_PARENT, &platform);
-	float32 platformAngle;
-	platform.PostMessage(EntityMessage::TYPE_GET_ANGLE, &platformAngle);
-	return platformAngle + mDefaultAngle + mTargetAngle;	
-	
-}

@@ -16,6 +16,8 @@ Resource::~Resource()
 		gLogMgr.LogMessage("Memory leak detected - resource '" + mName +"' was not unloaded before destroyed", LOG_ERROR);
 	if (mInputFileStream)
 	{
+		if (mInputFileStream->is_open())
+			gLogMgr.LogMessage("Resource '" + mName + "' was not closed", LOG_ERROR);
 		DYN_DELETE mInputFileStream;
 		mInputFileStream = 0;
 	}
@@ -26,6 +28,7 @@ InputStream& Resource::OpenInputStream(eInputStreamMode mode)
 	// currently opens the stream from a file
 	assert(mState != STATE_UNINITIALIZED);
 	assert(boost::filesystem::exists(mFilePath) && "Resource file not found.");
+	assert(!mInputFileStream && "Resource was not closed before reused");
 	mInputFileStream = DYN_NEW boost::filesystem::ifstream(mFilePath, InputStreamMode(mode));
 	assert(mInputFileStream);
 	return *mInputFileStream;
@@ -114,4 +117,5 @@ void ResourceSystem::Resource::GetRawInputData( DataContainer& outData )
 	for (std::vector<uint8>::const_iterator i=tmp.begin(); (i + 1)!=tmp.end(); ++i)
 		*(bufferPos++) = *i;
 	outData.SetData(buffer, tmp.size() - 1);
+	CloseInputStream();
 }
