@@ -164,6 +164,21 @@ namespace InputSystem
 		uint32 keyCode;
 	};
 
+	struct MouseState
+	{
+		/// Position of the cursor.
+		//@{
+		int32 x;
+		int32 y;
+		//@}
+
+		/// Wheel position.
+		int32 wheel;
+
+		/// Pressed buttons.
+		uint8 buttons;
+	};
+
 	struct MouseInfo
 	{
 		/// Position of the cursor.
@@ -183,24 +198,24 @@ namespace InputSystem
 
 		/// Delta position of the wheel since last update.
 		int32 wheelDelta;
+
+		/// Default constructor.
+		MouseInfo(void) {}
+
+		/// Conversion constructor.
+		MouseInfo(const MouseState& ms): 
+			x(ms.x),
+			y(ms.y),
+			dx(0),
+			dy(0),
+			wheel(ms.wheel),
+			wheelDelta(0)
+		{
+
+		}
 	};
 
 	enum eMouseButton { MBTN_LEFT=1<<1, MBTN_RIGHT=1<<2, MBTN_MIDDLE=1<<3, MBTN_UNKNOWN=0 };
-
-	struct MouseState
-	{
-		/// Position of the cursor.
-		//@{
-		int32 x;
-		int32 y;
-		//@}
-
-		/// Wheel position.
-		int32 wheel;
-
-		/// Pressed buttons.
-		uint8 buttons;
-	};
 
 }
 

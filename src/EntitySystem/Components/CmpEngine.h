@@ -19,8 +19,13 @@ namespace EntitySystem
 
 		/// Current power going out of the engine.
 		//@{
-		uint32 GetPower(void) const { return mPower; }
-		void SetPower(const uint32 pow) { mPower = pow; }
+		uint32 GetPower(void) const;
+		void SetPower(const uint32 pow);
+		//@}
+		/// Curret power ratio in 0-1 range.
+		//@{
+		float32 GetPowerRatio(void) const { return mPowerRatio; }
+		void SetPowerRatio(const float32 powrat);
 		//@}
 		/// Current angle of the engine relative to the default angle.
 		//@{
@@ -40,7 +45,7 @@ namespace EntitySystem
 		/// Just to make sure virtual functions work ok.
 		virtual ~CmpEngine(void) {}
 	private:
-		uint32 mPower;
+		float32 mPowerRatio;
 		float32 mDefaultAngle;
 		float32 mRelativeAngle;
 

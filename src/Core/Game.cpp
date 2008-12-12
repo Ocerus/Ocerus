@@ -13,6 +13,8 @@ using namespace InputSystem;
 #define CAMERA_SPEED_RATIO 10.0f
 #define CAMERA_SCALE_RATIO 0.001f
 #define WATER_TEXTURE_SCALE 0.01f
+#define ENGINE_ANGLECHANGE_SPEED 2.0f
+#define ENGINE_POWERCHANGE_SPEED 1.0f
 
 Core::Game::Game(): StateMachine<eGameState>(GS_NORMAL), mPhysics(0) {}
 
@@ -204,12 +206,51 @@ void Core::Game::Deinit()
 
 void Core::Game::Update( const float32 delta )
 {
+	//// Input reactions ////
+
 	if (gInputMgr.IsKeyDown(KC_ESCAPE))
 		gApp.Shutdown();
 	if (gInputMgr.IsKeyDown(InputSystem::KC_G)) {
 		gGUIMgr.LoadGUI();
 		gApp.RequestStateChange(AS_GUI, true);
 	}
+
+	// pick hover entity
+	MouseState& mouse = gInputMgr.GetMouseState();
+	EntityPicker picker(mouse.x, mouse.y);
+	gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::TYPE_MOUSE_PICK, &picker));
+	mHoveredEntity = picker.GetResult();
+
+	// we want to do certain action even when the right button is still down
+	if ((mouse.buttons & MBTN_RIGHT) && mSelectedEntities.size()>0 
+		&& mSelectedEntities[0].GetType()==ET_ENGINE)
+		MouseButtonPressed(mouse, MBTN_RIGHT);
+
+	// control engines by using keys
+	if (mSelectedEntities.size()>0 && mSelectedEntities[0].GetType()==ET_ENGINE)
+	{
+		if (gInputMgr.IsKeyDown(KC_NUMPAD4) || gInputMgr.IsKeyDown(KC_NUMPAD6))
+		{
+			for (EntityList::iterator i=mSelectedEntities.begin(); i!=mSelectedEntities.end(); ++i)
+			{
+				float32 angle;
+				i->PostMessage(EntityMessage::TYPE_GET_RELATIVE_ANGLE, &angle);
+				angle += (gInputMgr.IsKeyDown(KC_NUMPAD4)?-1:1) * ENGINE_ANGLECHANGE_SPEED * delta;
+				i->PostMessage(EntityMessage::TYPE_SET_RELATIVE_ANGLE, &angle);
+			}
+		}
+		if (gInputMgr.IsKeyDown(KC_NUMPAD8) || gInputMgr.IsKeyDown(KC_NUMPAD5))
+		{
+			for (EntityList::iterator i=mSelectedEntities.begin(); i!=mSelectedEntities.end(); ++i)
+			{
+				float32 powerRatio;
+				i->PostMessage(EntityMessage::TYPE_GET_POWER_RATIO, &powerRatio);
+				powerRatio += (gInputMgr.IsKeyDown(KC_NUMPAD5)?-1:1) * ENGINE_POWERCHANGE_SPEED * delta;
+				i->PostMessage(EntityMessage::TYPE_SET_POWER_RATIO, &powerRatio);
+			}
+		}
+	}
+
 
 	float32 physicsDelta = delta + mPhysicsResidualDelta;
 	while (physicsDelta > PHYSICS_TIMESTEP)
@@ -336,18 +377,6 @@ void Core::Game::MouseMoved( const MouseInfo& mi )
 	// zoom camera
 	if (mi.wheelDelta)
 		gGfxRenderer.ZoomCamera(CAMERA_SCALE_RATIO * gGfxRenderer.GetCameraScale() * mi.wheelDelta);
-
-	// pick hover entity
-	EntityPicker picker(mi.x, mi.y);
-	gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::TYPE_MOUSE_PICK, &picker));
-	mHoveredEntity = picker.GetResult();
-
-	// we want to do certain action even when the right button is still down
-	MouseState& mouse = gInputMgr.GetMouseState();
-	if ((mouse.buttons & MBTN_RIGHT) && mSelectedEntities.size()>0 
-		&& mSelectedEntities[0].GetType()==ET_ENGINE)
-		MouseButtonPressed(mi, MBTN_RIGHT);
-
 }
 
 void Core::Game::MouseButtonPressed( const MouseInfo& mi, const eMouseButton btn )

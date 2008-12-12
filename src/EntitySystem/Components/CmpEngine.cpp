@@ -16,7 +16,7 @@ void EntitySystem::CmpEngine::Init( ComponentDescription& desc )
 	SetRelativeAngle(desc.GetNextItem()->GetData<float32>());
 	EntityHandle blueprints;
 	PostMessage(EntityMessage::TYPE_GET_BLUEPRINTS, &blueprints);
-	mPower = 0;
+	mPowerRatio = 0.0f;
 }
 
 void EntitySystem::CmpEngine::Deinit( void )
@@ -37,7 +37,7 @@ EntityMessage::eResult EntitySystem::CmpEngine::HandleMessage( const EntityMessa
 			Vector2 myPos;
 			PostMessage(EntityMessage::TYPE_GET_POSITION, &myPos);
 			Vector2 forceDir = MathUtils::VectorFromAngle(GetAbsoluteAngle());
-			platformBody->ApplyForce(-POWER_RATIO * mPower * forceDir, myPos);
+			platformBody->ApplyForce(-POWER_RATIO * GetPower() * forceDir, myPos);
 			Vector2 perpDir(-forceDir.y, forceDir.x);
 			float32 perpVel = MathUtils::Dot(perpDir, platformBody->GetLinearVelocity());
 			EntityHandle blueprints;
@@ -51,12 +51,23 @@ EntityMessage::eResult EntitySystem::CmpEngine::HandleMessage( const EntityMessa
 		// note: the angle is absolute, but I need to convert it to an angle relative to the default angle
 		assert(msg.data);
 		{
+			EntityMessage msg2(EntityMessage::TYPE_SET_RELATIVE_ANGLE);
+			float32 relAngle = *(float32*)msg.data - GetAbsoluteDefaultAngle();
+			msg2.data = &relAngle;
+			return HandleMessage(msg2);
+		}
+	case EntityMessage::TYPE_GET_ANGLE:
+		assert(msg.data);
+		*(float32*)msg.data = GetAbsoluteAngle();
+		return EntityMessage::RESULT_OK;
+	case EntityMessage::TYPE_SET_RELATIVE_ANGLE:
+		assert(msg.data);
+		{
 			float32 arcAngle;
 			EntityHandle blueprints;
 			PostMessage(EntityMessage::TYPE_GET_BLUEPRINTS, &blueprints);
 			blueprints.PostMessage(EntityMessage::TYPE_GET_ARC_ANGLE, &arcAngle);
 			float32 relAngle = *(float32*)msg.data;
-			relAngle = relAngle - GetAbsoluteDefaultAngle();
 			if (MathUtils::IsAngleInRange(relAngle, -arcAngle, arcAngle))
 				mRelativeAngle = MathUtils::WrapAngle(relAngle);
 			else if (MathUtils::AngleDistance(relAngle, -arcAngle) < MathUtils::AngleDistance(relAngle, arcAngle))
@@ -65,19 +76,17 @@ EntityMessage::eResult EntitySystem::CmpEngine::HandleMessage( const EntityMessa
 				mRelativeAngle = MathUtils::WrapAngle(arcAngle);
 		}
 		return EntityMessage::RESULT_OK;
-	case EntityMessage::TYPE_GET_ANGLE:
+	case EntityMessage::TYPE_GET_RELATIVE_ANGLE:
 		assert(msg.data);
-		*(float32*)msg.data = GetAbsoluteAngle();
+		*(float32*)msg.data = GetRelativeAngle();
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_SET_POWER_RATIO:
 		assert(msg.data);
-		{
-			uint32 maxPower;
-			EntityHandle blueprints;
-			PostMessage(EntityMessage::TYPE_GET_BLUEPRINTS, &blueprints);
-			blueprints.PostMessage(EntityMessage::TYPE_GET_MAX_POWER, &maxPower);
-			mPower = MathUtils::Round(maxPower * MathUtils::Clamp(*(float32*)msg.data, 0.0f, 1.0f));
-		}
+		SetPowerRatio(*(float32*)msg.data);
+		return EntityMessage::RESULT_OK;
+	case EntityMessage::TYPE_GET_POWER_RATIO:
+		assert(msg.data);
+		*(float32*)msg.data = GetPowerRatio();
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_MOUSE_PICK:
 		assert(msg.data);
@@ -158,7 +167,7 @@ void EntitySystem::CmpEngine::DrawSelectionUnderlay( const bool hover ) const
 	// draw target angle and power vector
 	uint32 maxPower;
 	blueprints.PostMessage(EntityMessage::TYPE_GET_MAX_POWER, &maxPower);
-	Vector2 indicator = MathUtils::VectorFromAngle(GetAbsoluteAngle(), (float32)circleRadius*(float32)mPower/(float32)maxPower);
+	Vector2 indicator = MathUtils::VectorFromAngle(GetAbsoluteAngle(), (float32)circleRadius*GetPowerRatio());
 	GfxSystem::Pen indicatorPen(GfxSystem::Color(200,0,20,200));
 	gGfxRenderer.DrawLine(screenPos.x, screenPos.y, screenPos.x + MathUtils::Round(indicator.x), screenPos.y + MathUtils::Round(indicator.y), indicatorPen);
 }
@@ -172,3 +181,25 @@ float32 EntitySystem::CmpEngine::GetAbsoluteDefaultAngle( void ) const
 	return platformAngle + mDefaultAngle;	
 }
 
+uint32 EntitySystem::CmpEngine::GetPower( void ) const
+{
+	uint32 maxPower;
+	EntityHandle blueprints;
+	PostMessage(EntityMessage::TYPE_GET_BLUEPRINTS, &blueprints);
+	blueprints.PostMessage(EntityMessage::TYPE_GET_MAX_POWER, &maxPower);
+	return MathUtils::Round(mPowerRatio * (float32)maxPower);
+}
+
+void EntitySystem::CmpEngine::SetPower( const uint32 pow )
+{
+	uint32 maxPower;
+	EntityHandle blueprints;
+	PostMessage(EntityMessage::TYPE_GET_BLUEPRINTS, &blueprints);
+	blueprints.PostMessage(EntityMessage::TYPE_GET_MAX_POWER, &maxPower);
+	SetPowerRatio((float32)pow / (float32)maxPower);
+}
+
+void EntitySystem::CmpEngine::SetPowerRatio( const float32 powrat )
+{
+	mPowerRatio = MathUtils::Clamp(powrat, 0.0f, 1.0f);
+}
