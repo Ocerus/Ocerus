@@ -178,8 +178,6 @@ namespace GfxSystem
 
 		std::set<IScreenResolutionChangeListener*> mResChangeListeners;
 
-		virtual void ClearResolutionChangeListeners(void);
-
 	};
 }
 

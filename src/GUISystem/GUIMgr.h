@@ -6,6 +6,7 @@
 #include "../InputSystem/IInputListener.h"
 #include "../Utility/Settings.h"
 #include "CEGUI.h"
+#include <set>
 
 #define gGUIMgr GUISystem::GUIMgr::GetSingleton()
 
@@ -18,17 +19,11 @@ namespace GUISystem {
 	//@}
 
 	//TODO vsechny inlinovany funkce premistit do CPP a odinlinovat, at se zbavime includovani CEGUI.h
-	inline CEGUI::MouseButton ConvertMouseButtonEnum(const InputSystem::eMouseButton btn) {
-		switch (btn) {
-			case InputSystem::MBTN_LEFT:
-				return CEGUI::LeftButton;
-			case InputSystem::MBTN_RIGHT:
-				return CEGUI::RightButton;
-			case InputSystem::MBTN_MIDDLE:
-				return CEGUI::MiddleButton;
-		}
-		return CEGUI::NoButton;
-	}
+
+	class IConsoleListener {
+	public:
+		virtual void EventConsoleCommand(std::string command) = 0;
+	};
 
 	class GUIMgr : public Singleton<GUIMgr>, public InputSystem::IInputListener
 	{
@@ -37,53 +32,46 @@ namespace GUISystem {
 
 		/// DO NOT CHANGE TO const METHODS!! these methods override IInputListener's methods
 		//@{
-		inline virtual void KeyPressed(const InputSystem::KeyInfo& ke) {
-			assert(mCegui);
-			mCegui->injectKeyDown(ke.keyCode);
-			mCegui->injectChar(ke.keyCode);
-		}
+		virtual void KeyPressed(const InputSystem::KeyInfo& ke);
 
-		inline virtual void KeyReleased(const InputSystem::KeyInfo& ke) {
-			assert(mCegui);
-			mCegui->injectKeyUp(ke.keyCode);
-		}
+		virtual void KeyReleased(const InputSystem::KeyInfo& ke);
 
-		inline virtual void MouseMoved(const InputSystem::MouseInfo& mi) {
-			assert(mCegui);
-			mCegui->injectMousePosition(float(mi.x), float(mi.y));
-			mCegui->injectMouseWheelChange(float(mi.wheelDelta));
-		}
+		virtual void MouseMoved(const InputSystem::MouseInfo& mi);
 
-		inline virtual void MouseButtonPressed(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn) {
-			assert(mCegui);
-			mCegui->injectMouseButtonDown( ConvertMouseButtonEnum(btn) );
-		}
+		virtual void MouseButtonPressed(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn);
 
-		inline virtual void MouseButtonReleased(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn) {
-			assert(mCegui);
-			mCegui->injectMouseButtonUp( ConvertMouseButtonEnum(btn) );
-		}
+		virtual void MouseButtonReleased(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn);
 		//@}
 
 		virtual void LoadGUI();
+		virtual void LoadConsole();
 
 		inline virtual void RenderGUI() const {
 			assert(mCegui);
-			mCegui->renderGUI();
+			CEGUI::System::getSingleton().renderGUI();
 		}
 
 		virtual void Update(float32 delta);
+
+		void AddConsoleListener(IConsoleListener* listener);
+		void AddConsoleMessage(std::string message, const GfxSystem::Color& color = GfxSystem::Color(255,255,255,255));
 
 		virtual ~GUIMgr();
 	protected:
 		void RegisterEvents();
 		bool QuitEvent(const CEGUI::EventArgs& e);
+		void ConsoleTrigger();
+		bool ConsoleCommandEvent(const CEGUI::EventArgs& e);
+		void EnsureConsoleIsLoaded();
 
+		bool ConsoleIsLoaded;
 		CEGUI::System * mCegui;
 		CEGUI::Window * CurrentWindowRoot;
 		ResourceGate * mResourceGate;
 		RendererGate * mRendererGate;
 		friend class RendererGate;
+
+		std::set<IConsoleListener*> ConsoleListeners;
 	};
 }
 #endif

@@ -1,0 +1,4 @@
+<?xml version="1.0" ?>
+<GUIScheme Name="Console">
+	<Imageset Name="Console" Filename="Console.imageset" />
+</GUIScheme>

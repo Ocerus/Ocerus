@@ -75,14 +75,9 @@ GfxRenderer::GfxRenderer(const Point& resolution, bool fullscreen):
 
 GfxRenderer::~GfxRenderer()
 {
-	ClearResolutionChangeListeners();
 	assert(mHGE);
 	HgeExitFunction();
 	mHGE->System_Shutdown();
-}
-
-void GfxRenderer::ClearResolutionChangeListeners() {
-	mResChangeListeners.clear();
 }
 
 uint32 GfxRenderer::_GetWindowHandle() const

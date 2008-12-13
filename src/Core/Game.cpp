@@ -210,10 +210,12 @@ void Core::Game::Update( const float32 delta )
 
 	if (gInputMgr.IsKeyDown(KC_ESCAPE))
 		gApp.Shutdown();
+	/*
 	if (gInputMgr.IsKeyDown(InputSystem::KC_G)) {
 		gGUIMgr.LoadGUI();
 		gApp.RequestStateChange(AS_GUI, true);
 	}
+	*/
 
 	// pick hover entity
 	MouseState& mouse = gInputMgr.GetMouseState();

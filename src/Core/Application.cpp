@@ -95,6 +95,7 @@ void Application::RunMainLoop()
 			break;
 		case AS_GAME:
 			mGame->Update(delta);
+			mGUIMgr->Update(delta);
 			break;
 		case AS_GUI:
 			mGUIMgr->Update(delta);			
@@ -106,9 +107,10 @@ void Application::RunMainLoop()
 		{
 		case AS_GAME:
 			if (gGfxRenderer.BeginRendering())
-			{
+			{				
 				mGame->Draw(delta);
-				gGfxRenderer.EndRendering();
+				mGUIMgr->RenderGUI();
+				gGfxRenderer.EndRendering();	
 			}
 			break;
 		case AS_GUI:
