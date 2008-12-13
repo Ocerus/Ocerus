@@ -17,9 +17,7 @@
             <Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}" />
             <Property Name="UnifiedAreaRect" Value="{{0,0},{0.888867,0},{1,0},{1,0}}" />
         </Window>
-        <Window Type="TaharezLook/Listbox" Name="ConsoleRoot/Pane" >
-            <Property Name="Enabeld" Value="True" />
-            <Property Name="MaxSize" Value="50" />   
+        <Window Type="TaharezLook/Listbox" Name="ConsoleRoot/Pane" >   
             <Property Name="Font" Value="Commonwealth-10" />
             <Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}" />
             <Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{1,0},{0.88751,0}}" />
