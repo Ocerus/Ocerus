@@ -8,6 +8,12 @@
         <Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}" />
         <Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{1,0},{0.33,0}}" />
         <Window Type="TaharezLook/StaticImage" Name="ConsoleRoot/BG" >
+            <Property Name="BackgroundEnabled" Value="False" />
+            <Property Name="VerticalAlignment" Value="Centre" />
+            <Property Name="HorizontalAlignment" Value="Centre" />                                
+            <Property Name="VertFormatting" Value="CentreAligned" />
+            <Property Name="HorzFormatting" Value="CentreAligned" />
+            <Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}" />
             <Property Name="Image" Value="set:Console image:Logo" />
             <Property Name="FrameEnabled" Value="False" />
         </Window>        
