@@ -23,7 +23,7 @@ namespace StringSystem
 	class TextResource : public ResourceSystem::Resource
 	{
 	public:
-		virtual ~TextResource(void) {}
+		virtual ~TextResource(void);
 		static ResourceSystem::ResourcePtr CreateMe(void);
 
 		/// return pointer to text data

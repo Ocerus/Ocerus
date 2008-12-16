@@ -4,6 +4,7 @@
 #include <map>
 #include <vector>
 #include "Resource.h"
+#include "XMLResource.h"
 #include "../Utility/Singleton.h"
 
 /// Macro for easier use

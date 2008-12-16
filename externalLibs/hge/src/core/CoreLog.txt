@@ -1,0 +1,26 @@
+20:36:23:Log created
+20:36:23:Loading config file 'config.txt'
+20:36:23:Config file NOT loaded
+20:36:23:*** ResourceMgr init ***
+20:36:23:Base directory = data/
+20:36:23:All resource types registered
+20:36:23:*** StringMgr init ***
+20:36:23:*** GfxRenderer init ***
+20:36:23:HGE inited; logfile=HgeLog.txt
+20:36:23:*** InputMgr init ***
+20:36:23:Initing OIS
+20:36:23:OIS created
+20:36:23:OIS keyboard inited
+20:36:23:OIS mouse inited
+20:36:23:*** EntityMgr init ***
+20:36:23:******** GUIMgr init *********
+20:36:23:Adding dir 'gui/schemes' to group 'schemes'
+20:36:23: !! ERROR !! Path does not exist 'data/gui/schemes'
+20:36:23:Adding dir 'gui/imagesets' to group 'imagesets'
+20:36:23: !! ERROR !! Path does not exist 'data/gui/imagesets'
+20:36:23:Adding dir 'gui/fonts' to group 'fonts'
+20:36:23: !! ERROR !! Path does not exist 'data/gui/fonts'
+20:36:23:Adding dir 'gui/layouts' to group 'layouts'
+20:36:23: !! ERROR !! Path does not exist 'data/gui/layouts'
+20:36:23:Adding dir 'gui/looknfeel' to group 'looknfeels'
+20:36:23: !! ERROR !! Path does not exist 'data/gui/looknfeel'

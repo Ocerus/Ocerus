@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Global comment  -->
+<Powerups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="powerups.xsd">
+	<!-- Document comment  -->
+	<Powerup>
+		<!-- Record comment  -->
+		asdasd
+		<g_PowerUps>
+			<!-- Element comment  -->
+			<entry1>
+				<szName>Turbo Jet</szName>
+				<szImage>jets.png</szImage>
+				<iHealth>0</iHealth>
+				<iInvulnerability>0</iInvulnerability>
+				<iFastMove>30</iFastMove>
+				<iHighJump>0</iHighJump>
+				<iStunPlayer>0</iStunPlayer>
+				<iLifeUp>0</iLifeUp>
+			</entry1>
+			<entry2>
+				<szName>Jump Boot</szName>
+				<szImage>boots.png</szImage>
+				<iHealth>0</iHealth>
+				<iInvulnerability>0</iInvulnerability>
+				<iFastMove>0</iFastMove>
+				<iHighJump>120</iHighJump>
+				<iStunPlayer>0</iStunPlayer>
+				<iLifeUp>0</iLifeUp>
+			</entry2>
+			<entry3>
+				<szName>Shields</szName>
+				<szImage>shield.png</szImage>
+				<iHealth>0</iHealth>
+				<iInvulnerability>20</iInvulnerability>
+				<iFastMove>0</iFastMove>
+				<iHighJump>0</iHighJump>
+				<iStunPlayer>0</iStunPlayer>
+				<iLifeUp>0</iLifeUp>
+			</entry3>
+			<entry4>
+				<szName>Life Up</szName>
+				<szImage>heart.png</szImage>
+				<iHealth>0</iHealth>
+				<iInvulnerability>0</iInvulnerability>
+				<iFastMove>0</iFastMove>
+				<iHighJump>0</iHighJump>
+				<iStunPlayer>0</iStunPlayer>
+				<iLifeUp>1</iLifeUp>
+			</entry4>
+			<entry5>
+				<szName>Poison</szName>
+				<szImage>vial.png</szImage>
+				<iHealth>-20</iHealth>
+				<iInvulnerability>0</iInvulnerability>
+				<iFastMove>0</iFastMove>
+				<iHighJump>0</iHighJump>
+				<iStunPlayer>3</iStunPlayer>
+				<iLifeUp>0</iLifeUp>
+			</entry5>
+			<entry6>
+				<szName>Med Kit</szName>
+				<szImage>medkit.png</szImage>
+				<iHealth>25</iHealth>
+				<iInvulnerability>0</iInvulnerability>
+				<iFastMove>0</iFastMove>
+				<iHighJump>0</iHighJump>
+				<iStunPlayer>0</iStunPlayer>
+				<iLifeUp>0</iLifeUp>
+			</entry6>
+		</g_PowerUps>
+	</Powerup>
+</Powerups>

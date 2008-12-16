@@ -23,6 +23,7 @@ ResourceMgr::ResourceMgr(const string& basepath):
 	mResourceCreationMethods[Resource::TYPE_TEXTURE] = GfxSystem::Texture::CreateMe;
 	mResourceCreationMethods[Resource::TYPE_CEGUIRESOURCE] = GUISystem::CEGUIResource::CreateMe;
 	mResourceCreationMethods[Resource::TYPE_TEXTRESOURCE] = StringSystem::TextResource::CreateMe;
+	mResourceCreationMethods[Resource::TYPE_XMLRESOURCE] = XMLResource::CreateMe;
 	mExtToTypeMap["png"] = Resource::TYPE_TEXTURE;
 	mExtToTypeMap["bmp"] = Resource::TYPE_TEXTURE;
 	mExtToTypeMap["jpg"] = Resource::TYPE_TEXTURE;
@@ -35,6 +36,7 @@ ResourceMgr::ResourceMgr(const string& basepath):
 	mExtToTypeMap["ttf"] = Resource::TYPE_CEGUIRESOURCE;
 	mExtToTypeMap["looknfeel"] = Resource::TYPE_CEGUIRESOURCE;
 	mExtToTypeMap["str"] = Resource::TYPE_TEXTRESOURCE;
+	mExtToTypeMap["xml"] = Resource::TYPE_XMLRESOURCE;
 
 	assert(mResourceCreationMethods[Resource::NUM_TYPES-1] && "Not all resource types are registered");
 

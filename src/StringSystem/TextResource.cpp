@@ -9,6 +9,11 @@ ResourceSystem::ResourcePtr TextResource::CreateMe(void)
 	return ResourceSystem::ResourcePtr(DYN_NEW TextResource());
 }
 
+TextResource::~TextResource(void)
+{
+	UnloadImpl();
+}
+
 bool TextResource::LoadImpl()
 {
 	InputStream& is = OpenInputStream(ISM_TEXT);

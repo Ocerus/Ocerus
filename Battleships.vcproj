@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="src/Precompiled;externalLibs/boost/inc;externalLibs/hge/include;externalLibs/ois/includes;externalLibs/cegui/include;externalLibs/rudeconfig/include;externalLibs/Box2D/Include"
+				AdditionalIncludeDirectories="src/Precompiled;externalLibs/boost/inc;externalLibs/hge/include;externalLibs/ois/includes;externalLibs/cegui/include;externalLibs/rudeconfig/include;externalLibs/Box2D/Include;externalLibs/expat/lib"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="true"
@@ -559,6 +559,10 @@
 					RelativePath=".\src\ResourceSystem\ResourceMgr.h"
 					>
 				</File>
+				<File
+					RelativePath=".\src\ResourceSystem\XMLResource.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="src"
@@ -569,6 +573,10 @@
 				</File>
 				<File
 					RelativePath=".\src\ResourceSystem\ResourceMgr.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\ResourceSystem\XMLResource.cpp"
 					>
 				</File>
 			</Filter>

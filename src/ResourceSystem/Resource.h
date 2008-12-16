@@ -23,7 +23,7 @@ namespace ResourceSystem
 		/// State of a resource.
 		enum eState { STATE_UNINITIALIZED=0, STATE_INITIALIZED, STATE_UNLOADING, STATE_LOADING, STATE_LOADED };
 		/// Type of a resource. Add your custom types here!
-		enum eType { TYPE_TEXTURE=0, TYPE_CEGUIRESOURCE, TYPE_TEXTRESOURCE,		NUM_TYPES, TYPE_AUTODETECT };
+		enum eType { TYPE_TEXTURE=0, TYPE_CEGUIRESOURCE, TYPE_TEXTRESOURCE, TYPE_XMLRESOURCE, NUM_TYPES, TYPE_AUTODETECT };
 
 		/// No need to override.
 		Resource(void);
@@ -42,6 +42,7 @@ namespace ResourceSystem
 		inline eType GetType(void) const { return mType; }
 		inline eState GetState(void) const { return mState; }
 		inline string GetName(void) const { return mName; }
+		inline string GetFilePath(void) const { return mFilePath; }
 		inline bool IsManual(void) const { return mIsManual; }
 		//@}
 

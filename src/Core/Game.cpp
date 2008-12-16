@@ -2,6 +2,7 @@
 #include "Game.h"
 #include "Application.h"
 #include "Box2D.h"
+#include <iostream>
 
 using namespace Core;
 using namespace EntitySystem;
@@ -193,6 +194,51 @@ void Core::Game::Init()
 	mCameraFocus.Invalidate();
 
 	gInputMgr.AddInputListener(this);
+
+	////////////////// XML MANAGER DEMO START //////////////////
+	gLogMgr.LogMessage("*** XML MANAGER DEMO START ***");
+	ResourceSystem::XMLResourcePtr test = gResourceMgr.GetResource("xml", "test.xml");
+
+	// Set rootnode
+	test->Enter("Powerups/Powerup/g_PowerUps");
+	test->Enter("entry1");
+
+	std::stringstream ss;
+	ss << "TEST ";
+	ss << test->GetAttribute<string>("szName") << " ";
+	int move = test->GetAttribute<int>("iFastMove");
+	move++;
+	ss << move << " ";
+	gLogMgr.LogMessage(ss.str());
+	
+	// absolute path specified
+	test->Enter("", ResourceSystem::XMLResource::ABS);
+	int jump = test->GetAttribute<int>("Powerups/Powerup/g_PowerUps/entry2/iHighJump");	
+	ss.clear();
+	ss << jump << " ";
+	gLogMgr.LogMessage(ss.str());
+
+	test->Enter("Powerups/Powerup/g_PowerUps/entry2");
+	// leave 2 levels up
+	test->Leave(2);
+	test->Enter("g_PowerUps/entry3");
+	int inv = test->GetAttribute<int>("iInvulnerability");
+	ss.clear();
+	ss << inv << " ";
+	gLogMgr.LogMessage(ss.str());
+
+	
+	// XMLRES ITERATOR DEMO
+	// Iterator iterates through current RootNode and return all immediate values
+	ss.clear();
+	for (ResourceSystem::XMLResource::node_iterator it = test->begin(); it != test->end(); it++)
+	{
+		gLogMgr.LogMessage("INSIDE LOOP " + it.GetName());
+		ss << it.GetName() << " ";
+	}
+	gLogMgr.LogMessage("ITERATOR END: " + ss.str());
+	gLogMgr.LogMessage("*** XML MANAGER DEMO END ***");
+	////////////////// XML MANAGER DEMO END //////////////////
 
 	gApp.ResetStats();
 
