@@ -9,10 +9,21 @@ using namespace EntitySystem;
 #define LINEAR_DAMPING 0.1f
 #define ANGULAR_DAMPING 0.5f
 
-void EntitySystem::CmpPlatformPhysics::Init( ComponentDescription& desc )
+void EntitySystem::CmpPlatformPhysics::Init( void )
 {
 	mBody = 0;
 	mShape = 0;
+	mRelativePosition.SetZero();
+
+	mInitBodyAngle = 0.0f;
+	mInitBodyPosition.SetZero();
+	mInitShapeAngle = 0.0f;
+	mInitShapeFlip = false;
+}
+
+
+void EntitySystem::CmpPlatformPhysics::PostInit( void )
+{
 	EntityHandle ship;
 	PostMessage(EntityMessage::TYPE_GET_PARENT, &ship);
 
@@ -25,8 +36,8 @@ void EntitySystem::CmpPlatformPhysics::Init( ComponentDescription& desc )
 	else
 	{
 		b2BodyDef bodyDef;
-		bodyDef.position = desc.GetNextItem()->GetData<Vector2>();
-		bodyDef.angle = desc.GetNextItem()->GetData<float32>();
+		bodyDef.position = mInitBodyPosition;
+		bodyDef.angle = mInitBodyAngle;
 		bodyDef.userData = GetOwnerPtr();
 		bodyDef.angularDamping = ANGULAR_DAMPING;
 		bodyDef.linearDamping = LINEAR_DAMPING;
@@ -49,11 +60,8 @@ void EntitySystem::CmpPlatformPhysics::Init( ComponentDescription& desc )
 	Vector2* poly = (Vector2*)cont.GetData();
 	uint32 polyLen = cont.GetSize();
 	// retrieve shape transformation info
-	mRelativePosition = b2Vec2_zero;
-	if (ship.IsValid())
-		mRelativePosition = desc.GetNextItem()->GetData<Vector2>();
-	bool flip = desc.GetNextItem()->GetData<bool>();
-	float32 angle = desc.GetNextItem()->GetData<float32>();
+	bool flip = mInitShapeFlip;
+	float32 angle = mInitShapeAngle;
 	b2XForm xform(mRelativePosition, b2Mat22(angle));
 	// create the shape
 	for (int i=flip?(polyLen-1):(0); flip?(i>=0):(i<(int)polyLen); flip?(--i):(++i))
@@ -73,7 +81,7 @@ void EntitySystem::CmpPlatformPhysics::Init( ComponentDescription& desc )
 		mBody->SetMassFromShapes();
 }
 
-void EntitySystem::CmpPlatformPhysics::Deinit( void )
+void EntitySystem::CmpPlatformPhysics::Clean( void )
 {
 
 }
@@ -82,6 +90,9 @@ EntityMessage::eResult EntitySystem::CmpPlatformPhysics::HandleMessage( const En
 {
 	switch(msg.type)
 	{
+	case EntityMessage::TYPE_POST_INIT:
+		PostInit();
+		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_BODY_POSITION: // I need this for drawing
 		assert(msg.data);
 		assert(mBody);
@@ -122,8 +133,12 @@ EntityMessage::eResult EntitySystem::CmpPlatformPhysics::HandleMessage( const En
 
 void EntitySystem::CmpPlatformPhysics::RegisterReflection()
 {
-	RegisterProperty<Vector2&>("RelativePosition", &GetRelativePosition, 0, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
-	RegisterProperty<Vector2>("AbsolutePosition", &GetAbsolutePosition, &SetAbsolutePosition, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<Vector2&>("RelativePosition", &GetRelativePosition, &SetRelativePosition, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<Vector2>("InitBodyPosition", 0, &SetInitBodyPosition, PROPACC_INIT);
+	RegisterProperty<float32>("InitBodyAngle", 0, &SetInitBodyAngle, PROPACC_INIT);
+	RegisterProperty<float32>("InitShapeAngle", 0, &SetInitShapeAngle, PROPACC_INIT);
+	RegisterProperty<bool>("InitShapeFlip", 0, &SetInitShapeFlip, PROPACC_INIT);
+	RegisterProperty<Vector2>("AbsolutePosition", &GetAbsolutePosition, &SetAbsolutePosition, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<float32>("Angle", &GetAngle, &SetAngle, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 }
 

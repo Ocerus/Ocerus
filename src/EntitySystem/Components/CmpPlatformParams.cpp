@@ -7,16 +7,21 @@ using namespace EntitySystem;
 #define SLOTS_RATIO 1.0f
 #define LINKSLOTS_RATIO 1.0f
 
-void EntitySystem::CmpPlatformParams::Init( ComponentDescription& desc )
+void EntitySystem::CmpPlatformParams::Init( void )
 {
-	SetMaterial(desc.GetNextItem()->GetData<EntityHandle>());
-	SetShapeLength(desc.GetNextItem()->GetData<uint32>());
+	mMaterial.Invalidate();
+	mShapeLength = 0;
 	mShape = 0;
-	SetShape(desc.GetNextItem()->GetData<Vector2*>());
-	ComputeParams();
+
+	mArea = 0.0f;
+	mBaseDetachingChance = 0.0f;
+	mMass = 0.0f;
+	mMaxHitpoints = 0;
+	mNumLinkSlots = 0;
+	mNumSlots = 0;
 }
 
-void EntitySystem::CmpPlatformParams::Deinit( void )
+void EntitySystem::CmpPlatformParams::Clean( void )
 {
 	if (mShape)
 	{
@@ -29,6 +34,9 @@ EntityMessage::eResult EntitySystem::CmpPlatformParams::HandleMessage( const Ent
 {
 	switch(msg.type)
 	{
+	case EntityMessage::TYPE_POST_INIT:
+		ComputeParams();
+		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_POLYSHAPE:
 		assert(msg.data);
 		((DataContainer*)msg.data)->SetData((uint8*)mShape, mShapeLength);
@@ -85,14 +93,14 @@ void EntitySystem::CmpPlatformParams::SetShape(Vector2* shape)
 
 void EntitySystem::CmpPlatformParams::RegisterReflection()
 {
-	RegisterProperty<EntityHandle>("Material", &GetMaterial, &SetMaterial, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<EntityHandle>("Material", &GetMaterial, &SetMaterial, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<uint32>("MaxHitpoints", &GetMaxHitpoints, &SetMaxHitpoints, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<uint32>("NumSlots", &GetNumSlots, &SetNumSlots, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<uint32>("NumLinkSlots", &GetNumLinkSlots, &SetNumLinkSlots, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<float32>("Area", &GetArea, &SetArea, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<float32>("Mass", &GetMass, &SetMass, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<float32>("BaseDetachingChance", &GetBaseDetachingChance, &SetBaseDetachingChance, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
-	RegisterProperty<uint32>("ShapeLength", &GetShapeLength, &SetShapeLength, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
-	RegisterProperty<Vector2*>("Shape", &GetShape, &SetShape, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<uint32>("ShapeLength", &GetShapeLength, &SetShapeLength, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<Vector2*>("Shape", &GetShape, &SetShape, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 
 }

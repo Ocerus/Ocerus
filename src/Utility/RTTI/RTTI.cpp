@@ -21,10 +21,20 @@ CRTTI::CRTTI(	uint8 dwStub, ClassID CLID, const char* szClassName, CRTTI* pBaseC
 		pReflectionFunc();
 }
 
-void CRTTI::EnumProperties( std::vector<CAbstractProperty*>& o_Result )
+void CRTTI::EnumProperties( AbstractPropertyList& o_Result, const uint8 flagMask )
 {
 	if ( m_pBaseRTTI )
-		m_pBaseRTTI->EnumProperties( o_Result );
+		m_pBaseRTTI->EnumProperties( o_Result, flagMask );
 	for ( std::list<CAbstractProperty*>::iterator it = m_Properties.begin(); it != m_Properties.end(); ++it )
-		o_Result.push_back( *it );
+		if (((*it)->GetAccessFlags()&flagMask) == flagMask)
+			o_Result.push_back( *it );
+}
+
+void CRTTI::EnumProperties( RTTIBaseClass* owner, PropertyList& o_Result, const uint8 flagMask )
+{
+	if ( m_pBaseRTTI )
+		m_pBaseRTTI->EnumProperties( owner, o_Result, flagMask );
+	for ( std::list<CAbstractProperty*>::iterator it = m_Properties.begin(); it != m_Properties.end(); ++it )
+		if (((*it)->GetAccessFlags()&flagMask) == flagMask)
+			o_Result[(*it)->GetName()] = PropertyHolder(owner, *it);
 }

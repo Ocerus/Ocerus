@@ -11,9 +11,8 @@
 
 #include "../EntitySystem/EntityMgr/EntityMgr.h"
 #include "../EntitySystem/EntityMgr/EntityHandle.h"
-#include "../EntitySystem/EntityMgr/EntityDescription.h"
 #include "../EntitySystem/EntityMgr/EntityMessage.h"
-#include "../EntitySystem/ComponentMgr/ComponentDescription.h"
+#include "../EntitySystem/EntityMgr/EntityDescription.h"
 #include "../EntitySystem/ComponentMgr/ComponentEnums.h"
 #include "../EntitySystem/EntityMgr/EntityPicker.h"
 

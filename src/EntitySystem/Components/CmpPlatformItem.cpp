@@ -4,16 +4,15 @@
 using namespace EntitySystem;
 
 
-void EntitySystem::CmpPlatformItem::Init( ComponentDescription& desc )
+void EntitySystem::CmpPlatformItem::Init( void )
 {
-	SetBlueprints(desc.GetNextItem()->GetData<EntityHandle>());
-	SetParentPlatform(desc.GetNextItem()->GetData<EntityHandle>());
-	SetRelativePosition(desc.GetNextItem()->GetData<Vector2>());
-	mBlueprints.PostMessage(EntityMessage::TYPE_GET_MAX_HITPOINTS, &mHitpoints);
-	mParentPlatform.PostMessage(EntityMessage::TYPE_ADD_PLATFORM_ITEM, GetOwnerPtr());
+	mBlueprints.Invalidate();
+	mParentPlatform.Invalidate();
+	mRelativePosition.SetZero();
+	mHitpoints = 0;
 }
 
-void EntitySystem::CmpPlatformItem::Deinit( void )
+void EntitySystem::CmpPlatformItem::Clean( void )
 {
 
 }
@@ -22,6 +21,10 @@ EntityMessage::eResult EntitySystem::CmpPlatformItem::HandleMessage( const Entit
 {
 	switch(msg.type)
 	{
+	case EntityMessage::TYPE_POST_INIT:
+		mBlueprints.PostMessage(EntityMessage::TYPE_GET_MAX_HITPOINTS, &mHitpoints);
+		mParentPlatform.PostMessage(EntityMessage::TYPE_ADD_PLATFORM_ITEM, GetOwnerPtr());
+		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_PARENT:
 		assert(msg.data);
 		*(EntityHandle*)msg.data = GetParentPlatform();
@@ -44,11 +47,11 @@ EntityMessage::eResult EntitySystem::CmpPlatformItem::HandleMessage( const Entit
 
 void EntitySystem::CmpPlatformItem::RegisterReflection( void )
 {
-	RegisterProperty<Vector2&>("RelativePosition", &GetRelativePosition, &SetRelativePosition, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<Vector2&>("RelativePosition", &GetRelativePosition, &SetRelativePosition, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<Vector2>("AbsolutePosition", &GetAbsolutePosition, 0, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<uint32>("Hitpoints", &GetHitpoints, &SetHitpoints, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
-	RegisterProperty<EntityHandle>("ParentPlatform", &GetParentPlatform, &SetParentPlatform, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
-	RegisterProperty<EntityHandle>("Blueprints", &GetBlueprints, &SetBlueprints, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<EntityHandle>("ParentPlatform", &GetParentPlatform, &SetParentPlatform, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<EntityHandle>("Blueprints", &GetBlueprints, &SetBlueprints, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 }
 
 Vector2 EntitySystem::CmpPlatformItem::GetAbsolutePosition( void ) const

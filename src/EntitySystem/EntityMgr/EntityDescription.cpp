@@ -1,6 +1,5 @@
 #include "Common.h"
 #include "EntityDescription.h"
-#include "../ComponentMgr/ComponentDescription.h"
 
 using namespace EntitySystem;
 
@@ -13,9 +12,7 @@ EntityDescription::~EntityDescription()
 
 void EntityDescription::Clear(void)
 {
-	for (ComponentDescriptionsList::const_iterator iter = mComponentDescriptions.begin(); iter!=mComponentDescriptions.end(); ++iter)
-		DYN_DELETE (*iter);
-	mComponentDescriptions.clear();
+	mComponents.clear();
 }
 
 void EntityDescription::Init(const eEntityType type)
@@ -25,15 +22,14 @@ void EntityDescription::Init(const eEntityType type)
 	mType = type;
 }
 
-void EntityDescription::AddComponentDescription(ComponentDescription& desc)
+void EntityDescription::AddComponent(const eComponentType type)
 {
-	assert(desc.GetType() != CT_INVALID && "Invalid component description type");
-	mComponentDescriptions.push_back(DYN_NEW ComponentDescription(desc.GetType(), desc.GetItems()));
-	desc.Invalidate();
+	assert(type != CT_INVALID && "Invalid component description type");
+	mComponents.push_back(type);
 }
 
-ComponentDescription* EntityDescription::GetNextComponentDescription()
+eComponentType EntityDescription::GetNextComponent()
 {
-	assert(mIndex<mComponentDescriptions.size());
-	return mComponentDescriptions[mIndex++];
+	assert(mIndex<mComponents.size());
+	return mComponents[mIndex++];
 }

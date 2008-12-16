@@ -25,7 +25,7 @@ public:
 
 	//----------------------------------------------------------------------------------------------
 	// Constructor. Takes in property name.
-	inline CTypedProperty( const char* szName );
+	inline CTypedProperty( const char* szName, const uint8 accessFlags );
 
 	//----------------------------------------------------------------------------------------------
 	// Returns the type of this property.
@@ -39,8 +39,8 @@ public:
 };
 
 template <class T>
-inline CTypedProperty<T>::CTypedProperty( const char* szName ) :
-	CAbstractProperty( szName			)
+inline CTypedProperty<T>::CTypedProperty( const char* szName, const uint8 accessFlags ) :
+	CAbstractProperty( szName, accessFlags			)
 {
 }
 

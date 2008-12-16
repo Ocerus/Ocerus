@@ -4,27 +4,16 @@
 using namespace EntitySystem;
 
 
-void EntitySystem::CmpPlatformLinks::Init( ComponentDescription& desc )
+void EntitySystem::CmpPlatformLinks::Init( void )
 {
-	SetFirstPlatform(desc.GetNextItem()->GetData<EntityHandle>());
-	SetSecondPlatform(desc.GetNextItem()->GetData<EntityHandle>());
-	ComputeDetachingChance();
-	SetNumLinks(desc.GetNextItem()->GetData<uint32>());
-	//TODO zautomatizovat pozicovani anchor - nejspis uedlat do SetNumLinks, at se prepocitaji jejich pozice
+	mFirstPlatform.Invalidate();
+	mSecondPlatform.Invalidate();
+	mAnchorsLength = 0;
 	mFirstAnchors = 0;
-	SetFirstAnchors(desc.GetNextItem()->GetData<Vector2*>());
 	mSecondAnchors = 0;
-	SetSecondAnchors(desc.GetNextItem()->GetData<Vector2*>());
-
-	EntityHandle ship;
-	mFirstPlatform.PostMessage(EntityMessage::TYPE_GET_PARENT, &ship);
-	EntityHandle ship2;
-	mSecondPlatform.PostMessage(EntityMessage::TYPE_GET_PARENT, &ship2);
-	assert(ship == ship2 && "Not compatible platforms");
-	ship.PostMessage(EntityMessage::TYPE_LINK_PLATFORMS, GetOwnerPtr());
 }
 
-void EntitySystem::CmpPlatformLinks::Deinit( void )
+void EntitySystem::CmpPlatformLinks::Clean( void )
 {
 
 }
@@ -33,6 +22,18 @@ EntityMessage::eResult EntitySystem::CmpPlatformLinks::HandleMessage( const Enti
 {
 	switch(msg.type)
 	{
+	case EntityMessage::TYPE_POST_INIT:
+		//TODO zautomatizovat pozicovani anchor - nejspis uedlat do SetNumLinks, at se prepocitaji jejich pozice
+		{
+			ComputeDetachingChance();
+			EntityHandle ship;
+			mFirstPlatform.PostMessage(EntityMessage::TYPE_GET_PARENT, &ship);
+			EntityHandle ship2;
+			mSecondPlatform.PostMessage(EntityMessage::TYPE_GET_PARENT, &ship2);
+			assert(ship == ship2 && "Not compatible platforms");
+			ship.PostMessage(EntityMessage::TYPE_LINK_PLATFORMS, GetOwnerPtr());
+		}
+		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_DRAW_PLATFORM_LINK:
 		Draw();
 		return EntityMessage::RESULT_OK;
@@ -42,12 +43,12 @@ EntityMessage::eResult EntitySystem::CmpPlatformLinks::HandleMessage( const Enti
 
 void EntitySystem::CmpPlatformLinks::RegisterReflection()
 {
-	RegisterProperty<EntityHandle>("FirstPlatform", &GetFirstPlatform, &SetFirstPlatform, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
-	RegisterProperty<EntityHandle>("SecondPlatform", &GetSecondPlatform, &SetSecondPlatform, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<EntityHandle>("FirstPlatform", &GetFirstPlatform, &SetFirstPlatform, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<EntityHandle>("SecondPlatform", &GetSecondPlatform, &SetSecondPlatform, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<float32>("DetachingChance", &GetDetachingChance, &SetDetachingChance, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
-	RegisterProperty<uint32>("NumLinks", &GetNumLinks, &SetNumLinks, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
-	RegisterProperty<Vector2*>("FirstAnchors", &GetFirstAnchors, &SetFirstAnchors, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
-	RegisterProperty<Vector2*>("SecondAnchors", &GetSecondAnchors, &SetSecondAnchors, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<uint32>("NumLinks", &GetNumLinks, &SetNumLinks, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<Vector2*>("FirstAnchors", &GetFirstAnchors, &SetFirstAnchors, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<Vector2*>("SecondAnchors", &GetSecondAnchors, &SetSecondAnchors, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 }
 
 void EntitySystem::CmpPlatformLinks::ComputeDetachingChance( void )

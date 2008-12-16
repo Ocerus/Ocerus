@@ -6,15 +6,17 @@ using namespace EntitySystem;
 #define HITPOINTS_RATIO 100.0f
 #define POWER_RATIO 100.0f
 
-void EntitySystem::CmpEngineParams::Init( ComponentDescription& desc )
+void EntitySystem::CmpEngineParams::Init( void )
 {
-	SetMaterial(desc.GetNextItem()->GetData<EntityHandle>());
-	SetArcAngle(desc.GetNextItem()->GetData<float32>());
-	SetStabilizationRatio(desc.GetNextItem()->GetData<uint32>());
-	ComputeParams();
+	mMaterial.Invalidate();
+	mArcAngle = 0.0f;
+	mStabilizationRatio = 0;
+
+	mMaxHitpoints = 0;
+	mMaxPower = 0;
 }
 
-void EntitySystem::CmpEngineParams::Deinit( void )
+void EntitySystem::CmpEngineParams::Clean( void )
 {
 
 }
@@ -23,6 +25,9 @@ EntityMessage::eResult EntitySystem::CmpEngineParams::HandleMessage( const Entit
 {
 	switch(msg.type)
 	{
+	case EntityMessage::TYPE_POST_INIT:
+		ComputeParams();
+		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_MAX_HITPOINTS:
 		assert(msg.data);
 		*(uint32*)msg.data = GetMaxHitpoints();
@@ -49,11 +54,11 @@ EntityMessage::eResult EntitySystem::CmpEngineParams::HandleMessage( const Entit
 
 void EntitySystem::CmpEngineParams::RegisterReflection( void )
 {
-	RegisterProperty<EntityHandle>("Material", &GetMaterial, &SetMaterial, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<EntityHandle>("Material", &GetMaterial, &SetMaterial, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<uint32>("MaxHitpoints", &GetMaxHitpoints, &SetMaxHitpoints, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<uint32>("MaxPower", &GetMaxPower, &SetMaxPower, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
-	RegisterProperty<float32>("ArcAngle", &GetArcAngle, &SetArcAngle, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
-	RegisterProperty<uint32>("StabilizationRatio", &GetStabilizationRatio, &SetStabilizationRatio, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<float32>("ArcAngle", &GetArcAngle, &SetArcAngle, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<uint32>("StabilizationRatio", &GetStabilizationRatio, &SetStabilizationRatio, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 }
 
 void EntitySystem::CmpEngineParams::ComputeParams( void )

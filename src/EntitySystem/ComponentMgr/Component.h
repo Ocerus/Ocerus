@@ -3,7 +3,6 @@
 
 #include "../../Utility/Properties.h"
 #include "../EntityMgr/EntityHandle.h"
-#include "ComponentDescriptionItem.h"
 
 namespace EntitySystem
 {
@@ -16,13 +15,13 @@ namespace EntitySystem
 
 	/** Abstract class representing one component. All concrete components must derive from this class.
 	*/
-	class Component : public RTTINullClass
+	class Component : public RTTIBaseClass
 	{
 	public:
 		/// Called after the component is created.
-		virtual void Init(ComponentDescription& desc) = 0;
+		virtual void Init(void) {}
 		/// Called before the component is destroyed.
-		virtual void Deinit(void) = 0;
+		virtual void Clean(void) {}
 
 		/// Called when a new message arrives. To be overriden.
 		virtual EntityMessage::eResult HandleMessage(const EntityMessage& msg);

@@ -6,6 +6,7 @@
 #define _PROPERTY_H
 
 #include "TypedProperty.h"
+#include "PropertyTypes.h"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -36,28 +37,31 @@ public:
 	// Determines the value of this property.
 	virtual T		GetValue( RTTIBaseClass* pObject );
 	virtual void	SetValue( RTTIBaseClass* pObject, T Value );
-	inline uint8	GetAccessFlags( void ) const { return m_accessFlags; }
 
 protected:
 
     GetterType		m_Getter;
     SetterType		m_Setter;
-	uint8			m_accessFlags;
- 
+
 };
+
 
 template <class OwnerType, class T>
 inline CProperty<OwnerType, T>::CProperty( const char* szName, GetterType Getter, SetterType Setter, const uint8 accessFlags ) :
-	CTypedProperty<T>	( szName		),
+	CTypedProperty<T>	( szName, accessFlags	),
 	m_Getter			( Getter		),
-	m_Setter			( Setter		),
-	m_accessFlags		( accessFlags	)
+	m_Setter			( Setter		)
 {
 }
 
 template <class OwnerType, class T> 
 T CProperty<OwnerType, T>::GetValue( RTTIBaseClass* pOwner )
 {
+	if (!m_Getter)
+	{
+		ReportWriteonlyProblem();
+		return CPropertyType<T>::GetDefaultValue();
+	}
 	return (((OwnerType*)pOwner)->*m_Getter)();
 }
 
@@ -66,7 +70,7 @@ void CProperty<OwnerType, T>::SetValue(RTTIBaseClass* pOwner, T Value )
 {
 	if ( !m_Setter)
 	{
-		assert( false ); // Cannot write to a read-only property
+		ReportReadonlyProblem();		
 		return;
 	}
 	(((OwnerType*)pOwner)->*m_Setter)( Value );

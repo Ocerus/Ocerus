@@ -12,8 +12,8 @@ namespace EntitySystem
 	public:
 		static Component* CreateMe(void) { return new CmpPlatformParams(); }
 
-		virtual void Init(ComponentDescription& desc);
-		virtual void Deinit(void);
+		virtual void Init(void);
+		virtual void Clean(void);
 		virtual EntityMessage::eResult HandleMessage(const EntityMessage& msg);
 
 		static void RegisterReflection(void);

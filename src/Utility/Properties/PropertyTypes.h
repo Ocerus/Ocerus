@@ -6,9 +6,9 @@
 #define _PROPERTY_TYPES_H
 
 #include "../Settings.h"
-#include "../EntitySystem/EntityMgr/EntityHandle.h"
+#include "../../EntitySystem/EntityMgr/EntityHandle.h"
 
-enum ePropertyAccess { PROPACC_EDIT_READ=1<<1, PROPACC_EDIT_WRITE=1<<2, PROPACC_SCRIPT_READ=1<<3, PROPACC_SCRIPT_WRITE=1<<4 };
+enum ePropertyAccess { PROPACC_EDIT_READ=1<<1, PROPACC_EDIT_WRITE=1<<2, PROPACC_SCRIPT_READ=1<<3, PROPACC_SCRIPT_WRITE=1<<4, PROPACC_INIT=1<<5 };
 
 enum ePropertyType
 {
@@ -46,12 +46,16 @@ template <class T> class CPropertyType
 
 public :
 
-	// Returns type ID associated with the templatized type.
+	/// Returns type ID associated with the templatized type.
 	static ePropertyType GetTypeID();
+
+	/// Returns a default value of this property type.
+	static T GetDefaultValue() { return ms_DefaultValue; }
 
 private:
 
     static ePropertyType ms_TypeID;
+	static T ms_DefaultValue;
 
 };
 
@@ -78,5 +82,23 @@ template<> ePropertyType CPropertyType<Vector2*>::ms_TypeID						= PROPTYPE_VECT
 template<> ePropertyType CPropertyType<EntitySystem::EntityHandle>::ms_TypeID	= PROPTYPE_ENTITYHANDLE;
 template<> ePropertyType CPropertyType<EntitySystem::EntityHandle*>::ms_TypeID	= PROPTYPE_ENTITYHANDLE_ARRAY;
 template<> ePropertyType CPropertyType<char*>::ms_TypeID						= PROPTYPE_STRING;
+
+template<class T> T CPropertyType<T>::ms_DefaultValue							= 0;
+template<> bool CPropertyType<bool>::ms_DefaultValue							= false;
+template<> int8 CPropertyType<int8>::ms_DefaultValue							= 0;
+template<> int16 CPropertyType<int16>::ms_DefaultValue							= 0;
+template<> int32 CPropertyType<int32>::ms_DefaultValue							= 0;
+template<> int64 CPropertyType<int64>::ms_DefaultValue							= 0;
+template<> uint8 CPropertyType<uint8>::ms_DefaultValue							= 0;
+template<> uint16 CPropertyType<uint16>::ms_DefaultValue						= 0;
+template<> uint32 CPropertyType<uint32>::ms_DefaultValue						= 0;
+template<> uint64 CPropertyType<uint64>::ms_DefaultValue						= 0;
+template<> float32 CPropertyType<float32>::ms_DefaultValue						= 0.f;
+template<> Vector2 CPropertyType<Vector2>::ms_DefaultValue						= Vector2_Zero;
+template<> Vector2& CPropertyType<Vector2&>::ms_DefaultValue					= Vector2_Dummy;
+template<> Vector2* CPropertyType<Vector2*>::ms_DefaultValue					= 0;
+template<> EntitySystem::EntityHandle CPropertyType<EntitySystem::EntityHandle>::ms_DefaultValue = EntitySystem::EntityHandle::Null;
+template<> EntitySystem::EntityHandle* CPropertyType<EntitySystem::EntityHandle*>::ms_DefaultValue = 0;
+template<> char* CPropertyType<char*>::ms_DefaultValue							= 0;
 
 #endif	// _PROPERTY_TYPES_H

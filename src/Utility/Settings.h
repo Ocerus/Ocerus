@@ -19,7 +19,10 @@ typedef float float32;
 #define	FLOAT32_MIN	FLT_MIN
 #define	FLOAT32_EPSILON	FLT_EPSILON
 typedef b2Vec2 Vector2;
+extern const Vector2 Vector2_Zero;
+extern Vector2 Vector2_Dummy;
 typedef b2Mat22 Matrix22;
+extern const Matrix22 Matrix22_Identity;
 typedef b2XForm XForm;
 //@}
 

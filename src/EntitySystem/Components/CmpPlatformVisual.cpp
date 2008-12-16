@@ -4,12 +4,12 @@
 using namespace EntitySystem;
 
 
-void EntitySystem::CmpPlatformVisual::Init( ComponentDescription& desc )
+void EntitySystem::CmpPlatformVisual::Init( void )
 {
 
 }
 
-void EntitySystem::CmpPlatformVisual::Deinit( void )
+void EntitySystem::CmpPlatformVisual::Clean( void )
 {
 
 }

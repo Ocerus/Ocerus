@@ -8,19 +8,25 @@ using namespace EntitySystem;
 #define LINEAR_DAMPING 0.1f
 #define ANGULAR_DAMPING 0.5f
 
-void EntitySystem::CmpShipPhysics::Init( ComponentDescription& desc )
+void EntitySystem::CmpShipPhysics::Init( void )
 {
 	mBody = 0;
+	mInitBodyAngle = 0.0f;
+	mInitBodyPosition.SetZero();
+}
+
+void EntitySystem::CmpShipPhysics::PostInit( void )
+{
 	b2BodyDef bodyDef;
-	bodyDef.position = desc.GetNextItem()->GetData<Vector2>();
-	bodyDef.angle = desc.GetNextItem()->GetData<float32>();
+	bodyDef.position = mInitBodyPosition;
+	bodyDef.angle = mInitBodyAngle;
 	bodyDef.userData = GetOwnerPtr();
 	bodyDef.angularDamping = ANGULAR_DAMPING;
 	bodyDef.linearDamping = LINEAR_DAMPING;
 	mBody = gApp.GetCurrentGame()->GetPhysics()->CreateBody(&bodyDef);
 }
 
-void EntitySystem::CmpShipPhysics::Deinit( void )
+void EntitySystem::CmpShipPhysics::Clean( void )
 {
 
 }
@@ -29,6 +35,9 @@ EntityMessage::eResult EntitySystem::CmpShipPhysics::HandleMessage( const Entity
 {
 	switch(msg.type)
 	{
+	case EntityMessage::TYPE_POST_INIT:
+		PostInit();
+		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_POSITION:
 		assert(msg.data);
 		((Vector2*)msg.data)->Set(GetPosition());
@@ -54,6 +63,8 @@ void EntitySystem::CmpShipPhysics::RegisterReflection()
 {
 	RegisterProperty<Vector2&>("Position", &GetPosition, &SetPosition, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<float32>("Angle", &GetAngle, &SetAngle, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<Vector2>("InitBodyPosition", 0, &SetInitBodyPosition, PROPACC_INIT);
+	RegisterProperty<float32>("InitBodyAngle", 0, &SetInitBodyAngle, PROPACC_INIT);
 }
 
 Vector2& EntitySystem::CmpShipPhysics::GetPosition( void ) const
@@ -79,3 +90,4 @@ void EntitySystem::CmpShipPhysics::SetAngle( const float32 angle )
 	assert(mBody);
 	mBody->SetXForm(mBody->GetPosition(), angle);
 }
+

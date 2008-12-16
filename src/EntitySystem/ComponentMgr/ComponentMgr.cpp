@@ -1,7 +1,6 @@
 #include "Common.h"
 #include "ComponentMgr.h"
 #include "Component.h"
-#include "ComponentDescription.h"
 
 #include "../Components/CmpMaterial.h"
 #include "../Components/CmpPlatformLinks.h"
@@ -51,25 +50,38 @@ EntityComponentsIterator ComponentMgr::GetEntityComponents(EntityID id)
 	return EntityComponentsIterator(eci->second);
 }
 
-bool ComponentMgr::CreateComponent(EntityHandle h, ComponentDescription& desc)
+bool ComponentMgr::CreateComponent(EntityHandle h, const eComponentType type)
 {
-	assert(desc.GetType() < NUM_COMPONENT_TYPES && desc.GetType() >= 0);
-	Component* cmp = mComponentCreationMethod[desc.GetType()]();
+	assert(type < NUM_COMPONENT_TYPES && type >= 0);
+	Component* cmp = mComponentCreationMethod[type]();
 	mEntityComponentsMap[h.GetID()].push_back(cmp);
 	cmp->SetOwner(h);
-	cmp->Init(desc);
+	cmp->Init();
 	return true;
 }
 
 void ComponentMgr::DestroyEntityComponents(EntityID id)
 {
 	EntityComponentsMap::iterator iter = mEntityComponentsMap.find(id);
-	assert(iter!=mEntityComponentsMap.end());
+	if (iter == mEntityComponentsMap.end())
+		return;
 	ComponentsList& cmpList = iter->second;
 	for (ComponentsList::iterator i=cmpList.begin(); i!=cmpList.end(); ++i)
 	{
-		(*i)->Deinit();
+		(*i)->Clean();
 		DYN_DELETE (*i);
 	}
 	mEntityComponentsMap.erase(iter);
 } 
+
+bool EntitySystem::ComponentMgr::GetEntityProperties( const EntityID id, PropertyList& out, const uint8 flagMask /*= 0xff*/ )
+{
+	out.clear();
+	EntityComponentsMap::iterator iter = mEntityComponentsMap.find(id);
+	if (iter == mEntityComponentsMap.end())
+		return false;
+	ComponentsList& cmpList = iter->second;
+	for (ComponentsList::iterator i=cmpList.begin(); i!=cmpList.end(); ++i)
+		(*i)->GetRTTI()->EnumProperties(*i, out, flagMask);
+	return true;
+}

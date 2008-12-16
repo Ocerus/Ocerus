@@ -5,13 +5,17 @@
 #include "EntityMessage.h"
 #include "EntityEnums.h"
 
+class PropertyList;
+
 namespace EntitySystem
 {
 
 	typedef uint32 EntityID;
 
-	/// Forward declaration.
+	/// @name Forward declarations.
+	//@{
 	class EntityMgr;
+	//@}
 
 	/** This class represents one unique entity in the entity system.
 	*/
@@ -36,11 +40,19 @@ namespace EntitySystem
 		/// Sets this handle to invalid state.
 		void Invalidate(void) { mEntityID = 0; }
 
+		/// Finishes initialization of this entity. Must be called once only!
+		void FinishInit(void);
+
+		/// Retrieves properties of this entity.
+		bool GetProperties(PropertyList& out, uint8 mask = 0xff);
+
 		/// Sends a message to this entity.
 		EntityMessage::eResult PostMessage(const EntityMessage::eType type, void* data = 0);
 
 		/// Returns type of this entity.
 		eEntityType GetType(void) const;
+
+		static const EntityHandle Null;
 
 	private:
 		friend class ComponentMgr;
@@ -53,7 +65,7 @@ namespace EntitySystem
 		//@}
 
 		/// Getter
-		EntityID GetID(void);
+		EntityID GetID(void) const;
 		/// ID identifying this entity.
 		EntityID mEntityID;
 		/// Last ID which was assigned to an entity.

@@ -97,7 +97,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy /V /Y /B externalLibs\cegui\bin\vs9\Debug\*.dll Debug&#x0D;&#x0A;"
+				CommandLine="copy /V /Y /B externalLibs\cegui\bin\vs9\Debug\*.dll Debug&#x0D;&#x0A;copy /V /Y /B externalLibs\expat\bin\vs9\*.dll Debug&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -180,7 +180,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Copying release file to output dir..."
-				CommandLine="copy &quot;$(OutDir)\$(TargetFileName)&quot; &quot;output&quot;&#x0D;&#x0A;copy /V /Y /B externalLibs\cegui\bin\vs9\Release\*.dll Release&#x0D;&#x0A;copy /V /Y /B externalLibs\cegui\bin\vs9\Release\*.dll output&#x0D;&#x0A;"
+				CommandLine="copy /V /Y &quot;$(OutDir)\$(TargetFileName)&quot; &quot;output&quot;&#x0D;&#x0A;copy /V /Y /B externalLibs\cegui\bin\vs9\Release\*.dll Release&#x0D;&#x0A;copy /V /Y /B externalLibs\cegui\bin\vs9\Release\*.dll output&#x0D;&#x0A;copy /V /Y /B externalLibs\expat\bin\vs9\*.dll Release&#x0D;&#x0A;copy /V /Y /B externalLibs\expat\bin\vs9\*.dll output"
 			/>
 		</Configuration>
 	</Configurations>
@@ -309,14 +309,6 @@
 						>
 					</File>
 					<File
-						RelativePath=".\src\EntitySystem\ComponentMgr\ComponentDescription.h"
-						>
-					</File>
-					<File
-						RelativePath=".\src\EntitySystem\ComponentMgr\ComponentDescriptionItem.h"
-						>
-					</File>
-					<File
 						RelativePath=".\src\EntitySystem\ComponentMgr\ComponentEnums.h"
 						>
 					</File>
@@ -343,10 +335,6 @@
 								UsePrecompiledHeader="1"
 							/>
 						</FileConfiguration>
-					</File>
-					<File
-						RelativePath=".\src\EntitySystem\ComponentMgr\ComponentDescription.cpp"
-						>
 					</File>
 					<File
 						RelativePath=".\src\EntitySystem\ComponentMgr\ComponentMgr.cpp"
@@ -466,6 +454,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\Utility\Settings.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\src\Utility\Timer.cpp"
 					>
 				</File>
@@ -513,6 +505,14 @@
 						>
 					</File>
 					<File
+						RelativePath=".\src\Utility\Properties\PropertyHolder.h"
+						>
+					</File>
+					<File
+						RelativePath=".\src\Utility\Properties\PropertyList.h"
+						>
+					</File>
+					<File
 						RelativePath=".\src\Utility\Properties\PropertySystem.h"
 						>
 					</File>
@@ -528,6 +528,14 @@
 				<Filter
 					Name="src"
 					>
+					<File
+						RelativePath=".\src\Utility\Properties\AbstractProperty.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\Utility\Properties\PropertyHolder.cpp"
+						>
+					</File>
 					<File
 						RelativePath=".\src\Utility\Properties\PropertySystem.cpp"
 						>

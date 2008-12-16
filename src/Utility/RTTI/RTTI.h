@@ -9,6 +9,7 @@
 #include <vector>
 
 #include "../Properties/AbstractProperty.h"
+#include "../Properties/PropertyHolder.h"
 #include "../Settings.h"
 
 //-------------------------------------------------------------------------------------------------
@@ -54,7 +55,8 @@ public:
 
 	//----------------------------------------------------------------------------------------------
 	// Fills a vector with all properties of the represented class type, including all ancestor types.
-	void	EnumProperties( std::vector<CAbstractProperty*>& o_Result );
+	void	EnumProperties( AbstractPropertyList& o_Result, const uint8 flagMask = 0xff );
+	void	EnumProperties( RTTIBaseClass* owner, PropertyList& o_Result, const uint8 flagMask = 0xff );
 
 	//----------------------------------------------------------------------------------------------
 	// Returns true if the RTTI structure is of the type specified by CLID.

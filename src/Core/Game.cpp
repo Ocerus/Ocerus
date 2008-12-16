@@ -43,144 +43,122 @@ void Core::Game::Init()
 
 
 	//// TEST ////
-
-	EntityDescription entityDesc;
-	ComponentDescription compDesc;
+	EntityDescription desc;
+	PropertyList props;
 
 	// create a material
-	entityDesc.Init(ET_UNKNOWN);
-	compDesc.Init(CT_MATERIAL);
-	compDesc.AddItem(1.0f); // durability ratio
-	compDesc.AddItem(1.0f); // density
-	entityDesc.AddComponentDescription(compDesc);
-	EntityHandle material0 = gEntityMgr.CreateEntity(entityDesc);
+	desc.Init(ET_UNKNOWN);
+	desc.AddComponent(CT_MATERIAL);
+	EntityHandle material0 = gEntityMgr.CreateEntity(desc, props);
+	props["DurabilityRatio"].SetValue(1.0f);
+	props["Density"].SetValue(1.0f);
+	material0.FinishInit();
 
 	// create a platform type
-	entityDesc.Init(ET_UNKNOWN);
-	compDesc.Init(CT_PLATFORM_PARAMS);
-	compDesc.AddItem(material0);
+	desc.Init(ET_UNKNOWN);
+	desc.AddComponent(CT_PLATFORM_PARAMS);
+	EntityHandle platformType0 = gEntityMgr.CreateEntity(desc, props);
+	props["Material"].SetValue(material0);
 	Vector2 shape[] = {Vector2(-0.5f,-0.5f),Vector2(0.25f,-0.5f),Vector2(0.5f,-0.25f),Vector2(0.5f,0.25f),Vector2(-0.5f,0.25f)};
-	compDesc.AddItem((uint32)5); // shape length
-	compDesc.AddItem(shape);
-	entityDesc.AddComponentDescription(compDesc);
-	EntityHandle platformType0 = gEntityMgr.CreateEntity(entityDesc);
+	props["ShapeLength"].SetValue((uint32)5);
+	props["Shape"].SetValue(shape);
+	platformType0.FinishInit();
 
 	// create an engine type
-	entityDesc.Init(ET_UNKNOWN);
-	compDesc.Init(CT_ENGINE_PARAMS);
-	compDesc.AddItem(material0);
-	compDesc.AddItem(0.5f*MathUtils::PI); // arc angle
-	compDesc.AddItem((uint32)1000); // stabil. ratio
-	entityDesc.AddComponentDescription(compDesc);
-	EntityHandle engineType0 = gEntityMgr.CreateEntity(entityDesc);
+	desc.Init(ET_UNKNOWN);
+	desc.AddComponent(CT_ENGINE_PARAMS);
+	EntityHandle engineType0 = gEntityMgr.CreateEntity(desc, props);
+	props["Material"].SetValue(material0);
+	props["ArcAngle"].SetValue(0.5f*MathUtils::PI);
+	props["StabilizationRatio"].SetValue((uint32)1000);
+	engineType0.FinishInit();
 
-	// create free platforms
-	/*entityDesc.Init();
-	compDesc.Init(CT_PLATFORM_LOGIC);
-	compDesc.AddItem(platformType0); // blueprints
-	compDesc.AddItem(EntityHandle()); // pass null ship handle to indicate this platform is free
-	entityDesc.AddComponentDescription(compDesc);
-	compDesc.Init(CT_PLATFORM_PHYSICS);
-	// pass body position and rotation cos it's a free platform
-	compDesc.AddItem(Vector2(5.0f,5.0f)); // position
-	compDesc.AddItem(0.3f); // angle
-	// pass shape info
-	compDesc.AddItem(false); // flip the shape?
-	compDesc.AddItem(0.0f); // shape angle relative to original shape
-	entityDesc.AddComponentDescription(compDesc);
-	compDesc.Init(CT_PLATFORM_VISUAL);
-	entityDesc.AddComponentDescription(compDesc);
-	EntityHandle platform0 = gEntityMgr.CreateEntity(entityDesc);*/
+	// create a free platform
+	/*desc.Init(ET_PLATFORM);
+	desc.AddComponent(CT_PLATFORM_PHYSICS);
+	desc.AddComponent(CT_PLATFORM_LOGIC);
+	desc.AddComponent(CT_PLATFORM_VISUAL);
+	EntityHandle platform0 = gEntityMgr.CreateEntity(desc, props);
+	props["Blueprints"].SetValue(platformType0);
+	props["InitBodyPosition"].SetValue(Vector2(5.0f,5.0f));
+	props["InitBodyAngle"].SetValue(0.3f);
+	platform0.FinishInit();*/
 
 	// create a ship
-	entityDesc.Init(ET_SHIP);
-	compDesc.Init(CT_SHIP_LOGIC);
-	entityDesc.AddComponentDescription(compDesc);
-	compDesc.Init(CT_SHIP_PHYSICS);
-	// body position and angle
-	compDesc.AddItem(Vector2(10.0f,10.0f));
-	compDesc.AddItem(-0.3f*MathUtils::PI);
-	entityDesc.AddComponentDescription(compDesc);
-	compDesc.Init(CT_SHIP_VISUAL);
-	entityDesc.AddComponentDescription(compDesc);
-	EntityHandle ship0 = gEntityMgr.CreateEntity(entityDesc);
+	desc.Init(ET_SHIP);
+	desc.AddComponent(CT_SHIP_PHYSICS);
+	desc.AddComponent(CT_SHIP_LOGIC);
+	desc.AddComponent(CT_SHIP_VISUAL);
+	EntityHandle ship0 = gEntityMgr.CreateEntity(desc, props);
+	props["InitBodyPosition"].SetValue(Vector2(10.0f, 10.0f));
+	props["InitBodyAngle"].SetValue(-0.3f*MathUtils::PI);
+	ship0.FinishInit();
 
 	// create a platform and attach it to the ship
-	entityDesc.Init(ET_PLATFORM);
-	compDesc.Init(CT_PLATFORM_LOGIC);
-	compDesc.AddItem(platformType0); // blueprints
-	compDesc.AddItem(ship0); // pass our ship
-	entityDesc.AddComponentDescription(compDesc);
-	compDesc.Init(CT_PLATFORM_PHYSICS);
-	// pass position relative to the ship center
-	compDesc.AddItem(Vector2(0.0f,-0.25f));
-	// pass additional shape info
-	compDesc.AddItem(false); // flip the shape?
-	compDesc.AddItem(0.0f); // shape angle relative to original shape
-	entityDesc.AddComponentDescription(compDesc);
-	compDesc.Init(CT_PLATFORM_VISUAL);
-	entityDesc.AddComponentDescription(compDesc);
-	EntityHandle platform1 = gEntityMgr.CreateEntity(entityDesc);
+	desc.Init(ET_PLATFORM);
+	desc.AddComponent(CT_PLATFORM_PHYSICS);
+	desc.AddComponent(CT_PLATFORM_LOGIC);
+	desc.AddComponent(CT_PLATFORM_VISUAL);
+	EntityHandle platform1 = gEntityMgr.CreateEntity(desc, props);
+	props["Blueprints"].SetValue(platformType0);
+	props["ParentShip"].SetValue(ship0);
+	props["RelativePosition"].SetValue<Vector2&>(Vector2(0.0f,-0.25f));
+	props["InitShapeFlip"].SetValue(false);
+	props["InitShapeAngle"].SetValue(0.0f);
+	platform1.FinishInit();
 
 	// create an engine and attach it to the platform
-	entityDesc.Init(ET_ENGINE);
-	compDesc.Init(CT_PLATFORM_ITEM);
-	compDesc.AddItem(engineType0); // blueprints
-	compDesc.AddItem(platform1); // parent
-	compDesc.AddItem(Vector2(-0.5f, -0.25f)); // position relative to the platform
-	entityDesc.AddComponentDescription(compDesc);
-	compDesc.Init(CT_ENGINE);
-	compDesc.AddItem(MathUtils::PI); // default angle
-	compDesc.AddItem(0.0f); // relative angle
-	entityDesc.AddComponentDescription(compDesc);
-	EntityHandle engine0 = gEntityMgr.CreateEntity(entityDesc);
+	desc.Init(ET_ENGINE);
+	desc.AddComponent(CT_PLATFORM_ITEM);
+	desc.AddComponent(CT_ENGINE);
+	EntityHandle engine0 = gEntityMgr.CreateEntity(desc, props);
+	props["Blueprints"].SetValue(engineType0);
+	props["ParentPlatform"].SetValue(platform1);
+	props["RelativePosition"].SetValue<Vector2&>(Vector2(-0.5f, -0.25f));
+	props["DefaultAngle"].SetValue(MathUtils::PI);
+	props["RelativeAngle"].SetValue(0.0f);
+	engine0.FinishInit();
 
 	// create another platform and attach it to the ship
-	entityDesc.Init(ET_PLATFORM);
-	compDesc.Init(CT_PLATFORM_LOGIC);
-	compDesc.AddItem(platformType0); // blueprints
-	compDesc.AddItem(ship0); // pass our ship
-	entityDesc.AddComponentDescription(compDesc);
-	compDesc.Init(CT_PLATFORM_PHYSICS);
-	// pass position relative to the ship center
-	compDesc.AddItem(Vector2(0.0f,0.25f));
-	// pass additional shape info
-	compDesc.AddItem(true); // flip the shape?
-	compDesc.AddItem(0.0f); // shape angle relative to original shape
-	entityDesc.AddComponentDescription(compDesc);
-	compDesc.Init(CT_PLATFORM_VISUAL);
-	entityDesc.AddComponentDescription(compDesc);
-	EntityHandle platform2 = gEntityMgr.CreateEntity(entityDesc);
+	desc.Init(ET_PLATFORM);
+	desc.AddComponent(CT_PLATFORM_PHYSICS);
+	desc.AddComponent(CT_PLATFORM_LOGIC);
+	desc.AddComponent(CT_PLATFORM_VISUAL);
+	EntityHandle platform2 = gEntityMgr.CreateEntity(desc, props);
+	props["Blueprints"].SetValue(platformType0);
+	props["ParentShip"].SetValue(ship0);
+	props["RelativePosition"].SetValue<Vector2&>(Vector2(0.0f,0.25f));
+	props["InitShapeFlip"].SetValue(true);
+	props["InitShapeAngle"].SetValue(0.0f);
+	platform2.FinishInit();
 
 	// create another engine and attach it to the second platform
-	entityDesc.Init(ET_ENGINE);
-	compDesc.Init(CT_PLATFORM_ITEM);
-	compDesc.AddItem(engineType0); // blueprints
-	compDesc.AddItem(platform2); // parent
-	compDesc.AddItem(Vector2(-0.5f, 0.25f)); // position relative to the platform
-	entityDesc.AddComponentDescription(compDesc);
-	compDesc.Init(CT_ENGINE);
-	compDesc.AddItem(MathUtils::PI); // default angle
-	compDesc.AddItem(0.0f); // relative angle
-	entityDesc.AddComponentDescription(compDesc);
-	EntityHandle engine1 = gEntityMgr.CreateEntity(entityDesc);
+	desc.Init(ET_ENGINE);
+	desc.AddComponent(CT_PLATFORM_ITEM);
+	desc.AddComponent(CT_ENGINE);
+	EntityHandle engine1 = gEntityMgr.CreateEntity(desc, props);
+	props["Blueprints"].SetValue(engineType0);
+	props["ParentPlatform"].SetValue(platform2);
+	props["RelativePosition"].SetValue<Vector2&>(Vector2(-0.5f, 0.25f));
+	props["DefaultAngle"].SetValue(MathUtils::PI);
+	props["RelativeAngle"].SetValue(0.0f);
+	engine1.FinishInit();
 
 	// link platforms together
-	entityDesc.Init(ET_UNKNOWN);
-	compDesc.Init(CT_PLATFORM_LINKS);
-	compDesc.AddItem(platform1); // first platform
-	compDesc.AddItem(platform2); // second platform
-	compDesc.AddItem((uint32)3); // number of links
+	desc.Init(ET_UNKNOWN);
+	desc.AddComponent(CT_PLATFORM_LINKS);
+	EntityHandle links1To2 = gEntityMgr.CreateEntity(desc, props);
+	props["FirstPlatform"].SetValue(platform1);
+	props["SecondPlatform"].SetValue(platform2);
+	props["NumLinks"].SetValue<uint32>(3);
 	Vector2 anchors1[] = {Vector2(-0.25f,0.2f),Vector2(0.0f,0.2f),Vector2(0.25f,0.2f)};
+	props["FirstAnchors"].SetValue(anchors1);
 	Vector2 anchors2[] = {Vector2(-0.25f,-0.2f),Vector2(0.0f,-0.2f),Vector2(0.25f,-0.2f)};
-	compDesc.AddItem(anchors1);
-	compDesc.AddItem(anchors2);
-	entityDesc.AddComponentDescription(compDesc);
-	gEntityMgr.CreateEntity(entityDesc);
+	props["SecondAnchors"].SetValue(anchors2);
+	links1To2.FinishInit();
 
 	// recompute mass of the ship's body
 	ship0.PostMessage(EntityMessage::TYPE_PHYSICS_UPDATE_MASS);
-
 
 
 

@@ -3,6 +3,7 @@
 
 using namespace EntitySystem;
 
+const EntityHandle EntityHandle::Null;
 EntityID EntityHandle::sLastID = 0;
 
 EntityHandle& EntityHandle::operator=(const EntityHandle& rhs)
@@ -23,7 +24,7 @@ EntitySystem::EntityHandle::EntityHandle( const EntityHandle& handle ): mEntityI
 
 EntitySystem::EntityHandle::EntityHandle( void ): mEntityID(0) {}
 
-EntitySystem::EntityID EntitySystem::EntityHandle::GetID( void )
+EntitySystem::EntityID EntitySystem::EntityHandle::GetID( void ) const
 {
 	assert(mEntityID && "Invalid entity handle");
 	return mEntityID;
@@ -39,6 +40,16 @@ EntitySystem::eEntityType EntitySystem::EntityHandle::GetType( void ) const
 	return gEntityMgr.GetEntityType(*this);
 }
 
+void EntitySystem::EntityHandle::FinishInit( void )
+{
+	// avoid ignored message by using EntityMgr directly
+	gEntityMgr.PostMessage(*this, EntityMessage(EntityMessage::TYPE_POST_INIT));
+}
+
+bool EntitySystem::EntityHandle::GetProperties( PropertyList& out, uint8 mask /*= 0xff*/ )
+{
+	return gEntityMgr.GetEntityProperties(GetID(), out, mask);
+}
 EntityMessage::eResult EntityHandle::PostMessage(const EntityMessage::eType type, void* data)
 {
 	assert(IsValid());

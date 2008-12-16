@@ -10,16 +10,14 @@ using namespace EntitySystem;
 #define PICTURE_SCALE 0.5f
 #define STABILIZATION_RATIO 0.0002f
 
-void EntitySystem::CmpEngine::Init( ComponentDescription& desc )
+void EntitySystem::CmpEngine::Init( void )
 {
-	SetDefaultAngle(desc.GetNextItem()->GetData<float32>());
-	SetRelativeAngle(desc.GetNextItem()->GetData<float32>());
-	EntityHandle blueprints;
-	PostMessage(EntityMessage::TYPE_GET_BLUEPRINTS, &blueprints);
+	mDefaultAngle = 0.0f;
+	mRelativeAngle = 0.0f;
 	mPowerRatio = 0.0f;
 }
 
-void EntitySystem::CmpEngine::Deinit( void )
+void EntitySystem::CmpEngine::Clean( void )
 {
 
 }
@@ -114,8 +112,8 @@ EntityMessage::eResult EntitySystem::CmpEngine::HandleMessage( const EntityMessa
 void EntitySystem::CmpEngine::RegisterReflection( void )
 {
 	RegisterProperty<uint32>("Power", &GetPower, &SetPower, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
-	RegisterProperty<float32>("RelativeAngle", &GetRelativeAngle, &SetRelativeAngle, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
-	RegisterProperty<float32>("DefaultAngle", &GetDefaultAngle, &SetDefaultAngle, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<float32>("RelativeAngle", &GetRelativeAngle, &SetRelativeAngle, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<float32>("DefaultAngle", &GetDefaultAngle, &SetDefaultAngle, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<float32>("AbsoluteAngle", &GetAbsoluteAngle, 0, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<float32>("AbsoluteDefaultAngle", &GetAbsoluteDefaultAngle, 0, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 }

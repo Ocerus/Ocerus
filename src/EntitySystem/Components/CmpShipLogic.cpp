@@ -4,12 +4,12 @@
 using namespace EntitySystem;
 
 
-void EntitySystem::CmpShipLogic::Init( ComponentDescription& desc )
+void EntitySystem::CmpShipLogic::Init( void )
 {
 
 }
 
-void EntitySystem::CmpShipLogic::Deinit( void )
+void EntitySystem::CmpShipLogic::Clean( void )
 {
 
 }

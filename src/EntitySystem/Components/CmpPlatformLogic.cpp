@@ -3,14 +3,14 @@
 
 using namespace EntitySystem;
 
-void CmpPlatformLogic::Init(ComponentDescription& desc)
+void CmpPlatformLogic::Init(void)
 {
-	SetBlueprints(desc.GetNextItem()->GetData<EntityHandle>());
-	mBlueprints.PostMessage(EntityMessage::TYPE_GET_MAX_HITPOINTS, &mHitpoints);
-	SetParentShip(desc.GetNextItem()->GetData<EntityHandle>());
+	mBlueprints.Invalidate();
+	mHitpoints = 0;
+	mParentShip.Invalidate();
 }
 
-void CmpPlatformLogic::Deinit() 
+void CmpPlatformLogic::Clean(void) 
 {
 
 }
@@ -19,6 +19,31 @@ EntityMessage::eResult CmpPlatformLogic::HandleMessage(const EntityMessage& msg)
 {
 	switch(msg.type)
 	{
+	case EntityMessage::TYPE_POST_INIT:
+		{
+			mBlueprints.PostMessage(EntityMessage::TYPE_GET_MAX_HITPOINTS, &mHitpoints);
+
+			// compute pick stuff
+			DataContainer cont;
+			PostMessage(EntityMessage::TYPE_GET_POLYSHAPE, &cont);
+			Vector2* shape = (Vector2*)cont.GetData();
+			int32 shapeLen = cont.GetSize();
+			// compute center
+			//TODO najit ten stred tak, aby to udelalo nejlepsi bounding circle
+			mPickCircleCenter.SetZero();
+			for (int i=0; i<shapeLen; ++i)
+				mPickCircleCenter += shape[i];
+			mPickCircleCenter *= 1.0f/shapeLen;
+			// compute radius
+			mPickCircleRadius = 0.0f;
+			for (int i=0; i<shapeLen; ++i)
+			{
+				float32 dist = MathUtils::Distance(mPickCircleCenter, shape[i]);
+				if (dist > mPickCircleRadius)
+					mPickCircleRadius = dist;
+			}
+		}
+		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_BLUEPRINTS:
 		assert(msg.data);
 		*(EntityHandle*)msg.data = GetBlueprints();
@@ -49,29 +74,6 @@ EntityMessage::eResult CmpPlatformLogic::HandleMessage(const EntityMessage& msg)
 		assert(msg.data);
 		DrawSelectionOverlay(*(bool*)msg.data);
 		return EntityMessage::RESULT_OK;
-	case EntityMessage::TYPE_POST_INIT:
-		{
-			// compute pick stuff
-			DataContainer cont;
-			PostMessage(EntityMessage::TYPE_GET_POLYSHAPE, &cont);
-			Vector2* shape = (Vector2*)cont.GetData();
-			int32 shapeLen = cont.GetSize();
-			// compute center
-			//TODO najit ten stred tak, aby to udelalo nejlepsi bounding circle
-			mPickCircleCenter.SetZero();
-			for (int i=0; i<shapeLen; ++i)
-				mPickCircleCenter += shape[i];
-			mPickCircleCenter *= 1.0f/shapeLen;
-			// compute radius
-			mPickCircleRadius = 0.0f;
-			for (int i=0; i<shapeLen; ++i)
-			{
-				float32 dist = MathUtils::Distance(mPickCircleCenter, shape[i]);
-				if (dist > mPickCircleRadius)
-					mPickCircleRadius = dist;
-			}
-		}
-		return EntityMessage::RESULT_OK;
 	}
 	return EntityMessage::RESULT_IGNORED;
 }
@@ -79,8 +81,8 @@ EntityMessage::eResult CmpPlatformLogic::HandleMessage(const EntityMessage& msg)
 void CmpPlatformLogic::RegisterReflection()
 {
 	RegisterProperty<uint32>("Hitpoints", &GetHitpoints, &SetHitpoints, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
-	RegisterProperty<EntityHandle>("Blueprints", &GetBlueprints, &SetBlueprints, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
-	RegisterProperty<EntityHandle>("ParentShip", &GetParentShip, &SetParentShip, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<EntityHandle>("Blueprints", &GetBlueprints, &SetBlueprints, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<EntityHandle>("ParentShip", &GetParentShip, &SetParentShip, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 }
 
 void EntitySystem::CmpPlatformLogic::DrawSelectionOverlay( const bool hover ) const

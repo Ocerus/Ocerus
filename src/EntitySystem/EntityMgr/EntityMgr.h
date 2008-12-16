@@ -5,6 +5,7 @@
 #include "EntityHandle.h"
 #include "EntityMessage.h"
 #include "EntityEnums.h"
+#include "../../Utility/Properties/PropertyList.h"
 
 /// Macro for easier use.
 #define gEntityMgr EntitySystem::EntityMgr::GetSingleton()
@@ -29,15 +30,17 @@ namespace EntitySystem
 		~EntityMgr(void);
 
 		/// Creates new entity accorindgly to its description and returns its handle.
-		EntityHandle CreateEntity(const EntityDescription& desc);
+		EntityHandle CreateEntity(const EntityDescription& desc, PropertyList& out);
 		/// Destroys a specified entity if it exists.
-		void DestroyEntity(EntityHandle h);
+		void DestroyEntity(const EntityHandle h);
 		/// Posts a message to an entity. It is the only way entities can communicate with each other.
 		inline EntityMessage::eResult PostMessage(EntityHandle h, const EntityMessage& msg) { return PostMessage(h.GetID(), msg); }
 		/// Sends a message to all entities.
 		void BroadcastMessage(const EntityMessage& msg);
 		/// Returns the type of a specified entity.
-		eEntityType GetEntityType(EntityHandle h) const;
+		eEntityType GetEntityType(const EntityHandle h) const;
+		/// Retrieves properties of an entity. A filter related to properties' flags can be specified.
+		bool GetEntityProperties(const EntityHandle h, PropertyList& out, const uint8 flagMask);
 		/// Destroys all entities in the manager.
 		void DestroyAllEntities(void);	
 

@@ -13,6 +13,8 @@ namespace EntitySystem
 		ET_UNKNOWN, // unknown is a valid entity type as well
 		NUM_ENTITY_TYPES,
 	};
+
+	//TODO sem pridat stringovy jmena, ktery se pak pouzijou v LUE
 }
 
 #endif // EntityEnums_h__

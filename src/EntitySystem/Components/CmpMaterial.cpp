@@ -4,13 +4,13 @@
 using namespace EntitySystem;
 
 
-void EntitySystem::CmpMaterial::Init( ComponentDescription& desc )
+void EntitySystem::CmpMaterial::Init( void )
 {
-	SetDurabilityRatio(desc.GetNextItem()->GetData<float32>());
-	SetDensity(desc.GetNextItem()->GetData<float32>());
+	mDurabilityRatio = 0.0f;
+	mDensity = 0.0f;
 }
 
-void EntitySystem::CmpMaterial::Deinit( void ) {}
+void EntitySystem::CmpMaterial::Clean( void ) {}
 
 EntityMessage::eResult EntitySystem::CmpMaterial::HandleMessage( const EntityMessage& msg )
 {
@@ -30,6 +30,6 @@ EntityMessage::eResult EntitySystem::CmpMaterial::HandleMessage( const EntityMes
 
 void EntitySystem::CmpMaterial::RegisterReflection()
 {
-	RegisterProperty<float32>("Density", &GetDensity, &SetDensity, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
-	RegisterProperty<float32>("DurabilityRatio", &GetDensity, &SetDensity, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<float32>("Density", &GetDensity, &SetDensity, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<float32>("DurabilityRatio", &GetDensity, &SetDensity, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 }

@@ -6,6 +6,7 @@
 #include "../../Utility/Singleton.h"
 #include "ComponentIterators.h"
 #include "ComponentEnums.h"
+#include "../../Utility/rtti/RTTI.h"
 
 namespace EntitySystem
 {
@@ -13,7 +14,6 @@ namespace EntitySystem
 	/// Forward declarations
 	//@{
 	class Component;
-	class ComponentDescription;
 	//#}
 
 	/// Type used for registration function individual components.
@@ -28,8 +28,10 @@ namespace EntitySystem
 		ComponentMgr(void);
 		~ComponentMgr(void);
 		
+		//TODO doplnit const pred EntityHandle
+
 		/// Creates a component and attaches it to an entity.
-		bool CreateComponent(EntityHandle h, ComponentDescription& desc);
+		bool CreateComponent(EntityHandle h, const eComponentType type);
 		/// Destroys all components of a specified entity.
 		//@{
 		inline void DestroyEntityComponents(EntityHandle h) { DestroyEntityComponents(h.GetID()); }
@@ -37,8 +39,14 @@ namespace EntitySystem
 		//@}
 		/// Returns a collection of components (represented by an iterator) of a specified entity.
 		//@{
-		EntityComponentsIterator GetEntityComponents(EntityHandle h) { return GetEntityComponents(h.GetID()); }
+		inline EntityComponentsIterator GetEntityComponents(EntityHandle h) { return GetEntityComponents(h.GetID()); }
 		EntityComponentsIterator GetEntityComponents(EntityID id);
+		//@}
+
+		/// Retrieves properties of an entity. A filter related to access flags can be specified.
+		//@{
+		inline bool GetEntityProperties(const EntityHandle h, PropertyList& out, const uint8 flagMask = 0xff) { return GetEntityProperties(h.GetID(), out, flagMask); }
+		bool GetEntityProperties(const EntityID id, PropertyList& out, const uint8 flagMask = 0xff);
 		//@}
 
 	private:
