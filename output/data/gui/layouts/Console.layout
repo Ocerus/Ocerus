@@ -16,6 +16,7 @@
             <Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}" />
             <Property Name="Image" Value="set:Console image:Logo" />
             <Property Name="FrameEnabled" Value="False" />
+            <Property Name="Alpha" Value="0.3" />
         </Window>        
         <Window Type="TaharezLook/Editbox" Name="ConsoleRoot/ConsolePrompt" >
             <Property Name="Font" Value="Commonwealth-10" />
