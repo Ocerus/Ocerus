@@ -25,6 +25,25 @@ EntityMgr::~EntityMgr()
 
 EntityMessage::eResult EntityMgr::PostMessage(EntityID id, const EntityMessage& msg)
 {
+	EntityMap::iterator ei = mEntities.find(id);
+	if (ei == mEntities.end())
+	{
+		gLogMgr.LogMessage("Can't find entity", id, LOG_ERROR);
+		return EntityMessage::RESULT_ERROR;
+	}
+	if (msg.type != EntityMessage::TYPE_POST_INIT && !ei->second.fullyInited)
+	{
+		gLogMgr.LogMessage("Entity '", id, "' is not initialized -> can't post messages", LOG_ERROR);
+		return EntityMessage::RESULT_ERROR;
+	}
+	if (msg.type == EntityMessage::TYPE_POST_INIT && ei->second.fullyInited)
+	{
+		gLogMgr.LogMessage("Entity '", id, "' is already initialized", LOG_ERROR);
+		return EntityMessage::RESULT_ERROR;
+	}
+	if (msg.type == EntityMessage::TYPE_POST_INIT)
+		ei->second.fullyInited = true;
+
 	EntityMessage::eResult result = EntityMessage::RESULT_IGNORED;
 	for (EntityComponentsIterator iter = mComponentMgr->GetEntityComponents(id); iter.HasMore(); ++iter)
 	{
@@ -49,14 +68,37 @@ EntityHandle EntityMgr::CreateEntity(const EntityDescription& desc, PropertyList
 	assert(i!=desc.mComponents.end());
 	EntityHandle h = EntityHandle::CreateUniqueHandle();
 	//TODO check if the handle is really unique
+
+	bool dependencyFailure = false;
+	std::set<eComponentType> cmpTypes;
+
 	for (; i!=desc.mComponents.end(); ++i)
 	{
-		bool created = mComponentMgr->CreateComponent(h, *i);
-		assert(created);
+		Component* cmp = mComponentMgr->CreateComponent(h, *i);
+		assert(cmp);
+		
+		// check dependencies
+		ComponentDependencyList depList;
+		cmp->GetRTTI()->EnumComponentDependencies(depList);
+		for (ComponentDependencyList::const_iterator depIt=depList.begin(); depIt!=depList.end(); ++depIt)
+			if (cmpTypes.find(*depIt) == cmpTypes.end())
+				dependencyFailure = true;
+
+		cmpTypes.insert(*i);
 	}
-	mEntities.insert(std::pair<EntityID, eEntityType>(h.GetID(), desc.mType));
+	mEntities[h.GetID()] = EntityInfo(desc.mType);
+
+	if (dependencyFailure)
+	{
+		gLogMgr.LogMessage("Component dependency failure on entity '", h.GetID(), "' of type '", desc.mType, "'", LOG_ERROR);
+		DestroyEntity(h);
+		return h; // do like nothing happened, but don't enum properties or they will access invalid memory
+	}
+
 	if (!GetEntityProperties(h.GetID(), out, PROPACC_INIT))
-		gLogMgr.LogMessage("Can't get properties for created entity", h.GetID());
+		gLogMgr.LogMessage("Can't get properties for created entity of type", desc.mType, LOG_ERROR);
+
+
 	return h;
 }
 
@@ -81,13 +123,24 @@ EntitySystem::eEntityType EntitySystem::EntityMgr::GetEntityType( const EntityHa
 	EntityMap::const_iterator ei = mEntities.find(h.GetID());
 	if (ei == mEntities.end())
 	{
-		gLogMgr.LogMessage("Can't find entity");
+		gLogMgr.LogMessage("Can't find entity", h.GetID(), LOG_ERROR);
 		return ET_UNKNOWN;
 	}
-	return ei->second;
+	return ei->second.type;
 }
 
 bool EntitySystem::EntityMgr::GetEntityProperties( const EntityHandle h, PropertyList& out, const uint8 flagMask )
 {
 	return mComponentMgr->GetEntityProperties(h, out, flagMask);
+}
+
+bool EntitySystem::EntityMgr::IsEntityInited( const EntityHandle h ) const
+{
+	EntityMap::const_iterator ei = mEntities.find(h.GetID());
+	if (ei == mEntities.end())
+	{
+		gLogMgr.LogMessage("Can't find entity", h.GetID(), LOG_ERROR);
+		return false;
+	}
+	return ei->second.fullyInited;
 }

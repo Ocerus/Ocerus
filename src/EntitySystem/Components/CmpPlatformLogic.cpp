@@ -83,6 +83,8 @@ void CmpPlatformLogic::RegisterReflection()
 	RegisterProperty<uint32>("Hitpoints", &GetHitpoints, &SetHitpoints, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<EntityHandle>("Blueprints", &GetBlueprints, &SetBlueprints, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<EntityHandle>("ParentShip", &GetParentShip, &SetParentShip, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+
+	AddComponentDependency(CT_PLATFORM_PHYSICS);
 }
 
 void EntitySystem::CmpPlatformLogic::DrawSelectionOverlay( const bool hover ) const

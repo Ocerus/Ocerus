@@ -10,16 +10,12 @@ namespace EntitySystem
 	class CmpShipLogic : public RTTIGlue<CmpShipLogic, Component>
 	{
 	public:
-		static Component* CreateMe(void) { return new CmpShipLogic(); }
-
 		virtual void Init(void);
 		virtual void Clean(void);
 		virtual EntityMessage::eResult HandleMessage(const EntityMessage& msg);
 
 		static void RegisterReflection(void);
 
-		/// Just to make sure virtual functions work ok.
-		virtual ~CmpShipLogic(void) {}
 	private:
 		typedef std::vector<EntityHandle> EntityList;
 		EntityList mPlatforms;

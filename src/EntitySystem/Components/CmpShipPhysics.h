@@ -11,8 +11,6 @@ namespace EntitySystem
 	class CmpShipPhysics : public RTTIGlue<CmpShipPhysics, Component>
 	{
 	public:
-		static Component* CreateMe(void) { return new CmpShipPhysics(); }
-
 		virtual void Init(void);
 		virtual void Clean(void);
 		virtual EntityMessage::eResult HandleMessage(const EntityMessage& msg);
@@ -35,8 +33,6 @@ namespace EntitySystem
 		void SetInitBodyAngle(const float32 angle) { mInitBodyAngle = angle; }
 		//@}
 
-		/// Just to make sure virtual functions work ok.
-		virtual ~CmpShipPhysics(void) {}
 	private:
 		b2Body* mBody;
 

@@ -9,8 +9,6 @@ namespace EntitySystem
 	class CmpPlatformLogic : public RTTIGlue<CmpPlatformLogic, Component>
 	{
 	public:
-		static Component* CreateMe(void) { return new CmpPlatformLogic(); }
-
 		virtual void Init(void);
 		virtual void Clean(void);
 		virtual EntityMessage::eResult HandleMessage(const EntityMessage& msg);
@@ -33,8 +31,6 @@ namespace EntitySystem
 		void SetParentShip(const EntityHandle parentShip) { mParentShip = parentShip; }
 		//@}
 	
-		/// Just to make sure virtual functions work ok.
-		virtual ~CmpPlatformLogic(void) {}
 	private:
 		EntityHandle mBlueprints;
 		EntityHandle mParentShip; // if null, it means this platform is free

@@ -9,8 +9,6 @@ namespace EntitySystem
 	class CmpEngineParams : public RTTIGlue<CmpEngineParams, Component>
 	{
 	public:
-		static Component* CreateMe(void) { return new CmpEngineParams(); }
-
 		virtual void Init(void);
 		virtual void Clean(void);
 		virtual EntityMessage::eResult HandleMessage(const EntityMessage& msg);
@@ -43,8 +41,6 @@ namespace EntitySystem
 		void SetStabilizationRatio(const uint32 ratio) { mStabilizationRatio = ratio; }
 		//@}
 
-		/// Just to make sure virtual functions work ok.
-		virtual ~CmpEngineParams(void) {}
 	private:
 		EntityHandle mMaterial;
 		uint32 mMaxHitpoints;

@@ -22,18 +22,18 @@ ComponentMgr::ComponentMgr()
 	mComponentCreationMethod[NUM_COMPONENT_TYPES-1] = 0;
 
 	// register components
-	mComponentCreationMethod[CT_MATERIAL] = CmpMaterial::CreateMe;
-	mComponentCreationMethod[CT_PLATFORM_LINKS] = CmpPlatformLinks::CreateMe;
-	mComponentCreationMethod[CT_PLATFORM_PARAMS] = CmpPlatformParams::CreateMe;
-	mComponentCreationMethod[CT_PLATFORM_PHYSICS] = CmpPlatformPhysics::CreateMe;
-	mComponentCreationMethod[CT_PLATFORM_LOGIC] = CmpPlatformLogic::CreateMe;
-	mComponentCreationMethod[CT_PLATFORM_VISUAL] = CmpPlatformVisual::CreateMe;
-	mComponentCreationMethod[CT_SHIP_LOGIC] = CmpShipLogic::CreateMe;
-	mComponentCreationMethod[CT_SHIP_PHYSICS] = CmpShipPhysics::CreateMe;
-	mComponentCreationMethod[CT_SHIP_VISUAL] = CmpShipVisual::CreateMe;
-	mComponentCreationMethod[CT_PLATFORM_ITEM] = CmpPlatformItem::CreateMe;
-	mComponentCreationMethod[CT_ENGINE_PARAMS] = CmpEngineParams::CreateMe;
-	mComponentCreationMethod[CT_ENGINE] = CmpEngine::CreateMe;
+	mComponentCreationMethod[CT_MATERIAL] = (ComponentCreationMethod)CmpMaterial::GetClassRTTI()->GetClassFactory();
+	mComponentCreationMethod[CT_PLATFORM_LINKS] = (ComponentCreationMethod)CmpPlatformLinks::GetClassRTTI()->GetClassFactory();
+	mComponentCreationMethod[CT_PLATFORM_PARAMS] = (ComponentCreationMethod)CmpPlatformParams::GetClassRTTI()->GetClassFactory();
+	mComponentCreationMethod[CT_PLATFORM_PHYSICS] = (ComponentCreationMethod)CmpPlatformPhysics::GetClassRTTI()->GetClassFactory();
+	mComponentCreationMethod[CT_PLATFORM_LOGIC] = (ComponentCreationMethod)CmpPlatformLogic::GetClassRTTI()->GetClassFactory();
+	mComponentCreationMethod[CT_PLATFORM_VISUAL] = (ComponentCreationMethod)CmpPlatformVisual::GetClassRTTI()->GetClassFactory();
+	mComponentCreationMethod[CT_SHIP_LOGIC] = (ComponentCreationMethod)CmpShipLogic::GetClassRTTI()->GetClassFactory();
+	mComponentCreationMethod[CT_SHIP_PHYSICS] = (ComponentCreationMethod)CmpShipPhysics::GetClassRTTI()->GetClassFactory();
+	mComponentCreationMethod[CT_SHIP_VISUAL] = (ComponentCreationMethod)CmpShipVisual::GetClassRTTI()->GetClassFactory();
+	mComponentCreationMethod[CT_PLATFORM_ITEM] = (ComponentCreationMethod)CmpPlatformItem::GetClassRTTI()->GetClassFactory();
+	mComponentCreationMethod[CT_ENGINE_PARAMS] = (ComponentCreationMethod)CmpEngineParams::GetClassRTTI()->GetClassFactory();
+	mComponentCreationMethod[CT_ENGINE] = (ComponentCreationMethod)CmpEngine::GetClassRTTI()->GetClassFactory();
 
 	assert(mComponentCreationMethod[NUM_COMPONENT_TYPES-1]);
 }
@@ -50,14 +50,14 @@ EntityComponentsIterator ComponentMgr::GetEntityComponents(EntityID id)
 	return EntityComponentsIterator(eci->second);
 }
 
-bool ComponentMgr::CreateComponent(EntityHandle h, const eComponentType type)
+Component* ComponentMgr::CreateComponent(EntityHandle h, const eComponentType type)
 {
 	assert(type < NUM_COMPONENT_TYPES && type >= 0);
 	Component* cmp = mComponentCreationMethod[type]();
 	mEntityComponentsMap[h.GetID()].push_back(cmp);
 	cmp->SetOwner(h);
 	cmp->Init();
-	return true;
+	return cmp;
 }
 
 void ComponentMgr::DestroyEntityComponents(EntityID id)

@@ -9,16 +9,12 @@ namespace EntitySystem
 	class CmpShipVisual : public RTTIGlue<CmpShipVisual, Component>
 	{
 	public:
-		static Component* CreateMe(void) { return new CmpShipVisual(); }
-
 		virtual void Init(void);
 		virtual void Clean(void);
 		virtual EntityMessage::eResult HandleMessage(const EntityMessage& msg);
 
 		static void RegisterReflection(void);
 
-		/// Just to make sure virtual functions work ok.
-		virtual ~CmpShipVisual(void) {}
 	private:
 
 		//TODO tahle komponenta je asi na nic

@@ -10,8 +10,6 @@ namespace EntitySystem
 	class CmpPlatformLinks : public RTTIGlue<CmpPlatformLinks, Component>
 	{
 	public:
-		static Component* CreateMe(void) { return new CmpPlatformLinks(); }
-
 		virtual void Init(void);
 		virtual void Clean(void);
 		virtual EntityMessage::eResult HandleMessage(const EntityMessage& msg);
@@ -49,8 +47,6 @@ namespace EntitySystem
 		void SetSecondAnchors(Vector2* anchors);
 		//@}
 
-		/// Just to make sure virtual functions work ok.
-		virtual ~CmpPlatformLinks(void) {}
 	private:
 		EntityHandle mFirstPlatform;
 		EntityHandle mSecondPlatform;

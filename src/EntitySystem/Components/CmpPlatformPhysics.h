@@ -15,8 +15,6 @@ namespace EntitySystem
 	class CmpPlatformPhysics : public RTTIGlue<CmpPlatformPhysics, Component>
 	{
 	public:
-		static Component* CreateMe(void) { return new CmpPlatformPhysics(); }
-
 		virtual void Init(void);
 		virtual void Clean(void);
 		virtual EntityMessage::eResult HandleMessage(const EntityMessage& msg);
@@ -46,8 +44,6 @@ namespace EntitySystem
 		void SetInitShapeFlip(const bool flip) { mInitShapeFlip = flip; }
 		//@}
 
-		/// Just to make sure virtual functions work ok.
-		virtual ~CmpPlatformPhysics(void) {}
 	private:
 		b2Body* mBody;
 		b2Shape* mShape;

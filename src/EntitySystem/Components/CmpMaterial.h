@@ -9,8 +9,6 @@ namespace EntitySystem
 	class CmpMaterial : public RTTIGlue<CmpMaterial, Component>
 	{
 	public:
-		static Component* CreateMe(void) { return new CmpMaterial(); }
-
 		virtual void Init(void);
 		virtual void Clean(void);
 		virtual EntityMessage::eResult HandleMessage(const EntityMessage& msg);
@@ -28,8 +26,6 @@ namespace EntitySystem
 		void SetDensity(const float32 density) { mDensity = density; }
 		//@}
 
-		/// Just to make sure virtual functions work ok.
-		virtual ~CmpMaterial(void) {}
 	private:
 		float32 mDurabilityRatio;
 		float32 mDensity;

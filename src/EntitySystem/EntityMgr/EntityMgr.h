@@ -39,6 +39,8 @@ namespace EntitySystem
 		void BroadcastMessage(const EntityMessage& msg);
 		/// Returns the type of a specified entity.
 		eEntityType GetEntityType(const EntityHandle h) const;
+		/// Returns true if the entity was fully initialized.
+		bool IsEntityInited(const EntityHandle h) const;
 		/// Retrieves properties of an entity. A filter related to properties' flags can be specified.
 		bool GetEntityProperties(const EntityHandle h, PropertyList& out, const uint8 flagMask);
 		/// Destroys all entities in the manager.
@@ -46,7 +48,17 @@ namespace EntitySystem
 
 
 	private:
-		typedef std::map<EntityID, eEntityType> EntityMap;
+		/// This struct holds info about an instance of an entity in the system.
+		struct EntityInfo
+		{
+			EntityInfo(void): type(ET_UNKNOWN), fullyInited(false) {}
+			EntityInfo(const eEntityType _type): fullyInited(false), type(_type) {}
+			EntityInfo(const bool _fullyInited, const eEntityType _type): fullyInited(_fullyInited), type(_type)	{}
+
+			eEntityType type;
+			bool fullyInited;
+		};
+		typedef std::map<EntityID, EntityInfo> EntityMap;
 
 		ComponentMgr* mComponentMgr;
 		EntityMap mEntities;

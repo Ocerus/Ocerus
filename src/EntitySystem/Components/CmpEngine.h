@@ -9,8 +9,6 @@ namespace EntitySystem
 	class CmpEngine : public RTTIGlue<CmpEngine, Component>
 	{
 	public:
-		static Component* CreateMe(void) { return new CmpEngine(); }
-
 		virtual void Init(void);
 		virtual void Clean(void);
 		virtual EntityMessage::eResult HandleMessage(const EntityMessage& msg);
@@ -42,8 +40,6 @@ namespace EntitySystem
 		/// Default angle of the engine in absolute coords.
 		float32 GetAbsoluteDefaultAngle(void) const;
 
-		/// Just to make sure virtual functions work ok.
-		virtual ~CmpEngine(void) {}
 	private:
 		float32 mPowerRatio;
 		float32 mDefaultAngle;

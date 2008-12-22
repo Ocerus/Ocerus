@@ -9,8 +9,6 @@ namespace EntitySystem
 	class CmpPlatformItem : public RTTIGlue<CmpPlatformItem, Component>
 	{
 	public:
-		static Component* CreateMe(void) { return new CmpPlatformItem(); }
-
 		virtual void Init(void);
 		virtual void Clean(void);
 		virtual EntityMessage::eResult HandleMessage(const EntityMessage& msg);
@@ -40,8 +38,6 @@ namespace EntitySystem
 		/// Position in absolute coords.
 		Vector2 GetAbsolutePosition(void) const;
 
-		/// Just to make sure virtual functions work ok.
-		virtual ~CmpPlatformItem(void) {}
 	private:
 		Vector2 mRelativePosition;
 		uint32 mHitpoints;

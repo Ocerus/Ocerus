@@ -31,7 +31,7 @@ namespace EntitySystem
 		//TODO doplnit const pred EntityHandle
 
 		/// Creates a component and attaches it to an entity.
-		bool CreateComponent(EntityHandle h, const eComponentType type);
+		Component* CreateComponent(EntityHandle h, const eComponentType type);
 		/// Destroys all components of a specified entity.
 		//@{
 		inline void DestroyEntityComponents(EntityHandle h) { DestroyEntityComponents(h.GetID()); }

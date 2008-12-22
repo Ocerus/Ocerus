@@ -9,6 +9,7 @@
 #include "../Properties/PropertySystem.h"
 #include "../Properties/Property.h"
 #include "../Hash.h"
+#include "../../EntitySystem/ComponentMgr/ComponentEnums.h"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -50,6 +51,11 @@ public :
 		CProperty<T, PropertyType>* pProperty = new CProperty<T, PropertyType>( szName, Getter, Setter, accessFlags );
 		T::GetClassRTTI()->GetProperties()->push_back( pProperty );
 		PropertySystem::GetProperties()->push_back( pProperty );
+	}
+
+	static void AddComponentDependency(const EntitySystem::eComponentType cmp)
+	{
+		T::GetClassRTTI()->GetComponentDependencies()->push_back(cmp);
 	}
 
 	//----------------------------------------------------------------------------------------------

@@ -11,6 +11,7 @@
 #include "../Properties/AbstractProperty.h"
 #include "../Properties/PropertyHolder.h"
 #include "../Settings.h"
+#include "../../EntitySystem/ComponentMgr/ComponentEnums.h"
 
 //-------------------------------------------------------------------------------------------------
 class RTTIBaseClass;
@@ -18,8 +19,9 @@ class CRTTI;
 
 //-------------------------------------------------------------------------------------------------
 typedef uint32			ClassID;
-typedef RTTIBaseClass*	(*ClassFactoryFunc)( ClassID );
+typedef RTTIBaseClass*	(*ClassFactoryFunc)();
 typedef bool			(*RegisterReflectionFunc)();
+typedef std::vector<EntitySystem::eComponentType> ComponentDependencyList;
 
 //-------------------------------------------------------------------------------------------------
 const uint32 CLASSNAME_LENGTH = 48;
@@ -57,6 +59,8 @@ public:
 	// Fills a vector with all properties of the represented class type, including all ancestor types.
 	void	EnumProperties( AbstractPropertyList& o_Result, const uint8 flagMask = 0xff );
 	void	EnumProperties( RTTIBaseClass* owner, PropertyList& o_Result, const uint8 flagMask = 0xff );
+	void EnumComponentDependencies(ComponentDependencyList& out);
+
 
 	//----------------------------------------------------------------------------------------------
 	// Returns true if the RTTI structure is of the type specified by CLID.
@@ -87,6 +91,7 @@ public:
 	inline	std::list<CAbstractProperty*>::iterator	GetFirstProperty();
 	inline	std::list<CAbstractProperty*>::iterator	GetLastProperty();
 	inline	std::list<CAbstractProperty*>*			GetProperties();
+	inline  ComponentDependencyList* GetComponentDependencies() { return &m_ComponentDependencies; }
 
 private:
 
@@ -96,6 +101,7 @@ private:
 	CRTTI*						m_pBaseRTTI;							// Base class RTTI structure
 	ClassFactoryFunc			m_pObjectFactory;						// Factory function
 	std::list<CAbstractProperty*>	m_Properties;							// Property list
+	ComponentDependencyList m_ComponentDependencies;
 
 };
 

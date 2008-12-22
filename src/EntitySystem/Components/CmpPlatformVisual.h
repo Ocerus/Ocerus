@@ -10,16 +10,12 @@ namespace EntitySystem
 	class CmpPlatformVisual : public RTTIGlue<CmpPlatformVisual, Component>
 	{
 	public:
-		static Component* CreateMe(void) { return new CmpPlatformVisual(); }
-
 		virtual void Init(void);
 		virtual void Clean(void);
 		virtual EntityMessage::eResult HandleMessage(const EntityMessage& msg);
 
 		static void RegisterReflection(void);
 
-		/// Just to make sure virtual functions work ok.
-		virtual ~CmpPlatformVisual(void) {}
 	private:
 		void Draw(void) const;
 	};
