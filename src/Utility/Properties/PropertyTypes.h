@@ -46,10 +46,10 @@ template <class T> class CPropertyType
 
 public :
 
-	/// Returns type ID associated with the templatized type.
+	/// @name Returns type ID associated with the templatized type.
 	static ePropertyType GetTypeID();
 
-	/// Returns a default value of this property type.
+	/// @name Returns a default value of this property type.
 	static T GetDefaultValue() { return ms_DefaultValue; }
 
 private:

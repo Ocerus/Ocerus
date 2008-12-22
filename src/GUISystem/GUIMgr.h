@@ -12,7 +12,7 @@
 
 namespace GUISystem {
 
-	/// Forward declarations.
+	/// @name Forward declarations.
 	//@{
 	class ResourceGate;
 	class RendererGate;
@@ -46,12 +46,12 @@ namespace GUISystem {
 		virtual void MouseButtonReleased(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn);
 		//@}
 
-		/// Don't call this now
+		/// @name Don't call this now
 		virtual void LoadGUI();
-		/// This gets called automatically in constructor. Will change later
+		/// @name This gets called automatically in constructor. Will change later
 		virtual void LoadConsole();
 
-		/// Called in main application loop
+		/// @name Called in main application loop
 		//@{
 		inline virtual void RenderGUI() const {
 			assert(mCegui);
@@ -61,29 +61,29 @@ namespace GUISystem {
 		virtual void Update(float32 delta);
 		//@}
 
-		/// Console related method
+		/// @name Console related method
 		//@{
-		/// Registers a class that implements IConsoleListener
+		/// @name Registers a class that implements IConsoleListener
 		void AddConsoleListener(IConsoleListener* listener);
-		/// If you wish to post a new message into console, call this method
+		/// @name If you wish to post a new message into console, call this method
 		void AddConsoleMessage(std::string message, const GfxSystem::Color& color = GfxSystem::Color(255,255,255,255));
 		//@}
 
 		virtual ~GUIMgr();
 	protected:
-		/// Registers callbacks in CEGUI
+		/// @name Registers callbacks in CEGUI
 		void RegisterEvents();
 
-		/// CEGUI events callbacks
+		/// @name CEGUI events callbacks
 		//@{
 		bool QuitEvent(const CEGUI::EventArgs& e);
 		bool ConsoleCommandEvent(const CEGUI::EventArgs& e);
 		//@}
 
-		/// Called after ` is hit
+		/// @name Called after ` is hit
 		void ConsoleTrigger();
 		
-		/// Lazy initialization for console
+		/// @name Lazy initialization for console
 		void EnsureConsoleIsLoaded();
 
 		bool ConsoleIsLoaded;

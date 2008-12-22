@@ -8,7 +8,7 @@
 namespace EntitySystem 
 {
 
-	/// Forward declarations
+	/// @name Forward declarations
 	class Component;
 	
 	typedef std::vector<Component*> ComponentsList;
@@ -42,13 +42,13 @@ namespace EntitySystem
 			ComponentsList::const_iterator::operator=(rhs);
 		}
 
-		/// Use this method as a loop condition instead of comparing the iterator to a collection end().
+		/// @name Use this method as a loop condition instead of comparing the iterator to a collection end().
 		bool HasMore(void) { return operator!=(mComponentsList->end()); }
 
-		/// Returns a reference to the list owner.
+		/// @name Returns a reference to the list owner.
 		inline const ComponentsList& GetList(void) const { return *mComponentsList; }
 
-		/// Returns an end iterator of the owning list.
+		/// @name Returns an end iterator of the owning list.
 		EntityComponentsIterator GetEnd(void) const
 		{
 			return EntityComponentsIterator(mComponentsList, mComponentsList->end());

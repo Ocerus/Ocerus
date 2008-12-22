@@ -4,12 +4,12 @@
 namespace EntitySystem
 {
 
-	/// Message is the only way how to pass/get some data from/to an entity.
+	/// @name Message is the only way how to pass/get some data from/to an entity.
 	struct EntityMessage
 	{
 		enum eResult { RESULT_IGNORED, RESULT_OK, RESULT_ERROR };
 
-		/// Define user types of messages here.
+		/// @name Define user types of messages here.
 		enum eType
 		{ 
 			TYPE_DRAW_PLATFORM=0,

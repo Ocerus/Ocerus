@@ -6,7 +6,7 @@
 
 namespace EntitySystem
 {
-	/// Visual representation of a specific platform.
+	/// @name Visual representation of a specific platform.
 	class CmpPlatformVisual : public RTTIGlue<CmpPlatformVisual, Component>
 	{
 	public:

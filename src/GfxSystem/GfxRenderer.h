@@ -9,7 +9,7 @@
 
 #define gGfxRenderer GfxSystem::GfxRenderer::GetSingleton()
 
-/// Forward declarations
+/// @name Forward declarations
 //@{
 class HGE;
 //@}
@@ -17,7 +17,7 @@ class HGE;
 namespace GfxSystem
 {
 
-	/// Forward declarations.
+	/// @name Forward declarations.
 	//@{
 	class IScreenResolutionChangeListener;
 	//@}
@@ -130,15 +130,15 @@ namespace GfxSystem
 		// note that anchor determines the rotation/scaling pivot
 		bool DrawImage(const TexturePtr& image, int32 x, int32 y, uint8 anchor = 0, float32 angle = 0.0f, uint8 alpha = 255, float32 scale = 1.0f, int32 width = 0, int32 height = 0, const Rect& textureRect = Rect::NullRect) const;
 		bool DrawImage(const TexturePtr& image, const Point& pos, uint8 anchor = 0, float32 angle = 0.0f, uint8 alpha = 255, float32 scale = 1.0f) const;
-		/// This version does a conversion from world space
+		/// @name This version does a conversion from world space
 		bool DrawImageWithConversion(const TexturePtr& image, const Vector2& pos, uint8 anchor = 0, float32 angle = 0.0f, uint8 alpha = 255, float32 scale = 1.0f) const;
-		/// This version is made specially to support GUI
+		/// @name This version is made specially to support GUI
 		bool DrawImage(const TexturePtr& image, const Rect& textureRect, const Rect& destRect, const ColorRect& colors = ColorRect() ) const;
 		bool DrawImage(const TexturePtr& image, const Rect& destRect) const;
 
 		bool DrawLine(int x1, int y1, int x2, int y2, const Pen& pen) const;
 		bool DrawLine(const Point& begin, const Point& end, const Pen& pen) const;
-		/// This version does a conversion from world space
+		/// @name This version does a conversion from world space
 		bool DrawLineWithConversion(const Vector2& begin, const Vector2& end, const Pen& pen) const;
 
 		bool DrawPolygon(Point* vertices, int vertices_len, const TexturePtr& image, const Pen& outline, float32 angle = 0.0f, uint8 alpha = 255, float32 scale = 1.0f, float32 textureAngle = 0.0f, float32 textureScale = 1.0f) const;
@@ -147,7 +147,7 @@ namespace GfxSystem
 		bool DrawPolygon(Point* vertices, int vertices_len, const Color& fillColor, const Pen& outline = Pen::NullPen) const;
 		bool DrawPolygon(const std::vector<Point>& vertices, const Color& fillColor, const Pen& outline = Pen::NullPen) const;
 
-		/// This version does a conversion from world space
+		/// @name This version does a conversion from world space
 		//TODO dodelat podobne verze DrawPolygon
 		bool DrawPolygonWithConversion(const Vector2* vertices, int vertices_len, const Vector2& offsetPosition, const float32 offsetAngle, const Color& fillColor, const Pen& outline = Pen::NullPen) const;
 
@@ -161,13 +161,13 @@ namespace GfxSystem
 	private:
 		HGE* mHGE; 
 
-		/// Camera center position.
+		/// @name Camera center position.
 		//@{
 		float32 mCameraX;
 		float32 mCameraY;
 		//@}
 
-		/// Camera zoom ratio.
+		/// @name Camera zoom ratio.
 		//@{
 		float32 mCameraScale;
 		float32 mCameraScaleInv;

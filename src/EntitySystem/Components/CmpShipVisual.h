@@ -5,7 +5,7 @@
 
 namespace EntitySystem
 {
-	/// Visual representation of a ship.
+	/// @name Visual representation of a ship.
 	class CmpShipVisual : public RTTIGlue<CmpShipVisual, Component>
 	{
 	public:

@@ -10,20 +10,20 @@ class DataContainer
 public:
 	DataContainer(void): mData(0), mSize(0)	{}
 
-	/// Note that the dtor should NOT destroy contained data.
+	/// @name Note that the dtor should NOT destroy contained data.
 	~DataContainer(void) {}
 
-	/// Set the actual data.
+	/// @name Set the actual data.
 	void SetData(uint8* data, int32 size) { mData = data; mSize = size; }
 
-	/// Data getters.
+	/// @name Data getters.
 	//@{
 	uint8* GetData(void) { return mData; }
 	const uint8* GetData(void) const { return mData; }
 	int32 GetSize(void) const { return mSize; }
 	//@}
 
-	/// Destroy the data.
+	/// @name Destroy the data.
 	void Release(void)
 	{
 		if (!mData)

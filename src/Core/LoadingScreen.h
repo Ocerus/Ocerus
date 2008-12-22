@@ -16,13 +16,13 @@ namespace Core
 
 		enum eType { TYPE_BASIC_RESOURCES=0, TYPE_GENERAL_RESOURCES };
 
-		/// Main entry point.
+		/// @name Main entry point.
 		void DoLoading(eType type);
 
-		/// Update visuals.
+		/// @name Update visuals.
 		void Draw();
 
-		/// Callbacks from the resource manager.
+		/// @name Callbacks from the resource manager.
 		//@{
 		virtual void ResourceGroupLoadStarted(const string& groupName, uint32 resourceCount);
 		virtual void ResourceLoadStarted(const ResourceSystem::ResourcePtr& resource);

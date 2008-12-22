@@ -5,7 +5,7 @@
 
 namespace EntitySystem
 {
-	/// Represents all parameters someone can set up for a type of an engine.
+	/// @name Represents all parameters someone can set up for a type of an engine.
 	class CmpEngineParams : public RTTIGlue<CmpEngineParams, Component>
 	{
 	public:
@@ -15,27 +15,27 @@ namespace EntitySystem
 
 		static void RegisterReflection(void);
 
-		/// Maximum hitpoints of the engine.
+		/// @name Maximum hitpoints of the engine.
 		//@{
 		uint32 GetMaxHitpoints(void) const { return mMaxHitpoints; }
 		void SetMaxHitpoints(const uint32 hp) { mMaxHitpoints = hp; }
 		//@}
-		/// Maximum power of the engine in absolute units.
+		/// @name Maximum power of the engine in absolute units.
 		//@{
 		uint32 GetMaxPower(void) const { return mMaxPower; }
 		void SetMaxPower(const uint32 power) { mMaxPower = power; }
 		//@}
-		/// Material used by this engine.
+		/// @name Material used by this engine.
 		//@{
 		EntityHandle GetMaterial(void) const { return mMaterial; }
 		void SetMaterial(const EntityHandle mat) { mMaterial = mat; }
 		//@}
-		/// Angle variation (relative to the default angle) allowed to the engine.
+		/// @name Angle variation (relative to the default angle) allowed to the engine.
 		//@{
 		float32 GetArcAngle(void) const { return mArcAngle; }
 		void SetArcAngle(const float32 ang) { mArcAngle = ang; }
 		//@}
-		/// Stabilization ratio determines how fast the engine will prevent the ship from moving perpendicular to it's current direction.
+		/// @name Stabilization ratio determines how fast the engine will prevent the ship from moving perpendicular to it's current direction.
 		//@{
 		uint32 GetStabilizationRatio(void) const { return mStabilizationRatio; }
 		void SetStabilizationRatio(const uint32 ratio) { mStabilizationRatio = ratio; }

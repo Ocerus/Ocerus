@@ -7,7 +7,7 @@
 #include "ResourceGate.h"
 
 namespace GUISystem {
-	/// Prototypes for utility functions
+	/// @name Prototypes for utility functions
 	//@{
 	CEGUI::uint KeyMapperOIStoCEGUI(InputSystem::eKeyCode key);
 	CEGUI::MouseButton ConvertMouseButtonEnum(const InputSystem::eMouseButton btn);

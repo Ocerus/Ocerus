@@ -9,7 +9,7 @@ public:
 	StateMachine(T initialState): mState(initialState), mNextState(initialState), mLocked(false) {}
 	virtual ~StateMachine() {}
 
-	/// Returns current state of the machine.
+	/// @name Returns current state of the machine.
 	inline T GetState() { return mState; }
 
 	/** Requests a change of state of the machine. The state will be changed after the machine is updated.
@@ -25,7 +25,7 @@ public:
 		return true;
 	}
 
-	/// Unlocks current state if locked. The passed state must match the state which was locked.
+	/// @name Unlocks current state if locked. The passed state must match the state which was locked.
 	bool UnlockState(T lockState)
 	{
 		if (mNextState != lockState)
@@ -33,7 +33,7 @@ public:
 		mLocked = false;
 	}
 
-	/// Updates the machine and changes its state if needed.
+	/// @name Updates the machine and changes its state if needed.
 	void UpdateState()
 	{
 		if (mState != mNextState)
@@ -45,7 +45,7 @@ public:
 		}
 	}
 	
-	/// Callbacks to all derived classes.
+	/// @name Callbacks to all derived classes.
 	virtual void StateChanged(T oldState, T newState) {}
 
 private:

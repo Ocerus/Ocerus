@@ -5,10 +5,10 @@
 #include "../Utility/Settings.h"
 #include <boost/filesystem/fstream.hpp>
 
-/// Macro for easier use.
+/// @name Macro for easier use.
 #define gLogMgr LogSystem::LogMgr::GetSingleton()
 
-/// Level of severity of a log message. Not all messages will be stored in the log depending on the logger settings.
+/// @name Level of severity of a log message. Not all messages will be stored in the log depending on the logger settings.
 enum eLogSeverity { LOG_TRIVIAL=0, LOG_INFO, LOG_ERROR };
 
 namespace LogSystem
@@ -24,7 +24,7 @@ namespace LogSystem
 		LogMgr(const string& name, eLogSeverity severityLevel);
 		~LogMgr(void);
 	
-		/// These methods can be used for storing messages in the log.
+		/// @name These methods can be used for storing messages in the log.
 		//@{
 		void LogMessage(const string& msg, eLogSeverity severity = LOG_INFO);
 		void LogMessage(const string& msg, const string& msg2, eLogSeverity severity = LOG_INFO);

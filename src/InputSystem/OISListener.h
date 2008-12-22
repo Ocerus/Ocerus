@@ -8,7 +8,7 @@
 namespace InputSystem
 {
 
-	/// Forward declarations.
+	/// @name Forward declarations.
 	//@{
 	class InputMgr;
 	enum eKeyCode;
@@ -22,29 +22,29 @@ namespace InputSystem
 		OISListener();
 		virtual ~OISListener();
 
-		/// MouseListener
+		/// @name MouseListener
 		//@{
 		virtual bool mouseMoved(const OIS::MouseEvent &evt);
 		virtual bool mousePressed(const OIS::MouseEvent &evt, OIS::MouseButtonID);
 		virtual bool mouseReleased(const OIS::MouseEvent &evt, OIS::MouseButtonID);
 		//@}
 
-		/// KeyListener
+		/// @name KeyListener
 		//@{
 		virtual bool keyPressed(const OIS::KeyEvent &evt);
 		virtual bool keyReleased(const OIS::KeyEvent &evt);
 		//@}
 
-		/// Process OIS events.
+		/// @name Process OIS events.
 		void CaptureInput();
 
-		/// True if the specified key is down.
-		bool IsKeyDown(eKeyCode k) const;
+		/// @name True if the specified key is down.
+		bool IsKeyDown(const eKeyCode k) const;
 
-		/// Returns current state of the mouse.
-		void GetMouseState(MouseState& state);
+		/// @name Returns current state of the mouse.
+		void GetMouseState(MouseState& state) const;
 
-		/// Sets resolution of the screen.
+		/// @name Sets resolution of the screen.
 		void SetResolution(uint32 width, uint32 height);
 
 	private:
@@ -54,7 +54,7 @@ namespace InputSystem
 		OIS::Mouse* mMouse;
 		OIS::Keyboard* mKeyboard;
 
-		/// Conversion function.
+		/// @name Conversion function.
 		eMouseButton OisToMbtn(OIS::MouseButtonID id);
 	};
 }

@@ -6,7 +6,7 @@
 
 namespace EntitySystem
 {
-	/// Links between two specific platforms.
+	/// @name Links between two specific platforms.
 	class CmpPlatformLinks : public RTTIGlue<CmpPlatformLinks, Component>
 	{
 	public:
@@ -16,32 +16,32 @@ namespace EntitySystem
 
 		static void RegisterReflection(void);
 
-		/// First of the two connected platforms.
+		/// @name First of the two connected platforms.
 		//@{
 		EntityHandle GetFirstPlatform(void) const { return mFirstPlatform; }
 		void SetFirstPlatform(const EntityHandle first) { mFirstPlatform = first; }
 		//@}
-		/// Second of the two connected platforms.
+		/// @name Second of the two connected platforms.
 		//@{
 		EntityHandle GetSecondPlatform(void) const { return mSecondPlatform; }
 		void SetSecondPlatform(const EntityHandle second) { mSecondPlatform = second; }
 		//@}
-		/// Chance ratio of destrying these links and disconnecting platforms.
+		/// @name Chance ratio of destrying these links and disconnecting platforms.
 		//@{
 		float32 GetDetachingChance(void) const { return mDetachingChance; }
 		void SetDetachingChance(const float32 chance) { mDetachingChance = chance; }
 		//@}
-		/// Number of links between platforms.
+		/// @name Number of links between platforms.
 		//@{
 		uint32 GetNumLinks(void) const { return mAnchorsLength; }
 		void SetNumLinks(const uint32 num) { mAnchorsLength = num; }
 		//@}
-		/// A list of anchors of all links on the first platform.
+		/// @name A list of anchors of all links on the first platform.
 		//@{
 		Vector2* GetFirstAnchors(void) const { return mFirstAnchors; }
 		void SetFirstAnchors(Vector2* anchors);
 		//@}
-		/// a list of anchors of all links on the second platform.
+		/// @name a list of anchors of all links on the second platform.
 		//@{
 		Vector2* GetSecondAnchors(void) const { return mSecondAnchors; }
 		void SetSecondAnchors(Vector2* anchors);

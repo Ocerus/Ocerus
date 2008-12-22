@@ -11,11 +11,11 @@ public:
 	Timer(void);
 	~Timer(void);
 
-	/// Resets the counter.
+	/// @name Resets the counter.
 	void Reset(void);
-	/// Returns time since reset in milliseconds.
+	/// @name Returns time since reset in milliseconds.
 	uint64 GetMilliseconds(void);
-	/// Returns time since reset in microseconds.
+	/// @name Returns time since reset in microseconds.
 	uint64 GetMicroseconds(void);
 
 private:

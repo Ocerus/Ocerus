@@ -3,7 +3,7 @@
 
 namespace EntitySystem
 {
-	/// A set of types of all components in the system.
+	/// @name A set of types of all components in the system.
 	enum eComponentType
 	{
 		CT_PLATFORM_LOGIC = 0,

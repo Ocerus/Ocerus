@@ -6,7 +6,7 @@
 #include <boost/filesystem/fstream.hpp>
 #include <sstream>
 
-/// Forward declaration.
+/// @name Forward declaration.
 class DataContainer;
 
 namespace ResourceSystem
@@ -20,24 +20,24 @@ namespace ResourceSystem
 	class Resource
 	{
 	public:
-		/// State of a resource.
+		/// @name State of a resource.
 		enum eState { STATE_UNINITIALIZED=0, STATE_INITIALIZED, STATE_UNLOADING, STATE_LOADING, STATE_LOADED };
-		/// Type of a resource. Add your custom types here!
+		/// @name Type of a resource. Add your custom types here!
 		enum eType { TYPE_TEXTURE=0, TYPE_CEGUIRESOURCE, TYPE_TEXTRESOURCE, TYPE_XMLRESOURCE, NUM_TYPES, TYPE_AUTODETECT };
 
-		/// No need to override.
+		/// @name No need to override.
 		Resource(void);
-		/// Don't forget to override!
+		/// @name Don't forget to override!
 		virtual ~Resource(void);
 
-		/// Enforces this resource to be loaded. Do not override this!
+		/// @name Enforces this resource to be loaded. Do not override this!
 		virtual bool Load(void);
 		/** Enforces this resource to be unloaded. Do not override this!
 			\param allowManual If allowManual is true, the resource will be unloaded even if it was manually created.
 		*/
 		virtual bool Unload(bool allowManual = false);
 
-		/// Getters.
+		/// @name Getters.
 		//@{
 		inline eType GetType(void) const { return mType; }
 		inline eState GetState(void) const { return mState; }
@@ -61,13 +61,13 @@ namespace ResourceSystem
 			the stream after you're done.
 		*/
 		InputStream& OpenInputStream(eInputStreamMode = ISM_BINARY );
-		/// Closes the stream opened by OpenInputStream.
+		/// @name Closes the stream opened by OpenInputStream.
 		void CloseInputStream(void);
-		/// Returns raw data read from the input stream. The data is stored inside the outData container.
+		/// @name Returns raw data read from the input stream. The data is stored inside the outData container.
 		void GetRawInputData(DataContainer& outData);
-		/// Call this whenever you need to make sure the data is loaded.
+		/// @name Call this whenever you need to make sure the data is loaded.
 		void EnsureLoaded(void);
-		/// Set the current state of the resource.
+		/// @name Set the current state of the resource.
 		inline void SetState(const eState newState) { mState = newState; }
 
 	private:
@@ -76,13 +76,13 @@ namespace ResourceSystem
 		bool mIsManual;
 		eType mType;
 		string mName;
-		/// Used by the impl of OpenInputStream
+		/// @name Used by the impl of OpenInputStream
 		//@{
 		boost::filesystem::ifstream* mInputFileStream;
 		//@}
 
 
-		/// For internal use by the resource manager.
+		/// @name For internal use by the resource manager.
 		//@{
 		inline void SetName(const string& name) { mName = name; }
 		inline void SetFilepath(const string& filepath) { mFilePath = filepath; }
@@ -91,7 +91,7 @@ namespace ResourceSystem
 		//@}
 	};
 
-	/// Use this instead of a direct pointer to Resource.
+	/// @name Use this instead of a direct pointer to Resource.
 	typedef SmartPointer<Resource> ResourcePtr;
 }
 

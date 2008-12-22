@@ -29,19 +29,19 @@ namespace ResourceSystem
 {
 	class XMLResource; 
 
-	/// define a container for textdata
+	/// @name define a container for textdata
 	typedef std::map<string, string> XMLDataMap;
-	/// define pointer to XMLResource
+	/// @name define pointer to XMLResource
 	typedef SmartPointer<XMLResource> XMLResourcePtr;
 
-	/// Functions used by Expat parser
+	/// @name Functions used by Expat parser
 	//@{
 	void XMLCALL ElementStartHandle(void *data, const char *el, const char **attr);
 	void XMLCALL ElementEndHandle(void *data, const char *el);
 	void XMLCALL DataHandle(void* data, const XML_Char *s, int len);
 	//@}
 
-	/// Helper functions for string manipulation
+	/// @name Helper functions for string manipulation
 	//@{
 	void remControl(std::string& str);
 	int StringSplit(string str, string delim, std::vector<string>& results);
@@ -57,7 +57,7 @@ namespace ResourceSystem
 	class XMLResource : public Resource
 	{
 	public:
-		/// Specifies mode for Enter method (Absolute or Relative)
+		/// @name Specifies mode for Enter method (Absolute or Relative)
 		enum eEnterMode { ABS, REL };
 
 		virtual ~XMLResource(void);
@@ -76,10 +76,10 @@ namespace ResourceSystem
 		 */
 		bool Enter(const string& name, eEnterMode mode = REL);
 
-		/// Return n levels up in the tree structure 
+		/// @name Return n levels up in the tree structure 
 		bool Leave(const int n = 1);
 
-		/// Friend classes used by Expat parser
+		/// @name Friend classes used by Expat parser
 		//@{
 		friend void XMLCALL ResourceSystem::ElementStartHandle(void *data, const char *el, const char **attr);
 		friend void XMLCALL ResourceSystem::ElementEndHandle(void *data, const char *el);
@@ -97,10 +97,10 @@ namespace ResourceSystem
 			node_iterator(const XMLDataMap::const_iterator node, const XMLResource* me);
 			~node_iterator(void);
 
-			/// Check if the node is current-level node or not
+			/// @name Check if the node is current-level node or not
 			bool CheckNode(void);
 
-			/// Common iterator functionality
+			/// @name Common iterator functionality
 			//@{
 			node_iterator& operator=(const XMLResource::node_iterator& other);
 			bool operator==(const node_iterator& other);
@@ -108,7 +108,7 @@ namespace ResourceSystem
 			node_iterator& operator++(int);
 			//@}
 
-			/// Get name of the attribute pointed by the iterator
+			/// @name Get name of the attribute pointed by the iterator
 			string GetName(void);
 			/** Return value of type U of the attribute pointed by the iterator.
 			    Uses GetAttribute<T> internally
@@ -121,24 +121,24 @@ namespace ResourceSystem
 			const XMLResource* me;
 		};
 
-		/// Return iterator to the first node in current level (Same as standard STL iterators)
+		/// @name Return iterator to the first node in current level (Same as standard STL iterators)
 		const node_iterator begin(void) const;
-		/// Return iterator to the behind-last node in current level (Same as standard STL iterators)
+		/// @name Return iterator to the behind-last node in current level (Same as standard STL iterators)
 		const node_iterator end(void) const;
 
 	protected:	
-		/// container used to store data
+		/// @name container used to store data
 		XMLDataMap mDataMap;
-		/// stack to hold actual path in tree
+		/// @name stack to hold actual path in tree
 		std::vector<string> mStack;
-		/// buffer used for loading
+		/// @name buffer used for loading
 		char* mBuff;
-		/// node
+		/// @name node
 		string mNode;
-		/// root node
+		/// @name root node
 		string mRootNode;
 
-		/// Load/Unload implementation
+		/// @name Load/Unload implementation
 		//@{
 		virtual bool LoadImpl(void);
 		virtual bool UnloadImpl(void);	

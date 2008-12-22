@@ -5,7 +5,7 @@
 
 namespace EntitySystem
 {
-	/// Handles logic of one specific platform.
+	/// @name Handles logic of one specific platform.
 	class CmpPlatformLogic : public RTTIGlue<CmpPlatformLogic, Component>
 	{
 	public:
@@ -15,17 +15,17 @@ namespace EntitySystem
 
 		static void RegisterReflection(void);
 
-		/// Current hitpoints in absolute units.
+		/// @name Current hitpoints in absolute units.
 		//@{
 		uint32 GetHitpoints(void) const { return mHitpoints; }
 		void SetHitpoints(const uint32 hp) { mHitpoints = hp; }
 		//@}
-		/// Platform type of this platform.
+		/// @name Platform type of this platform.
 		//@{
 		EntityHandle GetBlueprints(void) const { return mBlueprints; }
 		void SetBlueprints(const EntityHandle blueprints) { mBlueprints = blueprints; }
 		//@}
-		/// Link to a parent ship owning this platform. Can be null (invalid).
+		/// @name Link to a parent ship owning this platform. Can be null (invalid).
 		//@{
 		EntityHandle GetParentShip(void) const { return mParentShip; }
 		void SetParentShip(const EntityHandle parentShip) { mParentShip = parentShip; }
@@ -38,7 +38,7 @@ namespace EntitySystem
 		typedef std::vector<EntityHandle> EntityList;
 		EntityList mItems;
 
-		/// support data
+		/// @name support data
 		Vector2 mPickCircleCenter;
 		float32 mPickCircleRadius;
 

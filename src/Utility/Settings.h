@@ -4,7 +4,7 @@
 #include <assert.h>
 #include "../Source/Common/b2Math.h"
 
-/// Global basic types. Only these should be used.
+/// @name Global basic types. Only these should be used.
 //@{
 typedef signed char	int8;
 typedef signed short int16;
@@ -26,18 +26,18 @@ extern const Matrix22 Matrix22_Identity;
 typedef b2XForm XForm;
 //@}
 
-/// Allocation.
+/// @name Allocation.
 #define DYN_NEW new
 #define DYN_NEW_T(T) new T
 #define DYN_DELETE delete
 #define DYN_DELETE_ARRAY delete[]
 
 
-/// Math.
+/// @name Math.
 #include "MathUtils.h"
 
 
-/// Streams.
+/// @name Streams.
 #include <string>
 #include <ios>
 typedef std::string string;

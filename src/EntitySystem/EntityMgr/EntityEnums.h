@@ -3,7 +3,7 @@
 
 namespace EntitySystem
 {
-	/// Set of all entyties in the system
+	/// @name Set of all entyties in the system
 	enum eEntityType
 	{
 		ET_SHIP=0,

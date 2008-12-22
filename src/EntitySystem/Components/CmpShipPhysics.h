@@ -7,7 +7,7 @@ class b2Body;
 
 namespace EntitySystem
 {
-	/// Physical representation of a specific ship.
+	/// @name Physical representation of a specific ship.
 	class CmpShipPhysics : public RTTIGlue<CmpShipPhysics, Component>
 	{
 	public:
@@ -17,17 +17,17 @@ namespace EntitySystem
 
 		static void RegisterReflection(void);
 
-		/// Position in absolute coords.
+		/// @name Position in absolute coords.
 		//@{
 		Vector2& GetPosition(void) const;
 		void SetPosition(Vector2& pos);
 		//@}
-		/// Angle in absolute coords.
+		/// @name Angle in absolute coords.
 		//@{
 		float32 GetAngle(void) const;
 		void SetAngle(const float32 angle);
 		//@}
-		/// @name Initialization parameters.
+		/// @name  Initialization parameters.
 		//@{
 		void SetInitBodyPosition(Vector2 pos) { mInitBodyPosition = pos; }
 		void SetInitBodyAngle(const float32 angle) { mInitBodyAngle = angle; }

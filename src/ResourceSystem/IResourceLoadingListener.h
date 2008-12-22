@@ -11,20 +11,20 @@ namespace ResourceSystem
 	class IResourceLoadingListener
 	{
 	public:
-		/// Does nothing.
+		/// @name Does nothing.
 		IResourceLoadingListener() {}
-		/// Don't forget to override.
+		/// @name Don't forget to override.
 		virtual ~IResourceLoadingListener() {}
 
 		/** Called when a group of resources is being loaded. In resourceCount you are told how many resources will be
 			loaded, so that you have an estimate.
 		*/
 		virtual void ResourceGroupLoadStarted(const string& groupName, uint32 resourceCount) = 0;
-		/// Called when one single resource is being loaded.
+		/// @name Called when one single resource is being loaded.
 		virtual void ResourceLoadStarted(const ResourcePtr& resource) = 0;
-		/// Called when the resource which previously started loading is now loaded.
+		/// @name Called when the resource which previously started loading is now loaded.
         virtual void ResourceLoadEnded(void) = 0;
-		/// Called when a group of resources is done with loading.
+		/// @name Called when a group of resources is done with loading.
 		virtual void ResourceGroupLoadEnded(void) = 0;
 	};
 }

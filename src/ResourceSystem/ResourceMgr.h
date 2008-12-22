@@ -7,12 +7,12 @@
 #include "XMLResource.h"
 #include "../Utility/Singleton.h"
 
-/// Macro for easier use
+/// @name Macro for easier use
 #define gResourceMgr ResourceSystem::ResourceMgr::GetSingleton()
 
 namespace ResourceSystem
 {
-	/// Forward declarations
+	/// @name Forward declarations
 	//@{
 	class IResourceLoadingListener;
 	//@}
@@ -29,11 +29,11 @@ namespace ResourceSystem
 		ResourceMgr(const string& basepath);
 		~ResourceMgr(void);
 
-		/// Assings resources in a directory to a group. In this case the resource types will be autodetected.
+		/// @name Assings resources in a directory to a group. In this case the resource types will be autodetected.
 		bool AddResourceDirToGroup(const string& path, const string& group, const string& includeRegexp = "*.*", const string& excludeRegexp = "");
-		/// Assigns a resource to a group.
+		/// @name Assigns a resource to a group.
 		bool AddResourceFileToGroup(const string& filepath, const string& group, Resource::eType type = Resource::TYPE_AUTODETECT, bool pathRelative = true);
-		/// Assigns a resource to a group. Note that if you create the resource this way you must manually delete it later.
+		/// @name Assigns a resource to a group. Note that if you create the resource this way you must manually delete it later.
 		bool AddManualResourceToGroup(const string& name, const string& group, Resource::eType type);
 		/** Loads all resources in the specified group.
 			Doesn't need to be called, resources are loaded on-the-fly if someone needs them.
@@ -43,23 +43,23 @@ namespace ResourceSystem
 			\param allowManual If allowManual is true, manually created resources will be unloaded as well. It is not recommended to do that!
 		*/
 		void UnloadResourcesInGroup(const string& group, bool allowManual = false);
-		/// Unloads and then deletes all resources in the specified group. They can't be reloaded.
+		/// @name Unloads and then deletes all resources in the specified group. They can't be reloaded.
 		void DeleteGroup(const string& group);
-		/// Unloads and deletes one specific resource.
+		/// @name Unloads and deletes one specific resource.
 		void DeleteResource(const string& group, const string& name);
 		//TODO think about this method. It can be dangerous to release resources with UseCount==1.
 		// void UnloadUnusedResources(void);
 
-		/// Unloads all resources from all groups, call before destructing this object
+		/// @name Unloads all resources from all groups, call before destructing this object
 		void UnloadAllResources();
 
-		/// Loading listener receives callbacks from the manager when a resource is being loaded.
+		/// @name Loading listener receives callbacks from the manager when a resource is being loaded.
 		void SetLoadingListener(IResourceLoadingListener* listener);
 
 		/** Retrieves a resource from the manager. If the resource can't be found, null ResourcePtr is returned.
 		*/
 		//@{
-		/// @param groupSlashName group name/resource's filename
+		/// @name @param groupSlashName group name/resource's filename
 		ResourcePtr GetResource(const string& groupSlashName);
 		ResourcePtr GetResource(const string& group, const string& name);
 		//@}

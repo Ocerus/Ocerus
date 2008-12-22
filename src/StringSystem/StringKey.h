@@ -5,7 +5,7 @@
 
 namespace StringSystem
 {
-	/// define type of keys used for indexing strings
+	/// @name define type of keys used for indexing strings
 	typedef string StringKey;
 }
 

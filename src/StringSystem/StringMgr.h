@@ -7,7 +7,7 @@
 #include <map>
 #include <string>
 
-/// Macro for easier use
+/// @name Macro for easier use
 #define gStringMgr StringSystem::StringMgr::GetSingleton()
 
 namespace StringSystem
@@ -19,7 +19,7 @@ namespace StringSystem
 	class StringMgr : public Singleton<StringMgr>
 	{
 	public:
-		/// @param basepath for string data. Root is in the ResMgr's basepath
+		/// @name @param basepath for string data. Root is in the ResMgr's basepath
 		StringMgr(const string& basepath = "strings/");
 		~StringMgr(void);
 
@@ -35,29 +35,29 @@ namespace StringSystem
 		// Change language -- unload all strings and load them again with LoadStrings(lang)
 		// bool ChangeLanguage(const string& lang);
 
-		/// We can use these to load strings that are not defined by/for language pack (ie common names for weapons?)
+		/// @name We can use these to load strings that are not defined by/for language pack (ie common names for weapons?)
 		//@{
-		/// wrapper around gResourceMgr.AddResourceDirToGroup / LoadResourcesInGroup
+		/// @name wrapper around gResourceMgr.AddResourceDirToGroup / LoadResourcesInGroup
 		bool LoadDataFromDir(const string& path, const string& includeRegexp = "*.*", const string& excludeRegexp = "");
-		/// wrapper around gResourceMgr.AddResourceFileToGroup
+		/// @name wrapper around gResourceMgr.AddResourceFileToGroup
 		bool LoadDataFromFile(const string& filepath, ResourceSystem::Resource::eType type = ResourceSystem::Resource::TYPE_AUTODETECT, bool pathRelative = true);
 		//@}
 
-		/// unload all the data (using UnloadResourcesInGroup)
+		/// @name unload all the data (using UnloadResourcesInGroup)
 		bool UnloadData(void);
 
-		/// return pointer to text data
+		/// @name return pointer to text data
 		const TextData* GetTextDataPtr(const StringKey& key);
 		/** Return text data. Note that this may be slow if strings are long. (It has to copy
 		    whole TextData structure). Returning a ptr should be preffered way to access data.
 		*/
 		const TextData GetTextData(const StringKey& key);
 	private:
-		/// container used to store data (same type used in TextRes!)
+		/// @name container used to store data (same type used in TextRes!)
 		TextDataMap mTextDataMap;
-		/// actual language
+		/// @name actual language
 		string mLanguage;
-		/// Basepath for string data. Root is in the ResMgr's basepath
+		/// @name Basepath for string data. Root is in the ResMgr's basepath
 		string mBasePath;
 	};
 }

@@ -18,29 +18,29 @@ namespace EntitySystem
 		EntityDescription(void);
 		~EntityDescription(void);
 
-		/// Call this before each subsequent filling of the description.
+		/// @name Call this before each subsequent filling of the description.
 		void Init(const eEntityType type);
 
-		/// Add new component specified by its type.
+		/// @name Add new component specified by its type.
 		void AddComponent(const eComponentType type);
 
-		/// For internal use by the ComponentMgr.
+		/// @name For internal use by the ComponentMgr.
 		eComponentType GetNextComponent(void);
 	private:
 		friend class EntityMgr;
 
 		typedef std::vector<eComponentType> ComponentDescriptionsList;
 
-		/// List of descriptions of invidivual components this entity will consist of.
+		/// @name List of descriptions of invidivual components this entity will consist of.
 		ComponentDescriptionsList mComponents;
 
-		/// Index of current component description.
+		/// @name Index of current component description.
 		uint32 mIndex;
 
-		/// Type of this entity.
+		/// @name Type of this entity.
 		eEntityType mType;
 
-		/// Clears everything
+		/// @name Clears everything
 		void Clear(void);
 	};
 }

@@ -6,12 +6,12 @@
 #include "../Utility/Settings.h"
 #include "InputActions.h"
 
-/// Macro for easier use.
+/// @name Macro for easier use.
 #define gInputMgr InputSystem::InputMgr::GetSingleton()
 
 namespace OIS
 {
-	/// Forward declarations.
+	/// @name Forward declarations.
 	//@{
 	class Mouse;
 	class Keyboard;
@@ -20,7 +20,7 @@ namespace OIS
 
 namespace InputSystem
 {
-	/// Forward declarations.
+	/// @name Forward declarations.
 	//@{
 	class IInputListener;
 	class OISListener;
@@ -35,35 +35,38 @@ namespace InputSystem
 		InputMgr(void);
 		~InputMgr(void);
 
-		/// Updates the state of the manager and processes all events.
+		/// @name Updates the state of the manager and processes all events.
 		void CaptureInput(void);
 		
-		/// Returns true if a specified key is down.
-		bool IsKeyDown(eKeyCode k) const;
+		/// @name Returns true if a specified key is down.
+		bool IsKeyDown(const eKeyCode k) const;
 
-		/// Returns current state of the mouse.
-		MouseState& GetMouseState(void);
+		/// @name Returns true if a specified button of the mouse is pressed.
+		bool IsMouseButtonPressed(const eMouseButton btn) const;
 
-		/// Registers/unregisters event listeners.
+		/// @name Returns current state of the mouse.
+		MouseState& GetMouseState(void) const;
+
+		/// @name Registers/unregisters event listeners.
 		//@{
 		void AddInputListener(IInputListener* listener);
 		void RemoveInputListener(IInputListener* listener);
 		void RemoveAllInputListeners(void);
 		//@}
 
-		/// Sets current resolution of the screen. To be called from the gfx system.
+		/// @name Sets current resolution of the screen. To be called from the gfx system.
 		void _SetResolution(uint32 width, uint32 height);
 	private:
-		/// OIS specific stuff
+		/// @name OIS specific stuff
 		//@{
 		friend class OISListener;
 		OISListener* mOISListener;
 		//@}
 
-		/// Mouse state cache.
-		MouseState mMouseStateCache;
+		/// @name Mouse state cache.
+		mutable MouseState mMouseStateCache;
 
-		/// Collection of input event listeners.
+		/// @name Collection of input event listeners.
 		//@{
 		typedef std::vector<IInputListener*> ListenersList;
 		ListenersList mListeners;

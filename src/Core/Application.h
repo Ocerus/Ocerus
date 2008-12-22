@@ -7,10 +7,10 @@
 #include "../Utility/Singleton.h"
 #include <deque>
 
-/// Macro for easier use.
+/// @name Macro for easier use.
 #define gApp Core::Application::GetSingleton()
 
-/// Forward declarations
+/// @name  Forward declarations
 //@{
 namespace ResourceSystem { class ResourceMgr; }
 namespace InputSystem { class InputMgr; }
@@ -25,14 +25,14 @@ class Timer;
 namespace Core
 {
 
-	/// Forward declarations.
+	/// @name  Forward declarations.
 	//@{
 	class LoadingScreen;
 	class Game;
 	class Config;
 	//@}
 
-	/// State which the application can be in.
+	/// @name State which the application can be in.
 	enum eAppState { AS_INITING=0, AS_LOADING, AS_GAME, AS_SHUTDOWN, AS_GUI };
 
 	/** Main class of the whole project. One instance is created at startup and the runMainLoop method is invoked.
@@ -40,46 +40,46 @@ namespace Core
 	class Application : public StateMachine<eAppState>, public Singleton<Application>
 	{
 	public:
-		/// Does all necessary init prior to the main execution.
+		/// @name Does all necessary init prior to the main execution.
 		Application(void);
-		/// Cleans up everything.
+		/// @name Cleans up everything.
 		virtual ~Application(void);
 
-		/// Inits the application (creates singletons, ...)
+		/// @name Inits the application (creates singletons, ...)
 		void Init(void);
 
-		/// Main loop of the whole project.
+		/// @name Main loop of the whole project.
 		void RunMainLoop(void);
 
-		/// Shuts the application down and clean everything
+		/// @name Shuts the application down and clean everything
 		void Shutdown(void);
 
-		/// Reset FPS counters and other stats measured in the main loop.
+		/// @name Reset FPS counters and other stats measured in the main loop.
 		void ResetStats(void);
 		
-		/// Stats getters.
+		/// @name  Stats getters.
 		//@{
 		inline float32 GetAvgFPS(void) const { return mAvgFPS; }
 		inline float32 GetLastFPS(void) const { return mLastFPS; }
 		//@}
 
-		/// Console debug window stuff.
+		/// @name  Console debug window stuff.
 		//@{
 		void ShowConsole(void);
 		void WriteToConsole(const string& str);
 		void HideConsole(void);
 		//@}
 
-		/// Provides access to the global config functionality.
+		/// @name Provides access to the global config functionality.
 		inline Config* GetGlobalConfig(void) const { return mGlobalConfig; }
 
-		/// State getters
+		/// @name  State getters
 		//@{
 		Game* GetCurrentGame(void) const { assert(mGame); return mGame; }
 		//@}
 
 	private:
-		/// Singletons.
+		/// @name  Singletons.
 		//@{
 		ResourceSystem::ResourceMgr* mResourceMgr;
 		StringSystem::StringMgr* mStringMgr;
@@ -90,19 +90,19 @@ namespace Core
 		GUISystem::GUIMgr* mGUIMgr;
 		//@}
 
-		/// Application state screens.
+		/// @name  Application state screens.
 		//@{
 		LoadingScreen* mLoadingScreen;
 		Game* mGame;
 		//@}
 
-		/// Represents global settings of the application. Available via getter.
+		/// @name Represents global settings of the application. Available via getter.
 		Config* mGlobalConfig;
 
-		/// Helper method for processing window events.	
+		/// @name Helper method for processing window events.	
 		void MessagePump(void);
 
-		/// Stuff for measuring performance and time.
+		/// @name  Stuff for measuring performance and time.
 		//@{
 		typedef std::deque<uint64> TimesList;
 		TimesList mFrameDeltaTimes;
@@ -111,7 +111,7 @@ namespace Core
 		float32 CalculateFrameDeltaTime(void);
 		//@}
 
-		/// Performance stats
+		/// @name  Performance stats
 		//@{
 		uint64 mLastSecond;
 		uint64 mFrameCount;
@@ -120,7 +120,7 @@ namespace Core
 		void UpdateStats();
 		//@}
 
-		/// Debug console stuff.
+		/// @name  Debug console stuff.
 		//@{
 		uint32 mConsoleHandle;
 		int32 mConsoleX;

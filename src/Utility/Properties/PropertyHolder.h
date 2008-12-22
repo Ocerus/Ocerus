@@ -5,7 +5,7 @@
 #include "../Settings.h"
 #include <map>
 
-/// @name Forward declarations.
+/// @name  Forward declarations.
 //@{
 class RTTIBaseClass;
 //@}

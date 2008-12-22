@@ -5,7 +5,7 @@
 
 namespace EntitySystem
 {
-	/// Represents a material used by platforms and items.
+	/// @name Represents a material used by platforms and items.
 	class CmpMaterial : public RTTIGlue<CmpMaterial, Component>
 	{
 	public:
@@ -15,12 +15,12 @@ namespace EntitySystem
 
 		static void RegisterReflection(void);
 
-		/// Durability ratio means how endurable is this material.
+		/// @name Durability ratio means how endurable is this material.
 		//@{
 		float32 GetDurabilityRatio(void) const { return mDurabilityRatio; }
 		void SetDurabilityRatio(const float32 ratio) { mDurabilityRatio = ratio; }
 		//@}
-		/// Density means how heavy products made of this material will be.
+		/// @name Density means how heavy products made of this material will be.
 		//@{
 		float32 GetDensity(void) const { return mDensity; }
 		void SetDensity(const float32 density) { mDensity = density; }

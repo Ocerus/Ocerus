@@ -4,7 +4,7 @@
 namespace GfxSystem
 {
 
-	/// Callback listener from GfxRenderer.
+	/// @name Callback listener from GfxRenderer.
 	class IScreenResolutionChangeListener {
 	public:
 		virtual void EventResolutionChanged(int x, int y) = 0;

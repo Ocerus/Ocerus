@@ -134,13 +134,13 @@ InputSystem::eMouseButton InputSystem::OISListener::OisToMbtn( OIS::MouseButtonI
 	return MBTN_UNKNOWN;
 }
 
-bool InputSystem::OISListener::IsKeyDown( eKeyCode k ) const
+bool InputSystem::OISListener::IsKeyDown( const eKeyCode k ) const
 {
 	assert(mKeyboard);
 	return mKeyboard->isKeyDown(static_cast<OIS::KeyCode>(k));
 }
 
-void InputSystem::OISListener::GetMouseState( InputSystem::MouseState& state )
+void InputSystem::OISListener::GetMouseState( InputSystem::MouseState& state ) const
 {
 	assert(mMouse);
 	const OIS::MouseState& oisstate = mMouse->getMouseState();

@@ -51,14 +51,20 @@ void InputSystem::InputMgr::_SetResolution( uint32 width, uint32 height )
 	mOISListener->SetResolution(width, height);
 }
 
-bool InputSystem::InputMgr::IsKeyDown( eKeyCode k ) const
+bool InputSystem::InputMgr::IsKeyDown( const eKeyCode k ) const
 {
 	assert(mOISListener);
 	return mOISListener->IsKeyDown(k);
 }
 
-MouseState& InputSystem::InputMgr::GetMouseState( void )
+MouseState& InputSystem::InputMgr::GetMouseState( void ) const
 {
 	mOISListener->GetMouseState(mMouseStateCache);
 	return mMouseStateCache;
+}
+
+bool InputSystem::InputMgr::IsMouseButtonPressed( const eMouseButton btn ) const
+{
+	MouseState& mouse = GetMouseState();
+	return (mouse.buttons & btn) != 0;
 }

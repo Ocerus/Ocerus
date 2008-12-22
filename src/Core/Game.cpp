@@ -42,7 +42,7 @@ void Core::Game::Init()
 
 
 
-	//// TEST ////
+	//// @name TEST ////
 	EntityDescription desc;
 	PropertyList props;
 
@@ -173,7 +173,7 @@ void Core::Game::Init()
 
 	gInputMgr.AddInputListener(this);
 
-	////////////////// XML MANAGER DEMO START //////////////////
+	////////////////// @name XML MANAGER DEMO START //////////////////
 	gLogMgr.LogMessage("*** XML MANAGER DEMO START ***");
 	ResourceSystem::XMLResourcePtr test = gResourceMgr.GetResource("xml", "test.xml");
 
@@ -216,7 +216,7 @@ void Core::Game::Init()
 	}
 	gLogMgr.LogMessage("ITERATOR END: " + ss.str());
 	gLogMgr.LogMessage("*** XML MANAGER DEMO END ***");
-	////////////////// XML MANAGER DEMO END //////////////////
+	////////////////// @name XML MANAGER DEMO END //////////////////
 
 	gApp.ResetStats();
 
@@ -230,7 +230,7 @@ void Core::Game::Deinit()
 
 void Core::Game::Update( const float32 delta )
 {
-	//// Input reactions ////
+	//// @name Input reactions ////
 
 	if (gInputMgr.IsKeyDown(KC_ESCAPE))
 		gApp.Shutdown();
@@ -248,7 +248,7 @@ void Core::Game::Update( const float32 delta )
 	mHoveredEntity = picker.GetResult();
 
 	// we want to do certain action even when the right button is still down
-	if ((mouse.buttons & MBTN_RIGHT) && mSelectedEntities.size()>0 
+	if (gInputMgr.IsMouseButtonPressed(MBTN_RIGHT) && mSelectedEntities.size()>0 
 		&& mSelectedEntities[0].GetType()==ET_ENGINE)
 		MouseButtonPressed(mouse, MBTN_RIGHT);
 
