@@ -7,6 +7,7 @@
 */
 
 
+#include <Windows.h>
 #include "..\..\include\hgeguictrls.h"
 #include <string.h>
 #include <stdio.h>

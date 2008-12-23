@@ -19,12 +19,13 @@ namespace GfxSystem
 
 	/// @name Forward declarations.
 	//@{
-	class IScreenResolutionChangeListener;
+	class IScreenListener;
 	//@}
 
 	struct Point
 	{
 		Point(int32 _x, int32 _y): x(_x), y(_y) {}
+		Point(void): x(0), y(0) {}
 		int32 x, y;
 	};
 
@@ -85,22 +86,25 @@ namespace GfxSystem
 		GfxRenderer(const Point& resolution, bool fullscreen);
 		~GfxRenderer(void);
 
-		void ChangeResolution(const Point& resolution);
+		inline void ChangeResolution(const Point& resolution) { ChangeResolution(resolution.x, resolution.y); }
+		void ChangeResolution(const uint32 width, const uint32 height);
 		Point GetResolution(void) const;
 		int32 GetScreenWidth(void) const;
 		int32 GetScreenHeight(void) const;
 		inline int32 GetScreenWidthHalf(void) const { return GetScreenWidth() >> 1; }
 		inline int32 GetScreenHeightHalf(void) const { return GetScreenHeight() >> 1; }
 		void SetFullscreen(bool fullscreen);
+		bool IsFullscreen(void) const;
+		bool GetWindowPosition(Point& out);
 
-		inline virtual void AddResolutionChangeListener(IScreenResolutionChangeListener * listener)
+		inline virtual void AddScreenListener(IScreenListener * listener)
 		{
-			mResChangeListeners.insert(listener);
+			mScreenListeners.insert(listener);
 		}
 
-		inline virtual void RemoveResolutionChangeListener(IScreenResolutionChangeListener * listener)
+		inline virtual void RemoveResolutionChangeListener(IScreenListener * listener)
 		{
-			mResChangeListeners.erase(listener);
+			mScreenListeners.erase(listener);
 		}
 
  		bool BeginRendering(void) const;
@@ -156,7 +160,10 @@ namespace GfxSystem
 		//TODO add font param
 		//bool DrawText(const string& str, font, int32 x, int32 y, uint8 anchor = ANCHOR_VCENTER|ANCHOR_HCENTER, float32 angle = 0.0f, uint8 alpha = 255);
 
+		/// @name Few haxxor functions to workaround HGE and Windows issues.
+		//@{
 		uint32 _GetWindowHandle(void) const;
+		//@}
 
 	private:
 		HGE* mHGE; 
@@ -176,7 +183,7 @@ namespace GfxSystem
 		friend class Texture;
 		friend bool HgeExitFunction(void);
 
-		std::set<IScreenResolutionChangeListener*> mResChangeListeners;
+		std::set<IScreenListener*> mScreenListeners;
 
 	};
 }

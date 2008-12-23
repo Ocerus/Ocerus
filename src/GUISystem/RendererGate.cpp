@@ -27,6 +27,8 @@ namespace GUISystem {
 		d_resourceProvider = new ResourceGate();
 		this->d_identifierString = "Black_Hand's wrapper around that disgusting piece of code created by Santhos :PPP";
 		this->setQueueingEnabled(false);
+
+		gGfxRenderer.AddScreenListener(this);
 	}
 
 	RendererGate::~RendererGate() {

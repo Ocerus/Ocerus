@@ -11,8 +11,6 @@
 #define HGE_H
 
 
-#include <windows.h>
-
 #define HGE_VERSION 0x180
 
 #ifdef HGEDLL
@@ -41,11 +39,13 @@
 /*
 ** Common data types
 */
-/*#ifndef DWORD
+#ifndef DWORD
 typedef unsigned long       DWORD;
 typedef unsigned short      WORD;
 typedef unsigned char       BYTE;
-#endif*/
+struct HWND__;
+typedef HWND__ *			HWND;
+#endif
 
 
 /*
@@ -285,6 +285,7 @@ public:
 	virtual	void		CALL	System_Log(const char *format, ...) = 0;
 	virtual bool		CALL	System_Launch(const char *url) = 0;
 	virtual void		CALL	System_Snapshot(const char *filename=0) = 0;
+	virtual void		CALL	System_ChangeResolution(const int width, const int height) = 0;
 
 private:
 	virtual void		CALL	System_SetStateBool  (hgeBoolState   state, bool        value) = 0;

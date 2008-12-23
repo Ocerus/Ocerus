@@ -31,7 +31,7 @@ void Application::Init()
 
 	// create singletons
 	mResourceMgr = DYN_NEW ResourceSystem::ResourceMgr("data/");
-	mStringMgr = DYN_NEW StringSystem::StringMgr(); //fuco
+	mStringMgr = DYN_NEW StringSystem::StringMgr(); 
 	mGfxRenderer = DYN_NEW GfxSystem::GfxRenderer(GfxSystem::Point(1024,768), false);
 	mInputMgr = DYN_NEW InputSystem::InputMgr();
 	mEntityMgr = DYN_NEW EntitySystem::EntityMgr();

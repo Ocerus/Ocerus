@@ -40,6 +40,21 @@ namespace EntitySystem
 		uint32 GetStabilizationRatio(void) const { return mStabilizationRatio; }
 		void SetStabilizationRatio(const uint32 ratio) { mStabilizationRatio = ratio; }
 		//@}
+		/// @name Texture used for a visual representation of this engine.
+		//@{
+		char* GetTexture(void) const { return mTexture; }
+		void SetTexture(char* tex) { mTexture = tex; }
+		//@}
+		/// @name Angle used for transforming texture while drawing.
+		//@{
+		float32 GetTextureAngle(void) const { return mTextureAngle; }
+		void SetTextureAngle(const float32 angle) { mTextureAngle = angle; }
+		//@}
+		/// @name Scale used for transforming texture while drawing.
+		//@{
+		float32 GetTextureScale(void) const { return mTextureScale; }
+		void SetTextureScale(const float32 s) { mTextureScale = s; }
+		//@}
 
 	private:
 		EntityHandle mMaterial;
@@ -47,6 +62,10 @@ namespace EntitySystem
 		uint32 mMaxPower;
 		uint32 mStabilizationRatio;
 		float32 mArcAngle;
+		float32 mTextureScale;
+		float32 mTextureAngle;
+		//TODO tady predelat char* na univerzalni hash stringu
+		char* mTexture;
 
 		void ComputeParams(void);
 

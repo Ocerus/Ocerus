@@ -7,6 +7,7 @@
 */
 
 
+#include <Windows.h>
 #include "..\..\include\hgeanim.h"
 
 

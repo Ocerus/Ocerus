@@ -3,7 +3,7 @@
 
 #include "../Utility/Settings.h"
 #include "../GfxSystem/GfxRenderer.h"
-#include "../GfxSystem/IScreenResolutionChangeListener.h"
+#include "../GfxSystem/IScreenListener.h"
 #include "CEGUIRenderer.h"
 #include "ResourceGate.h"
 #include <limits>
@@ -28,7 +28,7 @@ namespace GUISystem {
 		virtual ~Quad_info();
 	};
 
-	class RendererGate : public CEGUI::Renderer, GfxSystem::IScreenResolutionChangeListener
+	class RendererGate : public CEGUI::Renderer, GfxSystem::IScreenListener
 	{
 	public:
 		RendererGate();
@@ -88,7 +88,7 @@ namespace GUISystem {
 			return d_resourceProvider;
 		}
 
-		inline virtual void EventResolutionChanged(int x, int y) {
+		inline virtual void ResolutionChanged(int x, int y) {
 			gGUIMgr.mCegui->fireEvent(EventDisplaySizeChanged, CEGUI::EventArgs());
 		}
 

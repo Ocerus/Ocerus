@@ -11,7 +11,9 @@ InputSystem::InputMgr::InputMgr( void )
 {
 	gLogMgr.LogMessage("*** InputMgr init ***");
 	mOISListener = DYN_NEW OISListener();
-	_SetResolution(gGfxRenderer.GetResolution().x, gGfxRenderer.GetResolution().y);
+
+	gGfxRenderer.AddScreenListener(this);
+	ResolutionChanged(gGfxRenderer.GetResolution().x, gGfxRenderer.GetResolution().y);
 }
 
 InputSystem::InputMgr::~InputMgr( void )
@@ -45,7 +47,7 @@ void InputSystem::InputMgr::RemoveAllInputListeners( void )
 	mListeners.clear();
 }
 
-void InputSystem::InputMgr::_SetResolution( uint32 width, uint32 height )
+void InputSystem::InputMgr::ResolutionChanged( int width, int height )
 {
 	assert(mOISListener);
 	mOISListener->SetResolution(width, height);
@@ -68,3 +70,4 @@ bool InputSystem::InputMgr::IsMouseButtonPressed( const eMouseButton btn ) const
 	MouseState& mouse = GetMouseState();
 	return (mouse.buttons & btn) != 0;
 }
+

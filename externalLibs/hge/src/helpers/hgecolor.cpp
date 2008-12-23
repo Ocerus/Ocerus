@@ -7,8 +7,10 @@
 */
 
 
+#include <Windows.h>
 #include "..\..\include\hgecolor.h"
 #include <math.h>
+
 
 
 void hgeColorHSV::SetHWColor(DWORD col)

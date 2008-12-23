@@ -112,9 +112,16 @@ bool ResourceMgr::AddResourceFileToGroup(const string& filepath, const string& g
 		return false;
 	}
 
+	string name = boostPath.filename();
+	ResourceGroupMap::const_iterator groupIt = mResourceGroups.find(group);
+	if (mResourceGroups.find(group) != mResourceGroups.end() && groupIt->second.find(name) != groupIt->second.end())
+	{
+		gLogMgr.LogMessage("Resource already exists");
+		return true;
+	}
+
 	ResourcePtr r = mResourceCreationMethods[type]();
 	r->SetState(Resource::STATE_INITIALIZED);
-	string name = boostPath.filename();
 	r->SetName(name);
 	r->SetFilepath(boostPath.string());
 	mResourceGroups[group][name] = r;

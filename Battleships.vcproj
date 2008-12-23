@@ -180,7 +180,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Copying release file to output dir..."
-				CommandLine="copy /V /Y &quot;$(OutDir)\$(TargetFileName)&quot; &quot;output&quot;&#x0D;&#x0A;copy /V /Y /B externalLibs\cegui\bin\vs9\Release\*.dll Release&#x0D;&#x0A;copy /V /Y /B externalLibs\cegui\bin\vs9\Release\*.dll output&#x0D;&#x0A;copy /V /Y /B externalLibs\expat\bin\vs9\*.dll Release&#x0D;&#x0A;copy /V /Y /B externalLibs\expat\bin\vs9\*.dll output"
+				CommandLine="copy /V /Y &quot;$(OutDir)\$(TargetFileName)&quot; &quot;output&quot;&#x0D;&#x0A;copy /V /Y /B externalLibs\cegui\bin\vs9\Release\*.dll Release&#x0D;&#x0A;copy /V /Y /B externalLibs\cegui\bin\vs9\Release\*.dll output&#x0D;&#x0A;copy /V /Y /B externalLibs\expat\bin\vs9\*.dll Release&#x0D;&#x0A;copy /V /Y /B externalLibs\expat\bin\vs9\*.dll output&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>
@@ -600,7 +600,7 @@
 					>
 				</File>
 				<File
-					RelativePath=".\src\GfxSystem\IScreenResolutionChangeListener.h"
+					RelativePath=".\src\GfxSystem\IScreenListener.h"
 					>
 				</File>
 				<File

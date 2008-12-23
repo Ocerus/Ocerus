@@ -7,6 +7,7 @@
 */
 
 
+#include <Windows.h>
 #include "hge_impl.h"
 
 
@@ -149,6 +150,9 @@ bool CALL HGE_Impl::System_Initiate()
 	}
 
 	ShowWindow(hwnd, SW_SHOW);
+
+	if (bHideMouse)
+		ShowCursor(false);
 
 	// Init subsystems
 
@@ -647,6 +651,26 @@ void CALL HGE_Impl::System_Snapshot(const char *filename)
 	}
 }
 
+void CALL HGE_Impl::System_ChangeResolution(const int width, const int height)
+{
+	nScreenWidth = width;
+	nScreenHeight = height;
+
+	d3dppW.BackBufferWidth = nScreenWidth;
+	d3dppW.BackBufferHeight = nScreenHeight;
+	rectW.right = rectW.left + nScreenWidth;
+	rectW.bottom = rectW.top + nScreenHeight;
+	d3dppFS.BackBufferWidth = nScreenWidth;
+	d3dppFS.BackBufferHeight = nScreenHeight;
+	rectFS.right = rectFS.left + nScreenWidth;
+	rectFS.bottom = rectFS.top + nScreenHeight;
+
+	_SetProjectionMatrix(nScreenWidth, nScreenHeight);
+	_GfxRestore();
+	_AdjustWindow();
+
+}
+
 //////// Implementation ////////
 
 
@@ -792,11 +816,12 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 				//if(pHGE->procExitFunc && !pHGE->procExitFunc()) return FALSE; // deleted cos it's called in WM_SYSCOMMAND
 				return DefWindowProc(hwnd, msg, wparam, lparam);
 			}
-			else if(wparam == VK_RETURN)
+			// deleted cos I don't want ALT+ENTER to switch fullscreen
+			/*else if(wparam == VK_RETURN)
 			{
 				pHGE->System_SetState(HGE_WINDOWED, !pHGE->System_GetState(HGE_WINDOWED));
 				return FALSE;
-			}
+			}*/
 			else
 			{
 				pHGE->_BuildEvent(INPUT_KEYDOWN, wparam, HIWORD(lparam) & 0xFF, (lparam & 0x40000000) ? HGEINP_REPEAT:0, -1, -1);

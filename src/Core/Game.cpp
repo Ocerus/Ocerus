@@ -71,6 +71,9 @@ void Core::Game::Init()
 	props["Material"].SetValue(material0);
 	props["ArcAngle"].SetValue(0.5f*MathUtils::PI);
 	props["StabilizationRatio"].SetValue((uint32)1000);
+	//TODO predelat char*
+	props["Texture"].SetValue<char*>("ShipParts/engine0.png");
+	props["TextureScale"].SetValue(0.5f);
 	engineType0.FinishInit();
 
 	// create a free platform
@@ -345,25 +348,43 @@ void Core::Game::Draw( const float32 delta)
 	gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::TYPE_DRAW_PLATFORM));
 	gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::TYPE_DRAW_PLATFORM_LINK));
 
+	// draw direction lines to the mouse cursor
 	if (mSelectedEntities.size() > 0)
 	{
-		// display selection of engines
-		if (mSelectedEntities[0].GetType() == ET_ENGINE)
+		MouseState& mouse = gInputMgr.GetMouseState();
+		for (EntityList::iterator i=mSelectedEntities.begin(); i!=mSelectedEntities.end(); ++i)
 		{
-			MouseState& mouse = gInputMgr.GetMouseState();
-			GfxSystem::Pen pen(GfxSystem::Color(100,100,100,180));
-			Vector2 pos;
-			for (EntityList::iterator i=mSelectedEntities.begin(); i!=mSelectedEntities.end(); ++i)
+			if (i->GetType() == ET_ENGINE)
 			{
-				assert(i->GetType()==ET_ENGINE);
-				i->PostMessage(EntityMessage::TYPE_GET_POSITION, &pos);
-				gGfxRenderer.DrawLine(mouse.x, mouse.y, gGfxRenderer.WorldToScreenX(pos.x), gGfxRenderer.WorldToScreenY(pos.y), pen);
+				GfxSystem::Pen pen(GfxSystem::Color(100,100,100,180));
+				// if ALT is pressed, we want to set the direction from the ship center instead of the engine center
+				if (gInputMgr.IsKeyDown(KC_LMENU) || gInputMgr.IsKeyDown(KC_RMENU))
+				{
+					if (i == mSelectedEntities.begin())
+					{
+						EntityHandle platform;
+						i->PostMessage(EntityMessage::TYPE_GET_PARENT, &platform);
+						EntityHandle ship;
+						platform.PostMessage(EntityMessage::TYPE_GET_PARENT, &ship);
+						Vector2 pos;
+						ship.PostMessage(EntityMessage::TYPE_GET_POSITION, &pos);
+						gGfxRenderer.DrawLine(mouse.x, mouse.y, gGfxRenderer.WorldToScreenX(pos.x), gGfxRenderer.WorldToScreenY(pos.y), pen);
+					}
+				}
+				else
+				{
+					Vector2 pos;
+					i->PostMessage(EntityMessage::TYPE_GET_POSITION, &pos);
+					gGfxRenderer.DrawLine(mouse.x, mouse.y, gGfxRenderer.WorldToScreenX(pos.x), gGfxRenderer.WorldToScreenY(pos.y), pen);
+				}
 			}
 		}
 	}
 
 	bool hoverAlsoSelected = false;
 	bool hover = false;
+
+	// draw underlays
 	for (EntityList::iterator i=mSelectedEntities.begin(); i!=mSelectedEntities.end(); ++i)
 	{
 		// calling via EntityMgr to avoid ignored messages
@@ -372,16 +393,20 @@ void Core::Game::Draw( const float32 delta)
 			hoverAlsoSelected = true;
 	}
 
+	// draw underlay of a hovered entity
 	hover = true;
 	if (!hoverAlsoSelected && mHoveredEntity.IsValid())
 		gEntityMgr.PostMessage(mHoveredEntity, EntityMessage(EntityMessage::TYPE_DRAW_UNDERLAY, &hover));
 
+	// draw entities
 	gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::TYPE_DRAW_PLATFORM_ITEM));
 
+	// draw overlays
 	hover = false;
 	for (EntityList::iterator i=mSelectedEntities.begin(); i!=mSelectedEntities.end(); ++i)
 		gEntityMgr.PostMessage(*i, EntityMessage(EntityMessage::TYPE_DRAW_OVERLAY, &hover));
 
+	// draw overlay of a hovered entity
 	hover = true;
 	if (!hoverAlsoSelected && mHoveredEntity.IsValid())
 		gEntityMgr.PostMessage(mHoveredEntity, EntityMessage(EntityMessage::TYPE_DRAW_OVERLAY, &hover));
@@ -390,7 +415,14 @@ void Core::Game::Draw( const float32 delta)
 
 void Core::Game::KeyPressed( const KeyInfo& ke )
 {
-
+	if (ke.keyAction == KC_F)
+	{
+		gGfxRenderer.SetFullscreen(!gGfxRenderer.IsFullscreen());
+	}
+	if (ke.keyAction==KC_D)
+	{
+		gGfxRenderer.ChangeResolution(800,600);
+	}
 }
 
 void Core::Game::KeyReleased( const KeyInfo& ke )
@@ -434,13 +466,25 @@ void Core::Game::MouseButtonPressed( const MouseInfo& mi, const eMouseButton btn
 		if (mSelectedEntities.size() > 0)
 		{
 			// set the engine power and angle if selected
-			if (mSelectedEntities[0].GetType() == ET_ENGINE)
+			Vector2 cursor = gGfxRenderer.ScreenToWorld(GfxSystem::Point(mi.x, mi.y));
+			for (EntityList::iterator i=mSelectedEntities.begin(); i!=mSelectedEntities.end(); ++i)
 			{
-				Vector2 cursor = gGfxRenderer.ScreenToWorld(GfxSystem::Point(mi.x, mi.y));
-				for (EntityList::iterator i=mSelectedEntities.begin(); i!=mSelectedEntities.end(); ++i)
+				if (i->GetType() == ET_ENGINE)
 				{
 					Vector2 pos;
-					i->PostMessage(EntityMessage::TYPE_GET_POSITION, &pos);
+					// if ALT is pressed, we want to set the direction from the ship center instead of the engine center
+					if (gInputMgr.IsKeyDown(KC_LMENU) || gInputMgr.IsKeyDown(KC_RMENU))
+					{
+						EntityHandle platform;
+						i->PostMessage(EntityMessage::TYPE_GET_PARENT, &platform);
+						EntityHandle ship;
+						platform.PostMessage(EntityMessage::TYPE_GET_PARENT, &ship);
+						ship.PostMessage(EntityMessage::TYPE_GET_POSITION, &pos);
+					}
+					else
+					{
+						i->PostMessage(EntityMessage::TYPE_GET_POSITION, &pos);
+					}
 					Vector2 dir = cursor - pos;
 					float32 angle = MathUtils::Angle(dir);
 					i->PostMessage(EntityMessage::TYPE_SET_ANGLE, &angle);

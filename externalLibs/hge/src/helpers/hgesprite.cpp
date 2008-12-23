@@ -7,6 +7,7 @@
 */
 
 
+#include <Windows.h>
 #include "..\..\include\hgesprite.h"
 #include <math.h>
 

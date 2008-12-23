@@ -7,7 +7,6 @@ using namespace EntitySystem;
 
 #define PICK_CIRCLE_RADIUS 0.5f
 #define POWER_RATIO 0.005f
-#define PICTURE_SCALE 0.5f
 #define STABILIZATION_RATIO 0.0002f
 
 void EntitySystem::CmpEngine::Init( void )
@@ -122,9 +121,21 @@ void EntitySystem::CmpEngine::Draw( void ) const
 {
 	Vector2 pos;
 	PostMessage(EntityMessage::TYPE_GET_POSITION, &pos);
-	GfxSystem::TexturePtr img = gResourceMgr.GetResource("ShipParts/engine0.png");
-	gGfxRenderer.DrawImageWithConversion(img, pos, GfxSystem::ANCHOR_HCENTER|GfxSystem::ANCHOR_VCENTER, 
-		GetAbsoluteAngle(), 255, PICTURE_SCALE);
+	EntityHandle blueprints;
+	PostMessage(EntityMessage::TYPE_GET_BLUEPRINTS, &blueprints);
+	//TODO predelat char*
+	char* tex = 0;
+	blueprints.PostMessage(EntityMessage::TYPE_GET_TEXTURE, &tex);
+	float32 texAngle;
+	blueprints.PostMessage(EntityMessage::TYPE_GET_TEXTURE_ANGLE, &texAngle);
+	float32 texScale;
+	blueprints.PostMessage(EntityMessage::TYPE_GET_TEXTURE_SCALE, &texScale);
+	if (tex)
+	{
+		GfxSystem::TexturePtr img = gResourceMgr.GetResource(tex);
+		gGfxRenderer.DrawImageWithConversion(img, pos, GfxSystem::ANCHOR_HCENTER|GfxSystem::ANCHOR_VCENTER, 
+			GetAbsoluteAngle() + texAngle, 255, texScale);
+	}
 }
 
 float32 EntitySystem::CmpEngine::GetAbsoluteAngle( void ) const

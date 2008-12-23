@@ -1,15 +1,13 @@
-//
-// PropertyTypes.h
-//
-
 #ifndef _PROPERTY_TYPES_H
 #define _PROPERTY_TYPES_H
 
 #include "../Settings.h"
 #include "../../EntitySystem/EntityMgr/EntityHandle.h"
 
+/// @name Type of access which will be granted to a property. It can be access from scripts, from editor, during the init, ...
 enum ePropertyAccess { PROPACC_EDIT_READ=1<<1, PROPACC_EDIT_WRITE=1<<2, PROPACC_SCRIPT_READ=1<<3, PROPACC_SCRIPT_WRITE=1<<4, PROPACC_INIT=1<<5 };
 
+/// @name Type of a property. It is used for runtime type checks.
 enum ePropertyType
 {
 	PROPTYPE_BOOL,
@@ -33,72 +31,62 @@ enum ePropertyType
 	PROPTYPE_MAX
 };
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// CPropertyType
-//
-// This templatized class will associate compile-time types with unique enum members.
-//
-///////////////////////////////////////////////////////////////////////////////////////////////////
-
-template <class T> class CPropertyType
+/// @name This templatized class will associate compile-time types with unique enum members.
+template <class T> class PropertyType
 {
 
 public :
 
 	/// @name Returns type ID associated with the templatized type.
-	static ePropertyType GetTypeID();
+	static ePropertyType GetTypeID(void) { return mTypeID; };
 
 	/// @name Returns a default value of this property type.
-	static T GetDefaultValue() { return ms_DefaultValue; }
+	static T GetDefaultValue(void) { return mDefaultValue; }
 
 private:
 
-    static ePropertyType ms_TypeID;
-	static T ms_DefaultValue;
+    static ePropertyType mTypeID;
+	static T mDefaultValue;
 
 };
 
-template<class T>
-ePropertyType CPropertyType<T>::GetTypeID()
-{
-	return ms_TypeID;
-}
+/// @name Template specializations to set up types.
+//@{
+template<class T> ePropertyType PropertyType<T>::mTypeID						= PROPTYPE_PTR;
+template<> ePropertyType PropertyType<bool>::mTypeID							= PROPTYPE_BOOL;
+template<> ePropertyType PropertyType<int8>::mTypeID							= PROPTYPE_INT8;
+template<> ePropertyType PropertyType<int16>::mTypeID						= PROPTYPE_INT16;
+template<> ePropertyType PropertyType<int32>::mTypeID						= PROPTYPE_INT32;
+template<> ePropertyType PropertyType<int64>::mTypeID						= PROPTYPE_INT64;
+template<> ePropertyType PropertyType<uint8>::mTypeID						= PROPTYPE_UINT8;
+template<> ePropertyType PropertyType<uint16>::mTypeID						= PROPTYPE_UINT16;
+template<> ePropertyType PropertyType<uint32>::mTypeID						= PROPTYPE_UINT32;
+template<> ePropertyType PropertyType<uint64>::mTypeID						= PROPTYPE_UINT64;
+template<> ePropertyType PropertyType<float32>::mTypeID						= PROPTYPE_FLOAT32;
+template<> ePropertyType PropertyType<Vector2>::mTypeID						= PROPTYPE_VECTOR2;
+template<> ePropertyType PropertyType<Vector2&>::mTypeID						= PROPTYPE_VECTOR2_REFERENCE;
+template<> ePropertyType PropertyType<Vector2*>::mTypeID						= PROPTYPE_VECTOR2_ARRAY;
+template<> ePropertyType PropertyType<EntitySystem::EntityHandle>::mTypeID	= PROPTYPE_ENTITYHANDLE;
+template<> ePropertyType PropertyType<EntitySystem::EntityHandle*>::mTypeID	= PROPTYPE_ENTITYHANDLE_ARRAY;
+template<> ePropertyType PropertyType<char*>::mTypeID						= PROPTYPE_STRING;
 
-template<class T> ePropertyType CPropertyType<T>::ms_TypeID						= PROPTYPE_PTR;
-template<> ePropertyType CPropertyType<bool>::ms_TypeID							= PROPTYPE_BOOL;
-template<> ePropertyType CPropertyType<int8>::ms_TypeID							= PROPTYPE_INT8;
-template<> ePropertyType CPropertyType<int16>::ms_TypeID						= PROPTYPE_INT16;
-template<> ePropertyType CPropertyType<int32>::ms_TypeID						= PROPTYPE_INT32;
-template<> ePropertyType CPropertyType<int64>::ms_TypeID						= PROPTYPE_INT64;
-template<> ePropertyType CPropertyType<uint8>::ms_TypeID						= PROPTYPE_UINT8;
-template<> ePropertyType CPropertyType<uint16>::ms_TypeID						= PROPTYPE_UINT16;
-template<> ePropertyType CPropertyType<uint32>::ms_TypeID						= PROPTYPE_UINT32;
-template<> ePropertyType CPropertyType<uint64>::ms_TypeID						= PROPTYPE_UINT64;
-template<> ePropertyType CPropertyType<float32>::ms_TypeID						= PROPTYPE_FLOAT32;
-template<> ePropertyType CPropertyType<Vector2>::ms_TypeID						= PROPTYPE_VECTOR2;
-template<> ePropertyType CPropertyType<Vector2&>::ms_TypeID						= PROPTYPE_VECTOR2_REFERENCE;
-template<> ePropertyType CPropertyType<Vector2*>::ms_TypeID						= PROPTYPE_VECTOR2_ARRAY;
-template<> ePropertyType CPropertyType<EntitySystem::EntityHandle>::ms_TypeID	= PROPTYPE_ENTITYHANDLE;
-template<> ePropertyType CPropertyType<EntitySystem::EntityHandle*>::ms_TypeID	= PROPTYPE_ENTITYHANDLE_ARRAY;
-template<> ePropertyType CPropertyType<char*>::ms_TypeID						= PROPTYPE_STRING;
-
-template<class T> T CPropertyType<T>::ms_DefaultValue							= 0;
-template<> bool CPropertyType<bool>::ms_DefaultValue							= false;
-template<> int8 CPropertyType<int8>::ms_DefaultValue							= 0;
-template<> int16 CPropertyType<int16>::ms_DefaultValue							= 0;
-template<> int32 CPropertyType<int32>::ms_DefaultValue							= 0;
-template<> int64 CPropertyType<int64>::ms_DefaultValue							= 0;
-template<> uint8 CPropertyType<uint8>::ms_DefaultValue							= 0;
-template<> uint16 CPropertyType<uint16>::ms_DefaultValue						= 0;
-template<> uint32 CPropertyType<uint32>::ms_DefaultValue						= 0;
-template<> uint64 CPropertyType<uint64>::ms_DefaultValue						= 0;
-template<> float32 CPropertyType<float32>::ms_DefaultValue						= 0.f;
-template<> Vector2 CPropertyType<Vector2>::ms_DefaultValue						= Vector2_Zero;
-template<> Vector2& CPropertyType<Vector2&>::ms_DefaultValue					= Vector2_Dummy;
-template<> Vector2* CPropertyType<Vector2*>::ms_DefaultValue					= 0;
-template<> EntitySystem::EntityHandle CPropertyType<EntitySystem::EntityHandle>::ms_DefaultValue = EntitySystem::EntityHandle::Null;
-template<> EntitySystem::EntityHandle* CPropertyType<EntitySystem::EntityHandle*>::ms_DefaultValue = 0;
-template<> char* CPropertyType<char*>::ms_DefaultValue							= 0;
+template<class T> T PropertyType<T>::mDefaultValue							= 0;
+template<> bool PropertyType<bool>::mDefaultValue							= false;
+template<> int8 PropertyType<int8>::mDefaultValue							= 0;
+template<> int16 PropertyType<int16>::mDefaultValue							= 0;
+template<> int32 PropertyType<int32>::mDefaultValue							= 0;
+template<> int64 PropertyType<int64>::mDefaultValue							= 0;
+template<> uint8 PropertyType<uint8>::mDefaultValue							= 0;
+template<> uint16 PropertyType<uint16>::mDefaultValue						= 0;
+template<> uint32 PropertyType<uint32>::mDefaultValue						= 0;
+template<> uint64 PropertyType<uint64>::mDefaultValue						= 0;
+template<> float32 PropertyType<float32>::mDefaultValue						= 0.f;
+template<> Vector2 PropertyType<Vector2>::mDefaultValue						= Vector2_Zero;
+template<> Vector2& PropertyType<Vector2&>::mDefaultValue					= Vector2_Dummy;
+template<> Vector2* PropertyType<Vector2*>::mDefaultValue					= 0;
+template<> EntitySystem::EntityHandle PropertyType<EntitySystem::EntityHandle>::mDefaultValue = EntitySystem::EntityHandle::Null;
+template<> EntitySystem::EntityHandle* PropertyType<EntitySystem::EntityHandle*>::mDefaultValue = 0;
+template<> char* PropertyType<char*>::mDefaultValue							= 0;
+//@}
 
 #endif	// _PROPERTY_TYPES_H

@@ -5,6 +5,7 @@
 #include "../Utility/Singleton.h"
 #include "../Utility/Settings.h"
 #include "InputActions.h"
+#include "../GfxSystem/IScreenListener.h"
 
 /// @name Macro for easier use.
 #define gInputMgr InputSystem::InputMgr::GetSingleton()
@@ -29,7 +30,7 @@ namespace InputSystem
 	/** This class processes all input from external devices such as mouse, keyboard or joystick. You can query its
 		current state or register for event callbacks. Note that it must be updated reguralry by calling CaptureInput.
 	*/
-	class InputMgr : public Singleton<InputMgr>
+	class InputMgr : public Singleton<InputMgr>, public GfxSystem::IScreenListener
 	{
 	public:
 		InputMgr(void);
@@ -54,8 +55,9 @@ namespace InputSystem
 		void RemoveAllInputListeners(void);
 		//@}
 
-		/// @name Sets current resolution of the screen. To be called from the gfx system.
-		void _SetResolution(uint32 width, uint32 height);
+		/// @name Callback from the GfxSystem.
+		virtual void ResolutionChanged(int x, int y);
+
 	private:
 		/// @name OIS specific stuff
 		//@{

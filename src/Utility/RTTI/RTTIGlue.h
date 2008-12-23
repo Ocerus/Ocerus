@@ -1,7 +1,3 @@
-//
-// RTTIClass.h
-//
-
 #ifndef _RTTICLASS_H
 #define _RTTICLASS_H
 
@@ -11,98 +7,69 @@
 #include "../Hash.h"
 #include "../../EntitySystem/ComponentMgr/ComponentEnums.h"
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// RTTIGlue
-//
-// RTTIGlue is the RTTI "sandwich class" being used to augment a class with RTTI support. Classes
-// supporting RTTI need to derive from this class, with their ancestor specified as the BaseClass
-// template parameter.
-//
-///////////////////////////////////////////////////////////////////////////////////////////////////
-
+/** @name RTTIGlue is the RTTI "sandwich class" being used to augment a class with RTTI support. Classes
+	supporting RTTI need to derive from this class, with their ancestor specified as the BaseClass
+	template parameter.
+*/
 template <class T, class BaseClass> class RTTIGlue : public BaseClass
 {
-
 public :
 
-	static	ClassID	ClassCLID;
+	/// @name Constructor.
+	RTTIGlue(void) {}
 	
-	//----------------------------------------------------------------------------------------------
-	// Constructor
-	RTTIGlue();
-	
-	//----------------------------------------------------------------------------------------------
-	// Default factory function. Creates an instance of T. Called by the system to dynamically create
-	// class instances from class IDs.
-	static T*	Create();
+	/** @name Default factory function. Creates an instance of T. Called by the system to dynamically create
+		class instances from class IDs.
+	*/
+	static T* Create(void) { return new T(); }
 
-	//----------------------------------------------------------------------------------------------
-	// Default reflection registration function. Does nothing by default.
-	static void	RegisterReflection();
+	/// @name Default reflection registration function. Does nothing by default.
+	static void	RegisterReflection(void) {}
 
-	//----------------------------------------------------------------------------------------------
-	// Registers a property. Takes in the property name, its getter and setter functions, and the property
-	// type as a template parameter. Should be called from within a user-defined RegisterReflection function.
+	/** @name Registers a property. Takes in the property name, its getter and setter functions, and the property
+		type as a template parameter. Should be called from within a user-defined RegisterReflection function.
+	*/
 	template <class PropertyType> 
-	static	void RegisterProperty(	const char* szName, typename CProperty<T, PropertyType>::GetterType Getter, 
-									typename CProperty<T, PropertyType>::SetterType Setter, const uint8 accessFlags )
+	static void RegisterProperty(const char* name, typename Property<T, PropertyType>::GetterType getter, 
+								 typename Property<T, PropertyType>::SetterType setter, const uint8 accessFlags)
 	{
-		CProperty<T, PropertyType>* pProperty = new CProperty<T, PropertyType>( szName, Getter, Setter, accessFlags );
+		Property<T, PropertyType>* pProperty = new Property<T, PropertyType>( name, getter, setter, accessFlags );
 		T::GetClassRTTI()->GetProperties()->push_back( pProperty );
 		PropertySystem::GetProperties()->push_back( pProperty );
 	}
 
+	/// @name Adds a component dependant on the owner into the list.
 	static void AddComponentDependency(const EntitySystem::eComponentType cmp)
 	{
 		T::GetClassRTTI()->GetComponentDependencies()->push_back(cmp);
 	}
 
-	//----------------------------------------------------------------------------------------------
-	// Returns RTTI info associated with this class type.
-	static inline CRTTI* GetClassRTTI()
+	/// @name ID of the T class.
+	static ClassID& GetClassID(void)
 	{
-		return &ms_RTTI;
+		static ClassID classID = HashString(typeid(T).name());
+		return classID;
 	}
 
-	//----------------------------------------------------------------------------------------------
-	// Returns RTTI info associated with this class instance.
-	virtual CRTTI* GetRTTI()
-	{
-		return &ms_RTTI;
-	}
+	/// @name Returns RTTI info associated with this class type.
+	static inline RTTI* GetClassRTTI(void) { return &mRTTI; }
+
+	/// Returns RTTI info associated with this class instance.
+	virtual RTTI* GetRTTI(void) const { return &mRTTI; }
 
 protected :
 
-	static CRTTI	ms_RTTI;				// RTTI structure
+	static RTTI	mRTTI;
 																		
 };
 
-// The first parameter (0) is a stub. See CRTTI constructor for details.
+/** @name Creates an RTTI structure for a specified class pair.
+	The first parameter (0) is a stub. See RTTI constructor for details.
+*/
 template <class T, class BaseClass>
-CRTTI RTTIGlue<T, BaseClass>::ms_RTTI
-	( 0, HashString(typeid(T).name()), typeid(T).name(), BaseClass::GetClassRTTI(), (ClassFactoryFunc)T::Create, 
+RTTI RTTIGlue<T, BaseClass>::mRTTI
+( 0, RTTIGlue<T, BaseClass>::GetClassID(), typeid(T).name(), BaseClass::GetClassRTTI(), (ClassFactoryFunc)T::Create, 
 	(RegisterReflectionFunc)T::RegisterReflection );
-
-template <class T, class BaseClass>
-CRTTI RTTIGlue<T, BaseClass>::ClassCLID
-	( HashString(typeid(T).name()) );
-
-template <class T, class BaseClass> 
-RTTIGlue<T, BaseClass>::RTTIGlue()
-{
-}
-
-template <class T, class BaseClass> 
-T* RTTIGlue<T, BaseClass>::Create()
-{
-	return new T();
-}
-
-template <class T, class BaseClass> 
-void RTTIGlue<T, BaseClass>::RegisterReflection()
-{
-}
 
 
 #endif	// _RTTICLASS_H

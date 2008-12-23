@@ -7,6 +7,7 @@
 */
 
 
+#include <Windows.h>
 #include "..\..\include\hgevector.h"
 
 float InvSqrt(float x)

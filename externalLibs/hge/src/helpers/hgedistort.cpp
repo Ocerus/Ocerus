@@ -6,6 +6,7 @@
 ** hgeDistortionMesh helper class implementation
 */
 
+#include <Windows.h>
 #include "..\..\include\hgedistort.h"
 
 

@@ -7,6 +7,7 @@
 */
 
 
+#include <Windows.h>
 #include "..\..\include\hgefont.h"
 #include <stdlib.h>
 #include <stdio.h>

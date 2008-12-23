@@ -93,6 +93,7 @@ public:
 	virtual	void		CALL	System_Log(const char *format, ...);
 	virtual bool		CALL	System_Launch(const char *url);
 	virtual void		CALL	System_Snapshot(const char *filename=0);
+	virtual void		CALL	System_ChangeResolution(const int width, const int height);
 
 	virtual void*		CALL	Resource_Load(const char *filename, DWORD *size=0);
 	virtual void		CALL	Resource_Free(void *res);

@@ -10,12 +10,16 @@
 class RTTIBaseClass;
 //@}
 
+/// @name This class encapsulates abstract properties to allow easier access to their values.
 class PropertyHolder
 {
 public:
+	/// @name Constructors.
+	//@{
 	PropertyHolder(void): mOwner(0), mProperty(0) {}
 	PropertyHolder(const PropertyHolder& rhs): mOwner(rhs.mOwner), mProperty(rhs.mProperty) {}
-	PropertyHolder(RTTIBaseClass* owner, CAbstractProperty* prop): mOwner(owner), mProperty(prop) {}
+	PropertyHolder(RTTIBaseClass* owner, AbstractProperty* prop): mOwner(owner), mProperty(prop) {}
+	//@}
 
 	PropertyHolder& operator=(const PropertyHolder& rhs)
 	{
@@ -24,17 +28,19 @@ public:
 		return *this;
 	}
 
+	/// @name Returns the value of this property.
 	template<class T>
 	T GetValue(void)
 	{
 		if (!mProperty)
 		{
 			ReportUndefined();
-			return CPropertyType<T>::GetDefaultValue();
+			return PropertyType<T>::GetDefaultValue();
 		}
 		return mProperty->GetValue<T>(mOwner);
 	}
 	
+	/// @name Sets the value of this property.
 	template<class T>
 	void SetValue(const T value)
 	{
@@ -48,8 +54,9 @@ public:
 
 private:
 	RTTIBaseClass* mOwner;
-	CAbstractProperty* mProperty;
+	AbstractProperty* mProperty;
 
+	/// @name Problem reporting.
 	void ReportUndefined(void);
 };
 

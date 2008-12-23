@@ -7,6 +7,7 @@
 */
 
 
+#include <Windows.h>
 #include "hge_impl.h"
 
 #ifdef DEMO

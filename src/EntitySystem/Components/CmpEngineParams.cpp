@@ -11,6 +11,9 @@ void EntitySystem::CmpEngineParams::Init( void )
 	mMaterial.Invalidate();
 	mArcAngle = 0.0f;
 	mStabilizationRatio = 0;
+	mTexture = 0;
+	mTextureScale = 1.0f;
+	mTextureAngle = 0.0f;
 
 	mMaxHitpoints = 0;
 	mMaxPower = 0;
@@ -48,6 +51,19 @@ EntityMessage::eResult EntitySystem::CmpEngineParams::HandleMessage( const Entit
 		assert(msg.data);
 		*(uint32*)msg.data = GetStabilizationRatio();
 		return EntityMessage::RESULT_OK;
+	case EntityMessage::TYPE_GET_TEXTURE:
+		assert(msg.data);
+		//TODO predelat char*
+		*(char**)msg.data = GetTexture();
+		return EntityMessage::RESULT_OK;
+	case EntityMessage::TYPE_GET_TEXTURE_ANGLE:
+		assert(msg.data);
+		*(float32*)msg.data = GetTextureAngle();
+		return EntityMessage::RESULT_OK;
+	case EntityMessage::TYPE_GET_TEXTURE_SCALE:
+		assert(msg.data);
+		*(float32*)msg.data = GetTextureScale();
+		return EntityMessage::RESULT_OK;
 	}
 	return EntityMessage::RESULT_IGNORED;
 }
@@ -59,6 +75,10 @@ void EntitySystem::CmpEngineParams::RegisterReflection( void )
 	RegisterProperty<uint32>("MaxPower", &GetMaxPower, &SetMaxPower, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<float32>("ArcAngle", &GetArcAngle, &SetArcAngle, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<uint32>("StabilizationRatio", &GetStabilizationRatio, &SetStabilizationRatio, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<float32>("TextureAngle", &GetTextureAngle, &SetTextureAngle, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<float32>("TextureScale", &GetTextureScale, &SetTextureScale, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	//TODO predelat char*
+	RegisterProperty<char*>("Texture", &GetTexture, &SetTexture, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 }
 
 void EntitySystem::CmpEngineParams::ComputeParams( void )

@@ -6,6 +6,7 @@
 ** Resource script parser implementation
 */
 
+#include <Windows.h>
 #include "parser.h"
 
 

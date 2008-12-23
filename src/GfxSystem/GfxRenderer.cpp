@@ -3,7 +3,35 @@
 #include <hge.h>
 #include "Triangulate.h"
 #include "Texture.h"
-#include "IScreenResolutionChangeListener.h"
+#include "IScreenListener.h"
+
+namespace GfxSystem
+{
+
+	inline DWORD ConvertColorToDWORD(const Color& color) {
+		return ARGB(color.a, color.r, color.g, color.b);
+	}
+
+	/** This function is called whenever the HGE was notified that the application requested the shutdown.
+	Returning false will prevent the application from being shut down. It's advices to return true.
+	*/
+	bool HgeExitFunction(void)
+	{
+		static bool alreadyDone = false;
+		if (alreadyDone)
+			return true;
+		alreadyDone = true;
+
+		// we need to save the current position of the window so that we can restore it on next startup
+		Point pos;
+		if (!gGfxRenderer.IsFullscreen() && gGfxRenderer.GetWindowPosition(pos))
+		{
+			gApp.GetGlobalConfig()->SetInt32("WindowX", pos.x, "Windows");
+			gApp.GetGlobalConfig()->SetInt32("WindowY", pos.y, "Windows");
+		}
+		return true;
+	}
+}
 
 using namespace GfxSystem;
 
@@ -14,34 +42,6 @@ Pen Pen::NullPen(Color(0,0,0,0));
 Rect Rect::NullRect(0,0,0,0);
 Color Color::NullColor(0,0,0,0);
 Color Color::FullColor(255,255,255,255);
-
-namespace GfxSystem
-{
-
-	inline DWORD ConvertColorToDWORD(const Color& color) {
-		return ARGB(color.a, color.r, color.g, color.b);
-	}
-
-	/** This function is called whenever the HGE was notified that the application requested the shutdown.
-		Returning false will prevent the application from being shut down. It's advices to return true.
-	*/
-	bool HgeExitFunction(void)
-	{
-		static bool alreadyDone = false;
-		if (alreadyDone)
-			return true;
-		alreadyDone = true;
-
-		// we need to save the current position of the window so that we can restore it on next startup
-		RECT windowRect;
-		if (GetWindowRect(gGfxRenderer.mHGE->System_GetState(HGE_HWND), &windowRect))
-		{
-			gApp.GetGlobalConfig()->SetInt32("WindowX", windowRect.left, "Windows");
-			gApp.GetGlobalConfig()->SetInt32("WindowY", windowRect.top, "Windows");
-		}
-		return true;
-	}
-}
 
 GfxRenderer::GfxRenderer(const Point& resolution, bool fullscreen):
 	mCameraX(0),
@@ -61,7 +61,7 @@ GfxRenderer::GfxRenderer(const Point& resolution, bool fullscreen):
 	mHGE->System_SetState(HGE_WINDOWED, !fullscreen);
 	mHGE->System_SetState(HGE_EXITFUNC, (hgeCallback)(&HgeExitFunction));
 	mHGE->System_SetState(HGE_LOGFILE, "HgeLog.txt");
-	mHGE->System_SetState(HGE_HIDEMOUSE, false);
+	mHGE->System_SetState(HGE_HIDEMOUSE, true);
 	mHGE->System_SetState(HGE_USESOUND, false);
 	mHGE->System_SetState(HGE_SHOWSPLASH, false);
 	bool success = mHGE->System_Initiate();
@@ -87,20 +87,22 @@ uint32 GfxRenderer::_GetWindowHandle() const
 	return (uint32)hWnd;
 }
 
-void GfxRenderer::ChangeResolution( const Point& resolution )
+void GfxRenderer::ChangeResolution( const uint32 width, const uint32 height )
 {
-	std::set<IScreenResolutionChangeListener*>::iterator iter = mResChangeListeners.begin();
+	assert(mHGE);
 
-	gLogMgr.LogMessage("Changing resolution to ", resolution.x, resolution.y);
+	std::set<IScreenListener*>::iterator iter = mScreenListeners.begin();
 
-	mHGE->System_SetState(HGE_SCREENWIDTH,resolution.x);
-	mHGE->System_SetState(HGE_SCREENHEIGHT,resolution.y);
+	gLogMgr.LogMessage("Changing resolution to ", width, height);
 
-	gInputMgr._SetResolution(resolution.x, resolution.y);
+	mHGE->System_ChangeResolution(width, height);
 
-	while (iter != mResChangeListeners.end())
+	/*mHGE->System_SetState(HGE_SCREENWIDTH,width);
+	mHGE->System_SetState(HGE_SCREENHEIGHT,height);*/
+
+	while (iter != mScreenListeners.end())
 	{
-		(*iter)->EventResolutionChanged(resolution.x, resolution.y);
+		(*iter)->ResolutionChanged(width, height);
 		++iter;
 	}
 
@@ -124,9 +126,9 @@ int32 GfxRenderer::GetScreenHeight( void ) const
 
 void GfxRenderer::SetFullscreen(bool fullscreen)
 {
-	gLogMgr.LogMessage("Changing fullscreen/windowed" + fullscreen);
-	mHGE->System_SetState(HGE_WINDOWED,fullscreen);	
-	gLogMgr.LogMessage("Fullscreen changed");
+	gLogMgr.LogMessage("Changing fullscreen/windowed", fullscreen);
+	mHGE->System_SetState(HGE_WINDOWED, !fullscreen);	
+	gLogMgr.LogMessage("Fullscreen changed to", IsFullscreen());
 }
 
 bool GfxRenderer::BeginRendering(void) const
@@ -559,3 +561,26 @@ Vector2 GfxRenderer::GetCameraWorldBoxBotRight( void ) const
 	return Vector2(ScreenToWorldX(GetScreenWidth()),ScreenToWorldY(GetScreenHeight()));
 }
 
+bool GfxRenderer::IsFullscreen( void ) const
+{
+	assert(mHGE);
+	return !mHGE->System_GetState(HGE_WINDOWED);
+}
+
+
+//------------------------------------------------------------------------
+// Haxxor functions follow!
+
+#include <Windows.h>
+
+bool GfxRenderer::GetWindowPosition( Point& out )
+{
+	RECT windowRect;
+	bool result = GetWindowRect(gGfxRenderer.mHGE->System_GetState(HGE_HWND), &windowRect) != 0;
+	if (result)
+	{
+		out.x = windowRect.left;
+		out.y = windowRect.top;
+	}
+	return result;
+}

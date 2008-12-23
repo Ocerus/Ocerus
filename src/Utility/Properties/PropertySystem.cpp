@@ -1,7 +1,3 @@
-//
-// PropertySystem.cpp
-//
-
 #include "Common.h"
 #include "PropertySystem.h"
 
@@ -9,16 +5,16 @@ PropertySystem gPropertySystem;
 
 PropertySystem::~PropertySystem()
 {
-	std::list<CAbstractProperty*>* propertyList = GetProperties();
+	std::list<AbstractProperty*>* propertyList = GetProperties();
 	// Destroy properties
-	for ( std::list<CAbstractProperty*>::iterator it = propertyList->begin(); it != propertyList->end(); ++it )
+	for ( std::list<AbstractProperty*>::iterator it = propertyList->begin(); it != propertyList->end(); ++it )
 		delete *it;
 	propertyList->clear();
 	DYN_DELETE propertyList;
 }
 
-std::list<CAbstractProperty*>* PropertySystem::GetProperties(void)
+std::list<AbstractProperty*>* PropertySystem::GetProperties(void)
 {
-	static std::list<CAbstractProperty*>* propertyList = DYN_NEW std::list<CAbstractProperty*>();
+	static std::list<AbstractProperty*>* propertyList = DYN_NEW std::list<AbstractProperty*>();
 	return propertyList;
 }

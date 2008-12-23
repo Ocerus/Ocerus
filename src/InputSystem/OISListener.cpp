@@ -22,7 +22,7 @@ InputSystem::OISListener::OISListener(): mMouse(0), mKeyboard(0), mOIS(0)
 	pl.insert(OIS::ParamList::value_type("WINDOW", StringConverter::ToString(hWnd)));
 
 	// let the standard mouse cursor be
-	pl.insert(std::make_pair(std::string("w32_mouse"), std::string("DISCL_FOREGROUND" )));
+	pl.insert(std::make_pair(std::string("w32_mouse"), std::string("DISCL_BACKGROUND" )));
 	pl.insert(std::make_pair(std::string("w32_mouse"), std::string("DISCL_NONEXCLUSIVE")));
 
 	mOIS = OIS::InputManager::createInputSystem(pl);
@@ -37,8 +37,8 @@ InputSystem::OISListener::OISListener(): mMouse(0), mKeyboard(0), mOIS(0)
 
 InputSystem::OISListener::~OISListener()
 {
-	assert(mOIS);
-	OIS::InputManager::destroyInputSystem(mOIS);
+	if (mOIS)
+		OIS::InputManager::destroyInputSystem(mOIS);
 }
 
 bool InputSystem::OISListener::mouseMoved( const OIS::MouseEvent &evt )
@@ -107,17 +107,20 @@ bool InputSystem::OISListener::keyReleased( const OIS::KeyEvent &evt )
 
 void InputSystem::OISListener::CaptureInput()
 {
-	assert(mMouse && mKeyboard);
-	mMouse->capture();
-	mKeyboard->capture();
+	if (mKeyboard)
+		mKeyboard->capture();
+	if (mMouse)
+		mMouse->capture();
 }
 
 void InputSystem::OISListener::SetResolution( uint32 width, uint32 height )
 {
-	assert(mMouse);
-	const OIS::MouseState &ms = mMouse->getMouseState();
-	ms.width = width;
-	ms.height = height;
+	if (mMouse)
+	{
+		const OIS::MouseState &ms = mMouse->getMouseState();
+		ms.width = width;
+		ms.height = height;
+	}
 }
 
 InputSystem::eMouseButton InputSystem::OISListener::OisToMbtn( OIS::MouseButtonID id )
@@ -136,13 +139,15 @@ InputSystem::eMouseButton InputSystem::OISListener::OisToMbtn( OIS::MouseButtonI
 
 bool InputSystem::OISListener::IsKeyDown( const eKeyCode k ) const
 {
-	assert(mKeyboard);
-	return mKeyboard->isKeyDown(static_cast<OIS::KeyCode>(k));
+	if (mKeyboard)
+		return mKeyboard->isKeyDown(static_cast<OIS::KeyCode>(k));
+	return false;
 }
 
 void InputSystem::OISListener::GetMouseState( InputSystem::MouseState& state ) const
 {
-	assert(mMouse);
+	if (!mMouse)
+		return;
 	const OIS::MouseState& oisstate = mMouse->getMouseState();
 	state.x = oisstate.X.abs;
 	state.y = oisstate.Y.abs;
