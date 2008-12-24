@@ -166,6 +166,8 @@ namespace InputSystem
 
 	struct MouseState
 	{
+		MouseState(void): x(0), y(0), wheel(0), buttons(0) {}
+
 		/// @name Position of the cursor.
 		//@{
 		int32 x;

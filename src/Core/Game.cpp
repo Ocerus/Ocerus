@@ -415,14 +415,14 @@ void Core::Game::Draw( const float32 delta)
 
 void Core::Game::KeyPressed( const KeyInfo& ke )
 {
-	if (ke.keyAction == KC_F)
+	/*if (ke.keyAction == KC_F)
 	{
 		gGfxRenderer.SetFullscreen(!gGfxRenderer.IsFullscreen());
 	}
 	if (ke.keyAction==KC_D)
 	{
 		gGfxRenderer.ChangeResolution(800,600);
-	}
+	}*/
 }
 
 void Core::Game::KeyReleased( const KeyInfo& ke )

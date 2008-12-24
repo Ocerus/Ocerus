@@ -53,6 +53,7 @@ namespace OIS
 		IDirectInputDevice8* mMouse;
 		DWORD coopSetting;
 		HWND mHwnd;
+		bool mInited; // HARDWIRE
 	};
 }
 

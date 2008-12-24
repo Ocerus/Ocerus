@@ -35,6 +35,7 @@ Win32Mouse::Win32Mouse( InputManager* creator, IDirectInput8* pDI, bool buffered
 	mDirectInput = pDI;
 	coopSetting = coopSettings;
 	mHwnd = 0;
+	mInited = false; // HARDWIRE
 
 	static_cast<Win32InputManager*>(mCreator)->_setMouseUsed(true);
 }
@@ -156,7 +157,7 @@ void Win32Mouse::capture()
 		} //end switch
 	}//end for
 
-	if( axesMoved )
+	if( axesMoved || !mInited ) // HARDWIRE
 	{
 		if( coopSetting & DISCL_NONEXCLUSIVE )
 		{
@@ -188,6 +189,8 @@ void Win32Mouse::capture()
 		if( mListener && mBuffered )
 			mListener->mouseMoved( MouseEvent( this, mState ) );
 	}
+
+	mInited = true; // HARDWIRE
 }
 
 //--------------------------------------------------------------------------------------------------//

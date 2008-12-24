@@ -51,6 +51,9 @@ namespace GUISystem {
 		/// @name This gets called automatically in constructor. Will change later
 		virtual void LoadConsole();
 
+		/// @name Loads basic stuff common for all schemes.
+		void LoadStyle(void);
+
 		/// @name Called in main application loop
 		//@{
 		inline virtual void RenderGUI() const {

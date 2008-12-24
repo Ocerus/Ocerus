@@ -58,15 +58,9 @@ namespace GUISystem {
 		gLogMgr.LogMessage("******** GUI Console init *********");
 // Resource loading
 		gResourceMgr.AddResourceFileToGroup("gui/schemes/Console.scheme", "schemes");
-		gResourceMgr.AddResourceFileToGroup("gui/schemes/TaharezLook.scheme", "schemes");
 		gResourceMgr.AddResourceFileToGroup("gui/imagesets/Console.imageset", "imagesets");
 		gResourceMgr.AddResourceFileToGroup("gui/imagesets/BSLogov2.png", "imagesets");
-		gResourceMgr.AddResourceFileToGroup("gui/imagesets/TaharezLook.imageset", "imagesets");
-		gResourceMgr.AddResourceFileToGroup("gui/imagesets/TaharezLook.tga", "imagesets");		
-		gResourceMgr.AddResourceFileToGroup("gui/fonts/Commonwealth-10.font", "fonts");
-		gResourceMgr.AddResourceFileToGroup("gui/fonts/Commonv2c.ttf", "fonts");
 		gResourceMgr.AddResourceFileToGroup("gui/layouts/Console.layout", "layouts");
-		gResourceMgr.AddResourceFileToGroup("gui/looknfeel/TaharezLook.looknfeel", "looknfeels");
 /* // Resource blind loading
 
 		gResourceMgr.AddResourceDirToGroup("gui/schemes", "schemes");
@@ -75,7 +69,6 @@ namespace GUISystem {
 		gResourceMgr.AddResourceDirToGroup("gui/layouts", "layouts");
 		gResourceMgr.AddResourceDirToGroup("gui/looknfeel", "looknfeels");
 */
-		CEGUI::SchemeManager::getSingleton().loadScheme("TaharezLook.scheme");
 		CEGUI::SchemeManager::getSingleton().loadScheme("Console.scheme");
 
 		if( !CEGUI::FontManager::getSingleton().isFontPresent( "Commonwealth-10" ) )
@@ -91,6 +84,23 @@ namespace GUISystem {
 		RegisterEvents();
 
 	}
+
+
+	void GUIMgr::LoadStyle( void )
+	{
+		CEGUI::SchemeManager::getSingleton().loadScheme("TaharezLook.scheme");
+		if( !CEGUI::FontManager::getSingleton().isFontPresent( "Commonwealth-10" ) )
+			CEGUI::FontManager::getSingleton().createFont( "Commonwealth-10.font" );
+
+		CEGUI::SchemeManager::getSingleton().loadScheme("Console.scheme");
+		CurrentWindowRoot =	CEGUI::WindowManager::getSingleton().loadWindowLayout( "Console.layout" );
+		CEGUI::System::getSingleton().setGUISheet( CurrentWindowRoot );
+		ConsoleIsLoaded = true;
+
+		mCegui->setDefaultFont( "Commonwealth-10" );
+		mCegui->setDefaultMouseCursor( "TaharezLook", "MouseArrow" );
+	}
+
 
 	void GUIMgr::AddConsoleListener(IConsoleListener* listener) {
 		ConsoleListeners.insert(listener);
@@ -157,6 +167,8 @@ namespace GUISystem {
 	void GUIMgr::Update( float32 delta ) {
 		assert(mCegui);
 		mCegui->injectTimePulse( delta );
+		InputSystem::MouseState& m = gInputMgr.GetMouseState();
+		mCegui->injectMousePosition(float(m.x), float(m.y));
 	}
 
 	void GUIMgr::KeyPressed(const InputSystem::KeyInfo& ke) {
@@ -179,7 +191,6 @@ namespace GUISystem {
 
 	void GUIMgr::MouseMoved(const InputSystem::MouseInfo& mi) {
 		assert(mCegui);
-		CEGUI::System::getSingleton().injectMousePosition(float(mi.x), float(mi.y));
 		CEGUI::System::getSingleton().injectMouseWheelChange(float(mi.wheelDelta));
 	}
 

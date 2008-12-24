@@ -108,14 +108,30 @@ void ResourceSystem::Resource::EnsureLoaded( void )
 void ResourceSystem::Resource::GetRawInputData( DataContainer& outData )
 {
 	outData.Release();
+	std::vector<uint8*> tmps;
+	const uint32 tmpMaxSize = 1024; // size of one tmp buffer
+	uint32 tmpLastSize; // size of the last tmp buffer in the vector
+	uint32 bufferSize = 0; // resulting size
 	InputStream& is = OpenInputStream(ISM_BINARY);
-	std::vector<uint8> tmp;
 	while (is.good())
-		tmp.push_back(is.get());
-	uint8* buffer = DYN_NEW uint8[tmp.size() - 1];
-	uint8* bufferPos = buffer;
-	for (std::vector<uint8>::const_iterator i=tmp.begin(); (i + 1)!=tmp.end(); ++i)
-		*(bufferPos++) = *i;
-	outData.SetData(buffer, tmp.size() - 1);
+	{
+		uint8* tmpBuf = DYN_NEW uint8[tmpMaxSize];
+		is.read((char*)tmpBuf, tmpMaxSize);
+		tmpLastSize = is.gcount();
+		bufferSize += tmpLastSize;
+		tmps.push_back(tmpBuf);
+	}
 	CloseInputStream();
+	uint8* buffer = DYN_NEW uint8[bufferSize];
+	uint8* lastBufferPos = buffer;
+	int32 numBufs = tmps.size();
+	for (int32 i=0; i<numBufs; ++i)
+	{
+		uint32 copyCount = i==numBufs-1 ? tmpLastSize : tmpMaxSize;
+		memcpy(lastBufferPos, tmps[i], copyCount);
+		lastBufferPos += copyCount;
+		DYN_DELETE_ARRAY tmps[i];
+	}
+	assert(buffer+bufferSize == lastBufferPos);
+	outData.SetData(buffer, bufferSize);
 }
