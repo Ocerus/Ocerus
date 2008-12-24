@@ -438,6 +438,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\Utility\StringKey.h"
+					>
+				</File>
+				<File
 					RelativePath=".\src\Utility\Timer.h"
 					>
 				</File>
@@ -455,6 +459,10 @@
 				</File>
 				<File
 					RelativePath=".\src\Utility\Settings.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Utility\StringKey.cpp"
 					>
 				</File>
 				<File
@@ -819,10 +827,6 @@
 			<Filter
 				Name="inc"
 				>
-				<File
-					RelativePath=".\src\StringSystem\StringKey.h"
-					>
-				</File>
 				<File
 					RelativePath=".\src\StringSystem\StringMgr.h"
 					>

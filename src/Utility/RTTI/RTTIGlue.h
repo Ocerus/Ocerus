@@ -31,17 +31,17 @@ public :
 	*/
 	template <class PropertyType> 
 	static void RegisterProperty(const char* name, typename Property<T, PropertyType>::GetterType getter, 
-								 typename Property<T, PropertyType>::SetterType setter, const uint8 accessFlags)
+								 typename Property<T, PropertyType>::SetterType setter, const PropertyAccessFlags accessFlags)
 	{
 		Property<T, PropertyType>* pProperty = new Property<T, PropertyType>( name, getter, setter, accessFlags );
-		T::GetClassRTTI()->GetProperties()->push_back( pProperty );
+		T::GetClassRTTI()->AddProperty(pProperty);
 		PropertySystem::GetProperties()->push_back( pProperty );
 	}
 
 	/// @name Adds a component dependant on the owner into the list.
 	static void AddComponentDependency(const EntitySystem::eComponentType cmp)
 	{
-		T::GetClassRTTI()->GetComponentDependencies()->push_back(cmp);
+		T::GetClassRTTI()->AddComponentDependency(cmp);
 	}
 
 	/// @name ID of the T class.

@@ -129,7 +129,7 @@ EntitySystem::eEntityType EntitySystem::EntityMgr::GetEntityType( const EntityHa
 	return ei->second.type;
 }
 
-bool EntitySystem::EntityMgr::GetEntityProperties( const EntityHandle h, PropertyList& out, const uint8 flagMask )
+bool EntitySystem::EntityMgr::GetEntityProperties( const EntityHandle h, PropertyList& out, const PropertyAccessFlags flagMask )
 {
 	return mComponentMgr->GetEntityProperties(h, out, flagMask);
 }
@@ -143,4 +143,9 @@ bool EntitySystem::EntityMgr::IsEntityInited( const EntityHandle h ) const
 		return false;
 	}
 	return ei->second.fullyInited;
+}
+
+PropertyHolder EntitySystem::EntityMgr::GetEntityProperty( const EntityHandle h, const StringKey key, const PropertyAccessFlags flagMask /*= 0xff*/ )
+{
+	return mComponentMgr->GetEntityProperty(h, key, flagMask);
 }

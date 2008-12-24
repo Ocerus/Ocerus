@@ -82,7 +82,7 @@ const TextData* StringMgr::GetTextDataPtr(const StringKey& key)
 {
 	const TextData* returnValue = &mTextDataMap[key];
 	if (*returnValue == "") {
-		gLogMgr.LogMessage("StringMgr: Index " + key + " doesn't exist. Return value set to empty TextData", LOG_ERROR);
+		gLogMgr.LogMessage("StringMgr: Index ", key, " doesn't exist. Return value set to empty TextData", LOG_ERROR);
 	}
 	return returnValue;
 }
@@ -91,7 +91,7 @@ const TextData StringMgr::GetTextData(const StringKey& key)
 {
 	const TextData returnValue = mTextDataMap[key];
 	if (returnValue == "") {
-		gLogMgr.LogMessage("StringMgr: Index " + key + " doesn't exist. Return value set to empty TextData", LOG_ERROR);
+		gLogMgr.LogMessage("StringMgr: Index ", key, " doesn't exist. Return value set to empty TextData", LOG_ERROR);
 	}
 	return returnValue;
 }

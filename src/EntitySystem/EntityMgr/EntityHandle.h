@@ -2,10 +2,15 @@
 #define _ENTITYHANDLE_H_
 
 #include "../../Utility/Settings.h"
+#include "../../Utility/StringKey.h"
 #include "EntityMessage.h"
 #include "EntityEnums.h"
 
+/// @name Forward declarations.
+//@{
 class PropertyList;
+class PropertyHolder;
+//@}
 
 namespace EntitySystem
 {
@@ -43,8 +48,11 @@ namespace EntitySystem
 		/// @name Finishes initialization of this entity. Must be called once only!
 		void FinishInit(void);
 
-		/// @name Retrieves properties of this entity.
-		bool GetProperties(PropertyList& out, uint8 mask = 0xff);
+		/// @name Retrieves properties of this entity. A filter related to properties' flags can be specified.
+		bool GetProperties(PropertyList& out, const PropertyAccessFlags mask = FULL_PROPERTY_ACCESS_FLAGS);
+
+		/// @name Retrieves a property of this entity. A filter related to properties' flags can be specified.
+		bool GetProperty(PropertyHolder& out, const StringKey key, const PropertyAccessFlags mask = FULL_PROPERTY_ACCESS_FLAGS);
 
 		/// @name Sends a message to this entity.
 		EntityMessage::eResult PostMessage(const EntityMessage::eType type, void* data = 0);

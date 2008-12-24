@@ -42,7 +42,9 @@ namespace EntitySystem
 		/// @name Returns true if the entity was fully initialized.
 		bool IsEntityInited(const EntityHandle h) const;
 		/// @name Retrieves properties of an entity. A filter related to properties' flags can be specified.
-		bool GetEntityProperties(const EntityHandle h, PropertyList& out, const uint8 flagMask);
+		bool GetEntityProperties(const EntityHandle h, PropertyList& out, const PropertyAccessFlags flagMask = FULL_PROPERTY_ACCESS_FLAGS);
+		/// @name Retrieves a property of an entity. A filter related to properties' flags can be specified.
+		PropertyHolder GetEntityProperty(const EntityHandle h, const StringKey key, const PropertyAccessFlags flagMask = FULL_PROPERTY_ACCESS_FLAGS);
 		/// @name Destroys all entities in the manager.
 		void DestroyAllEntities(void);	
 
@@ -53,7 +55,7 @@ namespace EntitySystem
 		{
 			EntityInfo(void): type(ET_UNKNOWN), fullyInited(false) {}
 			EntityInfo(const eEntityType _type): fullyInited(false), type(_type) {}
-			EntityInfo(const bool _fullyInited, const eEntityType _type): fullyInited(_fullyInited), type(_type)	{}
+			EntityInfo(const bool _fullyInited, const eEntityType _type): fullyInited(_fullyInited), type(_type) {}
 
 			eEntityType type;
 			bool fullyInited;

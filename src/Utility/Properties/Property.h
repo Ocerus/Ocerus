@@ -20,7 +20,7 @@ public:
 	typedef void (OwnerType::*SetterType)( T Value );
 
 	/// @name Constructor.
-	inline Property( const char* name, GetterType getter, SetterType setter, const uint8 accessFlags ):
+	inline Property( const char* name, GetterType getter, SetterType setter, const PropertyAccessFlags accessFlags ):
 		TypedProperty<T> (name, accessFlags),
 		mGetter (getter),
 		mSetter (setter) {}

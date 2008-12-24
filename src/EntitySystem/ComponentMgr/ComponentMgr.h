@@ -45,12 +45,13 @@ namespace EntitySystem
 
 		/// @name Retrieves properties of an entity. A filter related to access flags can be specified.
 		//@{
-		inline bool GetEntityProperties(const EntityHandle h, PropertyList& out, const uint8 flagMask = 0xff) { return GetEntityProperties(h.GetID(), out, flagMask); }
-		bool GetEntityProperties(const EntityID id, PropertyList& out, const uint8 flagMask = 0xff);
+		inline bool GetEntityProperties(const EntityHandle h, PropertyList& out, const PropertyAccessFlags flagMask = FULL_PROPERTY_ACCESS_FLAGS) { return GetEntityProperties(h.GetID(), out, flagMask); }
+		bool GetEntityProperties(const EntityID id, PropertyList& out, const PropertyAccessFlags flagMask = FULL_PROPERTY_ACCESS_FLAGS);
+		PropertyHolder GetEntityProperty(const EntityHandle h, const StringKey key, const PropertyAccessFlags mask = FULL_PROPERTY_ACCESS_FLAGS);
 		//@}
 
 	private:
-		typedef std::map<EntityID, ComponentsList> EntityComponentsMap;
+		typedef std::map<EntityID, ComponentsList*> EntityComponentsMap;
 
 		/// @name Static component data.
 		ComponentCreationMethod mComponentCreationMethod[NUM_COMPONENT_TYPES];

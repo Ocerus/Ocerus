@@ -15,6 +15,7 @@ typedef unsigned short uint16;
 typedef unsigned int uint32;
 typedef unsigned __int64 uint64;
 typedef float float32;
+typedef double float64;
 #define	FLOAT32_MAX	FLT_MAX
 #define	FLOAT32_MIN	FLT_MIN
 #define	FLOAT32_EPSILON	FLT_EPSILON
@@ -24,6 +25,12 @@ extern Vector2 Vector2_Dummy;
 typedef b2Mat22 Matrix22;
 extern const Matrix22 Matrix22_Identity;
 typedef b2XForm XForm;
+//@}
+
+/// @name A little hack for the property system - I need to define this type somewhere else instead inside the system.
+//@{
+typedef uint8 PropertyAccessFlags;
+#define FULL_PROPERTY_ACCESS_FLAGS 0xff
 //@}
 
 /// @name Allocation.

@@ -3,7 +3,6 @@
 
 #include "AbstractProperty.h"
 #include "../Settings.h"
-#include <map>
 
 /// @name  Forward declarations.
 //@{
@@ -51,6 +50,9 @@ public:
 		}
 		mProperty->SetValue<T>(mOwner, value);
 	}
+
+	/// @name Returns true if this holder holds a valid property.
+	bool IsValid(void) const;
 
 private:
 	RTTIBaseClass* mOwner;

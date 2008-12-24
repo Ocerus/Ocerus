@@ -54,7 +54,13 @@ Component* ComponentMgr::CreateComponent(EntityHandle h, const eComponentType ty
 {
 	assert(type < NUM_COMPONENT_TYPES && type >= 0);
 	Component* cmp = mComponentCreationMethod[type]();
-	mEntityComponentsMap[h.GetID()].push_back(cmp);
+	EntityComponentsMap::const_iterator entIt = mEntityComponentsMap.find(h.GetID());
+	if (entIt == mEntityComponentsMap.end())
+	{
+		mEntityComponentsMap[h.GetID()] = DYN_NEW ComponentsList();
+		entIt = mEntityComponentsMap.find(h.GetID());
+	}
+	entIt->second->push_back(cmp);
 	cmp->SetOwner(h);
 	cmp->Init();
 	return cmp;
@@ -65,23 +71,38 @@ void ComponentMgr::DestroyEntityComponents(EntityID id)
 	EntityComponentsMap::iterator iter = mEntityComponentsMap.find(id);
 	if (iter == mEntityComponentsMap.end())
 		return;
-	ComponentsList& cmpList = iter->second;
+	ComponentsList& cmpList = *iter->second;
 	for (ComponentsList::iterator i=cmpList.begin(); i!=cmpList.end(); ++i)
 	{
 		(*i)->Clean();
 		DYN_DELETE (*i);
 	}
+	DYN_DELETE iter->second;
 	mEntityComponentsMap.erase(iter);
 } 
 
-bool EntitySystem::ComponentMgr::GetEntityProperties( const EntityID id, PropertyList& out, const uint8 flagMask /*= 0xff*/ )
+bool EntitySystem::ComponentMgr::GetEntityProperties( const EntityID id, PropertyList& out, const PropertyAccessFlags flagMask )
 {
 	out.clear();
 	EntityComponentsMap::iterator iter = mEntityComponentsMap.find(id);
 	if (iter == mEntityComponentsMap.end())
 		return false;
-	ComponentsList& cmpList = iter->second;
+	ComponentsList& cmpList = *iter->second;
 	for (ComponentsList::iterator i=cmpList.begin(); i!=cmpList.end(); ++i)
 		(*i)->GetRTTI()->EnumProperties(*i, out, flagMask);
 	return true;
+}
+
+PropertyHolder EntitySystem::ComponentMgr::GetEntityProperty( const EntityHandle h, const StringKey key, const PropertyAccessFlags mask )
+{
+	EntityComponentsMap::iterator iter = mEntityComponentsMap.find(h.GetID());
+	if (iter == mEntityComponentsMap.end())
+		return PropertyHolder();
+	ComponentsList& cmpList = *iter->second;
+	for (ComponentsList::iterator i=cmpList.begin(); i!=cmpList.end(); ++i){
+		AbstractProperty* prop = (*i)->GetRTTI()->GetProperty(key, mask);
+		if (prop)
+			return PropertyHolder(*i, prop);
+	}
+	return PropertyHolder();	
 }

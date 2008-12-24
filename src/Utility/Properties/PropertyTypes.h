@@ -4,7 +4,10 @@
 #include "../Settings.h"
 #include "../../EntitySystem/EntityMgr/EntityHandle.h"
 
-/// @name Type of access which will be granted to a property. It can be access from scripts, from editor, during the init, ...
+/** @name Type of access which will be granted to a property. It can be access from scripts, from editor, 
+	during the init, ...
+	Note that it is assumed that this type fits into PropertyAccessFlags!
+*/
 enum ePropertyAccess { PROPACC_EDIT_READ=1<<1, PROPACC_EDIT_WRITE=1<<2, PROPACC_SCRIPT_READ=1<<3, PROPACC_SCRIPT_WRITE=1<<4, PROPACC_INIT=1<<5 };
 
 /// @name Type of a property. It is used for runtime type checks.

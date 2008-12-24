@@ -46,10 +46,17 @@ void EntitySystem::EntityHandle::FinishInit( void )
 	gEntityMgr.PostMessage(*this, EntityMessage(EntityMessage::TYPE_POST_INIT));
 }
 
-bool EntitySystem::EntityHandle::GetProperties( PropertyList& out, uint8 mask /*= 0xff*/ )
+bool EntitySystem::EntityHandle::GetProperties( PropertyList& out, const PropertyAccessFlags mask )
 {
-	return gEntityMgr.GetEntityProperties(GetID(), out, mask);
+	return gEntityMgr.GetEntityProperties(*this, out, mask);
 }
+
+bool EntitySystem::EntityHandle::GetProperty( PropertyHolder& out, const StringKey key, const PropertyAccessFlags mask )
+{
+	out = gEntityMgr.GetEntityProperty(*this, key, mask);
+	return out.IsValid();
+}
+
 EntityMessage::eResult EntityHandle::PostMessage(const EntityMessage::eType type, void* data)
 {
 	assert(IsValid());

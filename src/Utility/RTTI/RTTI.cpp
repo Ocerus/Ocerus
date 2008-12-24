@@ -17,26 +17,26 @@ RTTI::RTTI(	uint8 dwStub, ClassID CLID, const char* szClassName, RTTI* pBaseClas
 		pReflectionFunc();
 }
 
-void RTTI::EnumProperties( AbstractPropertyList& out, const uint8 flagMask )
+void RTTI::EnumProperties( AbstractPropertyList& out, const PropertyAccessFlags flagMask )
 {
 	if ( mBaseRTTI )
 		mBaseRTTI->EnumProperties( out, flagMask );
-	for ( std::list<AbstractProperty*>::iterator it = mProperties.begin(); it != mProperties.end(); ++it )
-		if (((*it)->GetAccessFlags()&flagMask) == flagMask)
-			out.push_back( *it );
+	for ( PropertyMap::const_iterator it = mProperties.begin(); it != mProperties.end(); ++it )
+		if ((it->second->GetAccessFlags()&flagMask) == flagMask)
+			out.push_back( it->second );
 }
 
-void RTTI::EnumProperties( RTTIBaseClass* owner, PropertyList& out, const uint8 flagMask )
+void RTTI::EnumProperties( RTTIBaseClass* owner, PropertyList& out, const PropertyAccessFlags flagMask )
 {
 	if ( mBaseRTTI )
 		mBaseRTTI->EnumProperties( owner, out, flagMask );
-	for ( std::list<AbstractProperty*>::iterator it = mProperties.begin(); it != mProperties.end(); ++it )
-		if (((*it)->GetAccessFlags()&flagMask) == flagMask)
+	for ( PropertyMap::const_iterator it = mProperties.begin(); it != mProperties.end(); ++it )
+		if ((it->second->GetAccessFlags()&flagMask) == flagMask)
 		{
-			const char* name = (*it)->GetName();
-			if (out.find(name) != out.end())
-				gLogMgr.LogMessage("Duplicate property name '", name, "' -> overwriting", LOG_ERROR);
-			out[name] = PropertyHolder(owner, *it);
+			StringKey key = it->second->GetKey();
+			if (out.find(key) != out.end())
+				gLogMgr.LogMessage("Duplicate property name '", it->second->GetName(), "' -> overwriting", LOG_ERROR);
+			out[key] = PropertyHolder(owner, it->second);
 		}
 }
 
@@ -46,4 +46,28 @@ void RTTI::EnumComponentDependencies( ComponentDependencyList& out )
 		mBaseRTTI->EnumComponentDependencies(out);
 	for (ComponentDependencyList::const_iterator it=mComponentDependencies.begin(); it!=mComponentDependencies.end(); ++it )
 		out.push_back(*it);
+}
+
+AbstractProperty* RTTI::GetProperty( const StringKey& key, const PropertyAccessFlags flagMask )
+{
+	PropertyMap::const_iterator it = mProperties.find(key);
+	if (it != mProperties.end())
+	{
+		if ((it->second->GetAccessFlags()&flagMask) == flagMask)
+			return it->second;
+		return 0;
+	}
+	if (mBaseRTTI)
+		return mBaseRTTI->GetProperty(key);
+	return 0;
+}
+
+void RTTI::AddProperty( AbstractProperty* prop )
+{
+	mProperties[prop->GetKey()] = prop;
+}
+
+void RTTI::AddComponentDependency( const EntitySystem::eComponentType dep )
+{
+	mComponentDependencies.push_back(dep);
 }

@@ -1,7 +1,7 @@
 #ifndef __RTTI_H__
 #define __RTTI_H__
 
-#include <list>
+#include <hash_map>
 #include <vector>
 
 #include "../Properties/AbstractProperty.h"
@@ -52,10 +52,19 @@ public:
 		including all ancestor types.
 	*/
 	//@{
-	void EnumProperties( AbstractPropertyList& out, const uint8 flagMask = 0xff );
-	void EnumProperties( RTTIBaseClass* owner, PropertyList& out, const uint8 flagMask = 0xff );
+	void EnumProperties( AbstractPropertyList& out, const PropertyAccessFlags flagMask = FULL_PROPERTY_ACCESS_FLAGS );
+	void EnumProperties( RTTIBaseClass* owner, PropertyList& out, const PropertyAccessFlags flagMask = FULL_PROPERTY_ACCESS_FLAGS );
 	void EnumComponentDependencies(ComponentDependencyList& out);
 	//@}
+
+	/// @name Returns a property identified by it's name.
+	AbstractProperty* GetProperty(const StringKey& key, const PropertyAccessFlags flagMask = FULL_PROPERTY_ACCESS_FLAGS);
+
+	/// @name Adds a property to the RTTI.
+	void AddProperty(AbstractProperty* prop);
+
+	/// @name Adds a component dependency to the RTTI.
+	void AddComponentDependency(const EntitySystem::eComponentType dep);
 
 	/// @name Returns true if the RTTI structure is of the type specified by CLID.
 	inline bool	IsTypeOf(ClassID CLID) const { return mCLID == CLID; }
@@ -82,23 +91,17 @@ public:
 	/// @name Gets the class factory function.
 	inline ClassFactoryFunc	GetClassFactory(void) const { return mClassFactory; }
 
-	/** @name Provides access to the properties/dependencies bound to this run-time type. Does not include ancestor 
-		class properties. Use EnumProperties to include ancestor properties.
-	*/
-	//@{
-	inline	std::list<AbstractProperty*>::iterator	GetFirstProperty(void) { return mProperties.begin(); }
-	inline	std::list<AbstractProperty*>::iterator	GetLastProperty(void) { return mProperties.end(); }
-	inline	std::list<AbstractProperty*>*			GetProperties(void) { return &mProperties; }
-	inline  ComponentDependencyList* GetComponentDependencies(void) { return &mComponentDependencies; }
-	//@}
 
 private:
+
+	/// @name A map of properties of this RTTI.
+	typedef stdext::hash_map<StringKey, AbstractProperty*> PropertyMap;
 
 	ClassID	mCLID;									
 	char mClassName[CLASSNAME_LENGTH];	
 	RTTI* mBaseRTTI;						
 	ClassFactoryFunc mClassFactory;					
-	std::list<AbstractProperty*> mProperties;					
+	PropertyMap mProperties;					
 	ComponentDependencyList mComponentDependencies;
 
 };

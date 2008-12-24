@@ -3,7 +3,7 @@
 
 #include "../ResourceSystem/Resource.h"
 #include "../Utility/Settings.h"
-#include "StringKey.h"
+#include "../Utility/StringKey.h"
 #include <map>
 
 namespace StringSystem 

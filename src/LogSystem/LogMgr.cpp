@@ -54,6 +54,13 @@ void LogSystem::LogMgr::LogMessage(const string& msg, const uint32 num, eLogSeve
 	LogMessage(ss.str(), severity);
 }
 
+void LogSystem::LogMgr::LogMessage(const string& msg, const uint64 num, eLogSeverity severity)
+{
+	std::stringstream ss;
+	ss << msg << " (" << num << ")";
+	LogMessage(ss.str(), severity);
+}
+
 void LogSystem::LogMgr::LogMessage(const string& msg, const int32 num, eLogSeverity severity)
 {
 	std::stringstream ss;
@@ -79,6 +86,20 @@ void LogSystem::LogMgr::LogMessage( const string& msg, const string& msg2, const
 {
 	std::stringstream ss;
 	ss << msg << msg2 << msg3;
+	LogMessage(ss.str(), severity);
+}
+
+void LogSystem::LogMgr::LogMessage( const string& msg, const string& msg2, const string& msg3, const string& msg4, eLogSeverity severity )
+{
+	std::stringstream ss;
+	ss << msg << msg2 << msg3 << msg4;
+	LogMessage(ss.str(), severity);
+}
+
+void LogSystem::LogMgr::LogMessage( const string& msg, const string& msg2, const string& msg3, const string& msg4, const string& msg5, eLogSeverity severity )
+{
+	std::stringstream ss;
+	ss << msg << msg2 << msg3 << msg4 << msg5;
 	LogMessage(ss.str(), severity);
 }
 

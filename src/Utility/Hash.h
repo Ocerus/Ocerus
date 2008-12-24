@@ -3,12 +3,10 @@
 
 #include "Settings.h"
 
+/// @name If hashing fails, this is what you get from the HashString function.
 #define INVALID_HASH 0xffffffff
-#define HASH_INIT	0x811c9dc5
-#define HASH_PRIME	0x01000193
-#define CONVERT_BACKSLASH
-#define CASE_INSENSITIVE
 
+/// @name Hashes a string into an integer value.
 uint32 HashString(const char* hashString);
 
 

@@ -2,6 +2,7 @@
 #define _ABSTRACT_PROPERTY_H
 
 #include "PropertyTypes.h"
+#include "../StringKey.h"
 #include <vector>
 
 /// @name  Forward declarations.
@@ -16,18 +17,22 @@ class AbstractProperty
 public:
 
 	/// @name Constructor. Takes in property name.
-	inline AbstractProperty( const char* szName, const uint8 accessFlags ):
+	inline AbstractProperty( const char* szName, const PropertyAccessFlags accessFlags ):
+		mKey(szName),
 		mName(szName),
 		mAccessFlags(accessFlags) {}
 
 	/// @name Returns the name of this property.
-		inline const char* GetName(void) const { return mName; }
+	inline const char* GetName(void) const { return mName; }
+
+	/// @name Returns string key created from name.
+	inline StringKey GetKey(void) const { return mKey; }
 
 	/// @name Returns the type of this property.
 	virtual ePropertyType GetType(void) const = 0;
 
 	/// @name Returns flags indicating what is accessible in this property.
-	inline uint8 GetAccessFlags(void) const { return mAccessFlags; }
+	inline PropertyAccessFlags GetAccessFlags(void) const { return mAccessFlags; }
 
 	/// @name Returns the value of this property. An owner of the property must be specified.
 	template<class T>
@@ -59,8 +64,9 @@ public:
     
 protected :
 
+	StringKey mKey;
 	const char* mName;
-	uint8 mAccessFlags;
+	PropertyAccessFlags mAccessFlags;
 
 	/// @name Error reporting internals.
 	//@{

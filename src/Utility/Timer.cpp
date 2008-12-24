@@ -2,7 +2,7 @@
 #include "Timer.h"
 #include <Windows.h>
 
-Timer::Timer()
+Timer::Timer(const bool manual): mManual(manual)
 {
 	Reset();
 }
@@ -18,6 +18,9 @@ void Timer::Reset()
 	mStartTime = large.QuadPart;
 	mStartTick = GetTickCount();
 	mLastTime = 0;
+	mPausedTimeMicro = 0;
+	mTotalPauseDelta = 0;
+	mPaused = false;
 }
 
 uint64 Timer::GetMilliseconds()
@@ -27,32 +30,77 @@ uint64 Timer::GetMilliseconds()
 
 uint64 Timer::GetMicroseconds()
 {
-	LARGE_INTEGER curTime;
-	QueryPerformanceCounter(&curTime);
-	// time since last reset
-	LONGLONG newTime = curTime.QuadPart - mStartTime;
-	// scale up to get milliseconds
-	uint64 newTicks = (uint64) (1000 * newTime / mFrequency);
-
-	// detect and compensate for performance counter leaps
-	// (surprisingly common, see Microsoft KB: Q274323)
-	uint64 check = GetTickCount() - mStartTick;
-	int64 msecOff = (int64)(newTicks - check);
-	if (msecOff < -100 || msecOff > 100)
+	if (mManual)
 	{
-		// We must keep the timer running forward :)
-		int64 adjust = (std::min)(msecOff * mFrequency / 1000, newTime - mLastTime);
-		mStartTime += adjust;
-		newTime -= adjust;
-
-		// Re-calculate milliseconds
-		newTicks = (uint64) (1000 * newTime / mFrequency);
+		return mLastTime - mTotalPauseDelta;
 	}
+	else
+	{
+		if (mPaused)
+			return mPausedTimeMicro;
 
-	// Record last time for adjust
-	mLastTime = newTime;
+		LARGE_INTEGER curTime;
+		QueryPerformanceCounter(&curTime);
+		// time since last reset
+		LONGLONG newTime = curTime.QuadPart - mStartTime;
 
-	uint64 micro = (uint64) (1000000 * newTime / mFrequency);
+		// detect and compensate for performance counter leaps
+		// (surprisingly common, see Microsoft KB: Q274323)
+		// scale up to get milliseconds
+		uint64 newTicks = (uint64) (1000 * newTime / mFrequency);
+		uint64 check = GetTickCount() - mStartTick;
+		int64 msecOff = (int64)(newTicks - check);
+		if (msecOff < -100 || msecOff > 100)
+		{
+			// We must keep the timer running forward :)
+			int64 adjust = (std::min)(msecOff * mFrequency / 1000, newTime - mLastTime);
+			mStartTime += adjust;
+			newTime -= adjust;
+	
+			// Re-calculate milliseconds
+			newTicks = (uint64) (1000 * newTime / mFrequency);
+		}
+	
+		// Record last time for adjust
+		mLastTime = newTime;
+	
+		uint64 micro = (uint64) (1000000 * newTime / mFrequency);
+	
+		return micro - mTotalPauseDelta;;
+	}
+}
 
-	return micro;
+void Timer::Pause( void )
+{
+	if (!mPaused)
+	{
+		mPausedTimeMicro = GetMicroseconds();
+		mPaused = true;
+	}
+}
+
+void Timer::Resume( void )
+{
+	if (mPaused)
+	{
+		mPaused = false; // must unpause here so that GetMicroseconds returns something reasonable.
+		mTotalPauseDelta += GetMicroseconds() - mPausedTimeMicro;
+	}
+}
+
+void Timer::UpdateInMicroseconds( const uint64 delta )
+{
+	assert(mManual && "Timer must be set to manual control to be updatable");
+	if (!mPaused)
+		mLastTime += delta;
+}
+
+void Timer::UpdateInMiliseconds( const uint64 delta )
+{
+	UpdateInMicroseconds(1000 * delta);
+}
+
+void Timer::UpdateInSeconds( const float64 delta )
+{
+	UpdateInMicroseconds((uint64)(1000000.0f * delta));
 }

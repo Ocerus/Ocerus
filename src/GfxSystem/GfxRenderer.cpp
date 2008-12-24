@@ -289,16 +289,31 @@ bool GfxRenderer::DrawImage( const TexturePtr& image, int32 x, int32 y, uint8 an
 
 bool GfxRenderer::DrawImage( const TexturePtr& image, const Point& pos, uint8 anchor /*= ANCHOR_VCENTER|ANCHOR_HCENTER*/, float32 angle /*= 0.0f*/, uint8 alpha /*= 255*/, float32 scale /*= 1.0f*/ ) const
 {
+	if (image.IsNull())
+	{
+		gLogMgr.LogMessage("DrawImage: texture is null", LOG_ERROR);
+		return false;
+	}
 	return DrawImage(image, pos.x, pos.y, anchor, angle, alpha, scale, image->GetWidth(), image->GetHeight());
 }
 
 bool GfxRenderer::DrawImageWithConversion( const TexturePtr& image, const Vector2& pos, uint8 anchor /*= ANCHOR_VCENTER|ANCHOR_HCENTER*/, float32 angle /*= 0.0f*/, uint8 alpha /*= 255*/, float32 scale /*= 1.0f*/ ) const
 {
+	if (image.IsNull())
+	{
+		gLogMgr.LogMessage("DrawImage: texture is null", LOG_ERROR);
+		return false;
+	}
 	return DrawImage(image, WorldToScreenX(pos.x), WorldToScreenY(pos.y), anchor, angle, alpha, WorldToScreenImageScale(scale), image->GetWidth(), image->GetHeight());
 }
 
 bool GfxRenderer::DrawImage( const TexturePtr& image, const Rect& destRect ) const
 {
+	if (image.IsNull())
+	{
+		gLogMgr.LogMessage("DrawImage: texture is null", LOG_ERROR);
+		return false;
+	}
 	return DrawImage(image, Rect(0,0,image->GetWidth(),image->GetHeight()), destRect);
 }
 

@@ -14,7 +14,7 @@ template <class T> class TypedProperty: public AbstractProperty
 public:
 
 	/// @name Constructor.
-	inline TypedProperty(const char* name, const uint8 accessFlags):
+	inline TypedProperty(const char* name, const PropertyAccessFlags accessFlags):
 		AbstractProperty(name, accessFlags) {}
 
 	/// @name Returns the type of this property.

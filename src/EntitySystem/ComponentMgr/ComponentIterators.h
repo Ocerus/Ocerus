@@ -9,8 +9,11 @@ namespace EntitySystem
 {
 
 	/// @name Forward declarations
+	//@{
 	class Component;
+	//@}
 	
+	/// @name A list of generic component.
 	typedef std::vector<Component*> ComponentsList;
 
 	/** Enables iterating over a collection of components. Wraps around an STL iterator.

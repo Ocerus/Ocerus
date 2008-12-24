@@ -7,6 +7,8 @@
 
 using namespace Core;
 
+#define MAX_DELTA_TIME 0.5f
+
 Application::Application(): 
 	StateMachine<eAppState>(AS_INITING), mFrameSmoothingTime(0.5f), mConsoleHandle(0)
 {
@@ -155,7 +157,8 @@ float32 Application::CalculateFrameDeltaTime( void )
 	mFrameDeltaTimes.erase(mFrameDeltaTimes.begin(), it);
 
 	// average and convert to seconds
-	return (float32)(mFrameDeltaTimes.back() - mFrameDeltaTimes.front()) / ((mFrameDeltaTimes.size()-1)*1000);
+	float32 result = (float32)(mFrameDeltaTimes.back() - mFrameDeltaTimes.front()) / ((mFrameDeltaTimes.size()-1)*1000);
+	return MathUtils::Min(result, MAX_DELTA_TIME);
 }
 
 void Application::MessagePump( void )
@@ -194,7 +197,7 @@ void Application::UpdateStats()
 		if (mAvgFPS == 0)
 			mAvgFPS = mLastFPS;
 		else
-			mAvgFPS = (mAvgFPS + mLastFPS) / 2; // approximation
+			mAvgFPS = 0.05f * (mAvgFPS + mLastFPS); // approximation
 		mLastSecond = curTimeMillis;
 		mFrameCount = 0;
 	}
