@@ -14,15 +14,16 @@
 #define DEBUG_STRING_HASH
 
 
-uint32 HashString(const char* hashString)
+uint32 HashString(const char* hashString, const int32 strLen)
 {
 	if (!hashString || !hashString[0])
 		return INVALID_HASH;
 
 	const unsigned char* string = (const unsigned char*)hashString;
+	int32 len  = strLen==-1 ? strlen(hashString) : strLen;
 	uint32 hash = HASH_INIT;
 
-	while (*string)
+	while (len--)
 	{
 		hash *= HASH_PRIME;
 
@@ -65,6 +66,8 @@ uint32 HashString(const char* hashString)
 			}
 			else
 			{
+				const char* newString = it->second;
+				const char* oldString = hashString;
 				assert(!"HashString collision");
 			}
 		}

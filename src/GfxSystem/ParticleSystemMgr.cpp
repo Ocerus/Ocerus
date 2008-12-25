@@ -119,8 +119,8 @@ void ParticleSystemMgr::KillPS(ParticleSystemPtr ps)
 
 void ParticleSystemMgr::KillAll(void)
 {
-	for(PSList::iterator i = psList.begin(); i != psList.end(); i++) UnregisterPS(*i);
-		//(!i->IsUnique()) ? (*i)->Unload() : UnregisterPS(*i);
+	for(PSList::iterator i = psList.begin(); i != psList.end(); ++i)
+		(*i)->Unload();
 	psList.clear();
 }
 

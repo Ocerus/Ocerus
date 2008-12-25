@@ -34,10 +34,7 @@ public:
 	//@}
 
 private:
-	char* mData;
-
-	void CreateData(const char* str, int32 numChars = -1);
-	void DestroyData(void);
+	uint32 mData;
 };
 
 #endif // StringKey_h__

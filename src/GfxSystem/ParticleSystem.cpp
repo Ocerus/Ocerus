@@ -13,10 +13,7 @@ ParticleSystem::ParticleSystem(hgeParticleSystem* ps)
 ParticleSystem::~ParticleSystem(void) 
 {
 	//gLogMgr.LogMessage("Particle SYSTEM Destroyed");
-	if (loaded)
-	{
-		delete ps;
-	}
+	Unload();
 }
 
 void ParticleSystem::Unload(void)

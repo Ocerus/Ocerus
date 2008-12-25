@@ -7,7 +7,7 @@
 #define INVALID_HASH 0xffffffff
 
 /// @name Hashes a string into an integer value.
-uint32 HashString(const char* hashString);
+uint32 HashString(const char* hashString, const int32 strLen = -1);
 
 
 #endif // Hash_h__
