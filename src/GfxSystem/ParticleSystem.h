@@ -1,11 +1,9 @@
 #ifndef _PARTICLESYSTEM_H_
 #define _PARTICLESYSTEM_H_
 
-#include "Common.h"
 #include "../Utility/Settings.h"
 #include "hgeparticle.h"
-
-//class hgeParticleSystem;
+#include "GfxRenderer.h"
 
 namespace GfxSystem
 {
@@ -13,13 +11,14 @@ namespace GfxSystem
 	{
 	public:
 		~ParticleSystem(void);
-		
-		void MoveTo(float x, float y, bool bMoveParticles = false);
+
+		inline void MoveTo(Point pos, bool bMoveParticles = false) { MoveTo(pos.x, pos.y, bMoveParticles); }
+		void MoveTo(int32 x, int32 y, bool bMoveParticles = false);
 		void Transpose(float dx, float dy);
 		void SetScale(float scale);
 		void SetAngle(float angle);
 		void SetSpeed(float fSpeedMin, float fSpeedMax);
-		void FireAt(float x, float y);
+		void FireAt(int32 x, int32 y);
 		void Update(float delta);
 		void Render(void);
 

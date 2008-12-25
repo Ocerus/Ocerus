@@ -30,9 +30,9 @@ void ParticleSystem::Unload(void)
 	loaded = false;
 }
 
-void ParticleSystem::MoveTo(float x, float y, bool bMoveParticles)
+void ParticleSystem::MoveTo(int32 x, int32 y, bool bMoveParticles)
 {
-	if (loaded) ps->MoveTo(x,y,bMoveParticles);
+	if (loaded) ps->MoveTo((float32)x,(float32)y,bMoveParticles);
 }
 
 void ParticleSystem::Transpose(float dx, float dy)
@@ -65,9 +65,9 @@ hgeParticleSystem* ParticleSystem::GetPS(void)
 	return ps;
 }
 
-void ParticleSystem::FireAt(float x, float y)
+void ParticleSystem::FireAt(int32 x, int32 y)
 {
-	if (loaded) ps->FireAt(x, y);
+	if (loaded) ps->FireAt((float32)x, (float32)y);
 }
 
 void ParticleSystem::Update(float delta)

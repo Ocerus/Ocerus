@@ -3,6 +3,7 @@
 
 #include "../../Utility/Properties.h"
 #include "../EntityMgr/EntityHandle.h"
+#include "../../Utility/StringKey.h"
 
 namespace EntitySystem
 {

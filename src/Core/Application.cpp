@@ -38,8 +38,6 @@ void Application::Init()
 	mInputMgr = DYN_NEW InputSystem::InputMgr();
 	mEntityMgr = DYN_NEW EntitySystem::EntityMgr();
 	mGUIMgr = DYN_NEW GUISystem::GUIMgr();
-	// particle manager
-	//mPSMgr = DYN_NEW hgeParticleManager();
 	mPSMgr = DYN_NEW GfxSystem::ParticleSystemMgr();
 
 	// create core states
@@ -64,8 +62,6 @@ Application::~Application()
 	DYN_DELETE mGUIMgr;
 
 	mResourceMgr->UnloadAllResources();
-
-	//ResourceSystem::ParticleResource::UnloadSprite(); // particle system - fuco
 
 	DYN_DELETE mEntityMgr;
 	DYN_DELETE mInputMgr;		

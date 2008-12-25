@@ -25,6 +25,18 @@ EntityMessage::eResult EntitySystem::CmpEngine::HandleMessage( const EntityMessa
 {
 	switch (msg.type)
 	{
+	case EntityMessage::TYPE_POST_INIT:
+		{
+			EntityHandle blueprints;
+			PostMessage(EntityMessage::TYPE_GET_BLUEPRINTS, &blueprints);
+			StringKey effect;
+			blueprints.PostMessage(EntityMessage::TYPE_GET_EFFECT, &effect);
+			StringKey resGroup;
+			blueprints.PostMessage(EntityMessage::TYPE_GET_RESOURCE_GROUP, &resGroup);
+			mThrustPS = gPSMgr.SpawnPS(resGroup, effect);
+			mThrustPS->FireAt(0,0);
+		}
+		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_UPDATE_PHYSICS_SERVER:
 		{
 			EntityHandle platform;
@@ -123,19 +135,38 @@ void EntitySystem::CmpEngine::Draw( void ) const
 	PostMessage(EntityMessage::TYPE_GET_POSITION, &pos);
 	EntityHandle blueprints;
 	PostMessage(EntityMessage::TYPE_GET_BLUEPRINTS, &blueprints);
-	//TODO predelat char*
-	char* tex = 0;
+	float32 angle = GetAbsoluteAngle();
+
+	// draw the particle effect
+	float32 thrustScale;
+	blueprints.PostMessage(EntityMessage::TYPE_GET_EFFECT_SCALE, &thrustScale);
+	if (!mThrustPS.IsNull())
+	{
+		PropertyHolder prop;
+		blueprints.GetProperty(prop, "ThrustEffectDisplacement");
+		Vector2 disp = MathUtils::VectorFromAngle(angle, prop.GetValue<float32>());
+		mThrustPS->MoveTo(gGfxRenderer.WorldToScreen(pos + disp), true);
+		mThrustPS->SetScale(gGfxRenderer.WorldToScreenScale(thrustScale));
+		mThrustPS->SetAngle(angle + MathUtils::HALF_PI);
+		float32 powRat = GetPowerRatio();
+		blueprints.GetProperty(prop, "ThrustEffectPowerScale");
+		float32 powScale = prop.GetValue<float32>();
+		mThrustPS->SetSpeed(powScale*powRat, powScale*powRat);
+		mThrustPS->Render();
+	}
+
+	// draw the image
+	StringKey tex;
 	blueprints.PostMessage(EntityMessage::TYPE_GET_TEXTURE, &tex);
 	float32 texAngle;
 	blueprints.PostMessage(EntityMessage::TYPE_GET_TEXTURE_ANGLE, &texAngle);
 	float32 texScale;
 	blueprints.PostMessage(EntityMessage::TYPE_GET_TEXTURE_SCALE, &texScale);
-	if (tex)
-	{
-		GfxSystem::TexturePtr img = gResourceMgr.GetResource(tex);
-		gGfxRenderer.DrawImageWithConversion(img, pos, GfxSystem::ANCHOR_HCENTER|GfxSystem::ANCHOR_VCENTER, 
-			GetAbsoluteAngle() + texAngle, 255, texScale);
-	}
+	StringKey resGroup;
+	blueprints.PostMessage(EntityMessage::TYPE_GET_RESOURCE_GROUP, &resGroup);
+	GfxSystem::TexturePtr img = gResourceMgr.GetResource(resGroup, tex);
+	gGfxRenderer.DrawImageWithConversion(img, pos, GfxSystem::ANCHOR_HCENTER|GfxSystem::ANCHOR_VCENTER, 
+		GetAbsoluteAngle() + texAngle, 255, texScale);
 }
 
 float32 EntitySystem::CmpEngine::GetAbsoluteAngle( void ) const

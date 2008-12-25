@@ -45,6 +45,11 @@ namespace EntitySystem
 		float32 mDefaultAngle;
 		float32 mRelativeAngle;
 
+		/// @name Internals.
+		//@{
+		GfxSystem::ParticleSystemPtr mThrustPS;
+		//@}
+
 		void Draw(void) const;
 		void DrawSelectionOverlay(const bool hover) const;
 		void DrawSelectionUnderlay(const bool hover) const;

@@ -11,7 +11,6 @@ ResourceSystem::ResourcePtr ParticleResource::CreateMe(void)
 
 ParticleResource::~ParticleResource(void)
 {
-	UnloadImpl();
 }
 
 int ReadInt(InputStream& is)
@@ -36,7 +35,6 @@ float ReadFloat(InputStream& is)
 
 bool ParticleResource::LoadImpl(void)
 {
-	gLogMgr.LogMessage("LOADING");
 	mPsi = new hgeParticleSystemInfo();
 	
 	GfxSystem::TexturePtr tex = gResourceMgr.GetResource("psi", "particles.png");

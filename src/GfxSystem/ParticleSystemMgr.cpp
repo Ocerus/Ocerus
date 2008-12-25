@@ -66,13 +66,21 @@ void ParticleSystemMgr::SetScale(float s)
 	for(PSList::iterator i = psList.begin(); i != psList.end(); i++) (*i)->SetScale(s);
 }
 
-//ParticleSystem* ParticleSystemMgr::SpawnPS(hgeParticleSystemInfo* psi, float x, float y)
-ParticleSystemPtr ParticleSystemMgr::SpawnPS(const string& psiName, float x, float y)
+GfxSystem::ParticleSystemPtr GfxSystem::ParticleSystemMgr::SpawnPS( StringKey group, StringKey name )
 {
-	ParticleResourcePtr psi = gResourceMgr.GetResource("psi", psiName);
+	ParticleResourcePtr psi = gResourceMgr.GetResource(group, name);
+	if (psi.IsNull())
+		return ParticleSystemPtr();
 	psList.push_back(ParticleSystemPtr(DYN_NEW ParticleSystem(DYN_NEW hgeParticleSystem(psi->GetPsi()))));
-	psList.back()->FireAt(x,y);
-	psList.back()->Transpose(tX,tY);
+	return psList.back();	
+}
+
+ParticleSystemPtr ParticleSystemMgr::SpawnPS(char* groupSlashName)
+{
+	ParticleResourcePtr psi = gResourceMgr.GetResource(groupSlashName);
+	if (psi.IsNull())
+		return ParticleSystemPtr();
+	psList.push_back(ParticleSystemPtr(DYN_NEW ParticleSystem(DYN_NEW hgeParticleSystem(psi->GetPsi()))));
 	return psList.back();	
 }
 
@@ -115,4 +123,5 @@ void ParticleSystemMgr::KillAll(void)
 		//(!i->IsUnique()) ? (*i)->Unload() : UnregisterPS(*i);
 	psList.clear();
 }
+
 

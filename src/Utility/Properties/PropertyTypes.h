@@ -3,6 +3,7 @@
 
 #include "../Settings.h"
 #include "../../EntitySystem/EntityMgr/EntityHandle.h"
+#include "../StringKey.h"
 
 /** @name Type of access which will be granted to a property. It can be access from scripts, from editor, 
 	during the init, ...
@@ -27,6 +28,7 @@ enum ePropertyType
 	PROPTYPE_VECTOR2_REFERENCE,
 	PROPTYPE_VECTOR2_ARRAY,
 	PROPTYPE_STRING,
+	PROPTYPE_STRING_KEY,
 	PROPTYPE_ENTITYHANDLE,
 	PROPTYPE_ENTITYHANDLE_ARRAY,
 	PROPTYPE_PTR,
@@ -72,6 +74,7 @@ template<> ePropertyType PropertyType<Vector2*>::mTypeID						= PROPTYPE_VECTOR2
 template<> ePropertyType PropertyType<EntitySystem::EntityHandle>::mTypeID	= PROPTYPE_ENTITYHANDLE;
 template<> ePropertyType PropertyType<EntitySystem::EntityHandle*>::mTypeID	= PROPTYPE_ENTITYHANDLE_ARRAY;
 template<> ePropertyType PropertyType<char*>::mTypeID						= PROPTYPE_STRING;
+template<> ePropertyType PropertyType<StringKey>::mTypeID						= PROPTYPE_STRING_KEY;
 
 template<class T> T PropertyType<T>::mDefaultValue							= 0;
 template<> bool PropertyType<bool>::mDefaultValue							= false;
@@ -90,6 +93,7 @@ template<> Vector2* PropertyType<Vector2*>::mDefaultValue					= 0;
 template<> EntitySystem::EntityHandle PropertyType<EntitySystem::EntityHandle>::mDefaultValue = EntitySystem::EntityHandle::Null;
 template<> EntitySystem::EntityHandle* PropertyType<EntitySystem::EntityHandle*>::mDefaultValue = 0;
 template<> char* PropertyType<char*>::mDefaultValue							= 0;
+template<> StringKey PropertyType<StringKey>::mDefaultValue					= StringKey();
 //@}
 
 #endif	// _PROPERTY_TYPES_H

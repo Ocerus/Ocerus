@@ -36,7 +36,7 @@ public:
 
 	/// @name Returns the value of this property. An owner of the property must be specified.
 	template<class T>
-	T GetValue(const RTTIBaseClass* owner)
+	T GetValue(RTTIBaseClass* owner)
 	{
 		ePropertyType desiredType = PropertyType<T>::GetTypeID();
 		ePropertyType myType = GetType();

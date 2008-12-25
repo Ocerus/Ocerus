@@ -9,7 +9,7 @@ RTTI::RTTI(	uint8 dwStub, ClassID CLID, const char* szClassName, RTTI* pBaseClas
 	mComponentDependencies(0)
 {
 	assert( CLID != 0 );
-	assert( strlen(szClassName) <= CLASSNAME_LENGTH && "Class name too long" );
+	assert( strlen(szClassName) <= CLASSNAME_LENGTH && "RTTI:Class name too long" );
 	#pragma warning(disable: 4996)
 	strcpy( mClassName, szClassName );
 
@@ -22,7 +22,7 @@ void RTTI::EnumProperties( AbstractPropertyList& out, const PropertyAccessFlags 
 	if ( mBaseRTTI )
 		mBaseRTTI->EnumProperties( out, flagMask );
 	for ( PropertyMap::const_iterator it = mProperties.begin(); it != mProperties.end(); ++it )
-		if ((it->second->GetAccessFlags()&flagMask) == flagMask)
+		if ((it->second->GetAccessFlags()&flagMask) != 0)
 			out.push_back( it->second );
 }
 
@@ -31,11 +31,11 @@ void RTTI::EnumProperties( RTTIBaseClass* owner, PropertyList& out, const Proper
 	if ( mBaseRTTI )
 		mBaseRTTI->EnumProperties( owner, out, flagMask );
 	for ( PropertyMap::const_iterator it = mProperties.begin(); it != mProperties.end(); ++it )
-		if ((it->second->GetAccessFlags()&flagMask) == flagMask)
+		if ((it->second->GetAccessFlags()&flagMask) != 0)
 		{
 			StringKey key = it->second->GetKey();
 			if (out.find(key) != out.end())
-				gLogMgr.LogMessage("Duplicate property name '", it->second->GetName(), "' -> overwriting", LOG_ERROR);
+				gLogMgr.LogMessage("EnumProperties:Duplicate property name '", it->second->GetName(), "' -> overwriting", LOG_ERROR);
 			out[key] = PropertyHolder(owner, it->second);
 		}
 }
@@ -53,7 +53,7 @@ AbstractProperty* RTTI::GetProperty( const StringKey& key, const PropertyAccessF
 	PropertyMap::const_iterator it = mProperties.find(key);
 	if (it != mProperties.end())
 	{
-		if ((it->second->GetAccessFlags()&flagMask) == flagMask)
+		if ((it->second->GetAccessFlags()&flagMask) != 0)
 			return it->second;
 		return 0;
 	}

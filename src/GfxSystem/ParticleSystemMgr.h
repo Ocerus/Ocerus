@@ -30,7 +30,8 @@ namespace GfxSystem
 		int GetNum(void) { return psList.size(); }
 
 		//ParticleSystem* SpawnPS(hgeParticleSystemInfo* psi, float x, float y);
-		ParticleSystemPtr SpawnPS(const string& psiName , float x, float y);
+		ParticleSystemPtr SpawnPS(char* psiName);
+		ParticleSystemPtr SpawnPS(StringKey group, StringKey name);
 		bool IsPSAlive(ParticleSystemPtr ps);
 		void UnregisterPS(ParticleSystemPtr ps);
 		//void KillPS(ParticleSystemPtr ps);

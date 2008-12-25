@@ -4,9 +4,6 @@
 #include "Box2D.h"
 #include <iostream>
 #include "../GfxSystem/ParticleResource.h"
-///@name Included for particle manager demo rand() function.
-#include <cstdlib>
-
 
 using namespace Core;
 using namespace EntitySystem;
@@ -20,6 +17,7 @@ using namespace InputSystem;
 #define WATER_TEXTURE_SCALE 0.01f
 #define ENGINE_ANGLECHANGE_SPEED 2.0f
 #define ENGINE_POWERCHANGE_SPEED 1.0f
+#define PARTICLE_SYSTEM_SCALE_RATIO 0.02f
 
 Core::Game::Game(): StateMachine<eGameState>(GS_NORMAL), mPhysics(0) {}
 
@@ -75,9 +73,13 @@ void Core::Game::Init()
 	props["Material"].SetValue(material0);
 	props["ArcAngle"].SetValue(0.5f*MathUtils::PI);
 	props["StabilizationRatio"].SetValue((uint32)1000);
-	//TODO predelat char*
-	props["Texture"].SetValue<char*>("ShipParts/engine0.png");
+	props["ResourceGroup"].SetValue<StringKey>("ShipParts");
+	props["Texture"].SetValue<StringKey>("engine0.png");
 	props["TextureScale"].SetValue(0.5f);
+	props["ThrustEffect"].SetValue<StringKey>("engine1.psi");
+	props["ThrustEffectScale"].SetValue(0.02f);
+	props["ThrustEffectDisplacement"].SetValue(0.1f);
+	props["ThrustEffectPowerScale"].SetValue(100.0f);
 	engineType0.FinishInit();
 
 	// create a free platform
@@ -225,13 +227,7 @@ void Core::Game::Init()
 	gLogMgr.LogMessage("*** XML MANAGER DEMO END ***");
 	////////////////// @name XML MANAGER DEMO END //////////////////
 
-	////////////////// @name PARTICLE DEMO START ///////////////////
-	gPSMgr.SpawnPS("engine1.psi", 100, 100);
-	gPSMgr.SpawnPS("gunfire.psi", 100, 300);
-	GfxSystem::ParticleSystemPtr x = gPSMgr.SpawnPS("bullets.psi", 100, 300);
-	x->SetAngle(MathUtils::PI/2);
-	x->SetSpeed(500,500);	
-	////////////////// @name PARTICLE DEMO END /////////////////////
+
 
 	gApp.ResetStats();
 
@@ -426,8 +422,8 @@ void Core::Game::Draw( const float32 delta)
 	if (!hoverAlsoSelected && mHoveredEntity.IsValid())
 		gEntityMgr.PostMessage(mHoveredEntity, EntityMessage(EntityMessage::TYPE_DRAW_OVERLAY, &hover));
 	
-	//particle effects
-	gPSMgr.SetScale(gGfxRenderer.GetCameraScale()/50); //scale divided by 50 to compensate default zoom value
+	// draw remaining (undrawn) particle effects
+	gPSMgr.SetScale(PARTICLE_SYSTEM_SCALE_RATIO * gGfxRenderer.GetCameraScale());
 	gPSMgr.Render();
 }
 
@@ -478,18 +474,6 @@ void Core::Game::MouseButtonPressed( const MouseInfo& mi, const eMouseButton btn
 			if (mHoveredEntity.IsValid())
 				mSelectedEntities.push_back(mHoveredEntity);
 		}
-		///////////////////// @name PARTICLE DEMO 2 START ////////////////
-		//gPSMgr.SpawnPS("explosion.psi", (float)mi.x, (float)mi.y);
-		srand((unsigned int)time(NULL));
-		// 4-vybuch :P //includujem cstdlib kvoli rand, po odstraneni dema odstranit aj include
-		gPSMgr.SpawnPS("explosion.psi", (float)(mi.x - 50 + (rand() % 100)), (float)(mi.y - 50 + (rand() % 100)));
-		gPSMgr.SpawnPS("explosion.psi", (float)(mi.x - 50 + (rand() % 100)), (float)(mi.y - 50 + (rand() % 100)));
-		gPSMgr.SpawnPS("explosion.psi", (float)(mi.x - 50 + (rand() % 100)), (float)(mi.y - 50 + (rand() % 100)));
-		gPSMgr.SpawnPS("explosion.psi", (float)(mi.x - 50 + (rand() % 100)), (float)(mi.y - 50 + (rand() % 100)));	
-		std::stringstream ss;
-		ss << gPSMgr.GetNum();
-		gLogMgr.LogMessage("Particle systems alive: " + ss.str());
-		///////////////////// @name PARTICLE DEMO 2 END ////////////////
 
 	}
 	else if (btn == MBTN_RIGHT)

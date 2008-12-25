@@ -42,8 +42,8 @@ namespace EntitySystem
 		//@}
 		/// @name Texture used for a visual representation of this engine.
 		//@{
-		char* GetTexture(void) const { return mTexture; }
-		void SetTexture(char* tex) { mTexture = tex; }
+		StringKey GetTexture(void) const { return mTexture; }
+		void SetTexture(StringKey tex) { mTexture = tex; }
 		//@}
 		/// @name Angle used for transforming texture while drawing.
 		//@{
@@ -55,6 +55,31 @@ namespace EntitySystem
 		float32 GetTextureScale(void) const { return mTextureScale; }
 		void SetTextureScale(const float32 s) { mTextureScale = s; }
 		//@}
+		/// @name Particle effect used for drawing thrust.
+		//@{
+		StringKey GetThrustEffect(void) const { return mThrustEffect; }
+		void SetThrustEffect(const StringKey effect) { mThrustEffect = effect; }
+		//@}
+		/// @name Scale used for transforming thrust PS while drawing.
+		//@{
+		float32 GetThrustEffectScale(void) const { return mThrustEffectScale; }
+		void SetThrustEffectScale(const float32 s) { mThrustEffectScale = s; }
+		//@}
+		/// @name Displacement used to move the PS away from the engine's center while drawing.
+		//@{
+		float32 GetThrustEffectDisplacement(void) const { return mThrustEffectDisplacement; }
+		void SetThrustEffectDisplacement(const float32 s) { mThrustEffectDisplacement = s; }
+		//@}
+		/// @name Scale of the effect's emitting speed related to the current power ratio.
+		//@{
+		float32 GetThrustEffectPowerScale(void) const { return mThrustEffectPowerScale; }
+		void SetThrustEffectPowerScale(const float32 s) { mThrustEffectPowerScale = s; }
+		//@}
+		/// @name ResourceMgr group identifier where are located all data related to this engine.
+		//@{
+		StringKey GetResourceGroup(void) const { return mResourceGroup; }
+		void SetResourceGroup(const StringKey group) { mResourceGroup = group; }
+		//@}
 
 	private:
 		EntityHandle mMaterial;
@@ -64,8 +89,12 @@ namespace EntitySystem
 		float32 mArcAngle;
 		float32 mTextureScale;
 		float32 mTextureAngle;
-		//TODO tady predelat char* na univerzalni hash stringu
-		char* mTexture;
+		float32 mThrustEffectScale;
+		float32 mThrustEffectDisplacement;
+		float32 mThrustEffectPowerScale;
+		StringKey mTexture;
+		StringKey mThrustEffect;
+		StringKey mResourceGroup;
 
 		void ComputeParams(void);
 
