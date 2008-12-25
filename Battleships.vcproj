@@ -612,6 +612,18 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\GfxSystem\ParticleResource.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\GfxSystem\ParticleSystem.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\GfxSystem\ParticleSystemMgr.h"
+					>
+				</File>
+				<File
 					RelativePath=".\src\GfxSystem\Texture.h"
 					>
 				</File>
@@ -625,6 +637,18 @@
 				>
 				<File
 					RelativePath=".\src\GfxSystem\GfxRenderer.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\GfxSystem\ParticleResource.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\GfxSystem\ParticleSystem.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\GfxSystem\ParticleSystemMgr.cpp"
 					>
 				</File>
 				<File

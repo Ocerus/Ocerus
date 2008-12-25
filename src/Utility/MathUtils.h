@@ -60,6 +60,10 @@ namespace MathUtils
 
 	Vector2 VectorFromAngle(const float32 angle, const float32 size = 1.0f);
 
+	float FloatSwap(float f);
+
+	int LongSwap(int i);
+
 }
 
 #endif

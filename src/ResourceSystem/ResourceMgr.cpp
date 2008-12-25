@@ -6,6 +6,7 @@
 #include "../GUISystem/CEGUIResource.h"
 #include "../StringSystem/TextResource.h"
 #include "IResourceLoadingListener.h"
+#include "../GfxSystem/ParticleResource.h"
 
 #pragma warning(disable: 4996)
 
@@ -24,6 +25,7 @@ ResourceMgr::ResourceMgr(const string& basepath):
 	mResourceCreationMethods[Resource::TYPE_CEGUIRESOURCE] = GUISystem::CEGUIResource::CreateMe;
 	mResourceCreationMethods[Resource::TYPE_TEXTRESOURCE] = StringSystem::TextResource::CreateMe;
 	mResourceCreationMethods[Resource::TYPE_XMLRESOURCE] = XMLResource::CreateMe;
+	mResourceCreationMethods[Resource::TYPE_PARTICLERESOURCE] = GfxSystem::ParticleResource::CreateMe;
 	mExtToTypeMap["png"] = Resource::TYPE_TEXTURE;
 	mExtToTypeMap["bmp"] = Resource::TYPE_TEXTURE;
 	mExtToTypeMap["jpg"] = Resource::TYPE_TEXTURE;
@@ -37,6 +39,7 @@ ResourceMgr::ResourceMgr(const string& basepath):
 	mExtToTypeMap["looknfeel"] = Resource::TYPE_CEGUIRESOURCE;
 	mExtToTypeMap["str"] = Resource::TYPE_TEXTRESOURCE;
 	mExtToTypeMap["xml"] = Resource::TYPE_XMLRESOURCE;
+	mExtToTypeMap["psi"] = Resource::TYPE_PARTICLERESOURCE;
 
 	assert(mResourceCreationMethods[Resource::NUM_TYPES-1] && "Not all resource types are registered");
 

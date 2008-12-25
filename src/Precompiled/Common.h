@@ -21,6 +21,7 @@
 #include "../StringSystem/StringMgr.h"
 
 #include "../GfxSystem/GfxRenderer.h"
+#include "../GfxSystem/ParticleSystemMgr.h"
 
 #include "../InputSystem/InputMgr.h"
 

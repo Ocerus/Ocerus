@@ -1,18 +1,18 @@
 HGE Started..
 
 HGE version: 1.80
-Date: 02.11.2008, 17:15:46
+Date: 22.12.2008, 19:00:58
 
 Application: HGE Tutorial 03 - Using helper classes
 OS: Windows 5.1.2600
-Memory: 1048052K total, 192568K free
+Memory: 2097151K total, 2097151K free
 
 D3D Driver: nv4_disp.dll
-Description: NVIDIA GeForce3 Ti 200
-Version: 6.14.10.9371
+Description: NVIDIA GeForce 8600M GT 
+Version: 6.14.11.5610
 Mode: 800 x 600 x X8R8G8B8
 
-Sound Device: NVIDIA(R) nForce(TM) Audio
+Sound Device: Realtek HD Audio output
 Sample rate: 44100
 
 Init done.

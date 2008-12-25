@@ -46,7 +46,7 @@ struct hgeParticle
 struct hgeParticleSystemInfo
 {
 	hgeSprite*	sprite;    // texture + blend mode
-	int			nEmission; // particles per sec
+	int		nEmission; // particles per sec
 	float		fLifetime;
 
 	float		fParticleLifeMin;
@@ -105,7 +105,7 @@ public:
 	void				SetScale(float scale) { fScale = scale; }
 	void				TrackBoundingBox(bool bTrack) { bUpdateBoundingBox=bTrack; }
 
-	int					GetParticlesAlive() const { return nParticlesAlive; }
+	int				GetParticlesAlive() const { return nParticlesAlive; }
 	float				GetAge() const { return fAge; }
 	void				GetPosition(float *x, float *y) const { *x=vecLocation.x; *y=vecLocation.y; }
 	void				GetTransposition(float *x, float *y) const { *x=fTx; *y=fTy; }
@@ -141,7 +141,7 @@ public:
 	void				Update(float dt);
 	void				Render();
 
-	hgeParticleSystem*	SpawnPS(hgeParticleSystemInfo *psi, float x, float y);
+	hgeParticleSystem*		SpawnPS(hgeParticleSystemInfo *psi, float x, float y);
 	bool				IsPSAlive(hgeParticleSystem *ps) const;
 	void				Transpose(float x, float y);
 	void				GetTransposition(float *dx, float *dy) const {*dx=tX; *dy=tY;}
@@ -150,12 +150,13 @@ public:
 
 private:
 	hgeParticleManager(const hgeParticleManager &);
-	hgeParticleManager&	operator= (const hgeParticleManager &);
-
-	int					nPS;
+	hgeParticleManager& operator=(const hgeParticleManager &);
+	
+	int				nPS;
+	
 	float				tX;
 	float				tY;
-	hgeParticleSystem*	psList[MAX_PSYSTEMS];
+	hgeParticleSystem*		psList[MAX_PSYSTEMS];
 };
 
 

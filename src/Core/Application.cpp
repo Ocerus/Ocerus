@@ -38,6 +38,9 @@ void Application::Init()
 	mInputMgr = DYN_NEW InputSystem::InputMgr();
 	mEntityMgr = DYN_NEW EntitySystem::EntityMgr();
 	mGUIMgr = DYN_NEW GUISystem::GUIMgr();
+	// particle manager
+	//mPSMgr = DYN_NEW hgeParticleManager();
+	mPSMgr = DYN_NEW GfxSystem::ParticleSystemMgr();
 
 	// create core states
 	mLoadingScreen = DYN_NEW LoadingScreen();
@@ -62,11 +65,14 @@ Application::~Application()
 
 	mResourceMgr->UnloadAllResources();
 
+	//ResourceSystem::ParticleResource::UnloadSprite(); // particle system - fuco
+
 	DYN_DELETE mEntityMgr;
 	DYN_DELETE mInputMgr;		
 	DYN_DELETE mGfxRenderer;
 	DYN_DELETE mStringMgr;
 	DYN_DELETE mResourceMgr;
+	DYN_DELETE mPSMgr;
 	
 	// must come last
 	DYN_DELETE mGlobalConfig;

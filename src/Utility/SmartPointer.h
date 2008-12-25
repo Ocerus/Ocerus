@@ -67,7 +67,7 @@ public:
 	inline T* Get() const { return mPointer; }
 	inline T* GetPointer() const { return mPointer; }
 
-	inline bool IsUnique() const { return mUseCount == 1; }
+	inline bool IsUnique() const { return *mUseCountPtr == 1; }
 
 	inline uint32 GetUseCount() const { assert(mUseCountPtr); return *mUseCountPtr; }
 	inline uint32* GetUseCountPtr() const { return mUseCountPtr; }

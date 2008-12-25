@@ -105,7 +105,7 @@ typedef DWORD HCHANNEL;
 enum hgeBoolState
 {
 	HGE_WINDOWED		= 1,    // bool		run in window?		(default: false)
-	HGE_ZBUFFER			= 2,    // bool		use z-buffer?		(default: false)
+	HGE_ZBUFFER		= 2,    // bool		use z-buffer?		(default: false)
 	HGE_TEXTUREFILTER	= 3,    // bool		texture filtering?	(default: true)
 	
 	HGE_USESOUND		= 4,    // bool		use BASS for sound?	(default: true)
@@ -132,7 +132,7 @@ enum hgeFuncState
 
 enum hgeHwndState
 {
-	HGE_HWND			= 15,	// int		window handle: read only
+	HGE_HWND		= 15,	// int		window handle: read only
 	HGE_HWNDPARENT		= 16,	// int		parent win handle	(default: 0)
 	
 	HGEHWNDSTATE_FORCE_DWORD = 0x7FFFFFFF

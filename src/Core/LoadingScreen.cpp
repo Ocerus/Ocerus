@@ -15,9 +15,10 @@ void Core::LoadingScreen::DoLoading( eType type )
 		break;
 	case TYPE_GENERAL_RESOURCES:
 		gResourceMgr.AddResourceDirToGroup("engines", "ShipParts");
-		gResourceMgr.AddResourceFileToGroup("water.png", "Backgrounds");
+		gResourceMgr.AddResourceFileToGroup("water.png", "Backgrounds");	
 		gResourceMgr.AddResourceDirToGroup("xml", "xml");
-		
+		gResourceMgr.AddResourceDirToGroup("psi", "psi");
+
 		gResourceMgr.AddResourceFileToGroup("gui/schemes/TaharezLook.scheme", "schemes");
 		gResourceMgr.AddResourceFileToGroup("gui/imagesets/TaharezLook.imageset", "imagesets");
 		gResourceMgr.AddResourceFileToGroup("gui/imagesets/TaharezLook.tga", "imagesets"); 
@@ -32,6 +33,7 @@ void Core::LoadingScreen::DoLoading( eType type )
 		gResourceMgr.LoadResourcesInGroup("Backgrounds");
 		gResourceMgr.LoadResourcesInGroup("ShipParts");
 		gResourceMgr.LoadResourcesInGroup("xml");
+		gResourceMgr.LoadResourcesInGroup("psi");
 		gResourceMgr.LoadResourcesInGroup("fonts");
 		gResourceMgr.LoadResourcesInGroup("schemes");
 		gResourceMgr.LoadResourcesInGroup("imagesets");

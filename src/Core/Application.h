@@ -5,16 +5,20 @@
 #include "../Utility/Settings.h"
 #include "../Utility/Timer.h"
 #include "../Utility/Singleton.h"
+//particle manager
+//#include "hgeparticle.h"
 #include <deque>
 
 /// @name Macro for easier use.
 #define gApp Core::Application::GetSingleton()
+//#define gPSMgr gApp.GetPSMgr()
 
 /// @name  Forward declarations
 //@{
 namespace ResourceSystem { class ResourceMgr; }
 namespace InputSystem { class InputMgr; }
 namespace GfxSystem { class GfxRenderer; }
+namespace GfxSystem { class ParticleSystemMgr; }
 namespace EntitySystem { class EntityMgr; }
 namespace LogSystem { class LogMgr; }
 namespace GUISystem { class GUIMgr; }
@@ -76,6 +80,7 @@ namespace Core
 		/// @name  State getters
 		//@{
 		Game* GetCurrentGame(void) const { assert(mGame); return mGame; }
+		//hgeParticleManager* GetPSMgr(void) { return mPSMgr; }
 		//@}
 
 	private:
@@ -88,6 +93,8 @@ namespace Core
 		EntitySystem::EntityMgr* mEntityMgr;
 		LogSystem::LogMgr* mLogMgr;
 		GUISystem::GUIMgr* mGUIMgr;
+		//hgeParticleManager* mPSMgr;
+		GfxSystem::ParticleSystemMgr* mPSMgr;
 		//@}
 
 		/// @name  Application state screens.
