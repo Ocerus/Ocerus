@@ -5,9 +5,10 @@ using namespace GfxSystem;
 
 ParticleSystem::ParticleSystem(hgeParticleSystem* ps)
 {
-	this->ps = ps;
-	renderDone = false;
-	loaded = true;
+	mPs = ps;
+	mRenderDone = false;
+	mLoaded = true;
+	mActive = false;
 }
 
 ParticleSystem::~ParticleSystem(void) 
@@ -20,80 +21,136 @@ void ParticleSystem::Unload(void)
 {
 	//gPSMgr.UnregisterPS(ParticleSystemPtr(this));
 	//gLogMgr.LogMessage("Particle SYSTEM Unloaded");
-	if (loaded)
+	if (mLoaded)
 	{
-		delete ps;
+		DYN_DELETE mPs;
 	}
-	loaded = false;
+	mLoaded = false;
 }
-
+/*
 void ParticleSystem::MoveTo(int32 x, int32 y, bool bMoveParticles)
 {
-	if (loaded) ps->MoveTo((float32)x,(float32)y,bMoveParticles);
-}
-
-void ParticleSystem::Transpose(float dx, float dy)
-{
-	if (loaded) ps->Transpose(dx, dy);
-}
-
-void ParticleSystem::SetScale(float scale)
-{
-	if (loaded) ps->SetScale(scale);
-}
-
-void ParticleSystem::SetAngle(float angle)
-{
-	if (loaded) ps->info.fDirection = angle;
-}
-
-
-void ParticleSystem::SetSpeed(float fSpeedMin, float fSpeedMax)
-{
-	if (loaded) 
+	if (mLoaded) 
 	{
-		ps->info.fSpeedMin = fSpeedMin;
-		ps->info.fSpeedMax = fSpeedMax;
+		//mPs->MoveTo((float32)(x / mPs->GetScale()),(float32)(y / mPs->GetScale()), bMoveParticles);
+		//mPs->MoveTo((float32)(x),(float32)(y), bMoveParticles);
+	}
+}*/
+
+void ParticleSystem::MoveTo(float32 x, float32 y, bool bMoveParticles)
+{
+	mWorldX = x;
+	mWorldY = y;
+	mMoveParticles = bMoveParticles;
+}
+
+
+void ParticleSystem::SetScale(float32 scale)
+{
+	if (mLoaded) mPs->SetScale(scale);
+}
+
+void ParticleSystem::SetAngle(float32 angle)
+{
+	if (mLoaded) mPs->info.fDirection = angle;
+}
+
+
+void ParticleSystem::SetSpeed(float32 fSpeedMin, float32 fSpeedMax)
+{
+	if (mLoaded) 
+	{
+		mPs->info.fSpeedMin = fSpeedMin;
+		mPs->info.fSpeedMax = fSpeedMax;
 	}
 }
 
 hgeParticleSystem* ParticleSystem::GetPS(void)
 {
-	return ps;
+	return mPs;
 }
 
-void ParticleSystem::FireAt(int32 x, int32 y)
+void ParticleSystem::FireAt(float32 x, float32 y)
 {
-	if (loaded) ps->FireAt((float32)x, (float32)y);
+	if (mLoaded && !mActive) 
+	{
+		//mPs->FireAt((float32)(x / mPs->GetScale()), (float32)(y / mPs->GetScale()));
+		//mPs->FireAt((float32)(x), (float32)(y));
+		Stop();
+		MoveTo(x, y);
+		Fire();
+		mActive = true;
+	}
 }
 
-void ParticleSystem::Update(float delta)
+void ParticleSystem::Fire(void)
 {
-	if (loaded) ps->Update(delta);
+	if (mLoaded && !mActive)
+	{
+		mPs->Fire();
+		mActive = true;
+	}
 }
 
-void ParticleSystem::Render(void)
+void ParticleSystem::Stop(void)
 {
-	if (loaded) ps->Render(); 
-	renderDone = true; 
+	if (mLoaded && mActive)
+	{
+		mPs->Stop();
+		mActive = false;
+	}
 }
 
-int ParticleSystem::GetParticlesAlive(void) const 
+void ParticleSystem::Update(float32 delta)
+{
+	if (mLoaded) mPs->Update(delta);
+}
+
+
+void ParticleSystem::Render(float32 scale)
+{
+	if (mLoaded) 
+	{
+		if (scale != -1.0f) mPs->SetScale(scale);
+		mPs->MoveTo((float)(gGfxRenderer.WorldToScreenX(mWorldX) / mPs->GetScale()),
+			    (float)(gGfxRenderer.WorldToScreenY(mWorldY) / mPs->GetScale()), mMoveParticles);
+		mPs->Render(); 
+	}
+	mRenderDone = true; 
+	mMoveParticles = true;
+}
+
+int32 ParticleSystem::GetParticlesAlive(void) const 
 { 
-	return ((loaded) ? ps->GetParticlesAlive() : 0); 
+	return ((mLoaded) ? mPs->GetParticlesAlive() : 0); 
 }
 
-float ParticleSystem::GetAge(void) const 
+float32 ParticleSystem::GetAge(void) const 
 {
-	return ((loaded) ? ps->GetAge() : -2); 
+	return ((mLoaded) ? mPs->GetAge() : -2); 
 }
 
 bool ParticleSystem::GetRenderDone(void) const 
 {
-	return renderDone; 
+	return mRenderDone; 
 }
 
 void ParticleSystem::SetRenderDone(void)
 {
-	renderDone = false; 
+	mRenderDone = false; 
+}
+
+float32 ParticleSystem::GetLifeTime(void) const 
+{
+	return mPs->info.fLifetime; 
+}
+
+float32 ParticleSystem::GetWorldX(void) const
+{
+	return mWorldX;
+}
+
+float32 ParticleSystem::GetWorldY(void) const
+{
+	return mWorldY;
 }

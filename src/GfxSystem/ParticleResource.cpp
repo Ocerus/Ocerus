@@ -13,16 +13,16 @@ ParticleResource::~ParticleResource(void)
 {
 }
 
-int ReadInt(InputStream& is)
+int32 ReadInt(InputStream& is)
 {
 	return is.get() + (is.get() << 8) + (is.get() << 16) + (is.get() << 24);
 }
 
-float ReadFloat(InputStream& is)
+float32 ReadFloat(InputStream& is)
 {
 	union
 	{
-		float f;
+		float32 f;
 		unsigned char b[4];
 	} dat1;
 	dat1.b[0] = is.get();
@@ -100,7 +100,7 @@ bool ParticleResource::LoadImpl(void)
 
 bool ParticleResource::UnloadImpl(void)
 {
-	delete mPsi;
-	delete mSprite;
+	DYN_DELETE mPsi;
+	DYN_DELETE mSprite;
 	return true;
 }

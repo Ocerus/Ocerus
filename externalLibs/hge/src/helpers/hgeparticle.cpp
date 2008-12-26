@@ -243,6 +243,7 @@ void hgeParticleSystem::Render()
 		else
 			info.sprite->SetColor(par->colColor.GetHWColor());
 		info.sprite->RenderEx(par->vecLocation.x*fScale+fTx, par->vecLocation.y*fScale+fTy, par->fSpin*par->fAge, par->fSize*fScale);
+		//info.sprite->RenderEx(par->vecLocation.x+fTx, par->vecLocation.y+fTy, par->fSpin*par->fAge, par->fSize*fScale);
 		par++;
 	}
 

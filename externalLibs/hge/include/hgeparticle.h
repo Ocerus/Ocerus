@@ -125,7 +125,7 @@ private:
 	float				fTx, fTy;
 	float				fScale;
 
-	int					nParticlesAlive;
+	int				nParticlesAlive;
 	hgeRect				rectBoundingBox;
 	bool				bUpdateBoundingBox;
 

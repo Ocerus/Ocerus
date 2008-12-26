@@ -474,7 +474,6 @@ void Core::Game::MouseButtonPressed( const MouseInfo& mi, const eMouseButton btn
 			if (mHoveredEntity.IsValid())
 				mSelectedEntities.push_back(mHoveredEntity);
 		}
-
 	}
 	else if (btn == MBTN_RIGHT)
 	{
