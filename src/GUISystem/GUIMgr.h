@@ -31,7 +31,7 @@ namespace GUISystem {
 	public:	
 		GUIMgr();
 
-		/** IInputListener implementation
+		/** @name IInputListener implementation
 		  * DO NOT CHANGE TO const METHODS!!
 	      */
 		//@{
@@ -64,13 +64,15 @@ namespace GUISystem {
 		virtual void Update(float32 delta);
 		//@}
 
-		/// @name Console related method
+		/// @name Console related methods
 		//@{
 		/// @name Registers a class that implements IConsoleListener
 		void AddConsoleListener(IConsoleListener* listener);
 		/// @name If you wish to post a new message into console, call this method
 		void AddConsoleMessage(std::string message, const GfxSystem::Color& color = GfxSystem::Color(255,255,255,255));
 		//@}
+
+		void AddStaticText( int x, int y, std::string text );
 
 		virtual ~GUIMgr();
 	protected:

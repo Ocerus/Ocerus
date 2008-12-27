@@ -5,6 +5,8 @@
 #include "../InputSystem/InputActions.h"
 #include "RendererGate.h"
 #include "ResourceGate.h"
+#include <sstream>
+#include <math.h>
 
 namespace GUISystem {
 	/// @name Prototypes for utility functions
@@ -17,12 +19,11 @@ namespace GUISystem {
 		gLogMgr.LogMessage("******** GUIMgr init *********");
 		mCegui = DYN_NEW CEGUI::System( mRendererGate = DYN_NEW RendererGate(), mResourceGate = DYN_NEW ResourceGate() );
 		gInputMgr.AddInputListener(this);
-
 		CEGUI::Imageset::setDefaultResourceGroup("imagesets");
 		CEGUI::Font::setDefaultResourceGroup("fonts");
 		CEGUI::Scheme::setDefaultResourceGroup("schemes");
 		CEGUI::WidgetLookManager::setDefaultResourceGroup("looknfeels");
-		CEGUI::WindowManager::setDefaultResourceGroup("layouts");		
+		CEGUI::WindowManager::setDefaultResourceGroup("layouts");
 	}
 
 	void GUIMgr::LoadGUI() {
@@ -58,9 +59,15 @@ namespace GUISystem {
 		gLogMgr.LogMessage("******** GUI Console init *********");
 // Resource loading
 		gResourceMgr.AddResourceFileToGroup("gui/schemes/Console.scheme", "schemes");
+		gResourceMgr.AddResourceFileToGroup("gui/schemes/Lightweight.scheme", "schemes");
 		gResourceMgr.AddResourceFileToGroup("gui/imagesets/Console.imageset", "imagesets");
 		gResourceMgr.AddResourceFileToGroup("gui/imagesets/BSLogov2.png", "imagesets");
+		gResourceMgr.AddResourceFileToGroup("gui/imagesets/Lightweight.imageset", "imagesets");
+		gResourceMgr.AddResourceFileToGroup("gui/imagesets/Lightweight.tga", "imagesets");		
+		gResourceMgr.AddResourceFileToGroup("gui/fonts/Commonwealth-10.font", "fonts");
+		gResourceMgr.AddResourceFileToGroup("gui/fonts/Commonv2c.ttf", "fonts");
 		gResourceMgr.AddResourceFileToGroup("gui/layouts/Console.layout", "layouts");
+		gResourceMgr.AddResourceFileToGroup("gui/looknfeel/Lightweight.looknfeel", "looknfeels");
 /* // Resource blind loading
 
 		gResourceMgr.AddResourceDirToGroup("gui/schemes", "schemes");
@@ -69,12 +76,14 @@ namespace GUISystem {
 		gResourceMgr.AddResourceDirToGroup("gui/layouts", "layouts");
 		gResourceMgr.AddResourceDirToGroup("gui/looknfeel", "looknfeels");
 */
+		CEGUI::SchemeManager::getSingleton().loadScheme("Lightweight.scheme");
 		CEGUI::SchemeManager::getSingleton().loadScheme("Console.scheme");
 
 		if( !CEGUI::FontManager::getSingleton().isFontPresent( "Commonwealth-10" ) )
 			CEGUI::FontManager::getSingleton().createFont( "Commonwealth-10.font" );
 
 		mCegui->setDefaultFont( "Commonwealth-10" );
+		CEGUI::System::getSingleton().setDefaultMouseCursor( "Lightweight", "MouseArrow" );
 
 		CurrentWindowRoot =
 			CEGUI::WindowManager::getSingleton().loadWindowLayout( "Console.layout" );
@@ -124,19 +133,28 @@ namespace GUISystem {
 		Root->setVisible( !Root->isVisible() );
 
 		CEGUI::Window* Console = CEGUI::WindowManager::getSingleton().getWindow("ConsoleRoot/ConsolePrompt");
-		Console->activate();			
+		Console->activate();
 	}
 
-	bool GUIMgr::QuitEvent(const CEGUI::EventArgs& e)
-	{
+	bool GUIMgr::QuitEvent(const CEGUI::EventArgs& e) {
 		gApp.RequestStateChange(Core::AS_SHUTDOWN);
 		return true;
 	}
 
 	bool GUIMgr::ConsoleCommandEvent(const CEGUI::EventArgs& e) {
 		CEGUI::Window* prompt = CEGUI::WindowManager::getSingleton().getWindow("ConsoleRoot/ConsolePrompt");
-		AddConsoleMessage(prompt->getText().c_str());
-
+		std::string message(prompt->getText().c_str());
+		if (message == "quit")
+			gApp.RequestStateChange( Core::AS_SHUTDOWN );
+		if (message == "addtext")
+			AddStaticText( (int)(gGfxRenderer.GetScreenWidth()*0.25f),
+				(int)(gGfxRenderer.GetScreenHeight()*0.25f), message );
+		if (message == "deletetext") {
+			CEGUI::Window* text_to_delete = CEGUI::WindowManager::getSingleton().getWindow("CustomText");
+			CEGUI::System::getSingleton().getGUISheet()->removeChildWindow( text_to_delete );
+			CEGUI::WindowManager::getSingleton().destroyWindow( text_to_delete );
+		}
+		AddConsoleMessage(message);
 		prompt->setText("");
 
 		return true;
@@ -147,7 +165,7 @@ namespace GUISystem {
 		CEGUI::Listbox* pane = (CEGUI::Listbox*)CEGUI::WindowManager::getSingleton().getWindow("ConsoleRoot/Pane");
 
 		CEGUI::ListboxTextItem* new_item = DYN_NEW CEGUI::ListboxTextItem(message);
-		new_item->setTextColours(CEGUI::colour(color.r, color.g, color.b, color.a));
+		new_item->setTextColours(CEGUI::colour(color.a, color.r, color.g, color.b));
 
 		pane->addItem(new_item);
 		pane->ensureItemIsVisible(new_item);
@@ -209,6 +227,17 @@ namespace GUISystem {
 			LoadConsole();
 			ConsoleIsLoaded = true;
 		}
+	}
+
+	void GUIMgr::AddStaticText( int x, int y, std::string text ) {
+		CEGUI::Window* text_window
+			= CEGUI::WindowManager::getSingleton().createWindow( "Lightweight/StaticText", "CustomText" );
+		text_window->setText( text );
+		text_window->setArea( CEGUI::UDim( x/(float)gGfxRenderer.GetScreenWidth(), 0 ), 
+							CEGUI::UDim( y/(float)gGfxRenderer.GetScreenHeight(), 0 ),
+							CEGUI::UDim( 1, 0 ), CEGUI::UDim( 1, 0 ) );
+							
+		CurrentWindowRoot->addChildWindow( text_window );
 	}
 
 	GUIMgr::~GUIMgr() {

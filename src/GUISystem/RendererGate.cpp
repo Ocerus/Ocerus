@@ -38,7 +38,7 @@ namespace GUISystem {
 		destroyAllTextures();
 	}
 
-	// add's a quad to the list to be rendered
+	/// add's a quad to the list to be rendered
 	void RendererGate::addQuad(const CEGUI::Rect& dest_rect, float z, const CEGUI::Texture* tex,
 			const CEGUI::Rect& texture_rect, const CEGUI::ColourRect& colors, CEGUI::QuadSplitMode quad_split_mode) 
 	{		

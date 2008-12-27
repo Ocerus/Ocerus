@@ -1,0 +1,66 @@
+<?xml version="1.0" ?>
+<Imageset Name="Lightweight" Imagefile="Lightweight.tga" NativeHorzRes="800" NativeVertRes="600" AutoScaled="true">
+    <Image Name="ClientBrush" XPos="2" YPos="2" Width="64" Height="64" />
+    <Image Name="GenericBrush" XPos="68" YPos="33" Width="1" Height="1" />
+	<Image Name="ProgressBarLeft" XPos="68" YPos="1" Width="7" Height="12" />
+	<Image Name="ProgressBarMiddle" XPos="77" YPos="1" Width="6" Height="12" />
+	<Image Name="ProgressBarRight" XPos="85" YPos="1" Width="6" Height="12" />
+	<Image Name="ProgressBarDimSegment" XPos="93" YPos="1" Width="8" Height="12" />
+	<Image Name="ProgressBarLitSegment" XPos="103" YPos="1" Width="8" Height="12" />
+	<Image Name="EditBoxLeft" XPos="68" YPos="14" Width="4" Height="18" />
+	<Image Name="EditBoxMiddle" XPos="74" YPos="14" Width="4" Height="18" />
+	<Image Name="EditBoxRight" XPos="80" YPos="14" Width="4" Height="18" />
+	<Image Name="EditBoxCarat" XPos="87" YPos="14" Width="4" Height="18" />
+	<Image Name="TextSelectionBrush" XPos="68" YPos="33" Width="16" Height="16" />
+	<Image Name="VertScrollTop" XPos="92" YPos="14" Width="20" Height="8" />
+	<Image Name="VertScrollMiddle" XPos="92" YPos="24" Width="20" Height="8" />
+	<Image Name="VertScrollBottom" XPos="92" YPos="34" Width="20" Height="8" />
+	<Image Name="VertScrollBarSegment" XPos="86" YPos="33" Width="4" Height="10" />
+	<Image Name="VertScrollThumbNormal" XPos="92" YPos="43" Width="8" Height="24" />
+	<Image Name="VertScrollThumbHover" XPos="102" YPos="43" Width="8" Height="24" />
+	<Image Name="VertScrollUpNormal" XPos="113" YPos="1" Width="12" Height="12" />
+	<Image Name="VertScrollDownNormal" XPos="11" YPos="93" Width="12" Height="12" />
+	<Image Name="VertScrollUpHover" XPos="113" YPos="15" Width="12" Height="12" />
+	<Image Name="VertScrollDownHover" XPos="11" YPos="107" Width="12" Height="12" />
+	<Image Name="MiniVertScrollBarSegment" XPos="86" YPos="44" Width="4" Height="10" />
+	<Image Name="MiniVertScrollThumbNormal" XPos="68" YPos="50" Width="7" Height="22" />
+	<Image Name="MiniVertScrollThumbTopNormal" XPos="68" YPos="50" Width="7" Height="5" />
+	<Image Name="MiniVertScrollThumbMiddleNormal" XPos="68" YPos="56" Width="7" Height="5" />
+	<Image Name="MiniVertScrollThumbBottomNormal" XPos="68" YPos="68" Width="7" Height="5" />
+	<Image Name="MiniVertScrollThumbTopHover" XPos="77" YPos="50" Width="7" Height="5" />
+	<Image Name="MiniVertScrollThumbMiddleHover" XPos="77" YPos="56" Width="7" Height="5" />
+	<Image Name="MiniVertScrollThumbBottomHover" XPos="77" YPos="68" Width="7" Height="5" />
+	<Image Name="MiniVertScrollThumbHover" XPos="77" YPos="50" Width="7" Height="22" />
+	<Image Name="MiniVertScrollDownNormal" XPos="113" YPos="28" Width="10" Height="9" />
+	<Image Name="MiniVertScrollUpNormal" XPos="11" YPos="73" Width="10" Height="9" />
+	<Image Name="MiniVertScrollDownHover" XPos="113" YPos="38" Width="10" Height="9" />
+	<Image Name="MiniVertScrollUpHover" XPos="11" YPos="83" Width="10" Height="9" />
+	<Image Name="VertSliderBody" XPos="1" YPos="68" Width="9" Height="48" />
+	<Image Name="VertSliderThumbNormal" XPos="111" YPos="39" Width="15" Height="6" />
+	<Image Name="VertSliderThumbHover" XPos="111" YPos="47" Width="15" Height="6" />
+	<Image Name="MiniHorzScrollBarSegment" XPos="11" YPos="68" Width="10" Height="4" />
+	<Image Name="MiniHorzScrollThumbNormal" XPos="22" YPos="68" Width="22" Height="7" />
+	<Image Name="MiniHorzScrollThumbLeftNormal" XPos="22" YPos="68" Width="5" Height="7" />
+	<Image Name="MiniHorzScrollThumbMiddleNormal" XPos="28" YPos="68" Width="5" Height="7" />
+	<Image Name="MiniHorzScrollThumbRightNormal" XPos="39" YPos="68" Width="5" Height="7" />
+	<Image Name="MiniHorzScrollThumbHover" XPos="22" YPos="77" Width="22" Height="7" />
+	<Image Name="MiniHorzScrollThumbLeftHover" XPos="22" YPos="77" Width="5" Height="7" />
+	<Image Name="MiniHorzScrollThumbMiddleHover" XPos="28" YPos="77" Width="5" Height="7" />
+	<Image Name="MiniHorzScrollThumbRightHover" XPos="39" YPos="77" Width="5" Height="7" />
+	<Image Name="MiniHorzScrollLeftNormal" XPos="57" YPos="68" Width="9" Height="10" />
+	<Image Name="MiniHorzScrollRightNormal" XPos="56" YPos="80" Width="9" Height="10" />
+	<Image Name="MiniHorzScrollLeftHover" XPos="47" YPos="68" Width="9" Height="10" />
+	<Image Name="MiniHorzScrollRightHover" XPos="46" YPos="80" Width="9" Height="10" />
+    <Image Name="MouseArrow" XPos="34" YPos="91" Width="31" Height="25" XOffset="0" YOffset="0" />	
+	<Image Name="MouseTextBar" XPos="25" YPos="95" Width="6" Height="18" XOffset="-2" YOffset="-9" />
+	<Image Name="ButtonLeftNormal" XPos="86" YPos="67" Width="12" Height="16" />
+	<Image Name="ButtonMiddleNormal" XPos="96" YPos="67" Width="12" Height="16" />
+	<Image Name="ButtonRightNormal" XPos="110" YPos="67" Width="12" Height="16" />
+	<Image Name="ButtonLeftPushed" XPos="86" YPos="85" Width="12" Height="16" />
+	<Image Name="ButtonMiddlePushed" XPos="96" YPos="85" Width="12" Height="16" />
+	<Image Name="ButtonRightPushed" XPos="110" YPos="85" Width="12" Height="16" />
+	<Image Name="ButtonLeftHighlight" XPos="68" YPos="103" Width="12" Height="16" />
+	<Image Name="ButtonMiddleHighlight" XPos="82" YPos="103" Width="12" Height="16" />
+	<Image Name="ButtonRightHighlight" XPos="96" YPos="103" Width="12" Height="16" />
+    <Image Name="ListboxBackdrop" XPos="23" YPos="86" Width="6" Height="6" />	
+</Imageset>
