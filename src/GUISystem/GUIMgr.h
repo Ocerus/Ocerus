@@ -48,8 +48,6 @@ namespace GUISystem {
 
 		/// @name Don't call this now
 		virtual void LoadGUI();
-		/// @name This gets called automatically in constructor. Will change later
-		virtual void LoadConsole();
 
 		/// @name Loads basic stuff common for all schemes.
 		void LoadStyle(void);
@@ -72,7 +70,12 @@ namespace GUISystem {
 		void AddConsoleMessage(std::string message, const GfxSystem::Color& color = GfxSystem::Color(255,255,255,255));
 		//@}
 
-		void AddStaticText( int x, int y, std::string text );
+		/// @name Static text related methods
+		//@{
+		void AddStaticText( int x, int y, const std::string & id, const std::string & text );
+		void DeleteStaticText( const std::string & id );
+		bool TextIdExists( const std::string & id );
+		//@}
 
 		virtual ~GUIMgr();
 	protected:
@@ -87,9 +90,6 @@ namespace GUISystem {
 
 		/// @name Called after ` is hit
 		void ConsoleTrigger();
-		
-		/// @name Lazy initialization for console
-		void EnsureConsoleIsLoaded();
 
 		bool ConsoleIsLoaded;
 		CEGUI::System * mCegui;

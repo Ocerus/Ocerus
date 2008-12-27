@@ -55,9 +55,8 @@ namespace GUISystem {
 		
 	}
 
-	void GUIMgr::LoadConsole() {
-		gLogMgr.LogMessage("******** GUI Console init *********");
-// Resource loading
+	void GUIMgr::LoadStyle( void )
+	{
 		gResourceMgr.AddResourceFileToGroup("gui/schemes/Console.scheme", "schemes");
 		gResourceMgr.AddResourceFileToGroup("gui/schemes/Lightweight.scheme", "schemes");
 		gResourceMgr.AddResourceFileToGroup("gui/imagesets/Console.imageset", "imagesets");
@@ -68,36 +67,8 @@ namespace GUISystem {
 		gResourceMgr.AddResourceFileToGroup("gui/fonts/Commonv2c.ttf", "fonts");
 		gResourceMgr.AddResourceFileToGroup("gui/layouts/Console.layout", "layouts");
 		gResourceMgr.AddResourceFileToGroup("gui/looknfeel/Lightweight.looknfeel", "looknfeels");
-/* // Resource blind loading
 
-		gResourceMgr.AddResourceDirToGroup("gui/schemes", "schemes");
-		gResourceMgr.AddResourceDirToGroup("gui/imagesets", "imagesets");
-		gResourceMgr.AddResourceDirToGroup("gui/fonts", "fonts");
-		gResourceMgr.AddResourceDirToGroup("gui/layouts", "layouts");
-		gResourceMgr.AddResourceDirToGroup("gui/looknfeel", "looknfeels");
-*/
 		CEGUI::SchemeManager::getSingleton().loadScheme("Lightweight.scheme");
-		CEGUI::SchemeManager::getSingleton().loadScheme("Console.scheme");
-
-		if( !CEGUI::FontManager::getSingleton().isFontPresent( "Commonwealth-10" ) )
-			CEGUI::FontManager::getSingleton().createFont( "Commonwealth-10.font" );
-
-		mCegui->setDefaultFont( "Commonwealth-10" );
-		CEGUI::System::getSingleton().setDefaultMouseCursor( "Lightweight", "MouseArrow" );
-
-		CurrentWindowRoot =
-			CEGUI::WindowManager::getSingleton().loadWindowLayout( "Console.layout" );
-
-		CEGUI::System::getSingleton().setGUISheet( CurrentWindowRoot );
-		
-		RegisterEvents();
-
-	}
-
-
-	void GUIMgr::LoadStyle( void )
-	{
-		CEGUI::SchemeManager::getSingleton().loadScheme("TaharezLook.scheme");
 		if( !CEGUI::FontManager::getSingleton().isFontPresent( "Commonwealth-10" ) )
 			CEGUI::FontManager::getSingleton().createFont( "Commonwealth-10.font" );
 
@@ -107,7 +78,8 @@ namespace GUISystem {
 		ConsoleIsLoaded = true;
 
 		mCegui->setDefaultFont( "Commonwealth-10" );
-		mCegui->setDefaultMouseCursor( "TaharezLook", "MouseArrow" );
+		mCegui->setDefaultMouseCursor( "Lightweight", "MouseArrow" );
+		RegisterEvents();
 	}
 
 
@@ -128,7 +100,6 @@ namespace GUISystem {
 	}
 
 	void GUIMgr::ConsoleTrigger() {
-		EnsureConsoleIsLoaded();
 		CEGUI::Window* Root = CEGUI::WindowManager::getSingleton().getWindow("ConsoleRoot");
 		Root->setVisible( !Root->isVisible() );
 
@@ -146,13 +117,15 @@ namespace GUISystem {
 		std::string message(prompt->getText().c_str());
 		if (message == "quit")
 			gApp.RequestStateChange( Core::AS_SHUTDOWN );
-		if (message == "addtext")
-			AddStaticText( (int)(gGfxRenderer.GetScreenWidth()*0.25f),
-				(int)(gGfxRenderer.GetScreenHeight()*0.25f), message );
+		if ( message.length() >= 9 ) {
+			std::string prefix = message.substr(0, 7);
+			std::string args = message.substr(8);
+			if (prefix == "addtext")
+				AddStaticText( (int)(gGfxRenderer.GetScreenWidth()*0.25f),
+					(int)(gGfxRenderer.GetScreenHeight()*0.25f), "ConsoleCustomText", args );
+		}
 		if (message == "deletetext") {
-			CEGUI::Window* text_to_delete = CEGUI::WindowManager::getSingleton().getWindow("CustomText");
-			CEGUI::System::getSingleton().getGUISheet()->removeChildWindow( text_to_delete );
-			CEGUI::WindowManager::getSingleton().destroyWindow( text_to_delete );
+			DeleteStaticText( "ConsoleCustomText" );
 		}
 		AddConsoleMessage(message);
 		prompt->setText("");
@@ -161,7 +134,6 @@ namespace GUISystem {
 	}
 
 	void GUIMgr::AddConsoleMessage(std::string message, const GfxSystem::Color& color) {
-		EnsureConsoleIsLoaded();
 		CEGUI::Listbox* pane = (CEGUI::Listbox*)CEGUI::WindowManager::getSingleton().getWindow("ConsoleRoot/Pane");
 
 		CEGUI::ListboxTextItem* new_item = DYN_NEW CEGUI::ListboxTextItem(message);
@@ -204,7 +176,7 @@ namespace GUISystem {
 
 	void GUIMgr::KeyReleased(const InputSystem::KeyInfo& ke) {
 		assert(mCegui);
-		CEGUI::System::getSingleton().injectKeyUp(ke.keyCode);
+		CEGUI::System::getSingleton().injectKeyUp(KeyMapperOIStoCEGUI(ke.keyAction));
 	}
 
 	void GUIMgr::MouseMoved(const InputSystem::MouseInfo& mi) {
@@ -222,22 +194,30 @@ namespace GUISystem {
 		CEGUI::System::getSingleton().injectMouseButtonUp( ConvertMouseButtonEnum(btn) );
 	}
 
-	void GUIMgr::EnsureConsoleIsLoaded() {
-		if (!ConsoleIsLoaded) {
-			LoadConsole();
-			ConsoleIsLoaded = true;
+	void GUIMgr::DeleteStaticText( const std::string & id ) {
+		if (CEGUI::WindowManager::getSingleton().isWindowPresent(id)) {
+			CEGUI::Window* text_to_delete = CEGUI::WindowManager::getSingleton().getWindow(id);
+			CEGUI::System::getSingleton().getGUISheet()->removeChildWindow( text_to_delete );
+			CEGUI::WindowManager::getSingleton().destroyWindow( text_to_delete );
 		}
 	}
 
-	void GUIMgr::AddStaticText( int x, int y, std::string text ) {
-		CEGUI::Window* text_window
-			= CEGUI::WindowManager::getSingleton().createWindow( "Lightweight/StaticText", "CustomText" );
+	void GUIMgr::AddStaticText( int x, int y, const std::string & id, const std::string & text ) {
+		CEGUI::Window* text_window = 0;
+		if (!CEGUI::WindowManager::getSingleton().isWindowPresent(id)) {
+			text_window = CEGUI::WindowManager::getSingleton().createWindow( "Lightweight/StaticText", id );
+			CurrentWindowRoot->addChildWindow( text_window );
+		} else {
+			text_window = CEGUI::WindowManager::getSingleton().getWindow( id );
+		}
 		text_window->setText( text );
 		text_window->setArea( CEGUI::UDim( x/(float)gGfxRenderer.GetScreenWidth(), 0 ), 
 							CEGUI::UDim( y/(float)gGfxRenderer.GetScreenHeight(), 0 ),
-							CEGUI::UDim( 1, 0 ), CEGUI::UDim( 1, 0 ) );
-							
-		CurrentWindowRoot->addChildWindow( text_window );
+							CEGUI::UDim( 1, 0 ), CEGUI::UDim( 1, 0 ) );									
+	}
+
+	bool GUIMgr::TextIdExists( const std::string &id ) {
+		return CEGUI::WindowManager::getSingleton().isWindowPresent(id);
 	}
 
 	GUIMgr::~GUIMgr() {
@@ -257,6 +237,8 @@ namespace GUISystem {
 		switch (key) {
 			case InputSystem::KC_RETURN:
 				return CEGUI::Key::Return;
+			case InputSystem::KC_NUMPADENTER:
+				return CEGUI::Key::NumpadEnter;
 			case InputSystem::KC_UP:
 				return CEGUI::Key::ArrowUp;
 			case InputSystem::KC_DOWN:
