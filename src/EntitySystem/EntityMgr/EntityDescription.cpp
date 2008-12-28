@@ -13,13 +13,15 @@ EntityDescription::~EntityDescription()
 void EntityDescription::Clear(void)
 {
 	mComponents.clear();
+	mID = "";
 }
 
-void EntityDescription::Init(const eEntityType type)
+void EntityDescription::Init(const eEntityType type, const string& ID)
 {
 	Clear();
 	mIndex = 0;
 	mType = type;
+	mID = ID;
 }
 
 void EntityDescription::AddComponent(const eComponentType type)

@@ -4,9 +4,9 @@
 #include <map>
 #include "../EntityMgr/EntityHandle.h"
 #include "../../Utility/Singleton.h"
+#include "../../Utility/Properties/PropertyHolderMediator.h"
 #include "ComponentIterators.h"
 #include "ComponentEnums.h"
-#include "../../Utility/rtti/RTTI.h"
 
 namespace EntitySystem
 {
@@ -47,7 +47,7 @@ namespace EntitySystem
 		//@{
 		inline bool GetEntityProperties(const EntityHandle h, PropertyList& out, const PropertyAccessFlags flagMask = FULL_PROPERTY_ACCESS_FLAGS) { return GetEntityProperties(h.GetID(), out, flagMask); }
 		bool GetEntityProperties(const EntityID id, PropertyList& out, const PropertyAccessFlags flagMask = FULL_PROPERTY_ACCESS_FLAGS);
-		PropertyHolder GetEntityProperty(const EntityHandle h, const StringKey key, const PropertyAccessFlags mask = FULL_PROPERTY_ACCESS_FLAGS);
+		PropertyHolderMediator GetEntityProperty(const EntityHandle h, const StringKey key, const PropertyAccessFlags mask = FULL_PROPERTY_ACCESS_FLAGS);
 		//@}
 
 	private:

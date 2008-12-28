@@ -3,6 +3,7 @@
 
 #include "AbstractProperty.h"
 #include "../Settings.h"
+#include "PropertyHolderMediator.h"
 
 /// @name  Forward declarations.
 //@{
@@ -51,8 +52,23 @@ public:
 		mProperty->SetValue<T>(mOwner, value);
 	}
 
+	/// @name Returns type of this property.
+	inline ePropertyType GetType(void) const { return mProperty->GetType(); }
+
 	/// @name Returns true if this holder holds a valid property.
 	bool IsValid(void) const;
+
+	/// @name Haxxor conversion methods.
+	//@{
+	inline operator PropertyHolderMediator (void) const
+	{
+		return *reinterpret_cast<const PropertyHolderMediator*>(this);
+	}
+	inline PropertyHolder(const PropertyHolderMediator rhs)
+	{
+		operator=(*reinterpret_cast<const PropertyHolder*>(&rhs));
+	}
+	//@}
 
 private:
 	RTTIBaseClass* mOwner;

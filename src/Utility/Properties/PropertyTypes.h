@@ -55,11 +55,13 @@ private:
 
 };
 
-/// @name Template specializations to set up types.
+/** @name Template specializations to set up types.
+	Note: All changes here must be made in PropertyHolder as well!
+*/
 //@{
-template<class T> ePropertyType PropertyType<T>::mTypeID						= PROPTYPE_PTR;
-template<> ePropertyType PropertyType<bool>::mTypeID							= PROPTYPE_BOOL;
-template<> ePropertyType PropertyType<int8>::mTypeID							= PROPTYPE_INT8;
+template<class T> ePropertyType PropertyType<T>::mTypeID					= PROPTYPE_PTR;
+template<> ePropertyType PropertyType<bool>::mTypeID						= PROPTYPE_BOOL;
+template<> ePropertyType PropertyType<int8>::mTypeID						= PROPTYPE_INT8;
 template<> ePropertyType PropertyType<int16>::mTypeID						= PROPTYPE_INT16;
 template<> ePropertyType PropertyType<int32>::mTypeID						= PROPTYPE_INT32;
 template<> ePropertyType PropertyType<int64>::mTypeID						= PROPTYPE_INT64;
@@ -69,12 +71,12 @@ template<> ePropertyType PropertyType<uint32>::mTypeID						= PROPTYPE_UINT32;
 template<> ePropertyType PropertyType<uint64>::mTypeID						= PROPTYPE_UINT64;
 template<> ePropertyType PropertyType<float32>::mTypeID						= PROPTYPE_FLOAT32;
 template<> ePropertyType PropertyType<Vector2>::mTypeID						= PROPTYPE_VECTOR2;
-template<> ePropertyType PropertyType<Vector2&>::mTypeID						= PROPTYPE_VECTOR2_REFERENCE;
-template<> ePropertyType PropertyType<Vector2*>::mTypeID						= PROPTYPE_VECTOR2_ARRAY;
+template<> ePropertyType PropertyType<Vector2&>::mTypeID					= PROPTYPE_VECTOR2_REFERENCE;
+template<> ePropertyType PropertyType<Vector2*>::mTypeID					= PROPTYPE_VECTOR2_ARRAY;
 template<> ePropertyType PropertyType<EntitySystem::EntityHandle>::mTypeID	= PROPTYPE_ENTITYHANDLE;
 template<> ePropertyType PropertyType<EntitySystem::EntityHandle*>::mTypeID	= PROPTYPE_ENTITYHANDLE_ARRAY;
 template<> ePropertyType PropertyType<char*>::mTypeID						= PROPTYPE_STRING;
-template<> ePropertyType PropertyType<StringKey>::mTypeID						= PROPTYPE_STRING_KEY;
+template<> ePropertyType PropertyType<StringKey>::mTypeID					= PROPTYPE_STRING_KEY;
 
 template<class T> T PropertyType<T>::mDefaultValue							= 0;
 template<> bool PropertyType<bool>::mDefaultValue							= false;

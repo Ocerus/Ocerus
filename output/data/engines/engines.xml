@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Entities>
+
+  <Entity Type="ET_UNKNOWN" Name="engineType0">
+    <Component Type="CT_ENGINE_PARAMS">
+      <Material>material0</Material>
+      <ArcAngle>1.5707963267948966192313216916398</ArcAngle>
+      <StabilizationRatio>1000</StabilizationRatio>
+      <ResourceGroup>ShipParts</ResourceGroup>
+      <Texture>engine0.png</Texture>
+      <TextureScale>0.5</TextureScale>
+      <ThrustEffect>engine1.psi</ThrustEffect>
+      <ThrustEffectScale>0.02</ThrustEffectScale>
+      <ThrustEffectDisplacement>0.1</ThrustEffectDisplacement>
+      <ThrustEffectPowerScale>100.0</ThrustEffectPowerScale>
+    </Component>
+  </Entity>
+  
+</Entities>

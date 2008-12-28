@@ -44,137 +44,33 @@ void Core::Game::Init()
 
 
 
-	//// @name TEST ////
-	EntityDescription desc;
-	PropertyList props;
+	//// TEST ////
 
 	// create a material
-	desc.Init(ET_UNKNOWN);
-	desc.AddComponent(CT_MATERIAL);
-	EntityHandle material0 = gEntityMgr.CreateEntity(desc, props);
-	props["DurabilityRatio"].SetValue(1.0f);
-	props["Density"].SetValue(1.0f);
-	material0.FinishInit();
+	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("ShipParts/materials.xml"));
 
 	// create a platform type
-	desc.Init(ET_UNKNOWN);
-	desc.AddComponent(CT_PLATFORM_PARAMS);
-	EntityHandle platformType0 = gEntityMgr.CreateEntity(desc, props);
-	props["Material"].SetValue(material0);
-	Vector2 shape[] = {Vector2(-0.5f,-0.5f),Vector2(0.25f,-0.5f),Vector2(0.5f,-0.25f),Vector2(0.5f,0.25f),Vector2(-0.5f,0.25f)};
-	props["ShapeLength"].SetValue((uint32)5);
-	props["Shape"].SetValue(shape);
-	platformType0.FinishInit();
+	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("ShipParts/platforms.xml"));
 
 	// create an engine type
-	desc.Init(ET_UNKNOWN);
-	desc.AddComponent(CT_ENGINE_PARAMS);
-	EntityHandle engineType0 = gEntityMgr.CreateEntity(desc, props);
-	props["Material"].SetValue(material0);
-	props["ArcAngle"].SetValue(0.5f*MathUtils::PI);
-	props["StabilizationRatio"].SetValue((uint32)1000);
-	props["ResourceGroup"].SetValue<StringKey>("ShipParts");
-	props["Texture"].SetValue<StringKey>("engine0.png");
-	props["TextureScale"].SetValue(0.5f);
-	props["ThrustEffect"].SetValue<StringKey>("engine1.psi");
-	props["ThrustEffectScale"].SetValue(0.02f);
-	props["ThrustEffectDisplacement"].SetValue(0.1f);
-	props["ThrustEffectPowerScale"].SetValue(100.0f);
-	engineType0.FinishInit();
-
-	// create a free platform
-	/*desc.Init(ET_PLATFORM);
-	desc.AddComponent(CT_PLATFORM_PHYSICS);
-	desc.AddComponent(CT_PLATFORM_LOGIC);
-	desc.AddComponent(CT_PLATFORM_VISUAL);
-	EntityHandle platform0 = gEntityMgr.CreateEntity(desc, props);
-	props["Blueprints"].SetValue(platformType0);
-	props["InitBodyPosition"].SetValue(Vector2(5.0f,5.0f));
-	props["InitBodyAngle"].SetValue(0.3f);
-	platform0.FinishInit();*/
+	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("ShipParts/engines.xml"));
 
 	// create a ship
-	desc.Init(ET_SHIP);
-	desc.AddComponent(CT_SHIP_PHYSICS);
-	desc.AddComponent(CT_SHIP_LOGIC);
-	desc.AddComponent(CT_SHIP_VISUAL);
-	EntityHandle ship0 = gEntityMgr.CreateEntity(desc, props);
-	props["InitBodyPosition"].SetValue(Vector2(10.0f, 10.0f));
-	props["InitBodyAngle"].SetValue(-0.3f*MathUtils::PI);
-	ship0.FinishInit();
-
-	// create a platform and attach it to the ship
-	desc.Init(ET_PLATFORM);
-	desc.AddComponent(CT_PLATFORM_PHYSICS);
-	desc.AddComponent(CT_PLATFORM_LOGIC);
-	desc.AddComponent(CT_PLATFORM_VISUAL);
-	EntityHandle platform1 = gEntityMgr.CreateEntity(desc, props);
-	props["Blueprints"].SetValue(platformType0);
-	props["ParentShip"].SetValue(ship0);
-	props["RelativePosition"].SetValue<Vector2&>(Vector2(0.0f,-0.25f));
-	props["InitShapeFlip"].SetValue(false);
-	props["InitShapeAngle"].SetValue(0.0f);
-	platform1.FinishInit();
-
-	// create an engine and attach it to the platform
-	desc.Init(ET_ENGINE);
-	desc.AddComponent(CT_PLATFORM_ITEM);
-	desc.AddComponent(CT_ENGINE);
-	EntityHandle engine0 = gEntityMgr.CreateEntity(desc, props);
-	props["Blueprints"].SetValue(engineType0);
-	props["ParentPlatform"].SetValue(platform1);
-	props["RelativePosition"].SetValue<Vector2&>(Vector2(-0.5f, -0.25f));
-	props["DefaultAngle"].SetValue(MathUtils::PI);
-	props["RelativeAngle"].SetValue(0.0f);
-	engine0.FinishInit();
-
-	// create another platform and attach it to the ship
-	desc.Init(ET_PLATFORM);
-	desc.AddComponent(CT_PLATFORM_PHYSICS);
-	desc.AddComponent(CT_PLATFORM_LOGIC);
-	desc.AddComponent(CT_PLATFORM_VISUAL);
-	EntityHandle platform2 = gEntityMgr.CreateEntity(desc, props);
-	props["Blueprints"].SetValue(platformType0);
-	props["ParentShip"].SetValue(ship0);
-	props["RelativePosition"].SetValue<Vector2&>(Vector2(0.0f,0.25f));
-	props["InitShapeFlip"].SetValue(true);
-	props["InitShapeAngle"].SetValue(0.0f);
-	platform2.FinishInit();
-
-	// create another engine and attach it to the second platform
-	desc.Init(ET_ENGINE);
-	desc.AddComponent(CT_PLATFORM_ITEM);
-	desc.AddComponent(CT_ENGINE);
-	EntityHandle engine1 = gEntityMgr.CreateEntity(desc, props);
-	props["Blueprints"].SetValue(engineType0);
-	props["ParentPlatform"].SetValue(platform2);
-	props["RelativePosition"].SetValue<Vector2&>(Vector2(-0.5f, 0.25f));
-	props["DefaultAngle"].SetValue(MathUtils::PI);
-	props["RelativeAngle"].SetValue(0.0f);
-	engine1.FinishInit();
-
-	// link platforms together
-	desc.Init(ET_UNKNOWN);
-	desc.AddComponent(CT_PLATFORM_LINKS);
-	EntityHandle links1To2 = gEntityMgr.CreateEntity(desc, props);
-	props["FirstPlatform"].SetValue(platform1);
-	props["SecondPlatform"].SetValue(platform2);
-	props["NumLinks"].SetValue<uint32>(3);
-	Vector2 anchors1[] = {Vector2(-0.25f,0.2f),Vector2(0.0f,0.2f),Vector2(0.25f,0.2f)};
-	props["FirstAnchors"].SetValue(anchors1);
-	Vector2 anchors2[] = {Vector2(-0.25f,-0.2f),Vector2(0.0f,-0.2f),Vector2(0.25f,-0.2f)};
-	props["SecondAnchors"].SetValue(anchors2);
-	links1To2.FinishInit();
+	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("Ships/ship0.xml"));
 
 	// recompute mass of the ship's body
-	ship0.PostMessage(EntityMessage::TYPE_PHYSICS_UPDATE_MASS);
+	gEntityMgr.BroadcastMessage(EntityMessage::TYPE_PHYSICS_UPDATE_MASS);
 
 
 
 	// set camera
 	Vector2 shipPos;
-	ship0.PostMessage(EntityMessage::TYPE_GET_POSITION, &shipPos);
-	gGfxRenderer.SetCameraPos(shipPos);
+	EntityHandle ship = gEntityMgr.FindFirstEntity("ship0");
+	if (ship.IsValid())
+	{
+		ship.PostMessage(EntityMessage::TYPE_GET_POSITION, &shipPos);
+		gGfxRenderer.SetCameraPos(shipPos);
+	}
 	//gGfxRenderer.SetCameraX(50.0f* gGfxRenderer.GetScreenWidthHalf());
 	//gGfxRenderer.SetCameraY(50.0f* gGfxRenderer.GetScreenHeightHalf());
 	gGfxRenderer.SetCameraScale(50.0f);
@@ -182,50 +78,7 @@ void Core::Game::Init()
 
 	gInputMgr.AddInputListener(this);
 
-	////////////////// @name XML MANAGER DEMO START //////////////////
-	gLogMgr.LogMessage("*** XML MANAGER DEMO START ***");
-	ResourceSystem::XMLResourcePtr test = gResourceMgr.GetResource("xml", "test.xml");
 
-	// Set rootnode
-	test->Enter("Powerups/Powerup/g_PowerUps");
-	test->Enter("entry1");
-
-	std::stringstream ss;
-	ss << "TEST ";
-	ss << test->GetAttribute<string>("szName") << " ";
-	int move = test->GetAttribute<int>("iFastMove");
-	move++;
-	ss << move << " ";
-	gLogMgr.LogMessage(ss.str());
-	
-	// absolute path specified
-	test->Enter("", ResourceSystem::XMLResource::ABS);
-	int jump = test->GetAttribute<int>("Powerups/Powerup/g_PowerUps/entry2/iHighJump");	
-	ss.clear();
-	ss << jump << " ";
-	gLogMgr.LogMessage(ss.str());
-
-	test->Enter("Powerups/Powerup/g_PowerUps/entry2");
-	// leave 2 levels up
-	test->Leave(2);
-	test->Enter("g_PowerUps/entry3");
-	int inv = test->GetAttribute<int>("iInvulnerability");
-	ss.clear();
-	ss << inv << " ";
-	gLogMgr.LogMessage(ss.str());
-
-	
-	// XMLRES ITERATOR DEMO
-	// Iterator iterates through current RootNode and return all immediate values
-	ss.clear();
-	for (ResourceSystem::XMLResource::node_iterator it = test->begin(); it != test->end(); it++)
-	{
-		gLogMgr.LogMessage("INSIDE LOOP " + it.GetName());
-		ss << it.GetName() << " ";
-	}
-	gLogMgr.LogMessage("ITERATOR END: " + ss.str());
-	gLogMgr.LogMessage("*** XML MANAGER DEMO END ***");
-	////////////////// @name XML MANAGER DEMO END //////////////////
 
 
 

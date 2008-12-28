@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Entities>
+
+  <Entity Type="ET_UNKNOWN" Name="platformType0">
+    <Component Type="CT_PLATFORM_PARAMS">
+      <Material>material0</Material>
+      <Shape>
+        <LengthParam>ShapeLength</LengthParam>
+        <Vertex>-0.5 -0.5</Vertex>
+        <Vertex>0.25 -0.5</Vertex>
+        <Vertex>0.5 -0.25</Vertex>
+        <Vertex>0.5 0.25</Vertex>
+        <Vertex>-0.5 0.25</Vertex>
+      </Shape>
+    </Component>
+  </Entity>
+  
+</Entities>

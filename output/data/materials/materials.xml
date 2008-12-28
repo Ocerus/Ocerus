@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Entities>
+
+  <Entity Type="ET_UNKNOWN" Name="material0">
+    <Component Type="CT_MATERIAL">
+      <DurabilityRatio>1.0</DurabilityRatio>
+      <Density>1.0</Density>
+    </Component>
+  </Entity>
+  
+</Entities>

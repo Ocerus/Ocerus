@@ -34,7 +34,6 @@ EntityMessage::eResult EntitySystem::CmpEngine::HandleMessage( const EntityMessa
 			StringKey resGroup;
 			blueprints.PostMessage(EntityMessage::TYPE_GET_RESOURCE_GROUP, &resGroup);
 			mThrustPS = gPSMgr.SpawnPS(resGroup, effect);
-			//mThrustPS->FireAt(0,0);
 		}
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_UPDATE_PHYSICS_SERVER:
@@ -143,14 +142,13 @@ void EntitySystem::CmpEngine::Draw( void ) const
 	if (!mThrustPS.IsNull())
 	{
 		PropertyHolder prop;
-		blueprints.GetProperty(prop, "ThrustEffectDisplacement");
+		prop = blueprints.GetProperty("ThrustEffectDisplacement");
 		Vector2 disp = MathUtils::VectorFromAngle(angle, prop.GetValue<float32>());
-		//mThrustPS->MoveTo(gGfxRenderer.WorldToScreen(pos + disp), true);
 		mThrustPS->MoveTo(pos + disp, true);
 		mThrustPS->SetScale(gGfxRenderer.WorldToScreenScale(thrustScale));
 		mThrustPS->SetAngle(angle + MathUtils::HALF_PI);
 		float32 powRat = GetPowerRatio();
-		blueprints.GetProperty(prop, "ThrustEffectPowerScale");
+		prop = blueprints.GetProperty("ThrustEffectPowerScale");
 		float32 powScale = prop.GetValue<float32>();	
 		if (powRat < 0.1) mThrustPS->Stop();
 		else mThrustPS->Fire();	

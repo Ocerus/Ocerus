@@ -9,5 +9,8 @@
 /// @name Hashes a string into an integer value.
 uint32 HashString(const char* hashString, const int32 strLen = -1);
 
+/// @name Returns one of values hashed into a specified hash.
+const char* DeHashString(const uint32 hash);
+
 
 #endif // Hash_h__

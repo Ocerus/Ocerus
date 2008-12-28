@@ -320,6 +320,10 @@
 						RelativePath=".\src\EntitySystem\ComponentMgr\ComponentMgr.h"
 						>
 					</File>
+					<File
+						RelativePath=".\src\EntitySystem\ComponentMgr\ComponentTypes.h"
+						>
+					</File>
 				</Filter>
 				<Filter
 					Name="src"
@@ -335,6 +339,10 @@
 								UsePrecompiledHeader="1"
 							/>
 						</FileConfiguration>
+					</File>
+					<File
+						RelativePath=".\src\EntitySystem\ComponentMgr\ComponentEnums.cpp"
+						>
 					</File>
 					<File
 						RelativePath=".\src\EntitySystem\ComponentMgr\ComponentMgr.cpp"
@@ -372,12 +380,20 @@
 						RelativePath=".\src\EntitySystem\EntityMgr\EntityPicker.h"
 						>
 					</File>
+					<File
+						RelativePath=".\src\EntitySystem\EntityMgr\EntityTypes.h"
+						>
+					</File>
 				</Filter>
 				<Filter
 					Name="src"
 					>
 					<File
 						RelativePath=".\src\EntitySystem\EntityMgr\EntityDescription.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\EntitySystem\EntityMgr\EntityEnums.cpp"
 						>
 					</File>
 					<File
@@ -445,6 +461,10 @@
 					RelativePath=".\src\Utility\Timer.h"
 					>
 				</File>
+				<File
+					RelativePath=".\src\Utility\Tree.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="src"
@@ -459,6 +479,10 @@
 				</File>
 				<File
 					RelativePath=".\src\Utility\Settings.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Utility\StringConverter.cpp"
 					>
 				</File>
 				<File
@@ -514,6 +538,10 @@
 					</File>
 					<File
 						RelativePath=".\src\Utility\Properties\PropertyHolder.h"
+						>
+					</File>
+					<File
+						RelativePath=".\src\Utility\Properties\PropertyHolderMediator.h"
 						>
 					</File>
 					<File

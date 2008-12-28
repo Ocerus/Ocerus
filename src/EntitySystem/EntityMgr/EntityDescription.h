@@ -19,7 +19,7 @@ namespace EntitySystem
 		~EntityDescription(void);
 
 		/// @name Call this before each subsequent filling of the description.
-		void Init(const eEntityType type);
+		void Init(const eEntityType type, const string& ID = "");
 
 		/// @name Add new component specified by its type.
 		void AddComponent(const eComponentType type);
@@ -39,6 +39,9 @@ namespace EntitySystem
 
 		/// @name Type of this entity.
 		eEntityType mType;
+
+		/// @name Custom identifier (not neccessarily unique) of this entity.
+		string mID;
 
 		/// @name Clears everything
 		void Clear(void);

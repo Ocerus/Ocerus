@@ -15,6 +15,9 @@ void Core::LoadingScreen::DoLoading( eType type )
 		break;
 	case TYPE_GENERAL_RESOURCES:
 		gResourceMgr.AddResourceDirToGroup("engines", "ShipParts");
+		gResourceMgr.AddResourceDirToGroup("materials", "ShipParts");
+		gResourceMgr.AddResourceDirToGroup("platforms", "ShipParts");
+		gResourceMgr.AddResourceDirToGroup("ships", "Ships");
 		gResourceMgr.AddResourceFileToGroup("water.png", "Backgrounds");	
 		gResourceMgr.AddResourceDirToGroup("xml", "xml");
 		gResourceMgr.AddResourceDirToGroup("psi", "psi");
@@ -32,7 +35,7 @@ void Core::LoadingScreen::DoLoading( eType type )
 
 		gResourceMgr.LoadResourcesInGroup("Backgrounds");
 		gResourceMgr.LoadResourcesInGroup("ShipParts");
-		gResourceMgr.LoadResourcesInGroup("xml");
+		gResourceMgr.LoadResourcesInGroup("Ships");
 		gResourceMgr.LoadResourcesInGroup("psi");
 		gResourceMgr.LoadResourcesInGroup("fonts");
 		gResourceMgr.LoadResourcesInGroup("schemes");

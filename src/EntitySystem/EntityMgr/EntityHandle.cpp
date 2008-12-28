@@ -51,10 +51,9 @@ bool EntitySystem::EntityHandle::GetProperties( PropertyList& out, const Propert
 	return gEntityMgr.GetEntityProperties(*this, out, mask);
 }
 
-bool EntitySystem::EntityHandle::GetProperty( PropertyHolder& out, const StringKey key, const PropertyAccessFlags mask )
+PropertyHolderMediator EntitySystem::EntityHandle::GetProperty( const StringKey key, const PropertyAccessFlags mask )
 {
-	out = gEntityMgr.GetEntityProperty(*this, key, mask);
-	return out.IsValid();
+	return gEntityMgr.GetEntityProperty(*this, key, mask);
 }
 
 EntityMessage::eResult EntityHandle::PostMessage(const EntityMessage::eType type, void* data)

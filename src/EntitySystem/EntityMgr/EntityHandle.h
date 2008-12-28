@@ -3,13 +3,13 @@
 
 #include "../../Utility/Settings.h"
 #include "../../Utility/StringKey.h"
+#include "../../Utility/Properties/PropertyHolderMediator.h"
 #include "EntityMessage.h"
 #include "EntityEnums.h"
 
 /// @name Forward declarations.
 //@{
 class PropertyList;
-class PropertyHolder;
 //@}
 
 namespace EntitySystem
@@ -52,7 +52,7 @@ namespace EntitySystem
 		bool GetProperties(PropertyList& out, const PropertyAccessFlags mask = FULL_PROPERTY_ACCESS_FLAGS);
 
 		/// @name Retrieves a property of this entity. A filter related to properties' flags can be specified.
-		bool GetProperty(PropertyHolder& out, const StringKey key, const PropertyAccessFlags mask = FULL_PROPERTY_ACCESS_FLAGS);
+		PropertyHolderMediator GetProperty(const StringKey key, const PropertyAccessFlags mask = FULL_PROPERTY_ACCESS_FLAGS);
 
 		/// @name Sends a message to this entity.
 		EntityMessage::eResult PostMessage(const EntityMessage::eType type, void* data = 0);

@@ -47,7 +47,7 @@ bool StringKey::operator<( const StringKey& rhs ) const
 
 StringKey::operator string( void ) const
 {
-	return "TOHLE_DODELAT";
+	return DeHashString(mData);
 }
 
 StringKey::operator size_t( void ) const

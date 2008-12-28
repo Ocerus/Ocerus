@@ -21,10 +21,16 @@ namespace StringConverter
 	{
 		T result;
 		std::istringstream iss(str);
-		if (!(iss >> result).fail())
+		if ((iss >> result).fail())
 			return T(); // return default value
 		return result;
 	}
+
+	template<>
+	Vector2 FromString(const string& str);
+
+	template<>
+	bool FromString(const string& str);
 
 }
 

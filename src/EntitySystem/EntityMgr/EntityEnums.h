@@ -1,20 +1,31 @@
 #ifndef EntityEnums_h__
 #define EntityEnums_h__
 
+#include "../../Utility/Settings.h"
+
 namespace EntitySystem
 {
-	/// @name Set of all entyties in the system
+	/// @name Set of all entities in the system
 	enum eEntityType
 	{
-		ET_SHIP=0,
-		ET_PLATFORM,
-		ET_ENGINE,
+		#define ENTITY_TYPE(x) x,
+		#include "EntityTypes.h"
+		#undef ENTITY_TYPE
 
-		ET_UNKNOWN, // unknown is a valid entity type as well
-		NUM_ENTITY_TYPES,
+		NUM_ENTITY_TYPES
 	};
 
-	//TODO sem pridat stringovy jmena, ktery se pak pouzijou v LUE
+	/// @name String names of all entity types.
+	const char* const EntityTypeNames[] =
+	{
+		#define ENTITY_TYPE(x) #x,
+		#include "EntityTypes.h"
+		#undef ENTITY_TYPE
+	};
+
+	/// @name Returns an entity type based on a string.
+	eEntityType DetectEntityType(const string& type);
+
 }
 
 #endif // EntityEnums_h__

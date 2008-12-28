@@ -14,6 +14,18 @@
 #define DEBUG_STRING_HASH
 
 
+#ifdef DEBUG_STRING_HASH 
+
+typedef stdext::hash_map<uint32, char*> StringHashMap;
+
+static StringHashMap& GetStringHashMap(void)
+{
+	static StringHashMap stringMap;
+	return stringMap;
+}
+
+#endif
+
 uint32 HashString(const char* hashString, const int32 strLen)
 {
 	if (!hashString || !hashString[0])
@@ -47,18 +59,18 @@ uint32 HashString(const char* hashString, const int32 strLen)
 	}
 
 	#ifdef DEBUG_STRING_HASH
-		typedef stdext::hash_map<uint32, char*> StringHashMap;
-		static StringHashMap stringMap;
+		len  = strLen==-1 ? strlen(hashString) : strLen;
+		StringHashMap& stringMap = GetStringHashMap();
 		StringHashMap::const_iterator it = stringMap.find(hash);
 		if (it == stringMap.end())
 		{
-			int32 strLen = strlen(hashString);
-			char* str = DYN_NEW char[strLen+1];
-			for (int32 i=0; i<strLen+1; ++i)
+			char* str = DYN_NEW char[len+1];
+			for (int32 i=0; i<len; ++i)
 				str[i] = hashString[i];
+			str[len] = 0;
 			stringMap[hash] = str;
 		}
-		else if (strcmp(it->second, hashString))
+		else if (strncmp(it->second, hashString, len))
 		{
 			if (LogSystem::LogMgr::GetSingletonPtr())
 			{
@@ -74,4 +86,13 @@ uint32 HashString(const char* hashString, const int32 strLen)
 	#endif
 
 	return hash;
+}
+
+const char* DeHashString( const uint32 hash )
+{
+	StringHashMap& stringMap = GetStringHashMap();
+	StringHashMap::const_iterator it = stringMap.find(hash);
+	if (it == stringMap.end())
+		return "DeHashString_FAILED";
+	return it->second;
 }

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Entities>
+
+  <Entity Type="ET_SHIP" Name="ship0">
+    <Component Type="CT_SHIP_PHYSICS">
+      <InitBodyPosition>10.0 10.0</InitBodyPosition>
+      <InitBodyAngle>-0.94247779607693797153879301498385</InitBodyAngle>
+    </Component>
+    <Component Type="CT_SHIP_LOGIC"/>
+    <Component Type="CT_SHIP_VISUAL"/>
+  </Entity>
+
+  <Entity Type="ET_PLATFORM" Name="platform1">
+    <Component Type="CT_PLATFORM_PHYSICS">
+      <RelativePosition>0.0 -0.25</RelativePosition>
+      <InitShapeFlip>false</InitShapeFlip>
+      <InitShapeAngle>0.0</InitShapeAngle>
+    </Component>
+    <Component Type="CT_PLATFORM_LOGIC">
+      <Blueprints>platformType0</Blueprints>
+      <ParentShip>ship0</ParentShip>
+    </Component>
+    <Component Type="CT_PLATFORM_VISUAL"/>
+  </Entity>
+
+  <Entity Type="ET_ENGINE" Name="engine0">
+    <Component Type="CT_PLATFORM_ITEM">
+      <Blueprints>engineType0</Blueprints>
+      <ParentPlatform>platform1</ParentPlatform>
+      <RelativePosition>-0.5 -0.25</RelativePosition>
+    </Component>
+    <Component Type="CT_ENGINE">
+      <DefaultAngle>3.1415926535897932384626433832795</DefaultAngle>
+      <RelativeAngle>0.0</RelativeAngle>
+    </Component>
+  </Entity>
+
+  <Entity Type="ET_PLATFORM" Name="platform2">
+    <Component Type="CT_PLATFORM_PHYSICS">
+      <RelativePosition>0.0 0.25</RelativePosition>
+      <InitShapeFlip>true</InitShapeFlip>
+      <InitShapeAngle>0.0</InitShapeAngle>
+    </Component>
+    <Component Type="CT_PLATFORM_LOGIC">
+      <Blueprints>platformType0</Blueprints>
+      <ParentShip>ship0</ParentShip>
+    </Component>
+    <Component Type="CT_PLATFORM_VISUAL"/>
+  </Entity>
+
+  <Entity Type="ET_ENGINE" Name="engine1">
+    <Component Type="CT_PLATFORM_ITEM">
+      <Blueprints>engineType0</Blueprints>
+      <ParentPlatform>platform2</ParentPlatform>
+      <RelativePosition>-0.5 0.25</RelativePosition>
+    </Component>
+    <Component Type="CT_ENGINE">
+      <DefaultAngle>3.1415926535897932384626433832795</DefaultAngle>
+      <RelativeAngle>0.0</RelativeAngle>
+    </Component>
+  </Entity>
+
+  <Entity Type="ET_UNKNOWN" Name="link0">
+    <Component Type="CT_PLATFORM_LINKS">
+      <FirstPlatform>platform1</FirstPlatform>
+      <SecondPlatform>platform2</SecondPlatform>
+      <FirstAnchors>
+        <LengthParam>NumLinks</LengthParam>
+        <Vertex>-0.25 0.2</Vertex>
+        <Vertex>0.0 0.2</Vertex>
+        <Vertex>0.25 0.2</Vertex>
+      </FirstAnchors>
+      <SecondAnchors>
+        <LengthParam>NumLinks</LengthParam>
+        <Vertex>-0.25 -0.2</Vertex>
+        <Vertex>0.0 -0.2</Vertex>
+        <Vertex>0.25 -0.2</Vertex>
+      </SecondAnchors>
+    </Component>
+  </Entity>
+
+</Entities>

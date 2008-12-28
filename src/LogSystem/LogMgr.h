@@ -37,6 +37,7 @@ namespace LogSystem
 		void LogMessage(const string& msg, const int32 num, const int32 num2, eLogSeverity severity = LOG_INFO);
 		void LogMessage(const string& msg, const float32 num, eLogSeverity severity = LOG_INFO);
 		void LogMessage(const string& msg, const int32 num, const string& msg2, const int32 num2, const string& msg3, eLogSeverity severity = LOG_INFO);
+		void LogMessage(const string& msg, const int32 num, const string& msg2, const string& msg3, eLogSeverity severity = LOG_INFO);
 		void LogMessage(const string& msg, const int32 num, const string& msg2, eLogSeverity severity = LOG_INFO);
 		void LogMessage(const string& msg, const string& msg2, const string& msg3, const int32 num, const string& msg4, const int32 num2, const string& msg5, eLogSeverity severity = LOG_INFO);
 		//@}
