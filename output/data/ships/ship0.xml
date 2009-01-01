@@ -35,6 +35,20 @@
       <RelativeAngle>0.0</RelativeAngle>
     </Component>
   </Entity>
+  
+  <Entity Type="ET_WEAPON" Name="weapon0">
+    <Component Type="CT_PLATFORM_ITEM">
+      <Blueprints>weaponType0</Blueprints>
+      <ParentPlatform>platform1</ParentPlatform>
+      <RelativePosition>+0.4 -0.25</RelativePosition>
+    </Component>
+    <Component Type="CT_WEAPON">
+      <Ammo>ammoType0</Ammo>
+      <DefaultAngle>0.0</DefaultAngle>
+      <RelativeAngle>0.0</RelativeAngle>
+    </Component>
+  </Entity>
+
 
   <Entity Type="ET_PLATFORM" Name="platform2">
     <Component Type="CT_PLATFORM_PHYSICS">
@@ -67,15 +81,15 @@
       <SecondPlatform>platform2</SecondPlatform>
       <FirstAnchors>
         <LengthParam>NumLinks</LengthParam>
-        <Vertex>-0.25 0.2</Vertex>
-        <Vertex>0.0 0.2</Vertex>
-        <Vertex>0.25 0.2</Vertex>
+        <Vertex>-0.25 0.1</Vertex>
+        <Vertex>0.0 0.1</Vertex>
+        <Vertex>0.25 0.1</Vertex>
       </FirstAnchors>
       <SecondAnchors>
         <LengthParam>NumLinks</LengthParam>
-        <Vertex>-0.25 -0.2</Vertex>
-        <Vertex>0.0 -0.2</Vertex>
-        <Vertex>0.25 -0.2</Vertex>
+        <Vertex>-0.25 -0.1</Vertex>
+        <Vertex>0.0 -0.1</Vertex>
+        <Vertex>0.25 -0.1</Vertex>
       </SecondAnchors>
     </Component>
   </Entity>

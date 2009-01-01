@@ -12,8 +12,13 @@
 #include "../Components/CmpShipPhysics.h"
 #include "../Components/CmpShipVisual.h"
 #include "../Components/CmpPlatformItem.h"
+#include "../Components/CmpPlatformItemParams.h"
 #include "../Components/CmpEngineParams.h"
 #include "../Components/CmpEngine.h"
+#include "../Components/CmpWeaponParams.h"
+#include "../Components/CmpWeapon.h"
+#include "../Components/CmpAmmoParams.h"
+#include "../Components/CmpProjectile.h"
 
 using namespace EntitySystem;
 
@@ -22,18 +27,9 @@ ComponentMgr::ComponentMgr()
 	mComponentCreationMethod[NUM_COMPONENT_TYPES-1] = 0;
 
 	// register components
-	mComponentCreationMethod[CT_MATERIAL] = (ComponentCreationMethod)CmpMaterial::GetClassRTTI()->GetClassFactory();
-	mComponentCreationMethod[CT_PLATFORM_LINKS] = (ComponentCreationMethod)CmpPlatformLinks::GetClassRTTI()->GetClassFactory();
-	mComponentCreationMethod[CT_PLATFORM_PARAMS] = (ComponentCreationMethod)CmpPlatformParams::GetClassRTTI()->GetClassFactory();
-	mComponentCreationMethod[CT_PLATFORM_PHYSICS] = (ComponentCreationMethod)CmpPlatformPhysics::GetClassRTTI()->GetClassFactory();
-	mComponentCreationMethod[CT_PLATFORM_LOGIC] = (ComponentCreationMethod)CmpPlatformLogic::GetClassRTTI()->GetClassFactory();
-	mComponentCreationMethod[CT_PLATFORM_VISUAL] = (ComponentCreationMethod)CmpPlatformVisual::GetClassRTTI()->GetClassFactory();
-	mComponentCreationMethod[CT_SHIP_LOGIC] = (ComponentCreationMethod)CmpShipLogic::GetClassRTTI()->GetClassFactory();
-	mComponentCreationMethod[CT_SHIP_PHYSICS] = (ComponentCreationMethod)CmpShipPhysics::GetClassRTTI()->GetClassFactory();
-	mComponentCreationMethod[CT_SHIP_VISUAL] = (ComponentCreationMethod)CmpShipVisual::GetClassRTTI()->GetClassFactory();
-	mComponentCreationMethod[CT_PLATFORM_ITEM] = (ComponentCreationMethod)CmpPlatformItem::GetClassRTTI()->GetClassFactory();
-	mComponentCreationMethod[CT_ENGINE_PARAMS] = (ComponentCreationMethod)CmpEngineParams::GetClassRTTI()->GetClassFactory();
-	mComponentCreationMethod[CT_ENGINE] = (ComponentCreationMethod)CmpEngine::GetClassRTTI()->GetClassFactory();
+	#define COMPONENT_TYPE(id, cls) mComponentCreationMethod[id] = (ComponentCreationMethod)cls::GetClassRTTI()->GetClassFactory();
+	#include "ComponentTypes.h"
+	#undef COMPONENT_TYPE
 
 	assert(mComponentCreationMethod[NUM_COMPONENT_TYPES-1]);
 }
@@ -93,9 +89,9 @@ bool EntitySystem::ComponentMgr::GetEntityProperties( const EntityID id, Propert
 	return true;
 }
 
-PropertyHolderMediator EntitySystem::ComponentMgr::GetEntityProperty( const EntityHandle h, const StringKey key, const PropertyAccessFlags mask )
+PropertyHolderMediator EntitySystem::ComponentMgr::GetEntityProperty( const EntityHandle h, const StringKey key, const PropertyAccessFlags mask ) const
 {
-	EntityComponentsMap::iterator iter = mEntityComponentsMap.find(h.GetID());
+	EntityComponentsMap::const_iterator iter = mEntityComponentsMap.find(h.GetID());
 	if (iter == mEntityComponentsMap.end())
 		return PropertyHolder();
 	ComponentsList& cmpList = *iter->second;

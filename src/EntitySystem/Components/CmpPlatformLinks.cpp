@@ -66,7 +66,7 @@ void EntitySystem::CmpPlatformLinks::Draw( void )
 	ship.PostMessage(EntityMessage::TYPE_GET_ANGLE, &angle);
 	XForm xf(shipPos, Matrix22(angle));
 	for (uint32 i=0; i<mAnchorsLength; ++i)
-		gGfxRenderer.DrawLineWithConversion(MathUtils::Multiply(xf, mFirstAnchors[i]), MathUtils::Multiply(xf, mSecondAnchors[i]), GfxSystem::Pen(GfxSystem::Color(200,0,0,168)));
+		gGfxRenderer.DrawLineWithConversion(MathUtils::Multiply(xf, mFirstAnchors[i]), MathUtils::Multiply(xf, mSecondAnchors[i]), GfxSystem::Pen(GfxSystem::Color(100,0,100,100)));
 
 }
 

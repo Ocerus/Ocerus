@@ -35,6 +35,11 @@ bool EntitySystem::EntityHandle::operator==( const EntityHandle& rhs )
 	return mEntityID == rhs.mEntityID;
 }
 
+bool EntitySystem::EntityHandle::operator!=( const EntityHandle& rhs )
+{
+	return mEntityID != rhs.mEntityID;
+}
+
 EntitySystem::eEntityType EntitySystem::EntityHandle::GetType( void ) const
 {
 	return gEntityMgr.GetEntityType(*this);
@@ -51,7 +56,7 @@ bool EntitySystem::EntityHandle::GetProperties( PropertyList& out, const Propert
 	return gEntityMgr.GetEntityProperties(*this, out, mask);
 }
 
-PropertyHolderMediator EntitySystem::EntityHandle::GetProperty( const StringKey key, const PropertyAccessFlags mask )
+PropertyHolderMediator EntitySystem::EntityHandle::GetProperty( const StringKey key, const PropertyAccessFlags mask ) const
 {
 	return gEntityMgr.GetEntityProperty(*this, key, mask);
 }
@@ -64,6 +69,6 @@ EntityMessage::eResult EntityHandle::PostMessage(const EntityMessage::eType type
 	if (result == EntityMessage::RESULT_ERROR)
 		gLogMgr.LogMessage("Message '", type, "' on entity '", mEntityID, "' returned error", LOG_ERROR);
 	else if (result == EntityMessage::RESULT_IGNORED)
-		gLogMgr.LogMessage("WARNING: Message '", type, "' on entity '", mEntityID, "' returned error");
+		gLogMgr.LogMessage("Message '", type, "' on entity '", mEntityID, "' returned error", LOG_WARNING);
 	return result;
 }

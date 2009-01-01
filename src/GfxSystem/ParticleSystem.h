@@ -36,7 +36,7 @@ namespace GfxSystem
 		/// @name Update logic and position of particles
 		void Update(float delta);
 		/// @name Render PS
-		void Render(float32 scale = -1.0f);
+		void Render(void);
 
 		/// @name Return underlying hgeParticleSystem (for debug only, do not use otherwise)
 		hgeParticleSystem* GetPS(void);
@@ -72,8 +72,11 @@ namespace GfxSystem
 		bool mRenderDone;
 		bool mLoaded;
 		bool mActive;
-		float32 mWorldX;
-		float32 mWorldY;
+		float32 mPositionX;
+		float32 mLastPositionX;
+		float32 mPositionY;
+		float32 mLastPositionY;
+		float32 mScale;
 		bool mMoveParticles;
 	};
 	typedef SmartPointer<ParticleSystem> ParticleSystemPtr;

@@ -65,7 +65,8 @@ EntityHandle EntityMgr::CreateEntity(const EntityDescription& desc, PropertyList
 {
 	assert(mComponentMgr);
 	EntityDescription::ComponentDescriptionsList::const_iterator i = desc.mComponents.begin();
-	assert(i!=desc.mComponents.end());
+	if (i == desc.mComponents.end())
+		return EntityHandle::Null;
 	EntityHandle h = EntityHandle::CreateUniqueHandle();
 	//TODO check if the handle is really unique
 
@@ -105,22 +106,18 @@ EntityHandle EntityMgr::CreateEntity(const EntityDescription& desc, PropertyList
 
 void EntityMgr::DestroyEntity(const EntityHandle h)
 {
-	assert(mComponentMgr);
-	EntityMap::const_iterator it = mEntities.find(h.GetID());
-	if (it != mEntities.end())
-	{
-		DestroyEntity(it);
-		mEntities.erase(it);
-	}
+	mEntityDestroyQueue.push_back(h.GetID());
 }
 
-void EntitySystem::EntityMgr::DestroyEntity( EntityMap::const_iterator it )
+void EntitySystem::EntityMgr::ProcessDestroyQueue( void )
 {
-	if (it != mEntities.end())
+	for (EntityQueue::const_iterator it=mEntityDestroyQueue.begin(); it!=mEntityDestroyQueue.end(); ++it)
 	{
-		mComponentMgr->DestroyEntityComponents(it->first);
-		DYN_DELETE it->second;
+		EntityMap::const_iterator mapIt = mEntities.find(*it);
+		DestroyEntity(mapIt);
+		mEntities.erase(mapIt);
 	}
+	mEntityDestroyQueue.clear();
 }
 
 void EntityMgr::DestroyAllEntities()
@@ -130,6 +127,16 @@ void EntityMgr::DestroyAllEntities()
 		DestroyEntity(i);
 	mEntities.clear();
 }
+
+void EntityMgr::DestroyEntity( EntityMap::const_iterator it )
+{
+	if (it != mEntities.end())
+	{
+		mComponentMgr->DestroyEntityComponents(it->first);
+		DYN_DELETE it->second;
+	}
+}
+
 
 EntitySystem::eEntityType EntitySystem::EntityMgr::GetEntityType( const EntityHandle h ) const
 {
@@ -158,7 +165,7 @@ bool EntitySystem::EntityMgr::IsEntityInited( const EntityHandle h ) const
 	return ei->second->mFullyInited;
 }
 
-PropertyHolderMediator EntitySystem::EntityMgr::GetEntityProperty( const EntityHandle h, const StringKey key, const PropertyAccessFlags flagMask /*= 0xff*/ )
+PropertyHolderMediator EntitySystem::EntityMgr::GetEntityProperty( const EntityHandle h, const StringKey key, const PropertyAccessFlags flagMask /*= 0xff*/ ) const
 {
 	return mComponentMgr->GetEntityProperty(h, key, flagMask);
 }
@@ -305,3 +312,4 @@ bool EntitySystem::EntityMgr::LoadFromResource( ResourceSystem::ResourcePtr res 
 
 	return false;
 }
+

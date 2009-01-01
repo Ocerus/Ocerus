@@ -1,12 +1,12 @@
-#ifndef CmpEngine_h__
-#define CmpEngine_h__
+#ifndef CmpWeapon_h__
+#define CmpWeapon_h__
 
 #include "../ComponentMgr/Component.h"
 
 namespace EntitySystem
 {
-	/// @name Platform item - engine. Handles rendering as well as logic and physics.
-	class CmpEngine : public RTTIGlue<CmpEngine, Component>
+	/// @name Platform item - weapon. Handles rendering as well as logic and physics.
+	class CmpWeapon : public RTTIGlue<CmpWeapon, Component>
 	{
 	public:
 		virtual void Init(void);
@@ -15,15 +15,14 @@ namespace EntitySystem
 
 		static void RegisterReflection(void);
 
-		/// @name Current power going out of the engine.
+		/// @name Time which must pass until the weapon can be reloaded.
 		//@{
-		uint32 GetPower(void) const;
-		void SetPower(const uint32 pow);
+		float32 GetTimeToReload(void) const { return mTimeToReload; }
 		//@}
-		/// @name Curret power ratio in 0-1 range.
+		/// @name Current ammo used by this weapon. This is a blueprints only.
 		//@{
-		float32 GetPowerRatio(void) const { return mPowerRatio; }
-		void SetPowerRatio(const float32 powrat);
+		EntityHandle GetAmmo(void) const { return mAmmoBlueprints; }
+		void SetAmmo(const EntityHandle bp) { mAmmoBlueprints = bp; }
 		//@}
 		/// @name Current angle of the engine relative to the default angle.
 		//@{
@@ -39,18 +38,30 @@ namespace EntitySystem
 		float32 GetAbsoluteAngle(void) const;
 		/// @name Default angle of the engine in absolute coords.
 		float32 GetAbsoluteDefaultAngle(void) const;
+		/// @name Current target of this weapon. Can be null.
+		//@{
+		EntityHandle GetTarget(void) const { return mTarget; }
+		void SetTarget(const EntityHandle tar);
+		//@}
+		/// @name Is the weapon currently shooting?
+		//@{
+		bool IsFiring(void) const { return mIsFiring; }
+		//@}
 
 	private:
-		float32 mPowerRatio;
+		float32 mTimeToReload;
 		float32 mDefaultAngle;
 		float32 mRelativeAngle;
+		EntityHandle mAmmoBlueprints;
+		EntityHandle mTarget;
+		bool mIsFiring;
 
 		/// @name Internals.
 		//@{
-		GfxSystem::ParticleSystemPtr mThrustPS;
 		bool mWasSelected;
 		//@}
 
+		void Fire(void);
 		void Draw(const bool selected) const;
 		void DrawSelectionOverlay(const bool hover) const;
 		void DrawSelectionUnderlay(const bool hover) const;
@@ -58,4 +69,4 @@ namespace EntitySystem
 	};
 }
 
-#endif // CmpEngine_h__
+#endif // CmpWeapon_h__

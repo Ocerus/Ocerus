@@ -2,6 +2,7 @@
 #define _ENTITYMGR_H_
 
 #include <map>
+#include <vector>
 #include "EntityHandle.h"
 #include "EntityMessage.h"
 #include "EntityEnums.h"
@@ -39,7 +40,7 @@ namespace EntitySystem
 		void DestroyEntity(const EntityHandle h);
 		/// @name Loads all entities from an XML resource.
 		bool LoadFromResource(ResourceSystem::ResourcePtr res);
-		/// @name Posts a message to an entity. It is the only way entities can communicate with each other.
+		/// @name Posts a message to an entity.
 		inline EntityMessage::eResult PostMessage(EntityHandle h, const EntityMessage& msg) { return PostMessage(h.GetID(), msg); }
 		/// @name Sends a message to all entities.
 		void BroadcastMessage(const EntityMessage& msg);
@@ -50,9 +51,11 @@ namespace EntitySystem
 		/// @name Retrieves properties of an entity. A filter related to properties' flags can be specified.
 		bool GetEntityProperties(const EntityHandle h, PropertyList& out, const PropertyAccessFlags flagMask = FULL_PROPERTY_ACCESS_FLAGS);
 		/// @name Retrieves a property of an entity. A filter related to properties' flags can be specified.
-		PropertyHolderMediator GetEntityProperty(const EntityHandle h, const StringKey key, const PropertyAccessFlags flagMask = FULL_PROPERTY_ACCESS_FLAGS);
+		PropertyHolderMediator GetEntityProperty(const EntityHandle h, const StringKey key, const PropertyAccessFlags flagMask = FULL_PROPERTY_ACCESS_FLAGS) const;
 		/// @name Returns EntityHandle to an entity of a specified ID. If there are more of them, then returns the first one.
 		EntityHandle FindFirstEntity(const string& ID);
+		/// @name Actually destroyes all entities marked for destruction.
+		void ProcessDestroyQueue(void);
 		/// @name Destroys all entities in the manager.
 		void DestroyAllEntities(void);	
 
@@ -70,9 +73,11 @@ namespace EntitySystem
 			string mID;
 		};
 		typedef std::map<EntityID, EntityInfo*> EntityMap;
+		typedef std::vector<EntityID> EntityQueue;
 
 		ComponentMgr* mComponentMgr;
 		EntityMap mEntities;
+		EntityQueue mEntityDestroyQueue;
 
 		/// @name Posts a message to an entity. It is the only way entities can communicate with each other.
 		EntityMessage::eResult PostMessage(EntityID id, const EntityMessage& msg);

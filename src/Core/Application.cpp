@@ -57,13 +57,13 @@ Application::~Application()
 	HideConsole();
 
 	DYN_DELETE mLoadingScreen;
-	DYN_DELETE mGame;
 	
 	DYN_DELETE mGUIMgr;
 
 	mResourceMgr->UnloadAllResources();
 
 	DYN_DELETE mEntityMgr;
+	DYN_DELETE mGame;
 	DYN_DELETE mInputMgr;		
 	DYN_DELETE mGfxRenderer;
 	DYN_DELETE mStringMgr;
@@ -105,6 +105,9 @@ void Application::RunMainLoop()
 			mGUIMgr->Update(delta);			
 			break;
 		}
+		
+		// destroy marked entities
+		gEntityMgr.ProcessDestroyQueue();
 
 		// draw
 		switch (GetState())

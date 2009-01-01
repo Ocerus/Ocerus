@@ -78,6 +78,7 @@ GfxRenderer::~GfxRenderer()
 	assert(mHGE);
 	HgeExitFunction();
 	mHGE->System_Shutdown();
+	mHGE->Release();
 }
 
 uint32 GfxRenderer::_GetWindowHandle() const
@@ -218,7 +219,7 @@ void InitQuad(hgeQuad& q,const TexturePtr& image, const Rect& textureRect, const
 	q.blend = BLEND_ALPHABLEND | BLEND_COLORMUL | BLEND_ZWRITE;
 }
 
-bool GfxRenderer::DrawImage( const TexturePtr& image, int32 x, int32 y, uint8 anchor /*= ANCHOR_VCENTER|ANCHOR_HCENTER*/, float32 angle /*= 0.0f*/, uint8 alpha /*= 255*/, float32 scale /*= 1.0f*/, int32 width /* = 0 */,int32 height /* = 0 */, const Rect& textureRect /* = 0 */) const
+bool GfxRenderer::DrawImage( const TexturePtr& image, int32 x, int32 y, uint8 anchor, float32 angle, const Color& color, float32 scale) const
 {	
 	if (image.IsNull())
 	{
@@ -226,8 +227,7 @@ bool GfxRenderer::DrawImage( const TexturePtr& image, int32 x, int32 y, uint8 an
 		return false;
 	}
 
-	Color alphacolor = Color(255, 255, 255, alpha);
-	ColorRect alphas(alphacolor, alphacolor, alphacolor, alphacolor);
+	ColorRect alphas(color, color, color, color);
 	hgeQuad q;
 	uint32 imgW = image->GetWidth();
 	uint32 imgH = image->GetHeight();
@@ -287,24 +287,24 @@ bool GfxRenderer::DrawImage( const TexturePtr& image, int32 x, int32 y, uint8 an
 	return true;
 }
 
-bool GfxRenderer::DrawImage( const TexturePtr& image, const Point& pos, uint8 anchor /*= ANCHOR_VCENTER|ANCHOR_HCENTER*/, float32 angle /*= 0.0f*/, uint8 alpha /*= 255*/, float32 scale /*= 1.0f*/ ) const
+bool GfxRenderer::DrawImage( const TexturePtr& image, const Point& pos, uint8 anchor, float32 angle, const Color& color, float32 scale ) const
 {
 	if (image.IsNull())
 	{
 		gLogMgr.LogMessage("DrawImage: texture is null", LOG_ERROR);
 		return false;
 	}
-	return DrawImage(image, pos.x, pos.y, anchor, angle, alpha, scale, image->GetWidth(), image->GetHeight());
+	return DrawImage(image, pos.x, pos.y, anchor, angle, color, scale);
 }
 
-bool GfxRenderer::DrawImageWithConversion( const TexturePtr& image, const Vector2& pos, uint8 anchor /*= ANCHOR_VCENTER|ANCHOR_HCENTER*/, float32 angle /*= 0.0f*/, uint8 alpha /*= 255*/, float32 scale /*= 1.0f*/ ) const
+bool GfxRenderer::DrawImageWithConversion( const TexturePtr& image, const Vector2& pos, uint8 anchor, float32 angle, const Color& color, float32 scale ) const
 {
 	if (image.IsNull())
 	{
 		gLogMgr.LogMessage("DrawImage: texture is null", LOG_ERROR);
 		return false;
 	}
-	return DrawImage(image, WorldToScreenX(pos.x), WorldToScreenY(pos.y), anchor, angle, alpha, WorldToScreenImageScale(scale), image->GetWidth(), image->GetHeight());
+	return DrawImage(image, WorldToScreenX(pos.x), WorldToScreenY(pos.y), anchor, angle, color, WorldToScreenImageScale(scale));
 }
 
 bool GfxRenderer::DrawImage( const TexturePtr& image, const Rect& destRect ) const
@@ -387,12 +387,12 @@ void InitTriple(hgeTriple& t,uint32 hTex,int32 x1,int32 y1,int32 x2,int32 y2,int
 	t.blend = BLEND_ALPHABLEND | BLEND_COLORMUL | BLEND_ZWRITE;
 }
 
-bool GfxRenderer::DrawPolygon( Point* vertices, int vertices_len, const TexturePtr& image, const Pen& outline, float32 angle /*= 0.0f*/, uint8 alpha /*= 255*/, float32 scale /*= 1.0f*/, float32 textureAngle /*= 0.0f*/, float32 textureScale /*= 1.0f*/ ) const
+bool GfxRenderer::DrawPolygon( Point* vertices, int vertices_len, const TexturePtr& image, const Pen& outline, float32 angle, const Color& color, float32 scale, float32 textureAngle, float32 textureScale ) const
 {
 	return false;
 }
 
-bool GfxRenderer::DrawPolygon( const std::vector<Point>& vertices, const TexturePtr& image, const Pen& outline, float32 angle /*= 0.0f*/, uint8 alpha /*= 255*/, float32 scale /*= 1.0f*/, float32 textureAngle /*= 0.0f*/, float32 textureScale /*= 1.0f*/ ) const
+bool GfxRenderer::DrawPolygon( const std::vector<Point>& vertices, const TexturePtr& image, const Pen& outline, float32 angle, const Color& color, float32 scale, float32 textureAngle, float32 textureScale ) const
 {
 	if (image.IsNull())
 	{
@@ -403,7 +403,7 @@ bool GfxRenderer::DrawPolygon( const std::vector<Point>& vertices, const Texture
 	return false;
 }
 
-bool GfxRenderer::DrawPolygon( Point* vertices, int vertices_len, const Color& fillColor, const Pen& outline /* = Pen::NullPen */) const
+bool GfxRenderer::DrawPolygon( Point* vertices, int vertices_len, const Color& fillColor, const Pen& outline) const
 {	
 	// init vector
 	std::vector<Point> v;

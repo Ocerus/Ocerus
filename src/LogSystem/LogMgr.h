@@ -9,7 +9,7 @@
 #define gLogMgr LogSystem::LogMgr::GetSingleton()
 
 /// @name Level of severity of a log message. Not all messages will be stored in the log depending on the logger settings.
-enum eLogSeverity { LOG_TRIVIAL=0, LOG_INFO, LOG_ERROR };
+enum eLogSeverity { LOG_TRIVIAL=0, LOG_INFO, LOG_WARNING, LOG_ERROR };
 
 namespace LogSystem
 {

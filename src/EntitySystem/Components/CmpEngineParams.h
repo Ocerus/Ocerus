@@ -15,20 +15,10 @@ namespace EntitySystem
 
 		static void RegisterReflection(void);
 
-		/// @name Maximum hitpoints of the engine.
-		//@{
-		uint32 GetMaxHitpoints(void) const { return mMaxHitpoints; }
-		void SetMaxHitpoints(const uint32 hp) { mMaxHitpoints = hp; }
-		//@}
 		/// @name Maximum power of the engine in absolute units.
 		//@{
 		uint32 GetMaxPower(void) const { return mMaxPower; }
 		void SetMaxPower(const uint32 power) { mMaxPower = power; }
-		//@}
-		/// @name Material used by this engine.
-		//@{
-		EntityHandle GetMaterial(void) const { return mMaterial; }
-		void SetMaterial(const EntityHandle mat) { mMaterial = mat; }
 		//@}
 		/// @name Angle variation (relative to the default angle) allowed to the engine.
 		//@{
@@ -39,21 +29,6 @@ namespace EntitySystem
 		//@{
 		uint32 GetStabilizationRatio(void) const { return mStabilizationRatio; }
 		void SetStabilizationRatio(const uint32 ratio) { mStabilizationRatio = ratio; }
-		//@}
-		/// @name Texture used for a visual representation of this engine.
-		//@{
-		StringKey GetTexture(void) const { return mTexture; }
-		void SetTexture(StringKey tex) { mTexture = tex; }
-		//@}
-		/// @name Angle used for transforming texture while drawing.
-		//@{
-		float32 GetTextureAngle(void) const { return mTextureAngle; }
-		void SetTextureAngle(const float32 angle) { mTextureAngle = angle; }
-		//@}
-		/// @name Scale used for transforming texture while drawing.
-		//@{
-		float32 GetTextureScale(void) const { return mTextureScale; }
-		void SetTextureScale(const float32 s) { mTextureScale = s; }
 		//@}
 		/// @name Particle effect used for drawing thrust.
 		//@{
@@ -75,26 +50,15 @@ namespace EntitySystem
 		float32 GetThrustEffectPowerScale(void) const { return mThrustEffectPowerScale; }
 		void SetThrustEffectPowerScale(const float32 s) { mThrustEffectPowerScale = s; }
 		//@}
-		/// @name ResourceMgr group identifier where are located all data related to this engine.
-		//@{
-		StringKey GetResourceGroup(void) const { return mResourceGroup; }
-		void SetResourceGroup(const StringKey group) { mResourceGroup = group; }
-		//@}
 
 	private:
-		EntityHandle mMaterial;
-		uint32 mMaxHitpoints;
 		uint32 mMaxPower;
 		uint32 mStabilizationRatio;
 		float32 mArcAngle;
-		float32 mTextureScale;
-		float32 mTextureAngle;
 		float32 mThrustEffectScale;
 		float32 mThrustEffectDisplacement;
 		float32 mThrustEffectPowerScale;
-		StringKey mTexture;
 		StringKey mThrustEffect;
-		StringKey mResourceGroup;
 
 		void ComputeParams(void);
 

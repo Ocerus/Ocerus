@@ -7,8 +7,11 @@
 #include "../EntitySystem/EntityMgr/EntityHandle.h"
 #include <vector>
 
-/// @name Forward declaration.
+/// @name Forward declarations.
+//@{
 class b2World;
+class hgeDistortionMesh;
+//@}
 
 namespace Core
 {
@@ -47,11 +50,23 @@ namespace Core
 		/// @name Returns the size of the circle used for setting engine power.
 		int32 GetEnginePowerCircleRadius(void) const;
 
+		/// @name Returns the size of the circle used for setting weapon angle.
+		int32 GetWeaponCircleRadius(void) const;
+
 	private:
 		/// @name This object represents the physics engine.
 		b2World* mPhysics;
 		/// @name Part of the timestep delta we didn't use for the physics update last Update.
 		float32 mPhysicsResidualDelta;
+
+		/// @name Water stuff.
+		//@{
+		hgeDistortionMesh* mWaterDistMesh;
+		int32 mWaterDistRows;
+		int32 mWaterDistCols;
+		int32 mWaterDistCellW;
+		int32 mWaterDistCellH;
+		//@}
 
 		/// @name Selections stuff.
 		//@{

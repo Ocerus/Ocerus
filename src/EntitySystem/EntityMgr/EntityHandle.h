@@ -37,7 +37,10 @@ namespace EntitySystem
 		EntityHandle& operator=(const EntityHandle& rhs);
 
 		/// @name Enables comparing handles.
+		//@{
 		bool operator==(const EntityHandle& rhs);
+		bool operator!=(const EntityHandle& rhs);
+		//@}
 
 		/// @name Returns true if this handle is valid (not null).
 		bool IsValid(void) const { return mEntityID != 0; }
@@ -52,7 +55,7 @@ namespace EntitySystem
 		bool GetProperties(PropertyList& out, const PropertyAccessFlags mask = FULL_PROPERTY_ACCESS_FLAGS);
 
 		/// @name Retrieves a property of this entity. A filter related to properties' flags can be specified.
-		PropertyHolderMediator GetProperty(const StringKey key, const PropertyAccessFlags mask = FULL_PROPERTY_ACCESS_FLAGS);
+		PropertyHolderMediator GetProperty(const StringKey key, const PropertyAccessFlags mask = FULL_PROPERTY_ACCESS_FLAGS) const;
 
 		/// @name Sends a message to this entity.
 		EntityMessage::eResult PostMessage(const EntityMessage::eType type, void* data = 0);

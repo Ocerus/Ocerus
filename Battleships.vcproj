@@ -197,6 +197,10 @@
 					Name="inc"
 					>
 					<File
+						RelativePath=".\src\EntitySystem\Components\CmpAmmoParams.h"
+						>
+					</File>
+					<File
 						RelativePath=".\src\EntitySystem\Components\CmpEngine.h"
 						>
 					</File>
@@ -210,6 +214,10 @@
 					</File>
 					<File
 						RelativePath=".\src\EntitySystem\Components\CmpPlatformItem.h"
+						>
+					</File>
+					<File
+						RelativePath=".\src\EntitySystem\Components\CmpPlatformItemParams.h"
 						>
 					</File>
 					<File
@@ -233,6 +241,10 @@
 						>
 					</File>
 					<File
+						RelativePath=".\src\EntitySystem\Components\CmpProjectile.h"
+						>
+					</File>
+					<File
 						RelativePath=".\src\EntitySystem\Components\CmpShipLogic.h"
 						>
 					</File>
@@ -244,10 +256,22 @@
 						RelativePath=".\src\EntitySystem\Components\CmpShipVisual.h"
 						>
 					</File>
+					<File
+						RelativePath=".\src\EntitySystem\Components\CmpWeapon.h"
+						>
+					</File>
+					<File
+						RelativePath=".\src\EntitySystem\Components\CmpWeaponParams.h"
+						>
+					</File>
 				</Filter>
 				<Filter
 					Name="src"
 					>
+					<File
+						RelativePath=".\src\EntitySystem\Components\CmpAmmoParams.cpp"
+						>
+					</File>
 					<File
 						RelativePath=".\src\EntitySystem\Components\CmpEngine.cpp"
 						>
@@ -262,6 +286,10 @@
 					</File>
 					<File
 						RelativePath=".\src\EntitySystem\Components\CmpPlatformItem.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\EntitySystem\Components\CmpPlatformItemParams.cpp"
 						>
 					</File>
 					<File
@@ -285,6 +313,10 @@
 						>
 					</File>
 					<File
+						RelativePath=".\src\EntitySystem\Components\CmpProjectile.cpp"
+						>
+					</File>
+					<File
 						RelativePath=".\src\EntitySystem\Components\CmpShipLogic.cpp"
 						>
 					</File>
@@ -294,6 +326,14 @@
 					</File>
 					<File
 						RelativePath=".\src\EntitySystem\Components\CmpShipVisual.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\EntitySystem\Components\CmpWeapon.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\EntitySystem\Components\CmpWeaponParams.cpp"
 						>
 					</File>
 				</Filter>

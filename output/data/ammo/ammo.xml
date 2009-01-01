@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Entities>
+
+  <Entity Type="ET_UNKNOWN" Name="ammoType0">
+    <Component Type="CT_AMMO_PARAMS">
+      <Material>material0</Material>
+      <Size>100</Size>
+      <ResourceGroup>ShipParts</ResourceGroup>
+      <TrailEffect>trail1.psi</TrailEffect>
+      <TrailEffectScale>0.09</TrailEffectScale>
+      <ExplodeEffect>explosion.psi</ExplodeEffect>
+      <ExplodeEffectScale>0.005</ExplodeEffectScale>
+    </Component>
+  </Entity>
+  
+</Entities>

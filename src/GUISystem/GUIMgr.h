@@ -67,14 +67,15 @@ namespace GUISystem {
 		/// @name Registers a class that implements IConsoleListener
 		void AddConsoleListener(IConsoleListener* listener);
 		/// @name If you wish to post a new message into console, call this method
-		void AddConsoleMessage(std::string message, const GfxSystem::Color& color = GfxSystem::Color(255,255,255,255));
+		void AddConsoleMessage(string message, const GfxSystem::Color& color = GfxSystem::Color(255,255,255,255));
+		bool IsConsoleLoaded(void) const { return mConsoleIsLoaded; }
 		//@}
 
 		/// @name Static text related methods
 		//@{
-		void AddStaticText( int x, int y, const std::string & id, const std::string & text );
-		void DeleteStaticText( const std::string & id );
-		bool TextIdExists( const std::string & id );
+		void AddStaticText( int x, int y, const string & id, const string & text );
+		void DeleteStaticText( const string & id );
+		bool TextIdExists( const string & id );
 		//@}
 
 		virtual ~GUIMgr();
@@ -91,7 +92,7 @@ namespace GUISystem {
 		/// @name Called after ` is hit
 		void ConsoleTrigger();
 
-		bool ConsoleIsLoaded;
+		bool mConsoleIsLoaded;
 		CEGUI::System * mCegui;
 		CEGUI::Window * CurrentWindowRoot;
 		ResourceGate * mResourceGate;

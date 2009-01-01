@@ -13,6 +13,7 @@ void EntitySystem::EntityPicker::SetupPriorities( void )
 		msPriorities[i] = 0;
 	msPriorities[ET_PLATFORM] = 50;
 	msPriorities[ET_ENGINE] = 70;
+	msPriorities[ET_WEAPON] = 80;
 }
 
 EntitySystem::EntityPicker::EntityPicker( const Vector2& worldCursorPos ): 

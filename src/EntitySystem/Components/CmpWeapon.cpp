@@ -1,62 +1,37 @@
 #include "Common.h"
-#include "CmpEngine.h"
-#include "Box2D.h"
+#include "CmpWeapon.h"
 #include "../../Core/Game.h"
 
 using namespace EntitySystem;
 
 #define PICK_CIRCLE_RADIUS 0.3f
-#define POWER_RATIO 0.005f
-#define STABILIZATION_RATIO 0.0002f
 
-void EntitySystem::CmpEngine::Init( void )
+void EntitySystem::CmpWeapon::Init( void )
 {
-	mDefaultAngle = 0.0f;
-	mRelativeAngle = 0.0f;
-	mPowerRatio = 0.0f;
+	mTimeToReload = 0;
+	mDefaultAngle = 0;
+	mRelativeAngle = 0;
+	mAmmoBlueprints.Invalidate();
 
-	mThrustPS.SetNull();
 	mWasSelected = false;
+	mIsFiring = false;
+	mTarget.Invalidate();
 }
 
-void EntitySystem::CmpEngine::Clean( void )
+void EntitySystem::CmpWeapon::Clean( void )
 {
 
 }
 
-EntityMessage::eResult EntitySystem::CmpEngine::HandleMessage( const EntityMessage& msg )
+EntityMessage::eResult EntitySystem::CmpWeapon::HandleMessage( const EntityMessage& msg )
 {
 	switch (msg.type)
 	{
-	case EntityMessage::TYPE_POST_INIT:
-		{
-			EntityHandle blueprints;
-			PostMessage(EntityMessage::TYPE_GET_BLUEPRINTS, &blueprints);
-			StringKey effect;
-			blueprints.PostMessage(EntityMessage::TYPE_GET_EFFECT, &effect);
-			StringKey resGroup;
-			blueprints.PostMessage(EntityMessage::TYPE_GET_RESOURCE_GROUP, &resGroup);
-			mThrustPS = gPSMgr.SpawnPS(resGroup, effect);
-		}
+	case EntityMessage::TYPE_START_SHOOTING:
+		mIsFiring = true;
 		return EntityMessage::RESULT_OK;
-	case EntityMessage::TYPE_UPDATE_PHYSICS_SERVER:
-		{
-			EntityHandle platform;
-			PostMessage(EntityMessage::TYPE_GET_PARENT, &platform);
-			b2Body* platformBody;
-			platform.PostMessage(EntityMessage::TYPE_GET_PHYSICS_BODY, &platformBody);
-			Vector2 myPos;
-			PostMessage(EntityMessage::TYPE_GET_POSITION, &myPos);
-			Vector2 forceDir = MathUtils::VectorFromAngle(GetAbsoluteAngle());
-			platformBody->ApplyForce(-POWER_RATIO * GetPower() * forceDir, myPos);
-			Vector2 perpDir(-forceDir.y, forceDir.x);
-			float32 perpVel = MathUtils::Dot(perpDir, platformBody->GetLinearVelocity());
-			EntityHandle blueprints;
-			PostMessage(EntityMessage::TYPE_GET_BLUEPRINTS, &blueprints);
-			uint32 stabRatio;
-			blueprints.PostMessage(EntityMessage::TYPE_GET_STABILIZATION_RATIO, &stabRatio);
-			platformBody->ApplyForce(-STABILIZATION_RATIO * stabRatio * perpVel * perpDir, platformBody->GetWorldCenter());
-		}
+	case EntityMessage::TYPE_STOP_SHOOTING:
+		mIsFiring = false;
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_SET_ANGLE:
 		// note: the angle is absolute, but I need to convert it to an angle relative to the default angle
@@ -71,13 +46,18 @@ EntityMessage::eResult EntitySystem::CmpEngine::HandleMessage( const EntityMessa
 		assert(msg.data);
 		*(float32*)msg.data = GetAbsoluteAngle();
 		return EntityMessage::RESULT_OK;
+	case EntityMessage::TYPE_GET_RELATIVE_ANGLE:
+		assert(msg.data);
+		*(float32*)msg.data = GetRelativeAngle();
+		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_SET_RELATIVE_ANGLE:
 		assert(msg.data);
 		{
-			float32 arcAngle;
-			EntityHandle blueprints;
-			PostMessage(EntityMessage::TYPE_GET_BLUEPRINTS, &blueprints);
-			blueprints.PostMessage(EntityMessage::TYPE_GET_ARC_ANGLE, &arcAngle);
+			PropertyHolder prop;
+			prop = GetOwner().GetProperty("Blueprints");
+			EntityHandle blueprints = prop.GetValue<EntityHandle>();
+			prop = blueprints.GetProperty("ArcAngle");
+			float32 arcAngle = prop.GetValue<float32>();
 			float32 relAngle = *(float32*)msg.data;
 			if (MathUtils::IsAngleInRange(relAngle, -arcAngle, arcAngle))
 				mRelativeAngle = MathUtils::WrapAngle(relAngle);
@@ -86,18 +66,6 @@ EntityMessage::eResult EntitySystem::CmpEngine::HandleMessage( const EntityMessa
 			else
 				mRelativeAngle = MathUtils::WrapAngle(arcAngle);
 		}
-		return EntityMessage::RESULT_OK;
-	case EntityMessage::TYPE_GET_RELATIVE_ANGLE:
-		assert(msg.data);
-		*(float32*)msg.data = GetRelativeAngle();
-		return EntityMessage::RESULT_OK;
-	case EntityMessage::TYPE_SET_POWER_RATIO:
-		assert(msg.data);
-		SetPowerRatio(*(float32*)msg.data);
-		return EntityMessage::RESULT_OK;
-	case EntityMessage::TYPE_GET_POWER_RATIO:
-		assert(msg.data);
-		*(float32*)msg.data = GetPowerRatio();
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_MOUSE_PICK:
 		assert(msg.data);
@@ -128,22 +96,34 @@ EntityMessage::eResult EntitySystem::CmpEngine::HandleMessage( const EntityMessa
 		assert(msg.data);
 		DrawSelectionOverlay(*(bool*)msg.data);
 		return EntityMessage::RESULT_OK;
+	case EntityMessage::TYPE_UPDATE_PHYSICS_SERVER:
+		assert(msg.data);
+		{
+			if (mTimeToReload > 0)
+				mTimeToReload -= *(float32*)msg.data;
+			if (mIsFiring && mTimeToReload <= 0)
+				Fire();
+		}
+		return EntityMessage::RESULT_OK;
 	}
 	return EntityMessage::RESULT_IGNORED;
 }
 
-void EntitySystem::CmpEngine::RegisterReflection( void )
+void EntitySystem::CmpWeapon::RegisterReflection( void )
 {
-	RegisterProperty<uint32>("Power", &GetPower, &SetPower, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<float32>("TimeToReload", &GetTimeToReload, 0, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<EntityHandle>("Ammo", &GetAmmo, &SetAmmo, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<EntityHandle>("Target", &GetTarget, &SetTarget, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<float32>("RelativeAngle", &GetRelativeAngle, &SetRelativeAngle, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<float32>("DefaultAngle", &GetDefaultAngle, &SetDefaultAngle, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<float32>("AbsoluteAngle", &GetAbsoluteAngle, 0, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<float32>("AbsoluteDefaultAngle", &GetAbsoluteDefaultAngle, 0, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<bool>("IsFiring", &IsFiring, 0, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 
 	AddComponentDependency(CT_PLATFORM_ITEM);
 }
 
-float32 EntitySystem::CmpEngine::GetAbsoluteAngle( void ) const
+float32 EntitySystem::CmpWeapon::GetAbsoluteAngle( void ) const
 {
 	EntityHandle platform;
 	PostMessage(EntityMessage::TYPE_GET_PARENT, &platform);
@@ -152,7 +132,7 @@ float32 EntitySystem::CmpEngine::GetAbsoluteAngle( void ) const
 	return platformAngle + mDefaultAngle + mRelativeAngle;	
 }
 
-float32 EntitySystem::CmpEngine::GetAbsoluteDefaultAngle( void ) const
+float32 EntitySystem::CmpWeapon::GetAbsoluteDefaultAngle( void ) const
 {
 	EntityHandle platform;
 	PostMessage(EntityMessage::TYPE_GET_PARENT, &platform);
@@ -161,56 +141,13 @@ float32 EntitySystem::CmpEngine::GetAbsoluteDefaultAngle( void ) const
 	return platformAngle + mDefaultAngle;	
 }
 
-uint32 EntitySystem::CmpEngine::GetPower( void ) const
-{
-	uint32 maxPower;
-	EntityHandle blueprints;
-	PostMessage(EntityMessage::TYPE_GET_BLUEPRINTS, &blueprints);
-	blueprints.PostMessage(EntityMessage::TYPE_GET_MAX_POWER, &maxPower);
-	return MathUtils::Round(mPowerRatio * (float32)maxPower);
-}
-
-void EntitySystem::CmpEngine::SetPower( const uint32 pow )
-{
-	uint32 maxPower;
-	EntityHandle blueprints;
-	PostMessage(EntityMessage::TYPE_GET_BLUEPRINTS, &blueprints);
-	blueprints.PostMessage(EntityMessage::TYPE_GET_MAX_POWER, &maxPower);
-	SetPowerRatio((float32)pow / (float32)maxPower);
-}
-
-void EntitySystem::CmpEngine::SetPowerRatio( const float32 powrat )
-{
-	mPowerRatio = MathUtils::Clamp(powrat, 0.0f, 1.0f);
-}
-
-void EntitySystem::CmpEngine::Draw( const bool selected ) const
+void EntitySystem::CmpWeapon::Draw( const bool selected ) const
 {
 	Vector2 pos;
 	PostMessage(EntityMessage::TYPE_GET_POSITION, &pos);
 	EntityHandle blueprints;
 	PostMessage(EntityMessage::TYPE_GET_BLUEPRINTS, &blueprints);
 	float32 angle = GetAbsoluteAngle();
-
-	// draw the particle effect
-	if (!mThrustPS.IsNull())
-	{
-		float32 thrustScale;
-		blueprints.PostMessage(EntityMessage::TYPE_GET_EFFECT_SCALE, &thrustScale);
-		PropertyHolder prop;
-		prop = blueprints.GetProperty("ThrustEffectDisplacement");
-		Vector2 disp = MathUtils::VectorFromAngle(angle, prop.GetValue<float32>());
-		mThrustPS->MoveTo(pos + disp, true);
-		mThrustPS->SetScale(thrustScale);
-		mThrustPS->SetAngle(angle);
-		float32 powRat = GetPowerRatio();
-		prop = blueprints.GetProperty("ThrustEffectPowerScale");
-		float32 powScale = prop.GetValue<float32>();	
-		if (powRat < 0.1) mThrustPS->Stop();
-		else mThrustPS->Fire();	
-		mThrustPS->SetSpeed(powScale*powRat, powScale*powRat);
-		mThrustPS->Render();
-	}
 
 	// draw the image
 	GfxSystem::Color color(255,255,255);
@@ -229,7 +166,7 @@ void EntitySystem::CmpEngine::Draw( const bool selected ) const
 		GetAbsoluteAngle() + texAngle, color, texScale);
 }
 
-void EntitySystem::CmpEngine::DrawSelectionOverlay( const bool hover ) const
+void EntitySystem::CmpWeapon::DrawSelectionOverlay( const bool hover ) const
 {
 	Vector2 pos;
 	PostMessage(EntityMessage::TYPE_GET_POSITION, &pos);
@@ -242,24 +179,94 @@ void EntitySystem::CmpEngine::DrawSelectionOverlay( const bool hover ) const
 	}
 }
 
-void EntitySystem::CmpEngine::DrawSelectionUnderlay( const bool hover ) const
+void EntitySystem::CmpWeapon::DrawSelectionUnderlay( const bool hover ) const
 {
 	// draw an arch designating possible power and angle
-	Vector2 pos;
-	PostMessage(EntityMessage::TYPE_GET_POSITION, &pos);
-	EntityHandle blueprints;
-	PostMessage(EntityMessage::TYPE_GET_BLUEPRINTS, &blueprints);
-	float32 angleDiver;
-	blueprints.PostMessage(EntityMessage::TYPE_GET_ARC_ANGLE, &angleDiver);
+	PropertyHolder prop;
+	prop = GetOwner().GetProperty("Blueprints");
+	EntityHandle blueprints = prop.GetValue<EntityHandle>();
+	prop = GetOwner().GetProperty("AbsolutePosition");
+	Vector2 pos = prop.GetValue<Vector2>();
+	prop = blueprints.GetProperty("ArcAngle");
+	float32 angleDiver = prop.GetValue<float32>();
 	GfxSystem::Color color(10,10,80,15);
 	float32 defAngle = GetAbsoluteDefaultAngle();
-	int32 circleRadius = gApp.GetCurrentGame()->GetEnginePowerCircleRadius();
+	int32 circleRadius = gApp.GetCurrentGame()->GetWeaponCircleRadius();
 	GfxSystem::Point screenPos = gGfxRenderer.WorldToScreen(pos);
 	gGfxRenderer.DrawCircle(screenPos, circleRadius, color, GfxSystem::Pen::NullPen/*GfxSystem::Pen(color)*/, defAngle - angleDiver, defAngle + angleDiver);
 
 	// draw target angle and power vector
-	Vector2 indicator = MathUtils::VectorFromAngle(GetAbsoluteAngle(), (float32)circleRadius*GetPowerRatio());
+	Vector2 indicator = MathUtils::VectorFromAngle(GetAbsoluteAngle(), (float32)circleRadius);
 	GfxSystem::Pen indicatorPen(GfxSystem::Color(200,0,20,70));
 	gGfxRenderer.DrawLine(screenPos.x, screenPos.y, screenPos.x + MathUtils::Round(indicator.x), screenPos.y + MathUtils::Round(indicator.y), indicatorPen);
+
 }
 
+void EntitySystem::CmpWeapon::SetTarget( const EntityHandle tar )
+{
+  eEntityType type = tar.GetType();
+  if (type == ET_PLATFORM)
+  {
+	  EntityHandle platform = tar;
+	  PropertyHolder prop = platform.GetProperty("ParentShip");
+	  EntityHandle ship = prop.GetValue<EntityHandle>();
+	  prop = GetOwner().GetProperty("ParentPlatform");
+	  EntityHandle myPlatform = prop.GetValue<EntityHandle>();
+	  prop = myPlatform.GetProperty("ParentShip");
+	  EntityHandle myShip = prop.GetValue<EntityHandle>();
+	  if (!ship.IsValid() || ship != myShip)
+		mTarget = tar;
+  }
+}
+
+void EntitySystem::CmpWeapon::Fire( void )
+{
+	if (!mAmmoBlueprints.IsValid() || !mIsFiring || mTimeToReload > 0)
+		return;
+
+	PropertyHolder prop = GetOwner().GetProperty("Blueprints");
+	EntityHandle blueprints = prop.GetValue<EntityHandle>();
+	
+	EntityDescription desc;
+	desc.Init(ET_PROJECTILE);
+	desc.AddComponent(CT_PROJECTILE);
+	PropertyList props;
+	EntityHandle projectile = gEntityMgr.CreateEntity(desc, props);
+	props["Blueprints"].SetValue(mAmmoBlueprints);
+	prop = blueprints.GetProperty("FireEffectDisplacement");
+	float32 fireEffectDisp = prop.GetValue<float32>();
+	prop = GetOwner().GetProperty("AbsoluteAngle");
+	float32 angle = prop.GetValue<float32>();
+	prop = GetOwner().GetProperty("AbsolutePosition");
+	Vector2 firePos = prop.GetValue<Vector2>() + MathUtils::VectorFromAngle(angle, fireEffectDisp);
+	props["InitBodyPosition"].SetValue<Vector2>(firePos);
+	prop = blueprints.GetProperty("FiringSpeed");
+	float32 speed = prop.GetValue<float32>();
+	prop = mAmmoBlueprints.GetProperty("SpeedRatio");
+	speed *= prop.GetValue<float32>();
+	props["InitBodySpeed"].SetValue<Vector2>(MathUtils::VectorFromAngle(angle, speed));
+	prop = blueprints.GetProperty("FiringDistance");
+	float32 maxFireDist = prop.GetValue<float32>();
+	prop = mAmmoBlueprints.GetProperty("DistanceRatio");
+	maxFireDist *= prop.GetValue<float32>();
+	props["MaxDistance"].SetValue(maxFireDist);
+	projectile.FinishInit();	
+
+	// create the fire effect
+	prop = blueprints.GetProperty("FireEffect");
+	StringKey effect = prop.GetValue<StringKey>();
+	prop = blueprints.GetProperty("ResourceGroup");
+	StringKey resGroup = prop.GetValue<StringKey>();
+	GfxSystem::ParticleSystemPtr ps = gPSMgr.SpawnPS(resGroup, effect);
+	if (!ps.IsNull())
+	{
+		ps->SetAngle(angle);
+		prop = blueprints.GetProperty("FireEffectScale");
+		ps->SetScale(prop.GetValue<float32>());
+		ps->FireAt(firePos.x, firePos.y);
+	}
+
+	// reset the cooldown
+	prop = blueprints.GetProperty("ReloadTime");
+	mTimeToReload = prop.GetValue<float32>();
+}

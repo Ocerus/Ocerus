@@ -38,5 +38,5 @@ void EntitySystem::CmpPlatformVisual::Draw( void ) const
 	PostMessage(EntityMessage::TYPE_GET_BODY_POSITION, &pos);
 	float32 angle;
 	PostMessage(EntityMessage::TYPE_GET_ANGLE, &angle);
-	gGfxRenderer.DrawPolygonWithConversion((Vector2*)cont.GetData(), cont.GetSize(), pos, angle, GfxSystem::Color(0,170,0,90), GfxSystem::Pen(GfxSystem::Color(0,230,0,150)));
+	gGfxRenderer.DrawPolygonWithConversion((Vector2*)cont.GetData(), cont.GetSize(), pos, angle, GfxSystem::Color(126, 128, 127), GfxSystem::Pen(GfxSystem::Color(27,3,0,200)));
 }

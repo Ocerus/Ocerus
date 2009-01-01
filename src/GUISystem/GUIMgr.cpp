@@ -15,7 +15,7 @@ namespace GUISystem {
 	CEGUI::MouseButton ConvertMouseButtonEnum(const InputSystem::eMouseButton btn);
 	//@}
 
-	GUIMgr::GUIMgr() : ConsoleIsLoaded(false) {
+	GUIMgr::GUIMgr() : mConsoleIsLoaded(false) {
 		gLogMgr.LogMessage("******** GUIMgr init *********");
 		mCegui = DYN_NEW CEGUI::System( mRendererGate = DYN_NEW RendererGate(), mResourceGate = DYN_NEW ResourceGate() );
 		gInputMgr.AddInputListener(this);
@@ -75,7 +75,7 @@ namespace GUISystem {
 		CEGUI::SchemeManager::getSingleton().loadScheme("Console.scheme");
 		CurrentWindowRoot =	CEGUI::WindowManager::getSingleton().loadWindowLayout( "Console.layout" );
 		CEGUI::System::getSingleton().setGUISheet( CurrentWindowRoot );
-		ConsoleIsLoaded = true;
+		mConsoleIsLoaded = true;
 
 		mCegui->setDefaultFont( "Commonwealth-10" );
 		mCegui->setDefaultMouseCursor( "Lightweight", "MouseArrow" );
@@ -134,6 +134,9 @@ namespace GUISystem {
 	}
 
 	void GUIMgr::AddConsoleMessage(std::string message, const GfxSystem::Color& color) {
+		if (!mConsoleIsLoaded)
+			return;
+
 		CEGUI::Listbox* pane = (CEGUI::Listbox*)CEGUI::WindowManager::getSingleton().getWindow("ConsoleRoot/Pane");
 
 		CEGUI::ListboxTextItem* new_item = DYN_NEW CEGUI::ListboxTextItem(message);

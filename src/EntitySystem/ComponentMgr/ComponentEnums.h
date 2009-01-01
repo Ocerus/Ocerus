@@ -6,7 +6,7 @@ namespace EntitySystem
 	/// @name A set of types of all components in the system.
 	enum eComponentType
 	{
-		#define COMPONENT_TYPE(x) x,
+		#define COMPONENT_TYPE(x, y) x,
 		#include "ComponentTypes.h"
 		#undef COMPONENT_TYPE
 
@@ -17,7 +17,7 @@ namespace EntitySystem
 	/// @name String names of all component types.
 	const char* const ComponentTypeNames[] =
 	{
-		#define COMPONENT_TYPE(x) #x,
+		#define COMPONENT_TYPE(x, y) #x,
 		#include "ComponentTypes.h"
 		#undef COMPONENT_TYPE
 	};

@@ -4,6 +4,8 @@
 #include "Box2D.h"
 #include <iostream>
 #include "../GfxSystem/ParticleResource.h"
+//TODO odstranit az bude voda jina
+#include "hgedistort.h"
 
 using namespace Core;
 using namespace EntitySystem;
@@ -12,12 +14,13 @@ using namespace InputSystem;
 #define PHYSICS_TIMESTEP 0.016f
 #define PHYSICS_ITERATIONS 10
 #define ENGINE_VISIBLE_MAX_POWER 80
+#define WEAPON_VISIBLE_ARC_RADIUS 80
 #define CAMERA_SPEED_RATIO 10.0f
 #define CAMERA_SCALE_RATIO 0.001f
 #define WATER_TEXTURE_SCALE 0.01f
+#define WEAPON_ANGLECHANGE_SPEED 2.0f
 #define ENGINE_ANGLECHANGE_SPEED 2.0f
 #define ENGINE_POWERCHANGE_SPEED 1.0f
-#define PARTICLE_SYSTEM_SCALE_RATIO 0.02f
 
 Core::Game::Game(): StateMachine<eGameState>(GS_NORMAL), mPhysics(0) {}
 
@@ -46,16 +49,12 @@ void Core::Game::Init()
 
 	//// TEST ////
 
-	// create a material
 	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("ShipParts/materials.xml"));
-
-	// create a platform type
 	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("ShipParts/platforms.xml"));
-
-	// create an engine type
 	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("ShipParts/engines.xml"));
+	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("ShipParts/ammo.xml"));
+	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("ShipParts/weapons.xml"));
 
-	// create a ship
 	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("Ships/ship0.xml"));
 
 	// recompute mass of the ship's body
@@ -76,6 +75,21 @@ void Core::Game::Init()
 	gGfxRenderer.SetCameraScale(50.0f);
 	mCameraFocus.Invalidate();
 
+
+	// water
+	GfxSystem::TexturePtr tex = gResourceMgr.GetResource("Backgrounds", "water.png");
+	mWaterDistRows = 16;
+	mWaterDistCols = 16;
+	mWaterDistCellW = tex->GetWidth() / mWaterDistCols;
+	mWaterDistCellH = tex->GetHeight() / mWaterDistRows;
+	mWaterDistMesh = new hgeDistortionMesh(mWaterDistCols, mWaterDistRows);
+	mWaterDistMesh->SetTexture(tex->GetTexture());
+	mWaterDistMesh->SetTextureRect(0, 0, (float32)gGfxRenderer.GetScreenWidth(), (float32)gGfxRenderer.GetScreenHeight());
+	mWaterDistMesh->SetBlendMode(BLEND_COLORADD | BLEND_ALPHABLEND | BLEND_ZWRITE);
+	mWaterDistMesh->Clear(0xFF000000);
+
+
+
 	gInputMgr.AddInputListener(this);
 
 
@@ -94,7 +108,7 @@ void Core::Game::Deinit()
 
 void Core::Game::Update( const float32 delta )
 {
-	//// @name Input reactions ////
+	//// Input reactions ////
 
 	if (gInputMgr.IsKeyDown(KC_ESCAPE))
 		gApp.Shutdown();
@@ -111,32 +125,41 @@ void Core::Game::Update( const float32 delta )
 	gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::TYPE_MOUSE_PICK, &picker));
 	mHoveredEntity = picker.GetResult();
 
+	//TODO tady se predpoklada, ze vsechny vybrane entity jsou jednoho typu, melo by jit ale vybrat vic typu najednou
+
 	// we want to do certain action even when the right button is still down
-	if (gInputMgr.IsMouseButtonPressed(MBTN_RIGHT) && mSelectedEntities.size()>0 
-		&& mSelectedEntities[0].GetType()==ET_ENGINE)
+	if (gInputMgr.IsMouseButtonPressed(MBTN_RIGHT) && mSelectedEntities.size()>0)
 		MouseButtonPressed(mouse, MBTN_RIGHT);
 
-	// control engines by using keys
-	if (mSelectedEntities.size()>0 && mSelectedEntities[0].GetType()==ET_ENGINE)
+	// control by using keys
+	for (EntityList::iterator i=mSelectedEntities.begin(); i!=mSelectedEntities.end(); ++i)
 	{
-		if (gInputMgr.IsKeyDown(KC_NUMPAD4) || gInputMgr.IsKeyDown(KC_NUMPAD6))
+		eEntityType type = i->GetType();
+		if (type == ET_ENGINE)
 		{
-			for (EntityList::iterator i=mSelectedEntities.begin(); i!=mSelectedEntities.end(); ++i)
+			if (gInputMgr.IsKeyDown(KC_NUMPAD4) || gInputMgr.IsKeyDown(KC_NUMPAD6))
 			{
 				float32 angle;
 				i->PostMessage(EntityMessage::TYPE_GET_RELATIVE_ANGLE, &angle);
 				angle += (gInputMgr.IsKeyDown(KC_NUMPAD4)?-1:1) * ENGINE_ANGLECHANGE_SPEED * delta;
 				i->PostMessage(EntityMessage::TYPE_SET_RELATIVE_ANGLE, &angle);
 			}
-		}
-		if (gInputMgr.IsKeyDown(KC_NUMPAD8) || gInputMgr.IsKeyDown(KC_NUMPAD5))
-		{
-			for (EntityList::iterator i=mSelectedEntities.begin(); i!=mSelectedEntities.end(); ++i)
+			if (gInputMgr.IsKeyDown(KC_NUMPAD8) || gInputMgr.IsKeyDown(KC_NUMPAD5))
 			{
 				float32 powerRatio;
 				i->PostMessage(EntityMessage::TYPE_GET_POWER_RATIO, &powerRatio);
 				powerRatio += (gInputMgr.IsKeyDown(KC_NUMPAD5)?-1:1) * ENGINE_POWERCHANGE_SPEED * delta;
 				i->PostMessage(EntityMessage::TYPE_SET_POWER_RATIO, &powerRatio);
+			}
+		}
+		else if (type == ET_WEAPON)
+		{
+			if (gInputMgr.IsKeyDown(KC_NUMPAD4) || gInputMgr.IsKeyDown(KC_NUMPAD6))
+			{
+				float32 angle;
+				i->PostMessage(EntityMessage::TYPE_GET_RELATIVE_ANGLE, &angle);
+				angle += (gInputMgr.IsKeyDown(KC_NUMPAD4)?-1:1) * WEAPON_ANGLECHANGE_SPEED * delta;
+				i->PostMessage(EntityMessage::TYPE_SET_RELATIVE_ANGLE, &angle);
 			}
 		}
 	}
@@ -145,10 +168,11 @@ void Core::Game::Update( const float32 delta )
 	float32 physicsDelta = delta + mPhysicsResidualDelta;
 	while (physicsDelta > PHYSICS_TIMESTEP)
 	{
-		gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::TYPE_UPDATE_PHYSICS_SERVER));
-		gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::TYPE_UPDATE_PHYSICS_CLIENT));
-		mPhysics->Step(PHYSICS_TIMESTEP, PHYSICS_ITERATIONS);
-		physicsDelta -= PHYSICS_TIMESTEP;
+		float32 stepSize = PHYSICS_TIMESTEP;
+		gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::TYPE_UPDATE_PHYSICS_SERVER, &stepSize));
+		gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::TYPE_UPDATE_PHYSICS_CLIENT, &stepSize));
+		mPhysics->Step(stepSize, PHYSICS_ITERATIONS);
+		physicsDelta -= stepSize;
 	}
 	mPhysicsResidualDelta = physicsDelta;
 
@@ -191,6 +215,25 @@ void Core::Game::Draw( const float32 delta)
 	gGfxRenderer.ClearScreen(GfxSystem::Color(0,0,0));
 
 	// draw the water
+	/*static float32 waterTime = 0;
+	waterTime += delta;
+
+	int32 cX = gGfxRenderer.WorldToScreenScalar(gGfxRenderer.GetCameraWorldBoxTopLeft().x);
+	int32 cY = gGfxRenderer.WorldToScreenScalar(gGfxRenderer.GetCameraWorldBoxTopLeft().y);
+	for(int32 i=1; i<mWaterDistCols-1; ++i)
+	{
+		for(int32 j=1; j<mWaterDistRows-1; ++j)
+		{
+			int32 wX = cX/2 + mWaterDistCellW*i;
+			int32 wY = cY/2 + mWaterDistCellH*j;
+			//mWaterDistMesh->SetDisplacement(j,i,-cosf(t*2+((i*cellw+j*cellh-cX-cY)/(Zoom*2*(cellw+cellh))))*2,sinf(t*2+((i*cellw+j*cellh-cX-cY)/(Zoom*2*(cellw+cellh))))*2,HGEDISP_NODE);
+			//col=int((cosf(t*2+((i*cellw+j*cellh-cX-cY)))+1)*10);						
+			int32 col = MathUtils::Round((MathUtils::Cos(2.0f*waterTime + 0.09f*(wX + wY)) + 1) * 10);
+			mWaterDistMesh->SetColor(j,i,0xFF<<24 | col<<16 | col<<8 | col);
+		}
+	}
+	mWaterDistMesh->Render(0, 0);*/
+	
 	GfxSystem::TexturePtr waterTex = gResourceMgr.GetResource("Backgrounds", "water.png");
 	float32 texW_ws = WATER_TEXTURE_SCALE * waterTex->GetWidth();
 	float32 texH_ws = WATER_TEXTURE_SCALE * waterTex->GetHeight();
@@ -218,9 +261,10 @@ void Core::Game::Draw( const float32 delta)
 		MouseState& mouse = gInputMgr.GetMouseState();
 		for (EntityList::iterator i=mSelectedEntities.begin(); i!=mSelectedEntities.end(); ++i)
 		{
-			if (i->GetType() == ET_ENGINE)
+			eEntityType type = i->GetType();
+			if (type == ET_ENGINE || type == ET_WEAPON)
 			{
-				GfxSystem::Pen pen(GfxSystem::Color(100,100,100,180));
+				GfxSystem::Pen pen(GfxSystem::Color(100,100,100,100));
 				// if ALT is pressed, we want to set the direction from the ship center instead of the engine center
 				if (gInputMgr.IsKeyDown(KC_LMENU) || gInputMgr.IsKeyDown(KC_RMENU))
 				{
@@ -274,9 +318,11 @@ void Core::Game::Draw( const float32 delta)
 	hover = true;
 	if (!hoverAlsoSelected && mHoveredEntity.IsValid())
 		gEntityMgr.PostMessage(mHoveredEntity, EntityMessage(EntityMessage::TYPE_DRAW_OVERLAY, &hover));
+
+	// draw projectiles
+	gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::TYPE_DRAW_PROJECTILE));
 	
 	// draw remaining (undrawn) particle effects
-	gPSMgr.SetScale(PARTICLE_SYSTEM_SCALE_RATIO * gGfxRenderer.GetCameraScale());
 	gPSMgr.Render();
 }
 
@@ -290,6 +336,20 @@ void Core::Game::KeyPressed( const KeyInfo& ke )
 	{
 		gGfxRenderer.ChangeResolution(800,600);
 	}*/
+
+	for (EntityList::iterator i=mSelectedEntities.begin(); i!=mSelectedEntities.end(); ++i)
+	{
+		eEntityType type = i->GetType();
+		if (type == ET_WEAPON && gInputMgr.IsKeyDown(KC_SPACE))
+		{
+			PropertyHolder prop;
+			prop = i->GetProperty("IsFiring");
+			if (prop.GetValue<bool>())
+				i->PostMessage(EntityMessage::TYPE_STOP_SHOOTING);
+			else
+				i->PostMessage(EntityMessage::TYPE_START_SHOOTING);
+		}
+	}
 }
 
 void Core::Game::KeyReleased( const KeyInfo& ke )
@@ -330,16 +390,62 @@ void Core::Game::MouseButtonPressed( const MouseInfo& mi, const eMouseButton btn
 	}
 	else if (btn == MBTN_RIGHT)
 	{
-		if (mSelectedEntities.size() > 0)
+		// set the engine power and angle if selected
+		Vector2 cursor = gGfxRenderer.ScreenToWorld(GfxSystem::Point(mi.x, mi.y));
+		for (EntityList::iterator i=mSelectedEntities.begin(); i!=mSelectedEntities.end(); ++i)
 		{
-			// set the engine power and angle if selected
-			Vector2 cursor = gGfxRenderer.ScreenToWorld(GfxSystem::Point(mi.x, mi.y));
-			for (EntityList::iterator i=mSelectedEntities.begin(); i!=mSelectedEntities.end(); ++i)
+			eEntityType type = i->GetType();
+			if (type == ET_ENGINE)
 			{
-				if (i->GetType() == ET_ENGINE)
+				Vector2 pos;
+				// if ALT is pressed, we want to set the direction from the ship center instead of the engine center
+				if (gInputMgr.IsKeyDown(KC_LMENU) || gInputMgr.IsKeyDown(KC_RMENU))
 				{
+					EntityHandle platform;
+					i->PostMessage(EntityMessage::TYPE_GET_PARENT, &platform);
+					EntityHandle ship;
+					platform.PostMessage(EntityMessage::TYPE_GET_PARENT, &ship);
+					ship.PostMessage(EntityMessage::TYPE_GET_POSITION, &pos);
+				}
+				else
+				{
+					i->PostMessage(EntityMessage::TYPE_GET_POSITION, &pos);
+				}
+				Vector2 dir = cursor - pos;
+				float32 angle = MathUtils::Angle(dir);
+				i->PostMessage(EntityMessage::TYPE_SET_ANGLE, &angle);
+				// get back the clamped value
+				i->PostMessage(EntityMessage::TYPE_GET_ANGLE, &angle);
+				Vector2 unitDir = MathUtils::VectorFromAngle(angle);
+				// project the target vector onto the correct direction vector
+				dir = MathUtils::Dot(dir, unitDir) * unitDir;
+
+				int32 screenDist = gGfxRenderer.WorldToScreenScalar(dir.Length());
+				float32 powerRatio = (float32)screenDist / (float32)GetEnginePowerCircleRadius();
+				i->PostMessage(EntityMessage::TYPE_SET_POWER_RATIO, &powerRatio);
+			}
+			else if (type == ET_WEAPON)
+			{
+				if ((gInputMgr.IsKeyDown(KC_LMENU) || gInputMgr.IsKeyDown(KC_RMENU)) && mHoveredEntity.IsValid())
+				{
+					PropertyHolder prop;
+					prop = i->GetProperty("Target");
+					prop.SetValue(mHoveredEntity);
+					i->PostMessage(EntityMessage::TYPE_START_SHOOTING);
+				}
+				else
+				{
+					PropertyHolder prop;
+					prop = i->GetProperty("Target");
+					EntityHandle curTarget = prop.GetValue<EntityHandle>();
+					if (curTarget.IsValid())
+						{
+						prop.SetValue(EntityHandle::Null);
+						i->PostMessage(EntityMessage::TYPE_STOP_SHOOTING);
+					}
+
 					Vector2 pos;
-					// if ALT is pressed, we want to set the direction from the ship center instead of the engine center
+					// if ALT is pressed, we want to set the direction from the ship center instead of the weapon center
 					if (gInputMgr.IsKeyDown(KC_LMENU) || gInputMgr.IsKeyDown(KC_RMENU))
 					{
 						EntityHandle platform;
@@ -355,15 +461,6 @@ void Core::Game::MouseButtonPressed( const MouseInfo& mi, const eMouseButton btn
 					Vector2 dir = cursor - pos;
 					float32 angle = MathUtils::Angle(dir);
 					i->PostMessage(EntityMessage::TYPE_SET_ANGLE, &angle);
-					// get back the clamped value
-					i->PostMessage(EntityMessage::TYPE_GET_ANGLE, &angle);
-					Vector2 unitDir = MathUtils::VectorFromAngle(angle);
-					// project the target vector onto the correct direction vector
-					dir = MathUtils::Dot(dir, unitDir) * unitDir;
-
-					int32 screenDist = gGfxRenderer.WorldToScreenScalar(dir.Length());
-					float32 powerRatio = (float32)screenDist / (float32)GetEnginePowerCircleRadius();
-					i->PostMessage(EntityMessage::TYPE_SET_POWER_RATIO, &powerRatio);
 				}
 			}
 		}
@@ -378,4 +475,9 @@ void Core::Game::MouseButtonReleased( const MouseInfo& mi, const eMouseButton bt
 int32 Core::Game::GetEnginePowerCircleRadius( void ) const
 {
 	return ENGINE_VISIBLE_MAX_POWER;
+}
+
+int32 Core::Game::GetWeaponCircleRadius( void ) const
+{
+	return WEAPON_VISIBLE_ARC_RADIUS;
 }

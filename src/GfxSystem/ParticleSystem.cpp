@@ -3,13 +3,16 @@
 
 using namespace GfxSystem;
 
-ParticleSystem::ParticleSystem(hgeParticleSystem* ps)
-{
-	mPs = ps;
-	mRenderDone = false;
-	mLoaded = true;
-	mActive = false;
-}
+ParticleSystem::ParticleSystem(hgeParticleSystem* ps):
+	mPs(ps),
+	mRenderDone(false),
+	mLoaded(true),
+	mActive(false),
+	mScale(1),
+	mPositionX(0),
+	mPositionY(0),
+	mLastPositionX(0),
+	mLastPositionY(0) {}
 
 ParticleSystem::~ParticleSystem(void) 
 {
@@ -39,20 +42,23 @@ void ParticleSystem::MoveTo(int32 x, int32 y, bool bMoveParticles)
 
 void ParticleSystem::MoveTo(float32 x, float32 y, bool bMoveParticles)
 {
-	mWorldX = x;
-	mWorldY = y;
+	mLastPositionX = mPositionX;
+	mLastPositionY = mPositionY;
+	mPositionX = x;
+	mPositionY = y;
 	mMoveParticles = bMoveParticles;
 }
 
 
 void ParticleSystem::SetScale(float32 scale)
 {
-	if (mLoaded) mPs->SetScale(scale);
+	mScale = scale;
 }
 
 void ParticleSystem::SetAngle(float32 angle)
 {
-	if (mLoaded) mPs->info.fDirection = angle;
+	//Hardwire: added 1/2 PI
+	if (mLoaded) mPs->info.fDirection = angle + MathUtils::HALF_PI;
 }
 
 
@@ -107,13 +113,16 @@ void ParticleSystem::Update(float32 delta)
 }
 
 
-void ParticleSystem::Render(float32 scale)
+void ParticleSystem::Render()
 {
 	if (mLoaded) 
 	{
-		if (scale != -1.0f) mPs->SetScale(scale);
-		mPs->MoveTo((float)(gGfxRenderer.WorldToScreenX(mWorldX) / mPs->GetScale()),
-			    (float)(gGfxRenderer.WorldToScreenY(mWorldY) / mPs->GetScale()), mMoveParticles);
+		mPs->SetScale(gGfxRenderer.WorldToScreenScale(mScale));
+		//Hardwire: I added this line here to workaround bug causing to move particles when the camera moved
+		mPs->MoveTo((float)(gGfxRenderer.WorldToScreenX(mLastPositionX) / mPs->GetScale()),
+			(float)(gGfxRenderer.WorldToScreenY(mLastPositionY) / mPs->GetScale()), true);
+		mPs->MoveTo((float)(gGfxRenderer.WorldToScreenX(mPositionX) / mPs->GetScale()),
+			    (float)(gGfxRenderer.WorldToScreenY(mPositionY) / mPs->GetScale()), mMoveParticles);
 		mPs->Render(); 
 	}
 	mRenderDone = true; 
@@ -147,10 +156,10 @@ float32 ParticleSystem::GetLifeTime(void) const
 
 float32 ParticleSystem::GetWorldX(void) const
 {
-	return mWorldX;
+	return mPositionX;
 }
 
 float32 ParticleSystem::GetWorldY(void) const
 {
-	return mWorldY;
+	return mPositionY;
 }
