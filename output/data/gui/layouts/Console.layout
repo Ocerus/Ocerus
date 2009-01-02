@@ -2,6 +2,9 @@
 
 <GUILayout >
     <Window Type="DefaultWindow" Name="MainRoot">
+        <Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}" />
+        <Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{1,0},{1,0}}" />
+        <Property Name="Visible" Value="True" />    
         <Window Type="DefaultWindow" Name="ConsoleRoot" >
             <Property Name="Visible" Value="False" />
             <Property Name="Alpha" Value="0.55" />
