@@ -28,13 +28,6 @@ namespace GUISystem {
 
 	void GUIMgr::LoadGUI() {
 		gLogMgr.LogMessage("******** GUI Menu init *********");
-		/*
-		gResourceMgr.AddResourceDirToGroup("gui/schemes", "schemes");
-		gResourceMgr.AddResourceDirToGroup("gui/imagesets", "imagesets");
-		gResourceMgr.AddResourceDirToGroup("gui/fonts", "fonts");
-		gResourceMgr.AddResourceDirToGroup("gui/layouts", "layouts");
-		gResourceMgr.AddResourceDirToGroup("gui/looknfeel", "looknfeels");
-		*/
 		//CEGUI::SchemeManager::getSingleton().loadScheme( "TaharezLook.scheme");
 		CEGUI::SchemeManager::getSingleton().loadScheme( "BGGUI.scheme");
 
@@ -57,16 +50,12 @@ namespace GUISystem {
 
 	void GUIMgr::LoadStyle( void )
 	{
-		gResourceMgr.AddResourceFileToGroup("gui/schemes/Console.scheme", "schemes");
-		gResourceMgr.AddResourceFileToGroup("gui/schemes/Lightweight.scheme", "schemes");
-		gResourceMgr.AddResourceFileToGroup("gui/imagesets/Console.imageset", "imagesets");
-		gResourceMgr.AddResourceFileToGroup("gui/imagesets/BSLogov2.png", "imagesets");
-		gResourceMgr.AddResourceFileToGroup("gui/imagesets/Lightweight.imageset", "imagesets");
-		gResourceMgr.AddResourceFileToGroup("gui/imagesets/Lightweight.tga", "imagesets");		
-		gResourceMgr.AddResourceFileToGroup("gui/fonts/Commonwealth-10.font", "fonts");
-		gResourceMgr.AddResourceFileToGroup("gui/fonts/Commonv2c.ttf", "fonts");
-		gResourceMgr.AddResourceFileToGroup("gui/layouts/Console.layout", "layouts");
-		gResourceMgr.AddResourceFileToGroup("gui/looknfeel/Lightweight.looknfeel", "looknfeels");
+		gLogMgr.LogMessage( "load style" );
+		gResourceMgr.AddResourceDirToGroup("gui/schemes", "schemes");
+		gResourceMgr.AddResourceDirToGroup("gui/imagesets", "imagesets");
+		gResourceMgr.AddResourceDirToGroup("gui/fonts", "fonts");
+		gResourceMgr.AddResourceDirToGroup("gui/layouts", "layouts");
+		gResourceMgr.AddResourceDirToGroup("gui/looknfeel", "looknfeels");
 
 		CEGUI::SchemeManager::getSingleton().loadScheme("Lightweight.scheme");
 		if( !CEGUI::FontManager::getSingleton().isFontPresent( "Commonwealth-10" ) )
@@ -89,11 +78,6 @@ namespace GUISystem {
 
 	void GUIMgr::RegisterEvents() {
 		assert(mCegui);
-		/*
-		CEGUI::Window* quit_button = CEGUI::WindowManager::getSingleton().getWindow("Root/QuitButton");
-		if (quit_button)
-			quit_button->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&GUIMgr::QuitEvent, this));
-		*/
 
 		CEGUI::Window* console = CEGUI::WindowManager::getSingleton().getWindow("ConsoleRoot/ConsolePrompt");
 		console->subscribeEvent(CEGUI::Editbox::EventTextAccepted, CEGUI::Event::Subscriber(&GUIMgr::ConsoleCommandEvent, this));	
@@ -121,16 +105,23 @@ namespace GUISystem {
 			std::string prefix = message.substr(0, 7);
 			std::string args = message.substr(8);
 			if (prefix == "addtext")
-				AddStaticText( (int)(gGfxRenderer.GetScreenWidth()*0.25f),
-					(int)(gGfxRenderer.GetScreenHeight()*0.25f), "ConsoleCustomText", args );
-		}
-		if (message == "deletetext") {
-			DeleteStaticText( "ConsoleCustomText" );
+				AddStaticText( GetTextSize(args).x, 0.25f, args, GfxSystem::Color( 255, 0, 0),
+					GfxSystem::ANCHOR_VCENTER | GfxSystem::ANCHOR_RIGHT );
 		}
 		AddConsoleMessage(message);
 		prompt->setText("");
 
 		return true;
+	}
+
+	Vector2 GUIMgr::GetTextSize( const std::string & text, const std::string & fontid ) {
+		CEGUI::Font* font;
+		if (fontid != "")
+			font = CEGUI::FontManager::getSingleton().getFont(fontid);
+		else
+			font = CEGUI::System::getSingleton().getDefaultFont();
+		return Vector2(font->getTextExtent(text)/gGfxRenderer.GetScreenWidth(),
+			font->getFontHeight()/gGfxRenderer.GetScreenHeight());
 	}
 
 	void GUIMgr::AddConsoleMessage(std::string message, const GfxSystem::Color& color) {
@@ -197,30 +188,12 @@ namespace GUISystem {
 		CEGUI::System::getSingleton().injectMouseButtonUp( ConvertMouseButtonEnum(btn) );
 	}
 
-	void GUIMgr::DeleteStaticText( const std::string & id ) {
-		if (CEGUI::WindowManager::getSingleton().isWindowPresent(id)) {
-			CEGUI::Window* text_to_delete = CEGUI::WindowManager::getSingleton().getWindow(id);
-			CEGUI::System::getSingleton().getGUISheet()->removeChildWindow( text_to_delete );
-			CEGUI::WindowManager::getSingleton().destroyWindow( text_to_delete );
-		}
-	}
-
-	void GUIMgr::AddStaticText( int x, int y, const std::string & id, const std::string & text ) {
-		CEGUI::Window* text_window = 0;
-		if (!CEGUI::WindowManager::getSingleton().isWindowPresent(id)) {
-			text_window = CEGUI::WindowManager::getSingleton().createWindow( "Lightweight/StaticText", id );
-			CurrentWindowRoot->addChildWindow( text_window );
-		} else {
-			text_window = CEGUI::WindowManager::getSingleton().getWindow( id );
-		}
-		text_window->setText( text );
-		text_window->setArea( CEGUI::UDim( x/(float)gGfxRenderer.GetScreenWidth(), 0 ), 
-							CEGUI::UDim( y/(float)gGfxRenderer.GetScreenHeight(), 0 ),
-							CEGUI::UDim( 1, 0 ), CEGUI::UDim( 1, 0 ) );									
-	}
-
-	bool GUIMgr::TextIdExists( const std::string &id ) {
-		return CEGUI::WindowManager::getSingleton().isWindowPresent(id);
+	StaticText* GUIMgr::AddStaticText( float32 x, float32 y, const std::string & text,
+			const GfxSystem::Color color/* = GfxSystem::Color(255,255,255)*/,
+			uint8 anchor/* = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP*/ ) {
+		StaticText* ptr = new StaticText( x, y, text, color, anchor );
+		CreatedStaticElements.push_back( ptr );
+		return ptr;
 	}
 
 	GUIMgr::~GUIMgr() {
@@ -266,6 +239,6 @@ namespace GUISystem {
 			case InputSystem::MBTN_MIDDLE:
 				return CEGUI::MiddleButton;
 		}
-		return CEGUI::NoButton;
+		return CEGUI::LeftButton;
 	}
 }

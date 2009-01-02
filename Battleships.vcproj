@@ -846,12 +846,20 @@
 						RelativePath=".\src\GUISystem\GUIMgr.h"
 						>
 					</File>
+					<File
+						RelativePath=".\src\GUISystem\StaticElements.h"
+						>
+					</File>
 				</Filter>
 				<Filter
 					Name="src"
 					>
 					<File
 						RelativePath=".\src\GUISystem\GUIMgr.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\GUISystem\StaticElements.cpp"
 						>
 					</File>
 				</Filter>

@@ -44,6 +44,7 @@ namespace GfxSystem
 		Color(uint32 color) : a((uint8)(color >> 24)), r((uint8)( (color >> 16)&0x000000FF )),
 			g((uint8)( (color >> 8)&0x000000FF )), b((uint8)( color&0x000000FF )) {}
 		Color(void): r(0), g(0), b(0), a(255) {}
+		inline uint32 GetARGB() const { return a << 24 | r << 16 | g << 8 | b; }
 		uint8 r, g, b, a;
 
 		static Color NullColor;

@@ -5,7 +5,10 @@
 #include "../Utility/Settings.h"
 #include "../InputSystem/IInputListener.h"
 #include "../Utility/Settings.h"
-#include "CEGUI.h"
+#include "StaticElements.h"
+#include "CEGUIBase.h"
+#include "CEGUISystem.h"
+#include "CEGUIWindow.h"
 #include <set>
 
 #define gGUIMgr GUISystem::GUIMgr::GetSingleton()
@@ -73,9 +76,10 @@ namespace GUISystem {
 
 		/// @name Static text related methods
 		//@{
-		void AddStaticText( int x, int y, const string & id, const string & text );
-		void DeleteStaticText( const string & id );
-		bool TextIdExists( const string & id );
+		StaticText* AddStaticText( float32 x, float32 y, const std::string & text,
+			const GfxSystem::Color color = GfxSystem::Color(255,255,255),
+			uint8 anchor = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP);
+		Vector2 GetTextSize( const std::string & text, const std::string & fontid = "" );
 		//@}
 
 		virtual ~GUIMgr();
@@ -100,6 +104,7 @@ namespace GUISystem {
 		friend class RendererGate;
 
 		std::set<IConsoleListener*> ConsoleListeners;
+		std::vector<StaticElement*> CreatedStaticElements;
 	};
 }
 #endif
