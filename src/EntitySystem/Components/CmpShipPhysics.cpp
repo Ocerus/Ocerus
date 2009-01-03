@@ -28,7 +28,11 @@ void EntitySystem::CmpShipPhysics::PostInit( void )
 
 void EntitySystem::CmpShipPhysics::Clean( void )
 {
-
+	if (mBody)
+	{
+		gApp.GetCurrentGame()->GetPhysics()->DestroyBody(mBody);
+		mBody = 0;
+	}
 }
 
 EntityMessage::eResult EntitySystem::CmpShipPhysics::HandleMessage( const EntityMessage& msg )
@@ -40,7 +44,7 @@ EntityMessage::eResult EntitySystem::CmpShipPhysics::HandleMessage( const Entity
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_POSITION:
 		assert(msg.data);
-		((Vector2*)msg.data)->Set(GetPosition());
+		((Vector2*)msg.data)->Set(GetAbsolutePosition());
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_ANGLE:
 		assert(msg.data);
@@ -61,19 +65,19 @@ EntityMessage::eResult EntitySystem::CmpShipPhysics::HandleMessage( const Entity
 
 void EntitySystem::CmpShipPhysics::RegisterReflection()
 {
-	RegisterProperty<Vector2&>("Position", &GetPosition, &SetPosition, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<Vector2&>("AbsolutePosition", &GetAbsolutePosition, &SetAbsolutePosition, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<float32>("Angle", &GetAngle, &SetAngle, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<Vector2>("InitBodyPosition", 0, &SetInitBodyPosition, PROPACC_INIT);
 	RegisterProperty<float32>("InitBodyAngle", 0, &SetInitBodyAngle, PROPACC_INIT);
 }
 
-Vector2& EntitySystem::CmpShipPhysics::GetPosition( void ) const
+Vector2& EntitySystem::CmpShipPhysics::GetAbsolutePosition( void ) const
 {
 	assert(mBody);
 	return const_cast<Vector2&>(mBody->GetPosition());
 }
 
-void EntitySystem::CmpShipPhysics::SetPosition( Vector2& pos )
+void EntitySystem::CmpShipPhysics::SetAbsolutePosition( Vector2& pos )
 {
 	assert(mBody);
 	mBody->SetXForm(pos, mBody->GetAngle());

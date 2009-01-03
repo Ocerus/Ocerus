@@ -13,6 +13,9 @@
         <Vertex>0.5 0.25</Vertex>
         <Vertex>-0.5 0.25</Vertex>
       </Shape>
+      <ResourceGroup>ShipParts</ResourceGroup>
+      <ExplodeEffect>explosion.psi</ExplodeEffect>
+      <ExplodeEffectScale>0.025</ExplodeEffectScale>
     </Component>
   </Entity>
   

@@ -1,13 +1,20 @@
 #include "Common.h"
 #include "CmpPlatformLogic.h"
+#include <Box2D.h>
 
 using namespace EntitySystem;
+
+#define EXPLOSION_FORCE_RATIO 10.0f
 
 void CmpPlatformLogic::Init(void)
 {
 	mBlueprints.Invalidate();
 	mHitpoints = 0;
 	mParentShip.Invalidate();
+	mItems.clear();
+
+	mPickCircleCenter = Vector2_Zero;
+	mPickCircleRadius = 0;
 }
 
 void CmpPlatformLogic::Clean(void) 
@@ -42,8 +49,30 @@ EntityMessage::eResult CmpPlatformLogic::HandleMessage(const EntityMessage& msg)
 				if (dist > mPickCircleRadius)
 					mPickCircleRadius = dist;
 			}
+
+			// set the team
+			GetOwner().SetTeam(mParentShip);
 		}
 		return EntityMessage::RESULT_OK;
+	case EntityMessage::TYPE_DAMAGE:
+		assert(msg.data);
+		{
+			PropertyHolder prop = mBlueprints.GetProperty("Material");
+			EntityHandle material = prop.GetValue<EntityHandle>();
+			prop = material.GetProperty("DurabilityRatio");
+			int32 newHP = mHitpoints - MathUtils::Round(*(float32*)msg.data / prop.GetValue<float32>());
+			if (newHP <= 0)
+				Die();
+			else
+				mHitpoints = newHP;
+		}
+		return EntityMessage::RESULT_OK;
+	case EntityMessage::TYPE_DIE:
+		Die();
+		return EntityMessage::RESULT_OK;
+	case EntityMessage::TYPE_DETACH_PLATFORM:
+		mParentShip.Invalidate();
+		break;
 	case EntityMessage::TYPE_GET_BLUEPRINTS:
 		assert(msg.data);
 		*(EntityHandle*)msg.data = GetBlueprints();
@@ -98,4 +127,67 @@ void EntitySystem::CmpPlatformLogic::DrawSelectionOverlay( const bool hover ) co
 		color = GfxSystem::Color(255,255,255,180);
 	gGfxRenderer.DrawCircle(gGfxRenderer.WorldToScreen(MathUtils::Multiply(Matrix22(angle), mPickCircleCenter) + pos), gGfxRenderer.WorldToScreenScalar(mPickCircleRadius), 
 		GfxSystem::Color::NullColor, GfxSystem::Pen(color));
+}
+
+void EntitySystem::CmpPlatformLogic::Die( void )
+{
+	// create the PS explode effect
+	PropertyHolder prop = mBlueprints.GetProperty("ExplodeEffect");
+	StringKey effect = prop.GetValue<StringKey>();
+	prop = mBlueprints.GetProperty("ResourceGroup");
+	StringKey resGroup = prop.GetValue<StringKey>();
+	GfxSystem::ParticleSystemPtr ps = gPSMgr.SpawnPS(resGroup, effect);
+	if (!ps.IsNull())
+	{
+		prop = mBlueprints.GetProperty("ExplodeEffectScale");
+		float32 scale = prop.GetValue<float32>();
+		prop = GetProperty("Shape");
+		Vector2* shape = prop.GetValue<Vector2*>();
+		prop = GetProperty("ShapeLength");
+		int32 shapeLen = prop.GetValue<uint32>();
+		assert(shapeLen);
+		float32 radius = 0;
+		Vector2 center = Vector2_Zero;
+		for (int32 i=0; i<shapeLen; ++i)
+			center += shape[i];
+		center *= 1.0f / shapeLen;
+		for (int32 i=0; i<shapeLen; ++i)
+		{
+			float32 dist = MathUtils::Distance(center, shape[i]);
+			if (dist > radius)
+				radius = dist;
+		}
+		ps->SetScale(radius * scale);
+		prop = GetProperty("AbsolutePosition");
+		ps->MoveTo(prop.GetValue<Vector2>());
+		ps->Fire();
+	}
+
+	mHitpoints = 0;
+
+	// destroy everything on this platform
+	for (EntityList::iterator it=mItems.begin(); it!=mItems.end(); ++it)
+		it->PostMessage(EntityMessage::TYPE_DIE);
+
+	// detach the platform from the body and delete it
+	if (mParentShip.IsValid())
+	{
+		// apply some force from the explosion to the parent ship
+		//TODO aplikovat silu na vsechno v dosahu
+		b2Body* body;
+		GetOwner().PostMessage(EntityMessage::TYPE_GET_PHYSICS_BODY, &body);
+		prop = GetProperty("AbsolutePosition");
+		Vector2 myPos = prop.GetValue<Vector2>();
+		prop = mParentShip.GetProperty("AbsolutePosition");
+		Vector2 forceDir = prop.GetValue<Vector2&>() - myPos;
+		float32 distSq = forceDir.LengthSquared();
+		body->ApplyForce(EXPLOSION_FORCE_RATIO / distSq * forceDir, myPos);
+
+		mParentShip.PostMessage(EntityMessage::TYPE_REMOVE_PLATFORM, GetOwnerPtr());
+		bool recreate = false;
+		GetOwner().PostMessage(EntityMessage::TYPE_DETACH_PLATFORM, &recreate);
+	}
+
+	// delete the entity
+	gEntityMgr.DestroyEntity(GetOwner());
 }

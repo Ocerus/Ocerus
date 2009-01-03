@@ -15,7 +15,11 @@ class PropertyList;
 namespace EntitySystem
 {
 
+	/// @name Entity identifier.
 	typedef uint32 EntityID;
+	/// @name Team identifier.
+	typedef EntityID TeamID;
+
 
 	/// @name  Forward declarations.
 	//@{
@@ -45,6 +49,9 @@ namespace EntitySystem
 		/// @name Returns true if this handle is valid (not null).
 		bool IsValid(void) const { return mEntityID != 0; }
 
+		/// @name Returns true if this entity exists.
+		bool Exists(void) const;
+
 		/// @name Sets this handle to invalid state.
 		void Invalidate(void) { mEntityID = 0; }
 
@@ -62,6 +69,15 @@ namespace EntitySystem
 
 		/// @name Returns type of this entity.
 		eEntityType GetType(void) const;
+
+		/// @name Rerturns team this entity belongs to.
+		TeamID GetTeam(void) const;
+
+		/// @name Changes team this entity belongs to.
+		//@{
+		void SetTeam(const EntityHandle teamOwner);
+		void SetTeam(const TeamID team);
+		//@}
 
 		static const EntityHandle Null;
 

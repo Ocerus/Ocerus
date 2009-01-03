@@ -65,6 +65,16 @@ namespace EntitySystem
 		StringKey GetExplodeEffect(void) const { return mExplodeEffect; }
 		void SetExplodeEffect(const StringKey effect) { mExplodeEffect = effect; }
 		//@}
+		/// @name Scaling factor of the splash effect.
+		//@{
+		float32 GetSplashEffectScale(void) const { return mSplashEffectScale; }
+		void SetSplashEffectScale(const float32 scale) { mSplashEffectScale = scale; }
+		//@}
+		/// @name ID of the splash effect resource.
+		//@{
+		StringKey GetSplashEffect(void) const { return mSplashEffect; }
+		void SetSplashEffect(const StringKey effect) { mSplashEffect = effect; }
+		//@}
 		/// @name ID of the resource group containing resources related to this entity.
 		//@{
 		StringKey GetResourceGroup(void) const { return mResourceGroup; }
@@ -86,8 +96,10 @@ namespace EntitySystem
 		float32 mSpeedRatio;
 		float32 mTrailEffectScale;
 		float32 mExplodeEffectScale;
+		float32 mSplashEffectScale;
 		StringKey mTrailEffect;
 		StringKey mExplodeEffect;
+		StringKey mSplashEffect;
 		StringKey mResourceGroup;
 
 	};

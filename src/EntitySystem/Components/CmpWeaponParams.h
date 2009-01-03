@@ -20,6 +20,11 @@ namespace EntitySystem
 		float32 GetFiringDistance(void) const { return mFiringDistance; }
 		void SetFiringDistance(const float32 d) { mFiringDistance = d; }
 		//@}
+		/// @name How much it will diverse from it's desired angle when fired.
+		//@{
+		float32 GetSpread(void) const { return mSpread; }
+		void SetSpread(const float32 spread) { mSpread = spread; }
+		//@}
 		/// @name Time delay before the weapon can fire again.
 		//@{
 		float32 GetReloadTime(void) const { return mReloadTime; }
@@ -63,6 +68,7 @@ namespace EntitySystem
 
 	private:
 		float32 mFiringDistance;
+		float32 mSpread;
 		float32 mReloadTime;
 		uint32 mProjectileType;
 		uint32 mProjectileSize;

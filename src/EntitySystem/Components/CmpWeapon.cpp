@@ -20,7 +20,6 @@ void EntitySystem::CmpWeapon::Init( void )
 
 void EntitySystem::CmpWeapon::Clean( void )
 {
-
 }
 
 EntityMessage::eResult EntitySystem::CmpWeapon::HandleMessage( const EntityMessage& msg )
@@ -54,7 +53,7 @@ EntityMessage::eResult EntitySystem::CmpWeapon::HandleMessage( const EntityMessa
 		assert(msg.data);
 		{
 			PropertyHolder prop;
-			prop = GetOwner().GetProperty("Blueprints");
+			prop = GetProperty("Blueprints");
 			EntityHandle blueprints = prop.GetValue<EntityHandle>();
 			prop = blueprints.GetProperty("ArcAngle");
 			float32 arcAngle = prop.GetValue<float32>();
@@ -99,6 +98,20 @@ EntityMessage::eResult EntitySystem::CmpWeapon::HandleMessage( const EntityMessa
 	case EntityMessage::TYPE_UPDATE_PHYSICS_SERVER:
 		assert(msg.data);
 		{
+			// auto aim
+			if (mTarget.Exists())
+			{
+				Vector2 myPos = ((PropertyHolder)GetProperty("AbsolutePosition")).GetValue<Vector2>();
+				Vector2 tarPos = ((PropertyHolder)mTarget.GetProperty("AbsolutePosition")).GetValue<Vector2>();
+				float32 angle = MathUtils::Angle(tarPos - myPos);
+				HandleMessage(EntityMessage(EntityMessage::TYPE_SET_ANGLE, &angle));
+			}
+			else if (mTarget.IsValid())
+			{
+				mTarget.Invalidate();
+				HandleMessage(EntityMessage(EntityMessage::TYPE_STOP_SHOOTING));
+			}
+
 			if (mTimeToReload > 0)
 				mTimeToReload -= *(float32*)msg.data;
 			if (mIsFiring && mTimeToReload <= 0)
@@ -183,9 +196,9 @@ void EntitySystem::CmpWeapon::DrawSelectionUnderlay( const bool hover ) const
 {
 	// draw an arch designating possible power and angle
 	PropertyHolder prop;
-	prop = GetOwner().GetProperty("Blueprints");
+	prop = GetProperty("Blueprints");
 	EntityHandle blueprints = prop.GetValue<EntityHandle>();
-	prop = GetOwner().GetProperty("AbsolutePosition");
+	prop = GetProperty("AbsolutePosition");
 	Vector2 pos = prop.GetValue<Vector2>();
 	prop = blueprints.GetProperty("ArcAngle");
 	float32 angleDiver = prop.GetValue<float32>();
@@ -204,19 +217,17 @@ void EntitySystem::CmpWeapon::DrawSelectionUnderlay( const bool hover ) const
 
 void EntitySystem::CmpWeapon::SetTarget( const EntityHandle tar )
 {
-  eEntityType type = tar.GetType();
-  if (type == ET_PLATFORM)
-  {
-	  EntityHandle platform = tar;
-	  PropertyHolder prop = platform.GetProperty("ParentShip");
-	  EntityHandle ship = prop.GetValue<EntityHandle>();
-	  prop = GetOwner().GetProperty("ParentPlatform");
-	  EntityHandle myPlatform = prop.GetValue<EntityHandle>();
-	  prop = myPlatform.GetProperty("ParentShip");
-	  EntityHandle myShip = prop.GetValue<EntityHandle>();
-	  if (!ship.IsValid() || ship != myShip)
-		mTarget = tar;
-  }
+	if (!tar.IsValid())
+	{
+		mTarget.Invalidate();
+	}
+	else
+	{
+		eEntityType type = tar.GetType();
+		if ((type == ET_PLATFORM || type == ET_ENGINE || type == ET_WEAPON)
+			&& GetOwner().GetTeam() != tar.GetTeam())
+			mTarget = tar;
+	}
 }
 
 void EntitySystem::CmpWeapon::Fire( void )
@@ -224,7 +235,7 @@ void EntitySystem::CmpWeapon::Fire( void )
 	if (!mAmmoBlueprints.IsValid() || !mIsFiring || mTimeToReload > 0)
 		return;
 
-	PropertyHolder prop = GetOwner().GetProperty("Blueprints");
+	PropertyHolder prop = GetProperty("Blueprints");
 	EntityHandle blueprints = prop.GetValue<EntityHandle>();
 	
 	EntityDescription desc;
@@ -232,25 +243,36 @@ void EntitySystem::CmpWeapon::Fire( void )
 	desc.AddComponent(CT_PROJECTILE);
 	PropertyList props;
 	EntityHandle projectile = gEntityMgr.CreateEntity(desc, props);
+
+	// set our team for the projectile
+	// note: we need to do that before finishing init, otherwise we don't catch correctly the first collision
+	projectile.SetTeam(GetOwner().GetTeam());
+
 	props["Blueprints"].SetValue(mAmmoBlueprints);
 	prop = blueprints.GetProperty("FireEffectDisplacement");
 	float32 fireEffectDisp = prop.GetValue<float32>();
-	prop = GetOwner().GetProperty("AbsoluteAngle");
+	prop = GetProperty("AbsoluteAngle");
 	float32 angle = prop.GetValue<float32>();
-	prop = GetOwner().GetProperty("AbsolutePosition");
+	prop = blueprints.GetProperty("Spread");
+	float32 spread = prop.GetValue<float32>();
+	angle += MathUtils::Random(-spread, spread);
+	prop = GetProperty("AbsolutePosition");
 	Vector2 firePos = prop.GetValue<Vector2>() + MathUtils::VectorFromAngle(angle, fireEffectDisp);
 	props["InitBodyPosition"].SetValue<Vector2>(firePos);
 	prop = blueprints.GetProperty("FiringSpeed");
 	float32 speed = prop.GetValue<float32>();
 	prop = mAmmoBlueprints.GetProperty("SpeedRatio");
 	speed *= prop.GetValue<float32>();
-	props["InitBodySpeed"].SetValue<Vector2>(MathUtils::VectorFromAngle(angle, speed));
+	prop = GetProperty("ParentPlatform");
+	EntityHandle platform = prop.GetValue<EntityHandle>();
+	prop = platform.GetProperty("LinearVelocity");
+	props["InitBodySpeed"].SetValue<Vector2>(MathUtils::VectorFromAngle(angle, speed) + prop.GetValue<Vector2>());
 	prop = blueprints.GetProperty("FiringDistance");
 	float32 maxFireDist = prop.GetValue<float32>();
 	prop = mAmmoBlueprints.GetProperty("DistanceRatio");
 	maxFireDist *= prop.GetValue<float32>();
 	props["MaxDistance"].SetValue(maxFireDist);
-	projectile.FinishInit();	
+	projectile.FinishInit();
 
 	// create the fire effect
 	prop = blueprints.GetProperty("FireEffect");

@@ -106,27 +106,22 @@ void Application::RunMainLoop()
 			break;
 		}
 		
-		// destroy marked entities
-		gEntityMgr.ProcessDestroyQueue();
-
 		// draw
-		switch (GetState())
-		{
-		case AS_GAME:
-			if (gGfxRenderer.BeginRendering())
-			{				
+		if (gGfxRenderer.BeginRendering())
+		{				
+			switch (GetState())
+			{
+			case AS_GAME:
 				mGame->Draw(delta);
 				mGUIMgr->RenderGUI();
-				gGfxRenderer.EndRendering();	
+				break;
 			}
-			break;
-		case AS_GUI:
-			if (gGfxRenderer.BeginRendering()) {
-				gGfxRenderer.ClearScreen(GfxSystem::Color(0,0,0));
-				mGUIMgr->RenderGUI();
-				gGfxRenderer.EndRendering();
-			}
-			break;
+
+			// draw stats (from previous frame)
+			//gGfxRenderer.DrawString(97, 2, "FPS:", GfxSystem::ANCHOR_RIGHT | GfxSystem::ANCHOR_TOP);
+			//gGfxRenderer.DrawString(98, 2, StringConverter::ToString(mAvgFPS), GfxSystem::ANCHOR_RIGHT | GfxSystem::ANCHOR_TOP);
+
+			gGfxRenderer.EndRendering();	
 		}
 
 		// update FPS and other performance counters

@@ -114,6 +114,7 @@ namespace GfxSystem
 		inline void SetCameraX(const float32 x) { mCameraX = x; }
 		inline void SetCameraY(const float32 y) { mCameraY = y; }
 		inline void SetCameraPos(const Vector2& pos) { mCameraX = pos.x; mCameraY = pos.y; }
+		inline Vector2 GetCameraPos(void) { return Vector2(mCameraX, mCameraY); }
 		inline void SetCameraScale(const float32 s) { mCameraScale = s; mCameraScaleInv = 1.0f/s; }
 		inline float32 GetCameraScale(void) const { return mCameraScale; }
 		void ZoomCamera(const float32 delta);
@@ -157,6 +158,14 @@ namespace GfxSystem
 		bool DrawPolygonWithConversion(const Vector2* vertices, int vertices_len, const Vector2& offsetPosition, const float32 offsetAngle, const Color& fillColor, const Pen& outline = Pen::NullPen) const;
 
 		bool DrawCircle(const Point& center, const int32 radius, const Color& fillColor, const Pen& outline = Pen::NullPen, const float32 minAngle = 0.0f, const float32 maxAngle = MathUtils::TWO_PI) const;
+
+
+		/// @name Text drawing methods.
+		/// Note that coords are in percentage values relative to the screen bounds.
+		//@{
+		void DrawString( float32 x, float32 y, const string & text,	uint8 anchor = ANCHOR_LEFT | ANCHOR_TOP, const Color color = Color(255,255,255));
+		Vector2 GetTextSize( const string & text, const string & fontid = "" );
+		//@}
 
 		//TODO add font param
 		//bool DrawText(const string& str, font, int32 x, int32 y, uint8 anchor = ANCHOR_VCENTER|ANCHOR_HCENTER, float32 angle = 0.0f, uint8 alpha = 255);

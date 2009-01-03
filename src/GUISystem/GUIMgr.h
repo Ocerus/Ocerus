@@ -76,10 +76,10 @@ namespace GUISystem {
 
 		/// @name Static text related methods
 		//@{
-		StaticText* AddStaticText( float32 x, float32 y, const std::string & text,
+		StaticText* AddStaticText( float32 x, float32 y, const string & text,
 			const GfxSystem::Color color = GfxSystem::Color(255,255,255),
 			uint8 anchor = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP);
-		Vector2 GetTextSize( const std::string & text, const std::string & fontid = "" );
+		Vector2 GetTextSize( const string & text, const string & fontid = "" );
 		//@}
 
 		virtual ~GUIMgr();

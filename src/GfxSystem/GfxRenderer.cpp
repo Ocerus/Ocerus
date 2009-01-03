@@ -582,6 +582,15 @@ bool GfxRenderer::IsFullscreen( void ) const
 	return !mHGE->System_GetState(HGE_WINDOWED);
 }
 
+void GfxRenderer::DrawString( float32 x, float32 y, const string & text, uint8 anchor, const Color color )
+{
+	gGUIMgr.AddStaticText(x, y, text, color, anchor);
+}
+
+Vector2 GfxRenderer::GetTextSize( const string & text, const string & fontid )
+{
+	return gGUIMgr.GetTextSize(text, fontid);
+}
 
 //------------------------------------------------------------------------
 // Haxxor functions follow!

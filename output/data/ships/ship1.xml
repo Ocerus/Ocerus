@@ -2,16 +2,16 @@
 
 <Entities>
 
-  <Entity Type="ET_SHIP" Name="ship0">
+  <Entity Type="ET_SHIP" Name="ship1">
     <Component Type="CT_SHIP_PHYSICS">
-      <InitBodyPosition>10.0 10.0</InitBodyPosition>
-      <InitBodyAngle>-0.8</InitBodyAngle>
+      <InitBodyPosition>12.0 8.0</InitBodyPosition>
+      <InitBodyAngle>0.12354</InitBodyAngle>
     </Component>
     <Component Type="CT_SHIP_LOGIC"/>
     <Component Type="CT_SHIP_VISUAL"/>
   </Entity>
 
-  <Entity Type="ET_PLATFORM" Name="platform1">
+  <Entity Type="ET_PLATFORM" Name="platform1-0">
     <Component Type="CT_PLATFORM_PHYSICS">
       <RelativePosition>0.0 -0.25</RelativePosition>
       <InitShapeFlip>false</InitShapeFlip>
@@ -19,15 +19,15 @@
     </Component>
     <Component Type="CT_PLATFORM_LOGIC">
       <Blueprints>platformType0</Blueprints>
-      <ParentShip>ship0</ParentShip>
+      <ParentShip>ship1</ParentShip>
     </Component>
     <Component Type="CT_PLATFORM_VISUAL"/>
   </Entity>
 
-  <Entity Type="ET_ENGINE" Name="engine0">
+  <Entity Type="ET_ENGINE" Name="engine1-0">
     <Component Type="CT_PLATFORM_ITEM">
       <Blueprints>engineType0</Blueprints>
-      <ParentPlatform>platform1</ParentPlatform>
+      <ParentPlatform>platform1-0</ParentPlatform>
       <RelativePosition>-0.5 -0.25</RelativePosition>
     </Component>
     <Component Type="CT_ENGINE">
@@ -36,10 +36,10 @@
     </Component>
   </Entity>
   
-  <Entity Type="ET_WEAPON" Name="weapon0">
+  <Entity Type="ET_WEAPON" Name="weapon1-0">
     <Component Type="CT_PLATFORM_ITEM">
       <Blueprints>weaponType0</Blueprints>
-      <ParentPlatform>platform1</ParentPlatform>
+      <ParentPlatform>platform1-0</ParentPlatform>
       <RelativePosition>+0.4 -0.25</RelativePosition>
     </Component>
     <Component Type="CT_WEAPON">
@@ -50,7 +50,7 @@
   </Entity>
 
 
-  <Entity Type="ET_PLATFORM" Name="platform2">
+  <Entity Type="ET_PLATFORM" Name="platform1-1">
     <Component Type="CT_PLATFORM_PHYSICS">
       <RelativePosition>0.0 0.25</RelativePosition>
       <InitShapeFlip>true</InitShapeFlip>
@@ -58,15 +58,15 @@
     </Component>
     <Component Type="CT_PLATFORM_LOGIC">
       <Blueprints>platformType0</Blueprints>
-      <ParentShip>ship0</ParentShip>
+      <ParentShip>ship1</ParentShip>
     </Component>
     <Component Type="CT_PLATFORM_VISUAL"/>
   </Entity>
 
-  <Entity Type="ET_ENGINE" Name="engine1">
+  <Entity Type="ET_ENGINE" Name="engine1-1">
     <Component Type="CT_PLATFORM_ITEM">
       <Blueprints>engineType0</Blueprints>
-      <ParentPlatform>platform2</ParentPlatform>
+      <ParentPlatform>platform1-1</ParentPlatform>
       <RelativePosition>-0.5 0.25</RelativePosition>
     </Component>
     <Component Type="CT_ENGINE">
@@ -75,10 +75,10 @@
     </Component>
   </Entity>
 
-  <Entity Type="ET_UNKNOWN" Name="link0">
+  <Entity Type="ET_UNKNOWN" Name="link1-0">
     <Component Type="CT_PLATFORM_LINKS">
-      <FirstPlatform>platform1</FirstPlatform>
-      <SecondPlatform>platform2</SecondPlatform>
+      <FirstPlatform>platform1-0</FirstPlatform>
+      <SecondPlatform>platform1-1</SecondPlatform>
       <FirstAnchors>
         <LengthParam>NumLinks</LengthParam>
         <Vertex>-0.25 0.1</Vertex>

@@ -11,7 +11,7 @@
     </Component>
     <Component Type="CT_WEAPON_PARAMS">
       <ArcAngle>1.5707963267948966192313216916398</ArcAngle>
-      <ReloadTime>1.0</ReloadTime>
+      <ReloadTime>0.5</ReloadTime>
       <FiringSpeed>5.0</FiringSpeed>
       <FireEffect>gunfire0.psi</FireEffect>
       <FireEffectScale>0.05</FireEffectScale>

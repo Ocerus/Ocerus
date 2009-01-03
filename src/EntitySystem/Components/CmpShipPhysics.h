@@ -19,8 +19,8 @@ namespace EntitySystem
 
 		/// @name Position in absolute coords.
 		//@{
-		Vector2& GetPosition(void) const;
-		void SetPosition(Vector2& pos);
+		Vector2& GetAbsolutePosition(void) const;
+		void SetAbsolutePosition(Vector2& pos);
 		//@}
 		/// @name Angle in absolute coords.
 		//@{

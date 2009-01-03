@@ -12,6 +12,7 @@ void EntitySystem::CmpEngineParams::Init( void )
 	mThrustEffectScale = 1.0f;
 	mThrustEffectDisplacement = 0.0f;
 	mThrustEffectPowerScale = 10.0f;
+	mThrustEffect = "";
 
 	mMaxPower = 0;
 }
@@ -67,7 +68,7 @@ void EntitySystem::CmpEngineParams::RegisterReflection( void )
 
 void EntitySystem::CmpEngineParams::ComputeParams( void )
 {
-	EntityHandle material = ((PropertyHolder)GetOwner().GetProperty("Material")).GetValue<EntityHandle>();
+	EntityHandle material = ((PropertyHolder)GetProperty("Material")).GetValue<EntityHandle>();
 	float32 density = ((PropertyHolder)material.GetProperty("Density")).GetValue<float32>();
 	mMaxPower = MathUtils::Round(POWER_RATIO * density);
 }

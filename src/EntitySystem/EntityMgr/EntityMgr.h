@@ -1,7 +1,7 @@
 #ifndef _ENTITYMGR_H_
 #define _ENTITYMGR_H_
 
-#include <map>
+#include <hash_map>
 #include <vector>
 #include "EntityHandle.h"
 #include "EntityMessage.h"
@@ -46,6 +46,15 @@ namespace EntitySystem
 		void BroadcastMessage(const EntityMessage& msg);
 		/// @name Returns the type of a specified entity.
 		eEntityType GetEntityType(const EntityHandle h) const;
+		/// @name Returns team this entity belongs to.
+		TeamID GetEntityTeam(const EntityHandle h) const;
+		/// @name Returns true if the entity exists.
+		bool EntityExists(const EntityHandle h) const;
+		/// @name Changes team this entity belongs to.
+		//@{
+		void SetEntityTeam(const EntityHandle h, const EntityHandle teamOwner);
+		void SetEntityTeam(const EntityHandle h, const TeamID team);
+		//@}
 		/// @name Returns true if the entity was fully initialized.
 		bool IsEntityInited(const EntityHandle h) const;
 		/// @name Retrieves properties of an entity. A filter related to properties' flags can be specified.
@@ -64,15 +73,16 @@ namespace EntitySystem
 		/// @name This struct holds info about an instance of an entity in the system.
 		struct EntityInfo
 		{
-			EntityInfo(void): mType(ET_UNKNOWN), mFullyInited(false) {}
-			EntityInfo(const eEntityType _type, const string& _ID = ""): mFullyInited(false), mType(_type), mID(_ID) {}
-			EntityInfo(const bool _fullyInited, const eEntityType _type, const string& _ID = ""): mFullyInited(_fullyInited), mType(_type), mID(_ID) {}
+			EntityInfo(void): mType(ET_UNKNOWN), mTeam(0), mFullyInited(false) {}
+			EntityInfo(const eEntityType _type, const string& _ID = ""): mTeam(0), mFullyInited(false), mType(_type), mID(_ID) {}
+			EntityInfo(const bool _fullyInited, const TeamID _team, const eEntityType _type, const string& _ID = ""): mFullyInited(_fullyInited), mTeam(_team), mType(_type), mID(_ID) {}
 
 			eEntityType mType;
+			TeamID mTeam; // currently corresponds to an entity ID of the owning ship. Zero if no such exists.
 			bool mFullyInited;
 			string mID;
 		};
-		typedef std::map<EntityID, EntityInfo*> EntityMap;
+		typedef stdext::hash_map<EntityID, EntityInfo*> EntityMap;
 		typedef std::vector<EntityID> EntityQueue;
 
 		ComponentMgr* mComponentMgr;

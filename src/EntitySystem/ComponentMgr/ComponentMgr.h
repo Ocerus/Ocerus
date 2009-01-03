@@ -1,7 +1,7 @@
 #ifndef _COMPONENTMGR_H_
 #define _COMPONENTMGR_H_
 
-#include <map>
+#include <hash_map>
 #include "../EntityMgr/EntityHandle.h"
 #include "../../Utility/Singleton.h"
 #include "../../Utility/Properties/PropertyHolderMediator.h"
@@ -51,7 +51,7 @@ namespace EntitySystem
 		//@}
 
 	private:
-		typedef std::map<EntityID, ComponentsList*> EntityComponentsMap;
+		typedef stdext::hash_map<EntityID, ComponentsList*> EntityComponentsMap;
 
 		/// @name Static component data.
 		ComponentCreationMethod mComponentCreationMethod[NUM_COMPONENT_TYPES];

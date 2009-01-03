@@ -15,14 +15,14 @@ using namespace InputSystem;
 #define PHYSICS_ITERATIONS 10
 #define ENGINE_VISIBLE_MAX_POWER 80
 #define WEAPON_VISIBLE_ARC_RADIUS 80
-#define CAMERA_SPEED_RATIO 10.0f
+#define CAMERA_SPEED_RATIO 700.0f
 #define CAMERA_SCALE_RATIO 0.001f
 #define WATER_TEXTURE_SCALE 0.01f
 #define WEAPON_ANGLECHANGE_SPEED 2.0f
 #define ENGINE_ANGLECHANGE_SPEED 2.0f
 #define ENGINE_POWERCHANGE_SPEED 1.0f
 
-Core::Game::Game(): StateMachine<eGameState>(GS_NORMAL), mPhysics(0) {}
+Core::Game::Game(): StateMachine<eGameState>(GS_NORMAL), mPhysics(0), mMyTeam(-1) {}
 
 Core::Game::~Game()
 {
@@ -39,11 +39,14 @@ void Core::Game::Init()
 	// init physics engine
 	b2AABB worldAABB;
 	//TODO chtelo by to nekonecny rozmery, nebo vymyslet nejak jinak
-	worldAABB.lowerBound.Set(-100.0f, -100.0f);
-	worldAABB.upperBound.Set(100.0f, 100.0f);
+	worldAABB.lowerBound.Set(-10000.0f, -10000.0f);
+	worldAABB.upperBound.Set(10000.0f, 10000.0f);
 	// turn off sleeping as we are moving in a space with no gravity
 	mPhysics = DYN_NEW b2World(worldAABB, b2Vec2(0.0f, 0.0f), false);
+	mPhysics->SetContactFilter(this);
+	mPhysics->SetContactListener(this);
 	mPhysicsResidualDelta = 0.0f;
+	mPhysicsEvents.clear();
 
 
 
@@ -56,6 +59,7 @@ void Core::Game::Init()
 	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("ShipParts/weapons.xml"));
 
 	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("Ships/ship0.xml"));
+	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("Ships/ship1.xml"));
 
 	// recompute mass of the ship's body
 	gEntityMgr.BroadcastMessage(EntityMessage::TYPE_PHYSICS_UPDATE_MASS);
@@ -69,9 +73,8 @@ void Core::Game::Init()
 	{
 		ship.PostMessage(EntityMessage::TYPE_GET_POSITION, &shipPos);
 		gGfxRenderer.SetCameraPos(shipPos);
+		mMyTeam = ship.GetTeam();
 	}
-	//gGfxRenderer.SetCameraX(50.0f* gGfxRenderer.GetScreenWidthHalf());
-	//gGfxRenderer.SetCameraY(50.0f* gGfxRenderer.GetScreenHeightHalf());
 	gGfxRenderer.SetCameraScale(50.0f);
 	mCameraFocus.Invalidate();
 
@@ -172,6 +175,26 @@ void Core::Game::Update( const float32 delta )
 		gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::TYPE_UPDATE_PHYSICS_SERVER, &stepSize));
 		gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::TYPE_UPDATE_PHYSICS_CLIENT, &stepSize));
 		mPhysics->Step(stepSize, PHYSICS_ITERATIONS);
+
+		// process physics events
+		for (PhysicsEventList::const_iterator i=mPhysicsEvents.begin(); i!=mPhysicsEvents.end(); ++i)
+			ProcessPhysicsEvent(**i);
+		mPhysicsEvents.clear();
+
+		// destroy marked entities
+		gEntityMgr.ProcessDestroyQueue();
+
+		// if some of the selected entities were destroyed, remove it
+		if (!mHoveredEntity.Exists())
+			mHoveredEntity.Invalidate();
+		for (EntityList::const_iterator it=mSelectedEntities.begin(); it!=mSelectedEntities.end(); ++it)
+			if (!it->Exists())
+				it = mSelectedEntities.erase(it);
+		for (int32 i=0; i<MAX_SELECTED_GROUPS; ++i)
+			for (EntityList::const_iterator it=mSelectedGroups[i].begin(); it!=mSelectedGroups[i].end(); ++it)
+				if (!it->Exists())
+					it = mSelectedGroups[i].erase(it);
+
 		physicsDelta -= stepSize;
 	}
 	mPhysicsResidualDelta = physicsDelta;
@@ -185,22 +208,22 @@ void Core::Game::Draw( const float32 delta)
 	// move camera in reaction to the user input
 	if (gInputMgr.IsKeyDown(KC_LEFT))
 	{
-		gGfxRenderer.MoveCamera(-CAMERA_SPEED_RATIO * delta, 0.0f);
+		gGfxRenderer.MoveCamera(-CAMERA_SPEED_RATIO / gGfxRenderer.GetCameraScale() * delta, 0.0f);
 		mCameraFocus.Invalidate();
 	}
 	if (gInputMgr.IsKeyDown(KC_RIGHT))
 	{
-		gGfxRenderer.MoveCamera(CAMERA_SPEED_RATIO * delta, 0.0f);
+		gGfxRenderer.MoveCamera(CAMERA_SPEED_RATIO / gGfxRenderer.GetCameraScale() * delta, 0.0f);
 		mCameraFocus.Invalidate();
 	}
 	if (gInputMgr.IsKeyDown(KC_UP))
 	{
-		gGfxRenderer.MoveCamera(0.0f, -CAMERA_SPEED_RATIO * delta);
+		gGfxRenderer.MoveCamera(0.0f, -CAMERA_SPEED_RATIO / gGfxRenderer.GetCameraScale() * delta);
 		mCameraFocus.Invalidate();
 	}
 	if (gInputMgr.IsKeyDown(KC_DOWN))
 	{
-		gGfxRenderer.MoveCamera(0.0f, CAMERA_SPEED_RATIO * delta);
+		gGfxRenderer.MoveCamera(0.0f, CAMERA_SPEED_RATIO / gGfxRenderer.GetCameraScale() * delta);
 		mCameraFocus.Invalidate();
 	}
 
@@ -337,6 +360,15 @@ void Core::Game::KeyPressed( const KeyInfo& ke )
 		gGfxRenderer.ChangeResolution(800,600);
 	}*/
 
+	if (ke.keyAction >= KC_1 && ke.keyAction <= KC_0)
+	{
+		int32 groupIndex = ke.keyAction - KC_1;
+		if (gInputMgr.IsKeyDown(KC_LCONTROL) || gInputMgr.IsKeyDown(KC_RCONTROL))
+			mSelectedGroups[groupIndex] = mSelectedEntities;
+		else if (mSelectedGroups[groupIndex].size() > 0)
+			mSelectedEntities = mSelectedGroups[groupIndex];
+	}
+
 	for (EntityList::iterator i=mSelectedEntities.begin(); i!=mSelectedEntities.end(); ++i)
 	{
 		eEntityType type = i->GetType();
@@ -359,6 +391,13 @@ void Core::Game::KeyReleased( const KeyInfo& ke )
 
 void Core::Game::MouseMoved( const MouseInfo& mi )
 {
+	if (gInputMgr.IsMouseButtonPressed(MBTN_MIDDLE))
+	{
+		mCameraFocus.Invalidate();
+		Vector2 cursor = gGfxRenderer.ScreenToWorld(GfxSystem::Point(mi.x, mi.y));
+		gGfxRenderer.SetCameraPos(gGfxRenderer.GetCameraPos() - cursor + mCameraGrabWorldPos);
+	}
+
 	// zoom camera
 	if (mi.wheelDelta)
 		gGfxRenderer.ZoomCamera(CAMERA_SCALE_RATIO * gGfxRenderer.GetCameraScale() * mi.wheelDelta);
@@ -368,33 +407,43 @@ void Core::Game::MouseButtonPressed( const MouseInfo& mi, const eMouseButton btn
 {
 	if (btn == MBTN_LEFT)
 	{
-		// use the hover entity as a focus
-		if (gInputMgr.IsKeyDown(KC_RCONTROL) || gInputMgr.IsKeyDown(KC_LCONTROL))
+		if (mHoveredEntity.IsValid())
 		{
-			if (mHoveredEntity.IsValid())
+			// use the hover entity as a focus
+			if (gInputMgr.IsKeyDown(KC_RCONTROL) || gInputMgr.IsKeyDown(KC_LCONTROL))
+			{
 				mCameraFocus = mHoveredEntity;
+			}
+			// select controllable entities
+			else if (mHoveredEntity.GetTeam() == mMyTeam)
+			{
+				// add to the current selection if SHIFT down
+				if (mSelectedEntities.size()>0 && (gInputMgr.IsKeyDown(KC_RSHIFT) || gInputMgr.IsKeyDown(KC_LSHIFT)))
+				{
+					if (mHoveredEntity.IsValid() && mHoveredEntity.GetType() == mSelectedEntities[0].GetType())
+						mSelectedEntities.push_back(mHoveredEntity);
+				}
+				// clear the selection and add the hovered one if any
+				else
+				{
+					mSelectedEntities.clear();
+					if (mHoveredEntity.IsValid())
+						mSelectedEntities.push_back(mHoveredEntity);
+				}
+			}
 		}
-		// add to the current selection if SHIFT down
-		else if (mSelectedEntities.size()>0 && (gInputMgr.IsKeyDown(KC_RSHIFT) || gInputMgr.IsKeyDown(KC_LSHIFT)))
-		{
-			if (mHoveredEntity.IsValid() && mHoveredEntity.GetType() == mSelectedEntities[0].GetType())
-				mSelectedEntities.push_back(mHoveredEntity);
-		}
-		// clear the selection and add the hovered one if any
 		else
 		{
 			mSelectedEntities.clear();
-			if (mHoveredEntity.IsValid())
-				mSelectedEntities.push_back(mHoveredEntity);
 		}
 	}
 	else if (btn == MBTN_RIGHT)
 	{
-		// set the engine power and angle if selected
 		Vector2 cursor = gGfxRenderer.ScreenToWorld(GfxSystem::Point(mi.x, mi.y));
 		for (EntityList::iterator i=mSelectedEntities.begin(); i!=mSelectedEntities.end(); ++i)
 		{
 			eEntityType type = i->GetType();
+			// set the engine power and angle if selected
 			if (type == ET_ENGINE)
 			{
 				Vector2 pos;
@@ -426,12 +475,13 @@ void Core::Game::MouseButtonPressed( const MouseInfo& mi, const eMouseButton btn
 			}
 			else if (type == ET_WEAPON)
 			{
-				if ((gInputMgr.IsKeyDown(KC_LMENU) || gInputMgr.IsKeyDown(KC_RMENU)) && mHoveredEntity.IsValid())
+				if (!gInputMgr.IsKeyDown(KC_LMENU) && !gInputMgr.IsKeyDown(KC_RMENU) && mHoveredEntity.IsValid())
 				{
 					PropertyHolder prop;
 					prop = i->GetProperty("Target");
 					prop.SetValue(mHoveredEntity);
-					i->PostMessage(EntityMessage::TYPE_START_SHOOTING);
+					if (prop.GetValue<EntityHandle>().IsValid())
+						i->PostMessage(EntityMessage::TYPE_START_SHOOTING);
 				}
 				else
 				{
@@ -439,7 +489,7 @@ void Core::Game::MouseButtonPressed( const MouseInfo& mi, const eMouseButton btn
 					prop = i->GetProperty("Target");
 					EntityHandle curTarget = prop.GetValue<EntityHandle>();
 					if (curTarget.IsValid())
-						{
+					{
 						prop.SetValue(EntityHandle::Null);
 						i->PostMessage(EntityMessage::TYPE_STOP_SHOOTING);
 					}
@@ -465,6 +515,10 @@ void Core::Game::MouseButtonPressed( const MouseInfo& mi, const eMouseButton btn
 			}
 		}
 	}
+	else if (btn == MBTN_MIDDLE)
+	{
+		mCameraGrabWorldPos = gGfxRenderer.ScreenToWorld(GfxSystem::Point(mi.x, mi.y));
+	}
 }
 
 void Core::Game::MouseButtonReleased( const MouseInfo& mi, const eMouseButton btn )
@@ -480,4 +534,45 @@ int32 Core::Game::GetEnginePowerCircleRadius( void ) const
 int32 Core::Game::GetWeaponCircleRadius( void ) const
 {
 	return WEAPON_VISIBLE_ARC_RADIUS;
+}
+
+bool Core::Game::ShouldCollide( b2Shape* shape1, b2Shape* shape2 )
+{
+	if (!b2ContactFilter::ShouldCollide(shape1, shape2))
+		return false;
+
+	EntityHandle firstEntity = *(EntityHandle*)shape1->GetUserData();
+	EntityHandle secondEntity = *(EntityHandle*)shape2->GetUserData();
+
+	return gEntityMgr.GetEntityTeam(firstEntity) != gEntityMgr.GetEntityTeam(secondEntity);
+}
+
+void Core::Game::Add( const b2ContactPoint* point )
+{
+	//TODO tady to chce pooling, zbytecna casta alokace malych objektu
+	PhysicsEvent* evt = DYN_NEW PhysicsEvent();
+	if (point->shape1->GetUserData())
+		evt->entity1 = *(EntityHandle*)point->shape1->GetUserData();
+	else
+		evt->entity1.Invalidate();
+	if (point->shape2->GetUserData())
+		evt->entity2 = *(EntityHandle*)point->shape2->GetUserData();
+	else
+		evt->entity2.Invalidate();
+	mPhysicsEvents.push_back(evt);
+}
+
+void Core::Game::ProcessPhysicsEvent( const PhysicsEvent& evt )
+{
+	if (!evt.entity1.IsValid() || !evt.entity2.IsValid())
+		return;
+	EntityHandle ent1 = evt.entity1;
+	EntityHandle ent2 = evt.entity2;
+	eEntityType type1 = gEntityMgr.GetEntityType(ent1);
+	eEntityType type2 = gEntityMgr.GetEntityType(ent2);
+	if (type1 == ET_PROJECTILE)
+		gEntityMgr.PostMessage(ent1, EntityMessage(EntityMessage::TYPE_STRIKE, &ent2));
+	else if (type2 == ET_PROJECTILE)
+		gEntityMgr.PostMessage(ent2, EntityMessage(EntityMessage::TYPE_STRIKE, &ent1));
+
 }

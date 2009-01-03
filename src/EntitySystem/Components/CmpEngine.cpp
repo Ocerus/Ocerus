@@ -21,7 +21,11 @@ void EntitySystem::CmpEngine::Init( void )
 
 void EntitySystem::CmpEngine::Clean( void )
 {
-
+	if (!mThrustPS.IsNull())
+	{
+		gPSMgr.UnregisterPS(mThrustPS);
+		mThrustPS.SetNull();
+	}
 }
 
 EntityMessage::eResult EntitySystem::CmpEngine::HandleMessage( const EntityMessage& msg )

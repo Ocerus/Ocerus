@@ -6,6 +6,8 @@
 using namespace EntitySystem;
 
 #define RADIUS_RATIO 0.001f
+#define DAMAGE_RATIO 100.0f
+#define KNOCKBACK_RATIO 5.0f
 
 void EntitySystem::CmpProjectile::Init( void )
 {
@@ -44,27 +46,15 @@ EntityMessage::eResult EntitySystem::CmpProjectile::HandleMessage( const EntityM
 		{
 			float32 distSq = MathUtils::DistanceSquared(mBody->GetPosition(), mInitBodyPosition); 
 			if (distSq > MathUtils::Sqr(mMaxDistance))
-			{
-				gEntityMgr.DestroyEntity(GetOwner());
-
-				// create the PS explode effect
-				PropertyHolder prop = mBlueprints.GetProperty("ExplodeEffect");
-				StringKey effect = prop.GetValue<StringKey>();
-				prop = mBlueprints.GetProperty("ResourceGroup");
-				StringKey resGroup = prop.GetValue<StringKey>();
-				GfxSystem::ParticleSystemPtr ps = gPSMgr.SpawnPS(resGroup, effect);
-				if (!ps.IsNull())
-				{
-					prop = mBlueprints.GetProperty("ExplodeEffectScale");
-					ps->SetScale(prop.GetValue<float32>());
-					ps->MoveTo(mBody->GetPosition());
-					ps->Fire();
-				}
-			}
+				Die(true);
 		}
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_DRAW_PROJECTILE:
 		Draw();
+		return EntityMessage::RESULT_OK;
+	case EntityMessage::TYPE_STRIKE:
+		assert(msg.data);
+		Strike(*(EntityHandle*)msg.data);
 		return EntityMessage::RESULT_OK;
 	}
 	return EntityMessage::RESULT_IGNORED;
@@ -122,6 +112,9 @@ void EntitySystem::CmpProjectile::PostInit( )
 	shapeDef.density = density;
 	prop = mBlueprints.GetProperty("Size");
 	shapeDef.radius = RADIUS_RATIO * prop.GetValue<uint32>();
+	shapeDef.isSensor = true;
+	shapeDef.filter.categoryBits = (1 << 15) | (1 << 14); // 15 means AA projectiles, 14 means normal projectile
+	shapeDef.filter.maskBits = 16383; // colide with everything except projectiles
 	shapeDef.userData = GetOwnerPtr();
 	mBody->CreateShape(&shapeDef);
 
@@ -139,4 +132,53 @@ void EntitySystem::CmpProjectile::PostInit( )
 	mTrailPS = gPSMgr.SpawnPS(resGroup, effect);
 	if (!mTrailPS.IsNull())
 		mTrailPS->MoveTo(mBody->GetPosition());
+}
+
+void EntitySystem::CmpProjectile::Strike( EntityHandle target )
+{
+	assert(target.IsValid());
+	PropertyHolder prop;
+	if (target.GetType() == ET_PLATFORM)
+	{
+		prop = target.GetProperty("AbsolutePosition");
+		Vector2 targetPos = prop.GetValue<Vector2>();
+		b2Body* targetBody;
+		target.PostMessage(EntityMessage::TYPE_GET_PHYSICS_BODY, &targetBody);
+		Vector2 forceDir = mBody->GetLinearVelocity();
+		forceDir.Normalize();
+		prop = mBlueprints.GetProperty("KnockbackRatio");
+		targetBody->ApplyForce(KNOCKBACK_RATIO * prop.GetValue<float32>() * forceDir, mBody->GetPosition());
+	}
+	prop = mBlueprints.GetProperty("PowerRatio");
+	float32 damage = DAMAGE_RATIO * prop.GetValue<float32>();
+	target.PostMessage(EntityMessage::TYPE_DAMAGE, &damage);
+
+	Die(false);
+}
+
+void EntitySystem::CmpProjectile::Die( const bool splash )
+{
+	// create the PS explode/splash effect
+	PropertyHolder prop;
+	if (splash)
+		prop = mBlueprints.GetProperty("SplashEffect");
+	else
+		prop = mBlueprints.GetProperty("ExplodeEffect");
+	StringKey effect = prop.GetValue<StringKey>();
+	prop = mBlueprints.GetProperty("ResourceGroup");
+	StringKey resGroup = prop.GetValue<StringKey>();
+	GfxSystem::ParticleSystemPtr ps = gPSMgr.SpawnPS(resGroup, effect);
+	if (!ps.IsNull())
+	{
+		if (splash)
+			prop = mBlueprints.GetProperty("SplashEffectScale");
+		else
+			prop = mBlueprints.GetProperty("ExplodeEffectScale");
+		ps->SetScale(prop.GetValue<float32>());
+		ps->MoveTo(mBody->GetPosition());
+		ps->Fire();
+	}
+
+	// delete the entity
+	gEntityMgr.DestroyEntity(GetOwner());
 }

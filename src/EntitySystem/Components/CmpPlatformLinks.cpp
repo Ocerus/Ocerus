@@ -34,6 +34,20 @@ EntityMessage::eResult EntitySystem::CmpPlatformLinks::HandleMessage( const Enti
 			ship.PostMessage(EntityMessage::TYPE_LINK_PLATFORMS, GetOwnerPtr());
 		}
 		return EntityMessage::RESULT_OK;
+	case EntityMessage::TYPE_DIE:
+		gEntityMgr.DestroyEntity(GetOwner());
+		return EntityMessage::RESULT_OK;
+	case EntityMessage::TYPE_UNLINK_PLATFORM:
+		assert(msg.data);
+		{
+			EntityHandle platform = *(EntityHandle*)msg.data;
+			if (platform == mFirstPlatform || platform == mSecondPlatform)
+			{
+				gEntityMgr.DestroyEntity(GetOwner());
+				return EntityMessage::RESULT_OK;
+			}
+		}
+		return EntityMessage::RESULT_ERROR;
 	case EntityMessage::TYPE_DRAW_PLATFORM_LINK:
 		Draw();
 		return EntityMessage::RESULT_OK;

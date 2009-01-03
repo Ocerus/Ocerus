@@ -24,6 +24,10 @@ EntityMessage::eResult EntitySystem::CmpPlatformItem::HandleMessage( const Entit
 	case EntityMessage::TYPE_POST_INIT:
 		mBlueprints.PostMessage(EntityMessage::TYPE_GET_MAX_HITPOINTS, &mHitpoints);
 		mParentPlatform.PostMessage(EntityMessage::TYPE_ADD_PLATFORM_ITEM, GetOwnerPtr());
+		GetOwner().SetTeam(mParentPlatform.GetTeam());
+		return EntityMessage::RESULT_OK;
+	case EntityMessage::TYPE_DIE:
+		gEntityMgr.DestroyEntity(GetOwner());
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_PARENT:
 		assert(msg.data);
@@ -64,3 +68,4 @@ Vector2 EntitySystem::CmpPlatformItem::GetAbsolutePosition( void ) const
 	platform.PostMessage(EntityMessage::TYPE_GET_ANGLE, &platformAngle);
 	return platformPos + MathUtils::Multiply(Matrix22(platformAngle), mRelativePosition);
 }
+

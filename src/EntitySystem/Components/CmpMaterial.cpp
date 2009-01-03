@@ -6,8 +6,8 @@ using namespace EntitySystem;
 
 void EntitySystem::CmpMaterial::Init( void )
 {
-	mDurabilityRatio = 0.0f;
-	mDensity = 0.0f;
+	mDurabilityRatio = 1.0f;
+	mDensity = 1.0f;
 }
 
 void EntitySystem::CmpMaterial::Clean( void ) {}
@@ -31,5 +31,5 @@ EntityMessage::eResult EntitySystem::CmpMaterial::HandleMessage( const EntityMes
 void EntitySystem::CmpMaterial::RegisterReflection()
 {
 	RegisterProperty<float32>("Density", &GetDensity, &SetDensity, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
-	RegisterProperty<float32>("DurabilityRatio", &GetDensity, &SetDensity, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<float32>("DurabilityRatio", &GetDurabilityRatio, &SetDurabilityRatio, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 }

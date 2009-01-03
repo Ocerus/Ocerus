@@ -42,6 +42,7 @@ namespace EntitySystem
 		Vector2 mPickCircleCenter;
 		float32 mPickCircleRadius;
 
+		void Die(void);
 		void DrawSelectionOverlay(const bool hover) const;
 
 	};

@@ -3,7 +3,7 @@
 
 using namespace EntitySystem;
 
-#define HITPOINTS_RATIO 1.0f
+#define HITPOINTS_RATIO 1000.0f
 #define SLOTS_RATIO 1.0f
 #define LINKSLOTS_RATIO 1.0f
 
@@ -12,6 +12,9 @@ void EntitySystem::CmpPlatformParams::Init( void )
 	mMaterial.Invalidate();
 	mShapeLength = 0;
 	mShape = 0;
+	mResourceGroup = "";
+	mExplodeEffect = "";
+	mExplodeEffectScale = 1;
 
 	mArea = 0.0f;
 	mBaseDetachingChance = 0.0f;
@@ -102,5 +105,7 @@ void EntitySystem::CmpPlatformParams::RegisterReflection()
 	RegisterProperty<float32>("BaseDetachingChance", &GetBaseDetachingChance, &SetBaseDetachingChance, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<uint32>("ShapeLength", &GetShapeLength, &SetShapeLength, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<Vector2*>("Shape", &GetShape, &SetShape, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
-
+	RegisterProperty<float32>("ExplodeEffectScale", &GetExplodeEffectScale, &SetExplodeEffectScale, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<StringKey>("ExplodeEffect", &GetExplodeEffect, &SetExplodeEffect, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<StringKey>("ResourceGroup", &GetResourceGroup, &SetResourceGroup, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 }

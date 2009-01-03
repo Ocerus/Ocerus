@@ -36,12 +36,21 @@ namespace EntitySystem
 		float32 GetAngle(void) const;
 		void SetAngle(const float32 angle);
 		//@}
+		/// @name Linear velocity of the platform.
+		//@{
+		Vector2 GetLinearVelocity(void) const;
+		void SetLinearVelocity(const Vector2 linVel);
 		/// @name  Initialization parameters.
 		//@{
 		void SetInitBodyPosition(Vector2 pos) { mInitBodyPosition = pos; }
 		void SetInitBodyAngle(const float32 angle) { mInitBodyAngle = angle; }
 		void SetInitShapeAngle(const float32 angle) { mInitShapeAngle = angle; }
 		void SetInitShapeFlip(const bool flip) { mInitShapeFlip = flip; }
+		//@}
+		/// @name Shape of the platform.
+		//@{
+		Vector2* GetShape(void) const;
+		uint32 GetShapeLength(void) const;
 		//@}
 
 	private:

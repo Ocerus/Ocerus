@@ -61,6 +61,18 @@ namespace EntitySystem
 		Vector2* GetShape(void) const { return mShape; }
 		void SetShape(Vector2* shape);
 		//@}
+		/// @name Effect used when the platform is destroyed.
+		//@{
+		StringKey GetExplodeEffect(void) const { return mExplodeEffect; }
+		void SetExplodeEffect(const StringKey effect) { mExplodeEffect = effect; }
+		float32 GetExplodeEffectScale(void) const { return mExplodeEffectScale; }
+		void SetExplodeEffectScale(const float32 scale) { mExplodeEffectScale = scale; }
+		//@}
+		/// @name Group containing all resources needed for this entity.
+		//@{
+		StringKey GetResourceGroup(void) const { return mResourceGroup; }
+		void SetResourceGroup(const StringKey group) { mResourceGroup = group; }
+		//@}
 
 	private:
 		EntityHandle mMaterial;
@@ -72,6 +84,9 @@ namespace EntitySystem
 		float32 mBaseDetachingChance;
 		uint32 mShapeLength;
 		Vector2* mShape;
+		float32 mExplodeEffectScale;
+		StringKey mExplodeEffect;
+		StringKey mResourceGroup;
 			
 		void ComputeParams(void);
 	};

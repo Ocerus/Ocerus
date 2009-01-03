@@ -114,8 +114,11 @@ void EntitySystem::EntityMgr::ProcessDestroyQueue( void )
 	for (EntityQueue::const_iterator it=mEntityDestroyQueue.begin(); it!=mEntityDestroyQueue.end(); ++it)
 	{
 		EntityMap::const_iterator mapIt = mEntities.find(*it);
-		DestroyEntity(mapIt);
-		mEntities.erase(mapIt);
+		if (mapIt != mEntities.end()) // it can happen that we added one entity multiple times to the queue
+		{
+			DestroyEntity(mapIt);
+			mEntities.erase(mapIt);
+		}
 	}
 	mEntityDestroyQueue.clear();
 }
@@ -181,6 +184,11 @@ EntitySystem::EntityHandle EntitySystem::EntityMgr::FindFirstEntity( const strin
 bool EntitySystem::EntityMgr::LoadFromResource( ResourceSystem::ResourcePtr res )
 {
 	ResourceSystem::XMLResourcePtr xml = res;
+	if (xml.IsNull())
+	{
+		gLogMgr.LogMessage("XML:Can't load file", LOG_ERROR);
+		return false;
+	}
 
 	for (ResourceSystem::XMLResource::NodeIterator entIt=xml->IterateTopLevel(); entIt!=xml->EndTopLevel(); ++entIt)
 	{
@@ -313,3 +321,36 @@ bool EntitySystem::EntityMgr::LoadFromResource( ResourceSystem::ResourcePtr res 
 	return false;
 }
 
+EntitySystem::TeamID EntitySystem::EntityMgr::GetEntityTeam( const EntityHandle h ) const
+{
+	EntityMap::const_iterator it = mEntities.find(h.GetID());
+	if (it == mEntities.end())
+	{
+		gLogMgr.LogMessage("Can't find entity", h.GetID(), LOG_ERROR);
+		return 0;
+	}
+	return it->second->mTeam;
+}
+
+void EntitySystem::EntityMgr::SetEntityTeam( const EntityHandle h, const EntityHandle teamOwner )
+{
+	SetEntityTeam(h, teamOwner.GetID());
+}
+
+void EntitySystem::EntityMgr::SetEntityTeam( const EntityHandle h, const TeamID team )
+{
+	EntityMap::const_iterator it = mEntities.find(h.GetID());
+	if (it == mEntities.end())
+	{
+		gLogMgr.LogMessage("Can't find entity", h.GetID(), LOG_ERROR);
+		return;
+	}
+	it->second->mTeam = team;
+}
+
+bool EntitySystem::EntityMgr::EntityExists( const EntityHandle h ) const
+{
+	if (!h.IsValid())
+		return false;
+	return mEntities.find(h.GetID()) != mEntities.end();
+}

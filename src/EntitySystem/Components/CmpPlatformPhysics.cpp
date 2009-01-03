@@ -83,7 +83,12 @@ void EntitySystem::CmpPlatformPhysics::PostInit( void )
 
 void EntitySystem::CmpPlatformPhysics::Clean( void )
 {
-
+	PropertyHolder prop = GetProperty("ParentShip");
+	if (mBody && !prop.GetValue<EntityHandle>().IsValid())
+	{
+		gApp.GetCurrentGame()->GetPhysics()->DestroyBody(mBody);
+		mBody = 0;
+	}
 }
 
 EntityMessage::eResult EntitySystem::CmpPlatformPhysics::HandleMessage( const EntityMessage& msg )
@@ -123,10 +128,18 @@ EntityMessage::eResult EntitySystem::CmpPlatformPhysics::HandleMessage( const En
 		assert(mBody);
 		*(b2Body**)msg.data = mBody;
 		return EntityMessage::RESULT_OK;
-	case EntityMessage::TYPE_PLATFORM_DETACH:
+	case EntityMessage::TYPE_DETACH_PLATFORM:
 		assert(mBody);
-		//TODO
-		return EntityMessage::RESULT_ERROR;
+		assert(msg.data);
+		{
+			bool recreate = *(bool*)msg.data;
+			//TODO dodelat recreate
+			mBody->DestroyShape(mShape);
+			mShape = 0;
+			mBody->SetMassFromShapes();
+			mBody = 0; // prevent body to be deleted upon destruction of this entity
+		}
+		return EntityMessage::RESULT_OK;
 	}
 	return EntityMessage::RESULT_IGNORED;
 }
@@ -138,8 +151,11 @@ void EntitySystem::CmpPlatformPhysics::RegisterReflection()
 	RegisterProperty<float32>("InitBodyAngle", 0, &SetInitBodyAngle, PROPACC_INIT);
 	RegisterProperty<float32>("InitShapeAngle", 0, &SetInitShapeAngle, PROPACC_INIT);
 	RegisterProperty<bool>("InitShapeFlip", 0, &SetInitShapeFlip, PROPACC_INIT);
-	RegisterProperty<Vector2>("AbsolutePosition", &GetAbsolutePosition, &SetAbsolutePosition, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<Vector2>("AbsolutePosition", &GetAbsolutePosition, &SetAbsolutePosition,  PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<float32>("Angle", &GetAngle, &SetAngle, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<Vector2>("LinearVelocity", &GetLinearVelocity, &SetLinearVelocity, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<Vector2*>("Shape", &GetShape, 0, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<uint32>("ShapeLength", &GetShapeLength, 0, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 }
 
 Vector2 EntitySystem::CmpPlatformPhysics::GetAbsolutePosition( void ) const
@@ -167,4 +183,30 @@ void EntitySystem::CmpPlatformPhysics::SetAngle( const float32 angle )
 {
 	assert(mBody);
 	mBody->SetXForm(mBody->GetPosition(), angle);
+}
+
+Vector2 EntitySystem::CmpPlatformPhysics::GetLinearVelocity( void ) const
+{
+	assert(mBody);
+	return mBody->GetLinearVelocity();
+}
+
+void EntitySystem::CmpPlatformPhysics::SetLinearVelocity( const Vector2 linVel )
+{
+	assert(mBody);
+	mBody->SetLinearVelocity(linVel);
+}
+
+Vector2* EntitySystem::CmpPlatformPhysics::GetShape( void ) const
+{
+	assert(mShape);
+	b2PolygonShape* polyshape = (b2PolygonShape*)mShape;
+	return const_cast<Vector2*>(polyshape->GetVertices());
+}
+
+uint32 EntitySystem::CmpPlatformPhysics::GetShapeLength( void ) const
+{
+	assert(mShape);
+	b2PolygonShape* polyshape = (b2PolygonShape*)mShape;
+	return polyshape->GetVertexCount();
 }

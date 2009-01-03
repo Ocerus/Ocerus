@@ -14,6 +14,11 @@ void EntitySystem::CmpAmmoParams::Init( void )
 	mSpeedRatio = 1;
 	mTrailEffectScale = 1;
 	mExplodeEffectScale = 1;
+	mSplashEffectScale = 1;
+	mExplodeEffect = "";
+	mSplashEffect = "";
+	mTrailEffect = "";
+	mResourceGroup = "";
 }
 
 void EntitySystem::CmpAmmoParams::Clean( void )
@@ -38,6 +43,8 @@ void EntitySystem::CmpAmmoParams::RegisterReflection( void )
 	RegisterProperty<float32>("TrailEffectScale", &GetTrailEffectScale, &SetTrailEffectScale, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<StringKey>("TrailEffect", &GetTrailEffect, &SetTrailEffect, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<float32>("ExplodeEffectScale", &GetExplodeEffectScale, &SetExplodeEffectScale, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<float32>("SplashEffectScale", &GetSplashEffectScale, &SetSplashEffectScale, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<StringKey>("ExplodeEffect", &GetExplodeEffect, &SetExplodeEffect, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<StringKey>("SplashEffect", &GetSplashEffect, &SetSplashEffect, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<StringKey>("ResourceGroup", &GetResourceGroup, &SetResourceGroup, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 }

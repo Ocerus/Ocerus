@@ -9,8 +9,10 @@
       <ResourceGroup>ShipParts</ResourceGroup>
       <TrailEffect>trail1.psi</TrailEffect>
       <TrailEffectScale>0.09</TrailEffectScale>
-      <ExplodeEffect>explosion.psi</ExplodeEffect>
-      <ExplodeEffectScale>0.005</ExplodeEffectScale>
+      <ExplodeEffect>explodeProjectile.psi</ExplodeEffect>
+      <ExplodeEffectScale>0.008</ExplodeEffectScale>
+      <SplashEffect>splashProjectile.psi</SplashEffect>
+      <SplashEffectScale>0.010</SplashEffectScale>
     </Component>
   </Entity>
   

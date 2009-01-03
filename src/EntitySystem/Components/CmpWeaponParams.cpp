@@ -7,6 +7,7 @@ using namespace EntitySystem;
 void EntitySystem::CmpWeaponParams::Init( void )
 {
 	mFiringDistance = 0;
+	mSpread = 0;
 	mReloadTime = 1;
 	mProjectileType = 0;
 	mProjectileSize = 0;
@@ -35,6 +36,7 @@ EntityMessage::eResult EntitySystem::CmpWeaponParams::HandleMessage( const Entit
 void EntitySystem::CmpWeaponParams::RegisterReflection( void )
 {
 	RegisterProperty<float32>("FiringDistance", &GetFiringDistance, &SetFiringDistance, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<float32>("Spread", &GetSpread, &SetSpread, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<uint32>("ProjectileType", &GetProjectileType, &SetProjectileType, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<uint32>("ProjectileSize", &GetProjectileSize, &SetProjectileSize, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<float32>("FiringSpeed", &GetFiringSpeed, &SetFiringSpeed, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
@@ -51,5 +53,6 @@ void EntitySystem::CmpWeaponParams::ComputeParams( void )
 {
 	//TODO asi by se tu melo neco pocitat :)
 	mFiringDistance = 20.0f;
+	mSpread = 0.08f;
 
 }

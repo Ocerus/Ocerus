@@ -53,6 +53,8 @@ namespace EntitySystem
 		b2Body* mBody;
 		//@}
 
+		void Die(const bool splash);
+		void Strike(EntityHandle target);
 		void PostInit(void);
 		void Draw(void) const;
 

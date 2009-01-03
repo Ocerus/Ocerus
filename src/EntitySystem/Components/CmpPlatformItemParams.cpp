@@ -10,6 +10,7 @@ void EntitySystem::CmpPlatformItemParams::Init( void )
 	mMaterial.Invalidate();
 	mTextureScale = 1.0f;
 	mTextureAngle = 0.0f;
+	mResourceGroup = "";
 
 	mMaxHitpoints = 0;
 }
