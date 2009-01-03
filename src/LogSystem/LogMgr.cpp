@@ -41,8 +41,8 @@ void LogSystem::LogMgr::LogMessage(const string& msg, eLogSeverity severity)
 		string& str = ss.str();
 
 		gApp.WriteToConsole(str);
-		if (GUISystem::GUIMgr::GetSingletonPtr())
-			gGUIMgr.AddConsoleMessage(str);
+		/*if (GUISystem::GUIMgr::GetSingletonPtr())
+			gGUIMgr.AddConsoleMessage(str);*/
 
 		mOutStream << str;
 		mOutStream.flush();

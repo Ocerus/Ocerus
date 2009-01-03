@@ -48,6 +48,14 @@ EntityMessage::eResult EntitySystem::CmpPlatformLinks::HandleMessage( const Enti
 			}
 		}
 		return EntityMessage::RESULT_ERROR;
+	case EntityMessage::TYPE_LINKS_PLATFORM:
+		assert(msg.data);
+		{
+			EntityHandle platform = *(EntityHandle*)msg.data;
+			if (platform == mFirstPlatform || platform == mSecondPlatform)
+				return EntityMessage::RESULT_OK;
+		}
+		return EntityMessage::RESULT_ERROR;
 	case EntityMessage::TYPE_DRAW_PLATFORM_LINK:
 		Draw();
 		return EntityMessage::RESULT_OK;

@@ -37,16 +37,49 @@ EntityMessage::eResult EntitySystem::CmpShipLogic::HandleMessage( const EntityMe
 		{
 			EntityHandle platform = *(EntityHandle*)msg.data;
 			EntityList::const_iterator platIt = find(mPlatforms.begin(), mPlatforms.end(), platform);
+
+			// remove the dead platform
 			if (platIt == mPlatforms.end())
 				return EntityMessage::RESULT_ERROR;
 			mPlatforms.erase(platIt);
-			for (EntityList::const_iterator it=mLinks.begin(); it!=mLinks.end(); ++it)
+
+			// remove links to the dead platform
+			for (EntityList::const_iterator it=mLinks.begin(); it!=mLinks.end(); )
+			{
 				if (gEntityMgr.PostMessage(*it, EntityMessage(EntityMessage::TYPE_UNLINK_PLATFORM, &platform)) == EntityMessage::RESULT_OK)
-				{
 					it = mLinks.erase(it);
-					if (it == mLinks.end())
-						break;
+				else
+					++it;
+			}
+
+			// detach platforms with no links
+			for (EntityList::iterator it=mPlatforms.begin(); it!=mPlatforms.end();)
+			{
+				//TODO pokud je *it ship bridge, tak ji preskocit
+				if (it == mPlatforms.begin())
+				{
+					++it;
+					continue;
 				}
+
+				EntityHandle p = *it;
+				bool hasLink = false;
+				for (EntityList::const_iterator linkIt=mLinks.begin(); linkIt!=mLinks.end() && !hasLink; ++linkIt)
+					if (gEntityMgr.PostMessage(*linkIt, EntityMessage(EntityMessage::TYPE_LINKS_PLATFORM, &p)) == EntityMessage::RESULT_OK)
+						hasLink = true;
+				if (!hasLink)
+				{
+					bool recreate = true;
+					it->PostMessage(EntityMessage::TYPE_DETACH_PLATFORM, &recreate);
+					it = mPlatforms.erase(it);
+				}
+				else
+				{
+					++it;
+				}
+			}
+
+			// no platforms left -> destroy the ship
 			if (mPlatforms.size() == 0)
 			{
 				assert(mLinks.size()==0 && "There is nothing to link as there are no platforms");

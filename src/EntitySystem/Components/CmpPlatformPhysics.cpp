@@ -24,12 +24,20 @@ void EntitySystem::CmpPlatformPhysics::Init( void )
 
 void EntitySystem::CmpPlatformPhysics::PostInit( void )
 {
-	EntityHandle ship;
-	PostMessage(EntityMessage::TYPE_GET_PARENT, &ship);
+	PropertyHolder prop = GetProperty("ParentShip");
+	EntityHandle ship = prop.GetValue<EntityHandle>();
+	CreateBody(ship.IsValid());
+}
+
+void EntitySystem::CmpPlatformPhysics::CreateBody( const bool hasParentShip )
+{
+	PropertyHolder prop;
 
 	// create body
-	if (ship.IsValid())
+	if (hasParentShip)
 	{
+		prop = GetProperty("ParentShip");
+		EntityHandle ship = prop.GetValue<EntityHandle>();
 		ship.PostMessage(EntityMessage::TYPE_GET_PHYSICS_BODY, &mBody);
 		ship.PostMessage(EntityMessage::TYPE_ADD_PLATFORM, GetOwnerPtr());
 	}
@@ -77,7 +85,7 @@ void EntitySystem::CmpPlatformPhysics::PostInit( void )
 	mShape = mBody->CreateShape(&shapeDef);
 
 	// compute mass
-	if (!ship.IsValid())
+	if (!hasParentShip)
 		mBody->SetMassFromShapes();
 }
 
@@ -132,12 +140,33 @@ EntityMessage::eResult EntitySystem::CmpPlatformPhysics::HandleMessage( const En
 		assert(mBody);
 		assert(msg.data);
 		{
+			// Note that I must invalidate the parent ship here to update the team properly.
+			// CreateBody invokes collision checking and at that time it must be already updated.
+			((PropertyHolder)GetProperty("ParentShip")).SetValue(EntityHandle::Null);
+			PostMessage(EntityMessage::TYPE_UPDATE_TEAM);
+
 			bool recreate = *(bool*)msg.data;
-			//TODO dodelat recreate
-			mBody->DestroyShape(mShape);
-			mShape = 0;
-			mBody->SetMassFromShapes();
-			mBody = 0; // prevent body to be deleted upon destruction of this entity
+			if (recreate)
+			{
+				mInitBodyPosition = GetAbsolutePosition();
+				mInitBodyAngle = GetAngle();
+				Vector2 linVel = mBody->GetLinearVelocity();
+				float32 angVel = mBody->GetAngularVelocity();
+				mRelativePosition = Vector2_Zero;
+				mInitShapeAngle = 0;
+				mBody->DestroyShape(mShape);
+				mShape = 0;
+				CreateBody(false);
+				mBody->SetLinearVelocity(linVel);
+				mBody->SetAngularVelocity(angVel);
+			}
+			else
+			{
+				mBody->DestroyShape(mShape);
+				mShape = 0;
+				mBody->SetMassFromShapes();
+				mBody = 0; // prevent body to be deleted upon destruction of this entity
+			}
 		}
 		return EntityMessage::RESULT_OK;
 	}
@@ -210,3 +239,4 @@ uint32 EntitySystem::CmpPlatformPhysics::GetShapeLength( void ) const
 	b2PolygonShape* polyshape = (b2PolygonShape*)mShape;
 	return polyshape->GetVertexCount();
 }
+

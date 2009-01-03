@@ -82,7 +82,7 @@ void CmpPlatformParams::ComputeParams()
 	//TODO tady by mel hrat roli jeste parametr v materialu, kerej tam chybi
 	mNumLinkSlots = MathUtils::Round(LINKSLOTS_RATIO * perimeter); 
 	//TODO tohle chce domyslet
-	mBaseDetachingChance = 1.0f;
+	mBaseDetachingChance = 0.5f;
 }
 
 void EntitySystem::CmpPlatformParams::SetShape(Vector2* shape)

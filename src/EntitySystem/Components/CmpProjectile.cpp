@@ -138,6 +138,7 @@ void EntitySystem::CmpProjectile::Strike( EntityHandle target )
 {
 	assert(target.IsValid());
 	PropertyHolder prop;
+	//TODO kdyz to nebude platforma, tak knockback udelat na parent (coz musi bejt platforma)
 	if (target.GetType() == ET_PLATFORM)
 	{
 		prop = target.GetProperty("AbsolutePosition");
@@ -147,7 +148,9 @@ void EntitySystem::CmpProjectile::Strike( EntityHandle target )
 		Vector2 forceDir = mBody->GetLinearVelocity();
 		forceDir.Normalize();
 		prop = mBlueprints.GetProperty("KnockbackRatio");
-		targetBody->ApplyForce(KNOCKBACK_RATIO * prop.GetValue<float32>() * forceDir, mBody->GetPosition());
+		float32 knockback = prop.GetValue<float32>();
+		targetBody->ApplyForce(KNOCKBACK_RATIO * knockback * forceDir, mBody->GetPosition());
+		target.PostMessage(EntityMessage::TYPE_KNOCKBACK_DETACH, &knockback);
 	}
 	prop = mBlueprints.GetProperty("PowerRatio");
 	float32 damage = DAMAGE_RATIO * prop.GetValue<float32>();

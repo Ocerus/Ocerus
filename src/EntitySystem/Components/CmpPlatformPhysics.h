@@ -64,6 +64,7 @@ namespace EntitySystem
 		bool mInitShapeFlip;
 
 		void PostInit(void);
+		void CreateBody(const bool hasParentShip);
 
 	};
 }

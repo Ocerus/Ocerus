@@ -334,7 +334,10 @@ EntitySystem::TeamID EntitySystem::EntityMgr::GetEntityTeam( const EntityHandle 
 
 void EntitySystem::EntityMgr::SetEntityTeam( const EntityHandle h, const EntityHandle teamOwner )
 {
-	SetEntityTeam(h, teamOwner.GetID());
+	if (teamOwner.IsValid())
+		SetEntityTeam(h, teamOwner.GetID());
+	else
+		SetEntityTeam(h, 0);
 }
 
 void EntitySystem::EntityMgr::SetEntityTeam( const EntityHandle h, const TeamID team )

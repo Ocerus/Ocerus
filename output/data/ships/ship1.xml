@@ -5,7 +5,7 @@
   <Entity Type="ET_SHIP" Name="ship1">
     <Component Type="CT_SHIP_PHYSICS">
       <InitBodyPosition>12.0 8.0</InitBodyPosition>
-      <InitBodyAngle>0.12354</InitBodyAngle>
+      <InitBodyAngle>-0.8</InitBodyAngle>
     </Component>
     <Component Type="CT_SHIP_LOGIC"/>
     <Component Type="CT_SHIP_VISUAL"/>
@@ -75,6 +75,32 @@
     </Component>
   </Entity>
 
+  <Entity Type="ET_PLATFORM" Name="platform1-2">
+    <Component Type="CT_PLATFORM_PHYSICS">
+      <RelativePosition>0.0 1.25</RelativePosition>
+      <InitShapeFlip>false</InitShapeFlip>
+      <InitShapeAngle>0.0</InitShapeAngle>
+    </Component>
+    <Component Type="CT_PLATFORM_LOGIC">
+      <Blueprints>platformType0</Blueprints>
+      <ParentShip>ship1</ParentShip>
+    </Component>
+    <Component Type="CT_PLATFORM_VISUAL"/>
+  </Entity>
+
+  <Entity Type="ET_WEAPON" Name="weapon1-2">
+    <Component Type="CT_PLATFORM_ITEM">
+      <Blueprints>weaponType0</Blueprints>
+      <ParentPlatform>platform1-2</ParentPlatform>
+      <RelativePosition>+0.4 -0.25</RelativePosition>
+    </Component>
+    <Component Type="CT_WEAPON">
+      <Ammo>ammoType0</Ammo>
+      <DefaultAngle>0.0</DefaultAngle>
+      <RelativeAngle>0.0</RelativeAngle>
+    </Component>
+  </Entity>
+
   <Entity Type="ET_UNKNOWN" Name="link1-0">
     <Component Type="CT_PLATFORM_LINKS">
       <FirstPlatform>platform1-0</FirstPlatform>
@@ -90,6 +116,25 @@
         <Vertex>-0.25 -0.1</Vertex>
         <Vertex>0.0 -0.1</Vertex>
         <Vertex>0.25 -0.1</Vertex>
+      </SecondAnchors>
+    </Component>
+  </Entity>
+
+  <Entity Type="ET_UNKNOWN" Name="link1-1">
+    <Component Type="CT_PLATFORM_LINKS">
+      <FirstPlatform>platform1-1</FirstPlatform>
+      <SecondPlatform>platform1-2</SecondPlatform>
+      <FirstAnchors>
+        <LengthParam>NumLinks</LengthParam>
+        <Vertex>-0.25 0.65</Vertex>
+        <Vertex>-0.1 0.65</Vertex>
+        <Vertex>0.20 0.65</Vertex>
+      </FirstAnchors>
+      <SecondAnchors>
+        <LengthParam>NumLinks</LengthParam>
+        <Vertex>-0.25 0.85</Vertex>
+        <Vertex>-0.1 0.85</Vertex>
+        <Vertex>0.20 0.85</Vertex>
       </SecondAnchors>
     </Component>
   </Entity>

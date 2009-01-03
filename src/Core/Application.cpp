@@ -121,6 +121,7 @@ void Application::RunMainLoop()
 			gGfxRenderer.DrawString(0.0f, 0.0f, "FPS", "FPS: " + StringConverter::ToString(mAvgFPS),
 				GfxSystem::Color(0,180,0), GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_BOTTOM,
 				GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_BOTTOM);
+
 			gGfxRenderer.EndRendering();	
 		}
 

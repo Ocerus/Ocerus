@@ -5,6 +5,7 @@
 using namespace EntitySystem;
 
 #define EXPLOSION_FORCE_RATIO 10.0f
+#define KNOCKBACK_DETACH_RATIO 1.0f
 
 void CmpPlatformLogic::Init(void)
 {
@@ -30,25 +31,7 @@ EntityMessage::eResult CmpPlatformLogic::HandleMessage(const EntityMessage& msg)
 		{
 			mBlueprints.PostMessage(EntityMessage::TYPE_GET_MAX_HITPOINTS, &mHitpoints);
 
-			// compute pick stuff
-			DataContainer cont;
-			PostMessage(EntityMessage::TYPE_GET_POLYSHAPE, &cont);
-			Vector2* shape = (Vector2*)cont.GetData();
-			int32 shapeLen = cont.GetSize();
-			// compute center
-			//TODO najit ten stred tak, aby to udelalo nejlepsi bounding circle
-			mPickCircleCenter.SetZero();
-			for (int i=0; i<shapeLen; ++i)
-				mPickCircleCenter += shape[i];
-			mPickCircleCenter *= 1.0f/shapeLen;
-			// compute radius
-			mPickCircleRadius = 0.0f;
-			for (int i=0; i<shapeLen; ++i)
-			{
-				float32 dist = MathUtils::Distance(mPickCircleCenter, shape[i]);
-				if (dist > mPickCircleRadius)
-					mPickCircleRadius = dist;
-			}
+			ComputePickStuff();
 
 			// set the team
 			GetOwner().SetTeam(mParentShip);
@@ -67,12 +50,34 @@ EntityMessage::eResult CmpPlatformLogic::HandleMessage(const EntityMessage& msg)
 				mHitpoints = newHP;
 		}
 		return EntityMessage::RESULT_OK;
+	case EntityMessage::TYPE_KNOCKBACK_DETACH:
+		assert(msg.data);
+		{
+			if (!mParentShip.IsValid())
+				return EntityMessage::RESULT_OK;
+			float32 probability = ((PropertyHolder)mBlueprints.GetProperty("BaseDetachingChance")).GetValue<float32>();
+			probability *= *(float32*)msg.data * KNOCKBACK_DETACH_RATIO;
+			if (MathUtils::Random(0, 1.0f) < probability)
+			{
+				// detach
+				mParentShip.PostMessage(EntityMessage::TYPE_REMOVE_PLATFORM, GetOwnerPtr());
+				bool recreate = true;
+				GetOwner().PostMessage(EntityMessage::TYPE_DETACH_PLATFORM, &recreate);
+			}
+		}
+		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_DIE:
 		Die();
 		return EntityMessage::RESULT_OK;
+	case EntityMessage::TYPE_UPDATE_TEAM:
+		GetOwner().SetTeam(mParentShip);
+		for (EntityList::iterator it=mItems.begin(); it!=mItems.end(); ++it)
+			it->SetTeam(mParentShip);
+		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_DETACH_PLATFORM:
-		mParentShip.Invalidate();
-		break;
+		// this assumes this is called after DETACH_PLATFORM was already processed by the physics component
+		ComputePickStuff();
+		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_BLUEPRINTS:
 		assert(msg.data);
 		*(EntityHandle*)msg.data = GetBlueprints();
@@ -174,6 +179,7 @@ void EntitySystem::CmpPlatformLogic::Die( void )
 	{
 		// apply some force from the explosion to the parent ship
 		//TODO aplikovat silu na vsechno v dosahu
+		//TODO silu scalovat podle hmotnosti tehle platformy
 		b2Body* body;
 		GetOwner().PostMessage(EntityMessage::TYPE_GET_PHYSICS_BODY, &body);
 		prop = GetProperty("AbsolutePosition");
@@ -190,4 +196,26 @@ void EntitySystem::CmpPlatformLogic::Die( void )
 
 	// delete the entity
 	gEntityMgr.DestroyEntity(GetOwner());
+}
+
+void EntitySystem::CmpPlatformLogic::ComputePickStuff( void )
+{
+	// compute pick stuff
+	DataContainer cont;
+	PostMessage(EntityMessage::TYPE_GET_POLYSHAPE, &cont);
+	Vector2* shape = (Vector2*)cont.GetData();
+	int32 shapeLen = cont.GetSize();
+	// compute center
+	mPickCircleCenter.SetZero();
+	for (int i=0; i<shapeLen; ++i)
+		mPickCircleCenter += shape[i];
+	mPickCircleCenter *= 1.0f/shapeLen;
+	// compute radius
+	mPickCircleRadius = 0.0f;
+	for (int i=0; i<shapeLen; ++i)
+	{
+		float32 dist = MathUtils::Distance(mPickCircleCenter, shape[i]);
+		if (dist > mPickCircleRadius)
+			mPickCircleRadius = dist;
+	}
 }

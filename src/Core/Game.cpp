@@ -194,6 +194,8 @@ void Core::Game::Update( const float32 delta )
 			for (EntityList::const_iterator it=mSelectedGroups[i].begin(); it!=mSelectedGroups[i].end(); ++it)
 				if (!it->Exists())
 					it = mSelectedGroups[i].erase(it);
+		if (!mCameraFocus.Exists())
+			mCameraFocus.Invalidate();
 
 		physicsDelta -= stepSize;
 	}
@@ -491,7 +493,8 @@ void Core::Game::MouseButtonPressed( const MouseInfo& mi, const eMouseButton btn
 					if (curTarget.IsValid())
 					{
 						prop.SetValue(EntityHandle::Null);
-						i->PostMessage(EntityMessage::TYPE_STOP_SHOOTING);
+						// note: I removed this cos it caused the weapon to stop shooting even while the mouse moved (while the right button was pressed)
+						//i->PostMessage(EntityMessage::TYPE_STOP_SHOOTING);
 					}
 
 					Vector2 pos;
@@ -544,7 +547,13 @@ bool Core::Game::ShouldCollide( b2Shape* shape1, b2Shape* shape2 )
 	EntityHandle firstEntity = *(EntityHandle*)shape1->GetUserData();
 	EntityHandle secondEntity = *(EntityHandle*)shape2->GetUserData();
 
-	return gEntityMgr.GetEntityTeam(firstEntity) != gEntityMgr.GetEntityTeam(secondEntity);
+	TeamID team1 = gEntityMgr.GetEntityTeam(firstEntity);
+	TeamID team2 = gEntityMgr.GetEntityTeam(secondEntity);
+
+	if (team1 == 0 || team2 == 0)
+		return true;
+
+	return team1 != team2;
 }
 
 void Core::Game::Add( const b2ContactPoint* point )
