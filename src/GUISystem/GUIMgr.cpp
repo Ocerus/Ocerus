@@ -38,7 +38,7 @@ namespace GUISystem {
 		mCegui->setDefaultFont( "Commonwealth-10" );
 		CEGUI::System::getSingleton().setDefaultMouseCursor( "TaharezLook", "MouseArrow" );
 		
-		std::string layout = gApp.GetGlobalConfig()->GetString("Layout", "Battleships.layout", "CEGUI");
+		string layout = gApp.GetGlobalConfig()->GetString("Layout", "Battleships.layout", "CEGUI");
 
 		CEGUI::Window* CurrentWindowRoot =
 			CEGUI::WindowManager::getSingleton().loadWindowLayout( layout.c_str() );		
@@ -62,8 +62,8 @@ namespace GUISystem {
 			CEGUI::FontManager::getSingleton().createFont( "Commonwealth-10.font" );
 
 		CEGUI::SchemeManager::getSingleton().loadScheme("Console.scheme");
-		CurrentWindowRoot =	CEGUI::WindowManager::getSingleton().loadWindowLayout( "Console.layout" );
-		CEGUI::System::getSingleton().setGUISheet( CurrentWindowRoot );
+		mCurrentWindowRoot =	CEGUI::WindowManager::getSingleton().loadWindowLayout( "Console.layout" );
+		CEGUI::System::getSingleton().setGUISheet( mCurrentWindowRoot );
 		mConsoleIsLoaded = true;
 
 		mCegui->setDefaultFont( "Commonwealth-10" );
@@ -73,7 +73,7 @@ namespace GUISystem {
 
 
 	void GUIMgr::AddConsoleListener(IConsoleListener* listener) {
-		ConsoleListeners.insert(listener);
+		mConsoleListeners.insert(listener);
 	}
 
 	void GUIMgr::RegisterEvents() {
@@ -98,23 +98,45 @@ namespace GUISystem {
 
 	bool GUIMgr::ConsoleCommandEvent(const CEGUI::EventArgs& e) {
 		CEGUI::Window* prompt = CEGUI::WindowManager::getSingleton().getWindow("ConsoleRoot/ConsolePrompt");
-		std::string message(prompt->getText().c_str());
+		string message(prompt->getText().c_str());
 		if (message == "quit")
 			gApp.RequestStateChange( Core::AS_SHUTDOWN );
 		if ( message.length() >= 9 ) {
-			std::string prefix = message.substr(0, 7);
-			std::string args = message.substr(8);
+			string prefix = message.substr(0, 7);
+			string args = message.substr(8);
 			if (prefix == "addtext")
-				AddStaticText( GetTextSize(args).x, 0.25f, args, GfxSystem::Color( 255, 0, 0),
-					GfxSystem::ANCHOR_VCENTER | GfxSystem::ANCHOR_RIGHT );
+				AddStaticText( 0.0f, 0.0f, "test text", args, GfxSystem::Color( 255, 0, 0),
+					GfxSystem::ANCHOR_BOTTOM | GfxSystem::ANCHOR_RIGHT,
+					GfxSystem::ANCHOR_BOTTOM | GfxSystem::ANCHOR_RIGHT );
 		}
+		AddLastCommand(message);
 		AddConsoleMessage(message);
 		prompt->setText("");
 
 		return true;
 	}
 
-	Vector2 GUIMgr::GetTextSize( const std::string & text, const std::string & fontid ) {
+	void GUIMgr::AddLastCommand(string command) {
+		if (mLastCommands.size() == 25)
+			mLastCommands.pop_back();
+		mLastCommands.push_front( command );
+		mCurrentLastSelected = mLastCommands.begin();
+	}
+
+	void GUIMgr::LoadLastCommand() {
+		if (mLastCommands.size() == 0)
+			return;		
+		if (mCurrentLastSelected == mLastCommands.end()) {
+			mCurrentLastSelected = mLastCommands.begin();
+		}
+
+		CEGUI::Editbox* editbox =
+			(CEGUI::Editbox*)CEGUI::WindowManager::getSingleton().getWindow("ConsoleRoot/ConsolePrompt");
+
+		editbox->setText(*mCurrentLastSelected);
+	}
+
+	Vector2 GUIMgr::GetTextSize( const string & text, const string & fontid ) {
 		CEGUI::Font* font;
 		if (fontid != "")
 			font = CEGUI::FontManager::getSingleton().getFont(fontid);
@@ -124,14 +146,14 @@ namespace GUISystem {
 			font->getFontHeight()/gGfxRenderer.GetScreenHeight());
 	}
 
-	void GUIMgr::AddConsoleMessage(std::string message, const GfxSystem::Color& color) {
+	void GUIMgr::AddConsoleMessage(string message, const GfxSystem::Color& color) {
 		if (!mConsoleIsLoaded)
 			return;
 
 		CEGUI::Listbox* pane = (CEGUI::Listbox*)CEGUI::WindowManager::getSingleton().getWindow("ConsoleRoot/Pane");
 
 		CEGUI::ListboxTextItem* new_item = DYN_NEW CEGUI::ListboxTextItem(message);
-		new_item->setTextColours(CEGUI::colour(color.a, color.r, color.g, color.b));
+		new_item->setTextColours(CEGUI::colour( color.GetARGB() ) );
 
 		pane->addItem(new_item);
 		pane->ensureItemIsVisible(new_item);
@@ -140,8 +162,8 @@ namespace GUISystem {
 		while (item_count = pane->getItemCount() > 50)
 			pane->removeItem(pane->getListboxItemFromIndex(item_count - 1));
 
-		std::set<IConsoleListener*>::iterator iter = ConsoleListeners.begin();
-		while (iter != ConsoleListeners.end())
+		std::set<IConsoleListener*>::iterator iter = mConsoleListeners.begin();
+		while (iter != mConsoleListeners.end())
 		{
 			(*iter)->EventConsoleCommand(message);
 			++iter;
@@ -188,12 +210,25 @@ namespace GUISystem {
 		CEGUI::System::getSingleton().injectMouseButtonUp( ConvertMouseButtonEnum(btn) );
 	}
 
-	StaticText* GUIMgr::AddStaticText( float32 x, float32 y, const std::string & text,
+	void GUIMgr::AddStaticText( float32 x, float32 y, const string & id, const string & text,
 			const GfxSystem::Color color/* = GfxSystem::Color(255,255,255)*/,
-			uint8 anchor/* = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP*/ ) {
-		StaticText* ptr = new StaticText( x, y, text, color, anchor );
-		CreatedStaticElements.push_back( ptr );
-		return ptr;
+			uint8 text_anchor/* = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP*/,
+			uint8 screen_anchor/* = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP*/,
+			const string & fontid )
+	{
+		std::map<string, StaticElement*>::iterator iter = mCreatedStaticElements.find( id );
+		if (iter == mCreatedStaticElements.end()) {
+			StaticText* ptr = new StaticText( x, y, id, text, color, text_anchor, screen_anchor, fontid );
+			mCreatedStaticElements.insert( std::pair<string, StaticElement*>( id, ptr ) );
+		} else {
+			StaticText* static_text = (StaticText*)iter->second;
+			static_text->SetStaticText( x, y, text, color, text_anchor, screen_anchor, fontid );
+		}
+	}
+
+	StaticText* GUIMgr::GetStaticText( const string & id ) {
+		std::map<string, StaticElement*>::iterator iter = mCreatedStaticElements.find( id );
+		return (StaticText*)(iter->second);
 	}
 
 	GUIMgr::~GUIMgr() {

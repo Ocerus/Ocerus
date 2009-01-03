@@ -582,9 +582,11 @@ bool GfxRenderer::IsFullscreen( void ) const
 	return !mHGE->System_GetState(HGE_WINDOWED);
 }
 
-void GfxRenderer::DrawString( float32 x, float32 y, const string & text, uint8 anchor, const Color color )
+void GfxRenderer::DrawString( float32 x, float32 y, const string & id,
+							 const string & text, const Color color,
+							 uint8 text_anchor, uint8 screen_anchor, const string & fontid )
 {
-	gGUIMgr.AddStaticText(x, y, text, color, anchor);
+	gGUIMgr.AddStaticText(x, y, id, text, color, text_anchor, screen_anchor, fontid);
 }
 
 Vector2 GfxRenderer::GetTextSize( const string & text, const string & fontid )

@@ -83,8 +83,8 @@ namespace GUISystem {
 		uint32 mOriginalHeight, mOriginalWidth;
 
 		static uint32 mTextureIndex;
-		static const std::string mResourceGroupName;
-		static std::string GetNextTextureName();
+		static const string mResourceGroupName;
+		static string GetNextTextureName();
 
 	private:
 		CEGUI::Renderer* d_owner;		//<! Renderer object that created and owns this texture		

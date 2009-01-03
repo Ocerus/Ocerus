@@ -26,7 +26,7 @@ namespace GUISystem {
 	// Inherit this to be eligible to console prompt events
 	class IConsoleListener {
 	public:
-		virtual void EventConsoleCommand(std::string command) = 0;
+		virtual void EventConsoleCommand(string command) = 0;
 	};
 
 	class GUIMgr : public Singleton<GUIMgr>, public InputSystem::IInputListener
@@ -76,10 +76,13 @@ namespace GUISystem {
 
 		/// @name Static text related methods
 		//@{
-		StaticText* AddStaticText( float32 x, float32 y, const string & text,
+		void AddStaticText( float32 x, float32 y, const string & id, const string & text,
 			const GfxSystem::Color color = GfxSystem::Color(255,255,255),
-			uint8 anchor = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP);
+			uint8 text_anchor = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP,
+			uint8 screen_anchor = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP,
+			const string & fontid = "");
 		Vector2 GetTextSize( const string & text, const string & fontid = "" );
+		StaticText* GetStaticText( const string & id );
 		//@}
 
 		virtual ~GUIMgr();
@@ -98,13 +101,21 @@ namespace GUISystem {
 
 		bool mConsoleIsLoaded;
 		CEGUI::System * mCegui;
-		CEGUI::Window * CurrentWindowRoot;
+		CEGUI::Window * mCurrentWindowRoot;
 		ResourceGate * mResourceGate;
 		RendererGate * mRendererGate;
 		friend class RendererGate;
 
-		std::set<IConsoleListener*> ConsoleListeners;
-		std::vector<StaticElement*> CreatedStaticElements;
+		/// @name Commands memory
+		//@{
+		void AddLastCommand(string command);
+		void LoadLastCommand();
+		std::deque<string>::const_iterator mCurrentLastSelected;
+		std::deque<string> mLastCommands;
+		//@}
+
+		std::set<IConsoleListener*> mConsoleListeners;		
+		std::map<string, StaticElement*> mCreatedStaticElements;
 	};
 }
 #endif

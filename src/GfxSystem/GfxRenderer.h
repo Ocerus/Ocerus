@@ -163,7 +163,11 @@ namespace GfxSystem
 		/// @name Text drawing methods.
 		/// Note that coords are in percentage values relative to the screen bounds.
 		//@{
-		void DrawString( float32 x, float32 y, const string & text,	uint8 anchor = ANCHOR_LEFT | ANCHOR_TOP, const Color color = Color(255,255,255));
+		void DrawString( float32 x, float32 y, const string & id,
+							 const string & text, const Color color = Color(255,255,255),
+							 uint8 text_anchor =  ANCHOR_LEFT | ANCHOR_TOP,
+							 uint8 screen_anchor = ANCHOR_LEFT | ANCHOR_TOP,
+							 const string & fontid = "");
 		Vector2 GetTextSize( const string & text, const string & fontid = "" );
 		//@}
 

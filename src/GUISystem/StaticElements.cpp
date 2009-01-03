@@ -19,77 +19,112 @@ enum eAnchor {
 };
 */
 
-	void StaticElement::SetPosition( float32 x, float32 y, uint8 anchor ) {
-		mElement->setArea( CEGUI::UDim( 0.0f,0 ), CEGUI::UDim(0.0f,0), CEGUI::UDim(1.0f,0), CEGUI::UDim(1.0f,0));		
-		if ( anchor & GfxSystem::ANCHOR_VCENTER ) {			
-			mElement->setYPosition(CEGUI::UDim(0.5f + y, 0));
-		} else if ( anchor & GfxSystem::ANCHOR_TOP ) {
-			mElement->setYPosition(CEGUI::UDim(1.0f - y, 0));
-		} else if ( anchor & GfxSystem::ANCHOR_BOTTOM ) {
-			mElement->setYPosition(CEGUI::UDim(y, 0));
+	void StaticElement::SetPosition( float32 x, float32 y,
+			uint8 text_anchor/* = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP*/,
+			uint8 screen_anchor/* = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP*/ )
+	{
+		SetSize();
+		Vector2 offset = GetSize();
+		if ( text_anchor & GfxSystem::ANCHOR_VCENTER ) {
+			offset.y = -offset.y/2;
+		} else if ( text_anchor & GfxSystem::ANCHOR_BOTTOM ) {
+			offset.y = -offset.y;
+		} else if ( text_anchor & GfxSystem::ANCHOR_TOP ) {
+			offset.y = 0;
 		}
-
-		if ( anchor & GfxSystem::ANCHOR_HCENTER ) {			
-			mElement->setXPosition(CEGUI::UDim(0.5f + x, 0));
-		} else if ( anchor & GfxSystem::ANCHOR_RIGHT ) {
-			mElement->setXPosition(CEGUI::UDim(1.0f - x, 0));
-		} else if ( anchor & GfxSystem::ANCHOR_LEFT ) {
-			mElement->setXPosition(CEGUI::UDim(x, 0));
+		if ( text_anchor & GfxSystem::ANCHOR_HCENTER ) {
+			offset.x = -offset.x/2;
+		} else if ( text_anchor & GfxSystem::ANCHOR_RIGHT ) {
+			offset.x = -offset.x;
+		} else if ( text_anchor & GfxSystem::ANCHOR_LEFT ) {
+			offset.x = 0;
+		}
+			
+		if ( screen_anchor & GfxSystem::ANCHOR_VCENTER ) {			
+			mElement->setYPosition(CEGUI::UDim(0.5f + y + offset.y, 0));
+		} else if ( screen_anchor & GfxSystem::ANCHOR_BOTTOM ) {
+			mElement->setYPosition(CEGUI::UDim(1.0f - y + offset.y, 0));
+		} else if ( screen_anchor & GfxSystem::ANCHOR_TOP ) {
+			mElement->setYPosition(CEGUI::UDim(y + offset.y, 0));
+		}
+		if ( screen_anchor & GfxSystem::ANCHOR_HCENTER ) {			
+			mElement->setXPosition(CEGUI::UDim(0.5f + x + offset.x, 0));
+		} else if ( screen_anchor & GfxSystem::ANCHOR_RIGHT ) {
+			mElement->setXPosition(CEGUI::UDim(1.0f - x + offset.x, 0));
+		} else if ( screen_anchor & GfxSystem::ANCHOR_LEFT ) {
+			mElement->setXPosition(CEGUI::UDim(x + offset.x, 0));
 		}	
 	}
 
-	void StaticElement::SetPosition( int32 x, int32 y, uint8 anchor ) {
-		if ( anchor & GfxSystem::ANCHOR_HCENTER ) {			
-			mElement->setXPosition(CEGUI::UDim(0.5f, (float32)x));
-		} else if ( anchor & GfxSystem::ANCHOR_RIGHT ) {
-			mElement->setXPosition(CEGUI::UDim(1.0f, (float32)-x));
-		} else if ( anchor & GfxSystem::ANCHOR_LEFT ) {
-			mElement->setXPosition(CEGUI::UDim(0, (float32)x));
-		}
-
-		if ( anchor & GfxSystem::ANCHOR_VCENTER ) {			
-			mElement->setYPosition(CEGUI::UDim(0.5f, (float32)y));
-		} else if ( anchor & GfxSystem::ANCHOR_TOP ) {
-			mElement->setYPosition(CEGUI::UDim(1.0f, (float32)-y));
-		} else if ( anchor & GfxSystem::ANCHOR_BOTTOM ) {
-			mElement->setYPosition(CEGUI::UDim(0, (float32)y));
-		}
+	void StaticElement::SetPosition( int32 x, int32 y,
+			uint8 text_anchor/* = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP*/,
+			uint8 screen_anchor/* = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP*/ )
+	{
+		SetPosition( (float)x/(float)gGfxRenderer.GetScreenWidth(),
+			(float)y/(float)gGfxRenderer.GetScreenHeight(),
+			text_anchor, screen_anchor);
 	}
 
 	void StaticElement::SetSize() {
-		mElement->setWidth( CEGUI::UDim( mElement->getFont()->getTextExtent( mElement->getText() ), 0) );
-		mElement->setHeight( CEGUI::UDim( mElement->getFont()->getFontHeight(), 0) );
+		mElement->setWidth(
+			CEGUI::UDim( 0, mElement->getFont()->getTextExtent( mElement->getText() )) );
+		mElement->setHeight(
+			CEGUI::UDim( 0, mElement->getFont()->getFontHeight()) );
 	}
 
 	Vector2 StaticElement::GetSize() {
 		CEGUI::UVector2 size = mElement->getSize();
-		return Vector2( size.d_x.d_scale, size.d_y.d_scale );
+		
+		return Vector2(size.d_x.asRelative((float)gGfxRenderer.GetScreenWidth()),
+			size.d_y.asRelative((float)gGfxRenderer.GetScreenHeight()));
 	}
 
-	StaticText::StaticText( float32 x, float32 y, const std::string & text, 
+	StaticText::StaticText( float32 x, float32 y, const string & id, const string & text, 
 			const GfxSystem::Color & color,
-			uint8 anchor/* = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP*/,
-			const std::string & fontid/* = ""*/ )
+			uint8 text_anchor/* = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP*/,
+			uint8 screen_anchor/* = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP*/,
+			const string & fontid/* = ""*/ )
 	{
-		InitElement();
-		SetPosition( x, y, anchor );		
-		SetColor( color );
+		InitElement(id);
+		SetStaticText( x, y, text, color, text_anchor, screen_anchor, fontid );
+	}
+
+	StaticText::StaticText( int32 x, int32 y, const string & id, const string & text,
+			const GfxSystem::Color & color,
+			uint8 text_anchor/* = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP*/,
+			uint8 screen_anchor/* = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP*/,
+			const string & fontid/* = ""*/ )
+	{
+		InitElement(id);
+		SetStaticText( x, y, text, color, text_anchor, screen_anchor, fontid );
+	}
+
+	void StaticText::SetStaticText( float32 x, float32 y, const string & text,
+			const GfxSystem::Color & color,
+			uint8 text_anchor/* = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP*/,
+			uint8 screen_anchor/* = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP*/,
+			const string & fontid/* = ""*/ )
+	{
+		SetStaticTextWorker( text, color, fontid );
+		SetPosition( x, y, text_anchor, screen_anchor );
+	}
+
+	void StaticText::SetStaticText( int32 x, int32 y, const string & text,
+			const GfxSystem::Color & color,
+			uint8 text_anchor/* = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP*/,
+			uint8 screen_anchor/* = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP*/,
+			const string & fontid/* = ""*/ )
+	{
+		SetStaticTextWorker( text, color, fontid );
+		SetPosition( x, y, text_anchor, screen_anchor );
+	}
+
+	void StaticText::SetStaticTextWorker( const string & text,
+		const GfxSystem::Color & color, const string & fontid/* = "" */)
+	{
+		SetText( text );
 		SetFont( fontid );
-		SetText( text );
-		SetSize();		
-	}
-
-	StaticText::StaticText( int32 x, int32 y, const std::string & text,
-			const GfxSystem::Color & color,
-			uint8 anchor/* = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP*/,
-			const std::string & fontid/* = ""*/ )
-	{
-		InitElement();
-		SetPosition( x, y, anchor );
 		SetColor( color );
-		SetFont( fontid );		
-		SetText( text );
-		SetSize();
 	}
 
 	StaticElement::~StaticElement() {
@@ -100,10 +135,8 @@ enum eAnchor {
 	StaticText::~StaticText() {
 	}
 
-	void StaticText::InitElement() {
-		std::stringstream sstream;
-		sstream << "StaticTextOnDemand" << mID++;
-		mElement = CEGUI::WindowManager::getSingleton().createWindow( "Lightweight/StaticText", sstream.str() );
+	void StaticText::InitElement( const string & id ) {
+		mElement = CEGUI::WindowManager::getSingleton().createWindow( "Lightweight/StaticText", "CustomStaticText/" + id );
 		CEGUI::System::getSingleton().getGUISheet()->addChildWindow( mElement );
 		mElement->setProperty("VertFormatting", "TopAligned");
 	}
@@ -118,7 +151,7 @@ enum eAnchor {
 		mElement->setProperty( "TextColours", sstream.str() );
 	}
 
-	void StaticText::SetFont( const std::string & fontid ) {
+	void StaticText::SetFont( const string & fontid ) {
 		if (fontid == "") return;
 		try {			
 			if( !CEGUI::FontManager::getSingleton().isFontPresent( fontid ) )
@@ -129,7 +162,7 @@ enum eAnchor {
 		}
 	}
 
-	void StaticText::SetText( const std::string & text ) {
+	void StaticText::SetText( const string & text ) {
 		mElement->setText( text );
 	}
 }

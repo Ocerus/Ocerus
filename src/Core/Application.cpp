@@ -118,9 +118,9 @@ void Application::RunMainLoop()
 			}
 
 			// draw stats (from previous frame)
-			//gGfxRenderer.DrawString(97, 2, "FPS:", GfxSystem::ANCHOR_RIGHT | GfxSystem::ANCHOR_TOP);
-			//gGfxRenderer.DrawString(98, 2, StringConverter::ToString(mAvgFPS), GfxSystem::ANCHOR_RIGHT | GfxSystem::ANCHOR_TOP);
-
+			gGfxRenderer.DrawString(0.0f, 0.0f, "FPS", "FPS: " + StringConverter::ToString(mAvgFPS),
+				GfxSystem::Color(0,180,0), GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_BOTTOM,
+				GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_BOTTOM);
 			gGfxRenderer.EndRendering();	
 		}
 
