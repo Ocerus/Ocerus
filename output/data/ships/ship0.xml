@@ -5,59 +5,371 @@
   <Entity Type="ET_SHIP" Name="ship0">
     <Component Type="CT_SHIP_PHYSICS">
       <InitBodyPosition>10.0 10.0</InitBodyPosition>
-      <InitBodyAngle>-0.8</InitBodyAngle>
+      <InitBodyAngle>0</InitBodyAngle>
     </Component>
     <Component Type="CT_SHIP_LOGIC"/>
     <Component Type="CT_SHIP_VISUAL"/>
   </Entity>
 
+<!--  bottom part of the front "wing" -->
+
   <Entity Type="ET_PLATFORM" Name="platform1">
     <Component Type="CT_PLATFORM_PHYSICS">
-      <RelativePosition>0.0 -0.25</RelativePosition>
+      <RelativePosition>1.5 0.6666666666666666</RelativePosition>
       <InitShapeFlip>false</InitShapeFlip>
       <InitShapeAngle>0.0</InitShapeAngle>
     </Component>
     <Component Type="CT_PLATFORM_LOGIC">
-      <Blueprints>platformType0</Blueprints>
+      <Blueprints>platformFront2</Blueprints>
       <ParentShip>ship0</ParentShip>
     </Component>
     <Component Type="CT_PLATFORM_VISUAL"/>
   </Entity>
 
-  <Entity Type="ET_ENGINE" Name="engine0">
+  <Entity Type="ET_PLATFORM" Name="platform3">
+    <Component Type="CT_PLATFORM_PHYSICS">
+      <RelativePosition>0.17 0.3</RelativePosition>
+      <InitShapeFlip>false</InitShapeFlip>
+      <InitShapeAngle>0.0</InitShapeAngle>
+    </Component>
+    <Component Type="CT_PLATFORM_LOGIC">
+      <Blueprints>platformFront4</Blueprints>
+      <ParentShip>ship0</ParentShip>
+    </Component>
+    <Component Type="CT_PLATFORM_VISUAL"/>
+  </Entity>
+
+  <Entity Type="ET_PLATFORM" Name="platform5">
+    <Component Type="CT_PLATFORM_PHYSICS">
+      <RelativePosition>5 0.4</RelativePosition>
+      <InitShapeFlip>false</InitShapeFlip>
+      <InitShapeAngle>0.0</InitShapeAngle>
+    </Component>
+    <Component Type="CT_PLATFORM_LOGIC">
+      <Blueprints>platformFront1</Blueprints>
+      <ParentShip>ship0</ParentShip>
+    </Component>
+    <Component Type="CT_PLATFORM_VISUAL"/>
+  </Entity>
+
+  <Entity Type="ET_PLATFORM" Name="platform7">
+    <Component Type="CT_PLATFORM_PHYSICS">
+      <RelativePosition>-0.16 0.66</RelativePosition>
+      <InitShapeFlip>false</InitShapeFlip>
+      <InitShapeAngle>0.0</InitShapeAngle>
+    </Component>
+    <Component Type="CT_PLATFORM_LOGIC">
+      <Blueprints>platformFront3</Blueprints>
+      <ParentShip>ship0</ParentShip>
+    </Component>
+    <Component Type="CT_PLATFORM_VISUAL"/>
+  </Entity>
+
+
+  <Entity Type="ET_PLATFORM" Name="platform9">
+    <Component Type="CT_PLATFORM_PHYSICS">
+      <RelativePosition>3.17 0.5</RelativePosition>
+      <InitShapeFlip>false</InitShapeFlip>
+      <InitShapeAngle>0.0</InitShapeAngle>
+    </Component>
+    <Component Type="CT_PLATFORM_LOGIC">
+      <Blueprints>platformWing1</Blueprints>
+      <ParentShip>ship0</ParentShip>
+    </Component>
+    <Component Type="CT_PLATFORM_VISUAL"/>
+  </Entity>
+
+  <Entity Type="ET_ENGINE" Name="engine5">
     <Component Type="CT_PLATFORM_ITEM">
       <Blueprints>engineType0</Blueprints>
-      <ParentPlatform>platform1</ParentPlatform>
-      <RelativePosition>-0.5 -0.25</RelativePosition>
+      <ParentPlatform>platform9</ParentPlatform>
+      <RelativePosition>-0.15 0.33</RelativePosition>
+    </Component>
+    <Component Type="CT_ENGINE">
+      <DefaultAngle>1.5707963267948966192313216916398</DefaultAngle>
+      <RelativeAngle>0.0</RelativeAngle>
+    </Component>
+  </Entity>
+
+  <Entity Type="ET_ENGINE" Name="engine7">
+    <Component Type="CT_PLATFORM_ITEM">
+      <Blueprints>engineType0</Blueprints>
+      <ParentPlatform>platform9</ParentPlatform>
+      <RelativePosition>0.15 0.33</RelativePosition>
+    </Component>
+    <Component Type="CT_ENGINE">
+      <DefaultAngle>1.5707963267948966192313216916398</DefaultAngle>
+      <RelativeAngle>0.0</RelativeAngle>
+    </Component>
+  </Entity>
+
+
+<!-- top part of the front "wing" -->
+
+
+  <Entity Type="ET_PLATFORM" Name="platform2">
+    <Component Type="CT_PLATFORM_PHYSICS">
+      <RelativePosition>1.5 -0.666666666666666666666</RelativePosition>
+      <InitShapeFlip>true</InitShapeFlip>
+      <InitShapeAngle>0.0</InitShapeAngle>
+    </Component>
+    <Component Type="CT_PLATFORM_LOGIC">
+      <Blueprints>platformFront2</Blueprints>
+      <ParentShip>ship0</ParentShip>
+    </Component>
+    <Component Type="CT_PLATFORM_VISUAL"/>
+  </Entity>
+
+  <Entity Type="ET_PLATFORM" Name="platform4">
+    <Component Type="CT_PLATFORM_PHYSICS">
+      <RelativePosition>0.17 -0.3</RelativePosition>
+      <InitShapeFlip>true</InitShapeFlip>
+      <InitShapeAngle>0.0</InitShapeAngle>
+    </Component>
+    <Component Type="CT_PLATFORM_LOGIC">
+      <Blueprints>platformFront4</Blueprints>
+      <ParentShip>ship0</ParentShip>
+    </Component>
+    <Component Type="CT_PLATFORM_VISUAL"/>
+  </Entity>
+
+  <Entity Type="ET_PLATFORM" Name="platform6">
+    <Component Type="CT_PLATFORM_PHYSICS">
+      <RelativePosition>5 -0.4</RelativePosition>
+      <InitShapeFlip>true</InitShapeFlip>
+      <InitShapeAngle>0.0</InitShapeAngle>
+    </Component>
+    <Component Type="CT_PLATFORM_LOGIC">
+      <Blueprints>platformFront1</Blueprints>
+      <ParentShip>ship0</ParentShip>
+    </Component>
+    <Component Type="CT_PLATFORM_VISUAL"/>
+  </Entity>
+
+  <Entity Type="ET_PLATFORM" Name="platform8">
+    <Component Type="CT_PLATFORM_PHYSICS">
+      <RelativePosition>-0.16 -0.66</RelativePosition>
+      <InitShapeFlip>true</InitShapeFlip>
+      <InitShapeAngle>0.0</InitShapeAngle>
+    </Component>
+    <Component Type="CT_PLATFORM_LOGIC">
+      <Blueprints>platformFront3</Blueprints>
+      <ParentShip>ship0</ParentShip>
+    </Component>
+    <Component Type="CT_PLATFORM_VISUAL"/>
+  </Entity>
+
+   <Entity Type="ET_PLATFORM" Name="platform10">
+    <Component Type="CT_PLATFORM_PHYSICS">
+      <RelativePosition>3.17 -0.5</RelativePosition>
+      <InitShapeFlip>true</InitShapeFlip>
+      <InitShapeAngle>0.0</InitShapeAngle>
+    </Component>
+    <Component Type="CT_PLATFORM_LOGIC">
+      <Blueprints>platformWing1</Blueprints>
+      <ParentShip>ship0</ParentShip>
+    </Component>
+    <Component Type="CT_PLATFORM_VISUAL"/>
+  </Entity>
+
+  <Entity Type="ET_ENGINE" Name="engine6">
+    <Component Type="CT_PLATFORM_ITEM">
+      <Blueprints>engineType0</Blueprints>
+      <ParentPlatform>platform10</ParentPlatform>
+      <RelativePosition>-0.15 -0.33</RelativePosition>
+    </Component>
+    <Component Type="CT_ENGINE">
+      <DefaultAngle>4.7123889803846898576939650749193</DefaultAngle>
+      <RelativeAngle>0.0</RelativeAngle>
+    </Component>
+  </Entity>
+
+  <Entity Type="ET_ENGINE" Name="engine8">
+    <Component Type="CT_PLATFORM_ITEM">
+      <Blueprints>engineType0</Blueprints>
+      <ParentPlatform>platform10</ParentPlatform>
+      <RelativePosition>0.15 -0.33</RelativePosition>
+    </Component>
+    <Component Type="CT_ENGINE">
+      <DefaultAngle>4.7123889803846898576939650749193</DefaultAngle>
+      <RelativeAngle>0.0</RelativeAngle>
+    </Component>
+  </Entity>
+
+
+
+
+<!-- COMMAND CENTER -->
+
+  <Entity Type="ET_PLATFORM" Name="platform11">
+    <Component Type="CT_PLATFORM_PHYSICS">
+      <RelativePosition>-1.33 0</RelativePosition>
+      <InitShapeFlip>false</InitShapeFlip>
+      <InitShapeAngle>0.0</InitShapeAngle>
+    </Component>
+    <Component Type="CT_PLATFORM_LOGIC">
+      <Blueprints>platformCommandCenter1</Blueprints>
+      <ParentShip>ship0</ParentShip>
+    </Component>
+    <Component Type="CT_PLATFORM_VISUAL"/>
+  </Entity>
+
+<!-- bottom back wing -->
+
+  <Entity Type="ET_PLATFORM" Name="platform12">
+    <Component Type="CT_PLATFORM_PHYSICS">
+      <RelativePosition>-2 0.6666666666</RelativePosition>
+      <InitShapeFlip>false</InitShapeFlip>
+      <InitShapeAngle>0.0</InitShapeAngle>
+    </Component>
+    <Component Type="CT_PLATFORM_LOGIC">
+      <Blueprints>platformBack1</Blueprints>
+      <ParentShip>ship0</ParentShip>
+    </Component>
+    <Component Type="CT_PLATFORM_VISUAL"/>
+  </Entity>
+
+  <Entity Type="ET_ENGINE" Name="engine3">
+    <Component Type="CT_PLATFORM_ITEM">
+      <Blueprints>engineTypeBackEngine</Blueprints>
+      <ParentPlatform>platform12</ParentPlatform>
+      <RelativePosition>-1 -0.33</RelativePosition>
     </Component>
     <Component Type="CT_ENGINE">
       <DefaultAngle>3.1415926535897932384626433832795</DefaultAngle>
       <RelativeAngle>0.0</RelativeAngle>
     </Component>
   </Entity>
-  
-  <Entity Type="ET_WEAPON" Name="weapon0">
-    <Component Type="CT_PLATFORM_ITEM">
-      <Blueprints>weaponType0</Blueprints>
-      <ParentPlatform>platform1</ParentPlatform>
-      <RelativePosition>+0.4 -0.25</RelativePosition>
+
+  <Entity Type="ET_PLATFORM" Name="platform20">
+    <Component Type="CT_PLATFORM_PHYSICS">
+      <RelativePosition>-2.8333 1.6666666666</RelativePosition>
+      <InitShapeFlip>false</InitShapeFlip>
+      <InitShapeAngle>0.0</InitShapeAngle>
     </Component>
-    <Component Type="CT_WEAPON">
-      <Ammo>ammoType0</Ammo>
-      <DefaultAngle>0.0</DefaultAngle>
+    <Component Type="CT_PLATFORM_LOGIC">
+      <Blueprints>platformWing3</Blueprints>
+      <ParentShip>ship0</ParentShip>
+    </Component>
+    <Component Type="CT_PLATFORM_VISUAL"/>
+  </Entity>
+
+  <Entity Type="ET_PLATFORM" Name="platform22">
+    <Component Type="CT_PLATFORM_PHYSICS">
+      <RelativePosition>-3.17 0.6666666666</RelativePosition>
+      <InitShapeFlip>false</InitShapeFlip>
+      <InitShapeAngle>0.0</InitShapeAngle>
+    </Component>
+    <Component Type="CT_PLATFORM_LOGIC">
+      <Blueprints>platformWing4</Blueprints>
+      <ParentShip>ship0</ParentShip>
+    </Component>
+    <Component Type="CT_PLATFORM_VISUAL"/>
+  </Entity>
+
+  <Entity Type="ET_ENGINE" Name="engine4">
+    <Component Type="CT_PLATFORM_ITEM">
+      <Blueprints>engineTypeBackEngine</Blueprints>
+      <ParentPlatform>platform22</ParentPlatform>
+      <RelativePosition>-0.42 0.12</RelativePosition>
+    </Component>
+    <Component Type="CT_ENGINE">
+      <DefaultAngle>3.1415926535897932384626433832795</DefaultAngle>
       <RelativeAngle>0.0</RelativeAngle>
     </Component>
   </Entity>
 
 
-  <Entity Type="ET_PLATFORM" Name="platform2">
+  <Entity Type="ET_PLATFORM" Name="platform14">
     <Component Type="CT_PLATFORM_PHYSICS">
-      <RelativePosition>0.0 0.25</RelativePosition>
+      <RelativePosition>-1.75 1.495</RelativePosition>
+      <InitShapeFlip>false</InitShapeFlip>
+      <InitShapeAngle>0.0</InitShapeAngle>
+    </Component>
+    <Component Type="CT_PLATFORM_LOGIC">
+      <Blueprints>platformRectangle2</Blueprints>
+      <ParentShip>ship0</ParentShip>
+    </Component>
+    <Component Type="CT_PLATFORM_VISUAL"/>
+  </Entity>
+
+  <Entity Type="ET_PLATFORM" Name="platform16">
+    <Component Type="CT_PLATFORM_PHYSICS">
+      <RelativePosition>-2 1.8333</RelativePosition>
+      <InitShapeFlip>false</InitShapeFlip>
+      <InitShapeAngle>0.0</InitShapeAngle>
+    </Component>
+    <Component Type="CT_PLATFORM_LOGIC">
+      <Blueprints>platformWing2</Blueprints>
+      <ParentShip>ship0</ParentShip>
+    </Component>
+    <Component Type="CT_PLATFORM_VISUAL"/>
+  </Entity>
+
+
+  <Entity Type="ET_PLATFORM" Name="platform18">
+    <Component Type="CT_PLATFORM_PHYSICS">
+      <RelativePosition>-2.5 2</RelativePosition>
+      <InitShapeFlip>false</InitShapeFlip>
+      <InitShapeAngle>0.0</InitShapeAngle>
+    </Component>
+    <Component Type="CT_PLATFORM_LOGIC">
+      <Blueprints>platformRectangle1</Blueprints>
+      <ParentShip>ship0</ParentShip>
+    </Component>
+    <Component Type="CT_PLATFORM_VISUAL"/>
+  </Entity>
+
+
+<!-- top back wing -->
+
+  <Entity Type="ET_PLATFORM" Name="platform13">
+    <Component Type="CT_PLATFORM_PHYSICS">
+      <RelativePosition>-2 -0.66666666666666</RelativePosition>
       <InitShapeFlip>true</InitShapeFlip>
       <InitShapeAngle>0.0</InitShapeAngle>
     </Component>
     <Component Type="CT_PLATFORM_LOGIC">
-      <Blueprints>platformType0</Blueprints>
+      <Blueprints>platformBack1</Blueprints>
+      <ParentShip>ship0</ParentShip>
+    </Component>
+    <Component Type="CT_PLATFORM_VISUAL"/>
+  </Entity>
+
+  <Entity Type="ET_ENGINE" Name="engine2">
+    <Component Type="CT_PLATFORM_ITEM">
+      <Blueprints>engineTypeBackEngine</Blueprints>
+      <ParentPlatform>platform13</ParentPlatform>
+      <RelativePosition>-1 0.33</RelativePosition>
+    </Component>
+    <Component Type="CT_ENGINE">
+      <DefaultAngle>3.1415926535897932384626433832795</DefaultAngle>
+      <RelativeAngle>0.0</RelativeAngle>
+    </Component>
+  </Entity>
+
+
+ <Entity Type="ET_PLATFORM" Name="platform21">
+    <Component Type="CT_PLATFORM_PHYSICS">
+      <RelativePosition>-2.8333 -1.6666666666</RelativePosition>
+      <InitShapeFlip>true</InitShapeFlip>
+      <InitShapeAngle>0.0</InitShapeAngle>
+    </Component>
+    <Component Type="CT_PLATFORM_LOGIC">
+      <Blueprints>platformWing3</Blueprints>
+      <ParentShip>ship0</ParentShip>
+    </Component>
+    <Component Type="CT_PLATFORM_VISUAL"/>
+  </Entity>
+
+  <Entity Type="ET_PLATFORM" Name="platform23">
+    <Component Type="CT_PLATFORM_PHYSICS">
+      <RelativePosition>-3.17 -0.6666666666</RelativePosition>
+      <InitShapeFlip>true</InitShapeFlip>
+      <InitShapeAngle>0.0</InitShapeAngle>
+    </Component>
+    <Component Type="CT_PLATFORM_LOGIC">
+      <Blueprints>platformWing4</Blueprints>
       <ParentShip>ship0</ParentShip>
     </Component>
     <Component Type="CT_PLATFORM_VISUAL"/>
@@ -65,9 +377,9 @@
 
   <Entity Type="ET_ENGINE" Name="engine1">
     <Component Type="CT_PLATFORM_ITEM">
-      <Blueprints>engineType0</Blueprints>
-      <ParentPlatform>platform2</ParentPlatform>
-      <RelativePosition>-0.5 0.25</RelativePosition>
+      <Blueprints>engineTypeBackEngine</Blueprints>
+      <ParentPlatform>platform23</ParentPlatform>
+      <RelativePosition>-0.42 -0.12</RelativePosition>
     </Component>
     <Component Type="CT_ENGINE">
       <DefaultAngle>3.1415926535897932384626433832795</DefaultAngle>
@@ -75,23 +387,53 @@
     </Component>
   </Entity>
 
-  <Entity Type="ET_UNKNOWN" Name="link0">
-    <Component Type="CT_PLATFORM_LINKS">
-      <FirstPlatform>platform1</FirstPlatform>
-      <SecondPlatform>platform2</SecondPlatform>
-      <FirstAnchors>
-        <LengthParam>NumLinks</LengthParam>
-        <Vertex>-0.25 0.1</Vertex>
-        <Vertex>0.0 0.1</Vertex>
-        <Vertex>0.25 0.1</Vertex>
-      </FirstAnchors>
-      <SecondAnchors>
-        <LengthParam>NumLinks</LengthParam>
-        <Vertex>-0.25 -0.1</Vertex>
-        <Vertex>0.0 -0.1</Vertex>
-        <Vertex>0.25 -0.1</Vertex>
-      </SecondAnchors>
+
+  <Entity Type="ET_PLATFORM" Name="platform15">
+    <Component Type="CT_PLATFORM_PHYSICS">
+      <RelativePosition>-1.75 -1.495</RelativePosition>
+      <InitShapeFlip>true</InitShapeFlip>
+      <InitShapeAngle>0.0</InitShapeAngle>
     </Component>
+    <Component Type="CT_PLATFORM_LOGIC">
+      <Blueprints>platformRectangle2</Blueprints>
+      <ParentShip>ship0</ParentShip>
+    </Component>
+    <Component Type="CT_PLATFORM_VISUAL"/>
   </Entity>
+
+  <Entity Type="ET_PLATFORM" Name="platform17">
+    <Component Type="CT_PLATFORM_PHYSICS">
+      <RelativePosition>-2 -1.8333</RelativePosition>
+      <InitShapeFlip>true</InitShapeFlip>
+      <InitShapeAngle>0.0</InitShapeAngle>
+    </Component>
+    <Component Type="CT_PLATFORM_LOGIC">
+      <Blueprints>platformWing2</Blueprints>
+      <ParentShip>ship0</ParentShip>
+    </Component>
+    <Component Type="CT_PLATFORM_VISUAL"/>
+  </Entity>
+
+
+  <Entity Type="ET_PLATFORM" Name="platform19">
+    <Component Type="CT_PLATFORM_PHYSICS">
+      <RelativePosition>-2.5 -2</RelativePosition>
+      <InitShapeFlip>true</InitShapeFlip>
+      <InitShapeAngle>0.0</InitShapeAngle>
+    </Component>
+    <Component Type="CT_PLATFORM_LOGIC">
+      <Blueprints>platformRectangle1</Blueprints>
+      <ParentShip>ship0</ParentShip>
+    </Component>
+    <Component Type="CT_PLATFORM_VISUAL"/>
+  </Entity>
+
+
+
+
+
+
+
+
 
 </Entities>
