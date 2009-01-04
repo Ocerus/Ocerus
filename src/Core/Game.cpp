@@ -275,7 +275,6 @@ void Core::Game::Draw( const float32 delta)
 		for (y=oldY; y<screenH; y+=texH)
 			gGfxRenderer.DrawImage(waterTex, GfxSystem::Rect(x, y, texW, texH));
 
-
 	// draw ships
 	gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::TYPE_DRAW_PLATFORM));
 	gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::TYPE_DRAW_PLATFORM_LINK));

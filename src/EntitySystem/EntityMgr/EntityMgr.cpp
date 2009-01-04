@@ -357,3 +357,4 @@ bool EntitySystem::EntityMgr::EntityExists( const EntityHandle h ) const
 		return false;
 	return mEntities.find(h.GetID()) != mEntities.end();
 }
+

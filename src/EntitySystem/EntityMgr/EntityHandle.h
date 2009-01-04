@@ -89,6 +89,7 @@ namespace EntitySystem
 		//@{
 		EntityHandle(EntityID ID): mEntityID(ID) {}
 		static EntityHandle CreateUniqueHandle();
+		static EntityID GetMaxID(void) { return sLastID; }
 		//@}
 
 		/// @name Getter

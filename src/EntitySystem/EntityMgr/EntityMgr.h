@@ -1,7 +1,8 @@
 #ifndef _ENTITYMGR_H_
 #define _ENTITYMGR_H_
 
-#include <hash_map>
+//#include <hash_map>
+#include <map>
 #include <vector>
 #include "EntityHandle.h"
 #include "EntityMessage.h"
@@ -68,7 +69,6 @@ namespace EntitySystem
 		/// @name Destroys all entities in the manager.
 		void DestroyAllEntities(void);	
 
-
 	private:
 		/// @name This struct holds info about an instance of an entity in the system.
 		struct EntityInfo
@@ -82,7 +82,9 @@ namespace EntitySystem
 			bool mFullyInited;
 			string mID;
 		};
-		typedef stdext::hash_map<EntityID, EntityInfo*> EntityMap;
+		//TODO predelat zpet na hashmapu, az bude hotova struktura pro vykreslovani entit i podle Z-orderu
+		//typedef stdext::hash_map<EntityID, EntityInfo*> EntityMap;
+		typedef std::map<EntityID, EntityInfo*> EntityMap;
 		typedef std::vector<EntityID> EntityQueue;
 
 		ComponentMgr* mComponentMgr;
