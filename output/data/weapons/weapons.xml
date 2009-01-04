@@ -18,5 +18,40 @@
       <FireEffectDisplacement>0.2</FireEffectDisplacement>
     </Component>
   </Entity>
-  
+
+  <Entity Type="ET_UNKNOWN" Name="weaponTypeRotationalCannon1">
+    <Component Type="CT_PLATFORM_ITEM_PARAMS">
+      <Material>material0</Material>
+      <ResourceGroup>ShipParts</ResourceGroup>
+      <Texture>weapon0.png</Texture>
+      <TextureScale>0.6</TextureScale>
+    </Component>
+    <Component Type="CT_WEAPON_PARAMS">
+      <ArcAngle>0.78539816339744830961566084581988</ArcAngle>
+      <ReloadTime>0.5</ReloadTime>
+      <FiringSpeed>5.0</FiringSpeed>
+      <FireEffect>gunfire0.psi</FireEffect>
+      <FireEffectScale>0.05</FireEffectScale>
+      <FireEffectDisplacement>0.2</FireEffectDisplacement>
+    </Component>
+  </Entity>
+
+  <Entity Type="ET_UNKNOWN" Name="weaponTypeFixedCannon1">
+    <Component Type="CT_PLATFORM_ITEM_PARAMS">
+      <Material>material0</Material>
+      <ResourceGroup>ShipParts</ResourceGroup>
+      <Texture>weapon0.png</Texture>
+      <TextureScale>0.6</TextureScale>
+    </Component>
+    <Component Type="CT_WEAPON_PARAMS">
+      <ArcAngle>0.05</ArcAngle>
+      <ReloadTime>0.5</ReloadTime>
+      <FiringSpeed>5.0</FiringSpeed>
+      <FireEffect>gunfire0.psi</FireEffect>
+      <FireEffectScale>0.05</FireEffectScale>
+      <FireEffectDisplacement>0.2</FireEffectDisplacement>
+    </Component>
+  </Entity>
+
+
 </Entities>

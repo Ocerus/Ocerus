@@ -65,6 +65,45 @@
     <Component Type="CT_PLATFORM_VISUAL"/>
   </Entity>
 
+  <Entity Type="ET_WEAPON" Name="weapon4">
+    <Component Type="CT_PLATFORM_ITEM">
+      <Blueprints>weaponTypeFixedCannon1</Blueprints>
+      <ParentPlatform>platform7</ParentPlatform>
+      <RelativePosition>-0.6 0.5</RelativePosition>
+    </Component>
+    <Component Type="CT_WEAPON">
+      <Ammo>ammoType0</Ammo>
+      <DefaultAngle>1.5707963267948966192313216916398</DefaultAngle>
+      <RelativeAngle>0.0</RelativeAngle>
+    </Component>
+  </Entity>
+
+  <Entity Type="ET_WEAPON" Name="weapon5">
+    <Component Type="CT_PLATFORM_ITEM">
+      <Blueprints>weaponTypeFixedCannon1</Blueprints>
+      <ParentPlatform>platform7</ParentPlatform>
+      <RelativePosition>-0.2 0.5</RelativePosition>
+    </Component>
+    <Component Type="CT_WEAPON">
+      <Ammo>ammoType0</Ammo>
+      <DefaultAngle>1.5707963267948966192313216916398</DefaultAngle>
+      <RelativeAngle>0.0</RelativeAngle>
+    </Component>
+  </Entity>
+
+  <Entity Type="ET_WEAPON" Name="weapon6">
+    <Component Type="CT_PLATFORM_ITEM">
+      <Blueprints>weaponTypeFixedCannon1</Blueprints>
+      <ParentPlatform>platform7</ParentPlatform>
+      <RelativePosition>0.2 0.5</RelativePosition>
+    </Component>
+    <Component Type="CT_WEAPON">
+      <Ammo>ammoType0</Ammo>
+      <DefaultAngle>1.5707963267948966192313216916398</DefaultAngle>
+      <RelativeAngle>0.0</RelativeAngle>
+    </Component>
+  </Entity>
+
 
   <Entity Type="ET_PLATFORM" Name="platform9">
     <Component Type="CT_PLATFORM_PHYSICS">
@@ -99,6 +138,19 @@
     </Component>
     <Component Type="CT_ENGINE">
       <DefaultAngle>1.5707963267948966192313216916398</DefaultAngle>
+      <RelativeAngle>0.0</RelativeAngle>
+    </Component>
+  </Entity>
+
+  <Entity Type="ET_WEAPON" Name="weapon8">
+    <Component Type="CT_PLATFORM_ITEM">
+      <Blueprints>weaponTypeRotationalCannon1</Blueprints>
+      <ParentPlatform>platform9</ParentPlatform>
+      <RelativePosition>-0.8 -0.15</RelativePosition>
+    </Component>
+    <Component Type="CT_WEAPON">
+      <Ammo>ammoType0</Ammo>
+      <DefaultAngle>0</DefaultAngle>
       <RelativeAngle>0.0</RelativeAngle>
     </Component>
   </Entity>
@@ -159,6 +211,46 @@
     <Component Type="CT_PLATFORM_VISUAL"/>
   </Entity>
 
+  <Entity Type="ET_WEAPON" Name="weapon1">
+    <Component Type="CT_PLATFORM_ITEM">
+      <Blueprints>weaponTypeFixedCannon1</Blueprints>
+      <ParentPlatform>platform8</ParentPlatform>
+      <RelativePosition>-0.6 -0.5</RelativePosition>
+    </Component>
+    <Component Type="CT_WEAPON">
+      <Ammo>ammoType0</Ammo>
+      <DefaultAngle>-1.5707963267948966192313216916398</DefaultAngle>
+      <RelativeAngle>0.0</RelativeAngle>
+    </Component>
+  </Entity>
+
+  <Entity Type="ET_WEAPON" Name="weapon2">
+    <Component Type="CT_PLATFORM_ITEM">
+      <Blueprints>weaponTypeFixedCannon1</Blueprints>
+      <ParentPlatform>platform8</ParentPlatform>
+      <RelativePosition>-0.2 -0.5</RelativePosition>
+    </Component>
+    <Component Type="CT_WEAPON">
+      <Ammo>ammoType0</Ammo>
+      <DefaultAngle>-1.5707963267948966192313216916398</DefaultAngle>
+      <RelativeAngle>0.0</RelativeAngle>
+    </Component>
+  </Entity>
+
+  <Entity Type="ET_WEAPON" Name="weapon3">
+    <Component Type="CT_PLATFORM_ITEM">
+      <Blueprints>weaponTypeFixedCannon1</Blueprints>
+      <ParentPlatform>platform8</ParentPlatform>
+      <RelativePosition>0.2 -0.5</RelativePosition>
+    </Component>
+    <Component Type="CT_WEAPON">
+      <Ammo>ammoType0</Ammo>
+      <DefaultAngle>-1.5707963267948966192313216916398</DefaultAngle>
+      <RelativeAngle>0.0</RelativeAngle>
+    </Component>
+  </Entity>
+
+
    <Entity Type="ET_PLATFORM" Name="platform10">
     <Component Type="CT_PLATFORM_PHYSICS">
       <RelativePosition>3.17 -0.5</RelativePosition>
@@ -196,7 +288,18 @@
     </Component>
   </Entity>
 
-
+  <Entity Type="ET_WEAPON" Name="weapon7">
+    <Component Type="CT_PLATFORM_ITEM">
+      <Blueprints>weaponTypeRotationalCannon1</Blueprints>
+      <ParentPlatform>platform10</ParentPlatform>
+      <RelativePosition>-0.8 0.15</RelativePosition>
+    </Component>
+    <Component Type="CT_WEAPON">
+      <Ammo>ammoType0</Ammo>
+      <DefaultAngle>0</DefaultAngle>
+      <RelativeAngle>0.0</RelativeAngle>
+    </Component>
+  </Entity>
 
 
 <!-- COMMAND CENTER -->
@@ -254,6 +357,19 @@
     <Component Type="CT_PLATFORM_VISUAL"/>
   </Entity>
 
+  <Entity Type="ET_WEAPON" Name="weapon10">
+    <Component Type="CT_PLATFORM_ITEM">
+      <Blueprints>weaponTypeRotationalCannon1</Blueprints>
+      <ParentPlatform>platform20</ParentPlatform>
+      <RelativePosition>-0.25 -0.6</RelativePosition>
+    </Component>
+    <Component Type="CT_WEAPON">
+      <Ammo>ammoType0</Ammo>
+      <DefaultAngle>2.3561944901923449288469825374596</DefaultAngle>
+      <RelativeAngle>0.0</RelativeAngle>
+    </Component>
+  </Entity>
+
   <Entity Type="ET_PLATFORM" Name="platform22">
     <Component Type="CT_PLATFORM_PHYSICS">
       <RelativePosition>-3.17 0.6666666666</RelativePosition>
@@ -305,6 +421,20 @@
     </Component>
     <Component Type="CT_PLATFORM_VISUAL"/>
   </Entity>
+
+  <Entity Type="ET_WEAPON" Name="weapon12">
+    <Component Type="CT_PLATFORM_ITEM">
+      <Blueprints>weaponTypeFixedCannon1</Blueprints>
+      <ParentPlatform>platform16</ParentPlatform>
+      <RelativePosition>0.4 0.17</RelativePosition>
+    </Component>
+    <Component Type="CT_WEAPON">
+      <Ammo>ammoType0</Ammo>
+      <DefaultAngle>0</DefaultAngle>
+      <RelativeAngle>0.0</RelativeAngle>
+    </Component>
+  </Entity>
+
 
 
   <Entity Type="ET_PLATFORM" Name="platform18">
@@ -362,6 +492,19 @@
     <Component Type="CT_PLATFORM_VISUAL"/>
   </Entity>
 
+  <Entity Type="ET_WEAPON" Name="weapon9">
+    <Component Type="CT_PLATFORM_ITEM">
+      <Blueprints>weaponTypeRotationalCannon1</Blueprints>
+      <ParentPlatform>platform21</ParentPlatform>
+      <RelativePosition>-0.25 0.6</RelativePosition>
+    </Component>
+    <Component Type="CT_WEAPON">
+      <Ammo>ammoType0</Ammo>
+      <DefaultAngle>3.9269908169872415480783042290994</DefaultAngle>
+      <RelativeAngle>0.0</RelativeAngle>
+    </Component>
+  </Entity>
+
   <Entity Type="ET_PLATFORM" Name="platform23">
     <Component Type="CT_PLATFORM_PHYSICS">
       <RelativePosition>-3.17 -0.6666666666</RelativePosition>
@@ -412,6 +555,19 @@
       <ParentShip>ship0</ParentShip>
     </Component>
     <Component Type="CT_PLATFORM_VISUAL"/>
+  </Entity>
+
+  <Entity Type="ET_WEAPON" Name="weapon11">
+    <Component Type="CT_PLATFORM_ITEM">
+      <Blueprints>weaponTypeFixedCannon1</Blueprints>
+      <ParentPlatform>platform17</ParentPlatform>
+      <RelativePosition>0.4 -0.17</RelativePosition>
+    </Component>
+    <Component Type="CT_WEAPON">
+      <Ammo>ammoType0</Ammo>
+      <DefaultAngle>0</DefaultAngle>
+      <RelativeAngle>0.0</RelativeAngle>
+    </Component>
   </Entity>
 
 

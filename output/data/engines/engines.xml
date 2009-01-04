@@ -27,7 +27,7 @@
       <TextureScale>0.5</TextureScale>
     </Component>
     <Component Type="CT_ENGINE_PARAMS">
-      <ArcAngle>0.0</ArcAngle>
+      <ArcAngle>0.1</ArcAngle>
       <StabilizationRatio>1000</StabilizationRatio>
       <ThrustEffect>engine1.psi</ThrustEffect>
       <ThrustEffectScale>0.02</ThrustEffectScale>
