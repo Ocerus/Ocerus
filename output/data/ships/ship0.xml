@@ -584,6 +584,251 @@
     <Component Type="CT_PLATFORM_VISUAL"/>
   </Entity>
 
+<!--                      LINKS                       -->
+
+<!-- bottom wing links -->
+  <Entity Type="ET_UNKNOWN" Name="link1">
+    <Component Type="CT_PLATFORM_LINKS">
+      <FirstPlatform>platform5</FirstPlatform>
+      <SecondPlatform>platform9</SecondPlatform>
+    </Component>
+  </Entity>
+
+
+  <Entity Type="ET_UNKNOWN" Name="link2">
+    <Component Type="CT_PLATFORM_LINKS">
+      <FirstPlatform>platform9</FirstPlatform>
+      <SecondPlatform>platform1</SecondPlatform>
+    </Component>
+  </Entity>
+
+  <Entity Type="ET_UNKNOWN" Name="link3">
+    <Component Type="CT_PLATFORM_LINKS">
+      <FirstPlatform>platform1</FirstPlatform>
+      <SecondPlatform>platform7</SecondPlatform>
+    </Component>
+  </Entity>
+
+  <Entity Type="ET_UNKNOWN" Name="link4">
+    <Component Type="CT_PLATFORM_LINKS">
+      <FirstPlatform>platform7</FirstPlatform>
+      <SecondPlatform>platform3</SecondPlatform>
+    </Component>
+  </Entity>
+
+
+  <Entity Type="ET_UNKNOWN" Name="link5">
+    <Component Type="CT_PLATFORM_LINKS">
+      <FirstPlatform>platform3</FirstPlatform>
+      <SecondPlatform>platform1</SecondPlatform>
+    </Component>
+  </Entity>
+
+<!-- top wing links -->
+  <Entity Type="ET_UNKNOWN" Name="link6">
+    <Component Type="CT_PLATFORM_LINKS">
+      <FirstPlatform>platform6</FirstPlatform>
+      <SecondPlatform>platform8</SecondPlatform>
+    </Component>
+  </Entity>
+
+
+  <Entity Type="ET_UNKNOWN" Name="link7">
+    <Component Type="CT_PLATFORM_LINKS">
+      <FirstPlatform>platform10</FirstPlatform>
+      <SecondPlatform>platform2</SecondPlatform>
+    </Component>
+  </Entity>
+
+  <Entity Type="ET_UNKNOWN" Name="link8">
+    <Component Type="CT_PLATFORM_LINKS">
+      <FirstPlatform>platform2</FirstPlatform>
+      <SecondPlatform>platform8</SecondPlatform>
+    </Component>
+  </Entity>
+
+
+  <Entity Type="ET_UNKNOWN" Name="link9">
+    <Component Type="CT_PLATFORM_LINKS">
+      <FirstPlatform>platform8</FirstPlatform>
+      <SecondPlatform>platform4</SecondPlatform>
+    </Component>
+  </Entity>
+
+  <Entity Type="ET_UNKNOWN" Name="link10">
+    <Component Type="CT_PLATFORM_LINKS">
+      <FirstPlatform>platform4</FirstPlatform>
+      <SecondPlatform>platform2</SecondPlatform>
+    </Component>
+  </Entity>
+
+
+<!-- wings to CC -->
+
+  <!-- wing + cc + wing -->
+  <Entity Type="ET_UNKNOWN" Name="link11">
+    <Component Type="CT_PLATFORM_LINKS">
+      <FirstPlatform>platform4</FirstPlatform>
+      <SecondPlatform>platform11</SecondPlatform>
+    </Component>
+  </Entity>
+
+  <Entity Type="ET_UNKNOWN" Name="link12">
+    <Component Type="CT_PLATFORM_LINKS">
+      <FirstPlatform>platform3</FirstPlatform>
+      <SecondPlatform>platform11</SecondPlatform>
+    </Component>
+  </Entity>
+
+  <Entity Type="ET_UNKNOWN" Name="link13">
+    <Component Type="CT_PLATFORM_LINKS">
+      <FirstPlatform>platform3</FirstPlatform>
+      <SecondPlatform>platform4</SecondPlatform>
+    </Component>
+  </Entity>
+
+   <!-- front + back -->
+
+   <Entity Type="ET_UNKNOWN" Name="link14">
+    <Component Type="CT_PLATFORM_LINKS">
+      <FirstPlatform>platform8</FirstPlatform>
+      <SecondPlatform>platform13</SecondPlatform>
+    </Component>
+  </Entity>
+
+   <Entity Type="ET_UNKNOWN" Name="link15">
+    <Component Type="CT_PLATFORM_LINKS">
+      <FirstPlatform>platform11</FirstPlatform>
+      <SecondPlatform>platform13</SecondPlatform>
+    </Component>
+  </Entity>
+
+   <Entity Type="ET_UNKNOWN" Name="link16">
+    <Component Type="CT_PLATFORM_LINKS">
+      <FirstPlatform>platform7</FirstPlatform>
+      <SecondPlatform>platform12</SecondPlatform>
+    </Component>
+  </Entity>
+
+  <Entity Type="ET_UNKNOWN" Name="link17">
+    <Component Type="CT_PLATFORM_LINKS">
+      <FirstPlatform>platform11</FirstPlatform>
+      <SecondPlatform>platform12</SecondPlatform>
+    </Component>
+  </Entity>
+
+<!-- top back wing -->
+
+
+   <Entity Type="ET_UNKNOWN" Name="link18">
+    <Component Type="CT_PLATFORM_LINKS">
+      <FirstPlatform>platform13</FirstPlatform>
+      <SecondPlatform>platform15</SecondPlatform>
+    </Component>
+  </Entity>
+
+   <Entity Type="ET_UNKNOWN" Name="link19">
+    <Component Type="CT_PLATFORM_LINKS">
+      <FirstPlatform>platform15</FirstPlatform>
+      <SecondPlatform>platform17</SecondPlatform>
+    </Component>
+  </Entity>
+
+   <Entity Type="ET_UNKNOWN" Name="link20">
+    <Component Type="CT_PLATFORM_LINKS">
+      <FirstPlatform>platform17</FirstPlatform>
+      <SecondPlatform>platform19</SecondPlatform>
+    </Component>
+  </Entity>
+
+
+   <Entity Type="ET_UNKNOWN" Name="link21">
+    <Component Type="CT_PLATFORM_LINKS">
+      <FirstPlatform>platform19</FirstPlatform>
+      <SecondPlatform>platform21</SecondPlatform>
+    </Component>
+  </Entity>
+
+   <Entity Type="ET_UNKNOWN" Name="link22">
+    <Component Type="CT_PLATFORM_LINKS">
+      <FirstPlatform>platform21</FirstPlatform>
+      <SecondPlatform>platform23</SecondPlatform>
+    </Component>
+  </Entity>
+
+
+   <Entity Type="ET_UNKNOWN" Name="link23">
+    <Component Type="CT_PLATFORM_LINKS">
+      <FirstPlatform>platform23</FirstPlatform>
+      <SecondPlatform>platform13</SecondPlatform>
+    </Component>
+  </Entity>
+
+   <Entity Type="ET_UNKNOWN" Name="link24">
+    <Component Type="CT_PLATFORM_LINKS">
+      <FirstPlatform>platform13</FirstPlatform>
+      <SecondPlatform>platform21</SecondPlatform>
+    </Component>
+  </Entity>
+
+
+<!-- bottom back wing -->
+
+
+   <Entity Type="ET_UNKNOWN" Name="link25">
+    <Component Type="CT_PLATFORM_LINKS">
+      <FirstPlatform>platform12</FirstPlatform>
+      <SecondPlatform>platform14</SecondPlatform>
+    </Component>
+  </Entity>
+
+   <Entity Type="ET_UNKNOWN" Name="link26">
+    <Component Type="CT_PLATFORM_LINKS">
+      <FirstPlatform>platform14</FirstPlatform>
+      <SecondPlatform>platform16</SecondPlatform>
+    </Component>
+  </Entity>
+
+
+   <Entity Type="ET_UNKNOWN" Name="link27">
+    <Component Type="CT_PLATFORM_LINKS">
+      <FirstPlatform>platform16</FirstPlatform>
+      <SecondPlatform>platform18</SecondPlatform>
+    </Component>
+  </Entity>
+
+   <Entity Type="ET_UNKNOWN" Name="link28">
+    <Component Type="CT_PLATFORM_LINKS">
+      <FirstPlatform>platform18</FirstPlatform>
+      <SecondPlatform>platform20</SecondPlatform>
+    </Component>
+  </Entity>
+
+
+   <Entity Type="ET_UNKNOWN" Name="link29">
+    <Component Type="CT_PLATFORM_LINKS">
+      <FirstPlatform>platform20</FirstPlatform>
+      <SecondPlatform>platform22</SecondPlatform>
+    </Component>
+  </Entity>
+
+   <Entity Type="ET_UNKNOWN" Name="link30">
+    <Component Type="CT_PLATFORM_LINKS">
+      <FirstPlatform>platform22</FirstPlatform>
+      <SecondPlatform>platform12</SecondPlatform>
+    </Component>
+  </Entity>
+
+
+   <Entity Type="ET_UNKNOWN" Name="link31">
+    <Component Type="CT_PLATFORM_LINKS">
+      <FirstPlatform>platform12</FirstPlatform>
+      <SecondPlatform>platform20</SecondPlatform>
+    </Component>
+  </Entity>
+
+
+
 
 
 
