@@ -189,7 +189,7 @@ void Core::Game::Update( const float32 delta )
 	mPhysicsResidualDelta = physicsDelta;
 
 	// water
-	mWaterSurface->Update(delta);
+	//mWaterSurface->Update(delta);
 
 	//particle effects
 	gPSMgr.Update(delta);
@@ -230,7 +230,7 @@ void Core::Game::Draw( const float32 delta)
 	gGfxRenderer.ClearScreen(GfxSystem::Color(0,0,0));
 
 	// draw the water
-	mWaterSurface->Draw();
+	//mWaterSurface->Draw();
 	
 	/*GfxSystem::TexturePtr waterTex = gResourceMgr.GetResource("Backgrounds", "water.png");
 	float32 texW_ws = WATER_TEXTURE_SCALE * waterTex->GetWidth();
