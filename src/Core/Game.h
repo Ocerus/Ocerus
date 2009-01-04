@@ -13,13 +13,17 @@
 //@{
 class b2World;
 class b2Shape;
-class hgeDistortionMesh;
 //@}
 
 namespace Core
 {
 	/// @name Inner states of the game state.
 	enum eGameState { GS_NORMAL=0 };
+
+	/// @name Forward declarations.
+	//@{
+	class WaterSurface;
+	//@}
 
 	/** This class holds all info related directly to the game and takes care about rendering, input and game logic.
 	*/
@@ -81,11 +85,7 @@ namespace Core
 
 		/// @name Water stuff.
 		//@{
-		hgeDistortionMesh* mWaterDistMesh;
-		int32 mWaterDistRows;
-		int32 mWaterDistCols;
-		int32 mWaterDistCellW;
-		int32 mWaterDistCellH;
+		WaterSurface* mWaterSurface;
 		//@}
 
 		/// @name Selections stuff.

@@ -66,6 +66,9 @@ GfxRenderer::GfxRenderer(const Point& resolution, bool fullscreen):
 	mHGE->System_SetState(HGE_SHOWSPLASH, false);
 	bool success = mHGE->System_Initiate();
 
+	mScreenWidth = resolution.x;
+	mScreenHeight = resolution.y;
+
 	assert(success);
 	if (success)
 		gLogMgr.LogMessage("HGE inited; logfile=", mHGE->System_GetState(HGE_LOGFILE));
@@ -97,9 +100,8 @@ void GfxRenderer::ChangeResolution( const uint32 width, const uint32 height )
 	gLogMgr.LogMessage("Changing resolution to ", width, height);
 
 	mHGE->System_ChangeResolution(width, height);
-
-	/*mHGE->System_SetState(HGE_SCREENWIDTH,width);
-	mHGE->System_SetState(HGE_SCREENHEIGHT,height);*/
+	mScreenWidth = width;
+	mScreenHeight = height;
 
 	while (iter != mScreenListeners.end())
 	{
@@ -113,16 +115,6 @@ void GfxRenderer::ChangeResolution( const uint32 width, const uint32 height )
 Point GfxRenderer::GetResolution() const
 {
 	return Point(GetScreenWidth(), GetScreenHeight());
-}
-
-int32 GfxRenderer::GetScreenWidth( void ) const
-{
-	return mHGE->System_GetState(HGE_SCREENWIDTH);
-}
-
-int32 GfxRenderer::GetScreenHeight( void ) const
-{
-	return mHGE->System_GetState(HGE_SCREENHEIGHT);
 }
 
 void GfxRenderer::SetFullscreen(bool fullscreen)
@@ -592,6 +584,34 @@ void GfxRenderer::DrawString( float32 x, float32 y, const string & id,
 Vector2 GfxRenderer::GetTextSize( const string & text, const string & fontid )
 {
 	return gGUIMgr.GetTextSize(text, fontid);
+}
+
+bool GfxRenderer::DrawQuad( GfxSystem::Point* const vertices, const TexturePtr texture, Vector2* const textureCoords, Color* const vertexColors )
+{
+	if (texture.IsNull())
+	{
+		gLogMgr.LogMessage("DrawQuad: texture is null", LOG_ERROR);
+		return false;
+	}
+
+	hgeQuad q;
+	for (int32 i=0; i<4; ++i)
+	{
+		q.v[i].x = (float32)vertices[i].x;
+		q.v[i].y = (float32)vertices[i].y;
+		q.v[i].z = 0;
+		q.v[i].tx = textureCoords[i].x;
+		q.v[i].ty = textureCoords[i].y;
+		q.v[i].col = ConvertColorToDWORD(vertexColors[i]);
+	}
+
+	q.tex = texture->GetTexture();
+	q.blend = BLEND_ALPHABLEND | BLEND_COLORMUL | BLEND_ZWRITE;
+
+	assert(mHGE);
+	mHGE->Gfx_RenderQuad(&q);
+
+	return true;
 }
 
 //------------------------------------------------------------------------

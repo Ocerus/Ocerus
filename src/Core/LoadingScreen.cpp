@@ -21,6 +21,7 @@ void Core::LoadingScreen::DoLoading( eType type )
 		gResourceMgr.AddResourceDirToGroup("ammo", "ShipParts");
 		gResourceMgr.AddResourceDirToGroup("ships", "Ships");
 		gResourceMgr.AddResourceFileToGroup("water.png", "Backgrounds");	
+		gResourceMgr.AddResourceFileToGroup("water2.png", "Backgrounds");	
 		gResourceMgr.AddResourceDirToGroup("xml", "xml");
 		gResourceMgr.AddResourceDirToGroup("psi", "psi");
 

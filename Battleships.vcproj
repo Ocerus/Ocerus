@@ -751,6 +751,10 @@
 					RelativePath=".\src\Core\LoadingScreen.h"
 					>
 				</File>
+				<File
+					RelativePath=".\src\Core\WaterSurface.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="src"
@@ -773,6 +777,10 @@
 				</File>
 				<File
 					RelativePath=".\src\Core\main.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Core\WaterSurface.cpp"
 					>
 				</File>
 			</Filter>

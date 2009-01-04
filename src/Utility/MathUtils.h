@@ -26,6 +26,8 @@ namespace MathUtils
 
 	inline int32 Floor(const float32 num) { return static_cast<int32>(floorf(num)); }
 
+	inline int32 Ceiling(const float32 num) { return static_cast<int32>(ceilf(num)); }
+
 	inline float32 Sqr(const float32 num) { return num*num; }
 
 	inline float32 Sqrt(const float32 num) { return b2Sqrt(num); }
@@ -43,6 +45,12 @@ namespace MathUtils
 	inline float32 Sin(const float32 angle) { return sinf(angle); }
 
 	inline float32 Cos(const float32 angle) { return cosf(angle); }
+
+	inline float32 Tan(const float32 angle) { return tanf(angle); }
+
+	inline float32 ArcTan(const float32 x) { return atanf(x); }
+
+	inline float32 ArcSin(const float32 x) { return asinf(x); }
 
 	inline float32 Dot(const Vector2& vec1, const Vector2& vec2) { return b2Dot(vec1, vec2); }
 
@@ -64,9 +72,7 @@ namespace MathUtils
 
 	Vector2 VectorFromAngle(const float32 angle, const float32 size = 1.0f);
 
-	float FloatSwap(float f);
-
-	int LongSwap(int i);
+	inline bool IsPowerOfTwo(const uint32 num) { return b2IsPowerOfTwo(num); }
 
 }
 

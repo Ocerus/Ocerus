@@ -4,8 +4,7 @@
 #include "Box2D.h"
 #include <iostream>
 #include "../GfxSystem/ParticleResource.h"
-//TODO odstranit az bude voda jina
-#include "hgedistort.h"
+#include "WaterSurface.h"
 
 using namespace Core;
 using namespace EntitySystem;
@@ -17,12 +16,17 @@ using namespace InputSystem;
 #define WEAPON_VISIBLE_ARC_RADIUS 80
 #define CAMERA_SPEED_RATIO 700.0f
 #define CAMERA_SCALE_RATIO 0.001f
-#define WATER_TEXTURE_SCALE 0.01f
 #define WEAPON_ANGLECHANGE_SPEED 2.0f
 #define ENGINE_ANGLECHANGE_SPEED 2.0f
 #define ENGINE_POWERCHANGE_SPEED 1.0f
 
-Core::Game::Game(): StateMachine<eGameState>(GS_NORMAL), mPhysics(0), mMyTeam(-1) {}
+#define WATER_TEXTURE_SCALE 0.01f
+
+Core::Game::Game(): 
+	StateMachine<eGameState>(GS_NORMAL),
+	mPhysics(0),
+	mMyTeam(-1),
+	mWaterSurface(0) {}
 
 Core::Game::~Game()
 {
@@ -75,21 +79,13 @@ void Core::Game::Init()
 		gGfxRenderer.SetCameraPos(shipPos);
 		mMyTeam = ship.GetTeam();
 	}
-	gGfxRenderer.SetCameraScale(50.0f);
+	gGfxRenderer.SetCameraScale(70.0f);
 	mCameraFocus.Invalidate();
 
 
 	// water
-	GfxSystem::TexturePtr tex = gResourceMgr.GetResource("Backgrounds", "water.png");
-	mWaterDistRows = 16;
-	mWaterDistCols = 16;
-	mWaterDistCellW = tex->GetWidth() / mWaterDistCols;
-	mWaterDistCellH = tex->GetHeight() / mWaterDistRows;
-	mWaterDistMesh = new hgeDistortionMesh(mWaterDistCols, mWaterDistRows);
-	mWaterDistMesh->SetTexture(tex->GetTexture());
-	mWaterDistMesh->SetTextureRect(0, 0, (float32)gGfxRenderer.GetScreenWidth(), (float32)gGfxRenderer.GetScreenHeight());
-	mWaterDistMesh->SetBlendMode(BLEND_COLORADD | BLEND_ALPHABLEND | BLEND_ZWRITE);
-	mWaterDistMesh->Clear(0xFF000000);
+	GfxSystem::TexturePtr tex = gResourceMgr.GetResource("Backgrounds", "water2.png");
+	mWaterSurface = DYN_NEW WaterSurface(tex, 0.01f, 0.2f, 0.2f, 128, 128);
 
 
 
@@ -112,15 +108,6 @@ void Core::Game::Deinit()
 void Core::Game::Update( const float32 delta )
 {
 	//// Input reactions ////
-
-	if (gInputMgr.IsKeyDown(KC_ESCAPE))
-		gApp.Shutdown();
-	/*
-	if (gInputMgr.IsKeyDown(InputSystem::KC_G)) {
-		gGUIMgr.LoadGUI();
-		gApp.RequestStateChange(AS_GUI, true);
-	}
-	*/
 
 	// pick hover entity
 	MouseState& mouse = gInputMgr.GetMouseState();
@@ -201,6 +188,9 @@ void Core::Game::Update( const float32 delta )
 	}
 	mPhysicsResidualDelta = physicsDelta;
 
+	// water
+	mWaterSurface->Update(delta);
+
 	//particle effects
 	gPSMgr.Update(delta);
 };
@@ -240,26 +230,9 @@ void Core::Game::Draw( const float32 delta)
 	gGfxRenderer.ClearScreen(GfxSystem::Color(0,0,0));
 
 	// draw the water
-	/*static float32 waterTime = 0;
-	waterTime += delta;
-
-	int32 cX = gGfxRenderer.WorldToScreenScalar(gGfxRenderer.GetCameraWorldBoxTopLeft().x);
-	int32 cY = gGfxRenderer.WorldToScreenScalar(gGfxRenderer.GetCameraWorldBoxTopLeft().y);
-	for(int32 i=1; i<mWaterDistCols-1; ++i)
-	{
-		for(int32 j=1; j<mWaterDistRows-1; ++j)
-		{
-			int32 wX = cX/2 + mWaterDistCellW*i;
-			int32 wY = cY/2 + mWaterDistCellH*j;
-			//mWaterDistMesh->SetDisplacement(j,i,-cosf(t*2+((i*cellw+j*cellh-cX-cY)/(Zoom*2*(cellw+cellh))))*2,sinf(t*2+((i*cellw+j*cellh-cX-cY)/(Zoom*2*(cellw+cellh))))*2,HGEDISP_NODE);
-			//col=int((cosf(t*2+((i*cellw+j*cellh-cX-cY)))+1)*10);						
-			int32 col = MathUtils::Round((MathUtils::Cos(2.0f*waterTime + 0.09f*(wX + wY)) + 1) * 10);
-			mWaterDistMesh->SetColor(j,i,0xFF<<24 | col<<16 | col<<8 | col);
-		}
-	}
-	mWaterDistMesh->Render(0, 0);*/
+	mWaterSurface->Draw();
 	
-	GfxSystem::TexturePtr waterTex = gResourceMgr.GetResource("Backgrounds", "water.png");
+	/*GfxSystem::TexturePtr waterTex = gResourceMgr.GetResource("Backgrounds", "water.png");
 	float32 texW_ws = WATER_TEXTURE_SCALE * waterTex->GetWidth();
 	float32 texH_ws = WATER_TEXTURE_SCALE * waterTex->GetHeight();
 	int32 texW = gGfxRenderer.WorldToScreenScalar(texW_ws);
@@ -273,7 +246,7 @@ void Core::Game::Draw( const float32 delta)
 	int32 oldY = y;
 	for (; x<screenW; x+=texW)
 		for (y=oldY; y<screenH; y+=texH)
-			gGfxRenderer.DrawImage(waterTex, GfxSystem::Rect(x, y, texW, texH));
+			gGfxRenderer.DrawImage(waterTex, GfxSystem::Rect(x, y, texW, texH));*/
 
 	// draw ships
 	gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::TYPE_DRAW_PLATFORM));
@@ -352,6 +325,9 @@ void Core::Game::Draw( const float32 delta)
 
 void Core::Game::KeyPressed( const KeyInfo& ke )
 {
+	if (ke.keyAction == KC_ESCAPE)
+		gApp.Shutdown();
+
 	/*if (ke.keyAction == KC_F)
 	{
 		gGfxRenderer.SetFullscreen(!gGfxRenderer.IsFullscreen());

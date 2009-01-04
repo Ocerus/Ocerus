@@ -90,8 +90,8 @@ namespace GfxSystem
 		inline void ChangeResolution(const Point& resolution) { ChangeResolution(resolution.x, resolution.y); }
 		void ChangeResolution(const uint32 width, const uint32 height);
 		Point GetResolution(void) const;
-		int32 GetScreenWidth(void) const;
-		int32 GetScreenHeight(void) const;
+		inline int32 GetScreenWidth(void) const { return mScreenWidth; }
+		inline int32 GetScreenHeight(void) const { return mScreenHeight; }
 		inline int32 GetScreenWidthHalf(void) const { return GetScreenWidth() >> 1; }
 		inline int32 GetScreenHeightHalf(void) const { return GetScreenHeight() >> 1; }
 		void SetFullscreen(bool fullscreen);
@@ -142,7 +142,7 @@ namespace GfxSystem
 		bool DrawImage(const TexturePtr& image, const Rect& textureRect, const Rect& destRect, const ColorRect& colors = ColorRect() ) const;
 		bool DrawImage(const TexturePtr& image, const Rect& destRect) const;
 
-		bool DrawLine(int x1, int y1, int x2, int y2, const Pen& pen) const;
+		bool DrawLine(int32 x1, int32 y1, int32 x2, int32 y2, const Pen& pen) const;
 		bool DrawLine(const Point& begin, const Point& end, const Pen& pen) const;
 		/// @name This version does a conversion from world space
 		bool DrawLineWithConversion(const Vector2& begin, const Vector2& end, const Pen& pen) const;
@@ -152,6 +152,8 @@ namespace GfxSystem
 		
 		bool DrawPolygon(Point* vertices, int vertices_len, const Color& fillColor, const Pen& outline = Pen::NullPen) const;
 		bool DrawPolygon(const std::vector<Point>& vertices, const Color& fillColor, const Pen& outline = Pen::NullPen) const;
+
+		bool DrawQuad(Point* const vertices, const TexturePtr texture, Vector2* const textureCoords, Color* const vertexColors);
 
 		/// @name This version does a conversion from world space
 		//TODO dodelat podobne verze DrawPolygon
@@ -181,6 +183,12 @@ namespace GfxSystem
 
 	private:
 		HGE* mHGE; 
+
+		/// @name Screen bounds.
+		//@{
+		int32 mScreenWidth;
+		int32 mScreenHeight;
+		//@}
 
 		/// @name Camera center position.
 		//@{
