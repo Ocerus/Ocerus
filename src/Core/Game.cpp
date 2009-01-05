@@ -64,6 +64,9 @@ void Core::Game::Init()
 
 	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("Ships/ship0.xml"));
 	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("Ships/ship1.xml"));
+	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("Ships/ship2.xml"));
+	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("Ships/ship3.xml"));
+
 
 	// recompute mass of the ship's body
 	gEntityMgr.BroadcastMessage(EntityMessage::TYPE_PHYSICS_UPDATE_MASS);
@@ -90,8 +93,6 @@ void Core::Game::Init()
 
 
 	gInputMgr.AddInputListener(this);
-
-
 
 
 

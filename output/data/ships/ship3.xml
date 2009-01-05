@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Entities>
+
+  <Entity Type="ET_SHIP" Name="ship3">
+    <Component Type="CT_SHIP_PHYSICS">
+      <InitBodyPosition>10.0 5.0</InitBodyPosition>
+      <InitBodyAngle>0</InitBodyAngle>
+    </Component>
+    <Component Type="CT_SHIP_LOGIC"/>
+    <Component Type="CT_SHIP_VISUAL"/>
+  </Entity>
+
+
+  <Entity Type="ET_PLATFORM" Name="platform1-3">
+    <Component Type="CT_PLATFORM_PHYSICS">
+      <RelativePosition>1.25 0.57</RelativePosition>
+      <InitShapeFlip>false</InitShapeFlip>
+      <InitShapeAngle>0</InitShapeAngle>
+    </Component>
+    <Component Type="CT_PLATFORM_LOGIC">
+      <Blueprints>platformFront1</Blueprints>
+      <ParentShip>ship3</ParentShip>
+    </Component>
+    <Component Type="CT_PLATFORM_VISUAL"/>
+  </Entity>
+
+  <Entity Type="ET_PLATFORM" Name="platform2-3">
+    <Component Type="CT_PLATFORM_PHYSICS">
+      <RelativePosition>1.25 -0.57</RelativePosition>
+      <InitShapeFlip>true</InitShapeFlip>
+      <InitShapeAngle>0.0</InitShapeAngle>
+    </Component>
+    <Component Type="CT_PLATFORM_LOGIC">
+      <Blueprints>platformFront1</Blueprints>
+      <ParentShip>ship3</ParentShip>
+    </Component>
+    <Component Type="CT_PLATFORM_VISUAL"/>
+  </Entity>
+
+  <Entity Type="ET_PLATFORM" Name="platform8-3">
+    <Component Type="CT_PLATFORM_PHYSICS">
+      <RelativePosition>0.29 1.97</RelativePosition>
+      <InitShapeFlip>false</InitShapeFlip>
+      <InitShapeAngle>0</InitShapeAngle>
+    </Component>
+    <Component Type="CT_PLATFORM_LOGIC">
+      <Blueprints>platformFront1</Blueprints>
+      <ParentShip>ship3</ParentShip>
+    </Component>
+    <Component Type="CT_PLATFORM_VISUAL"/>
+  </Entity>
+
+  <Entity Type="ET_PLATFORM" Name="platform9-3">
+    <Component Type="CT_PLATFORM_PHYSICS">
+      <RelativePosition>0.29 -1.97</RelativePosition>
+      <InitShapeFlip>true</InitShapeFlip>
+      <InitShapeAngle>0.0</InitShapeAngle>
+    </Component>
+    <Component Type="CT_PLATFORM_LOGIC">
+      <Blueprints>platformFront1</Blueprints>
+      <ParentShip>ship3</ParentShip>
+    </Component>
+    <Component Type="CT_PLATFORM_VISUAL"/>
+  </Entity>
+
+
+  <Entity Type="ET_PLATFORM" Name="platform3-3">
+    <Component Type="CT_PLATFORM_PHYSICS">
+      <RelativePosition>-0.3 0.3</RelativePosition>
+      <InitShapeFlip>true</InitShapeFlip>
+      <InitShapeAngle>3.1415926535897932384626433832795</InitShapeAngle>
+    </Component>
+    <Component Type="CT_PLATFORM_LOGIC">
+      <Blueprints>platformWing4</Blueprints>
+      <ParentShip>ship3</ParentShip>
+    </Component>
+    <Component Type="CT_PLATFORM_VISUAL"/>
+  </Entity>
+
+  <Entity Type="ET_ENGINE" Name="engine1-3">
+    <Component Type="CT_PLATFORM_ITEM">
+      <Blueprints>engineTypeRotational90-10</Blueprints>
+      <ParentPlatform>platform3-3</ParentPlatform>
+      <RelativePosition>-0.3 0.1</RelativePosition>
+    </Component>
+    <Component Type="CT_ENGINE">
+      <DefaultAngle>3.1415926535897932384626433832795</DefaultAngle>
+      <RelativeAngle>0.0</RelativeAngle>
+    </Component>
+  </Entity>
+
+  <Entity Type="ET_PLATFORM" Name="platform4-3">
+    <Component Type="CT_PLATFORM_PHYSICS">
+      <RelativePosition>-0.3 -0.3</RelativePosition>
+      <InitShapeFlip>false</InitShapeFlip>
+      <InitShapeAngle>3.1415926535897932384626433832795</InitShapeAngle>
+    </Component>
+    <Component Type="CT_PLATFORM_LOGIC">
+      <Blueprints>platformWing4</Blueprints>
+      <ParentShip>ship3</ParentShip>
+    </Component>
+    <Component Type="CT_PLATFORM_VISUAL"/>
+  </Entity>
+
+  <Entity Type="ET_ENGINE" Name="engine2-3">
+    <Component Type="CT_PLATFORM_ITEM">
+      <Blueprints>engineTypeRotational90-10</Blueprints>
+      <ParentPlatform>platform4-3</ParentPlatform>
+      <RelativePosition>-0.3 -0.1</RelativePosition>
+    </Component>
+    <Component Type="CT_ENGINE">
+      <DefaultAngle>3.1415926535897932384626433832795</DefaultAngle>
+      <RelativeAngle>0.0</RelativeAngle>
+    </Component>
+  </Entity>
+
+  <Entity Type="ET_PLATFORM" Name="platform5-3">
+    <Component Type="CT_PLATFORM_PHYSICS">
+      <RelativePosition>0.5 0</RelativePosition>
+      <InitShapeFlip>false</InitShapeFlip>
+      <InitShapeAngle>0</InitShapeAngle>
+    </Component>
+    <Component Type="CT_PLATFORM_LOGIC">
+      <Blueprints>platformCommandCenter1</Blueprints>
+      <ParentShip>ship3</ParentShip>
+    </Component>
+    <Component Type="CT_PLATFORM_VISUAL"/>
+  </Entity>
+
+  <Entity Type="ET_WEAPON" Name="weapon3-3">
+    <Component Type="CT_PLATFORM_ITEM">
+      <Blueprints>weaponTypeTurret1</Blueprints>
+      <ParentPlatform>platform5-3</ParentPlatform>
+      <RelativePosition>0 0</RelativePosition>
+    </Component>
+    <Component Type="CT_WEAPON">
+      <Ammo>ammoType0</Ammo>
+      <DefaultAngle>0.0</DefaultAngle>
+      <RelativeAngle>0.0</RelativeAngle>
+    </Component>
+  </Entity>
+
+  <Entity Type="ET_PLATFORM" Name="platform6-3">
+    <Component Type="CT_PLATFORM_PHYSICS">
+      <RelativePosition>-0.63 1.31</RelativePosition>
+      <InitShapeFlip>true</InitShapeFlip>
+      <InitShapeAngle>3.1415926535897932384626433832795</InitShapeAngle>
+    </Component>
+    <Component Type="CT_PLATFORM_LOGIC">
+      <Blueprints>platformWing3</Blueprints>
+      <ParentShip>ship3</ParentShip>
+    </Component>
+    <Component Type="CT_PLATFORM_VISUAL"/>
+  </Entity>
+
+  <Entity Type="ET_WEAPON" Name="weapon2-3">
+    <Component Type="CT_PLATFORM_ITEM">
+      <Blueprints>weaponTypeFixedCannon1</Blueprints>
+      <ParentPlatform>platform6-3</ParentPlatform>
+      <RelativePosition>0 0</RelativePosition>
+    </Component>
+    <Component Type="CT_WEAPON">
+      <Ammo>ammoType0</Ammo>
+      <DefaultAngle>0.0</DefaultAngle>
+      <RelativeAngle>0.0</RelativeAngle>
+    </Component>
+  </Entity>
+
+  <Entity Type="ET_PLATFORM" Name="platform7-3">
+    <Component Type="CT_PLATFORM_PHYSICS">
+      <RelativePosition>-0.63 -1.31</RelativePosition>
+      <InitShapeFlip>false</InitShapeFlip>
+      <InitShapeAngle>3.1415926535897932384626433832795</InitShapeAngle>
+    </Component>
+    <Component Type="CT_PLATFORM_LOGIC">
+      <Blueprints>platformWing3</Blueprints>
+      <ParentShip>ship3</ParentShip>
+    </Component>
+    <Component Type="CT_PLATFORM_VISUAL"/>
+  </Entity>
+
+  <Entity Type="ET_WEAPON" Name="weapon2-3">
+    <Component Type="CT_PLATFORM_ITEM">
+      <Blueprints>weaponTypeFixedCannon1</Blueprints>
+      <ParentPlatform>platform7-3</ParentPlatform>
+      <RelativePosition>0 0</RelativePosition>
+    </Component>
+    <Component Type="CT_WEAPON">
+      <Ammo>ammoType0</Ammo>
+      <DefaultAngle>0.0</DefaultAngle>
+      <RelativeAngle>0.0</RelativeAngle>
+    </Component>
+  </Entity>
+
+
+<!--             LINKS                    -->
+
+
+  <Entity Type="ET_UNKNOWN" Name="link1-3">
+    <Component Type="CT_PLATFORM_LINKS">
+      <FirstPlatform>platform2-3</FirstPlatform>
+      <SecondPlatform>platform5-3</SecondPlatform>
+    </Component>
+  </Entity>
+
+  <Entity Type="ET_UNKNOWN" Name="link2-3">
+    <Component Type="CT_PLATFORM_LINKS">
+      <FirstPlatform>platform1-3</FirstPlatform>
+      <SecondPlatform>platform5-3</SecondPlatform>
+    </Component>
+  </Entity>
+
+  <Entity Type="ET_UNKNOWN" Name="link3-3">
+    <Component Type="CT_PLATFORM_LINKS">
+      <FirstPlatform>platform3-3</FirstPlatform>
+      <SecondPlatform>platform5-3</SecondPlatform>
+    </Component>
+  </Entity>
+
+  <Entity Type="ET_UNKNOWN" Name="link4-3">
+    <Component Type="CT_PLATFORM_LINKS">
+      <FirstPlatform>platform4-3</FirstPlatform>
+      <SecondPlatform>platform5-3</SecondPlatform>
+    </Component>
+  </Entity>
+
+  <Entity Type="ET_UNKNOWN" Name="link5-3">
+    <Component Type="CT_PLATFORM_LINKS">
+      <FirstPlatform>platform3-3</FirstPlatform>
+      <SecondPlatform>platform6-3</SecondPlatform>
+    </Component>
+  </Entity>
+
+  <Entity Type="ET_UNKNOWN" Name="link6-3">
+    <Component Type="CT_PLATFORM_LINKS">
+      <FirstPlatform>platform4-3</FirstPlatform>
+      <SecondPlatform>platform7-3</SecondPlatform>
+    </Component>
+  </Entity>
+
+  <Entity Type="ET_UNKNOWN" Name="link7-3">
+    <Component Type="CT_PLATFORM_LINKS">
+      <FirstPlatform>platform6-3</FirstPlatform>
+      <SecondPlatform>platform8-3</SecondPlatform>
+    </Component>
+  </Entity>
+
+  <Entity Type="ET_UNKNOWN" Name="link8-3">
+    <Component Type="CT_PLATFORM_LINKS">
+      <FirstPlatform>platform7-3</FirstPlatform>
+      <SecondPlatform>platform9-3</SecondPlatform>
+    </Component>
+  </Entity>
+
+  <Entity Type="ET_UNKNOWN" Name="link9-3">
+    <Component Type="CT_PLATFORM_LINKS">
+      <FirstPlatform>platform1-3</FirstPlatform>
+      <SecondPlatform>platform3-3</SecondPlatform>
+    </Component>
+  </Entity>
+
+  <Entity Type="ET_UNKNOWN" Name="link10-3">
+    <Component Type="CT_PLATFORM_LINKS">
+      <FirstPlatform>platform2-3</FirstPlatform>
+      <SecondPlatform>platform4-3</SecondPlatform>
+    </Component>
+  </Entity>
+
+
+
+</Entities>

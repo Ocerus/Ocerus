@@ -121,7 +121,7 @@ void Application::RunMainLoop()
 			gGfxRenderer.DrawString(0.0f, 0.0f, "FPS", "FPS: " + StringConverter::ToString(mAvgFPS),
 				GfxSystem::Color(0,180,0), GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_BOTTOM,
 				GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_BOTTOM);
-
+			
 			gGfxRenderer.EndRendering();	
 		}
 
@@ -195,7 +195,7 @@ void Application::UpdateStats()
 	if (curTimeMillis - mLastSecond > 1000)
 	{
 		mLastFPS = 1000.0f * (float32)mFrameCount / (float32)(curTimeMillis - mLastSecond);
-		if (mAvgFPS == 0)
+		if (mAvgFPS != 0)
 			mAvgFPS = mLastFPS;
 		else
 			mAvgFPS = 0.05f * (mAvgFPS + mLastFPS); // approximation
