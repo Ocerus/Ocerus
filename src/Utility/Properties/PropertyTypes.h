@@ -31,7 +31,7 @@ enum ePropertyType
 	PROPTYPE_STRING_KEY,
 	PROPTYPE_ENTITYHANDLE,
 	PROPTYPE_ENTITYHANDLE_ARRAY,
-	PROPTYPE_PTR,
+	PROPTYPE_UNKNOWN,
 
 	PROPTYPE_MAX
 };
@@ -59,7 +59,7 @@ private:
 	Note: All changes here must be made in PropertyHolder as well!
 */
 //@{
-template<class T> ePropertyType PropertyType<T>::mTypeID					= PROPTYPE_PTR;
+template<class T> ePropertyType PropertyType<T>::mTypeID					= PROPTYPE_UNKNOWN;
 template<> ePropertyType PropertyType<bool>::mTypeID						= PROPTYPE_BOOL;
 template<> ePropertyType PropertyType<int8>::mTypeID						= PROPTYPE_INT8;
 template<> ePropertyType PropertyType<int16>::mTypeID						= PROPTYPE_INT16;

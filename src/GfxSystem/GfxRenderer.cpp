@@ -606,7 +606,7 @@ bool GfxRenderer::DrawQuad( GfxSystem::Point* const vertices, const TexturePtr t
 	}
 
 	q.tex = texture->GetTexture();
-	q.blend = BLEND_ALPHABLEND | BLEND_COLORMUL | BLEND_ZWRITE;
+	q.blend = BLEND_ALPHABLEND | BLEND_COLORMUL;
 
 	assert(mHGE);
 	mHGE->Gfx_RenderQuad(&q);

@@ -15,7 +15,7 @@ namespace Core
 
 		void Update(const float32 delta);
 		void Draw(void);
-		void LowerArea(const Vector2* poly, const int32 polyLen);
+		void LowerArea(const Vector2* poly, const int32 polyLen, const Vector2& offset);
 
 
 	private:
@@ -27,6 +27,10 @@ namespace Core
 		int32 mCols;
 		//TODO mozna by stacilo mit tu jen int8
 		int32** mHeightmap;
+		int32** mPrevHeightmap;
+
+		float32 mResidualDelta;
+		float32 mAmbientWaveTime;
 
 		inline int32 GetWrappedIndexX(const int32 index) const
 		{
@@ -37,6 +41,8 @@ namespace Core
 		{
 			return (index&(mRows-1) + mRows)&(mRows-1);
 		}
+
+		int32 GetAmbientWaveHeight(const int32 i, const int32 j) const;
 	};
 }
 

@@ -62,10 +62,11 @@ void Core::Game::Init()
 	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("ShipParts/ammo.xml"));
 	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("ShipParts/weapons.xml"));
 
-	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("Ships/ship0.xml"));
-	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("Ships/ship1.xml"));
-	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("Ships/ship2.xml"));
-	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("Ships/ship3.xml"));
+	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("Ships/old_ship0.xml"));
+	//gEntityMgr.LoadFromResource(gResourceMgr.GetResource("Ships/ship0.xml"));
+	//gEntityMgr.LoadFromResource(gResourceMgr.GetResource("Ships/ship1.xml"));
+	/*gEntityMgr.LoadFromResource(gResourceMgr.GetResource("Ships/ship2.xml"));
+	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("Ships/ship3.xml"));*/
 
 
 	// recompute mass of the ship's body
@@ -82,13 +83,16 @@ void Core::Game::Init()
 		gGfxRenderer.SetCameraPos(shipPos);
 		mMyTeam = ship.GetTeam();
 	}
-	gGfxRenderer.SetCameraScale(70.0f);
+	//gGfxRenderer.SetCameraPos(Vector2(5,5));
+	//gGfxRenderer.SetCameraScale(100.0f);
+	gGfxRenderer.SetCameraScale(50.0f);
 	mCameraFocus.Invalidate();
 
 
 	// water
-	GfxSystem::TexturePtr tex = gResourceMgr.GetResource("Backgrounds", "water2.png");
-	mWaterSurface = DYN_NEW WaterSurface(tex, 0.01f, 0.2f, 0.2f, 128, 128);
+	GfxSystem::TexturePtr tex = gResourceMgr.GetResource("Backgrounds", "water4.png");
+	mWaterSurface = DYN_NEW WaterSurface(tex, 0.05f, 0.4f, 0.4f, 128, 128);
+	//mWaterSurface = DYN_NEW WaterSurface(tex, 0.05f, 1.0f, 1.0f, 8, 8);
 
 
 
@@ -190,7 +194,18 @@ void Core::Game::Update( const float32 delta )
 	mPhysicsResidualDelta = physicsDelta;
 
 	// water
-	//mWaterSurface->Update(delta);
+	EntityHandle platform;
+	DataContainer cont;
+	Vector2 pos;
+	platform = gEntityMgr.FindFirstEntity("platform1");
+	platform.PostMessage(EntityMessage::TYPE_GET_POLYSHAPE, &cont);
+	platform.PostMessage(EntityMessage::TYPE_GET_BODY_POSITION, &pos);
+	mWaterSurface->LowerArea((Vector2*)cont.GetData(), cont.GetSize(), pos);
+	platform = gEntityMgr.FindFirstEntity("platform2");
+	platform.PostMessage(EntityMessage::TYPE_GET_POLYSHAPE, &cont);
+	platform.PostMessage(EntityMessage::TYPE_GET_BODY_POSITION, &pos);
+	mWaterSurface->LowerArea((Vector2*)cont.GetData(), cont.GetSize(), pos);
+	mWaterSurface->Update(delta);
 
 	//particle effects
 	gPSMgr.Update(delta);
@@ -231,7 +246,7 @@ void Core::Game::Draw( const float32 delta)
 	gGfxRenderer.ClearScreen(GfxSystem::Color(0,0,0));
 
 	// draw the water
-	//mWaterSurface->Draw();
+	mWaterSurface->Draw();
 	
 	/*GfxSystem::TexturePtr waterTex = gResourceMgr.GetResource("Backgrounds", "water.png");
 	float32 texW_ws = WATER_TEXTURE_SCALE * waterTex->GetWidth();
@@ -322,6 +337,31 @@ void Core::Game::Draw( const float32 delta)
 	
 	// draw remaining (undrawn) particle effects
 	gPSMgr.Render();
+
+
+	/*GfxSystem::Point vertices[4];
+	GfxSystem::Color colors[4];
+	Vector2 texCoords[4];
+	vertices[0].x = 0;
+	vertices[0].y = 0;
+	texCoords[0].x = -0.1f;
+	texCoords[0].y = 0.0f;
+	vertices[1].x = 200;
+	vertices[1].y = 0;
+	texCoords[1].x = 1.1f;
+	texCoords[1].y = 0.0f;
+	vertices[2].x = 200;
+	vertices[2].y = 200;
+	texCoords[2].x = 1.1f;
+	texCoords[2].y = 1.0f;
+	vertices[3].x = 0;
+	vertices[3].y = 200;
+	texCoords[3].x = -0.1f;
+	texCoords[3].y = 1.0f;
+	for (int i=0; i<4; ++i)
+		colors[i].r = colors[i].g = colors[i].b = 255;
+	gGfxRenderer.DrawQuad(vertices, gResourceMgr.GetResource("Backgrounds", "water2.png"), texCoords, colors);
+	gGfxRenderer.DrawLine(200,0,200,200,GfxSystem::Pen(GfxSystem::Color()));*/
 }
 
 void Core::Game::KeyPressed( const KeyInfo& ke )
