@@ -5,7 +5,7 @@
 using namespace EntitySystem;
 
 #define EXPLOSION_FORCE_RATIO 10.0f
-#define KNOCKBACK_DETACH_RATIO 1.0f
+#define KNOCKBACK_DETACH_RATIO 0.5f
 
 void CmpPlatformLogic::Init(void)
 {
@@ -75,8 +75,9 @@ EntityMessage::eResult CmpPlatformLogic::HandleMessage(const EntityMessage& msg)
 			it->SetTeam(mParentShip);
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_DETACH_PLATFORM:
-		// this assumes this is called after DETACH_PLATFORM was already processed by the physics component
-		ComputePickStuff();
+		// this assumes DETACH_PLATFORM was already processed by the physics component
+		if (*(bool*)msg.data) // recreate
+			ComputePickStuff();
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_BLUEPRINTS:
 		assert(msg.data);
@@ -174,16 +175,19 @@ void EntitySystem::CmpPlatformLogic::Die( void )
 	for (EntityList::iterator it=mItems.begin(); it!=mItems.end(); ++it)
 		it->PostMessage(EntityMessage::TYPE_DIE);
 
+	// apply some force from the explosion to the neighbourhood ship
+	//TODO aplikovat silu na vsechno v dosahu
+	//TODO nedelat to hrubou silou, ale udelat na to query
+	//TODO silu scalovat podle hmotnosti tehle platformy
+	prop = GetProperty("AbsolutePosition");
+	Vector2 myPos = prop.GetValue<Vector2>();
+	gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::TYPE_EXPLOSION, &myPos));
+
 	// detach the platform from the body and delete it
 	if (mParentShip.IsValid())
 	{
-		// apply some force from the explosion to the parent ship
-		//TODO aplikovat silu na vsechno v dosahu
-		//TODO silu scalovat podle hmotnosti tehle platformy
 		b2Body* body;
 		GetOwner().PostMessage(EntityMessage::TYPE_GET_PHYSICS_BODY, &body);
-		prop = GetProperty("AbsolutePosition");
-		Vector2 myPos = prop.GetValue<Vector2>();
 		prop = mParentShip.GetProperty("AbsolutePosition");
 		Vector2 forceDir = prop.GetValue<Vector2&>() - myPos;
 		float32 distSq = forceDir.LengthSquared();

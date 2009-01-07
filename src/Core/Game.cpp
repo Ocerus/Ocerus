@@ -62,11 +62,11 @@ void Core::Game::Init()
 	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("ShipParts/ammo.xml"));
 	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("ShipParts/weapons.xml"));
 
-	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("Ships/old_ship0.xml"));
-	//gEntityMgr.LoadFromResource(gResourceMgr.GetResource("Ships/ship0.xml"));
-	//gEntityMgr.LoadFromResource(gResourceMgr.GetResource("Ships/ship1.xml"));
-	/*gEntityMgr.LoadFromResource(gResourceMgr.GetResource("Ships/ship2.xml"));
-	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("Ships/ship3.xml"));*/
+	//gEntityMgr.LoadFromResource(gResourceMgr.GetResource("Ships/old_ship0.xml"));
+	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("Ships/ship0.xml"));
+	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("Ships/ship1.xml"));
+	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("Ships/ship2.xml"));
+	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("Ships/ship3.xml"));
 
 
 	// recompute mass of the ship's body
@@ -75,6 +75,7 @@ void Core::Game::Init()
 
 
 	// set camera
+	mCameraFocus.Invalidate();
 	Vector2 shipPos;
 	EntityHandle ship = gEntityMgr.FindFirstEntity("ship0");
 	if (ship.IsValid())
@@ -82,11 +83,9 @@ void Core::Game::Init()
 		ship.PostMessage(EntityMessage::TYPE_GET_POSITION, &shipPos);
 		gGfxRenderer.SetCameraPos(shipPos);
 		mMyTeam = ship.GetTeam();
+		mCameraFocus = ship;
 	}
-	//gGfxRenderer.SetCameraPos(Vector2(5,5));
-	//gGfxRenderer.SetCameraScale(100.0f);
 	gGfxRenderer.SetCameraScale(50.0f);
-	mCameraFocus.Invalidate();
 
 
 	// water

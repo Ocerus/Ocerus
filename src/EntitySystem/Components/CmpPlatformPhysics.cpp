@@ -153,12 +153,20 @@ EntityMessage::eResult EntitySystem::CmpPlatformPhysics::HandleMessage( const En
 				Vector2 linVel = mBody->GetLinearVelocity();
 				float32 angVel = mBody->GetAngularVelocity();
 				mRelativePosition = Vector2_Zero;
-				mInitShapeAngle = 0;
+				Vector2 shipPos = mBody->GetPosition();
 				mBody->DestroyShape(mShape);
 				mShape = 0;
 				CreateBody(false);
-				mBody->SetLinearVelocity(linVel);
-				mBody->SetAngularVelocity(angVel);
+				//mBody->SetAngularVelocity(angVel);
+				//mBody->SetLinearVelocity(linVel);
+				//TODO pridal sem detachnuty platforme trochu kick, at to ma grady
+				mBody->SetAngularVelocity(angVel + MathUtils::Random(-1.0f, 1.0f));
+				Vector2 dir = mBody->GetPosition() - shipPos;
+				if (dir.x!=0 && dir.y!=0)
+				{
+					dir.Normalize();
+					mBody->SetLinearVelocity(linVel + MathUtils::Random(0, 2.0f)*dir);
+				}
 			}
 			else
 			{
@@ -166,6 +174,20 @@ EntityMessage::eResult EntitySystem::CmpPlatformPhysics::HandleMessage( const En
 				mShape = 0;
 				mBody->SetMassFromShapes();
 				mBody = 0; // prevent body to be deleted upon destruction of this entity
+			}
+		}
+		return EntityMessage::RESULT_OK;
+	case EntityMessage::TYPE_EXPLOSION:
+		assert(msg.data);
+		{
+			Vector2 myPos = GetAbsolutePosition();
+			Vector2 exploPos = *(Vector2*)msg.data;
+			Vector2 dir = myPos - exploPos;
+			if (dir.x!=0 && dir.y!=0)
+			{
+				float32 lenSq = dir.LengthSquared();
+				//TODO magic number...ale hlavne sila z exploze se ma delat pres query
+				mBody->ApplyForce(100.0f/lenSq*dir, myPos);
 			}
 		}
 		return EntityMessage::RESULT_OK;

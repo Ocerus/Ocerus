@@ -82,11 +82,12 @@ bool EntitySystem::EntityHandle::Exists( void ) const
 }
 EntityMessage::eResult EntityHandle::PostMessage(const EntityMessage::eType type, void* data)
 {
-	if (!IsValid())
+	assert(IsValid());
+	/*if (!IsValid())
 	{
 		gLogMgr.LogMessage("PostMesage: Invalid entity", LOG_ERROR);
 		return EntityMessage::RESULT_ERROR;
-	}
+	}*/
 	EntityMessage::eResult result = gEntityMgr.PostMessage(*this, EntityMessage(type, data));
 	//TODO tady hlasit TYPe netity misto jejiho ID
 	if (result == EntityMessage::RESULT_ERROR)

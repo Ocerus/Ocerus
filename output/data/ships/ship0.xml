@@ -120,7 +120,7 @@
 
   <Entity Type="ET_ENGINE" Name="engine5">
     <Component Type="CT_PLATFORM_ITEM">
-      <Blueprints>engineType0</Blueprints>
+      <Blueprints>engineTypeTurnEngine</Blueprints>
       <ParentPlatform>platform9</ParentPlatform>
       <RelativePosition>-0.15 0.33</RelativePosition>
     </Component>
@@ -132,7 +132,7 @@
 
   <Entity Type="ET_ENGINE" Name="engine7">
     <Component Type="CT_PLATFORM_ITEM">
-      <Blueprints>engineType0</Blueprints>
+      <Blueprints>engineTypeTurnEngine</Blueprints>
       <ParentPlatform>platform9</ParentPlatform>
       <RelativePosition>0.15 0.33</RelativePosition>
     </Component>
@@ -266,7 +266,7 @@
 
   <Entity Type="ET_ENGINE" Name="engine6">
     <Component Type="CT_PLATFORM_ITEM">
-      <Blueprints>engineType0</Blueprints>
+      <Blueprints>engineTypeTurnEngine</Blueprints>
       <ParentPlatform>platform10</ParentPlatform>
       <RelativePosition>-0.15 -0.33</RelativePosition>
     </Component>
@@ -278,7 +278,7 @@
 
   <Entity Type="ET_ENGINE" Name="engine8">
     <Component Type="CT_PLATFORM_ITEM">
-      <Blueprints>engineType0</Blueprints>
+      <Blueprints>engineTypeTurnEngine</Blueprints>
       <ParentPlatform>platform10</ParentPlatform>
       <RelativePosition>0.15 -0.33</RelativePosition>
     </Component>

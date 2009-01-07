@@ -301,7 +301,12 @@ bool EntitySystem::EntityMgr::LoadFromResource( ResourceSystem::ResourcePtr res 
 							}
 							break;
 						case PROPTYPE_ENTITYHANDLE:
-							p.SetValue(FindFirstEntity(propIt.GetChildValue<string>()));
+							{
+								EntityHandle e = FindFirstEntity(propIt.GetChildValue<string>());
+								if (!e.IsValid())
+									gLogMgr.LogMessage("XML:Entity:Entity for property '", *propIt, "' of name '", propIt.GetChildValue<string>(), "' was not found", LOG_WARNING);
+								p.SetValue(e);
+							}
 							break;
 						default:
 							gLogMgr.LogMessage("XML:Entity:Can't parse property type '", p.GetType(), "'", LOG_ERROR);

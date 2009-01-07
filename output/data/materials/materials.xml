@@ -16,4 +16,11 @@
     </Component>
   </Entity>
 
+  <Entity Type="ET_UNKNOWN" Name="material2">
+    <Component Type="CT_MATERIAL">
+      <DurabilityRatio>1.0</DurabilityRatio>
+      <Density>5.0</Density>
+    </Component>
+  </Entity>
+
 </Entities>

@@ -7,7 +7,7 @@ using namespace EntitySystem;
 
 #define RADIUS_RATIO 0.001f
 #define DAMAGE_RATIO 100.0f
-#define KNOCKBACK_RATIO 5.0f
+#define KNOCKBACK_RATIO 10.0f
 
 void EntitySystem::CmpProjectile::Init( void )
 {
@@ -87,7 +87,7 @@ void EntitySystem::CmpProjectile::Draw( void ) const
 	}
 	
 	// draw the projectile
-	GfxSystem::Color color(50,50,50,180);
+	GfxSystem::Color color(150,150,150,180);
 	Vector2 square[] = {Vector2(-radius,-radius), Vector2(radius,-radius), Vector2(radius,radius), Vector2(-radius,radius)};
 	gGfxRenderer.DrawPolygonWithConversion(square, 4, mBody->GetPosition(), MathUtils::Random(0, MathUtils::TWO_PI), color);
 }
