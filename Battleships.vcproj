@@ -957,6 +957,54 @@
 				</File>
 			</Filter>
 		</Filter>
+		<Filter
+			Name="AISystem"
+			>
+			<Filter
+				Name="inc"
+				>
+				<File
+					RelativePath=".\src\AISystem\AIMgr.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="src"
+				>
+				<File
+					RelativePath=".\src\AISystem\AIMgr.cpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="AIs"
+				>
+				<Filter
+					Name="inc"
+					>
+					<File
+						RelativePath=".\src\AISystem\GenericAI.h"
+						>
+					</File>
+					<File
+						RelativePath=".\src\AISystem\SimpleAI.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="src"
+					>
+					<File
+						RelativePath=".\src\AISystem\GenericAI.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\AISystem\SimpleAI.cpp"
+						>
+					</File>
+				</Filter>
+			</Filter>
+		</Filter>
 		<File
 			RelativePath=".\BattleShipsClassDiagram.cd"
 			>

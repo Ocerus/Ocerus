@@ -29,6 +29,8 @@
 
 #include "../GUISystem/GUIMgr.h"
 
+#include "../AISystem/AIMgr.h"
+
 #include "../Core/Config.h"
 
 #include "../Utility/Properties.h"

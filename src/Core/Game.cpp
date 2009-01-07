@@ -65,8 +65,8 @@ void Core::Game::Init()
 	//gEntityMgr.LoadFromResource(gResourceMgr.GetResource("Ships/old_ship0.xml"));
 	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("Ships/ship0.xml"));
 	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("Ships/ship1.xml"));
-	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("Ships/ship2.xml"));
-	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("Ships/ship3.xml"));
+	/*gEntityMgr.LoadFromResource(gResourceMgr.GetResource("Ships/ship2.xml"));
+	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("Ships/ship3.xml"));*/
 
 
 	// recompute mass of the ship's body
@@ -88,8 +88,11 @@ void Core::Game::Init()
 	gGfxRenderer.SetCameraScale(50.0f);
 
 
+	// attach AI to ship1
+	gAIMgr.AssignAITo( gEntityMgr.FindFirstEntity( "ship1" ) );
+
 	// water
-	GfxSystem::TexturePtr tex = gResourceMgr.GetResource("Backgrounds", "water4.png");
+	GfxSystem::TexturePtr tex = gResourceMgr.GetResource("Backgrounds", "water3.png");
 	mWaterSurface = DYN_NEW WaterSurface(tex, 0.05f, 0.4f, 0.4f, 128, 128);
 	//mWaterSurface = DYN_NEW WaterSurface(tex, 0.05f, 1.0f, 1.0f, 8, 8);
 
@@ -97,7 +100,7 @@ void Core::Game::Init()
 
 	gInputMgr.AddInputListener(this);
 
-
+	
 
 	gApp.ResetStats();
 
@@ -124,6 +127,10 @@ void Core::Game::Update( const float32 delta )
 	// we want to do certain action even when the right button is still down
 	if (gInputMgr.IsMouseButtonPressed(MBTN_RIGHT) && mSelectedEntities.size()>0)
 		MouseButtonPressed(mouse, MBTN_RIGHT);
+
+	if (gInputMgr.IsKeyDown(KC_INSERT)) {
+		gGUIMgr.AddConsoleMessage( "AI running: " + StringConverter::ToString(gAIMgr.TriggerAI()) );
+	}
 
 	// control by using keys
 	for (EntityList::iterator i=mSelectedEntities.begin(); i!=mSelectedEntities.end(); ++i)
@@ -204,7 +211,7 @@ void Core::Game::Update( const float32 delta )
 	platform.PostMessage(EntityMessage::TYPE_GET_POLYSHAPE, &cont);
 	platform.PostMessage(EntityMessage::TYPE_GET_BODY_POSITION, &pos);
 	mWaterSurface->LowerArea((Vector2*)cont.GetData(), cont.GetSize(), pos);
-	mWaterSurface->Update(delta);
+	//mWaterSurface->Update(delta);
 
 	//particle effects
 	gPSMgr.Update(delta);
@@ -245,7 +252,7 @@ void Core::Game::Draw( const float32 delta)
 	gGfxRenderer.ClearScreen(GfxSystem::Color(0,0,0));
 
 	// draw the water
-	mWaterSurface->Draw();
+	//mWaterSurface->Draw();
 	
 	/*GfxSystem::TexturePtr waterTex = gResourceMgr.GetResource("Backgrounds", "water.png");
 	float32 texW_ws = WATER_TEXTURE_SCALE * waterTex->GetWidth();
