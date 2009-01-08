@@ -628,7 +628,7 @@
   <Entity Type="ET_UNKNOWN" Name="link6">
     <Component Type="CT_PLATFORM_LINKS">
       <FirstPlatform>platform6</FirstPlatform>
-      <SecondPlatform>platform8</SecondPlatform>
+      <SecondPlatform>platform10</SecondPlatform>
     </Component>
   </Entity>
 
