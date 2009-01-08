@@ -191,13 +191,21 @@ void Core::Game::Update( const float32 delta )
 		// if some of the selected entities were destroyed, remove it
 		if (!mHoveredEntity.Exists())
 			mHoveredEntity.Invalidate();
-		for (EntityList::const_iterator it=mSelectedEntities.begin(); it!=mSelectedEntities.end(); ++it)
+		for (EntityList::const_iterator it=mSelectedEntities.begin(); it!=mSelectedEntities.end();)
+		{
 			if (!it->Exists())
 				it = mSelectedEntities.erase(it);
+			else
+				++it;
+		}
 		for (int32 i=0; i<MAX_SELECTED_GROUPS; ++i)
-			for (EntityList::const_iterator it=mSelectedGroups[i].begin(); it!=mSelectedGroups[i].end(); ++it)
+			for (EntityList::const_iterator it=mSelectedGroups[i].begin(); it!=mSelectedGroups[i].end();)
+			{
 				if (!it->Exists())
 					it = mSelectedGroups[i].erase(it);
+				else
+					++it;
+			}
 		if (!mCameraFocus.Exists())
 			mCameraFocus.Invalidate();
 
