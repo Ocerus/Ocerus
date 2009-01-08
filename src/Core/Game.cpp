@@ -238,12 +238,19 @@ void Core::Game::Update( const float32 delta )
 			Vector2 pos = prop.GetValue<Vector2>();
 			prop = platform.GetProperty("ParentShip");
 			EntityHandle ship = prop.GetValue<EntityHandle>();
-			prop = ship.GetProperty("AbsolutePosition");
-			Vector2 shipPos = prop.GetValue<Vector2&>();
-			mBubbleEffects[i]->MoveTo(pos.x, pos.y, false);
-			mBubbleEffects[i]->SetScale(0.2f);
-			mBubbleEffects[i]->SetAngle(MathUtils::Angle(pos - shipPos));
-			mBubbleEffects[i]->Fire();
+			if (ship.Exists())
+			{
+				prop = ship.GetProperty("AbsolutePosition");
+				Vector2 shipPos = prop.GetValue<Vector2&>();
+				mBubbleEffects[i]->MoveTo(pos.x, pos.y, false);
+				mBubbleEffects[i]->SetScale(0.2f);
+				mBubbleEffects[i]->SetAngle(MathUtils::Angle(pos - shipPos));
+				mBubbleEffects[i]->Fire();
+			}
+			else
+			{
+				mBubbleEffects[i]->Stop();
+			}
 		}
 	}
 
