@@ -141,16 +141,25 @@ void EntitySystem::CmpProjectile::Strike( EntityHandle target )
 	//TODO kdyz to nebude platforma, tak knockback udelat na parent (coz musi bejt platforma)
 	if (target.GetType() == ET_PLATFORM)
 	{
-		prop = target.GetProperty("AbsolutePosition");
-		Vector2 targetPos = prop.GetValue<Vector2>();
 		b2Body* targetBody;
 		target.PostMessage(EntityMessage::TYPE_GET_PHYSICS_BODY, &targetBody);
-		Vector2 forceDir = mBody->GetLinearVelocity();
-		forceDir.Normalize();
-		prop = mBlueprints.GetProperty("KnockbackRatio");
-		float32 knockback = prop.GetValue<float32>();
-		targetBody->ApplyForce(KNOCKBACK_RATIO * knockback * forceDir, mBody->GetPosition());
-		target.PostMessage(EntityMessage::TYPE_KNOCKBACK_DETACH, &knockback);
+		//TODO Strike by se vubec nemel zavolat, pokud targetBody je null.
+		//TODO Tohle muze nastat, pokud dve strely v jeden frame trefi platformu a prvni z nich ji zabije.
+		if (targetBody)
+		{
+			prop = target.GetProperty("AbsolutePosition");
+			Vector2 targetPos = prop.GetValue<Vector2>();
+			Vector2 forceDir = mBody->GetLinearVelocity();
+			forceDir.Normalize();
+			prop = mBlueprints.GetProperty("KnockbackRatio");
+			float32 knockback = prop.GetValue<float32>();
+			targetBody->ApplyForce(KNOCKBACK_RATIO * knockback * forceDir, mBody->GetPosition());
+			target.PostMessage(EntityMessage::TYPE_KNOCKBACK_DETACH, &knockback);
+		}
+		else
+		{
+			targetBody = 0; // tohle je jen zachytnej bod pro breakpoint :)
+		}
 	}
 	prop = mBlueprints.GetProperty("PowerRatio");
 	float32 damage = DAMAGE_RATIO * prop.GetValue<float32>();
