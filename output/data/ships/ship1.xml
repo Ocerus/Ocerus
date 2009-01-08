@@ -4,8 +4,8 @@
 
   <Entity Type="ET_SHIP" Name="ship1">
     <Component Type="CT_SHIP_PHYSICS">
-      <InitBodyPosition>30.0 10.0</InitBodyPosition>
-      <InitBodyAngle>0</InitBodyAngle>
+      <InitBodyPosition>120.0 110.0</InitBodyPosition>
+      <InitBodyAngle>-0.9</InitBodyAngle>
     </Component>
     <Component Type="CT_SHIP_LOGIC"/>
     <Component Type="CT_SHIP_VISUAL"/>
@@ -120,7 +120,7 @@
 
   <Entity Type="ET_ENGINE" Name="engine5-1">
     <Component Type="CT_PLATFORM_ITEM">
-      <Blueprints>engineType0</Blueprints>
+      <Blueprints>engineTypeTurnEngine</Blueprints>
       <ParentPlatform>platform9-1</ParentPlatform>
       <RelativePosition>-0.15 0.33</RelativePosition>
     </Component>
@@ -132,7 +132,7 @@
 
   <Entity Type="ET_ENGINE" Name="engine7-1">
     <Component Type="CT_PLATFORM_ITEM">
-      <Blueprints>engineType0</Blueprints>
+      <Blueprints>engineTypeTurnEngine</Blueprints>
       <ParentPlatform>platform9-1</ParentPlatform>
       <RelativePosition>0.15 0.33</RelativePosition>
     </Component>
@@ -266,7 +266,7 @@
 
   <Entity Type="ET_ENGINE" Name="engine6-1">
     <Component Type="CT_PLATFORM_ITEM">
-      <Blueprints>engineType0</Blueprints>
+      <Blueprints>engineTypeTurnEngine</Blueprints>
       <ParentPlatform>platform10-1</ParentPlatform>
       <RelativePosition>-0.15 -0.33</RelativePosition>
     </Component>
@@ -278,7 +278,7 @@
 
   <Entity Type="ET_ENGINE" Name="engine8-1">
     <Component Type="CT_PLATFORM_ITEM">
-      <Blueprints>engineType0</Blueprints>
+      <Blueprints>engineTypeTurnEngine</Blueprints>
       <ParentPlatform>platform10-1</ParentPlatform>
       <RelativePosition>0.15 -0.33</RelativePosition>
     </Component>

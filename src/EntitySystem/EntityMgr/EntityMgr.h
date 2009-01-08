@@ -68,6 +68,9 @@ namespace EntitySystem
 		void ProcessDestroyQueue(void);
 		/// @name Destroys all entities in the manager.
 		void DestroyAllEntities(void);	
+		/// @name Fills the output vector with entities matching specified type/team.
+		//TODO tohle je tu zbytecny; az budou hotovy query, odstranit!
+		void EnumerateEntities(std::vector<EntityHandle>& out, const eEntityType desiredType = NUM_ENTITY_TYPES, const TeamID team = 0);
 
 	private:
 		/// @name This struct holds info about an instance of an entity in the system.

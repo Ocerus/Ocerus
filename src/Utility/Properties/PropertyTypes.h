@@ -4,6 +4,7 @@
 #include "../Settings.h"
 #include "../../EntitySystem/EntityMgr/EntityHandle.h"
 #include "../StringKey.h"
+#include "../../GfxSystem/GfxStructures.h"
 
 /** @name Type of access which will be granted to a property. It can be access from scripts, from editor, 
 	during the init, ...
@@ -31,6 +32,7 @@ enum ePropertyType
 	PROPTYPE_STRING_KEY,
 	PROPTYPE_ENTITYHANDLE,
 	PROPTYPE_ENTITYHANDLE_ARRAY,
+	PROPTYPE_COLOR,
 	PROPTYPE_UNKNOWN,
 
 	PROPTYPE_MAX
@@ -77,6 +79,7 @@ template<> ePropertyType PropertyType<EntitySystem::EntityHandle>::mTypeID	= PRO
 template<> ePropertyType PropertyType<EntitySystem::EntityHandle*>::mTypeID	= PROPTYPE_ENTITYHANDLE_ARRAY;
 template<> ePropertyType PropertyType<char*>::mTypeID						= PROPTYPE_STRING;
 template<> ePropertyType PropertyType<StringKey>::mTypeID					= PROPTYPE_STRING_KEY;
+template<> ePropertyType PropertyType<GfxSystem::Color>::mTypeID			= PROPTYPE_COLOR;
 
 template<class T> T PropertyType<T>::mDefaultValue							= 0;
 template<> bool PropertyType<bool>::mDefaultValue							= false;
@@ -96,6 +99,7 @@ template<> EntitySystem::EntityHandle PropertyType<EntitySystem::EntityHandle>::
 template<> EntitySystem::EntityHandle* PropertyType<EntitySystem::EntityHandle*>::mDefaultValue = 0;
 template<> char* PropertyType<char*>::mDefaultValue							= 0;
 template<> StringKey PropertyType<StringKey>::mDefaultValue					= StringKey();
+template<> GfxSystem::Color PropertyType<GfxSystem::Color>::mDefaultValue			= GfxSystem::Color::NullColor;
 //@}
 
 #endif	// _PROPERTY_TYPES_H

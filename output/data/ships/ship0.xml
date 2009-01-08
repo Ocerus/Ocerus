@@ -4,7 +4,7 @@
 
   <Entity Type="ET_SHIP" Name="ship0">
     <Component Type="CT_SHIP_PHYSICS">
-      <InitBodyPosition>10.0 10.0</InitBodyPosition>
+      <InitBodyPosition>100.0 100.0</InitBodyPosition>
       <InitBodyAngle>0</InitBodyAngle>
     </Component>
     <Component Type="CT_SHIP_LOGIC"/>

@@ -198,10 +198,10 @@ EntityMessage::eResult EntitySystem::CmpPlatformPhysics::HandleMessage( const En
 void EntitySystem::CmpPlatformPhysics::RegisterReflection()
 {
 	RegisterProperty<Vector2&>("RelativePosition", &GetRelativePosition, &SetRelativePosition, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
-	RegisterProperty<Vector2>("InitBodyPosition", 0, &SetInitBodyPosition, PROPACC_INIT);
-	RegisterProperty<float32>("InitBodyAngle", 0, &SetInitBodyAngle, PROPACC_INIT);
-	RegisterProperty<float32>("InitShapeAngle", 0, &SetInitShapeAngle, PROPACC_INIT);
-	RegisterProperty<bool>("InitShapeFlip", 0, &SetInitShapeFlip, PROPACC_INIT);
+	RegisterProperty<Vector2>("InitBodyPosition", &GetInitBodyPosition, &SetInitBodyPosition, PROPACC_INIT);
+	RegisterProperty<float32>("InitBodyAngle", &GetInitBodyAngle, &SetInitBodyAngle, PROPACC_INIT);
+	RegisterProperty<float32>("InitShapeAngle", &GetInitShapeAngle, &SetInitShapeAngle, PROPACC_INIT);
+	RegisterProperty<bool>("InitShapeFlip", &GetInitShapeFlip, &SetInitShapeFlip, PROPACC_INIT);
 	RegisterProperty<Vector2>("AbsolutePosition", &GetAbsolutePosition, &SetAbsolutePosition,  PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<float32>("Angle", &GetAngle, &SetAngle, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<Vector2>("LinearVelocity", &GetLinearVelocity, &SetLinearVelocity, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);

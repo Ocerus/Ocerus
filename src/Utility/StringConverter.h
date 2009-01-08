@@ -2,6 +2,7 @@
 #define StringConverter_h__
 
 #include "Settings.h"
+#include "../GfxSystem/GfxStructures.h"
 #include <sstream>
 
 /** Set of functions for converting different values to and from a string.
@@ -28,6 +29,9 @@ namespace StringConverter
 
 	template<>
 	Vector2 FromString(const string& str);
+
+	template<>
+	GfxSystem::Color FromString(const string& str);
 
 	template<>
 	bool FromString(const string& str);

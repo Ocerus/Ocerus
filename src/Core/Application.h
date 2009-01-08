@@ -68,6 +68,9 @@ namespace Core
 		inline float32 GetLastFPS(void) const { return mLastFPS; }
 		//@}
 
+		/// @name Current application time.
+		inline uint64 GetCurrentTimeMillis(void) { return mTimer.GetMilliseconds(); }
+
 		/// @name  Console debug window stuff.
 		//@{
 		void ShowConsole(void);
@@ -81,7 +84,6 @@ namespace Core
 		/// @name  State getters
 		//@{
 		Game* GetCurrentGame(void) const { assert(mGame); return mGame; }
-		//hgeParticleManager* GetPSMgr(void) { return mPSMgr; }
 		//@}
 
 	private:

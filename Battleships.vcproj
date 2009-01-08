@@ -127,6 +127,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="externalLibs/boost/inc;externalLibs/hge/include;externalLibs/ois/includes;externalLibs/cegui/include;externalLibs/rudeconfig/include;externalLibs/Box2D/Include;externalLibs/Box2D/Source;externalLibs/expat/lib"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
@@ -151,7 +152,7 @@
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="externalLibs/boost/lib;externalLibs/cegui/lib;externalLibs/cegui/dependencies/lib"
 				IgnoreDefaultLibraryNames="libci.lib;libcmt.lib"
-				GenerateDebugInformation="true"
+				GenerateDebugInformation="false"
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
@@ -181,6 +182,93 @@
 				Name="VCPostBuildEventTool"
 				Description="Copying release file to output dir..."
 				CommandLine="copy /V /Y &quot;$(OutDir)\$(TargetFileName)&quot; &quot;output&quot;&#x0D;&#x0A;copy /V /Y /B externalLibs\cegui\bin\vs9\Release\*.dll Release&#x0D;&#x0A;copy /V /Y /B externalLibs\cegui\bin\vs9\Release\*.dll output&#x0D;&#x0A;copy /V /Y /B externalLibs\expat\bin\vs9\*.dll Release&#x0D;&#x0A;copy /V /Y /B externalLibs\expat\bin\vs9\*.dll output&#x0D;&#x0A;"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Develop|Win32"
+			OutputDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="1"
+			CharacterSet="0"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="2"
+				InlineFunctionExpansion="1"
+				WholeProgramOptimization="false"
+				AdditionalIncludeDirectories="src/Precompiled;externalLibs/boost/inc;externalLibs/hge/include;externalLibs/ois/includes;externalLibs/cegui/include;externalLibs/rudeconfig/include;externalLibs/Box2D/Include;externalLibs/Box2D/Source;externalLibs/expat/lib"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
+				GeneratePreprocessedFile="0"
+				MinimalRebuild="true"
+				BasicRuntimeChecks="0"
+				RuntimeLibrary="3"
+				UsePrecompiledHeader="2"
+				PrecompiledHeaderThrough="Common.h"
+				WarningLevel="3"
+				WarnAsError="true"
+				Detect64BitPortabilityProblems="false"
+				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="CEGUIBase_d.lib freetype_d.lib pcre_d.lib CEGUIExpatParser_d.lib CEGUIFalagardWRBase_Static_d.lib"
+				OutputFile="$(ConfigurationName)/$(ProjectName).exe"
+				LinkIncremental="2"
+				AdditionalLibraryDirectories="externalLibs/boost/lib;externalLibs/cegui/lib;externalLibs/cegui/dependencies/lib"
+				IgnoreAllDefaultLibraries="false"
+				IgnoreDefaultLibraryNames="libci.lib;libcmtd.lib"
+				GenerateDebugInformation="false"
+				SubSystem="2"
+				LinkTimeCodeGeneration="0"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
+				TargetMachine="1"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				CommandLine="copy /V /Y /B externalLibs\cegui\bin\vs9\Debug\*.dll Develop&#x0D;&#x0A;copy /V /Y /B externalLibs\expat\bin\vs9\*.dll Develop&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>
@@ -373,6 +461,14 @@
 						>
 						<FileConfiguration
 							Name="Debug|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								UsePrecompiledHeader="1"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="Develop|Win32"
 							>
 							<Tool
 								Name="VCCLCompilerTool"
@@ -676,6 +772,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\GfxSystem\GfxStructures.h"
+					>
+				</File>
+				<File
 					RelativePath=".\src\GfxSystem\IScreenListener.h"
 					>
 				</File>
@@ -705,6 +805,10 @@
 				>
 				<File
 					RelativePath=".\src\GfxSystem\GfxRenderer.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\GfxSystem\GfxStructures.cpp"
 					>
 				</File>
 				<File
@@ -1022,6 +1126,14 @@
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Release|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					UsePrecompiledHeader="1"
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Develop|Win32"
 				>
 				<Tool
 					Name="VCCLCompilerTool"

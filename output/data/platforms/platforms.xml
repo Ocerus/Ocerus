@@ -16,6 +16,7 @@
       <ResourceGroup>ShipParts</ResourceGroup>
       <ExplodeEffect>explosion.psi</ExplodeEffect>
       <ExplodeEffectScale>0.025</ExplodeEffectScale>
+      <FillColor>90 119 114</FillColor>
     </Component>
   </Entity>
 
@@ -33,6 +34,7 @@
       <ResourceGroup>ShipParts</ResourceGroup>
       <ExplodeEffect>explosion.psi</ExplodeEffect>
       <ExplodeEffectScale>0.025</ExplodeEffectScale>
+      <FillColor>90 119 114</FillColor>
     </Component>
   </Entity>
 
@@ -51,6 +53,7 @@
       <ResourceGroup>ShipParts</ResourceGroup>
       <ExplodeEffect>explosion.psi</ExplodeEffect>
       <ExplodeEffectScale>0.025</ExplodeEffectScale>
+      <FillColor>126 184 167</FillColor>
     </Component>
   </Entity>
 
@@ -67,6 +70,7 @@
       <ResourceGroup>ShipParts</ResourceGroup>
       <ExplodeEffect>explosion.psi</ExplodeEffect>
       <ExplodeEffectScale>0.025</ExplodeEffectScale>
+      <FillColor>90 119 114</FillColor>
     </Component>
   </Entity>
 
@@ -79,12 +83,13 @@
         <Vertex>0.83 -0.125</Vertex>
         <Vertex>0.83 0.09</Vertex>
         <Vertex>0.5 0.47</Vertex>
-	<Vertex>-1 0.47</Vertex>
-	<Vertex>-1 0.09</Vertex>
+	      <Vertex>-1 0.47</Vertex>
+      	<Vertex>-1 0.09</Vertex>
       </Shape>
       <ResourceGroup>ShipParts</ResourceGroup>
       <ExplodeEffect>explosion.psi</ExplodeEffect>
       <ExplodeEffectScale>0.025</ExplodeEffectScale>
+      <FillColor>90 119 114</FillColor>
     </Component>
   </Entity>
 
@@ -103,6 +108,7 @@
       <ResourceGroup>ShipParts</ResourceGroup>
       <ExplodeEffect>explosion.psi</ExplodeEffect>
       <ExplodeEffectScale>0.025</ExplodeEffectScale>
+      <FillColor>64 89 86</FillColor>
     </Component>
   </Entity>
 
@@ -123,6 +129,7 @@
       <ResourceGroup>ShipParts</ResourceGroup>
       <ExplodeEffect>explosion.psi</ExplodeEffect>
       <ExplodeEffectScale>0.025</ExplodeEffectScale>
+      <FillColor>64 89 86</FillColor>
     </Component>
   </Entity>
 
@@ -134,13 +141,14 @@
         <LengthParam>ShapeLength</LengthParam>
         <Vertex>-1.33 -0.33</Vertex>
         <Vertex>0.58 -0.33</Vertex>
-	<Vertex>1.17 0.25</Vertex>
+      	<Vertex>1.17 0.25</Vertex>
         <Vertex>1.17 0.33</Vertex>
         <Vertex>-0.66 0.33</Vertex>
       </Shape>
       <ResourceGroup>ShipParts</ResourceGroup>
       <ExplodeEffect>explosion.psi</ExplodeEffect>
       <ExplodeEffectScale>0.025</ExplodeEffectScale>
+      <FillColor>90 119 114</FillColor>
     </Component>
   </Entity>
 
@@ -151,14 +159,15 @@
         <LengthParam>ShapeLength</LengthParam>
         <Vertex>-0.17 0</Vertex>
         <Vertex>0 -0.17</Vertex>
-	<Vertex>0.5 -0.17</Vertex>
+       	<Vertex>0.5 -0.17</Vertex>
         <Vertex>0.5 0.25</Vertex>
         <Vertex>0.17 0.42</Vertex>
-	<Vertex>-0.17 0.42</Vertex>
+      	<Vertex>-0.17 0.42</Vertex>
       </Shape>
       <ResourceGroup>ShipParts</ResourceGroup>
       <ExplodeEffect>explosion.psi</ExplodeEffect>
       <ExplodeEffectScale>0.025</ExplodeEffectScale>
+      <FillColor>64 89 86</FillColor>
     </Component>
   </Entity>
 
@@ -170,12 +179,13 @@
         <LengthParam>ShapeLength</LengthParam>
         <Vertex>-0.33 -0.66</Vertex>
         <Vertex>0.25 -0.66</Vertex>
-	<Vertex>0.25 0.66</Vertex>
+	      <Vertex>0.25 0.66</Vertex>
         <Vertex>0 0.66</Vertex>
       </Shape>
       <ResourceGroup>ShipParts</ResourceGroup>
       <ExplodeEffect>explosion.psi</ExplodeEffect>
       <ExplodeEffectScale>0.025</ExplodeEffectScale>
+      <FillColor>90 119 114</FillColor>
     </Component>
   </Entity>
 
@@ -186,14 +196,15 @@
         <LengthParam>ShapeLength</LengthParam>
         <Vertex>-0.42 0</Vertex>
         <Vertex>-0.33 -0.17</Vertex>
-	<Vertex>0 -0.17</Vertex>
+      	<Vertex>0 -0.17</Vertex>
         <Vertex>0.58 0.35</Vertex>
         <Vertex>0 0.35</Vertex>
-	<Vertex>-0.42 0.25</Vertex>
+	      <Vertex>-0.42 0.25</Vertex>
       </Shape>
       <ResourceGroup>ShipParts</ResourceGroup>
       <ExplodeEffect>explosion.psi</ExplodeEffect>
       <ExplodeEffectScale>0.025</ExplodeEffectScale>
+      <FillColor>64 89 86</FillColor>
     </Component>
   </Entity>
 
@@ -213,6 +224,7 @@
       <ResourceGroup>ShipParts</ResourceGroup>
       <ExplodeEffect>explosion.psi</ExplodeEffect>
       <ExplodeEffectScale>0.025</ExplodeEffectScale>
+      <FillColor>90 119 114</FillColor>
     </Component>
   </Entity>
 
@@ -230,6 +242,7 @@
       <ResourceGroup>ShipParts</ResourceGroup>
       <ExplodeEffect>explosion.psi</ExplodeEffect>
       <ExplodeEffectScale>0.025</ExplodeEffectScale>
+      <FillColor>64 89 86</FillColor>
     </Component>
   </Entity>
 
@@ -246,6 +259,7 @@
       <ResourceGroup>ShipParts</ResourceGroup>
       <ExplodeEffect>explosion.psi</ExplodeEffect>
       <ExplodeEffectScale>0.025</ExplodeEffectScale>
+      <FillColor>64 89 86</FillColor>
     </Component>
   </Entity>
 

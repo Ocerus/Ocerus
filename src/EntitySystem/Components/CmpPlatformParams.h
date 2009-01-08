@@ -2,6 +2,7 @@
 #define CmpPlatformParams_h__
 
 #include "../ComponentMgr/Component.h"
+#include "../../GfxSystem/GfxStructures.h"
 #include <vector>
 
 namespace EntitySystem
@@ -73,6 +74,12 @@ namespace EntitySystem
 		StringKey GetResourceGroup(void) const { return mResourceGroup; }
 		void SetResourceGroup(const StringKey group) { mResourceGroup = group; }
 		//@}
+		/// @name Color of the platform.
+		//TODO nahradit texturou
+		//@{
+		GfxSystem::Color GetFillColor(void) const { return mFillColor; }
+		void SetFillColor(const GfxSystem::Color col) { mFillColor = col; }
+		//@}
 
 	private:
 		EntityHandle mMaterial;
@@ -87,6 +94,7 @@ namespace EntitySystem
 		float32 mExplodeEffectScale;
 		StringKey mExplodeEffect;
 		StringKey mResourceGroup;
+		GfxSystem::Color mFillColor;
 			
 		void ComputeParams(void);
 	};

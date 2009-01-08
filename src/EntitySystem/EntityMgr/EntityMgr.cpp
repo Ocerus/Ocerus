@@ -267,6 +267,9 @@ bool EntitySystem::EntityMgr::LoadFromResource( ResourceSystem::ResourcePtr res 
 						case PROPTYPE_STRING_KEY:
 							p.SetValue<StringKey>(propIt.GetChildValue<string>());
 							break;
+						case PROPTYPE_COLOR:
+							p.SetValue(propIt.GetChildValue<GfxSystem::Color>());
+							break;
 						case PROPTYPE_VECTOR2:
 							p.SetValue(propIt.GetChildValue<Vector2>());
 							break;
@@ -363,3 +366,10 @@ bool EntitySystem::EntityMgr::EntityExists( const EntityHandle h ) const
 	return mEntities.find(h.GetID()) != mEntities.end();
 }
 
+void EntitySystem::EntityMgr::EnumerateEntities( std::vector<EntityHandle>& out, const eEntityType desiredType, const TeamID team )
+{
+	out.clear();
+	for (EntityMap::const_iterator it=mEntities.begin(); it!=mEntities.end(); ++it)
+		if ((desiredType == NUM_ENTITY_TYPES || it->second->mType == desiredType) && it->second->mTeam == team)
+			out.push_back(it->first);
+}

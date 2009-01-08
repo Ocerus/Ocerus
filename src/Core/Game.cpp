@@ -26,6 +26,7 @@ Core::Game::Game():
 	StateMachine<eGameState>(GS_NORMAL),
 	mPhysics(0),
 	mMyTeam(-1),
+	mLastClickTime(0),
 	mWaterSurface(0) {}
 
 Core::Game::~Game()
@@ -65,8 +66,8 @@ void Core::Game::Init()
 	//gEntityMgr.LoadFromResource(gResourceMgr.GetResource("Ships/old_ship0.xml"));
 	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("Ships/ship0.xml"));
 	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("Ships/ship1.xml"));
-	/*gEntityMgr.LoadFromResource(gResourceMgr.GetResource("Ships/ship2.xml"));
-	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("Ships/ship3.xml"));*/
+	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("Ships/ship2.xml"));
+	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("Ships/ship3.xml"));
 
 
 	// recompute mass of the ship's body
@@ -92,7 +93,7 @@ void Core::Game::Init()
 	gAIMgr.AssignAITo( gEntityMgr.FindFirstEntity( "ship1" ) );
 
 	// water
-	GfxSystem::TexturePtr tex = gResourceMgr.GetResource("Backgrounds", "water3.png");
+	GfxSystem::TexturePtr tex = gResourceMgr.GetResource("Backgrounds", "water2.png");
 	mWaterSurface = DYN_NEW WaterSurface(tex, 0.05f, 0.4f, 0.4f, 128, 128);
 	//mWaterSurface = DYN_NEW WaterSurface(tex, 0.05f, 1.0f, 1.0f, 8, 8);
 
@@ -128,8 +129,13 @@ void Core::Game::Update( const float32 delta )
 	if (gInputMgr.IsMouseButtonPressed(MBTN_RIGHT) && mSelectedEntities.size()>0)
 		MouseButtonPressed(mouse, MBTN_RIGHT);
 
-	if (gInputMgr.IsKeyDown(KC_INSERT)) {
-		gGUIMgr.AddConsoleMessage( "AI running: " + StringConverter::ToString(gAIMgr.TriggerAI()) );
+	// make sure we didn't lose any of the selected entities
+	for (EntityList::const_iterator i=mSelectedEntities.begin(); i!=mSelectedEntities.end();)
+	{
+		if (i->GetTeam() != mMyTeam)
+			i = mSelectedEntities.erase(i);
+		else
+			++i;
 	}
 
 	// control by using keys
@@ -203,15 +209,22 @@ void Core::Game::Update( const float32 delta )
 	EntityHandle platform;
 	DataContainer cont;
 	Vector2 pos;
-	platform = gEntityMgr.FindFirstEntity("platform1");
-	platform.PostMessage(EntityMessage::TYPE_GET_POLYSHAPE, &cont);
-	platform.PostMessage(EntityMessage::TYPE_GET_BODY_POSITION, &pos);
-	mWaterSurface->LowerArea((Vector2*)cont.GetData(), cont.GetSize(), pos);
-	platform = gEntityMgr.FindFirstEntity("platform2");
-	platform.PostMessage(EntityMessage::TYPE_GET_POLYSHAPE, &cont);
-	platform.PostMessage(EntityMessage::TYPE_GET_BODY_POSITION, &pos);
-	mWaterSurface->LowerArea((Vector2*)cont.GetData(), cont.GetSize(), pos);
-	//mWaterSurface->Update(delta);
+	float32 angle;
+	char* waterPlatforms[] = {"platform5", "platform6", "platform1", "platform2", "platform20", "platform21"};
+	for (int i=0; i<sizeof(waterPlatforms)/sizeof(char*); ++i)
+	{
+		platform = gEntityMgr.FindFirstEntity(waterPlatforms[i]);
+		if (platform.Exists())
+		{
+			platform.PostMessage(EntityMessage::TYPE_GET_POLYSHAPE, &cont);
+			platform.PostMessage(EntityMessage::TYPE_GET_BODY_POSITION, &pos);
+			platform.PostMessage(EntityMessage::TYPE_GET_ANGLE, &angle);
+			mWaterSurface->LowerArea((Vector2*)cont.GetData(), cont.GetSize(), pos, angle);
+		}
+	}
+
+	mWaterSurface->Update(delta);
+
 
 	//particle effects
 	gPSMgr.Update(delta);
@@ -252,7 +265,8 @@ void Core::Game::Draw( const float32 delta)
 	gGfxRenderer.ClearScreen(GfxSystem::Color(0,0,0));
 
 	// draw the water
-	//mWaterSurface->Draw();
+	mWaterSurface->Draw();
+
 	
 	/*GfxSystem::TexturePtr waterTex = gResourceMgr.GetResource("Backgrounds", "water.png");
 	float32 texW_ws = WATER_TEXTURE_SCALE * waterTex->GetWidth();
@@ -343,31 +357,6 @@ void Core::Game::Draw( const float32 delta)
 	
 	// draw remaining (undrawn) particle effects
 	gPSMgr.Render();
-
-
-	/*GfxSystem::Point vertices[4];
-	GfxSystem::Color colors[4];
-	Vector2 texCoords[4];
-	vertices[0].x = 0;
-	vertices[0].y = 0;
-	texCoords[0].x = -0.1f;
-	texCoords[0].y = 0.0f;
-	vertices[1].x = 200;
-	vertices[1].y = 0;
-	texCoords[1].x = 1.1f;
-	texCoords[1].y = 0.0f;
-	vertices[2].x = 200;
-	vertices[2].y = 200;
-	texCoords[2].x = 1.1f;
-	texCoords[2].y = 1.0f;
-	vertices[3].x = 0;
-	vertices[3].y = 200;
-	texCoords[3].x = -0.1f;
-	texCoords[3].y = 1.0f;
-	for (int i=0; i<4; ++i)
-		colors[i].r = colors[i].g = colors[i].b = 255;
-	gGfxRenderer.DrawQuad(vertices, gResourceMgr.GetResource("Backgrounds", "water2.png"), texCoords, colors);
-	gGfxRenderer.DrawLine(200,0,200,200,GfxSystem::Pen(GfxSystem::Color()));*/
 }
 
 void Core::Game::KeyPressed( const KeyInfo& ke )
@@ -375,14 +364,21 @@ void Core::Game::KeyPressed( const KeyInfo& ke )
 	if (ke.keyAction == KC_ESCAPE)
 		gApp.Shutdown();
 
-	/*if (ke.keyAction == KC_F)
+	if (ke.keyAction == KC_INSERT) {
+		gLogMgr.LogMessage("AI running: ", StringConverter::ToString(gAIMgr.TriggerAI()));
+	}
+	if (ke.keyAction == KC_F)
 	{
 		gGfxRenderer.SetFullscreen(!gGfxRenderer.IsFullscreen());
 	}
-	if (ke.keyAction==KC_D)
+	if (ke.keyAction==KC_G)
+	{
+		gGfxRenderer.ChangeResolution(1280,1024);
+	}
+	if (ke.keyAction==KC_H)
 	{
 		gGfxRenderer.ChangeResolution(800,600);
-	}*/
+	}
 
 	if (ke.keyAction >= KC_1 && ke.keyAction <= KC_0)
 	{
@@ -431,10 +427,22 @@ void Core::Game::MouseButtonPressed( const MouseInfo& mi, const eMouseButton btn
 {
 	if (btn == MBTN_LEFT)
 	{
+		bool doubleClick = false;
+		uint64 curTime = gApp.GetCurrentTimeMillis();
+		if (curTime - mLastClickTime < 200)
+			doubleClick = true;
+		mLastClickTime = curTime;
+
 		if (mHoveredEntity.IsValid())
 		{
+			// select all entities of the same type when doubleclicked
+			if (doubleClick)
+			{
+				eEntityType type = mHoveredEntity.GetType();
+				gEntityMgr.EnumerateEntities(mSelectedEntities, type, mMyTeam);
+			}
 			// use the hover entity as a focus
-			if (gInputMgr.IsKeyDown(KC_RCONTROL) || gInputMgr.IsKeyDown(KC_LCONTROL))
+			else if (gInputMgr.IsKeyDown(KC_RCONTROL) || gInputMgr.IsKeyDown(KC_LCONTROL))
 			{
 				mCameraFocus = mHoveredEntity;
 			}
@@ -444,7 +452,8 @@ void Core::Game::MouseButtonPressed( const MouseInfo& mi, const eMouseButton btn
 				// add to the current selection if SHIFT down
 				if (mSelectedEntities.size()>0 && (gInputMgr.IsKeyDown(KC_RSHIFT) || gInputMgr.IsKeyDown(KC_LSHIFT)))
 				{
-					if (mHoveredEntity.IsValid() && mHoveredEntity.GetType() == mSelectedEntities[0].GetType())
+					if (mHoveredEntity.IsValid() && mHoveredEntity.GetType() == mSelectedEntities[0].GetType()
+						&& find(mSelectedEntities.begin(), mSelectedEntities.end(), mHoveredEntity) == mSelectedEntities.end())
 						mSelectedEntities.push_back(mHoveredEntity);
 				}
 				// clear the selection and add the hovered one if any
@@ -491,9 +500,9 @@ void Core::Game::MouseButtonPressed( const MouseInfo& mi, const eMouseButton btn
 				i->PostMessage(EntityMessage::TYPE_GET_ANGLE, &angle);
 				Vector2 unitDir = MathUtils::VectorFromAngle(angle);
 				// project the target vector onto the correct direction vector
-				dir = MathUtils::Dot(dir, unitDir) * unitDir;
+				float32 dot = MathUtils::Dot(dir, unitDir);
 
-				int32 screenDist = gGfxRenderer.WorldToScreenScalar(dir.Length());
+				int32 screenDist = gGfxRenderer.WorldToScreenScalar(dot);
 				float32 powerRatio = (float32)screenDist / (float32)GetEnginePowerCircleRadius();
 				i->PostMessage(EntityMessage::TYPE_SET_POWER_RATIO, &powerRatio);
 			}

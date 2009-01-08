@@ -38,5 +38,26 @@ void EntitySystem::CmpPlatformVisual::Draw( void ) const
 	PostMessage(EntityMessage::TYPE_GET_BODY_POSITION, &pos);
 	float32 angle;
 	PostMessage(EntityMessage::TYPE_GET_ANGLE, &angle);
-	gGfxRenderer.DrawPolygonWithConversion((Vector2*)cont.GetData(), cont.GetSize(), pos, angle, GfxSystem::Color(126, 128, 127), GfxSystem::Pen(GfxSystem::Color(27,3,0,200)));
+	PropertyHolder prop = GetProperty("Blueprints");
+	EntityHandle blueprints = prop.GetValue<EntityHandle>();
+	prop = blueprints.GetProperty("FillColor");
+	GfxSystem::Color fillColor = prop.GetValue<GfxSystem::Color>();
+	prop = GetProperty("InitShapeFlip");
+	bool flip = prop.GetValue<bool>();
+	if (flip)
+	{
+		/*int32 col = fillColor.r * 130/100;
+		fillColor.r = col > 255 ? 255 : col;
+		col = fillColor.g * 130/100;
+		fillColor.g = col > 255 ? 255 : col;
+		col = fillColor.b * 130/100;
+		fillColor.b = col > 255 ? 255 : col;*/
+		int32 col = fillColor.r + 30;
+		fillColor.r = col > 255 ? 255 : col;
+		col = fillColor.g + 30;
+		fillColor.g = col > 255 ? 255 : col;
+		col = fillColor.b + 30;
+		fillColor.b = col > 255 ? 255 : col;
+	}
+	gGfxRenderer.DrawPolygonWithConversion((Vector2*)cont.GetData(), cont.GetSize(), pos, angle, fillColor, GfxSystem::Pen(GfxSystem::Color(48, 30, 27, 200)));
 }

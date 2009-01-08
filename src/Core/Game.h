@@ -90,6 +90,7 @@ namespace Core
 
 		/// @name Selections stuff.
 		//@{
+		uint64 mLastClickTime;
 		EntitySystem::EntityHandle mHoveredEntity;
 		typedef std::vector<EntitySystem::EntityHandle> EntityList;
 		EntityList mSelectedEntities;

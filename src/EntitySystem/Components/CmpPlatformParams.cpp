@@ -15,6 +15,7 @@ void EntitySystem::CmpPlatformParams::Init( void )
 	mResourceGroup = "";
 	mExplodeEffect = "";
 	mExplodeEffectScale = 1;
+	mFillColor = GfxSystem::Color::NullColor;
 
 	mArea = 0.0f;
 	mBaseDetachingChance = 0.0f;
@@ -108,4 +109,5 @@ void EntitySystem::CmpPlatformParams::RegisterReflection()
 	RegisterProperty<float32>("ExplodeEffectScale", &GetExplodeEffectScale, &SetExplodeEffectScale, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<StringKey>("ExplodeEffect", &GetExplodeEffect, &SetExplodeEffect, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<StringKey>("ResourceGroup", &GetResourceGroup, &SetResourceGroup, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<GfxSystem::Color>("FillColor", &GetFillColor, &SetFillColor, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 }

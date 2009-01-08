@@ -48,12 +48,13 @@ Core::WaterSurface::~WaterSurface( void )
 	}
 }
 
-void Core::WaterSurface::LowerArea( const Vector2* poly, const int32 polyLen, const Vector2& offset )
+void Core::WaterSurface::LowerArea( const Vector2* poly, const int32 polyLen, const Vector2& offPos, const float32 offAngle )
 {
 	float32 minX=FLT_MAX, minY=FLT_MAX, maxX=FLT_MIN, maxY=FLT_MIN;
+	XForm xf(offPos, Matrix22(offAngle));
 	for (int32 i=0; i<polyLen; ++i)
 	{
-		Vector2 v = poly[i] + offset;
+		Vector2 v = MathUtils::Multiply(xf, poly[i]);
 		if (v.x < minX)
 			minX = v.x;
 		if (v.y < minY)
@@ -208,7 +209,7 @@ void Core::WaterSurface::Draw( void )
 				textureCoords[k].x += displaceX / textureWidth;
 				textureCoords[k].y += displaceY / textureHeight;
 
-				uint32 col = 140 + 100 * (h + MAX_HEIGHT) / (MAX_HEIGHT*2);
+				uint32 col = 130 + 120 * (h + MAX_HEIGHT) / (MAX_HEIGHT*2);
 				if (col > 255)
 					col = 255;
 				vertexColors[k].a = 255;

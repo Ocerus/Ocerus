@@ -42,9 +42,13 @@ namespace EntitySystem
 		void SetLinearVelocity(const Vector2 linVel);
 		/// @name  Initialization parameters.
 		//@{
+		Vector2 GetInitBodyPosition(void) const { return mInitBodyPosition; }
 		void SetInitBodyPosition(Vector2 pos) { mInitBodyPosition = pos; }
+		float32 GetInitBodyAngle(void) const { return mInitBodyAngle; }
 		void SetInitBodyAngle(const float32 angle) { mInitBodyAngle = angle; }
+		float32 GetInitShapeAngle(void) const { return mInitShapeAngle; }
 		void SetInitShapeAngle(const float32 angle) { mInitShapeAngle = angle; }
+		bool GetInitShapeFlip(void) const { return mInitShapeFlip; }
 		void SetInitShapeFlip(const bool flip) { mInitShapeFlip = flip; }
 		//@}
 		/// @name Shape of the platform.

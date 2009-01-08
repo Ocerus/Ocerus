@@ -15,7 +15,7 @@ namespace Core
 
 		void Update(const float32 delta);
 		void Draw(void);
-		void LowerArea(const Vector2* poly, const int32 polyLen, const Vector2& offset);
+		void LowerArea(const Vector2* poly, const int32 polyLen, const Vector2& offPos, const float32 offAngle);
 
 
 	private:

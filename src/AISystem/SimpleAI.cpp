@@ -54,7 +54,7 @@ namespace AISystem {
 	void SimpleAI::DoLogic( float32 delta ) {
 		Refresh();
 		SetEngines();
-		//TargetWeapons();
+		TargetWeapons();
 	}
 
 	void SimpleAI::SetEngines() {
@@ -81,6 +81,11 @@ namespace AISystem {
 
 		std::list<TurretInfo>::iterator iter = mEngines.begin();
 		while ( iter != mEngines.end() ) {
+			if (!iter->mHandle.Exists())
+			{
+				++iter;
+				continue;
+			}
 			prop = iter->mHandle.GetProperty( "AbsoluteAngle" );			
 			float32 engine_absolute_current = prop.GetValue<float32>();
 			engine_absolute_current = MathUtils::Wrap( engine_absolute_current, -MathUtils::PI, MathUtils::PI );
@@ -116,6 +121,11 @@ namespace AISystem {
 	void SimpleAI::TargetWeapons() {		
 		std::list<TurretInfo>::iterator iter = mWeapons.begin();
 		while ( iter != mWeapons.end() ) {
+			if (!iter->mHandle.Exists())
+			{
+				++iter;
+				continue;
+			}
 			PropertyHolder prop = iter->mHandle.GetProperty( "AbsolutePosition" );
 			Vector2 weapon_absolute = prop.GetValue<Vector2>();
 			prop = iter->mHandle.GetProperty( "AbsoluteDefaultAngle" );
@@ -124,6 +134,11 @@ namespace AISystem {
 			std::list<EntitySystem::EntityHandle>::iterator platform_iterator = mEnemyPlatforms.begin();
 			
 			while ( platform_iterator != mEnemyPlatforms.end() ) {
+				if (!platform_iterator->Exists())
+				{
+					++platform_iterator;
+					continue;
+				}
 				prop = platform_iterator->GetProperty( "AbsolutePosition" );
 				Vector2 platform_absolute = prop.GetValue<Vector2>();
 				Vector2 platform_relative = platform_absolute - weapon_absolute;

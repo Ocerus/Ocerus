@@ -37,11 +37,6 @@ using namespace GfxSystem;
 
 #define DEFAULT_IMAGE_WORLD_SCALE 0.02f
 
-// init null values
-Pen Pen::NullPen(Color(0,0,0,0));
-Rect Rect::NullRect(0,0,0,0);
-Color Color::NullColor(0,0,0,0);
-Color Color::FullColor(255,255,255,255);
 
 GfxRenderer::GfxRenderer(const Point& resolution, bool fullscreen):
 	mCameraX(0),
