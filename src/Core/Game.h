@@ -3,6 +3,7 @@
 
 #include "../Utility/StateMachine.h"
 #include "../Utility/Settings.h"
+#include "../Utility/ResourcePointers.h"
 #include "../InputSystem/IInputListener.h"
 #include "../EntitySystem/EntityMgr/EntityHandle.h"
 #include "../EntitySystem/EntityMgr/EntityEnums.h"
@@ -86,6 +87,7 @@ namespace Core
 		/// @name Water stuff.
 		//@{
 		WaterSurface* mWaterSurface;
+		std::vector<GfxSystem::ParticleSystemPtr> mBubbleEffects;
 		//@}
 
 		/// @name Selections stuff.

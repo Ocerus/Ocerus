@@ -3,6 +3,7 @@
 
 #include "../ResourceSystem/Resource.h"
 #include "../Utility/Settings.h"
+#include "../Utility/ResourcePointers.h"
 
 namespace GfxSystem
 {
@@ -37,8 +38,6 @@ namespace GfxSystem
 		friend class GfxRenderer;
 	};
 
-
-	typedef SmartPointer<Texture> TexturePtr;
 }
 
 #endif

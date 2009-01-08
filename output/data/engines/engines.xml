@@ -21,7 +21,7 @@
 
   <Entity Type="ET_UNKNOWN" Name="engineTypeTurnEngine">
     <Component Type="CT_PLATFORM_ITEM_PARAMS">
-      <Material>material2</Material>
+      <Material>material1</Material>
       <ResourceGroup>ShipParts</ResourceGroup>
       <Texture>engine0.png</Texture>
       <TextureScale>0.5</TextureScale>

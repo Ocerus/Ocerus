@@ -6,6 +6,7 @@
 #include "../InputSystem/IInputListener.h"
 #include "../Utility/Settings.h"
 #include "StaticElements.h"
+//TODO zbavit se techto includu pokud mozno
 #include "CEGUIBase.h"
 #include "CEGUISystem.h"
 #include "CEGUIWindow.h"

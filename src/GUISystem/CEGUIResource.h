@@ -2,6 +2,7 @@
 #define _CEGUIRESOURCE_H_
 
 #include "../Utility/Settings.h"
+#include "../Utility/ResourcePointers.h"
 #include "../ResourceSystem/Resource.h"
 
 namespace CEGUI { class RawDataContainer; }
@@ -26,9 +27,6 @@ namespace GUISystem {
 		uint8* mDataBlock;
 		uint32 mDataBlockSize;
 	};
-
-
-	typedef SmartPointer<CEGUIResource> CEGUIResourcePtr;
 }
 
 #endif

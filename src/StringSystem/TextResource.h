@@ -3,6 +3,7 @@
 
 #include "../ResourceSystem/Resource.h"
 #include "../Utility/Settings.h"
+#include "../Utility/ResourcePointers.h"
 #include "../Utility/StringKey.h"
 #include <map>
 
@@ -44,8 +45,6 @@ namespace StringSystem
 		virtual bool UnloadImpl(void);	
 		//friend class StringMgr; // dunno if this is actually necessary
 	};
-
-	typedef SmartPointer<TextResource> TextResourcePtr;
 }
 
 #endif

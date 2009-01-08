@@ -3,6 +3,7 @@
 
 #include "../Utility/SmartPointer.h"
 #include "../Utility/Settings.h"
+#include "../Utility/ResourcePointers.h"
 #include <boost/filesystem/fstream.hpp>
 #include <sstream>
 
@@ -91,8 +92,6 @@ namespace ResourceSystem
 		//@}
 	};
 
-	/// @name Use this instead of a direct pointer to Resource.
-	typedef SmartPointer<Resource> ResourcePtr;
 }
 
 #endif

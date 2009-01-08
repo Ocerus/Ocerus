@@ -3,6 +3,7 @@
 #include "EntityDescription.h"
 #include "../ComponentMgr/ComponentMgr.h"
 #include "../ComponentMgr/Component.h"
+#include "../../ResourceSystem/XMLResource.h"
 
 using namespace EntitySystem;
 

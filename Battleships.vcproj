@@ -570,6 +570,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\Utility\ResourcePointers.h"
+					>
+				</File>
+				<File
 					RelativePath=".\src\Utility\Settings.h"
 					>
 				</File>

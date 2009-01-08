@@ -3,10 +3,9 @@
 
 #include <map>
 #include <vector>
-#include "Resource.h"
-#include "XMLResource.h"
 #include "../Utility/StringKey.h"
 #include "../Utility/Singleton.h"
+#include "../Utility/ResourcePointers.h"
 
 /// @name Macro for easier use
 #define gResourceMgr ResourceSystem::ResourceMgr::GetSingleton()

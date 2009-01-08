@@ -34,7 +34,7 @@
 #include "../Core/Config.h"
 
 #include "../Utility/Properties.h"
-
 #include "../Utility/DataContainer.h"
+#include "../Utility/StringConverter.h"
 
 #endif

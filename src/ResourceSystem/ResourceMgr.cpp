@@ -2,11 +2,13 @@
 #include <stdio.h>
 #include <boost/filesystem.hpp>
 #include "ResourceMgr.h"
+#include "IResourceLoadingListener.h"
+
 #include "../GfxSystem/Texture.h"
 #include "../GUISystem/CEGUIResource.h"
 #include "../StringSystem/TextResource.h"
-#include "IResourceLoadingListener.h"
 #include "../GfxSystem/ParticleResource.h"
+#include "../ResourceSystem/XMLResource.h"
 
 #pragma warning(disable: 4996)
 

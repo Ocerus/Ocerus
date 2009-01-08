@@ -3,18 +3,15 @@
 
 #include "Resource.h"
 #include "../Utility/Settings.h"
+#include "../Utility/ResourcePointers.h"
 #include "../Utility/Tree.h"
 #include "../Utility/StringConverter.h"
 #include <algorithm>
 
 namespace ResourceSystem 
 {
-	class XMLResource; 
-
 	/// @name define a container for textdata
 	typedef tree<string> XMLDataMap;
-	/// @name define pointer to XMLResource
-	typedef SmartPointer<XMLResource> XMLResourcePtr;
 
 	/** @name This class is used to load and maintain XML resources. XML file is automatically parsed into pairs
 	    node->value. Values are NOT stored with types, but as a raw text data. You have to know type of node to

@@ -2,6 +2,8 @@
 #define _PARTICLESYSTEM_H_
 
 #include "../Utility/Settings.h"
+#include "../Utility/ResourcePointers.h"
+//TODO tohle smazat
 #include "hgeparticle.h"
 #include "GfxRenderer.h"
 
@@ -10,6 +12,7 @@ namespace GfxSystem
 	/** This class is a wrapper around hgeParticleSystem class. It forwards some methods and add some
 	    new for convenience.	  
 	 */
+	//TODO cely predelat poradne.
 	class ParticleSystem
 	{
 	public:
@@ -79,7 +82,6 @@ namespace GfxSystem
 		float32 mScale;
 		bool mMoveParticles;
 	};
-	typedef SmartPointer<ParticleSystem> ParticleSystemPtr;
 }
 
 #endif

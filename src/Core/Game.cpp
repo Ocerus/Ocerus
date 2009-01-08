@@ -3,7 +3,7 @@
 #include "Application.h"
 #include "Box2D.h"
 #include <iostream>
-#include "../GfxSystem/ParticleResource.h"
+#include "../GfxSystem/ParticleSystem.h"
 #include "WaterSurface.h"
 
 using namespace Core;
@@ -206,20 +206,44 @@ void Core::Game::Update( const float32 delta )
 	mPhysicsResidualDelta = physicsDelta;
 
 	// water
-	EntityHandle platform;
-	DataContainer cont;
-	Vector2 pos;
-	float32 angle;
 	char* waterPlatforms[] = {"platform5", "platform6", "platform1", "platform2", "platform20", "platform21"};
 	for (int i=0; i<sizeof(waterPlatforms)/sizeof(char*); ++i)
 	{
-		platform = gEntityMgr.FindFirstEntity(waterPlatforms[i]);
+		EntityHandle platform = gEntityMgr.FindFirstEntity(waterPlatforms[i]);
 		if (platform.Exists())
 		{
+			DataContainer cont;
+			Vector2 pos, dir;
+			float32 angle;
 			platform.PostMessage(EntityMessage::TYPE_GET_POLYSHAPE, &cont);
 			platform.PostMessage(EntityMessage::TYPE_GET_BODY_POSITION, &pos);
 			platform.PostMessage(EntityMessage::TYPE_GET_ANGLE, &angle);
 			mWaterSurface->LowerArea((Vector2*)cont.GetData(), cont.GetSize(), pos, angle);
+		}
+	}
+
+	char* bubblePlatforms[] = {"platform20", "platform21", "platform22", "platform23"};
+	const int len = sizeof(bubblePlatforms)/sizeof(char*);
+	if (mBubbleEffects.size() == 0)
+	{
+		for (int32 i=0; i<len; ++i)
+			mBubbleEffects.push_back(gPSMgr.SpawnPS("psi", "particle8.psi"));
+	}
+	for (int i=0; i<len; ++i)
+	{
+		EntityHandle platform = gEntityMgr.FindFirstEntity(bubblePlatforms[i]);
+		if (platform.Exists())
+		{
+			PropertyHolder prop = platform.GetProperty("AbsolutePosition");
+			Vector2 pos = prop.GetValue<Vector2>();
+			prop = platform.GetProperty("ParentShip");
+			EntityHandle ship = prop.GetValue<EntityHandle>();
+			prop = ship.GetProperty("AbsolutePosition");
+			Vector2 shipPos = prop.GetValue<Vector2&>();
+			mBubbleEffects[i]->MoveTo(pos.x, pos.y, false);
+			mBubbleEffects[i]->SetScale(0.2f);
+			mBubbleEffects[i]->SetAngle(MathUtils::Angle(pos - shipPos));
+			mBubbleEffects[i]->Fire();
 		}
 	}
 
@@ -266,6 +290,10 @@ void Core::Game::Draw( const float32 delta)
 
 	// draw the water
 	mWaterSurface->Draw();
+
+	// draw bubbles
+	for (std::vector<GfxSystem::ParticleSystemPtr>::const_iterator it=mBubbleEffects.begin(); it!=mBubbleEffects.end(); ++it)
+		(*it)->Render();
 
 	
 	/*GfxSystem::TexturePtr waterTex = gResourceMgr.GetResource("Backgrounds", "water.png");
