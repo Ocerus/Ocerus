@@ -73,7 +73,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\win32\bin\Debug/libexpat.dll"
+				OutputFile="..\win32\bin\Debug\libexpat.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				ModuleDefinitionFile=".\libexpat.def"
@@ -167,7 +167,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\win32\bin\Release/libexpat.dll"
+				OutputFile="..\win32\bin\Release\libexpat.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				ModuleDefinitionFile=".\libexpat.def"
@@ -237,9 +237,9 @@
 				Optimization="2"
 				InlineFunctionExpansion="1"
 				WholeProgramOptimization="false"
-				PreprocessorDefinitions="_DEBUG;COMPILED_FROM_DSP;WIN32;_WINDOWS;_USRDLL"
+				PreprocessorDefinitions="NDEBUG;COMPILED_FROM_DSP;WIN32;_WINDOWS;_USRDLL"
 				BasicRuntimeChecks="0"
-				RuntimeLibrary="1"
+				RuntimeLibrary="0"
 				PrecompiledHeaderFile=".\..\win32\tmp\Debug/expat.pch"
 				AssemblerListingLocation=".\..\win32\tmp\Debug/"
 				ObjectFile=".\..\win32\tmp\Debug/"
@@ -262,7 +262,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\win32\bin\Debug/libexpat.dll"
+				OutputFile="..\win32\bin\Develop\libexpat.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				ModuleDefinitionFile=".\libexpat.def"
