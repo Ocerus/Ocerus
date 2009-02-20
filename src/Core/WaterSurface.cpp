@@ -19,9 +19,9 @@ Core::WaterSurface::WaterSurface( const GfxSystem::TexturePtr waterTexture, cons
 	mResidualDelta(0),
 	mAmbientWaveTime(0)
 {
-	assert(MathUtils::IsPowerOfTwo(mRows) && "Number of rows must be a power of two");
-	assert(MathUtils::IsPowerOfTwo(mCols) && "Number of columns must be a power of two");
-	assert(!mWaterTexture.IsNull() && "Texture is null");
+	ASSERT_MSG(MathUtils::IsPowerOfTwo(mRows), "Number of rows must be a power of two");
+	ASSERT_MSG(MathUtils::IsPowerOfTwo(mCols), "Number of columns must be a power of two");
+	ASSERT_MSG(!mWaterTexture.IsNull(), "Texture is null");
 
 	mHeightmap = DYN_NEW int32*[mCols];
 	mPrevHeightmap = DYN_NEW int32*[mCols];

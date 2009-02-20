@@ -29,11 +29,11 @@ EntityMessage::eResult EntitySystem::CmpShipLogic::HandleMessage( const EntityMe
 			i->PostMessage(EntityMessage::TYPE_DRAW_INNER);
 		return EntityMessage::RESULT_OK;*/
 	case EntityMessage::TYPE_ADD_PLATFORM:
-		assert(msg.data);
+		DASSERT(msg.data);
 		mPlatforms.push_back(*(EntityHandle*)msg.data);
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_REMOVE_PLATFORM:
-		assert(msg.data);
+		DASSERT(msg.data);
 		{
 			EntityHandle platform = *(EntityHandle*)msg.data;
 			EntityList::const_iterator platIt = find(mPlatforms.begin(), mPlatforms.end(), platform);
@@ -82,7 +82,7 @@ EntityMessage::eResult EntitySystem::CmpShipLogic::HandleMessage( const EntityMe
 			// no platforms left -> destroy the ship
 			if (mPlatforms.size() == 0)
 			{
-				assert(mLinks.size()==0 && "There is nothing to link as there are no platforms");
+				ASSERT_MSG(mLinks.size()==0, "There is nothing to link as there are no platforms");
 				gEntityMgr.DestroyEntity(GetOwner());
 			}
 		}
@@ -97,10 +97,10 @@ EntityMessage::eResult EntitySystem::CmpShipLogic::HandleMessage( const EntityMe
 		}
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_LINK_PLATFORMS:
-		assert(msg.data);
+		DASSERT(msg.data);
 		{
 			EntityHandle links = *(EntityHandle*)msg.data;
-			assert(links.IsValid());
+			ASSERT(links.IsValid());
 			mLinks.push_back(links);
 		}
 		return EntityMessage::RESULT_OK;

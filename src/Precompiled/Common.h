@@ -7,6 +7,8 @@
 
 #include "../Utility/Settings.h"
 
+#include "../Utility/Singleton.h"
+
 #include "../Core/Application.h"
 
 #include "../EntitySystem/EntityMgr/EntityMgr.h"

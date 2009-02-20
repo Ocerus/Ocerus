@@ -64,7 +64,7 @@ EntityMessage::eResult EntitySystem::CmpEngine::HandleMessage( const EntityMessa
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_SET_ANGLE:
 		// note: the angle is absolute, but I need to convert it to an angle relative to the default angle
-		assert(msg.data);
+		DASSERT(msg.data);
 		{
 			EntityMessage msg2(EntityMessage::TYPE_SET_RELATIVE_ANGLE);
 			float32 relAngle = *(float32*)msg.data - GetAbsoluteDefaultAngle();
@@ -72,11 +72,11 @@ EntityMessage::eResult EntitySystem::CmpEngine::HandleMessage( const EntityMessa
 			return HandleMessage(msg2);
 		}
 	case EntityMessage::TYPE_GET_ANGLE:
-		assert(msg.data);
+		DASSERT(msg.data);
 		*(float32*)msg.data = GetAbsoluteAngle();
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_SET_RELATIVE_ANGLE:
-		assert(msg.data);
+		DASSERT(msg.data);
 		{
 			float32 arcAngle;
 			EntityHandle blueprints;
@@ -92,19 +92,19 @@ EntityMessage::eResult EntitySystem::CmpEngine::HandleMessage( const EntityMessa
 		}
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_RELATIVE_ANGLE:
-		assert(msg.data);
+		DASSERT(msg.data);
 		*(float32*)msg.data = GetRelativeAngle();
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_SET_POWER_RATIO:
-		assert(msg.data);
+		DASSERT(msg.data);
 		SetPowerRatio(*(float32*)msg.data);
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_POWER_RATIO:
-		assert(msg.data);
+		DASSERT(msg.data);
 		*(float32*)msg.data = GetPowerRatio();
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_MOUSE_PICK:
-		assert(msg.data);
+		DASSERT(msg.data);
 		{
 			Vector2 pos;
 			PostMessage(EntityMessage::TYPE_GET_POSITION, &pos);
@@ -112,7 +112,7 @@ EntityMessage::eResult EntitySystem::CmpEngine::HandleMessage( const EntityMessa
 		}
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_DRAW_UNDERLAY:
-		assert(msg.data);
+		DASSERT(msg.data);
 		{
 			bool hover = *(bool*)msg.data;
 			DrawSelectionUnderlay(hover);
@@ -129,7 +129,7 @@ EntityMessage::eResult EntitySystem::CmpEngine::HandleMessage( const EntityMessa
 		mWasSelected = false;
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_DRAW_OVERLAY:
-		assert(msg.data);
+		DASSERT(msg.data);
 		DrawSelectionOverlay(*(bool*)msg.data);
 		return EntityMessage::RESULT_OK;
 	}

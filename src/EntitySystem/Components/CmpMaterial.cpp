@@ -17,11 +17,11 @@ EntityMessage::eResult EntitySystem::CmpMaterial::HandleMessage( const EntityMes
 	switch(msg.type)
 	{
 	case EntityMessage::TYPE_GET_DURABILITY_RATIO:
-		assert(msg.data);
+		DASSERT(msg.data);
 		*(float32*)msg.data = GetDurabilityRatio();
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_DENSITY:
-		assert(msg.data);
+		DASSERT(msg.data);
 		*(float32*)msg.data = GetDensity();
 		return EntityMessage::RESULT_OK;
 	}

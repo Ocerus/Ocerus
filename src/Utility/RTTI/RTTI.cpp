@@ -8,8 +8,8 @@ RTTI::RTTI(	uint8 dwStub, ClassID CLID, const char* szClassName, RTTI* pBaseClas
 	mClassFactory( pFactory			),
 	mComponentDependencies(0)
 {
-	assert( CLID != 0 );
-	assert( strlen(szClassName) <= CLASSNAME_LENGTH && "RTTI:Class name too long" );
+	ASSERT( CLID != 0 );
+	ASSERT( strlen(szClassName) <= CLASSNAME_LENGTH && "RTTI:Class name too long" );
 	#pragma warning(disable: 4996)
 	strcpy( mClassName, szClassName );
 

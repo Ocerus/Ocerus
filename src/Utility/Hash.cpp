@@ -80,7 +80,7 @@ uint32 HashString(const char* hashString, const int32 strLen)
 			{
 				const char* newString = it->second;
 				const char* oldString = hashString;
-				assert(!"HashString collision");
+				ASSERT(!"HashString collision");
 			}
 		}
 	#endif

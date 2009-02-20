@@ -30,19 +30,19 @@ EntityMessage::eResult EntitySystem::CmpPlatformItem::HandleMessage( const Entit
 		gEntityMgr.DestroyEntity(GetOwner());
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_PARENT:
-		assert(msg.data);
+		DASSERT(msg.data);
 		*(EntityHandle*)msg.data = GetParentPlatform();
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_BLUEPRINTS:
-		assert(msg.data);
+		DASSERT(msg.data);
 		*(EntityHandle*)msg.data = GetBlueprints();
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_POSITION:
-		assert(msg.data);
+		DASSERT(msg.data);
 		((Vector2*)msg.data)->Set(GetAbsolutePosition());
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_HITPOINTS:
-		assert(msg.data);
+		DASSERT(msg.data);
 		*(uint32*)msg.data = GetHitpoints();
 		return EntityMessage::RESULT_OK;
 	}

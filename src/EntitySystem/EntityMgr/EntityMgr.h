@@ -1,7 +1,6 @@
 #ifndef _ENTITYMGR_H_
 #define _ENTITYMGR_H_
 
-//#include <hash_map>
 #include <map>
 #include <vector>
 #include "EntityHandle.h"

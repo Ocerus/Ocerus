@@ -43,7 +43,7 @@ ResourceMgr::ResourceMgr(const string& basepath):
 	mExtToTypeMap["xml"] = Resource::TYPE_XMLRESOURCE;
 	mExtToTypeMap["psi"] = Resource::TYPE_PARTICLERESOURCE;
 
-	assert(mResourceCreationMethods[Resource::NUM_TYPES-1] && "Not all resource types are registered");
+	ASSERT_MSG(mResourceCreationMethods[Resource::NUM_TYPES-1], "Not all resource types are registered");
 
 	gLogMgr.LogMessage("All resource types registered");
 }
@@ -143,7 +143,7 @@ bool ResourceSystem::ResourceMgr::AddManualResourceToGroup( const StringKey& nam
 {
 	gLogMgr.LogMessage("Adding resource '", name, "' to group '", group, "'");
 
-	assert(type != Resource::TYPE_AUTODETECT && "Must specify resource type when creating it manually");
+	ASSERT_MSG(type != Resource::TYPE_AUTODETECT, "Must specify resource type when creating it manually");
 
 	ResourcePtr r = mResourceCreationMethods[type]();
 	r->SetState(Resource::STATE_INITIALIZED);
@@ -175,7 +175,7 @@ void ResourceMgr::LoadResourcesInGroup(const StringKey& group)
 
 	if (gi==mResourceGroups.end())
 		gLogMgr.LogMessage("Unknown group '", group, "'", LOG_ERROR);
-	assert(gi != mResourceGroups.end() && "Unknown group");
+	ASSERT_MSG(gi != mResourceGroups.end(), "Unknown group");
 
 	const ResourceMap& resmap = *gi->second;
 	if (mListener)
@@ -203,7 +203,7 @@ void ResourceMgr::UnloadResourcesInGroup(const StringKey& group, bool allowManua
 
 	if (gi==mResourceGroups.end())
 		gLogMgr.LogMessage("Unknown group '", group, "'", LOG_ERROR);
-	assert(gi != mResourceGroups.end() && "Unknown group");
+	ASSERT_MSG(gi != mResourceGroups.end(), "Unknown group");
 
 	const ResourceMap& resmap = *gi->second;
 	for (ResourceMap::const_iterator ri = resmap.begin(); ri != resmap.end(); ++ri)
@@ -264,13 +264,13 @@ void ResourceSystem::ResourceMgr::DeleteResource( const StringKey& group, const 
 
 	if (gi==mResourceGroups.end())
 		gLogMgr.LogMessage("Unknown group '", group, "'", LOG_ERROR);
-	assert(gi != mResourceGroups.end() && "Unknown group");
+	ASSERT_MSG(gi != mResourceGroups.end(), "Unknown group");
 
 	ResourceMap& resmap = *gi->second;
 	ResourceMap::iterator ri = resmap.find(name);
 	if (ri==resmap.end())
 		gLogMgr.LogMessage("Unknown resource '", name, "' in group '", group, "'", LOG_ERROR);
-	assert(ri != resmap.end() && "Unknown resource");
+	ASSERT_MSG(ri != resmap.end(), "Unknown resource");
 	ri->second->Unload(true);
 	resmap.erase(ri);
 

@@ -24,7 +24,6 @@ void Core::LoadingScreen::DoLoading( eType type )
 		gResourceMgr.AddResourceFileToGroup("water2.png", "Backgrounds");	
 		gResourceMgr.AddResourceFileToGroup("water3.png", "Backgrounds");	
 		gResourceMgr.AddResourceFileToGroup("water4.png", "Backgrounds");	
-		gResourceMgr.AddResourceDirToGroup("xml", "xml");
 		gResourceMgr.AddResourceDirToGroup("psi", "psi");
 
 		gResourceMgr.LoadResourcesInGroup("Backgrounds");

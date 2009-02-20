@@ -53,7 +53,7 @@ EntityMessage::eResult EntitySystem::CmpProjectile::HandleMessage( const EntityM
 		Draw();
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_STRIKE:
-		assert(msg.data);
+		DASSERT(msg.data);
 		Strike(*(EntityHandle*)msg.data);
 		return EntityMessage::RESULT_OK;
 	}
@@ -136,7 +136,7 @@ void EntitySystem::CmpProjectile::PostInit( )
 
 void EntitySystem::CmpProjectile::Strike( EntityHandle target )
 {
-	assert(target.IsValid());
+	ASSERT(target.IsValid());
 	PropertyHolder prop;
 	//TODO kdyz to nebude platforma, tak knockback udelat na parent (coz musi bejt platforma)
 	if (target.GetType() == ET_PLATFORM)

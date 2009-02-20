@@ -1,8 +1,6 @@
 #ifndef _SINGLETON_H_
 #define _SINGLETON_H_
 
-#include <cassert>
-
 // disable VS warnings
 #pragma warning (disable : 4311)
 #pragma warning (disable : 4312)
@@ -16,19 +14,19 @@ template <typename T> class Singleton
 public:
     Singleton(void)
     {
-        assert( !msSingleton );
+        ASSERT( !msSingleton );
 		msSingleton = static_cast<T*>(this);
     }
     
 	~Singleton(void)
 	{
-		assert( msSingleton );
+		ASSERT( msSingleton );
 		msSingleton = 0;
 	}
     
 	static T& GetSingleton(void)
     {
-		assert(msSingleton);
+		DASSERT(msSingleton);
 		return (*msSingleton);
 	}
 

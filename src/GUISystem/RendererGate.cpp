@@ -94,7 +94,7 @@ namespace GUISystem {
 	}
 
 	CEGUI::Texture* RendererGate::createTexture(float size) {
-		assert(!"We are doomed....AGAIN!");
+		ASSERT(!"We are doomed....AGAIN!");
 		return 0;
 	}
 

@@ -54,7 +54,7 @@
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderThrough="StdAfx.h"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
+				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="3"
 				CallingConvention="0"
 			/>
@@ -129,7 +129,7 @@
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile="$(IntDir)/$(TargetName).pch"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
+				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="3"
 			/>
 			<Tool
@@ -143,6 +143,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
+				AdditionalOptions="/LTCG"
 				AdditionalDependencies="dxguid.lib dinput8.lib"
 				OutputFile="$(OutDir)/OIS_static.lib"
 				AdditionalLibraryDirectories="..\src\win32\extras\WiiMote;..\..\dx9\lib"
@@ -202,7 +203,7 @@
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile="$(IntDir)/$(TargetName).pch"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
+				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="3"
 			/>
 			<Tool
@@ -284,7 +285,7 @@
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderThrough="StdAfx.h"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
+				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="3"
 				CallingConvention="0"
 			/>
@@ -357,16 +358,16 @@
 				InlineFunctionExpansion="1"
 				WholeProgramOptimization="false"
 				AdditionalIncludeDirectories="..\includes;..\src;../../dx9/inc"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_STLP_DEBUG"
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;_STLP_DEBUG"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="0"
-				RuntimeLibrary="3"
+				RuntimeLibrary="2"
 				FloatingPointModel="2"
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderThrough="StdAfx.h"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
+				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="3"
 				CallingConvention="0"
 			/>
@@ -382,7 +383,7 @@
 			<Tool
 				Name="VCLibrarianTool"
 				AdditionalDependencies="dxguid.lib dinput8.lib"
-				OutputFile="$(OutDir)/OIS_static_d.lib"
+				OutputFile="$(OutDir)/OIS_static_dev.lib"
 				AdditionalLibraryDirectories="..\src\win32\extras\WiiMote;..\..\dx9\lib"
 			/>
 			<Tool

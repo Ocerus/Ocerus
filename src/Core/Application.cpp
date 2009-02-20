@@ -1,6 +1,5 @@
 #include "Common.h"
 #include "Application.h"
-#include <Windows.h>
 #include "LoadingScreen.h"
 #include "Game.h"
 #include "Config.h"
@@ -165,23 +164,6 @@ float32 Application::CalculateFrameDeltaTime( void )
 	return MathUtils::Min(result, MAX_DELTA_TIME);
 }
 
-void Application::MessagePump( void )
-{
-	MSG msg;
-	while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
-	{
-		if (msg.message == WM_QUIT)
-		{
-			RequestStateChange(AS_SHUTDOWN, true);				
-		}
-		else
-		{
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-		}
-	}
-}
-
 void Application::ResetStats()
 {
 	mLastFPS = 0.0f;
@@ -204,6 +186,35 @@ void Application::UpdateStats()
 			mAvgFPS = 0.05f * (mAvgFPS + mLastFPS); // approximation
 		mLastSecond = curTimeMillis;
 		mFrameCount = 0;
+	}
+}
+
+void Core::Application::Shutdown( void )
+{
+	RequestStateChange(AS_SHUTDOWN);
+}
+
+
+
+//-----------------------------------------------------
+// Windows specific functions follow.
+
+#include <Windows.h>
+
+void Application::MessagePump( void )
+{
+	MSG msg;
+	while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+	{
+		if (msg.message == WM_QUIT)
+		{
+			RequestStateChange(AS_SHUTDOWN, true);				
+		}
+		else
+		{
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
 	}
 }
 
@@ -248,9 +259,4 @@ void Core::Application::WriteToConsole( const string& str )
 {
 	DWORD writtenChars = 0;
 	WriteConsole(GetStdHandle(STD_OUTPUT_HANDLE), str.c_str(), str.length(), &writtenChars, NULL);	
-}
-
-void Core::Application::Shutdown( void )
-{
-	RequestStateChange(AS_SHUTDOWN);
 }

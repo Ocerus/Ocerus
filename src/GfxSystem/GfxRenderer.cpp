@@ -64,7 +64,7 @@ GfxRenderer::GfxRenderer(const Point& resolution, bool fullscreen):
 	mScreenWidth = resolution.x;
 	mScreenHeight = resolution.y;
 
-	assert(success);
+	ASSERT(success);
 	if (success)
 		gLogMgr.LogMessage("HGE inited; logfile=", mHGE->System_GetState(HGE_LOGFILE));
 
@@ -73,7 +73,7 @@ GfxRenderer::GfxRenderer(const Point& resolution, bool fullscreen):
 
 GfxRenderer::~GfxRenderer()
 {
-	assert(mHGE);
+	ASSERT(mHGE);
 	HgeExitFunction();
 	mHGE->System_Shutdown();
 	mHGE->Release();
@@ -82,13 +82,13 @@ GfxRenderer::~GfxRenderer()
 uint32 GfxRenderer::_GetWindowHandle() const
 {
 	HWND hWnd = mHGE->System_GetState(HGE_HWND);
-	assert(hWnd);
+	ASSERT(hWnd);
 	return (uint32)hWnd;
 }
 
 void GfxRenderer::ChangeResolution( const uint32 width, const uint32 height )
 {
-	assert(mHGE);
+	ASSERT(mHGE);
 
 	std::set<IScreenListener*>::iterator iter = mScreenListeners.begin();
 
@@ -231,18 +231,18 @@ bool GfxRenderer::DrawImage( const TexturePtr& image, int32 x, int32 y, uint8 an
 	float32 qy = -imgH_half;
 
 	// anchoring
-	assert(!(anchor&ANCHOR_LEFT)||!(anchor&ANCHOR_RIGHT)||!(anchor&ANCHOR_HCENTER) && "Coliding anchors");
-	assert(!(anchor&ANCHOR_TOP)||!(anchor&ANCHOR_BOTTOM)||!(anchor&ANCHOR_VCENTER) && "Coliding anchors");
+	ASSERT_MSG(!(anchor&ANCHOR_LEFT)||!(anchor&ANCHOR_RIGHT)||!(anchor&ANCHOR_HCENTER), "Coliding anchors");
+	ASSERT_MSG(!(anchor&ANCHOR_TOP)||!(anchor&ANCHOR_BOTTOM)||!(anchor&ANCHOR_VCENTER), "Coliding anchors");
 	if (anchor & ANCHOR_LEFT)
 		qx += imgW_half;
 	else if (anchor & ANCHOR_RIGHT)
 		qx -= imgW_half;
-	else { assert((anchor&ANCHOR_HCENTER) && "Wrong anchor"); }
+	else { ASSERT_MSG((anchor&ANCHOR_HCENTER), "Wrong anchor"); }
 	if (anchor & ANCHOR_TOP)
 		qy += imgH_half;
 	else if (anchor & ANCHOR_BOTTOM)
 		qy -= imgH_half;
-	else { assert((anchor&ANCHOR_VCENTER) && "Wrong anchor"); }
+	else { ASSERT_MSG((anchor&ANCHOR_VCENTER), "Wrong anchor"); }
 
 	// position the quad
 	q.v[0].x = qx;
@@ -565,7 +565,7 @@ Vector2 GfxRenderer::GetCameraWorldBoxBotRight( void ) const
 
 bool GfxRenderer::IsFullscreen( void ) const
 {
-	assert(mHGE);
+	ASSERT(mHGE);
 	return !mHGE->System_GetState(HGE_WINDOWED);
 }
 
@@ -603,7 +603,7 @@ bool GfxRenderer::DrawQuad( GfxSystem::Point* const vertices, const TexturePtr t
 	q.tex = texture->GetTexture();
 	q.blend = BLEND_ALPHABLEND | BLEND_COLORMUL;
 
-	assert(mHGE);
+	ASSERT(mHGE);
 	mHGE->Gfx_RenderQuad(&q);
 
 	return true;

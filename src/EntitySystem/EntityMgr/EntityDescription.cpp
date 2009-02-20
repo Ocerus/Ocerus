@@ -26,12 +26,12 @@ void EntityDescription::Init(const eEntityType type, const string& ID)
 
 void EntityDescription::AddComponent(const eComponentType type)
 {
-	assert(type != CT_INVALID && "Invalid component description type");
+	ASSERT_MSG(type != CT_INVALID, "Invalid component description type");
 	mComponents.push_back(type);
 }
 
 eComponentType EntityDescription::GetNextComponent()
 {
-	assert(mIndex<mComponents.size());
+	ASSERT(mIndex<mComponents.size());
 	return mComponents[mIndex++];
 }

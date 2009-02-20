@@ -1,7 +1,7 @@
 #ifndef _SETTINGS_H_
 #define _SETTINGS_H_
 
-#include <assert.h>
+#include "SmartAssert.h"
 #include "../Source/Common/b2Math.h"
 
 /// @name Global basic types. Only these should be used.

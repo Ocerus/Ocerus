@@ -50,7 +50,7 @@ void XMLCALL DataHandle(void* data, const XML_Char *s, int len)
 bool XMLResource::LoadImpl(void)
 {
 	XML_Parser p = XML_ParserCreate(NULL);
-	assert(p);
+	ASSERT(p);
 
 	XMLMapDataHolder holder;
 	mDataMap.clear();

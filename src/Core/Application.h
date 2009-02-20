@@ -83,7 +83,7 @@ namespace Core
 
 		/// @name  State getters
 		//@{
-		Game* GetCurrentGame(void) const { assert(mGame); return mGame; }
+		Game* GetCurrentGame(void) const { ASSERT(mGame); return mGame; }
 		//@}
 
 	private:

@@ -16,8 +16,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory=".\..\win32\bin\Debug"
-			IntermediateDirectory=".\..\win32\tmp\Debug"
+			OutputDirectory="..\tmp\$(ConfigurationName)"
+			IntermediateDirectory="..\tmp\$(ConfigurationName)"
 			ConfigurationType="2"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
@@ -51,10 +51,10 @@
 				PreprocessorDefinitions="_DEBUG;COMPILED_FROM_DSP;WIN32;_WINDOWS;_USRDLL"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
-				PrecompiledHeaderFile=".\..\win32\tmp\Debug/expat.pch"
-				AssemblerListingLocation=".\..\win32\tmp\Debug/"
-				ObjectFile=".\..\win32\tmp\Debug/"
-				ProgramDataBaseFileName=".\..\win32\tmp\Debug/"
+				PrecompiledHeaderFile=".\..\tmp\Debug\expat.pch"
+				AssemblerListingLocation=".\..\tmp\Debug\"
+				ObjectFile=".\..\tmp\Debug\"
+				ProgramDataBaseFileName=".\..\tmp\Debug\"
 				BrowseInformation="1"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
@@ -73,14 +73,14 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\win32\bin\Debug\libexpat.dll"
+				OutputFile="..\bin\Debug\libexpat.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				ModuleDefinitionFile=".\libexpat.def"
 				GenerateDebugInformation="true"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
-				ImportLibrary=".\..\win32\bin\Debug/libexpat.lib"
+				ImportLibrary=".\..\bin\Debug\libexpat.lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -95,7 +95,7 @@
 			<Tool
 				Name="VCBscMakeTool"
 				SuppressStartupBanner="true"
-				OutputFile=".\..\win32\bin\Debug/expat.bsc"
+				OutputFile=".\..\bin\Develop\expat.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -109,8 +109,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory=".\..\win32\bin\Release"
-			IntermediateDirectory=".\..\win32\tmp\Release"
+			OutputDirectory="..\tmp\$(ConfigurationName)"
+			IntermediateDirectory="..\tmp\$(ConfigurationName)"
 			ConfigurationType="2"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
@@ -147,10 +147,10 @@
 				StringPooling="true"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
-				PrecompiledHeaderFile=".\..\win32\tmp\Release/expat.pch"
-				AssemblerListingLocation=".\..\win32\tmp\Release/"
-				ObjectFile=".\..\win32\tmp\Release/"
-				ProgramDataBaseFileName=".\..\win32\tmp\Release/"
+				PrecompiledHeaderFile=".\..\tmp\Release\expat.pch"
+				AssemblerListingLocation=".\..\tmp\Release\"
+				ObjectFile=".\..\tmp\Release\"
+				ProgramDataBaseFileName=".\..\tmp\Release\"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 			/>
@@ -167,14 +167,15 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\win32\bin\Release\libexpat.dll"
+				OutputFile="..\bin\Release\libexpat.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				ModuleDefinitionFile=".\libexpat.def"
+				OptimizeReferences="0"
 				LinkTimeCodeGeneration="1"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
-				ImportLibrary=".\..\win32\bin\Release/libexpat.lib"
+				ImportLibrary=".\..\bin\Release\libexpat.lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -189,7 +190,7 @@
 			<Tool
 				Name="VCBscMakeTool"
 				SuppressStartupBanner="true"
-				OutputFile=".\..\win32\bin\Release/expat.bsc"
+				OutputFile=".\..\bin\Release\expat.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -203,8 +204,8 @@
 		</Configuration>
 		<Configuration
 			Name="Develop|Win32"
-			OutputDirectory="$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			OutputDirectory="..\tmp\$(ConfigurationName)"
+			IntermediateDirectory="..\tmp\$(ConfigurationName)"
 			ConfigurationType="2"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
@@ -240,10 +241,10 @@
 				PreprocessorDefinitions="NDEBUG;COMPILED_FROM_DSP;WIN32;_WINDOWS;_USRDLL"
 				BasicRuntimeChecks="0"
 				RuntimeLibrary="0"
-				PrecompiledHeaderFile=".\..\win32\tmp\Debug/expat.pch"
-				AssemblerListingLocation=".\..\win32\tmp\Debug/"
-				ObjectFile=".\..\win32\tmp\Debug/"
-				ProgramDataBaseFileName=".\..\win32\tmp\Debug/"
+				PrecompiledHeaderFile=".\..\tmp\Develop\expat.pch"
+				AssemblerListingLocation=".\..\tmp\Develop\"
+				ObjectFile=".\..\tmp\Develop\"
+				ProgramDataBaseFileName=".\..\tmp\Develop\"
 				BrowseInformation="1"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
@@ -262,7 +263,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\win32\bin\Develop\libexpat.dll"
+				OutputFile="..\bin\Develop\libexpat.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				ModuleDefinitionFile=".\libexpat.def"
@@ -270,7 +271,7 @@
 				LinkTimeCodeGeneration="0"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
-				ImportLibrary=".\..\win32\bin\Debug/libexpat.lib"
+				ImportLibrary=".\..\bin\Develop\libexpat.lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -285,7 +286,7 @@
 			<Tool
 				Name="VCBscMakeTool"
 				SuppressStartupBanner="true"
-				OutputFile=".\..\win32\bin\Debug/expat.bsc"
+				OutputFile=".\..\bin\Develop\expat.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"

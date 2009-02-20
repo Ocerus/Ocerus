@@ -59,7 +59,7 @@ namespace GUISystem {
 		/// @name Called in main application loop
 		//@{
 		inline virtual void RenderGUI() const {
-			assert(mCegui);
+			ASSERT(mCegui);
 			CEGUI::System::getSingleton().renderGUI();
 		}
 		

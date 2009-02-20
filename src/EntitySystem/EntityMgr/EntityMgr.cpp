@@ -20,7 +20,7 @@ EntityMgr::EntityMgr()
 EntityMgr::~EntityMgr()
 {
 	DestroyAllEntities();
-	assert(mComponentMgr);
+	ASSERT(mComponentMgr);
 	DYN_DELETE mComponentMgr;
 }
 
@@ -64,7 +64,7 @@ void EntityMgr::BroadcastMessage(const EntityMessage& msg)
 
 EntityHandle EntityMgr::CreateEntity(const EntityDescription& desc, PropertyList& out)
 {
-	assert(mComponentMgr);
+	ASSERT(mComponentMgr);
 	EntityDescription::ComponentDescriptionsList::const_iterator i = desc.mComponents.begin();
 	if (i == desc.mComponents.end())
 		return EntityHandle::Null;
@@ -77,7 +77,7 @@ EntityHandle EntityMgr::CreateEntity(const EntityDescription& desc, PropertyList
 	for (; i!=desc.mComponents.end(); ++i)
 	{
 		Component* cmp = mComponentMgr->CreateComponent(h, *i);
-		assert(cmp);
+		ASSERT(cmp);
 		
 		// check dependencies
 		ComponentDependencyList depList;
@@ -126,7 +126,7 @@ void EntitySystem::EntityMgr::ProcessDestroyQueue( void )
 
 void EntityMgr::DestroyAllEntities()
 {
-	assert(mComponentMgr);
+	ASSERT(mComponentMgr);
 	for (EntityMap::const_iterator i = mEntities.begin(); i!=mEntities.end(); ++i)
 		DestroyEntity(i);
 	mEntities.clear();

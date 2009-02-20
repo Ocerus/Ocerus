@@ -61,15 +61,15 @@ public:
 
 	virtual ~SmartPointer() { Release(); }
 
-	inline T& operator*() const { assert(mPointer); return *mPointer; }
-	inline T* operator->() const { assert(mPointer); return mPointer; }
+	inline T& operator*() const { DASSERT(mPointer); return *mPointer; }
+	inline T* operator->() const { DASSERT(mPointer); return mPointer; }
 
 	inline T* Get() const { return mPointer; }
 	inline T* GetPointer() const { return mPointer; }
 
 	inline bool IsUnique() const { return *mUseCountPtr == 1; }
 
-	inline uint32 GetUseCount() const { assert(mUseCountPtr); return *mUseCountPtr; }
+	inline uint32 GetUseCount() const { DASSERT(mUseCountPtr); return *mUseCountPtr; }
 	inline uint32* GetUseCountPtr() const { return mUseCountPtr; }
 
 	inline bool IsNull(void) const { return mPointer == 0; }

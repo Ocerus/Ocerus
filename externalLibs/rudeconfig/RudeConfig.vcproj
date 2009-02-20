@@ -173,10 +173,10 @@
 				InlineFunctionExpansion="1"
 				WholeProgramOptimization="false"
 				AdditionalIncludeDirectories="include/rudeconfig"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="0"
-				RuntimeLibrary="3"
+				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				DebugInformationFormat="3"
@@ -192,7 +192,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="lib\$(ProjectName)_d.lib"
+				OutputFile="lib\$(ProjectName)_dev.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"

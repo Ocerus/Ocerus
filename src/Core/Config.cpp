@@ -8,7 +8,7 @@ Config::Config(const string& filePath): mFilePath(filePath)
 {
 	gLogMgr.LogMessage("Loading config file '" + mFilePath + "'");
 
-	assert(mFilePath.length()>0);
+	ASSERT(mFilePath.length()>0);
 
 	// attempt to load the file
 	mRudeConfig = DYN_NEW rude::Config();
@@ -20,7 +20,7 @@ Config::Config(const string& filePath): mFilePath(filePath)
 
 Config::~Config() 
 {
-	assert(mRudeConfig);
+	ASSERT(mRudeConfig);
 	Save();
 	DYN_DELETE mRudeConfig;
 }

@@ -19,12 +19,13 @@
 #ifndef B2_SETTINGS_H
 #define B2_SETTINGS_H
 
-#include <assert.h>
-#include <math.h>
-
+#include "SmartAssert.h"
 #define B2_NOT_USED(x) x
-#define b2Assert(A) assert(A)
+#define b2Assert(A) ASSERT(A)
+// This is here to hide warning which appears when we disable asserts. We can safely assume the library is error-prune, so hiding the warning is safe.
+#pragma warning(disable: 4189)
 
+#include <math.h>
 
 // need to include NDS jtypes.h instead of 
 // usual typedefs because NDS jtypes defines

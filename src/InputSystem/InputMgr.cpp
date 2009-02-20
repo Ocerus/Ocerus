@@ -18,25 +18,25 @@ InputSystem::InputMgr::InputMgr( void )
 
 InputSystem::InputMgr::~InputMgr( void )
 {
-	assert(mOISListener);
+	ASSERT(mOISListener);
 	DYN_DELETE mOISListener;
 }
 
 void InputSystem::InputMgr::CaptureInput( void )
 {
-	assert(mOISListener);
+	ASSERT(mOISListener);
 	mOISListener->CaptureInput();
 }
 
 void InputSystem::InputMgr::AddInputListener( IInputListener* listener )
 {
-	assert(listener);
+	ASSERT(listener);
 	mListeners.push_back(listener);
 }
 
 void InputSystem::InputMgr::RemoveInputListener( IInputListener* listener )
 {
-	assert(listener);
+	ASSERT(listener);
 	ListenersList::iterator it = std::find(mListeners.begin(), mListeners.end(), listener);
 	if (it != mListeners.end())
 		mListeners.erase(it);
@@ -49,13 +49,13 @@ void InputSystem::InputMgr::RemoveAllInputListeners( void )
 
 void InputSystem::InputMgr::ResolutionChanged( int width, int height )
 {
-	assert(mOISListener);
+	ASSERT(mOISListener);
 	mOISListener->SetResolution(width, height);
 }
 
 bool InputSystem::InputMgr::IsKeyDown( const eKeyCode k ) const
 {
-	assert(mOISListener);
+	ASSERT(mOISListener);
 	return mOISListener->IsKeyDown(k);
 }
 

@@ -38,7 +38,7 @@ EntityMessage::eResult CmpPlatformLogic::HandleMessage(const EntityMessage& msg)
 		}
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_DAMAGE:
-		assert(msg.data);
+		DASSERT(msg.data);
 		{
 			PropertyHolder prop = mBlueprints.GetProperty("Material");
 			EntityHandle material = prop.GetValue<EntityHandle>();
@@ -51,7 +51,7 @@ EntityMessage::eResult CmpPlatformLogic::HandleMessage(const EntityMessage& msg)
 		}
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_KNOCKBACK_DETACH:
-		assert(msg.data);
+		DASSERT(msg.data);
 		{
 			if (!mParentShip.IsValid())
 				return EntityMessage::RESULT_OK;
@@ -80,23 +80,23 @@ EntityMessage::eResult CmpPlatformLogic::HandleMessage(const EntityMessage& msg)
 			ComputePickStuff();
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_BLUEPRINTS:
-		assert(msg.data);
+		DASSERT(msg.data);
 		*(EntityHandle*)msg.data = GetBlueprints();
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_PARENT:
-		assert(msg.data);
+		DASSERT(msg.data);
 		*(EntityHandle*)msg.data = GetParentShip();
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_HITPOINTS:
-		assert(msg.data);
+		DASSERT(msg.data);
 		*(uint32*)msg.data = GetHitpoints();
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_ADD_PLATFORM_ITEM:
-		assert(msg.data);
+		DASSERT(msg.data);
 		mItems.push_back(*(EntityHandle*)msg.data);
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_MOUSE_PICK:
-		assert(msg.data);
+		DASSERT(msg.data);
 		{
 			Vector2 pos;
 			PostMessage(EntityMessage::TYPE_GET_BODY_POSITION, &pos);
@@ -106,7 +106,7 @@ EntityMessage::eResult CmpPlatformLogic::HandleMessage(const EntityMessage& msg)
 		}
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_DRAW_OVERLAY:
-		assert(msg.data);
+		DASSERT(msg.data);
 		DrawSelectionOverlay(*(bool*)msg.data);
 		return EntityMessage::RESULT_OK;
 	}
@@ -151,7 +151,7 @@ void EntitySystem::CmpPlatformLogic::Die( void )
 		Vector2* shape = prop.GetValue<Vector2*>();
 		prop = GetProperty("ShapeLength");
 		int32 shapeLen = prop.GetValue<uint32>();
-		assert(shapeLen);
+		ASSERT(shapeLen);
 		float32 radius = 0;
 		Vector2 center = Vector2_Zero;
 		for (int32 i=0; i<shapeLen; ++i)
