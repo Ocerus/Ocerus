@@ -29,7 +29,7 @@ void Core::LoadingScreen::DoLoading( eType type )
 		gResourceMgr.LoadResourcesInGroup("Backgrounds");
 		gResourceMgr.LoadResourcesInGroup("ShipParts");
 		gResourceMgr.LoadResourcesInGroup("Ships");
-		gResourceMgr.LoadResourcesInGroup("psi");
+		//gResourceMgr.LoadResourcesInGroup("psi");
 
 		gGUIMgr.LoadStyle();
 		break;

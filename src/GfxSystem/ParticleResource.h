@@ -16,7 +16,11 @@ namespace GfxSystem
 		virtual ~ParticleResource(void);
 		static ResourceSystem::ResourcePtr CreateMe(void);
 
-		inline hgeParticleSystemInfo* GetPsi(void) { return mPsi; }
+		inline hgeParticleSystemInfo* GetPsi(void)
+		{
+			EnsureLoaded();
+			return mPsi;
+		}
 
 	protected:	
 		hgeAnimation* mSprite;

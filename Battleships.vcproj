@@ -135,7 +135,7 @@
 				PrecompiledHeaderThrough="Common.h"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="false"
-				DebugInformationFormat="3"
+				DebugInformationFormat="0"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -215,6 +215,7 @@
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;USE_ASSERT"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="true"
+				ExceptionHandling="1"
 				BasicRuntimeChecks="0"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
@@ -240,7 +241,7 @@
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="externalLibs/boost/lib;externalLibs/cegui/lib;externalLibs/cegui/dependencies/lib"
 				IgnoreAllDefaultLibraries="false"
-				IgnoreDefaultLibraryNames="libci.lib;libcmt.lib;libcmtd.lib"
+				IgnoreDefaultLibraryNames="libci.lib;libcmt.lib"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="0"
@@ -270,7 +271,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy /V /Y /B externalLibs\cegui\bin\vs9\Release\*.dll Develop&#x0D;&#x0A;copy /V /Y /B externalLibs\expat\bin\Develop\*.dll Develop"
+				CommandLine="copy /V /Y /B externalLibs\cegui\bin\vs9\Release\*.dll Develop&#x0D;&#x0A;copy /V /Y /B externalLibs\expat\bin\Develop\*.dll Develop&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>

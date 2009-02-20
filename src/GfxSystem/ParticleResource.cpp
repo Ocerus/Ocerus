@@ -15,7 +15,11 @@ ParticleResource::~ParticleResource(void)
 
 int32 ReadInt(InputStream& is)
 {
-	return is.get() + (is.get() << 8) + (is.get() << 16) + (is.get() << 24);
+	int a = is.get();
+	int b = is.get();
+	int c = is.get();
+	int d = is.get();
+	return a + (b<<8) + (c<<16) + (d<<24);
 }
 
 float32 ReadFloat(InputStream& is)
