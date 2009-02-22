@@ -20,7 +20,7 @@ public:
 	/// @name Updates the time if it's manual.
 	//@{
 	void UpdateInMicroseconds(const uint64 delta);
-	void UpdateInMiliseconds(const uint64 delta);
+	void UpdateInMilliseconds(const uint64 delta);
 	void UpdateInSeconds(const float64 delta);
 	//@}
 	/// @name Returns time since reset in milliseconds.

@@ -18,8 +18,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			OutputDirectory="bin\$(ConfigurationName)"
+			IntermediateDirectory="bin\$(ConfigurationName)"
 			ConfigurationType="1"
 			CharacterSet="0"
 			>
@@ -66,7 +66,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="CEGUIBase_d.lib freetype_d.lib pcre_d.lib CEGUIExpatParser_d.lib CEGUIFalagardWRBase_Static_d.lib"
-				OutputFile="$(ConfigurationName)/$(ProjectName).exe"
+				OutputFile="bin/$(ConfigurationName)/$(ProjectName).exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="externalLibs/boost/lib;externalLibs/cegui/lib;externalLibs/cegui/dependencies/lib"
 				IgnoreAllDefaultLibraries="false"
@@ -97,13 +97,13 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy /V /Y /B externalLibs\cegui\bin\vs9\Debug\*.dll Debug&#x0D;&#x0A;copy /V /Y /B externalLibs\expat\bin\Debug\*.dll Debug&#x0D;&#x0A;"
+				CommandLine="copy /V /Y /B externalLibs\cegui\bin\vs9\Debug\*.dll &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /V /Y /B externalLibs\expat\bin\Debug\*.dll &quot;$(OutDir)&quot;&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			OutputDirectory="bin\$(ConfigurationName)"
+			IntermediateDirectory="bin\$(ConfigurationName)"
 			ConfigurationType="1"
 			CharacterSet="0"
 			WholeProgramOptimization="1"
@@ -149,6 +149,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="CEGUIBase.lib freetype.lib pcre.lib CEGUIExpatParser.lib CEGUIFalagardWRBase_Static.lib "
+				OutputFile="bin/$(ConfigurationName)/$(ProjectName).exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="externalLibs/boost/lib;externalLibs/cegui/lib;externalLibs/cegui/dependencies/lib"
 				IgnoreDefaultLibraryNames="libci.lib;libcmt.lib"
@@ -181,13 +182,13 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Copying DLL files to output dir..."
-				CommandLine="copy /V /Y &quot;$(OutDir)\$(TargetFileName)&quot; &quot;output&quot;&#x0D;&#x0A;copy /V /Y /B externalLibs\cegui\bin\vs9\Release\*.dll Release&#x0D;&#x0A;copy /V /Y /B externalLibs\cegui\bin\vs9\Release\*.dll output&#x0D;&#x0A;copy /V /Y /B externalLibs\expat\bin\Release\*.dll Release&#x0D;&#x0A;copy /V /Y /B externalLibs\expat\bin\Release\*.dll output&#x0D;&#x0A;"
+				CommandLine="copy /V /Y &quot;$(OutDir)\$(TargetFileName)&quot; &quot;output&quot;&#x0D;&#x0A;copy /V /Y /B externalLibs\cegui\bin\vs9\Release\*.dll &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /V /Y /B externalLibs\cegui\bin\vs9\Release\*.dll output&#x0D;&#x0A;copy /V /Y /B externalLibs\expat\bin\Release\*.dll &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /V /Y /B externalLibs\expat\bin\Release\*.dll output&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Develop|Win32"
-			OutputDirectory="$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			OutputDirectory="bin\$(ConfigurationName)"
+			IntermediateDirectory="bin\$(ConfigurationName)"
 			ConfigurationType="1"
 			CharacterSet="0"
 			>
@@ -237,7 +238,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="CEGUIBase.lib freetype.lib pcre.lib CEGUIExpatParser.lib CEGUIFalagardWRBase_Static.lib "
-				OutputFile="$(ConfigurationName)/$(ProjectName).exe"
+				OutputFile="bin/$(ConfigurationName)/$(ProjectName).exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="externalLibs/boost/lib;externalLibs/cegui/lib;externalLibs/cegui/dependencies/lib"
 				IgnoreAllDefaultLibraries="false"
@@ -271,7 +272,74 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy /V /Y /B externalLibs\cegui\bin\vs9\Release\*.dll Develop&#x0D;&#x0A;copy /V /Y /B externalLibs\expat\bin\Develop\*.dll Develop&#x0D;&#x0A;"
+				CommandLine="copy /V /Y /B externalLibs\cegui\bin\vs9\Release\*.dll &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /V /Y /B externalLibs\expat\bin\Develop\*.dll &quot;$(OutDir)&quot;&#x0D;&#x0A;"
+			/>
+		</Configuration>
+		<Configuration
+			Name="LibDebug|Win32"
+			OutputDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="4"
+			CharacterSet="0"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				AdditionalIncludeDirectories="src/Precompiled;externalLibs/boost/inc;externalLibs/hge/include;externalLibs/ois/includes;externalLibs/cegui/include;externalLibs/rudeconfig/include;externalLibs/Box2D/Include;externalLibs/Box2D/Source;externalLibs/expat/lib"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;USE_ASSERT"
+				GeneratePreprocessedFile="0"
+				MinimalRebuild="true"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="3"
+				UsePrecompiledHeader="2"
+				PrecompiledHeaderThrough="Common.h"
+				WarningLevel="3"
+				WarnAsError="true"
+				Detect64BitPortabilityProblems="false"
+				DebugInformationFormat="4"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLibrarianTool"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				CommandLine=""
 			/>
 		</Configuration>
 	</Configurations>
@@ -472,6 +540,14 @@
 						</FileConfiguration>
 						<FileConfiguration
 							Name="Develop|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								UsePrecompiledHeader="1"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="LibDebug|Win32"
 							>
 							<Tool
 								Name="VCCLCompilerTool"
@@ -889,6 +965,14 @@
 							GeneratePreprocessedFile="0"
 						/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="LibDebug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							GeneratePreprocessedFile="0"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath=".\src\Core\Config.cpp"
@@ -1157,6 +1241,14 @@
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Develop|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					UsePrecompiledHeader="1"
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="LibDebug|Win32"
 				>
 				<Tool
 					Name="VCCLCompilerTool"

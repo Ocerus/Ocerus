@@ -90,12 +90,12 @@ void Timer::Resume( void )
 
 void Timer::UpdateInMicroseconds( const uint64 delta )
 {
-	ASSERT(mManual && "Timer must be set to manual control to be updatable");
+	ASSERT_MSG(mManual, "Timer must be set to manual control to be updatable");
 	if (!mPaused)
 		mLastTime += delta;
 }
 
-void Timer::UpdateInMiliseconds( const uint64 delta )
+void Timer::UpdateInMilliseconds( const uint64 delta )
 {
 	UpdateInMicroseconds(1000 * delta);
 }
