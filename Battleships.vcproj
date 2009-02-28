@@ -277,8 +277,8 @@
 		</Configuration>
 		<Configuration
 			Name="LibDebug|Win32"
-			OutputDirectory="$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			OutputDirectory="bin\$(ConfigurationName)"
+			IntermediateDirectory="bin\$(ConfigurationName)"
 			ConfigurationType="4"
 			CharacterSet="0"
 			>
