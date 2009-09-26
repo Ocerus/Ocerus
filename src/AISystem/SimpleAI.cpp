@@ -32,7 +32,7 @@ namespace AISystem {
 		list.remove_if( is_prop_not_valid<EntitySystem::EntityHandle>() );
 	}
 
-	void LoadEntitiesOfType( String name_prefix, String name_suffix, uint32 count,
+	void LoadEntitiesOfType( string name_prefix, string name_suffix, uint32 count,
 			std::list<TurretInfo> & target ) {
 		for (uint32 i = 1; i <= count; ++i) {
 			target.push_back( 
@@ -41,7 +41,7 @@ namespace AISystem {
 		}
 	}
 
-	void LoadEntitiesOfType( String name_prefix, String name_suffix, uint32 count,
+	void LoadEntitiesOfType( string name_prefix, string name_suffix, uint32 count,
 			std::list<EntitySystem::EntityHandle> & target )
 	{
 		for (uint32 i = 1; i <= count; ++i) {

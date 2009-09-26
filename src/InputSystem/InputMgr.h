@@ -1,8 +1,8 @@
 #ifndef InputMgr_h__
 #define InputMgr_h__
 
-#include "../Utility/Singleton.h"
-#include "../Utility/Settings.h"
+#include "Singleton.h"
+#include "Settings.h"
 #include "InputActions.h"
 #include "../GfxSystem/IScreenListener.h"
 
@@ -69,7 +69,7 @@ namespace InputSystem
 
 		/// @name Collection of input event listeners.
 		//@{
-		typedef Vector<IInputListener*> ListenersList;
+		typedef vector<IInputListener*> ListenersList;
 		ListenersList mListeners;
 		//@}
 	};

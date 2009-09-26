@@ -5,7 +5,7 @@
 #include "../StringKey.h"
 
 /// @name This trick had to be done to avoid circular include dependencies (I can forward declare this class).
-class PropertyList : public Map<StringKey, PropertyHolder>
+class PropertyList : public map<StringKey, PropertyHolder>
 {
 
 };

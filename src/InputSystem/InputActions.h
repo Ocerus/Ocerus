@@ -1,7 +1,7 @@
 #ifndef InputActions_h__
 #define InputActions_h__
 
-#include "../Utility/Settings.h"
+#include "Settings.h"
 
 namespace InputSystem
 {

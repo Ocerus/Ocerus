@@ -1,7 +1,7 @@
 #include "Common.h"
 #include "CmpPlatformPhysics.h"
 #include "Box2D.h"
-#include "../../Utility/DataContainer.h"
+#include "DataContainer.h"
 #include "../../Core/Game.h"
 
 using namespace EntitySystem;

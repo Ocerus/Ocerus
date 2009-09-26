@@ -1,7 +1,7 @@
 #ifndef LoadingScreen_h__
 #define LoadingScreen_h__
 
-#include "../Utility/StateMachine.h"
+#include "StateMachine.h"
 #include "../ResourceSystem/IResourceLoadingListener.h"
 
 namespace Core
@@ -24,7 +24,7 @@ namespace Core
 
 		/// @name Callbacks from the resource manager.
 		//@{
-		virtual void ResourceGroupLoadStarted(const String& groupName, uint32 resourceCount);
+		virtual void ResourceGroupLoadStarted(const string& groupName, uint32 resourceCount);
 		virtual void ResourceLoadStarted(const ResourceSystem::ResourcePtr& resource);
 		virtual void ResourceLoadEnded(void);
 		virtual void ResourceGroupLoadEnded(void);

@@ -1,7 +1,7 @@
 #ifndef _ENTITYDESCRIPTION_H_
 #define _ENTITYDESCRIPTION_H_
 
-#include "../../Utility/Settings.h"
+#include "Settings.h"
 #include "EntityEnums.h"
 #include "../ComponentMgr/ComponentEnums.h"
 
@@ -18,7 +18,7 @@ namespace EntitySystem
 		~EntityDescription(void);
 
 		/// @name Call this before each subsequent filling of the description.
-		void Init(const eEntityType type, const String& ID = "");
+		void Init(const eEntityType type, const string& ID = "");
 
 		/// @name Add new component specified by its type.
 		void AddComponent(const eComponentType type);
@@ -28,7 +28,7 @@ namespace EntitySystem
 	private:
 		friend class EntityMgr;
 
-		typedef Vector<eComponentType> ComponentDescriptionsList;
+		typedef vector<eComponentType> ComponentDescriptionsList;
 
 		/// @name List of descriptions of invidivual components this entity will consist of.
 		ComponentDescriptionsList mComponents;
@@ -40,7 +40,7 @@ namespace EntitySystem
 		eEntityType mType;
 
 		/// @name Custom identifier (not neccessarily unique) of this entity.
-		String mID;
+		string mID;
 
 		/// @name Clears everything
 		void Clear(void);

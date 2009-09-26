@@ -3,6 +3,7 @@
 
 #include "Settings.h"
 #include "../GfxSystem/GfxStructures.h"
+//TODO nejde tohle pryc?
 #include <sstream>
 
 /** Set of functions for converting different values to and from a string.
@@ -10,7 +11,7 @@
 namespace StringConverter
 {
 	template<typename T>
-	String ToString(T val)
+	string ToString(T val)
 	{
 		std::ostringstream out;
 		out << val;
@@ -18,7 +19,7 @@ namespace StringConverter
 	}
 
 	template<typename T>
-	T FromString(const String& str)
+	T FromString(const string& str)
 	{
 		T result;
 		std::istringstream iss(str);
@@ -28,13 +29,13 @@ namespace StringConverter
 	}
 
 	template<>
-	Vector2 FromString(const String& str);
+	Vector2 FromString(const string& str);
 
 	template<>
-	GfxSystem::Color FromString(const String& str);
+	GfxSystem::Color FromString(const string& str);
 
 	template<>
-	bool FromString(const String& str);
+	bool FromString(const string& str);
 
 }
 

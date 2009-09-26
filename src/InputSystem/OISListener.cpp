@@ -2,7 +2,7 @@
 #include "InputMgr.h"
 #include "OISListener.h"
 #include "../GfxSystem/GfxRenderer.h"
-#include "../Utility/StringConverter.h"
+#include "StringConverter.h"
 #include "IInputListener.h"
 #include <OISInputManager.h>
 
@@ -22,8 +22,8 @@ InputSystem::OISListener::OISListener(): mMouse(0), mKeyboard(0), mOIS(0)
 	pl.insert(OIS::ParamList::value_type("WINDOW", StringConverter::ToString(hWnd)));
 
 	// let the standard mouse cursor be
-	pl.insert(Containers::make_pair(String("w32_mouse"), String("DISCL_BACKGROUND" )));
-	pl.insert(Containers::make_pair(String("w32_mouse"), String("DISCL_NONEXCLUSIVE")));
+	pl.insert(Containers::make_pair(string("w32_mouse"), string("DISCL_BACKGROUND" )));
+	pl.insert(Containers::make_pair(string("w32_mouse"), string("DISCL_NONEXCLUSIVE")));
 
 	mOIS = OIS::InputManager::createInputSystem(pl);
 	gLogMgr.LogMessage("OIS created");

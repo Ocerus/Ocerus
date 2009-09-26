@@ -1,6 +1,5 @@
 #include "Common.h"
 #include "Hash.h"
-#include <hash_map>
 
 /// @name Initial seed.
 #define HASH_INIT	0x811c9dc5

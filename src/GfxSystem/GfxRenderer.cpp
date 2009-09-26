@@ -1,9 +1,10 @@
 #include "Common.h"
 #include "GfxRenderer.h"
-#include <hge.h>
 #include "Triangulate.h"
 #include "Texture.h"
 #include "IScreenListener.h"
+
+#include <hge.h>
 
 namespace GfxSystem
 {
@@ -90,7 +91,7 @@ void GfxRenderer::ChangeResolution( const uint32 width, const uint32 height )
 {
 	BS_ASSERT(mHGE);
 
-	Set<IScreenListener*>::iterator iter = mScreenListeners.begin();
+	set<IScreenListener*>::iterator iter = mScreenListeners.begin();
 
 	gLogMgr.LogMessage("Changing resolution to ", width, height);
 
@@ -327,17 +328,17 @@ bool GfxRenderer::DrawImage( const TexturePtr& image, const Rect& textureRect, c
 	return true;
 }
 
-bool createTriangles(const Vector<Point>& vertices, Vector<Point>& triangles)
+bool createTriangles(const vector<Point>& vertices, vector<Point>& triangles)
 {	
 	Vector2dVector a;
-	for(Vector<Point>::const_iterator i = vertices.begin();i != vertices.end();++i)
+	for(vector<Point>::const_iterator i = vertices.begin();i != vertices.end();++i)
 	{
 		a.push_back(Vector2d((float)(i->x),(float)(i->y)));
 	}
 	
 	Vector2dVector result;
 	if (Triangulate::Process(a,result))
-		for(Vector<Vector2d>::const_iterator i = result.begin();i != result.end();++i)
+		for(vector<Vector2d>::const_iterator i = result.begin();i != result.end();++i)
 			triangles.push_back(Point(MathUtils::Round(i->GetX()),MathUtils::Round(i->GetY())));
 	else
 		return false;
@@ -379,7 +380,7 @@ bool GfxRenderer::DrawPolygon( Point* vertices, int vertices_len, const TextureP
 	return false;
 }
 
-bool GfxRenderer::DrawPolygon( const Vector<Point>& vertices, const TexturePtr& image, const Pen& outline, float32 angle, const Color& color, float32 scale, float32 textureAngle, float32 textureScale ) const
+bool GfxRenderer::DrawPolygon( const vector<Point>& vertices, const TexturePtr& image, const Pen& outline, float32 angle, const Color& color, float32 scale, float32 textureAngle, float32 textureScale ) const
 {
 	if (image.IsNull())
 	{
@@ -393,7 +394,7 @@ bool GfxRenderer::DrawPolygon( const Vector<Point>& vertices, const TexturePtr& 
 bool GfxRenderer::DrawPolygon( Point* vertices, int vertices_len, const Color& fillColor, const Pen& outline) const
 {	
 	// init vector
-	Vector<Point> v;
+	vector<Point> v;
 	for(int i = 0;i < vertices_len;i++)
 		v.push_back(vertices[i]);
 
@@ -407,7 +408,7 @@ bool GfxRenderer::DrawPolygon( Point* vertices, int vertices_len, const Color& f
 bool GfxRenderer::DrawPolygonWithConversion( const Vector2* vertices, int vertices_len, const Vector2& offsetPosition, const float32 offsetAngle, const Color& fillColor, const Pen& outline) const
 {	
 	// init vector
-	Vector<Point> v;
+	vector<Point> v;
 	XForm xf(offsetPosition, Matrix22(offsetAngle));
 	for(int i = 0;i < vertices_len;i++)
 		v.push_back(WorldToScreen(MathUtils::Multiply(xf, vertices[i])));
@@ -419,19 +420,19 @@ bool GfxRenderer::DrawPolygonWithConversion( const Vector2* vertices, int vertic
 		return false;
 }
 
-bool GfxRenderer::DrawPolygon( const Vector<Point>& vertices, const Color& fillColor, const Pen& outline) const
+bool GfxRenderer::DrawPolygon( const vector<Point>& vertices, const Color& fillColor, const Pen& outline) const
 {	
 	//TODO tahle funkce musi bejt schopna neco vykreslit i kdyz je polygon degenerovanej a nejde triangulovat
 	//TODO prozkoumat, jestli nejde pres DirectX kreslit polygon lip a pripadne implementovat prislusnou funkci dovnitr HGE
 
-	Vector<Point> triangles;
+	vector<Point> triangles;
 	if (createTriangles(vertices,triangles)) // get triangles from points
 	{
 		// draw filled triangles
 		int32 pre2[2][2]; // to store two first points of triangle
 		int x = 0;  // simple counter
 		hgeTriple t; // triangle
-		for(Vector<Point>::iterator i = triangles.begin();i<triangles.end();++i)
+		for(vector<Point>::iterator i = triangles.begin();i<triangles.end();++i)
 		{
 			int m = x % 3;
 			if (m == 2) // current vertex is the third needed
@@ -452,7 +453,7 @@ bool GfxRenderer::DrawPolygon( const Vector<Point>& vertices, const Color& fillC
 		//draw outline
 		if(&outline != &Pen::NullPen)
 		{
-			for(Vector<Point>::const_iterator i = vertices.begin();i<vertices.end() - 1;++i)
+			for(vector<Point>::const_iterator i = vertices.begin();i<vertices.end() - 1;++i)
 				DrawLine(*i, *(i + 1), outline);
 			DrawLine(*(vertices.end() - 1),vertices[0],outline);
 		}
@@ -478,7 +479,7 @@ bool GfxRenderer::DrawCircle( const Point& center, const int32 radius, const Col
 	int32 x, y, oldX=-1, oldY=-1;
 
 	bool fill = &fillColor != &Color::NullColor;
-	Vector<Point> points;
+	vector<Point> points;
 	if (fill)
 		points.push_back(center);	
 
@@ -569,14 +570,14 @@ bool GfxRenderer::IsFullscreen( void ) const
 	return !mHGE->System_GetState(HGE_WINDOWED);
 }
 
-void GfxRenderer::DrawString( float32 x, float32 y, const String & id,
-							 const String & text, const Color color,
-							 uint8 text_anchor, uint8 screen_anchor, const String & fontid )
+void GfxRenderer::DrawString( float32 x, float32 y, const string & id,
+							 const string & text, const Color color,
+							 uint8 text_anchor, uint8 screen_anchor, const string & fontid )
 {
 	gGUIMgr.AddStaticText(x, y, id, text, color, text_anchor, screen_anchor, fontid);
 }
 
-Vector2 GfxRenderer::GetTextSize( const String & text, const String & fontid )
+Vector2 GfxRenderer::GetTextSize( const string & text, const string & fontid )
 {
 	return gGUIMgr.GetTextSize(text, fontid);
 }

@@ -5,7 +5,6 @@
 #include "../GfxSystem/Texture.h"
 #include "../ResourceSystem/ResourceMgr.h"
 #include "../LogSystem/LogMgr.h"
-#include <math.h>
 
 namespace GUISystem {
 
@@ -67,7 +66,7 @@ namespace GUISystem {
 
 	// perform final rendering for all queued renderable quads.
 	void RendererGate::doRender() {
-		Vector<Quad_info>::const_iterator iter = mQuads.begin();
+		vector<Quad_info>::const_iterator iter = mQuads.begin();
 		while (iter != mQuads.end()) {			
 			DrawQuad(*iter);
 			++iter;
@@ -99,7 +98,7 @@ namespace GUISystem {
 	}
 
 	void RendererGate::destroyTexture(CEGUI::Texture* texture) {
-		Set<CEGUITextureWrapper*>::iterator found_tex = mTextures.find(static_cast<CEGUITextureWrapper*>(texture));
+		set<CEGUITextureWrapper*>::iterator found_tex = mTextures.find(static_cast<CEGUITextureWrapper*>(texture));
 		if (found_tex != mTextures.end()) {
 			DYN_DELETE *found_tex;
 			mTextures.erase(found_tex);
@@ -107,7 +106,7 @@ namespace GUISystem {
 	}
 
 	void RendererGate::destroyAllTextures(void) {
-		Set<CEGUITextureWrapper*>::iterator iter = mTextures.begin();
+		set<CEGUITextureWrapper*>::iterator iter = mTextures.begin();
 		while (iter != mTextures.end()) {
 			DYN_DELETE *iter;
 			++iter;

@@ -1,7 +1,7 @@
 #ifndef _CEGUITEXTUREWRAPPER_H
 #define _CEGUITEXTUREWRAPPER_H
 
-#include "../Utility/Settings.h"
+#include "Settings.h"
 #include "CEGUIBase.h"
 #include "CEGUITexture.h"
 #include "../GfxSystem/Texture.h"
@@ -83,8 +83,8 @@ namespace GUISystem {
 		uint32 mOriginalHeight, mOriginalWidth;
 
 		static uint32 mTextureIndex;
-		static const String mResourceGroupName;
-		static String GetNextTextureName();
+		static const string mResourceGroupName;
+		static string GetNextTextureName();
 
 	private:
 		CEGUI::Renderer* d_owner;		//<! Renderer object that created and owns this texture		

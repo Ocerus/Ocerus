@@ -19,7 +19,7 @@ typedef RTTIBaseClass* (*ClassFactoryFunc)();
 /// @name This functions is called by client classes to register properties into RTTI.
 typedef bool (*RegisterReflectionFunc)();
 /// @name A list of component types determining dependency of a component on other components.
-typedef Vector<EntitySystem::eComponentType> ComponentDependencyList;
+typedef vector<EntitySystem::eComponentType> ComponentDependencyList;
 
 /// @name Maximum length of a name of a class.
 const uint32 CLASSNAME_LENGTH = 48;
@@ -92,7 +92,7 @@ public:
 private:
 
 	/// @name A map of properties of this RTTI.
-	typedef HashMap<StringKey, AbstractProperty*> PropertyMap;
+	typedef hash_map<StringKey, AbstractProperty*> PropertyMap;
 
 	ClassID	mCLID;									
 	char mClassName[CLASSNAME_LENGTH];	

@@ -1,6 +1,6 @@
 #include "Common.h"
 #include "Texture.h"
-#include "../Utility/DataContainer.h"
+#include "DataContainer.h"
 #include <hge.h>
 
 using namespace GfxSystem;

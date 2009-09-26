@@ -1,10 +1,9 @@
 #ifndef _PARTICLESYSTEMMGR_H_
 #define _PARTICLESYSTEMMGR_H_
 
-#include "../Utility/Settings.h"
+#include "Settings.h"
 #include "ParticleSystem.h"
 #include "ParticleResource.h"
-#include <list>
 
 /// @name Forward declarations of hge classes
 //@{
@@ -52,7 +51,7 @@ namespace GfxSystem
 		/// @name Unregister all PS from manager
 		void KillAll(void);
 	private:
-		typedef List<ParticleSystemPtr> PSList;
+		typedef list<ParticleSystemPtr> PSList;
 
 		float32 mScale;
 		PSList mPsList;

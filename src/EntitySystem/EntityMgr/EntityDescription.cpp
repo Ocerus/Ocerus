@@ -16,7 +16,7 @@ void EntityDescription::Clear(void)
 	mID = "";
 }
 
-void EntityDescription::Init(const eEntityType type, const String& ID)
+void EntityDescription::Init(const eEntityType type, const string& ID)
 {
 	Clear();
 	mIndex = 0;

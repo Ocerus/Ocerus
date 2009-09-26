@@ -1,6 +1,6 @@
 #include "Common.h"
 #include "CEGUITextureWrapper.h"
-#include "../Utility/Settings.h"
+#include "Settings.h"
 #include "CEGUIBase.h"
 #include "CEGUIString.h"
 #include "GUIMgr.h"
@@ -13,7 +13,7 @@
 namespace GUISystem {
 
 	uint32 CEGUITextureWrapper::mTextureIndex = 0;
-	const String CEGUITextureWrapper::mResourceGroupName = "CEGUI_created";
+	const string CEGUITextureWrapper::mResourceGroupName = "CEGUI_created";
 
 	void CEGUITextureWrapper::loadFromFile(const CEGUI::String& filename, const CEGUI::String& resourceGroup) {
 		mTexture.SetNull();
@@ -32,7 +32,7 @@ namespace GUISystem {
 
 		uint32 bytesize = ((buffWidth * sizeof(uint32)) * buffHeight);
 
-		String name = GetNextTextureName();
+		string name = GetNextTextureName();
 		gResourceMgr.AddManualResourceToGroup(name, mResourceGroupName, ResourceSystem::Resource::TYPE_TEXTURE);
 						
 		mTexture = (GfxSystem::TexturePtr)gResourceMgr.GetResource(mResourceGroupName, name);
@@ -61,7 +61,7 @@ namespace GUISystem {
 		mTexture.SetNull();		
 	}
 
-	String CEGUITextureWrapper::GetNextTextureName() {
+	string CEGUITextureWrapper::GetNextTextureName() {
 		std::stringstream sstream;
 		sstream << "CEGUI_CUSTOM_TEXTURE_";
 		sstream << mTextureIndex++;

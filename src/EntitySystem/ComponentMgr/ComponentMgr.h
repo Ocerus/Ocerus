@@ -1,9 +1,8 @@
 #ifndef _COMPONENTMGR_H_
 #define _COMPONENTMGR_H_
 
-#include <hash_map>
 #include "../EntityMgr/EntityHandle.h"
-#include "../../Utility/Singleton.h"
+#include "Singleton.h"
 #include "../../Utility/Properties/PropertyHolderMediator.h"
 #include "ComponentIterators.h"
 #include "ComponentEnums.h"

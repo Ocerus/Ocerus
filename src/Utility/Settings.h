@@ -1,6 +1,13 @@
 #ifndef _SETTINGS_H_
 #define _SETTINGS_H_
 
+
+/// Disable STL exception. Solution taken from http://ccollomb.free.fr/blog/?p=34 .
+#define _HAS_EXCEPTIONS 0
+#define _STATIC_CPPLIB
+#define BOOST_NO_STD_TYPEINFO
+#define BOOST_NO_EXCEPTIONS
+
 #include "SmartAssert.h"
 #include "BasicTypes.h"
 #include "ComplexTypes.h"

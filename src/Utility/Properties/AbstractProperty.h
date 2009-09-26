@@ -77,6 +77,6 @@ protected :
 };
 
 /// @name A list of generic properties.
-typedef Vector<AbstractProperty*> AbstractPropertyList;
+typedef vector<AbstractProperty*> AbstractPropertyList;
 
 #endif	// _ABSTRACT_PROPERTY_H

@@ -60,32 +60,32 @@ namespace EntitySystem
 		/// @name Retrieves a property of an entity. A filter related to properties' flags can be specified.
 		PropertyHolderMediator GetEntityProperty(const EntityHandle h, const StringKey key, const PropertyAccessFlags flagMask = FULL_PROPERTY_ACCESS_FLAGS) const;
 		/// @name Returns EntityHandle to an entity of a specified ID. If there are more of them, then returns the first one.
-		EntityHandle FindFirstEntity(const String& ID);
+		EntityHandle FindFirstEntity(const string& ID);
 		/// @name Actually destroyes all entities marked for destruction.
 		void ProcessDestroyQueue(void);
 		/// @name Destroys all entities in the manager.
 		void DestroyAllEntities(void);	
 		/// @name Fills the output vector with entities matching specified type/team.
 		//TODO tohle je tu zbytecny; az budou hotovy query, odstranit!
-		void EnumerateEntities(Vector<EntityHandle>& out, const eEntityType desiredType = NUM_ENTITY_TYPES, const TeamID team = 0);
+		void EnumerateEntities(vector<EntityHandle>& out, const eEntityType desiredType = NUM_ENTITY_TYPES, const TeamID team = 0);
 
 	private:
 		/// @name This struct holds info about an instance of an entity in the system.
 		struct EntityInfo
 		{
 			EntityInfo(void): mType(ET_UNKNOWN), mTeam(0), mFullyInited(false) {}
-			EntityInfo(const eEntityType _type, const String& _ID = ""): mTeam(0), mFullyInited(false), mType(_type), mID(_ID) {}
-			EntityInfo(const bool _fullyInited, const TeamID _team, const eEntityType _type, const String& _ID = ""): mFullyInited(_fullyInited), mTeam(_team), mType(_type), mID(_ID) {}
+			EntityInfo(const eEntityType _type, const string& _ID = ""): mTeam(0), mFullyInited(false), mType(_type), mID(_ID) {}
+			EntityInfo(const bool _fullyInited, const TeamID _team, const eEntityType _type, const string& _ID = ""): mFullyInited(_fullyInited), mTeam(_team), mType(_type), mID(_ID) {}
 
 			eEntityType mType;
 			TeamID mTeam; // currently corresponds to an entity ID of the owning ship. Zero if no such exists.
 			bool mFullyInited;
-			String mID;
+			string mID;
 		};
 		//TODO predelat zpet na hashmapu, az bude hotova struktura pro vykreslovani entit i podle Z-orderu
 		//typedef stdext::hash_map<EntityID, EntityInfo*> EntityMap;
-		typedef Map<EntityID, EntityInfo*> EntityMap;
-		typedef Vector<EntityID> EntityQueue;
+		typedef map<EntityID, EntityInfo*> EntityMap;
+		typedef vector<EntityID> EntityQueue;
 
 		ComponentMgr* mComponentMgr;
 		EntityMap mEntities;

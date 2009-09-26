@@ -4,7 +4,7 @@
 using namespace StringConverter;
 
 template<>
-Vector2 StringConverter::FromString(const String& str)
+Vector2 StringConverter::FromString(const string& str)
 {
 	Vector2 result;
 	std::istringstream iss(str);
@@ -16,7 +16,7 @@ Vector2 StringConverter::FromString(const String& str)
 }
 
 template<>
-GfxSystem::Color StringConverter::FromString(const String& str)
+GfxSystem::Color StringConverter::FromString(const string& str)
 {
 	GfxSystem::Color result;
 	uint32 val;
@@ -36,7 +36,7 @@ GfxSystem::Color StringConverter::FromString(const String& str)
 }
 
 template<>
-bool StringConverter::FromString(const String& str)
+bool StringConverter::FromString(const string& str)
 {
 	bool result;
 	std::istringstream iss(str);

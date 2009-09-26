@@ -2,15 +2,15 @@
 #define _XMLRESOURCE_H_
 
 #include "Resource.h"
-#include "../Utility/Settings.h"
-#include "../Utility/ResourcePointers.h"
-#include "../Utility/Tree.h"
-#include "../Utility/StringConverter.h"
+#include "Settings.h"
+#include "ResourcePointers.h"
+#include "Tree.h"
+#include "StringConverter.h"
 
 namespace ResourceSystem 
 {
 	/// @name define a container for textdata
-	typedef tree<String> XMLDataMap;
+	typedef tree<string> XMLDataMap;
 
 	/** @name This class is used to load and maintain XML resources. XML file is automatically parsed into pairs
 	    node->value. Values are NOT stored with types, but as a raw text data. You have to know type of node to
@@ -31,7 +31,7 @@ namespace ResourceSystem
 		public:
 			/// @name Returns an attribute of specified name and type of the node the iterator points to.
 			template<typename T>
-			inline T GetAttribute(const String& name) { return mOwner->GetAttribute<T>(*this, name); }
+			inline T GetAttribute(const string& name) { return mOwner->GetAttribute<T>(*this, name); }
 
 			/// @name Returns the of the node the iterator points to.
 			template<typename T>
@@ -78,7 +78,7 @@ namespace ResourceSystem
 
 		/// @name Returns an attribute of specified name and type of the specified node.
 		template<typename T>
-		T GetAttribute(const NodeIterator iter, const String& name)
+		T GetAttribute(const NodeIterator iter, const string& name)
 		{
 			XMLDataMap::sibling_iterator attr = find(mDataMap.begin(iter), mDataMap.end(iter), name);
 			if (attr == mDataMap.end(iter))

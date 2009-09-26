@@ -1,9 +1,9 @@
 #ifndef Game_h__
 #define Game_h__
 
-#include "../Utility/StateMachine.h"
-#include "../Utility/Settings.h"
-#include "../Utility/ResourcePointers.h"
+#include "StateMachine.h"
+#include "Settings.h"
+#include "ResourcePointers.h"
 #include "../InputSystem/IInputListener.h"
 #include "../EntitySystem/EntityMgr/EntityHandle.h"
 #include "../EntitySystem/EntityMgr/EntityEnums.h"
@@ -78,7 +78,7 @@ namespace Core
 			EntitySystem::EntityHandle entity1;
 			EntitySystem::EntityHandle entity2;
 		};
-		typedef Vector<PhysicsEvent*> PhysicsEventList;
+		typedef vector<PhysicsEvent*> PhysicsEventList;
 		PhysicsEventList mPhysicsEvents;
 		void ProcessPhysicsEvent(const PhysicsEvent& evt);
 		//@}
@@ -86,14 +86,14 @@ namespace Core
 		/// @name Water stuff.
 		//@{
 		WaterSurface* mWaterSurface;
-		Vector<GfxSystem::ParticleSystemPtr> mBubbleEffects;
+		vector<GfxSystem::ParticleSystemPtr> mBubbleEffects;
 		//@}
 
 		/// @name Selections stuff.
 		//@{
 		uint64 mLastClickTime;
 		EntitySystem::EntityHandle mHoveredEntity;
-		typedef Vector<EntitySystem::EntityHandle> EntityList;
+		typedef vector<EntitySystem::EntityHandle> EntityList;
 		EntityList mSelectedEntities;
 		#define MAX_SELECTED_GROUPS 10
 		EntityList mSelectedGroups[MAX_SELECTED_GROUPS];

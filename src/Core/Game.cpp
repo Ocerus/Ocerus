@@ -2,7 +2,6 @@
 #include "Game.h"
 #include "Application.h"
 #include "Box2D.h"
-#include <iostream>
 #include "../GfxSystem/ParticleSystem.h"
 #include "WaterSurface.h"
 
@@ -307,7 +306,7 @@ void Core::Game::Draw( const float32 delta)
 	mWaterSurface->Draw();
 
 	// draw bubbles
-	for (Vector<GfxSystem::ParticleSystemPtr>::const_iterator it=mBubbleEffects.begin(); it!=mBubbleEffects.end(); ++it)
+	for (vector<GfxSystem::ParticleSystemPtr>::const_iterator it=mBubbleEffects.begin(); it!=mBubbleEffects.end(); ++it)
 		(*it)->Render();
 
 	

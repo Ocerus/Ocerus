@@ -1,7 +1,7 @@
 #include "Common.h"
 #include "CEGUIResource.h"
 #include "CEGUIDataContainer.h"
-#include "../Utility/DataContainer.h"
+#include "DataContainer.h"
 
 using namespace GUISystem;
 

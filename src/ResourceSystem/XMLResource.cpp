@@ -38,7 +38,7 @@ void XMLCALL DataHandle(void* data, const XML_Char *s, int len)
 		XML_Char* buf = DYN_NEW XML_Char[len+1];
 		memcpy(buf, s, len);
 		buf[len] = '\0';
-		String str = buf;
+		string str = buf;
 		str.erase(remove_if(str.begin(),str.end(),iscntrl),str.end()); // remove contrl sequence chars
 		boost::trim(str);
 		if (!str.empty())

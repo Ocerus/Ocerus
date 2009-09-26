@@ -12,7 +12,7 @@ extern const Matrix22 Matrix22_Identity;
 typedef b2XForm XForm;
 
 #include <string>
-typedef std::string String;
+typedef std::string string;
 
 #include "Containers.h"
 

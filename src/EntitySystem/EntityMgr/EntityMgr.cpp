@@ -72,7 +72,7 @@ EntityHandle EntityMgr::CreateEntity(const EntityDescription& desc, PropertyList
 	//TODO check if the handle is really unique
 
 	bool dependencyFailure = false;
-	Set<eComponentType> cmpTypes;
+	set<eComponentType> cmpTypes;
 
 	for (; i!=desc.mComponents.end(); ++i)
 	{
@@ -174,7 +174,7 @@ PropertyHolderMediator EntitySystem::EntityMgr::GetEntityProperty( const EntityH
 	return mComponentMgr->GetEntityProperty(h, key, flagMask);
 }
 
-EntitySystem::EntityHandle EntitySystem::EntityMgr::FindFirstEntity( const String& ID )
+EntitySystem::EntityHandle EntitySystem::EntityMgr::FindFirstEntity( const string& ID )
 {
 	for(EntityMap::const_iterator i=mEntities.begin(); i!=mEntities.end(); ++i)
 		if (i->second->mID.compare(ID) == 0)
@@ -197,13 +197,13 @@ bool EntitySystem::EntityMgr::LoadFromResource( ResourceSystem::ResourcePtr res 
 		{
 			// init the entity description
 			EntityDescription desc;
-			eEntityType type = DetectEntityType(entIt.GetAttribute<String>("Type"));
-			String ID = entIt.GetAttribute<String>("Name");
+			eEntityType type = DetectEntityType(entIt.GetAttribute<string>("Type"));
+			string ID = entIt.GetAttribute<string>("Name");
 			desc.Init(type, ID);
 			// add component types
 			for (ResourceSystem::XMLResource::NodeIterator cmpIt=xml->IterateChildren(entIt); cmpIt!=xml->EndChildren(entIt); ++cmpIt)
 				if ((*cmpIt).compare("Component") == 0)
-					desc.AddComponent(DetectComponentType(cmpIt.GetAttribute<String>("Type")));
+					desc.AddComponent(DetectComponentType(cmpIt.GetAttribute<string>("Type")));
 			// create the entity
 			PropertyList props;
 			EntityHandle entity = CreateEntity(desc, props);
@@ -263,10 +263,10 @@ bool EntitySystem::EntityMgr::LoadFromResource( ResourceSystem::ResourcePtr res 
 							p.SetValue(propIt.GetChildValue<uint8>());
 							break;
 						case PROPTYPE_STRING:
-							p.SetValue(propIt.GetChildValue<String>().c_str());
+							p.SetValue(propIt.GetChildValue<string>().c_str());
 							break;
 						case PROPTYPE_STRING_KEY:
-							p.SetValue<StringKey>(propIt.GetChildValue<String>());
+							p.SetValue<StringKey>(propIt.GetChildValue<string>());
 							break;
 						case PROPTYPE_COLOR:
 							p.SetValue(propIt.GetChildValue<GfxSystem::Color>());
@@ -279,14 +279,14 @@ bool EntitySystem::EntityMgr::LoadFromResource( ResourceSystem::ResourcePtr res 
 							break;
 						case PROPTYPE_VECTOR2_ARRAY:
 							{
-								String lengthParam;
-								Vector<Vector2> vertices;
+								string lengthParam;
+								vector<Vector2> vertices;
 								for (ResourceSystem::XMLResource::NodeIterator vertIt=xml->IterateChildren(propIt); vertIt!=xml->EndChildren(propIt); ++vertIt)
 								{
 									if ((*vertIt).compare("Vertex") == 0)
 										vertices.push_back(vertIt.GetChildValue<Vector2>());
 									else if ((*vertIt).compare("LengthParam") == 0)
-										lengthParam = vertIt.GetChildValue<String>();
+										lengthParam = vertIt.GetChildValue<string>();
 									else
 										gLogMgr.LogMessage("XML:Entity:Expected 'Vertex' or 'LengthParam', found '", *vertIt, "'", LOG_ERROR);
 								}
@@ -306,9 +306,9 @@ bool EntitySystem::EntityMgr::LoadFromResource( ResourceSystem::ResourcePtr res 
 							break;
 						case PROPTYPE_ENTITYHANDLE:
 							{
-								EntityHandle e = FindFirstEntity(propIt.GetChildValue<String>());
+								EntityHandle e = FindFirstEntity(propIt.GetChildValue<string>());
 								if (!e.IsValid())
-									gLogMgr.LogMessage("XML:Entity:Entity for property '", *propIt, "' of name '", propIt.GetChildValue<String>(), "' was not found", LOG_WARNING);
+									gLogMgr.LogMessage("XML:Entity:Entity for property '", *propIt, "' of name '", propIt.GetChildValue<string>(), "' was not found", LOG_WARNING);
 								p.SetValue(e);
 							}
 							break;
@@ -367,7 +367,7 @@ bool EntitySystem::EntityMgr::EntityExists( const EntityHandle h ) const
 	return mEntities.find(h.GetID()) != mEntities.end();
 }
 
-void EntitySystem::EntityMgr::EnumerateEntities( Vector<EntityHandle>& out, const eEntityType desiredType, const TeamID team )
+void EntitySystem::EntityMgr::EnumerateEntities( vector<EntityHandle>& out, const eEntityType desiredType, const TeamID team )
 {
 	out.clear();
 	for (EntityMap::const_iterator it=mEntities.begin(); it!=mEntities.end(); ++it)

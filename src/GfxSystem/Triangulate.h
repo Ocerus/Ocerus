@@ -36,8 +36,6 @@
 /*****************************************************************/
 
 
-#include <vector>  // Include STL vector class.
-
 class Vector2d
 {
 public:
@@ -62,7 +60,7 @@ private:
 
 // Typedef an STL vector of vertices which are used to represent
 // a polygon/contour and a series of triangles.
-typedef Vector< Vector2d > Vector2dVector;
+typedef vector< Vector2d > Vector2dVector;
 
 
 class Triangulate

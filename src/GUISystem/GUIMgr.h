@@ -1,10 +1,10 @@
 #ifndef _GUIMGR_H_
 #define _GUIMGR_H_
 
-#include "../Utility/Singleton.h"
-#include "../Utility/Settings.h"
+#include "Singleton.h"
+#include "Settings.h"
 #include "../InputSystem/IInputListener.h"
-#include "../Utility/Settings.h"
+#include "Settings.h"
 #include "StaticElements.h"
 //TODO zbavit se techto includu pokud mozno
 #include "CEGUIBase.h"
@@ -26,7 +26,7 @@ namespace GUISystem {
 	// Inherit this to be eligible to console prompt events
 	class IConsoleListener {
 	public:
-		virtual void EventConsoleCommand(String command) = 0;
+		virtual void EventConsoleCommand(string command) = 0;
 	};
 
 	class GUIMgr : public Singleton<GUIMgr>, public InputSystem::IInputListener
@@ -70,19 +70,19 @@ namespace GUISystem {
 		/// @name Registers a class that implements IConsoleListener
 		void AddConsoleListener(IConsoleListener* listener);
 		/// @name If you wish to post a new message into console, call this method
-		void AddConsoleMessage(String message, const GfxSystem::Color& color = GfxSystem::Color(255,255,255,255));
+		void AddConsoleMessage(string message, const GfxSystem::Color& color = GfxSystem::Color(255,255,255,255));
 		bool IsConsoleLoaded(void) const { return mConsoleIsLoaded; }
 		//@}
 
 		/// @name Static text related methods
 		//@{
-		void AddStaticText( float32 x, float32 y, const String & id, const String & text,
+		void AddStaticText( float32 x, float32 y, const string & id, const string & text,
 			const GfxSystem::Color color = GfxSystem::Color(255,255,255),
 			uint8 text_anchor = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP,
 			uint8 screen_anchor = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP,
-			const String & fontid = "");
-		Vector2 GetTextSize( const String & text, const String & fontid = "" );
-		StaticText* GetStaticText( const String & id );
+			const string & fontid = "");
+		Vector2 GetTextSize( const string & text, const string & fontid = "" );
+		StaticText* GetStaticText( const string & id );
 		//@}
 
 		virtual ~GUIMgr();
@@ -108,14 +108,14 @@ namespace GUISystem {
 
 		/// @name Commands memory
 		//@{
-		void AddLastCommand(String command);
+		void AddLastCommand(string command);
 		void LoadLastCommand();
-		Deque<String>::const_iterator mCurrentLastSelected;
-		Deque<String> mLastCommands;
+		deque<string>::const_iterator mCurrentLastSelected;
+		deque<string> mLastCommands;
 		//@}
 
-		Set<IConsoleListener*> mConsoleListeners;		
-		Map<String, StaticElement*> mCreatedStaticElements;
+		set<IConsoleListener*> mConsoleListeners;		
+		map<string, StaticElement*> mCreatedStaticElements;
 	};
 }
 #endif

@@ -5,7 +5,6 @@
 #include "../InputSystem/InputActions.h"
 #include "RendererGate.h"
 #include "ResourceGate.h"
-#include <math.h>
 
 namespace GUISystem {
 	/// @name Prototypes for utility functions
@@ -37,7 +36,7 @@ namespace GUISystem {
 		mCegui->setDefaultFont( "Commonwealth-10" );
 		CEGUI::System::getSingleton().setDefaultMouseCursor( "TaharezLook", "MouseArrow" );
 		
-		String layout = gApp.GetGlobalConfig()->GetString("Layout", "Battleships.layout", "CEGUI");
+		string layout = gApp.GetGlobalConfig()->GetString("Layout", "Battleships.layout", "CEGUI");
 
 		CEGUI::Window* CurrentWindowRoot =
 			CEGUI::WindowManager::getSingleton().loadWindowLayout( layout.c_str() );		
@@ -97,12 +96,12 @@ namespace GUISystem {
 
 	bool GUIMgr::ConsoleCommandEvent(const CEGUI::EventArgs& e) {
 		CEGUI::Window* prompt = CEGUI::WindowManager::getSingleton().getWindow("ConsoleRoot/ConsolePrompt");
-		String message(prompt->getText().c_str());
+		string message(prompt->getText().c_str());
 		if (message == "quit")
 			gApp.RequestStateChange( Core::AS_SHUTDOWN );
 		if ( message.length() >= 9 ) {
-			String prefix = message.substr(0, 7);
-			String args = message.substr(8);
+			string prefix = message.substr(0, 7);
+			string args = message.substr(8);
 			if (prefix == "addtext")
 				AddStaticText( 0.0f, 0.0f, "test text", args, GfxSystem::Color( 255, 0, 0),
 					GfxSystem::ANCHOR_BOTTOM | GfxSystem::ANCHOR_RIGHT,
@@ -115,7 +114,7 @@ namespace GUISystem {
 		return true;
 	}
 
-	void GUIMgr::AddLastCommand(String command) {
+	void GUIMgr::AddLastCommand(string command) {
 		if (mLastCommands.size() == 25)
 			mLastCommands.pop_back();
 		mLastCommands.push_front( command );
@@ -135,7 +134,7 @@ namespace GUISystem {
 		editbox->setText(*mCurrentLastSelected);
 	}
 
-	Vector2 GUIMgr::GetTextSize( const String & text, const String & fontid ) {
+	Vector2 GUIMgr::GetTextSize( const string & text, const string & fontid ) {
 		CEGUI::Font* font;
 		if (fontid != "")
 			font = CEGUI::FontManager::getSingleton().getFont(fontid);
@@ -145,7 +144,7 @@ namespace GUISystem {
 			font->getFontHeight()/gGfxRenderer.GetScreenHeight());
 	}
 
-	void GUIMgr::AddConsoleMessage(String message, const GfxSystem::Color& color) {
+	void GUIMgr::AddConsoleMessage(string message, const GfxSystem::Color& color) {
 		if (!mConsoleIsLoaded)
 			return;
 
@@ -161,7 +160,7 @@ namespace GUISystem {
 		while (item_count = pane->getItemCount() > 50)
 			pane->removeItem(pane->getListboxItemFromIndex(item_count - 1));
 
-		Set<IConsoleListener*>::iterator iter = mConsoleListeners.begin();
+		set<IConsoleListener*>::iterator iter = mConsoleListeners.begin();
 		while (iter != mConsoleListeners.end())
 		{
 			(*iter)->EventConsoleCommand(message);
@@ -209,13 +208,13 @@ namespace GUISystem {
 		CEGUI::System::getSingleton().injectMouseButtonUp( ConvertMouseButtonEnum(btn) );
 	}
 
-	void GUIMgr::AddStaticText( float32 x, float32 y, const String & id, const String & text,
+	void GUIMgr::AddStaticText( float32 x, float32 y, const string & id, const string & text,
 			const GfxSystem::Color color/* = GfxSystem::Color(255,255,255)*/,
 			uint8 text_anchor/* = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP*/,
 			uint8 screen_anchor/* = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP*/,
-			const String & fontid )
+			const string & fontid )
 	{
-		Map<String, StaticElement*>::iterator iter = mCreatedStaticElements.find( id );
+		map<string, StaticElement*>::iterator iter = mCreatedStaticElements.find( id );
 		if (iter == mCreatedStaticElements.end()) {
 			StaticText* ptr = DYN_NEW StaticText( x, y, id, text, color, text_anchor, screen_anchor, fontid );
 			mCreatedStaticElements.insert( Containers::make_pair( id, (StaticElement*)ptr ) );
@@ -225,8 +224,8 @@ namespace GUISystem {
 		}
 	}
 
-	StaticText* GUIMgr::GetStaticText( const String & id ) {
-		Map<String, StaticElement*>::iterator iter = mCreatedStaticElements.find( id );
+	StaticText* GUIMgr::GetStaticText( const string & id ) {
+		map<string, StaticElement*>::iterator iter = mCreatedStaticElements.find( id );
 		return (StaticText*)(iter->second);
 	}
 

@@ -1,7 +1,7 @@
 #ifndef EntityPicker_h__
 #define EntityPicker_h__
 
-#include "../Utility/Settings.h"
+#include "Settings.h"
 
 namespace EntitySystem
 {

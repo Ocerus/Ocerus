@@ -2,17 +2,17 @@
 #define _TEXTRESOURCE_H_
 
 #include "../ResourceSystem/Resource.h"
-#include "../Utility/Settings.h"
-#include "../Utility/ResourcePointers.h"
-#include "../Utility/StringKey.h"
-#include <map>
+#include "Settings.h"
+#include "ResourcePointers.h"
+#include "StringKey.h"
+
 
 namespace StringSystem 
 {
 	/// @name define type used for storing strings
-	typedef String TextData;
+	typedef string TextData;
 	/// @name define a container for textdata
-	typedef Map<StringKey, TextData> TextDataMap;
+	typedef map<StringKey, TextData> TextDataMap;
 
 	/** This class represents single text resource.
 		Main purpose of the class is to load and parse a .str file, not to store actual data. You should

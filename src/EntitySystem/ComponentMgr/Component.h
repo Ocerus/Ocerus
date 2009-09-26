@@ -1,9 +1,9 @@
 #ifndef _COMPONENT_H_
 #define _COMPONENT_H_
 
-#include "../../Utility/Properties.h"
+#include "Properties.h"
 #include "../EntityMgr/EntityHandle.h"
-#include "../../Utility/StringKey.h"
+#include "StringKey.h"
 
 namespace EntitySystem
 {

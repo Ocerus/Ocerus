@@ -1,6 +1,5 @@
 #include "Common.h"
 #include "TextResource.h"
-#include <string>
 
 using namespace StringSystem;
 
@@ -18,8 +17,8 @@ bool TextResource::LoadImpl()
 {
 	InputStream& is = OpenInputStream(ISM_TEXT);
 	char buf[4096];
-	String key = "";
-	String text = "";
+	string key = "";
+	string text = "";
 	bool store = false;
 	bool multiline = false;
 	while (is.good())
@@ -42,7 +41,7 @@ bool TextResource::LoadImpl()
 				{
 					text.resize(text.size()-1);
 					// gLogMgr.LogMessage("StringMgr: Saving key: " + key + " and data: " + text);
-					mTextDataMap.insert(Pair<StringKey, TextData>(key,text));
+					mTextDataMap.insert(pair<StringKey, TextData>(key,text));
 					text.clear();
 					key.clear();
 				}

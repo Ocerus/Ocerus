@@ -13,7 +13,7 @@ StringKey::StringKey( const char* str )
 	mData = HashString(str);
 }
 
-StringKey::StringKey( const String& str )
+StringKey::StringKey( const string& str )
 {
 	mData = HashString(str.c_str());
 }
@@ -45,7 +45,7 @@ bool StringKey::operator<( const StringKey& rhs ) const
 	return mData < rhs.mData;
 }
 
-StringKey::operator String( void ) const
+StringKey::operator string( void ) const
 {
 	return DeHashString(mData);
 }

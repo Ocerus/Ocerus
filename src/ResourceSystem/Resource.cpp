@@ -2,7 +2,7 @@
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
 #include "Resource.h"
-#include "../Utility/DataContainer.h"
+#include "DataContainer.h"
 
 using namespace ResourceSystem;
 
@@ -107,7 +107,7 @@ void ResourceSystem::Resource::GetRawInputData( DataContainer& outData )
 {
 	//TODO predelat tak, aby vyuzilo toho, ze nekdy je znat pocet ctenych dat dopredu -> a pridat prislusnou metodu na zjisteni toho poctu
 	outData.Release();
-	Vector<uint8*> tmps;
+	vector<uint8*> tmps;
 	const uint32 tmpMaxSize = 1024; // size of one tmp buffer
 	uint32 tmpLastSize; // size of the last tmp buffer in the vector
 	uint32 bufferSize = 0; // resulting size

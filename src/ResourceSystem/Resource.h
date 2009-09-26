@@ -1,9 +1,9 @@
 #ifndef _RESOURCE_H_
 #define _RESOURCE_H_
 
-#include "../Utility/SmartPointer.h"
-#include "../Utility/Settings.h"
-#include "../Utility/ResourcePointers.h"
+#include "SmartPointer.h"
+#include "Settings.h"
+#include "ResourcePointers.h"
 //TODO odstranit tenhle include!
 #include <boost/filesystem/fstream.hpp>
 
@@ -42,8 +42,8 @@ namespace ResourceSystem
 		//@{
 		inline eType GetType(void) const { return mType; }
 		inline eState GetState(void) const { return mState; }
-		inline String GetName(void) const { return mName; }
-		inline String GetFilePath(void) const { return mFilePath; }
+		inline string GetName(void) const { return mName; }
+		inline string GetFilePath(void) const { return mFilePath; }
 		inline bool IsManual(void) const { return mIsManual; }
 		//@}
 
@@ -73,10 +73,10 @@ namespace ResourceSystem
 
 	private:
 		friend class ResourceMgr;
-		String mFilePath;
+		string mFilePath;
 		bool mIsManual;
 		eType mType;
-		String mName;
+		string mName;
 		/// @name Used by the impl of OpenInputStream
 		//@{
 		boost::filesystem::ifstream* mInputFileStream;
@@ -85,8 +85,8 @@ namespace ResourceSystem
 
 		/// @name For internal use by the resource manager.
 		//@{
-		inline void SetName(const String& name) { mName = name; }
-		inline void SetFilepath(const String& filepath) { mFilePath = filepath; }
+		inline void SetName(const string& name) { mName = name; }
+		inline void SetFilepath(const string& filepath) { mFilePath = filepath; }
 		inline void SetManual(bool manual) { mIsManual = manual; }
 		inline void SetType(const eType newType) { mType = newType; }
 		//@}

@@ -11,8 +11,8 @@ namespace AISystem {
 
 	class AIMgr : public Singleton<AIMgr> {
 	protected:
-		Vector<GenericAI*> mAIs;
-		Vector<GenericAI*> mFreeAIs;
+		vector<GenericAI*> mAIs;
+		vector<GenericAI*> mFreeAIs;
 
 		bool mAIEnabled;
 		uint32 mSkipped;

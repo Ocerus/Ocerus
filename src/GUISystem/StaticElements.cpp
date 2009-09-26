@@ -3,6 +3,8 @@
 #include "CEGUIBase.h"
 #include "CEGUIWindowManager.h"
 #include "CEGUIFontManager.h"
+
+//TODO std pryc
 #include <sstream>
 #include <iomanip>
 
@@ -80,48 +82,48 @@ enum eAnchor {
 			size.d_y.asRelative((float)gGfxRenderer.GetScreenHeight()));
 	}
 
-	StaticText::StaticText( float32 x, float32 y, const String & id, const String & text, 
+	StaticText::StaticText( float32 x, float32 y, const string & id, const string & text, 
 			const GfxSystem::Color & color,
 			uint8 text_anchor/* = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP*/,
 			uint8 screen_anchor/* = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP*/,
-			const String & fontid/* = ""*/ )
+			const string & fontid/* = ""*/ )
 	{
 		InitElement(id);
 		SetStaticText( x, y, text, color, text_anchor, screen_anchor, fontid );
 	}
 
-	StaticText::StaticText( int32 x, int32 y, const String & id, const String & text,
+	StaticText::StaticText( int32 x, int32 y, const string & id, const string & text,
 			const GfxSystem::Color & color,
 			uint8 text_anchor/* = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP*/,
 			uint8 screen_anchor/* = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP*/,
-			const String & fontid/* = ""*/ )
+			const string & fontid/* = ""*/ )
 	{
 		InitElement(id);
 		SetStaticText( x, y, text, color, text_anchor, screen_anchor, fontid );
 	}
 
-	void StaticText::SetStaticText( float32 x, float32 y, const String & text,
+	void StaticText::SetStaticText( float32 x, float32 y, const string & text,
 			const GfxSystem::Color & color,
 			uint8 text_anchor/* = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP*/,
 			uint8 screen_anchor/* = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP*/,
-			const String & fontid/* = ""*/ )
+			const string & fontid/* = ""*/ )
 	{
 		SetStaticTextWorker( text, color, fontid );
 		SetPosition( x, y, text_anchor, screen_anchor );
 	}
 
-	void StaticText::SetStaticText( int32 x, int32 y, const String & text,
+	void StaticText::SetStaticText( int32 x, int32 y, const string & text,
 			const GfxSystem::Color & color,
 			uint8 text_anchor/* = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP*/,
 			uint8 screen_anchor/* = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP*/,
-			const String & fontid/* = ""*/ )
+			const string & fontid/* = ""*/ )
 	{
 		SetStaticTextWorker( text, color, fontid );
 		SetPosition( x, y, text_anchor, screen_anchor );
 	}
 
-	void StaticText::SetStaticTextWorker( const String & text,
-		const GfxSystem::Color & color, const String & fontid/* = "" */)
+	void StaticText::SetStaticTextWorker( const string & text,
+		const GfxSystem::Color & color, const string & fontid/* = "" */)
 	{
 		SetText( text );
 		SetFont( fontid );
@@ -136,7 +138,7 @@ enum eAnchor {
 	StaticText::~StaticText() {
 	}
 
-	void StaticText::InitElement( const String & id ) {
+	void StaticText::InitElement( const string & id ) {
 		mElement = CEGUI::WindowManager::getSingleton().createWindow( "Lightweight/StaticText", "CustomStaticText/" + id );
 		CEGUI::System::getSingleton().getGUISheet()->addChildWindow( mElement );
 		mElement->setProperty("VertFormatting", "TopAligned");
@@ -153,7 +155,7 @@ enum eAnchor {
 		mElement->setProperty( "TextColours", sstream.str() );
 	}
 
-	void StaticText::SetFont( const String & fontid ) {
+	void StaticText::SetFont( const string & fontid ) {
 		if (fontid == "") return;
 		try {			
 			if( !CEGUI::FontManager::getSingleton().isFontPresent( fontid ) )
@@ -164,7 +166,7 @@ enum eAnchor {
 		}
 	}
 
-	void StaticText::SetText( const String & text ) {
+	void StaticText::SetText( const string & text ) {
 		mElement->setText( text );
 	}
 }

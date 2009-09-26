@@ -4,7 +4,7 @@
 using namespace StringSystem;
 
 
-StringMgr::StringMgr(const String& basepath)
+StringMgr::StringMgr(const string& basepath)
 {
 	mBasePath = basepath;
 	gLogMgr.LogMessage("*** StringMgr init ***");
@@ -17,7 +17,7 @@ StringMgr::~StringMgr(void)
 	gLogMgr.LogMessage("*** StringMgr unloaded ***");
 }
 
-bool StringMgr::LoadLanguagePack(const String& lang)
+bool StringMgr::LoadLanguagePack(const string& lang)
 {
 	bool result = true;
 	result = LoadDataFromDir(lang);
@@ -25,17 +25,17 @@ bool StringMgr::LoadLanguagePack(const String& lang)
 	return result;
 }
 
-bool StringMgr::LoadDataFromDir(const String& path, const String& includeRegexp, const String& excludeRegexp)
+bool StringMgr::LoadDataFromDir(const string& path, const string& includeRegexp, const string& excludeRegexp)
 {
 	bool result = true;
 	result = gResourceMgr.AddResourceDirToGroup(mBasePath + path, "strings", includeRegexp, excludeRegexp);
 	gResourceMgr.LoadResourcesInGroup("strings");
 	
 	gLogMgr.LogMessage("StringMgr: Loading data from resource group ""strings""");
-	Vector<ResourceSystem::ResourcePtr> resourceGroup;
+	vector<ResourceSystem::ResourcePtr> resourceGroup;
 	gResourceMgr.GetResourceGroup("strings", resourceGroup);
 	
-	Vector<ResourceSystem::ResourcePtr>::iterator it;
+	vector<ResourceSystem::ResourcePtr>::iterator it;
 	
 	for (it = resourceGroup.begin(); it != resourceGroup.end(); it++)
 	{
@@ -48,17 +48,17 @@ bool StringMgr::LoadDataFromDir(const String& path, const String& includeRegexp,
 	return result;
 }
 
-bool StringMgr::LoadDataFromFile(const String& filepath, ResourceSystem::Resource::eType type, bool pathRelative)
+bool StringMgr::LoadDataFromFile(const string& filepath, ResourceSystem::Resource::eType type, bool pathRelative)
 {
 	bool result = true;
 	result = gResourceMgr.AddResourceFileToGroup(mBasePath + filepath, "strings", type, pathRelative);
 	gResourceMgr.LoadResourcesInGroup("strings");
 
 	gLogMgr.LogMessage("StringMgr: Loading data from resource group ""strings""");
-	Vector<ResourceSystem::ResourcePtr> resourceGroup;
+	vector<ResourceSystem::ResourcePtr> resourceGroup;
 	gResourceMgr.GetResourceGroup("strings", resourceGroup);
 
-	Vector<ResourceSystem::ResourcePtr>::iterator it;
+	vector<ResourceSystem::ResourcePtr>::iterator it;
 
 	for (it = resourceGroup.begin(); it != resourceGroup.end(); it++)
 	{

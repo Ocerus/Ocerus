@@ -255,7 +255,7 @@ void Core::Application::HideConsole( void )
 	FreeConsole();
 }
 
-void Core::Application::WriteToConsole( const String& str )
+void Core::Application::WriteToConsole( const string& str )
 {
 	DWORD writtenChars = 0;
 	WriteConsole(GetStdHandle(STD_OUTPUT_HANDLE), str.c_str(), str.length(), &writtenChars, NULL);	

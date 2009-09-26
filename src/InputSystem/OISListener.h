@@ -1,9 +1,10 @@
 #ifndef OISListener_h__
 #define OISListener_h__
 
+//TODO odtud se includuje STD
 #include <OISMouse.h>
 #include <OISKeyboard.h>
-#include "../Utility/Settings.h"
+#include "Settings.h"
 
 namespace InputSystem
 {

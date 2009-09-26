@@ -16,7 +16,7 @@ namespace EntitySystem
 		static void RegisterReflection(void);
 
 	private:
-		typedef Vector<EntityHandle> EntityList;
+		typedef vector<EntityHandle> EntityList;
 		EntityList mPlatforms;
 		EntityList mLinks;
 	};

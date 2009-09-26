@@ -1,7 +1,7 @@
 #ifndef EntityEnums_h__
 #define EntityEnums_h__
 
-#include "../../Utility/Settings.h"
+#include "Settings.h"
 
 namespace EntitySystem
 {
@@ -24,7 +24,7 @@ namespace EntitySystem
 	};
 
 	/// @name Returns an entity type based on a string.
-	eEntityType DetectEntityType(const String& type);
+	eEntityType DetectEntityType(const string& type);
 
 }
 

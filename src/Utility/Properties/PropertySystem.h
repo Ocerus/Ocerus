@@ -1,7 +1,6 @@
 #ifndef _PROPERTY_SYSTEM_H
 #define _PROPERTY_SYSTEM_H
 
-#include <list>
 #include "Property.h"
 #include "../Singleton.h"
 

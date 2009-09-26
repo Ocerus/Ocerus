@@ -1,8 +1,8 @@
 #ifndef _PARTICLESYSTEM_H_
 #define _PARTICLESYSTEM_H_
 
-#include "../Utility/Settings.h"
-#include "../Utility/ResourcePointers.h"
+#include "Settings.h"
+#include "ResourcePointers.h"
 //TODO tohle smazat
 #include "hgeparticle.h"
 #include "GfxRenderer.h"

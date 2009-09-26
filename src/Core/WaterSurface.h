@@ -1,7 +1,7 @@
 #ifndef WaterSurface_h__
 #define WaterSurface_h__
 
-#include "../Utility/Settings.h"
+#include "Settings.h"
 #include "../GfxSystem/Texture.h"
 
 namespace Core

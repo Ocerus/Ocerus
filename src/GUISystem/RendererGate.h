@@ -1,7 +1,7 @@
 #ifndef _RENDERERGATE_H_
 #define _RENDERERGATE_H_
 
-#include "../Utility/Settings.h"
+#include "Settings.h"
 #include "../GfxSystem/GfxRenderer.h"
 #include "../GfxSystem/IScreenListener.h"
 #include "CEGUIRenderer.h"
@@ -92,8 +92,8 @@ namespace GUISystem {
 	protected:
 		virtual void DrawQuad(const Quad_info & quad) const;
 
-		Set<CEGUITextureWrapper*> mTextures;
-		Vector<Quad_info> mQuads;
+		set<CEGUITextureWrapper*> mTextures;
+		vector<Quad_info> mQuads;
 
 		//void ClearProviders();
 

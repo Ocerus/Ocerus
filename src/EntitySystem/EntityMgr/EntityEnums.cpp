@@ -4,7 +4,7 @@
 using namespace EntitySystem;
 
 
-EntitySystem::eEntityType EntitySystem::DetectEntityType( const String& type )
+EntitySystem::eEntityType EntitySystem::DetectEntityType( const string& type )
 {
 	const char* typeStr = type.c_str();
 	for (int32 i=0; i<NUM_ENTITY_TYPES; ++i)

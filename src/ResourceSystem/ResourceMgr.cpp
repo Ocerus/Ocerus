@@ -14,7 +14,7 @@
 
 using namespace ResourceSystem;
 
-ResourceMgr::ResourceMgr(const String& basepath): 
+ResourceMgr::ResourceMgr(const string& basepath): 
 	mListener(0), mBasePath(basepath)
 {
 	gLogMgr.LogMessage("*** ResourceMgr init ***");
@@ -59,7 +59,7 @@ void ResourceMgr::UnloadAllResources()
 		UnloadResourcesInGroup(i->first);
 }
 
-bool ResourceMgr::AddResourceDirToGroup(const String& path, const StringKey& group, const String& includeRegexp, const String& excludeRegexp)
+bool ResourceMgr::AddResourceDirToGroup(const string& path, const StringKey& group, const string& includeRegexp, const string& excludeRegexp)
 {
 	//TODO add support for regexps
 
@@ -78,7 +78,7 @@ bool ResourceMgr::AddResourceDirToGroup(const String& path, const StringKey& gro
 	{
 		if (boost::filesystem::is_directory(i->status()))
 		{
-			String dirStr = i->path().filename();
+			string dirStr = i->path().filename();
 			if (dirStr.compare(".svn")!=0)
 				if (!AddResourceDirToGroup(i->path().string(), group, includeRegexp, excludeRegexp))
 					result = false;
@@ -92,7 +92,7 @@ bool ResourceMgr::AddResourceDirToGroup(const String& path, const StringKey& gro
 	return result;
 }
 
-bool ResourceMgr::AddResourceFileToGroup(const String& filepath, const StringKey& group, Resource::eType type, bool pathRelative)
+bool ResourceMgr::AddResourceFileToGroup(const string& filepath, const StringKey& group, Resource::eType type, bool pathRelative)
 {
 	gLogMgr.LogMessage("Adding resource '", filepath, "' to group '", group, "'");
 
@@ -120,7 +120,7 @@ bool ResourceMgr::AddResourceFileToGroup(const String& filepath, const StringKey
 		return false;
 	}
 
-	String name = boostPath.filename();
+	string name = boostPath.filename();
 	ResourceGroupMap::const_iterator groupIt = mResourceGroups.find(group);
 	if (mResourceGroups.find(group) != mResourceGroups.end() && groupIt->second->find(name) != groupIt->second->end())
 	{
@@ -245,7 +245,7 @@ ResourcePtr ResourceMgr::GetResource(const StringKey& group, const StringKey& na
 	return ri->second;
 }
 
-void ResourceMgr::GetResourceGroup(const StringKey& group, Vector<ResourcePtr>& output)
+void ResourceMgr::GetResourceGroup(const StringKey& group, vector<ResourcePtr>& output)
 {
 	ResourceGroupMap::const_iterator gi = mResourceGroups.find(group);
 	if (gi == mResourceGroups.end())

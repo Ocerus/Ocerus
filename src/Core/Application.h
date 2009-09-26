@@ -1,13 +1,10 @@
 #ifndef APPLICATION_h__
 #define APPLICATION_h__
 
-#include "../Utility/StateMachine.h"
-#include "../Utility/Settings.h"
-#include "../Utility/Timer.h"
-#include "../Utility/Singleton.h"
-//particle manager
-//#include "hgeparticle.h"
-#include <deque>
+#include "StateMachine.h"
+#include "Settings.h"
+#include "Timer.h"
+#include "Singleton.h"
 
 /// @name Macro for easier use.
 #define gApp Core::Application::GetSingleton()
@@ -74,7 +71,7 @@ namespace Core
 		/// @name  Console debug window stuff.
 		//@{
 		void ShowConsole(void);
-		void WriteToConsole(const String& str);
+		void WriteToConsole(const string& str);
 		void HideConsole(void);
 		//@}
 
@@ -115,7 +112,7 @@ namespace Core
 
 		/// @name  Stuff for measuring performance and time.
 		//@{
-		typedef Deque<uint64> TimesList;
+		typedef deque<uint64> TimesList;
 		TimesList mFrameDeltaTimes;
 		Timer mTimer;
 		float32 mFrameSmoothingTime; // during this time (in seconds) the frame delta time will be averaged

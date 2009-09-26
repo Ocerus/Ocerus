@@ -1,8 +1,8 @@
 #ifndef _CEGUIRESOURCE_H_
 #define _CEGUIRESOURCE_H_
 
-#include "../Utility/Settings.h"
-#include "../Utility/ResourcePointers.h"
+#include "Settings.h"
+#include "ResourcePointers.h"
 #include "../ResourceSystem/Resource.h"
 
 namespace CEGUI { class RawDataContainer; }

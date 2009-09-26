@@ -2,7 +2,7 @@
 #define _PARTICLERESOURCE_H_
 
 #include "../ResourceSystem/Resource.h"
-#include "../Utility/Settings.h"
+#include "Settings.h"
 #include "hgeanim.h"
 #include "hgeparticle.h"
 

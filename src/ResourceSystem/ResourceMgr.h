@@ -1,9 +1,9 @@
 #ifndef _RESOURCEMGR_H_
 #define _RESOURCEMGR_H_
 
-#include "../Utility/StringKey.h"
-#include "../Utility/Singleton.h"
-#include "../Utility/ResourcePointers.h"
+#include "StringKey.h"
+#include "Singleton.h"
+#include "ResourcePointers.h"
 
 /// @name Macro for easier use
 #define gResourceMgr ResourceSystem::ResourceMgr::GetSingleton()
@@ -24,13 +24,13 @@ namespace ResourceSystem
 		/** All resource types must be registered inside this ctor, so don't forget to add new types there!
 			Basepath is a path to directory where all resources can be found if readed from disk.
 		*/
-		ResourceMgr(const String& basepath);
+		ResourceMgr(const string& basepath);
 		~ResourceMgr(void);
 
 		/// @name Assings resources in a directory to a group. In this case the resource types will be autodetected.
-		bool AddResourceDirToGroup(const String& path, const StringKey& group, const String& includeRegexp = "*.*", const String& excludeRegexp = "");
+		bool AddResourceDirToGroup(const string& path, const StringKey& group, const string& includeRegexp = "*.*", const string& excludeRegexp = "");
 		/// @name Assigns a resource to a group.
-		bool AddResourceFileToGroup(const String& filepath, const StringKey& group, Resource::eType type = Resource::TYPE_AUTODETECT, bool pathRelative = true);
+		bool AddResourceFileToGroup(const string& filepath, const StringKey& group, Resource::eType type = Resource::TYPE_AUTODETECT, bool pathRelative = true);
 		/// @name Assigns a resource to a group. Note that if you create the resource this way you must manually delete it later.
 		bool AddManualResourceToGroup(const StringKey& name, const StringKey& group, Resource::eType type);
 		/** Loads all resources in the specified group.
@@ -67,15 +67,15 @@ namespace ResourceSystem
 		/** Retrieves a specified group of resources from the manager. If the group can't be found,
 		    empty vector is returned.
 		*/
-		void GetResourceGroup(const StringKey& group, Vector<ResourcePtr>& output);
+		void GetResourceGroup(const StringKey& group, vector<ResourcePtr>& output);
 
 	private:
 		typedef ResourcePtr (*ResourceCreationMethod)();
-		typedef Map<StringKey, ResourcePtr> ResourceMap;
-		typedef Map<StringKey, ResourceMap*> ResourceGroupMap;
-		typedef Map<StringKey, Resource::eType> ExtToTypeMap;
+		typedef map<StringKey, ResourcePtr> ResourceMap;
+		typedef map<StringKey, ResourceMap*> ResourceGroupMap;
+		typedef map<StringKey, Resource::eType> ExtToTypeMap;
 
-		String mBasePath;
+		string mBasePath;
 		ResourceGroupMap mResourceGroups;
 		ExtToTypeMap mExtToTypeMap;
 		IResourceLoadingListener* mListener;

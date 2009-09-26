@@ -1,8 +1,8 @@
 #ifndef _ENTITYHANDLE_H_
 #define _ENTITYHANDLE_H_
 
-#include "../../Utility/Settings.h"
-#include "../../Utility/StringKey.h"
+#include "Settings.h"
+#include "StringKey.h"
 #include "../../Utility/Properties/PropertyHolderMediator.h"
 #include "EntityMessage.h"
 #include "EntityEnums.h"

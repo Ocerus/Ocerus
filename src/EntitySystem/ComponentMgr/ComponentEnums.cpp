@@ -2,7 +2,7 @@
 #include "ComponentEnums.h"
 
 
-EntitySystem::eComponentType EntitySystem::DetectComponentType( const String& type )
+EntitySystem::eComponentType EntitySystem::DetectComponentType( const string& type )
 {
 	const char* typeStr = type.c_str();
 	for (int32 i=0; i<NUM_COMPONENT_TYPES; ++i)
