@@ -21,7 +21,7 @@ public :
 	/** @name Default factory function. Creates an instance of T. Called by the system to dynamically create
 		class instances from class IDs.
 	*/
-	static T* Create(void) { return new T(); }
+	static T* Create(void) { return DYN_NEW T(); }
 
 	/// @name Default reflection registration function. Does nothing by default.
 	static void	RegisterReflection(void) {}
@@ -33,7 +33,7 @@ public :
 	static void RegisterProperty(const char* name, typename Property<T, PropertyType>::GetterType getter, 
 								 typename Property<T, PropertyType>::SetterType setter, const PropertyAccessFlags accessFlags)
 	{
-		Property<T, PropertyType>* pProperty = new Property<T, PropertyType>( name, getter, setter, accessFlags );
+		Property<T, PropertyType>* pProperty = DYN_NEW Property<T, PropertyType>( name, getter, setter, accessFlags );
 		T::GetClassRTTI()->AddProperty(pProperty);
 		PropertySystem::GetProperties()->push_back( pProperty );
 	}

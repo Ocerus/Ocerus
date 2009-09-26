@@ -34,7 +34,7 @@ void assertion_failed(char const * expr, char const * function, char const * fil
 
 #else
 # include "../Utility/SmartAssert.h" // .h to support old libraries w/o <cassert> - effect is the same
-# define BOOST_ASSERT(expr) ASSERT(expr)
+# define BOOST_ASSERT(expr) BS_ASSERT(expr)
 #endif
 
 #undef BOOST_VERIFY

@@ -22,8 +22,8 @@ InputSystem::OISListener::OISListener(): mMouse(0), mKeyboard(0), mOIS(0)
 	pl.insert(OIS::ParamList::value_type("WINDOW", StringConverter::ToString(hWnd)));
 
 	// let the standard mouse cursor be
-	pl.insert(std::make_pair(std::string("w32_mouse"), std::string("DISCL_BACKGROUND" )));
-	pl.insert(std::make_pair(std::string("w32_mouse"), std::string("DISCL_NONEXCLUSIVE")));
+	pl.insert(Containers::make_pair(String("w32_mouse"), String("DISCL_BACKGROUND" )));
+	pl.insert(Containers::make_pair(String("w32_mouse"), String("DISCL_NONEXCLUSIVE")));
 
 	mOIS = OIS::InputManager::createInputSystem(pl);
 	gLogMgr.LogMessage("OIS created");

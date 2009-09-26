@@ -14,19 +14,19 @@ template <typename T> class Singleton
 public:
     Singleton(void)
     {
-        ASSERT( !msSingleton );
+        BS_ASSERT( !msSingleton );
 		msSingleton = static_cast<T*>(this);
     }
     
 	~Singleton(void)
 	{
-		ASSERT( msSingleton );
+		BS_ASSERT( msSingleton );
 		msSingleton = 0;
 	}
     
 	static T& GetSingleton(void)
     {
-		DASSERT(msSingleton);
+		BS_DASSERT(msSingleton);
 		return (*msSingleton);
 	}
 

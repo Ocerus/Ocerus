@@ -1,7 +1,6 @@
 #ifndef InputMgr_h__
 #define InputMgr_h__
 
-#include <vector>
 #include "../Utility/Singleton.h"
 #include "../Utility/Settings.h"
 #include "InputActions.h"
@@ -70,7 +69,7 @@ namespace InputSystem
 
 		/// @name Collection of input event listeners.
 		//@{
-		typedef std::vector<IInputListener*> ListenersList;
+		typedef Vector<IInputListener*> ListenersList;
 		ListenersList mListeners;
 		//@}
 	};

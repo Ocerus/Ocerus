@@ -10,9 +10,9 @@
 namespace StringSystem 
 {
 	/// @name define type used for storing strings
-	typedef string TextData;
+	typedef String TextData;
 	/// @name define a container for textdata
-	typedef std::map<StringKey, TextData> TextDataMap;
+	typedef Map<StringKey, TextData> TextDataMap;
 
 	/** This class represents single text resource.
 		Main purpose of the class is to load and parse a .str file, not to store actual data. You should

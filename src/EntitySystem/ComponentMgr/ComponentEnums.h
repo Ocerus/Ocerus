@@ -23,7 +23,7 @@ namespace EntitySystem
 	};
 
 	/// @name Returns a component type based on a string.
-	eComponentType DetectComponentType(const string& type);
+	eComponentType DetectComponentType(const String& type);
 
 }
 

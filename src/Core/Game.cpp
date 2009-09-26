@@ -307,7 +307,7 @@ void Core::Game::Draw( const float32 delta)
 	mWaterSurface->Draw();
 
 	// draw bubbles
-	for (std::vector<GfxSystem::ParticleSystemPtr>::const_iterator it=mBubbleEffects.begin(); it!=mBubbleEffects.end(); ++it)
+	for (Vector<GfxSystem::ParticleSystemPtr>::const_iterator it=mBubbleEffects.begin(); it!=mBubbleEffects.end(); ++it)
 		(*it)->Render();
 
 	

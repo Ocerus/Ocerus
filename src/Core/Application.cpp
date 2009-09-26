@@ -19,7 +19,7 @@ void Application::Init()
 	mLogMgr = DYN_NEW LogSystem::LogMgr("CoreLog.txt", LOG_TRIVIAL);
 
 	// get access to config file
-	mGlobalConfig = new Config("config.txt");
+	mGlobalConfig = DYN_NEW Config("config.txt");
 
 	// load console properties
 	mConsoleX = mGlobalConfig->GetInt32("ConsoleX", 0, "Windows");
@@ -255,7 +255,7 @@ void Core::Application::HideConsole( void )
 	FreeConsole();
 }
 
-void Core::Application::WriteToConsole( const string& str )
+void Core::Application::WriteToConsole( const String& str )
 {
 	DWORD writtenChars = 0;
 	WriteConsole(GetStdHandle(STD_OUTPUT_HANDLE), str.c_str(), str.length(), &writtenChars, NULL);	

@@ -39,10 +39,10 @@ float32 ReadFloat(InputStream& is)
 
 bool ParticleResource::LoadImpl(void)
 {
-	mPsi = new hgeParticleSystemInfo();
+	mPsi = DYN_NEW hgeParticleSystemInfo();
 	
 	GfxSystem::TexturePtr tex = gResourceMgr.GetResource("psi", "particles.png");
-	mSprite = new hgeAnimation(tex->GetTexture(), 16, 1.0f, 0, 0, 32, 32);
+	mSprite = DYN_NEW hgeAnimation(tex->GetTexture(), 16, 1.0f, 0, 0, 32, 32);
 	mSprite->SetHotSpot(16,16);
 
 	InputStream& is = OpenInputStream(ISM_BINARY);

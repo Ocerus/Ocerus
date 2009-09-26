@@ -1,8 +1,6 @@
 #ifndef _RESOURCEMGR_H_
 #define _RESOURCEMGR_H_
 
-#include <map>
-#include <vector>
 #include "../Utility/StringKey.h"
 #include "../Utility/Singleton.h"
 #include "../Utility/ResourcePointers.h"
@@ -26,13 +24,13 @@ namespace ResourceSystem
 		/** All resource types must be registered inside this ctor, so don't forget to add new types there!
 			Basepath is a path to directory where all resources can be found if readed from disk.
 		*/
-		ResourceMgr(const string& basepath);
+		ResourceMgr(const String& basepath);
 		~ResourceMgr(void);
 
 		/// @name Assings resources in a directory to a group. In this case the resource types will be autodetected.
-		bool AddResourceDirToGroup(const string& path, const StringKey& group, const string& includeRegexp = "*.*", const string& excludeRegexp = "");
+		bool AddResourceDirToGroup(const String& path, const StringKey& group, const String& includeRegexp = "*.*", const String& excludeRegexp = "");
 		/// @name Assigns a resource to a group.
-		bool AddResourceFileToGroup(const string& filepath, const StringKey& group, Resource::eType type = Resource::TYPE_AUTODETECT, bool pathRelative = true);
+		bool AddResourceFileToGroup(const String& filepath, const StringKey& group, Resource::eType type = Resource::TYPE_AUTODETECT, bool pathRelative = true);
 		/// @name Assigns a resource to a group. Note that if you create the resource this way you must manually delete it later.
 		bool AddManualResourceToGroup(const StringKey& name, const StringKey& group, Resource::eType type);
 		/** Loads all resources in the specified group.
@@ -69,15 +67,15 @@ namespace ResourceSystem
 		/** Retrieves a specified group of resources from the manager. If the group can't be found,
 		    empty vector is returned.
 		*/
-		void GetResourceGroup(const StringKey& group, std::vector<ResourcePtr>& output);
+		void GetResourceGroup(const StringKey& group, Vector<ResourcePtr>& output);
 
 	private:
 		typedef ResourcePtr (*ResourceCreationMethod)();
-		typedef std::map<StringKey, ResourcePtr> ResourceMap;
-		typedef std::map<StringKey, ResourceMap*> ResourceGroupMap;
-		typedef std::map<StringKey, Resource::eType> ExtToTypeMap;
+		typedef Map<StringKey, ResourcePtr> ResourceMap;
+		typedef Map<StringKey, ResourceMap*> ResourceGroupMap;
+		typedef Map<StringKey, Resource::eType> ExtToTypeMap;
 
-		string mBasePath;
+		String mBasePath;
 		ResourceGroupMap mResourceGroups;
 		ExtToTypeMap mExtToTypeMap;
 		IResourceLoadingListener* mListener;

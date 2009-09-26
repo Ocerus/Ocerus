@@ -14,7 +14,7 @@
 
 using namespace ResourceSystem;
 
-ResourceMgr::ResourceMgr(const string& basepath): 
+ResourceMgr::ResourceMgr(const String& basepath): 
 	mListener(0), mBasePath(basepath)
 {
 	gLogMgr.LogMessage("*** ResourceMgr init ***");
@@ -43,7 +43,7 @@ ResourceMgr::ResourceMgr(const string& basepath):
 	mExtToTypeMap["xml"] = Resource::TYPE_XMLRESOURCE;
 	mExtToTypeMap["psi"] = Resource::TYPE_PARTICLERESOURCE;
 
-	ASSERT_MSG(mResourceCreationMethods[Resource::NUM_TYPES-1], "Not all resource types are registered");
+	BS_ASSERT_MSG(mResourceCreationMethods[Resource::NUM_TYPES-1], "Not all resource types are registered");
 
 	gLogMgr.LogMessage("All resource types registered");
 }
@@ -59,7 +59,7 @@ void ResourceMgr::UnloadAllResources()
 		UnloadResourcesInGroup(i->first);
 }
 
-bool ResourceMgr::AddResourceDirToGroup(const string& path, const StringKey& group, const string& includeRegexp, const string& excludeRegexp)
+bool ResourceMgr::AddResourceDirToGroup(const String& path, const StringKey& group, const String& includeRegexp, const String& excludeRegexp)
 {
 	//TODO add support for regexps
 
@@ -78,7 +78,7 @@ bool ResourceMgr::AddResourceDirToGroup(const string& path, const StringKey& gro
 	{
 		if (boost::filesystem::is_directory(i->status()))
 		{
-			string dirStr = i->path().filename();
+			String dirStr = i->path().filename();
 			if (dirStr.compare(".svn")!=0)
 				if (!AddResourceDirToGroup(i->path().string(), group, includeRegexp, excludeRegexp))
 					result = false;
@@ -92,7 +92,7 @@ bool ResourceMgr::AddResourceDirToGroup(const string& path, const StringKey& gro
 	return result;
 }
 
-bool ResourceMgr::AddResourceFileToGroup(const string& filepath, const StringKey& group, Resource::eType type, bool pathRelative)
+bool ResourceMgr::AddResourceFileToGroup(const String& filepath, const StringKey& group, Resource::eType type, bool pathRelative)
 {
 	gLogMgr.LogMessage("Adding resource '", filepath, "' to group '", group, "'");
 
@@ -120,7 +120,7 @@ bool ResourceMgr::AddResourceFileToGroup(const string& filepath, const StringKey
 		return false;
 	}
 
-	string name = boostPath.filename();
+	String name = boostPath.filename();
 	ResourceGroupMap::const_iterator groupIt = mResourceGroups.find(group);
 	if (mResourceGroups.find(group) != mResourceGroups.end() && groupIt->second->find(name) != groupIt->second->end())
 	{
@@ -143,7 +143,7 @@ bool ResourceSystem::ResourceMgr::AddManualResourceToGroup( const StringKey& nam
 {
 	gLogMgr.LogMessage("Adding resource '", name, "' to group '", group, "'");
 
-	ASSERT_MSG(type != Resource::TYPE_AUTODETECT, "Must specify resource type when creating it manually");
+	BS_ASSERT_MSG(type != Resource::TYPE_AUTODETECT, "Must specify resource type when creating it manually");
 
 	ResourcePtr r = mResourceCreationMethods[type]();
 	r->SetState(Resource::STATE_INITIALIZED);
@@ -175,7 +175,7 @@ void ResourceMgr::LoadResourcesInGroup(const StringKey& group)
 
 	if (gi==mResourceGroups.end())
 		gLogMgr.LogMessage("Unknown group '", group, "'", LOG_ERROR);
-	ASSERT_MSG(gi != mResourceGroups.end(), "Unknown group");
+	BS_ASSERT_MSG(gi != mResourceGroups.end(), "Unknown group");
 
 	const ResourceMap& resmap = *gi->second;
 	if (mListener)
@@ -203,7 +203,7 @@ void ResourceMgr::UnloadResourcesInGroup(const StringKey& group, bool allowManua
 
 	if (gi==mResourceGroups.end())
 		gLogMgr.LogMessage("Unknown group '", group, "'", LOG_ERROR);
-	ASSERT_MSG(gi != mResourceGroups.end(), "Unknown group");
+	BS_ASSERT_MSG(gi != mResourceGroups.end(), "Unknown group");
 
 	const ResourceMap& resmap = *gi->second;
 	for (ResourceMap::const_iterator ri = resmap.begin(); ri != resmap.end(); ++ri)
@@ -245,7 +245,7 @@ ResourcePtr ResourceMgr::GetResource(const StringKey& group, const StringKey& na
 	return ri->second;
 }
 
-void ResourceMgr::GetResourceGroup(const StringKey& group, std::vector<ResourcePtr>& output)
+void ResourceMgr::GetResourceGroup(const StringKey& group, Vector<ResourcePtr>& output)
 {
 	ResourceGroupMap::const_iterator gi = mResourceGroups.find(group);
 	if (gi == mResourceGroups.end())
@@ -264,13 +264,13 @@ void ResourceSystem::ResourceMgr::DeleteResource( const StringKey& group, const 
 
 	if (gi==mResourceGroups.end())
 		gLogMgr.LogMessage("Unknown group '", group, "'", LOG_ERROR);
-	ASSERT_MSG(gi != mResourceGroups.end(), "Unknown group");
+	BS_ASSERT_MSG(gi != mResourceGroups.end(), "Unknown group");
 
 	ResourceMap& resmap = *gi->second;
 	ResourceMap::iterator ri = resmap.find(name);
 	if (ri==resmap.end())
 		gLogMgr.LogMessage("Unknown resource '", name, "' in group '", group, "'", LOG_ERROR);
-	ASSERT_MSG(ri != resmap.end(), "Unknown resource");
+	BS_ASSERT_MSG(ri != resmap.end(), "Unknown resource");
 	ri->second->Unload(true);
 	resmap.erase(ri);
 

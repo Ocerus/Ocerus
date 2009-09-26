@@ -6,9 +6,6 @@
 #include "../GfxSystem/IScreenListener.h"
 #include "CEGUIRenderer.h"
 #include "ResourceGate.h"
-#include <limits>
-#include <queue>
-#include <set>
 
 namespace GUISystem {
 
@@ -84,7 +81,7 @@ namespace GUISystem {
 
 		inline virtual CEGUI::ResourceProvider* createResourceProvider(void) {
 			if (!d_resourceProvider)
-				d_resourceProvider = new ResourceGate();
+				d_resourceProvider = DYN_NEW ResourceGate();
 			return d_resourceProvider;
 		}
 
@@ -95,8 +92,8 @@ namespace GUISystem {
 	protected:
 		virtual void DrawQuad(const Quad_info & quad) const;
 
-		std::set<CEGUITextureWrapper*> mTextures;
-		std::vector<Quad_info> mQuads;
+		Set<CEGUITextureWrapper*> mTextures;
+		Vector<Quad_info> mQuads;
 
 		//void ClearProviders();
 

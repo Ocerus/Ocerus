@@ -5,7 +5,6 @@
 #include "../InputSystem/InputActions.h"
 #include "RendererGate.h"
 #include "ResourceGate.h"
-#include <sstream>
 #include <math.h>
 
 namespace GUISystem {
@@ -38,7 +37,7 @@ namespace GUISystem {
 		mCegui->setDefaultFont( "Commonwealth-10" );
 		CEGUI::System::getSingleton().setDefaultMouseCursor( "TaharezLook", "MouseArrow" );
 		
-		string layout = gApp.GetGlobalConfig()->GetString("Layout", "Battleships.layout", "CEGUI");
+		String layout = gApp.GetGlobalConfig()->GetString("Layout", "Battleships.layout", "CEGUI");
 
 		CEGUI::Window* CurrentWindowRoot =
 			CEGUI::WindowManager::getSingleton().loadWindowLayout( layout.c_str() );		
@@ -77,7 +76,7 @@ namespace GUISystem {
 	}
 
 	void GUIMgr::RegisterEvents() {
-		ASSERT(mCegui);
+		BS_ASSERT(mCegui);
 
 		CEGUI::Window* console = CEGUI::WindowManager::getSingleton().getWindow("ConsoleRoot/ConsolePrompt");
 		console->subscribeEvent(CEGUI::Editbox::EventTextAccepted, CEGUI::Event::Subscriber(&GUIMgr::ConsoleCommandEvent, this));	
@@ -98,12 +97,12 @@ namespace GUISystem {
 
 	bool GUIMgr::ConsoleCommandEvent(const CEGUI::EventArgs& e) {
 		CEGUI::Window* prompt = CEGUI::WindowManager::getSingleton().getWindow("ConsoleRoot/ConsolePrompt");
-		string message(prompt->getText().c_str());
+		String message(prompt->getText().c_str());
 		if (message == "quit")
 			gApp.RequestStateChange( Core::AS_SHUTDOWN );
 		if ( message.length() >= 9 ) {
-			string prefix = message.substr(0, 7);
-			string args = message.substr(8);
+			String prefix = message.substr(0, 7);
+			String args = message.substr(8);
 			if (prefix == "addtext")
 				AddStaticText( 0.0f, 0.0f, "test text", args, GfxSystem::Color( 255, 0, 0),
 					GfxSystem::ANCHOR_BOTTOM | GfxSystem::ANCHOR_RIGHT,
@@ -116,7 +115,7 @@ namespace GUISystem {
 		return true;
 	}
 
-	void GUIMgr::AddLastCommand(string command) {
+	void GUIMgr::AddLastCommand(String command) {
 		if (mLastCommands.size() == 25)
 			mLastCommands.pop_back();
 		mLastCommands.push_front( command );
@@ -136,7 +135,7 @@ namespace GUISystem {
 		editbox->setText(*mCurrentLastSelected);
 	}
 
-	Vector2 GUIMgr::GetTextSize( const string & text, const string & fontid ) {
+	Vector2 GUIMgr::GetTextSize( const String & text, const String & fontid ) {
 		CEGUI::Font* font;
 		if (fontid != "")
 			font = CEGUI::FontManager::getSingleton().getFont(fontid);
@@ -146,7 +145,7 @@ namespace GUISystem {
 			font->getFontHeight()/gGfxRenderer.GetScreenHeight());
 	}
 
-	void GUIMgr::AddConsoleMessage(string message, const GfxSystem::Color& color) {
+	void GUIMgr::AddConsoleMessage(String message, const GfxSystem::Color& color) {
 		if (!mConsoleIsLoaded)
 			return;
 
@@ -162,7 +161,7 @@ namespace GUISystem {
 		while (item_count = pane->getItemCount() > 50)
 			pane->removeItem(pane->getListboxItemFromIndex(item_count - 1));
 
-		std::set<IConsoleListener*>::iterator iter = mConsoleListeners.begin();
+		Set<IConsoleListener*>::iterator iter = mConsoleListeners.begin();
 		while (iter != mConsoleListeners.end())
 		{
 			(*iter)->EventConsoleCommand(message);
@@ -171,14 +170,14 @@ namespace GUISystem {
 	}
 
 	void GUIMgr::Update( float32 delta ) {
-		ASSERT(mCegui);
+		BS_ASSERT(mCegui);
 		mCegui->injectTimePulse( delta );
 		InputSystem::MouseState& m = gInputMgr.GetMouseState();
 		mCegui->injectMousePosition(float(m.x), float(m.y));
 	}
 
 	void GUIMgr::KeyPressed(const InputSystem::KeyInfo& ke) {
-		ASSERT(mCegui);
+		BS_ASSERT(mCegui);
 
 		if (ke.keyAction == InputSystem::KC_GRAVE) {
 			ConsoleTrigger();
@@ -191,43 +190,43 @@ namespace GUISystem {
 	}
 
 	void GUIMgr::KeyReleased(const InputSystem::KeyInfo& ke) {
-		ASSERT(mCegui);
+		BS_ASSERT(mCegui);
 		CEGUI::System::getSingleton().injectKeyUp(KeyMapperOIStoCEGUI(ke.keyAction));
 	}
 
 	void GUIMgr::MouseMoved(const InputSystem::MouseInfo& mi) {
-		ASSERT(mCegui);
+		BS_ASSERT(mCegui);
 		CEGUI::System::getSingleton().injectMouseWheelChange(float(mi.wheelDelta));
 	}
 
 	void GUIMgr::MouseButtonPressed(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn) {
-		ASSERT(mCegui);
+		BS_ASSERT(mCegui);
 		CEGUI::System::getSingleton().injectMouseButtonDown( ConvertMouseButtonEnum(btn) );
 	}
 
 	void GUIMgr::MouseButtonReleased(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn) {
-		ASSERT(mCegui);
+		BS_ASSERT(mCegui);
 		CEGUI::System::getSingleton().injectMouseButtonUp( ConvertMouseButtonEnum(btn) );
 	}
 
-	void GUIMgr::AddStaticText( float32 x, float32 y, const string & id, const string & text,
+	void GUIMgr::AddStaticText( float32 x, float32 y, const String & id, const String & text,
 			const GfxSystem::Color color/* = GfxSystem::Color(255,255,255)*/,
 			uint8 text_anchor/* = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP*/,
 			uint8 screen_anchor/* = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP*/,
-			const string & fontid )
+			const String & fontid )
 	{
-		std::map<string, StaticElement*>::iterator iter = mCreatedStaticElements.find( id );
+		Map<String, StaticElement*>::iterator iter = mCreatedStaticElements.find( id );
 		if (iter == mCreatedStaticElements.end()) {
-			StaticText* ptr = new StaticText( x, y, id, text, color, text_anchor, screen_anchor, fontid );
-			mCreatedStaticElements.insert( std::pair<string, StaticElement*>( id, ptr ) );
+			StaticText* ptr = DYN_NEW StaticText( x, y, id, text, color, text_anchor, screen_anchor, fontid );
+			mCreatedStaticElements.insert( Containers::make_pair( id, (StaticElement*)ptr ) );
 		} else {
 			StaticText* static_text = (StaticText*)iter->second;
 			static_text->SetStaticText( x, y, text, color, text_anchor, screen_anchor, fontid );
 		}
 	}
 
-	StaticText* GUIMgr::GetStaticText( const string & id ) {
-		std::map<string, StaticElement*>::iterator iter = mCreatedStaticElements.find( id );
+	StaticText* GUIMgr::GetStaticText( const String & id ) {
+		Map<String, StaticElement*>::iterator iter = mCreatedStaticElements.find( id );
 		return (StaticText*)(iter->second);
 	}
 

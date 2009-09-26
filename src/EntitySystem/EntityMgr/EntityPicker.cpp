@@ -7,7 +7,7 @@ uint8* EntityPicker::msPriorities = 0;
 
 void EntitySystem::EntityPicker::SetupPriorities( void )
 {
-	ASSERT_MSG(!msPriorities, "Priorities are already set up");
+	BS_ASSERT_MSG(!msPriorities, "Priorities are already set up");
 	msPriorities = DYN_NEW uint8[NUM_ENTITY_TYPES];
 	for (int i=0; i<NUM_ENTITY_TYPES; ++i)
 		msPriorities[i] = 0;

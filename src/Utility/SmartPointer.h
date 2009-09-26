@@ -61,15 +61,15 @@ public:
 
 	virtual ~SmartPointer() { Release(); }
 
-	inline T& operator*() const { DASSERT(mPointer); return *mPointer; }
-	inline T* operator->() const { DASSERT(mPointer); return mPointer; }
+	inline T& operator*() const { BS_DASSERT(mPointer); return *mPointer; }
+	inline T* operator->() const { BS_DASSERT(mPointer); return mPointer; }
 
 	inline T* Get() const { return mPointer; }
 	inline T* GetPointer() const { return mPointer; }
 
 	inline bool IsUnique() const { return *mUseCountPtr == 1; }
 
-	inline uint32 GetUseCount() const { DASSERT(mUseCountPtr); return *mUseCountPtr; }
+	inline uint32 GetUseCount() const { BS_DASSERT(mUseCountPtr); return *mUseCountPtr; }
 	inline uint32* GetUseCountPtr() const { return mUseCountPtr; }
 
 	inline bool IsNull(void) const { return mPointer == 0; }
@@ -106,6 +106,7 @@ protected:
 	
 	virtual void Swap(SmartPointer<T> &other) 
 	{
+		//TODO std pryc
 		std::swap(mPointer, other.mPointer);
 		std::swap(mUseCountPtr, other.mUseCountPtr);
 	}
@@ -123,6 +124,7 @@ template<class T, class U> inline bool operator!=(SmartPointer<T> const& a, Smar
 
 template<class T, class U> inline bool operator<(SmartPointer<T> const& a, SmartPointer<U> const& b)
 {
+	//TODO std pryc
 	return std::less<const void*>()(a.Get(), b.Get());
 }
 

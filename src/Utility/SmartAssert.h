@@ -7,13 +7,13 @@
 
 void DisplayAssert(const char* msg, const char* file, const int line);
 
-#define ASSERT(expr) \
+#define BS_ASSERT(expr) \
 	__pragma(warning(push)) \
 	__pragma(warning(disable:4127)) \
 	if (!(expr)) { DisplayAssert(#expr, __FILE__, __LINE__); _asm { int 3 } } \
 	__pragma(warning(pop))
 
-#define ASSERT_MSG(expr, msg) \
+#define BS_ASSERT_MSG(expr, msg) \
 	__pragma(warning(push)) \
 	__pragma(warning(disable:4127)) \
 	if (!(expr)) { DisplayAssert(msg, __FILE__, __LINE__); _asm { int 3 } } \
@@ -21,22 +21,22 @@ void DisplayAssert(const char* msg, const char* file, const int line);
 
 #ifdef _DEBUG
 
-#define DASSERT(expr) ASSERT(expr)
-#define DASSERT_MSG(expr, msg) ASSERT_MSG(expr, msg)
+#define BS_DASSERT(expr) BS_ASSERT(expr)
+#define BS_DASSERT_MSG(expr, msg) BS_ASSERT_MSG(expr, msg)
 
 #else
 
-#define DASSERT(expr) ((void)0)
-#define DASSERT_MSG(expr, msg) ((void)0)
+#define BS_DASSERT(expr) ((void)0)
+#define BS_DASSERT_MSG(expr, msg) ((void)0)
 
 #endif
 
 #else
 
-#define ASSERT(expr) ((void)0)
-#define ASSERT_MSG(expr, msg) ((void)0)
-#define DASSERT(expr) ((void)0)
-#define DASSERT_MSG(expr, msg) ((void)0)
+#define BS_ASSERT(expr) ((void)0)
+#define BS_ASSERT_MSG(expr, msg) ((void)0)
+#define BS_DASSERT(expr) ((void)0)
+#define BS_DASSERT_MSG(expr, msg) ((void)0)
 
 #endif
 //@}

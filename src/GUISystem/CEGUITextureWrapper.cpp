@@ -9,12 +9,11 @@
 #include "../GfxSystem/Texture.h"
 #include "CEGUIResource.h"
 #include "RendererGate.h"
-#include <sstream>
 
 namespace GUISystem {
 
 	uint32 CEGUITextureWrapper::mTextureIndex = 0;
-	const string CEGUITextureWrapper::mResourceGroupName = "CEGUI_created";
+	const String CEGUITextureWrapper::mResourceGroupName = "CEGUI_created";
 
 	void CEGUITextureWrapper::loadFromFile(const CEGUI::String& filename, const CEGUI::String& resourceGroup) {
 		mTexture.SetNull();
@@ -33,7 +32,7 @@ namespace GUISystem {
 
 		uint32 bytesize = ((buffWidth * sizeof(uint32)) * buffHeight);
 
-		string name = GetNextTextureName();
+		String name = GetNextTextureName();
 		gResourceMgr.AddManualResourceToGroup(name, mResourceGroupName, ResourceSystem::Resource::TYPE_TEXTURE);
 						
 		mTexture = (GfxSystem::TexturePtr)gResourceMgr.GetResource(mResourceGroupName, name);
@@ -62,7 +61,7 @@ namespace GUISystem {
 		mTexture.SetNull();		
 	}
 
-	string CEGUITextureWrapper::GetNextTextureName() {
+	String CEGUITextureWrapper::GetNextTextureName() {
 		std::stringstream sstream;
 		sstream << "CEGUI_CUSTOM_TEXTURE_";
 		sstream << mTextureIndex++;

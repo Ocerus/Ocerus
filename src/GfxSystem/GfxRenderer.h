@@ -1,8 +1,6 @@
 #ifndef _GFXRENDERER_H_
 #define _GFXRENDERER_H_
 
-#include <vector>
-#include <set>
 #include "../Utility/Settings.h"
 #include "../Utility/Singleton.h"
 #include "Texture.h"
@@ -92,10 +90,10 @@ namespace GfxSystem
 		bool DrawLineWithConversion(const Vector2& begin, const Vector2& end, const Pen& pen) const;
 
 		bool DrawPolygon(Point* vertices, int vertices_len, const TexturePtr& image, const Pen& outline, float32 angle = 0.0f, const Color& color = Color::FullColor, float32 scale = 1.0f, float32 textureAngle = 0.0f, float32 textureScale = 1.0f) const;
-		bool DrawPolygon(const std::vector<Point>& vertices, const TexturePtr& image, const Pen& outline, float32 angle = 0.0f, const Color& color = Color::FullColor, float32 scale = 1.0f, float32 textureAngle = 0.0f, float32 textureScale = 1.0f) const;
+		bool DrawPolygon(const Vector<Point>& vertices, const TexturePtr& image, const Pen& outline, float32 angle = 0.0f, const Color& color = Color::FullColor, float32 scale = 1.0f, float32 textureAngle = 0.0f, float32 textureScale = 1.0f) const;
 		
 		bool DrawPolygon(Point* vertices, int vertices_len, const Color& fillColor, const Pen& outline = Pen::NullPen) const;
-		bool DrawPolygon(const std::vector<Point>& vertices, const Color& fillColor, const Pen& outline = Pen::NullPen) const;
+		bool DrawPolygon(const Vector<Point>& vertices, const Color& fillColor, const Pen& outline = Pen::NullPen) const;
 
 		bool DrawQuad(Point* const vertices, const TexturePtr texture, Vector2* const textureCoords, Color* const vertexColors);
 
@@ -109,12 +107,12 @@ namespace GfxSystem
 		/// @name Text drawing methods.
 		/// Note that coords are in percentage values relative to the screen bounds.
 		//@{
-		void DrawString( float32 x, float32 y, const string & id,
-							 const string & text, const Color color = Color(255,255,255),
+		void DrawString( float32 x, float32 y, const String & id,
+							 const String & text, const Color color = Color(255,255,255),
 							 uint8 text_anchor =  ANCHOR_LEFT | ANCHOR_TOP,
 							 uint8 screen_anchor = ANCHOR_LEFT | ANCHOR_TOP,
-							 const string & fontid = "");
-		Vector2 GetTextSize( const string & text, const string & fontid = "" );
+							 const String & fontid = "");
+		Vector2 GetTextSize( const String & text, const String & fontid = "" );
 		//@}
 
 		//TODO add font param
@@ -149,7 +147,7 @@ namespace GfxSystem
 		friend class Texture;
 		friend bool HgeExitFunction(void);
 
-		std::set<IScreenListener*> mScreenListeners;
+		Set<IScreenListener*> mScreenListeners;
 
 	};
 }

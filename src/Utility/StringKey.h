@@ -12,7 +12,7 @@ public:
 	StringKey(void);
 	StringKey(const char* str);
 	StringKey(const char* str, const int32 numChars);
-	StringKey(const string& str);
+	StringKey(const String& str);
 	StringKey(const StringKey& rhs);
 	//@}
 
@@ -23,7 +23,7 @@ public:
 	
 	/// @name Conversion operators.
 	//@{
-	operator string (void) const;
+	operator String (void) const;
 	operator size_t (void) const;
 	//@}
 

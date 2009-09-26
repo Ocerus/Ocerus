@@ -64,7 +64,7 @@ GfxRenderer::GfxRenderer(const Point& resolution, bool fullscreen):
 	mScreenWidth = resolution.x;
 	mScreenHeight = resolution.y;
 
-	ASSERT(success);
+	BS_ASSERT(success);
 	if (success)
 		gLogMgr.LogMessage("HGE inited; logfile=", mHGE->System_GetState(HGE_LOGFILE));
 
@@ -73,7 +73,7 @@ GfxRenderer::GfxRenderer(const Point& resolution, bool fullscreen):
 
 GfxRenderer::~GfxRenderer()
 {
-	ASSERT(mHGE);
+	BS_ASSERT(mHGE);
 	HgeExitFunction();
 	mHGE->System_Shutdown();
 	mHGE->Release();
@@ -82,15 +82,15 @@ GfxRenderer::~GfxRenderer()
 uint32 GfxRenderer::_GetWindowHandle() const
 {
 	HWND hWnd = mHGE->System_GetState(HGE_HWND);
-	ASSERT(hWnd);
+	BS_ASSERT(hWnd);
 	return (uint32)hWnd;
 }
 
 void GfxRenderer::ChangeResolution( const uint32 width, const uint32 height )
 {
-	ASSERT(mHGE);
+	BS_ASSERT(mHGE);
 
-	std::set<IScreenListener*>::iterator iter = mScreenListeners.begin();
+	Set<IScreenListener*>::iterator iter = mScreenListeners.begin();
 
 	gLogMgr.LogMessage("Changing resolution to ", width, height);
 
@@ -231,18 +231,18 @@ bool GfxRenderer::DrawImage( const TexturePtr& image, int32 x, int32 y, uint8 an
 	float32 qy = -imgH_half;
 
 	// anchoring
-	ASSERT_MSG(!(anchor&ANCHOR_LEFT)||!(anchor&ANCHOR_RIGHT)||!(anchor&ANCHOR_HCENTER), "Coliding anchors");
-	ASSERT_MSG(!(anchor&ANCHOR_TOP)||!(anchor&ANCHOR_BOTTOM)||!(anchor&ANCHOR_VCENTER), "Coliding anchors");
+	BS_ASSERT_MSG(!(anchor&ANCHOR_LEFT)||!(anchor&ANCHOR_RIGHT)||!(anchor&ANCHOR_HCENTER), "Coliding anchors");
+	BS_ASSERT_MSG(!(anchor&ANCHOR_TOP)||!(anchor&ANCHOR_BOTTOM)||!(anchor&ANCHOR_VCENTER), "Coliding anchors");
 	if (anchor & ANCHOR_LEFT)
 		qx += imgW_half;
 	else if (anchor & ANCHOR_RIGHT)
 		qx -= imgW_half;
-	else { ASSERT_MSG((anchor&ANCHOR_HCENTER), "Wrong anchor"); }
+	else { BS_ASSERT_MSG((anchor&ANCHOR_HCENTER), "Wrong anchor"); }
 	if (anchor & ANCHOR_TOP)
 		qy += imgH_half;
 	else if (anchor & ANCHOR_BOTTOM)
 		qy -= imgH_half;
-	else { ASSERT_MSG((anchor&ANCHOR_VCENTER), "Wrong anchor"); }
+	else { BS_ASSERT_MSG((anchor&ANCHOR_VCENTER), "Wrong anchor"); }
 
 	// position the quad
 	q.v[0].x = qx;
@@ -327,17 +327,17 @@ bool GfxRenderer::DrawImage( const TexturePtr& image, const Rect& textureRect, c
 	return true;
 }
 
-bool createTriangles(const std::vector<Point>& vertices,std::vector<Point>& triangles)
+bool createTriangles(const Vector<Point>& vertices, Vector<Point>& triangles)
 {	
 	Vector2dVector a;
-	for(std::vector<Point>::const_iterator i = vertices.begin();i != vertices.end();++i)
+	for(Vector<Point>::const_iterator i = vertices.begin();i != vertices.end();++i)
 	{
 		a.push_back(Vector2d((float)(i->x),(float)(i->y)));
 	}
 	
 	Vector2dVector result;
 	if (Triangulate::Process(a,result))
-		for(std::vector<Vector2d>::const_iterator i = result.begin();i != result.end();++i)
+		for(Vector<Vector2d>::const_iterator i = result.begin();i != result.end();++i)
 			triangles.push_back(Point(MathUtils::Round(i->GetX()),MathUtils::Round(i->GetY())));
 	else
 		return false;
@@ -379,7 +379,7 @@ bool GfxRenderer::DrawPolygon( Point* vertices, int vertices_len, const TextureP
 	return false;
 }
 
-bool GfxRenderer::DrawPolygon( const std::vector<Point>& vertices, const TexturePtr& image, const Pen& outline, float32 angle, const Color& color, float32 scale, float32 textureAngle, float32 textureScale ) const
+bool GfxRenderer::DrawPolygon( const Vector<Point>& vertices, const TexturePtr& image, const Pen& outline, float32 angle, const Color& color, float32 scale, float32 textureAngle, float32 textureScale ) const
 {
 	if (image.IsNull())
 	{
@@ -393,7 +393,7 @@ bool GfxRenderer::DrawPolygon( const std::vector<Point>& vertices, const Texture
 bool GfxRenderer::DrawPolygon( Point* vertices, int vertices_len, const Color& fillColor, const Pen& outline) const
 {	
 	// init vector
-	std::vector<Point> v;
+	Vector<Point> v;
 	for(int i = 0;i < vertices_len;i++)
 		v.push_back(vertices[i]);
 
@@ -407,7 +407,7 @@ bool GfxRenderer::DrawPolygon( Point* vertices, int vertices_len, const Color& f
 bool GfxRenderer::DrawPolygonWithConversion( const Vector2* vertices, int vertices_len, const Vector2& offsetPosition, const float32 offsetAngle, const Color& fillColor, const Pen& outline) const
 {	
 	// init vector
-	std::vector<Point> v;
+	Vector<Point> v;
 	XForm xf(offsetPosition, Matrix22(offsetAngle));
 	for(int i = 0;i < vertices_len;i++)
 		v.push_back(WorldToScreen(MathUtils::Multiply(xf, vertices[i])));
@@ -419,19 +419,19 @@ bool GfxRenderer::DrawPolygonWithConversion( const Vector2* vertices, int vertic
 		return false;
 }
 
-bool GfxRenderer::DrawPolygon( const std::vector<Point>& vertices, const Color& fillColor, const Pen& outline) const
+bool GfxRenderer::DrawPolygon( const Vector<Point>& vertices, const Color& fillColor, const Pen& outline) const
 {	
 	//TODO tahle funkce musi bejt schopna neco vykreslit i kdyz je polygon degenerovanej a nejde triangulovat
 	//TODO prozkoumat, jestli nejde pres DirectX kreslit polygon lip a pripadne implementovat prislusnou funkci dovnitr HGE
 
-	std::vector<Point> triangles;
+	Vector<Point> triangles;
 	if (createTriangles(vertices,triangles)) // get triangles from points
 	{
 		// draw filled triangles
 		int32 pre2[2][2]; // to store two first points of triangle
 		int x = 0;  // simple counter
 		hgeTriple t; // triangle
-		for(std::vector<Point>::iterator i = triangles.begin();i<triangles.end();++i)
+		for(Vector<Point>::iterator i = triangles.begin();i<triangles.end();++i)
 		{
 			int m = x % 3;
 			if (m == 2) // current vertex is the third needed
@@ -452,7 +452,7 @@ bool GfxRenderer::DrawPolygon( const std::vector<Point>& vertices, const Color& 
 		//draw outline
 		if(&outline != &Pen::NullPen)
 		{
-			for(std::vector<Point>::const_iterator i = vertices.begin();i<vertices.end() - 1;++i)
+			for(Vector<Point>::const_iterator i = vertices.begin();i<vertices.end() - 1;++i)
 				DrawLine(*i, *(i + 1), outline);
 			DrawLine(*(vertices.end() - 1),vertices[0],outline);
 		}
@@ -478,7 +478,7 @@ bool GfxRenderer::DrawCircle( const Point& center, const int32 radius, const Col
 	int32 x, y, oldX=-1, oldY=-1;
 
 	bool fill = &fillColor != &Color::NullColor;
-	std::vector<Point> points;
+	Vector<Point> points;
 	if (fill)
 		points.push_back(center);	
 
@@ -565,18 +565,18 @@ Vector2 GfxRenderer::GetCameraWorldBoxBotRight( void ) const
 
 bool GfxRenderer::IsFullscreen( void ) const
 {
-	ASSERT(mHGE);
+	BS_ASSERT(mHGE);
 	return !mHGE->System_GetState(HGE_WINDOWED);
 }
 
-void GfxRenderer::DrawString( float32 x, float32 y, const string & id,
-							 const string & text, const Color color,
-							 uint8 text_anchor, uint8 screen_anchor, const string & fontid )
+void GfxRenderer::DrawString( float32 x, float32 y, const String & id,
+							 const String & text, const Color color,
+							 uint8 text_anchor, uint8 screen_anchor, const String & fontid )
 {
 	gGUIMgr.AddStaticText(x, y, id, text, color, text_anchor, screen_anchor, fontid);
 }
 
-Vector2 GfxRenderer::GetTextSize( const string & text, const string & fontid )
+Vector2 GfxRenderer::GetTextSize( const String & text, const String & fontid )
 {
 	return gGUIMgr.GetTextSize(text, fontid);
 }
@@ -603,7 +603,7 @@ bool GfxRenderer::DrawQuad( GfxSystem::Point* const vertices, const TexturePtr t
 	q.tex = texture->GetTexture();
 	q.blend = BLEND_ALPHABLEND | BLEND_COLORMUL;
 
-	ASSERT(mHGE);
+	BS_ASSERT(mHGE);
 	mHGE->Gfx_RenderQuad(&q);
 
 	return true;

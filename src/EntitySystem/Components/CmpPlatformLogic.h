@@ -35,7 +35,7 @@ namespace EntitySystem
 		EntityHandle mBlueprints;
 		EntityHandle mParentShip; // if null, it means this platform is free
 		uint32 mHitpoints;
-		typedef std::vector<EntityHandle> EntityList;
+		typedef Vector<EntityHandle> EntityList;
 		EntityList mItems;
 
 		/// @name support data

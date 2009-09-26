@@ -64,7 +64,7 @@ void Core::LoadingScreen::Draw()
 	}
 }
 
-void Core::LoadingScreen::ResourceGroupLoadStarted( const string& groupName, uint32 resourceCount )
+void Core::LoadingScreen::ResourceGroupLoadStarted( const String& groupName, uint32 resourceCount )
 {
 
 	Draw();

@@ -1,7 +1,6 @@
 #ifndef ComponentIterators_h__
 #define ComponentIterators_h__
 
-#include <vector>
 #include "../../Utility/Settings.h"
 #include "ComponentEnums.h"
 
@@ -14,7 +13,7 @@ namespace EntitySystem
 	//@}
 	
 	/// @name A list of generic component.
-	typedef std::vector<Component*> ComponentsList;
+	typedef Vector<Component*> ComponentsList;
 
 	/** Enables iterating over a collection of components. Wraps around an STL iterator.
 	*/

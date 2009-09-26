@@ -30,23 +30,23 @@ EntityMessage::eResult EntitySystem::CmpEngineParams::HandleMessage( const Entit
 		ComputeParams();
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_ARC_ANGLE:
-		DASSERT(msg.data);
+		BS_DASSERT(msg.data);
 		*(float32*)msg.data = GetArcAngle();
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_MAX_POWER:
-		DASSERT(msg.data);
+		BS_DASSERT(msg.data);
 		*(uint32*)msg.data = GetMaxPower();
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_STABILIZATION_RATIO:
-		DASSERT(msg.data);
+		BS_DASSERT(msg.data);
 		*(uint32*)msg.data = GetStabilizationRatio();
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_EFFECT:
-		DASSERT(msg.data);
+		BS_DASSERT(msg.data);
 		*(StringKey*)msg.data = GetThrustEffect();
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_EFFECT_SCALE:
-		DASSERT(msg.data);
+		BS_DASSERT(msg.data);
 		*(float32*)msg.data = GetThrustEffectScale();
 		return EntityMessage::RESULT_OK;
 	}

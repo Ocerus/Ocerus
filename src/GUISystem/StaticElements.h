@@ -27,30 +27,30 @@ namespace GUISystem {
 
 	class StaticText : public StaticElement {
 	protected:
-		void InitElement( const string & id );
-		void SetStaticTextWorker( const string & text, const GfxSystem::Color & color, const string & fontid = "" );
+		void InitElement( const String & id );
+		void SetStaticTextWorker( const String & text, const GfxSystem::Color & color, const String & fontid = "" );
 	public:
-		StaticText( float32 x, float32 y, const string & id, const string & text, const GfxSystem::Color & color,
+		StaticText( float32 x, float32 y, const String & id, const String & text, const GfxSystem::Color & color,
 			uint8 text_anchor = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP,
 			uint8 screen_anchor = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP,
-			const string & fontid = "" );
-		StaticText( int32 x, int32 y, const string & id, const string & text, const GfxSystem::Color & color,
+			const String & fontid = "" );
+		StaticText( int32 x, int32 y, const String & id, const String & text, const GfxSystem::Color & color,
 			uint8 text_anchor = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP,
 			uint8 screen_anchor = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP,
-			const string & fontid = "" );
+			const String & fontid = "" );
 
 		void SetColor( const GfxSystem::Color & color );		
-		void SetFont( const string & fontid );
-		void SetText( const string & text );
+		void SetFont( const String & fontid );
+		void SetText( const String & text );
 
-		void SetStaticText( float32 x, float32 y, const string & text, const GfxSystem::Color & color,
+		void SetStaticText( float32 x, float32 y, const String & text, const GfxSystem::Color & color,
 			uint8 text_anchor = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP,
 			uint8 screen_anchor = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP,
-			const string & fontid = "" );
-		void SetStaticText( int32 x, int32 y, const string & text, const GfxSystem::Color & color,
+			const String & fontid = "" );
+		void SetStaticText( int32 x, int32 y, const String & text, const GfxSystem::Color & color,
 			uint8 text_anchor = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP,
 			uint8 screen_anchor = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP,
-			const string & fontid = "" );
+			const String & fontid = "" );
 
 		virtual ~StaticText();
 	};

@@ -16,7 +16,7 @@ void EntityDescription::Clear(void)
 	mID = "";
 }
 
-void EntityDescription::Init(const eEntityType type, const string& ID)
+void EntityDescription::Init(const eEntityType type, const String& ID)
 {
 	Clear();
 	mIndex = 0;
@@ -26,12 +26,12 @@ void EntityDescription::Init(const eEntityType type, const string& ID)
 
 void EntityDescription::AddComponent(const eComponentType type)
 {
-	ASSERT_MSG(type != CT_INVALID, "Invalid component description type");
+	BS_ASSERT_MSG(type != CT_INVALID, "Invalid component description type");
 	mComponents.push_back(type);
 }
 
 eComponentType EntityDescription::GetNextComponent()
 {
-	ASSERT(mIndex<mComponents.size());
+	BS_ASSERT(mIndex<mComponents.size());
 	return mComponents[mIndex++];
 }

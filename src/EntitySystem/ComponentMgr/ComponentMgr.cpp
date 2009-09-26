@@ -31,24 +31,24 @@ ComponentMgr::ComponentMgr()
 	#include "ComponentTypes.h"
 	#undef COMPONENT_TYPE
 
-	ASSERT(mComponentCreationMethod[NUM_COMPONENT_TYPES-1]);
+	BS_ASSERT(mComponentCreationMethod[NUM_COMPONENT_TYPES-1]);
 }
 
 ComponentMgr::~ComponentMgr() 
 {
-	ASSERT_MSG(mEntityComponentsMap.size()==0, "ComponentsMap not empty. (EntityMgr should erase it before deleting ComponentMgr)");
+	BS_ASSERT_MSG(mEntityComponentsMap.size()==0, "ComponentsMap not empty. (EntityMgr should erase it before deleting ComponentMgr)");
 }
 
 EntityComponentsIterator ComponentMgr::GetEntityComponents(EntityID id)
 {
 	EntityComponentsMap::iterator eci = mEntityComponentsMap.find(id);
-	ASSERT(eci != mEntityComponentsMap.end());
+	BS_ASSERT(eci != mEntityComponentsMap.end());
 	return EntityComponentsIterator(eci->second);
 }
 
 Component* ComponentMgr::CreateComponent(EntityHandle h, const eComponentType type)
 {
-	ASSERT(type < NUM_COMPONENT_TYPES && type >= 0);
+	BS_ASSERT(type < NUM_COMPONENT_TYPES && type >= 0);
 	Component* cmp = mComponentCreationMethod[type]();
 	EntityComponentsMap::const_iterator entIt = mEntityComponentsMap.find(h.GetID());
 	if (entIt == mEntityComponentsMap.end())

@@ -2,7 +2,6 @@
 #define CmpShipLogic_h__
 
 #include "../ComponentMgr/Component.h"
-#include <vector>
 
 namespace EntitySystem
 {
@@ -17,7 +16,7 @@ namespace EntitySystem
 		static void RegisterReflection(void);
 
 	private:
-		typedef std::vector<EntityHandle> EntityList;
+		typedef Vector<EntityHandle> EntityList;
 		EntityList mPlatforms;
 		EntityList mLinks;
 	};

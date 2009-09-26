@@ -42,15 +42,15 @@ EntityMessage::eResult EntitySystem::CmpPlatformParams::HandleMessage( const Ent
 		ComputeParams();
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_POLYSHAPE:
-		DASSERT(msg.data);
+		BS_DASSERT(msg.data);
 		((DataContainer*)msg.data)->SetData((uint8*)mShape, mShapeLength);
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_MAX_HITPOINTS:
-		DASSERT(msg.data);
+		BS_DASSERT(msg.data);
 		*(uint32*)msg.data = GetMaxHitpoints();
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_MATERIAL:
-		DASSERT(msg.data);
+		BS_DASSERT(msg.data);
 		*(EntityHandle*)msg.data = mMaterial;
 		return EntityMessage::RESULT_OK;
 	}

@@ -43,20 +43,20 @@ EntityMessage::eResult EntitySystem::CmpShipPhysics::HandleMessage( const Entity
 		PostInit();
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_POSITION:
-		DASSERT(msg.data);
+		BS_DASSERT(msg.data);
 		((Vector2*)msg.data)->Set(GetAbsolutePosition());
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_ANGLE:
-		DASSERT(msg.data);
+		BS_DASSERT(msg.data);
 		*(float32*)msg.data = GetAngle();
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_PHYSICS_BODY:
-		DASSERT(msg.data);
-		DASSERT(mBody);
+		BS_DASSERT(msg.data);
+		BS_DASSERT(mBody);
 		*(b2Body**)msg.data = mBody;
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_PHYSICS_UPDATE_MASS:
-		DASSERT(mBody);
+		BS_DASSERT(mBody);
 		mBody->SetMassFromShapes();
 		return EntityMessage::RESULT_OK;
 	}
@@ -73,25 +73,25 @@ void EntitySystem::CmpShipPhysics::RegisterReflection()
 
 Vector2& EntitySystem::CmpShipPhysics::GetAbsolutePosition( void ) const
 {
-	DASSERT(mBody);
+	BS_DASSERT(mBody);
 	return const_cast<Vector2&>(mBody->GetPosition());
 }
 
 void EntitySystem::CmpShipPhysics::SetAbsolutePosition( Vector2& pos )
 {
-	DASSERT(mBody);
+	BS_DASSERT(mBody);
 	mBody->SetXForm(pos, mBody->GetAngle());
 }
 
 float32 EntitySystem::CmpShipPhysics::GetAngle( void ) const
 {
-	DASSERT(mBody);
+	BS_DASSERT(mBody);
 	return mBody->GetAngle();
 }
 
 void EntitySystem::CmpShipPhysics::SetAngle( const float32 angle )
 {
-	DASSERT(mBody);
+	BS_DASSERT(mBody);
 	mBody->SetXForm(mBody->GetPosition(), angle);
 }
 

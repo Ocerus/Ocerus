@@ -1,7 +1,7 @@
 #ifndef _AIMGR_H_
 #define _AIMGR_H_
 
-#include <vector>
+#include "BasicTypes.h"
 #include "GenericAI.h"
 
 #define gAIMgr AISystem::AIMgr::GetSingleton()
@@ -11,8 +11,8 @@ namespace AISystem {
 
 	class AIMgr : public Singleton<AIMgr> {
 	protected:
-		std::vector<GenericAI*> mAIs;
-		std::vector<GenericAI*> mFreeAIs;
+		Vector<GenericAI*> mAIs;
+		Vector<GenericAI*> mFreeAIs;
 
 		bool mAIEnabled;
 		uint32 mSkipped;

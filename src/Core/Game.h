@@ -8,7 +8,6 @@
 #include "../EntitySystem/EntityMgr/EntityHandle.h"
 #include "../EntitySystem/EntityMgr/EntityEnums.h"
 #include "Dynamics/b2WorldCallbacks.h"
-#include <vector>
 
 /// @name Forward declarations.
 //@{
@@ -79,7 +78,7 @@ namespace Core
 			EntitySystem::EntityHandle entity1;
 			EntitySystem::EntityHandle entity2;
 		};
-		typedef std::vector<PhysicsEvent*> PhysicsEventList;
+		typedef Vector<PhysicsEvent*> PhysicsEventList;
 		PhysicsEventList mPhysicsEvents;
 		void ProcessPhysicsEvent(const PhysicsEvent& evt);
 		//@}
@@ -87,14 +86,14 @@ namespace Core
 		/// @name Water stuff.
 		//@{
 		WaterSurface* mWaterSurface;
-		std::vector<GfxSystem::ParticleSystemPtr> mBubbleEffects;
+		Vector<GfxSystem::ParticleSystemPtr> mBubbleEffects;
 		//@}
 
 		/// @name Selections stuff.
 		//@{
 		uint64 mLastClickTime;
 		EntitySystem::EntityHandle mHoveredEntity;
-		typedef std::vector<EntitySystem::EntityHandle> EntityList;
+		typedef Vector<EntitySystem::EntityHandle> EntityList;
 		EntityList mSelectedEntities;
 		#define MAX_SELECTED_GROUPS 10
 		EntityList mSelectedGroups[MAX_SELECTED_GROUPS];

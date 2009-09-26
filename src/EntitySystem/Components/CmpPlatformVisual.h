@@ -2,7 +2,6 @@
 #define CmpPlatformVisual_h__
 
 #include "../ComponentMgr/Component.h"
-#include <vector>
 
 namespace EntitySystem
 {

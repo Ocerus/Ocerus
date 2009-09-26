@@ -19,7 +19,7 @@ namespace ResourceSystem
 		/** Called when a group of resources is being loaded. In resourceCount you are told how many resources will be
 			loaded, so that you have an estimate.
 		*/
-		virtual void ResourceGroupLoadStarted(const string& groupName, uint32 resourceCount) = 0;
+		virtual void ResourceGroupLoadStarted(const String& groupName, uint32 resourceCount) = 0;
 		/// @name Called when one single resource is being loaded.
 		virtual void ResourceLoadStarted(const ResourcePtr& resource) = 0;
 		/// @name Called when the resource which previously started loading is now loaded.

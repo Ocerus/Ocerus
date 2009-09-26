@@ -10,7 +10,6 @@
 #include "CEGUIBase.h"
 #include "CEGUISystem.h"
 #include "CEGUIWindow.h"
-#include <set>
 
 #define gGUIMgr GUISystem::GUIMgr::GetSingleton()
 
@@ -27,7 +26,7 @@ namespace GUISystem {
 	// Inherit this to be eligible to console prompt events
 	class IConsoleListener {
 	public:
-		virtual void EventConsoleCommand(string command) = 0;
+		virtual void EventConsoleCommand(String command) = 0;
 	};
 
 	class GUIMgr : public Singleton<GUIMgr>, public InputSystem::IInputListener
@@ -59,7 +58,7 @@ namespace GUISystem {
 		/// @name Called in main application loop
 		//@{
 		inline virtual void RenderGUI() const {
-			ASSERT(mCegui);
+			BS_ASSERT(mCegui);
 			CEGUI::System::getSingleton().renderGUI();
 		}
 		
@@ -71,19 +70,19 @@ namespace GUISystem {
 		/// @name Registers a class that implements IConsoleListener
 		void AddConsoleListener(IConsoleListener* listener);
 		/// @name If you wish to post a new message into console, call this method
-		void AddConsoleMessage(string message, const GfxSystem::Color& color = GfxSystem::Color(255,255,255,255));
+		void AddConsoleMessage(String message, const GfxSystem::Color& color = GfxSystem::Color(255,255,255,255));
 		bool IsConsoleLoaded(void) const { return mConsoleIsLoaded; }
 		//@}
 
 		/// @name Static text related methods
 		//@{
-		void AddStaticText( float32 x, float32 y, const string & id, const string & text,
+		void AddStaticText( float32 x, float32 y, const String & id, const String & text,
 			const GfxSystem::Color color = GfxSystem::Color(255,255,255),
 			uint8 text_anchor = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP,
 			uint8 screen_anchor = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP,
-			const string & fontid = "");
-		Vector2 GetTextSize( const string & text, const string & fontid = "" );
-		StaticText* GetStaticText( const string & id );
+			const String & fontid = "");
+		Vector2 GetTextSize( const String & text, const String & fontid = "" );
+		StaticText* GetStaticText( const String & id );
 		//@}
 
 		virtual ~GUIMgr();
@@ -109,14 +108,14 @@ namespace GUISystem {
 
 		/// @name Commands memory
 		//@{
-		void AddLastCommand(string command);
+		void AddLastCommand(String command);
 		void LoadLastCommand();
-		std::deque<string>::const_iterator mCurrentLastSelected;
-		std::deque<string> mLastCommands;
+		Deque<String>::const_iterator mCurrentLastSelected;
+		Deque<String> mLastCommands;
 		//@}
 
-		std::set<IConsoleListener*> mConsoleListeners;		
-		std::map<string, StaticElement*> mCreatedStaticElements;
+		Set<IConsoleListener*> mConsoleListeners;		
+		Map<String, StaticElement*> mCreatedStaticElements;
 	};
 }
 #endif

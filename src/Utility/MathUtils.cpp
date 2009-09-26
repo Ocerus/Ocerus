@@ -21,7 +21,7 @@ float32 MathUtils::Angle( const Vector2& a, const Vector2& b )
 
 float32 MathUtils::Clamp( const float32 num, const float32 min, const float32 max )
 {
-	ASSERT(max>=min);
+	BS_ASSERT(max>=min);
 	float32 res = num;
 	if (res > max)
 		res = max;
@@ -32,7 +32,7 @@ float32 MathUtils::Clamp( const float32 num, const float32 min, const float32 ma
 
 float32 MathUtils::Wrap( const float32 num, const float32 min, const float32 max )
 {
-	ASSERT(max>=min);
+	BS_ASSERT(max>=min);
 	float32 res = num;
 	float32 d = max - min;
 	while (res > max)

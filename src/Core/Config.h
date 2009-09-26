@@ -15,7 +15,7 @@ namespace Core
 	class Config
 	{
 	public:
-		Config(const string& filePath);
+		Config(const String& filePath);
 		~Config(void);
 
 		/// @name Forces the config to be saved. However, it is saved automatically when deleted.
@@ -23,26 +23,26 @@ namespace Core
 
 		/// @name  Value getters.
 		//@{
-		string GetString(const string& key, const string& defaultValue = "", const string& section = "General" );
-		int32 GetInt32(const string& key, const int32 defaultValue = 0, const string& section = "General" );
-		bool GetBool(const string& key, const bool defaultValue = false, const string& section = "General" );
+		String GetString(const String& key, const String& defaultValue = "", const String& section = "General" );
+		int32 GetInt32(const String& key, const int32 defaultValue = 0, const String& section = "General" );
+		bool GetBool(const String& key, const bool defaultValue = false, const String& section = "General" );
 		//@}
 
 		/// @name  Value setters.
 		//@{
-		void SetString(const string& key, const string& value, const string& section = "General" );
-		void SetInt32(const string& key, const int32 value, const string& section = "General" );
-		void SetBool(const string& key, const bool value, const string& section = "General" );
+		void SetString(const String& key, const String& value, const String& section = "General" );
+		void SetInt32(const String& key, const int32 value, const String& section = "General" );
+		void SetBool(const String& key, const bool value, const String& section = "General" );
 		//@}
 
 		/// @name Remove whole section from the config.
-		void RemoveSection(const string& section);
+		void RemoveSection(const String& section);
 		/// @name Remove one key and its value from the config.
-		void RemoveKey(const string& key, const string& section = "General" );
+		void RemoveKey(const String& key, const String& section = "General" );
 
 	private:
 		/// @name Where is the config stored.
-		string mFilePath;
+		String mFilePath;
 
 		/// @name Helper.
 		rude::Config* mRudeConfig;

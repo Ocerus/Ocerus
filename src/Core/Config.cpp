@@ -4,11 +4,11 @@
 
 using namespace Core;
 
-Config::Config(const string& filePath): mFilePath(filePath)
+Config::Config(const String& filePath): mFilePath(filePath)
 {
 	gLogMgr.LogMessage("Loading config file '" + mFilePath + "'");
 
-	ASSERT(mFilePath.length()>0);
+	BS_ASSERT(mFilePath.length()>0);
 
 	// attempt to load the file
 	mRudeConfig = DYN_NEW rude::Config();
@@ -20,7 +20,7 @@ Config::Config(const string& filePath): mFilePath(filePath)
 
 Config::~Config() 
 {
-	ASSERT(mRudeConfig);
+	BS_ASSERT(mRudeConfig);
 	Save();
 	DYN_DELETE mRudeConfig;
 }
@@ -39,7 +39,7 @@ bool Core::Config::Save( void )
 	return false;
 }
 
-string Core::Config::GetString( const string& key, const string& defaultValue, const string& section )
+String Core::Config::GetString( const String& key, const String& defaultValue, const String& section )
 {
 	mRudeConfig->setSection(section.c_str()); // sets working section...all subsequent calls are related to this section.
 	if (mRudeConfig->exists(key.c_str()))
@@ -47,7 +47,7 @@ string Core::Config::GetString( const string& key, const string& defaultValue, c
 	return defaultValue;
 }
 
-int32 Core::Config::GetInt32( const string& key, const int32 defaultValue, const string& section )
+int32 Core::Config::GetInt32( const String& key, const int32 defaultValue, const String& section )
 {
 	mRudeConfig->setSection(section.c_str());
 	if (mRudeConfig->exists(key.c_str()))
@@ -55,7 +55,7 @@ int32 Core::Config::GetInt32( const string& key, const int32 defaultValue, const
 	return defaultValue;
 }
 
-bool Core::Config::GetBool( const string& key, const bool defaultValue, const string& section )
+bool Core::Config::GetBool( const String& key, const bool defaultValue, const String& section )
 {
 	mRudeConfig->setSection(section.c_str());
 	if (mRudeConfig->exists(key.c_str()))
@@ -63,31 +63,31 @@ bool Core::Config::GetBool( const string& key, const bool defaultValue, const st
 	return defaultValue;
 }
 
-void Core::Config::SetString( const string& key, const string& value, const string& section )
+void Core::Config::SetString( const String& key, const String& value, const String& section )
 {
 	mRudeConfig->setSection(section.c_str());
 	mRudeConfig->setStringValue(key.c_str(), value.c_str());
 }
 
-void Core::Config::SetInt32( const string& key, const int32 value, const string& section )
+void Core::Config::SetInt32( const String& key, const int32 value, const String& section )
 {
 	mRudeConfig->setSection(section.c_str());
 	mRudeConfig->setIntValue(key.c_str(), value);
 }
 
-void Core::Config::SetBool( const string& key, const bool value, const string& section )
+void Core::Config::SetBool( const String& key, const bool value, const String& section )
 {
 	mRudeConfig->setSection(section.c_str());
 	mRudeConfig->setBoolValue(key.c_str(), value);
 }
 
-void Core::Config::RemoveKey( const string& key, const string& section )
+void Core::Config::RemoveKey( const String& key, const String& section )
 {
 	mRudeConfig->setSection(section.c_str());
 	mRudeConfig->deleteData(key.c_str());
 }
 
-void Core::Config::RemoveSection( const string& section )
+void Core::Config::RemoveSection( const String& section )
 {
 	mRudeConfig->deleteSection(section.c_str());
 }

@@ -24,7 +24,7 @@ namespace GUISystem {
 	}
 
 	RendererGate::RendererGate() : mQueueing(false) {
-		d_resourceProvider = new ResourceGate();
+		d_resourceProvider = DYN_NEW ResourceGate();
 		this->d_identifierString = "Black_Hand's wrapper around that disgusting piece of code created by Santhos :PPP";
 		this->setQueueingEnabled(false);
 
@@ -67,7 +67,7 @@ namespace GUISystem {
 
 	// perform final rendering for all queued renderable quads.
 	void RendererGate::doRender() {
-		std::vector<Quad_info>::const_iterator iter = mQuads.begin();
+		Vector<Quad_info>::const_iterator iter = mQuads.begin();
 		while (iter != mQuads.end()) {			
 			DrawQuad(*iter);
 			++iter;
@@ -80,7 +80,7 @@ namespace GUISystem {
 	}
 
 	CEGUI::Texture* RendererGate::createTexture(void) {
-		CEGUITextureWrapper * wrap = new CEGUITextureWrapper(this);
+		CEGUITextureWrapper * wrap = DYN_NEW CEGUITextureWrapper(this);
 		mTextures.insert(wrap);
 		
 		return wrap;
@@ -94,12 +94,12 @@ namespace GUISystem {
 	}
 
 	CEGUI::Texture* RendererGate::createTexture(float size) {
-		ASSERT(!"We are doomed....AGAIN!");
+		BS_ASSERT(!"We are doomed....AGAIN!");
 		return 0;
 	}
 
 	void RendererGate::destroyTexture(CEGUI::Texture* texture) {
-		std::set<CEGUITextureWrapper*>::iterator found_tex = mTextures.find(static_cast<CEGUITextureWrapper*>(texture));
+		Set<CEGUITextureWrapper*>::iterator found_tex = mTextures.find(static_cast<CEGUITextureWrapper*>(texture));
 		if (found_tex != mTextures.end()) {
 			DYN_DELETE *found_tex;
 			mTextures.erase(found_tex);
@@ -107,7 +107,7 @@ namespace GUISystem {
 	}
 
 	void RendererGate::destroyAllTextures(void) {
-		std::set<CEGUITextureWrapper*>::iterator iter = mTextures.begin();
+		Set<CEGUITextureWrapper*>::iterator iter = mTextures.begin();
 		while (iter != mTextures.end()) {
 			DYN_DELETE *iter;
 			++iter;

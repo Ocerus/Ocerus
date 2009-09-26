@@ -30,7 +30,7 @@ EntityMessage::eResult EntitySystem::CmpPlatformLinks::HandleMessage( const Enti
 			mFirstPlatform.PostMessage(EntityMessage::TYPE_GET_PARENT, &ship);
 			EntityHandle ship2;
 			mSecondPlatform.PostMessage(EntityMessage::TYPE_GET_PARENT, &ship2);
-			ASSERT_MSG(ship == ship2, "Not compatible platforms");
+			BS_ASSERT_MSG(ship == ship2, "Not compatible platforms");
 			ship.PostMessage(EntityMessage::TYPE_LINK_PLATFORMS, GetOwnerPtr());
 		}
 		return EntityMessage::RESULT_OK;
@@ -38,7 +38,7 @@ EntityMessage::eResult EntitySystem::CmpPlatformLinks::HandleMessage( const Enti
 		gEntityMgr.DestroyEntity(GetOwner());
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_UNLINK_PLATFORM:
-		DASSERT(msg.data);
+		BS_DASSERT(msg.data);
 		{
 			EntityHandle platform = *(EntityHandle*)msg.data;
 			if (platform == mFirstPlatform || platform == mSecondPlatform)
@@ -49,7 +49,7 @@ EntityMessage::eResult EntitySystem::CmpPlatformLinks::HandleMessage( const Enti
 		}
 		return EntityMessage::RESULT_ERROR;
 	case EntityMessage::TYPE_LINKS_PLATFORM:
-		DASSERT(msg.data);
+		BS_DASSERT(msg.data);
 		{
 			EntityHandle platform = *(EntityHandle*)msg.data;
 			if (platform == mFirstPlatform || platform == mSecondPlatform)

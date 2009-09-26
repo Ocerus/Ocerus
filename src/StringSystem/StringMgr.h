@@ -19,7 +19,7 @@ namespace StringSystem
 	{
 	public:
 		/// @name @param basepath for string data. Root is in the ResMgr's basepath
-		StringMgr(const string& basepath = "strings/");
+		StringMgr(const String& basepath = "strings/");
 		~StringMgr(void);
 
 		/** Load all strings for a given language.
@@ -29,7 +29,7 @@ namespace StringSystem
 		    This simply calls LoadDataFromDir. It's possible to load other strings with this method later on
 		    (not necessarily from the same language pack -- maybe there should be some language check, dunno)
 		*/
-		bool LoadLanguagePack(const string& lang = "en");
+		bool LoadLanguagePack(const String& lang = "en");
 
 		// Change language -- unload all strings and load them again with LoadStrings(lang)
 		// bool ChangeLanguage(const string& lang);
@@ -37,9 +37,9 @@ namespace StringSystem
 		/// @name We can use these to load strings that are not defined by/for language pack (ie common names for weapons?)
 		//@{
 		/// @name wrapper around gResourceMgr.AddResourceDirToGroup / LoadResourcesInGroup
-		bool LoadDataFromDir(const string& path, const string& includeRegexp = "*.*", const string& excludeRegexp = "");
+		bool LoadDataFromDir(const String& path, const String& includeRegexp = "*.*", const String& excludeRegexp = "");
 		/// @name wrapper around gResourceMgr.AddResourceFileToGroup
-		bool LoadDataFromFile(const string& filepath, ResourceSystem::Resource::eType type = ResourceSystem::Resource::TYPE_AUTODETECT, bool pathRelative = true);
+		bool LoadDataFromFile(const String& filepath, ResourceSystem::Resource::eType type = ResourceSystem::Resource::TYPE_AUTODETECT, bool pathRelative = true);
 		//@}
 
 		/// @name unload all the data (using UnloadResourcesInGroup)
@@ -55,9 +55,9 @@ namespace StringSystem
 		/// @name container used to store data (same type used in TextRes!)
 		TextDataMap mTextDataMap;
 		/// @name actual language
-		string mLanguage;
+		String mLanguage;
 		/// @name Basepath for string data. Root is in the ResMgr's basepath
-		string mBasePath;
+		String mBasePath;
 	};
 }
 

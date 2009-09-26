@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="src/Precompiled;externalLibs/boost/inc;externalLibs/hge/include;externalLibs/ois/includes;externalLibs/cegui/include;externalLibs/rudeconfig/include;externalLibs/Box2D/Include;externalLibs/Box2D/Source;externalLibs/expat/lib"
+				AdditionalIncludeDirectories="src/Precompiled;src/Utility;externalLibs/boost/inc;externalLibs/hge/include;externalLibs/ois/includes;externalLibs/cegui/include;externalLibs/rudeconfig/include;externalLibs/Box2D/Include;externalLibs/Box2D/Source;externalLibs/expat/lib"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;USE_ASSERT"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="true"
@@ -128,7 +128,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="externalLibs/boost/inc;externalLibs/hge/include;externalLibs/ois/includes;externalLibs/cegui/include;externalLibs/rudeconfig/include;externalLibs/Box2D/Include;externalLibs/Box2D/Source;externalLibs/expat/lib"
+				AdditionalIncludeDirectories="src/Precompiled;src/Utility;externalLibs/boost/inc;externalLibs/hge/include;externalLibs/ois/includes;externalLibs/cegui/include;externalLibs/rudeconfig/include;externalLibs/Box2D/Include;externalLibs/Box2D/Source;externalLibs/expat/lib"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
@@ -212,7 +212,7 @@
 				Optimization="2"
 				InlineFunctionExpansion="1"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories="src/Precompiled;externalLibs/boost/inc;externalLibs/hge/include;externalLibs/ois/includes;externalLibs/cegui/include;externalLibs/rudeconfig/include;externalLibs/Box2D/Include;externalLibs/Box2D/Source;externalLibs/expat/lib"
+				AdditionalIncludeDirectories="src/Precompiled;src/Utility;externalLibs/boost/inc;externalLibs/hge/include;externalLibs/ois/includes;externalLibs/cegui/include;externalLibs/rudeconfig/include;externalLibs/Box2D/Include;externalLibs/Box2D/Source;externalLibs/expat/lib"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;USE_ASSERT"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="true"
@@ -300,7 +300,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="src/Precompiled;externalLibs/boost/inc;externalLibs/hge/include;externalLibs/ois/includes;externalLibs/cegui/include;externalLibs/rudeconfig/include;externalLibs/Box2D/Include;externalLibs/Box2D/Source;externalLibs/expat/lib"
+				AdditionalIncludeDirectories="src/Precompiled;src/Utility;externalLibs/boost/inc;externalLibs/hge/include;externalLibs/ois/includes;externalLibs/cegui/include;externalLibs/rudeconfig/include;externalLibs/Box2D/Include;externalLibs/Box2D/Source;externalLibs/expat/lib"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;USE_ASSERT"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="true"
@@ -653,10 +653,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\src\Utility\Settings.h"
-					>
-				</File>
-				<File
 					RelativePath=".\src\Utility\Singleton.h"
 					>
 				</File>
@@ -693,15 +689,15 @@
 				Name="src"
 				>
 				<File
+					RelativePath=".\src\Utility\ComplexTypes.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\src\Utility\Hash.cpp"
 					>
 				</File>
 				<File
 					RelativePath=".\src\Utility\MathUtils.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\src\Utility\Settings.cpp"
 					>
 				</File>
 				<File
@@ -804,6 +800,26 @@
 						>
 					</File>
 				</Filter>
+			</Filter>
+			<Filter
+				Name="Setup"
+				>
+				<File
+					RelativePath=".\src\Utility\BasicTypes.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Utility\ComplexTypes.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Utility\Containers.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Utility\Settings.h"
+					>
+				</File>
 			</Filter>
 		</Filter>
 		<Filter
@@ -1216,10 +1232,6 @@
 				</Filter>
 			</Filter>
 		</Filter>
-		<File
-			RelativePath=".\BattleShipsClassDiagram.cd"
-			>
-		</File>
 		<File
 			RelativePath=".\src\Precompiled\Common.cpp"
 			>

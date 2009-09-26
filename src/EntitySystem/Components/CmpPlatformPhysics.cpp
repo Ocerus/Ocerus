@@ -107,38 +107,38 @@ EntityMessage::eResult EntitySystem::CmpPlatformPhysics::HandleMessage( const En
 		PostInit();
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_BODY_POSITION: // I need this for drawing
-		DASSERT(msg.data);
-		DASSERT(mBody);
+		BS_DASSERT(msg.data);
+		BS_DASSERT(mBody);
 		((Vector2*)msg.data)->Set(mBody->GetPosition());
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_POSITION:
-		DASSERT(msg.data);
+		BS_DASSERT(msg.data);
 		((Vector2*)msg.data)->Set(GetAbsolutePosition());
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_RELATIVE_POSITION:
-		DASSERT(msg.data);
+		BS_DASSERT(msg.data);
 		((Vector2*)msg.data)->Set(GetRelativePosition());
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_ANGLE:
-		DASSERT(msg.data);
+		BS_DASSERT(msg.data);
 		*(float32*)msg.data = GetAngle();
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_POLYSHAPE:
-		DASSERT(msg.data);
-		DASSERT(mShape);
+		BS_DASSERT(msg.data);
+		BS_DASSERT(mShape);
 		{
 			b2PolygonShape* polyshape = (b2PolygonShape*)mShape;
 			((DataContainer*)msg.data)->SetData((uint8*)polyshape->GetVertices(), polyshape->GetVertexCount());
 		}
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_PHYSICS_BODY:
-		DASSERT(msg.data);
-		DASSERT(mBody);
+		BS_DASSERT(msg.data);
+		BS_DASSERT(mBody);
 		*(b2Body**)msg.data = mBody;
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_DETACH_PLATFORM:
-		DASSERT(mBody);
-		DASSERT(msg.data);
+		BS_DASSERT(mBody);
+		BS_DASSERT(msg.data);
 		{
 			// Note that I must invalidate the parent ship here to update the team properly.
 			// CreateBody invokes collision checking and at that time it must be already updated.
@@ -178,7 +178,7 @@ EntityMessage::eResult EntitySystem::CmpPlatformPhysics::HandleMessage( const En
 		}
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_EXPLOSION:
-		DASSERT(msg.data);
+		BS_DASSERT(msg.data);
 		{
 			Vector2 myPos = GetAbsolutePosition();
 			Vector2 exploPos = *(Vector2*)msg.data;
@@ -211,53 +211,53 @@ void EntitySystem::CmpPlatformPhysics::RegisterReflection()
 
 Vector2 EntitySystem::CmpPlatformPhysics::GetAbsolutePosition( void ) const
 {
-	DASSERT(mBody);
+	BS_DASSERT(mBody);
 	return mBody->GetPosition() + MathUtils::Multiply(Matrix22(mBody->GetAngle()), mRelativePosition);
 }
 
 void EntitySystem::CmpPlatformPhysics::SetAbsolutePosition( Vector2 pos )
 {
-	DASSERT(mBody);
+	BS_DASSERT(mBody);
 	EntityHandle ship;
 	PostMessage(EntityMessage::TYPE_GET_PARENT, &ship);
-	DASSERT_MSG(!ship.IsValid(), "SetAbsolutePosition can be used for free platforms only");
+	BS_DASSERT_MSG(!ship.IsValid(), "SetAbsolutePosition can be used for free platforms only");
 	mBody->SetXForm(pos, mBody->GetAngle());
 }
 
 float32 EntitySystem::CmpPlatformPhysics::GetAngle( void ) const
 {
-	DASSERT(mBody);
+	BS_DASSERT(mBody);
 	return mBody->GetAngle();
 }
 
 void EntitySystem::CmpPlatformPhysics::SetAngle( const float32 angle )
 {
-	DASSERT(mBody);
+	BS_DASSERT(mBody);
 	mBody->SetXForm(mBody->GetPosition(), angle);
 }
 
 Vector2 EntitySystem::CmpPlatformPhysics::GetLinearVelocity( void ) const
 {
-	DASSERT(mBody);
+	BS_DASSERT(mBody);
 	return mBody->GetLinearVelocity();
 }
 
 void EntitySystem::CmpPlatformPhysics::SetLinearVelocity( const Vector2 linVel )
 {
-	DASSERT(mBody);
+	BS_DASSERT(mBody);
 	mBody->SetLinearVelocity(linVel);
 }
 
 Vector2* EntitySystem::CmpPlatformPhysics::GetShape( void ) const
 {
-	DASSERT(mShape);
+	BS_DASSERT(mShape);
 	b2PolygonShape* polyshape = (b2PolygonShape*)mShape;
 	return const_cast<Vector2*>(polyshape->GetVertices());
 }
 
 uint32 EntitySystem::CmpPlatformPhysics::GetShapeLength( void ) const
 {
-	DASSERT(mShape);
+	BS_DASSERT(mShape);
 	b2PolygonShape* polyshape = (b2PolygonShape*)mShape;
 	return polyshape->GetVertexCount();
 }

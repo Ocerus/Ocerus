@@ -34,7 +34,7 @@ EntityMessage::eResult EntitySystem::CmpWeapon::HandleMessage( const EntityMessa
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_SET_ANGLE:
 		// note: the angle is absolute, but I need to convert it to an angle relative to the default angle
-		DASSERT(msg.data);
+		BS_DASSERT(msg.data);
 		{
 			EntityMessage msg2(EntityMessage::TYPE_SET_RELATIVE_ANGLE);
 			float32 relAngle = *(float32*)msg.data - GetAbsoluteDefaultAngle();
@@ -42,15 +42,15 @@ EntityMessage::eResult EntitySystem::CmpWeapon::HandleMessage( const EntityMessa
 			return HandleMessage(msg2);
 		}
 	case EntityMessage::TYPE_GET_ANGLE:
-		DASSERT(msg.data);
+		BS_DASSERT(msg.data);
 		*(float32*)msg.data = GetAbsoluteAngle();
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_RELATIVE_ANGLE:
-		DASSERT(msg.data);
+		BS_DASSERT(msg.data);
 		*(float32*)msg.data = GetRelativeAngle();
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_SET_RELATIVE_ANGLE:
-		DASSERT(msg.data);
+		BS_DASSERT(msg.data);
 		{
 			PropertyHolder prop;
 			prop = GetProperty("Blueprints");
@@ -67,7 +67,7 @@ EntityMessage::eResult EntitySystem::CmpWeapon::HandleMessage( const EntityMessa
 		}
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_MOUSE_PICK:
-		DASSERT(msg.data);
+		BS_DASSERT(msg.data);
 		{
 			Vector2 pos;
 			PostMessage(EntityMessage::TYPE_GET_POSITION, &pos);
@@ -75,7 +75,7 @@ EntityMessage::eResult EntitySystem::CmpWeapon::HandleMessage( const EntityMessa
 		}
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_DRAW_UNDERLAY:
-		DASSERT(msg.data);
+		BS_DASSERT(msg.data);
 		{
 			bool hover = *(bool*)msg.data;
 			DrawSelectionUnderlay(hover);
@@ -92,11 +92,11 @@ EntityMessage::eResult EntitySystem::CmpWeapon::HandleMessage( const EntityMessa
 		mWasSelected = false;
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_DRAW_OVERLAY:
-		DASSERT(msg.data);
+		BS_DASSERT(msg.data);
 		DrawSelectionOverlay(*(bool*)msg.data);
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_UPDATE_PHYSICS_SERVER:
-		DASSERT(msg.data);
+		BS_DASSERT(msg.data);
 		{
 			// auto aim
 			if (mTarget.Exists())

@@ -1,10 +1,6 @@
 #ifndef _COMMON_H_
 #define _COMMON_H_
 
-#include <map>
-#include <vector>
-#include <string>
-
 #include "../Utility/Settings.h"
 
 #include "../Utility/Singleton.h"

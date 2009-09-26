@@ -21,7 +21,7 @@
 
 #include "SmartAssert.h"
 #define B2_NOT_USED(x) x
-#define b2Assert(A) ASSERT(A)
+#define b2Assert(A) BS_ASSERT(A)
 // This is here to hide warning which appears when we disable asserts. We can safely assume the library is error-prune, so hiding the warning is safe.
 #pragma warning(disable: 4189)
 
@@ -36,12 +36,7 @@
 
 #else
 
-typedef signed char	int8;
-typedef signed short int16;
-typedef signed int int32;
-typedef unsigned char uint8;
-typedef unsigned short uint16;
-typedef unsigned int uint32;
+#include "BasicTypes.h"
 
 #endif
 

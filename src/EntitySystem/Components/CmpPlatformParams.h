@@ -3,7 +3,6 @@
 
 #include "../ComponentMgr/Component.h"
 #include "../../GfxSystem/GfxStructures.h"
-#include <vector>
 
 namespace EntitySystem
 {

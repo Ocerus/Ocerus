@@ -18,8 +18,8 @@ bool TextResource::LoadImpl()
 {
 	InputStream& is = OpenInputStream(ISM_TEXT);
 	char buf[4096];
-	string key = "";
-	string text = "";
+	String key = "";
+	String text = "";
 	bool store = false;
 	bool multiline = false;
 	while (is.good())
@@ -42,7 +42,7 @@ bool TextResource::LoadImpl()
 				{
 					text.resize(text.size()-1);
 					// gLogMgr.LogMessage("StringMgr: Saving key: " + key + " and data: " + text);
-					mTextDataMap.insert(std::pair<StringKey, TextData>(key,text));
+					mTextDataMap.insert(Pair<StringKey, TextData>(key,text));
 					text.clear();
 					key.clear();
 				}

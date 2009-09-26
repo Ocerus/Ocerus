@@ -3,7 +3,6 @@
 
 #include "PropertyTypes.h"
 #include "../StringKey.h"
-#include <vector>
 
 /// @name  Forward declarations.
 //@{
@@ -78,6 +77,6 @@ protected :
 };
 
 /// @name A list of generic properties.
-typedef std::vector<AbstractProperty*> AbstractPropertyList;
+typedef Vector<AbstractProperty*> AbstractPropertyList;
 
 #endif	// _ABSTRACT_PROPERTY_H

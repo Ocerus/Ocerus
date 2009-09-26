@@ -38,7 +38,7 @@ void XMLCALL DataHandle(void* data, const XML_Char *s, int len)
 		XML_Char* buf = DYN_NEW XML_Char[len+1];
 		memcpy(buf, s, len);
 		buf[len] = '\0';
-		string str = buf;
+		String str = buf;
 		str.erase(remove_if(str.begin(),str.end(),iscntrl),str.end()); // remove contrl sequence chars
 		boost::trim(str);
 		if (!str.empty())
@@ -50,7 +50,7 @@ void XMLCALL DataHandle(void* data, const XML_Char *s, int len)
 bool XMLResource::LoadImpl(void)
 {
 	XML_Parser p = XML_ParserCreate(NULL);
-	ASSERT(p);
+	BS_ASSERT(p);
 
 	XMLMapDataHolder holder;
 	mDataMap.clear();

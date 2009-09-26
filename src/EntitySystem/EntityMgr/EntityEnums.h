@@ -24,7 +24,7 @@ namespace EntitySystem
 	};
 
 	/// @name Returns an entity type based on a string.
-	eEntityType DetectEntityType(const string& type);
+	eEntityType DetectEntityType(const String& type);
 
 }
 

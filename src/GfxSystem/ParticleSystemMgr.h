@@ -52,7 +52,7 @@ namespace GfxSystem
 		/// @name Unregister all PS from manager
 		void KillAll(void);
 	private:
-		typedef std::list<ParticleSystemPtr> PSList;
+		typedef List<ParticleSystemPtr> PSList;
 
 		float32 mScale;
 		PSList mPsList;

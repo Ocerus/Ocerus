@@ -10,7 +10,7 @@
 namespace StringConverter
 {
 	template<typename T>
-	string ToString(T val)
+	String ToString(T val)
 	{
 		std::ostringstream out;
 		out << val;
@@ -18,7 +18,7 @@ namespace StringConverter
 	}
 
 	template<typename T>
-	T FromString(const string& str)
+	T FromString(const String& str)
 	{
 		T result;
 		std::istringstream iss(str);
@@ -28,13 +28,13 @@ namespace StringConverter
 	}
 
 	template<>
-	Vector2 FromString(const string& str);
+	Vector2 FromString(const String& str);
 
 	template<>
-	GfxSystem::Color FromString(const string& str);
+	GfxSystem::Color FromString(const String& str);
 
 	template<>
-	bool FromString(const string& str);
+	bool FromString(const String& str);
 
 }
 

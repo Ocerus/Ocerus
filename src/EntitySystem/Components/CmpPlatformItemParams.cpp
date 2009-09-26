@@ -28,27 +28,27 @@ EntityMessage::eResult EntitySystem::CmpPlatformItemParams::HandleMessage( const
 		ComputeParams();
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_MAX_HITPOINTS:
-		DASSERT(msg.data);
+		BS_DASSERT(msg.data);
 		*(uint32*)msg.data = GetMaxHitpoints();
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_MATERIAL:
-		DASSERT(msg.data);
+		BS_DASSERT(msg.data);
 		*(EntityHandle*)msg.data = mMaterial;
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_TEXTURE:
-		DASSERT(msg.data);
+		BS_DASSERT(msg.data);
 		*(StringKey*)msg.data = GetTexture();
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_TEXTURE_ANGLE:
-		DASSERT(msg.data);
+		BS_DASSERT(msg.data);
 		*(float32*)msg.data = GetTextureAngle();
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_TEXTURE_SCALE:
-		DASSERT(msg.data);
+		BS_DASSERT(msg.data);
 		*(float32*)msg.data = GetTextureScale();
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_GET_RESOURCE_GROUP:
-		DASSERT(msg.data);
+		BS_DASSERT(msg.data);
 		*(StringKey*)msg.data = GetResourceGroup();
 		return EntityMessage::RESULT_OK;
 	}

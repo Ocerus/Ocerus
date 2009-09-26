@@ -74,7 +74,7 @@ namespace Core
 		/// @name  Console debug window stuff.
 		//@{
 		void ShowConsole(void);
-		void WriteToConsole(const string& str);
+		void WriteToConsole(const String& str);
 		void HideConsole(void);
 		//@}
 
@@ -83,7 +83,7 @@ namespace Core
 
 		/// @name  State getters
 		//@{
-		Game* GetCurrentGame(void) const { ASSERT(mGame); return mGame; }
+		Game* GetCurrentGame(void) const { BS_ASSERT(mGame); return mGame; }
 		//@}
 
 	private:
@@ -115,7 +115,7 @@ namespace Core
 
 		/// @name  Stuff for measuring performance and time.
 		//@{
-		typedef std::deque<uint64> TimesList;
+		typedef Deque<uint64> TimesList;
 		TimesList mFrameDeltaTimes;
 		Timer mTimer;
 		float32 mFrameSmoothingTime; // during this time (in seconds) the frame delta time will be averaged
