@@ -242,7 +242,7 @@
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="externalLibs/boost/lib;externalLibs/cegui/lib;externalLibs/cegui/dependencies/lib"
 				IgnoreAllDefaultLibraries="false"
-				IgnoreDefaultLibraryNames="libci.lib;libcmt.lib"
+				IgnoreDefaultLibraryNames="libci.lib;libcmt.lib;msvcprt.lib"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="0"
