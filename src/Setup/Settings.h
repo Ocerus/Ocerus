@@ -2,6 +2,7 @@
 #define _SETTINGS_H_
 
 
+#include "Memory.h"
 #include "SmartAssert.h"
 #include "BasicTypes.h"
 #include "ComplexTypes.h"
@@ -13,12 +14,6 @@
 typedef uint8 PropertyAccessFlags;
 #define FULL_PROPERTY_ACCESS_FLAGS 0xff
 //@}
-
-/// @name Memory allocation.
-#define DYN_NEW new
-#define DYN_NEW_T(T) new T
-#define DYN_DELETE delete
-#define DYN_DELETE_ARRAY delete[]
 
 
 #endif

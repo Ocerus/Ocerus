@@ -20,7 +20,6 @@ Config::Config(const string& filePath): mFilePath(filePath)
 
 Config::~Config() 
 {
-	BS_ASSERT(mRudeConfig);
 	Save();
 	DYN_DELETE mRudeConfig;
 }

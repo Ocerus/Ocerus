@@ -37,8 +37,8 @@ InputSystem::OISListener::OISListener(): mMouse(0), mKeyboard(0), mOIS(0)
 
 InputSystem::OISListener::~OISListener()
 {
-	if (mOIS)
-		OIS::InputManager::destroyInputSystem(mOIS);
+	BS_ASSERT(mOIS);
+	OIS::InputManager::destroyInputSystem(mOIS);
 }
 
 bool InputSystem::OISListener::mouseMoved( const OIS::MouseEvent &evt )

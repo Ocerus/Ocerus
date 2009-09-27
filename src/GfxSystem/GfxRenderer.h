@@ -40,15 +40,8 @@ namespace GfxSystem
 		bool IsFullscreen(void) const;
 		bool GetWindowPosition(Point& out);
 
-		inline virtual void AddScreenListener(IScreenListener * listener)
-		{
-			mScreenListeners.insert(listener);
-		}
-
-		inline virtual void RemoveResolutionChangeListener(IScreenListener * listener)
-		{
-			mScreenListeners.erase(listener);
-		}
+		inline virtual void AddScreenListener(IScreenListener * listener) { mScreenListeners.insert(listener); }
+		inline virtual void RemoveResolutionChangeListener(IScreenListener * listener) { mScreenListeners.erase(listener); }
 
  		bool BeginRendering(void) const;
 		bool EndRendering(void) const;

@@ -20,6 +20,7 @@
 #define B2_SETTINGS_H
 
 #include "SmartAssert.h"
+
 #define B2_NOT_USED(x) x
 #define b2Assert(A) BS_ASSERT(A)
 // This is here to hide warning which appears when we disable asserts. We can safely assume the library is error-prune, so hiding the warning is safe.

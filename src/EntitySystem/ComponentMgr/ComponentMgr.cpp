@@ -2,6 +2,7 @@
 #include "ComponentMgr.h"
 #include "Component.h"
 
+//TODO nejde se zbavit includu tady?
 #include "../Components/CmpMaterial.h"
 #include "../Components/CmpPlatformLinks.h"
 #include "../Components/CmpPlatformParams.h"

@@ -6,8 +6,8 @@ using namespace StringSystem;
 
 StringMgr::StringMgr(const string& basepath)
 {
-	mBasePath = basepath;
 	gLogMgr.LogMessage("*** StringMgr init ***");
+	mBasePath = basepath;
 }
 
 StringMgr::~StringMgr(void)

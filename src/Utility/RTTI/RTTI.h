@@ -3,7 +3,7 @@
 
 #include "../Properties/AbstractProperty.h"
 #include "../Properties/PropertyHolder.h"
-#include "../Settings.h"
+#include "Settings.h"
 #include "../../EntitySystem/ComponentMgr/ComponentEnums.h"
 
 /// @name Forward declarations.

@@ -3,7 +3,6 @@
 
 #include "Settings.h"
 #include "CEGUIResourceProvider.h"
-//#pragma once
 
 namespace GUISystem {
 	class ResourceGate : public CEGUI::ResourceProvider

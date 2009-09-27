@@ -17,7 +17,6 @@ InputSystem::InputMgr::InputMgr( void )
 
 InputSystem::InputMgr::~InputMgr( void )
 {
-	BS_ASSERT(mOISListener);
 	DYN_DELETE mOISListener;
 }
 

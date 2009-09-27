@@ -50,7 +50,6 @@ void Core::Game::Init()
 	mPhysics->SetContactFilter(this);
 	mPhysics->SetContactListener(this);
 	mPhysicsResidualDelta = 0.0f;
-	mPhysicsEvents.clear();
 
 
 
@@ -97,10 +96,8 @@ void Core::Game::Init()
 	//mWaterSurface = DYN_NEW WaterSurface(tex, 0.05f, 1.0f, 1.0f, 8, 8);
 
 
-
 	gInputMgr.AddInputListener(this);
 
-	
 
 	gApp.ResetStats();
 
@@ -109,7 +106,13 @@ void Core::Game::Init()
 
 void Core::Game::Deinit()
 {
-
+	if (mPhysics)
+		DYN_DELETE mPhysics;
+	for (PhysicsEventList::const_iterator i=mPhysicsEvents.begin(); i!=mPhysicsEvents.end(); ++i)
+		DYN_DELETE *i;
+	mPhysicsEvents.clear();
+	if (mWaterSurface)
+		DYN_DELETE mWaterSurface;
 }
 
 void Core::Game::Update( const float32 delta )
@@ -181,7 +184,10 @@ void Core::Game::Update( const float32 delta )
 
 		// process physics events
 		for (PhysicsEventList::const_iterator i=mPhysicsEvents.begin(); i!=mPhysicsEvents.end(); ++i)
+		{
 			ProcessPhysicsEvent(**i);
+			DYN_DELETE *i;
+		}
 		mPhysicsEvents.clear();
 
 		// destroy marked entities

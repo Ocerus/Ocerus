@@ -13,9 +13,17 @@ namespace GUISystem {
 	CEGUI::MouseButton ConvertMouseButtonEnum(const InputSystem::eMouseButton btn);
 	//@}
 
-	GUIMgr::GUIMgr() : mConsoleIsLoaded(false) {
+	GUIMgr::GUIMgr() : 
+		mConsoleIsLoaded(false),
+		mCegui(0),
+		mCurrentWindowRoot(0),
+		mRendererGate(0),
+		mResourceGate(0)
+	{
 		gLogMgr.LogMessage("******** GUIMgr init *********");
-		mCegui = DYN_NEW CEGUI::System( mRendererGate = DYN_NEW RendererGate(), mResourceGate = DYN_NEW ResourceGate() );
+		mRendererGate = DYN_NEW RendererGate();
+		mResourceGate = DYN_NEW ResourceGate();
+		mCegui = DYN_NEW CEGUI::System( mRendererGate, mResourceGate );
 		gInputMgr.AddInputListener(this);
 		CEGUI::Imageset::setDefaultResourceGroup("imagesets");
 		CEGUI::Font::setDefaultResourceGroup("fonts");
@@ -60,7 +68,7 @@ namespace GUISystem {
 			CEGUI::FontManager::getSingleton().createFont( "Commonwealth-10.font" );
 
 		CEGUI::SchemeManager::getSingleton().loadScheme("Console.scheme");
-		mCurrentWindowRoot =	CEGUI::WindowManager::getSingleton().loadWindowLayout( "Console.layout" );
+		mCurrentWindowRoot = CEGUI::WindowManager::getSingleton().loadWindowLayout( "Console.layout" );
 		CEGUI::System::getSingleton().setGUISheet( mCurrentWindowRoot );
 		mConsoleIsLoaded = true;
 
@@ -128,8 +136,7 @@ namespace GUISystem {
 			mCurrentLastSelected = mLastCommands.begin();
 		}
 
-		CEGUI::Editbox* editbox =
-			(CEGUI::Editbox*)CEGUI::WindowManager::getSingleton().getWindow("ConsoleRoot/ConsolePrompt");
+		CEGUI::Editbox* editbox = (CEGUI::Editbox*)CEGUI::WindowManager::getSingleton().getWindow("ConsoleRoot/ConsolePrompt");
 
 		editbox->setText(*mCurrentLastSelected);
 	}
@@ -231,14 +238,16 @@ namespace GUISystem {
 
 	GUIMgr::~GUIMgr() {
 		gInputMgr.RemoveInputListener(this);
-/*
-		if (mCegui)
-			DYN_DELETE mCegui;
-			*/
-		if (mRendererGate)
-			DYN_DELETE mRendererGate;
-		if (mResourceGate)
-			DYN_DELETE mResourceGate;
+
+		//TODO mCreatedStaticElements se nedealokuji!
+
+		if (mCurrentWindowRoot)
+			DYN_DELETE mCurrentWindowRoot;
+
+		//TODO nejde dealokovat, proc? Mozna pouzivame starou vezi CEGUI.
+		//DYN_DELETE mCegui;
+		DYN_DELETE mRendererGate;
+		DYN_DELETE mResourceGate;
 	}
 
 	CEGUI::uint KeyMapperOIStoCEGUI(InputSystem::eKeyCode key)

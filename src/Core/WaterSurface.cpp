@@ -40,12 +40,13 @@ Core::WaterSurface::WaterSurface( const GfxSystem::TexturePtr waterTexture, cons
 
 Core::WaterSurface::~WaterSurface( void )
 {
-	if (mHeightmap)
-	{
-		for (int32 i=0; i<mCols; ++i)
-			DYN_DELETE_ARRAY mHeightmap[i];
-		DYN_DELETE_ARRAY mHeightmap;
-	}
+	for (int32 i=0; i<mCols; ++i)
+		DYN_DELETE_ARRAY mHeightmap[i];
+	DYN_DELETE_ARRAY mHeightmap;
+
+	for (int32 i=0; i<mCols; ++i)
+		DYN_DELETE_ARRAY mPrevHeightmap[i];
+	DYN_DELETE_ARRAY mPrevHeightmap;
 }
 
 void Core::WaterSurface::LowerArea( const Vector2* poly, const int32 polyLen, const Vector2& offPos, const float32 offAngle )

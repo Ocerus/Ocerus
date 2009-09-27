@@ -94,7 +94,6 @@ namespace Core
 		LogSystem::LogMgr* mLogMgr;
 		GUISystem::GUIMgr* mGUIMgr;
 		AISystem::AIMgr* mAIMgr;
-		//hgeParticleManager* mPSMgr;
 		GfxSystem::ParticleSystemMgr* mPSMgr;
 		//@}
 

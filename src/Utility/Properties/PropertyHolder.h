@@ -2,7 +2,7 @@
 #define PropertyHolder_h__
 
 #include "AbstractProperty.h"
-#include "../Settings.h"
+#include "Settings.h"
 #include "PropertyHolderMediator.h"
 
 /// @name  Forward declarations.

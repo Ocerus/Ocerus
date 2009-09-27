@@ -11,6 +11,7 @@ ResourceSystem::ResourcePtr ParticleResource::CreateMe(void)
 
 ParticleResource::~ParticleResource(void)
 {
+
 }
 
 int32 ReadInt(InputStream& is)

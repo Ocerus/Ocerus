@@ -1,7 +1,7 @@
 #ifndef _COMMON_H_
 #define _COMMON_H_
 
-#include "../Utility/Settings.h"
+#include "Settings.h"
 
 #include "../Utility/Singleton.h"
 

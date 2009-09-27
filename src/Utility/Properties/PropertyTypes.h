@@ -1,9 +1,9 @@
 #ifndef _PROPERTY_TYPES_H
 #define _PROPERTY_TYPES_H
 
-#include "../Settings.h"
+#include "Settings.h"
 #include "../../EntitySystem/EntityMgr/EntityHandle.h"
-#include "../StringKey.h"
+#include "StringKey.h"
 #include "../../GfxSystem/GfxStructures.h"
 
 /** @name Type of access which will be granted to a property. It can be access from scripts, from editor, 

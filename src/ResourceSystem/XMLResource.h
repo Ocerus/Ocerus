@@ -4,7 +4,6 @@
 #include "Resource.h"
 #include "Settings.h"
 #include "ResourcePointers.h"
-#include "Tree.h"
 #include "StringConverter.h"
 
 namespace ResourceSystem 

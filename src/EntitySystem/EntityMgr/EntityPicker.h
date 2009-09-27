@@ -26,6 +26,7 @@ namespace EntitySystem
 
 		/// @name Sets up priorities for all entity types.
 		static void SetupPriorities(void);
+		static void CleanPriorities(void);
 
 	private:
 

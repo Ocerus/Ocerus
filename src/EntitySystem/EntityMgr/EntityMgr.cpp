@@ -20,8 +20,9 @@ EntityMgr::EntityMgr()
 EntityMgr::~EntityMgr()
 {
 	DestroyAllEntities();
-	BS_ASSERT(mComponentMgr);
 	DYN_DELETE mComponentMgr;
+
+	EntityPicker::CleanPriorities();
 }
 
 EntityMessage::eResult EntityMgr::PostMessage(EntityID id, const EntityMessage& msg)

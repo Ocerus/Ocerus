@@ -16,6 +16,12 @@ void EntitySystem::EntityPicker::SetupPriorities( void )
 	msPriorities[ET_WEAPON] = 80;
 }
 
+void EntitySystem::EntityPicker::CleanPriorities( void )
+{
+	if (msPriorities)
+		DYN_DELETE_ARRAY msPriorities;
+}
+
 EntitySystem::EntityPicker::EntityPicker( const Vector2& worldCursorPos ): 
 	mResult(), 
 	mResultType(ET_UNKNOWN),
