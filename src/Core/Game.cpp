@@ -4,6 +4,9 @@
 #include "Box2D.h"
 #include "../GfxSystem/ParticleSystem.h"
 #include "WaterSurface.h"
+#include "Properties.h"
+#include "DataContainer.h"
+#include "StringConverter.h"
 
 using namespace Core;
 using namespace EntitySystem;
@@ -86,9 +89,6 @@ void Core::Game::Init()
 	}
 	gGfxRenderer.SetCameraScale(50.0f);
 
-
-	// attach AI to ship1
-	gAIMgr.AssignAITo( gEntityMgr.FindFirstEntity( "ship1" ) );
 
 	// water
 	GfxSystem::TexturePtr tex = gResourceMgr.GetResource("Backgrounds", "water2.png");
@@ -412,9 +412,6 @@ void Core::Game::KeyPressed( const KeyInfo& ke )
 	if (ke.keyAction == KC_ESCAPE)
 		gApp.Shutdown();
 
-	if (ke.keyAction == KC_INSERT) {
-		gLogMgr.LogMessage("AI running: ", StringConverter::ToString(gAIMgr.TriggerAI()));
-	}
 	if (ke.keyAction == KC_F)
 	{
 		gGfxRenderer.SetFullscreen(!gGfxRenderer.IsFullscreen());

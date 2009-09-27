@@ -2,6 +2,8 @@
 #include "CmpEngine.h"
 #include "Box2D.h"
 #include "../../Core/Game.h"
+#include "../../Core/Application.h"
+
 
 using namespace EntitySystem;
 

@@ -1,6 +1,7 @@
 #include "Common.h"
 #include "CmpWeapon.h"
 #include "../../Core/Game.h"
+#include "../../Core/Application.h"
 
 using namespace EntitySystem;
 

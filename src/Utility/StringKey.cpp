@@ -1,5 +1,6 @@
 #include "Common.h"
 #include "StringKey.h"
+#include "Hash.h"
 
 //TODO predelat na pouzivani hashe
 

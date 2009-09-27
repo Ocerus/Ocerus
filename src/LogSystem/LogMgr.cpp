@@ -1,5 +1,6 @@
 #include "Common.h"
 #include "LogMgr.h"
+#include "../Core/Application.h"
 //TODO std pryc!
 #include <sstream>
 #include <iomanip>

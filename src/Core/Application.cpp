@@ -3,6 +3,7 @@
 #include "LoadingScreen.h"
 #include "Game.h"
 #include "Config.h"
+#include "StringConverter.h"
 
 using namespace Core;
 
@@ -37,7 +38,6 @@ void Application::Init()
 	mInputMgr = DYN_NEW InputSystem::InputMgr();
 	mEntityMgr = DYN_NEW EntitySystem::EntityMgr();
 	mGUIMgr = DYN_NEW GUISystem::GUIMgr();
-	mAIMgr = DYN_NEW AISystem::AIMgr();
 	mPSMgr = DYN_NEW GfxSystem::ParticleSystemMgr();
 
 	// create core states
@@ -59,7 +59,6 @@ Application::~Application()
 	DYN_DELETE mLoadingScreen;
 	
 	DYN_DELETE mGUIMgr;
-	DYN_DELETE mAIMgr;
 
 	mResourceMgr->UnloadAllResources();
 
@@ -100,7 +99,6 @@ void Application::RunMainLoop()
 			break;
 		case AS_GAME:
 			mGame->Update(delta);
-			mAIMgr->Update( delta );
 			mGUIMgr->Update(delta);
 			break;
 		case AS_GUI:

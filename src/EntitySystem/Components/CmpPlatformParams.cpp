@@ -1,5 +1,6 @@
 #include "Common.h"
 #include "CmpPlatformParams.h"
+#include "DataContainer.h"
 
 using namespace EntitySystem;
 

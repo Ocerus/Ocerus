@@ -6,6 +6,7 @@
 #include "EntityEnums.h"
 #include "../../Utility/Properties/PropertyHolderMediator.h"
 #include "../../ResourceSystem/Resource.h"
+#include "Singleton.h"
 
 /// @name Macro for easier use.
 #define gEntityMgr EntitySystem::EntityMgr::GetSingleton()

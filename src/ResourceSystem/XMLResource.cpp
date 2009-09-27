@@ -1,5 +1,6 @@
 #include "Common.h"
 #include "XMLResource.h"
+#include "DataContainer.h"
 #include <expat.h>
 #include <boost/algorithm/string.hpp>
 

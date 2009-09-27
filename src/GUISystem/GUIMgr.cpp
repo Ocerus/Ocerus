@@ -5,6 +5,7 @@
 #include "../InputSystem/InputActions.h"
 #include "RendererGate.h"
 #include "ResourceGate.h"
+#include "../Core/Application.h"
 
 namespace GUISystem {
 	/// @name Prototypes for utility functions

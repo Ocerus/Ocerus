@@ -10,6 +10,9 @@
 #include "CEGUIResource.h"
 #include "RendererGate.h"
 
+//TODO get rid of this
+#include <sstream>
+
 namespace GUISystem {
 
 	uint32 CEGUITextureWrapper::mTextureIndex = 0;

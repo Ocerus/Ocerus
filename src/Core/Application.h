@@ -19,7 +19,6 @@ namespace GfxSystem { class ParticleSystemMgr; }
 namespace EntitySystem { class EntityMgr; }
 namespace LogSystem { class LogMgr; }
 namespace GUISystem { class GUIMgr; }
-namespace AISystem { class AIMgr; }
 namespace StringSystem { class StringMgr; }
 class Timer;
 //@}
@@ -93,7 +92,6 @@ namespace Core
 		EntitySystem::EntityMgr* mEntityMgr;
 		LogSystem::LogMgr* mLogMgr;
 		GUISystem::GUIMgr* mGUIMgr;
-		AISystem::AIMgr* mAIMgr;
 		GfxSystem::ParticleSystemMgr* mPSMgr;
 		//@}
 

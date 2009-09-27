@@ -3,10 +3,6 @@
 
 #include "Settings.h"
 
-#include "../Utility/Singleton.h"
-
-#include "../Core/Application.h"
-
 #include "../EntitySystem/EntityMgr/EntityMgr.h"
 #include "../EntitySystem/EntityMgr/EntityHandle.h"
 #include "../EntitySystem/EntityMgr/EntityMessage.h"
@@ -27,12 +23,7 @@
 
 #include "../GUISystem/GUIMgr.h"
 
-#include "../AISystem/AIMgr.h"
-
 #include "../Core/Config.h"
 
-#include "../Utility/Properties.h"
-#include "../Utility/DataContainer.h"
-#include "../Utility/StringConverter.h"
 
 #endif

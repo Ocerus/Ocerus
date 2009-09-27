@@ -1,6 +1,8 @@
 #include "Common.h"
 #include "CmpPlatformLogic.h"
 #include <Box2D.h>
+#include "DataContainer.h"
+
 
 using namespace EntitySystem;
 

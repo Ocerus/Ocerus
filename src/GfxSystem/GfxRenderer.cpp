@@ -3,6 +3,7 @@
 #include "Triangulate.h"
 #include "Texture.h"
 #include "IScreenListener.h"
+#include "../Core/Application.h"
 
 #include <hge.h>
 

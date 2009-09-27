@@ -1,6 +1,7 @@
 #include "Common.h"
 #include "CmpProjectile.h"
 #include "../../Core/Game.h"
+#include "../../Core/Application.h"
 #include "Box2D.h"
 
 using namespace EntitySystem;

@@ -1,5 +1,6 @@
 #include "Common.h"
 #include "RTTI.h"
+#include "../Properties.h"
 
 RTTI::RTTI(	uint8 dwStub, ClassID CLID, const char* szClassName, RTTI* pBaseClassRTTI, 
 				ClassFactoryFunc pFactory, RegisterReflectionFunc pReflectionFunc ) : 
