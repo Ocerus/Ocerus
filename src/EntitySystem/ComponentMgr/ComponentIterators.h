@@ -1,3 +1,6 @@
+/// @file
+/// Iterators to walk across entities and their parts.
+
 #ifndef ComponentIterators_h__
 #define ComponentIterators_h__
 
@@ -7,31 +10,33 @@
 namespace EntitySystem 
 {
 
-	/// @name Forward declarations
-	//@{
 	class Component;
-	//@}
 	
-	/// @name A list of generic component.
+	/// A list of generic components.
 	typedef vector<Component*> ComponentsList;
 
-	/** Enables iterating over a collection of components. Wraps around an STL iterator.
-	*/
+	/// Enables iterating over a collection of components. Wraps around an STL iterator.
 	class EntityComponentsIterator : public ComponentsList::const_iterator
 	{
 	public:
+
+		/// Creates an iterator to walk across entity components in the given list. Beginning with the first item.
 		EntityComponentsIterator(ComponentsList* componentsList):
 			mComponentsList(componentsList),
 			ComponentsList::const_iterator(componentsList->begin()) {}
 
+		/// Creates an iterator to walk across entity components in the given list. Bbeginning with the first item.
 		EntityComponentsIterator(ComponentsList& componentsList):
 			mComponentsList(&componentsList),
 			ComponentsList::const_iterator(componentsList.begin()) {}
 
-		EntityComponentsIterator(ComponentsList* componentsList, const ComponentsList::const_iterator iter):
+		/// Creates an iterator to walk across components in the given list. Beginning with the item determined by
+		/// the given iterator.
+		EntityComponentsIterator(ComponentsList* componentsList, const ComponentsList::const_iterator firstItem):
 			mComponentsList(componentsList),
-			ComponentsList::const_iterator(iter) {}
+			ComponentsList::const_iterator(firstItem) {}
 
+		/// Copy constructor.
 		EntityComponentsIterator(const EntityComponentsIterator& rhs):
 			mComponentsList(rhs.mComponentsList),
 			ComponentsList::const_iterator(rhs) {}
@@ -44,13 +49,13 @@ namespace EntitySystem
 			ComponentsList::const_iterator::operator=(rhs);
 		}
 
-		/// @name Use this method as a loop condition instead of comparing the iterator to a collection end().
+		/// Use this method as a loop condition instead of comparing the iterator to a collection end().
 		bool HasMore(void) { return operator!=(mComponentsList->end()); }
 
-		/// @name Returns a reference to the list owner.
+		/// Returns a reference to the list owner.
 		inline const ComponentsList& GetList(void) const { return *mComponentsList; }
 
-		/// @name Returns an end iterator of the owning list.
+		/// Returns an end iterator of the owning list.
 		EntityComponentsIterator GetEnd(void) const
 		{
 			return EntityComponentsIterator(mComponentsList, mComponentsList->end());

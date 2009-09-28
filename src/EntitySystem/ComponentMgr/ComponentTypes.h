@@ -1,7 +1,5 @@
-
-
-/// @name Here are defined types for all entities in the game. The macro used for definition is inside EntityEnums.h.
-//@{
+/// @file
+/// Here are definitions of types for all entity components in the game. The macro used for definition is inside ComponentEnums.h.
 
 COMPONENT_TYPE(CT_PLATFORM_LOGIC, CmpPlatformLogic)
 COMPONENT_TYPE(CT_PLATFORM_PARAMS, CmpPlatformParams)
@@ -21,4 +19,4 @@ COMPONENT_TYPE(CT_WEAPON, CmpWeapon)
 COMPONENT_TYPE(CT_AMMO_PARAMS, CmpAmmoParams)
 COMPONENT_TYPE(CT_PROJECTILE, CmpProjectile)
 
-//@}
+

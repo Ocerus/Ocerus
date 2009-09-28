@@ -11,7 +11,7 @@ Copyright (C) 2001-2006  Kasper Peeters <kasper.peeters@aei.mpg.de>.
 
 */
 
-/** \mainpage tree.hh
+/**
 \author   Kasper Peeters
 \version  2.62
 \date     28-Aug-2008

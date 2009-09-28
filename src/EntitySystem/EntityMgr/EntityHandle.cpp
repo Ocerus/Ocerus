@@ -80,6 +80,12 @@ bool EntitySystem::EntityHandle::Exists( void ) const
 {
 	return gEntityMgr.EntityExists(*this);
 }
+
+EntityHandle& EntitySystem::EntityHandle::~EntityHandle( const EntityHandle& rhs )
+{
+
+}
+
 EntityMessage::eResult EntityHandle::PostMessage(const EntityMessage::eType type, void* data)
 {
 	BS_DASSERT(IsValid());

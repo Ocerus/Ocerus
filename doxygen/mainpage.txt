@@ -1,0 +1,18 @@
+
+/** 
+
+@mainpage Battleships API reference manual
+  
+@section intro Introduction
+  
+@subsection s1 What is this?
+  
+This is a blablabla...
+  
+  
+@subsection s2 Where to start?
+  
+Nowhere...
+  
+  
+*/

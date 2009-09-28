@@ -30,7 +30,7 @@ void EntityDescription::AddComponent(const eComponentType type)
 	mComponents.push_back(type);
 }
 
-eComponentType EntityDescription::GetNextComponent()
+eComponentType EntityDescription::_GetNextComponent()
 {
 	BS_ASSERT(mIndex<mComponents.size());
 	return mComponents[mIndex++];

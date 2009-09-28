@@ -1,3 +1,6 @@
+/// @file
+/// Static information about an entity to be created.
+
 #ifndef _ENTITYDESCRIPTION_H_
 #define _ENTITYDESCRIPTION_H_
 
@@ -8,41 +11,43 @@
 namespace EntitySystem
 {
 
-	/** This class contains all info needed to create one instance of an entity. It is basically a collection of
-		component descriptions.
-	*/
+	/// @brief This class contains all info needed to create one instance of an entity. It is basically a collection of
+	///	component descriptions.
 	class EntityDescription
 	{
 	public:
+
 		EntityDescription(void);
 		~EntityDescription(void);
 
-		/// @name Call this before each subsequent filling of the description.
+		/// Call this before each subsequent filling of the description.
 		void Init(const eEntityType type, const string& ID = "");
 
-		/// @name Add new component specified by its type.
+		/// Addd new component specified by its type.
 		void AddComponent(const eComponentType type);
 
-		/// @name For internal use by the ComponentMgr.
-		eComponentType GetNextComponent(void);
+		/// For internal use by the ComponentMgr. Advances to the next component in an internal list.
+		eComponentType _GetNextComponent(void);
+
 	private:
+
 		friend class EntityMgr;
 
 		typedef vector<eComponentType> ComponentDescriptionsList;
 
-		/// @name List of descriptions of invidivual components this entity will consist of.
+		/// List of descriptions of invidivual components this entity will consist of.
 		ComponentDescriptionsList mComponents;
 
-		/// @name Index of current component description.
+		/// Index of current component description.
 		uint32 mIndex;
 
-		/// @name Type of this entity.
+		/// Type of this entity.
 		eEntityType mType;
 
-		/// @name Custom identifier (not neccessarily unique) of this entity.
+		/// Custom identifier (not neccessarily unique) of this entity.
 		string mID;
 
-		/// @name Clears everything
+		/// Clears everything
 		void Clear(void);
 	};
 }

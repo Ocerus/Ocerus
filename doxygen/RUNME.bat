@@ -1,1 +1,1 @@
-doxygen BattleshipsDoxyTest.dox
+doxygen Battleships.dox

@@ -1,3 +1,7 @@
+/// @file
+/// Definitions of all entity types to be registered in the system. This includes only entities defined in
+/// the C++ code. Other entities can be registered during run-time.
+
 #ifndef EntityEnums_h__
 #define EntityEnums_h__
 
@@ -5,7 +9,8 @@
 
 namespace EntitySystem
 {
-	/// @name Set of all entities in the system
+	/// @brief Set of all entity types in the system. This includes only entities defined in
+	/// the C++ code. Other entities can be registered during run-time.
 	enum eEntityType
 	{
 		#define ENTITY_TYPE(x) x,
@@ -15,7 +20,7 @@ namespace EntitySystem
 		NUM_ENTITY_TYPES
 	};
 
-	/// @name String names of all entity types.
+	/// String names of all entity types.
 	const char* const EntityTypeNames[] =
 	{
 		#define ENTITY_TYPE(x) #x,
@@ -23,7 +28,7 @@ namespace EntitySystem
 		#undef ENTITY_TYPE
 	};
 
-	/// @name Returns an entity type based on a string.
+	/// Returns an entity type based on a string.
 	eEntityType DetectEntityType(const string& type);
 
 }
