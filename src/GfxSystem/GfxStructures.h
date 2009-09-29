@@ -3,11 +3,7 @@
 
 namespace GfxSystem
 {
-
-	/// @name Forward declarations.
-	//@{
 	class IScreenListener;
-	//@}
 
 	struct Point
 	{

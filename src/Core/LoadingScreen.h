@@ -1,3 +1,6 @@
+/// @file
+/// An application state when certain resources are loading.
+
 #ifndef LoadingScreen_h__
 #define LoadingScreen_h__
 
@@ -6,23 +9,30 @@
 
 namespace Core
 {
-	/** Loads resource gruops into memory and displays info about the loading progress.
-	*/
+	/// Loads resource groups into the memory and displays info about the loading progress.
 	class LoadingScreen : public ResourceSystem::IResourceLoadingListener
 	{
 	public:
+
 		LoadingScreen() {}
 		virtual ~LoadingScreen() {}
 
-		enum eType { TYPE_BASIC_RESOURCES=0, TYPE_GENERAL_RESOURCES };
+		/// Defines resource groups to be loaded.
+		enum eType 
+		{ 
+			/// Basic resources needed for displaying the default application state.
+			TYPE_BASIC_RESOURCES=0, 
+			/// Resources needed in most of the states of the application.
+			TYPE_GENERAL_RESOURCES 
+		};
 
-		/// @name Main entry point.
+		/// Main entry point. Starts the resource loading.
 		void DoLoading(eType type);
 
-		/// @name Update visuals.
+		/// Renders the current loading state.
 		void Draw();
 
-		/// @name Callbacks from the resource manager.
+		/// @name Callbacks from ResourceSystem::IResourceLoadingListener
 		//@{
 		virtual void ResourceGroupLoadStarted(const string& groupName, uint32 resourceCount);
 		virtual void ResourceLoadStarted(const ResourceSystem::ResourcePtr& resource);
@@ -31,6 +41,7 @@ namespace Core
 		//@}
 
 	private:
+
 		eType mType;
 
 		void Init();

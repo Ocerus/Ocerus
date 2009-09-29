@@ -101,9 +101,6 @@ void Application::RunMainLoop()
 			mGame->Update(delta);
 			mGUIMgr->Update(delta);
 			break;
-		case AS_GUI:
-			mGUIMgr->Update(delta);			
-			break;
 		}
 		
 		// draw

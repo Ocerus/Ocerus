@@ -34,7 +34,7 @@ namespace EntitySystem
 		/// Only the copy ctor is enabled. We want new entities to be added only by the EntityMgr.
 		EntityHandle(const EntityHandle& handle);
 
-		~EntityHandle(void)
+		~EntityHandle(void);
 
 		EntityHandle& operator=(const EntityHandle& rhs);
 

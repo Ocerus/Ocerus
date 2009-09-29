@@ -1,17 +1,18 @@
+/// @file
+/// Notifications from the GfxSystem of changes to the screen.
+
 #ifndef IScreenResolutionChangeListener_h__
 #define IScreenResolutionChangeListener_h__
 
 namespace GfxSystem
 {
-
-	/// @name Callback listener from GfxRenderer.
+	/// Receives notifications from the GfxSystem of changes to the screen.
 	class IScreenListener {
 	public:
 		
-		/// @name Called when a screen resolution changes.
+		/// Called when a screen resolution changes.
 		virtual void ResolutionChanged(int width, int height) = 0;
 
-		/// @name Ensures virtual methods to work ok.
 		virtual ~IScreenListener(void) {}
 	};
 }

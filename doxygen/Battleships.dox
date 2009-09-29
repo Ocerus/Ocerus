@@ -43,7 +43,7 @@ OPTIMIZE_OUTPUT_VHDL   = NO
 BUILTIN_STL_SUPPORT    = YES
 CPP_CLI_SUPPORT        = NO
 SIP_SUPPORT            = NO
-DISTRIBUTE_GROUP_DOC   = NO
+DISTRIBUTE_GROUP_DOC   = YES
 SUBGROUPING            = YES
 TYPEDEF_HIDES_STRUCT   = NO
 #---------------------------------------------------------------------------
@@ -66,8 +66,8 @@ SHOW_INCLUDE_FILES     = YES
 INLINE_INFO            = YES
 SORT_MEMBER_DOCS       = YES
 SORT_BRIEF_DOCS        = YES
-SORT_GROUP_NAMES       = YES
-SORT_BY_SCOPE_NAME     = YES
+SORT_GROUP_NAMES       = NO
+SORT_BY_SCOPE_NAME     = NO
 GENERATE_TODOLIST      = YES
 GENERATE_TESTLIST      = YES
 GENERATE_BUGLIST       = YES
@@ -102,7 +102,8 @@ EXCLUDE_PATTERNS       = */Common.* \
 EXCLUDE_SYMBOLS        = CEGUI \
                          kp \
                          OIS \
-                         rude
+                         rude \
+                         Vector2d
 EXAMPLE_PATH           = 
 EXAMPLE_PATTERNS       = *
 EXAMPLE_RECURSIVE      = NO

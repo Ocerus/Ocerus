@@ -1,3 +1,6 @@
+/// @file
+/// Entry point to the InputSystem.
+
 #ifndef InputMgr_h__
 #define InputMgr_h__
 
@@ -6,72 +9,77 @@
 #include "InputActions.h"
 #include "../GfxSystem/IScreenListener.h"
 
-/// @name Macro for easier use.
+/// Macro for easier use.
 #define gInputMgr InputSystem::InputMgr::GetSingleton()
 
 namespace OIS
 {
-	/// @name Forward declarations.
-	//@{
 	class Mouse;
 	class Keyboard;
-	//@}
 }
 
+/// Input system manages events from all input devices connected to the computer which are required by the game.
 namespace InputSystem
 {
-	/// @name Forward declarations.
-	//@{
 	class IInputListener;
 	class OISListener;
-	//@}
 
-	/** This class processes all input from external devices such as mouse, keyboard or joystick. You can query its
-		current state or register for event callbacks. Note that it must be updated reguralry by calling CaptureInput.
-	*/
+	/// @brief This class processes all input from external devices such as mouse, keyboard or joystick. You can query its
+	///	current state or register for event callbacks.
+	/// @remarks Note that it must be updated reguralry by calling CaptureInput.
 	class InputMgr : public Singleton<InputMgr>, public GfxSystem::IScreenListener
 	{
 	public:
+
 		InputMgr(void);
 		~InputMgr(void);
 
-		/// @name Updates the state of the manager and processes all events.
+		/// Updates the state of the manager and processes all events.
 		void CaptureInput(void);
 		
-		/// @name Returns true if a specified key is down.
+		/// Returns true if a specified key is down.
 		bool IsKeyDown(const eKeyCode k) const;
 
-		/// @name Returns true if a specified button of the mouse is pressed.
+		/// Returns true if a specified button of the mouse is pressed.
 		bool IsMouseButtonPressed(const eMouseButton btn) const;
 
-		/// @name Returns current state of the mouse.
+		/// Returns the current state of the mouse.
 		MouseState& GetMouseState(void) const;
 
-		/// @name Registers/unregisters event listeners.
+
+		/// @name Event listeners
 		//@{
+
+		/// Registers an event listener.
 		void AddInputListener(IInputListener* listener);
+
+		/// Unregisters an event listener.
 		void RemoveInputListener(IInputListener* listener);
+
+		/// Unregisters all event listeners.
 		void RemoveAllInputListeners(void);
+
 		//@}
 
-		/// @name Callback from the GfxSystem.
+
+		/// @name Callbacks from GfxSystem::IScreenListener
+		//@{
 		virtual void ResolutionChanged(int x, int y);
+		//@}
 
 	private:
-		/// @name OIS specific stuff
-		//@{
+
+		/// OIS specific stuff
 		friend class OISListener;
 		OISListener* mOISListener;
-		//@}
 
-		/// @name Mouse state cache.
+		/// Mouse state cache.
 		mutable MouseState mMouseStateCache;
 
-		/// @name Collection of input event listeners.
-		//@{
+		///Collection of input event listeners.
 		typedef vector<IInputListener*> ListenersList;
 		ListenersList mListeners;
-		//@}
+
 	};
 }
 

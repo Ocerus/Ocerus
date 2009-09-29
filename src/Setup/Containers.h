@@ -1,3 +1,8 @@
+/// @file
+/// Platform specific setting of containers allowed in the project.
+/// @remarks Currently all containers are implemented using the STL containers. The STL containers are not used directly
+/// to enforce higher level of encapsulation and to enable easier changes in the future.
+
 #ifndef Containers_h__
 #define Containers_h__
 

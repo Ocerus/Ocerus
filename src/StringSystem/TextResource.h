@@ -1,3 +1,6 @@
+/// @file
+/// Implementation of a resource able to read files containing text data.
+
 #ifndef _TEXTRESOURCE_H_
 #define _TEXTRESOURCE_H_
 
@@ -9,41 +12,48 @@
 
 namespace StringSystem 
 {
-	/// @name define type used for storing strings
+	/// Type of the data stored by this resource.
 	typedef string TextData;
-	/// @name define a container for textdata
+
+	/// Container used for storing the text data.
 	typedef map<StringKey, TextData> TextDataMap;
 
-	/** This class represents single text resource.
-		Main purpose of the class is to load and parse a .str file, not to store actual data. You should
-		only use StringMgr to load TextResources (however its possible to load it directly with ResourceMgr,
-		IT IS NOT recommended). Also, use StringMgr to access data, because TextRes is normally discarded 
-		after loading (StringMgr calls GetTextDataMap() and Unload()), thus it may be required to load it
-		again, which is slow.
-	*/
+	/// @brief This class represents a single text resource.
+	/// @remarks Main purpose of the class is to load and parse a .str file, not to store the actual data. You should
+	///	only use StringMgr to load text resources (although its possible to load it directly with ResourceMgr,
+	///	IT IS NOT recommended). Also, use StringMgr to access the actual text data, because TextResource is normally discarded 
+	///	after loading (StringMgr calls GetTextDataMap() and Unload()), thus it may be required to load it
+	///	again, which would be slow.
 	class TextResource : public ResourceSystem::Resource
 	{
 	public:
+
 		virtual ~TextResource(void);
+
+		/// Factory method.
 		static ResourceSystem::ResourcePtr CreateMe(void);
 
-		/// @name return pointer to text data
+		/// Returns pointer to parsed the text data.
 		const TextData* GetTextDataPtr(const StringKey& key);
-		/** Return text data. Note that this may be slow if strings are long. (It has to copy
-		    whole TextData structure). Returning a ptr should be preffered way to access data.
-		*/
+
+		/// @brief Returns the text data.
+		/// @remarks Note that this may be slow if strings are long. Returning a ptr should be preffered.
 		const TextData GetTextData(const StringKey& key);
-		/// @name return textdata map
+
+		/// Returns the text data container used by this resource.
+		//TODO na co tohle je?
 		const TextDataMap* GetTextDataMap(void);
 
 	protected:	
-		/// @name container used to store data
-		TextDataMap mTextDataMap;
 
-		/// @name we parse the file as we load it and store the items into TextDataMap
 		virtual bool LoadImpl(void);
 		virtual bool UnloadImpl(void);	
-		//friend class StringMgr; // dunno if this is actually necessary
+
+	private:
+
+		/// Container used to store the parsed data.
+		TextDataMap mTextDataMap;
+
 	};
 }
 

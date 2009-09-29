@@ -1,3 +1,6 @@
+/// @file
+/// Platform specific setting of basic (simple) data types.
+
 #ifndef BasicTypes_h__
 #define BasicTypes_h__
 

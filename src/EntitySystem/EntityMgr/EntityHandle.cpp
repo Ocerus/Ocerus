@@ -81,7 +81,7 @@ bool EntitySystem::EntityHandle::Exists( void ) const
 	return gEntityMgr.EntityExists(*this);
 }
 
-EntityHandle& EntitySystem::EntityHandle::~EntityHandle( const EntityHandle& rhs )
+EntitySystem::EntityHandle::~EntityHandle( void )
 {
 
 }

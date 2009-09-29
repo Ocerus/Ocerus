@@ -1,9 +1,10 @@
+/// @file
+/// This file gathers smart pointers of all resources together so that it can be included with no overhead.
+
 #ifndef ResourcePointers_h__
 #define ResourcePointers_h__
 
 #include "SmartPointer.h"
-
-/// @name This class gathers smart pointers of all resources together so that it can be included with no overhead.
 
 namespace GfxSystem
 {

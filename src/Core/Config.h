@@ -3,48 +3,59 @@
 
 #include "Settings.h"
 
-/// @name  Forward declarations
-//@{
 namespace rude { class Config; }
-//@}
 
 namespace Core
 {
-	/** Allows storing config informations needed to be saved by various parts of the program.
-	*/
+	/// Allows storing configuration data needed to be saved by various parts of the program.
 	class Config
 	{
 	public:
+
+		/// Constructs the config to operate on the specified file.
 		Config(const string& filePath);
+
 		~Config(void);
 
-		/// @name Forces the config to be saved. However, it is saved automatically when deleted.
+		/// Forces the config to be saved. However, it is saved automatically when the instance is being destroyed.
 		bool Save(void);
 
-		/// @name  Value getters.
-		//@{
+		/// @brief Returns string data based on the provided search key and (optional) section.
+		/// @remarks
+		/// If the key doesn't exist, defaultValue is returned.
 		string GetString(const string& key, const string& defaultValue = "", const string& section = "General" );
+
+		/// @brief Returns integer data based on the provided search key and (optional) section.
+		/// @remarks
+		/// If the key doesn't exist, defaultValue is returned.
 		int32 GetInt32(const string& key, const int32 defaultValue = 0, const string& section = "General" );
+
+		/// @brief Returns boolean data based on the provided search key and (optional) section.
+		/// @remarks
+		/// If the key doesn't exist, defaultValue is returned.
 		bool GetBool(const string& key, const bool defaultValue = false, const string& section = "General" );
-		//@}
 
-		/// @name  Value setters.
-		//@{
+		/// Saves string data to the specified key and (optional) section.
 		void SetString(const string& key, const string& value, const string& section = "General" );
-		void SetInt32(const string& key, const int32 value, const string& section = "General" );
-		void SetBool(const string& key, const bool value, const string& section = "General" );
-		//@}
 
-		/// @name Remove whole section from the config.
+		/// Saves integer data to the specified key and (optional) section.
+		void SetInt32(const string& key, const int32 value, const string& section = "General" );
+
+		/// Saves boolean data to the specified key and (optional) section.
+		void SetBool(const string& key, const bool value, const string& section = "General" );
+
+		/// Removes the whole section from the config.
 		void RemoveSection(const string& section);
-		/// @name Remove one key and its value from the config.
+
+		/// Removes one key and its value from the config.
 		void RemoveKey(const string& key, const string& section = "General" );
 
 	private:
-		/// @name Where is the config stored.
+
+		/// Where is the config stored.
 		string mFilePath;
 
-		/// @name Helper.
+		/// Implementation details.
 		rude::Config* mRudeConfig;
 
 	};

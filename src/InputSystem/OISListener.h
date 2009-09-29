@@ -1,3 +1,6 @@
+/// @file
+/// Implementation of the InputSystem using OIS.
+
 #ifndef OISListener_h__
 #define OISListener_h__
 
@@ -8,54 +11,51 @@
 
 namespace InputSystem
 {
-
-	/// @name Forward declarations.
-	//@{
 	class InputMgr;
 	enum eKeyCode;
-	//@}
 
-	/** OIS library specific wrapper to hide its implementation.
-	*/
+	/// OIS library specific wrapper to hide its implementation.
 	class OISListener : public OIS::MouseListener, public OIS::KeyListener
 	{
 	public:
+
 		OISListener();
 		virtual ~OISListener();
 
-		/// @name MouseListener
+		/// @name Callbacks from OIS::MouseListener
 		//@{
 		virtual bool mouseMoved(const OIS::MouseEvent &evt);
 		virtual bool mousePressed(const OIS::MouseEvent &evt, OIS::MouseButtonID);
 		virtual bool mouseReleased(const OIS::MouseEvent &evt, OIS::MouseButtonID);
 		//@}
 
-		/// @name KeyListener
+		/// @name Callbacks from OIS::KeyListener
 		//@{
 		virtual bool keyPressed(const OIS::KeyEvent &evt);
 		virtual bool keyReleased(const OIS::KeyEvent &evt);
 		//@}
 
-		/// @name Process OIS events.
+		/// Processes OIS events.
 		void CaptureInput();
 
-		/// @name True if the specified key is down.
+		/// True if the specified key is down.
 		bool IsKeyDown(const eKeyCode k) const;
 
-		/// @name Returns current state of the mouse.
+		/// Returns the current state of the mouse.
 		void GetMouseState(MouseState& state) const;
 
-		/// @name Sets resolution of the screen.
+		/// Sets new resolution of the screen.
+		/// @remarks You should make sure the resolution is always correct to prevent any problems with mouse.
 		void SetResolution(uint32 width, uint32 height);
 
 	private:
+
 		InputMgr *mMgr;
 
 		OIS::InputManager* mOIS;
 		OIS::Mouse* mMouse;
 		OIS::Keyboard* mKeyboard;
 
-		/// @name Conversion function.
 		eMouseButton OisToMbtn(OIS::MouseButtonID id);
 	};
 }

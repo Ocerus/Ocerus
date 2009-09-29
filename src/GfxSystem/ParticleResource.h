@@ -8,8 +8,6 @@
 
 namespace GfxSystem
 {
-	/** This class is used to load and manage .psi resource file	   
-	 */
 	class ParticleResource : public ResourceSystem::Resource
 	{
 	public:

@@ -7,10 +7,7 @@
 #include "../GfxSystem/Texture.h"
 #include "RendererGate.h"
 
-/// @name Forward declarations.
-//@{
 namespace CEGUI { class String; }
-//@}
 
 namespace GUISystem {
 	class RendererGate;

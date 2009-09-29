@@ -1,3 +1,6 @@
+/// @file
+/// Key and button codes, data structures for mouse state informations.
+
 #ifndef InputActions_h__
 #define InputActions_h__
 
@@ -6,7 +9,8 @@
 namespace InputSystem
 {
 
-	/// @name Codes copied from OIS, so you can cast the type from and to.
+	/// Key code constants.
+	/// @remarks The codes are copied from OIS, so you can cast the type directly from and to OIS.
 	enum eKeyCode
 	{
 		KC_UNASSIGNED  = 0x00,
@@ -156,55 +160,55 @@ namespace InputSystem
 		KC_MEDIASELECT = 0xED     // Media Select
 	};
 
+	/// Data of an keyboard input event.
 	struct KeyInfo
 	{
-		/// @name Enum value of the key.
+		/// Enum value of the key.
 		eKeyCode keyAction;
-		/// @name Character of the key pressed.
+		/// Character of the key pressed.
 		uint32 keyCode;
 	};
 
+	/// State of the mouse device at a specific point of time.
 	struct MouseState
 	{
 		MouseState(void): x(0), y(0), wheel(0), buttons(0) {}
 
-		/// @name Position of the cursor.
-		//@{
+		/// X position of the cursor.
 		int32 x;
+		/// Y position of the cursor.
 		int32 y;
-		//@}
 
-		/// @name Wheel position.
+		/// Wheel position.
 		int32 wheel;
 
-		/// @name Pressed buttons.
+		/// Pressed buttons.
 		uint8 buttons;
 	};
 
+	/// Data of a mouse input event.
 	struct MouseInfo
 	{
-		/// @name Position of the cursor.
-		//@{
+		/// X position of the cursor.
 		int32 x;
+		/// Y position of the cursor.
 		int32 y;
-		//@}
 
-		/// @name Delta position since last update.
-		//@{
+		/// Delta position since last update.
 		int32 dx;
+		/// Delta position since last update.
 		int32 dy;
-		//@}
 
-		/// @name Wheel position.
+		/// Wheel position.
 		int32 wheel;
 
-		/// @name Delta position of the wheel since last update.
+		/// Delta position of the wheel since last update.
 		int32 wheelDelta;
 
-		/// @name Default constructor.
+		/// Default constructor.
 		MouseInfo(void) {}
 
-		/// @name Conversion constructor.
+		/// Conversion constructor.
 		MouseInfo(const MouseState& ms): 
 			x(ms.x),
 			y(ms.y),
@@ -217,7 +221,18 @@ namespace InputSystem
 		}
 	};
 
-	enum eMouseButton { MBTN_LEFT=1<<1, MBTN_RIGHT=1<<2, MBTN_MIDDLE=1<<3, MBTN_UNKNOWN=0 };
+	/// All possible buttons of the mouse device.
+	enum eMouseButton 
+	{
+		/// Left mouse button.
+		MBTN_LEFT=1<<1, 
+		/// Right mouse button.
+		MBTN_RIGHT=1<<2, 
+		/// Middle mouse button or the wheel.
+		MBTN_MIDDLE=1<<3, 
+		/// Unknown button - error.
+		MBTN_UNKNOWN=0 
+	};
 
 }
 

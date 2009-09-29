@@ -8,18 +8,11 @@
 
 #define gGfxRenderer GfxSystem::GfxRenderer::GetSingleton()
 
-/// @name Forward declarations
-//@{
 class HGE;
-//@}
 
 namespace GfxSystem
 {
-
-	/// @name Forward declarations.
-	//@{
 	class IScreenListener;
-	//@}
 
 	enum eAnchor { ANCHOR_VCENTER=1<<0, ANCHOR_TOP=1<<1, ANCHOR_BOTTOM=1<<2, ANCHOR_LEFT=1<<3, ANCHOR_RIGHT=1<<4, ANCHOR_HCENTER=1<<5 };
 
@@ -68,18 +61,18 @@ namespace GfxSystem
 
 		bool ClearScreen(const Color& color) const;
 
-		// note that anchor determines the rotation/scaling pivot
+		/// @remarks Note that anchor determines the rotation/scaling pivot.
 		bool DrawImage(const TexturePtr& image, int32 x, int32 y, uint8 anchor = 0, float32 angle = 0.0f, const Color& color = Color::FullColor, float32 scale = 1.0f) const;
 		bool DrawImage(const TexturePtr& image, const Point& pos, uint8 anchor = 0, float32 angle = 0.0f, const Color& color = Color::FullColor, float32 scale = 1.0f) const;
-		/// @name This version does a conversion from world space
+		/// @remarks This version does a conversion from world space
 		bool DrawImageWithConversion(const TexturePtr& image, const Vector2& pos, uint8 anchor = 0, float32 angle = 0.0f, const Color& color = Color::FullColor, float32 scale = 1.0f) const;
-		/// @name This version is made specially to support GUI
+		/// This version is made specially to support GUI
 		bool DrawImage(const TexturePtr& image, const Rect& textureRect, const Rect& destRect, const ColorRect& colors = ColorRect() ) const;
 		bool DrawImage(const TexturePtr& image, const Rect& destRect) const;
 
 		bool DrawLine(int32 x1, int32 y1, int32 x2, int32 y2, const Pen& pen) const;
 		bool DrawLine(const Point& begin, const Point& end, const Pen& pen) const;
-		/// @name This version does a conversion from world space
+		/// @remarks This version does a conversion from world space
 		bool DrawLineWithConversion(const Vector2& begin, const Vector2& end, const Pen& pen) const;
 
 		bool DrawPolygon(Point* vertices, int vertices_len, const TexturePtr& image, const Pen& outline, float32 angle = 0.0f, const Color& color = Color::FullColor, float32 scale = 1.0f, float32 textureAngle = 0.0f, float32 textureScale = 1.0f) const;
@@ -90,52 +83,39 @@ namespace GfxSystem
 
 		bool DrawQuad(Point* const vertices, const TexturePtr texture, Vector2* const textureCoords, Color* const vertexColors);
 
-		/// @name This version does a conversion from world space
+		/// @remarks This version does a conversion from world space
 		//TODO dodelat podobne verze DrawPolygon
 		bool DrawPolygonWithConversion(const Vector2* vertices, int vertices_len, const Vector2& offsetPosition, const float32 offsetAngle, const Color& fillColor, const Pen& outline = Pen::NullPen) const;
 
 		bool DrawCircle(const Point& center, const int32 radius, const Color& fillColor, const Pen& outline = Pen::NullPen, const float32 minAngle = 0.0f, const float32 maxAngle = MathUtils::TWO_PI) const;
 
-
-		/// @name Text drawing methods.
-		/// Note that coords are in percentage values relative to the screen bounds.
-		//@{
+		/// @remarks Note that coords are in percentage values relative to the screen bounds.
 		void DrawString( float32 x, float32 y, const string & id,
 							 const string & text, const Color color = Color(255,255,255),
 							 uint8 text_anchor =  ANCHOR_LEFT | ANCHOR_TOP,
 							 uint8 screen_anchor = ANCHOR_LEFT | ANCHOR_TOP,
 							 const string & fontid = "");
 		Vector2 GetTextSize( const string & text, const string & fontid = "" );
-		//@}
 
 		//TODO add font param
 		//bool DrawText(const string& str, font, int32 x, int32 y, uint8 anchor = ANCHOR_VCENTER|ANCHOR_HCENTER, float32 angle = 0.0f, uint8 alpha = 255);
 
-		/// @name Few haxxor functions to workaround HGE and Windows issues.
-		//@{
+		/// A haxxor function to workaround HGE and Windows issues.
 		uint32 _GetWindowHandle(void) const;
-		//@}
 
 	private:
 		HGE* mHGE; 
 
-		/// @name Screen bounds.
-		//@{
 		int32 mScreenWidth;
 		int32 mScreenHeight;
-		//@}
 
-		/// @name Camera center position.
-		//@{
+		/// Camera center position.
 		float32 mCameraX;
 		float32 mCameraY;
-		//@}
 
-		/// @name Camera zoom ratio.
-		//@{
+		/// Camera zoom ratio.
 		float32 mCameraScale;
 		float32 mCameraScaleInv;
-		//@}
 
 		friend class Texture;
 		friend bool HgeExitFunction(void);

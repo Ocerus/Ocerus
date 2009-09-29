@@ -1,3 +1,6 @@
+/// @file
+/// Notifications of events from input devices.
+
 #ifndef IInputListener_h__
 #define IInputListener_h__
 
@@ -5,28 +8,27 @@
 
 namespace InputSystem
 {
-	/** This class provides callbacks from the input manager.
-	*/
+	/// Interface for receiving notifications of events from input devices.
 	class IInputListener
 	{
 	public:
-		/// @name These do nothing.
-		//@{
+
 		IInputListener(void) {}
 		virtual ~IInputListener(void) {}
-		//@}
 
-		/// @name Called when a keyboard key is pressed/released.
-		//@{
+		/// Called when a keyboard key is pressed.
 		virtual void KeyPressed(const KeyInfo& ke) = 0;
-		virtual void KeyReleased(const KeyInfo& ke) = 0;
-		//@}
 
-		/// @name Called when the mouse moves. Cursor position and other info is passed via parameter.
+		/// Called when a keyboard key is released.
+		virtual void KeyReleased(const KeyInfo& ke) = 0;
+
+		/// Called when the mouse moves. Cursor position and other info is passed via parameter.
 		virtual void MouseMoved(const MouseInfo& mi) = 0;
-		/// @name Called when a mouse button is pressed.
+
+		/// Called when a mouse button is pressed. Cursor position and other info is passed via parameter.
 		virtual void MouseButtonPressed(const MouseInfo& mi, const eMouseButton btn) = 0;
-		/// @name Called when a mouse button is released.
+
+		/// Called when a mouse button is released. Cursor position and other info is passed via parameter.
 		virtual void MouseButtonReleased(const MouseInfo& mi, const eMouseButton btn) = 0;
 
 	};

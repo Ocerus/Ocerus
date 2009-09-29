@@ -1,3 +1,6 @@
+/// @file
+/// Application entry point.
+
 #ifndef APPLICATION_h__
 #define APPLICATION_h__
 
@@ -6,12 +9,9 @@
 #include "Timer.h"
 #include "Singleton.h"
 
-/// @name Macro for easier use.
+/// Macro for easier use.
 #define gApp Core::Application::GetSingleton()
-//#define gPSMgr gApp.GetPSMgr()
 
-/// @name  Forward declarations
-//@{
 namespace ResourceSystem { class ResourceMgr; }
 namespace InputSystem { class InputMgr; }
 namespace GfxSystem { class GfxRenderer; }
@@ -21,70 +21,80 @@ namespace LogSystem { class LogMgr; }
 namespace GUISystem { class GUIMgr; }
 namespace StringSystem { class StringMgr; }
 class Timer;
-//@}
 
+/// Main namespace of the application.
 namespace Core
 {
-
-	/// @name  Forward declarations.
-	//@{
 	class LoadingScreen;
 	class Game;
 	class Config;
-	//@}
 
-	/// @name State which the application can be in.
-	enum eAppState { AS_INITING=0, AS_LOADING, AS_GAME, AS_SHUTDOWN, AS_GUI };
+	/// State which the application can be in.
+	enum eAppState 
+	{ 
+		/// The application is initializing basic data.
+		AS_INITING=0, 
+		/// The application is loading resources needed to enter the fist state.
+		AS_LOADING, 
+		/// A game is currently in the progress.
+		AS_GAME, 
+		/// The application is shutting down.
+		AS_SHUTDOWN, 
+		/// 
+//		AS_GUI
+	};
 
-	/** Main class of the whole project. One instance is created at startup and the runMainLoop method is invoked.
-	*/
+	/// Main class of the whole application. One instance is created at startup and the RunMainLoop() method is invoked.
 	class Application : public StateMachine<eAppState>, public Singleton<Application>
 	{
 	public:
-		/// @name Does all necessary init prior to the main execution.
+
+		/// Does all necessary init prior to the main execution.
 		Application(void);
-		/// @name Cleans up everything.
+
+		/// Cleans up everything.
 		virtual ~Application(void);
 
-		/// @name Inits the application (creates singletons, ...)
+		/// Inits the application (creates singletons, ...)
 		void Init(void);
 
-		/// @name Main loop of the whole project.
+		/// Main loop of the whole project.
 		void RunMainLoop(void);
 
-		/// @name Shuts the application down and clean everything
+		/// Shuts the application down and cleans everything.
 		void Shutdown(void);
 
-		/// @name Reset FPS counters and other stats measured in the main loop.
+		/// Resets FPS counters and other stats measured in the main loop.
 		void ResetStats(void);
 		
-		/// @name  Stats getters.
-		//@{
+		/// Returns the average FPS.
 		inline float32 GetAvgFPS(void) const { return mAvgFPS; }
-		inline float32 GetLastFPS(void) const { return mLastFPS; }
-		//@}
 
-		/// @name Current application time.
+		/// Returns FPS measured in the last frame.
+		inline float32 GetLastFPS(void) const { return mLastFPS; }
+
+		/// Current application time.
 		inline uint64 GetCurrentTimeMillis(void) { return mTimer.GetMilliseconds(); }
 
-		/// @name  Console debug window stuff.
-		//@{
+		/// Displays the debug console.
 		void ShowConsole(void);
-		void WriteToConsole(const string& str);
-		void HideConsole(void);
-		//@}
 
-		/// @name Provides access to the global config functionality.
+		/// Writes text into the debug console.
+		void WriteToConsole(const string& str);
+
+		/// Hides the debug console.
+		void HideConsole(void);
+
+		/// Provides access to the global config functionality.
 		inline Config* GetGlobalConfig(void) const { return mGlobalConfig; }
 
-		/// @name  State getters
-		//@{
+		//TODO tohle predelat na global properties.
+		/// Returns instance of the current game.
 		Game* GetCurrentGame(void) const { BS_ASSERT(mGame); return mGame; }
-		//@}
 
 	private:
-		/// @name  Singletons.
-		//@{
+
+		/// Singletons
 		ResourceSystem::ResourceMgr* mResourceMgr;
 		StringSystem::StringMgr* mStringMgr;
 		InputSystem::InputMgr* mInputMgr;
@@ -93,46 +103,38 @@ namespace Core
 		LogSystem::LogMgr* mLogMgr;
 		GUISystem::GUIMgr* mGUIMgr;
 		GfxSystem::ParticleSystemMgr* mPSMgr;
-		//@}
 
-		/// @name  Application state screens.
-		//@{
+		/// Application states.
 		LoadingScreen* mLoadingScreen;
 		Game* mGame;
-		//@}
-
-		/// @name Represents global settings of the application. Available via getter.
+		
+		/// Represents global settings of the application.
 		Config* mGlobalConfig;
 
-		/// @name Helper method for processing window events.	
+		/// Helper method for processing window events.	
 		void MessagePump(void);
 
-		/// @name  Stuff for measuring performance and time.
-		//@{
+		/// Stuff for measuring performance and time.
 		typedef deque<uint64> TimesList;
 		TimesList mFrameDeltaTimes;
 		Timer mTimer;
-		float32 mFrameSmoothingTime; // during this time (in seconds) the frame delta time will be averaged
+		/// During this time (in seconds) the frame delta time will be averaged
+		float32 mFrameSmoothingTime;
 		float32 CalculateFrameDeltaTime(void);
-		//@}
 
-		/// @name  Performance stats
-		//@{
+		/// Performance stats
 		uint64 mLastSecond;
 		uint64 mFrameCount;
 		float32 mLastFPS;
 		float32 mAvgFPS;
 		void UpdateStats();
-		//@}
 
-		/// @name  Debug console stuff.
-		//@{
+		/// Debug console stuff.
 		uint32 mConsoleHandle;
 		int32 mConsoleX;
 		int32 mConsoleY;
 		int32 mConsoleWidth;
 		int32 mConsoleHeight;
-		//@}
 
 	};
 }
