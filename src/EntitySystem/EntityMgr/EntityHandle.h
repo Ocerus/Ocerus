@@ -6,7 +6,7 @@
 
 #include "Settings.h"
 #include "StringKey.h"
-#include "../../Utility/Properties/PropertyHolderMediator.h"
+#include "../../Utils/Properties/PropertyHolderMediator.h"
 #include "EntityMessage.h"
 #include "EntityEnums.h"
 

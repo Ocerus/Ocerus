@@ -7,7 +7,7 @@
 #include "EntityHandle.h"
 #include "EntityMessage.h"
 #include "EntityEnums.h"
-#include "../../Utility/Properties/PropertyHolderMediator.h"
+#include "../../Utils/Properties/PropertyHolderMediator.h"
 #include "../../ResourceSystem/Resource.h"
 #include "Singleton.h"
 

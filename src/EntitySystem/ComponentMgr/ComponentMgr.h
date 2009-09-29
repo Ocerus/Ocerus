@@ -6,7 +6,7 @@
 
 #include "../EntityMgr/EntityHandle.h"
 #include "Singleton.h"
-#include "../../Utility/Properties/PropertyHolderMediator.h"
+#include "../../Utils/Properties/PropertyHolderMediator.h"
 #include "ComponentIterators.h"
 #include "ComponentEnums.h"
 
