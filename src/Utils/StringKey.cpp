@@ -11,12 +11,12 @@ StringKey::StringKey( void )
 
 StringKey::StringKey( const char* str )
 {
-	mData = HashString(str);
+	mData = Hash::HashString(str);
 }
 
 StringKey::StringKey( const string& str )
 {
-	mData = HashString(str.c_str());
+	mData = Hash::HashString(str.c_str());
 }
 
 StringKey::StringKey( const StringKey& rhs )
@@ -26,7 +26,7 @@ StringKey::StringKey( const StringKey& rhs )
 
 StringKey::StringKey( const char* str, const int32 numChars )
 {
-	mData = HashString(str, numChars);
+	mData = Hash::HashString(str, numChars);
 }
 StringKey& StringKey::operator=( const StringKey& rhs )
 {
@@ -48,7 +48,7 @@ bool StringKey::operator<( const StringKey& rhs ) const
 
 StringKey::operator string( void ) const
 {
-	return DeHashString(mData);
+	return Hash::DeHashString(mData);
 }
 
 StringKey::operator size_t( void ) const

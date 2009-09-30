@@ -9,7 +9,11 @@
 #include "SmartAssert.h"
 #include "BasicTypes.h"
 #include "ComplexTypes.h"
+
 #include "MathUtils.h"
+
+namespace Utils {}
+using namespace Utils;
 
 //TODO a proc ze tohle nemuze bejt v PropertyTypes.h ?
 /// A little hack for the property system - I need to define this type somewhere else instead inside the system.

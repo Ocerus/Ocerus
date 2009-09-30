@@ -1,15 +1,15 @@
 #include "Common.h"
 #include "Hash.h"
 
-/// @name Initial seed.
+/// Initial seed used for hashing.
 #define HASH_INIT	0x811c9dc5
-/// @name Prime number used for hashing.
+/// Prime number used for hashing.
 #define HASH_PRIME	0x01000193
-/// @name If set, converts between double backslashes and one backslash.
+/// If set, converts between double backslashes and one backslash.
 #define CONVERT_BACKSLASH
-/// @name If set, it hashes case sensitive strings into different values.
+/// If set, it hashes case sensitive strings into different values.
 #define CASE_INSENSITIVE
-/// @name If set, it checks whether all hashes were unique.
+/// If set, it checks whether all hashes were unique.
 #define DEBUG_STRING_HASH
 
 
@@ -25,10 +25,10 @@ static StringHashMap& GetStringHashMap(void)
 
 #endif
 
-uint32 HashString(const char* hashString, const int32 strLen)
+uint32 Hash::HashString(const char* hashString, const int32 strLen)
 {
 	if (!hashString || !hashString[0])
-		return INVALID_HASH;
+		return Hash::INVALID_HASH;
 
 	const unsigned char* string = (const unsigned char*)hashString;
 	int32 len  = strLen==-1 ? strlen(hashString) : strLen;
@@ -87,7 +87,7 @@ uint32 HashString(const char* hashString, const int32 strLen)
 	return hash;
 }
 
-const char* DeHashString( const uint32 hash )
+const char* Hash::DeHashString( const uint32 hash )
 {
 	StringHashMap& stringMap = GetStringHashMap();
 	StringHashMap::const_iterator it = stringMap.find(hash);

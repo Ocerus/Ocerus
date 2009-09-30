@@ -47,7 +47,7 @@ public :
 	/// @name ID of the T class.
 	static ClassID& GetClassID(void)
 	{
-		static ClassID classID = HashString(typeid(T).name());
+		static ClassID classID = Hash::HashString(typeid(T).name());
 		return classID;
 	}
 

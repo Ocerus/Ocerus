@@ -20,7 +20,7 @@ namespace EntitySystem { class EntityMgr; }
 namespace LogSystem { class LogMgr; }
 namespace GUISystem { class GUIMgr; }
 namespace StringSystem { class StringMgr; }
-class Timer;
+namespace Utils { class Timer; }
 
 /// Main namespace of the application.
 namespace Core

@@ -11,7 +11,7 @@
 /// Macro for easier use
 #define gResourceMgr ResourceSystem::ResourceMgr::GetSingleton()
 
-/// Resource system manages all data which has to be loaded from files or other external storage media.
+/// %Resource system manages all data which has to be loaded from files or other external storage media.
 namespace ResourceSystem
 {
 	class IResourceLoadingListener;

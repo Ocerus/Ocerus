@@ -10,8 +10,8 @@
 //TODO odstranit tenhle include!
 #include <boost/filesystem/fstream.hpp>
 
-class DataContainer;
 
+namespace Utils { class DataContainer; }
 
 namespace ResourceSystem
 {
