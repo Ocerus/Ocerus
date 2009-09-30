@@ -1,4 +1,3 @@
-﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Battleships", "Battleships.vcproj", "{685FB3A5-4080-4FA7-8C69-AF6406E38DA5}"
@@ -11,27 +10,21 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Battleships", "Battleships.
 		{9CC704CB-4956-4479-BDEC-57CBC03F700E} = {9CC704CB-4956-4479-BDEC-57CBC03F700E}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hge", "externalLibs\hge\src\core\hge.vcproj", "{FB1A9503-D67D-4311-AB3B-113DAD7D6F9F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hge", "..\externalLibs\hge\src\core\hge.vcproj", "{FB1A9503-D67D-4311-AB3B-113DAD7D6F9F}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OIS", "externalLibs\ois\Win32\OIS.vcproj", "{9CC704CB-4956-4479-BDEC-57CBC03F700E}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OIS", "..\externalLibs\ois\Win32\OIS.vcproj", "{9CC704CB-4956-4479-BDEC-57CBC03F700E}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hgehelp", "externalLibs\hge\src\helpers\hgehelp.vcproj", "{6541DC36-B249-4986-AF71-72CAAE29D71F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hgehelp", "..\externalLibs\hge\src\helpers\hgehelp.vcproj", "{6541DC36-B249-4986-AF71-72CAAE29D71F}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RudeConfig", "externalLibs\RudeConfig\RudeConfig.vcproj", "{ABD59B39-A335-43E3-8087-0CEB68C4BEEA}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RudeConfig", "..\externalLibs\RudeConfig\RudeConfig.vcproj", "{ABD59B39-A335-43E3-8087-0CEB68C4BEEA}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Box2D", "externalLibs\Box2D\Build\VC8\Box2D.vcproj", "{7A2DFC3D-516A-471D-A215-BD40E5E5AD9A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Box2D", "..\externalLibs\Box2D\Build\VC8\Box2D.vcproj", "{7A2DFC3D-516A-471D-A215-BD40E5E5AD9A}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "expat", "externalLibs\expat\lib\expat.vcproj", "{8AEC6643-4014-4B8F-A154-4F2172B202A8}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "expat", "..\externalLibs\expat\lib\expat.vcproj", "{8AEC6643-4014-4B8F-A154-4F2172B202A8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{A4AA8C9F-9FB7-4C4F-A216-51D67B3F7CCF}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnitTest++.vsnet2008", "externalLibs\UnitTest++\UnitTest++.vsnet2008.vcproj", "{64A4FEFE-0461-4E95-8CC1-91EF5F57DBC6}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EngineTests", "unitTests\EngineTests\EngineTests.vcproj", "{25B21D42-C947-4DD2-90FC-070FA9239C92}"
-	ProjectSection(ProjectDependencies) = postProject
-		{685FB3A5-4080-4FA7-8C69-AF6406E38DA5} = {685FB3A5-4080-4FA7-8C69-AF6406E38DA5}
-		{64A4FEFE-0461-4E95-8CC1-91EF5F57DBC6} = {64A4FEFE-0461-4E95-8CC1-91EF5F57DBC6}
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnitTest++.vsnet2008", "..\externalLibs\UnitTest++\UnitTest++.vsnet2008.vcproj", "{64A4FEFE-0461-4E95-8CC1-91EF5F57DBC6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -102,17 +95,11 @@ Global
 		{64A4FEFE-0461-4E95-8CC1-91EF5F57DBC6}.Release|Win32.ActiveCfg = Release|Win32
 		{64A4FEFE-0461-4E95-8CC1-91EF5F57DBC6}.UnitTestDebug|Win32.ActiveCfg = Debug|Win32
 		{64A4FEFE-0461-4E95-8CC1-91EF5F57DBC6}.UnitTestDebug|Win32.Build.0 = Debug|Win32
-		{25B21D42-C947-4DD2-90FC-070FA9239C92}.Debug|Win32.ActiveCfg = Nothing|Win32
-		{25B21D42-C947-4DD2-90FC-070FA9239C92}.Develop|Win32.ActiveCfg = Nothing|Win32
-		{25B21D42-C947-4DD2-90FC-070FA9239C92}.Release|Win32.ActiveCfg = Nothing|Win32
-		{25B21D42-C947-4DD2-90FC-070FA9239C92}.UnitTestDebug|Win32.ActiveCfg = Debug|Win32
-		{25B21D42-C947-4DD2-90FC-070FA9239C92}.UnitTestDebug|Win32.Build.0 = Debug|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{64A4FEFE-0461-4E95-8CC1-91EF5F57DBC6} = {A4AA8C9F-9FB7-4C4F-A216-51D67B3F7CCF}
-		{25B21D42-C947-4DD2-90FC-070FA9239C92} = {A4AA8C9F-9FB7-4C4F-A216-51D67B3F7CCF}
 	EndGlobalSection
 EndGlobal
