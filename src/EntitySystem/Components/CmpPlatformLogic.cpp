@@ -3,13 +3,10 @@
 #include <Box2D.h>
 #include "DataContainer.h"
 
-
-using namespace EntitySystem;
-
 #define EXPLOSION_FORCE_RATIO 10.0f
 #define KNOCKBACK_DETACH_RATIO 0.5f
 
-void CmpPlatformLogic::Init(void)
+void EntityComponents::CmpPlatformLogic::Init(void)
 {
 	mBlueprints.Invalidate();
 	mHitpoints = 0;
@@ -20,12 +17,12 @@ void CmpPlatformLogic::Init(void)
 	mPickCircleRadius = 0;
 }
 
-void CmpPlatformLogic::Clean(void) 
+void EntityComponents::CmpPlatformLogic::Clean(void) 
 {
 
 }
 
-EntityMessage::eResult CmpPlatformLogic::HandleMessage(const EntityMessage& msg)
+EntityMessage::eResult EntityComponents::CmpPlatformLogic::HandleMessage(const EntityMessage& msg)
 {
 	switch(msg.type)
 	{
@@ -115,7 +112,7 @@ EntityMessage::eResult CmpPlatformLogic::HandleMessage(const EntityMessage& msg)
 	return EntityMessage::RESULT_IGNORED;
 }
 
-void CmpPlatformLogic::RegisterReflection()
+void EntityComponents::CmpPlatformLogic::RegisterReflection()
 {
 	RegisterProperty<uint32>("Hitpoints", &GetHitpoints, &SetHitpoints, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<EntityHandle>("Blueprints", &GetBlueprints, &SetBlueprints, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
@@ -124,7 +121,7 @@ void CmpPlatformLogic::RegisterReflection()
 	AddComponentDependency(CT_PLATFORM_PHYSICS);
 }
 
-void EntitySystem::CmpPlatformLogic::DrawSelectionOverlay( const bool hover ) const
+void EntityComponents::CmpPlatformLogic::DrawSelectionOverlay( const bool hover ) const
 {
 	Vector2 pos;
 	PostMessage(EntityMessage::TYPE_GET_BODY_POSITION, &pos);
@@ -137,7 +134,7 @@ void EntitySystem::CmpPlatformLogic::DrawSelectionOverlay( const bool hover ) co
 		GfxSystem::Color::NullColor, GfxSystem::Pen(color));
 }
 
-void EntitySystem::CmpPlatformLogic::Die( void )
+void EntityComponents::CmpPlatformLogic::Die( void )
 {
 	// create the PS explode effect
 	PropertyHolder prop = mBlueprints.GetProperty("ExplodeEffect");
@@ -204,7 +201,7 @@ void EntitySystem::CmpPlatformLogic::Die( void )
 	gEntityMgr.DestroyEntity(GetOwner());
 }
 
-void EntitySystem::CmpPlatformLogic::ComputePickStuff( void )
+void EntityComponents::CmpPlatformLogic::ComputePickStuff( void )
 {
 	// compute pick stuff
 	DataContainer cont;

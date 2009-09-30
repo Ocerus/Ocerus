@@ -3,7 +3,7 @@
 
 #include "../ComponentMgr/Component.h"
 
-namespace EntitySystem
+namespace EntityComponents
 {
 	/// @name Represents a material used by platforms and items.
 	class CmpMaterial : public RTTIGlue<CmpMaterial, Component>

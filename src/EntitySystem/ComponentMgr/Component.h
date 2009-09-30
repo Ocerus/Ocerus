@@ -8,9 +8,11 @@
 #include "../EntityMgr/EntityHandle.h"
 #include "StringKey.h"
 
+/// Set of all user defined entity components usable by entities.
+namespace EntityComponents { using namespace EntitySystem; }
+
 namespace EntitySystem
 {
-
 	class ComponentDescription;
 	struct EntityMessage;
 

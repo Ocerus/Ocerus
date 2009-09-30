@@ -6,6 +6,7 @@
 
 #include "StringKey.h"
 #include "Singleton.h"
+#include "Resource.h"
 #include "ResourcePointers.h"
 
 /// Macro for easier use

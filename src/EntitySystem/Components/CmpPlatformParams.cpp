@@ -2,13 +2,13 @@
 #include "CmpPlatformParams.h"
 #include "DataContainer.h"
 
-using namespace EntitySystem;
+using namespace EntityComponents;
 
 #define HITPOINTS_RATIO 1000.0f
 #define SLOTS_RATIO 1.0f
 #define LINKSLOTS_RATIO 1.0f
 
-void EntitySystem::CmpPlatformParams::Init( void )
+void EntityComponents::CmpPlatformParams::Init( void )
 {
 	mMaterial.Invalidate();
 	mShapeLength = 0;
@@ -26,7 +26,7 @@ void EntitySystem::CmpPlatformParams::Init( void )
 	mNumSlots = 0;
 }
 
-void EntitySystem::CmpPlatformParams::Clean( void )
+void EntityComponents::CmpPlatformParams::Clean( void )
 {
 	if (mShape)
 	{
@@ -35,7 +35,7 @@ void EntitySystem::CmpPlatformParams::Clean( void )
 	}
 }
 
-EntityMessage::eResult EntitySystem::CmpPlatformParams::HandleMessage( const EntityMessage& msg )
+EntityMessage::eResult EntityComponents::CmpPlatformParams::HandleMessage( const EntityMessage& msg )
 {
 	switch(msg.type)
 	{
@@ -87,7 +87,7 @@ void CmpPlatformParams::ComputeParams()
 	mBaseDetachingChance = 0.5f;
 }
 
-void EntitySystem::CmpPlatformParams::SetShape(Vector2* shape)
+void EntityComponents::CmpPlatformParams::SetShape(Vector2* shape)
 {
 	if (mShape)
 		DYN_DELETE_ARRAY mShape;
@@ -96,7 +96,7 @@ void EntitySystem::CmpPlatformParams::SetShape(Vector2* shape)
 		mShape[i] = shape[i];
 }
 
-void EntitySystem::CmpPlatformParams::RegisterReflection()
+void EntityComponents::CmpPlatformParams::RegisterReflection()
 {
 	RegisterProperty<EntityHandle>("Material", &GetMaterial, &SetMaterial, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<uint32>("MaxHitpoints", &GetMaxHitpoints, &SetMaxHitpoints, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);

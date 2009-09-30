@@ -4,22 +4,10 @@
 
 //TODO nejde se zbavit includu tady?
 #include "../Components/CmpMaterial.h"
-#include "../Components/CmpPlatformLinks.h"
 #include "../Components/CmpPlatformParams.h"
 #include "../Components/CmpPlatformPhysics.h"
 #include "../Components/CmpPlatformLogic.h"
 #include "../Components/CmpPlatformVisual.h"
-#include "../Components/CmpShipLogic.h"
-#include "../Components/CmpShipPhysics.h"
-#include "../Components/CmpShipVisual.h"
-#include "../Components/CmpPlatformItem.h"
-#include "../Components/CmpPlatformItemParams.h"
-#include "../Components/CmpEngineParams.h"
-#include "../Components/CmpEngine.h"
-#include "../Components/CmpWeaponParams.h"
-#include "../Components/CmpWeapon.h"
-#include "../Components/CmpAmmoParams.h"
-#include "../Components/CmpProjectile.h"
 
 using namespace EntitySystem;
 
@@ -29,7 +17,7 @@ ComponentMgr::ComponentMgr()
 
 	// register components
 	#define COMPONENT_TYPE(id, cls) mComponentCreationMethod[id] = (ComponentCreationMethod)cls::GetClassRTTI()->GetClassFactory();
-	#include "ComponentTypes.h"
+	#include "../Components/_ComponentTypes.h"
 	#undef COMPONENT_TYPE
 
 	BS_ASSERT(mComponentCreationMethod[NUM_COMPONENT_TYPES-1]);

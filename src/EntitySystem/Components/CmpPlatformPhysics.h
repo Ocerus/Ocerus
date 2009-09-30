@@ -9,7 +9,7 @@ class b2Body;
 class b2Shape;
 //@}
 
-namespace EntitySystem
+namespace EntityComponents
 {
 	/// @name Handles physics representation of a specific platform.
 	class CmpPlatformPhysics : public RTTIGlue<CmpPlatformPhysics, Component>

@@ -8,8 +8,8 @@
 #include "EntityMessage.h"
 #include "EntityEnums.h"
 #include "../../Utils/Properties/PropertyHolderMediator.h"
-#include "../../ResourceSystem/Resource.h"
 #include "Singleton.h"
+#include "ResourcePointers.h"
 
 /// Macro for easier use.
 #define gEntityMgr EntitySystem::EntityMgr::GetSingleton()

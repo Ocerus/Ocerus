@@ -1,12 +1,10 @@
 #include "Common.h"
 #include "Game.h"
 #include "Application.h"
-#include "Box2D.h"
-#include "../GfxSystem/ParticleSystem.h"
-#include "WaterSurface.h"
 #include "Properties.h"
 #include "DataContainer.h"
 #include "StringConverter.h"
+#include "Box2D.h"
 
 using namespace Core;
 using namespace EntitySystem;
@@ -28,8 +26,7 @@ Core::Game::Game():
 	StateMachine<eGameState>(GS_NORMAL),
 	mPhysics(0),
 	mMyTeam(-1),
-	mLastClickTime(0),
-	mWaterSurface(0) {}
+	mLastClickTime(0) {}
 
 Core::Game::~Game()
 {
@@ -60,15 +57,8 @@ void Core::Game::Init()
 
 	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("ShipParts/materials.xml"));
 	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("ShipParts/platforms.xml"));
-	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("ShipParts/engines.xml"));
-	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("ShipParts/ammo.xml"));
-	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("ShipParts/weapons.xml"));
 
-	//gEntityMgr.LoadFromResource(gResourceMgr.GetResource("Ships/old_ship0.xml"));
 	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("Ships/ship0.xml"));
-	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("Ships/ship1.xml"));
-	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("Ships/ship2.xml"));
-	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("Ships/ship3.xml"));
 
 
 	// recompute mass of the ship's body
@@ -90,12 +80,6 @@ void Core::Game::Init()
 	gGfxRenderer.SetCameraScale(50.0f);
 
 
-	// water
-	GfxSystem::TexturePtr tex = gResourceMgr.GetResource("Backgrounds", "water2.png");
-	mWaterSurface = DYN_NEW WaterSurface(tex, 0.05f, 0.4f, 0.4f, 128, 128);
-	//mWaterSurface = DYN_NEW WaterSurface(tex, 0.05f, 1.0f, 1.0f, 8, 8);
-
-
 	gInputMgr.AddInputListener(this);
 
 
@@ -111,8 +95,6 @@ void Core::Game::Deinit()
 	for (PhysicsEventList::const_iterator i=mPhysicsEvents.begin(); i!=mPhysicsEvents.end(); ++i)
 		DYN_DELETE *i;
 	mPhysicsEvents.clear();
-	if (mWaterSurface)
-		DYN_DELETE mWaterSurface;
 }
 
 void Core::Game::Update( const float32 delta )
@@ -218,58 +200,6 @@ void Core::Game::Update( const float32 delta )
 	}
 	mPhysicsResidualDelta = physicsDelta;
 
-	// water
-	char* waterPlatforms[] = {"platform5", "platform6", "platform1", "platform2", "platform20", "platform21"};
-	for (int i=0; i<sizeof(waterPlatforms)/sizeof(char*); ++i)
-	{
-		EntityHandle platform = gEntityMgr.FindFirstEntity(waterPlatforms[i]);
-		if (platform.Exists())
-		{
-			DataContainer cont;
-			Vector2 pos, dir;
-			float32 angle;
-			platform.PostMessage(EntityMessage::TYPE_GET_POLYSHAPE, &cont);
-			platform.PostMessage(EntityMessage::TYPE_GET_BODY_POSITION, &pos);
-			platform.PostMessage(EntityMessage::TYPE_GET_ANGLE, &angle);
-			mWaterSurface->LowerArea((Vector2*)cont.GetData(), cont.GetSize(), pos, angle);
-		}
-	}
-
-	char* bubblePlatforms[] = {"platform20", "platform21", "platform22", "platform23"};
-	const int len = sizeof(bubblePlatforms)/sizeof(char*);
-	if (mBubbleEffects.size() == 0)
-	{
-		for (int32 i=0; i<len; ++i)
-			mBubbleEffects.push_back(gPSMgr.SpawnPS("psi", "particle8.psi"));
-	}
-	for (int i=0; i<len; ++i)
-	{
-		EntityHandle platform = gEntityMgr.FindFirstEntity(bubblePlatforms[i]);
-		if (platform.Exists())
-		{
-			PropertyHolder prop = platform.GetProperty("AbsolutePosition");
-			Vector2 pos = prop.GetValue<Vector2>();
-			prop = platform.GetProperty("ParentShip");
-			EntityHandle ship = prop.GetValue<EntityHandle>();
-			if (ship.Exists())
-			{
-				prop = ship.GetProperty("AbsolutePosition");
-				Vector2 shipPos = prop.GetValue<Vector2&>();
-				mBubbleEffects[i]->MoveTo(pos.x, pos.y, false);
-				mBubbleEffects[i]->SetScale(0.2f);
-				mBubbleEffects[i]->SetAngle(MathUtils::Angle(pos - shipPos));
-				mBubbleEffects[i]->Fire();
-			}
-			else
-			{
-				mBubbleEffects[i]->Stop();
-			}
-		}
-	}
-
-	mWaterSurface->Update(delta);
-
-
 	//particle effects
 	gPSMgr.Update(delta);
 };
@@ -307,30 +237,6 @@ void Core::Game::Draw( const float32 delta)
 
 	// clear the screen
 	gGfxRenderer.ClearScreen(GfxSystem::Color(0,0,0));
-
-	// draw the water
-	mWaterSurface->Draw();
-
-	// draw bubbles
-	for (vector<GfxSystem::ParticleSystemPtr>::const_iterator it=mBubbleEffects.begin(); it!=mBubbleEffects.end(); ++it)
-		(*it)->Render();
-
-	
-	/*GfxSystem::TexturePtr waterTex = gResourceMgr.GetResource("Backgrounds", "water.png");
-	float32 texW_ws = WATER_TEXTURE_SCALE * waterTex->GetWidth();
-	float32 texH_ws = WATER_TEXTURE_SCALE * waterTex->GetHeight();
-	int32 texW = gGfxRenderer.WorldToScreenScalar(texW_ws);
-	int32 texH = gGfxRenderer.WorldToScreenScalar(texH_ws);
-	Vector2 topleft = gGfxRenderer.GetCameraWorldBoxTopLeft();
-	int32 x, y;
-	x = - gGfxRenderer.WorldToScreenScalar(topleft.x - MathUtils::Floor(topleft.x / texW_ws) * texW_ws);
-	y = - gGfxRenderer.WorldToScreenScalar(topleft.y - MathUtils::Floor(topleft.y / texH_ws) * texH_ws);
-	int32 screenW = gGfxRenderer.GetScreenWidth();
-	int32 screenH = gGfxRenderer.GetScreenHeight();
-	int32 oldY = y;
-	for (; x<screenW; x+=texW)
-		for (y=oldY; y<screenH; y+=texH)
-			gGfxRenderer.DrawImage(waterTex, GfxSystem::Rect(x, y, texW, texH));*/
 
 	// draw ships
 	gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::TYPE_DRAW_PLATFORM));

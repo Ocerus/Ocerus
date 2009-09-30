@@ -5,6 +5,9 @@
 #ifndef _COMPONENTENUMS_H_
 #define _COMPONENTENUMS_H_
 
+namespace EntityComponents {}
+using namespace EntityComponents;
+
 namespace EntitySystem
 {
 	/// @brief A set of types of all components in the system. This includes only components written in
@@ -14,7 +17,7 @@ namespace EntitySystem
 		/// Macro used for easier definition of components. The first parameter is the type ID while the second one is 
 		/// the component class name.
 		#define COMPONENT_TYPE(x, y) x,
-		#include "ComponentTypes.h"
+		#include "../Components/_ComponentTypes.h"
 		#undef COMPONENT_TYPE
 
 		NUM_COMPONENT_TYPES,
@@ -27,7 +30,7 @@ namespace EntitySystem
 		/// Macro used for easier definition of components. The first parameter is the type ID while the second one is 
 		/// the component class name.
 		#define COMPONENT_TYPE(x, y) #x,
-		#include "ComponentTypes.h"
+		#include "../Components/_ComponentTypes.h"
 		#undef COMPONENT_TYPE
 	};
 

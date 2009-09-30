@@ -4,7 +4,7 @@
 #include "../ComponentMgr/Component.h"
 #include "../../GfxSystem/GfxStructures.h"
 
-namespace EntitySystem
+namespace EntityComponents
 {
 	/// @name Represents parameters one can set for a specific platform type.
 	class CmpPlatformParams : public RTTIGlue<CmpPlatformParams, Component>

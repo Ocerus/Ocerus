@@ -112,10 +112,6 @@ namespace Core
 		PhysicsEventList mPhysicsEvents;
 		void ProcessPhysicsEvent(const PhysicsEvent& evt);
 
-		/// Water stuff.
-		WaterSurface* mWaterSurface;
-		vector<GfxSystem::ParticleSystemPtr> mBubbleEffects;
-
 		/// Selections stuff.
 		uint64 mLastClickTime;
 		EntitySystem::EntityHandle mHoveredEntity;

@@ -3,7 +3,7 @@
 
 #include "../ComponentMgr/Component.h"
 
-namespace EntitySystem
+namespace EntityComponents
 {
 	/// @name Handles logic of one specific platform.
 	class CmpPlatformLogic : public RTTIGlue<CmpPlatformLogic, Component>

@@ -3,7 +3,7 @@
 
 #include "../ComponentMgr/Component.h"
 
-namespace EntitySystem
+namespace EntityComponents
 {
 	/// @name Visual representation of a specific platform.
 	class CmpPlatformVisual : public RTTIGlue<CmpPlatformVisual, Component>

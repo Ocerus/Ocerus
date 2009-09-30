@@ -2,20 +2,17 @@
 #include "CmpPlatformVisual.h"
 #include "DataContainer.h"
 
-using namespace EntitySystem;
-
-
-void EntitySystem::CmpPlatformVisual::Init( void )
+void EntityComponents::CmpPlatformVisual::Init( void )
 {
 
 }
 
-void EntitySystem::CmpPlatformVisual::Clean( void )
+void EntityComponents::CmpPlatformVisual::Clean( void )
 {
 
 }
 
-EntityMessage::eResult EntitySystem::CmpPlatformVisual::HandleMessage( const EntityMessage& msg )
+EntityMessage::eResult EntityComponents::CmpPlatformVisual::HandleMessage( const EntityMessage& msg )
 {
 	switch(msg.type)
 	{
@@ -26,12 +23,12 @@ EntityMessage::eResult EntitySystem::CmpPlatformVisual::HandleMessage( const Ent
 	return EntityMessage::RESULT_IGNORED;
 }
 
-void EntitySystem::CmpPlatformVisual::RegisterReflection()
+void EntityComponents::CmpPlatformVisual::RegisterReflection()
 {
 
 }
 
-void EntitySystem::CmpPlatformVisual::Draw( void ) const
+void EntityComponents::CmpPlatformVisual::Draw( void ) const
 {
 	DataContainer cont;
 	PostMessage(EntityMessage::TYPE_GET_POLYSHAPE, &cont);

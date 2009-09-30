@@ -5,12 +5,10 @@
 #include "../../Core/Game.h"
 #include "../../Core/Application.h"
 
-using namespace EntitySystem;
-
 #define LINEAR_DAMPING 0.1f
 #define ANGULAR_DAMPING 0.5f
 
-void EntitySystem::CmpPlatformPhysics::Init( void )
+void EntityComponents::CmpPlatformPhysics::Init( void )
 {
 	mBody = 0;
 	mShape = 0;
@@ -23,14 +21,14 @@ void EntitySystem::CmpPlatformPhysics::Init( void )
 }
 
 
-void EntitySystem::CmpPlatformPhysics::PostInit( void )
+void EntityComponents::CmpPlatformPhysics::PostInit( void )
 {
 	PropertyHolder prop = GetProperty("ParentShip");
 	EntityHandle ship = prop.GetValue<EntityHandle>();
 	CreateBody(ship.IsValid());
 }
 
-void EntitySystem::CmpPlatformPhysics::CreateBody( const bool hasParentShip )
+void EntityComponents::CmpPlatformPhysics::CreateBody( const bool hasParentShip )
 {
 	PropertyHolder prop;
 
@@ -90,7 +88,7 @@ void EntitySystem::CmpPlatformPhysics::CreateBody( const bool hasParentShip )
 		mBody->SetMassFromShapes();
 }
 
-void EntitySystem::CmpPlatformPhysics::Clean( void )
+void EntityComponents::CmpPlatformPhysics::Clean( void )
 {
 	PropertyHolder prop = GetProperty("ParentShip");
 	if (mBody && !prop.GetValue<EntityHandle>().IsValid())
@@ -100,7 +98,7 @@ void EntitySystem::CmpPlatformPhysics::Clean( void )
 	}
 }
 
-EntityMessage::eResult EntitySystem::CmpPlatformPhysics::HandleMessage( const EntityMessage& msg )
+EntityMessage::eResult EntityComponents::CmpPlatformPhysics::HandleMessage( const EntityMessage& msg )
 {
 	switch(msg.type)
 	{
@@ -196,7 +194,7 @@ EntityMessage::eResult EntitySystem::CmpPlatformPhysics::HandleMessage( const En
 	return EntityMessage::RESULT_IGNORED;
 }
 
-void EntitySystem::CmpPlatformPhysics::RegisterReflection()
+void EntityComponents::CmpPlatformPhysics::RegisterReflection()
 {
 	RegisterProperty<Vector2&>("RelativePosition", &GetRelativePosition, &SetRelativePosition, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<Vector2>("InitBodyPosition", &GetInitBodyPosition, &SetInitBodyPosition, PROPACC_INIT);
@@ -210,13 +208,13 @@ void EntitySystem::CmpPlatformPhysics::RegisterReflection()
 	RegisterProperty<uint32>("ShapeLength", &GetShapeLength, 0, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 }
 
-Vector2 EntitySystem::CmpPlatformPhysics::GetAbsolutePosition( void ) const
+Vector2 EntityComponents::CmpPlatformPhysics::GetAbsolutePosition( void ) const
 {
 	BS_DASSERT(mBody);
 	return mBody->GetPosition() + MathUtils::Multiply(Matrix22(mBody->GetAngle()), mRelativePosition);
 }
 
-void EntitySystem::CmpPlatformPhysics::SetAbsolutePosition( Vector2 pos )
+void EntityComponents::CmpPlatformPhysics::SetAbsolutePosition( Vector2 pos )
 {
 	BS_DASSERT(mBody);
 	EntityHandle ship;
@@ -225,38 +223,38 @@ void EntitySystem::CmpPlatformPhysics::SetAbsolutePosition( Vector2 pos )
 	mBody->SetXForm(pos, mBody->GetAngle());
 }
 
-float32 EntitySystem::CmpPlatformPhysics::GetAngle( void ) const
+float32 EntityComponents::CmpPlatformPhysics::GetAngle( void ) const
 {
 	BS_DASSERT(mBody);
 	return mBody->GetAngle();
 }
 
-void EntitySystem::CmpPlatformPhysics::SetAngle( const float32 angle )
+void EntityComponents::CmpPlatformPhysics::SetAngle( const float32 angle )
 {
 	BS_DASSERT(mBody);
 	mBody->SetXForm(mBody->GetPosition(), angle);
 }
 
-Vector2 EntitySystem::CmpPlatformPhysics::GetLinearVelocity( void ) const
+Vector2 EntityComponents::CmpPlatformPhysics::GetLinearVelocity( void ) const
 {
 	BS_DASSERT(mBody);
 	return mBody->GetLinearVelocity();
 }
 
-void EntitySystem::CmpPlatformPhysics::SetLinearVelocity( const Vector2 linVel )
+void EntityComponents::CmpPlatformPhysics::SetLinearVelocity( const Vector2 linVel )
 {
 	BS_DASSERT(mBody);
 	mBody->SetLinearVelocity(linVel);
 }
 
-Vector2* EntitySystem::CmpPlatformPhysics::GetShape( void ) const
+Vector2* EntityComponents::CmpPlatformPhysics::GetShape( void ) const
 {
 	BS_DASSERT(mShape);
 	b2PolygonShape* polyshape = (b2PolygonShape*)mShape;
 	return const_cast<Vector2*>(polyshape->GetVertices());
 }
 
-uint32 EntitySystem::CmpPlatformPhysics::GetShapeLength( void ) const
+uint32 EntityComponents::CmpPlatformPhysics::GetShapeLength( void ) const
 {
 	BS_DASSERT(mShape);
 	b2PolygonShape* polyshape = (b2PolygonShape*)mShape;
