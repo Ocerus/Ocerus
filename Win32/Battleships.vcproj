@@ -668,6 +668,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\src\Utils\Properties\PropertyFunctionParameters.h"
+						>
+					</File>
+					<File
 						RelativePath="..\src\Utils\Properties\PropertyHolder.h"
 						>
 					</File>
@@ -697,6 +701,10 @@
 					>
 					<File
 						RelativePath="..\src\Utils\Properties\AbstractProperty.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\src\Utils\Properties\PropertyFunctionParameters.cpp"
 						>
 					</File>
 					<File

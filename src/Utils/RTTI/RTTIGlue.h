@@ -38,6 +38,11 @@ public :
 		PropertySystem::GetProperties()->push_back( pProperty );
 	}
 
+	inline static void RegisterFunction(const char* name, typename Property<T, PropertyFunctionParameters&>::SetterType function, const PropertyAccessFlags accessFlags)
+	{
+		RegisterProperty<PropertyFunctionParameters&>(name, 0, function, accessFlags);
+	}
+
 	/// @name Adds a component dependant on the owner into the list.
 	static void AddComponentDependency(const EntitySystem::eComponentType cmp)
 	{

@@ -155,7 +155,7 @@ void Core::Game::Update( const float32 delta )
 		}
 	}
 
-
+	// advance the physics forward in time
 	float32 physicsDelta = delta + mPhysicsResidualDelta;
 	while (physicsDelta > PHYSICS_TIMESTEP)
 	{

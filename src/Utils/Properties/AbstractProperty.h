@@ -2,6 +2,7 @@
 #define _ABSTRACT_PROPERTY_H
 
 #include "PropertyTypes.h"
+#include "TypedProperty.h"
 #include "../StringKey.h"
 
 /// @name  Forward declarations.

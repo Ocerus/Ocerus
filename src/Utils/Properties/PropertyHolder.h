@@ -52,6 +52,17 @@ public:
 		mProperty->SetValue<T>(mOwner, value);
 	}
 
+	inline void CallFunction(PropertyFunctionParameters* parameters)
+	{
+		BS_DASSERT(parameters);
+		mProperty->SetValue<PropertyFunctionParameters&>(mOwner, *parameters);
+	}
+
+	inline void CallFunction(PropertyFunctionParameters& parameters)
+	{
+		CallFunction(&parameters);
+	}
+
 	/// @name Returns type of this property.
 	inline ePropertyType GetType(void) const { return mProperty->GetType(); }
 
