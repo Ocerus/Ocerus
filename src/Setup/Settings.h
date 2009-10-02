@@ -5,6 +5,8 @@
 #define _SETTINGS_H_
 
 
+#define BOOST_NO_TYPEID
+
 #include "Memory.h"
 #include "SmartAssert.h"
 #include "BasicTypes.h"
