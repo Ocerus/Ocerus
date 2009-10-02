@@ -13,7 +13,6 @@ namespace EntityComponents { using namespace EntitySystem; }
 
 namespace EntitySystem
 {
-	class ComponentDescription;
 	struct EntityMessage;
 
 	/// Base class for all entity components. This class contains the only means to communicate with entity components.

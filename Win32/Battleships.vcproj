@@ -357,6 +357,10 @@
 				Name="Components"
 				>
 				<File
+					RelativePath="..\src\EntitySystem\Components\_ComponentHeaders.h"
+					>
+				</File>
+				<File
 					RelativePath="..\src\EntitySystem\Components\_ComponentTypes.h"
 					>
 				</File>

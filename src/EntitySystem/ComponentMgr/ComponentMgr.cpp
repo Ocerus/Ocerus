@@ -2,12 +2,7 @@
 #include "ComponentMgr.h"
 #include "Component.h"
 
-//TODO nejde se zbavit includu tady?
-#include "../Components/CmpMaterial.h"
-#include "../Components/CmpPlatformParams.h"
-#include "../Components/CmpPlatformPhysics.h"
-#include "../Components/CmpPlatformLogic.h"
-#include "../Components/CmpPlatformVisual.h"
+#include "../Components/_ComponentHeaders.h"
 
 using namespace EntitySystem;
 
