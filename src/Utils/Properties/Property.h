@@ -1,56 +1,65 @@
+/// @file
+/// A complete property knowing what type of values it represents and what class does it belong to.
+/// @remarks
+/// Implementation based on the code from Game Programming Gems 5 (1.4).
+
 #ifndef _PROPERTY_H
 #define _PROPERTY_H
 
 #include "TypedProperty.h"
 #include "PropertyTypes.h"
 
-/** Fully defined property class. Specifies property's name, type and the getter/setters are bound as
-	members of a specific class type.
-	Template parameter OwnerType is the class that the getter and setter are a member of and template
-	parameter T is the property type.
-*/
-template <class OwnerType, class T> class Property : public TypedProperty<T>
+namespace Reflection
 {
+	/// @brief Fully defined property class.
+	/// @remarks
+	/// The class specifies the property's name and its type. The getters/setters are bound using function pointers.
+	///	The template parameter OwnerType is a class that the getter and setter are members of. The template
+	///	parameter T is the property value type.
+	template <class OwnerType, class T> class Property : public TypedProperty<T>
+	{
 
-public:
+	public:
 
-	/// @name getter type.
-	typedef T (OwnerType::*GetterType)( void ) const;
-	/// @name setter type.
-	typedef void (OwnerType::*SetterType)( T Value );
+		/// Type for the getter function of the property value.
+		typedef T (OwnerType::*GetterType)( void ) const;
 
-	/// @name Constructor.
-	inline Property( const char* name, GetterType getter, SetterType setter, const PropertyAccessFlags accessFlags ):
+		/// Type for the setter function of the property value.
+		typedef void (OwnerType::*SetterType)( T Value );
+
+		/// Constructor.
+		inline Property( const char* name, GetterType getter, SetterType setter, const PropertyAccessFlags accessFlags ):
 		TypedProperty<T> (name, accessFlags),
-		mGetter (getter),
-		mSetter (setter) {}
+			mGetter (getter),
+			mSetter (setter) {}
 
-	/// @name Returns the value of this property. Owner of this property must be specified.
-	virtual T GetValue(RTTIBaseClass* owner)
-	{
-		if (!mGetter)
+		/// Returns the value of this property. The owner of this property must be specified.
+		virtual T GetValue(RTTIBaseClass* owner)
 		{
-			ReportWriteonlyProblem();
-			return PropertyType<T>::GetDefaultValue();
+			if (!mGetter)
+			{
+				ReportWriteonlyProblem();
+				return PropertyType<T>::GetDefaultValue();
+			}
+			return (((OwnerType*)owner)->*mGetter)();
 		}
-		return (((OwnerType*)owner)->*mGetter)();
-	}
-	/// @name Sets the value of this property. Owner must be specified.
-	virtual void SetValue(RTTIBaseClass* owner, T Value)
-	{
-		if ( !mSetter)
+		/// Sets the value of this property. The owner of this property must be specified.
+		virtual void SetValue(RTTIBaseClass* owner, T Value)
 		{
-			ReportReadonlyProblem();		
-			return;
+			if ( !mSetter)
+			{
+				ReportReadonlyProblem();		
+				return;
+			}
+			(((OwnerType*)owner)->*mSetter)( Value );
 		}
-		(((OwnerType*)owner)->*mSetter)( Value );
-	}
 
-protected:
+	private:
 
-    GetterType mGetter;
-    SetterType mSetter;
+		GetterType mGetter;
+		SetterType mSetter;
 
-};
+	};
+}
 
 #endif	// _PROPERTY_H

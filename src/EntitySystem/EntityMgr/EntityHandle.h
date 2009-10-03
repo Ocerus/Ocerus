@@ -10,7 +10,7 @@
 #include "EntityMessage.h"
 #include "EntityEnums.h"
 
-class PropertyList;
+namespace Reflection { class PropertyList; }
 
 namespace EntitySystem
 {

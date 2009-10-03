@@ -14,11 +14,10 @@
 /// Macro for easier use.
 #define gEntityMgr EntitySystem::EntityMgr::GetSingleton()
 
-class PropertyList;
+namespace Reflection { class PropertyList; }
 
 namespace EntitySystem
 {
-
 	class ComponentMgr;
 	class EntityDescription;
 	struct EntityMessage;

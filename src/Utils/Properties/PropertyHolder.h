@@ -1,3 +1,6 @@
+/// @file
+/// This is a way how to interact with properties from the user code.
+
 #ifndef PropertyHolder_h__
 #define PropertyHolder_h__
 
@@ -5,88 +8,99 @@
 #include "Settings.h"
 #include "PropertyHolderMediator.h"
 
-/// @name  Forward declarations.
-//@{
-class RTTIBaseClass;
-//@}
-
-/// @name This class encapsulates abstract properties to allow easier access to their values.
-class PropertyHolder
+namespace Reflection
 {
-public:
-	/// @name Constructors.
-	//@{
-	PropertyHolder(void): mOwner(0), mProperty(0) {}
-	PropertyHolder(const PropertyHolder& rhs): mOwner(rhs.mOwner), mProperty(rhs.mProperty) {}
-	PropertyHolder(RTTIBaseClass* owner, AbstractProperty* prop): mOwner(owner), mProperty(prop) {}
-	//@}
+	class RTTIBaseClass;
 
-	PropertyHolder& operator=(const PropertyHolder& rhs)
+	/// This class encapsulates abstract properties to allow easier access to their values and/or calling functions.
+	class PropertyHolder
 	{
-		mOwner = rhs.mOwner;
-		mProperty = rhs.mProperty;
-		return *this;
-	}
+	public:
 
-	/// @name Returns the value of this property.
-	template<class T>
-	T GetValue(void)
-	{
-		if (!mProperty)
+		/// Default constructor.
+		PropertyHolder(void): mOwner(0), mProperty(0) {}
+
+		/// Copy constructor.
+		PropertyHolder(const PropertyHolder& rhs): mOwner(rhs.mOwner), mProperty(rhs.mProperty) {}
+
+		/// Constructs the holder from an instance of a class the property is bound to and the actual property.
+		PropertyHolder(RTTIBaseClass* owner, AbstractProperty* prop): mOwner(owner), mProperty(prop) {}
+
+		PropertyHolder& operator=(const PropertyHolder& rhs)
 		{
-			ReportUndefined();
-			return PropertyType<T>::GetDefaultValue();
+			mOwner = rhs.mOwner;
+			mProperty = rhs.mProperty;
+			return *this;
 		}
-		return mProperty->GetValue<T>(mOwner);
-	}
-	
-	/// @name Sets the value of this property.
-	template<class T>
-	void SetValue(const T value)
-	{
-		if (!mProperty)
+
+		/// Returns the typed value of this property.
+		template<class T>
+		T GetValue(void)
 		{
-			ReportUndefined();
-			return;
+			if (!mProperty)
+			{
+				ReportUndefined();
+				return PropertyType<T>::GetDefaultValue();
+			}
+			return mProperty->GetValue<T>(mOwner);
 		}
-		mProperty->SetValue<T>(mOwner, value);
-	}
 
-	inline void CallFunction(PropertyFunctionParameters* parameters)
-	{
-		BS_DASSERT(parameters);
-		mProperty->SetValue<PropertyFunctionParameters&>(mOwner, *parameters);
-	}
+		/// Sets the typed value of this property.
+		template<class T>
+		void SetValue(const T value)
+		{
+			if (!mProperty)
+			{
+				ReportUndefined();
+				return;
+			}
+			mProperty->SetValue<T>(mOwner, value);
+		}
 
-	inline void CallFunction(PropertyFunctionParameters& parameters)
-	{
-		CallFunction(&parameters);
-	}
+		/// Calls a function this property represents.
+		inline void CallFunction(PropertyFunctionParameters* parameters)
+		{
+			BS_DASSERT(parameters);
+			BS_DASSERT(GetType() == PROPTYPE_FUNCTION_PARAMETER);
+			mProperty->SetValue<PropertyFunctionParameters&>(mOwner, *parameters);
+		}
 
-	/// @name Returns type of this property.
-	inline ePropertyType GetType(void) const { return mProperty->GetType(); }
+		/// Calls a function this property represents.
+		inline void CallFunction(PropertyFunctionParameters& parameters)
+		{
+			CallFunction(&parameters);
+		}
 
-	/// @name Returns true if this holder holds a valid property.
-	bool IsValid(void) const;
+		/// Returns type of this property.
+		inline ePropertyType GetType(void) const { return mProperty->GetType(); }
 
-	/// @name Haxxor conversion methods.
-	//@{
-	inline operator PropertyHolderMediator (void) const
-	{
-		return *reinterpret_cast<const PropertyHolderMediator*>(this);
-	}
-	inline PropertyHolder(const PropertyHolderMediator rhs)
-	{
-		operator=(*reinterpret_cast<const PropertyHolder*>(&rhs));
-	}
-	//@}
+		/// Returns true if this holder holds a valid property.
+		inline bool IsValid(void) const { return (mOwner!=0 && mProperty!=0); }
 
-private:
-	RTTIBaseClass* mOwner;
-	AbstractProperty* mProperty;
+		/// @brief Conversion operator to PropertyHolderMediator.
+		/// @remarks This is needed to allow interchangebality of PropertyHolder
+		/// and PropertyHolderMediator.
+		inline operator PropertyHolderMediator (void) const
+		{
+			return *reinterpret_cast<const PropertyHolderMediator*>(this);
+		}
 
-	/// @name Problem reporting.
-	void ReportUndefined(void);
-};
+		/// @brief Conversion constructor from PropertyHolderMediator.
+		/// @remarks This is needed to allow interchangebality of PropertyHolder
+		/// and PropertyHolderMediator.
+		inline PropertyHolder(const PropertyHolderMediator rhs)
+		{
+			operator=(*reinterpret_cast<const PropertyHolder*>(&rhs));
+		}
+
+	private:
+
+		RTTIBaseClass* mOwner;
+		AbstractProperty* mProperty;
+
+		/// Problem reporting.
+		void ReportUndefined(void);
+	};
+}
 
 #endif // PropertyHolder_h__

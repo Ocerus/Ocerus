@@ -78,11 +78,14 @@ PropertyHolderMediator EntitySystem::ComponentMgr::GetEntityProperty( const Enti
 	EntityComponentsMap::const_iterator iter = mEntityComponentsMap.find(h.GetID());
 	if (iter == mEntityComponentsMap.end())
 		return PropertyHolder();
+
 	ComponentsList& cmpList = *iter->second;
-	for (ComponentsList::iterator i=cmpList.begin(); i!=cmpList.end(); ++i){
+	for (ComponentsList::iterator i=cmpList.begin(); i!=cmpList.end(); ++i)
+	{
 		AbstractProperty* prop = (*i)->GetRTTI()->GetProperty(key, mask);
 		if (prop)
 			return PropertyHolder(*i, prop);
 	}
+
 	return PropertyHolder();	
 }

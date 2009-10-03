@@ -16,6 +16,8 @@
 
 namespace Utils {}
 using namespace Utils;
+namespace Reflection {}
+using namespace Reflection;
 
 //TODO a proc ze tohle nemuze bejt v PropertyTypes.h ?
 /// A little hack for the property system - I need to define this type somewhere else instead inside the system.

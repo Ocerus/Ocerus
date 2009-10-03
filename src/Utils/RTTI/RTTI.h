@@ -1,3 +1,8 @@
+/// @file
+/// RTTI data storage for RTTI enabled classes.
+/// @remarks
+/// Implementation based on the code from Game Programming Gems 5 (1.4).
+
 #ifndef __RTTI_H__
 #define __RTTI_H__
 
@@ -6,101 +11,118 @@
 #include "Settings.h"
 #include "../../EntitySystem/ComponentMgr/ComponentEnums.h"
 
-/// @name Forward declarations.
-//@{
-class RTTIBaseClass;
-class RTTI;
-//@}
-
-/// @name Type of the identifier of a class.
-typedef uint32 ClassID;
-/// @name Factory function used for creating an instance of an owner class.
-typedef RTTIBaseClass* (*ClassFactoryFunc)();
-/// @name This functions is called by client classes to register properties into RTTI.
-typedef bool (*RegisterReflectionFunc)();
-/// @name A list of component types determining dependency of a component on other components.
-typedef vector<EntitySystem::eComponentType> ComponentDependencyList;
-
-/// @name Maximum length of a name of a class.
-const uint32 CLASSNAME_LENGTH = 48;
-
-/// @name RTTI description structure.
-class RTTI
+/// @brief A set of classes implementing custom %RTTI and reflection.
+/// @remarks 
+/// The word 'reflection' means that classes are aware of what they are. They can generate their string name
+/// in run-time and create instances of themselves based only on their string name. A system of generic access to class'es
+/// properties (member fields hidden behind getters and setters) is present as well.
+/// @remarks
+/// To make use of %RTTI the custom class C having a predecessor P must extend RTTIGlue<C, P>. If C has no predecessor,
+/// RTTIBaseClass must be used for P instead. The custom class then has to declare and define the RegisterReflection function which will
+/// be automatically called during the program startup. In this function C can register its properties
+/// and functions using the RTTIGlue::RegisterProperty and RTTIGlue::RegisterFunction functions.
+namespace Reflection
 {
-public:
+	class RTTIBaseClass;
+	class RTTI;
 
-	/** RTTI constructor.
-		The first paramter is a stub. I am not sure why this stub is necessary - removing ths stub will
-		confuse the .NET compiler and produce compile errors with subsequent parameters. If anybody knows 
-		why this is so, feel free to e-mail me at dfilion@hotmail.com
+	/// Type of the identifier of a class.
+	typedef uint32 ClassID;
 
-		The RTTI structure constructor takes in the following parameters:
-		dwStub			Just a stub
-		CLID			A unique class ID
-		szClassName		The name of the class type this RTTI structure represents
-		pBaseClassRTTI	The parent RTTI structure for this RTTI structure
-		pFactory		A factory function callback for creating an instance of the bound class type
-		pReflectionFunc	Callback called by the system to register the reflective properties
-	*/
-	RTTI(uint8 dwStub, ClassID CLID, const char* szClassName, RTTI* pBaseClassRTTI, 
+	/// @brief A factory function used for creating an instance of this class.
+	/// @remarks The function must return a pointer to the base class to make use of the polymorphism.
+	typedef RTTIBaseClass* (*ClassFactoryFunc)();
+
+	/// @brief This functions is called on client classes to register properties into the RTTI.
+	/// @remarks Note that the RegisterReflection function is called automatically when the program boots up.
+	/// This is handled by a trick in the RTTIGlue.h file (bottom).
+	typedef bool (*RegisterReflectionFunc)();
+
+	/// A list of entity component types determining dependencies of a component on other components.
+	typedef vector<EntitySystem::eComponentType> ComponentDependencyList;
+
+	/// A maximum length for a name of a class.
+	const uint32 CLASSNAME_LENGTH = 48;
+
+	/// The %RTTI description structure.
+	class RTTI
+	{
+	public:
+
+		/// @brief RTTI constructor.
+		/// @remarks The first paramter is a stub. I am not sure why this stub is necessary - removing ths stub will
+		/// confuse the .NET compiler and produce compile errors with subsequent parameters. If anybody knows 
+		/// why this is so, feel free to e-mail me at dfilion@hotmail.com
+		/// @param dwStub Just a stub.
+		/// @param CLID A unique class ID.
+		/// @param szClassName The name of the class type this RTTI structure represents.
+		/// @param pBaseClassRTTI The parent RTTI structure for this RTTI structure.
+		/// @param pFactory A factory function callback for creating an instance of the bound class type.
+		/// @param pReflectionFunc Callback called by the system to register the reflective properties.
+		RTTI(uint8 dwStub, ClassID CLID, const char* szClassName, RTTI* pBaseClassRTTI, 
 			ClassFactoryFunc pFactory, RegisterReflectionFunc pReflectionFunc);
 
-	/** @name Fills a data structure with all properties/component dependencies of the represented class type, 
-		including all ancestor types.
-	*/
-	//@{
-	void EnumProperties( AbstractPropertyList& out, const PropertyAccessFlags flagMask = FULL_PROPERTY_ACCESS_FLAGS );
-	void EnumProperties( RTTIBaseClass* owner, PropertyList& out, const PropertyAccessFlags flagMask = FULL_PROPERTY_ACCESS_FLAGS );
-	void EnumComponentDependencies(ComponentDependencyList& out);
-	//@}
+		/// @brief Fills a data structure with all properties of the represented class type, 
+		/// including all ancestor types.
+		void EnumProperties( AbstractPropertyList& out, const PropertyAccessFlags flagMask = FULL_PROPERTY_ACCESS_FLAGS );
 
-	/// @name Returns a property identified by it's name.
-	AbstractProperty* GetProperty(const StringKey& key, const PropertyAccessFlags flagMask = FULL_PROPERTY_ACCESS_FLAGS);
+		/// @brief Fills a data structure with all properties of the represented class type, 
+		/// including all ancestor types.
+		void EnumProperties( RTTIBaseClass* owner, PropertyList& out, const PropertyAccessFlags flagMask = FULL_PROPERTY_ACCESS_FLAGS );
 
-	/// @name Adds a property to the RTTI.
-	void AddProperty(AbstractProperty* prop);
+		/// @brief Fills a data structure with all component dependencies of the represented class type, 
+		/// including all ancestor types.
+		void EnumComponentDependencies(ComponentDependencyList& out);
 
-	/// @name Adds a component dependency to the RTTI.
-	void AddComponentDependency(const EntitySystem::eComponentType dep);
+		/// Returns a property identified by it's string key. Access restriction filter can be defined.
+		AbstractProperty* GetProperty(const StringKey& key, const PropertyAccessFlags flagMask = FULL_PROPERTY_ACCESS_FLAGS);
 
-	/// @name Returns true if the RTTI structure is of the type specified by CLID.
-	inline bool	IsTypeOf(ClassID CLID) const { return mCLID == CLID; }
+		/// Adds a property to the RTTI.
+		void AddProperty(AbstractProperty* prop);
 
-	// Returns true if the RTTI structure is derived from the type specified by CLID.
-	inline bool	IsDerivedFrom(ClassID CLID) const
-	{
-		if( mCLID == CLID )
-			return true;
-		else if( mBaseRTTI )
-			return mBaseRTTI->IsDerivedFrom( CLID );
-		return false;
-	}
+		/// @brief Adds a component dependency to the RTTI.
+		/// @remarks A component can define that it depends on other components. This is then used to determine the order
+		/// of creation of components. It is ensured that all components this component depends on will be created first.
+		void AddComponentDependency(const EntitySystem::eComponentType dep);
 
-	/// @name Gets base class' RTTI structure.
-	inline RTTI* GetAncestorRTTI(void) const { mBaseRTTI; }
+		/// Returns true if the RTTI structure is of the type specified by CLID.
+		inline bool	IsTypeOf(ClassID CLID) const { return mCLID == CLID; }
 
-	/// @name Gets the class ID.
-	inline ClassID GetCLID(void) const { return mCLID; }
+		/// Returns true if the RTTI structure is derived from the type specified by CLID.
+		inline bool	IsDerivedFrom(ClassID CLID) const
+		{
+			if( mCLID == CLID )
+				return true;
+			else if( mBaseRTTI )
+				return mBaseRTTI->IsDerivedFrom( CLID );
+			return false;
+		}
 
-	/// @name Gets the class name.
-	inline const char* GetClassName(void) const { return mClassName; }
+		/// Returns the base class'es RTTI structure.
+		inline RTTI* GetAncestorRTTI(void) const { mBaseRTTI; }
 
-	/// @name Gets the class factory function.
-	inline ClassFactoryFunc	GetClassFactory(void) const { return mClassFactory; }
+		/// Returns this class'es ID.
+		inline ClassID GetCLID(void) const { return mCLID; }
 
+		/// Returns the class name.
+		inline const char* GetClassName(void) const { return mClassName; }
 
-private:
+		/// Returns the class factory function.
+		inline ClassFactoryFunc	GetClassFactory(void) const { return mClassFactory; }
 
-	/// @name A map of properties of this RTTI.
-	typedef hash_map<StringKey, AbstractProperty*> PropertyMap;
+	private:
 
-	ClassID	mCLID;									
-	char mClassName[CLASSNAME_LENGTH];	
-	RTTI* mBaseRTTI;						
-	ClassFactoryFunc mClassFactory;					
-	PropertyMap mProperties;					
-	ComponentDependencyList mComponentDependencies;
+		/// A map of properties of this RTTI.
+		typedef hash_map<StringKey, AbstractProperty*> PropertyMap;
 
-};
+		ClassID	mCLID;									
+		char mClassName[CLASSNAME_LENGTH];	
+		RTTI* mBaseRTTI;						
+		ClassFactoryFunc mClassFactory;					
+		PropertyMap mProperties;					
+		ComponentDependencyList mComponentDependencies;
+
+	};
+}
 
 #endif //__RTTI_H__

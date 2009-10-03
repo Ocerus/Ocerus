@@ -1,17 +1,29 @@
+/// @file
+/// Storage of all properties in the program.
+/// @remarks
+/// Implementation based on the code from Game Programming Gems 5 (1.4).
+
 #ifndef _PROPERTY_SYSTEM_H
 #define _PROPERTY_SYSTEM_H
 
 #include "Property.h"
 #include "../Singleton.h"
 
-/// @name Global manager of all properties. Used to release properties.
-class PropertySystem : Singleton<PropertySystem>
+namespace Reflection
 {
-public :
-	~PropertySystem();
+	/// @brief Global manager of all properties.
+	/// @remarks This class is used to release properties when the program exits.
+	class PropertySystem : Singleton<PropertySystem>
+	{
+	public :
 
-	/// @name Returns the static list of all RTTI properties in the engine. They are released from the destructor.
-	static std::list<AbstractProperty*>* GetProperties(void);
-};
+		/// The destructor responsible for releasing the properties.
+		~PropertySystem();
+
+		/// @brief Returns the static list of all %RTTI properties in the program.
+		/// @remarks The proeprties are released in the destructor.
+		static std::list<AbstractProperty*>* GetProperties(void);
+	};
+}
 
 #endif	// _PROPERTY_SYSTEM_H
