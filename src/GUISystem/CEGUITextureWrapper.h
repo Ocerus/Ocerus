@@ -1,7 +1,7 @@
 #ifndef _CEGUITEXTUREWRAPPER_H
 #define _CEGUITEXTUREWRAPPER_H
 
-#include "Settings.h"
+#include "Base.h"
 #include "CEGUIBase.h"
 #include "CEGUITexture.h"
 #include "../GfxSystem/Texture.h"

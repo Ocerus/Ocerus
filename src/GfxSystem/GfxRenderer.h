@@ -1,9 +1,8 @@
 #ifndef _GFXRENDERER_H_
 #define _GFXRENDERER_H_
 
-#include "Settings.h"
+#include "Base.h"
 #include "Singleton.h"
-#include "Texture.h"
 #include "GfxStructures.h"
 
 #define gGfxRenderer GfxSystem::GfxRenderer::GetSingleton()
@@ -12,8 +11,6 @@ class HGE;
 
 namespace GfxSystem
 {
-	class IScreenListener;
-
 	enum eAnchor { ANCHOR_VCENTER=1<<0, ANCHOR_TOP=1<<1, ANCHOR_BOTTOM=1<<2, ANCHOR_LEFT=1<<3, ANCHOR_RIGHT=1<<4, ANCHOR_HCENTER=1<<5 };
 
 	class GfxRenderer : public Singleton<GfxRenderer>

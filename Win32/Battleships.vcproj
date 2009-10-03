@@ -214,7 +214,7 @@
 				Optimization="2"
 				InlineFunctionExpansion="1"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories="../src/Precompiled;../src/Setup;../src/Utils;../externalLibs/boost/inc;../externalLibs/hge/include;../externalLibs/ois/includes;../externalLibs/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib"
+				AdditionalIncludeDirectories="../src/Precompiled;../src/Utils;../externalLibs/boost/inc;../externalLibs/hge/include;../externalLibs/ois/includes;../externalLibs/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;USE_ASSERT"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="true"
@@ -394,6 +394,14 @@
 					<File
 						RelativePath="..\src\EntitySystem\Components\CmpMaterial.cpp"
 						>
+						<FileConfiguration
+							Name="Develop|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								ShowIncludes="false"
+							/>
+						</FileConfiguration>
 					</File>
 					<File
 						RelativePath="..\src\EntitySystem\Components\CmpPlatformLogic.cpp"
@@ -1049,6 +1057,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\StringSystem\TextData.h"
+					>
+				</File>
+				<File
 					RelativePath="..\src\StringSystem\TextResource.h"
 					>
 				</File>
@@ -1069,6 +1081,10 @@
 		<Filter
 			Name="Precompiled"
 			>
+			<File
+				RelativePath="..\src\Precompiled\Base.h"
+				>
+			</File>
 			<File
 				RelativePath="..\src\Precompiled\Common.cpp"
 				>
@@ -1107,6 +1123,10 @@
 			</File>
 			<File
 				RelativePath="..\src\Precompiled\Common.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\Precompiled\Forwards.h"
 				>
 			</File>
 		</Filter>

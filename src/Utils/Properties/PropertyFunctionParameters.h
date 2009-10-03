@@ -4,7 +4,7 @@
 #ifndef PropertyFunctionParameters_h__
 #define PropertyFunctionParameters_h__
 
-#include "Settings.h"
+#include "Base.h"
 
 namespace Reflection
 {

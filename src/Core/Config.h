@@ -1,7 +1,10 @@
+/// @file
+/// System for storing configuration data.
+
 #ifndef Config_h__
 #define Config_h__
 
-#include "Settings.h"
+#include "Base.h"
 
 namespace rude { class Config; }
 
@@ -15,6 +18,7 @@ namespace Core
 		/// Constructs the config to operate on the specified file.
 		Config(const string& filePath);
 
+		/// Destructs the config and closes all files open.
 		~Config(void);
 
 		/// Forces the config to be saved. However, it is saved automatically when the instance is being destroyed.

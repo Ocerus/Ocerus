@@ -4,10 +4,7 @@
 #ifndef _XMLRESOURCE_H_
 #define _XMLRESOURCE_H_
 
-#include "Resource.h"
-#include "Settings.h"
-#include "ResourcePointers.h"
-#include "StringConverter.h"
+#include "Base.h"
 
 namespace ResourceSystem 
 {

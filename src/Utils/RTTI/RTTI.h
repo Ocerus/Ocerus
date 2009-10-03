@@ -6,10 +6,7 @@
 #ifndef __RTTI_H__
 #define __RTTI_H__
 
-#include "../Properties/AbstractProperty.h"
-#include "../Properties/PropertyHolder.h"
-#include "Settings.h"
-#include "../../EntitySystem/ComponentMgr/ComponentEnums.h"
+#include "Base.h"
 
 /// @brief A set of classes implementing custom %RTTI and reflection.
 /// @remarks 
@@ -23,8 +20,8 @@
 /// and functions using the RTTIGlue::RegisterProperty and RTTIGlue::RegisterFunction functions.
 namespace Reflection
 {
-	class RTTIBaseClass;
-	class RTTI;
+	/// A list of generic properties.
+	typedef vector<AbstractProperty*> AbstractPropertyList;
 
 	/// Type of the identifier of a class.
 	typedef uint32 ClassID;

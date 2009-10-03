@@ -1,8 +1,7 @@
 #ifndef StringConverter_h__
 #define StringConverter_h__
 
-#include "Settings.h"
-#include "../GfxSystem/GfxStructures.h"
+#include "Base.h"
 //TODO nejde tohle pryc?
 #include <sstream>
 

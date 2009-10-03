@@ -4,24 +4,15 @@
 #ifndef _ENTITYMGR_H_
 #define _ENTITYMGR_H_
 
-#include "EntityHandle.h"
-#include "EntityMessage.h"
-#include "EntityEnums.h"
-#include "../../Utils/Properties/PropertyHolderMediator.h"
+#include "Base.h"
 #include "Singleton.h"
-#include "ResourcePointers.h"
+#include "EntityHandle.h"
 
 /// Macro for easier use.
 #define gEntityMgr EntitySystem::EntityMgr::GetSingleton()
 
-namespace Reflection { class PropertyList; }
-
 namespace EntitySystem
 {
-	class ComponentMgr;
-	class EntityDescription;
-	struct EntityMessage;
-
 	/// @brief This class manages all game entities like weapons, enemy ships, projectiles, etc. Manipulation of entities is
 	///	done via entity handles.
 	class EntityMgr : public Singleton<EntityMgr>
@@ -75,14 +66,14 @@ namespace EntitySystem
 
 		//TODO tohle je tu zbytecny; az budou hotovy query na picking, odstranit!
 		/// Fills the output vector with entities matching specified type/team.
-		void EnumerateEntities(vector<EntityHandle>& out, const eEntityType desiredType = NUM_ENTITY_TYPES);
+		void EnumerateEntities(vector<EntityHandle>& out, const eEntityType desiredType);
 
 	private:
 
 		/// This struct holds info about an instance of an entity in the system.
 		struct EntityInfo
 		{
-			EntityInfo(void): mType(ET_UNKNOWN), mFullyInited(false) {}
+			EntityInfo(void);
 			EntityInfo(const eEntityType _type, const string& _ID = ""): mFullyInited(false), mType(_type), mID(_ID) {}
 			EntityInfo(const bool _fullyInited, const eEntityType _type, const string& _ID = ""): mFullyInited(_fullyInited), mType(_type), mID(_ID) {}
 

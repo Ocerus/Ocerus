@@ -1,7 +1,7 @@
 #ifndef _SMARTPOINTER_H_
 #define _SMARTPOINTER_H_
 
-#include "Settings.h"
+#include "../Setup/Settings.h"
 
 namespace Utils
 {

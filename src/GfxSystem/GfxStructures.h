@@ -1,10 +1,10 @@
 #ifndef GfxStructures_h__
 #define GfxStructures_h__
 
+#include "Base.h"
+
 namespace GfxSystem
 {
-	class IScreenListener;
-
 	struct Point
 	{
 		Point(int32 _x, int32 _y): x(_x), y(_y) {}

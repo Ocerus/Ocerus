@@ -1,9 +1,10 @@
 #ifndef _RENDERERGATE_H_
 #define _RENDERERGATE_H_
 
-#include "Settings.h"
+#include "Base.h"
 #include "../GfxSystem/GfxRenderer.h"
 #include "../GfxSystem/IScreenListener.h"
+#include "../GfxSystem/Texture.h"
 #include "CEGUIRenderer.h"
 #include "ResourceGate.h"
 

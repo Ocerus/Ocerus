@@ -4,13 +4,11 @@
 #ifndef ComponentIterators_h__
 #define ComponentIterators_h__
 
-#include "Settings.h"
+#include "Base.h"
 #include "ComponentEnums.h"
 
 namespace EntitySystem 
 {
-
-	class Component;
 	
 	/// A list of generic components.
 	typedef vector<Component*> ComponentsList;

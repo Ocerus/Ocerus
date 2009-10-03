@@ -6,12 +6,10 @@
 #ifndef _TYPED_PROPERTY_H
 #define _TYPED_PROPERTY_H
 
-#include "../Properties/AbstractProperty.h"
+#include "AbstractProperty.h"
 
 namespace Reflection
 {
-	class RTTIBaseClass;
-
 	/// This intermediate class defines a property that is typed, but not bound as a member of a particular	class.
 	template <class T> class TypedProperty: public AbstractProperty
 	{

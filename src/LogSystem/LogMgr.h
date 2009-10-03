@@ -4,8 +4,8 @@
 #ifndef LogMgr_h__
 #define LogMgr_h__
 
+#include "Base.h"
 #include "Singleton.h"
-#include "Settings.h"
 //TODO tohle pryc nejak
 #include <boost/filesystem/fstream.hpp>
 

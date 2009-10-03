@@ -5,7 +5,7 @@
 #ifndef PropertyHolderMediator_h__
 #define PropertyHolderMediator_h__
 
-#include "Settings.h"
+#include "Base.h"
 
 namespace Reflection
 {

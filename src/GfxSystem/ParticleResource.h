@@ -1,8 +1,8 @@
 #ifndef _PARTICLERESOURCE_H_
 #define _PARTICLERESOURCE_H_
 
+#include "Base.h"
 #include "../ResourceSystem/Resource.h"
-#include "Settings.h"
 #include "hgeanim.h"
 #include "hgeparticle.h"
 

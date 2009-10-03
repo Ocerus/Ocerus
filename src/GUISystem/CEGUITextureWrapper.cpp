@@ -1,6 +1,5 @@
 #include "Common.h"
 #include "CEGUITextureWrapper.h"
-#include "Settings.h"
 #include "CEGUIBase.h"
 #include "CEGUIString.h"
 #include "GUIMgr.h"

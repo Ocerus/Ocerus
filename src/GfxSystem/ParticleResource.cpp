@@ -1,6 +1,6 @@
 #include "Common.h"
 #include "ParticleResource.h"
-#include "MathUtils.h"
+#include "Texture.h"
 
 using namespace GfxSystem;
 

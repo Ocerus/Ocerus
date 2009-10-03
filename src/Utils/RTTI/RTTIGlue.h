@@ -6,11 +6,10 @@
 #ifndef _RTTICLASS_H
 #define _RTTICLASS_H
 
+#include "Base.h"
 #include "RTTI.h"
 #include "../Properties/PropertySystem.h"
 #include "../Properties/Property.h"
-#include "../Hash.h"
-#include "../../EntitySystem/ComponentMgr/ComponentEnums.h"
 
 namespace Reflection
 {

@@ -4,13 +4,10 @@
 #ifndef _ENTITYDESCRIPTION_H_
 #define _ENTITYDESCRIPTION_H_
 
-#include "Settings.h"
-#include "EntityEnums.h"
-#include "../ComponentMgr/ComponentEnums.h"
+#include "Base.h"
 
 namespace EntitySystem
 {
-
 	/// @brief This class contains all info needed to create one instance of an entity. It is basically a collection of
 	///	component descriptions.
 	class EntityDescription

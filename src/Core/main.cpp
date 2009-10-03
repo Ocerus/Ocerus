@@ -1,7 +1,5 @@
 #include "Common.h"
 #include "Application.h"
-#include "Settings.h"
-#include "../LogSystem/LogMgr.h"
 
 #include <Windows.h>
 #include <exception>

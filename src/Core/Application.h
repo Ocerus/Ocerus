@@ -4,23 +4,12 @@
 #ifndef APPLICATION_h__
 #define APPLICATION_h__
 
-#include "StateMachine.h"
-#include "Settings.h"
-#include "Timer.h"
+#include "Base.h"
 #include "Singleton.h"
+#include "StateMachine.h"
 
 /// Macro for easier use.
 #define gApp Core::Application::GetSingleton()
-
-namespace ResourceSystem { class ResourceMgr; }
-namespace InputSystem { class InputMgr; }
-namespace GfxSystem { class GfxRenderer; }
-namespace GfxSystem { class ParticleSystemMgr; }
-namespace EntitySystem { class EntityMgr; }
-namespace LogSystem { class LogMgr; }
-namespace GUISystem { class GUIMgr; }
-namespace StringSystem { class StringMgr; }
-namespace Utils { class Timer; }
 
 /// Main namespace of the application.
 namespace Core

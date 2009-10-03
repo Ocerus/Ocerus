@@ -2,7 +2,6 @@
 #define CmpPlatformParams_h__
 
 #include "../ComponentMgr/Component.h"
-#include "../../GfxSystem/GfxStructures.h"
 
 namespace EntityComponents
 {

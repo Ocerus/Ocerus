@@ -5,7 +5,7 @@
 #ifndef EntityEnums_h__
 #define EntityEnums_h__
 
-#include "Settings.h"
+#include "Base.h"
 
 namespace EntitySystem
 {

@@ -36,7 +36,5 @@ inline std::ios_base::openmode InputStreamMode(eInputStreamMode mode)
 	return std::ios_base::in | std::ios_base::binary;
 }
 
-#include "Tree.h"
-
 
 #endif // ComplexTypes_h__

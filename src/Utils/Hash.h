@@ -4,7 +4,7 @@
 #ifndef Hash_h__
 #define Hash_h__
 
-#include "Settings.h"
+#include "Base.h"
 
 namespace Utils
 {

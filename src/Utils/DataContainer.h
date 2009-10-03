@@ -4,7 +4,7 @@
 #ifndef DataContainer_h__
 #define DataContainer_h__
 
-#include "Settings.h"
+#include "Base.h"
 
 /// This namespace contains utility classes and functions.
 namespace Utils

@@ -1,7 +1,7 @@
 #ifndef _RESOURCEGATE_H_
 #define _RESOURCEGATE_H_
 
-#include "Settings.h"
+#include "Base.h"
 #include "CEGUIResourceProvider.h"
 
 namespace GUISystem {

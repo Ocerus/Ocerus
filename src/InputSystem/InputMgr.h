@@ -4,9 +4,8 @@
 #ifndef InputMgr_h__
 #define InputMgr_h__
 
+#include "Base.h"
 #include "Singleton.h"
-#include "Settings.h"
-#include "InputActions.h"
 #include "../GfxSystem/IScreenListener.h"
 
 /// Macro for easier use.
@@ -21,8 +20,6 @@ namespace OIS
 /// Input system manages events from all input devices connected to the computer which are required by the game.
 namespace InputSystem
 {
-	class IInputListener;
-	class OISListener;
 
 	/// @brief This class processes all input from external devices such as mouse, keyboard or joystick. You can query its
 	///	current state or register for event callbacks.

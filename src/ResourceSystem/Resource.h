@@ -4,9 +4,7 @@
 #ifndef _RESOURCE_H_
 #define _RESOURCE_H_
 
-#include "SmartPointer.h"
-#include "Settings.h"
-#include "ResourcePointers.h"
+#include "Base.h"
 //TODO odstranit tenhle include!
 #include <boost/filesystem/fstream.hpp>
 

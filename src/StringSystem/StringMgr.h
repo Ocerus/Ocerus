@@ -4,8 +4,9 @@
 #ifndef _STRINGMGR_H_
 #define _STRINGMGR_H_
 
+#include "Base.h"
 #include "Singleton.h"
-#include "TextResource.h"
+#include "TextData.h"
 
 /// Macro for easier use
 #define gStringMgr StringSystem::StringMgr::GetSingleton()

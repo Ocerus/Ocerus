@@ -6,13 +6,13 @@
 #ifndef _ABSTRACT_PROPERTY_H
 #define _ABSTRACT_PROPERTY_H
 
-#include "PropertyTypes.h"
+#include "Base.h"
 #include "TypedProperty.h"
-#include "../StringKey.h"
+#include "StringKey.h"
 
 namespace Reflection
 {
-	class RTTIBaseClass;
+	enum ePropertyType;
 
 	/// @brief Base class for all properties.
 	/// @remarks A property represents either a field or a function of a class instance. The key advantage of properties
@@ -86,9 +86,6 @@ namespace Reflection
 		PropertyAccessFlags mAccessFlags;
 
 	};
-
-	/// A list of generic properties.
-	typedef vector<AbstractProperty*> AbstractPropertyList;
 }
 
 #endif	// _ABSTRACT_PROPERTY_H

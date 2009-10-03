@@ -1,7 +1,7 @@
 #ifndef _CEGUIRESOURCE_H_
 #define _CEGUIRESOURCE_H_
 
-#include "Settings.h"
+#include "Base.h"
 #include "ResourcePointers.h"
 #include "../ResourceSystem/Resource.h"
 

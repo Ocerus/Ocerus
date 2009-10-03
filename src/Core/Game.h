@@ -4,12 +4,9 @@
 #ifndef Game_h__
 #define Game_h__
 
+#include "Base.h"
 #include "StateMachine.h"
-#include "Settings.h"
-#include "ResourcePointers.h"
 #include "../InputSystem/IInputListener.h"
-#include "../EntitySystem/EntityMgr/EntityHandle.h"
-#include "../EntitySystem/EntityMgr/EntityEnums.h"
 #include "Dynamics/b2WorldCallbacks.h"
 
 class b2World;
@@ -20,10 +17,9 @@ namespace Core
 	/// Inner states of the game state.
 	enum eGameState 
 	{ 
+		/// Standard state of a running game.
 		GS_NORMAL=0 
 	};
-
-	class WaterSurface;
 
 	/// This class holds all info related directly to the game itself and takes care about rendering, input and game logic.
 	class Game : public StateMachine<eGameState>, public InputSystem::IInputListener, public b2ContactFilter, public b2ContactListener

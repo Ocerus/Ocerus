@@ -4,16 +4,13 @@
 #ifndef OISListener_h__
 #define OISListener_h__
 
+#include "Base.h"
 //TODO odtud se includuje STD
 #include <OISMouse.h>
 #include <OISKeyboard.h>
-#include "Settings.h"
 
 namespace InputSystem
 {
-	class InputMgr;
-	enum eKeyCode;
-
 	/// OIS library specific wrapper to hide its implementation.
 	class OISListener : public OIS::MouseListener, public OIS::KeyListener
 	{

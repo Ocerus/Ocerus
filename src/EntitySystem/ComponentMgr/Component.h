@@ -4,17 +4,13 @@
 #ifndef _COMPONENT_H_
 #define _COMPONENT_H_
 
-#include "Properties.h"
-#include "../EntityMgr/EntityHandle.h"
-#include "StringKey.h"
+// Note that all includes necessary are already contained in Common.h, so there's no need to include them here.
 
 /// Set of all user defined entity components usable by entities.
 namespace EntityComponents { using namespace EntitySystem; }
 
 namespace EntitySystem
 {
-	struct EntityMessage;
-
 	/// Base class for all entity components. This class contains the only means to communicate with entity components.
 	class Component : public RTTIBaseClass
 	{

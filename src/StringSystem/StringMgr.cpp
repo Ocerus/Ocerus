@@ -1,5 +1,6 @@
 #include "Common.h"
 #include "StringMgr.h"
+#include "TextResource.h"
 
 using namespace StringSystem;
 

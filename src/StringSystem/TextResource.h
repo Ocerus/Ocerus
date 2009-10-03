@@ -4,20 +4,11 @@
 #ifndef _TEXTRESOURCE_H_
 #define _TEXTRESOURCE_H_
 
-#include "../ResourceSystem/Resource.h"
-#include "Settings.h"
-#include "ResourcePointers.h"
-#include "StringKey.h"
-
+#include "Base.h"
+#include "TextData.h"
 
 namespace StringSystem 
 {
-	/// Type of the data stored by this resource.
-	typedef string TextData;
-
-	/// Container used for storing the text data.
-	typedef map<StringKey, TextData> TextDataMap;
-
 	/// @brief This class represents a single text resource.
 	/// @remarks Main purpose of the class is to load and parse a .str file, not to store the actual data. You should
 	///	only use StringMgr to load text resources (although its possible to load it directly with ResourceMgr,

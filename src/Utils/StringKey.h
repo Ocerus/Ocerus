@@ -1,7 +1,7 @@
 #ifndef StringKey_h__
 #define StringKey_h__
 
-#include "Settings.h"
+#include "Base.h"
 
 namespace Utils
 {

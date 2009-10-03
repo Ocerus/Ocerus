@@ -4,11 +4,9 @@
 #ifndef _COMPONENTMGR_H_
 #define _COMPONENTMGR_H_
 
-#include "../EntityMgr/EntityHandle.h"
+#include "Base.h"
 #include "Singleton.h"
-#include "../../Utils/Properties/PropertyHolderMediator.h"
 #include "ComponentIterators.h"
-#include "ComponentEnums.h"
 
 /// @brief Entity system manages game entities and their parts. 
 /// @remarks However, it takes care of their logical representation and
@@ -16,9 +14,6 @@
 /// structure for faster visibility culling of entities.
 namespace EntitySystem
 {
-
-	class Component;
-
 	/// Type used for a registration function of individual components.
 	typedef Component* (*ComponentCreationMethod)(void);
 

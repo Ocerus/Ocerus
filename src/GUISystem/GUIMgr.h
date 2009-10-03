@@ -1,10 +1,9 @@
 #ifndef _GUIMGR_H_
 #define _GUIMGR_H_
 
+#include "Base.h"
 #include "Singleton.h"
-#include "Settings.h"
 #include "../InputSystem/IInputListener.h"
-#include "Settings.h"
 #include "StaticElements.h"
 //TODO zbavit se techto includu pokud mozno
 #include "CEGUIBase.h"

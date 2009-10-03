@@ -4,10 +4,8 @@
 #ifndef _RESOURCEMGR_H_
 #define _RESOURCEMGR_H_
 
-#include "StringKey.h"
+#include "Base.h"
 #include "Singleton.h"
-#include "Resource.h"
-#include "ResourcePointers.h"
 
 /// Macro for easier use
 #define gResourceMgr ResourceSystem::ResourceMgr::GetSingleton()
@@ -15,8 +13,6 @@
 /// %Resource system manages all data which has to be loaded from files or other external storage media.
 namespace ResourceSystem
 {
-	class IResourceLoadingListener;
-
 	/// @brief This class manages all resources of the program. A resource is everything what is loaded from disk or any
 	///	other persistent medium (or even network stream).
 	/// @remarks Resources are coupled into groups for easier manipulation. Resources are unloaded and reloaded as the system sees fit. There are different states a resource can be in. It can either not exist in the system, or it can

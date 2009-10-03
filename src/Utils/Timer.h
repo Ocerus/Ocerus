@@ -1,7 +1,7 @@
 #ifndef Timer_h__
 #define Timer_h__
 
-#include "Settings.h"
+#include "Base.h"
 
 namespace Utils
 {

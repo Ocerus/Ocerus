@@ -4,14 +4,12 @@
 #ifndef PropertyHolder_h__
 #define PropertyHolder_h__
 
+#include "Base.h"
 #include "AbstractProperty.h"
-#include "Settings.h"
 #include "PropertyHolderMediator.h"
 
 namespace Reflection
 {
-	class RTTIBaseClass;
-
 	/// This class encapsulates abstract properties to allow easier access to their values and/or calling functions.
 	class PropertyHolder
 	{

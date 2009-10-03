@@ -4,8 +4,7 @@
 #ifndef PropertyList_h__
 #define PropertyList_h__
 
-#include "PropertyHolder.h"
-#include "StringKey.h"
+#include "Base.h"
 
 namespace Reflection
 {

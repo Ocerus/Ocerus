@@ -62,8 +62,6 @@ Using a comparison class now, but this should be investigated.
 #ifndef tree_hh_
 #define tree_hh_
 
-#include "Settings.h"
-
 //TODO prepsat bez STD?
 #include <memory>
 #include <stdexcept>

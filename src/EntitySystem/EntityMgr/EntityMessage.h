@@ -6,7 +6,6 @@
 
 namespace EntitySystem
 {
-
 	/// @brief Defines messages which can be send to entities.
 	/// @remarks
 	/// After the message is sent to an entity, it will go through all of its components and hope one (or more)

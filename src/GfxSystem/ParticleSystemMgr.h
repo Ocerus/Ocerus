@@ -1,7 +1,7 @@
 #ifndef _PARTICLESYSTEMMGR_H_
 #define _PARTICLESYSTEMMGR_H_
 
-#include "Settings.h"
+#include "Base.h"
 #include "ParticleSystem.h"
 #include "ParticleResource.h"
 

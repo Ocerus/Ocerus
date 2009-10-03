@@ -357,3 +357,10 @@ void EntitySystem::EntityMgr::EnumerateEntities( vector<EntityHandle>& out, cons
 		if (desiredType == NUM_ENTITY_TYPES || it->second->mType == desiredType)
 			out.push_back(it->first);
 }
+
+EntitySystem::EntityMgr::EntityInfo::EntityInfo( void ):
+	mType(ET_UNKNOWN), 
+	mFullyInited(false)
+{
+
+}

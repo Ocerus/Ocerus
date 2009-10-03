@@ -4,7 +4,7 @@
 #ifndef _MATHUTILS_H_
 #define _MATHUTILS_H_
 
-#include "Settings.h"
+#include "../Setup/Settings.h"
 #include <math.h>
 
 namespace Utils

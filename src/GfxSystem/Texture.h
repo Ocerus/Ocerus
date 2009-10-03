@@ -1,9 +1,8 @@
 #ifndef _TEXTURE_H_
 #define _TEXTURE_H_
 
+#include "Base.h"
 #include "../ResourceSystem/Resource.h"
-#include "Settings.h"
-#include "ResourcePointers.h"
 
 namespace GfxSystem
 {

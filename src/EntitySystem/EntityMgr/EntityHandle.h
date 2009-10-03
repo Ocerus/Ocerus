@@ -4,18 +4,11 @@
 #ifndef _ENTITYHANDLE_H_
 #define _ENTITYHANDLE_H_
 
-#include "Settings.h"
-#include "StringKey.h"
-#include "../../Utils/Properties/PropertyHolderMediator.h"
+#include "Base.h"
 #include "EntityMessage.h"
-#include "EntityEnums.h"
-
-namespace Reflection { class PropertyList; }
 
 namespace EntitySystem
 {
-	class EntityMgr;
-
 	/// Entity identifier.
 	typedef uint32 EntityID;
 

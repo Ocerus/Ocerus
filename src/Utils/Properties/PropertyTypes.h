@@ -6,11 +6,7 @@
 #ifndef _PROPERTY_TYPES_H
 #define _PROPERTY_TYPES_H
 
-#include "Settings.h"
-//TODO nejde to jen s forward deklaraci?
-#include "../../EntitySystem/EntityMgr/EntityHandle.h"
-#include "StringKey.h"
-#include "../../GfxSystem/GfxStructures.h"
+#include "Base.h"
 #include "PropertyFunctionParameters.h"
 
 namespace Reflection
