@@ -3,7 +3,10 @@
 
 using namespace EntitySystem;
 
-EntityDescription::EntityDescription() {}
+EntityDescription::EntityDescription()
+{
+
+}
 
 EntityDescription::~EntityDescription()
 {
@@ -12,8 +15,8 @@ EntityDescription::~EntityDescription()
 
 void EntityDescription::Clear(void)
 {
-	mComponents.clear();
 	mID = "";
+	mComponents.clear();
 }
 
 void EntityDescription::Init(const eEntityType type, const string& ID)
@@ -28,10 +31,4 @@ void EntityDescription::AddComponent(const eComponentType type)
 {
 	BS_ASSERT_MSG(type != CT_INVALID, "Invalid component description type");
 	mComponents.push_back(type);
-}
-
-eComponentType EntityDescription::_GetNextComponent()
-{
-	BS_ASSERT(mIndex<mComponents.size());
-	return mComponents[mIndex++];
 }

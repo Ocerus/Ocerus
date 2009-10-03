@@ -32,7 +32,7 @@ namespace EntitySystem
 		~EntityMgr(void);
 
 		/// Creates new entity accorindgly to its description and returns its handle.
-		EntityHandle CreateEntity(const EntityDescription& desc, PropertyList& out);
+		EntityHandle CreateEntity(EntityDescription& desc, PropertyList& out);
 
 		/// Destroys a specified entity if it exists.
 		void DestroyEntity(const EntityHandle h);

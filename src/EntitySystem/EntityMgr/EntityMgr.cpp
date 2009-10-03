@@ -63,44 +63,56 @@ void EntityMgr::BroadcastMessage(const EntityMessage& msg)
 		PostMessage(i->first, msg);
 }
 
-EntityHandle EntityMgr::CreateEntity(const EntityDescription& desc, PropertyList& out)
+EntityHandle EntityMgr::CreateEntity(EntityDescription& desc, PropertyList& out)
 {
 	BS_ASSERT(mComponentMgr);
-	EntityDescription::ComponentDescriptionsList::const_iterator i = desc.mComponents.begin();
-	if (i == desc.mComponents.end())
-		return EntityHandle::Null;
+
+	if (desc.mComponents.size() == 0)
+	{
+		gLogMgr.LogMessage("Attempting to create an entity without components");
+		return EntityHandle::Null; // no components, so we can't create the entity
+	}
+
+	// create the handle for the new entity
 	EntityHandle h = EntityHandle::CreateUniqueHandle();
 	//TODO check if the handle is really unique
 
 	bool dependencyFailure = false;
-	set<eComponentType> cmpTypes;
+	set<eComponentType> createdComponentTypes;
 
-	for (; i!=desc.mComponents.end(); ++i)
+	for (ComponentDependencyList::const_iterator cmpDescIt=desc.mComponents.begin(); cmpDescIt!=desc.mComponents.end(); ++cmpDescIt)
 	{
-		Component* cmp = mComponentMgr->CreateComponent(h, *i);
+		eComponentType cmpType = *cmpDescIt;
+
+		// create the component
+		Component* cmp = mComponentMgr->CreateComponent(h, cmpType);
 		BS_ASSERT(cmp);
 		
-		// check dependencies
+		// check dependencies of the component
 		ComponentDependencyList depList;
 		cmp->GetRTTI()->EnumComponentDependencies(depList);
 		for (ComponentDependencyList::const_iterator depIt=depList.begin(); depIt!=depList.end(); ++depIt)
-			if (cmpTypes.find(*depIt) == cmpTypes.end())
+			if (createdComponentTypes.find(*depIt) == createdComponentTypes.end())
 				dependencyFailure = true;
 
-		cmpTypes.insert(*i);
+		// take a note that this component type was already created
+		createdComponentTypes.insert(cmpType);
 	}
+
+	// inits the attributes for the new components
 	mEntities[h.GetID()] = DYN_NEW EntityInfo(desc.mType, desc.mID);
 
+	// security checks
 	if (dependencyFailure)
 	{
 		gLogMgr.LogMessage("Component dependency failure on entity '", h.GetID(), "' of type '", desc.mType, "'", LOG_ERROR);
 		DestroyEntity(h);
-		return h; // do like nothing happened, but don't enum properties or they will access invalid memory
+		return h; // do like nothing's happened, but don't enum properties or they will access invalid memory
 	}
-
 	if (!GetEntityProperties(h.GetID(), out, PROPACC_INIT))
+	{
 		gLogMgr.LogMessage("Can't get properties for created entity of type", desc.mType, LOG_ERROR);
-
+	}
 
 	return h;
 }

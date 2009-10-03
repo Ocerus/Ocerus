@@ -26,9 +26,6 @@ namespace EntitySystem
 		/// Addd new component specified by its type.
 		void AddComponent(const eComponentType type);
 
-		/// For internal use by the ComponentMgr. Advances to the next component in an internal list.
-		eComponentType _GetNextComponent(void);
-
 	private:
 
 		friend class EntityMgr;
