@@ -17,7 +17,8 @@ Application::Application():
 void Application::Init()
 {
 	// create basic singletons
-	mLogMgr = DYN_NEW LogSystem::LogMgr("CoreLog.txt", LOG_TRIVIAL);
+	LogSystem::LogMgr::CreateSingleton();
+	LogSystem::LogMgr::GetSingleton().Init("CoreLog.txt", LOG_TRIVIAL);
 
 	// get access to config file
 	mGlobalConfig = DYN_NEW Config("config.txt");
@@ -32,13 +33,21 @@ void Application::Init()
 	ShowConsole(); 
 
 	// create singletons
-	mResourceMgr = DYN_NEW ResourceSystem::ResourceMgr("data/");
-	mStringMgr = DYN_NEW StringSystem::StringMgr(); 
-	mGfxRenderer = DYN_NEW GfxSystem::GfxRenderer(GfxSystem::Point(1024,768), false);
-	mInputMgr = DYN_NEW InputSystem::InputMgr();
-	mEntityMgr = DYN_NEW EntitySystem::EntityMgr();
-	mGUIMgr = DYN_NEW GUISystem::GUIMgr();
-	mPSMgr = DYN_NEW GfxSystem::ParticleSystemMgr();
+	ResourceSystem::ResourceMgr::CreateSingleton();
+	ResourceSystem::ResourceMgr::GetSingleton().Init("data/");
+
+	StringSystem::StringMgr::CreateSingleton(); 
+
+	GfxSystem::GfxRenderer::CreateSingleton();
+	GfxSystem::GfxRenderer::GetSingleton().Init(GfxSystem::Point(1024,768), false);
+
+	InputSystem::InputMgr::CreateSingleton();
+
+	EntitySystem::EntityMgr::CreateSingleton();
+
+	GUISystem::GUIMgr::CreateSingleton();
+
+	GfxSystem::ParticleSystemMgr::CreateSingleton();
 
 	// create core states
 	mLoadingScreen = DYN_NEW LoadingScreen();
@@ -58,21 +67,21 @@ Application::~Application()
 
 	DYN_DELETE mLoadingScreen;
 	
-	DYN_DELETE mGUIMgr;
+	GUISystem::GUIMgr::DestroySingleton();
 
-	mResourceMgr->UnloadAllResources();
+	ResourceSystem::ResourceMgr::GetSingleton().UnloadAllResources();
 
-	DYN_DELETE mEntityMgr;
+	EntitySystem::EntityMgr::DestroySingleton();
 	DYN_DELETE mGame;
-	DYN_DELETE mInputMgr;		
-	DYN_DELETE mGfxRenderer;
-	DYN_DELETE mStringMgr;
-	DYN_DELETE mResourceMgr;
-	DYN_DELETE mPSMgr;
+	InputSystem::InputMgr::DestroySingleton();
+	GfxSystem::GfxRenderer::DestroySingleton();
+	StringSystem::StringMgr::DestroySingleton();
+	ResourceSystem::ResourceMgr::DestroySingleton();
+	GfxSystem::ParticleSystemMgr::DestroySingleton();
 	
 	// must come last
 	DYN_DELETE mGlobalConfig;
-	DYN_DELETE mLogMgr;
+	LogSystem::LogMgr::DestroySingleton();
 }
 
 void Application::RunMainLoop()
@@ -83,7 +92,7 @@ void Application::RunMainLoop()
 		MessagePump();
 
 		// process input events
-		mInputMgr->CaptureInput();
+		gInputMgr.CaptureInput();
 
 		// calculate time since last frame
 		float32 delta = CalculateFrameDeltaTime();
@@ -99,7 +108,7 @@ void Application::RunMainLoop()
 			break;
 		case AS_GAME:
 			mGame->Update(delta);
-			mGUIMgr->Update(delta);
+			gGUIMgr.Update(delta);
 			break;
 		}
 		
@@ -110,7 +119,7 @@ void Application::RunMainLoop()
 			{
 			case AS_GAME:
 				mGame->Draw(delta);
-				mGUIMgr->RenderGUI();
+				gGUIMgr.RenderGUI();
 				break;
 			}
 

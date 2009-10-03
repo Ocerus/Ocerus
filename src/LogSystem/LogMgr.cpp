@@ -9,11 +9,9 @@
 using namespace LogSystem;
 
 
-LogSystem::LogMgr::LogMgr(const string& name, eLogSeverity severityLevel): mSeverityLevel(severityLevel)
+LogSystem::LogMgr::LogMgr( void )
 {
-	mOutStream.open(name.c_str());
 
-	gLogMgr.LogMessage("Log created", LOG_INFO);
 }
 
 LogSystem::LogMgr::~LogMgr()
@@ -21,6 +19,15 @@ LogSystem::LogMgr::~LogMgr()
 	mOutStream.close();
 }
 
+
+void LogSystem::LogMgr::Init( const string& name, eLogSeverity severityLevel )
+{
+	mSeverityLevel = severityLevel;
+
+	mOutStream.open(name.c_str());
+
+	gLogMgr.LogMessage("Log created", LOG_INFO);
+}
 
 void LogSystem::LogMgr::LogMessage(const string& msg, eLogSeverity severity)
 {

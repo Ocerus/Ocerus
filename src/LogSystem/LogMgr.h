@@ -23,11 +23,13 @@ namespace LogSystem
 	{
 	public:
 
-		///	@brief Creates a new instance of the logger.
+		LogMgr(void);
+		~LogMgr(void);
+
+		///	@brief Initializes the logger.
 		/// @param name Name of the log file to be used.
 		/// @param severityLevel Messages with lower level will be discarded.
-		LogMgr(const string& name, eLogSeverity severityLevel);
-		~LogMgr(void);
+		void Init(const string& name, eLogSeverity severityLevel);
 	
 		//@{
 		/// Saves a note into the log file.

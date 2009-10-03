@@ -7,6 +7,8 @@
 namespace Core
 {
 	class Config;
+	class Game;
+	class LoadingScreen;
 }
 
 namespace EntitySystem

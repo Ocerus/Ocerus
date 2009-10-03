@@ -40,11 +40,16 @@ using namespace GfxSystem;
 #define DEFAULT_IMAGE_WORLD_SCALE 0.02f
 
 
-GfxRenderer::GfxRenderer(const Point& resolution, bool fullscreen):
+GfxRenderer::GfxRenderer( void ):
 	mCameraX(0),
 	mCameraY(0),
 	mCameraScale(1.0f),
 	mHGE(0)
+{
+
+}
+
+void GfxRenderer::Init( const Point& resolution, bool fullscreen )
 {
 	gLogMgr.LogMessage("*** GfxRenderer init ***");
 

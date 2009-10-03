@@ -14,9 +14,16 @@
 
 using namespace ResourceSystem;
 
-ResourceMgr::ResourceMgr(const string& basepath): 
-	mListener(0), mBasePath(basepath)
+ResourceMgr::ResourceMgr( void ): 
+	mListener(0), mBasePath()
 {
+
+}
+
+void ResourceSystem::ResourceMgr::Init( const string& basepath )
+{
+	mBasePath = basepath;
+
 	gLogMgr.LogMessage("*** ResourceMgr init ***");
 	gLogMgr.LogMessage("Base directory = ", basepath);
 

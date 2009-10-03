@@ -14,10 +14,6 @@
 /// Main namespace of the application.
 namespace Core
 {
-	class LoadingScreen;
-	class Game;
-	class Config;
-
 	/// State which the application can be in.
 	enum eAppState 
 	{ 
@@ -28,9 +24,7 @@ namespace Core
 		/// A game is currently in the progress.
 		AS_GAME, 
 		/// The application is shutting down.
-		AS_SHUTDOWN, 
-		/// 
-//		AS_GUI
+		AS_SHUTDOWN
 	};
 
 	/// Main class of the whole application. One instance is created at startup and the RunMainLoop() method is invoked.
@@ -82,16 +76,6 @@ namespace Core
 		Game* GetCurrentGame(void) const { BS_ASSERT(mGame); return mGame; }
 
 	private:
-
-		/// Singletons
-		ResourceSystem::ResourceMgr* mResourceMgr;
-		StringSystem::StringMgr* mStringMgr;
-		InputSystem::InputMgr* mInputMgr;
-		GfxSystem::GfxRenderer* mGfxRenderer;
-		EntitySystem::EntityMgr* mEntityMgr;
-		LogSystem::LogMgr* mLogMgr;
-		GUISystem::GUIMgr* mGUIMgr;
-		GfxSystem::ParticleSystemMgr* mPSMgr;
 
 		/// Application states.
 		LoadingScreen* mLoadingScreen;

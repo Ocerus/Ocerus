@@ -21,11 +21,12 @@ namespace ResourceSystem
 	{
 	public:
 
+		ResourceMgr(void);
+		~ResourceMgr(void);
+
 		/// @brief All resource types must be registered inside this ctor, so don't forget to add new types there!
 		/// @param basepath Path to directory where all resources can be found if readed from disk.
-		ResourceMgr(const string& basepath);
-
-		~ResourceMgr(void);
+		void Init(const string& basepath);
 
 		/// Assings resources in a directory to a group. In this case the resource types will be autodetected.
 		bool AddResourceDirToGroup(const string& path, const StringKey& group, const string& includeRegexp = "*.*", const string& excludeRegexp = "");

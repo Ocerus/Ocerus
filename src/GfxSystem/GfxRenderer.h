@@ -16,8 +16,11 @@ namespace GfxSystem
 	class GfxRenderer : public Singleton<GfxRenderer>
 	{
 	public:
-		GfxRenderer(const Point& resolution, bool fullscreen);
+
+		GfxRenderer(void);
 		~GfxRenderer(void);
+
+		void Init(const Point& resolution, bool fullscreen);
 
 		inline void ChangeResolution(const Point& resolution) { ChangeResolution(resolution.x, resolution.y); }
 		void ChangeResolution(const uint32 width, const uint32 height);

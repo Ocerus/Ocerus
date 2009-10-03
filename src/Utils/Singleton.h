@@ -25,6 +25,20 @@ namespace Utils
 			msSingleton = 0;
 		}
 
+		/// Constructs the singleton instance.
+		static void CreateSingleton(void)
+		{
+			BS_ASSERT(!msSingleton);
+			DYN_NEW T();
+		}
+
+		/// Destructs the singleton instance.
+		static void DestroySingleton(void)
+		{
+			BS_ASSERT(msSingleton);
+			DYN_DELETE msSingleton;
+		}
+
 		/// Returns reference to the singleton instance.
 		static T& GetSingleton(void)
 		{
