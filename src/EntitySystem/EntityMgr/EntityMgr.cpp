@@ -331,36 +331,6 @@ bool EntitySystem::EntityMgr::LoadFromResource( ResourceSystem::ResourcePtr res 
 	return false;
 }
 
-EntitySystem::TeamID EntitySystem::EntityMgr::GetEntityTeam( const EntityHandle h ) const
-{
-	EntityMap::const_iterator it = mEntities.find(h.GetID());
-	if (it == mEntities.end())
-	{
-		gLogMgr.LogMessage("Can't find entity", h.GetID(), LOG_ERROR);
-		return 0;
-	}
-	return it->second->mTeam;
-}
-
-void EntitySystem::EntityMgr::SetEntityTeam( const EntityHandle h, const EntityHandle teamOwner )
-{
-	if (teamOwner.IsValid())
-		SetEntityTeam(h, teamOwner.GetID());
-	else
-		SetEntityTeam(h, 0);
-}
-
-void EntitySystem::EntityMgr::SetEntityTeam( const EntityHandle h, const TeamID team )
-{
-	EntityMap::const_iterator it = mEntities.find(h.GetID());
-	if (it == mEntities.end())
-	{
-		gLogMgr.LogMessage("Can't find entity", h.GetID(), LOG_ERROR);
-		return;
-	}
-	it->second->mTeam = team;
-}
-
 bool EntitySystem::EntityMgr::EntityExists( const EntityHandle h ) const
 {
 	if (!h.IsValid())
@@ -368,10 +338,10 @@ bool EntitySystem::EntityMgr::EntityExists( const EntityHandle h ) const
 	return mEntities.find(h.GetID()) != mEntities.end();
 }
 
-void EntitySystem::EntityMgr::EnumerateEntities( vector<EntityHandle>& out, const eEntityType desiredType, const TeamID team )
+void EntitySystem::EntityMgr::EnumerateEntities( vector<EntityHandle>& out, const eEntityType desiredType )
 {
 	out.clear();
 	for (EntityMap::const_iterator it=mEntities.begin(); it!=mEntities.end(); ++it)
-		if ((desiredType == NUM_ENTITY_TYPES || it->second->mType == desiredType) && it->second->mTeam == team)
+		if (desiredType == NUM_ENTITY_TYPES || it->second->mType == desiredType)
 			out.push_back(it->first);
 }

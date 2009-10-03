@@ -17,12 +17,10 @@ namespace Reflection
 		static PropertyFunctionParameters None;
 
 		/// Constructs new parameters and allocates necessary memory for them. Maximum number of parameter is required.
-		inline PropertyFunctionParameters(int32 numParameters):
-		mParametersCount(0),
-			mParametersMaxCount(numParameters)
-		{
-			mParameters = DYN_NEW void*[numParameters];
-		};
+		PropertyFunctionParameters(int32 numParameters);
+
+		/// Reinitializes the parameters.
+		void Reset(int32 numParameters);
 
 		/// Destroys the parameters and deallocates used memory.
 		~PropertyFunctionParameters(void)

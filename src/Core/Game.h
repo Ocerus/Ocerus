@@ -120,9 +120,6 @@ namespace Core
 		#define MAX_SELECTED_GROUPS 10
 		EntityList mSelectedGroups[MAX_SELECTED_GROUPS];
 
-		/// Player stuff.
-		EntitySystem::TeamID mMyTeam;
-
 		/// Camera stuff.
 		EntitySystem::EntityHandle mCameraFocus;
 		Vector2 mCameraGrabWorldPos;

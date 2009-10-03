@@ -49,17 +49,11 @@ namespace EntitySystem
 		/// Returns the type of a specified entity.
 		eEntityType GetEntityType(const EntityHandle h) const;
 		
-		/// Returns the team this entity belongs to.
-		TeamID GetEntityTeam(const EntityHandle h) const;
-
 		/// Returns true if the entity exists.
 		bool EntityExists(const EntityHandle h) const;
 
 		/// Changes the team this entity belongs to.
 		void SetEntityTeam(const EntityHandle h, const EntityHandle teamOwner);
-
-		/// Changes the team this entity belongs to.
-		void SetEntityTeam(const EntityHandle h, const TeamID team);
 
 		/// Returns true if the entity was fully initialized.
 		bool IsEntityInited(const EntityHandle h) const;
@@ -81,21 +75,19 @@ namespace EntitySystem
 
 		//TODO tohle je tu zbytecny; az budou hotovy query na picking, odstranit!
 		/// Fills the output vector with entities matching specified type/team.
-		void EnumerateEntities(vector<EntityHandle>& out, const eEntityType desiredType = NUM_ENTITY_TYPES, const TeamID team = 0);
+		void EnumerateEntities(vector<EntityHandle>& out, const eEntityType desiredType = NUM_ENTITY_TYPES);
 
 	private:
 
 		/// This struct holds info about an instance of an entity in the system.
 		struct EntityInfo
 		{
-			EntityInfo(void): mType(ET_UNKNOWN), mTeam(0), mFullyInited(false) {}
-			EntityInfo(const eEntityType _type, const string& _ID = ""): mTeam(0), mFullyInited(false), mType(_type), mID(_ID) {}
-			EntityInfo(const bool _fullyInited, const TeamID _team, const eEntityType _type, const string& _ID = ""): mFullyInited(_fullyInited), mTeam(_team), mType(_type), mID(_ID) {}
+			EntityInfo(void): mType(ET_UNKNOWN), mFullyInited(false) {}
+			EntityInfo(const eEntityType _type, const string& _ID = ""): mFullyInited(false), mType(_type), mID(_ID) {}
+			EntityInfo(const bool _fullyInited, const eEntityType _type, const string& _ID = ""): mFullyInited(_fullyInited), mType(_type), mID(_ID) {}
 
 			/// User type of the entity.
 			eEntityType mType;
-			/// Currently corresponds to an entity ID of the owning ship. Zero if no such exists.
-			TeamID mTeam;
 			/// True if this entity was fully inited in the system by the user.
 			bool mFullyInited;
 			/// Human readable user ID.

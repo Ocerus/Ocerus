@@ -61,21 +61,6 @@ PropertyHolderMediator EntitySystem::EntityHandle::GetProperty( const StringKey 
 	return gEntityMgr.GetEntityProperty(*this, key, mask);
 }
 
-EntitySystem::TeamID EntitySystem::EntityHandle::GetTeam( void ) const
-{
-	return gEntityMgr.GetEntityTeam(*this);
-}
-
-void EntitySystem::EntityHandle::SetTeam( const EntityHandle teamOwner )
-{
-	gEntityMgr.SetEntityTeam(*this, teamOwner);
-}
-
-void EntitySystem::EntityHandle::SetTeam( const TeamID team )
-{
-	gEntityMgr.SetEntityTeam(*this, team);
-}
-
 bool EntitySystem::EntityHandle::Exists( void ) const
 {
 	return gEntityMgr.EntityExists(*this);

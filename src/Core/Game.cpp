@@ -25,7 +25,6 @@ using namespace InputSystem;
 Core::Game::Game(): 
 	StateMachine<eGameState>(GS_NORMAL),
 	mPhysics(0),
-	mMyTeam(-1),
 	mLastClickTime(0) {}
 
 Core::Game::~Game()
@@ -74,7 +73,6 @@ void Core::Game::Init()
 	{
 		ship.PostMessage(EntityMessage::TYPE_GET_POSITION, &shipPos);
 		gGfxRenderer.SetCameraPos(shipPos);
-		mMyTeam = ship.GetTeam();
 		mCameraFocus = ship;
 	}
 	gGfxRenderer.SetCameraScale(50.0f);
@@ -116,10 +114,7 @@ void Core::Game::Update( const float32 delta )
 	// make sure we didn't lose any of the selected entities
 	for (EntityList::const_iterator i=mSelectedEntities.begin(); i!=mSelectedEntities.end();)
 	{
-		if (i->GetTeam() != mMyTeam)
-			i = mSelectedEntities.erase(i);
-		else
-			++i;
+		i = mSelectedEntities.erase(i);
 	}
 
 	// control by using keys
@@ -390,7 +385,7 @@ void Core::Game::MouseButtonPressed( const MouseInfo& mi, const eMouseButton btn
 			if (doubleClick)
 			{
 				eEntityType type = mHoveredEntity.GetType();
-				gEntityMgr.EnumerateEntities(mSelectedEntities, type, mMyTeam);
+				gEntityMgr.EnumerateEntities(mSelectedEntities, type);
 			}
 			// use the hover entity as a focus
 			else if (gInputMgr.IsKeyDown(KC_RCONTROL) || gInputMgr.IsKeyDown(KC_LCONTROL))
@@ -398,7 +393,7 @@ void Core::Game::MouseButtonPressed( const MouseInfo& mi, const eMouseButton btn
 				mCameraFocus = mHoveredEntity;
 			}
 			// select controllable entities
-			else if (mHoveredEntity.GetTeam() == mMyTeam)
+			else
 			{
 				// add to the current selection if SHIFT down
 				if (mSelectedEntities.size()>0 && (gInputMgr.IsKeyDown(KC_RSHIFT) || gInputMgr.IsKeyDown(KC_LSHIFT)))
@@ -526,16 +521,7 @@ bool Core::Game::ShouldCollide( b2Shape* shape1, b2Shape* shape2 )
 	if (!b2ContactFilter::ShouldCollide(shape1, shape2))
 		return false;
 
-	EntityHandle firstEntity = *(EntityHandle*)shape1->GetUserData();
-	EntityHandle secondEntity = *(EntityHandle*)shape2->GetUserData();
-
-	TeamID team1 = gEntityMgr.GetEntityTeam(firstEntity);
-	TeamID team2 = gEntityMgr.GetEntityTeam(secondEntity);
-
-	if (team1 == 0 || team2 == 0)
-		return true;
-
-	return team1 != team2;
+	return true;
 }
 
 void Core::Game::Add( const b2ContactPoint* point )

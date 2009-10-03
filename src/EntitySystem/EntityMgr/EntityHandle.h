@@ -14,14 +14,10 @@ namespace Reflection { class PropertyList; }
 
 namespace EntitySystem
 {
+	class EntityMgr;
 
 	/// Entity identifier.
 	typedef uint32 EntityID;
-
-	/// Entity team identifier.
-	typedef EntityID TeamID;
-
-	class EntityMgr;
 
 	/// This class represents one unique entity in the entity system.
 	class EntityHandle
@@ -65,15 +61,6 @@ namespace EntitySystem
 
 		/// Returns the type of this entity.
 		eEntityType GetType(void) const;
-
-		/// Returns the team this entity belongs to.
-		TeamID GetTeam(void) const;
-
-		/// Changes the team this entity belongs to.
-		void SetTeam(const EntityHandle teamOwner);
-
-		/// Changes the team this entity belongs to.
-		void SetTeam(const TeamID team);
 
 		/// Invalid handle representing no entity in the system.
 		static const EntityHandle Null;

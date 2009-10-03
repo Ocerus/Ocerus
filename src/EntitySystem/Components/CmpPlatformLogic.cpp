@@ -31,9 +31,6 @@ EntityMessage::eResult EntityComponents::CmpPlatformLogic::HandleMessage(const E
 			mBlueprints.PostMessage(EntityMessage::TYPE_GET_MAX_HITPOINTS, &mHitpoints);
 
 			ComputePickStuff();
-
-			// set the team
-			GetOwner().SetTeam(mParentShip);
 		}
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_DAMAGE:
@@ -67,11 +64,6 @@ EntityMessage::eResult EntityComponents::CmpPlatformLogic::HandleMessage(const E
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_DIE:
 		Die();
-		return EntityMessage::RESULT_OK;
-	case EntityMessage::TYPE_UPDATE_TEAM:
-		GetOwner().SetTeam(mParentShip);
-		for (EntityList::iterator it=mItems.begin(); it!=mItems.end(); ++it)
-			it->SetTeam(mParentShip);
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::TYPE_DETACH_PLATFORM:
 		// this assumes DETACH_PLATFORM was already processed by the physics component
