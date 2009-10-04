@@ -1110,7 +1110,7 @@
 					<Tool
 						Name="VCCLCompilerTool"
 						UsePrecompiledHeader="1"
-						ShowIncludes="true"
+						ShowIncludes="false"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -1151,7 +1151,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\Setup\Memory.h"
+				RelativePath="..\src\Setup\Memory_post.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\Setup\Memory_pre.h"
 				>
 			</File>
 			<File
@@ -1162,14 +1166,18 @@
 		<Filter
 			Name="Memory"
 			>
-			<File
-				RelativePath="..\src\Memory\GlobalAlloc.h"
+			<Filter
+				Name="inc"
 				>
-			</File>
-			<File
-				RelativePath="..\src\Memory\MemoryAlloc.h"
-				>
-			</File>
+				<File
+					RelativePath="..\src\Memory\GlobalAlloc.h"
+					>
+				</File>
+				<File
+					RelativePath="..\src\Memory\MemoryAlloc.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<File
 			RelativePath="..\doxygen\mainpage.txt"

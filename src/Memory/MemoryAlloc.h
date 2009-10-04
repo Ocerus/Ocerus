@@ -5,7 +5,7 @@
 #define MemoryAlloc_h__
 
 // We are currently using the standard memory allocator. Remove this when we switch to custom memory allocator.
-#include <stdlib.h>
+#include <cstdlib>
 
 #ifdef new
 #  undef new
@@ -18,77 +18,54 @@
 namespace Memory
 {
 	/// Different heaps available for allocation.
-	enum eHeap
+	enum eAllocationType
 	{
-		HEAP_MAIN=0
+		ALLOC_HEAP_MAIN=0
 	};
 
-	/// @brief Custom dynamic memory allocator.
-	/// @remarks The Heap template parameter specifies the heap which will be used for allocation.
-	//template<eHeap Heap = HEAP_MAIN>
+	/// @brief Custom dynamic memory allocator to allow specialized allocation of classes.
+	/// @remarks The Heap template parameter specifies the heap which will be used for allocation. To make use of this
+	/// allocator, simply extend the class by it.
+	template<eAllocationType AllocType>
 	class MemoryAlloc
 	{
 	public:
 
-		explicit MemoryAlloc(void) {
-			int a=0;
-		}
+		explicit MemoryAlloc(void) {}
 		~MemoryAlloc(void) {}
 
-		/// Operator new, with debug line info.
-		void* operator new(size_t sz, const char* file, int line)
-		{
-			return malloc(sz);
-		}
-
 		/// Standard operator new.
-		void* operator new(size_t sz)
-		{
-			return malloc(sz);
-		}
-
-		/// Placement operator new.
-		void* operator new(size_t sz, void* ptr)
-		{
-			return ptr;
-		}
-
-		/// Array operator new, with debug line info.
-		void* operator new[] ( size_t sz, const char* file, int line )
-		{
-			return malloc(sz);
-		}
-
-		/// Standard array operator new.
-		void* operator new[] ( size_t sz )
-		{
-			return malloc(sz);
-		}
-
+		inline void* operator new(size_t sz, eCustomHeap) { return malloc(sz); }
 		/// Standard operator delete.
-		void operator delete( void* ptr )
-		{
-			free(ptr);
-		}
-
-		/// @brief Operator delete with debug info.
-		/// @remarks Only called if there is an exception in corresponding 'new'.
-		void operator delete( void* ptr, const char* , int )
-		{
-			free(ptr);
-		}
-
+		inline void operator delete(void* ptr, eCustomHeap) { free(ptr); }
+		/// Standard operator delete.
+		inline void operator delete(void* ptr) { free(ptr); }
+		/// Debug operator new.
+		inline void* operator new(size_t sz, eCustomHeap, const char* file, int line) { return malloc(sz); }
+		/// Debug operator delete.
+		inline void operator delete(void* ptr, eCustomHeap, const char* file, int line) { free(ptr); }
+		/// Debug operator delete.
+		inline void operator delete(void* ptr, const char* file, int line) { free(ptr); }
+		/// Placement operator new.
+		inline void* operator new(size_t sz, void* ptr) { return ptr; }
+		/// Placement operator delete.
+		inline void operator delete(void*, void*) {}
+		/// Standard array operator new.
+		inline void* operator new[](size_t sz, eCustomHeap) { return malloc(sz); }
 		/// Standard array operator delete.
-		void operator delete[] ( void* ptr )
-		{
-			free(ptr);
-		}
-
-		/// Array operator delete with debug info.
-		void operator delete[] ( void* ptr, const char* , int )
-		{
-			free(ptr);
-		}		
+		inline void operator delete[](void* ptr, eCustomHeap) { free(ptr); }
+		/// Standard array operator delete.
+		inline void operator delete[](void* ptr) { free(ptr); }
+		/// Debug array operator new.
+		inline void* operator new[](size_t sz, eCustomHeap, const char* file, int line) { return malloc(sz); }
+		/// Debug array operator delete.
+		inline void operator delete[](void* ptr, eCustomHeap, const char* file, int line) { free(ptr); }
+		/// Debug array operator delete.
+		inline void operator delete[](void* ptr, const char* file, int line) { free(ptr); }
+		/// Placement array operator new.
+		inline void* operator new[](size_t sz, void* ptr) { return ptr; }
+		/// Placement array operator delete.
+		inline void operator delete[](void*, void*) {}
 
 	};
 }
