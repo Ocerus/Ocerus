@@ -7,7 +7,7 @@ using namespace GUISystem;
 
 ResourceSystem::ResourcePtr CEGUIResource::CreateMe()
 {
-	return ResourceSystem::ResourcePtr(DYN_NEW CEGUIResource());
+	return ResourceSystem::ResourcePtr(new CEGUIResource());
 }
 
 bool CEGUIResource::LoadImpl()
@@ -21,7 +21,7 @@ bool CEGUIResource::LoadImpl()
 
 bool CEGUIResource::UnloadImpl()
 {
-	//DYN_DELETE_ARRAY mDataBlock;
+	//delete[] mDataBlock;
 	return true;
 }
 
@@ -29,7 +29,7 @@ void CEGUIResource::GetResource( CEGUI::RawDataContainer& outData )
 {
 	EnsureLoaded();
 	/*
-	uint8* mDataBlockCopy = DYN_NEW uint8[mDataBlockSize];
+	uint8* mDataBlockCopy = new uint8[mDataBlockSize];
 	memcpy(mDataBlockCopy, mDataBlock, mDataBlockSize);
 	outData.setData(mDataBlockCopy);
 	*/

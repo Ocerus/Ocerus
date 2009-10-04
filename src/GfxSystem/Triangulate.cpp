@@ -82,7 +82,7 @@ bool Triangulate::Process(const Vector2dVector &contour,Vector2dVector &result)
   int n = contour.size();
   if ( n < 3 ) return false;
 
-  int *V = DYN_NEW int[n];
+  int *V = new int[n];
 
   /* we want a counter-clockwise polygon in V */
 
@@ -134,7 +134,7 @@ bool Triangulate::Process(const Vector2dVector &contour,Vector2dVector &result)
 
 
 
-  DYN_DELETE V;
+  delete V;
 
   return true;
 }

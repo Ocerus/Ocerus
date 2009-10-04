@@ -45,7 +45,7 @@ void Core::Game::Init()
 	worldAABB.lowerBound.Set(-10000.0f, -10000.0f);
 	worldAABB.upperBound.Set(10000.0f, 10000.0f);
 	// turn off sleeping as we are moving in a space with no gravity
-	mPhysics = DYN_NEW b2World(worldAABB, b2Vec2(0.0f, 0.0f), false);
+	mPhysics = new b2World(worldAABB, b2Vec2(0.0f, 0.0f), false);
 	mPhysics->SetContactFilter(this);
 	mPhysics->SetContactListener(this);
 	mPhysicsResidualDelta = 0.0f;
@@ -89,9 +89,9 @@ void Core::Game::Init()
 void Core::Game::Deinit()
 {
 	if (mPhysics)
-		DYN_DELETE mPhysics;
+		delete mPhysics;
 	for (PhysicsEventList::const_iterator i=mPhysicsEvents.begin(); i!=mPhysicsEvents.end(); ++i)
-		DYN_DELETE *i;
+		delete *i;
 	mPhysicsEvents.clear();
 }
 
@@ -163,7 +163,7 @@ void Core::Game::Update( const float32 delta )
 		for (PhysicsEventList::const_iterator i=mPhysicsEvents.begin(); i!=mPhysicsEvents.end(); ++i)
 		{
 			ProcessPhysicsEvent(**i);
-			DYN_DELETE *i;
+			delete *i;
 		}
 		mPhysicsEvents.clear();
 
@@ -527,7 +527,7 @@ bool Core::Game::ShouldCollide( b2Shape* shape1, b2Shape* shape2 )
 void Core::Game::Add( const b2ContactPoint* point )
 {
 	//TODO tady to chce pooling, zbytecna casta alokace malych objektu
-	PhysicsEvent* evt = DYN_NEW PhysicsEvent();
+	PhysicsEvent* evt = new PhysicsEvent();
 	if (point->shape1->GetUserData())
 		evt->entity1 = *(EntityHandle*)point->shape1->GetUserData();
 	else

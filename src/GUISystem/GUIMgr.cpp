@@ -22,9 +22,9 @@ namespace GUISystem {
 		mResourceGate(0)
 	{
 		gLogMgr.LogMessage("******** GUIMgr init *********");
-		mRendererGate = DYN_NEW RendererGate();
-		mResourceGate = DYN_NEW ResourceGate();
-		mCegui = DYN_NEW CEGUI::System( mRendererGate, mResourceGate );
+		mRendererGate = new RendererGate();
+		mResourceGate = new ResourceGate();
+		mCegui = new CEGUI::System( mRendererGate, mResourceGate );
 		gInputMgr.AddInputListener(this);
 		CEGUI::Imageset::setDefaultResourceGroup("imagesets");
 		CEGUI::Font::setDefaultResourceGroup("fonts");
@@ -158,7 +158,7 @@ namespace GUISystem {
 
 		CEGUI::Listbox* pane = (CEGUI::Listbox*)CEGUI::WindowManager::getSingleton().getWindow("ConsoleRoot/Pane");
 
-		CEGUI::ListboxTextItem* new_item = DYN_NEW CEGUI::ListboxTextItem(message);
+		CEGUI::ListboxTextItem* new_item = new CEGUI::ListboxTextItem(message);
 		new_item->setTextColours(CEGUI::colour( color.GetARGB() ) );
 
 		pane->addItem(new_item);
@@ -224,7 +224,7 @@ namespace GUISystem {
 	{
 		map<string, StaticElement*>::iterator iter = mCreatedStaticElements.find( id );
 		if (iter == mCreatedStaticElements.end()) {
-			StaticText* ptr = DYN_NEW StaticText( x, y, id, text, color, text_anchor, screen_anchor, fontid );
+			StaticText* ptr = new StaticText( x, y, id, text, color, text_anchor, screen_anchor, fontid );
 			mCreatedStaticElements.insert( Containers::make_pair( id, (StaticElement*)ptr ) );
 		} else {
 			StaticText* static_text = (StaticText*)iter->second;
@@ -243,12 +243,12 @@ namespace GUISystem {
 		//TODO mCreatedStaticElements se nedealokuji!
 
 		if (mCurrentWindowRoot)
-			DYN_DELETE mCurrentWindowRoot;
+			delete mCurrentWindowRoot;
 
 		//TODO nejde dealokovat, proc? Mozna pouzivame starou vezi CEGUI.
-		//DYN_DELETE mCegui;
-		DYN_DELETE mRendererGate;
-		DYN_DELETE mResourceGate;
+		//delete mCegui;
+		delete mRendererGate;
+		delete mResourceGate;
 	}
 
 	CEGUI::uint KeyMapperOIStoCEGUI(InputSystem::eKeyCode key)

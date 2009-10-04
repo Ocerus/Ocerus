@@ -168,7 +168,7 @@ void ResourceSystem::ResourceMgr::AddResourceToGroup( const StringKey& group, co
 	ResourceGroupMap::iterator groupIt = mResourceGroups.find(group);
 	if (groupIt == mResourceGroups.end())
 	{
-		mResourceGroups[group] = DYN_NEW ResourceMap();
+		mResourceGroups[group] = new ResourceMap();
 		groupIt = mResourceGroups.find(group);
 	}
 	(*groupIt->second)[name] = res;
@@ -226,7 +226,7 @@ void ResourceMgr::DeleteGroup(const StringKey& group)
 	if (groupIt == mResourceGroups.end())
 		return;
 	UnloadResourcesInGroup(group, true);
-	DYN_DELETE groupIt->second;
+	delete groupIt->second;
 	mResourceGroups.erase(groupIt);
 }
 
@@ -301,7 +301,7 @@ void ResourceSystem::ResourceMgr::DeleteAllResources( void )
 	for (ResourceGroupMap::const_iterator i=mResourceGroups.begin(); i!=mResourceGroups.end(); ++i)
 	{
 		UnloadResourcesInGroup(i->first, true);
-		DYN_DELETE i->second;
+		delete i->second;
 	}
 	mResourceGroups.clear();
 }

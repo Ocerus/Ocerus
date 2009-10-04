@@ -1,3 +1,8 @@
+/// @file
+/// Smart pointer pattern implementation.
+/// @remarks
+/// Implementation based on the code from Ogre.
+
 #ifndef _SMARTPOINTER_H_
 #define _SMARTPOINTER_H_
 
@@ -8,6 +13,7 @@ namespace Utils
 	/// @brief A Smart pointer pattern implementation.
 	/// @remarks This pointer counts its uses and deletes the data it is pointing at only if nobody
 	/// points to them. This prevents the use of invalid pointers. Use whenever you acces a shared resource.
+	/// @remarks Note that this class it NOT thread-safe! A working thread-safe implementation can be found in Ogre.
 	template<class T> class SmartPointer
 	{
 	private:
@@ -20,7 +26,7 @@ namespace Utils
 
 		/// Constructs new smart pointer from a raw pointer.
 		template< class Y>
-		explicit SmartPointer(Y* pointer): mPointer(pointer), mUseCountPtr(DYN_NEW_T(uint32)(1)) {}
+		explicit SmartPointer(Y* pointer): mPointer(pointer), mUseCountPtr(new (uint32)(1)) {}
 
 		/// Copy constructor.
 		SmartPointer(const SmartPointer& r): mPointer(0), mUseCountPtr(0)
@@ -125,8 +131,8 @@ namespace Utils
 		{
 			// IF YOU GET A CRASH HERE, YOU FORGOT TO FREE UP POINTERS BEFORE SHUTTING DOWN
 			// Use SetNull() before shutdown or make sure your pointer goes out of scope to avoid this.
-			DYN_DELETE mPointer;
-			DYN_DELETE mUseCountPtr;
+			delete mPointer;
+			delete mUseCountPtr;
 		}
 
 		/// Swaps two smart pointers.

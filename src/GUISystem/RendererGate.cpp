@@ -23,7 +23,7 @@ namespace GUISystem {
 	}
 
 	RendererGate::RendererGate() : mQueueing(false) {
-		d_resourceProvider = DYN_NEW ResourceGate();
+		d_resourceProvider = new ResourceGate();
 		this->d_identifierString = "Black_Hand's wrapper around that disgusting piece of code created by Santhos :PPP";
 		this->setQueueingEnabled(false);
 
@@ -32,7 +32,7 @@ namespace GUISystem {
 
 	RendererGate::~RendererGate() {
 		//ClearProviders();
-		//DYN_DELETE d_resourceProvider;
+		//delete d_resourceProvider;
 		clearRenderList();
 		destroyAllTextures();
 	}
@@ -79,7 +79,7 @@ namespace GUISystem {
 	}
 
 	CEGUI::Texture* RendererGate::createTexture(void) {
-		CEGUITextureWrapper * wrap = DYN_NEW CEGUITextureWrapper(this);
+		CEGUITextureWrapper * wrap = new CEGUITextureWrapper(this);
 		mTextures.insert(wrap);
 		
 		return wrap;
@@ -100,7 +100,7 @@ namespace GUISystem {
 	void RendererGate::destroyTexture(CEGUI::Texture* texture) {
 		set<CEGUITextureWrapper*>::iterator found_tex = mTextures.find(static_cast<CEGUITextureWrapper*>(texture));
 		if (found_tex != mTextures.end()) {
-			DYN_DELETE *found_tex;
+			delete *found_tex;
 			mTextures.erase(found_tex);
 		}
 	}
@@ -108,7 +108,7 @@ namespace GUISystem {
 	void RendererGate::destroyAllTextures(void) {
 		set<CEGUITextureWrapper*>::iterator iter = mTextures.begin();
 		while (iter != mTextures.end()) {
-			DYN_DELETE *iter;
+			delete *iter;
 			++iter;
 		}
 		mTextures.clear();
@@ -120,7 +120,7 @@ namespace GUISystem {
 /*
 	void RendererGate::ClearProviders() {
 		while (!mGivenResourceProviders.empty()) {
-			DYN_DELETE mGivenResourceProviders.back();
+			delete mGivenResourceProviders.back();
 			mGivenResourceProviders.pop_back();
 		}
 	}

@@ -26,7 +26,7 @@ void ParticleSystem::Unload(void)
 	//gLogMgr.LogMessage("Particle SYSTEM Unloaded");
 	if (mLoaded)
 	{
-		DYN_DELETE mPs;
+		delete mPs;
 	}
 	mLoaded = false;
 }

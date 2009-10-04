@@ -78,13 +78,13 @@ namespace kp {
 	template <class T1, class T2>
 	void constructor(T1* p, T2& val) 
 	{
-		DYN_NEW ((void *) p) T1(val);
+		new ((void *) p) T1(val);
 	}
 
 	template <class T1>
 	void constructor(T1* p) 
 	{
-		DYN_NEW ((void *) p) T1;
+		new ((void *) p) T1;
 	}
 
 	template <class T1>
@@ -2815,7 +2815,7 @@ public:
 	Iter AddChild(const Iter parent, const T key)
 	{
 		Node* parentNode = parent.GetNode();
-		Node* newNode = DYN_NEW Node();
+		Node* newNode = new Node();
 		newNode->mFirstChild = 0;
 		newNode->mNextSibling = 0;
 		newNode->mData = key;
@@ -2866,7 +2866,7 @@ private:
 			if (n == node)
 			{
 				*last = node->mNextSibling;
-				DYN_DELETE node;
+				delete node;
 				break;
 			}
 	}

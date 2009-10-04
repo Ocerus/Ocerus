@@ -63,7 +63,7 @@ uint32 Hash::HashString(const char* hashString, const int32 strLen)
 		StringHashMap::const_iterator it = stringMap.find(hash);
 		if (it == stringMap.end())
 		{
-			char* str = DYN_NEW char[len+1];
+			char* str = new char[len+1];
 			for (int32 i=0; i<len; ++i)
 				str[i] = hashString[i];
 			str[len] = 0;

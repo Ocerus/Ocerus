@@ -11,7 +11,7 @@ EntityMgr::EntityMgr()
 {
 	gLogMgr.LogMessage("*** EntityMgr init ***");
 
-	mComponentMgr = DYN_NEW ComponentMgr();
+	mComponentMgr = new ComponentMgr();
 
 	// this assumes EntityMgr is a singleton
 	EntityPicker::SetupPriorities();
@@ -20,7 +20,7 @@ EntityMgr::EntityMgr()
 EntityMgr::~EntityMgr()
 {
 	DestroyAllEntities();
-	DYN_DELETE mComponentMgr;
+	delete mComponentMgr;
 
 	EntityPicker::CleanPriorities();
 }
@@ -100,7 +100,7 @@ EntityHandle EntityMgr::CreateEntity(EntityDescription& desc, PropertyList& out)
 	}
 
 	// inits the attributes for the new components
-	mEntities[h.GetID()] = DYN_NEW EntityInfo(desc.mType, desc.mID);
+	mEntities[h.GetID()] = new EntityInfo(desc.mType, desc.mID);
 
 	// security checks
 	if (dependencyFailure)
@@ -150,7 +150,7 @@ void EntityMgr::DestroyEntity( EntityMap::const_iterator it )
 	if (it != mEntities.end())
 	{
 		mComponentMgr->DestroyEntityComponents(it->first);
-		DYN_DELETE it->second;
+		delete it->second;
 	}
 }
 
@@ -310,7 +310,7 @@ bool EntitySystem::EntityMgr::LoadFromResource( ResourceSystem::ResourcePtr res 
 								else
 								{
 									props[lengthParam].SetValue<uint32>(vertices.size());
-									Vector2* vertArray = DYN_NEW Vector2[vertices.size()];
+									Vector2* vertArray = new Vector2[vertices.size()];
 									for (uint32 i=0; i<vertices.size(); ++i)
 										vertArray[i] = vertices[i];
 									p.SetValue<Vector2*>(vertArray);

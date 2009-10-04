@@ -16,7 +16,7 @@ Resource::~Resource()
 	{
 		if (mInputFileStream->is_open())
 			gLogMgr.LogMessage("Resource '" + mName + "' was not closed", LOG_ERROR);
-		DYN_DELETE mInputFileStream;
+		delete mInputFileStream;
 		mInputFileStream = 0;
 	}
 }
@@ -27,7 +27,7 @@ InputStream& Resource::OpenInputStream(eInputStreamMode mode)
 	BS_ASSERT(mState != STATE_UNINITIALIZED);
 	BS_ASSERT_MSG(boost::filesystem::exists(mFilePath), "Resource file not found.");
 	BS_ASSERT_MSG(!mInputFileStream, "Resource was not closed before reused");
-	mInputFileStream = DYN_NEW boost::filesystem::ifstream(mFilePath, InputStreamMode(mode));
+	mInputFileStream = new boost::filesystem::ifstream(mFilePath, InputStreamMode(mode));
 	BS_ASSERT(mInputFileStream);
 	return *mInputFileStream;
 }
@@ -37,7 +37,7 @@ void Resource::CloseInputStream()
 	BS_ASSERT(mState != STATE_UNINITIALIZED);
 	BS_ASSERT(mInputFileStream);
 	mInputFileStream->close();
-	DYN_DELETE mInputFileStream;
+	delete mInputFileStream;
 	mInputFileStream = 0;
 }
 
@@ -114,14 +114,14 @@ void ResourceSystem::Resource::GetRawInputData( DataContainer& outData )
 	InputStream& is = OpenInputStream(ISM_BINARY);
 	while (is.good())
 	{
-		uint8* tmpBuf = DYN_NEW uint8[tmpMaxSize];
+		uint8* tmpBuf = new uint8[tmpMaxSize];
 		is.read((char*)tmpBuf, tmpMaxSize);
 		tmpLastSize = is.gcount();
 		bufferSize += tmpLastSize;
 		tmps.push_back(tmpBuf);
 	}
 	CloseInputStream();
-	uint8* buffer = DYN_NEW uint8[bufferSize];
+	uint8* buffer = new uint8[bufferSize];
 	uint8* lastBufferPos = buffer;
 	int32 numBufs = tmps.size();
 	for (int32 i=0; i<numBufs; ++i)
@@ -129,7 +129,7 @@ void ResourceSystem::Resource::GetRawInputData( DataContainer& outData )
 		uint32 copyCount = i==numBufs-1 ? tmpLastSize : tmpMaxSize;
 		memcpy(lastBufferPos, tmps[i], copyCount);
 		lastBufferPos += copyCount;
-		DYN_DELETE_ARRAY tmps[i];
+		delete[] tmps[i];
 	}
 	BS_ASSERT(buffer+bufferSize == lastBufferPos);
 	outData.SetData(buffer, bufferSize);

@@ -7,14 +7,20 @@ Reflection::PropertyFunctionParameters::PropertyFunctionParameters( int32 numPar
 	mParametersCount(0),
 	mParametersMaxCount(numParameters)
 {
-	mParameters = DYN_NEW void*[numParameters];
+	mParameters = new void*[numParameters];
 }
 
 void Reflection::PropertyFunctionParameters::Reset( int32 numParameters )
 {
 	if (mParameters)
-		DYN_DELETE_ARRAY mParameters;
+		delete[] mParameters;
 	mParametersCount = 0;
 	mParametersMaxCount = numParameters;
-	mParameters = DYN_NEW void*[numParameters];
+	mParameters = new void*[numParameters];
 }
+
+Reflection::PropertyFunctionParameters::~PropertyFunctionParameters( void )
+{
+	BS_DASSERT(mParameters);
+	delete[] mParameters;
+};

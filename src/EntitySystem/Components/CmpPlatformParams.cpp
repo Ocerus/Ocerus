@@ -30,7 +30,7 @@ void EntityComponents::CmpPlatformParams::Clean( void )
 {
 	if (mShape)
 	{
-		DYN_DELETE_ARRAY mShape;
+		delete[] mShape;
 		mShape = 0;
 	}
 }
@@ -90,8 +90,8 @@ void CmpPlatformParams::ComputeParams()
 void EntityComponents::CmpPlatformParams::SetShape(Vector2* shape)
 {
 	if (mShape)
-		DYN_DELETE_ARRAY mShape;
-	mShape = DYN_NEW Vector2[mShapeLength];
+		delete[] mShape;
+	mShape = new Vector2[mShapeLength];
 	for (uint32 i=0; i<mShapeLength; ++i)
 		mShape[i] = shape[i];
 }

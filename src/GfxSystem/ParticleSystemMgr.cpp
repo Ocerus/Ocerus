@@ -56,7 +56,7 @@ ParticleSystemPtr ParticleSystemMgr::SpawnPS(StringKey group, StringKey name)
 	ParticleResourcePtr psi = gResourceMgr.GetResource(group, name);
 	if (psi.IsNull())
 		return ParticleSystemPtr();
-	mPsList.push_back(ParticleSystemPtr(DYN_NEW ParticleSystem(DYN_NEW hgeParticleSystem(psi->GetPsi()))));
+	mPsList.push_back(ParticleSystemPtr(new ParticleSystem(new hgeParticleSystem(psi->GetPsi()))));
 	return mPsList.back();	
 }
 
@@ -65,7 +65,7 @@ ParticleSystemPtr ParticleSystemMgr::SpawnPS(char* groupSlashName)
 	ParticleResourcePtr psi = gResourceMgr.GetResource(groupSlashName);
 	if (psi.IsNull())
 		return ParticleSystemPtr();
-	mPsList.push_back(ParticleSystemPtr(DYN_NEW ParticleSystem(DYN_NEW hgeParticleSystem(psi->GetPsi()))));
+	mPsList.push_back(ParticleSystemPtr(new ParticleSystem(new hgeParticleSystem(psi->GetPsi()))));
 	return mPsList.back();	
 }
 
@@ -74,7 +74,7 @@ ParticleSystemPtr ParticleSystemMgr::SpawnPS(StringKey group, StringKey name, in
 	ParticleResourcePtr psi = gResourceMgr.GetResource(group, name);
 	if (psi.IsNull())
 		return ParticleSystemPtr();
-	mPsList.push_back(ParticleSystemPtr(DYN_NEW ParticleSystem(DYN_NEW hgeParticleSystem(psi->GetPsi()))));
+	mPsList.push_back(ParticleSystemPtr(new ParticleSystem(new hgeParticleSystem(psi->GetPsi()))));
 	mPsList.back()->SetScale(mScale);
 	mPsList.back()->FireAt(gGfxRenderer.ScreenToWorldX(x), gGfxRenderer.ScreenToWorldY(y));
 	return mPsList.back();	
@@ -85,7 +85,7 @@ ParticleSystemPtr ParticleSystemMgr::SpawnPS(char* groupSlashName, int32 x, int3
 	ParticleResourcePtr psi = gResourceMgr.GetResource(groupSlashName);
 	if (psi.IsNull())
 		return ParticleSystemPtr();
-	mPsList.push_back(ParticleSystemPtr(DYN_NEW ParticleSystem(DYN_NEW hgeParticleSystem(psi->GetPsi()))));
+	mPsList.push_back(ParticleSystemPtr(new ParticleSystem(new hgeParticleSystem(psi->GetPsi()))));
 	mPsList.back()->SetScale(mScale);
 	mPsList.back()->FireAt(gGfxRenderer.ScreenToWorldX(x), gGfxRenderer.ScreenToWorldY(y));
 	return mPsList.back();	

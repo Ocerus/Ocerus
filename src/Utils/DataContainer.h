@@ -9,7 +9,9 @@
 /// This namespace contains utility classes and functions.
 namespace Utils
 {
-	/// This class stores a pointer to a data buffer and its size. It is used to retrieve data from a function where it is passed via reference.
+	/// @brief This class stores a pointer to a data buffer and its size. It is used to retrieve data from a function
+	/// where it is passed via reference.
+	/// @remarks Note that the class doesn't allocate nor deallocate any memory until requested by calling Release.
 	class DataContainer
 	{
 	public:
@@ -36,7 +38,7 @@ namespace Utils
 		{
 			if (!mData)
 				return;
-			DYN_DELETE_ARRAY mData;
+			delete[] mData;
 			mData = 0;
 			mSize = 0;
 		}

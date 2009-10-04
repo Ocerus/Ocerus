@@ -21,7 +21,7 @@ void Application::Init()
 	LogSystem::LogMgr::GetSingleton().Init("CoreLog.txt", LOG_TRIVIAL);
 
 	// get access to config file
-	mGlobalConfig = DYN_NEW Config("config.txt");
+	mGlobalConfig = new Config("config.txt");
 
 	// load console properties
 	mConsoleX = mGlobalConfig->GetInt32("ConsoleX", 0, "Windows");
@@ -50,8 +50,8 @@ void Application::Init()
 	GfxSystem::ParticleSystemMgr::CreateSingleton();
 
 	// create core states
-	mLoadingScreen = DYN_NEW LoadingScreen();
-	mGame = DYN_NEW Game();
+	mLoadingScreen = new LoadingScreen();
+	mGame = new Game();
 
 	// init finished, now loading
 	RequestStateChange(AS_LOADING);
@@ -65,14 +65,14 @@ Application::~Application()
 {
 	HideConsole();
 
-	DYN_DELETE mLoadingScreen;
+	delete mLoadingScreen;
 	
 	GUISystem::GUIMgr::DestroySingleton();
 
 	ResourceSystem::ResourceMgr::GetSingleton().UnloadAllResources();
 
 	EntitySystem::EntityMgr::DestroySingleton();
-	DYN_DELETE mGame;
+	delete mGame;
 	InputSystem::InputMgr::DestroySingleton();
 	GfxSystem::GfxRenderer::DestroySingleton();
 	StringSystem::StringMgr::DestroySingleton();
@@ -80,7 +80,7 @@ Application::~Application()
 	GfxSystem::ParticleSystemMgr::DestroySingleton();
 	
 	// must come last
-	DYN_DELETE mGlobalConfig;
+	delete mGlobalConfig;
 	LogSystem::LogMgr::DestroySingleton();
 }
 

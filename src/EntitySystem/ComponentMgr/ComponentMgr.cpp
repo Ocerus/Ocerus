@@ -37,7 +37,7 @@ Component* ComponentMgr::CreateComponent(EntityHandle h, const eComponentType ty
 	EntityComponentsMap::const_iterator entIt = mEntityComponentsMap.find(h.GetID());
 	if (entIt == mEntityComponentsMap.end())
 	{
-		mEntityComponentsMap[h.GetID()] = DYN_NEW ComponentsList();
+		mEntityComponentsMap[h.GetID()] = new ComponentsList();
 		entIt = mEntityComponentsMap.find(h.GetID());
 	}
 	entIt->second->push_back(cmp);
@@ -55,9 +55,9 @@ void ComponentMgr::DestroyEntityComponents(EntityID id)
 	for (ComponentsList::iterator i=cmpList.begin(); i!=cmpList.end(); ++i)
 	{
 		(*i)->Clean();
-		DYN_DELETE (*i);
+		delete (*i);
 	}
-	DYN_DELETE iter->second;
+	delete iter->second;
 	mEntityComponentsMap.erase(iter);
 } 
 

@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../src/Precompiled;../src/Setup;../src/Utils;../externalLibs/boost/inc;../externalLibs/hge/include;../externalLibs/ois/includes;../externalLibs/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib"
+				AdditionalIncludeDirectories="../src/Precompiled;../src/Utils;../externalLibs/boost/inc;../externalLibs/hge/include;../externalLibs/ois/includes;../externalLibs/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;USE_ASSERT"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="true"
@@ -129,7 +129,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="../src/Precompiled;../src/Setup;../src/Utils;../externalLibs/boost/inc;../externalLibs/hge/include;../externalLibs/ois/includes;../externalLibs/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib"
+				AdditionalIncludeDirectories="../src/Precompiled;../src/Utils;../externalLibs/boost/inc;../externalLibs/hge/include;../externalLibs/ois/includes;../externalLibs/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="false"
@@ -303,7 +303,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../src/Precompiled;../src/Setup;../src/Utils;../externalLibs/boost/inc;../externalLibs/hge/include;../externalLibs/ois/includes;../externalLibs/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib"
+				AdditionalIncludeDirectories="../src/Precompiled;../src/Utils;../externalLibs/boost/inc;../externalLibs/hge/include;../externalLibs/ois/includes;../externalLibs/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;USE_ASSERT"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="true"
@@ -1110,6 +1110,7 @@
 					<Tool
 						Name="VCCLCompilerTool"
 						UsePrecompiledHeader="1"
+						ShowIncludes="true"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -1155,6 +1156,18 @@
 			</File>
 			<File
 				RelativePath="..\src\Setup\Settings.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Memory"
+			>
+			<File
+				RelativePath="..\src\Memory\GlobalAlloc.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\Memory\MemoryAlloc.h"
 				>
 			</File>
 		</Filter>

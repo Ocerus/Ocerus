@@ -5,7 +5,7 @@ using namespace StringSystem;
 
 ResourceSystem::ResourcePtr TextResource::CreateMe(void)
 {
-	return ResourceSystem::ResourcePtr(DYN_NEW TextResource());
+	return ResourceSystem::ResourcePtr(new TextResource());
 }
 
 TextResource::~TextResource(void)

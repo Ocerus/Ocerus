@@ -11,7 +11,7 @@ Texture::~Texture( void ) {}
 
 ResourceSystem::ResourcePtr Texture::CreateMe()
 {
-	return ResourceSystem::ResourcePtr(DYN_NEW Texture());
+	return ResourceSystem::ResourcePtr(new Texture());
 }
 
 void Texture::Init()

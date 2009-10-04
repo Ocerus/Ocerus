@@ -29,14 +29,14 @@ namespace Utils
 		static void CreateSingleton(void)
 		{
 			BS_ASSERT(!msSingleton);
-			DYN_NEW T();
+			new T();
 		}
 
 		/// Destructs the singleton instance.
 		static void DestroySingleton(void)
 		{
 			BS_ASSERT(msSingleton);
-			DYN_DELETE msSingleton;
+			delete msSingleton;
 		}
 
 		/// Returns reference to the singleton instance.

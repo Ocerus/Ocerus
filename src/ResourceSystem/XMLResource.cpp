@@ -36,7 +36,7 @@ void XMLCALL DataHandle(void* data, const XML_Char *s, int len)
 	if (len > 0) 
 	{
 		//TODO neco udelat s tim, at to tady zbytecne nealokuju a neprevadim na string...je to kvuli tomu, ze s neni ukoncene nulou
-		XML_Char* buf = DYN_NEW XML_Char[len+1];
+		XML_Char* buf = new XML_Char[len+1];
 		memcpy(buf, s, len);
 		buf[len] = '\0';
 		string str = buf;
@@ -44,7 +44,7 @@ void XMLCALL DataHandle(void* data, const XML_Char *s, int len)
 		boost::trim(str);
 		if (!str.empty())
 			me->mDataMapPtr->append_child(me->mCurrentNode, str);
-		DYN_DELETE_ARRAY buf;
+		delete[] buf;
 	}
 }
 
@@ -76,7 +76,7 @@ bool XMLResource::LoadImpl(void)
 	++mTopNode;
 
 	XML_ParserFree(p);
-	DYN_DELETE_ARRAY cont.GetData();
+	delete[] cont.GetData();
 	return true;
 }
 
@@ -89,7 +89,7 @@ bool XMLResource::UnloadImpl(void)
 
 ResourcePtr XMLResource::CreateMe(void)
 {
-	return ResourcePtr(DYN_NEW XMLResource());
+	return ResourcePtr(new XMLResource());
 }
 
 

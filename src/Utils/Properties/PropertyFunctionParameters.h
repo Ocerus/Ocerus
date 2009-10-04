@@ -23,11 +23,7 @@ namespace Reflection
 		void Reset(int32 numParameters);
 
 		/// Destroys the parameters and deallocates used memory.
-		~PropertyFunctionParameters(void)
-		{
-			BS_DASSERT(mParameters);
-			DYN_DELETE_ARRAY mParameters;
-		};
+		~PropertyFunctionParameters(void);
 
 		/// Adds a parameter to the end of the list.
 		inline void PushParameter(void* toAdd)

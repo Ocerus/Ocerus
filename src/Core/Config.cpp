@@ -11,7 +11,7 @@ Config::Config(const string& filePath): mFilePath(filePath)
 	BS_ASSERT(mFilePath.length()>0);
 
 	// attempt to load the file
-	mRudeConfig = DYN_NEW rude::Config();
+	mRudeConfig = new rude::Config();
 	if (mRudeConfig->load(mFilePath.c_str()))
 		gLogMgr.LogMessage("Config file loaded");
 	else
@@ -21,7 +21,7 @@ Config::Config(const string& filePath): mFilePath(filePath)
 Config::~Config() 
 {
 	Save();
-	DYN_DELETE mRudeConfig;
+	delete mRudeConfig;
 }
 
 

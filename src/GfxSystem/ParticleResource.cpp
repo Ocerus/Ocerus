@@ -6,7 +6,7 @@ using namespace GfxSystem;
 
 ResourceSystem::ResourcePtr ParticleResource::CreateMe(void)
 {
-	return ResourceSystem::ResourcePtr(DYN_NEW ParticleResource());
+	return ResourceSystem::ResourcePtr(new ParticleResource());
 }
 
 ParticleResource::~ParticleResource(void)
@@ -40,10 +40,10 @@ float32 ReadFloat(InputStream& is)
 
 bool ParticleResource::LoadImpl(void)
 {
-	mPsi = DYN_NEW hgeParticleSystemInfo();
+	mPsi = new hgeParticleSystemInfo();
 	
 	GfxSystem::TexturePtr tex = gResourceMgr.GetResource("psi", "particles.png");
-	mSprite = DYN_NEW hgeAnimation(tex->GetTexture(), 16, 1.0f, 0, 0, 32, 32);
+	mSprite = new hgeAnimation(tex->GetTexture(), 16, 1.0f, 0, 0, 32, 32);
 	mSprite->SetHotSpot(16,16);
 
 	InputStream& is = OpenInputStream(ISM_BINARY);
@@ -105,7 +105,7 @@ bool ParticleResource::LoadImpl(void)
 
 bool ParticleResource::UnloadImpl(void)
 {
-	DYN_DELETE mPsi;
-	DYN_DELETE mSprite;
+	delete mPsi;
+	delete mSprite;
 	return true;
 }

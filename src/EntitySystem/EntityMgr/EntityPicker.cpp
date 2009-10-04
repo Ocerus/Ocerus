@@ -8,7 +8,7 @@ uint8* EntityPicker::msPriorities = 0;
 void EntitySystem::EntityPicker::SetupPriorities( void )
 {
 	BS_ASSERT_MSG(!msPriorities, "Priorities are already set up");
-	msPriorities = DYN_NEW uint8[NUM_ENTITY_TYPES];
+	msPriorities = new uint8[NUM_ENTITY_TYPES];
 	for (int i=0; i<NUM_ENTITY_TYPES; ++i)
 		msPriorities[i] = 0;
 	msPriorities[ET_PLATFORM] = 50;
@@ -19,7 +19,7 @@ void EntitySystem::EntityPicker::SetupPriorities( void )
 void EntitySystem::EntityPicker::CleanPriorities( void )
 {
 	if (msPriorities)
-		DYN_DELETE_ARRAY msPriorities;
+		delete[] msPriorities;
 }
 
 EntitySystem::EntityPicker::EntityPicker( const Vector2& worldCursorPos ): 

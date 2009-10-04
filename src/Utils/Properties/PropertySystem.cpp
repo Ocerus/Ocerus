@@ -8,13 +8,13 @@ PropertySystem::~PropertySystem()
 	std::list<AbstractProperty*>* propertyList = GetProperties();
 	// Destroy properties
 	for ( std::list<AbstractProperty*>::iterator it = propertyList->begin(); it != propertyList->end(); ++it )
-		DYN_DELETE *it;
+		delete (*it);
 	propertyList->clear();
-	DYN_DELETE propertyList;
+	delete propertyList;
 }
 
 std::list<AbstractProperty*>* PropertySystem::GetProperties(void)
 {
-	static std::list<AbstractProperty*>* propertyList = DYN_NEW std::list<AbstractProperty*>();
+	static std::list<AbstractProperty*>* propertyList = new std::list<AbstractProperty*>();
 	return propertyList;
 }

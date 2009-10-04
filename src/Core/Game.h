@@ -23,6 +23,7 @@ namespace Core
 
 	/// This class holds all info related directly to the game itself and takes care about rendering, input and game logic.
 	class Game : public StateMachine<eGameState>, public InputSystem::IInputListener, public b2ContactFilter, public b2ContactListener
+		, public MemoryAlloc
 	{
 	public:
 

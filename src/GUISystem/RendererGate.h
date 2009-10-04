@@ -82,7 +82,7 @@ namespace GUISystem {
 
 		inline virtual CEGUI::ResourceProvider* createResourceProvider(void) {
 			if (!d_resourceProvider)
-				d_resourceProvider = DYN_NEW ResourceGate();
+				d_resourceProvider = new ResourceGate();
 			return d_resourceProvider;
 		}
 

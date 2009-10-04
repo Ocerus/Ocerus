@@ -26,7 +26,7 @@ namespace Reflection
 		/// @brief Default factory function. Creates an instance of T.
 		/// @remarks The factory function is called by the system to dynamically create
 		///	class instances from class IDs.
-		static T* Create(void) { return DYN_NEW T(); }
+		static T* Create(void) { return new T(); }
 
 		/// Default reflection registration function. Registers nothing by default.
 		static void	RegisterReflection(void) {}
@@ -38,7 +38,7 @@ namespace Reflection
 		static void RegisterProperty(const char* name, typename Property<T, PropertyType>::GetterType getter, 
 			typename Property<T, PropertyType>::SetterType setter, const PropertyAccessFlags accessFlags)
 		{
-			Property<T, PropertyType>* pProperty = DYN_NEW Property<T, PropertyType>( name, getter, setter, accessFlags );
+			Property<T, PropertyType>* pProperty = new Property<T, PropertyType>( name, getter, setter, accessFlags );
 			T::GetClassRTTI()->AddProperty(pProperty);
 			PropertySystem::GetProperties()->push_back( pProperty );
 		}
