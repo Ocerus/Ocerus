@@ -8,15 +8,21 @@
 
 namespace Utils
 {
+	/// @brief Globally accessible variables identified by string identifiers.
+	/// @remarks Only pointer can be stored this way. So, to make use of this you must have the data accessible somewhere
+	/// else as well.
 	class GlobalProperties
 	{
 	public:
 
+		/// @brief Sets new key-pointer pair.
+		/// @remarks Don't store null pointers as it will cause assert.
 		static void SetPointer(const StringKey key, void* value)
 		{
 			mProperties[key] = value;
 		}
 
+		/// Returns a stored pointer identified by the given string key.
 		template<typename T>
 		static T* GetPointer(const StringKey key)
 		{
@@ -25,6 +31,8 @@ namespace Utils
 			return (T*)(it->second);
 		}
 
+		/// @brief Returns reference to the object stored using a pointer identified by the given string key.
+		/// @remarks If the stored pointer is null, an assert will appear.
 		template<typename T>
 		static T& Get(const StringKey key)
 		{
