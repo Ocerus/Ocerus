@@ -49,7 +49,7 @@ void RTTI::EnumComponentDependencies( ComponentDependencyList& out )
 		out.push_back(*it);
 }
 
-AbstractProperty* RTTI::GetProperty( const StringKey& key, const PropertyAccessFlags flagMask )
+AbstractProperty* RTTI::GetProperty( const StringKey key, const PropertyAccessFlags flagMask )
 {
 	PropertyMap::const_iterator it = mProperties.find(key);
 	if (it != mProperties.end())

@@ -557,6 +557,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\Utils\GlobalProperties.h"
+					>
+				</File>
+				<File
 					RelativePath="..\src\Utils\Hash.h"
 					>
 				</File>
@@ -608,6 +612,10 @@
 			<Filter
 				Name="src"
 				>
+				<File
+					RelativePath="..\src\Utils\GlobalProperties.cpp"
+					>
+				</File>
 				<File
 					RelativePath="..\src\Utils\Hash.cpp"
 					>
@@ -1094,6 +1102,7 @@
 					<Tool
 						Name="VCCLCompilerTool"
 						UsePrecompiledHeader="1"
+						ShowIncludes="false"
 					/>
 				</FileConfiguration>
 				<FileConfiguration

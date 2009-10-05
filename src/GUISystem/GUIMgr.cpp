@@ -45,7 +45,7 @@ namespace GUISystem {
 		mCegui->setDefaultFont( "Commonwealth-10" );
 		CEGUI::System::getSingleton().setDefaultMouseCursor( "TaharezLook", "MouseArrow" );
 		
-		string layout = gApp.GetGlobalConfig()->GetString("Layout", "Battleships.layout", "CEGUI");
+		string layout = GlobalProperties::Get<Core::Config>("GlobalConfig").GetString("Layout", "Battleships.layout", "CEGUI");
 
 		CEGUI::Window* CurrentWindowRoot =
 			CEGUI::WindowManager::getSingleton().loadWindowLayout( layout.c_str() );		

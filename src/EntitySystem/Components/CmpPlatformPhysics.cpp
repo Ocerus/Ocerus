@@ -48,7 +48,7 @@ void EntityComponents::CmpPlatformPhysics::CreateBody( const bool hasParentShip 
 		bodyDef.userData = GetOwnerPtr();
 		bodyDef.angularDamping = ANGULAR_DAMPING;
 		bodyDef.linearDamping = LINEAR_DAMPING;
-		mBody = gApp.GetCurrentGame()->GetPhysics()->CreateBody(&bodyDef);
+		mBody = GlobalProperties::Get<b2World>("CurrentPhysics").CreateBody(&bodyDef);
 	}
 
 	// create shape
@@ -93,7 +93,7 @@ void EntityComponents::CmpPlatformPhysics::Clean( void )
 	PropertyHolder prop = GetProperty("ParentShip");
 	if (mBody && !prop.GetValue<EntityHandle>().IsValid())
 	{
-		gApp.GetCurrentGame()->GetPhysics()->DestroyBody(mBody);
+		GlobalProperties::Get<b2World>("CurrentPhysics").DestroyBody(mBody);
 		mBody = 0;
 	}
 }

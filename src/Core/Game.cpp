@@ -32,6 +32,14 @@ Core::Game::~Game()
 	Deinit();
 }
 
+
+void Core::Game::UpdateGameProperties( void )
+{
+	// update current game properties
+	GlobalProperties::SetPointer("CurrentGame", this);
+	GlobalProperties::SetPointer("CurrentPhysics", mPhysics);
+}
+
 void Core::Game::Init()
 {
 	gLogMgr.LogMessage("Game init");
@@ -50,6 +58,9 @@ void Core::Game::Init()
 	mPhysics->SetContactListener(this);
 	mPhysicsResidualDelta = 0.0f;
 
+	
+	// update globally accessible game related properties, like the physics engine
+	UpdateGameProperties();
 
 
 	//// TEST ////
@@ -97,7 +108,8 @@ void Core::Game::Deinit()
 
 void Core::Game::Update( const float32 delta )
 {
-	//// Input reactions ////
+	UpdateGameProperties();
+
 
 	// pick hover entity
 	MouseState& mouse = gInputMgr.GetMouseState();

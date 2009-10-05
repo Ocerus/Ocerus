@@ -72,7 +72,7 @@ namespace Reflection
 		void EnumComponentDependencies(ComponentDependencyList& out);
 
 		/// Returns a property identified by it's string key. Access restriction filter can be defined.
-		AbstractProperty* GetProperty(const StringKey& key, const PropertyAccessFlags flagMask = FULL_PROPERTY_ACCESS_FLAGS);
+		AbstractProperty* GetProperty(const StringKey key, const PropertyAccessFlags flagMask = FULL_PROPERTY_ACCESS_FLAGS);
 
 		/// Adds a property to the RTTI.
 		void AddProperty(AbstractProperty* prop);

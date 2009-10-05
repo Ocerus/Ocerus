@@ -8,6 +8,8 @@
 
 #include "Base.h"
 #include "PropertyFunctionParameters.h"
+#include "../../EntitySystem/EntityMgr/EntityHandle.h"
+#include "../../GfxSystem/GfxStructures.h"
 
 namespace Reflection
 {

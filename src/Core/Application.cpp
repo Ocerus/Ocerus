@@ -22,6 +22,7 @@ void Application::Init()
 
 	// get access to config file
 	mGlobalConfig = new Config("config.txt");
+	GlobalProperties::SetPointer("GlobalConfig", mGlobalConfig);
 
 	// load console properties
 	mConsoleX = mGlobalConfig->GetInt32("ConsoleX", 0, "Windows");

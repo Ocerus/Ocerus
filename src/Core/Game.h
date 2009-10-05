@@ -119,6 +119,11 @@ namespace Core
 		/// Camera stuff.
 		EntitySystem::EntityHandle mCameraFocus;
 		Vector2 mCameraGrabWorldPos;
+
+
+		/// Updates globally accessible properties related to game.
+		void UpdateGameProperties(void);
+
 	};
 }
 

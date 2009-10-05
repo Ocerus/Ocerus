@@ -39,6 +39,7 @@
 #include "../Utils/StringConverter.h"
 #include "../Utils/StringKey.h"
 #include "../Utils/Timer.h"
+#include "../Utils/GlobalProperties.h"
 
 
 #endif

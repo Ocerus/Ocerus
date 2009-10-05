@@ -16,6 +16,9 @@
 #define __PLACEMENT_VEC_NEW_INLINE
 #include <new>
 
+/// Here we are including standard libraries which cause problems after we redefine operator new.
+#include <xlocmon>
+
 /// We are using standard memory allocators now, so we need this include for malloc and free.
 #include <cstdlib>
 

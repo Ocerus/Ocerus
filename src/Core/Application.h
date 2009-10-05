@@ -68,13 +68,6 @@ namespace Core
 		/// Hides the debug console.
 		void HideConsole(void);
 
-		/// Provides access to the global config functionality.
-		inline Config* GetGlobalConfig(void) const { return mGlobalConfig; }
-
-		//TODO tohle predelat na global properties.
-		/// Returns instance of the current game.
-		Game* GetCurrentGame(void) const { BS_ASSERT(mGame); return mGame; }
-
 	private:
 
 		/// Application states.

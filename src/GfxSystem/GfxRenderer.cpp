@@ -28,8 +28,8 @@ namespace GfxSystem
 		Point pos;
 		if (!gGfxRenderer.IsFullscreen() && gGfxRenderer.GetWindowPosition(pos))
 		{
-			gApp.GetGlobalConfig()->SetInt32("WindowX", pos.x, "Windows");
-			gApp.GetGlobalConfig()->SetInt32("WindowY", pos.y, "Windows");
+			GlobalProperties::Get<Core::Config>("GlobalConfig").SetInt32("WindowX", pos.x, "Windows");
+			GlobalProperties::Get<Core::Config>("GlobalConfig").SetInt32("WindowY", pos.y, "Windows");
 		}
 		return true;
 	}
@@ -58,8 +58,8 @@ void GfxRenderer::Init( const Point& resolution, bool fullscreen )
 	mHGE->System_SetState(HGE_SCREENWIDTH, resolution.x);
 	mHGE->System_SetState(HGE_SCREENHEIGHT, resolution.y);
 	mHGE->System_SetState(HGE_SCREENBPP, 32);
-	mHGE->System_SetState(HGE_WINDOWX, gApp.GetGlobalConfig()->GetInt32("WindowX", 0, "Windows"));
-	mHGE->System_SetState(HGE_WINDOWY, gApp.GetGlobalConfig()->GetInt32("WindowY", 0, "Windows"));
+	mHGE->System_SetState(HGE_WINDOWX, GlobalProperties::Get<Core::Config>("GlobalConfig").GetInt32("WindowX", 0, "Windows"));
+	mHGE->System_SetState(HGE_WINDOWY, GlobalProperties::Get<Core::Config>("GlobalConfig").GetInt32("WindowY", 0, "Windows"));
 	mHGE->System_SetState(HGE_WINDOWED, !fullscreen);
 	mHGE->System_SetState(HGE_EXITFUNC, (hgeCallback)(&HgeExitFunction));
 	mHGE->System_SetState(HGE_LOGFILE, "HgeLog.txt");
