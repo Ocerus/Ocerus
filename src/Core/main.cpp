@@ -4,8 +4,7 @@
 #include <Windows.h>
 #include <exception>
 
-/** Application entry point.
-*/
+
 INT WINAPI WinMain (HINSTANCE hInstance, 
 					HINSTANCE hPrevInstance,
 					LPSTR lpCmdLine, 
