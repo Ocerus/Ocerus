@@ -113,13 +113,10 @@ namespace Core
 		EntitySystem::EntityHandle mHoveredEntity;
 		typedef vector<EntitySystem::EntityHandle> EntityList;
 		EntityList mSelectedEntities;
-		#define MAX_SELECTED_GROUPS 10
-		EntityList mSelectedGroups[MAX_SELECTED_GROUPS];
 
 		/// Camera stuff.
 		EntitySystem::EntityHandle mCameraFocus; // an entity currently in focus of camera (camera is following it)
 		Vector2 mCameraGrabWorldPos;
-
 
 		/// Updates globally accessible properties related to game.
 		void UpdateGameProperties(void);

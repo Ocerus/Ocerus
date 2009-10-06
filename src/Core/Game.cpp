@@ -148,14 +148,6 @@ void Core::Game::Update( const float32 delta )
 			else
 				++it;
 		}
-		for (int32 i=0; i<MAX_SELECTED_GROUPS; ++i)
-			for (EntityList::const_iterator it=mSelectedGroups[i].begin(); it!=mSelectedGroups[i].end();)
-			{
-				if (!it->Exists())
-					it = mSelectedGroups[i].erase(it);
-				else
-					++it;
-			}
 		if (!mCameraFocus.Exists())
 			mCameraFocus.Invalidate();
 
@@ -281,41 +273,6 @@ void Core::Game::KeyPressed( const KeyInfo& ke )
 	if (ke.keyAction == KC_ESCAPE)
 		gApp.Shutdown();
 
-	if (ke.keyAction == KC_F)
-	{
-		gGfxRenderer.SetFullscreen(!gGfxRenderer.IsFullscreen());
-	}
-	if (ke.keyAction==KC_G)
-	{
-		gGfxRenderer.ChangeResolution(1280,1024);
-	}
-	if (ke.keyAction==KC_H)
-	{
-		gGfxRenderer.ChangeResolution(800,600);
-	}
-
-	if (ke.keyAction >= KC_1 && ke.keyAction <= KC_0)
-	{
-		int32 groupIndex = ke.keyAction - KC_1;
-		if (gInputMgr.IsKeyDown(KC_LCONTROL) || gInputMgr.IsKeyDown(KC_RCONTROL))
-			mSelectedGroups[groupIndex] = mSelectedEntities;
-		else if (mSelectedGroups[groupIndex].size() > 0)
-			mSelectedEntities = mSelectedGroups[groupIndex];
-	}
-
-	for (EntityList::iterator i=mSelectedEntities.begin(); i!=mSelectedEntities.end(); ++i)
-	{
-		eEntityType type = i->GetType();
-		if (type == ET_WEAPON && gInputMgr.IsKeyDown(KC_SPACE))
-		{
-			PropertyHolder prop;
-			prop = i->GetProperty("IsFiring");
-			if (prop.GetValue<bool>())
-				i->PostMessage(EntityMessage::TYPE_STOP_SHOOTING);
-			else
-				i->PostMessage(EntityMessage::TYPE_START_SHOOTING);
-		}
-	}
 }
 
 void Core::Game::KeyReleased( const KeyInfo& ke )
