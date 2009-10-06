@@ -29,22 +29,20 @@ namespace EntitySystem
 		ComponentMgr(void);
 		~ComponentMgr(void);
 		
-		//TODO doplnit const pred EntityHandle
-
 		/// Creates a component and attaches it to an entity.
-		Component* CreateComponent(EntityHandle h, const eComponentType type);
+		Component* CreateComponent(const EntityHandle h, const eComponentType type);
 
 		/// Destroys all components of a specified entity.
-		inline void DestroyEntityComponents(EntityHandle h) { DestroyEntityComponents(h.GetID()); }
+		inline void DestroyEntityComponents(const EntityHandle h) { DestroyEntityComponents(h.GetID()); }
 
 		/// Destroys all components of a specified entity.
-		void DestroyEntityComponents(EntityID id);
+		void DestroyEntityComponents(const EntityID id);
 
 		/// Returns a collection of components (represented by an iterator) of a specified entity.
-		inline EntityComponentsIterator GetEntityComponents(EntityHandle h) { return GetEntityComponents(h.GetID()); }
+		inline EntityComponentsIterator GetEntityComponents(const EntityHandle h) const { return GetEntityComponents(h.GetID()); }
 
 		/// Returns a collection of components (represented by an iterator) of a specified entity.
-		EntityComponentsIterator GetEntityComponents(EntityID id);
+		EntityComponentsIterator GetEntityComponents(const EntityID id) const;
 
 		/// Retrieves properties of an entity. A filter related to access flags can be specified.
 		inline bool GetEntityProperties(const EntityHandle h, PropertyList& out, const PropertyAccessFlags flagMask = FULL_PROPERTY_ACCESS_FLAGS) { return GetEntityProperties(h.GetID(), out, flagMask); }

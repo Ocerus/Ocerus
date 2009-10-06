@@ -81,9 +81,7 @@ void CmpPlatformParams::ComputeParams()
 		if (dist > perimeter)
 			perimeter = dist;
 	}
-	//TODO tady by mel hrat roli jeste parametr v materialu, kerej tam chybi
 	mNumLinkSlots = MathUtils::Round(LINKSLOTS_RATIO * perimeter); 
-	//TODO tohle chce domyslet
 	mBaseDetachingChance = 0.5f;
 }
 

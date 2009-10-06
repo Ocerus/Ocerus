@@ -95,7 +95,7 @@ namespace ResourceSystem
 		template<typename T>
 		T GetValue(const NodeIterator iter)
 		{
-			return StringConverter::FromString(*iter);
+			return StringConverter::FromString<T>(*iter);
 		}
 
 		/// Returns the value of the first child of the specified node.

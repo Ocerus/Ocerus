@@ -19,6 +19,16 @@ namespace Utils
 			return out.str();
 		}
 
+		/// Template specialization.
+		template<>
+		inline string ToString(const string& val) { return val; }
+
+		/// Template specialization.
+		template<>
+		inline string ToString(const string val) { return val; }
+
+
+
 		/// Converts the given string to a value of an arbitrary type.
 		template<typename T>
 		T FromString(const string& str)
@@ -29,6 +39,9 @@ namespace Utils
 				return T(); // return default value
 			return result;
 		}
+
+		template<>
+		inline string FromString(const string& str) { return str; }
 
 		template<>
 		Vector2 FromString(const string& str);

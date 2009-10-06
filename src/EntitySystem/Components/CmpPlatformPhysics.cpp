@@ -158,7 +158,6 @@ EntityMessage::eResult EntityComponents::CmpPlatformPhysics::HandleMessage( cons
 				CreateBody(false);
 				//mBody->SetAngularVelocity(angVel);
 				//mBody->SetLinearVelocity(linVel);
-				//TODO pridal sem detachnuty platforme trochu kick, at to ma grady
 				mBody->SetAngularVelocity(angVel + MathUtils::Random(-1.0f, 1.0f));
 				Vector2 dir = mBody->GetPosition() - shipPos;
 				if (dir.x!=0 && dir.y!=0)
@@ -185,7 +184,6 @@ EntityMessage::eResult EntityComponents::CmpPlatformPhysics::HandleMessage( cons
 			if (dir.x!=0 && dir.y!=0)
 			{
 				float32 lenSq = dir.LengthSquared();
-				//TODO magic number...ale hlavne sila z exploze se ma delat pres query
 				mBody->ApplyForce(100.0f/lenSq*dir, myPos);
 			}
 		}

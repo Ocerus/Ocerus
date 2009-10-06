@@ -167,9 +167,6 @@ void EntityComponents::CmpPlatformLogic::Die( void )
 		it->PostMessage(EntityMessage::TYPE_DIE);
 
 	// apply some force from the explosion to the neighbourhood ship
-	//TODO aplikovat silu na vsechno v dosahu
-	//TODO nedelat to hrubou silou, ale udelat na to query
-	//TODO silu scalovat podle hmotnosti tehle platformy
 	prop = GetProperty("AbsolutePosition");
 	Vector2 myPos = prop.GetValue<Vector2>();
 	gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::TYPE_EXPLOSION, &myPos));

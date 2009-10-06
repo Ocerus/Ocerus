@@ -73,7 +73,6 @@ namespace EntityComponents
 		void SetResourceGroup(const StringKey group) { mResourceGroup = group; }
 		//@}
 		/// @name Color of the platform.
-		//TODO nahradit texturou
 		//@{
 		GfxSystem::Color GetFillColor(void) const { return mFillColor; }
 		void SetFillColor(const GfxSystem::Color col) { mFillColor = col; }

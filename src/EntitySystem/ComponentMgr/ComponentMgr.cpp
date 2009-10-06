@@ -23,9 +23,9 @@ ComponentMgr::~ComponentMgr()
 	BS_ASSERT_MSG(mEntityComponentsMap.size()==0, "ComponentsMap not empty. (EntityMgr should erase it before deleting ComponentMgr)");
 }
 
-EntityComponentsIterator ComponentMgr::GetEntityComponents(EntityID id)
+EntityComponentsIterator ComponentMgr::GetEntityComponents(EntityID id) const
 {
-	EntityComponentsMap::iterator eci = mEntityComponentsMap.find(id);
+	EntityComponentsMap::const_iterator eci = mEntityComponentsMap.find(id);
 	BS_ASSERT(eci != mEntityComponentsMap.end());
 	return EntityComponentsIterator(eci->second);
 }

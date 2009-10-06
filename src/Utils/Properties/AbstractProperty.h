@@ -68,6 +68,9 @@ namespace Reflection
 			return ((TypedProperty<T>*)this)->SetValue( owner, value );
 		}
 
+		/// Parses the typed value of this property from the input string.
+		void SetValueFromString(RTTIBaseClass* owner, const string& str);
+
 	protected:
 
 		/// Reports an error when the property is accessed with a wrong type and cannot be converted between these types.

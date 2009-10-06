@@ -117,7 +117,7 @@ namespace Core
 		EntityList mSelectedGroups[MAX_SELECTED_GROUPS];
 
 		/// Camera stuff.
-		EntitySystem::EntityHandle mCameraFocus;
+		EntitySystem::EntityHandle mCameraFocus; // an entity currently in focus of camera (camera is following it)
 		Vector2 mCameraGrabWorldPos;
 
 

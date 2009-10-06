@@ -75,7 +75,6 @@ EntityHandle EntityMgr::CreateEntity(EntityDescription& desc, PropertyList& out)
 
 	// create the handle for the new entity
 	EntityHandle h = EntityHandle::CreateUniqueHandle();
-	//TODO check if the handle is really unique
 
 	bool dependencyFailure = false;
 	set<eComponentType> createdComponentTypes;
@@ -240,93 +239,46 @@ bool EntitySystem::EntityMgr::LoadFromResource( ResourceSystem::ResourcePtr res 
 					else
 					{
 						PropertyHolder p = prop->second;
-						//TODO tenhle switch asi bude chtit premistit nekam, odkud se na to dostane i LUA
-						//nejlip do PropertyHolder a hodnotu tam predat jako string a rozparsovat az uvnitr
-						//V Lue ale jinak rozparsovat EntityHandle, pac tam to bude asi primo EntityHandle
-						switch (p.GetType())
+						if (p.GetType() == PROPTYPE_VECTOR2_ARRAY)
 						{
-						case PROPTYPE_BOOL:
-							p.SetValue(propIt.GetChildValue<bool>());
-							break;
-						case PROPTYPE_FLOAT32:
-							p.SetValue(propIt.GetChildValue<float32>());
-							break;
-						case PROPTYPE_INT16:
-							p.SetValue(propIt.GetChildValue<int16>());
-							break;
-						case PROPTYPE_INT32:
-							p.SetValue(propIt.GetChildValue<int32>());
-							break;
-						case PROPTYPE_INT64:
-							p.SetValue(propIt.GetChildValue<int64>());
-							break;
-						case PROPTYPE_INT8:
-							p.SetValue(propIt.GetChildValue<int8>());
-							break;
-						case PROPTYPE_UINT16:
-							p.SetValue(propIt.GetChildValue<uint16>());
-							break;
-						case PROPTYPE_UINT32:
-							p.SetValue(propIt.GetChildValue<uint32>());
-							break;
-						case PROPTYPE_UINT64:
-							p.SetValue(propIt.GetChildValue<uint64>());
-							break;
-						case PROPTYPE_UINT8:
-							p.SetValue(propIt.GetChildValue<uint8>());
-							break;
-						case PROPTYPE_STRING:
-							p.SetValue(propIt.GetChildValue<string>().c_str());
-							break;
-						case PROPTYPE_STRING_KEY:
-							p.SetValue<StringKey>(propIt.GetChildValue<string>());
-							break;
-						case PROPTYPE_COLOR:
-							p.SetValue(propIt.GetChildValue<GfxSystem::Color>());
-							break;
-						case PROPTYPE_VECTOR2:
-							p.SetValue(propIt.GetChildValue<Vector2>());
-							break;
-						case PROPTYPE_VECTOR2_REFERENCE:
-							p.SetValue<Vector2&>(propIt.GetChildValue<Vector2>());
-							break;
-						case PROPTYPE_VECTOR2_ARRAY:
+							string lengthParam;
+							vector<Vector2> vertices;
+							for (ResourceSystem::XMLResource::NodeIterator vertIt=xml->IterateChildren(propIt); vertIt!=xml->EndChildren(propIt); ++vertIt)
 							{
-								string lengthParam;
-								vector<Vector2> vertices;
-								for (ResourceSystem::XMLResource::NodeIterator vertIt=xml->IterateChildren(propIt); vertIt!=xml->EndChildren(propIt); ++vertIt)
-								{
-									if ((*vertIt).compare("Vertex") == 0)
-										vertices.push_back(vertIt.GetChildValue<Vector2>());
-									else if ((*vertIt).compare("LengthParam") == 0)
-										lengthParam = vertIt.GetChildValue<string>();
-									else
-										gLogMgr.LogMessage("XML:Entity:Expected 'Vertex' or 'LengthParam', found '", *vertIt, "'", LOG_ERROR);
-								}
-								if (lengthParam.length() == 0)
-									gLogMgr.LogMessage("XML:Entity:LengthParam of an array not specified", LOG_ERROR);
-								else if (props.find(lengthParam) == props.end())
-									gLogMgr.LogMessage("XML:Entity:LengthParam of name '", lengthParam, "' not found in entity", LOG_ERROR);
+								if ((*vertIt).compare("Vertex") == 0)
+									vertices.push_back(vertIt.GetChildValue<Vector2>());
+								else if ((*vertIt).compare("LengthParam") == 0)
+									lengthParam = vertIt.GetChildValue<string>();
 								else
-								{
-									props[lengthParam].SetValue<uint32>(vertices.size());
-									Vector2* vertArray = new Vector2[vertices.size()];
-									for (uint32 i=0; i<vertices.size(); ++i)
-										vertArray[i] = vertices[i];
-									p.SetValue<Vector2*>(vertArray);
-								}
+									gLogMgr.LogMessage("XML:Entity:Expected 'Vertex' or 'LengthParam', found '", *vertIt, "'", LOG_ERROR);
 							}
-							break;
-						case PROPTYPE_ENTITYHANDLE:
+							if (lengthParam.length() == 0)
 							{
-								EntityHandle e = FindFirstEntity(propIt.GetChildValue<string>());
-								if (!e.IsValid())
-									gLogMgr.LogMessage("XML:Entity:Entity for property '", *propIt, "' of name '", propIt.GetChildValue<string>(), "' was not found", LOG_WARNING);
-								p.SetValue(e);
+								gLogMgr.LogMessage("XML:Entity:LengthParam of an array not specified", LOG_ERROR);
 							}
-							break;
-						default:
-							gLogMgr.LogMessage("XML:Entity:Can't parse property type '", p.GetType(), "'", LOG_ERROR);
+							else if (props.find(lengthParam) == props.end())
+							{
+								gLogMgr.LogMessage("XML:Entity:LengthParam of name '", lengthParam, "' not found in entity", LOG_ERROR);
+							}
+							else
+							{
+								props[lengthParam].SetValue<uint32>(vertices.size());
+								Vector2* vertArray = new Vector2[vertices.size()];
+								for (uint32 i=0; i<vertices.size(); ++i)
+									vertArray[i] = vertices[i];
+								p.SetValue<Vector2*>(vertArray);
+							}
+						}
+						else if (p.GetType() == PROPTYPE_ENTITYHANDLE)
+						{
+							EntityHandle e = FindFirstEntity(propIt.GetChildValue<string>());
+							if (!e.IsValid())
+								gLogMgr.LogMessage("XML:Entity:Entity for property '", *propIt, "' of name '", propIt.GetChildValue<string>(), "' was not found", LOG_WARNING);
+							p.SetValue(e);
+						}
+						else
+						{
+							p.SetValueFromString(propIt.GetChildValue<string>());
 						}
 					}
 				}
@@ -348,14 +300,6 @@ bool EntitySystem::EntityMgr::EntityExists( const EntityHandle h ) const
 	if (!h.IsValid())
 		return false;
 	return mEntities.find(h.GetID()) != mEntities.end();
-}
-
-void EntitySystem::EntityMgr::EnumerateEntities( vector<EntityHandle>& out, const eEntityType desiredType )
-{
-	out.clear();
-	for (EntityMap::const_iterator it=mEntities.begin(); it!=mEntities.end(); ++it)
-		if (desiredType == NUM_ENTITY_TYPES || it->second->mType == desiredType)
-			out.push_back(it->first);
 }
 
 EntitySystem::EntityMgr::EntityInfo::EntityInfo( void ):

@@ -49,7 +49,6 @@ void Core::Game::Init()
 
 	// init physics engine
 	b2AABB worldAABB;
-	//TODO chtelo by to nekonecny rozmery, nebo vymyslet nejak jinak
 	worldAABB.lowerBound.Set(-10000.0f, -10000.0f);
 	worldAABB.upperBound.Set(10000.0f, 10000.0f);
 	// turn off sleeping as we are moving in a space with no gravity
@@ -110,57 +109,14 @@ void Core::Game::Update( const float32 delta )
 {
 	UpdateGameProperties();
 
-
 	// pick hover entity
 	MouseState& mouse = gInputMgr.GetMouseState();
 	EntityPicker picker(mouse.x, mouse.y);
 	gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::TYPE_MOUSE_PICK, &picker));
 	mHoveredEntity = picker.GetResult();
 
-	//TODO tady se predpoklada, ze vsechny vybrane entity jsou jednoho typu, melo by jit ale vybrat vic typu najednou
-
-	// we want to do certain action even when the right button is still down
-	if (gInputMgr.IsMouseButtonPressed(MBTN_RIGHT) && mSelectedEntities.size()>0)
-		MouseButtonPressed(mouse, MBTN_RIGHT);
-
-	// make sure we didn't lose any of the selected entities
-	for (EntityList::const_iterator i=mSelectedEntities.begin(); i!=mSelectedEntities.end();)
-	{
-		i = mSelectedEntities.erase(i);
-	}
-
-	// control by using keys
-	for (EntityList::iterator i=mSelectedEntities.begin(); i!=mSelectedEntities.end(); ++i)
-	{
-		eEntityType type = i->GetType();
-		if (type == ET_ENGINE)
-		{
-			if (gInputMgr.IsKeyDown(KC_NUMPAD4) || gInputMgr.IsKeyDown(KC_NUMPAD6))
-			{
-				float32 angle;
-				i->PostMessage(EntityMessage::TYPE_GET_RELATIVE_ANGLE, &angle);
-				angle += (gInputMgr.IsKeyDown(KC_NUMPAD4)?-1:1) * ENGINE_ANGLECHANGE_SPEED * delta;
-				i->PostMessage(EntityMessage::TYPE_SET_RELATIVE_ANGLE, &angle);
-			}
-			if (gInputMgr.IsKeyDown(KC_NUMPAD8) || gInputMgr.IsKeyDown(KC_NUMPAD5))
-			{
-				float32 powerRatio;
-				i->PostMessage(EntityMessage::TYPE_GET_POWER_RATIO, &powerRatio);
-				powerRatio += (gInputMgr.IsKeyDown(KC_NUMPAD5)?-1:1) * ENGINE_POWERCHANGE_SPEED * delta;
-				i->PostMessage(EntityMessage::TYPE_SET_POWER_RATIO, &powerRatio);
-			}
-		}
-		else if (type == ET_WEAPON)
-		{
-			if (gInputMgr.IsKeyDown(KC_NUMPAD4) || gInputMgr.IsKeyDown(KC_NUMPAD6))
-			{
-				float32 angle;
-				i->PostMessage(EntityMessage::TYPE_GET_RELATIVE_ANGLE, &angle);
-				angle += (gInputMgr.IsKeyDown(KC_NUMPAD4)?-1:1) * WEAPON_ANGLECHANGE_SPEED * delta;
-				i->PostMessage(EntityMessage::TYPE_SET_RELATIVE_ANGLE, &angle);
-			}
-		}
-	}
+	// react on input
+	// ... TODO
 
 	// advance the physics forward in time
 	float32 physicsDelta = delta + mPhysicsResidualDelta;
@@ -179,10 +135,10 @@ void Core::Game::Update( const float32 delta )
 		}
 		mPhysicsEvents.clear();
 
-		// destroy marked entities
+		// destroy entities marked for destruction
 		gEntityMgr.ProcessDestroyQueue();
 
-		// if some of the selected entities were destroyed, remove it
+		// if some of the selected entities were destroyed, remove them from the selection
 		if (!mHoveredEntity.Exists())
 			mHoveredEntity.Invalidate();
 		for (EntityList::const_iterator it=mSelectedEntities.begin(); it!=mSelectedEntities.end();)
@@ -393,14 +349,8 @@ void Core::Game::MouseButtonPressed( const MouseInfo& mi, const eMouseButton btn
 
 		if (mHoveredEntity.IsValid())
 		{
-			// select all entities of the same type when doubleclicked
-			if (doubleClick)
-			{
-				eEntityType type = mHoveredEntity.GetType();
-				gEntityMgr.EnumerateEntities(mSelectedEntities, type);
-			}
 			// use the hover entity as a focus
-			else if (gInputMgr.IsKeyDown(KC_RCONTROL) || gInputMgr.IsKeyDown(KC_LCONTROL))
+			if (gInputMgr.IsKeyDown(KC_RCONTROL) || gInputMgr.IsKeyDown(KC_LCONTROL))
 			{
 				mCameraFocus = mHoveredEntity;
 			}

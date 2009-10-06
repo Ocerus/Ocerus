@@ -55,6 +55,12 @@ namespace Reflection
 			mProperty->SetValue<T>(mOwner, value);
 		}
 
+		/// Parses the typed value of this property from the input string.
+		inline void SetValueFromString(const string& str)
+		{
+			mProperty->SetValueFromString(mOwner, str);
+		}
+
 		/// Calls a function this property represents.
 		inline void CallFunction(PropertyFunctionParameters* parameters)
 		{
