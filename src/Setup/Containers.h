@@ -20,9 +20,10 @@ template<typename T>
 class vector: public std::vector<T> 
 {
 public:
-	inline vector(): std::vector<T>() {}
+    typedef typename std::vector<T>::size_type size_type;
+    inline vector(): std::vector<T>() {}
 	explicit inline vector(size_type _Count): std::vector<T>(_Count) {}
-	inline vector(const _Myt& _Right): std::vector<T>(_Right) {}
+	inline vector(const std::vector<T>& _Right): std::vector<T>(_Right) {}
 };
 
 #include <list>
@@ -30,9 +31,10 @@ template<typename T>
 class list: public std::list<T> 
 {
 public:
-	inline list(): std::list<T>() {}
+    typedef typename std::list<T>::size_type size_type;
+    inline list(): std::list<T>() {}
 	explicit inline list(size_type _Count): std::list<T>(_Count) {}
-	inline list(const _Myt& _Right): std::list<T>(_Right) {}
+	inline list(const std::list<T>& _Right): std::list<T>(_Right) {}
 };
 
 #include <queue>
@@ -40,6 +42,7 @@ template<typename T>
 class queue: public std::queue<T> 
 {
 public:
+    typedef typename std::queue<T>::container_type container_type;
 	inline queue(): std::queue<T>() {}
 	explicit inline queue(const container_type& _Cont): std::queue<T>(_Cont) {}
 };
@@ -49,9 +52,10 @@ template<typename T>
 class deque: public std::deque<T> 
 {
 public:
+    typedef typename std::deque<T>::size_type size_type;
 	inline deque(): std::deque<T>() {}
 	explicit inline deque(size_type _Count): std::deque<T>(_Count) {}
-	inline deque(const _Myt& _Right): std::deque<T>(_Right) {}
+	inline deque(const std::deque<T>& _Right): std::deque<T>(_Right) {}
 };
 
 #include <map>
@@ -62,6 +66,8 @@ public:
 	inline map(): std::map<Key, Value>() {}
 };
 
+#if defined(_MSC_VER) || defined(__BORLANDC__)
+
 #include <hash_map>
 template<typename Key, typename Value>
 class hash_map: public stdext::hash_map<Key, Value>
@@ -69,6 +75,18 @@ class hash_map: public stdext::hash_map<Key, Value>
 public:
 	inline hash_map(): stdext::hash_map<Key, Value>() {}
 };
+
+#else
+
+#include <ext/hash_map>
+template<typename Key, typename Value>
+class hash_map: public __gnu_cxx::hash_map<Key, Value>
+{
+public:
+	inline hash_map(): __gnu_cxx::hash_map<Key, Value>() {}
+};
+
+#endif
 
 #include <set>
 template<typename T>
