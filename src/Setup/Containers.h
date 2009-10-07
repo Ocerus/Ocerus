@@ -68,23 +68,23 @@ public:
 
 #if defined(_MSC_VER) || defined(__BORLANDC__)
 
-#include <hash_map>
-template<typename Key, typename Value>
-class hash_map: public stdext::hash_map<Key, Value>
-{
-public:
-	inline hash_map(): stdext::hash_map<Key, Value>() {}
-};
+	#include <hash_map>
+	template<typename Key, typename Value>
+	class hash_map: public stdext::hash_map<Key, Value>
+	{
+	public:
+		inline hash_map(): stdext::hash_map<Key, Value>() {}
+	};
 
 #else
 
-#include <ext/hash_map>
-template<typename Key, typename Value>
-class hash_map: public __gnu_cxx::hash_map<Key, Value>
-{
-public:
-	inline hash_map(): __gnu_cxx::hash_map<Key, Value>() {}
-};
+	#include <ext/hash_map>
+	template<typename Key, typename Value>
+	class hash_map: public __gnu_cxx::hash_map<Key, Value>
+	{
+	public:
+		inline hash_map(): __gnu_cxx::hash_map<Key, Value>() {}
+	};
 
 #endif
 
