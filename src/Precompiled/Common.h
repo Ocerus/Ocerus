@@ -7,6 +7,12 @@
 
 #include "../Setup/Settings.h"
 
+
+/// Big standard libraries come here. But only if they are needed by some of the headers below.
+#include <boost/filesystem/fstream.hpp>
+
+
+/// Our custom headers come here.
 #include "../Core/Config.h"
 
 #include "../EntitySystem/EntityMgr/EntityMgr.h"
@@ -27,6 +33,7 @@
 #include "../LogSystem/LogMgr.h"
 
 #include "../ResourceSystem/ResourceMgr.h"
+#include "../ResourceSystem/Resource.h"
 
 #include "../StringSystem/StringMgr.h"
 

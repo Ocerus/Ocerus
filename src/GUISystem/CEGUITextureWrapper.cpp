@@ -35,7 +35,7 @@ namespace GUISystem {
 		uint32 bytesize = ((buffWidth * sizeof(uint32)) * buffHeight);
 
 		string name = GetNextTextureName();
-		gResourceMgr.AddManualResourceToGroup(name, mResourceGroupName, ResourceSystem::Resource::TYPE_TEXTURE);
+		gResourceMgr.AddManualResourceToGroup(name, mResourceGroupName, ResourceSystem::RESTYPE_TEXTURE);
 						
 		mTexture = (GfxSystem::TexturePtr)gResourceMgr.GetResource(mResourceGroupName, name);
 		// warning, medved error, medved thought that position of A doesnt matter :)

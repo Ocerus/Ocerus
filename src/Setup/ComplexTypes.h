@@ -36,5 +36,8 @@ inline std::ios_base::openmode InputStreamMode(eInputStreamMode mode)
 	return std::ios_base::in | std::ios_base::binary;
 }
 
+#include <sstream>
+typedef std::stringstream stringstream;
+
 
 #endif // ComplexTypes_h__

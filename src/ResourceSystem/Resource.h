@@ -5,11 +5,7 @@
 #define _RESOURCE_H_
 
 #include "Base.h"
-//TODO odstranit tenhle include!
-#include <boost/filesystem/fstream.hpp>
-
-
-namespace Utils { class DataContainer; }
+#include "ResourceTypes.h"
 
 namespace ResourceSystem
 {
@@ -37,9 +33,6 @@ namespace ResourceSystem
 			STATE_LOADED 
 		};
 
-		/// Custom type of a resource. Add your types here!
-		enum eType { TYPE_TEXTURE=0, TYPE_CEGUIRESOURCE, TYPE_TEXTRESOURCE, TYPE_XMLRESOURCE, TYPE_PARTICLERESOURCE, NUM_TYPES, TYPE_AUTODETECT };
-
 		/// @remarks No need to override.
 		Resource(void);
 		/// @remarks Don't forget to override!
@@ -53,7 +46,7 @@ namespace ResourceSystem
 		virtual bool Unload(bool allowManual = false);
 
 		/// Returns the user type of this resource.
-		inline eType GetType(void) const { return mType; }
+		inline eResourceType GetType(void) const { return mType; }
 
 		/// Returns the current state of this resource.
 		inline eState GetState(void) const { return mState; }
@@ -102,7 +95,7 @@ namespace ResourceSystem
 		friend class ResourceMgr;
 		string mFilePath;
 		bool mIsManual;
-		eType mType;
+		eResourceType mType;
 		string mName;
 		eState mState;
 
@@ -113,7 +106,7 @@ namespace ResourceSystem
 		inline void SetName(const string& name) { mName = name; }
 		inline void SetFilepath(const string& filepath) { mFilePath = filepath; }
 		inline void SetManual(bool manual) { mIsManual = manual; }
-		inline void SetType(const eType newType) { mType = newType; }
+		inline void SetType(const eResourceType newType) { mType = newType; }
 	};
 
 }

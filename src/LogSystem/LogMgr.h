@@ -6,8 +6,6 @@
 
 #include "Base.h"
 #include "Singleton.h"
-//TODO tohle pryc nejak
-#include <boost/filesystem/fstream.hpp>
 
 /// Macro for easier use.
 #define gLogMgr LogSystem::LogMgr::GetSingleton()
@@ -44,6 +42,7 @@ namespace LogSystem
 		void LogMessage(const string& msg, const int32 num, const int32 num2, eLogSeverity severity = LOG_INFO);
 		void LogMessage(const string& msg, const float32 num, eLogSeverity severity = LOG_INFO);
 		void LogMessage(const string& msg, const int32 num, const string& msg2, const int32 num2, const string& msg3, eLogSeverity severity = LOG_INFO);
+		void LogMessage(const string& msg, const int32 num, const string& msg2, const int32 num2, const string& msg3, const int32 num3, const string& msg4, eLogSeverity severity = LOG_INFO);
 		void LogMessage(const string& msg, const int32 num, const string& msg2, const string& msg3, eLogSeverity severity = LOG_INFO);
 		void LogMessage(const string& msg, const int32 num, const string& msg2, eLogSeverity severity = LOG_INFO);
 		void LogMessage(const string& msg, const string& msg2, const string& msg3, const int32 num, const string& msg4, const int32 num2, const string& msg5, eLogSeverity severity = LOG_INFO);
@@ -51,7 +50,7 @@ namespace LogSystem
 
 	private:
 
-		boost::filesystem::ofstream mOutStream;
+		boost::filesystem::ofstream* mOutStream;
 		eLogSeverity mSeverityLevel;
 	};
 }

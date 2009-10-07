@@ -81,9 +81,7 @@ namespace EntitySystem
 			string mID;
 		};
 
-		//TODO predelat zpet na hashmapu, az bude hotova struktura pro vykreslovani entit i podle Z-orderu
-		//typedef stdext::hash_map<EntityID, EntityInfo*> EntityMap;
-		typedef map<EntityID, EntityInfo*> EntityMap;
+		typedef hash_map<EntityID, EntityInfo*> EntityMap;
 		typedef vector<EntityID> EntityQueue;
 
 		ComponentMgr* mComponentMgr;

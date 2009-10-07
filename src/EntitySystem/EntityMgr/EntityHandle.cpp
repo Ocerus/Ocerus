@@ -74,16 +74,10 @@ EntitySystem::EntityHandle::~EntityHandle( void )
 EntityMessage::eResult EntityHandle::PostMessage(const EntityMessage::eType type, void* data)
 {
 	BS_DASSERT(IsValid());
-	/*if (!IsValid())
-	{
-		gLogMgr.LogMessage("PostMesage: Invalid entity", LOG_ERROR);
-		return EntityMessage::RESULT_ERROR;
-	}*/
 	EntityMessage::eResult result = gEntityMgr.PostMessage(*this, EntityMessage(type, data));
-	//TODO tady hlasit TYPe netity misto jejiho ID
 	if (result == EntityMessage::RESULT_ERROR)
-		gLogMgr.LogMessage("Message '", type, "' on entity '", mEntityID, "' returned error", LOG_ERROR);
+		gLogMgr.LogMessage("Message '", type, "' on entity '", mEntityID, "' of type '", GetType(),"' returned error", LOG_ERROR);
 	else if (result == EntityMessage::RESULT_IGNORED)
-		gLogMgr.LogMessage("Message '", type, "' on entity '", mEntityID, "' returned warning", LOG_WARNING);
+		gLogMgr.LogMessage("Message '", type, "' on entity '", mEntityID, "' of type '", GetType(),"' was ignored", LOG_WARNING);
 	return result;
 }

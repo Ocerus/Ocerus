@@ -13,9 +13,6 @@ namespace EntitySystem
 	{
 	public:
 
-		//TODO pridat filter na typy entit, ktery to muze picknout
-		//TODO pridat moznost definovat celou oblast misto pouhyho kursoru
-
 		/// Creates a picker for selecting an entity under the current mouse cursor.
 		EntityPicker(const Vector2& worldCursorPos);
 
@@ -28,11 +25,9 @@ namespace EntitySystem
 		/// Tries to pick this entity if it is in specified area and has a specified type.
 		void Update(const EntityHandle entity, const float32 rectX1, const float32 rectY1, const float32 rectX2, const float32 rectY2);
 
-		//TODO pridat moznost vzit vic vysledku (pri definovani vetsi oblasti pouze)
 		/// Returns result of the search.
 		EntityHandle GetResult(void) const;
 
-		//TODO priority by se mely nastavovat nekde uplne mimo entity system. Nejspis tam, kde se definujou jejich typy + by to melo jit delat nak behem runtimu.
 		/// Sets priorities for all entity types in the system.
 		static void SetupPriorities(void);
 

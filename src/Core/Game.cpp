@@ -445,7 +445,6 @@ bool Core::Game::ShouldCollide( b2Shape* shape1, b2Shape* shape2 )
 
 void Core::Game::Add( const b2ContactPoint* point )
 {
-	//TODO tady to chce pooling, zbytecna casta alokace malych objektu
 	PhysicsEvent* evt = new PhysicsEvent();
 	if (point->shape1->GetUserData())
 		evt->entity1 = *(EntityHandle*)point->shape1->GetUserData();

@@ -27,30 +27,30 @@ void ResourceSystem::ResourceMgr::Init( const string& basepath )
 	gLogMgr.LogMessage("*** ResourceMgr init ***");
 	gLogMgr.LogMessage("Base directory = ", basepath);
 
-	mResourceCreationMethods[Resource::NUM_TYPES-1] = 0; // safety reasons
+	mResourceCreationMethods[NUM_RESTYPES-1] = 0; // safety reasons
 
 	// register resource types
-	mResourceCreationMethods[Resource::TYPE_TEXTURE] = GfxSystem::Texture::CreateMe;
-	mResourceCreationMethods[Resource::TYPE_CEGUIRESOURCE] = GUISystem::CEGUIResource::CreateMe;
-	mResourceCreationMethods[Resource::TYPE_TEXTRESOURCE] = StringSystem::TextResource::CreateMe;
-	mResourceCreationMethods[Resource::TYPE_XMLRESOURCE] = XMLResource::CreateMe;
-	mResourceCreationMethods[Resource::TYPE_PARTICLERESOURCE] = GfxSystem::ParticleResource::CreateMe;
-	mExtToTypeMap["png"] = Resource::TYPE_TEXTURE;
-	mExtToTypeMap["bmp"] = Resource::TYPE_TEXTURE;
-	mExtToTypeMap["jpg"] = Resource::TYPE_TEXTURE;
-	mExtToTypeMap["gif"] = Resource::TYPE_TEXTURE;
-	mExtToTypeMap["layout"] = Resource::TYPE_CEGUIRESOURCE;
-	mExtToTypeMap["imageset"] = Resource::TYPE_CEGUIRESOURCE;
-	mExtToTypeMap["font"] = Resource::TYPE_CEGUIRESOURCE;
-	mExtToTypeMap["scheme"] = Resource::TYPE_CEGUIRESOURCE;
-	mExtToTypeMap["tga"] = Resource::TYPE_TEXTURE;
-	mExtToTypeMap["ttf"] = Resource::TYPE_CEGUIRESOURCE;
-	mExtToTypeMap["looknfeel"] = Resource::TYPE_CEGUIRESOURCE;
-	mExtToTypeMap["str"] = Resource::TYPE_TEXTRESOURCE;
-	mExtToTypeMap["xml"] = Resource::TYPE_XMLRESOURCE;
-	mExtToTypeMap["psi"] = Resource::TYPE_PARTICLERESOURCE;
+	mResourceCreationMethods[RESTYPE_TEXTURE] = GfxSystem::Texture::CreateMe;
+	mResourceCreationMethods[RESTYPE_CEGUIRESOURCE] = GUISystem::CEGUIResource::CreateMe;
+	mResourceCreationMethods[RESTYPE_TEXTRESOURCE] = StringSystem::TextResource::CreateMe;
+	mResourceCreationMethods[RESTYPE_XMLRESOURCE] = XMLResource::CreateMe;
+	mResourceCreationMethods[RESTYPE_PARTICLERESOURCE] = GfxSystem::ParticleResource::CreateMe;
+	mExtToTypeMap["png"] = RESTYPE_TEXTURE;
+	mExtToTypeMap["bmp"] = RESTYPE_TEXTURE;
+	mExtToTypeMap["jpg"] = RESTYPE_TEXTURE;
+	mExtToTypeMap["gif"] = RESTYPE_TEXTURE;
+	mExtToTypeMap["layout"] = RESTYPE_CEGUIRESOURCE;
+	mExtToTypeMap["imageset"] = RESTYPE_CEGUIRESOURCE;
+	mExtToTypeMap["font"] = RESTYPE_CEGUIRESOURCE;
+	mExtToTypeMap["scheme"] = RESTYPE_CEGUIRESOURCE;
+	mExtToTypeMap["tga"] = RESTYPE_TEXTURE;
+	mExtToTypeMap["ttf"] = RESTYPE_CEGUIRESOURCE;
+	mExtToTypeMap["looknfeel"] = RESTYPE_CEGUIRESOURCE;
+	mExtToTypeMap["str"] = RESTYPE_TEXTRESOURCE;
+	mExtToTypeMap["xml"] = RESTYPE_XMLRESOURCE;
+	mExtToTypeMap["psi"] = RESTYPE_PARTICLERESOURCE;
 
-	BS_ASSERT_MSG(mResourceCreationMethods[Resource::NUM_TYPES-1], "Not all resource types are registered");
+	BS_ASSERT_MSG(mResourceCreationMethods[NUM_RESTYPES-1], "Not all resource types are registered");
 
 	gLogMgr.LogMessage("All resource types registered");
 }
@@ -92,14 +92,14 @@ bool ResourceMgr::AddResourceDirToGroup(const string& path, const StringKey& gro
 		}
 		else
 		{
-			if (!AddResourceFileToGroup(i->path().string(), group, Resource::TYPE_AUTODETECT, false))
+			if (!AddResourceFileToGroup(i->path().string(), group, RESTYPE_AUTODETECT, false))
 				result = false;
 		}
 	}
 	return result;
 }
 
-bool ResourceMgr::AddResourceFileToGroup(const string& filepath, const StringKey& group, Resource::eType type, bool pathRelative)
+bool ResourceMgr::AddResourceFileToGroup(const string& filepath, const StringKey& group, eResourceType type, bool pathRelative)
 {
 	gLogMgr.LogMessage("Adding resource '", filepath, "' to group '", group, "'");
 
@@ -114,14 +114,14 @@ bool ResourceMgr::AddResourceFileToGroup(const string& filepath, const StringKey
 	}
 
 	// detect resource type
-	if (type == Resource::TYPE_AUTODETECT)
+	if (type == RESTYPE_AUTODETECT)
 	{
 		ExtToTypeMap::const_iterator i = mExtToTypeMap.find(boostPath.extension().substr(1));
 		if (i != mExtToTypeMap.end())
 			type = i->second;
 	}
 	// error
-	if (type == Resource::TYPE_AUTODETECT)
+	if (type == RESTYPE_AUTODETECT)
 	{
 		gLogMgr.LogMessage("Can't detect type of resource '", filepath, "'", LOG_ERROR);
 		return false;
@@ -146,11 +146,11 @@ bool ResourceMgr::AddResourceFileToGroup(const string& filepath, const StringKey
 	return true;
 }
 
-bool ResourceSystem::ResourceMgr::AddManualResourceToGroup( const StringKey& name, const StringKey& group, Resource::eType type )
+bool ResourceSystem::ResourceMgr::AddManualResourceToGroup( const StringKey& name, const StringKey& group, eResourceType type )
 {
 	gLogMgr.LogMessage("Adding resource '", name, "' to group '", group, "'");
 
-	BS_ASSERT_MSG(type != Resource::TYPE_AUTODETECT, "Must specify resource type when creating it manually");
+	BS_ASSERT_MSG(type != RESTYPE_AUTODETECT, "Must specify resource type when creating it manually");
 
 	ResourcePtr r = mResourceCreationMethods[type]();
 	r->SetState(Resource::STATE_INITIALIZED);

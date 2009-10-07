@@ -5,6 +5,7 @@
 #define _XMLRESOURCE_H_
 
 #include "Base.h"
+#include "../ResourceSystem/Resource.h"
 
 namespace ResourceSystem 
 {

@@ -753,6 +753,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\ResourceSystem\ResourceTypes.h"
+					>
+				</File>
+				<File
 					RelativePath="..\src\ResourceSystem\XMLResource.h"
 					>
 				</File>
@@ -1111,6 +1115,7 @@
 					<Tool
 						Name="VCCLCompilerTool"
 						UsePrecompiledHeader="1"
+						ShowIncludes="false"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -1179,11 +1184,15 @@
 				Name="inc"
 				>
 				<File
-					RelativePath="..\src\Memory\GlobalAlloc.h"
+					RelativePath="..\src\Memory\MemoryAlloc.h"
 					>
 				</File>
+			</Filter>
+			<Filter
+				Name="src"
+				>
 				<File
-					RelativePath="..\src\Memory\MemoryAlloc.h"
+					RelativePath="..\src\Memory\GlobalAlloc.cpp"
 					>
 				</File>
 			</Filter>

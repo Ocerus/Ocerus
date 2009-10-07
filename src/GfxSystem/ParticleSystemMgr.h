@@ -3,7 +3,6 @@
 
 #include "Base.h"
 #include "ParticleSystem.h"
-#include "ParticleResource.h"
 
 struct hgeParticleSystemInfo;
 class hgeParticleManager;

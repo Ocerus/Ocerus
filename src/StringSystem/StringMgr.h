@@ -7,6 +7,7 @@
 #include "Base.h"
 #include "Singleton.h"
 #include "TextData.h"
+#include "../ResourceSystem/ResourceTypes.h"
 
 /// Macro for easier use
 #define gStringMgr StringSystem::StringMgr::GetSingleton()
@@ -44,7 +45,7 @@ namespace StringSystem
 
 		//TODO proc je tu nutne definovat typ resourcu??
 		/// Loads the text resource from a provided file.
-		bool LoadDataFromFile(const string& filepath, ResourceSystem::Resource::eType type = ResourceSystem::Resource::TYPE_AUTODETECT, bool pathRelative = true);
+		bool LoadDataFromFile(const string& filepath, ResourceSystem::eResourceType type = ResourceSystem::RESTYPE_AUTODETECT, bool pathRelative = true);
 
 		/// Unloads all data of the manager.
 		bool UnloadData(void);

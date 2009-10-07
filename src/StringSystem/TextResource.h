@@ -5,6 +5,7 @@
 #define _TEXTRESOURCE_H_
 
 #include "Base.h"
+#include "../ResourceSystem/Resource.h"
 #include "TextData.h"
 
 namespace StringSystem 

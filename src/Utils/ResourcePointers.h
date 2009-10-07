@@ -9,12 +9,13 @@
 namespace GfxSystem
 {
 	class ParticleSystem;
+	class ParticleResource;
+	class Texture;
 
 	/// Smart pointer to ParticleSystem.
 	typedef SmartPointer<ParticleSystem> ParticleSystemPtr;
-
-	class Texture;
-
+	/// Smart pointer to ParticleResource.
+	typedef SmartPointer<ParticleResource> ParticleResourcePtr;
 	/// Smart pointer to Texture.
 	typedef SmartPointer<Texture> TexturePtr;
 }
@@ -30,12 +31,10 @@ namespace StringSystem
 namespace ResourceSystem
 {
 	class Resource;
+	class XMLResource;
 
 	/// Smar pointer to Resource.
 	typedef SmartPointer<Resource> ResourcePtr;
-
-	class XMLResource;
-
 	/// Smart pointer to XMLResource.
 	typedef SmartPointer<XMLResource> XMLResourcePtr;
 }

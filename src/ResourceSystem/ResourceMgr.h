@@ -6,6 +6,7 @@
 
 #include "Base.h"
 #include "Singleton.h"
+#include "ResourceTypes.h"
 
 /// Macro for easier use
 #define gResourceMgr ResourceSystem::ResourceMgr::GetSingleton()
@@ -33,10 +34,10 @@ namespace ResourceSystem
 
 		/// @brief Assigns a resource to a group.
 		/// @remarks The resource type if autodetected if you don't specify it.
-		bool AddResourceFileToGroup(const string& filepath, const StringKey& group, Resource::eType type = Resource::TYPE_AUTODETECT, bool pathRelative = true);
+		bool AddResourceFileToGroup(const string& filepath, const StringKey& group, eResourceType type = RESTYPE_AUTODETECT, bool pathRelative = true);
 
 		/// Assigns a resource to a group. Note that if you create the resource this way you must manually delete it later.
-		bool AddManualResourceToGroup(const StringKey& name, const StringKey& group, Resource::eType type);
+		bool AddManualResourceToGroup(const StringKey& name, const StringKey& group, eResourceType type);
 
 		/// @brief Loads all resources in the specified group.
 		/// @remarks It doesn't need to be called, resources are loaded on-the-fly if someone needs them. But it's
@@ -81,13 +82,13 @@ namespace ResourceSystem
 		typedef ResourcePtr (*ResourceCreationMethod)();
 		typedef map<StringKey, ResourcePtr> ResourceMap;
 		typedef map<StringKey, ResourceMap*> ResourceGroupMap;
-		typedef map<StringKey, Resource::eType> ExtToTypeMap;
+		typedef map<StringKey, eResourceType> ExtToTypeMap;
 
 		string mBasePath;
 		ResourceGroupMap mResourceGroups;
 		ExtToTypeMap mExtToTypeMap;
 		IResourceLoadingListener* mListener;
-		ResourceCreationMethod mResourceCreationMethods[Resource::NUM_TYPES];
+		ResourceCreationMethod mResourceCreationMethods[NUM_RESTYPES];
 
 		void AddResourceToGroup(const StringKey& group, const StringKey& name, const ResourcePtr res);
 	};

@@ -1,6 +1,7 @@
 #include "Common.h"
 #include "ParticleSystemMgr.h"
 #include "hgeparticle.h"
+#include "ParticleResource.h"
 
 using namespace GfxSystem;
 
