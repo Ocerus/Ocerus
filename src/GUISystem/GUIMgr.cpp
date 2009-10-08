@@ -240,12 +240,12 @@ namespace GUISystem {
 	GUIMgr::~GUIMgr() {
 		gInputMgr.RemoveInputListener(this);
 
-		//TODO mCreatedStaticElements se nedealokuji!
+		//FIXME mCreatedStaticElements se nedealokuji!
 
 		if (mCurrentWindowRoot)
 			delete mCurrentWindowRoot;
 
-		//TODO nejde dealokovat, proc? Mozna pouzivame starou vezi CEGUI.
+		//FIXME nejde dealokovat, proc? Mozna pouzivame starou vezi CEGUI.
 		//delete mCegui;
 		delete mRendererGate;
 		delete mResourceGate;

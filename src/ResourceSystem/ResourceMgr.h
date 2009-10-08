@@ -54,9 +54,6 @@ namespace ResourceSystem
 		/// Unloads and deletes one specific resource. The resource can't be reloaded.
 		void DeleteResource(const StringKey& group, const StringKey& name);
 
-		//TODO think about this method. It can be dangerous to release resources with UseCount==1.
-		// void UnloadUnusedResources(void);
-
 		/// Unloads all resources from all groups. Resources can be still reloaded.
 		void UnloadAllResources(void);
 

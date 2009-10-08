@@ -6,6 +6,7 @@
 
 #include "Base.h"
 #include "EntityMessage.h"
+#include "Properties/PropertyAccess.h"
 
 namespace EntitySystem
 {
@@ -44,10 +45,10 @@ namespace EntitySystem
 		void FinishInit(void);
 
 		/// Retrieves properties of this entity. A filter related to properties' flags can be specified.
-		bool GetProperties(PropertyList& out, const PropertyAccessFlags mask = FULL_PROPERTY_ACCESS_FLAGS);
+		bool GetProperties(PropertyList& out, const PropertyAccessFlags mask = PROPACC_FULL);
 
 		/// Retrieves a property of this entity. A filter related to properties' flags can be specified.
-		PropertyHolderMediator GetProperty(const StringKey key, const PropertyAccessFlags mask = FULL_PROPERTY_ACCESS_FLAGS) const;
+		PropertyHolderMediator GetProperty(const StringKey key, const PropertyAccessFlags mask = PROPACC_FULL) const;
 
 		/// Sends a message to this entity.
 		EntityMessage::eResult PostMessage(const EntityMessage::eType type, void* data = 0);

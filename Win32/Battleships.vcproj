@@ -565,6 +565,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\Utils\MathConsts.h"
+					>
+				</File>
+				<File
 					RelativePath="..\src\Utils\MathUtils.h"
 					>
 				</File>
@@ -681,6 +685,10 @@
 					</File>
 					<File
 						RelativePath="..\src\Utils\Properties\Property.h"
+						>
+					</File>
+					<File
+						RelativePath="..\src\Utils\Properties\PropertyAccess.h"
 						>
 					</File>
 					<File

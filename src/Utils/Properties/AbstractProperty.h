@@ -9,6 +9,7 @@
 #include "Base.h"
 #include "TypedProperty.h"
 #include "StringKey.h"
+#include "PropertyAccess.h"
 
 namespace Reflection
 {

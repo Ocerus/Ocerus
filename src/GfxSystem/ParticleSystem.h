@@ -2,7 +2,8 @@
 #define _PARTICLESYSTEM_H_
 
 #include "Base.h"
-//TODO tohle smazat
+
+// tohle oboje smazat
 #include "hgeparticle.h"
 #include "GfxRenderer.h"
 
@@ -10,7 +11,6 @@ namespace GfxSystem
 {
 	/// This class is a wrapper around hgeParticleSystem class. It forwards some methods and add some
 	/// new for convenience.	  
-	//TODO cely predelat poradne.
 	class ParticleSystem
 	{
 	public:

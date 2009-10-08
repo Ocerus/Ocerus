@@ -5,7 +5,6 @@
 #include "Singleton.h"
 #include "../InputSystem/IInputListener.h"
 #include "StaticElements.h"
-//TODO zbavit se techto includu pokud mozno
 #include "CEGUIBase.h"
 #include "CEGUISystem.h"
 #include "CEGUIWindow.h"
@@ -16,8 +15,6 @@ namespace GUISystem {
 
 	class ResourceGate;
 	class RendererGate;
-
-	//TODO vsechny inlinovany funkce premistit do CPP a odinlinovat, at se zbavime includovani CEGUI.h
 
 	class IConsoleListener {
 	public:

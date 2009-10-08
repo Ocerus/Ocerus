@@ -4,7 +4,7 @@
 #include "CEGUIWindowManager.h"
 #include "CEGUIFontManager.h"
 
-//TODO std pryc
+//FIXME std pryc
 #include <sstream>
 #include <iomanip>
 
@@ -145,7 +145,7 @@ enum eAnchor {
 	}
 
 	void StaticText::SetColor( const GfxSystem::Color & color ) {
-		//TODO std pryc!
+		//FIXME std pryc!
 		std::stringstream sstream;
 		uint32 coloruint = color.GetARGB();
 		sstream << std::hex << std::uppercase << std::setfill('0') <<

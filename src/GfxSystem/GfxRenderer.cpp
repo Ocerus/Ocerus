@@ -428,9 +428,6 @@ bool GfxRenderer::DrawPolygonWithConversion( const Vector2* vertices, int vertic
 
 bool GfxRenderer::DrawPolygon( const vector<Point>& vertices, const Color& fillColor, const Pen& outline) const
 {	
-	//TODO tahle funkce musi bejt schopna neco vykreslit i kdyz je polygon degenerovanej a nejde triangulovat
-	//TODO prozkoumat, jestli nejde pres DirectX kreslit polygon lip a pripadne implementovat prislusnou funkci dovnitr HGE
-
 	vector<Point> triangles;
 	if (createTriangles(vertices,triangles)) // get triangles from points
 	{
@@ -475,7 +472,7 @@ bool GfxRenderer::DrawPolygon( const vector<Point>& vertices, const Color& fillC
 
 bool GfxRenderer::DrawCircle( const Point& center, const int32 radius, const Color& fillColor, const Pen& outline, const float32 minAng, const float32 maxAng ) const
 {
-	//TODO tohle je hrozne pomaly
+	// tohle je hrozne pomaly
 	float32 minAngle = MathUtils::WrapAngle(minAng);
 	float32 maxAngle = MathUtils::WrapAngle(maxAng);
 	if (maxAngle < minAngle)

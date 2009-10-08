@@ -35,7 +35,7 @@ void XMLCALL DataHandle(void* data, const XML_Char *s, int len)
 	XMLMapDataHolder* me = (XMLMapDataHolder*)data;
 	if (len > 0) 
 	{
-		//TODO neco udelat s tim, at to tady zbytecne nealokuju a neprevadim na string...je to kvuli tomu, ze s neni ukoncene nulou
+		//FIXME neco udelat s tim, at to tady zbytecne nealokuju a neprevadim na string...je to kvuli tomu, ze s neni ukoncene nulou
 		XML_Char* buf = new XML_Char[len+1];
 		memcpy(buf, s, len);
 		buf[len] = '\0';

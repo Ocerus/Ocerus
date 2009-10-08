@@ -45,13 +45,13 @@ namespace EntitySystem
 		EntityComponentsIterator GetEntityComponents(const EntityID id) const;
 
 		/// Retrieves properties of an entity. A filter related to access flags can be specified.
-		inline bool GetEntityProperties(const EntityHandle h, PropertyList& out, const PropertyAccessFlags flagMask = FULL_PROPERTY_ACCESS_FLAGS) { return GetEntityProperties(h.GetID(), out, flagMask); }
+		inline bool GetEntityProperties(const EntityHandle h, PropertyList& out, const PropertyAccessFlags flagMask = PROPACC_FULL) { return GetEntityProperties(h.GetID(), out, flagMask); }
 
 		/// Retrieves properties of an entity. A filter related to access flags can be specified.
-		bool GetEntityProperties(const EntityID id, PropertyList& out, const PropertyAccessFlags flagMask = FULL_PROPERTY_ACCESS_FLAGS);
+		bool GetEntityProperties(const EntityID id, PropertyList& out, const PropertyAccessFlags flagMask = PROPACC_FULL);
 
 		/// Retrieves properties of an entity. A filter related to access flags can be specified.
-		PropertyHolderMediator GetEntityProperty(const EntityHandle h, const StringKey key, const PropertyAccessFlags mask = FULL_PROPERTY_ACCESS_FLAGS) const;
+		PropertyHolderMediator GetEntityProperty(const EntityHandle h, const StringKey key, const PropertyAccessFlags mask = PROPACC_FULL) const;
 
 	private:
 

@@ -15,8 +15,7 @@
 
 #include "BasicTypes.h"
 #include "ComplexTypes.h"
-//TODO neodstranit mathutils odtud?
-#include "MathUtils.h"
+#include "MathConsts.h"
 
 
 // These must come last!
@@ -27,12 +26,6 @@ namespace Utils {}
 using namespace Utils;
 namespace Reflection {}
 using namespace Reflection;
-
-
-//TODO a proc ze tohle nemuze bejt v PropertyTypes.h ?
-/// A little hack for the property system - I need to define this type somewhere else instead inside the system.
-typedef uint8 PropertyAccessFlags;
-#define FULL_PROPERTY_ACCESS_FLAGS 0xff
 
 
 #endif

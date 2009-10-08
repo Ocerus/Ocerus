@@ -11,12 +11,6 @@
 /// Macro for easier use.
 #define gInputMgr InputSystem::InputMgr::GetSingleton()
 
-namespace OIS
-{
-	class Mouse;
-	class Keyboard;
-}
-
 /// Input system manages events from all input devices connected to the computer which are required by the game.
 namespace InputSystem
 {

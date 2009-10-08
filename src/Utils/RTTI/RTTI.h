@@ -7,6 +7,7 @@
 #define __RTTI_H__
 
 #include "Base.h"
+#include "Properties/PropertyAccess.h"
 
 /// @brief A set of classes implementing custom %RTTI and reflection.
 /// @remarks 
@@ -61,18 +62,18 @@ namespace Reflection
 
 		/// @brief Fills a data structure with all properties of the represented class type, 
 		/// including all ancestor types.
-		void EnumProperties( AbstractPropertyList& out, const PropertyAccessFlags flagMask = FULL_PROPERTY_ACCESS_FLAGS );
+		void EnumProperties( AbstractPropertyList& out, const PropertyAccessFlags flagMask = PROPACC_FULL );
 
 		/// @brief Fills a data structure with all properties of the represented class type, 
 		/// including all ancestor types.
-		void EnumProperties( RTTIBaseClass* owner, PropertyList& out, const PropertyAccessFlags flagMask = FULL_PROPERTY_ACCESS_FLAGS );
+		void EnumProperties( RTTIBaseClass* owner, PropertyList& out, const PropertyAccessFlags flagMask = PROPACC_FULL );
 
 		/// @brief Fills a data structure with all component dependencies of the represented class type, 
 		/// including all ancestor types.
 		void EnumComponentDependencies(ComponentDependencyList& out);
 
 		/// Returns a property identified by it's string key. Access restriction filter can be defined.
-		AbstractProperty* GetProperty(const StringKey key, const PropertyAccessFlags flagMask = FULL_PROPERTY_ACCESS_FLAGS);
+		AbstractProperty* GetProperty(const StringKey key, const PropertyAccessFlags flagMask = PROPACC_FULL);
 
 		/// Adds a property to the RTTI.
 		void AddProperty(AbstractProperty* prop);

@@ -5,7 +5,8 @@
 #define OISListener_h__
 
 #include "Base.h"
-//TODO odtud se includuje STD
+
+// We can safely include these headers as this file is included only by the InputSystem cpp files.
 #include <OISMouse.h>
 #include <OISKeyboard.h>
 
@@ -33,7 +34,7 @@ namespace InputSystem
 		//@}
 
 		/// Processes OIS events.
-		void CaptureInput();
+		void CaptureInput(void);
 
 		/// True if the specified key is down.
 		bool IsKeyDown(const eKeyCode k) const;
@@ -41,7 +42,7 @@ namespace InputSystem
 		/// Returns the current state of the mouse.
 		void GetMouseState(MouseState& state) const;
 
-		/// Sets new resolution of the screen.
+		/// @brief Sets new resolution of the screen.
 		/// @remarks You should make sure the resolution is always correct to prevent any problems with mouse.
 		void SetResolution(uint32 width, uint32 height);
 

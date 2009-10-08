@@ -57,7 +57,6 @@ namespace GfxSystem
 	{
 		Pen(const Color& c): color(c) {}
 		Color color;
-		//TODO add style
 
 		static Pen NullPen;
 	};

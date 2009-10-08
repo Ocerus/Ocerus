@@ -7,6 +7,7 @@
 #include "Base.h"
 #include "Singleton.h"
 #include "EntityHandle.h"
+#include "Properties/PropertyAccess.h"
 
 /// Macro for easier use.
 #define gEntityMgr EntitySystem::EntityMgr::GetSingleton()
@@ -50,10 +51,10 @@ namespace EntitySystem
 		bool IsEntityInited(const EntityHandle h) const;
 
 		/// Retrieves properties of an entity. A filter related to properties' flags can be specified.
-		bool GetEntityProperties(const EntityHandle h, PropertyList& out, const PropertyAccessFlags flagMask = FULL_PROPERTY_ACCESS_FLAGS);
+		bool GetEntityProperties(const EntityHandle h, PropertyList& out, const PropertyAccessFlags flagMask = PROPACC_FULL);
 
 		/// Retrieves a property of an entity. A filter related to properties' flags can be specified.
-		PropertyHolderMediator GetEntityProperty(const EntityHandle h, const StringKey key, const PropertyAccessFlags flagMask = FULL_PROPERTY_ACCESS_FLAGS) const;
+		PropertyHolderMediator GetEntityProperty(const EntityHandle h, const StringKey key, const PropertyAccessFlags flagMask = PROPACC_FULL) const;
 
 		/// Returns EntityHandle to an entity of a specified ID. If there are more of them, then returns the first one.
 		EntityHandle FindFirstEntity(const string& ID);

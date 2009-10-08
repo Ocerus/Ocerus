@@ -5,6 +5,9 @@
 #include "Singleton.h"
 #include "GfxStructures.h"
 
+// tohle je tady skoro zbytecne
+#include "MathUtils.h"
+
 #define gGfxRenderer GfxSystem::GfxRenderer::GetSingleton()
 
 class HGE;
@@ -84,7 +87,6 @@ namespace GfxSystem
 		bool DrawQuad(Point* const vertices, const TexturePtr texture, Vector2* const textureCoords, Color* const vertexColors);
 
 		/// @remarks This version does a conversion from world space
-		//TODO dodelat podobne verze DrawPolygon
 		bool DrawPolygonWithConversion(const Vector2* vertices, int vertices_len, const Vector2& offsetPosition, const float32 offsetAngle, const Color& fillColor, const Pen& outline = Pen::NullPen) const;
 
 		bool DrawCircle(const Point& center, const int32 radius, const Color& fillColor, const Pen& outline = Pen::NullPen, const float32 minAngle = 0.0f, const float32 maxAngle = MathUtils::TWO_PI) const;
@@ -96,9 +98,6 @@ namespace GfxSystem
 							 uint8 screen_anchor = ANCHOR_LEFT | ANCHOR_TOP,
 							 const string & fontid = "");
 		Vector2 GetTextSize( const string & text, const string & fontid = "" );
-
-		//TODO add font param
-		//bool DrawText(const string& str, font, int32 x, int32 y, uint8 anchor = ANCHOR_VCENTER|ANCHOR_HCENTER, float32 angle = 0.0f, uint8 alpha = 255);
 
 		/// A haxxor function to workaround HGE and Windows issues.
 		uint32 _GetWindowHandle(void) const;

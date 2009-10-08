@@ -68,8 +68,6 @@ void ResourceMgr::UnloadAllResources()
 
 bool ResourceMgr::AddResourceDirToGroup(const string& path, const StringKey& group, const string& includeRegexp, const string& excludeRegexp)
 {
-	//TODO add support for regexps
-
 	gLogMgr.LogMessage("Adding dir '", path, "' to group '", group, "'");
 
 	boost::filesystem::path boostPath = mBasePath + path;
@@ -142,7 +140,7 @@ bool ResourceMgr::AddResourceFileToGroup(const string& filepath, const StringKey
 
 	AddResourceToGroup(group, name, r);
 
-	gLogMgr.LogMessage("Resource added");
+	gLogMgr.LogMessage("Resource '", name, "' added");
 	return true;
 }
 
@@ -159,7 +157,7 @@ bool ResourceSystem::ResourceMgr::AddManualResourceToGroup( const StringKey& nam
 	
 	AddResourceToGroup(group, name, r);
 
-	gLogMgr.LogMessage("Resource added");
+	gLogMgr.LogMessage("Resource '", name, "' added");
 	return true;
 }
 

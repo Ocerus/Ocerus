@@ -23,7 +23,6 @@ Resource::~Resource()
 
 InputStream& Resource::OpenInputStream(eInputStreamMode mode)
 {
-	//TODO predelat tak, aby vyuzivalo GetRawInputData a ne naopak
 	BS_ASSERT(mState != STATE_UNINITIALIZED);
 	BS_ASSERT_MSG(boost::filesystem::exists(mFilePath), "Resource file not found.");
 	BS_ASSERT_MSG(!mInputFileStream, "Resource was not closed before reused");
@@ -105,7 +104,6 @@ void ResourceSystem::Resource::EnsureLoaded( void )
 
 void ResourceSystem::Resource::GetRawInputData( DataContainer& outData )
 {
-	//TODO predelat tak, aby vyuzilo toho, ze nekdy je znat pocet ctenych dat dopredu -> a pridat prislusnou metodu na zjisteni toho poctu
 	outData.Release();
 	vector<uint8*> tmps;
 	const uint32 tmpMaxSize = 1024; // size of one tmp buffer

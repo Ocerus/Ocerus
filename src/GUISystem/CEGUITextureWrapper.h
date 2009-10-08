@@ -12,7 +12,6 @@ namespace CEGUI { class String; }
 namespace GUISystem {
 	class RendererGate;
 
-	//TODO presunou funkce do CPP, at se odstrani zavislosti
 	class CEGUITextureWrapper : public CEGUI::Texture
 	{
 	public:
@@ -23,7 +22,6 @@ namespace GUISystem {
 		// Returns the current pixel height of the texture
 		inline virtual CEGUI::ushort getHeight(void) const { return mTexture->GetHeight(); }
 
-		//TODO hardwire: I removed params from GetWidth/GetHeight as it caused problems inside HGE
 		inline virtual CEGUI::ushort getOriginalHeight(void) const { return mOriginalHeight; }
 
 		inline virtual CEGUI::ushort getOriginalWidth(void) const { return mOriginalWidth; }

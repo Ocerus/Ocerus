@@ -9,7 +9,6 @@
 #include "CEGUIResource.h"
 #include "RendererGate.h"
 
-//TODO get rid of this
 #include <sstream>
 
 namespace GUISystem {

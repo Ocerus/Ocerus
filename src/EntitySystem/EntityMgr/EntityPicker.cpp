@@ -64,7 +64,5 @@ void EntitySystem::EntityPicker::PickIfHigherPriority( const EntityHandle entity
 		mResult = entity;
 		mResultType = type;
 	}
-	//TODO jeste bysme v else vetvi mohli zkontrlovat, pokud se priority rovnaji, jestli tenhle pick neni lepsi, tj.
-	//	jestli neni bliz kursoru stred kruhu nebo obdelnika (tzn. musime si pak pamatovat posledni tuto vzdalenost)
 }
 

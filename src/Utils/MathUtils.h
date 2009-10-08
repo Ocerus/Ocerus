@@ -1,23 +1,16 @@
 /// @file
-/// Helper math functions and constants.
+/// Helper math functions.
 
 #ifndef _MATHUTILS_H_
 #define _MATHUTILS_H_
 
 #include "../Setup/Settings.h"
-#include <math.h>
 
 namespace Utils
 {
-	/// Helper math functions and constants.
+	/// Helper math functions.
 	namespace MathUtils
 	{
-		const float32 PI = b2_pi;
-
-		const float32 TWO_PI = 2.0f*PI;
-
-		const float32 HALF_PI = 0.5f*PI;
-
 		inline float32 Random(const float32 min, const float32 max) { return b2Random(min, max); }
 
 		inline float32 Abs(const float32 num) { return b2Abs(num); }
