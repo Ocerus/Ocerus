@@ -13,9 +13,16 @@
 #include "Memory_pre.h"
 
 
+
+
 #include "BasicTypes.h"
 #include "ComplexTypes.h"
 #include "MathConsts.h"
+
+template<typename T, typename U>
+inline void swap(T& first, U& second) { std::swap(first, second); } 
+
+
 
 
 // These must come last!

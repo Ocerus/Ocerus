@@ -2,7 +2,8 @@
 #define StringConverter_h__
 
 #include "Base.h"
-//TODO nejde tohle pryc?
+
+// We are using the STD library for the conversion.
 #include <sstream>
 
 namespace Utils

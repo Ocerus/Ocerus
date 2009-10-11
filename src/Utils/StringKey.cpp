@@ -2,8 +2,6 @@
 #include "StringKey.h"
 #include "Hash.h"
 
-//TODO predelat na pouzivani hashe
-
 StringKey::StringKey( void )
 {
 	mData = 0;

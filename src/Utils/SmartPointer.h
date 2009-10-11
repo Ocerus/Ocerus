@@ -138,9 +138,8 @@ namespace Utils
 		/// Swaps two smart pointers.
 		virtual void Swap(SmartPointer<T> &other) 
 		{
-			//TODO std pryc
-			std::swap(mPointer, other.mPointer);
-			std::swap(mUseCountPtr, other.mUseCountPtr);
+			swap(mPointer, other.mPointer);
+			swap(mUseCountPtr, other.mUseCountPtr);
 		}
 	};
 
@@ -156,8 +155,7 @@ namespace Utils
 
 	template<class T, class U> inline bool operator<(SmartPointer<T> const& a, SmartPointer<U> const& b)
 	{
-		//TODO std pryc
-		return std::less<const void*>()(a.Get(), b.Get());
+		return a.Get() < b.Get();
 	}
 }
 

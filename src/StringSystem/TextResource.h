@@ -33,7 +33,6 @@ namespace StringSystem
 		const TextData GetTextData(const StringKey& key);
 
 		/// Returns the text data container used by this resource.
-		//TODO na co tohle je?
 		const TextDataMap* GetTextDataMap(void);
 
 	protected:	

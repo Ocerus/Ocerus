@@ -62,7 +62,6 @@ Using a comparison class now, but this should be investigated.
 #ifndef tree_hh_
 #define tree_hh_
 
-//TODO prepsat bez STD?
 #include <memory>
 #include <stdexcept>
 #include <iterator>
