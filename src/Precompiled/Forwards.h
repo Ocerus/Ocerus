@@ -19,9 +19,11 @@ namespace EntitySystem
 	class EntityDescription;
 	class EntityPicker;
 	class Component;
-	enum eComponentType;
-	enum eEntityType;
 }
+
+/// @note @see http://ocerus.hardwire.cz/wiki/index.php/User:MacJariel
+#include "ComponentEnums.h"
+#include "EntityEnums.h"
 
 namespace GfxSystem
 {
