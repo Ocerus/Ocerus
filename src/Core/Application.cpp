@@ -202,7 +202,12 @@ void Core::Application::Shutdown( void )
 
 
 //-----------------------------------------------------
-// Windows specific functions follow.
+// Platfofm specific functions follow.
+
+#if defined(__WIN__)    
+//------------
+// Windows 
+//------------
 
 #include <Windows.h>
 
@@ -265,3 +270,32 @@ void Core::Application::WriteToConsole( const string& str )
 	DWORD writtenChars = 0;
 	WriteConsole(GetStdHandle(STD_OUTPUT_HANDLE), str.c_str(), str.length(), &writtenChars, NULL);	
 }
+
+#else
+
+//------------
+// Unix
+//------------
+
+void Application::MessagePump( void )
+{
+    ///@todo port me to unix
+}
+
+void Core::Application::ShowConsole( void )
+{
+    ///@todo port me to unix
+}
+
+void Core::Application::HideConsole( void )
+{
+    ///@todo port me to unix
+}
+
+void Core::Application::WriteToConsole( const string& str )
+{
+    ///@todo port me to unix
+}
+
+#endif
+

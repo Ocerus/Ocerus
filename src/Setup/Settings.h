@@ -4,6 +4,12 @@
 #ifndef _SETTINGS_H_
 #define _SETTINGS_H_
 
+#ifdef _WIN32
+    #define __WIN__
+#else
+    #define __UNIX__
+#endif
+
 
 #define BOOST_NO_TYPEID
 

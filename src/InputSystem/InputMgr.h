@@ -14,7 +14,8 @@
 /// Input system manages events from all input devices connected to the computer which are required by the game.
 namespace InputSystem
 {
-
+	class OISListener;
+  
 	/// @brief This class processes all input from external devices such as mouse, keyboard or joystick. You can query its
 	///	current state or register for event callbacks.
 	/// @remarks Note that it must be updated reguralry by calling CaptureInput.

@@ -38,7 +38,7 @@ namespace Reflection
 		{
 			if (!mGetter)
 			{
-				ReportWriteonlyProblem();
+				this->ReportWriteonlyProblem();
 				return PropertyType<T>::GetDefaultValue();
 			}
 			return (((OwnerType*)owner)->*mGetter)();
@@ -48,7 +48,7 @@ namespace Reflection
 		{
 			if ( !mSetter)
 			{
-				ReportReadonlyProblem();		
+				this->ReportReadonlyProblem();		
 				return;
 			}
 			(((OwnerType*)owner)->*mSetter)( Value );

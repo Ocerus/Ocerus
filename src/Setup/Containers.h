@@ -77,13 +77,11 @@ public:
 	};
 
 #else
-
-	#include <ext/hash_map>
 	template<typename Key, typename Value>
-	class hash_map: public __gnu_cxx::hash_map<Key, Value>
+	class hash_map: public std::map<Key, Value>
 	{
 	public:
-		inline hash_map(): __gnu_cxx::hash_map<Key, Value>() {}
+		inline hash_map(): std::map<Key, Value>() {}
 	};
 
 #endif

@@ -7,15 +7,15 @@
 #define _ABSTRACT_PROPERTY_H
 
 #include "Base.h"
-#include "TypedProperty.h"
 #include "StringKey.h"
 #include "PropertyAccess.h"
+#include "PropertyTypes.h"
 
 namespace Reflection
 {
-	enum ePropertyType;
-
-	/// @brief Base class for all properties.
+    template<class T> class TypedProperty;
+    
+    /// @brief Base class for all properties.
 	/// @remarks A property represents either a field or a function of a class instance. The key advantage of properties
 	/// is that you access all of them in the same transparent way - using a string identifier. For example, this can be used to access
 	/// the properties from a script or a GUI editor in a very easy way.

@@ -282,10 +282,10 @@ void ResourceSystem::ResourceMgr::DeleteResource( const StringKey& group, const 
 	gLogMgr.LogMessage("Resource deleted");
 }
 
-ResourceSystem::ResourcePtr ResourceSystem::ResourceMgr::GetResource( char* groupSlashName )
+ResourceSystem::ResourcePtr ResourceSystem::ResourceMgr::GetResource( const char* groupSlashName )
 {
 	char* lastSlashPos = 0;
-	char* str = groupSlashName;
+	const char* str = groupSlashName;
 	for(; *str; ++str)
 		if (*str == '/')
 			lastSlashPos = str;

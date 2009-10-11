@@ -3,8 +3,12 @@
 
 #include "Base.h"
 
-// tohle oboje smazat
-#include "hgeparticle.h"
+///@todo smazat oba include
+#ifdef __WIN__
+    #include "hgeparticle.h"
+#else
+    class hgeParticleSystem;
+#endif
 #include "GfxRenderer.h"
 
 namespace GfxSystem
@@ -45,7 +49,7 @@ namespace GfxSystem
 		/// Render PS.
 		void Render(void);
 
-		/// Return underlying hgeParticleSystem (for debug only, do not use otherwise).
+        /// Return underlying hgeParticleSystem (for debug only, do not use otherwise).
 		hgeParticleSystem* GetPS(void);
 
 		/// Return number of particles in the system.

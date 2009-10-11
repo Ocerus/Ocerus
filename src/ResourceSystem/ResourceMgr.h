@@ -65,7 +65,7 @@ namespace ResourceSystem
 
 		/// @brief Retrieves a resource from the manager. If the resource can't be found, null ResourcePtr is returned.
 		/// @param groupSlashName Full name of the resource including group name/resource's filename
-		ResourcePtr GetResource(char* groupSlashName);
+		ResourcePtr GetResource(const char* groupSlashName);
 
 		/// @brief Retrieves a resource from the manager. If the resource can't be found, null ResourcePtr is returned.
 		ResourcePtr GetResource(const StringKey& group, const StringKey& name);

@@ -1,9 +1,10 @@
 #include "Common.h"
 #include "Application.h"
 
-#include <Windows.h>
 #include <exception>
 
+#ifdef __WIN__
+#include <Windows.h>
 
 INT WINAPI WinMain (HINSTANCE hInstance, 
 					HINSTANCE hPrevInstance,
@@ -31,3 +32,32 @@ INT WINAPI WinMain (HINSTANCE hInstance,
 	}
 	return 0;
 };
+
+#else
+
+int main(int argc, char* argv[])
+{	
+	try
+	{
+		Core::Application* app = new Core::Application();
+		app->Init();
+		app->RunMainLoop();
+		delete app;
+	}
+	catch (std::exception& e)
+	{
+		gLogMgr.LogMessage("An exception has occured: ", e.what(), LOG_ERROR);
+		fprintf(stderr, "An exception has occured!");
+		return 1;
+	}
+	catch (...)
+	{
+		gLogMgr.LogMessage("An unknown exception has occured.", LOG_ERROR);
+		fprintf(stderr, "An unknown exception has occured!");
+		return 1;
+	}
+	return 0;
+};
+
+#endif
+

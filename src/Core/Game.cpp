@@ -141,7 +141,7 @@ void Core::Game::Update( const float32 delta )
 		// if some of the selected entities were destroyed, remove them from the selection
 		if (!mHoveredEntity.Exists())
 			mHoveredEntity.Invalidate();
-		for (EntityList::const_iterator it=mSelectedEntities.begin(); it!=mSelectedEntities.end();)
+		for (EntityList::iterator it=mSelectedEntities.begin(); it!=mSelectedEntities.end();)
 		{
 			if (!it->Exists())
 				it = mSelectedEntities.erase(it);
