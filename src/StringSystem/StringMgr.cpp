@@ -49,10 +49,10 @@ bool StringMgr::LoadDataFromDir(const string& path, const string& includeRegexp,
 	return result;
 }
 
-bool StringMgr::LoadDataFromFile(const string& filepath, ResourceSystem::eResourceType type, bool pathRelative)
+bool StringMgr::LoadDataFromFile(const string& filepath, bool pathRelative)
 {
 	bool result = true;
-	result = gResourceMgr.AddResourceFileToGroup(mBasePath + filepath, "strings", type, pathRelative);
+	result = gResourceMgr.AddResourceFileToGroup(mBasePath + filepath, "strings", ResourceSystem::RESTYPE_TEXTRESOURCE, pathRelative);
 	gResourceMgr.LoadResourcesInGroup("strings");
 
 	gLogMgr.LogMessage("StringMgr: Loading data from resource group ""strings""");

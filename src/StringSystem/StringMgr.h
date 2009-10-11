@@ -7,7 +7,6 @@
 #include "Base.h"
 #include "Singleton.h"
 #include "TextData.h"
-#include "../ResourceSystem/ResourceTypes.h"
 
 /// Macro for easier use
 #define gStringMgr StringSystem::StringMgr::GetSingleton()
@@ -20,7 +19,6 @@ namespace StringSystem
 	/// @brief This class is a special type of resource manager, designed to work with strings (text resources).
 	///	@remarks Its main purpose is to store and index text data for further use. You should always load string
 	///	data via this class.
-	//TODO vysvetlit, proc je potreba na managovani stringu celej manager a jak pracuje s textovejma resourcama. Pac ja to nechapu :)
 	class StringMgr : public Singleton<StringMgr>
 	{
 	public:
@@ -36,16 +34,11 @@ namespace StringSystem
 		/// ISO 639-1 codes (http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)
 		bool LoadLanguagePack(const string& lang = "en");
 
-		//TODO neni dodelano
-		// Changes current language: unloads all strings and reloads them again with LoadStrings.
-		// bool ChangeLanguage(const string& lang);
-
 		/// Ads all text resources in a given directory and loads them into the memory.
 		bool LoadDataFromDir(const string& path, const string& includeRegexp = "*.*", const string& excludeRegexp = "");
 
-		//TODO proc je tu nutne definovat typ resourcu??
 		/// Loads the text resource from a provided file.
-		bool LoadDataFromFile(const string& filepath, ResourceSystem::eResourceType type = ResourceSystem::RESTYPE_AUTODETECT, bool pathRelative = true);
+		bool LoadDataFromFile(const string& filepath, bool pathRelative = true);
 
 		/// Unloads all data of the manager.
 		bool UnloadData(void);
