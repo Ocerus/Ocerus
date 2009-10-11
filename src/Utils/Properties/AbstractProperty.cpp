@@ -64,7 +64,15 @@ void Reflection::AbstractProperty::SetValueFromString( RTTIBaseClass* owner, con
 		SetValue(owner, StringConverter::FromString<Vector2>(str));
 		break;
 	case PROPTYPE_VECTOR2_REFERENCE:
+///@todo fix this
+///gcc fails here with following error:
+///   AbstractProperty.cpp:67: error: no matching function for call to 'Reflection::AbstractProperty::SetValue(Reflection::RTTIBaseClass*&, Vector2)'
+/// do we really need those Vector2 references??
+#if __WIN__
 		SetValue<Vector2&>(owner, StringConverter::FromString<Vector2>(str));
+#else
+		SetValue<Vector2>(owner, StringConverter::FromString<Vector2>(str));
+#endif
 		break;
 	case PROPTYPE_VECTOR2_ARRAY:
 	case PROPTYPE_ENTITYHANDLE:

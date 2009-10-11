@@ -1,6 +1,17 @@
 #include "Common.h"
 #include "Timer.h"
-#include <Windows.h>
+
+#ifdef __WIN__
+    #include <Windows.h>
+#else
+    #include <sys/time.h>
+    int64 GetMicrosecondsUnix()
+    {
+        timeval ts;
+        gettimeofday(&ts, 0);
+        return (int64)(ts.tv_sec * 1000000 + ts.tv_usec);
+    }
+#endif
 
 Timer::Timer(const bool manual): mManual(manual)
 {
@@ -11,12 +22,17 @@ Timer::~Timer() {}
 
 void Timer::Reset()
 {
+#ifdef __WIN__
 	LARGE_INTEGER large;
 	QueryPerformanceFrequency(&large);
 	mFrequency = large.QuadPart;
 	QueryPerformanceCounter(&large);
 	mStartTime = large.QuadPart;
 	mStartTick = GetTickCount();
+#else
+    mStartTime = GetMicrosecondsUnix();
+    mStartTick = 0; // not used on unices 
+#endif
 	mLastTime = 0;
 	mPausedTimeMicro = 0;
 	mTotalPauseDelta = 0;
@@ -39,6 +55,7 @@ uint64 Timer::GetMicroseconds()
 		if (mPaused)
 			return mPausedTimeMicro;
 
+#ifdef __WIN__
 		LARGE_INTEGER curTime;
 		QueryPerformanceCounter(&curTime);
 		// time since last reset
@@ -65,7 +82,10 @@ uint64 Timer::GetMicroseconds()
 		mLastTime = newTime;
 	
 		uint64 micro = (uint64) (1000000 * newTime / mFrequency);
-	
+#else
+        int64 curTime = GetMicrosecondsUnix();
+        uint64 micro = (uint64) (curTime - mStartTime);
+#endif
 		return micro - mTotalPauseDelta;;
 	}
 }

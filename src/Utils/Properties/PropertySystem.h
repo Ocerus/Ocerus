@@ -13,7 +13,7 @@ namespace Reflection
 {
 	/// @brief Global manager of all properties.
 	/// @remarks This class is used to release properties when the program exits.
-	class PropertySystem : Singleton<PropertySystem>
+	class PropertySystem : protected Singleton<PropertySystem>
 	{
 	public :
 

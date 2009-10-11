@@ -15,7 +15,7 @@
 
 #ifdef DEBUG_STRING_HASH 
 
-typedef stdext::hash_map<uint32, char*> StringHashMap;
+typedef hash_map<uint32, char*> StringHashMap;
 
 static StringHashMap& GetStringHashMap(void)
 {

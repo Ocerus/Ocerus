@@ -146,7 +146,7 @@ bool ResourceMgr::AddResourceFileToGroup(const string& filepath, const StringKey
 
 bool ResourceSystem::ResourceMgr::AddManualResourceToGroup( const StringKey& name, const StringKey& group, eResourceType type )
 {
-	gLogMgr.LogMessage("Adding resource '", name, "' to group '", group, "'");
+    gLogMgr.LogMessage("Adding resource '", name, "' to group '", string(group), "'");
 
 	BS_ASSERT_MSG(type != RESTYPE_AUTODETECT, "Must specify resource type when creating it manually");
 
@@ -157,7 +157,7 @@ bool ResourceSystem::ResourceMgr::AddManualResourceToGroup( const StringKey& nam
 	
 	AddResourceToGroup(group, name, r);
 
-	gLogMgr.LogMessage("Resource '", name, "' added");
+	gLogMgr.LogMessage("Resource '", string(name), "' added");
 	return true;
 }
 
@@ -174,12 +174,12 @@ void ResourceSystem::ResourceMgr::AddResourceToGroup( const StringKey& group, co
 
 void ResourceMgr::LoadResourcesInGroup(const StringKey& group)
 {
-	gLogMgr.LogMessage("Loading resource group '", group, "'");
+	gLogMgr.LogMessage("Loading resource group '", string(group), "'");
 
 	ResourceGroupMap::const_iterator gi = mResourceGroups.find(group);
 
 	if (gi==mResourceGroups.end())
-		gLogMgr.LogMessage("Unknown group '", group, "'", LOG_ERROR);
+		gLogMgr.LogMessage("Unknown group '", string(group), "'", LOG_ERROR);
 	BS_ASSERT_MSG(gi != mResourceGroups.end(), "Unknown group");
 
 	const ResourceMap& resmap = *gi->second;
@@ -197,17 +197,17 @@ void ResourceMgr::LoadResourcesInGroup(const StringKey& group)
 	if (mListener)
 		mListener->ResourceGroupLoadEnded();
 
-	gLogMgr.LogMessage("Resource group loaded '", group, "'");
+	gLogMgr.LogMessage("Resource group loaded '", string(group), "'");
 }
 
 void ResourceMgr::UnloadResourcesInGroup(const StringKey& group, bool allowManual)
 {
-	gLogMgr.LogMessage("Unloading resource group '", group, "'");
+	gLogMgr.LogMessage("Unloading resource group '", string(group), "'");
 
 	ResourceGroupMap::const_iterator gi = mResourceGroups.find(group);
 
 	if (gi==mResourceGroups.end())
-		gLogMgr.LogMessage("Unknown group '", group, "'", LOG_ERROR);
+		gLogMgr.LogMessage("Unknown group '", string(group), "'", LOG_ERROR);
 	BS_ASSERT_MSG(gi != mResourceGroups.end(), "Unknown group");
 
 	const ResourceMap& resmap = *gi->second;
@@ -215,12 +215,12 @@ void ResourceMgr::UnloadResourcesInGroup(const StringKey& group, bool allowManua
 		if (ri->second->GetState() >= Resource::STATE_LOADING)
 			ri->second->Unload(allowManual);
 
-	gLogMgr.LogMessage("Resource group '", group, "' unloaded");
+	gLogMgr.LogMessage("Resource group '", string(group), "' unloaded");
 }
 
 void ResourceMgr::DeleteGroup(const StringKey& group)
 {
-	ResourceGroupMap::const_iterator groupIt = mResourceGroups.find(group);
+	ResourceGroupMap::iterator groupIt = mResourceGroups.find(group);
 	if (groupIt == mResourceGroups.end())
 		return;
 	UnloadResourcesInGroup(group, true);
@@ -263,18 +263,18 @@ void ResourceMgr::GetResourceGroup(const StringKey& group, vector<ResourcePtr>& 
 
 void ResourceSystem::ResourceMgr::DeleteResource( const StringKey& group, const StringKey& name )
 {
-	gLogMgr.LogMessage("Deleting resource '", name, "' in group '", group, "'");
+	gLogMgr.LogMessage("Deleting resource '", string(name), "' in group '", string(group), "'");
 
 	ResourceGroupMap::iterator gi = mResourceGroups.find(group);
 
 	if (gi==mResourceGroups.end())
-		gLogMgr.LogMessage("Unknown group '", group, "'", LOG_ERROR);
+		gLogMgr.LogMessage("Unknown group '", string(group), "'", LOG_ERROR);
 	BS_ASSERT_MSG(gi != mResourceGroups.end(), "Unknown group");
 
 	ResourceMap& resmap = *gi->second;
 	ResourceMap::iterator ri = resmap.find(name);
 	if (ri==resmap.end())
-		gLogMgr.LogMessage("Unknown resource '", name, "' in group '", group, "'", LOG_ERROR);
+		gLogMgr.LogMessage("Unknown resource '", string(name), "' in group '", string(group), "'", LOG_ERROR);
 	BS_ASSERT_MSG(ri != resmap.end(), "Unknown resource");
 	ri->second->Unload(true);
 	resmap.erase(ri);
@@ -284,7 +284,7 @@ void ResourceSystem::ResourceMgr::DeleteResource( const StringKey& group, const 
 
 ResourceSystem::ResourcePtr ResourceSystem::ResourceMgr::GetResource( const char* groupSlashName )
 {
-	char* lastSlashPos = 0;
+	const char* lastSlashPos = 0;
 	const char* str = groupSlashName;
 	for(; *str; ++str)
 		if (*str == '/')

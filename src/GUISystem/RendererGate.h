@@ -7,6 +7,7 @@
 #include "../GfxSystem/Texture.h"
 #include "CEGUIRenderer.h"
 #include "ResourceGate.h"
+#include "limits.h"
 
 namespace GUISystem {
 
@@ -87,7 +88,8 @@ namespace GUISystem {
 		}
 
 		inline virtual void ResolutionChanged(int x, int y) {
-			gGUIMgr.mCegui->fireEvent(EventDisplaySizeChanged, CEGUI::EventArgs());
+            CEGUI::EventArgs eventArgs;
+            gGUIMgr.mCegui->fireEvent(EventDisplaySizeChanged, eventArgs);
 		}
 
 	protected:

@@ -39,6 +39,8 @@
 #define INCLUDED_MAP
 #endif
 
+#include <string>
+
 using namespace rude::config;
 
 namespace rude{

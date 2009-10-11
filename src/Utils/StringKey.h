@@ -35,6 +35,8 @@ namespace Utils
 		operator string (void) const;
 
 		/// Converts the key to a decimal value (hash).
+        /// @note Is it really smart to have implicit conversion for this?
+        ///       It introduces ambiguity when StringKeys are passed to our LogMgr (which should be rewritten anyway)
 		operator size_t (void) const;
 
 		/// Comparison operator needed by containers.

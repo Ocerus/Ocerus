@@ -3,8 +3,9 @@
 
 #include "Base.h"
 #include "../ResourceSystem/Resource.h"
-#include "hgeanim.h"
-#include "hgeparticle.h"
+
+class hgeAnimation;
+class hgeParticleSystemInfo;
 
 namespace GfxSystem
 {

@@ -68,6 +68,8 @@
 #define INCLUDED_FSTREAM
 #endif
 
+#include <cstring>
+
 using namespace std;
 
 namespace rude{

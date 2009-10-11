@@ -70,7 +70,7 @@ const TextData* TextResource::GetTextDataPtr(const StringKey& key)
 	EnsureLoaded();
 	const TextData* returnValue = &mTextDataMap[key];
 	if (*returnValue == "") {
-		gLogMgr.LogMessage("TextResource: Index ",  key,  " doesn't exist. Return value set to empty TextData", LOG_ERROR);
+		gLogMgr.LogMessage("TextResource: Index ",  string(key),  " doesn't exist. Return value set to empty TextData", LOG_ERROR);
 	}
 	return returnValue;
 }
@@ -80,7 +80,7 @@ const TextData TextResource::GetTextData(const StringKey& key)
 	EnsureLoaded();
 	const TextData returnValue = mTextDataMap[key];
 	if (returnValue == "") {
-		gLogMgr.LogMessage("TextResource: Index ", key, " doesn't exist. Return value set to empty TextData", LOG_ERROR);
+		gLogMgr.LogMessage("TextResource: Index ", string(key), " doesn't exist. Return value set to empty TextData", LOG_ERROR);
 	}
 	return returnValue;
 }
