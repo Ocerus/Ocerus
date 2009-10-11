@@ -1,4 +1,4 @@
-#project()
+project(ocerus)
 
 cmake_minimum_required(VERSION 2.6.2)
 
@@ -31,11 +31,29 @@ INCLUDE_DIRECTORIES(
 )
 
 
-set(PROJECT_SRCS
+set(Core_SRCS
 	Core/Application.cpp
 	Core/Config.cpp
 	Core/Game.cpp
 	Core/LoadingScreen.cpp
-	Core/main.cpp)
+	Core/main.cpp
+)
 
-add_executable(project ${PROJECT_SRCS})
+set(EntitySystem_SRCS
+    EntitySystem/EntityMgr/EntityPicker.cpp
+    EntitySystem/EntityMgr/EntityEnums.cpp
+    EntitySystem/EntityMgr/EntityDescription.cpp
+    EntitySystem/EntityMgr/EntityMgr.cpp
+    EntitySystem/EntityMgr/EntityHandle.cpp
+    EntitySystem/Components/CmpMaterial.cpp
+    EntitySystem/Components/CmpPlatformLogic.cpp
+    EntitySystem/Components/CmpPlatformVisual.cpp
+    EntitySystem/Components/CmpPlatformPhysics.cpp
+    EntitySystem/Components/CmpPlatformParams.cpp
+    EntitySystem/ComponentMgr/Component.cpp
+    EntitySystem/ComponentMgr/ComponentEnums.cpp
+    EntitySystem/ComponentMgr/ComponentMgr.cpp
+)
+
+add_executable(ocerus ${Core_SRCS} ${EntitySystem_SRCS})
+

@@ -126,7 +126,7 @@ void EntitySystem::EntityMgr::ProcessDestroyQueue( void )
 {
 	for (EntityQueue::const_iterator it=mEntityDestroyQueue.begin(); it!=mEntityDestroyQueue.end(); ++it)
 	{
-		EntityMap::const_iterator mapIt = mEntities.find(*it);
+		EntityMap::iterator mapIt = mEntities.find(*it);
 		if (mapIt != mEntities.end()) // it can happen that we added one entity multiple times to the queue
 		{
 			DestroyEntity(mapIt);

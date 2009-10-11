@@ -48,7 +48,7 @@ namespace EntitySystem
 		}
 
 		/// Use this method as a loop condition instead of comparing the iterator to a collection end().
-		bool HasMore(void) { return operator!=(mComponentsList->end()); }
+		bool HasMore(void) const { return (*this) != mComponentsList->end(); }
 
 		/// Returns a reference to the list owner.
 		inline const ComponentsList& GetList(void) const { return *mComponentsList; }

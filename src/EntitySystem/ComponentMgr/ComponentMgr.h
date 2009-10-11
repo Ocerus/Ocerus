@@ -55,7 +55,7 @@ namespace EntitySystem
 
 	private:
 
-		typedef stdext::hash_map<EntityID, ComponentsList*> EntityComponentsMap;
+		typedef hash_map<EntityID, ComponentsList*> EntityComponentsMap;
 
 		ComponentCreationMethod mComponentCreationMethod[NUM_COMPONENT_TYPES];
 		EntityComponentsMap mEntityComponentsMap;

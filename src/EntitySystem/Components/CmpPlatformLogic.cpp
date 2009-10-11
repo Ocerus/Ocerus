@@ -106,9 +106,9 @@ EntityMessage::eResult EntityComponents::CmpPlatformLogic::HandleMessage(const E
 
 void EntityComponents::CmpPlatformLogic::RegisterReflection()
 {
-	RegisterProperty<uint32>("Hitpoints", &GetHitpoints, &SetHitpoints, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
-	RegisterProperty<EntityHandle>("Blueprints", &GetBlueprints, &SetBlueprints, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
-	RegisterProperty<EntityHandle>("ParentShip", &GetParentShip, &SetParentShip, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<uint32>("Hitpoints", &EntityComponents::CmpPlatformLogic::GetHitpoints, &EntityComponents::CmpPlatformLogic::SetHitpoints, PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<EntityHandle>("Blueprints", &EntityComponents::CmpPlatformLogic::GetBlueprints, &EntityComponents::CmpPlatformLogic::SetBlueprints, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<EntityHandle>("ParentShip", &EntityComponents::CmpPlatformLogic::GetParentShip, &EntityComponents::CmpPlatformLogic::SetParentShip, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 
 	AddComponentDependency(CT_PLATFORM_PHYSICS);
 }
