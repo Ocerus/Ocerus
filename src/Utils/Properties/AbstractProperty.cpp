@@ -19,7 +19,7 @@ void AbstractProperty::ReportWriteonlyProblem( void )
 
 void Reflection::AbstractProperty::SetValueFromString( RTTIBaseClass* owner, const string& str )
 {
-	switch (GetType())
+    switch (GetType())
 	{
 	case PROPTYPE_BOOL:
 		SetValue(owner, StringConverter::FromString<bool>(str));
@@ -52,7 +52,7 @@ void Reflection::AbstractProperty::SetValueFromString( RTTIBaseClass* owner, con
 		SetValue(owner, StringConverter::FromString<uint8>(str));
 		break;
 	case PROPTYPE_STRING:
-		SetValue(owner, StringConverter::FromString<string>(str));
+		SetValue(owner, StringConverter::FromString<char*>(str));
 		break;
 	case PROPTYPE_STRING_KEY:
 		SetValue<StringKey>(owner, StringConverter::FromString<string>(str));
@@ -81,5 +81,5 @@ void Reflection::AbstractProperty::SetValueFromString( RTTIBaseClass* owner, con
 		break;
 	default:
 		gLogMgr.LogMessage("Parsing property of type '", GetType(), "' from string is not implemented in the file ", __FILE__, LOG_ERROR);
-	}
+    }
 }

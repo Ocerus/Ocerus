@@ -739,6 +739,10 @@
 						RelativePath="..\src\Utils\Properties\PropertySystem.cpp"
 						>
 					</File>
+					<File
+						RelativePath="..\src\Utils\Properties\PropertyTypes.cpp"
+						>
+					</File>
 				</Filter>
 			</Filter>
 		</Filter>
