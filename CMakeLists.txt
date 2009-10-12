@@ -1,46 +1,92 @@
 project(ocerus)
 
+# where to look first for cmake modules
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
+
 cmake_minimum_required(VERSION 2.6.2)
 
 set(CMAKE_BUILD_TYPE release)
 
-# search for Boost version 1.36
+###############################################################################
+###                      bundled external libraries                         ###
+###############################################################################
+
+###############
+# Box2D
+###############
+ADD_SUBDIRECTORY(externalLibs/Box2D)
+set(Box2D_INCLUDE_DIRS
+    ${CMAKE_CURRENT_SOURCE_DIR}/externalLibs/Box2D/Include
+    ${CMAKE_CURRENT_SOURCE_DIR}/externalLibs/Box2D/Source
+)
+set(Box2D_LIBRARIES box2d)
+
+
+###############
+# rudeconfig
+###############
+ADD_SUBDIRECTORY(externalLibs/rudeconfig)
+set(rudeconfig_INCLUDE_DIRS
+    ${CMAKE_CURRENT_SOURCE_DIR}/externalLibs/rudeconfig/include
+)
+set(rudeconfig_LIBRARIES rudeconfig)
+
+
+###############################################################################
+###                             dependencies                                ###
+###############################################################################
+
+
+###############
+# OIS
+###############
+find_package(OIS REQUIRED)
+if (OIS_FOUND)
+    include_directories(${OIS_INCLUDE_DIRS})
+else (OIS_FOUND)
+    message(FATAL_ERROR "OIS library cannot be found in your system.")
+endif (OIS_FOUND)
+
+###############
+# Boost
+###############
 set(Boost_USE_STATIC_LIBS   ON)
 set(Boost_USE_MULTITHREADED ON)
-find_package( Boost 1.36 COMPONENTS system filesystem )
+find_package( Boost 1.36 REQUIRED COMPONENTS system filesystem )
+if (Boost_FOUND)
+    link_directories(${Boost_LIBRARY_DIRS})
+    include_directories(${BOOST_INCLUDE_DIRS})
+else (Boost_FOUND)
+    message(FATAL_ERROR "BOOST library cannot be found in your system.")
+endif (Boost_FOUND)
 
-ADD_SUBDIRECTORY(externalLibs/ois)
-ADD_SUBDIRECTORY(externalLibs/rudeconfig)
+###############
+# EXPAT
+###############
+find_package(EXPAT 2.0.1 REQUIRED)
+if (EXPAT_FOUND)
+    include_directories(${EXPAT_INCLUDE_DIRS})
+else (EXPAT_FOUND)
+    message(FATAL_ERROR "Expat library cannot be found in your system.")
+    #TODO: use bundled expat
+endif (EXPAT_FOUND)
 
-## box2d includes and linking
-
-INCLUDE_DIRECTORIES(
-	${CMAKE_CURRENT_SOURCE_DIR}/externalLibs/Box2D/Include
-	${CMAKE_CURRENT_SOURCE_DIR}/externalLibs/Box2D/Source
-)
-
-## boost includes
-#INCLUDE_DIRECTORIES(
-#	${CMAKE_CURRENT_SOURCE_DIR}/externalLibs/boost/inc
-#)
-
-
-## cegui
-INCLUDE_DIRECTORIES(
-	${CMAKE_CURRENT_SOURCE_DIR}/externalLibs/cegui/include
-)
-
-## rudeconfig
-INCLUDE_DIRECTORIES(
-	${CMAKE_CURRENT_SOURCE_DIR}/externalLibs/rudeconfig/include
-)
-
-## ois
-INCLUDE_DIRECTORIES(
-	${CMAKE_CURRENT_SOURCE_DIR}/externalLibs/ois/includes
-)
+###############
+# CEGUI
+###############
+find_package(CEGUI 0.6.2 REQUIRED)
+if (CEGUI_FOUND)
+    include_directories(${CEGUI_INCLUDE_DIRS}/CEGUI)
+else (CEGUI_FOUND)
+    message(FATAL_ERROR "CEGUI library cannot be found in your system.")
+    #TODO: use bundled CEGUI
+endif (CEGUI_FOUND)
 
 
+
+###############################################################################
+###                            ocerus project                               ###
+###############################################################################
 
 INCLUDE_DIRECTORIES(
 	${CMAKE_CURRENT_SOURCE_DIR}/src
@@ -92,6 +138,7 @@ set(InputSystem_SRCS
     src/InputSystem/InputMgr.cpp
     src/InputSystem/OISListener.cpp
 )
+
 set(LogSystem_SRCS
     src/LogSystem/LogMgr.cpp
 )
@@ -130,10 +177,10 @@ set(Utils_SRCS
     src/Utils/MathUtils.cpp
 )
 
-
-
-link_directories ( ${Boost_LIBRARY_DIRS} )
-include_directories ( ${Boost_INCLUDE_DIRS} )
+include_directories(
+    ${Box2D_INCLUDE_DIRS}
+    ${rudeconfig_INCLUDE_DIRS}
+)
 
 add_executable(ocerus 
     ${Core_SRCS}
@@ -150,8 +197,13 @@ add_executable(ocerus
 )
 
 target_link_libraries(ocerus
-    ois
-    rudeconfig
+    ${Box2D_LIBRARIES}
+    ${rudeconfig_LIBRARIES}
+    ${OIS_LIBRARIES} 
     ${Boost_LIBRARIES}
+    ${EXPAT_LIBRARIES}
+    ${CEGUI_LIBRARIES}
 )
+
+
 
