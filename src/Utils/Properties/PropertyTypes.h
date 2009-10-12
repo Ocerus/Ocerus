@@ -58,6 +58,48 @@ namespace Reflection
 		static T mDefaultValue;
 
 	};
+
+	template<> ePropertyType PropertyType<bool>::mTypeID;
+	template<> ePropertyType PropertyType<int8>::mTypeID;
+	template<> ePropertyType PropertyType<int16>::mTypeID;
+	template<> ePropertyType PropertyType<int32>::mTypeID;
+	template<> ePropertyType PropertyType<int64>::mTypeID;
+	template<> ePropertyType PropertyType<uint8>::mTypeID;
+	template<> ePropertyType PropertyType<uint16>::mTypeID;
+	template<> ePropertyType PropertyType<uint32>::mTypeID;
+	template<> ePropertyType PropertyType<uint64>::mTypeID;	
+	template<> ePropertyType PropertyType<float32>::mTypeID;
+	template<> ePropertyType PropertyType<Vector2>::mTypeID;
+	template<> ePropertyType PropertyType<Vector2&>::mTypeID;
+	template<> ePropertyType PropertyType<Vector2*>::mTypeID;
+	template<> ePropertyType PropertyType<EntitySystem::EntityHandle>::mTypeID;
+	template<> ePropertyType PropertyType<EntitySystem::EntityHandle*>::mTypeID;
+	template<> ePropertyType PropertyType<char*>::mTypeID;
+	template<> ePropertyType PropertyType<StringKey>::mTypeID;
+	template<> ePropertyType PropertyType<GfxSystem::Color>::mTypeID;
+	template<> ePropertyType PropertyType<PropertyFunctionParameters&>::mTypeID;
+
+//	template<class T> T PropertyType<T>::mDefaultValue;
+	template<> bool PropertyType<bool>::mDefaultValue;
+	template<> int8 PropertyType<int8>::mDefaultValue;
+	template<> int16 PropertyType<int16>::mDefaultValue;
+	template<> int32 PropertyType<int32>::mDefaultValue;
+	template<> int64 PropertyType<int64>::mDefaultValue;
+	template<> uint8 PropertyType<uint8>::mDefaultValue;
+	template<> uint16 PropertyType<uint16>::mDefaultValue;
+	template<> uint32 PropertyType<uint32>::mDefaultValue;
+	template<> uint64 PropertyType<uint64>::mDefaultValue;
+	template<> float32 PropertyType<float32>::mDefaultValue;
+	template<> Vector2 PropertyType<Vector2>::mDefaultValue;
+	template<> Vector2& PropertyType<Vector2&>::mDefaultValue;
+	template<> Vector2* PropertyType<Vector2*>::mDefaultValue;
+	template<> EntitySystem::EntityHandle PropertyType<EntitySystem::EntityHandle>::mDefaultValue;
+	template<> EntitySystem::EntityHandle* PropertyType<EntitySystem::EntityHandle*>::mDefaultValue; 
+	template<> char* PropertyType<char*>::mDefaultValue;
+	template<> StringKey PropertyType<StringKey>::mDefaultValue;
+	template<> GfxSystem::Color PropertyType<GfxSystem::Color>::mDefaultValue;
+	template<> PropertyFunctionParameters& PropertyType<PropertyFunctionParameters&>::mDefaultValue;
+
 }
 
 #endif	// _PROPERTY_TYPES_H
