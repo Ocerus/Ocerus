@@ -1,7 +1,7 @@
 #include "Common.h"
 #include "SmartAssert.h"
 
-#if __WIN__
+#ifdef __WIN__
 
 #include <Windows.h>
 void DisplayAssert(const char* msg, const char* file, const int line)

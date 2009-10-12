@@ -3,6 +3,7 @@
 /// @remarks
 /// Implementation based on the code from Game Programming Gems 5 (1.4).
 
+#include "Common.h"
 #include "PropertyTypes.h"
 #include "StringKey.h"
 

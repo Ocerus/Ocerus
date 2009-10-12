@@ -28,7 +28,8 @@ namespace Utils
 		template<>
 		inline string ToString(const string val) { return val; }
 
-
+#pragma warning(push)
+#pragma warning(disable: 4700)
 
 		/// Converts the given string to a value of an arbitrary type.
 		template<typename T>
@@ -40,6 +41,8 @@ namespace Utils
 				return T(); // return default value
 			return result;
 		}
+
+#pragma warning(pop)
 
 		template<>
 		inline string FromString(const string& str) { return str; }

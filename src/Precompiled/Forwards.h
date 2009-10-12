@@ -22,8 +22,8 @@ namespace EntitySystem
 }
 
 /// @note @see http://ocerus.hardwire.cz/wiki/index.php/User:MacJariel
-#include "ComponentEnums.h"
-#include "EntityEnums.h"
+#include "../EntitySystem/ComponentMgr/ComponentEnums.h"
+#include "../EntitySystem/EntityMgr/EntityEnums.h"
 
 namespace GfxSystem
 {

@@ -5,7 +5,7 @@
 #include "../ResourceSystem/Resource.h"
 
 class hgeAnimation;
-class hgeParticleSystemInfo;
+struct hgeParticleSystemInfo;
 
 namespace GfxSystem
 {
