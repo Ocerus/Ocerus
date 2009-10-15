@@ -21,6 +21,9 @@ namespace Utils
 
 		/// Returns one of the values previously hashed into the given hash.
 		const char* DeHashString(const uint32 hash);
+
+		/// Release all previously hashed strings. Call this when destroying application.
+		void ClearHashMap();
 	}
 }
 

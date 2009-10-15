@@ -79,6 +79,7 @@ Application::~Application()
 	StringSystem::StringMgr::DestroySingleton();
 	ResourceSystem::ResourceMgr::DestroySingleton();
 	GfxSystem::ParticleSystemMgr::DestroySingleton();
+	Utils::Hash::ClearHashMap();
 	
 	// must come last
 	delete mGlobalConfig;

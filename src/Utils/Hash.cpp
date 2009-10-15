@@ -72,3 +72,13 @@ const char* Hash::DeHashString( const uint32 hash )
 		return "DeHashString_FAILED";
 	return it->second;
 }
+
+void Hash::ClearHashMap()
+{
+	StringHashMap& stringMap = GetStringHashMap();
+	for (StringHashMap::const_iterator it = stringMap.begin(); it!= stringMap.end(); ++it)
+	{
+		delete[] (*it);
+	}
+	stringMap.clear();
+}
