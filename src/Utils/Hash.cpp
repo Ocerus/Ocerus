@@ -78,7 +78,7 @@ void Hash::ClearHashMap()
 	StringHashMap& stringMap = GetStringHashMap();
 	for (StringHashMap::const_iterator it = stringMap.begin(); it!= stringMap.end(); ++it)
 	{
-		delete[] (*it);
+		delete[] (it->second);
 	}
 	stringMap.clear();
 }

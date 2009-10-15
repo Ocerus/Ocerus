@@ -65,7 +65,7 @@ namespace Reflection
 		inline void CallFunction(PropertyFunctionParameters* parameters)
 		{
 			BS_DASSERT(parameters);
-			BS_DASSERT(GetType() == PROPTYPE_FUNCTION_PARAMETER);
+			BS_DASSERT(GetType() == PT_FUNCTION_PARAMETER);
 			mProperty->SetValue<PropertyFunctionParameters>(mOwner, *parameters);
 		}
 
