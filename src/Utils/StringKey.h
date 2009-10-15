@@ -45,6 +45,9 @@ namespace Utils
 		/// Comparison operator needed by containers.
 		bool operator<(const StringKey& rhs) const;
 
+		/// Invalid key representing no real string.
+		static const StringKey Null;
+
 	private:
 		uint32 mData;
 	};

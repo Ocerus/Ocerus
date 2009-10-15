@@ -168,7 +168,7 @@ set(Utils_SRCS
     src/Utils/Properties/AbstractProperty.cpp
     src/Utils/Properties/PropertyFunctionParameters.cpp
     src/Utils/Properties/PropertyHolder.cpp
-    src/Utils/Properties/PropertyTypes.cpp
+    src/Utils/Properties/PropertyEnums.cpp
     src/Utils/RTTI/RTTI.cpp
     src/Utils/Hash.cpp
     src/Utils/GlobalProperties.cpp

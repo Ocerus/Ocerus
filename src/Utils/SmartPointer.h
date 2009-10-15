@@ -25,7 +25,7 @@ namespace Utils
 		SmartPointer(): mPointer(0), mUseCountPtr(0) {}
 
 		/// Constructs new smart pointer from a raw pointer.
-		template< class Y>
+		template<class Y>
 		explicit SmartPointer(Y* pointer): mPointer(pointer), mUseCountPtr(new (uint32)(1)) {}
 
 		/// Copy constructor.

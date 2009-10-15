@@ -2,6 +2,8 @@
 #include "StringKey.h"
 #include "Hash.h"
 
+const StringKey StringKey::Null;
+
 StringKey::StringKey( void )
 {
 	mData = 0;

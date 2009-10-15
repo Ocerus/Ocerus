@@ -239,7 +239,7 @@ bool EntitySystem::EntityMgr::LoadFromResource( ResourceSystem::ResourcePtr res 
 					else
 					{
 						PropertyHolder p = prop->second;
-						if (p.GetType() == PROPTYPE_VECTOR2_ARRAY)
+						if (p.GetType() == PT_VECTOR2_ARRAY)
 						{
 							string lengthParam;
 							vector<Vector2> vertices;
@@ -269,7 +269,7 @@ bool EntitySystem::EntityMgr::LoadFromResource( ResourceSystem::ResourcePtr res 
 								p.SetValue<Vector2*>(vertArray);
 							}
 						}
-						else if (p.GetType() == PROPTYPE_ENTITYHANDLE)
+						else if (p.GetType() == PT_ENTITYHANDLE)
 						{
 							EntityHandle e = FindFirstEntity(propIt.GetChildValue<string>());
 							if (!e.IsValid())

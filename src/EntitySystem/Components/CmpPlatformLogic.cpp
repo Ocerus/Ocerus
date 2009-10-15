@@ -177,7 +177,7 @@ void EntityComponents::CmpPlatformLogic::Die( void )
 		b2Body* body;
 		GetOwner().PostMessage(EntityMessage::TYPE_GET_PHYSICS_BODY, &body);
 		prop = mParentShip.GetProperty("AbsolutePosition");
-		Vector2 forceDir = prop.GetValue<Vector2&>() - myPos;
+		Vector2 forceDir = prop.GetValue<Vector2>() - myPos;
 		float32 distSq = forceDir.LengthSquared();
 		body->ApplyForce(EXPLOSION_FORCE_RATIO / distSq * forceDir, myPos);
 

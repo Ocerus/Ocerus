@@ -553,6 +553,10 @@
 				Name="inc"
 				>
 				<File
+					RelativePath="..\src\Utils\Array.h"
+					>
+				</File>
+				<File
 					RelativePath="..\src\Utils\DataContainer.h"
 					>
 				</File>
@@ -692,6 +696,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\src\Utils\Properties\PropertyEnums.h"
+						>
+					</File>
+					<File
 						RelativePath="..\src\Utils\Properties\PropertyFunctionParameters.h"
 						>
 					</File>
@@ -728,6 +736,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\src\Utils\Properties\PropertyEnums.cpp"
+						>
+					</File>
+					<File
 						RelativePath="..\src\Utils\Properties\PropertyFunctionParameters.cpp"
 						>
 					</File>
@@ -737,10 +749,6 @@
 					</File>
 					<File
 						RelativePath="..\src\Utils\Properties\PropertySystem.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\src\Utils\Properties\PropertyTypes.cpp"
 						>
 					</File>
 				</Filter>

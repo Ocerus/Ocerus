@@ -23,8 +23,8 @@ namespace EntityComponents
 
 		/// @name Position relative to the parent ship. Equals global in case this platform is free.
 		//@{
-		Vector2& GetRelativePosition(void) const { return const_cast<Vector2&>(mRelativePosition); }
-		void SetRelativePosition(Vector2& pos) { mRelativePosition = pos; }
+		Vector2 GetRelativePosition(void) const { return mRelativePosition; }
+		void SetRelativePosition(Vector2 pos) { mRelativePosition = pos; }
 		//@}
 		/// @name Position in absolute coords.
 		//@{

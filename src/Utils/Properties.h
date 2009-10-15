@@ -5,7 +5,7 @@
 #define Properties_h__
 
 #include "RTTI/RTTIBaseClass.h"
-#include "Properties/PropertyTypes.h"
+#include "Properties/PropertyEnums.h"
 #include "Properties/PropertyHolder.h"
 #include "Properties/PropertyList.h"
 

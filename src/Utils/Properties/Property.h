@@ -7,7 +7,7 @@
 #define _PROPERTY_H
 
 #include "TypedProperty.h"
-#include "PropertyTypes.h"
+#include "PropertyEnums.h"
 
 namespace Reflection
 {

@@ -9,7 +9,7 @@
 #include "Base.h"
 #include "StringKey.h"
 #include "PropertyAccess.h"
-#include "PropertyTypes.h"
+#include "PropertyEnums.h"
 
 namespace Reflection
 {

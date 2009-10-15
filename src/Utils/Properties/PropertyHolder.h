@@ -66,7 +66,7 @@ namespace Reflection
 		{
 			BS_DASSERT(parameters);
 			BS_DASSERT(GetType() == PROPTYPE_FUNCTION_PARAMETER);
-			mProperty->SetValue<PropertyFunctionParameters&>(mOwner, *parameters);
+			mProperty->SetValue<PropertyFunctionParameters>(mOwner, *parameters);
 		}
 
 		/// Calls a function this property represents.

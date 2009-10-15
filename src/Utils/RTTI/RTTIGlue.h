@@ -45,9 +45,9 @@ namespace Reflection
 
 		/// @brief Registers a function. Takes in the function name and its address.
 		/// @remarks This function should be called only from within a user-defined RegisterReflection function.
-		inline static void RegisterFunction(const char* name, typename Property<T, PropertyFunctionParameters&>::SetterType function, const PropertyAccessFlags accessFlags)
+		inline static void RegisterFunction(const char* name, typename Property<T, PropertyFunctionParameters>::SetterType function, const PropertyAccessFlags accessFlags)
 		{
-			RegisterProperty<PropertyFunctionParameters&>(name, 0, function, accessFlags);
+			RegisterProperty<PropertyFunctionParameters>(name, 0, function, accessFlags);
 		}
 
 		/// @brief Registers an entity component dependant on the owner of this class.

@@ -194,7 +194,7 @@ EntityMessage::eResult EntityComponents::CmpPlatformPhysics::HandleMessage( cons
 
 void EntityComponents::CmpPlatformPhysics::RegisterReflection()
 {
-	RegisterProperty<Vector2&>("RelativePosition", &EntityComponents::CmpPlatformPhysics::GetRelativePosition, &EntityComponents::CmpPlatformPhysics::SetRelativePosition, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
+	RegisterProperty<Vector2>("RelativePosition", &EntityComponents::CmpPlatformPhysics::GetRelativePosition, &EntityComponents::CmpPlatformPhysics::SetRelativePosition, PROPACC_INIT | PROPACC_EDIT_READ | PROPACC_SCRIPT_READ);
 	RegisterProperty<Vector2>("InitBodyPosition", &EntityComponents::CmpPlatformPhysics::GetInitBodyPosition, &EntityComponents::CmpPlatformPhysics::SetInitBodyPosition, PROPACC_INIT);
 	RegisterProperty<float32>("InitBodyAngle", &EntityComponents::CmpPlatformPhysics::GetInitBodyAngle, &EntityComponents::CmpPlatformPhysics::SetInitBodyAngle, PROPACC_INIT);
 	RegisterProperty<float32>("InitShapeAngle", &EntityComponents::CmpPlatformPhysics::GetInitShapeAngle, &EntityComponents::CmpPlatformPhysics::SetInitShapeAngle, PROPACC_INIT);
