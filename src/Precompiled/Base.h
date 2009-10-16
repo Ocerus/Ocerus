@@ -15,7 +15,6 @@
 
 // Small headers without dependencies, which are used in a lot of other headers, so that it makes sense to include them here.
 #include "../Utils/ResourcePointers.h"
-//#include "../Utils/Properties/PropertyHolderMediator.h"
 
 
 #endif // Base_h__
