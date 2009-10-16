@@ -13,18 +13,18 @@ namespace Reflection
 	enum ePropertyAccess 
 	{ 
 		/// The property can be read from edit tools.
-		PROPACC_EDIT_READ=1<<1, 
+		PA_EDIT_READ=1<<1, 
 		/// The property can be written from edit tools.
-		PROPACC_EDIT_WRITE=1<<2, 
+		PA_EDIT_WRITE=1<<2, 
 		/// The property can be read from scripts.
-		PROPACC_SCRIPT_READ=1<<3, 
+		PA_SCRIPT_READ=1<<3, 
 		/// The property can be written from scripts.
-		PROPACC_SCRIPT_WRITE=1<<4,
+		PA_SCRIPT_WRITE=1<<4,
 		/// The property can be written during the component init.
-		PROPACC_INIT=1<<5,
+		PA_INIT=1<<5,
 
 		/// Full access to the property.
-		PROPACC_FULL=0xff
+		PA_FULL_ACCESS=0xff
 	};
 
 	/// Type for storing access flags defined by ePropertyAccess.

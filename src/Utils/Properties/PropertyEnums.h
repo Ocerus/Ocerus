@@ -8,12 +8,6 @@
 
 #include "Base.h"
 
-// These includes are needed because of the usage of default values for the property types.
-#include "StringKey.h"
-#include "PropertyFunctionParameters.h"
-#include "../../EntitySystem/EntityMgr/EntityHandle.h"
-#include "../../GfxSystem/GfxStructures.h"
-
 namespace Reflection
 {
 	/// @brief Value type of a property.
@@ -28,36 +22,23 @@ namespace Reflection
 		NUM_PROPERTY_TYPES
 	};
 
-	/// @brief This templatized class will associate compile-time types with unique enum members.
-	template <class T> class PropertyType
+	/// @brief This namespace contains templatized functions associated in compile-time with specific property types and values.
+	namespace PropertyTypes
 	{
-	public :
-
 		/// Returns the type ID associated with the templatized type.
-		static ePropertyType GetTypeID(void) { return mTypeID; };
+		template<typename T> ePropertyType GetTypeID(void) { return PT_UNKNOWN; };
 
 		/// Returns the default value of this property type.
-		static T GetDefaultValue(void) { return mDefaultValue; }
+		template<typename T> T GetDefaultValue(void) { return 0; }
 
-	private:
-
-		static ePropertyType mTypeID;
-		static T mDefaultValue;
+		/// Template specialization.
+		#define PROPERTY_TYPE(typeID, typeClass, defaultValue) \
+			template<> ePropertyType GetTypeID<typeClass>(void); \
+			template<> typeClass GetDefaultValue<typeClass>(void);
+		#include "PropertyTypes.h"
+		#undef PROPERTY_TYPE
 
 	};
-
-
-#ifdef __WIN__
-	template<class T> ePropertyType PropertyType<T>::mTypeID = PT_UNKNOWN;
-	template<class T> T PropertyType<T>::mDefaultValue = 0;
-
-	/// Template specialization.
-	#define PROPERTY_TYPE(typeID, typeClass, defaultValue) \
-		template<> ePropertyType PropertyType<typeClass>::mTypeID = typeID; \
-		template<> typeClass PropertyType<typeClass>::mDefaultValue(defaultValue);
-	#include "PropertyTypes.h"
-	#undef PROPERTY_TYPE
-#endif
 
 }
 

@@ -7,6 +7,7 @@
 #include "Base.h"
 #include "AbstractProperty.h"
 #include "PropertyHolderMediator.h"
+#include "../../Utils/Properties/PropertyFunctionParameters.h"
 
 namespace Reflection
 {
@@ -38,7 +39,7 @@ namespace Reflection
 			if (!mProperty)
 			{
 				ReportUndefined();
-				return PropertyType<T>::GetDefaultValue();
+				return PropertyTypes::GetDefaultValue<T>();
 			}
 			return mProperty->GetValue<T>(mOwner);
 		}

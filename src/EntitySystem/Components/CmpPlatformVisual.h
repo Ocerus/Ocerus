@@ -13,6 +13,11 @@ namespace EntityComponents
 		virtual void Clean(void);
 		virtual EntityMessage::eResult HandleMessage(const EntityMessage& msg);
 
+		void MyFunction(PropertyFunctionParameters params)
+		{
+			gLogMgr.LogMessage(*((string*)params.GetParameter(0)));
+		}
+
 		static void RegisterReflection(void);
 
 	private:

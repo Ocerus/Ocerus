@@ -54,6 +54,9 @@ namespace Reflection
 			return (*mParameters)[index];
 		}
 
+		/// Returns the number of actual parameters inserted into this parameter holder.
+		inline int32 GetParametersCount(void) const { return mParametersCount; }
+
 	private:
 
 		int32 mParametersCount;

@@ -6,20 +6,22 @@
 #include "Common.h"
 #include "PropertyEnums.h"
 
+// These includes are needed because of the usage of default values for the property types.
+#include "StringKey.h"
+#include "PropertyFunctionParameters.h"
+#include "../../EntitySystem/EntityMgr/EntityHandle.h"
+#include "../../GfxSystem/GfxStructures.h"
+
 namespace Reflection
 {
 
-#ifdef __LINUX__
-	template<class T> ePropertyType PropertyType<T>::mTypeID = PT_UNKNOWN;
-	template<class T> T PropertyType<T>::mDefaultValue = 0;
-
 	/// Template specialization.
 	#define PROPERTY_TYPE(typeID, typeClass, defaultValue) \
-		template<> ePropertyType PropertyType<typeClass>::mTypeID = typeID; \
-		template<> typeClass PropertyType<typeClass>::mDefaultValue(defaultValue);
+		template<> ePropertyType PropertyTypes::GetTypeID<typeClass>(void) { return typeID; } \
+		template<> typeClass PropertyTypes::GetDefaultValue<typeClass>(void) {return defaultValue; }
 	#include "PropertyTypes.h"
 	#undef PROPERTY_TYPE
-#endif
+
 
 }
 

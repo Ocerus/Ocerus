@@ -56,6 +56,11 @@ bool EntitySystem::EntityHandle::GetProperties( PropertyList& out, const Propert
 	return gEntityMgr.GetEntityProperties(*this, out, mask);
 }
 
+PropertyHolderMediator EntitySystem::EntityHandle::GetFunction( const StringKey key, const PropertyAccessFlags mask ) const
+{
+	return gEntityMgr.GetEntityProperty(*this, key, mask);
+}
+
 PropertyHolderMediator EntitySystem::EntityHandle::GetProperty( const StringKey key, const PropertyAccessFlags mask ) const
 {
 	return gEntityMgr.GetEntityProperty(*this, key, mask);

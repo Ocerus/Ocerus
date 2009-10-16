@@ -53,10 +53,10 @@ namespace EntitySystem
 		bool IsEntityInited(const EntityHandle h) const;
 
 		/// Retrieves properties of an entity. A filter related to properties' flags can be specified.
-		bool GetEntityProperties(const EntityHandle h, PropertyList& out, const PropertyAccessFlags flagMask = PROPACC_FULL);
+		bool GetEntityProperties(const EntityHandle h, PropertyList& out, const PropertyAccessFlags flagMask = PA_FULL_ACCESS);
 
 		/// Retrieves a property of an entity. A filter related to properties' flags can be specified.
-		PropertyHolderMediator GetEntityProperty(const EntityHandle h, const StringKey key, const PropertyAccessFlags flagMask = PROPACC_FULL) const;
+		PropertyHolderMediator GetEntityProperty(const EntityHandle h, const StringKey key, const PropertyAccessFlags flagMask = PA_FULL_ACCESS) const;
 
 		/// Returns EntityHandle to an entity of a specified ID. If there are more of them, then returns the first one.
 		EntityHandle FindFirstEntity(const string& ID);

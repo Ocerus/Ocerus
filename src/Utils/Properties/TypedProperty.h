@@ -21,7 +21,7 @@ namespace Reflection
 		AbstractProperty(name, accessFlags) {}
 
 		/// Returns the type of this property.
-		virtual ePropertyType GetType(void) const { return PropertyType<T>::GetTypeID(); }
+		virtual ePropertyType GetType(void) const { return PropertyTypes::GetTypeID<T>(); }
 
 		/// Returns the value of this property. An owner of the property must be specified.
 		virtual T GetValue( RTTIBaseClass* owner ) = 0;

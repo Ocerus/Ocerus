@@ -94,6 +94,18 @@ void Core::Game::Init()
 	gApp.ResetStats();
 
 	gLogMgr.LogMessage("Game inited");
+
+
+
+	// an example of how to use functions registered in the reflection system
+	if (ship.IsValid())
+	{
+		PropertyHolder prop = ship.GetFunction("MyFunction");
+		PropertyFunctionParameters params(1);
+		string str("Calling my function");
+		params.PushParameter(&str);
+		prop.CallFunction(params);
+	}
 }
 
 void Core::Game::Deinit()

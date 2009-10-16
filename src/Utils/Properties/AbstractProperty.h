@@ -46,12 +46,12 @@ namespace Reflection
 		template<class T>
 		T GetValue(RTTIBaseClass* owner)
 		{
-			ePropertyType desiredType = PropertyType<T>::GetTypeID();
+			ePropertyType desiredType = PropertyTypes::GetTypeID<T>();
 			ePropertyType myType = GetType();
 			if (myType != desiredType)
 			{
 				ReportConvertProblem(desiredType);
-				return PropertyType<T>::GetDefaultValue();
+				return PropertyTypes::GetDefaultValue<T>();
 			}
 			return ((TypedProperty<T>*)this)->GetValue( owner );
 		}
@@ -60,7 +60,7 @@ namespace Reflection
 		template<class T>
 		void SetValue(RTTIBaseClass* owner, const T value)
 		{
-			ePropertyType desiredType = PropertyType<T>::GetTypeID();
+			ePropertyType desiredType = PropertyTypes::GetTypeID<T>();
 			if (GetType() != desiredType)
 			{
 				ReportConvertProblem(desiredType);

@@ -39,7 +39,7 @@ namespace Reflection
 			if (!mGetter)
 			{
 				this->ReportWriteonlyProblem();
-				return PropertyType<T>::GetDefaultValue();
+				return PropertyTypes::GetDefaultValue<T>();
 			}
 			return (((OwnerType*)owner)->*mGetter)();
 		}

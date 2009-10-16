@@ -34,11 +34,11 @@ namespace Reflection
 		/// @brief Registers a property. Takes in the property name, its getter and setter functions, and the property
 		///	type as a template parameter.
 		/// @remarks This function should be called only from within a user-defined RegisterReflection function.
-		template <class PropertyType> 
-		static void RegisterProperty(const char* name, typename Property<T, PropertyType>::GetterType getter, 
-			typename Property<T, PropertyType>::SetterType setter, const PropertyAccessFlags accessFlags)
+		template <class PropertyTypes> 
+		static void RegisterProperty(const char* name, typename Property<T, PropertyTypes>::GetterType getter, 
+			typename Property<T, PropertyTypes>::SetterType setter, const PropertyAccessFlags accessFlags)
 		{
-			Property<T, PropertyType>* pProperty = new Property<T, PropertyType>( name, getter, setter, accessFlags );
+			Property<T, PropertyTypes>* pProperty = new Property<T, PropertyTypes>( name, getter, setter, accessFlags );
 			T::GetClassRTTI()->AddProperty(pProperty);
 			PropertySystem::GetProperties()->push_back( pProperty );
 		}

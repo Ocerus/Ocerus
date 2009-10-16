@@ -108,7 +108,7 @@ EntityHandle EntityMgr::CreateEntity(EntityDescription& desc, PropertyList& out)
 		DestroyEntity(h);
 		return h; // do like nothing's happened, but don't enum properties or they will access invalid memory
 	}
-	if (!GetEntityProperties(h.GetID(), out, PROPACC_INIT))
+	if (!GetEntityProperties(h.GetID(), out, PA_INIT))
 	{
 		gLogMgr.LogMessage("Can't get properties for created entity of type", desc.mType, LOG_ERROR);
 	}

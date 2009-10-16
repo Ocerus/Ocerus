@@ -45,10 +45,13 @@ namespace EntitySystem
 		void FinishInit(void);
 
 		/// Retrieves properties of this entity. A filter related to properties' flags can be specified.
-		bool GetProperties(PropertyList& out, const PropertyAccessFlags mask = PROPACC_FULL);
+		bool GetProperties(PropertyList& out, const PropertyAccessFlags mask = PA_FULL_ACCESS);
+
+		/// Retrieves a function of this entity. A filter related to the function's flags can be specified.
+		PropertyHolderMediator GetFunction(const StringKey key, const PropertyAccessFlags mask = PA_FULL_ACCESS) const;
 
 		/// Retrieves a property of this entity. A filter related to properties' flags can be specified.
-		PropertyHolderMediator GetProperty(const StringKey key, const PropertyAccessFlags mask = PROPACC_FULL) const;
+		PropertyHolderMediator GetProperty(const StringKey key, const PropertyAccessFlags mask = PA_FULL_ACCESS) const;
 
 		/// Sends a message to this entity.
 		EntityMessage::eResult PostMessage(const EntityMessage::eType type, void* data = 0);
