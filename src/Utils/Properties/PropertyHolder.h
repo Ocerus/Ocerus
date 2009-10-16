@@ -6,7 +6,6 @@
 
 #include "Base.h"
 #include "AbstractProperty.h"
-#include "PropertyHolderMediator.h"
 #include "../../Utils/Properties/PropertyFunctionParameters.h"
 
 namespace Reflection
@@ -81,22 +80,6 @@ namespace Reflection
 
 		/// Returns true if this holder holds a valid property.
 		inline bool IsValid(void) const { return (mOwner!=0 && mProperty!=0); }
-
-		/// @brief Conversion operator to PropertyHolderMediator.
-		/// @remarks This is needed to allow interchangebality of PropertyHolder
-		/// and PropertyHolderMediator.
-		inline operator PropertyHolderMediator (void) const
-		{
-			return *reinterpret_cast<const PropertyHolderMediator*>(this);
-		}
-
-		/// @brief Conversion constructor from PropertyHolderMediator.
-		/// @remarks This is needed to allow interchangebality of PropertyHolder
-		/// and PropertyHolderMediator.
-		inline PropertyHolder(const PropertyHolderMediator rhs)
-		{
-			operator=(*reinterpret_cast<const PropertyHolder*>(&rhs));
-		}
 
 	private:
 

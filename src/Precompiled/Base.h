@@ -7,11 +7,15 @@
 #ifndef Base_h__
 #define Base_h__
 
+// Basic settings and typedefs of the project.
 #include "../Setup/Settings.h"
+
+// Forward declarations to minimize usage of #include in headers.
 #include "Forwards.h"
 
+// Small headers without dependencies, which are used in a lot of other headers, so that it makes sense to include them here.
 #include "../Utils/ResourcePointers.h"
-#include "../Utils/Properties/PropertyHolderMediator.h"
+//#include "../Utils/Properties/PropertyHolderMediator.h"
 
 
 #endif // Base_h__

@@ -35,12 +35,13 @@ namespace EntitySystem
 		inline EntityMessage::eResult PostMessage(const EntityMessage::eType type, void* data = 0) const { return GetOwner().PostMessage(type, data); }
 
 		/// Returns a property to be get or set.
-		inline PropertyHolderMediator GetProperty(const StringKey name) const { return GetOwner().GetProperty(name); }
+		inline PropertyHolder GetProperty(const StringKey name) const { return GetOwner().GetProperty(name); }
 
 		/// @remarks
 		/// We don't want anyone except the ComponentMgr to create new components, but it has to be public because of the RTTI.
 		Component(void);
 
+		/// Destructor.
 		virtual ~Component(void);
 
 	private:

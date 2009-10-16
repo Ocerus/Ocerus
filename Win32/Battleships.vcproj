@@ -708,10 +708,6 @@
 						>
 					</File>
 					<File
-						RelativePath="..\src\Utils\Properties\PropertyHolderMediator.h"
-						>
-					</File>
-					<File
 						RelativePath="..\src\Utils\Properties\PropertyList.h"
 						>
 					</File>

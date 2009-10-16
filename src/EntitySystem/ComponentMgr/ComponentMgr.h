@@ -51,7 +51,7 @@ namespace EntitySystem
 		bool GetEntityProperties(const EntityID id, PropertyList& out, const PropertyAccessFlags flagMask = PA_FULL_ACCESS);
 
 		/// Retrieves properties of an entity. A filter related to access flags can be specified.
-		PropertyHolderMediator GetEntityProperty(const EntityHandle h, const StringKey key, const PropertyAccessFlags mask = PA_FULL_ACCESS) const;
+		PropertyHolder GetEntityProperty(const EntityHandle h, const StringKey key, const PropertyAccessFlags mask = PA_FULL_ACCESS) const;
 
 	private:
 

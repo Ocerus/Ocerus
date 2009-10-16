@@ -181,7 +181,7 @@ bool EntitySystem::EntityMgr::IsEntityInited( const EntityHandle h ) const
 	return ei->second->mFullyInited;
 }
 
-PropertyHolderMediator EntitySystem::EntityMgr::GetEntityProperty( const EntityHandle h, const StringKey key, const PropertyAccessFlags flagMask /*= 0xff*/ ) const
+PropertyHolder EntitySystem::EntityMgr::GetEntityProperty( const EntityHandle h, const StringKey key, const PropertyAccessFlags flagMask /*= 0xff*/ ) const
 {
 	return mComponentMgr->GetEntityProperty(h, key, flagMask);
 }

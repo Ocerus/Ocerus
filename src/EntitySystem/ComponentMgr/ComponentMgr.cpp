@@ -73,7 +73,7 @@ bool EntitySystem::ComponentMgr::GetEntityProperties( const EntityID id, Propert
 	return true;
 }
 
-PropertyHolderMediator EntitySystem::ComponentMgr::GetEntityProperty( const EntityHandle h, const StringKey key, const PropertyAccessFlags mask ) const
+PropertyHolder EntitySystem::ComponentMgr::GetEntityProperty( const EntityHandle h, const StringKey key, const PropertyAccessFlags mask ) const
 {
 	EntityComponentsMap::const_iterator iter = mEntityComponentsMap.find(h.GetID());
 	if (iter == mEntityComponentsMap.end())
