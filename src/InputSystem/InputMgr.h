@@ -14,6 +14,8 @@
 /// Input system manages events from all input devices connected to the computer which are required by the game.
 namespace InputSystem
 {
+	// The forward declaration here is allowed as this serves only for internal purposes of InputMgr and thus it doesn't
+	// make sense to forward declare it in Forwards.h.
 	class OISListener;
   
 	/// @brief This class processes all input from external devices such as mouse, keyboard or joystick. You can query its

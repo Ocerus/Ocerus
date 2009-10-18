@@ -18,6 +18,7 @@ namespace EntitySystem
 	struct EntityMessage;
 	class EntityDescription;
 	class EntityPicker;
+	class ComponentMgr;
 	class Component;
 }
 
