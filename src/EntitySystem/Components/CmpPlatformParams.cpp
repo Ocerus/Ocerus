@@ -96,17 +96,17 @@ void EntityComponents::CmpPlatformParams::SetShape(Vector2* shape)
 
 void EntityComponents::CmpPlatformParams::RegisterReflection()
 {
-	RegisterProperty<EntityHandle>("Material", &EntityComponents::CmpPlatformParams::GetMaterial, &EntityComponents::CmpPlatformParams::SetMaterial, PA_INIT | PA_EDIT_READ | PA_SCRIPT_READ);
-	RegisterProperty<uint32>("MaxHitpoints", &EntityComponents::CmpPlatformParams::GetMaxHitpoints, &EntityComponents::CmpPlatformParams::SetMaxHitpoints, PA_EDIT_READ | PA_SCRIPT_READ);
-	RegisterProperty<uint32>("NumSlots", &EntityComponents::CmpPlatformParams::GetNumSlots, &EntityComponents::CmpPlatformParams::SetNumSlots, PA_EDIT_READ | PA_SCRIPT_READ);
-	RegisterProperty<uint32>("NumLinkSlots", &EntityComponents::CmpPlatformParams::GetNumLinkSlots, &EntityComponents::CmpPlatformParams::SetNumLinkSlots, PA_EDIT_READ | PA_SCRIPT_READ);
-	RegisterProperty<float32>("Area", &EntityComponents::CmpPlatformParams::GetArea, &EntityComponents::CmpPlatformParams::SetArea, PA_EDIT_READ | PA_SCRIPT_READ);
-	RegisterProperty<float32>("Mass", &EntityComponents::CmpPlatformParams::GetMass, &EntityComponents::CmpPlatformParams::SetMass, PA_EDIT_READ | PA_SCRIPT_READ);
-	RegisterProperty<float32>("BaseDetachingChance", &EntityComponents::CmpPlatformParams::GetBaseDetachingChance, &EntityComponents::CmpPlatformParams::SetBaseDetachingChance, PA_EDIT_READ | PA_SCRIPT_READ);
-	RegisterProperty<uint32>("ShapeLength", &EntityComponents::CmpPlatformParams::GetShapeLength, &EntityComponents::CmpPlatformParams::SetShapeLength, PA_INIT | PA_EDIT_READ | PA_SCRIPT_READ);
-	RegisterProperty<Vector2*>("Shape", &EntityComponents::CmpPlatformParams::GetShape, &EntityComponents::CmpPlatformParams::SetShape, PA_INIT | PA_EDIT_READ | PA_SCRIPT_READ);
-	RegisterProperty<float32>("ExplodeEffectScale", &EntityComponents::CmpPlatformParams::GetExplodeEffectScale, &EntityComponents::CmpPlatformParams::SetExplodeEffectScale, PA_INIT | PA_EDIT_READ | PA_SCRIPT_READ);
-	RegisterProperty<StringKey>("ExplodeEffect", &EntityComponents::CmpPlatformParams::GetExplodeEffect, &EntityComponents::CmpPlatformParams::SetExplodeEffect, PA_INIT | PA_EDIT_READ | PA_SCRIPT_READ);
-	RegisterProperty<StringKey>("ResourceGroup", &EntityComponents::CmpPlatformParams::GetResourceGroup, &EntityComponents::CmpPlatformParams::SetResourceGroup, PA_INIT | PA_EDIT_READ | PA_SCRIPT_READ);
-	RegisterProperty<GfxSystem::Color>("FillColor", &EntityComponents::CmpPlatformParams::GetFillColor, &EntityComponents::CmpPlatformParams::SetFillColor, PA_INIT | PA_EDIT_READ | PA_SCRIPT_READ);
+	RegisterProperty<EntityHandle>("Material", &CmpPlatformParams::GetMaterial, &CmpPlatformParams::SetMaterial, PA_INIT | PA_EDIT_READ | PA_SCRIPT_READ);
+	RegisterProperty<uint32>("MaxHitpoints", &CmpPlatformParams::GetMaxHitpoints, &CmpPlatformParams::SetMaxHitpoints, PA_EDIT_READ | PA_SCRIPT_READ);
+	RegisterProperty<uint32>("NumSlots", &CmpPlatformParams::GetNumSlots, &CmpPlatformParams::SetNumSlots, PA_EDIT_READ | PA_SCRIPT_READ);
+	RegisterProperty<uint32>("NumLinkSlots", &CmpPlatformParams::GetNumLinkSlots, &CmpPlatformParams::SetNumLinkSlots, PA_EDIT_READ | PA_SCRIPT_READ);
+	RegisterProperty<float32>("Area", &CmpPlatformParams::GetArea, &CmpPlatformParams::SetArea, PA_EDIT_READ | PA_SCRIPT_READ);
+	RegisterProperty<float32>("Mass", &CmpPlatformParams::GetMass, &CmpPlatformParams::SetMass, PA_EDIT_READ | PA_SCRIPT_READ);
+	RegisterProperty<float32>("BaseDetachingChance", &CmpPlatformParams::GetBaseDetachingChance, &CmpPlatformParams::SetBaseDetachingChance, PA_EDIT_READ | PA_SCRIPT_READ);
+	RegisterProperty<uint32>("ShapeLength", &CmpPlatformParams::GetShapeLength, &CmpPlatformParams::SetShapeLength, PA_INIT | PA_EDIT_READ | PA_SCRIPT_READ);
+	RegisterProperty<Vector2*>("Shape", &CmpPlatformParams::GetShape, &CmpPlatformParams::SetShape, PA_INIT | PA_EDIT_READ | PA_SCRIPT_READ);
+	RegisterProperty<float32>("ExplodeEffectScale", &CmpPlatformParams::GetExplodeEffectScale, &CmpPlatformParams::SetExplodeEffectScale, PA_INIT | PA_EDIT_READ | PA_SCRIPT_READ);
+	RegisterProperty<StringKey>("ExplodeEffect", &CmpPlatformParams::GetExplodeEffect, &CmpPlatformParams::SetExplodeEffect, PA_INIT | PA_EDIT_READ | PA_SCRIPT_READ);
+	RegisterProperty<StringKey>("ResourceGroup", &CmpPlatformParams::GetResourceGroup, &CmpPlatformParams::SetResourceGroup, PA_INIT | PA_EDIT_READ | PA_SCRIPT_READ);
+	RegisterProperty<GfxSystem::Color>("FillColor", &CmpPlatformParams::GetFillColor, &CmpPlatformParams::SetFillColor, PA_INIT | PA_EDIT_READ | PA_SCRIPT_READ);
 }
