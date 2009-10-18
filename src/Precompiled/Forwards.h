@@ -21,10 +21,6 @@ namespace EntitySystem
 	class Component;
 }
 
-/// @note @see http://ocerus.hardwire.cz/wiki/index.php/User:MacJariel
-#include "../EntitySystem/ComponentMgr/ComponentEnums.h"
-#include "../EntitySystem/EntityMgr/EntityEnums.h"
-
 namespace GfxSystem
 {
 	class GfxRenderer;

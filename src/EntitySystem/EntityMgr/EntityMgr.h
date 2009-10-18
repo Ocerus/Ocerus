@@ -7,6 +7,7 @@
 #include "Base.h"
 #include "Singleton.h"
 #include "EntityHandle.h"
+#include "EntityEnums.h"
 #include "Properties/PropertyAccess.h"
 
 /// Macro for easier use.

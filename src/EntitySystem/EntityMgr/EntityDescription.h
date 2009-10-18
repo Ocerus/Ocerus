@@ -5,6 +5,7 @@
 #define _ENTITYDESCRIPTION_H_
 
 #include "Base.h"
+#include "../ComponentMgr/ComponentEnums.h"
 
 namespace EntitySystem
 {

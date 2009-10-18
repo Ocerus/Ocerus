@@ -7,6 +7,7 @@
 #include "Base.h"
 #include "EntityMessage.h"
 #include "Properties/PropertyAccess.h"
+#include "EntityEnums.h"
 
 namespace EntitySystem
 {
