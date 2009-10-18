@@ -4,6 +4,6 @@
 
 void PropertyHolder::ReportUndefined( void )
 {
-	gLogMgr.LogMessage("PropertyHolder:Undefined property", LOG_ERROR);
+	gLogMgr.LogMessage("PropertyHolder: Undefined property", LOG_ERROR);
 }
 

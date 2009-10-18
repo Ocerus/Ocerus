@@ -55,7 +55,10 @@ namespace EntitySystem
 		PropertyHolder GetProperty(const StringKey key, const PropertyAccessFlags mask = PA_FULL_ACCESS) const;
 
 		/// Sends a message to this entity.
-		EntityMessage::eResult PostMessage(const EntityMessage::eType type, void* data = 0);
+		EntityMessage::eResult PostMessage(const EntityMessage& msg);
+
+		/// Sends a message to this entity.
+		inline EntityMessage::eResult PostMessage(const EntityMessage::eType type, void* data = 0) {  return PostMessage(EntityMessage(type, data)); }
 
 		/// Returns the type of this entity.
 		eEntityType GetType(void) const;

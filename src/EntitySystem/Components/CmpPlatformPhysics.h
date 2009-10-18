@@ -15,8 +15,8 @@ namespace EntityComponents
 	class CmpPlatformPhysics : public RTTIGlue<CmpPlatformPhysics, Component>
 	{
 	public:
-		virtual void Init(void);
-		virtual void Clean(void);
+		virtual void Create(void);
+		virtual void Destroy(void);
 		virtual EntityMessage::eResult HandleMessage(const EntityMessage& msg);
 
 		static void RegisterReflection(void);
@@ -67,7 +67,7 @@ namespace EntityComponents
 		float32 mInitShapeAngle;
 		bool mInitShapeFlip;
 
-		void PostInit(void);
+		void Init(void);
 		void CreateBody(const bool hasParentShip);
 
 	};

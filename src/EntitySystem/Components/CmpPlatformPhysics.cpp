@@ -8,7 +8,7 @@
 #define LINEAR_DAMPING 0.1f
 #define ANGULAR_DAMPING 0.5f
 
-void EntityComponents::CmpPlatformPhysics::Init( void )
+void EntityComponents::CmpPlatformPhysics::Create( void )
 {
 	mBody = 0;
 	mShape = 0;
@@ -21,7 +21,7 @@ void EntityComponents::CmpPlatformPhysics::Init( void )
 }
 
 
-void EntityComponents::CmpPlatformPhysics::PostInit( void )
+void EntityComponents::CmpPlatformPhysics::Init( void )
 {
 	PropertyHolder prop = GetProperty("ParentShip");
 	EntityHandle ship = prop.GetValue<EntityHandle>();
@@ -37,8 +37,7 @@ void EntityComponents::CmpPlatformPhysics::CreateBody( const bool hasParentShip 
 	{
 		prop = GetProperty("ParentShip");
 		EntityHandle ship = prop.GetValue<EntityHandle>();
-		ship.PostMessage(EntityMessage::TYPE_GET_PHYSICS_BODY, &mBody);
-		ship.PostMessage(EntityMessage::TYPE_ADD_PLATFORM, GetOwnerPtr());
+		mBody = ship.GetProperty("PhysicsBody").GetValue<b2Body*>();
 	}
 	else
 	{
@@ -53,19 +52,14 @@ void EntityComponents::CmpPlatformPhysics::CreateBody( const bool hasParentShip 
 
 	// create shape
 	b2PolygonDef shapeDef;
-	EntityHandle blueprints;
-	PostMessage(EntityMessage::TYPE_GET_BLUEPRINTS, &blueprints);
-	EntityHandle material;
-	blueprints.PostMessage(EntityMessage::TYPE_GET_MATERIAL, &material);
+	EntityHandle blueprints = GetProperty("Blueprints").GetValue<EntityHandle>();
+	EntityHandle material = blueprints.GetProperty("Material").GetValue<EntityHandle>();;
 	// set density
-	float32 density;
-	material.PostMessage(EntityMessage::TYPE_GET_DENSITY, &density);
+	float32 density = material.GetProperty("Density").GetValue<float32>();;
 	shapeDef.density = density;
 	// retrieve original shape
-	DataContainer cont;
-	blueprints.PostMessage(EntityMessage::TYPE_GET_POLYSHAPE, &cont);
-	Vector2* poly = (Vector2*)cont.GetData();
-	uint32 polyLen = cont.GetSize();
+	Vector2* poly = blueprints.GetProperty("Shape").GetValue<Vector2*>();
+	uint32 polyLen = blueprints.GetProperty("ShapeLength").GetValue<uint32>();
 	// retrieve shape transformation info
 	bool flip = mInitShapeFlip;
 	float32 angle = mInitShapeAngle;
@@ -88,7 +82,7 @@ void EntityComponents::CmpPlatformPhysics::CreateBody( const bool hasParentShip 
 		mBody->SetMassFromShapes();
 }
 
-void EntityComponents::CmpPlatformPhysics::Clean( void )
+void EntityComponents::CmpPlatformPhysics::Destroy( void )
 {
 	PropertyHolder prop = GetProperty("ParentShip");
 	if (mBody && !prop.GetValue<EntityHandle>().IsValid())
@@ -102,91 +96,8 @@ EntityMessage::eResult EntityComponents::CmpPlatformPhysics::HandleMessage( cons
 {
 	switch(msg.type)
 	{
-	case EntityMessage::TYPE_POST_INIT:
-		PostInit();
-		return EntityMessage::RESULT_OK;
-	case EntityMessage::TYPE_GET_BODY_POSITION: // I need this for drawing
-		BS_DASSERT(msg.data);
-		BS_DASSERT(mBody);
-		((Vector2*)msg.data)->Set(mBody->GetPosition());
-		return EntityMessage::RESULT_OK;
-	case EntityMessage::TYPE_GET_POSITION:
-		BS_DASSERT(msg.data);
-		((Vector2*)msg.data)->Set(GetAbsolutePosition());
-		return EntityMessage::RESULT_OK;
-	case EntityMessage::TYPE_GET_RELATIVE_POSITION:
-		BS_DASSERT(msg.data);
-		((Vector2*)msg.data)->Set(GetRelativePosition());
-		return EntityMessage::RESULT_OK;
-	case EntityMessage::TYPE_GET_ANGLE:
-		BS_DASSERT(msg.data);
-		*(float32*)msg.data = GetAngle();
-		return EntityMessage::RESULT_OK;
-	case EntityMessage::TYPE_GET_POLYSHAPE:
-		BS_DASSERT(msg.data);
-		BS_DASSERT(mShape);
-		{
-			b2PolygonShape* polyshape = (b2PolygonShape*)mShape;
-			((DataContainer*)msg.data)->SetData((uint8*)polyshape->GetVertices(), polyshape->GetVertexCount());
-		}
-		return EntityMessage::RESULT_OK;
-	case EntityMessage::TYPE_GET_PHYSICS_BODY:
-		BS_DASSERT(msg.data);
-		BS_DASSERT(mBody);
-		*(b2Body**)msg.data = mBody;
-		return EntityMessage::RESULT_OK;
-	case EntityMessage::TYPE_DETACH_PLATFORM:
-		BS_DASSERT(mBody);
-		BS_DASSERT(msg.data);
-		{
-			// Note that I must invalidate the parent ship here to update the team properly.
-			// CreateBody invokes collision checking and at that time it must be already updated.
-			((PropertyHolder)GetProperty("ParentShip")).SetValue(EntityHandle::Null);
-			PostMessage(EntityMessage::TYPE_UPDATE_TEAM);
-
-			bool recreate = *(bool*)msg.data;
-			if (recreate)
-			{
-				mInitBodyPosition = GetAbsolutePosition();
-				mInitBodyAngle = GetAngle();
-				Vector2 linVel = mBody->GetLinearVelocity();
-				float32 angVel = mBody->GetAngularVelocity();
-				mRelativePosition = Vector2_Zero;
-				Vector2 shipPos = mBody->GetPosition();
-				mBody->DestroyShape(mShape);
-				mShape = 0;
-				CreateBody(false);
-				//mBody->SetAngularVelocity(angVel);
-				//mBody->SetLinearVelocity(linVel);
-				mBody->SetAngularVelocity(angVel + MathUtils::Random(-1.0f, 1.0f));
-				Vector2 dir = mBody->GetPosition() - shipPos;
-				if (dir.x!=0 && dir.y!=0)
-				{
-					dir.Normalize();
-					mBody->SetLinearVelocity(linVel + MathUtils::Random(0, 2.0f)*dir);
-				}
-			}
-			else
-			{
-				mBody->DestroyShape(mShape);
-				mShape = 0;
-				mBody->SetMassFromShapes();
-				mBody = 0; // prevent body to be deleted upon destruction of this entity
-			}
-		}
-		return EntityMessage::RESULT_OK;
-	case EntityMessage::TYPE_EXPLOSION:
-		BS_DASSERT(msg.data);
-		{
-			Vector2 myPos = GetAbsolutePosition();
-			Vector2 exploPos = *(Vector2*)msg.data;
-			Vector2 dir = myPos - exploPos;
-			if (dir.x!=0 && dir.y!=0)
-			{
-				float32 lenSq = dir.LengthSquared();
-				mBody->ApplyForce(100.0f/lenSq*dir, myPos);
-			}
-		}
+	case EntityMessage::INIT:
+		Init();
 		return EntityMessage::RESULT_OK;
 	}
 	return EntityMessage::RESULT_IGNORED;
@@ -204,6 +115,8 @@ void EntityComponents::CmpPlatformPhysics::RegisterReflection()
 	RegisterProperty<Vector2>("LinearVelocity", &CmpPlatformPhysics::GetLinearVelocity, &CmpPlatformPhysics::SetLinearVelocity, PA_EDIT_READ | PA_SCRIPT_READ);
 	RegisterProperty<Vector2*>("Shape", &CmpPlatformPhysics::GetShape, 0, PA_EDIT_READ | PA_SCRIPT_READ);
 	RegisterProperty<uint32>("ShapeLength", &CmpPlatformPhysics::GetShapeLength, 0, PA_EDIT_READ | PA_SCRIPT_READ);
+
+	AddComponentDependency(CT_PLATFORM_LOGIC);
 }
 
 Vector2 EntityComponents::CmpPlatformPhysics::GetAbsolutePosition( void ) const
@@ -215,8 +128,7 @@ Vector2 EntityComponents::CmpPlatformPhysics::GetAbsolutePosition( void ) const
 void EntityComponents::CmpPlatformPhysics::SetAbsolutePosition( Vector2 pos )
 {
 	BS_DASSERT(mBody);
-	EntityHandle ship;
-	PostMessage(EntityMessage::TYPE_GET_PARENT, &ship);
+	EntityHandle ship = GetProperty("ParentShip").GetValue<EntityHandle>();
 	BS_DASSERT_MSG(!ship.IsValid(), "SetAbsolutePosition can be used for free platforms only");
 	mBody->SetXForm(pos, mBody->GetAngle());
 }

@@ -4,7 +4,7 @@
 #ifndef _COMPONENT_H_
 #define _COMPONENT_H_
 
-// Note that all includes necessary are already contained in Common.h, so there's no need to include them here.
+#include "../EntityMgr/EntityMessage.h"
 
 /// Set of all user defined entity components usable by entities.
 namespace EntityComponents { using namespace EntitySystem; }
@@ -17,10 +17,11 @@ namespace EntitySystem
 	public:
 
 		/// Called after the component is created. To be overriden.
-		virtual void Init(void) {}
+		/// Note that no property of the whole entity has been set yet while in this state.
+		virtual void Create(void) {}
 
 		/// Called before the component is destroyed. To be overriden.
-		virtual void Clean(void) {}
+		virtual void Destroy(void) {}
 
 		/// Called when a new message arrives. To be overriden.
 		virtual EntityMessage::eResult HandleMessage(const EntityMessage& msg);

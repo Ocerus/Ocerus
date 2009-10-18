@@ -9,8 +9,8 @@ namespace EntityComponents
 	class CmpPlatformLogic : public RTTIGlue<CmpPlatformLogic, Component>
 	{
 	public:
-		virtual void Init(void);
-		virtual void Clean(void);
+		virtual void Create(void);
+		virtual void Destroy(void);
 		virtual EntityMessage::eResult HandleMessage(const EntityMessage& msg);
 
 		static void RegisterReflection(void);

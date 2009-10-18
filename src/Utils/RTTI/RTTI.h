@@ -61,18 +61,18 @@ namespace Reflection
 
 		/// Fills a data structure with all properties of the represented class type, 
 		/// including all ancestor types.
-		void EnumProperties( AbstractPropertyList& out, const PropertyAccessFlags flagMask = PA_FULL_ACCESS );
+		void EnumProperties( AbstractPropertyList& out, const PropertyAccessFlags flagMask = PA_FULL_ACCESS ) const;
 
 		/// Fills a data structure with all properties of the represented class type, 
 		/// including all ancestor types.
-		void EnumProperties( RTTIBaseClass* owner, PropertyList& out, const PropertyAccessFlags flagMask = PA_FULL_ACCESS );
+		void EnumProperties( RTTIBaseClass* owner, PropertyList& out, const PropertyAccessFlags flagMask = PA_FULL_ACCESS ) const;
 
 		/// Fills a data structure with all component dependencies of the represented class type, 
 		/// including all ancestor types.
-		void EnumComponentDependencies(ComponentDependencyList& out);
+		void EnumComponentDependencies(ComponentDependencyList& out) const;
 
 		/// Returns a property identified by it's string key. Access restriction filter can be defined.
-		AbstractProperty* GetProperty(const StringKey key, const PropertyAccessFlags flagMask = PA_FULL_ACCESS);
+		AbstractProperty* GetProperty(const StringKey key, const PropertyAccessFlags flagMask = PA_FULL_ACCESS) const;
 
 		/// Adds a property to the RTTI.
 		void AddProperty(AbstractProperty* prop);

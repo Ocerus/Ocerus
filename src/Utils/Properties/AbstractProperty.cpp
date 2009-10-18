@@ -5,6 +5,7 @@
 void AbstractProperty::ReportConvertProblem( ePropertyType wrongType )
 {
 	gLogMgr.LogMessage("Can't convert property '", GetName(), "' from '", GetType(), "' to '", wrongType, "'", LOG_ERROR);
+	BS_ASSERT(false);
 }
 
 void AbstractProperty::ReportReadonlyProblem( void )

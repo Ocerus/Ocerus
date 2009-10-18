@@ -6,7 +6,7 @@
 #define EXPLOSION_FORCE_RATIO 10.0f
 #define KNOCKBACK_DETACH_RATIO 0.5f
 
-void EntityComponents::CmpPlatformLogic::Init(void)
+void EntityComponents::CmpPlatformLogic::Create(void)
 {
 	mBlueprints.Invalidate();
 	mHitpoints = 0;
@@ -17,7 +17,7 @@ void EntityComponents::CmpPlatformLogic::Init(void)
 	mPickCircleRadius = 0;
 }
 
-void EntityComponents::CmpPlatformLogic::Clean(void) 
+void EntityComponents::CmpPlatformLogic::Destroy(void) 
 {
 
 }
@@ -26,77 +26,23 @@ EntityMessage::eResult EntityComponents::CmpPlatformLogic::HandleMessage(const E
 {
 	switch(msg.type)
 	{
-	case EntityMessage::TYPE_POST_INIT:
+	case EntityMessage::POST_INIT:
 		{
-			mBlueprints.PostMessage(EntityMessage::TYPE_GET_MAX_HITPOINTS, &mHitpoints);
-
 			ComputePickStuff();
 		}
 		return EntityMessage::RESULT_OK;
-	case EntityMessage::TYPE_DAMAGE:
-		BS_DASSERT(msg.data);
-		{
-			PropertyHolder prop = mBlueprints.GetProperty("Material");
-			EntityHandle material = prop.GetValue<EntityHandle>();
-			prop = material.GetProperty("DurabilityRatio");
-			int32 newHP = mHitpoints - MathUtils::Round(*(float32*)msg.data / prop.GetValue<float32>());
-			if (newHP <= 0)
-				Die();
-			else
-				mHitpoints = newHP;
-		}
-		return EntityMessage::RESULT_OK;
-	case EntityMessage::TYPE_KNOCKBACK_DETACH:
-		BS_DASSERT(msg.data);
-		{
-			if (!mParentShip.IsValid())
-				return EntityMessage::RESULT_OK;
-			float32 probability = ((PropertyHolder)mBlueprints.GetProperty("BaseDetachingChance")).GetValue<float32>();
-			probability *= *(float32*)msg.data * KNOCKBACK_DETACH_RATIO;
-			if (MathUtils::Random(0, 1.0f) < probability)
-			{
-				// detach
-				mParentShip.PostMessage(EntityMessage::TYPE_REMOVE_PLATFORM, GetOwnerPtr());
-				bool recreate = true;
-				GetOwner().PostMessage(EntityMessage::TYPE_DETACH_PLATFORM, &recreate);
-			}
-		}
-		return EntityMessage::RESULT_OK;
-	case EntityMessage::TYPE_DIE:
+	case EntityMessage::DESTROY:
 		Die();
 		return EntityMessage::RESULT_OK;
-	case EntityMessage::TYPE_DETACH_PLATFORM:
-		// this assumes DETACH_PLATFORM was already processed by the physics component
-		if (*(bool*)msg.data) // recreate
-			ComputePickStuff();
-		return EntityMessage::RESULT_OK;
-	case EntityMessage::TYPE_GET_BLUEPRINTS:
-		BS_DASSERT(msg.data);
-		*(EntityHandle*)msg.data = GetBlueprints();
-		return EntityMessage::RESULT_OK;
-	case EntityMessage::TYPE_GET_PARENT:
-		BS_DASSERT(msg.data);
-		*(EntityHandle*)msg.data = GetParentShip();
-		return EntityMessage::RESULT_OK;
-	case EntityMessage::TYPE_GET_HITPOINTS:
-		BS_DASSERT(msg.data);
-		*(uint32*)msg.data = GetHitpoints();
-		return EntityMessage::RESULT_OK;
-	case EntityMessage::TYPE_ADD_PLATFORM_ITEM:
-		BS_DASSERT(msg.data);
-		mItems.push_back(*(EntityHandle*)msg.data);
-		return EntityMessage::RESULT_OK;
-	case EntityMessage::TYPE_MOUSE_PICK:
+	case EntityMessage::MOUSE_PICK:
 		BS_DASSERT(msg.data);
 		{
-			Vector2 pos;
-			PostMessage(EntityMessage::TYPE_GET_BODY_POSITION, &pos);
-			float32 angle;
-			PostMessage(EntityMessage::TYPE_GET_ANGLE, &angle);
+			Vector2 pos = GetProperty("AbsolutePosition").GetValue<Vector2>();
+			float32 angle = GetProperty("Angle").GetValue<float32>();
 			((EntityPicker*)msg.data)->Update(GetOwner(), MathUtils::Multiply(Matrix22(angle), mPickCircleCenter) + pos, mPickCircleRadius);
 		}
 		return EntityMessage::RESULT_OK;
-	case EntityMessage::TYPE_DRAW_OVERLAY:
+	case EntityMessage::DRAW_OVERLAY:
 		BS_DASSERT(msg.data);
 		DrawSelectionOverlay(*(bool*)msg.data);
 		return EntityMessage::RESULT_OK;
@@ -109,16 +55,12 @@ void EntityComponents::CmpPlatformLogic::RegisterReflection()
 	RegisterProperty<uint32>("Hitpoints", &CmpPlatformLogic::GetHitpoints, &CmpPlatformLogic::SetHitpoints, PA_EDIT_READ | PA_SCRIPT_READ);
 	RegisterProperty<EntityHandle>("Blueprints", &CmpPlatformLogic::GetBlueprints, &CmpPlatformLogic::SetBlueprints, PA_INIT | PA_EDIT_READ | PA_SCRIPT_READ);
 	RegisterProperty<EntityHandle>("ParentShip", &CmpPlatformLogic::GetParentShip, &CmpPlatformLogic::SetParentShip, PA_INIT | PA_EDIT_READ | PA_SCRIPT_READ);
-
-	AddComponentDependency(CT_PLATFORM_PHYSICS);
 }
 
 void EntityComponents::CmpPlatformLogic::DrawSelectionOverlay( const bool hover ) const
 {
-	Vector2 pos;
-	PostMessage(EntityMessage::TYPE_GET_BODY_POSITION, &pos);
-	float32 angle;
-	PostMessage(EntityMessage::TYPE_GET_ANGLE, &angle);
+	Vector2 pos = GetProperty("AbsolutePosition").GetValue<Vector2>();
+	float32 angle = GetProperty("Angle").GetValue<float32>();
 	GfxSystem::Color color(255,0,0,180);
 	if (hover)
 		color = GfxSystem::Color(255,255,255,180);
@@ -164,27 +106,7 @@ void EntityComponents::CmpPlatformLogic::Die( void )
 
 	// destroy everything on this platform
 	for (EntityList::iterator it=mItems.begin(); it!=mItems.end(); ++it)
-		it->PostMessage(EntityMessage::TYPE_DIE);
-
-	// apply some force from the explosion to the neighbourhood ship
-	prop = GetProperty("AbsolutePosition");
-	Vector2 myPos = prop.GetValue<Vector2>();
-	gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::TYPE_EXPLOSION, &myPos));
-
-	// detach the platform from the body and delete it
-	if (mParentShip.IsValid())
-	{
-		b2Body* body;
-		GetOwner().PostMessage(EntityMessage::TYPE_GET_PHYSICS_BODY, &body);
-		prop = mParentShip.GetProperty("AbsolutePosition");
-		Vector2 forceDir = prop.GetValue<Vector2>() - myPos;
-		float32 distSq = forceDir.LengthSquared();
-		body->ApplyForce(EXPLOSION_FORCE_RATIO / distSq * forceDir, myPos);
-
-		mParentShip.PostMessage(EntityMessage::TYPE_REMOVE_PLATFORM, GetOwnerPtr());
-		bool recreate = false;
-		GetOwner().PostMessage(EntityMessage::TYPE_DETACH_PLATFORM, &recreate);
-	}
+		it->PostMessage(EntityMessage::DESTROY);
 
 	// delete the entity
 	gEntityMgr.DestroyEntity(GetOwner());
@@ -193,10 +115,8 @@ void EntityComponents::CmpPlatformLogic::Die( void )
 void EntityComponents::CmpPlatformLogic::ComputePickStuff( void )
 {
 	// compute pick stuff
-	DataContainer cont;
-	PostMessage(EntityMessage::TYPE_GET_POLYSHAPE, &cont);
-	Vector2* shape = (Vector2*)cont.GetData();
-	int32 shapeLen = cont.GetSize();
+	Vector2* shape = GetProperty("Shape").GetValue<Vector2*>();
+	int32 shapeLen = GetProperty("ShapeLength").GetValue<uint32>();
 	// compute center
 	mPickCircleCenter.SetZero();
 	for (int i=0; i<shapeLen; ++i)

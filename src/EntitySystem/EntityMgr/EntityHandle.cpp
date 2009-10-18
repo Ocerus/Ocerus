@@ -1,5 +1,6 @@
 #include "Common.h"
 #include "EntityHandle.h"
+#include "EntityMessage.h"
 
 using namespace EntitySystem;
 
@@ -47,8 +48,9 @@ EntitySystem::eEntityType EntitySystem::EntityHandle::GetType( void ) const
 
 void EntitySystem::EntityHandle::FinishInit( void )
 {
-	// avoid ignored message by using EntityMgr directly
-	gEntityMgr.PostMessage(*this, EntityMessage(EntityMessage::TYPE_POST_INIT));
+	// avoid ignored message by using EntityMgr directly for posting messages
+	gEntityMgr.PostMessage(*this, EntityMessage(EntityMessage::INIT));
+	gEntityMgr.PostMessage(*this, EntityMessage(EntityMessage::POST_INIT));
 }
 
 bool EntitySystem::EntityHandle::GetProperties( PropertyList& out, const PropertyAccessFlags mask )
@@ -76,13 +78,13 @@ EntitySystem::EntityHandle::~EntityHandle( void )
 
 }
 
-EntityMessage::eResult EntityHandle::PostMessage(const EntityMessage::eType type, void* data)
+EntityMessage::eResult EntityHandle::PostMessage(const EntityMessage& msg)
 {
 	BS_DASSERT(IsValid());
-	EntityMessage::eResult result = gEntityMgr.PostMessage(*this, EntityMessage(type, data));
+	EntityMessage::eResult result = gEntityMgr.PostMessage(*this, msg);
 	if (result == EntityMessage::RESULT_ERROR)
-		gLogMgr.LogMessage("Message '", type, "' on entity '", mEntityID, "' of type '", GetType(),"' returned error", LOG_ERROR);
+		gLogMgr.LogMessage("Message '", msg.type, "' on entity '", mEntityID, "' of type '", GetType(),"' returned error", LOG_ERROR);
 	else if (result == EntityMessage::RESULT_IGNORED)
-		gLogMgr.LogMessage("Message '", type, "' on entity '", mEntityID, "' of type '", GetType(),"' was ignored", LOG_WARNING);
+		gLogMgr.LogMessage("Message '", msg.type, "' on entity '", mEntityID, "' of type '", GetType(),"' was ignored", LOG_WARNING);
 	return result;
 }

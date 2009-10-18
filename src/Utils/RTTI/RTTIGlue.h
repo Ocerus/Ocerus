@@ -26,7 +26,7 @@ namespace Reflection
 		/// Default factory function. Creates an instance of T.
 		/// The factory function is called by the system to dynamically create
 		///	class instances from class IDs.
-		static T* Create(void) { return new T(); }
+		static T* CreateInstance(void) { return new T(); }
 
 		/// Default reflection registration function. Registers nothing by default.
 		static void	RegisterReflection(void) {}
@@ -83,9 +83,14 @@ namespace Reflection
 	/// The first parameter (0) is a stub. See RTTI constructor for details.
 	/// Note that this is the place where the RegisterReflection function is being called when the program boots up.
 	template <class T, class BaseClass>
-	RTTI RTTIGlue<T, BaseClass>::mRTTI
-		( 0, RTTIGlue<T, BaseClass>::GetClassID(), typeid(T).name(), BaseClass::GetClassRTTI(), (ClassFactoryFunc)T::Create, 
-		(RegisterReflectionFunc)T::RegisterReflection );
+	RTTI RTTIGlue<T, BaseClass>::mRTTI(
+		0,
+		RTTIGlue<T, BaseClass>::GetClassID(),
+		typeid(T).name(),
+		BaseClass::GetClassRTTI(),
+		(ClassFactoryFunc)T::CreateInstance,
+		(RegisterReflectionFunc)T::RegisterReflection
+	);
 }
 
 

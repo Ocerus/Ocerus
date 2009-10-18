@@ -75,8 +75,19 @@ namespace Reflection
 			CallFunction(&parameters);
 		}
 
-		/// Returns type of this property.
-		inline ePropertyType GetType(void) const { return mProperty->GetType(); }
+		/// Returns the type of this property.
+		inline ePropertyType GetType(void) const 
+		{
+			BS_DASSERT(mProperty);
+			return mProperty->GetType();
+		}
+
+		/// Returns the name of this property.
+		inline const char* GetName(void) const
+		{
+			BS_DASSERT(mProperty);
+			return mProperty->GetName();
+		}
 
 		/// Returns true if this holder holds a valid property.
 		inline bool IsValid(void) const { return (mOwner!=0 && mProperty!=0); }

@@ -33,18 +33,20 @@ EntityMessage::eResult EntityMgr::PostMessage(EntityID id, const EntityMessage& 
 		gLogMgr.LogMessage("Can't find entity", id, LOG_ERROR);
 		return EntityMessage::RESULT_ERROR;
 	}
-	if (msg.type != EntityMessage::TYPE_POST_INIT && !ei->second->mFullyInited)
+	if (msg.type != EntityMessage::INIT && msg.type != EntityMessage::POST_INIT && !ei->second->mFullyInited)
 	{
 		gLogMgr.LogMessage("Entity '", id, "' is not initialized -> can't post messages", LOG_ERROR);
 		return EntityMessage::RESULT_ERROR;
 	}
-	if (msg.type == EntityMessage::TYPE_POST_INIT && ei->second->mFullyInited)
+	if (msg.type != EntityMessage::INIT && msg.type == EntityMessage::POST_INIT && ei->second->mFullyInited)
 	{
 		gLogMgr.LogMessage("Entity '", id, "' is already initialized", LOG_ERROR);
 		return EntityMessage::RESULT_ERROR;
 	}
-	if (msg.type == EntityMessage::TYPE_POST_INIT)
+	if (msg.type == EntityMessage::POST_INIT)
+	{
 		ei->second->mFullyInited = true;
+	}
 
 	EntityMessage::eResult result = EntityMessage::RESULT_IGNORED;
 	for (EntityComponentsIterator iter = mComponentMgr->GetEntityComponents(id); iter.HasMore(); ++iter)
@@ -219,7 +221,7 @@ bool EntitySystem::EntityMgr::LoadFromResource( ResourceSystem::ResourcePtr res 
 			// create the entity
 			PropertyList props;
 			EntityHandle entity = CreateEntity(desc, props);
-			// init properties
+			// set properties loaded from the file
 			for (ResourceSystem::XMLResource::NodeIterator cmpIt=xml->IterateChildren(entIt); cmpIt!=xml->EndChildren(entIt); ++cmpIt)
 			{
 				// skip unwanted data

@@ -2,12 +2,12 @@
 #include "CmpPlatformVisual.h"
 #include "DataContainer.h"
 
-void EntityComponents::CmpPlatformVisual::Init( void )
+void EntityComponents::CmpPlatformVisual::Create( void )
 {
 
 }
 
-void EntityComponents::CmpPlatformVisual::Clean( void )
+void EntityComponents::CmpPlatformVisual::Destroy( void )
 {
 
 }
@@ -16,7 +16,7 @@ EntityMessage::eResult EntityComponents::CmpPlatformVisual::HandleMessage( const
 {
 	switch(msg.type)
 	{
-	case EntityMessage::TYPE_DRAW_PLATFORM:
+	case EntityMessage::DRAW:
 		Draw();
 		return EntityMessage::RESULT_OK;
 	}
@@ -30,18 +30,11 @@ void EntityComponents::CmpPlatformVisual::RegisterReflection()
 
 void EntityComponents::CmpPlatformVisual::Draw( void ) const
 {
-	DataContainer cont;
-	PostMessage(EntityMessage::TYPE_GET_POLYSHAPE, &cont);
-	Vector2 pos;
-	PostMessage(EntityMessage::TYPE_GET_BODY_POSITION, &pos);
-	float32 angle;
-	PostMessage(EntityMessage::TYPE_GET_ANGLE, &angle);
-	PropertyHolder prop = GetProperty("Blueprints");
-	EntityHandle blueprints = prop.GetValue<EntityHandle>();
-	prop = blueprints.GetProperty("FillColor");
-	GfxSystem::Color fillColor = prop.GetValue<GfxSystem::Color>();
-	prop = GetProperty("InitShapeFlip");
-	bool flip = prop.GetValue<bool>();
+	Vector2 pos = GetProperty("AbsolutePosition").GetValue<Vector2>();
+	float32 angle = GetProperty("Angle").GetValue<float32>();
+	EntityHandle blueprints = GetProperty("Blueprints").GetValue<EntityHandle>();
+	GfxSystem::Color fillColor = blueprints.GetProperty("FillColor").GetValue<GfxSystem::Color>();
+	bool flip = GetProperty("InitShapeFlip").GetValue<bool>();
 	if (flip)
 	{
 		/*int32 col = fillColor.r * 130/100;
@@ -57,5 +50,5 @@ void EntityComponents::CmpPlatformVisual::Draw( void ) const
 		col = fillColor.b + 30;
 		fillColor.b = col > 255 ? 255 : col;
 	}
-	gGfxRenderer.DrawPolygonWithConversion((Vector2*)cont.GetData(), cont.GetSize(), pos, angle, fillColor, GfxSystem::Pen(GfxSystem::Color(48, 30, 27, 200)));
+	gGfxRenderer.DrawPolygonWithConversion(GetProperty("Shape").GetValue<Vector2*>(), GetProperty("ShapeLength").GetValue<uint32>(), pos, angle, fillColor, GfxSystem::Pen(GfxSystem::Color(48, 30, 27, 200)));
 }

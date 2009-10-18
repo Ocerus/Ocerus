@@ -70,18 +70,12 @@ void Core::Game::Init()
 	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("Ships/ship0.xml"));
 
 
-	// recompute mass of the ship's body
-	gEntityMgr.BroadcastMessage(EntityMessage::TYPE_PHYSICS_UPDATE_MASS);
-
-
-
 	// set camera
 	mCameraFocus.Invalidate();
-	Vector2 shipPos;
 	EntityHandle ship = gEntityMgr.FindFirstEntity("ship0");
 	if (ship.IsValid())
 	{
-		ship.PostMessage(EntityMessage::TYPE_GET_POSITION, &shipPos);
+		Vector2 shipPos = ship.GetProperty("AbsolutePosition").GetValue<Vector2>();
 		gGfxRenderer.SetCameraPos(shipPos);
 		mCameraFocus = ship;
 	}
@@ -124,7 +118,7 @@ void Core::Game::Update( const float32 delta )
 	// pick hover entity
 	MouseState& mouse = gInputMgr.GetMouseState();
 	EntityPicker picker(mouse.x, mouse.y);
-	gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::TYPE_MOUSE_PICK, &picker));
+	gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::MOUSE_PICK, &picker));
 	mHoveredEntity = picker.GetResult();
 
 	// react on input
@@ -135,8 +129,8 @@ void Core::Game::Update( const float32 delta )
 	while (physicsDelta > PHYSICS_TIMESTEP)
 	{
 		float32 stepSize = PHYSICS_TIMESTEP;
-		gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::TYPE_UPDATE_PHYSICS_SERVER, &stepSize));
-		gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::TYPE_UPDATE_PHYSICS_CLIENT, &stepSize));
+		gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::UPDATE_LOGIC, &stepSize));
+		gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::UPDATE_PHYSICS, &stepSize));
 		mPhysics->Step(stepSize, PHYSICS_ITERATIONS);
 
 		// process physics events
@@ -197,85 +191,47 @@ void Core::Game::Draw( const float32 delta)
 
 	if (mCameraFocus.IsValid())
 	{
-		Vector2 pos;
-		mCameraFocus.PostMessage(EntityMessage::TYPE_GET_POSITION, &pos);
+		Vector2 pos = mCameraFocus.GetProperty("AbsolutePosition").GetValue<Vector2>();
 		gGfxRenderer.SetCameraPos(pos);
 	}
 
 	// clear the screen
 	gGfxRenderer.ClearScreen(GfxSystem::Color(0,0,0));
 
-	// draw ships
-	gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::TYPE_DRAW_PLATFORM));
-	gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::TYPE_DRAW_PLATFORM_LINK));
 
-	// draw direction lines to the mouse cursor
-	if (mSelectedEntities.size() > 0)
+	// draw underlay under selected/hovered entities
+	bool hoveredEntityUnderlayDrawn = false;
+	for (EntityList::iterator it=mSelectedEntities.begin(); it!=mSelectedEntities.end(); ++it)
 	{
-		MouseState& mouse = gInputMgr.GetMouseState();
-		for (EntityList::iterator i=mSelectedEntities.begin(); i!=mSelectedEntities.end(); ++i)
-		{
-			eEntityType type = i->GetType();
-			if (type == ET_ENGINE || type == ET_WEAPON)
-			{
-				GfxSystem::Pen pen(GfxSystem::Color(100,100,100,100));
-				// if ALT is pressed, we want to set the direction from the ship center instead of the engine center
-				if (gInputMgr.IsKeyDown(KC_LMENU) || gInputMgr.IsKeyDown(KC_RMENU))
-				{
-					if (i == mSelectedEntities.begin())
-					{
-						EntityHandle platform;
-						i->PostMessage(EntityMessage::TYPE_GET_PARENT, &platform);
-						EntityHandle ship;
-						platform.PostMessage(EntityMessage::TYPE_GET_PARENT, &ship);
-						Vector2 pos;
-						ship.PostMessage(EntityMessage::TYPE_GET_POSITION, &pos);
-						gGfxRenderer.DrawLine(mouse.x, mouse.y, gGfxRenderer.WorldToScreenX(pos.x), gGfxRenderer.WorldToScreenY(pos.y), pen);
-					}
-				}
-				else
-				{
-					Vector2 pos;
-					i->PostMessage(EntityMessage::TYPE_GET_POSITION, &pos);
-					gGfxRenderer.DrawLine(mouse.x, mouse.y, gGfxRenderer.WorldToScreenX(pos.x), gGfxRenderer.WorldToScreenY(pos.y), pen);
-				}
-			}
-		}
+		bool hovered = false;
+		gEntityMgr.PostMessage(*it, EntityMessage(EntityMessage::DRAW_UNDERLAY, &hovered));
+		if ((*it) == mHoveredEntity) hoveredEntityUnderlayDrawn = true;
+	}
+	if (!hoveredEntityUnderlayDrawn && mHoveredEntity.IsValid())
+	{
+		bool hovered = true;
+		gEntityMgr.PostMessage(mHoveredEntity, EntityMessage(EntityMessage::DRAW_UNDERLAY, &hovered));
 	}
 
-	bool hoverAlsoSelected = false;
-	bool hover = false;
+	// draw entitites
+	gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::DRAW));
 
-	// draw underlays
-	for (EntityList::iterator i=mSelectedEntities.begin(); i!=mSelectedEntities.end(); ++i)
+	// draw overlay above selected/hovered entities
+	bool hoveredEntityOverlayDrawn = false;
+	for (EntityList::iterator it=mSelectedEntities.begin(); it!=mSelectedEntities.end(); ++it)
 	{
-		// calling via EntityMgr to avoid ignored messages
-		gEntityMgr.PostMessage(*i, EntityMessage(EntityMessage::TYPE_DRAW_UNDERLAY, &hover));
-		if (mHoveredEntity == *i)
-			hoverAlsoSelected = true;
+		bool hovered = false;
+		gEntityMgr.PostMessage(*it, EntityMessage(EntityMessage::DRAW_OVERLAY, &hovered));
+		if ((*it) == mHoveredEntity) hoveredEntityOverlayDrawn = true;
+
+	}
+	if (!hoveredEntityOverlayDrawn && mHoveredEntity.IsValid())
+	{
+		bool hovered = true;
+		gEntityMgr.PostMessage(mHoveredEntity, EntityMessage(EntityMessage::DRAW_OVERLAY, &hovered));
 	}
 
-	// draw underlay of a hovered entity
-	hover = true;
-	if (!hoverAlsoSelected && mHoveredEntity.IsValid())
-		gEntityMgr.PostMessage(mHoveredEntity, EntityMessage(EntityMessage::TYPE_DRAW_UNDERLAY, &hover));
 
-	// draw entities
-	gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::TYPE_DRAW_PLATFORM_ITEM));
-
-	// draw overlays
-	hover = false;
-	for (EntityList::iterator i=mSelectedEntities.begin(); i!=mSelectedEntities.end(); ++i)
-		gEntityMgr.PostMessage(*i, EntityMessage(EntityMessage::TYPE_DRAW_OVERLAY, &hover));
-
-	// draw overlay of a hovered entity
-	hover = true;
-	if (!hoverAlsoSelected && mHoveredEntity.IsValid())
-		gEntityMgr.PostMessage(mHoveredEntity, EntityMessage(EntityMessage::TYPE_DRAW_OVERLAY, &hover));
-
-	// draw projectiles
-	gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::TYPE_DRAW_PROJECTILE));
-	
 	// draw remaining (undrawn) particle effects
 	gPSMgr.Render();
 }
@@ -353,77 +309,6 @@ void Core::Game::MouseButtonPressed( const MouseInfo& mi, const eMouseButton btn
 		for (EntityList::iterator i=mSelectedEntities.begin(); i!=mSelectedEntities.end(); ++i)
 		{
 			eEntityType type = i->GetType();
-			// set the engine power and angle if selected
-			if (type == ET_ENGINE)
-			{
-				Vector2 pos;
-				// if ALT is pressed, we want to set the direction from the ship center instead of the engine center
-				if (gInputMgr.IsKeyDown(KC_LMENU) || gInputMgr.IsKeyDown(KC_RMENU))
-				{
-					EntityHandle platform;
-					i->PostMessage(EntityMessage::TYPE_GET_PARENT, &platform);
-					EntityHandle ship;
-					platform.PostMessage(EntityMessage::TYPE_GET_PARENT, &ship);
-					ship.PostMessage(EntityMessage::TYPE_GET_POSITION, &pos);
-				}
-				else
-				{
-					i->PostMessage(EntityMessage::TYPE_GET_POSITION, &pos);
-				}
-				Vector2 dir = cursor - pos;
-				float32 angle = MathUtils::Angle(dir);
-				i->PostMessage(EntityMessage::TYPE_SET_ANGLE, &angle);
-				// get back the clamped value
-				i->PostMessage(EntityMessage::TYPE_GET_ANGLE, &angle);
-				Vector2 unitDir = MathUtils::VectorFromAngle(angle);
-				// project the target vector onto the correct direction vector
-				float32 dot = MathUtils::Dot(dir, unitDir);
-
-				int32 screenDist = gGfxRenderer.WorldToScreenScalar(dot);
-				float32 powerRatio = (float32)screenDist / (float32)GetEnginePowerCircleRadius();
-				i->PostMessage(EntityMessage::TYPE_SET_POWER_RATIO, &powerRatio);
-			}
-			else if (type == ET_WEAPON)
-			{
-				if (!gInputMgr.IsKeyDown(KC_LMENU) && !gInputMgr.IsKeyDown(KC_RMENU) && mHoveredEntity.IsValid())
-				{
-					PropertyHolder prop;
-					prop = i->GetProperty("Target");
-					prop.SetValue(mHoveredEntity);
-					if (prop.GetValue<EntityHandle>().IsValid())
-						i->PostMessage(EntityMessage::TYPE_START_SHOOTING);
-				}
-				else
-				{
-					PropertyHolder prop;
-					prop = i->GetProperty("Target");
-					EntityHandle curTarget = prop.GetValue<EntityHandle>();
-					if (curTarget.IsValid())
-					{
-						prop.SetValue(EntityHandle::Null);
-						// note: I removed this cos it caused the weapon to stop shooting even while the mouse moved (while the right button was pressed)
-						//i->PostMessage(EntityMessage::TYPE_STOP_SHOOTING);
-					}
-
-					Vector2 pos;
-					// if ALT is pressed, we want to set the direction from the ship center instead of the weapon center
-					if (gInputMgr.IsKeyDown(KC_LMENU) || gInputMgr.IsKeyDown(KC_RMENU))
-					{
-						EntityHandle platform;
-						i->PostMessage(EntityMessage::TYPE_GET_PARENT, &platform);
-						EntityHandle ship;
-						platform.PostMessage(EntityMessage::TYPE_GET_PARENT, &ship);
-						ship.PostMessage(EntityMessage::TYPE_GET_POSITION, &pos);
-					}
-					else
-					{
-						i->PostMessage(EntityMessage::TYPE_GET_POSITION, &pos);
-					}
-					Vector2 dir = cursor - pos;
-					float32 angle = MathUtils::Angle(dir);
-					i->PostMessage(EntityMessage::TYPE_SET_ANGLE, &angle);
-				}
-			}
 		}
 	}
 	else if (btn == MBTN_MIDDLE)
@@ -477,9 +362,4 @@ void Core::Game::ProcessPhysicsEvent( const PhysicsEvent& evt )
 	EntityHandle ent2 = evt.entity2;
 	eEntityType type1 = gEntityMgr.GetEntityType(ent1);
 	eEntityType type2 = gEntityMgr.GetEntityType(ent2);
-	if (type1 == ET_PROJECTILE)
-		gEntityMgr.PostMessage(ent1, EntityMessage(EntityMessage::TYPE_STRIKE, &ent2));
-	else if (type2 == ET_PROJECTILE)
-		gEntityMgr.PostMessage(ent2, EntityMessage(EntityMessage::TYPE_STRIKE, &ent1));
-
 }

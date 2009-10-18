@@ -18,7 +18,7 @@ RTTI::RTTI(	uint8 dwStub, ClassID CLID, const char* szClassName, RTTI* pBaseClas
 		pReflectionFunc();
 }
 
-void RTTI::EnumProperties( AbstractPropertyList& out, const PropertyAccessFlags flagMask )
+void RTTI::EnumProperties( AbstractPropertyList& out, const PropertyAccessFlags flagMask ) const
 {
 	if ( mBaseRTTI )
 		mBaseRTTI->EnumProperties( out, flagMask );
@@ -27,7 +27,7 @@ void RTTI::EnumProperties( AbstractPropertyList& out, const PropertyAccessFlags 
 			out.push_back( it->second );
 }
 
-void RTTI::EnumProperties( RTTIBaseClass* owner, PropertyList& out, const PropertyAccessFlags flagMask )
+void RTTI::EnumProperties( RTTIBaseClass* owner, PropertyList& out, const PropertyAccessFlags flagMask ) const
 {
 	if ( mBaseRTTI )
 		mBaseRTTI->EnumProperties( owner, out, flagMask );
@@ -41,7 +41,7 @@ void RTTI::EnumProperties( RTTIBaseClass* owner, PropertyList& out, const Proper
 		}
 }
 
-void RTTI::EnumComponentDependencies( ComponentDependencyList& out )
+void RTTI::EnumComponentDependencies( ComponentDependencyList& out ) const
 {
 	if ( mBaseRTTI )
 		mBaseRTTI->EnumComponentDependencies(out);
@@ -49,7 +49,7 @@ void RTTI::EnumComponentDependencies( ComponentDependencyList& out )
 		out.push_back(*it);
 }
 
-AbstractProperty* RTTI::GetProperty( const StringKey key, const PropertyAccessFlags flagMask )
+AbstractProperty* RTTI::GetProperty( const StringKey key, const PropertyAccessFlags flagMask ) const
 {
 	PropertyMap::const_iterator it = mProperties.find(key);
 	if (it != mProperties.end())

@@ -8,7 +8,7 @@ using namespace EntityComponents;
 #define SLOTS_RATIO 1.0f
 #define LINKSLOTS_RATIO 1.0f
 
-void EntityComponents::CmpPlatformParams::Init( void )
+void EntityComponents::CmpPlatformParams::Create( void )
 {
 	mMaterial.Invalidate();
 	mShapeLength = 0;
@@ -26,7 +26,7 @@ void EntityComponents::CmpPlatformParams::Init( void )
 	mNumSlots = 0;
 }
 
-void EntityComponents::CmpPlatformParams::Clean( void )
+void EntityComponents::CmpPlatformParams::Destroy( void )
 {
 	if (mShape)
 	{
@@ -39,20 +39,8 @@ EntityMessage::eResult EntityComponents::CmpPlatformParams::HandleMessage( const
 {
 	switch(msg.type)
 	{
-	case EntityMessage::TYPE_POST_INIT:
+	case EntityMessage::INIT:
 		ComputeParams();
-		return EntityMessage::RESULT_OK;
-	case EntityMessage::TYPE_GET_POLYSHAPE:
-		BS_DASSERT(msg.data);
-		((DataContainer*)msg.data)->SetData((uint8*)mShape, mShapeLength);
-		return EntityMessage::RESULT_OK;
-	case EntityMessage::TYPE_GET_MAX_HITPOINTS:
-		BS_DASSERT(msg.data);
-		*(uint32*)msg.data = GetMaxHitpoints();
-		return EntityMessage::RESULT_OK;
-	case EntityMessage::TYPE_GET_MATERIAL:
-		BS_DASSERT(msg.data);
-		*(EntityHandle*)msg.data = mMaterial;
 		return EntityMessage::RESULT_OK;
 	}
 	return EntityMessage::RESULT_IGNORED;
@@ -60,12 +48,11 @@ EntityMessage::eResult EntityComponents::CmpPlatformParams::HandleMessage( const
 
 void CmpPlatformParams::ComputeParams()
 {
+	EntityHandle material = GetProperty("Material").GetValue<EntityHandle>();
 	mArea = MathUtils::ComputePolygonArea(mShape, mShapeLength);
-	float32 density;
-	mMaterial.PostMessage(EntityMessage::TYPE_GET_DENSITY, &density);
+	float32 density = material.GetProperty("Density").GetValue<float32>();
 	mMass = mArea * density;
-	float32 durabilityRatio;
-	mMaterial.PostMessage(EntityMessage::TYPE_GET_DURABILITY_RATIO, &durabilityRatio);
+	float32 durabilityRatio = material.GetProperty("DurabilityRatio").GetValue<float32>();;
 	mMaxHitpoints = MathUtils::Round(HITPOINTS_RATIO * durabilityRatio * MathUtils::Sqrt(mArea));
 	mNumSlots = MathUtils::Round(SLOTS_RATIO * mMass);
 
