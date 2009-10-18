@@ -75,6 +75,7 @@ namespace Reflection
 	class RTTIBaseClass;
 	class PropertyHolder;
 	class PropertyFunctionParameters;
+	template<class T> class TypedProperty;
 }
 
 

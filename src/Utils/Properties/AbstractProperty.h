@@ -13,8 +13,6 @@
 
 namespace Reflection
 {
-    template<class T> class TypedProperty;
-    
     /// @brief Base class for all properties.
 	/// @remarks A property represents either a field or a function of a class instance. The key advantage of properties
 	/// is that you access all of them in the same transparent way - using a string identifier. For example, this can be used to access
