@@ -10,8 +10,8 @@
 
 namespace Utils
 {
-	/// @brief A Smart pointer pattern implementation.
-	/// @remarks This pointer counts its uses and deletes the data it is pointing at only if nobody
+	/// A Smart pointer pattern implementation.
+	/// This pointer counts its uses and deletes the data it is pointing at only if nobody
 	/// points to them. This prevents the use of invalid pointers. Use whenever you acces a shared resource.
 	/// @remarks Note that this class it NOT thread-safe! A working thread-safe implementation can be found in Ogre.
 	template<class T> class SmartPointer
@@ -100,8 +100,8 @@ namespace Utils
 		/// True if the raw pointer is null.
 		inline bool IsNull(void) const { return mPointer == 0; }
 
-		/// @brief Nulls the raw pointer.
-		/// @remarks The data the raw pointer points at are deallocated during the process.
+		/// Nulls the raw pointer.
+		/// The data the raw pointer points at are deallocated during the process.
 		inline void SetNull(void)
 		{ 
 			if (mPointer)

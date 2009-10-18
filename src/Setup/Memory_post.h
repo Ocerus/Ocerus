@@ -9,8 +9,8 @@
 #include "Memory_pre.h"
 
 
-/// @brief We are disabling malloc and free as it's an old C-style way of allocating memory.
-/// @remarks We must define these macros here to prevent conflicts with standard libraries included before this line.
+/// We are disabling malloc and free as it's an old C-style way of allocating memory.
+/// We must define these macros here to prevent conflicts with standard libraries included before this line.
 #define malloc MALLOC_IS_DISABLED
 #define free FREE_IS_DISABLED
 

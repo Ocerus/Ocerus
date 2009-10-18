@@ -8,8 +8,8 @@
 
 namespace Reflection
 {
-	/// @brief A list for storing properties in their PropertyHolder.
-	/// @remarks This trick had to be done to avoid circular include dependencies (I can forward declare this class, 
+	/// A list for storing properties in their PropertyHolder.
+	/// This trick had to be done to avoid circular include dependencies (I can forward declare this class, 
 	/// but not the typedef).
 	class PropertyList : public map<StringKey, PropertyHolder>
 	{

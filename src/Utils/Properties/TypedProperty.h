@@ -15,7 +15,7 @@ namespace Reflection
 	{
 	public:
 
-		/// @brief Constructor.
+		/// Constructor.
 		/// @param accessFlags This parameter controls access to this property. It's similar to visibility in C++.
 		inline TypedProperty(const char* name, const PropertyAccessFlags accessFlags):
 		AbstractProperty(name, accessFlags) {}

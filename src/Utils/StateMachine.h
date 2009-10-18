@@ -3,8 +3,8 @@
 
 namespace Utils
 {
-	/// @brief Implementation of a basic finite state machine.
-	/// @remarks State type must be given by the template parameter T.
+	/// Implementation of a basic finite state machine.
+	/// State type must be given by the template parameter T.
 	template<typename T> class StateMachine
 	{
 	public:
@@ -17,8 +17,8 @@ namespace Utils
 		/// Returns the current state of the machine.
 		inline T GetState() { return mState; }
 
-		/// @brief Requests a change of state of the machine.
-		/// @remarks The state will be changed after the machine is updated.
+		/// Requests a change of state of the machine.
+		/// The state will be changed after the machine is updated.
 		/// If lock is set to true all subsequent requests to state change will be discarded until the machine is either
 		/// unlocked or updated.
 		bool RequestStateChange(T newState, bool lock = false)

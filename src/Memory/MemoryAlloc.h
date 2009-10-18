@@ -31,8 +31,8 @@ namespace Memory
 		ALLOC_HEAP_MAIN=0
 	};
 
-	/// @brief Custom dynamic memory allocator to allow specialized allocation of classes.
-	/// @remarks The Heap template parameter specifies the heap which will be used for allocation. To make use of this
+	/// Custom dynamic memory allocator to allow specialized allocation of classes.
+	/// The Heap template parameter specifies the heap which will be used for allocation. To make use of this
 	/// allocator, simply extend the class by it.
 	template<eAllocationType AllocType>
 	class MemoryAlloc

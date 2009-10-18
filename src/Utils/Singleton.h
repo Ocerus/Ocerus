@@ -7,8 +7,8 @@
 
 namespace Utils
 {
-	/// @brief A singleton pattern implementation taken from the Game Programming Gems.
-	/// @remarks To make a class named C singleton, simply derive it from Singleton<C>.
+	/// A singleton pattern implementation taken from the Game Programming Gems.
+	/// To make a class named C singleton, simply derive it from Singleton<C>.
 	template <typename T> class Singleton
 	{
 	public:

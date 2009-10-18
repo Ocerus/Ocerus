@@ -14,9 +14,9 @@ namespace Utils
 		/// If hashing fails, this is what you get from the HashString function.
 		const uint32 INVALID_HASH = 0xffffffff;
 
-		/// @brief Hashes a string into an integer value.
+		/// Hashes a string into an integer value.
+		/// INVALID_HASH is returned if the string cannot be hashed.
 		/// @param strLen If -1 then the whole string is used.
-		/// @remarks INVALID_HASH is returned if the string cannot be hashed.
 		uint32 HashString(const char* hashString, const int32 strLen = -1);
 
 		/// Returns one of the values previously hashed into the given hash.

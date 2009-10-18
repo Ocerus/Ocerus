@@ -5,8 +5,8 @@
 
 namespace Utils
 {
-	/// @brief This class measures time.
-	/// @remarks The timer can be in two modes - automatic or manual. If it's automatic you don't need to update it and
+	/// This class measures time.
+	/// The timer can be in two modes - automatic or manual. If it's automatic you don't need to update it and
 	/// just get the time when needed. If it's manual you have to call one of the update methods to move the time forward.
 	/// This way you have more control of the time. For example, in a game you want the timer to update only when the
 	/// game is actually in progress and is not paused.
@@ -14,8 +14,8 @@ namespace Utils
 	{
 	public:
 
-		/// @brief Constructs the timer.
-		/// @remarks If manual is set to false, the timer will be constructed in the automatic mode, otherwise
+		/// Constructs the timer.
+		/// If manual is set to false, the timer will be constructed in the automatic mode, otherwise
 		/// it will be constructed in the manual mode.
 		Timer(const bool manual = false);
 

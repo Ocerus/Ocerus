@@ -9,7 +9,7 @@
 
 namespace EntitySystem
 {
-	/// @brief This class contains all info needed to create one instance of an entity. It is basically a collection of
+	/// This class contains all info needed to create one instance of an entity. It is basically a collection of
 	///	component descriptions.
 	class EntityDescription
 	{

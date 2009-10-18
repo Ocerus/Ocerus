@@ -24,7 +24,7 @@ namespace LogSystem
 		LogMgr(void);
 		~LogMgr(void);
 
-		///	@brief Initializes the logger.
+		///	Initializes the logger.
 		/// @param name Name of the log file to be used.
 		/// @param severityLevel Messages with lower level will be discarded.
 		void Init(const string& name, eLogSeverity severityLevel);

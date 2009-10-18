@@ -10,7 +10,7 @@ using namespace EntityComponents;
 
 namespace EntitySystem
 {
-	/// @brief A set of types of all components in the system. This includes only components written in
+	/// A set of types of all components in the system. This includes only components written in
 	/// the C++ code. Other components can be registered during run-time.
 	enum eComponentType
 	{

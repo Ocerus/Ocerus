@@ -12,8 +12,8 @@ namespace ResourceSystem
 	/// Container for data stored in this resource.
 	typedef tree<string> XMLDataMap;
 
-	/// @brief This class is used to load and maintain XML resources.
-	/// @remarks The XML file is automatically parsed into the pairs of
+	/// This class is used to load and maintain XML resources.
+	/// The XML file is automatically parsed into the pairs of
 	/// node->value. Values are NOT stored typed, but as a raw text data. You have to know the type of a node to
 	/// be able to use it. Remember that you should always get data from this
 	/// class once only, and store it in an appropriate variable/class due to the necessary conversion from string

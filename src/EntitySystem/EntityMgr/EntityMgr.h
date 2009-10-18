@@ -15,7 +15,7 @@
 
 namespace EntitySystem
 {
-	/// @brief This class manages all game entities like weapons, enemy ships, projectiles, etc. Manipulation of entities is
+	/// This class manages all game entities like weapons, enemy ships, projectiles, etc. Manipulation of entities is
 	///	done via entity handles.
 	class EntityMgr : public Singleton<EntityMgr>
 	{

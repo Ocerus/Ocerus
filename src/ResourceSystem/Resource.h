@@ -9,9 +9,9 @@
 
 namespace ResourceSystem
 {
-	/// @brief This abstract class represents 1 resource in the resource system. All concrete resources must derive from this 
+	/// This abstract class represents 1 resource in the resource system. All concrete resources must derive from this 
 	///	class and it's their responsibility to load necessary data when requested.
-	/// @remarks The loading must happen inside LoadImpl method and unloading inside UnloadImpl method. There are
+	/// The loading must happen inside LoadImpl method and unloading inside UnloadImpl method. There are
 	/// helper methods OpenInputStream, CloseInputStream and GetRawInputData to make loading easier. Note that you
 	/// should never work with Rersources via direct pointers. Always use ResourcePtr smart pointer.
 	class Resource
@@ -33,15 +33,16 @@ namespace ResourceSystem
 			STATE_LOADED 
 		};
 
-		/// @remarks No need to override.
+		/// No need to override.
 		Resource(void);
-		/// @remarks Don't forget to override!
+
+		/// Don't forget to override!
 		virtual ~Resource(void);
 
 		/// Enforces this resource to be loaded. Do not override this!
 		virtual bool Load(void);
 		
-		/// @brief Enforces this resource to be unloaded. Do not override this!
+		/// Enforces this resource to be unloaded. Do not override this!
 		///	@param allowManual If allowManual is true, the resource will be unloaded even if it was manually created.
 		virtual bool Unload(bool allowManual = false);
 
@@ -62,18 +63,18 @@ namespace ResourceSystem
 
 	protected:
 
-		/// @brief Called whenever the resource is to be loaded.
-		/// @remarks Put your custom code inside the
+		/// Called whenever the resource is to be loaded.
+		/// Put your custom code inside the
 		///	implementation. You can use the OpenInputStream, CloseInputStream and GetRawInputData methods from inside.
 		virtual bool LoadImpl(void) = 0;
 
-		/// @brief Called whenever the resource is to be unloaded.
-		/// @remarks Put your custom code inside the
+		/// Called whenever the resource is to be unloaded.
+		/// Put your custom code inside the
 		///	implementation. You can use the OpenInputStream, CloseInputStream and GetRawInputData methods from inside them.
 		virtual bool UnloadImpl(void) = 0;
 
-		/// @brief Opens input stream from where raw data can be read.
-		/// @remarks Valid only from within LoadImpl! Don't forget to close 
+		/// Opens input stream from where raw data can be read.
+		/// Valid only from within LoadImpl! Don't forget to close 
 		///	the stream after you're done.
 		InputStream& OpenInputStream(eInputStreamMode = ISM_BINARY );
 
@@ -86,8 +87,8 @@ namespace ResourceSystem
 		/// Call this whenever you need to make sure the data is loaded.
 		void EnsureLoaded(void);
 
-		/// @brief Changes the state of the resource.
-		/// @remarks Don't call this unless you are doing custom loading of the resource outside of LoadImpl.
+		/// Changes the state of the resource.
+		/// Don't call this unless you are doing custom loading of the resource outside of LoadImpl.
 		inline void SetState(const eState newState) { mState = newState; }
 
 	private:

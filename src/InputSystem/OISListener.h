@@ -42,8 +42,8 @@ namespace InputSystem
 		/// Returns the current state of the mouse.
 		void GetMouseState(MouseState& state) const;
 
-		/// @brief Sets new resolution of the screen.
-		/// @remarks You should make sure the resolution is always correct to prevent any problems with mouse.
+		/// Sets new resolution of the screen.
+		/// You should make sure the resolution is always correct to prevent any problems with mouse.
 		void SetResolution(uint32 width, uint32 height);
 
 	private:

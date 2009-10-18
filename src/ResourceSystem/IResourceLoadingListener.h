@@ -8,7 +8,7 @@
 
 namespace ResourceSystem
 {
-	/// @brief This class provides callbacks from the resource manager, so it can be used to display info about resource
+	/// This class provides callbacks from the resource manager, so it can be used to display info about resource
 	///	loading.
 	class IResourceLoadingListener
 	{
@@ -17,7 +17,7 @@ namespace ResourceSystem
 		IResourceLoadingListener(void) {}
 		virtual ~IResourceLoadingListener(void) {}
 
-		/// @brief Called when a group of resources is being loaded. In resourceCount you are told how many resources will be
+		/// Called when a group of resources is being loaded. In resourceCount you are told how many resources will be
 		///	loaded, so that you have an estimate.
 		virtual void ResourceGroupLoadStarted(const string& groupName, uint32 resourceCount) = 0;
 

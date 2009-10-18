@@ -8,8 +8,8 @@
 #include "Singleton.h"
 #include "ComponentIterators.h"
 
-/// @brief Entity system manages game entities and their parts. 
-/// @remarks However, it takes care of their logical representation and
+/// Entity system manages game entities and their parts. 
+/// However, it takes care of their logical representation and
 /// leaves optimizing of other tasks to other system. For example, the rendering system can use an optimization data
 /// structure for faster visibility culling of entities.
 namespace EntitySystem
@@ -17,7 +17,7 @@ namespace EntitySystem
 	/// Type used for a registration function of individual components.
 	typedef Component* (*ComponentCreationMethod)(void);
 
-	/// @brief This class manages instances of all entity components in the system. Every entity consist only of these
+	/// This class manages instances of all entity components in the system. Every entity consist only of these
 	/// components plus some minor attributes.
 	/// @remarks
 	/// Components are registered automatically by taking their definitions from the ComponentTypes.h file. Apart

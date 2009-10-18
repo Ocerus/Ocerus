@@ -18,9 +18,9 @@ namespace InputSystem
 	// make sense to forward declare it in Forwards.h.
 	class OISListener;
   
-	/// @brief This class processes all input from external devices such as mouse, keyboard or joystick. You can query its
+	/// This class processes all input from external devices such as mouse, keyboard or joystick. You can query its
 	///	current state or register for event callbacks.
-	/// @remarks Note that it must be updated reguralry by calling CaptureInput.
+	/// Note that it must be updated reguralry by calling CaptureInput.
 	class InputMgr : public Singleton<InputMgr>, public GfxSystem::IScreenListener
 	{
 	public:

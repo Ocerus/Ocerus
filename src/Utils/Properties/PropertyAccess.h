@@ -6,8 +6,8 @@
 
 namespace Reflection
 {
-	/// @brief Restrictions of access which can be granted to a property.
-	/// @remarks The property can be access from scripts, from editor, during the init, ... By using these values you can
+	/// Restrictions of access which can be granted to a property.
+	/// The property can be access from scripts, from editor, during the init, ... By using these values you can
 	/// define a filter and forbid to access certain properties from certain parts of the code.
 	///	Note that it is assumed that this type fits into PropertyAccessFlags!
 	enum ePropertyAccess 

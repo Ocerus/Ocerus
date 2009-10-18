@@ -10,8 +10,8 @@
 
 namespace Reflection
 {
-	/// @brief Value type of a property.
-	/// @remarks It is used for runtime type checks.
+	/// Value type of a property.
+	/// It is used for runtime type checks.
 	enum ePropertyType
 	{
 		#define PROPERTY_TYPE(typeID, typeClass, defaultValue) typeID,
@@ -22,7 +22,7 @@ namespace Reflection
 		NUM_PROPERTY_TYPES
 	};
 
-	/// @brief This namespace contains templatized functions associated in compile-time with specific property types and values.
+	/// This namespace contains templatized functions associated in compile-time with specific property types and values.
 	namespace PropertyTypes
 	{
 		/// Returns the type ID associated with the templatized type.

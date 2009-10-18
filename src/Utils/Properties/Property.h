@@ -11,7 +11,7 @@
 
 namespace Reflection
 {
-	/// @brief Fully defined property class.
+	/// Fully defined property class.
 	/// @remarks
 	/// The class specifies the property's name and its type. The getters/setters are bound using function pointers.
 	///	The template parameter OwnerType is a class that the getter and setter are members of. The template

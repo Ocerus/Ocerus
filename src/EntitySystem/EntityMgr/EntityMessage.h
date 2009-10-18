@@ -6,8 +6,7 @@
 
 namespace EntitySystem
 {
-	/// @brief Defines messages which can be send to entities.
-	/// @remarks
+	/// Defines messages which can be send to entities.
 	/// After the message is sent to an entity, it will go through all of its components and hope one (or more)
 	/// of them picks it up.
 	struct EntityMessage

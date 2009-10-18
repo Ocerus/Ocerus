@@ -10,7 +10,7 @@ namespace InputSystem
 {
 
 	/// Key code constants.
-	/// @remarks The codes are copied from OIS, so you can cast the type directly from and to OIS.
+	/// The codes are copied from OIS, so you can cast the type directly from and to OIS.
 	enum eKeyCode
 	{
 		KC_UNASSIGNED  = 0x00,

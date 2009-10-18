@@ -9,7 +9,7 @@
 
 namespace EntitySystem
 {
-	/// @brief Set of all entity types in the system. This includes only entities defined in
+	/// Set of all entity types in the system. This includes only entities defined in
 	/// the C++ code. Other entities can be registered during run-time.
 	enum eEntityType
 	{

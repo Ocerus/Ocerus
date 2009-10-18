@@ -9,16 +9,16 @@
 /// This namespace contains utility classes and functions.
 namespace Utils
 {
-	/// @brief This class stores a pointer to a data buffer and its size. It is used to retrieve data from a function
+	/// This class stores a pointer to a data buffer and its size. It is used to retrieve data from a function
 	/// where it is passed via reference.
-	/// @remarks Note that the class doesn't allocate nor deallocate any memory until requested by calling Release.
+	/// Note that the class doesn't allocate nor deallocate any memory until requested by calling Release.
 	class DataContainer
 	{
 	public:
 
 		DataContainer(void): mData(0), mSize (0) {}
 
-		/// @remarks Note that the destructor doesn't destroy the carried data.
+		/// Note that the destructor doesn't destroy the carried data.
 		~DataContainer(void) {}
 
 		/// Sets the data to be carried.

@@ -13,15 +13,15 @@
 
 namespace Reflection
 {
-    /// @brief Base class for all properties.
-	/// @remarks A property represents either a field or a function of a class instance. The key advantage of properties
+    /// Base class for all properties.
+	/// A property represents either a field or a function of a class instance. The key advantage of properties
 	/// is that you access all of them in the same transparent way - using a string identifier. For example, this can be used to access
 	/// the properties from a script or a GUI editor in a very easy way.
 	class AbstractProperty
 	{
 	public:
 
-		/// @brief Constructor.
+		/// Constructor.
 		/// @param accessFlags This parameter controls access to this property. It's similar to visibility in C++.
 		inline AbstractProperty( const char* szName, const PropertyAccessFlags accessFlags ):
 		mKey(szName),

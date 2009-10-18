@@ -5,8 +5,8 @@
 
 namespace Utils
 {
-	/// @brief This class serves as a key into maps and other structures where we want to index data using strings, but we need high speed as well.
-	/// @remarks The string value is hashed and the result is then used as a decimal representation of the string.
+	/// This class serves as a key into maps and other structures where we want to index data using strings, but we need high speed as well.
+	/// The string value is hashed and the result is then used as a decimal representation of the string.
 	class StringKey
 	{
 	public:

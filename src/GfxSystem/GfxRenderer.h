@@ -64,10 +64,10 @@ namespace GfxSystem
 
 		bool ClearScreen(const Color& color) const;
 
-		/// @remarks Note that anchor determines the rotation/scaling pivot.
+		/// Note that anchor determines the rotation/scaling pivot.
 		bool DrawImage(const TexturePtr& image, int32 x, int32 y, uint8 anchor = 0, float32 angle = 0.0f, const Color& color = Color::FullColor, float32 scale = 1.0f) const;
 		bool DrawImage(const TexturePtr& image, const Point& pos, uint8 anchor = 0, float32 angle = 0.0f, const Color& color = Color::FullColor, float32 scale = 1.0f) const;
-		/// @remarks This version does a conversion from world space
+		/// This version does a conversion from world space
 		bool DrawImageWithConversion(const TexturePtr& image, const Vector2& pos, uint8 anchor = 0, float32 angle = 0.0f, const Color& color = Color::FullColor, float32 scale = 1.0f) const;
 		/// This version is made specially to support GUI
 		bool DrawImage(const TexturePtr& image, const Rect& textureRect, const Rect& destRect, const ColorRect& colors = ColorRect() ) const;
@@ -75,7 +75,7 @@ namespace GfxSystem
 
 		bool DrawLine(int32 x1, int32 y1, int32 x2, int32 y2, const Pen& pen) const;
 		bool DrawLine(const Point& begin, const Point& end, const Pen& pen) const;
-		/// @remarks This version does a conversion from world space
+		/// This version does a conversion from world space
 		bool DrawLineWithConversion(const Vector2& begin, const Vector2& end, const Pen& pen) const;
 
 		bool DrawPolygon(Point* vertices, int vertices_len, const TexturePtr& image, const Pen& outline, float32 angle = 0.0f, const Color& color = Color::FullColor, float32 scale = 1.0f, float32 textureAngle = 0.0f, float32 textureScale = 1.0f) const;
@@ -86,12 +86,12 @@ namespace GfxSystem
 
 		bool DrawQuad(Point* const vertices, const TexturePtr texture, Vector2* const textureCoords, Color* const vertexColors);
 
-		/// @remarks This version does a conversion from world space
+		/// This version does a conversion from world space
 		bool DrawPolygonWithConversion(const Vector2* vertices, int vertices_len, const Vector2& offsetPosition, const float32 offsetAngle, const Color& fillColor, const Pen& outline = Pen::NullPen) const;
 
 		bool DrawCircle(const Point& center, const int32 radius, const Color& fillColor, const Pen& outline = Pen::NullPen, const float32 minAngle = 0.0f, const float32 maxAngle = MathUtils::TWO_PI) const;
 
-		/// @remarks Note that coords are in percentage values relative to the screen bounds.
+		/// Note that coords are in percentage values relative to the screen bounds.
 		void DrawString( float32 x, float32 y, const string & id,
 							 const string & text, const Color color = Color(255,255,255),
 							 uint8 text_anchor =  ANCHOR_LEFT | ANCHOR_TOP,
