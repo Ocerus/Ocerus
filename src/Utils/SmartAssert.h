@@ -39,4 +39,6 @@ void DisplayAssert(const char* msg, const char* file, const int line);
 #define BS_DASSERT_MSG(expr, msg) ((void)0)
 
 #endif
+
+#define BS_NOT_REACHED() BS_ASSERT_MSG(0, "NOT_REACHED")
 //@}
