@@ -49,4 +49,9 @@
 #include "../Utils/GlobalProperties.h"
 
 
+
+// Unit test definitions should come last probably.
+#include "../Core/UnitTests.h"
+
+
 #endif

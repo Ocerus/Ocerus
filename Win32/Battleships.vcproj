@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../src/Precompiled;../src/Utils;../externalLibs/boost/inc;../externalLibs/hge/include;../externalLibs/ois/includes;../externalLibs/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib"
+				AdditionalIncludeDirectories="../src/Precompiled;../src/Utils;../externalLibs/boost/inc;../externalLibs/hge/include;../externalLibs/ois/includes;../externalLibs/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib;&quot;../externalLibs/UnitTest++/src&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;USE_ASSERT"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="true"
@@ -129,7 +129,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="../src/Precompiled;../src/Utils;../externalLibs/boost/inc;../externalLibs/hge/include;../externalLibs/ois/includes;../externalLibs/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib"
+				AdditionalIncludeDirectories="../src/Precompiled;../src/Utils;../externalLibs/boost/inc;../externalLibs/hge/include;../externalLibs/ois/includes;../externalLibs/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib;&quot;../externalLibs/UnitTest++/src&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="false"
@@ -214,7 +214,7 @@
 				Optimization="2"
 				InlineFunctionExpansion="1"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories="../src/Precompiled;../src/Utils;../externalLibs/boost/inc;../externalLibs/hge/include;../externalLibs/ois/includes;../externalLibs/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib"
+				AdditionalIncludeDirectories="../src/Precompiled;../src/Utils;../externalLibs/boost/inc;../externalLibs/hge/include;../externalLibs/ois/includes;../externalLibs/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib;&quot;../externalLibs/UnitTest++/src&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;USE_ASSERT"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="true"
@@ -247,6 +247,8 @@
 				IgnoreAllDefaultLibraries="false"
 				IgnoreDefaultLibraryNames="libci.lib;libcmt.lib"
 				GenerateDebugInformation="true"
+				GenerateMapFile="false"
+				MapFileName="link.map"
 				SubSystem="2"
 				OptimizeReferences="0"
 				EnableCOMDATFolding="0"
@@ -279,10 +281,10 @@
 			/>
 		</Configuration>
 		<Configuration
-			Name="LibDebug|Win32"
+			Name="TestDebug|Win32"
 			OutputDirectory="bin\$(ConfigurationName)"
 			IntermediateDirectory="bin\$(ConfigurationName)"
-			ConfigurationType="4"
+			ConfigurationType="1"
 			CharacterSet="0"
 			>
 			<Tool
@@ -303,8 +305,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../src/Precompiled;../src/Utils;../externalLibs/boost/inc;../externalLibs/hge/include;../externalLibs/ois/includes;../externalLibs/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;USE_ASSERT"
+				AdditionalIncludeDirectories="../src/Precompiled;../src/Utils;../externalLibs/boost/inc;../externalLibs/hge/include;../externalLibs/ois/includes;../externalLibs/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib;&quot;../externalLibs/UnitTest++/src&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;USE_ASSERT;UNIT_TESTS"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -327,10 +329,24 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
+				Name="VCLinkerTool"
+				AdditionalDependencies="CEGUIBase_d.lib freetype_d.lib pcre_d.lib CEGUIExpatParser_d.lib CEGUIFalagardWRBase_Static_d.lib"
+				OutputFile="bin/$(ConfigurationName)/$(ProjectName).exe"
+				LinkIncremental="2"
+				AdditionalLibraryDirectories="../externalLibs/boost/lib;../externalLibs/cegui/lib;../externalLibs/cegui/dependencies/lib"
+				IgnoreAllDefaultLibraries="false"
+				IgnoreDefaultLibraryNames="libci.lib;libcmtd.lib"
+				GenerateDebugInformation="true"
+				SubSystem="1"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
+				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -342,8 +358,11 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine=""
+				CommandLine="copy /V /Y /B ..\externalLibs\cegui\bin\vs9\Debug\*.dll &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /V /Y /B ..\externalLibs\expat\bin\Debug\*.dll &quot;$(OutDir)&quot;&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>
@@ -467,7 +486,7 @@
 							/>
 						</FileConfiguration>
 						<FileConfiguration
-							Name="LibDebug|Win32"
+							Name="TestDebug|Win32"
 							>
 							<Tool
 								Name="VCCLCompilerTool"
@@ -749,6 +768,38 @@
 					</File>
 				</Filter>
 			</Filter>
+			<Filter
+				Name="test"
+				>
+				<File
+					RelativePath="..\src\Utils\test\TestMath.cpp"
+					>
+					<FileConfiguration
+						Name="Develop|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							GeneratePreprocessedFile="0"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\src\Utils\test\TestStringConverter.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src\Utils\test\TestTimer.cpp"
+					>
+					<FileConfiguration
+						Name="Develop|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							GeneratePreprocessedFile="0"
+						/>
+					</FileConfiguration>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="ResourceSystem"
@@ -888,6 +939,10 @@
 					RelativePath="..\src\Core\LoadingScreen.h"
 					>
 				</File>
+				<File
+					RelativePath="..\src\Core\UnitTests.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="src"
@@ -904,7 +959,7 @@
 						/>
 					</FileConfiguration>
 					<FileConfiguration
-						Name="LibDebug|Win32"
+						Name="TestDebug|Win32"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
@@ -926,6 +981,10 @@
 				</File>
 				<File
 					RelativePath="..\src\Core\main.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src\Core\UnitTests.cpp"
 					>
 				</File>
 			</Filter>
@@ -1144,11 +1203,12 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="LibDebug|Win32"
+					Name="TestDebug|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
 						UsePrecompiledHeader="1"
+						ShowIncludes="false"
 					/>
 				</FileConfiguration>
 			</File>
