@@ -69,7 +69,6 @@ if (EXPAT_FOUND)
     include_directories(${EXPAT_INCLUDE_DIRS})
 else (EXPAT_FOUND)
     message(FATAL_ERROR "Expat library cannot be found in your system.")
-    #TODO: use bundled expat
 endif (EXPAT_FOUND)
 
 ###############
@@ -80,9 +79,17 @@ if (CEGUI_FOUND)
     include_directories(${CEGUI_INCLUDE_DIRS}/CEGUI)
 else (CEGUI_FOUND)
     message(FATAL_ERROR "CEGUI library cannot be found in your system.")
-    #TODO: use bundled CEGUI
 endif (CEGUI_FOUND)
 
+###############
+# UnitTest++
+###############
+find_package(UnitTest++ 1.4 REQUIRED)
+if (UNITTEST++_FOUND)
+    include_directories(${UNITTEST++_INCLUDE_DIR})
+else (UNITTEST++_FOUND)
+    message(FATAL_ERROR "UnitTest++ library cannot be found in your system.")
+endif (UNITTEST++_FOUND)
 
 
 ###############################################################################
@@ -103,7 +110,6 @@ set(Core_SRCS
 	src/Core/Config.cpp
 	src/Core/Game.cpp
 	src/Core/LoadingScreen.cpp
-	src/Core/main.cpp
 )
 
 set(EntitySystem_SRCS
@@ -186,7 +192,7 @@ include_directories(
 
 set(CMAKE_CXX_FLAGS "-g -Wall")
 
-add_executable(ocerus 
+add_library(ocerus-engine STATIC
     ${Core_SRCS}
     ${EntitySystem_SRCS}
     ${GfxSystem_SRCS}
@@ -200,14 +206,27 @@ add_executable(ocerus
     ${Utils_SRCS}
 )
 
-target_link_libraries(ocerus
+target_link_libraries(ocerus-engine
     ${Box2D_LIBRARIES}
     ${rudeconfig_LIBRARIES}
-    ${OIS_LIBRARIES} 
+    ${OIS_LIBRARIES}
     ${Boost_LIBRARIES}
     ${EXPAT_LIBRARIES}
     ${CEGUI_LIBRARIES}
+    ${UNITTEST++_LIBRARY}
 )
 
+add_executable(ocerus src/Core/main.cpp)
 
+target_link_libraries(ocerus ocerus-engine)
 
+###############################################################################
+###                             Ocerus tests                                ###
+###############################################################################
+file(GLOB Tests_SRCS src/*/test/Test*.cpp src/*/*/test/Test*.cpp src/*/*/*/test/Test*.cpp)
+
+add_executable(test-ocerus src/Core/UnitTests.cpp ${Tests_SRCS})
+
+set_target_properties(test-ocerus PROPERTIES COMPILE_FLAGS "-DUNIT_TESTS")
+
+target_link_libraries(test-ocerus ocerus-engine)

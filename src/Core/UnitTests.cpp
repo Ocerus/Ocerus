@@ -7,10 +7,12 @@
 
 
 int main(int argc, char* argv[])
-{	
+{
 	UnitTest::RunAllTests();
-	getchar();
 
+#ifdef __WIN__
+	getchar();
+#endif
 	return 0;
 };
 
