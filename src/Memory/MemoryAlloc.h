@@ -14,9 +14,10 @@
 #  undef delete
 #endif
 
+#ifdef __WIN__
 // Supress the warning of unused throw reference.
 #pragma warning(disable: 4290)
-
+#endif
 
 // We are currently using the standard memory allocator. Remove this when we switch to custom memory allocator.
 #include <cstdlib>
@@ -44,7 +45,7 @@ namespace Memory
 
 		void* operator new( std::size_t sz ) throw(std::bad_alloc)
 		{
-			return malloc(sz); 
+			return malloc(sz);
 		}
 
 		void operator delete( void* ptr ) throw()
@@ -54,7 +55,7 @@ namespace Memory
 
 		void* operator new( std::size_t sz, const std::nothrow_t& )
 		{
-			return malloc(sz); 
+			return malloc(sz);
 		}
 
 		void operator delete( void* ptr, const std::nothrow_t& )

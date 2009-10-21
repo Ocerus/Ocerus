@@ -38,7 +38,7 @@ namespace EntitySystem
 
 		/// Priorities of entity types
 		static uint8* msPriorities;
-		
+
 		/// Picking data.
 		Vector2 mCursorWorldPosition;
 
@@ -50,7 +50,7 @@ namespace EntitySystem
 
 		/// Disabled.
 		EntityPicker(const EntityPicker& rhs) {}
-		EntityPicker& operator=(const EntityPicker& rhs) {}
+		EntityPicker& operator=(const EntityPicker& rhs) { return *this; }
 	};
 }
 

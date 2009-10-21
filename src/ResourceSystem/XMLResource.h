@@ -7,7 +7,7 @@
 #include "Base.h"
 #include "../ResourceSystem/Resource.h"
 
-namespace ResourceSystem 
+namespace ResourceSystem
 {
 	/// Container for data stored in this resource.
 	typedef tree<string> XMLDataMap;
@@ -59,8 +59,8 @@ namespace ResourceSystem
 			friend class XMLResource;
 
 			/// Private ctor for internal use by XMLResource.
-			NodeIterator(XMLResource* xml, const XMLDataMap::sibling_iterator iter): 
-			   mOwner(xml), XMLDataMap::sibling_iterator(iter) {}
+			NodeIterator(XMLResource* xml, const XMLDataMap::sibling_iterator iter):
+				XMLDataMap::sibling_iterator(iter), mOwner(xml) {}
 
 			NodeIterator(void) {}
 
@@ -112,7 +112,7 @@ namespace ResourceSystem
 	protected:
 
 		virtual bool LoadImpl(void);
-		virtual bool UnloadImpl(void);	
+		virtual bool UnloadImpl(void);
 
 	private:
 

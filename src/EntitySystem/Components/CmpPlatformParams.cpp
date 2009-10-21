@@ -42,6 +42,8 @@ EntityMessage::eResult EntityComponents::CmpPlatformParams::HandleMessage( const
 	case EntityMessage::INIT:
 		ComputeParams();
 		return EntityMessage::RESULT_OK;
+	default:
+		break;
 	}
 	return EntityMessage::RESULT_IGNORED;
 }
@@ -57,7 +59,7 @@ void CmpPlatformParams::ComputeParams()
 	mNumSlots = MathUtils::Round(SLOTS_RATIO * mMass);
 
 	// compute perimeter of the BS of the platform
-	Vector2 center;
+	Vector2 center(0, 0);
 	for (uint32 i=0; i<mShapeLength; ++i)
 		center += mShape[i];
 	center *= 1.0f/mShapeLength;
@@ -68,7 +70,7 @@ void CmpPlatformParams::ComputeParams()
 		if (dist > perimeter)
 			perimeter = dist;
 	}
-	mNumLinkSlots = MathUtils::Round(LINKSLOTS_RATIO * perimeter); 
+	mNumLinkSlots = MathUtils::Round(LINKSLOTS_RATIO * perimeter);
 	mBaseDetachingChance = 0.5f;
 }
 

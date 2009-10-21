@@ -2,8 +2,8 @@
 #include "RTTI.h"
 #include "../Properties.h"
 
-RTTI::RTTI(	uint8 dwStub, ClassID CLID, const char* szClassName, RTTI* pBaseClassRTTI, 
-				ClassFactoryFunc pFactory, RegisterReflectionFunc pReflectionFunc ) : 
+RTTI::RTTI(	uint8 dwStub, ClassID CLID, const char* szClassName, RTTI* pBaseClassRTTI,
+				ClassFactoryFunc pFactory, RegisterReflectionFunc pReflectionFunc ) :
 	mCLID			( CLID				),
 	mBaseRTTI		( pBaseClassRTTI	),
 	mClassFactory( pFactory			),
@@ -11,7 +11,9 @@ RTTI::RTTI(	uint8 dwStub, ClassID CLID, const char* szClassName, RTTI* pBaseClas
 {
 	BS_ASSERT( CLID != 0 );
 	BS_ASSERT( strlen(szClassName) <= CLASSNAME_LENGTH && "RTTI:Class name too long" );
+#ifdef __WIN__
 	#pragma warning(disable: 4996)
+#endif
 	strcpy( mClassName, szClassName );
 
 	if ( pReflectionFunc )

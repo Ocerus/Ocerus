@@ -14,12 +14,12 @@ namespace GUISystem {
 	CEGUI::MouseButton ConvertMouseButtonEnum(const InputSystem::eMouseButton btn);
 	//@}
 
-	GUIMgr::GUIMgr() : 
+	GUIMgr::GUIMgr() :
 		mConsoleIsLoaded(false),
 		mCegui(0),
 		mCurrentWindowRoot(0),
-		mRendererGate(0),
-		mResourceGate(0)
+		mResourceGate(0),
+		mRendererGate(0)
 	{
 		gLogMgr.LogMessage("******** GUIMgr init *********");
 		mRendererGate = new RendererGate();
@@ -44,15 +44,15 @@ namespace GUISystem {
 
 		mCegui->setDefaultFont( "Commonwealth-10" );
 		CEGUI::System::getSingleton().setDefaultMouseCursor( "TaharezLook", "MouseArrow" );
-		
+
 		string layout = GlobalProperties::Get<Core::Config>("GlobalConfig").GetString("Layout", "Battleships.layout", "CEGUI");
 
 		CEGUI::Window* CurrentWindowRoot =
-			CEGUI::WindowManager::getSingleton().loadWindowLayout( layout.c_str() );		
+			CEGUI::WindowManager::getSingleton().loadWindowLayout( layout.c_str() );
 
 		CEGUI::System::getSingleton().setGUISheet( CurrentWindowRoot );
 		RegisterEvents();
-		
+
 	}
 
 	void GUIMgr::LoadStyle( void )
@@ -87,7 +87,7 @@ namespace GUISystem {
 		BS_ASSERT(mCegui);
 
 		CEGUI::Window* console = CEGUI::WindowManager::getSingleton().getWindow("ConsoleRoot/ConsolePrompt");
-		console->subscribeEvent(CEGUI::Editbox::EventTextAccepted, CEGUI::Event::Subscriber(&GUIMgr::ConsoleCommandEvent, this));	
+		console->subscribeEvent(CEGUI::Editbox::EventTextAccepted, CEGUI::Event::Subscriber(&GUIMgr::ConsoleCommandEvent, this));
 	}
 
 	void GUIMgr::ConsoleTrigger() {
@@ -132,7 +132,7 @@ namespace GUISystem {
 
 	void GUIMgr::LoadLastCommand() {
 		if (mLastCommands.size() == 0)
-			return;		
+			return;
 		if (mCurrentLastSelected == mLastCommands.end()) {
 			mCurrentLastSelected = mLastCommands.begin();
 		}
@@ -163,9 +163,9 @@ namespace GUISystem {
 
 		pane->addItem(new_item);
 		pane->ensureItemIsVisible(new_item);
-		
+
 		uint32 item_count;
-		while (item_count = pane->getItemCount() > 50)
+		while ((item_count = pane->getItemCount()) > 50)
 			pane->removeItem(pane->getListboxItemFromIndex(item_count - 1));
 
 		set<IConsoleListener*>::iterator iter = mConsoleListeners.begin();
@@ -192,7 +192,7 @@ namespace GUISystem {
 		}
 
 		bool res = mCegui->injectKeyDown(KeyMapperOIStoCEGUI(ke.keyAction));
-		if (!res)			
+		if (!res)
 			mCegui->injectChar(ke.keyCode);
 	}
 
@@ -275,12 +275,14 @@ namespace GUISystem {
 
 	CEGUI::MouseButton ConvertMouseButtonEnum(const InputSystem::eMouseButton btn) {
 		switch (btn) {
-			case InputSystem::MBTN_LEFT:
-				return CEGUI::LeftButton;
-			case InputSystem::MBTN_RIGHT:
-				return CEGUI::RightButton;
-			case InputSystem::MBTN_MIDDLE:
-				return CEGUI::MiddleButton;
+		case InputSystem::MBTN_LEFT:
+			return CEGUI::LeftButton;
+		case InputSystem::MBTN_RIGHT:
+			return CEGUI::RightButton;
+		case InputSystem::MBTN_MIDDLE:
+			return CEGUI::MiddleButton;
+		case InputSystem::MBTN_UNKNOWN:
+			break;
 		}
 		return CEGUI::LeftButton;
 	}

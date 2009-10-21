@@ -6,7 +6,7 @@
 
 using namespace ResourceSystem;
 
-Resource::Resource(): mState(STATE_UNINITIALIZED), mInputFileStream(0), mIsManual(false) {}
+Resource::Resource(): mIsManual(false), mState(STATE_UNINITIALIZED), mInputFileStream(0) {}
 
 Resource::~Resource()
 {
@@ -82,7 +82,7 @@ bool Resource::Unload(bool allowManual)
 		// we have a real problem if we can't dealloc a resource
 		gLogMgr.LogMessage("Resource '" + mName + "' could NOT be unloaded", LOG_ERROR);
 		BS_ASSERT_MSG(result, "Resource could NOT be unloaded");
-	} else 
+	} else
 	{
 		gLogMgr.LogMessage("Resource '"+mName+"' unloaded");
 	}
@@ -107,7 +107,7 @@ void ResourceSystem::Resource::GetRawInputData( DataContainer& outData )
 	outData.Release();
 	vector<uint8*> tmps;
 	const uint32 tmpMaxSize = 1024; // size of one tmp buffer
-	uint32 tmpLastSize; // size of the last tmp buffer in the vector
+	uint32 tmpLastSize = 0; // size of the last tmp buffer in the vector
 	uint32 bufferSize = 0; // resulting size
 	InputStream& is = OpenInputStream(ISM_BINARY);
 	while (is.good())

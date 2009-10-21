@@ -22,10 +22,10 @@ void EntitySystem::EntityPicker::CleanPriorities( void )
 		delete[] msPriorities;
 }
 
-EntitySystem::EntityPicker::EntityPicker( const Vector2& worldCursorPos ): 
-	mResult(), 
-	mResultType(ET_UNKNOWN),
-	mCursorWorldPosition(worldCursorPos) 
+EntitySystem::EntityPicker::EntityPicker( const Vector2& worldCursorPos ):
+	mCursorWorldPosition(worldCursorPos),
+	mResult(),
+	mResultType(ET_UNKNOWN)
 {
 
 }

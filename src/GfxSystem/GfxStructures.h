@@ -24,8 +24,8 @@ namespace GfxSystem
 	struct Color
 	{
 		Color(uint8 _r, uint8 _g, uint8 _b, uint8 _a = 255): r(_r), g(_g), b(_b), a(_a) {}
-		Color(uint32 color) : a((uint8)(color >> 24)), r((uint8)( (color >> 16)&0x000000FF )),
-			g((uint8)( (color >> 8)&0x000000FF )), b((uint8)( color&0x000000FF )) {}
+		Color(uint32 color) : r((uint8)( (color >> 16)&0x000000FF )), g((uint8)( (color >> 8)&0x000000FF )),
+			b((uint8)( color&0x000000FF )), a((uint8)(color >> 24)) {}
 		Color(void): r(0), g(0), b(0), a(255) {}
 		inline uint32 GetARGB() const { return a << 24 | r << 16 | g << 8 | b; }
 		uint8 r, g, b, a;

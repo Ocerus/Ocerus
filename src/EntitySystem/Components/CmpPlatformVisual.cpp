@@ -19,6 +19,8 @@ EntityMessage::eResult EntityComponents::CmpPlatformVisual::HandleMessage( const
 	case EntityMessage::DRAW:
 		Draw();
 		return EntityMessage::RESULT_OK;
+	default:
+		break;
 	}
 	return EntityMessage::RESULT_IGNORED;
 }

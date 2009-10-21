@@ -7,9 +7,9 @@
 #include "Base.h"
 #include "ComponentEnums.h"
 
-namespace EntitySystem 
+namespace EntitySystem
 {
-	
+
 	/// A list of generic components.
 	typedef vector<Component*> ComponentsList;
 
@@ -20,24 +20,24 @@ namespace EntitySystem
 
 		/// Creates an iterator to walk across entity components in the given list. Beginning with the first item.
 		EntityComponentsIterator(ComponentsList* componentsList):
-			mComponentsList(componentsList),
-			ComponentsList::const_iterator(componentsList->begin()) {}
+			ComponentsList::const_iterator(componentsList->begin()),
+			mComponentsList(componentsList) {}
 
 		/// Creates an iterator to walk across entity components in the given list. Bbeginning with the first item.
 		EntityComponentsIterator(ComponentsList& componentsList):
-			mComponentsList(&componentsList),
-			ComponentsList::const_iterator(componentsList.begin()) {}
+			ComponentsList::const_iterator(componentsList.begin()),
+			mComponentsList(&componentsList) {}
 
 		/// Creates an iterator to walk across components in the given list. Beginning with the item determined by
 		/// the given iterator.
 		EntityComponentsIterator(ComponentsList* componentsList, const ComponentsList::const_iterator firstItem):
-			mComponentsList(componentsList),
-			ComponentsList::const_iterator(firstItem) {}
+			ComponentsList::const_iterator(firstItem),
+			mComponentsList(componentsList) {}
 
 		/// Copy constructor.
 		EntityComponentsIterator(const EntityComponentsIterator& rhs):
-			mComponentsList(rhs.mComponentsList),
-			ComponentsList::const_iterator(rhs) {}
+			ComponentsList::const_iterator(rhs),
+			mComponentsList(rhs.mComponentsList) {}
 
 		virtual ~EntityComponentsIterator(void) {}
 
@@ -45,6 +45,7 @@ namespace EntitySystem
 		{
 			mComponentsList = rhs.mComponentsList;
 			ComponentsList::const_iterator::operator=(rhs);
+			return *this;
 		}
 
 		/// Use this method as a loop condition instead of comparing the iterator to a collection end().

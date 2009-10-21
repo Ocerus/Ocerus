@@ -29,7 +29,7 @@ namespace EntitySystem
 
 		/// Destroys a specified entity if it exists.
 		void DestroyEntity(const EntityHandle h);
-		
+
 		/// Loads all entities from an XML resource.
 		bool LoadFromResource(ResourceSystem::ResourcePtr res);
 
@@ -41,7 +41,7 @@ namespace EntitySystem
 
 		/// Returns the type of a specified entity.
 		eEntityType GetEntityType(const EntityHandle h) const;
-		
+
 		/// Returns true if the entity exists.
 		bool EntityExists(const EntityHandle h) const;
 
@@ -64,7 +64,7 @@ namespace EntitySystem
 		void ProcessDestroyQueue(void);
 
 		/// Destroys all entities in the manager.
-		void DestroyAllEntities(void);	
+		void DestroyAllEntities(void);
 
 	private:
 
@@ -72,8 +72,8 @@ namespace EntitySystem
 		struct EntityInfo
 		{
 			EntityInfo(void);
-			EntityInfo(const eEntityType _type, const string& _ID = ""): mFullyInited(false), mType(_type), mID(_ID) {}
-			EntityInfo(const bool _fullyInited, const eEntityType _type, const string& _ID = ""): mFullyInited(_fullyInited), mType(_type), mID(_ID) {}
+			EntityInfo(const eEntityType _type, const string& _ID = ""): mType(_type), mFullyInited(false), mID(_ID) {}
+			EntityInfo(const bool _fullyInited, const eEntityType _type, const string& _ID = ""): mType(_type), mFullyInited(_fullyInited), mID(_ID) {}
 
 			/// User type of the entity.
 			eEntityType mType;

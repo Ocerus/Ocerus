@@ -48,7 +48,7 @@ namespace Reflection
 
 		/// RTTI constructor.
 		/// The first paramter is a stub. I am not sure why this stub is necessary - removing ths stub will
-		/// confuse the .NET compiler and produce compile errors with subsequent parameters. If anybody knows 
+		/// confuse the .NET compiler and produce compile errors with subsequent parameters. If anybody knows
 		/// why this is so, feel free to e-mail me at dfilion@hotmail.com
 		/// @param dwStub Just a stub.
 		/// @param CLID A unique class ID.
@@ -56,18 +56,18 @@ namespace Reflection
 		/// @param pBaseClassRTTI The parent RTTI structure for this RTTI structure.
 		/// @param pFactory A factory function callback for creating an instance of the bound class type.
 		/// @param pReflectionFunc Callback called by the system to register the reflective properties.
-		RTTI(uint8 dwStub, ClassID CLID, const char* szClassName, RTTI* pBaseClassRTTI, 
+		RTTI(uint8 dwStub, ClassID CLID, const char* szClassName, RTTI* pBaseClassRTTI,
 			ClassFactoryFunc pFactory, RegisterReflectionFunc pReflectionFunc);
 
-		/// Fills a data structure with all properties of the represented class type, 
+		/// Fills a data structure with all properties of the represented class type,
 		/// including all ancestor types.
 		void EnumProperties( AbstractPropertyList& out, const PropertyAccessFlags flagMask = PA_FULL_ACCESS ) const;
 
-		/// Fills a data structure with all properties of the represented class type, 
+		/// Fills a data structure with all properties of the represented class type,
 		/// including all ancestor types.
 		void EnumProperties( RTTIBaseClass* owner, PropertyList& out, const PropertyAccessFlags flagMask = PA_FULL_ACCESS ) const;
 
-		/// Fills a data structure with all component dependencies of the represented class type, 
+		/// Fills a data structure with all component dependencies of the represented class type,
 		/// including all ancestor types.
 		void EnumComponentDependencies(ComponentDependencyList& out) const;
 
@@ -96,7 +96,7 @@ namespace Reflection
 		}
 
 		/// Returns the base class'es RTTI structure.
-		inline RTTI* GetAncestorRTTI(void) const { mBaseRTTI; }
+		inline RTTI* GetAncestorRTTI(void) const { return mBaseRTTI; }
 
 		/// Returns this class'es ID.
 		inline ClassID GetCLID(void) const { return mCLID; }
@@ -112,11 +112,11 @@ namespace Reflection
 		/// A map of properties of this RTTI.
 		typedef hash_map<StringKey, AbstractProperty*> PropertyMap;
 
-		ClassID	mCLID;									
-		char mClassName[CLASSNAME_LENGTH];	
-		RTTI* mBaseRTTI;						
-		ClassFactoryFunc mClassFactory;					
-		PropertyMap mProperties;					
+		ClassID	mCLID;
+		char mClassName[CLASSNAME_LENGTH];
+		RTTI* mBaseRTTI;
+		ClassFactoryFunc mClassFactory;
+		PropertyMap mProperties;
 		ComponentDependencyList mComponentDependencies;
 
 	};

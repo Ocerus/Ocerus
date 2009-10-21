@@ -9,7 +9,7 @@
 using namespace InputSystem;
 
 
-InputSystem::OISListener::OISListener(): mMouse(0), mKeyboard(0), mOIS(0)
+InputSystem::OISListener::OISListener(): mOIS(0), mMouse(0), mKeyboard(0)
 {
 	gLogMgr.LogMessage("Initing OIS");
 
@@ -133,6 +133,8 @@ InputSystem::eMouseButton InputSystem::OISListener::OisToMbtn( OIS::MouseButtonI
 		return MBTN_RIGHT;
 	case OIS::MB_Middle:
 		return MBTN_MIDDLE;
+	default:
+		break;
 	}
 	return MBTN_UNKNOWN;
 }

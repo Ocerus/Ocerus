@@ -7,6 +7,7 @@ cmake_minimum_required(VERSION 2.6.2)
 
 set(CMAKE_BUILD_TYPE release)
 
+
 ###############################################################################
 ###                      bundled external libraries                         ###
 ###############################################################################
@@ -182,6 +183,8 @@ include_directories(
     ${Box2D_INCLUDE_DIRS}
     ${rudeconfig_INCLUDE_DIRS}
 )
+
+set(CMAKE_CXX_FLAGS "-g -Wall")
 
 add_executable(ocerus 
     ${Core_SRCS}

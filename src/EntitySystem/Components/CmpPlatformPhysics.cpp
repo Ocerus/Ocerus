@@ -99,6 +99,8 @@ EntityMessage::eResult EntityComponents::CmpPlatformPhysics::HandleMessage( cons
 	case EntityMessage::INIT:
 		Init();
 		return EntityMessage::RESULT_OK;
+	default:
+		break;
 	}
 	return EntityMessage::RESULT_IGNORED;
 }

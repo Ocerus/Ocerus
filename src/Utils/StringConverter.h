@@ -28,8 +28,10 @@ namespace Utils
 		template<>
 		inline string ToString(const string val) { return val; }
 
+#ifdef __WIN__
 #pragma warning(push)
 #pragma warning(disable: 4700)
+#endif
 
 		/// Converts the given string to a value of an arbitrary type.
 		template<typename T>
@@ -42,7 +44,9 @@ namespace Utils
 			return result;
 		}
 
+#ifdef __WIN__
 #pragma warning(pop)
+#endif
 
 		template<>
 		inline string FromString(const string& str) { return str; }

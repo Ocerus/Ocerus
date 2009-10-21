@@ -9,7 +9,7 @@ using namespace Core;
 
 #define MAX_DELTA_TIME 0.5f
 
-Application::Application(): 
+Application::Application():
 	StateMachine<eAppState>(AS_INITING), mFrameSmoothingTime(0.5f), mConsoleHandle(0)
 {
 }
@@ -31,13 +31,13 @@ void Application::Init()
 	mConsoleHeight = mGlobalConfig->GetInt32("ConsoleH", 768, "Windows");
 
 	// debug window
-	ShowConsole(); 
+	ShowConsole();
 
 	// create singletons
 	ResourceSystem::ResourceMgr::CreateSingleton();
 	ResourceSystem::ResourceMgr::GetSingleton().Init("data/");
 
-	StringSystem::StringMgr::CreateSingleton(); 
+	StringSystem::StringMgr::CreateSingleton();
 
 	GfxSystem::GfxRenderer::CreateSingleton();
 	GfxSystem::GfxRenderer::GetSingleton().Init(GfxSystem::Point(1024,768), false);
@@ -67,7 +67,7 @@ Application::~Application()
 	HideConsole();
 
 	delete mLoadingScreen;
-	
+
 	GUISystem::GUIMgr::DestroySingleton();
 
 	ResourceSystem::ResourceMgr::GetSingleton().UnloadAllResources();
@@ -80,7 +80,7 @@ Application::~Application()
 	ResourceSystem::ResourceMgr::DestroySingleton();
 	GfxSystem::ParticleSystemMgr::DestroySingleton();
 	Utils::Hash::ClearHashMap();
-	
+
 	// must come last
 	delete mGlobalConfig;
 	LogSystem::LogMgr::DestroySingleton();
@@ -112,16 +112,20 @@ void Application::RunMainLoop()
 			mGame->Update(delta);
 			gGUIMgr.Update(delta);
 			break;
+		default:
+			break;
 		}
-		
+
 		// draw
 		if (gGfxRenderer.BeginRendering())
-		{				
+		{
 			switch (GetState())
 			{
 			case AS_GAME:
 				mGame->Draw(delta);
 				gGUIMgr.RenderGUI();
+				break;
+			default:
 				break;
 			}
 
@@ -129,8 +133,8 @@ void Application::RunMainLoop()
 			gGfxRenderer.DrawString(0.0f, 0.0f, "FPS", "FPS: " + StringConverter::ToString(mAvgFPS),
 				GfxSystem::Color(0,180,0), GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_BOTTOM,
 				GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_BOTTOM);
-			
-			gGfxRenderer.EndRendering();	
+
+			gGfxRenderer.EndRendering();
 		}
 
 		// update FPS and other performance counters
@@ -205,9 +209,9 @@ void Core::Application::Shutdown( void )
 //-----------------------------------------------------
 // Platfofm specific functions follow.
 
-#if defined(__WIN__)    
+#if defined(__WIN__)
 //------------
-// Windows 
+// Windows
 //------------
 
 #include <Windows.h>
@@ -219,7 +223,7 @@ void Application::MessagePump( void )
 	{
 		if (msg.message == WM_QUIT)
 		{
-			RequestStateChange(AS_SHUTDOWN, true);				
+			RequestStateChange(AS_SHUTDOWN, true);
 		}
 		else
 		{
@@ -269,7 +273,7 @@ void Core::Application::HideConsole( void )
 void Core::Application::WriteToConsole( const string& str )
 {
 	DWORD writtenChars = 0;
-	WriteConsole(GetStdHandle(STD_OUTPUT_HANDLE), str.c_str(), str.length(), &writtenChars, NULL);	
+	WriteConsole(GetStdHandle(STD_OUTPUT_HANDLE), str.c_str(), str.length(), &writtenChars, NULL);
 }
 
 #else

@@ -53,7 +53,7 @@ bool GfxRenderer::ClearScreen(const Color& color) const
 }
 
 bool GfxRenderer::DrawLine(int x1, int y1, int x2, int y2, const Pen& pen) const
-{	
+{
 }
 
 bool GfxRenderer::DrawLine( const Point& begin, const Point& end, const Pen& pen ) const
@@ -65,7 +65,7 @@ bool GfxRenderer::DrawLineWithConversion( const Vector2& begin, const Vector2& e
 }
 
 bool GfxRenderer::DrawImage( const TexturePtr& image, int32 x, int32 y, uint8 anchor, float32 angle, const Color& color, float32 scale) const
-{	
+{
     return 0;
 }
 
@@ -96,17 +96,17 @@ bool GfxRenderer::DrawPolygon( const vector<Point>& vertices, const TexturePtr& 
 }
 
 bool GfxRenderer::DrawPolygon( Point* vertices, int vertices_len, const Color& fillColor, const Pen& outline) const
-{	
+{
 	return false;
 }
 
 bool GfxRenderer::DrawPolygonWithConversion( const Vector2* vertices, int vertices_len, const Vector2& offsetPosition, const float32 offsetAngle, const Color& fillColor, const Pen& outline) const
-{	
+{
 	return false;
 }
 
 bool GfxRenderer::DrawPolygon( const vector<Point>& vertices, const Color& fillColor, const Pen& outline) const
-{	
+{
 	return true;
 }
 
@@ -232,7 +232,7 @@ float32 ReadFloat(InputStream& is)
 	dat1.b[1] = is.get();
 	dat1.b[2] = is.get();
 	dat1.b[3] = is.get();
-	return dat1.f;	
+	return dat1.f;
 }
 
 
@@ -257,7 +257,7 @@ ParticleSystem::ParticleSystem(hgeParticleSystem* ps):
 	mLastPositionX(0),
 	mLastPositionY(0) {}
 
-ParticleSystem::~ParticleSystem(void) 
+ParticleSystem::~ParticleSystem(void)
 {
 }
 
@@ -306,17 +306,17 @@ void ParticleSystem::Render()
 {
 }
 
-int32 ParticleSystem::GetParticlesAlive(void) const 
-{ 
-    return 0;
-}
-
-float32 ParticleSystem::GetAge(void) const 
+int32 ParticleSystem::GetParticlesAlive(void) const
 {
     return 0;
 }
 
-bool ParticleSystem::GetRenderDone(void) const 
+float32 ParticleSystem::GetAge(void) const
+{
+    return 0;
+}
+
+bool ParticleSystem::GetRenderDone(void) const
 {
     return 0;
 }
@@ -325,9 +325,9 @@ void ParticleSystem::SetRenderDone(void)
 {
 }
 
-float32 ParticleSystem::GetLifeTime(void) const 
+float32 ParticleSystem::GetLifeTime(void) const
 {
-	return 0; 
+	return 0;
 }
 
 float32 ParticleSystem::GetWorldX(void) const

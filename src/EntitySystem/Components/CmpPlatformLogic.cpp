@@ -17,7 +17,7 @@ void EntityComponents::CmpPlatformLogic::Create(void)
 	mPickCircleRadius = 0;
 }
 
-void EntityComponents::CmpPlatformLogic::Destroy(void) 
+void EntityComponents::CmpPlatformLogic::Destroy(void)
 {
 
 }
@@ -46,6 +46,8 @@ EntityMessage::eResult EntityComponents::CmpPlatformLogic::HandleMessage(const E
 		BS_DASSERT(msg.data);
 		DrawSelectionOverlay(*(bool*)msg.data);
 		return EntityMessage::RESULT_OK;
+	default:
+		break;
 	}
 	return EntityMessage::RESULT_IGNORED;
 }
@@ -64,7 +66,7 @@ void EntityComponents::CmpPlatformLogic::DrawSelectionOverlay( const bool hover 
 	GfxSystem::Color color(255,0,0,180);
 	if (hover)
 		color = GfxSystem::Color(255,255,255,180);
-	gGfxRenderer.DrawCircle(gGfxRenderer.WorldToScreen(MathUtils::Multiply(Matrix22(angle), mPickCircleCenter) + pos), gGfxRenderer.WorldToScreenScalar(mPickCircleRadius), 
+	gGfxRenderer.DrawCircle(gGfxRenderer.WorldToScreen(MathUtils::Multiply(Matrix22(angle), mPickCircleCenter) + pos), gGfxRenderer.WorldToScreenScalar(mPickCircleRadius),
 		GfxSystem::Color::NullColor, GfxSystem::Pen(color));
 }
 

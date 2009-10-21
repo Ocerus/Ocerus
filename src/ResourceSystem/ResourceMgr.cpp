@@ -10,12 +10,14 @@
 #include "../GfxSystem/ParticleResource.h"
 #include "../ResourceSystem/XMLResource.h"
 
+#ifdef __WIN__
 #pragma warning(disable: 4996)
+#endif
 
 using namespace ResourceSystem;
 
-ResourceMgr::ResourceMgr( void ): 
-	mListener(0), mBasePath()
+ResourceMgr::ResourceMgr( void ):
+	mBasePath(), mListener(0)
 {
 
 }
@@ -55,7 +57,7 @@ void ResourceSystem::ResourceMgr::Init( const string& basepath )
 	gLogMgr.LogMessage("All resource types registered");
 }
 
-ResourceMgr::~ResourceMgr() 
+ResourceMgr::~ResourceMgr()
 {
 	DeleteAllResources();
 }
@@ -154,7 +156,7 @@ bool ResourceSystem::ResourceMgr::AddManualResourceToGroup( const StringKey& nam
 	r->SetState(Resource::STATE_INITIALIZED);
 	r->SetName(name);
 	r->SetManual(true);
-	
+
 	AddResourceToGroup(group, name, r);
 
 	gLogMgr.LogMessage("Resource '", string(name), "' added");
@@ -257,7 +259,7 @@ void ResourceMgr::GetResourceGroup(const StringKey& group, vector<ResourcePtr>& 
 		return; // empty vector
 	const ResourceMap& resmap = *gi->second;
 	for (ResourceMap::const_iterator ri = resmap.begin(); ri != resmap.end(); ri++)
-		output.push_back(ri->second); 
+		output.push_back(ri->second);
 	return;
 }
 

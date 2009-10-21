@@ -37,7 +37,9 @@ void LogSystem::LogMgr::LogMessage(const string& msg, eLogSeverity severity)
 {
 	if (severity >= mSeverityLevel)
 	{
+#ifdef __WIN__
 		#pragma warning(disable: 4996)
+#endif
 		struct tm* locTime;
 		time_t ctime;
 		time(&ctime);

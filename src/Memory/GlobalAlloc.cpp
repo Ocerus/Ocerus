@@ -15,8 +15,10 @@
 #  undef delete
 #endif
 
+#ifdef __WIN__
 // Supress the warning of unused throw reference.
 #pragma warning(disable: 4290)
+#endif
 
 // We are using standard memory allocators now, so we need this include for malloc and free.
 #include <cstdlib>
@@ -26,7 +28,7 @@
 
 void* operator new( std::size_t sz ) throw(std::bad_alloc)
 {
-	return malloc(sz); 
+	return malloc(sz);
 }
 
 void operator delete( void* ptr ) throw()
@@ -36,7 +38,7 @@ void operator delete( void* ptr ) throw()
 
 void* operator new( std::size_t sz, const std::nothrow_t& )
 {
-	return malloc(sz); 
+	return malloc(sz);
 }
 
 void operator delete( void* ptr, const std::nothrow_t& )

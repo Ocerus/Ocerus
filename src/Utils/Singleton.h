@@ -1,9 +1,11 @@
 #ifndef _SINGLETON_H_
 #define _SINGLETON_H_
 
+#ifdef __WIN__
 // disable VS warnings
 #pragma warning (disable : 4311)
 #pragma warning (disable : 4312)
+#endif
 
 namespace Utils
 {
@@ -48,8 +50,8 @@ namespace Utils
 
 		/// Returns a pointer to the singleton instance.
 		static T* GetSingletonPtr(void)
-		{  
-			return (msSingleton);  
+		{
+			return (msSingleton);
 		}
 
 	private:

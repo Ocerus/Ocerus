@@ -22,7 +22,7 @@ using namespace InputSystem;
 
 #define WATER_TEXTURE_SCALE 0.01f
 
-Core::Game::Game(): 
+Core::Game::Game():
 	StateMachine<eGameState>(GS_NORMAL),
 	mPhysics(0),
 	mLastClickTime(0) {}
@@ -57,7 +57,7 @@ void Core::Game::Init()
 	mPhysics->SetContactListener(this);
 	mPhysicsResidualDelta = 0.0f;
 
-	
+
 	// update globally accessible game related properties, like the physics engine
 	UpdateGameProperties();
 
@@ -308,7 +308,7 @@ void Core::Game::MouseButtonPressed( const MouseInfo& mi, const eMouseButton btn
 		Vector2 cursor = gGfxRenderer.ScreenToWorld(GfxSystem::Point(mi.x, mi.y));
 		for (EntityList::iterator i=mSelectedEntities.begin(); i!=mSelectedEntities.end(); ++i)
 		{
-			eEntityType type = i->GetType();
+			// eEntityType type = i->GetType();
 		}
 	}
 	else if (btn == MBTN_MIDDLE)
@@ -362,4 +362,7 @@ void Core::Game::ProcessPhysicsEvent( const PhysicsEvent& evt )
 	EntityHandle ent2 = evt.entity2;
 	eEntityType type1 = gEntityMgr.GetEntityType(ent1);
 	eEntityType type2 = gEntityMgr.GetEntityType(ent2);
+	// Suppress unused warning
+	(void)type1;
+	(void)type2;
 }

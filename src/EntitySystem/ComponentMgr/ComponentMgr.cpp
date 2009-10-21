@@ -18,7 +18,7 @@ ComponentMgr::ComponentMgr()
 	BS_ASSERT(mComponentCreationMethod[NUM_COMPONENT_TYPES-1]);
 }
 
-ComponentMgr::~ComponentMgr() 
+ComponentMgr::~ComponentMgr()
 {
 	BS_ASSERT_MSG(mEntityComponentsMap.size()==0, "ComponentsMap not empty. (EntityMgr should erase it before deleting ComponentMgr)");
 }
@@ -62,7 +62,7 @@ void ComponentMgr::DestroyEntityComponents(EntityID id)
 	}
 	delete iter->second;
 	mEntityComponentsMap.erase(iter);
-} 
+}
 
 bool EntitySystem::ComponentMgr::GetEntityProperties( const EntityID id, PropertyList& out, const PropertyAccessFlags flagMask ) const
 {
@@ -92,7 +92,7 @@ PropertyHolder EntitySystem::ComponentMgr::GetEntityProperty( const EntityHandle
 
 
 	// property not found, print some info about why
-	gLogMgr.LogMessage("ComponentMgr: unknown property '", key, "'", LOG_ERROR);
+	gLogMgr.LogMessage("ComponentMgr: unknown property '", (string)key, "'", LOG_ERROR);
 	PropertyList propertyList;
 	string propertiesString;
 	GetEntityProperties(h, propertyList, mask);
@@ -106,5 +106,5 @@ PropertyHolder EntitySystem::ComponentMgr::GetEntityProperty( const EntityHandle
 	gLogMgr.LogMessage("Available properties: ", propertiesString);
 
 	// return an invalid holder
-	return PropertyHolder();	
+	return PropertyHolder();
 }
