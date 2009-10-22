@@ -93,7 +93,7 @@ namespace GUISystem {
 	}
 
 	CEGUI::Texture* RendererGate::createTexture(float size) {
-		BS_ASSERT(!"We are doomed....AGAIN!");
+		OC_ASSERT(!"We are doomed....AGAIN!");
 		return 0;
 	}
 

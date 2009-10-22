@@ -22,7 +22,7 @@
 #include "SmartAssert.h"
 
 #define B2_NOT_USED(x) (void)x
-#define b2Assert(A) BS_ASSERT(A)
+#define b2Assert(A) OC_ASSERT(A)
 
 
 #include <math.h>

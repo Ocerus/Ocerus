@@ -123,52 +123,52 @@ void EntityComponents::CmpPlatformPhysics::RegisterReflection()
 
 Vector2 EntityComponents::CmpPlatformPhysics::GetAbsolutePosition( void ) const
 {
-	BS_DASSERT(mBody);
+	OC_DASSERT(mBody);
 	return mBody->GetPosition() + MathUtils::Multiply(Matrix22(mBody->GetAngle()), mRelativePosition);
 }
 
 void EntityComponents::CmpPlatformPhysics::SetAbsolutePosition( Vector2 pos )
 {
-	BS_DASSERT(mBody);
+	OC_DASSERT(mBody);
 	EntityHandle ship = GetProperty("ParentShip").GetValue<EntityHandle>();
-	BS_DASSERT_MSG(!ship.IsValid(), "SetAbsolutePosition can be used for free platforms only");
+	OC_DASSERT_MSG(!ship.IsValid(), "SetAbsolutePosition can be used for free platforms only");
 	mBody->SetXForm(pos, mBody->GetAngle());
 }
 
 float32 EntityComponents::CmpPlatformPhysics::GetAngle( void ) const
 {
-	BS_DASSERT(mBody);
+	OC_DASSERT(mBody);
 	return mBody->GetAngle();
 }
 
 void EntityComponents::CmpPlatformPhysics::SetAngle( const float32 angle )
 {
-	BS_DASSERT(mBody);
+	OC_DASSERT(mBody);
 	mBody->SetXForm(mBody->GetPosition(), angle);
 }
 
 Vector2 EntityComponents::CmpPlatformPhysics::GetLinearVelocity( void ) const
 {
-	BS_DASSERT(mBody);
+	OC_DASSERT(mBody);
 	return mBody->GetLinearVelocity();
 }
 
 void EntityComponents::CmpPlatformPhysics::SetLinearVelocity( const Vector2 linVel )
 {
-	BS_DASSERT(mBody);
+	OC_DASSERT(mBody);
 	mBody->SetLinearVelocity(linVel);
 }
 
 Vector2* EntityComponents::CmpPlatformPhysics::GetShape( void ) const
 {
-	BS_DASSERT(mShape);
+	OC_DASSERT(mShape);
 	b2PolygonShape* polyshape = (b2PolygonShape*)mShape;
 	return const_cast<Vector2*>(polyshape->GetVertices());
 }
 
 uint32 EntityComponents::CmpPlatformPhysics::GetShapeLength( void ) const
 {
-	BS_DASSERT(mShape);
+	OC_DASSERT(mShape);
 	b2PolygonShape* polyshape = (b2PolygonShape*)mShape;
 	return polyshape->GetVertexCount();
 }

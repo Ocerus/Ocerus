@@ -22,19 +22,19 @@ InputSystem::InputMgr::~InputMgr( void )
 
 void InputSystem::InputMgr::CaptureInput( void )
 {
-	BS_ASSERT(mOISListener);
+	OC_ASSERT(mOISListener);
 	mOISListener->CaptureInput();
 }
 
 void InputSystem::InputMgr::AddInputListener( IInputListener* listener )
 {
-	BS_ASSERT(listener);
+	OC_ASSERT(listener);
 	mListeners.push_back(listener);
 }
 
 void InputSystem::InputMgr::RemoveInputListener( IInputListener* listener )
 {
-	BS_ASSERT(listener);
+	OC_ASSERT(listener);
 	ListenersList::iterator it = Containers::find(mListeners.begin(), mListeners.end(), listener);
 	if (it != mListeners.end())
 		mListeners.erase(it);
@@ -47,13 +47,13 @@ void InputSystem::InputMgr::RemoveAllInputListeners( void )
 
 void InputSystem::InputMgr::ResolutionChanged( int width, int height )
 {
-	BS_ASSERT(mOISListener);
+	OC_ASSERT(mOISListener);
 	mOISListener->SetResolution(width, height);
 }
 
 bool InputSystem::InputMgr::IsKeyDown( const eKeyCode k ) const
 {
-	BS_ASSERT(mOISListener);
+	OC_ASSERT(mOISListener);
 	return mOISListener->IsKeyDown(k);
 }
 

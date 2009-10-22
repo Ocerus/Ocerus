@@ -67,7 +67,7 @@ void EntityMgr::BroadcastMessage(const EntityMessage& msg)
 
 EntityHandle EntityMgr::CreateEntity(EntityDescription& desc, PropertyList& out)
 {
-	BS_ASSERT(mComponentMgr);
+	OC_ASSERT(mComponentMgr);
 
 	if (desc.mComponents.size() == 0)
 	{
@@ -87,7 +87,7 @@ EntityHandle EntityMgr::CreateEntity(EntityDescription& desc, PropertyList& out)
 
 		// create the component
 		Component* cmp = mComponentMgr->CreateComponent(h, cmpType);
-		BS_ASSERT(cmp);
+		OC_ASSERT(cmp);
 		
 		// check dependencies of the component
 		ComponentDependencyList depList;
@@ -140,7 +140,7 @@ void EntitySystem::EntityMgr::ProcessDestroyQueue( void )
 
 void EntityMgr::DestroyAllEntities()
 {
-	BS_ASSERT(mComponentMgr);
+	OC_ASSERT(mComponentMgr);
 	for (EntityMap::const_iterator i = mEntities.begin(); i!=mEntities.end(); ++i)
 		DestroyEntity(i);
 	mEntities.clear();

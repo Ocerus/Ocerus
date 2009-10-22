@@ -23,18 +23,18 @@ Resource::~Resource()
 
 InputStream& Resource::OpenInputStream(eInputStreamMode mode)
 {
-	BS_ASSERT(mState != STATE_UNINITIALIZED);
-	BS_ASSERT_MSG(boost::filesystem::exists(mFilePath), "Resource file not found.");
-	BS_ASSERT_MSG(!mInputFileStream, "Resource was not closed before reused");
+	OC_ASSERT(mState != STATE_UNINITIALIZED);
+	OC_ASSERT_MSG(boost::filesystem::exists(mFilePath), "Resource file not found.");
+	OC_ASSERT_MSG(!mInputFileStream, "Resource was not closed before reused");
 	mInputFileStream = new boost::filesystem::ifstream(mFilePath, InputStreamMode(mode));
-	BS_ASSERT(mInputFileStream);
+	OC_ASSERT(mInputFileStream);
 	return *mInputFileStream;
 }
 
 void Resource::CloseInputStream()
 {
-	BS_ASSERT(mState != STATE_UNINITIALIZED);
-	BS_ASSERT(mInputFileStream);
+	OC_ASSERT(mState != STATE_UNINITIALIZED);
+	OC_ASSERT(mInputFileStream);
 	mInputFileStream->close();
 	delete mInputFileStream;
 	mInputFileStream = 0;
@@ -43,7 +43,7 @@ void Resource::CloseInputStream()
 bool Resource::Load()
 {
 	// wraps around LoadImpl and does some additional work
-	BS_ASSERT(GetState() == STATE_INITIALIZED);
+	OC_ASSERT(GetState() == STATE_INITIALIZED);
 	if (mIsManual)
 		return false; // manual resources must be loaded by the user
 	SetState(STATE_LOADING);
@@ -65,7 +65,7 @@ bool Resource::Load()
 bool Resource::Unload(bool allowManual)
 {
 	// wraps around UnloadImpl and does some additional work
-	BS_ASSERT(mState != STATE_UNINITIALIZED);
+	OC_ASSERT(mState != STATE_UNINITIALIZED);
 	if (GetState() == STATE_INITIALIZED)
 		return true; // true as the data are not loaded
 	if (mIsManual && !allowManual)
@@ -81,7 +81,7 @@ bool Resource::Unload(bool allowManual)
 	{
 		// we have a real problem if we can't dealloc a resource
 		gLogMgr.LogMessage("Resource '" + mName + "' could NOT be unloaded", LOG_ERROR);
-		BS_ASSERT_MSG(result, "Resource could NOT be unloaded");
+		OC_ASSERT_MSG(result, "Resource could NOT be unloaded");
 	} else
 	{
 		gLogMgr.LogMessage("Resource '"+mName+"' unloaded");
@@ -96,7 +96,7 @@ void ResourceSystem::Resource::EnsureLoaded( void )
 		if (IsManual())
 		{
 			gLogMgr.LogMessage("Access to non-loaded manual resource '" + mName +"'", LOG_ERROR);
-			BS_ASSERT(!"Access to non-loaded manual resource");
+			OC_ASSERT(!"Access to non-loaded manual resource");
 		}
 		Load();
 	}
@@ -129,6 +129,6 @@ void ResourceSystem::Resource::GetRawInputData( DataContainer& outData )
 		lastBufferPos += copyCount;
 		delete[] tmps[i];
 	}
-	BS_ASSERT(buffer+bufferSize == lastBufferPos);
+	OC_ASSERT(buffer+bufferSize == lastBufferPos);
 	outData.SetData(buffer, bufferSize);
 }

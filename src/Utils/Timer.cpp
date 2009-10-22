@@ -110,7 +110,7 @@ void Timer::Resume( void )
 
 void Timer::UpdateInMicroseconds( const uint64 delta )
 {
-	BS_ASSERT_MSG(mManual, "Timer must be set to manual control to be updatable");
+	OC_ASSERT_MSG(mManual, "Timer must be set to manual control to be updatable");
 	if (!mPaused)
 		mLastTime += delta;
 }

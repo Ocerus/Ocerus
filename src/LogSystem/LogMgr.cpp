@@ -26,7 +26,7 @@ void LogSystem::LogMgr::Init( const string& name, eLogSeverity severityLevel )
 {
 	mSeverityLevel = severityLevel;
 
-	BS_ASSERT(!mOutStream);
+	OC_ASSERT(!mOutStream);
 	mOutStream = new boost::filesystem::ofstream();
 	mOutStream->open(name.c_str());
 

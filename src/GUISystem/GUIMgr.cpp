@@ -84,7 +84,7 @@ namespace GUISystem {
 	}
 
 	void GUIMgr::RegisterEvents() {
-		BS_ASSERT(mCegui);
+		OC_ASSERT(mCegui);
 
 		CEGUI::Window* console = CEGUI::WindowManager::getSingleton().getWindow("ConsoleRoot/ConsolePrompt");
 		console->subscribeEvent(CEGUI::Editbox::EventTextAccepted, CEGUI::Event::Subscriber(&GUIMgr::ConsoleCommandEvent, this));
@@ -177,14 +177,14 @@ namespace GUISystem {
 	}
 
 	void GUIMgr::Update( float32 delta ) {
-		BS_ASSERT(mCegui);
+		OC_ASSERT(mCegui);
 		mCegui->injectTimePulse( delta );
 		InputSystem::MouseState& m = gInputMgr.GetMouseState();
 		mCegui->injectMousePosition(float(m.x), float(m.y));
 	}
 
 	void GUIMgr::KeyPressed(const InputSystem::KeyInfo& ke) {
-		BS_ASSERT(mCegui);
+		OC_ASSERT(mCegui);
 
 		if (ke.keyAction == InputSystem::KC_GRAVE) {
 			ConsoleTrigger();
@@ -197,22 +197,22 @@ namespace GUISystem {
 	}
 
 	void GUIMgr::KeyReleased(const InputSystem::KeyInfo& ke) {
-		BS_ASSERT(mCegui);
+		OC_ASSERT(mCegui);
 		CEGUI::System::getSingleton().injectKeyUp(KeyMapperOIStoCEGUI(ke.keyAction));
 	}
 
 	void GUIMgr::MouseMoved(const InputSystem::MouseInfo& mi) {
-		BS_ASSERT(mCegui);
+		OC_ASSERT(mCegui);
 		CEGUI::System::getSingleton().injectMouseWheelChange(float(mi.wheelDelta));
 	}
 
 	void GUIMgr::MouseButtonPressed(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn) {
-		BS_ASSERT(mCegui);
+		OC_ASSERT(mCegui);
 		CEGUI::System::getSingleton().injectMouseButtonDown( ConvertMouseButtonEnum(btn) );
 	}
 
 	void GUIMgr::MouseButtonReleased(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn) {
-		BS_ASSERT(mCegui);
+		OC_ASSERT(mCegui);
 		CEGUI::System::getSingleton().injectMouseButtonUp( ConvertMouseButtonEnum(btn) );
 	}
 

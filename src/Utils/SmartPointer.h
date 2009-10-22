@@ -77,10 +77,10 @@ namespace Utils
 		virtual ~SmartPointer() { Release(); }
 
 		/// Dereference operator.
-		inline T& operator*() const { BS_DASSERT(mPointer); return *mPointer; }
+		inline T& operator*() const { OC_DASSERT(mPointer); return *mPointer; }
 
 		/// Dereference operator.
-		inline T* operator->() const { BS_DASSERT(mPointer); return mPointer; }
+		inline T* operator->() const { OC_DASSERT(mPointer); return mPointer; }
 
 		/// Returns the raw pointer.
 		inline T* Get() const { return mPointer; }
@@ -92,7 +92,7 @@ namespace Utils
 		inline bool IsUnique() const { return *mUseCountPtr == 1; }
 
 		/// Returns the number of smart pointers pointing to the resource.
-		inline uint32 GetUseCount() const { BS_DASSERT(mUseCountPtr); return *mUseCountPtr; }
+		inline uint32 GetUseCount() const { OC_DASSERT(mUseCountPtr); return *mUseCountPtr; }
 
 		/// Returns the pointer to the number of smart pointers pointing to the resource.
 		inline uint32* GetUseCountPtr() const { return mUseCountPtr; }

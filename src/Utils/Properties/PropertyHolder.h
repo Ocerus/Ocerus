@@ -64,8 +64,8 @@ namespace Reflection
 		/// Calls a function this property represents.
 		inline void CallFunction(PropertyFunctionParameters* parameters)
 		{
-			BS_DASSERT(parameters);
-			BS_DASSERT(GetType() == PT_FUNCTION_PARAMETER);
+			OC_DASSERT(parameters);
+			OC_DASSERT(GetType() == PT_FUNCTION_PARAMETER);
 			mProperty->SetValue<PropertyFunctionParameters>(mOwner, *parameters);
 		}
 
@@ -78,14 +78,14 @@ namespace Reflection
 		/// Returns the type of this property.
 		inline ePropertyType GetType(void) const 
 		{
-			BS_DASSERT(mProperty);
+			OC_DASSERT(mProperty);
 			return mProperty->GetType();
 		}
 
 		/// Returns the name of this property.
 		inline const char* GetName(void) const
 		{
-			BS_DASSERT(mProperty);
+			OC_DASSERT(mProperty);
 			return mProperty->GetName();
 		}
 

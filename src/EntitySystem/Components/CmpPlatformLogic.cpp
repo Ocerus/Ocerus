@@ -35,7 +35,7 @@ EntityMessage::eResult EntityComponents::CmpPlatformLogic::HandleMessage(const E
 		Die();
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::MOUSE_PICK:
-		BS_DASSERT(msg.data);
+		OC_DASSERT(msg.data);
 		{
 			Vector2 pos = GetProperty("AbsolutePosition").GetValue<Vector2>();
 			float32 angle = GetProperty("Angle").GetValue<float32>();
@@ -43,7 +43,7 @@ EntityMessage::eResult EntityComponents::CmpPlatformLogic::HandleMessage(const E
 		}
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::DRAW_OVERLAY:
-		BS_DASSERT(msg.data);
+		OC_DASSERT(msg.data);
 		DrawSelectionOverlay(*(bool*)msg.data);
 		return EntityMessage::RESULT_OK;
 	default:
@@ -86,7 +86,7 @@ void EntityComponents::CmpPlatformLogic::Die( void )
 		Vector2* shape = prop.GetValue<Vector2*>();
 		prop = GetProperty("ShapeLength");
 		int32 shapeLen = prop.GetValue<uint32>();
-		BS_ASSERT(shapeLen);
+		OC_ASSERT(shapeLen);
 		float32 radius = 0;
 		Vector2 center = Vector2_Zero;
 		for (int32 i=0; i<shapeLen; ++i)

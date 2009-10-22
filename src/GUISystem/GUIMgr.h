@@ -44,7 +44,7 @@ namespace GUISystem {
 		void LoadStyle(void);
 
 		inline virtual void RenderGUI() const {
-			BS_ASSERT(mCegui);
+			OC_ASSERT(mCegui);
 			CEGUI::System::getSingleton().renderGUI();
 		}
 		

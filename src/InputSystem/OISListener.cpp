@@ -37,7 +37,7 @@ InputSystem::OISListener::OISListener(): mOIS(0), mMouse(0), mKeyboard(0)
 
 InputSystem::OISListener::~OISListener()
 {
-	BS_ASSERT(mOIS);
+	OC_ASSERT(mOIS);
 	OIS::InputManager::destroyInputSystem(mOIS);
 }
 

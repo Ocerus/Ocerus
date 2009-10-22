@@ -41,16 +41,16 @@ namespace Reflection
 		/// Adds a parameter to the end of the list.
 		inline void PushParameter(PropertyFunctionParameter toAdd)
 		{
-			BS_DASSERT(!mParameters.IsNull());
-			BS_DASSERT_MSG(mParametersCount < mParametersMaxCount, "Too many parameters added!");
+			OC_DASSERT(!mParameters.IsNull());
+			OC_DASSERT_MSG(mParametersCount < mParametersMaxCount, "Too many parameters added!");
 			(*mParameters)[mParametersCount++] = toAdd;
 		}
 
 		/// Returns a parameter specified by the index.
 		inline PropertyFunctionParameter GetParameter(int32 index) const
 		{
-			BS_DASSERT(!mParameters.IsNull());
-			BS_DASSERT_MSG(index>=0 && index<mParametersCount, "Parameter index out of bounds!");
+			OC_DASSERT(!mParameters.IsNull());
+			OC_DASSERT_MSG(index>=0 && index<mParametersCount, "Parameter index out of bounds!");
 			return (*mParameters)[index];
 		}
 

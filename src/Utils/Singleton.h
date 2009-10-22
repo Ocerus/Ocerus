@@ -17,34 +17,34 @@ namespace Utils
 
 		Singleton(void)
 		{
-			BS_ASSERT(!msSingleton);
+			OC_ASSERT(!msSingleton);
 			msSingleton = static_cast<T*>(this);
 		}
 
 		~Singleton(void)
 		{
-			BS_ASSERT(msSingleton);
+			OC_ASSERT(msSingleton);
 			msSingleton = 0;
 		}
 
 		/// Constructs the singleton instance.
 		static void CreateSingleton(void)
 		{
-			BS_ASSERT(!msSingleton);
+			OC_ASSERT(!msSingleton);
 			new T();
 		}
 
 		/// Destructs the singleton instance.
 		static void DestroySingleton(void)
 		{
-			BS_ASSERT(msSingleton);
+			OC_ASSERT(msSingleton);
 			delete msSingleton;
 		}
 
 		/// Returns reference to the singleton instance.
 		static T& GetSingleton(void)
 		{
-			BS_DASSERT(msSingleton);
+			OC_DASSERT(msSingleton);
 			return (*msSingleton);
 		}
 

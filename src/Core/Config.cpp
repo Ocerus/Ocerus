@@ -8,7 +8,7 @@ Config::Config(const string& filePath): mFilePath(filePath)
 {
 	gLogMgr.LogMessage("Loading config file '" + mFilePath + "'");
 
-	BS_ASSERT(mFilePath.length()>0);
+	OC_ASSERT(mFilePath.length()>0);
 
 	// attempt to load the file
 	mRudeConfig = new rude::Config();

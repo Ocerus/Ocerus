@@ -27,7 +27,7 @@ EntitySystem::EntityHandle::EntityHandle( void ): mEntityID(0) {}
 
 EntitySystem::EntityID EntitySystem::EntityHandle::GetID( void ) const
 {
-	BS_DASSERT_MSG(mEntityID, "Invalid entity handle");
+	OC_DASSERT_MSG(mEntityID, "Invalid entity handle");
 	return mEntityID;
 }
 
@@ -80,7 +80,7 @@ EntitySystem::EntityHandle::~EntityHandle( void )
 
 EntityMessage::eResult EntityHandle::PostMessage(const EntityMessage& msg)
 {
-	BS_DASSERT(IsValid());
+	OC_DASSERT(IsValid());
 	EntityMessage::eResult result = gEntityMgr.PostMessage(*this, msg);
 	if (result == EntityMessage::RESULT_ERROR)
 		gLogMgr.LogMessage("Message '", msg.type, "' on entity '", mEntityID, "' of type '", GetType(),"' returned error", LOG_ERROR);

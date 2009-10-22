@@ -26,7 +26,7 @@ namespace Utils
         template<typename T>
         static T* GetPointer(const StringKey key) {
             PropertyMap::const_iterator it = mProperties.find(key);
-            BS_ASSERT_MSG(it != mProperties.end(), "Global property not found.");
+            OC_ASSERT_MSG(it != mProperties.end(), "Global property not found.");
             return (T*)(it->second);
         }
 
@@ -35,9 +35,9 @@ namespace Utils
         template<typename T>
         static T& Get(const StringKey key) {
             PropertyMap::const_iterator it = mProperties.find(key);
-            BS_ASSERT_MSG(it != mProperties.end(), "Global property not found.");
+            OC_ASSERT_MSG(it != mProperties.end(), "Global property not found.");
             T* ptr = (T*)(it->second);
-            BS_ASSERT_MSG(ptr, "Global property pointer is null.");
+            OC_ASSERT_MSG(ptr, "Global property pointer is null.");
             return *ptr;
         }
 
