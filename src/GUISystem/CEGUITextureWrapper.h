@@ -17,14 +17,14 @@ namespace GUISystem {
 	public:
 
 		// Returns the current pixel width of the texture
-		inline virtual CEGUI::ushort getWidth(void) const { return mTexture->GetWidth(); }
+		inline virtual CEGUI::ushort getWidth(void) const { return (CEGUI::ushort)mTexture->GetWidth(); }
 
 		// Returns the current pixel height of the texture
-		inline virtual CEGUI::ushort getHeight(void) const { return mTexture->GetHeight(); }
+		inline virtual CEGUI::ushort getHeight(void) const { return (CEGUI::ushort)mTexture->GetHeight(); }
 
-		inline virtual CEGUI::ushort getOriginalHeight(void) const { return mOriginalHeight; }
+		inline virtual CEGUI::ushort getOriginalHeight(void) const { return (CEGUI::ushort)mOriginalHeight; }
 
-		inline virtual CEGUI::ushort getOriginalWidth(void) const { return mOriginalWidth; }
+		inline virtual CEGUI::ushort getOriginalWidth(void) const { return (CEGUI::ushort)mOriginalWidth; }
 
 		// Returns the original pixel width of the data loaded into the texture.
 		// virtual ushort getOriginalWidth(void) const { return getWidth(); }

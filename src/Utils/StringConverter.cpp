@@ -23,15 +23,15 @@ GfxSystem::Color StringConverter::FromString(const string& str)
 	std::istringstream iss(str);
 	if ((iss >> val).fail())
 		return GfxSystem::Color::NullColor;
-	result.r = val;
+	result.r = (uint8)val;
 	if ((iss >> val).fail())
 		return GfxSystem::Color::NullColor;
-	result.g = val;
+	result.g = (uint8)val;
 	if ((iss >> val).fail())
 		return GfxSystem::Color::NullColor;
-	result.b = val;
+	result.b = (uint8)val;
 	if (!(iss >> val).fail())
-		result.a = val;
+		result.a = (uint8)val;
 	return result;
 }
 

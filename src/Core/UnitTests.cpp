@@ -2,6 +2,7 @@
 /// Unit tests entry point.
 
 #include "Common.h"
+#include "UnitTests.h"
 
 #ifdef UNIT_TESTS
 

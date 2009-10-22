@@ -39,18 +39,12 @@ void EntityComponents::CmpPlatformVisual::Draw( void ) const
 	bool flip = GetProperty("InitShapeFlip").GetValue<bool>();
 	if (flip)
 	{
-		/*int32 col = fillColor.r * 130/100;
-		fillColor.r = col > 255 ? 255 : col;
-		col = fillColor.g * 130/100;
-		fillColor.g = col > 255 ? 255 : col;
-		col = fillColor.b * 130/100;
-		fillColor.b = col > 255 ? 255 : col;*/
 		int32 col = fillColor.r + 30;
-		fillColor.r = col > 255 ? 255 : col;
+		fillColor.r = col > 255 ? 255 : (uint8)col;
 		col = fillColor.g + 30;
-		fillColor.g = col > 255 ? 255 : col;
+		fillColor.g = col > 255 ? 255 : (uint8)col;
 		col = fillColor.b + 30;
-		fillColor.b = col > 255 ? 255 : col;
+		fillColor.b = col > 255 ? 255 : (uint8)col;
 	}
 	gGfxRenderer.DrawPolygonWithConversion(GetProperty("Shape").GetValue<Vector2*>(), GetProperty("ShapeLength").GetValue<uint32>(), pos, angle, fillColor, GfxSystem::Pen(GfxSystem::Color(48, 30, 27, 200)));
 }

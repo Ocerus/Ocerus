@@ -50,7 +50,7 @@
 				RuntimeTypeInfo="false"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="Common.h"
-				WarningLevel="3"
+				WarningLevel="4"
 				WarnAsError="true"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="4"
@@ -67,7 +67,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="CEGUIBase_d.lib freetype_d.lib pcre_d.lib CEGUIExpatParser_d.lib CEGUIFalagardWRBase_Static_d.lib"
-				OutputFile="bin/$(ConfigurationName)/$(ProjectName).exe"
+				OutputFile="$(OutDir)/$(ProjectName).exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="../externalLibs/boost/lib;../externalLibs/cegui/lib;../externalLibs/cegui/dependencies/lib"
 				IgnoreAllDefaultLibraries="false"
@@ -135,7 +135,7 @@
 				RuntimeTypeInfo="false"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="Common.h"
-				WarningLevel="3"
+				WarningLevel="4"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="0"
 			/>
@@ -151,7 +151,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="CEGUIBase.lib freetype.lib pcre.lib CEGUIExpatParser.lib CEGUIFalagardWRBase_Static.lib "
-				OutputFile="bin/$(ConfigurationName)/$(ProjectName).exe"
+				OutputFile="$(OutDir)/$(ProjectName).exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="../externalLibs/boost/lib;../externalLibs/cegui/lib;../externalLibs/cegui/dependencies/lib"
 				IgnoreDefaultLibraryNames="libci.lib;libcmt.lib"
@@ -224,7 +224,7 @@
 				RuntimeTypeInfo="false"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="Common.h"
-				WarningLevel="3"
+				WarningLevel="4"
 				WarnAsError="true"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="3"
@@ -241,7 +241,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="CEGUIBase.lib freetype.lib pcre.lib CEGUIExpatParser.lib CEGUIFalagardWRBase_Static.lib "
-				OutputFile="bin/$(ConfigurationName)/$(ProjectName).exe"
+				OutputFile="$(OutDir)/$(ProjectName).exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="../externalLibs/boost/lib;../externalLibs/cegui/lib;../externalLibs/cegui/dependencies/lib"
 				IgnoreAllDefaultLibraries="false"
@@ -289,6 +289,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
+				CommandLine=""
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -314,7 +315,8 @@
 				RuntimeTypeInfo="false"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="Common.h"
-				WarningLevel="3"
+				PrecompiledHeaderFile="$(IntDir)\$(TargetName).pch"
+				WarningLevel="4"
 				WarnAsError="true"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="4"
@@ -331,7 +333,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="CEGUIBase_d.lib freetype_d.lib pcre_d.lib CEGUIExpatParser_d.lib CEGUIFalagardWRBase_Static_d.lib"
-				OutputFile="bin/$(ConfigurationName)/$(ProjectName).exe"
+				OutputFile="$(OutDir)/$(ProjectName).exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="../externalLibs/boost/lib;../externalLibs/cegui/lib;../externalLibs/cegui/dependencies/lib"
 				IgnoreAllDefaultLibraries="false"

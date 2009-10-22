@@ -49,8 +49,8 @@ namespace EntitySystem
 		void PickIfHigherPriority(const EntityHandle entity);
 
 		/// Disabled.
-		EntityPicker(const EntityPicker& rhs) {}
-		EntityPicker& operator=(const EntityPicker& rhs) { return *this; }
+		EntityPicker(const EntityPicker& rhs);
+		EntityPicker& operator=(const EntityPicker& rhs);
 	};
 }
 

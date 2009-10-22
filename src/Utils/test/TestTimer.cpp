@@ -1,5 +1,6 @@
 #include "Common.h"
 #ifdef UNIT_TESTS
+#include "../Core/UnitTests.h"
 
 #ifdef __WIN__
 
@@ -7,7 +8,7 @@
 
 inline void mySleep(uint64 ms)
 {
-	Sleep(ms);
+	Sleep((DWORD)ms);
 }
 
 #else

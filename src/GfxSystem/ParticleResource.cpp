@@ -31,10 +31,10 @@ float32 ReadFloat(InputStream& is)
 		float32 f;
 		unsigned char b[4];
 	} dat1;
-	dat1.b[0] = is.get();
-	dat1.b[1] = is.get();
-	dat1.b[2] = is.get();
-	dat1.b[3] = is.get();
+	dat1.b[0] = (uint8)is.get();
+	dat1.b[1] = (uint8)is.get();
+	dat1.b[2] = (uint8)is.get();
+	dat1.b[3] = (uint8)is.get();
 	return dat1.f;	
 }
 
