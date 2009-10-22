@@ -1,3 +1,4 @@
+#include "Common.h"
 #include "UnitTests.h"
 #include "../GlobalProperties.h"
 

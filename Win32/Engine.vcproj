@@ -50,6 +50,7 @@
 				RuntimeTypeInfo="false"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="Common.h"
+				PrecompiledHeaderFile="$(IntDir)\Common.pch"
 				WarningLevel="4"
 				WarnAsError="true"
 				Detect64BitPortabilityProblems="false"
@@ -120,6 +121,7 @@
 				RuntimeTypeInfo="false"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="Common.h"
+				PrecompiledHeaderFile="$(IntDir)\Common.pch"
 				WarningLevel="4"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="0"
@@ -191,6 +193,7 @@
 				RuntimeTypeInfo="false"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="Common.h"
+				PrecompiledHeaderFile="$(IntDir)\Common.pch"
 				WarningLevel="4"
 				WarnAsError="true"
 				Detect64BitPortabilityProblems="false"
@@ -981,6 +984,7 @@
 					<Tool
 						Name="VCCLCompilerTool"
 						UsePrecompiledHeader="1"
+						PrecompiledHeaderFile="$(IntDir)\Common.pch"
 						ShowIncludes="false"
 					/>
 				</FileConfiguration>
@@ -990,6 +994,7 @@
 					<Tool
 						Name="VCCLCompilerTool"
 						UsePrecompiledHeader="1"
+						PrecompiledHeaderFile="$(IntDir)\Common.pch"
 						ShowIncludes="false"
 					/>
 				</FileConfiguration>
@@ -999,6 +1004,7 @@
 					<Tool
 						Name="VCCLCompilerTool"
 						UsePrecompiledHeader="1"
+						PrecompiledHeaderFile="$(IntDir)\Common.pch"
 						ShowIncludes="false"
 					/>
 				</FileConfiguration>

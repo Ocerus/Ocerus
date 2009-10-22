@@ -5,7 +5,6 @@
 #define UnitTests_h__
 
 
-#include "../Setup/Settings.h"
 #include "UnitTest++.h"
 
 

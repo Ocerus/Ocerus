@@ -1,6 +1,7 @@
 /// @file
 /// Unit tests entry point.
 
+#include "Common.h"
 #include "UnitTests.h"
 
 
