@@ -24,10 +24,6 @@
 #define B2_NOT_USED(x) (void)x
 #define b2Assert(A) BS_ASSERT(A)
 
-#ifdef __WIN__
-// This is here to hide warning which appears when we disable asserts. We can safely assume the library is error-prune, so hiding the warning is safe.
-#pragma warning(disable: 4189)
-#endif
 
 #include <math.h>
 

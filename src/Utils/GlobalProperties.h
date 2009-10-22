@@ -5,6 +5,7 @@
 #define GlobalProperties_h__
 
 #include "Base.h"
+#include "StringKey.h"
 
 namespace Utils
 {

@@ -1,17 +1,12 @@
 /// @file
-/// Includes and definitions for unit tests.
+/// Unit tests includes and definitions.
 
 #ifndef UnitTests_h__
 #define UnitTests_h__
 
 
-#ifdef UNIT_TESTS
-
+#include "../Setup/Settings.h"
 #include "UnitTest++.h"
-
-#define ENDSUITE
-
-#endif
 
 
 #endif // UnitTests_h__

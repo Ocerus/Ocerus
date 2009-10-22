@@ -1,5 +1,5 @@
-#ifdef UNIT_TESTS
-#include "Common.h"
+#include "UnitTests.h"
+#include "../GlobalProperties.h"
 
 SUITE(GlobalProperties)
 {
@@ -22,4 +22,3 @@ SUITE(GlobalProperties)
 	}
 }
 
-#endif

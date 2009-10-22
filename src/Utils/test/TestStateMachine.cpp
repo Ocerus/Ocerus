@@ -1,6 +1,5 @@
-#include "Common.h"
-#include "StateMachine.h"
-#include "UnitTest++.h"
+#include "UnitTests.h"
+#include "../StateMachine.h"
 
 class StateMachineMock: public StateMachine<int>
 {
@@ -12,7 +11,7 @@ public:
 
 	virtual void StateChanged(int oldState, int newState)
 	{
-		CHECK_EQUAL(mIsChangeStateExpected, 1);
+		CHECK_EQUAL(mIsChangeStateExpected, true);
 		CHECK_EQUAL(mExpectedOldState, oldState);
 		CHECK_EQUAL(mExpectedNewState, newState);
 		mIsChangeStateExpected = 0;
@@ -20,7 +19,7 @@ public:
 
 	void setChangeStateExpected(int oldState, int newState)
 	{
-		mIsChangeStateExpected = 1;
+		mIsChangeStateExpected = true;
 		mExpectedOldState = oldState;
 		mExpectedNewState = newState;
 	}

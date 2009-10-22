@@ -6,6 +6,7 @@
 
 #include "Base.h"
 #include "Singleton.h"
+#include <boost/filesystem/fstream.hpp>
 
 /// Macro for easier use.
 #define gLogMgr LogSystem::LogMgr::GetSingleton()

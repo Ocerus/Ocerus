@@ -1,10 +1,8 @@
-#include "Common.h"
-#ifdef UNIT_TESTS
-#include "../Core/UnitTests.h"
+#include "UnitTests.h"
+#include "../StringConverter.h"
 
 SUITE(StringConverter)
 {
 
 }
 
-#endif

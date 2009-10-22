@@ -1,6 +1,6 @@
-#include "Common.h"
-#ifdef UNIT_TESTS
-#include "../Core/UnitTests.h"
+#include "UnitTests.h"
+#include "../Timer.h"
+
 
 #ifdef __WIN__
 
@@ -76,5 +76,3 @@ SUITE(Timer)
 		CHECK_CLOSE(29, timer.GetMilliseconds(), 1U);
 	}
 }
-
-#endif

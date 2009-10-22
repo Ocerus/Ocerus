@@ -141,6 +141,26 @@
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
+		<Configuration
+			Name="Nothing|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="0"
+			>
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine=""
+				ReBuildCommandLine=""
+				CleanCommandLine=""
+				Output=""
+				PreprocessorDefinitions=""
+				IncludeSearchPath=""
+				ForcedIncludes=""
+				AssemblySearchPath=""
+				ForcedUsingAssemblies=""
+				CompileAsManaged=""
+			/>
+		</Configuration>
 	</Configurations>
 	<References>
 	</References>
@@ -151,167 +171,331 @@
 			<File
 				RelativePath=".\src\Win32\TimeHelpers.cpp"
 				>
+				<FileConfiguration
+					Name="Nothing|Win32"
+					>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\src\Win32\TimeHelpers.h"
 				>
+				<FileConfiguration
+					Name="Nothing|Win32"
+					>
+				</FileConfiguration>
 			</File>
 		</Filter>
 		<File
 			RelativePath=".\src\AssertException.cpp"
 			>
+			<FileConfiguration
+				Name="Nothing|Win32"
+				>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\src\AssertException.h"
 			>
+			<FileConfiguration
+				Name="Nothing|Win32"
+				>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\src\CheckMacros.h"
 			>
+			<FileConfiguration
+				Name="Nothing|Win32"
+				>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\src\Checks.cpp"
 			>
+			<FileConfiguration
+				Name="Nothing|Win32"
+				>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\src\Checks.h"
 			>
+			<FileConfiguration
+				Name="Nothing|Win32"
+				>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\src\Config.h"
 			>
+			<FileConfiguration
+				Name="Nothing|Win32"
+				>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\src\CurrentTest.cpp"
 			>
+			<FileConfiguration
+				Name="Nothing|Win32"
+				>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\src\CurrentTest.h"
 			>
+			<FileConfiguration
+				Name="Nothing|Win32"
+				>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\src\DeferredTestReporter.cpp"
 			>
+			<FileConfiguration
+				Name="Nothing|Win32"
+				>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\src\DeferredTestReporter.h"
 			>
+			<FileConfiguration
+				Name="Nothing|Win32"
+				>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\src\DeferredTestResult.cpp"
 			>
+			<FileConfiguration
+				Name="Nothing|Win32"
+				>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\src\DeferredTestResult.h"
 			>
+			<FileConfiguration
+				Name="Nothing|Win32"
+				>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\src\ExecuteTest.h"
 			>
+			<FileConfiguration
+				Name="Nothing|Win32"
+				>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\src\MemoryOutStream.cpp"
 			>
+			<FileConfiguration
+				Name="Nothing|Win32"
+				>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\src\MemoryOutStream.h"
 			>
+			<FileConfiguration
+				Name="Nothing|Win32"
+				>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\src\ReportAssert.cpp"
 			>
+			<FileConfiguration
+				Name="Nothing|Win32"
+				>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\src\ReportAssert.h"
 			>
+			<FileConfiguration
+				Name="Nothing|Win32"
+				>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\src\Test.cpp"
 			>
+			<FileConfiguration
+				Name="Nothing|Win32"
+				>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\src\Test.h"
 			>
+			<FileConfiguration
+				Name="Nothing|Win32"
+				>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\src\TestDetails.cpp"
 			>
+			<FileConfiguration
+				Name="Nothing|Win32"
+				>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\src\TestDetails.h"
 			>
+			<FileConfiguration
+				Name="Nothing|Win32"
+				>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\src\TestList.cpp"
 			>
+			<FileConfiguration
+				Name="Nothing|Win32"
+				>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\src\TestList.h"
 			>
+			<FileConfiguration
+				Name="Nothing|Win32"
+				>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\src\TestMacros.h"
 			>
+			<FileConfiguration
+				Name="Nothing|Win32"
+				>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\src\TestReporter.cpp"
 			>
+			<FileConfiguration
+				Name="Nothing|Win32"
+				>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\src\TestReporter.h"
 			>
+			<FileConfiguration
+				Name="Nothing|Win32"
+				>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\src\TestReporterStdout.cpp"
 			>
+			<FileConfiguration
+				Name="Nothing|Win32"
+				>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\src\TestReporterStdout.h"
 			>
+			<FileConfiguration
+				Name="Nothing|Win32"
+				>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\src\TestResults.cpp"
 			>
+			<FileConfiguration
+				Name="Nothing|Win32"
+				>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\src\TestResults.h"
 			>
+			<FileConfiguration
+				Name="Nothing|Win32"
+				>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\src\TestRunner.cpp"
 			>
+			<FileConfiguration
+				Name="Nothing|Win32"
+				>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\src\TestRunner.h"
 			>
+			<FileConfiguration
+				Name="Nothing|Win32"
+				>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\src\TestSuite.h"
 			>
+			<FileConfiguration
+				Name="Nothing|Win32"
+				>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\src\TimeConstraint.cpp"
 			>
+			<FileConfiguration
+				Name="Nothing|Win32"
+				>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\src\TimeConstraint.h"
 			>
+			<FileConfiguration
+				Name="Nothing|Win32"
+				>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\src\TimeHelpers.h"
 			>
+			<FileConfiguration
+				Name="Nothing|Win32"
+				>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\src\UnitTest++.h"
 			>
+			<FileConfiguration
+				Name="Nothing|Win32"
+				>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\src\XmlTestReporter.cpp"
 			>
+			<FileConfiguration
+				Name="Nothing|Win32"
+				>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\src\XmlTestReporter.h"
 			>
+			<FileConfiguration
+				Name="Nothing|Win32"
+				>
+			</FileConfiguration>
 		</File>
 	</Files>
 	<Globals>

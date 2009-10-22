@@ -1,6 +1,5 @@
-#include "Common.h"
-#ifdef UNIT_TESTS
-#include "../Core/UnitTests.h"
+#include "UnitTests.h"
+#include "MathUtils.h"
 
 SUITE(MathUtils)
 {
@@ -41,5 +40,3 @@ SUITE(MathUtils)
 		CHECK_EQUAL(MathUtils::VectorFromAngle(0, 1.0f).x, 1.0f);
 	}
 }
-
-#endif

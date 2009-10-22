@@ -7,6 +7,7 @@
 #include "Base.h"
 #include "Singleton.h"
 #include "StateMachine.h"
+#include "Timer.h"
 
 /// Macro for easier use.
 #define gApp Core::Application::GetSingleton()

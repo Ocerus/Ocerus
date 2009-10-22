@@ -216,7 +216,7 @@ target_link_libraries(ocerus-engine
     ${UNITTEST++_LIBRARY}
 )
 
-add_executable(ocerus-main src/Core/main.cpp)
+add_executable(ocerus-main src/Runner/main.cpp)
 
 target_link_libraries(ocerus-main ocerus-engine)
 
@@ -229,7 +229,7 @@ foreach (test ${Tests_SRCS})
 	message("Adding test: ${test}")
 endforeach()
 
-add_executable(ocerus-test src/Core/UnitTests.cpp ${Tests_SRCS})
+add_executable(ocerus-test src/Runner/UnitTests.cpp ${Tests_SRCS})
 
 set_target_properties(ocerus-test PROPERTIES COMPILE_FLAGS "-DUNIT_TESTS")
 

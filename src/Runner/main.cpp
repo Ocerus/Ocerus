@@ -1,12 +1,8 @@
 /// @file
 /// Application entry point.
 
-#include "Common.h"
-
-#ifndef UNIT_TESTS
-
-
-#include "Application.h"
+#include "../Core/Application.h"
+#include "../LogSystem/LogMgr.h"
 #include <exception>
 
 
@@ -47,5 +43,3 @@ int main(int argc, char* argv[])
 	return 0;
 };
 
-
-#endif // UNIT_TESTS
