@@ -8,48 +8,45 @@
 
 namespace Utils
 {
-	/// Globally accessible variables identified by string identifiers.
-	/// Only pointer can be stored this way. So, to make use of this you must have the data accessible somewhere
-	/// else as well.
-	class GlobalProperties
-	{
-	public:
+    /// Globally accessible variables identified by string identifiers.
+    /// Only pointer can be stored this way. So, to make use of this you must have the data accessible somewhere
+    /// else as well.
+    class GlobalProperties
+    {
+    public:
 
-		/// Sets new key-pointer pair.
-		/// Don't store null pointers as it will cause assert.
-		static void SetPointer(const StringKey key, void* value)
-		{
-			mProperties[key] = value;
-		}
+        /// Sets new key-pointer pair.
+        /// Don't store null pointers as it will cause assert.
+        static void SetPointer(const StringKey key, void* value) {
+            mProperties[key] = value;
+        }
 
-		/// Returns a stored pointer identified by the given string key.
-		template<typename T>
-		static T* GetPointer(const StringKey key)
-		{
-			PropertyMap::const_iterator it = mProperties.find(key);
-			BS_ASSERT_MSG(it != mProperties.end(), "Global property not found.");
-			return (T*)(it->second);
-		}
+        /// Returns a stored pointer identified by the given string key.
+        template<typename T>
+        static T* GetPointer(const StringKey key) {
+            PropertyMap::const_iterator it = mProperties.find(key);
+            BS_ASSERT_MSG(it != mProperties.end(), "Global property not found.");
+            return (T*)(it->second);
+        }
 
-		/// Returns reference to the object stored using a pointer identified by the given string key.
-		/// If the stored pointer is null, an assert will appear.
-		template<typename T>
-		static T& Get(const StringKey key)
-		{
-			PropertyMap::const_iterator it = mProperties.find(key);
-			BS_ASSERT_MSG(it != mProperties.end(), "Global property not found.");
-			T* ptr = (T*)(it->second);
-			BS_ASSERT_MSG(ptr, "Global property pointer is null.");
-			return *ptr;
-		}
+        /// Returns reference to the object stored using a pointer identified by the given string key.
+        /// If the stored pointer is null, an assert will appear.
+        template<typename T>
+        static T& Get(const StringKey key) {
+            PropertyMap::const_iterator it = mProperties.find(key);
+            BS_ASSERT_MSG(it != mProperties.end(), "Global property not found.");
+            T* ptr = (T*)(it->second);
+            BS_ASSERT_MSG(ptr, "Global property pointer is null.");
+            return *ptr;
+        }
 
-	private:
+    private:
 
-		typedef map<StringKey, void*> PropertyMap;
+        typedef map<StringKey, void*> PropertyMap;
 
-		static PropertyMap mProperties;
+        static PropertyMap mProperties;
 
-	};
+    };
 }
 
 #endif // GlobalProperties_h__

@@ -216,17 +216,21 @@ target_link_libraries(ocerus-engine
     ${UNITTEST++_LIBRARY}
 )
 
-add_executable(ocerus src/Core/main.cpp)
+add_executable(ocerus-main src/Core/main.cpp)
 
-target_link_libraries(ocerus ocerus-engine)
+target_link_libraries(ocerus-main ocerus-engine)
 
 ###############################################################################
 ###                             Ocerus tests                                ###
 ###############################################################################
 file(GLOB Tests_SRCS src/*/test/Test*.cpp src/*/*/test/Test*.cpp src/*/*/*/test/Test*.cpp)
 
-add_executable(test-ocerus src/Core/UnitTests.cpp ${Tests_SRCS})
+foreach (test ${Tests_SRCS})
+	message("Adding test: ${test}")
+endforeach()
 
-set_target_properties(test-ocerus PROPERTIES COMPILE_FLAGS "-DUNIT_TESTS")
+add_executable(ocerus-test src/Core/UnitTests.cpp ${Tests_SRCS})
 
-target_link_libraries(test-ocerus ocerus-engine)
+set_target_properties(ocerus-test PROPERTIES COMPILE_FLAGS "-DUNIT_TESTS")
+
+target_link_libraries(ocerus-test ocerus-engine)

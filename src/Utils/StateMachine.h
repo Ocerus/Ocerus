@@ -36,6 +36,7 @@ namespace Utils
 			if (mNextState != lockState)
 				return false;
 			mLocked = false;
+			return true;
 		}
 
 		/// Updates the machine and changes its state if needed.
