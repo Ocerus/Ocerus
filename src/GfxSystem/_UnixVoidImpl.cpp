@@ -4,6 +4,9 @@
 #include "Texture.h"
 #include "IScreenListener.h"
 #include "../Core/Application.h"
+#include <cstdio>
+#include <X11/Xlib.h>
+#include "LogSystem/LogMgr.h"
 
 using namespace GfxSystem;
 
@@ -11,21 +14,47 @@ GfxRenderer::GfxRenderer( void ):
 	mCameraX(0),
 	mCameraY(0),
 	mCameraScale(1.0f),
-	mHGE(0)
+	mHGE(0),
+    mX11WindowId(0),
+	mX11Display(0)
 {
 }
 
 void GfxRenderer::Init( const Point& resolution, bool fullscreen )
 {
+    gLogMgr.LogMessage("*** GfxRenderer init ***");
+	int screen;
+    mX11Display = XOpenDisplay(NULL);
+    if (mX11Display == NULL) {
+        fprintf(stderr, "Cannot open display\n");
+        exit(1);
+    }
+    screen = DefaultScreen(mX11Display);
+    mX11WindowId = XCreateSimpleWindow(mX11Display, RootWindow(mX11Display, screen), 10, 10,
+		resolution.x, resolution.y, 1, BlackPixel(mX11Display, screen), WhitePixel(mX11Display, screen));
+	XSelectInput(mX11Display, mX11WindowId, StructureNotifyMask);
+    XMapWindow(mX11Display, mX11WindowId);
+
+	XEvent e;
+	//Wait for Window to show up
+	do { XNextEvent(mX11Display, &e); } while(e.type != MapNotify);
 }
 
 GfxRenderer::~GfxRenderer()
 {
+	if (mX11Display != NULL) {
+		XCloseDisplay(mX11Display);
+	}
 }
 
-uint32 GfxRenderer::_GetWindowHandle() const
+uint64 GfxRenderer::_GetWindowId() const
 {
-	return 0;
+    return mX11WindowId;
+}
+
+_XDisplay* GfxRenderer::_GetDisplay() const
+{
+	return mX11Display;
 }
 
 void GfxRenderer::ChangeResolution( const uint32 width, const uint32 height )
@@ -395,6 +424,7 @@ Texture::~Texture( void ) {}
 
 ResourceSystem::ResourcePtr Texture::CreateMe()
 {
+	return ResourceSystem::ResourcePtr(new Texture());
 }
 
 void Texture::Init()

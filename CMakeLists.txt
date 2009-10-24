@@ -5,8 +5,6 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
 
 cmake_minimum_required(VERSION 2.6.2)
 
-set(CMAKE_BUILD_TYPE release)
-
 
 ###############################################################################
 ###                      bundled external libraries                         ###
@@ -190,7 +188,9 @@ include_directories(
     ${rudeconfig_INCLUDE_DIRS}
 )
 
-set(CMAKE_CXX_FLAGS "-g -Wall")
+set(CMAKE_CXX_FLAGS "")
+set(CMAKE_CXX_FLAGS_DEBUG "-g -Wall -DUSE_ASSERT -D_DEBUG")
+
 
 add_library(ocerus-engine STATIC
     ${Core_SRCS}
@@ -228,6 +228,9 @@ file(GLOB Tests_SRCS src/*/test/Test*.cpp src/*/*/test/Test*.cpp src/*/*/*/test/
 foreach (test ${Tests_SRCS})
 	message("Adding test: ${test}")
 endforeach()
+include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Runner
+)
 
 add_executable(ocerus-test src/Runner/UnitTests.cpp ${Tests_SRCS})
 

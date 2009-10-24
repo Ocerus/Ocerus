@@ -282,9 +282,24 @@ void Core::Application::WriteToConsole( const string& str )
 // Unix
 //------------
 
+#include <X11/Xlib.h>
+#include <X11/Xatom.h>
+
 void Application::MessagePump( void )
 {
-    ///@todo port me to unix
+	_XDisplay* display = GfxSystem::GfxRenderer::GetSingleton()._GetDisplay();
+	if (display == NULL)
+		return;
+
+	while (XPending(display) > 0)
+	{
+		XEvent ev;
+		XNextEvent(display, &ev);
+		if (ev.type == DestroyNotify)
+		{
+			RequestStateChange(AS_SHUTDOWN, true);
+		}
+	}
 }
 
 void Core::Application::ShowConsole( void )

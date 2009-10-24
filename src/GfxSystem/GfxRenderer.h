@@ -11,6 +11,9 @@
 #define gGfxRenderer GfxSystem::GfxRenderer::GetSingleton()
 
 class HGE;
+#ifdef __UNIX__
+struct _XDisplay;
+#endif
 
 namespace GfxSystem
 {
@@ -80,7 +83,7 @@ namespace GfxSystem
 
 		bool DrawPolygon(Point* vertices, int vertices_len, const TexturePtr& image, const Pen& outline, float32 angle = 0.0f, const Color& color = Color::FullColor, float32 scale = 1.0f, float32 textureAngle = 0.0f, float32 textureScale = 1.0f) const;
 		bool DrawPolygon(const vector<Point>& vertices, const TexturePtr& image, const Pen& outline, float32 angle = 0.0f, const Color& color = Color::FullColor, float32 scale = 1.0f, float32 textureAngle = 0.0f, float32 textureScale = 1.0f) const;
-		
+
 		bool DrawPolygon(Point* vertices, int vertices_len, const Color& fillColor, const Pen& outline = Pen::NullPen) const;
 		bool DrawPolygon(const vector<Point>& vertices, const Color& fillColor, const Pen& outline = Pen::NullPen) const;
 
@@ -99,11 +102,17 @@ namespace GfxSystem
 							 const string & fontid = "");
 		Vector2 GetTextSize( const string & text, const string & fontid = "" );
 
-		/// A haxxor function to workaround HGE and Windows issues.
+    #ifdef __WINDOWS__
+        /// A haxxor function to workaround HGE and Windows issues.
 		uint32 _GetWindowHandle(void) const;
+    #endif
+    #ifdef __UNIX__
+        uint64 _GetWindowId() const;
+		_XDisplay* _GetDisplay() const;
+    #endif
 
 	private:
-		HGE* mHGE; 
+		HGE* mHGE;
 
 		int32 mScreenWidth;
 		int32 mScreenHeight;
@@ -120,6 +129,11 @@ namespace GfxSystem
 		friend bool HgeExitFunction(void);
 
 		set<IScreenListener*> mScreenListeners;
+
+#ifdef __UNIX__
+        uint64 mX11WindowId;
+		_XDisplay* mX11Display;
+#endif
 
 	};
 }
