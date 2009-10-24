@@ -53,7 +53,7 @@ void Reflection::AbstractProperty::SetValueFromString( RTTIBaseClass* owner, con
 		SetValue(owner, StringConverter::FromString<uint8>(str));
 		break;
 	case PT_STRING:
-		SetValue(owner, StringConverter::FromString<char*>(str));
+		SetValue(owner, str);
 		break;
 	case PT_STRING_KEY:
 		SetValue<StringKey>(owner, StringConverter::FromString<string>(str));
