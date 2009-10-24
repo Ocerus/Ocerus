@@ -19,6 +19,12 @@
 #ifndef B2_SETTINGS_H
 #define B2_SETTINGS_H
 
+#ifdef _WIN32
+    #define __WIN__
+#else
+    #define __UNIX__
+#endif
+
 #include "SmartAssert.h"
 
 #define B2_NOT_USED(x) (void)x

@@ -102,7 +102,7 @@ namespace GfxSystem
 							 const string & fontid = "");
 		Vector2 GetTextSize( const string & text, const string & fontid = "" );
 
-    #ifdef __WINDOWS__
+    #ifdef __WIN__
         /// A haxxor function to workaround HGE and Windows issues.
 		uint32 _GetWindowHandle(void) const;
     #endif

@@ -19,7 +19,11 @@ void DisplayAssert(const char* msg, const char* file, const int line)
 
 #endif
 
-#ifdef USE_ASSERT
+
+
+// force Boost to use our assert implementation
+#include <boost/assert.hpp>
+
 namespace boost
 {
     void assertion_failed(char const* expr, char const* function, char const* file, long line)
@@ -28,4 +32,3 @@ namespace boost
         DisplayAssert(expr, file, line);
     }
 }
-#endif // USE_ASSERT

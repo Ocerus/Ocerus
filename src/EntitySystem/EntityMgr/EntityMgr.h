@@ -45,9 +45,6 @@ namespace EntitySystem
 		/// Returns true if the entity exists.
 		bool EntityExists(const EntityHandle h) const;
 
-		/// Changes the team this entity belongs to.
-		void SetEntityTeam(const EntityHandle h, const EntityHandle teamOwner);
-
 		/// Returns true if the entity was fully initialized.
 		bool IsEntityInited(const EntityHandle h) const;
 

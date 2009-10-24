@@ -88,6 +88,7 @@ GfxRenderer::~GfxRenderer()
 
 uint32 GfxRenderer::_GetWindowHandle() const
 {
+	OC_ASSERT(mHGE);
 	HWND hWnd = mHGE->System_GetState(HGE_HWND);
 	OC_ASSERT(hWnd);
 	return (uint32)hWnd;

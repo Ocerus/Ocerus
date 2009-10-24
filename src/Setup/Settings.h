@@ -11,13 +11,13 @@
 #endif
 
 
+// Disable boost exceptions.
 #define BOOST_NO_TYPEID
 
 
 // These must come first!
 #include "SmartAssert.h"
 #include "Memory_pre.h"
-
 
 
 
