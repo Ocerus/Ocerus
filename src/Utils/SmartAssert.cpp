@@ -18,3 +18,14 @@ void DisplayAssert(const char* msg, const char* file, const int line)
 }
 
 #endif
+
+#ifdef USE_ASSERT
+namespace boost
+{
+    void assertion_failed(char const* expr, char const* function, char const* file, long line)
+    {
+        (void) function;
+        DisplayAssert(expr, file, line);
+    }
+}
+#endif // USE_ASSERT
