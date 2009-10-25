@@ -34,8 +34,8 @@ void EntityComponents::CmpPlatformVisual::Draw( void ) const
 {
 	Vector2 pos = GetProperty("Position").GetValue<Vector2>();
 	float32 angle = GetProperty("Angle").GetValue<float32>();
-	EntityHandle blueprints = GetProperty("Blueprints").GetValue<EntityHandle>();
-	GfxSystem::Color fillColor = blueprints.GetProperty("FillColor").GetValue<GfxSystem::Color>();
+	angle += GetProperty("InitShapeAngle").GetValue<float32>();
+	GfxSystem::Color fillColor = GetProperty("FillColor").GetValue<GfxSystem::Color>();
 	bool flip = GetProperty("InitShapeFlip").GetValue<bool>();
 	if (flip)
 	{

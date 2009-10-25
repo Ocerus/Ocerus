@@ -64,9 +64,6 @@ void Core::Game::Init()
 
 	//// TEST ////
 
-	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("ShipParts/materials.xml"));
-	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("ShipParts/platforms.xml"));
-
 	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("Ships/ship0.xml"));
 
 

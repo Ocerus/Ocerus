@@ -20,9 +20,7 @@ void EntityComponents::CmpPlatformPhysics::Create( void )
 
 void EntityComponents::CmpPlatformPhysics::Init( void )
 {
-	PropertyHolder prop = GetProperty("ParentShip");
-	EntityHandle ship = prop.GetValue<EntityHandle>();
-	CreateBody(ship.IsValid());
+	CreateBody(false);
 }
 
 void EntityComponents::CmpPlatformPhysics::CreateBody( const bool hasParentShip )
@@ -49,14 +47,12 @@ void EntityComponents::CmpPlatformPhysics::CreateBody( const bool hasParentShip 
 
 	// create shape
 	b2PolygonDef shapeDef;
-	EntityHandle blueprints = GetProperty("Blueprints").GetValue<EntityHandle>();
-	EntityHandle material = blueprints.GetProperty("Material").GetValue<EntityHandle>();;
 	// set density
-	float32 density = material.GetProperty("Density").GetValue<float32>();;
+	float32 density = GetProperty("Density").GetValue<float32>();;
 	shapeDef.density = density;
 	// retrieve original shape
-	Vector2* poly = blueprints.GetProperty("Shape").GetValue<Vector2*>();
-	uint32 polyLen = blueprints.GetProperty("ShapeLength").GetValue<uint32>();
+	Vector2* poly = GetProperty("Shape").GetValue<Vector2*>();
+	uint32 polyLen = GetProperty("ShapeLength").GetValue<uint32>();
 	// retrieve shape transformation info
 	bool flip = mInitShapeFlip;
 	float32 angle = mInitShapeAngle;
@@ -81,8 +77,7 @@ void EntityComponents::CmpPlatformPhysics::CreateBody( const bool hasParentShip 
 
 void EntityComponents::CmpPlatformPhysics::Destroy( void )
 {
-	PropertyHolder prop = GetProperty("ParentShip");
-	if (mBody && !prop.GetValue<EntityHandle>().IsValid())
+	if (mBody)
 	{
 		GlobalProperties::Get<b2World>("CurrentPhysics").DestroyBody(mBody);
 		mBody = 0;
@@ -109,8 +104,6 @@ void EntityComponents::CmpPlatformPhysics::RegisterReflection()
 	RegisterProperty<Vector2>("LinearVelocity", &CmpPlatformPhysics::GetLinearVelocity, &CmpPlatformPhysics::SetLinearVelocity, PA_EDIT_READ | PA_SCRIPT_READ);
 	RegisterProperty<Vector2*>("Shape", &CmpPlatformPhysics::GetShape, 0, PA_EDIT_READ | PA_SCRIPT_READ);
 	RegisterProperty<uint32>("ShapeLength", &CmpPlatformPhysics::GetShapeLength, 0, PA_EDIT_READ | PA_SCRIPT_READ);
-
-	AddComponentDependency(CT_PLATFORM_LOGIC);
 }
 
 Vector2 EntityComponents::CmpPlatformPhysics::GetLinearVelocity( void ) const

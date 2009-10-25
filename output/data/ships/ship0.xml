@@ -4,8 +4,25 @@
 
   <Entity Type="ET_PLATFORM" Name="ship0">
     <Component Type="CT_TRANSFORM"/>
+    <Component Type="CT_MATERIAL">
+      <DurabilityRatio>1.0</DurabilityRatio>
+      <Density>1.0</Density>
+    </Component>
+    <Component Type="CT_PLATFORM_PARAMS">
+      <Shape>
+        <LengthParam>ShapeLength</LengthParam>
+        <Vertex>-1.33 -0.33</Vertex>
+        <Vertex>0.58 -0.33</Vertex>
+      	<Vertex>1.17 0.25</Vertex>
+        <Vertex>1.17 0.33</Vertex>
+        <Vertex>-0.66 0.33</Vertex>
+      </Shape>
+      <ResourceGroup>ShipParts</ResourceGroup>
+      <ExplodeEffect>explosion.psi</ExplodeEffect>
+      <ExplodeEffectScale>0.025</ExplodeEffectScale>
+      <FillColor>90 119 114</FillColor>
+    </Component>
     <Component Type="CT_PLATFORM_LOGIC">
-      <Blueprints>platformWing1</Blueprints>
     </Component>
     <Component Type="CT_PLATFORM_PHYSICS">
       <InitShapeFlip>false</InitShapeFlip>
