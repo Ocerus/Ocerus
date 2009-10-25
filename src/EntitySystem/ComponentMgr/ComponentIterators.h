@@ -39,8 +39,10 @@ namespace EntitySystem
 			ComponentsList::const_iterator(rhs),
 			mComponentsList(rhs.mComponentsList) {}
 
+		/// Destructor.
 		virtual ~EntityComponentsIterator(void) {}
 
+		/// Assignment operator.
 		EntityComponentsIterator& operator=(const EntityComponentsIterator& rhs)
 		{
 			mComponentsList = rhs.mComponentsList;

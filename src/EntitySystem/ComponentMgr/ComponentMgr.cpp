@@ -42,6 +42,7 @@ Component* ComponentMgr::CreateComponent(EntityHandle h, const eComponentType ty
 	}
 	entIt->second->push_back(cmp);
 	cmp->SetOwner(h);
+	cmp->SetType(type);
 	cmp->Create();
 	return cmp;
 }
@@ -62,49 +63,4 @@ void ComponentMgr::DestroyEntityComponents(EntityID id)
 	}
 	delete iter->second;
 	mEntityComponentsMap.erase(iter);
-}
-
-bool EntitySystem::ComponentMgr::GetEntityProperties( const EntityID id, PropertyList& out, const PropertyAccessFlags flagMask ) const
-{
-	out.clear();
-	EntityComponentsMap::const_iterator iter = mEntityComponentsMap.find(id);
-	if (iter == mEntityComponentsMap.end())
-		return false;
-	ComponentsList& cmpList = *iter->second;
-	for (ComponentsList::const_iterator i=cmpList.begin(); i!=cmpList.end(); ++i)
-		(*i)->GetRTTI()->EnumProperties(*i, out, flagMask);
-	return true;
-}
-
-PropertyHolder EntitySystem::ComponentMgr::GetEntityProperty( const EntityHandle h, const StringKey key, const PropertyAccessFlags mask ) const
-{
-	EntityComponentsMap::const_iterator iter = mEntityComponentsMap.find(h.GetID());
-	if (iter == mEntityComponentsMap.end())
-		return PropertyHolder();
-
-	ComponentsList& cmpList = *iter->second;
-	for (ComponentsList::iterator i=cmpList.begin(); i!=cmpList.end(); ++i)
-	{
-		AbstractProperty* prop = (*i)->GetRTTI()->GetProperty(key, mask);
-		if (prop)
-			return PropertyHolder(*i, prop);
-	}
-
-
-	// property not found, print some info about why
-	gLogMgr.LogMessage("ComponentMgr: unknown property '", (string)key, "'", LOG_ERROR);
-	PropertyList propertyList;
-	string propertiesString;
-	GetEntityProperties(h, propertyList, mask);
-	for (PropertyList::iterator it=propertyList.begin(); it!=propertyList.end(); )
-	{
-		propertiesString += it->second.GetName();
-		++it;
-		if (it==propertyList.end()) propertiesString += ".";
-		else propertiesString += ", ";
-	}
-	gLogMgr.LogMessage("Available properties: ", propertiesString);
-
-	// return an invalid holder
-	return PropertyHolder();
 }

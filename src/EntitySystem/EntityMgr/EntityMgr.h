@@ -8,6 +8,7 @@
 #include "Singleton.h"
 #include "EntityHandle.h"
 #include "EntityEnums.h"
+#include "../ComponentMgr/ComponentEnums.h"
 #include "Properties/PropertyAccess.h"
 
 /// Macro for easier use.
@@ -15,6 +16,9 @@
 
 namespace EntitySystem
 {
+	/// A list of types of components.
+	typedef vector<eComponentType> ComponentTypeList;
+
 	/// This class manages all game entities like weapons, enemy ships, projectiles, etc. Manipulation of entities is
 	///	done via entity handles.
 	class EntityMgr : public Singleton<EntityMgr>
@@ -49,13 +53,19 @@ namespace EntitySystem
 		bool IsEntityInited(const EntityHandle h) const;
 
 		/// Retrieves properties of an entity. A filter related to properties' flags can be specified.
-		bool GetEntityProperties(const EntityHandle h, PropertyList& out, const PropertyAccessFlags flagMask = PA_FULL_ACCESS);
+		bool GetEntityProperties(const EntityHandle h, PropertyList& out, const PropertyAccessFlags flagMask = PA_FULL_ACCESS) const;
 
 		/// Retrieves a property of an entity. A filter related to properties' flags can be specified.
 		PropertyHolder GetEntityProperty(const EntityHandle h, const StringKey key, const PropertyAccessFlags flagMask = PA_FULL_ACCESS) const;
 
 		/// Returns EntityHandle to an entity of a specified ID. If there are more of them, then returns the first one.
 		EntityHandle FindFirstEntity(const string& ID);
+
+		/// Returns true if the given entity has a component of the given type.
+		bool HasEntityComponentOfType(const EntityHandle h, const eComponentType componentType);
+
+		/// Fills the given list with types of components present in the given entity. Returns true if everything was ok.
+		bool GetEntityComponentTypes(const EntityHandle h, ComponentTypeList& out);
 
 		/// Actually destroyes all entities marked for destruction.
 		void ProcessDestroyQueue(void);

@@ -167,11 +167,6 @@ EntitySystem::eEntityType EntitySystem::EntityMgr::GetEntityType( const EntityHa
 	return ei->second->mType;
 }
 
-bool EntitySystem::EntityMgr::GetEntityProperties( const EntityHandle h, PropertyList& out, const PropertyAccessFlags flagMask )
-{
-	return mComponentMgr->GetEntityProperties(h, out, flagMask);
-}
-
 bool EntitySystem::EntityMgr::IsEntityInited( const EntityHandle h ) const
 {
 	EntityMap::const_iterator ei = mEntities.find(h.GetID());
@@ -183,9 +178,43 @@ bool EntitySystem::EntityMgr::IsEntityInited( const EntityHandle h ) const
 	return ei->second->mFullyInited;
 }
 
+bool EntitySystem::EntityMgr::GetEntityProperties( const EntityHandle h, PropertyList& out, const PropertyAccessFlags flagMask ) const
+{
+	out.clear();
+
+	for (EntityComponentsIterator it=mComponentMgr->GetEntityComponents(h); it.HasMore(); ++it)
+	{
+		(*it)->GetRTTI()->EnumProperties(*it, out, flagMask);
+	}
+	
+	return true;
+}
+
 PropertyHolder EntitySystem::EntityMgr::GetEntityProperty( const EntityHandle h, const StringKey key, const PropertyAccessFlags flagMask /*= 0xff*/ ) const
 {
-	return mComponentMgr->GetEntityProperty(h, key, flagMask);
+	for (EntityComponentsIterator it=mComponentMgr->GetEntityComponents(h); it.HasMore(); ++it)
+	{
+		AbstractProperty* prop = (*it)->GetRTTI()->GetProperty(key, flagMask);
+		if (prop) return PropertyHolder(*it, prop);
+	}
+
+
+	// property not found, print some info about why
+	gLogMgr.LogMessage("EntityMgr: unknown property '", (string)key, "'", LOG_ERROR);
+	PropertyList propertyList;
+	string propertiesString;
+	GetEntityProperties(h, propertyList, flagMask);
+	for (PropertyList::iterator it=propertyList.begin(); it!=propertyList.end(); )
+	{
+		propertiesString += it->second.GetName();
+		++it;
+		if (it==propertyList.end()) propertiesString += ".";
+		else propertiesString += ", ";
+	}
+	gLogMgr.LogMessage("Available properties: ", propertiesString);
+
+	// return an invalid holder
+	return PropertyHolder();
 }
 
 EntitySystem::EntityHandle EntitySystem::EntityMgr::FindFirstEntity( const string& ID )
@@ -309,4 +338,23 @@ EntitySystem::EntityMgr::EntityInfo::EntityInfo( void ):
 	mFullyInited(false)
 {
 
+}
+
+bool EntitySystem::EntityMgr::HasEntityComponentOfType(const EntityHandle h, const eComponentType componentType)
+{
+	for (EntityComponentsIterator it=mComponentMgr->GetEntityComponents(h); it.HasMore(); ++it)
+	{
+		if ((*it)->GetType() == componentType) return true;
+	}
+	return false;
+}
+	
+bool EntitySystem::EntityMgr::GetEntityComponentTypes(const EntityHandle h, ComponentTypeList& out)
+{
+	out.clear();
+	for (EntityComponentsIterator it=mComponentMgr->GetEntityComponents(h); it.HasMore(); ++it)
+	{
+		out.push_back((*it)->GetType());
+	}
+	return true;
 }

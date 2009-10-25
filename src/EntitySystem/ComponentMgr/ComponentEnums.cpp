@@ -11,3 +11,8 @@ EntitySystem::eComponentType EntitySystem::DetectComponentType( const string& ty
 	gLogMgr.LogMessage("DetectComponentType:Unknown type '", type, "'", LOG_ERROR);
 	return CT_INVALID;
 }
+
+string EntitySystem::GetComponentTypeName(const eComponentType type)
+{
+	return ComponentTypeNames[type];
+}

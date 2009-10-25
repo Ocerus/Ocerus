@@ -32,10 +32,16 @@ namespace EntitySystem
 		#define COMPONENT_TYPE(x, y) #x,
 		#include "../Components/_ComponentTypes.h"
 		#undef COMPONENT_TYPE
+
+		"NUM_COMPONENT_TYPES",
+		"CT_INVALID"
 	};
 
 	/// Returns a component type based on a string.
 	eComponentType DetectComponentType(const string& type);
+
+	/// Returns a string representation of the given component type.
+	string GetComponentTypeName(const eComponentType type);
 
 }
 

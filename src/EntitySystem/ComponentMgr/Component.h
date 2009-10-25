@@ -32,13 +32,15 @@ namespace EntitySystem
 		/// Returns a handle to the owner of this component (an entity).
 		inline EntityHandle* GetOwnerPtr(void) { return &mOwner; }
 
+		/// Returns the type of this components.
+		inline eComponentType GetType(void) const { return mType; }
+
 		/// Posts a message to the entity owning this component.
 		inline EntityMessage::eResult PostMessage(const EntityMessage::eType type, void* data = 0) const { return GetOwner().PostMessage(type, data); }
 
 		/// Returns a property to be get or set.
 		inline PropertyHolder GetProperty(const StringKey name) const { return GetOwner().GetProperty(name); }
 
-		/// @remarks
 		/// We don't want anyone except the ComponentMgr to create new components, but it has to be public because of the RTTI.
 		Component(void);
 
@@ -47,8 +49,10 @@ namespace EntitySystem
 
 	private:
 		EntityHandle mOwner;
+		eComponentType mType;
 		friend class ComponentMgr;
 		inline void SetOwner(const EntityHandle owner) { mOwner = owner; }
+		inline void SetType(const eComponentType type) { mType = type; }
 	};
 }
 

@@ -43,6 +43,7 @@ bool EntitySystem::EntityHandle::operator!=( const EntityHandle& rhs )
 
 EntitySystem::eEntityType EntitySystem::EntityHandle::GetType( void ) const
 {
+	// if this is not optimized by the linker, then we have to inline it
 	return gEntityMgr.GetEntityType(*this);
 }
 
@@ -60,16 +61,19 @@ bool EntitySystem::EntityHandle::GetProperties( PropertyList& out, const Propert
 
 PropertyHolder EntitySystem::EntityHandle::GetFunction( const StringKey key, const PropertyAccessFlags mask ) const
 {
+	// if this is not optimized by the linker, then we have to inline it in both EntityMgr and EntityHandle
 	return gEntityMgr.GetEntityProperty(*this, key, mask);
 }
 
 PropertyHolder EntitySystem::EntityHandle::GetProperty( const StringKey key, const PropertyAccessFlags mask ) const
 {
+	// if this is not optimized by the linker, then we have to inline it in both EntityMgr and EntityHandle
 	return gEntityMgr.GetEntityProperty(*this, key, mask);
 }
 
 bool EntitySystem::EntityHandle::Exists( void ) const
 {
+	// if this is not optimized by the linker, then we have to inline it
 	return gEntityMgr.EntityExists(*this);
 }
 
