@@ -121,6 +121,7 @@ set(EntitySystem_SRCS
     src/EntitySystem/Components/CmpPlatformVisual.cpp
     src/EntitySystem/Components/CmpPlatformPhysics.cpp
     src/EntitySystem/Components/CmpPlatformParams.cpp
+    src/EntitySystem/Components/Transform.cpp
     src/EntitySystem/ComponentMgr/Component.cpp
     src/EntitySystem/ComponentMgr/ComponentEnums.cpp
     src/EntitySystem/ComponentMgr/ComponentMgr.cpp
