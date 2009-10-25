@@ -31,6 +31,12 @@ namespace Reflection
 		/// Returns the name of this property.
 		inline const char* GetName(void) const { return mName; }
 
+		/// Returns the comment of this property or empty string if no comment was set.
+		inline string GetComment(void) const { return mComment; }
+
+		/// Sets the comment for this property.
+		inline void SetComment(const string& comment) { mComment = comment; }
+
 		/// Returns string key created from the name of this property.
 		inline StringKey GetKey(void) const { return mKey; }
 
@@ -85,6 +91,7 @@ namespace Reflection
 
 		StringKey mKey;
 		const char* mName;
+		string mComment;
 		PropertyAccessFlags mAccessFlags;
 
 	};
