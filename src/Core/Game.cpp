@@ -75,7 +75,7 @@ void Core::Game::Init()
 	EntityHandle ship = gEntityMgr.FindFirstEntity("ship0");
 	if (ship.IsValid())
 	{
-		Vector2 shipPos = ship.GetProperty("AbsolutePosition").GetValue<Vector2>();
+		Vector2 shipPos = ship.GetProperty("Position").GetValue<Vector2>();
 		gGfxRenderer.SetCameraPos(shipPos);
 		mCameraFocus = ship;
 	}
@@ -191,7 +191,7 @@ void Core::Game::Draw( const float32 delta)
 
 	if (mCameraFocus.IsValid())
 	{
-		Vector2 pos = mCameraFocus.GetProperty("AbsolutePosition").GetValue<Vector2>();
+		Vector2 pos = mCameraFocus.GetProperty("Position").GetValue<Vector2>();
 		gGfxRenderer.SetCameraPos(pos);
 	}
 

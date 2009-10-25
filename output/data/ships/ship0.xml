@@ -3,11 +3,11 @@
 <Entities>
 
   <Entity Type="ET_PLATFORM" Name="ship0">
+    <Component Type="CT_TRANSFORM"/>
     <Component Type="CT_PLATFORM_LOGIC">
       <Blueprints>platformWing1</Blueprints>
     </Component>
     <Component Type="CT_PLATFORM_PHYSICS">
-      <RelativePosition>0 -0.85</RelativePosition>
       <InitShapeFlip>false</InitShapeFlip>
       <InitShapeAngle>-0.78539816339744830961566084581988</InitShapeAngle>
     </Component>

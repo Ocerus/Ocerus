@@ -269,6 +269,10 @@
 						RelativePath="..\src\EntitySystem\Components\CmpPlatformVisual.h"
 						>
 					</File>
+					<File
+						RelativePath="..\src\EntitySystem\Components\Transform.h"
+						>
+					</File>
 				</Filter>
 				<Filter
 					Name="src"
@@ -299,6 +303,10 @@
 					</File>
 					<File
 						RelativePath="..\src\EntitySystem\Components\CmpPlatformVisual.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\src\EntitySystem\Components\Transform.cpp"
 						>
 					</File>
 				</Filter>

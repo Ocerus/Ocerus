@@ -37,7 +37,7 @@ EntityMessage::eResult EntityComponents::CmpPlatformLogic::HandleMessage(const E
 	case EntityMessage::MOUSE_PICK:
 		OC_DASSERT(msg.data);
 		{
-			Vector2 pos = GetProperty("AbsolutePosition").GetValue<Vector2>();
+			Vector2 pos = GetProperty("Position").GetValue<Vector2>();
 			float32 angle = GetProperty("Angle").GetValue<float32>();
 			((EntityPicker*)msg.data)->Update(GetOwner(), MathUtils::Multiply(Matrix22(angle), mPickCircleCenter) + pos, mPickCircleRadius);
 		}
@@ -61,7 +61,7 @@ void EntityComponents::CmpPlatformLogic::RegisterReflection()
 
 void EntityComponents::CmpPlatformLogic::DrawSelectionOverlay( const bool hover ) const
 {
-	Vector2 pos = GetProperty("AbsolutePosition").GetValue<Vector2>();
+	Vector2 pos = GetProperty("Position").GetValue<Vector2>();
 	float32 angle = GetProperty("Angle").GetValue<float32>();
 	GfxSystem::Color color(255,0,0,180);
 	if (hover)
@@ -99,7 +99,7 @@ void EntityComponents::CmpPlatformLogic::Die( void )
 				radius = dist;
 		}
 		ps->SetScale(radius * scale);
-		prop = GetProperty("AbsolutePosition");
+		prop = GetProperty("Position");
 		ps->MoveTo(prop.GetValue<Vector2>());
 		ps->Fire();
 	}

@@ -4,6 +4,7 @@
 #ifndef _ComponentHeaders_h__
 #define _ComponentHeaders_h__
 
+#include "../Components/Transform.h"
 #include "../Components/CmpMaterial.h"
 #include "../Components/CmpPlatformParams.h"
 #include "../Components/CmpPlatformPhysics.h"

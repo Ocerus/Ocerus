@@ -12,10 +12,7 @@ void EntityComponents::CmpPlatformPhysics::Create( void )
 {
 	mBody = 0;
 	mShape = 0;
-	mRelativePosition.SetZero();
 
-	mInitBodyAngle = 0.0f;
-	mInitBodyPosition.SetZero();
 	mInitShapeAngle = 0.0f;
 	mInitShapeFlip = false;
 }
@@ -42,8 +39,8 @@ void EntityComponents::CmpPlatformPhysics::CreateBody( const bool hasParentShip 
 	else
 	{
 		b2BodyDef bodyDef;
-		bodyDef.position = mInitBodyPosition;
-		bodyDef.angle = mInitBodyAngle;
+		bodyDef.position = GetProperty("Position").GetValue<Vector2>();
+		bodyDef.angle = GetProperty("Angle").GetValue<float32>();
 		bodyDef.userData = GetOwnerPtr();
 		bodyDef.angularDamping = ANGULAR_DAMPING;
 		bodyDef.linearDamping = LINEAR_DAMPING;
@@ -63,7 +60,7 @@ void EntityComponents::CmpPlatformPhysics::CreateBody( const bool hasParentShip 
 	// retrieve shape transformation info
 	bool flip = mInitShapeFlip;
 	float32 angle = mInitShapeAngle;
-	b2XForm xform(mRelativePosition, b2Mat22(angle));
+	b2XForm xform(Vector2_Zero, b2Mat22(angle));
 	// create the shape
 	for (int i=flip?(polyLen-1):(0); flip?(i>=0):(i<(int)polyLen); flip?(--i):(++i))
 	{
@@ -107,44 +104,13 @@ EntityMessage::eResult EntityComponents::CmpPlatformPhysics::HandleMessage( cons
 
 void EntityComponents::CmpPlatformPhysics::RegisterReflection()
 {
-	RegisterProperty<Vector2>("RelativePosition", &CmpPlatformPhysics::GetRelativePosition, &CmpPlatformPhysics::SetRelativePosition, PA_INIT | PA_EDIT_READ | PA_SCRIPT_READ);
-	RegisterProperty<Vector2>("InitBodyPosition", &CmpPlatformPhysics::GetInitBodyPosition, &CmpPlatformPhysics::SetInitBodyPosition, PA_INIT);
-	RegisterProperty<float32>("InitBodyAngle", &CmpPlatformPhysics::GetInitBodyAngle, &CmpPlatformPhysics::SetInitBodyAngle, PA_INIT);
 	RegisterProperty<float32>("InitShapeAngle", &CmpPlatformPhysics::GetInitShapeAngle, &CmpPlatformPhysics::SetInitShapeAngle, PA_INIT);
 	RegisterProperty<bool>("InitShapeFlip", &CmpPlatformPhysics::GetInitShapeFlip, &CmpPlatformPhysics::SetInitShapeFlip, PA_INIT);
-	RegisterProperty<Vector2>("AbsolutePosition", &CmpPlatformPhysics::GetAbsolutePosition, &CmpPlatformPhysics::SetAbsolutePosition,  PA_EDIT_READ | PA_SCRIPT_READ);
-	RegisterProperty<float32>("Angle", &CmpPlatformPhysics::GetAngle, &CmpPlatformPhysics::SetAngle, PA_EDIT_READ | PA_SCRIPT_READ);
 	RegisterProperty<Vector2>("LinearVelocity", &CmpPlatformPhysics::GetLinearVelocity, &CmpPlatformPhysics::SetLinearVelocity, PA_EDIT_READ | PA_SCRIPT_READ);
 	RegisterProperty<Vector2*>("Shape", &CmpPlatformPhysics::GetShape, 0, PA_EDIT_READ | PA_SCRIPT_READ);
 	RegisterProperty<uint32>("ShapeLength", &CmpPlatformPhysics::GetShapeLength, 0, PA_EDIT_READ | PA_SCRIPT_READ);
 
 	AddComponentDependency(CT_PLATFORM_LOGIC);
-}
-
-Vector2 EntityComponents::CmpPlatformPhysics::GetAbsolutePosition( void ) const
-{
-	OC_DASSERT(mBody);
-	return mBody->GetPosition() + MathUtils::Multiply(Matrix22(mBody->GetAngle()), mRelativePosition);
-}
-
-void EntityComponents::CmpPlatformPhysics::SetAbsolutePosition( Vector2 pos )
-{
-	OC_DASSERT(mBody);
-	EntityHandle ship = GetProperty("ParentShip").GetValue<EntityHandle>();
-	OC_DASSERT_MSG(!ship.IsValid(), "SetAbsolutePosition can be used for free platforms only");
-	mBody->SetXForm(pos, mBody->GetAngle());
-}
-
-float32 EntityComponents::CmpPlatformPhysics::GetAngle( void ) const
-{
-	OC_DASSERT(mBody);
-	return mBody->GetAngle();
-}
-
-void EntityComponents::CmpPlatformPhysics::SetAngle( const float32 angle )
-{
-	OC_DASSERT(mBody);
-	mBody->SetXForm(mBody->GetPosition(), angle);
 }
 
 Vector2 EntityComponents::CmpPlatformPhysics::GetLinearVelocity( void ) const
