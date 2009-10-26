@@ -4,6 +4,31 @@
 using namespace StringConverter;
 
 template<>
+string StringConverter::ToString(bool& val)
+{
+	std::ostringstream out;
+	out << std::boolalpha << val;
+	return out.str();
+}
+		
+template<>
+string StringConverter::ToString(bool val)
+{
+	std::ostringstream out;
+	out << std::boolalpha << val;
+	return out.str();
+}
+
+template<>
+char* StringConverter::FromString(const string& str)
+{
+	char* result = new char[str.length()+1];
+	const char* temp = str.c_str();
+	strcpy_s(result, str.length()+1, temp);
+	return result;
+}
+
+template<>
 Vector2 StringConverter::FromString(const string& str)
 {
 	Vector2 result;

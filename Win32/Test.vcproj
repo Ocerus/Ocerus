@@ -311,6 +311,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\Utils\test\TestStringKey.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\Utils\test\TestTimer.cpp"
 				>
 			</File>

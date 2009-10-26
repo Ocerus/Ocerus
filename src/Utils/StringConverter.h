@@ -28,6 +28,12 @@ namespace Utils
 		template<>
 		inline string ToString(const string val) { return val; }
 
+		template<>
+		string ToString(bool& val);
+		
+		template<>
+		string ToString(bool val);
+
 #ifdef __WIN__
 #pragma warning(push)
 #pragma warning(disable: 4700)
@@ -50,6 +56,9 @@ namespace Utils
 
 		template<>
 		inline string FromString(const string& str) { return str; }
+
+		template<>
+		char* FromString(const string& str);
 
 		template<>
 		Vector2 FromString(const string& str);
