@@ -63,26 +63,24 @@ namespace EntitySystem
 		/// Returns the type of this entity.
 		eEntityType GetType(void) const;
 
+		/// Returns the internal ID of this entity.
+		EntityID GetID(void) const;
+
 		/// Invalid handle representing no entity in the system.
 		static const EntityHandle Null;
 
 	private:
 
-		static EntityID sLastID;
+		friend class EntityMgr;
 
 		EntityID mEntityID;
 
-		friend class ComponentMgr;
-		friend class EntityMgr;
+		static EntityID sLastID;
+		static EntityHandle CreateUniqueHandle();
+		static EntityID GetMaxID(void) { return sLastID; }
 
 		/// New entities can be created only by the EntityMgr, that's why it's private.
 		EntityHandle(EntityID ID): mEntityID(ID) {}
-
-		static EntityHandle CreateUniqueHandle();
-
-		static EntityID GetMaxID(void) { return sLastID; }
-
-		EntityID GetID(void) const;
 	};
 }
 

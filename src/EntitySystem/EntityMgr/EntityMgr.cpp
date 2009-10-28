@@ -9,7 +9,7 @@ using namespace EntitySystem;
 
 EntityMgr::EntityMgr()
 {
-	gLogMgr.LogMessage("*** EntityMgr init ***");
+	ocInfo << "*** EntityMgr init ***";
 
 	mComponentMgr = new ComponentMgr();
 
@@ -30,17 +30,17 @@ EntityMessage::eResult EntityMgr::PostMessage(EntityID id, const EntityMessage& 
 	EntityMap::iterator ei = mEntities.find(id);
 	if (ei == mEntities.end())
 	{
-		gLogMgr.LogMessage("Can't find entity", id, LOG_ERROR);
+		ocError << "Can't find entity with ID '" << id << "'";
 		return EntityMessage::RESULT_ERROR;
 	}
 	if (msg.type != EntityMessage::INIT && msg.type != EntityMessage::POST_INIT && !ei->second->mFullyInited)
 	{
-		gLogMgr.LogMessage("Entity '", id, "' is not initialized -> can't post messages", LOG_ERROR);
+		ocError << "Entity with ID '" << id << "' is not initialized -> can't post messages";
 		return EntityMessage::RESULT_ERROR;
 	}
 	if (msg.type != EntityMessage::INIT && msg.type == EntityMessage::POST_INIT && ei->second->mFullyInited)
 	{
-		gLogMgr.LogMessage("Entity '", id, "' is already initialized", LOG_ERROR);
+		ocError << "Entity with ID '" << id << "' is already initialized";
 		return EntityMessage::RESULT_ERROR;
 	}
 	if (msg.type == EntityMessage::POST_INIT)
@@ -71,7 +71,7 @@ EntityHandle EntityMgr::CreateEntity(EntityDescription& desc, PropertyList& out)
 
 	if (desc.mComponents.size() == 0)
 	{
-		gLogMgr.LogMessage("Attempting to create an entity without components");
+		ocWarning << "Attempting to create an entity without components";
 		return EntityHandle::Null; // no components, so we can't create the entity
 	}
 
@@ -106,13 +106,13 @@ EntityHandle EntityMgr::CreateEntity(EntityDescription& desc, PropertyList& out)
 	// security checks
 	if (dependencyFailure)
 	{
-		gLogMgr.LogMessage("Component dependency failure on entity '", h.GetID(), "' of type '", desc.mType, "'", LOG_ERROR);
+		ocError << "Component dependency failure on entity '" << h << "' of type '" << desc.mType << "'";
 		DestroyEntity(h);
 		return h; // do like nothing's happened, but don't enum properties or they will access invalid memory
 	}
 	if (!GetEntityProperties(h.GetID(), out, PA_INIT))
 	{
-		gLogMgr.LogMessage("Can't get properties for created entity of type", desc.mType, LOG_ERROR);
+		ocError << "Can't get properties for created entity of type" << desc.mType;
 	}
 
 	return h;
@@ -161,7 +161,7 @@ EntitySystem::eEntityType EntitySystem::EntityMgr::GetEntityType( const EntityHa
 	EntityMap::const_iterator ei = mEntities.find(h.GetID());
 	if (ei == mEntities.end())
 	{
-		gLogMgr.LogMessage("Can't find entity", h.GetID(), LOG_ERROR);
+		ocError << "Can't find entity " << h;
 		return ET_UNKNOWN;
 	}
 	return ei->second->mType;
@@ -172,7 +172,7 @@ bool EntitySystem::EntityMgr::IsEntityInited( const EntityHandle h ) const
 	EntityMap::const_iterator ei = mEntities.find(h.GetID());
 	if (ei == mEntities.end())
 	{
-		gLogMgr.LogMessage("Can't find entity", h.GetID(), LOG_ERROR);
+		ocError << "Can't find entity " << h;
 		return false;
 	}
 	return ei->second->mFullyInited;
@@ -200,7 +200,7 @@ PropertyHolder EntitySystem::EntityMgr::GetEntityProperty( const EntityHandle h,
 
 
 	// property not found, print some info about why
-	gLogMgr.LogMessage("EntityMgr: unknown property '", (string)key, "'", LOG_ERROR);
+	ocError << "EntityMgr: unknown property '" << key << "'";
 	PropertyList propertyList;
 	string propertiesString;
 	GetEntityProperties(h, propertyList, flagMask);
@@ -211,7 +211,7 @@ PropertyHolder EntitySystem::EntityMgr::GetEntityProperty( const EntityHandle h,
 		if (it==propertyList.end()) propertiesString += ".";
 		else propertiesString += ", ";
 	}
-	gLogMgr.LogMessage("Available properties: ", propertiesString);
+	ocError << "Available properties: " << propertiesString;
 
 	// return an invalid holder
 	return PropertyHolder();
@@ -230,7 +230,7 @@ bool EntitySystem::EntityMgr::LoadFromResource( ResourceSystem::ResourcePtr res 
 	ResourceSystem::XMLResourcePtr xml = res;
 	if (xml.IsNull())
 	{
-		gLogMgr.LogMessage("XML:Can't load file", LOG_ERROR);
+		ocError << "XML: Can't load data";
 		return false;
 	}
 
@@ -265,7 +265,7 @@ bool EntitySystem::EntityMgr::LoadFromResource( ResourceSystem::ResourcePtr res 
 					PropertyList::iterator prop = props.find(*propIt);
 					if (prop == props.end())
 					{
-						gLogMgr.LogMessage("XML:Entity:Unknown entity property '", *propIt, "'", LOG_ERROR);
+						ocError << "XML:Entity: Unknown entity property '" << *propIt, "'";
 					}
 					else
 					{
@@ -281,15 +281,15 @@ bool EntitySystem::EntityMgr::LoadFromResource( ResourceSystem::ResourcePtr res 
 								else if ((*vertIt).compare("LengthParam") == 0)
 									lengthParam = vertIt.GetChildValue<string>();
 								else
-									gLogMgr.LogMessage("XML:Entity:Expected 'Vertex' or 'LengthParam', found '", *vertIt, "'", LOG_ERROR);
+									ocError << "XML:Entity: Expected 'Vertex' or 'LengthParam', found '" << *vertIt << "'";
 							}
 							if (lengthParam.length() == 0)
 							{
-								gLogMgr.LogMessage("XML:Entity:LengthParam of an array not specified", LOG_ERROR);
+								ocError << "XML:Entity: LengthParam of an array not specified";
 							}
 							else if (props.find(lengthParam) == props.end())
 							{
-								gLogMgr.LogMessage("XML:Entity:LengthParam of name '", lengthParam, "' not found in entity", LOG_ERROR);
+								ocError << "XML:Entity: LengthParam of name '" << lengthParam << "' not found in entity";
 							}
 							else
 							{
@@ -304,7 +304,7 @@ bool EntitySystem::EntityMgr::LoadFromResource( ResourceSystem::ResourcePtr res 
 						{
 							EntityHandle e = FindFirstEntity(propIt.GetChildValue<string>());
 							if (!e.IsValid())
-								gLogMgr.LogMessage("XML:Entity:Entity for property '", *propIt, "' of name '", propIt.GetChildValue<string>(), "' was not found", LOG_WARNING);
+								ocError << "XML:Entity: Entity for property '" << *propIt << "' of name '" << propIt.GetChildValue<string>() << "' was not found";
 							p.SetValue(e);
 						}
 						else
@@ -319,7 +319,7 @@ bool EntitySystem::EntityMgr::LoadFromResource( ResourceSystem::ResourcePtr res 
 		}
 		else
 		{
-			gLogMgr.LogMessage("XML:Expected 'Entity', found '", *entIt, "'", LOG_ERROR);
+			ocError << "XML: Expected 'Entity', found '" << *entIt << "'";
 		}
 	}
 

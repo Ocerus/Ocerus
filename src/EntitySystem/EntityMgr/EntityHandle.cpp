@@ -87,8 +87,12 @@ EntityMessage::eResult EntityHandle::PostMessage(const EntityMessage& msg)
 	OC_DASSERT(IsValid());
 	EntityMessage::eResult result = gEntityMgr.PostMessage(*this, msg);
 	if (result == EntityMessage::RESULT_ERROR)
-		gLogMgr.LogMessage("Message '", msg.type, "' on entity '", mEntityID, "' of type '", GetType(),"' returned error", LOG_ERROR);
+	{
+		ocError << "Message '" << msg.type << "' on entity '" << mEntityID << "' of type '" << GetType() << "' returned error";
+	}
 	else if (result == EntityMessage::RESULT_IGNORED)
-		gLogMgr.LogMessage("Message '", msg.type, "' on entity '", mEntityID, "' of type '", GetType(),"' was ignored", LOG_WARNING);
+	{
+		ocWarning << "Message '" << msg.type << "' on entity '" << mEntityID << "' of type '" << GetType() << "' was ignored";
+	}
 	return result;
 }

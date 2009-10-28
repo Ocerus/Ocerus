@@ -10,6 +10,6 @@ EntitySystem::eEntityType EntitySystem::DetectEntityType( const string& type )
 	for (int32 i=0; i<NUM_ENTITY_TYPES; ++i)
 		if (strcmp(typeStr, EntityTypeNames[i]) == 0)
 			return static_cast<eEntityType>(i);
-	gLogMgr.LogMessage("DetectEntityType:Unknown type '", type, "'", LOG_ERROR);
+	ocError << "DetectEntityType: Unknown type '" << type << "'";
 	return ET_UNKNOWN;
 }

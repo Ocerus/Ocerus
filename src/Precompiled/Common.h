@@ -29,8 +29,6 @@
 
 #include "../InputSystem/InputMgr.h"
 
-#include "../LogSystem/LogMgr.h"
-
 #include "../ResourceSystem/ResourceMgr.h"
 #include "../ResourceSystem/Resource.h"
 
@@ -48,6 +46,8 @@
 #include "../Utils/Timer.h"
 #include "../Utils/GlobalProperties.h"
 
+#include "../LogSystem/LogMacros.h"
+#include "../LogSystem/Logger.h"
 
 
 #endif

@@ -4,6 +4,7 @@
 #include "Game.h"
 #include "Config.h"
 #include "StringConverter.h"
+#include "../LogSystem/LogMgr.h"
 
 using namespace Core;
 
@@ -18,7 +19,7 @@ void Application::Init()
 {
 	// create basic singletons
 	LogSystem::LogMgr::CreateSingleton();
-	LogSystem::LogMgr::GetSingleton().Init("CoreLog.txt", LOG_TRIVIAL);
+	LogSystem::LogMgr::GetSingleton().Init("CoreLog.txt");
 
 	// get access to config file
 	mGlobalConfig = new Config("config.txt");

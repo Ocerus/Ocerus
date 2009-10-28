@@ -20,11 +20,9 @@ namespace Utils
 			return out.str();
 		}
 
-		/// Template specialization.
 		template<>
 		inline string ToString(const string& val) { return val; }
 
-		/// Template specialization.
 		template<>
 		inline string ToString(const string val) { return val; }
 
@@ -33,6 +31,7 @@ namespace Utils
 		
 		template<>
 		string ToString(bool val);
+
 
 #ifdef __WIN__
 #pragma warning(push)

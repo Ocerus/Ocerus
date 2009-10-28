@@ -6,16 +6,16 @@ using namespace Core;
 
 Config::Config(const string& filePath): mFilePath(filePath)
 {
-	gLogMgr.LogMessage("Loading config file '" + mFilePath + "'");
+	ocInfo << "Loading config file '" << mFilePath << "'";
 
 	OC_ASSERT(mFilePath.length()>0);
 
 	// attempt to load the file
 	mRudeConfig = new rude::Config();
 	if (mRudeConfig->load(mFilePath.c_str()))
-		gLogMgr.LogMessage("Config file loaded");
+		ocInfo << "Config file loaded";
 	else
-		gLogMgr.LogMessage("Config file NOT loaded");
+		ocWarning << "Config file NOT loaded";
 }
 
 Config::~Config() 
@@ -27,14 +27,14 @@ Config::~Config()
 
 bool Core::Config::Save( void )
 {
-	gLogMgr.LogMessage("Saving config file '"+ mFilePath +"'");
+	ocInfo << "Saving config file '" << mFilePath << "'";
 
 	if (mRudeConfig->save(mFilePath.c_str()))
 	{
-		gLogMgr.LogMessage("Config file saved");
+		ocInfo << "Config file saved";
 		return true;
 	}
-	gLogMgr.LogMessage("Config file NOT saved");
+	ocInfo << "Config file NOT saved";
 	return false;
 }
 

@@ -51,7 +51,7 @@ GfxRenderer::GfxRenderer( void ):
 
 void GfxRenderer::Init( const Point& resolution, bool fullscreen )
 {
-	gLogMgr.LogMessage("*** GfxRenderer init ***");
+	ocInfo << "*** GfxRenderer init ***";
 
 	mHGE = hgeCreate(HGE_VERSION);
 	mHGE->System_SetState(HGE_TITLE, "Battleships");
@@ -73,7 +73,7 @@ void GfxRenderer::Init( const Point& resolution, bool fullscreen )
 
 	OC_ASSERT(success);
 	if (success)
-		gLogMgr.LogMessage("HGE inited; logfile=", mHGE->System_GetState(HGE_LOGFILE));
+		ocInfo << "HGE inited; logfile=" << mHGE->System_GetState(HGE_LOGFILE);
 
 	mCameraScaleInv = 1.0f / mCameraScale;
 }
@@ -100,7 +100,7 @@ void GfxRenderer::ChangeResolution( const uint32 width, const uint32 height )
 
 	set<IScreenListener*>::iterator iter = mScreenListeners.begin();
 
-	gLogMgr.LogMessage("Changing resolution to ", width, height);
+	ocInfo << "Changing resolution to " << width << height;
 
 	mHGE->System_ChangeResolution(width, height);
 	mScreenWidth = width;
@@ -112,7 +112,7 @@ void GfxRenderer::ChangeResolution( const uint32 width, const uint32 height )
 		++iter;
 	}
 
-	gLogMgr.LogMessage("Resolution changed");
+	ocInfo << "Resolution changed";
 }
 
 Point GfxRenderer::GetResolution() const
@@ -122,9 +122,9 @@ Point GfxRenderer::GetResolution() const
 
 void GfxRenderer::SetFullscreen(bool fullscreen)
 {
-	gLogMgr.LogMessage("Changing fullscreen/windowed", fullscreen);
+	ocInfo << "Changing fullscreen/windowed" << fullscreen;
 	mHGE->System_SetState(HGE_WINDOWED, !fullscreen);	
-	gLogMgr.LogMessage("Fullscreen changed to", IsFullscreen());
+	ocInfo << "Fullscreen changed to" << IsFullscreen();
 }
 
 bool GfxRenderer::BeginRendering(void) const
@@ -218,7 +218,7 @@ bool GfxRenderer::DrawImage( const TexturePtr& image, int32 x, int32 y, uint8 an
 {	
 	if (image.IsNull())
 	{
-		gLogMgr.LogMessage("DrawImage: texture is null", LOG_ERROR);
+		ocError << "DrawImage: texture is null";
 		return false;
 	}
 
@@ -286,7 +286,7 @@ bool GfxRenderer::DrawImage( const TexturePtr& image, const Point& pos, uint8 an
 {
 	if (image.IsNull())
 	{
-		gLogMgr.LogMessage("DrawImage: texture is null", LOG_ERROR);
+		ocError << "DrawImage: texture is null";
 		return false;
 	}
 	return DrawImage(image, pos.x, pos.y, anchor, angle, color, scale);
@@ -296,7 +296,7 @@ bool GfxRenderer::DrawImageWithConversion( const TexturePtr& image, const Vector
 {
 	if (image.IsNull())
 	{
-		gLogMgr.LogMessage("DrawImage: texture is null", LOG_ERROR);
+		ocError << "DrawImage: texture is null";
 		return false;
 	}
 	return DrawImage(image, WorldToScreenX(pos.x), WorldToScreenY(pos.y), anchor, angle, color, WorldToScreenImageScale(scale));
@@ -306,7 +306,7 @@ bool GfxRenderer::DrawImage( const TexturePtr& image, const Rect& destRect ) con
 {
 	if (image.IsNull())
 	{
-		gLogMgr.LogMessage("DrawImage: texture is null", LOG_ERROR);
+		ocError << "DrawImage: texture is null";
 		return false;
 	}
 	return DrawImage(image, Rect(0,0,image->GetWidth(),image->GetHeight()), destRect);
@@ -316,7 +316,7 @@ bool GfxRenderer::DrawImage( const TexturePtr& image, const Rect& textureRect, c
 {
 	if (image.IsNull())
 	{
-		gLogMgr.LogMessage("DrawImage: texture is null", LOG_ERROR);
+		ocError << "DrawImage: texture is null";
 		return false;
 	}
 	hgeQuad q;		
@@ -391,7 +391,7 @@ bool GfxRenderer::DrawPolygon( const vector<Point>& vertices, const TexturePtr& 
 {
 	if (image.IsNull())
 	{
-		gLogMgr.LogMessage("DrawPolygon: texture is null", LOG_ERROR);
+		ocError << "DrawPolygon: texture is null";
 		return false;
 	}
 
@@ -464,7 +464,7 @@ bool GfxRenderer::DrawPolygon( const vector<Point>& vertices, const Color& fillC
 	}
 	else 
 	{
-		gLogMgr.LogMessage("DrawPolygon: Unable to triangulate the polygon", LOG_ERROR);
+		ocError << "DrawPolygon: Unable to triangulate the polygon";
 		return false;
 	}
 		
@@ -590,7 +590,7 @@ bool GfxRenderer::DrawQuad( GfxSystem::Point* const vertices, const TexturePtr t
 {
 	if (texture.IsNull())
 	{
-		gLogMgr.LogMessage("DrawQuad: texture is null", LOG_ERROR);
+		ocError << "DrawQuad: texture is null";
 		return false;
 	}
 

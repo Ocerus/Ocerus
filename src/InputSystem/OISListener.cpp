@@ -17,7 +17,7 @@ using namespace InputSystem;
 
 InputSystem::OISListener::OISListener(): mOIS(0), mMouse(0), mKeyboard(0)
 {
-	gLogMgr.LogMessage("Initing OIS");
+	ocInfo << "Initing OIS";
 
 	mMgr = InputMgr::GetSingletonPtr();
 
@@ -40,11 +40,11 @@ InputSystem::OISListener::OISListener(): mOIS(0), mMouse(0), mKeyboard(0)
     pl.insert(Containers::make_pair(string("x11_mouse_hide"), string("true")));
 #endif
 	mOIS = OIS::InputManager::createInputSystem(pl);
-	gLogMgr.LogMessage("OIS created");
+	ocInfo << "OIS created";
 	mKeyboard = static_cast<OIS::Keyboard*>(mOIS->createInputObject(OIS::OISKeyboard, true));
-	gLogMgr.LogMessage("OIS keyboard inited");
+	ocInfo << "OIS keyboard inited";
 	mMouse = static_cast<OIS::Mouse*>(mOIS->createInputObject(OIS::OISMouse, true));
-	gLogMgr.LogMessage("OIS mouse inited");
+	ocInfo << "OIS mouse inited";
 	mKeyboard->setEventCallback(this);
 	mMouse->setEventCallback(this);
 }

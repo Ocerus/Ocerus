@@ -28,6 +28,7 @@ StringKey::StringKey( const char* str, const int32 numChars )
 {
 	mData = Hash::HashString(str, numChars);
 }
+
 StringKey& StringKey::operator=( const StringKey& rhs )
 {
 	mData = rhs.mData;
@@ -46,7 +47,7 @@ bool StringKey::operator<( const StringKey& rhs ) const
 	return mData < rhs.mData;
 }
 
-StringKey::operator string( void ) const
+string StringKey::ToString( void ) const
 {
 	return Hash::DeHashString(mData);
 }

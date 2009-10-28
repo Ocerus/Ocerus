@@ -843,6 +843,14 @@
 				Name="inc"
 				>
 				<File
+					RelativePath="..\src\LogSystem\Logger.h"
+					>
+				</File>
+				<File
+					RelativePath="..\src\LogSystem\LogMacros.h"
+					>
+				</File>
+				<File
 					RelativePath="..\src\LogSystem\LogMgr.h"
 					>
 				</File>
@@ -850,6 +858,10 @@
 			<Filter
 				Name="src"
 				>
+				<File
+					RelativePath="..\src\LogSystem\Logger.cpp"
+					>
+				</File>
 				<File
 					RelativePath="..\src\LogSystem\LogMgr.cpp"
 					>

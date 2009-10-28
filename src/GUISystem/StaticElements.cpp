@@ -162,7 +162,7 @@ enum eAnchor {
 				CEGUI::FontManager::getSingleton().createFont( fontid + ".font" );
 			mElement->setFont( CEGUI::FontManager::getSingleton().getFont( fontid ) );			
 		} catch (...) {
-			gLogMgr.LogMessage( "ERROR!!! Font " + fontid + " not found." );
+			ocError << "Font " << fontid << " not found.";
 		}
 	}
 

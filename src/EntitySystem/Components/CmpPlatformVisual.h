@@ -15,7 +15,7 @@ namespace EntityComponents
 
 		void MyFunction(PropertyFunctionParameters params)
 		{
-			gLogMgr.LogMessage(*((string*)params.GetParameter(0)));
+			ocInfo << *((string*)params.GetParameter(0));
 		}
 
 		static void RegisterReflection(void);

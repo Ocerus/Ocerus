@@ -39,6 +39,8 @@ namespace Utils {}
 using namespace Utils;
 namespace Reflection {}
 using namespace Reflection;
+namespace LogSystem {}
+using namespace LogSystem;
 
 
 #ifdef __WIN__

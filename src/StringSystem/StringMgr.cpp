@@ -7,15 +7,15 @@ using namespace StringSystem;
 
 StringMgr::StringMgr(const string& basepath)
 {
-	gLogMgr.LogMessage("*** StringMgr init ***");
+	ocInfo << "*** StringMgr init ***";
 	mBasePath = basepath;
 }
 
 StringMgr::~StringMgr(void)
 {
-	gLogMgr.LogMessage("*** StringMgr deinit ***");
+	ocInfo << "*** StringMgr deinit ***";
 	UnloadData();
-	gLogMgr.LogMessage("*** StringMgr unloaded ***");
+	ocInfo << "*** StringMgr unloaded ***";
 }
 
 bool StringMgr::LoadLanguagePack(const string& lang)
@@ -32,7 +32,7 @@ bool StringMgr::LoadDataFromDir(const string& path, const string& includeRegexp,
 	result = gResourceMgr.AddResourceDirToGroup(mBasePath + path, "strings", includeRegexp, excludeRegexp);
 	gResourceMgr.LoadResourcesInGroup("strings");
 	
-	gLogMgr.LogMessage("StringMgr: Loading data from resource group ""strings""");
+	ocInfo << "StringMgr: Loading data from resource group ""strings""";
 	vector<ResourceSystem::ResourcePtr> resourceGroup;
 	gResourceMgr.GetResourceGroup("strings", resourceGroup);
 	
@@ -55,7 +55,7 @@ bool StringMgr::LoadDataFromFile(const string& filepath, bool pathRelative)
 	result = gResourceMgr.AddResourceFileToGroup(mBasePath + filepath, "strings", ResourceSystem::RESTYPE_TEXTRESOURCE, pathRelative);
 	gResourceMgr.LoadResourcesInGroup("strings");
 
-	gLogMgr.LogMessage("StringMgr: Loading data from resource group ""strings""");
+	ocInfo << "StringMgr: Loading data from resource group ""strings""";
 	vector<ResourceSystem::ResourcePtr> resourceGroup;
 	gResourceMgr.GetResourceGroup("strings", resourceGroup);
 
@@ -83,7 +83,7 @@ const TextData* StringMgr::GetTextDataPtr(const StringKey& key)
 {
 	const TextData* returnValue = &mTextDataMap[key];
 	if (*returnValue == "") {
-		gLogMgr.LogMessage("StringMgr: Index ", string(key), " doesn't exist. Return value set to empty TextData", LOG_ERROR);
+		ocError << "StringMgr: Index " << key << " doesn't exist. Return value set to empty TextData";
 	}
 	return returnValue;
 }
@@ -92,7 +92,7 @@ const TextData StringMgr::GetTextData(const StringKey& key)
 {
 	const TextData returnValue = mTextDataMap[key];
 	if (returnValue == "") {
-		gLogMgr.LogMessage("StringMgr: Index ", string(key), " doesn't exist. Return value set to empty TextData", LOG_ERROR);
+		ocError << "StringMgr: Index " << key << " doesn't exist. Return value set to empty TextData";
 	}
 	return returnValue;
 }

@@ -38,7 +38,7 @@ void RTTI::EnumProperties( RTTIBaseClass* owner, PropertyList& out, const Proper
 		{
 			StringKey key = it->second->GetKey();
 			if (out.find(key) != out.end())
-				gLogMgr.LogMessage("EnumProperties:Duplicate property name '", it->second->GetName(), "' -> overwriting", LOG_ERROR);
+				ocWarning << "EnumProperties:Duplicate property name '" << it->second->GetName() << "' -> overwriting";
 			out[key] = PropertyHolder(owner, it->second);
 		}
 }

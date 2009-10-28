@@ -11,11 +11,11 @@ Resource::Resource(): mIsManual(false), mState(STATE_UNINITIALIZED), mInputFileS
 Resource::~Resource()
 {
 	if (mState >= STATE_LOADING)
-		gLogMgr.LogMessage("Memory leak detected - resource '" + mName +"' was not unloaded before destroyed", LOG_ERROR);
+		ocWarning << "Memory leak detected - resource '" << mName << "' was not unloaded before destroyed";
 	if (mInputFileStream)
 	{
 		if (mInputFileStream->is_open())
-			gLogMgr.LogMessage("Resource '" + mName + "' was not closed", LOG_ERROR);
+			ocWarning << "Resource '" << mName << "' was not closed before deleting";
 		delete mInputFileStream;
 		mInputFileStream = 0;
 	}
@@ -47,17 +47,17 @@ bool Resource::Load()
 	if (mIsManual)
 		return false; // manual resources must be loaded by the user
 	SetState(STATE_LOADING);
-	gLogMgr.LogMessage("Loading resource '"+mName+"'");
+	ocInfo << "Loading resource '" << mName << "'";
 	bool result = LoadImpl();
 	if (result)
 	{
 		SetState(STATE_LOADED);
-		gLogMgr.LogMessage("Resource '"+mName+"' loaded");
+		ocInfo << "Resource '" << mName << "' loaded";
 	}
 	else
 	{
 		SetState(STATE_INITIALIZED);
-		gLogMgr.LogMessage("Resource '" + mName + "' coult NOT be loaded", LOG_ERROR);
+		ocError << "Resource '" << mName << "' coult NOT be loaded";
 	}
 	return result;
 }
@@ -70,21 +70,21 @@ bool Resource::Unload(bool allowManual)
 		return true; // true as the data are not loaded
 	if (mIsManual && !allowManual)
 	{
-		gLogMgr.LogMessage("Can't unloade manual resource '"+mName+"'");
+		ocError << "Can't unload manual resource '" << mName << "'";
 		return false; // we can't unload manual resources as we won't be able to reload them later
 	}
 	SetState(STATE_UNLOADING);
-	gLogMgr.LogMessage("Unloading resource '"+mName+"'");
+	ocInfo << "Unloading resource '" << mName << "'";
 	bool result = UnloadImpl();
 	SetState(STATE_INITIALIZED);
 	if (!result)
 	{
 		// we have a real problem if we can't dealloc a resource
-		gLogMgr.LogMessage("Resource '" + mName + "' could NOT be unloaded", LOG_ERROR);
-		OC_ASSERT_MSG(result, "Resource could NOT be unloaded");
-	} else
+		ocError << "Resource '" << mName << "' could NOT be unloaded";
+	} 
+	else
 	{
-		gLogMgr.LogMessage("Resource '"+mName+"' unloaded");
+		ocInfo << "Resource '" << mName << "' unloaded";
 	}
 	return result;
 }
@@ -95,10 +95,12 @@ void ResourceSystem::Resource::EnsureLoaded( void )
 	{
 		if (IsManual())
 		{
-			gLogMgr.LogMessage("Access to non-loaded manual resource '" + mName +"'", LOG_ERROR);
-			OC_ASSERT(!"Access to non-loaded manual resource");
+			ocError << "Access to non-loaded manual resource '" << mName << "'";
 		}
-		Load();
+		else
+		{
+			Load();
+		}
 	}
 }
 

@@ -42,7 +42,7 @@ void Core::Game::UpdateGameProperties( void )
 
 void Core::Game::Init()
 {
-	gLogMgr.LogMessage("Game init");
+	ocInfo << "Game init";
 
 	// basic init stuff
 	mHoveredEntity.Invalidate();
@@ -84,7 +84,7 @@ void Core::Game::Init()
 
 	gApp.ResetStats();
 
-	gLogMgr.LogMessage("Game inited");
+	ocInfo << "Game inited";
 
 
 

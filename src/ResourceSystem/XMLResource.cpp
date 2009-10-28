@@ -67,7 +67,7 @@ bool XMLResource::LoadImpl(void)
 
 	if (XML_Parse(p, (char*)cont.GetData(), cont.GetSize(), true) == XML_STATUS_ERROR)
 	{
-		gLogMgr.LogMessage("XMLResource: Parse error at line ", (int32)XML_GetCurrentLineNumber(p), ": ", (char*)XML_ErrorString(XML_GetErrorCode(p)), LOG_ERROR);
+		ocError << "XMLResource: Parse error at line " << (int32)XML_GetCurrentLineNumber(p) << ": " << (char*)XML_ErrorString(XML_GetErrorCode(p));
 		XML_ParserFree(p);
 		return false;
 	}

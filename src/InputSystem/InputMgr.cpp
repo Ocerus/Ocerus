@@ -8,7 +8,7 @@ using namespace InputSystem;
 
 InputSystem::InputMgr::InputMgr( void )
 {
-	gLogMgr.LogMessage("*** InputMgr init ***");
+	ocInfo << "*** InputMgr init ***";
 	mOISListener = new OISListener();
 
 	gGfxRenderer.AddScreenListener(this);

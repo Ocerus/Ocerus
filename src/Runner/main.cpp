@@ -3,6 +3,7 @@
 
 #include "../Core/Application.h"
 #include "../LogSystem/LogMgr.h"
+#include "../LogSystem/LogMacros.h"
 #include <exception>
 
 
@@ -25,7 +26,7 @@ int main(int argc, char* argv[])
 	}
 	catch (std::exception& e)
 	{
-		gLogMgr.LogMessage("An exception has occured: ", e.what(), LOG_ERROR);
+		gLogMgr.LogMessage(string("An exception has occured: ") + e.what(), LL_ERROR);
 		#ifdef __WIN__
 		MessageBox(NULL,  e.what(), "An exception has occured!", MB_OK | MB_ICONERROR | MB_TASKMODAL);
 		#endif
@@ -33,7 +34,7 @@ int main(int argc, char* argv[])
 	}
 	catch (...)
 	{
-		gLogMgr.LogMessage("An unknown exception has occured.", LOG_ERROR);
+		gLogMgr.LogMessage("An unknown exception has occured.", LL_ERROR);
 		#ifdef __WIN__
 		MessageBox(NULL, "An unknown exception has occured!", "An exception has occured!", MB_OK | MB_ICONERROR | MB_TASKMODAL);
 		#endif

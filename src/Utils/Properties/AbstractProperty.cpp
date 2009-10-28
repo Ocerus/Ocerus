@@ -4,18 +4,17 @@
 
 void AbstractProperty::ReportConvertProblem( ePropertyType wrongType )
 {
-	gLogMgr.LogMessage("Can't convert property '", GetName(), "' from '", GetType(), "' to '", wrongType, "'", LOG_ERROR);
-	OC_ASSERT(false);
+	ocError << "Can't convert property '" << GetName() << "' from '" << GetType() << "' to '" << wrongType << "'";
 }
 
 void AbstractProperty::ReportReadonlyProblem( void )
 {
-	gLogMgr.LogMessage("Property '", GetName(), "' is read-only", LOG_ERROR);
+	ocWarning << "Property '" << GetName() << "' is read-only";
 }
 
 void AbstractProperty::ReportWriteonlyProblem( void )
 {
-	gLogMgr.LogMessage("Property '", GetName(), "' is write-only", LOG_ERROR);
+	ocWarning << "Property '" << GetName() << "' is write-only";
 }
 
 void Reflection::AbstractProperty::SetValueFromString( RTTIBaseClass* owner, const string& str )
@@ -67,9 +66,9 @@ void Reflection::AbstractProperty::SetValueFromString( RTTIBaseClass* owner, con
 	case PT_VECTOR2_ARRAY:
 	case PT_ENTITYHANDLE:
 	case PT_ENTITYHANDLE_ARRAY:
-		gLogMgr.LogMessage("Can't parse property of type '", GetType(), "' from string", LOG_ERROR);
+		ocError << "Can't parse property of type '" << GetType() << "' from string (not allowed)";
 		break;
 	default:
-		gLogMgr.LogMessage("Parsing property of type '", GetType(), "' from string is not implemented in the file ", __FILE__, LOG_ERROR);
+		ocError << "Parsing property of type '" << GetType() << "' from string is not implemented in the file " << __FILE__;
     }
 }

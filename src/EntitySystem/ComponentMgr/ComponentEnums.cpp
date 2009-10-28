@@ -8,7 +8,7 @@ EntitySystem::eComponentType EntitySystem::DetectComponentType( const string& ty
 	for (int32 i=0; i<NUM_COMPONENT_TYPES; ++i)
 		if (strcmp(typeStr, ComponentTypeNames[i]) == 0)
 			return static_cast<eComponentType>(i);
-	gLogMgr.LogMessage("DetectComponentType:Unknown type '", type, "'", LOG_ERROR);
+	ocError << "DetectComponentType: Unknown type '" << type << "'";
 	return CT_INVALID;
 }
 

@@ -21,7 +21,7 @@ namespace GUISystem {
 		mResourceGate(0),
 		mRendererGate(0)
 	{
-		gLogMgr.LogMessage("******** GUIMgr init *********");
+		ocInfo << "*** GUIMgr init ***";
 		mRendererGate = new RendererGate();
 		mResourceGate = new ResourceGate();
 		mCegui = new CEGUI::System( mRendererGate, mResourceGate );
@@ -34,7 +34,7 @@ namespace GUISystem {
 	}
 
 	void GUIMgr::LoadGUI() {
-		gLogMgr.LogMessage("******** GUI Menu init *********");
+		ocInfo << "GUI Menu init";
 		//CEGUI::SchemeManager::getSingleton().loadScheme( "TaharezLook.scheme");
 		CEGUI::SchemeManager::getSingleton().loadScheme( "BGGUI.scheme");
 
@@ -57,7 +57,7 @@ namespace GUISystem {
 
 	void GUIMgr::LoadStyle( void )
 	{
-		gLogMgr.LogMessage( "load style" );
+		ocInfo << "load style";
 		gResourceMgr.AddResourceDirToGroup("gui/schemes", "schemes");
 		gResourceMgr.AddResourceDirToGroup("gui/imagesets", "imagesets");
 		gResourceMgr.AddResourceDirToGroup("gui/fonts", "fonts");
