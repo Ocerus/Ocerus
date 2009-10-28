@@ -7,7 +7,7 @@ SUITE(StringKey)
 	TEST(StringEquality)
 	{
 		StringKey a = "TEST STRING";
-		CHECK_EQUAL("TEST STRING", (string)a);
+		CHECK_EQUAL("TEST STRING", a.ToString());
 		StringKey b = "TEST STRING";
 		CHECK_EQUAL(a, b);
 		CHECK_EQUAL((size_t)a, (size_t)b);

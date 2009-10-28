@@ -8,9 +8,6 @@
 #include "Singleton.h"
 #include <boost/filesystem/fstream.hpp>
 
-/// Macro for easier use.
-#define gLogMgr LogSystem::LogMgr::GetSingleton()
-
 /// Logging system helps with debugging of the application by allowing programmers to state when certain things happen in a human readable form.
 namespace LogSystem
 {
