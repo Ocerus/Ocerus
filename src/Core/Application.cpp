@@ -214,7 +214,7 @@ void Core::Application::Shutdown( void )
 //------------
 // Windows
 //------------
-
+#define WIN32_LEAN_AND_MEAN	// Exclude rarely-used stuff from Windows headers
 #include <Windows.h>
 
 void Application::MessagePump( void )

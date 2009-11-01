@@ -1,7 +1,8 @@
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Ocerus", "Ocerus.vcproj", "{685FB3A5-4080-4FA7-8C69-AF6406E38DA6}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_Ocerus", "Ocerus.vcproj", "{685FB3A5-4080-4FA7-8C69-AF6406E38DA6}"
 	ProjectSection(ProjectDependencies) = postProject
+		{5E06B00E-DAB1-41D2-81B6-B3D0A31B7E49} = {5E06B00E-DAB1-41D2-81B6-B3D0A31B7E49}
 		{685FB3A5-4080-4FA7-8C69-AF6406E38DA5} = {685FB3A5-4080-4FA7-8C69-AF6406E38DA5}
 	EndProjectSection
 EndProject
@@ -19,7 +20,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "expat", "..\externalLibs\ex
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnitTest++", "..\externalLibs\UnitTest++\UnitTest++.vsnet2008.vcproj", "{64A4FEFE-0461-4E95-8CC1-91EF5F57DBC6}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Engine", "Engine.vcproj", "{685FB3A5-4080-4FA7-8C69-AF6406E38DA5}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_Engine", "Engine.vcproj", "{685FB3A5-4080-4FA7-8C69-AF6406E38DA5}"
 	ProjectSection(ProjectDependencies) = postProject
 		{FB1A9503-D67D-4311-AB3B-113DAD7D6F9F} = {FB1A9503-D67D-4311-AB3B-113DAD7D6F9F}
 		{6541DC36-B249-4986-AF71-72CAAE29D71F} = {6541DC36-B249-4986-AF71-72CAAE29D71F}
@@ -29,11 +30,13 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Engine", "Engine.vcproj", "
 		{9CC704CB-4956-4479-BDEC-57CBC03F700E} = {9CC704CB-4956-4479-BDEC-57CBC03F700E}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test", "Test.vcproj", "{685FB3A5-4080-4FA7-8C69-AF6406E38DA7}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_Test", "Test.vcproj", "{685FB3A5-4080-4FA7-8C69-AF6406E38DA7}"
 	ProjectSection(ProjectDependencies) = postProject
 		{685FB3A5-4080-4FA7-8C69-AF6406E38DA5} = {685FB3A5-4080-4FA7-8C69-AF6406E38DA5}
 		{64A4FEFE-0461-4E95-8CC1-91EF5F57DBC6} = {64A4FEFE-0461-4E95-8CC1-91EF5F57DBC6}
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DbgLib", "..\externalLibs\DbgLib\DbgLib\DbgLib.vcproj", "{5E06B00E-DAB1-41D2-81B6-B3D0A31B7E49}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -102,6 +105,12 @@ Global
 		{685FB3A5-4080-4FA7-8C69-AF6406E38DA7}.Develop|Win32.Build.0 = Develop|Win32
 		{685FB3A5-4080-4FA7-8C69-AF6406E38DA7}.Release|Win32.ActiveCfg = Release|Win32
 		{685FB3A5-4080-4FA7-8C69-AF6406E38DA7}.Release|Win32.Build.0 = Release|Win32
+		{5E06B00E-DAB1-41D2-81B6-B3D0A31B7E49}.Debug|Win32.ActiveCfg = Debug|Win32
+		{5E06B00E-DAB1-41D2-81B6-B3D0A31B7E49}.Debug|Win32.Build.0 = Debug|Win32
+		{5E06B00E-DAB1-41D2-81B6-B3D0A31B7E49}.Develop|Win32.ActiveCfg = Debug|Win32
+		{5E06B00E-DAB1-41D2-81B6-B3D0A31B7E49}.Develop|Win32.Build.0 = Debug|Win32
+		{5E06B00E-DAB1-41D2-81B6-B3D0A31B7E49}.Release|Win32.ActiveCfg = Release|Win32
+		{5E06B00E-DAB1-41D2-81B6-B3D0A31B7E49}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

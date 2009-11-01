@@ -41,8 +41,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../src/Precompiled;../src/Utils;../externalLibs/boost/inc;../externalLibs/hge/include;../externalLibs/ois/includes;../externalLibs/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;USE_ASSERT"
+				AdditionalIncludeDirectories="../src/Precompiled;../src/Utils;../externalLibs/boost/inc;../externalLibs/hge/include;../externalLibs/ois/includes;../externalLibs/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib;../externalLibs/DbgLib"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;USE_ASSERT;USE_DBGLIB"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -99,7 +99,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine=""
+				CommandLine="copy /V /Y /B ..\externalLibs\DbgHelp\Win32\*.dll &quot;$(OutDir)&quot;"
 				ExcludedFromBuild="false"
 			/>
 		</Configuration>
@@ -131,8 +131,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="../src/Precompiled;../src/Utils;../externalLibs/boost/inc;../externalLibs/hge/include;../externalLibs/ois/includes;../externalLibs/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
+				AdditionalIncludeDirectories="../src/Precompiled;../src/Utils;../externalLibs/boost/inc;../externalLibs/hge/include;../externalLibs/ois/includes;../externalLibs/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib;../externalLibs/DbgLib"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;USE_DBGLIB"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="false"
 				UsePrecompiledHeader="0"
@@ -186,7 +186,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Copying DLL files to output dir..."
-				CommandLine="copy /V /Y &quot;$(OutDir)\$(TargetFileName)&quot; ..\output&#x0D;&#x0A;copy /V /Y /B ..\externalLibs\cegui\bin\vs9\Release\*.dll ..\output&#x0D;&#x0A;copy /V /Y /B ..\externalLibs\expat\bin\Release\*.dll ..\output&#x0D;&#x0A;"
+				CommandLine="copy /V /Y /B ..\externalLibs\DbgHelp\Win32\*.dll &quot;$(OutDir)&quot;"
 				ExcludedFromBuild="false"
 			/>
 		</Configuration>
@@ -217,8 +217,8 @@
 				Optimization="2"
 				InlineFunctionExpansion="1"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories="../src/Precompiled;../src/Utils;../externalLibs/boost/inc;../externalLibs/hge/include;../externalLibs/ois/includes;../externalLibs/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;USE_ASSERT"
+				AdditionalIncludeDirectories="../src/Precompiled;../src/Utils;../externalLibs/boost/inc;../externalLibs/hge/include;../externalLibs/ois/includes;../externalLibs/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib;../externalLibs/DbgLib"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;USE_ASSERT;USE_DBGLIB"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="true"
 				ExceptionHandling="1"
@@ -281,7 +281,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine=""
+				CommandLine="copy /V /Y /B ..\externalLibs\DbgHelp\Win32\*.dll &quot;$(OutDir)&quot;"
 				ExcludedFromBuild="false"
 			/>
 		</Configuration>

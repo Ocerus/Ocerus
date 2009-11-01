@@ -1,24 +1,69 @@
 /// @file
 /// Application entry point.
 
+#include "../Setup/Settings.h"
 #include "../Core/Application.h"
 #include "../LogSystem/LogMgr.h"
 #include "../LogSystem/LogMacros.h"
 #include <exception>
 
+#ifdef __WIN__
+#define WIN32_LEAN_AND_MEAN	// Exclude rarely-used stuff from Windows headers
+#include <Windows.h>
+#else
+#include <iostream>
+#endif
+
+#ifdef USE_DBGLIB
+#include <DbgLib/DbgLib.h>
+#endif
+
+
+
+#ifdef USE_DBGLIB
+/// Callback function from the DbgLib.
+void DbgLibExceptionCallback(void* params)
+{
+	const char* message = "A system exception has occured!\nTODO how to retrieve any detailed info?";
+	#ifdef __WIN__
+	MessageBox(NULL, message, "A Windows exception has occured!", MB_OK | MB_ICONERROR | MB_TASKMODAL);
+	#else
+	std::err << message << std::endl;
+	#endif
+
+	// terminate the application, this exception is not fixable
+	exit(1);
+}
+#endif
+
 
 #ifdef __WIN__
-#include <Windows.h>
-INT WINAPI WinMain (HINSTANCE hInstance, 
-					HINSTANCE hPrevInstance,
-					LPSTR lpCmdLine, 
-					int nCmdShow )
+INT WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow )
 #else
 int main(int argc, char* argv[])
 #endif // __WIN__
 {	
+	// register debugging support using DbgLib
+	#ifdef USE_DBGLIB
+
+		// enable exception handlers
+		DbgLib::CDebugFx::SetExceptionHandler(true);
+		
+		// install an exception callback
+		DbgLib::CDebugFx::SetExceptionCallback(DbgLibExceptionCallback, NULL);
+
+		#ifdef USE_LEAKDETECTOR
+		// enable memory leak detection
+		DbgLib::CMemLeakDetector* leakDetector = DbgLib::CDebugFx::GetMemLeakDetector();
+		// optional: here we can set a custom reported by calling SetReporter()
+		leakDetector->Enable();
+		#endif
+
+	#endif
+
 	try
 	{
+		// run the application itself
 		Core::Application* app = new Core::Application();
 		app->Init();
 		app->RunMainLoop();
@@ -40,6 +85,14 @@ int main(int argc, char* argv[])
 		#endif
 		return -1;
 	}
+
+	// unregister DbgLib
+	#ifdef USE_DBGLIB
+		#ifdef USE_LEAKDETECTOR
+		leakDetector->Disable();
+		leakDetector->ReportLeaks();
+		#endif
+	#endif
 
 	return 0;
 };
