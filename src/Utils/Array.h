@@ -8,7 +8,7 @@
 
 namespace Utils
 {
-	/// Templated representation of an array without.
+	/// Templated representation of an array without the information about its size.
 	/// The array doesn't know it's size. The purpose of this class is to allow access to an array in the
 	/// same way as to C++ objects. There should be no performance decrease since every method is inlined.
 	template<typename T>

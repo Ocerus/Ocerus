@@ -295,6 +295,10 @@
 			Name="Utils"
 			>
 			<File
+				RelativePath="..\src\Utils\test\TestArray.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\Utils\test\TestGlobalProperties.cpp"
 				>
 			</File>

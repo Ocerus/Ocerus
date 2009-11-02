@@ -14,6 +14,9 @@
 // Disable boost exceptions.
 #define BOOST_NO_TYPEID
 
+// Disable MSVC warnings about use of 'unsafe' functions like strcpy().
+#define _CRT_SECURE_NO_WARNINGS
+
 
 // These must come first!
 #include "SmartAssert.h"
