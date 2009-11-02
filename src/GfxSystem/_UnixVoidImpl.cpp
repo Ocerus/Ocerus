@@ -22,7 +22,7 @@ GfxRenderer::GfxRenderer( void ):
 
 void GfxRenderer::Init( const Point& resolution, bool fullscreen )
 {
-    gLogMgr.LogMessage("*** GfxRenderer init ***");
+    ocInfo << "*** GfxRenderer init ***";
 	int screen;
     mX11Display = XOpenDisplay(NULL);
     if (mX11Display == NULL) {

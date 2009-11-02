@@ -24,7 +24,7 @@ char* StringConverter::FromString(const string& str)
 {
 	char* result = new char[str.length()+1];
 	const char* temp = str.c_str();
-	strcpy_s(result, str.length()+1, temp);
+	strcpy(result, temp);
 	return result;
 }
 

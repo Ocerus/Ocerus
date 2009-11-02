@@ -23,6 +23,18 @@ namespace LogSystem
 		/// Destructs the logger and actually writes the logged message into the output.
 		~Logger(void);
 
+	    inline Logger& operator<<(EntitySystem::EntityHandle value)
+	    {
+	        *this << "Entity(" << value.GetID() << ")";
+		    return *this;
+	    }
+
+	    inline Logger& operator<<(Utils::StringKey value)
+    	{
+		    *this << value.ToString();
+    		return *this;
+    	}
+
 		/// Templated writable operator << for easier logging.
 		template<typename T>
 		Logger& operator<<(T value)
@@ -31,25 +43,11 @@ namespace LogSystem
 			return *this;
 		}
 
-		template<>
-		Logger& operator<<(EntitySystem::EntityHandle value)
-		{
-			*this << "Entity(" << value.GetID() << ")";
-			return *this;
-		}
-
-		template<>
-		Logger& operator<<(Utils::StringKey value)
-		{
-			*this << value.ToString();
-			return *this;
-		}
-
-
 	private:
 		int32 mLogLevel;
 		stringstream mMessageBuffer;
 	};
+	
 }
 
 

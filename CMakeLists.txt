@@ -5,6 +5,7 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
 
 cmake_minimum_required(VERSION 2.6.2)
 
+option(BUILD_TESTS "Builds tests." ON)
 
 ###############################################################################
 ###                      bundled external libraries                         ###
@@ -146,6 +147,7 @@ set(InputSystem_SRCS
 )
 
 set(LogSystem_SRCS
+    src/LogSystem/Logger.cpp
     src/LogSystem/LogMgr.cpp
 )
 
@@ -224,17 +226,19 @@ target_link_libraries(ocerus-main ocerus-engine)
 ###############################################################################
 ###                             Ocerus tests                                ###
 ###############################################################################
-file(GLOB Tests_SRCS src/*/test/Test*.cpp src/*/*/test/Test*.cpp src/*/*/*/test/Test*.cpp)
+if (BUILD_TESTS)
+    file(GLOB Tests_SRCS src/*/test/Test*.cpp src/*/*/test/Test*.cpp src/*/*/*/test/Test*.cpp)
 
-foreach (test ${Tests_SRCS})
-	message("Adding test: ${test}")
-endforeach()
-include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Runner
-)
+    foreach (test ${Tests_SRCS})
+    	message("Adding test: ${test}")
+    endforeach()
+    include_directories(
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/Runner
+    )
 
-add_executable(ocerus-test src/Runner/UnitTests.cpp ${Tests_SRCS})
+    add_executable(ocerus-test src/Runner/UnitTests.cpp ${Tests_SRCS})
 
-set_target_properties(ocerus-test PROPERTIES COMPILE_FLAGS "-DUNIT_TESTS")
+    set_target_properties(ocerus-test PROPERTIES COMPILE_FLAGS "-DUNIT_TESTS")
 
-target_link_libraries(ocerus-test ocerus-engine)
+    target_link_libraries(ocerus-test ocerus-engine)
+endif (BUILD_TESTS)
