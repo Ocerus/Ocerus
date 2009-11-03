@@ -22,7 +22,7 @@ SUITE(StringConverter)
 
 	TEST(CharConvert)
 	{
-		char* a = "test string";
+		const char* a = "test string";
 		string b = "test string";
 		CHECK_EQUAL(b, StringConverter::ToString(a));
 		char* c = StringConverter::FromString<char*>(b);

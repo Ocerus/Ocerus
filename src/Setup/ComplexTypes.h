@@ -1,6 +1,6 @@
 /// @file
 /// Platform specific setting of complex (usually structured) data types.
-/// @remarks The current setting tries to shadow STL containers and data structures to provide higher 
+/// @remarks The current setting tries to shadow STL containers and data structures to provide higher
 /// level of encapsulation and to enable easier changes in the future.
 
 #ifndef ComplexTypes_h__
