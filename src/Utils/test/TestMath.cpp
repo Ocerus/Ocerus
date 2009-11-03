@@ -6,8 +6,8 @@ SUITE(MathUtils)
 {
 	TEST(PI)
 	{
-		CHECK_CLOSE(3.1415926535897932384626433832795f, MathUtils::PI, 0.000000000000001f);
-		CHECK_CLOSE(1.5707963267948966192313216916398f, MathUtils::HALF_PI, 0.000000000001f);
+		CHECK_CLOSE(3.1415926535897932384626433832795f, MathUtils::PI, FLOAT32_EPSILON);
+		CHECK_CLOSE(1.5707963267948966192313216916398f, MathUtils::HALF_PI, FLOAT32_EPSILON);
 	}
 
 	TEST(AbsoluteValue)
@@ -38,14 +38,14 @@ SUITE(MathUtils)
 	{
 		Vector2 v1(0,1);
 		Vector2 v2(1,0);
-		CHECK_CLOSE(MathUtils::HALF_PI, MathUtils::Angle(v1,v2), 0.000000000000001f);
+		CHECK_CLOSE(MathUtils::HALF_PI, MathUtils::Angle(v1,v2), FLOAT32_EPSILON);
 	}
 
 	TEST(AngleDistance)
 	{
-		CHECK_CLOSE(0, MathUtils::AngleDistance(MathUtils::HALF_PI, MathUtils::HALF_PI), 0.000000000000001f);
-		CHECK_CLOSE(MathUtils::HALF_PI, MathUtils::AngleDistance(MathUtils::PI, MathUtils::HALF_PI), 0.000000000000001f);
-		CHECK_CLOSE(MathUtils::HALF_PI, MathUtils::AngleDistance(-MathUtils::PI, MathUtils::HALF_PI), 0.000000000000001f);
+		CHECK_CLOSE(0, MathUtils::AngleDistance(MathUtils::HALF_PI, MathUtils::HALF_PI), FLOAT32_EPSILON);
+		CHECK_CLOSE(MathUtils::HALF_PI, MathUtils::AngleDistance(MathUtils::PI, MathUtils::HALF_PI), FLOAT32_EPSILON);
+		CHECK_CLOSE(MathUtils::HALF_PI, MathUtils::AngleDistance(-MathUtils::PI, MathUtils::HALF_PI), FLOAT32_EPSILON);
 		//not very nice precision but ok
 		CHECK_CLOSE(MathUtils::HALF_PI + 1.0f, MathUtils::AngleDistance(-10*MathUtils::PI, MathUtils::HALF_PI + 1.0f), 0.000001f);
 		CHECK_CLOSE(MathUtils::PI - 1.0f, MathUtils::AngleDistance(-20*MathUtils::PI, MathUtils::PI + 1.0f), 0.00001f);
