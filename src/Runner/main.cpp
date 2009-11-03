@@ -28,7 +28,7 @@ void DbgLibExceptionCallback(void* params)
 	#ifdef __WIN__
 	MessageBox(NULL, message, "A Windows exception has occured!", MB_OK | MB_ICONERROR | MB_TASKMODAL);
 	#else
-	std::err << message << std::endl;
+	fprintf(stderr, "%s\n",  message);
 	#endif
 
 	// terminate the application, this exception is not fixable

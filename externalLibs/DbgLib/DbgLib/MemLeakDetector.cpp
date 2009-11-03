@@ -590,7 +590,7 @@ void CDefaultLeakReporter::WriteDebugString(const tchar* p_Msg)
 	fwprintf(stderr, p_Msg);
 	fwprintf(stderr, _T("\n"));
 #else
-	fprintf(stderr, p_Msg);
+	fprintf(stderr, "%s", p_Msg);
 	fprintf(stderr, _T("\n"));
 #endif
 #endif

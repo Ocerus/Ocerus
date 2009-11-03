@@ -46,7 +46,7 @@
 
 #include <asm/posix_types.h>
 #include <asm/types.h>
-#include <linux/dirent.h>
+#include <dirent.h>
 
 #include "LinuxSyscallSupport.h"
 #include "ThreadLister.h"

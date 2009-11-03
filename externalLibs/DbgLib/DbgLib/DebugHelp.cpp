@@ -364,7 +364,7 @@ void CDebugHelp::CreateMiniDump(bool p_IgnoreThread)
 {
 #if defined(PLATFORM_WINDOWS)
 	CreateMiniDump(NULL, p_IgnoreThread);
-#else
+#else // PLATFORM_WINDOWS
 	// get current time and format into a string
 	char buf[101];
 	time_t t;
@@ -383,11 +383,11 @@ void CDebugHelp::CreateMiniDump(bool p_IgnoreThread)
 	std::string path;
 	std::transform(m_DumpPath.begin(), m_DumpPath.end(), std::back_inserter(path), Internal::WideToChar());
 	fileName << path << _AT("Dump-") << buf << tv.tv_usec << _AT(".dmp");
-#else
+#else // _UNICODE
 	fileName << m_DumpPath << _AT("Dump-") << buf << tv.tv_usec << _AT(".dmp");
-#endif
+#endif // _UNICODE
 	WriteCoreDump(fileName.str().c_str());
-#endif
+#endif // _PLATFORM_WINDOWS
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -649,9 +649,9 @@ void CSymbolResolver::ResolveSymbol(uintx p_Address, ModuleHandle p_hModule, con
 			std::string moduleName;
 			std::wstring tmpModName(p_ModuleName);
 			std::transform(tmpModName.begin(), tmpModName.end(), std::back_inserter(moduleName), Internal::WideToChar());
-#else
+#else // _UNICODE
 			std::string moduleName(p_ModuleName);
-#endif
+#endif // _UNICODE
 
 			// Load module and query symbols
 			DWORD64 DllBase = g_DbgHelpDll.SymLoadModule64(m_hProcess, NULL, moduleName.c_str(), NULL, static_cast<DWORD64>(reinterpret_cast<size_t>(p_hModule)), 0);
@@ -662,11 +662,11 @@ void CSymbolResolver::ResolveSymbol(uintx p_Address, ModuleHandle p_hModule, con
 		}
 	}
 	ResolveSymbol(p_Address, p_Function, p_File, p_Line);
-#else
+#else // PLATFORM_WINDOWS
 	UNREFERENCED_PARAMETER(p_hModule);
 	UNREFERENCED_PARAMETER(p_ModuleName);
 	ResolveSymbol(p_Address, p_Function, p_File, p_Line);
-#endif
+#endif // PLATFORM_WINDOWS
 }
 
 

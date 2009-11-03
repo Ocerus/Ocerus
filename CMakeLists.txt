@@ -6,6 +6,13 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
 cmake_minimum_required(VERSION 2.6.2)
 
 option(BUILD_TESTS "Builds tests." ON)
+option(USE_DBGLIB "Uses DbgLib for debugging." ON)
+option(USE_LEAKDETECTOR "Uses DbgLib's leak detector." ON)
+
+set(ocerus-engine_INCLUDE_DIRS)
+set(ocerus-engine_LIBRARIES)
+set(ocerus-engine_SYMBOLS)
+
 
 ###############################################################################
 ###                      bundled external libraries                         ###
@@ -15,22 +22,49 @@ option(BUILD_TESTS "Builds tests." ON)
 # Box2D
 ###############
 ADD_SUBDIRECTORY(externalLibs/Box2D)
+
 set(Box2D_INCLUDE_DIRS
     ${CMAKE_CURRENT_SOURCE_DIR}/externalLibs/Box2D/Include
     ${CMAKE_CURRENT_SOURCE_DIR}/externalLibs/Box2D/Source
 )
 set(Box2D_LIBRARIES box2d)
-
+list(APPEND ocerus-engine_INCLUDE_DIRS ${Box2D_INCLUDE_DIRS})
+list(APPEND ocerus-engine_LIBRARIES ${Box2D_LIBRARIES})
 
 ###############
 # rudeconfig
 ###############
 ADD_SUBDIRECTORY(externalLibs/rudeconfig)
+
 set(rudeconfig_INCLUDE_DIRS
     ${CMAKE_CURRENT_SOURCE_DIR}/externalLibs/rudeconfig/include
 )
 set(rudeconfig_LIBRARIES rudeconfig)
 
+list(APPEND ocerus-engine_INCLUDE_DIRS ${rudeconfig_INCLUDE_DIRS})
+list(APPEND ocerus-engine_LIBRARIES ${rudeconfig_LIBRARIES})
+
+###############
+# DbgLib
+###############
+if (USE_DBGLIB OR USE_LEAKDETECTOR)
+    
+    ADD_SUBDIRECTORY(externalLibs/DbgLib)
+    
+    set(DbgLib_INCLUDE_DIRS
+        ${CMAKE_CURRENT_SOURCE_DIR}/externalLibs/DbgLib
+    )
+    set(DbgLib_LIBRARIES DbgLib)
+
+    list(APPEND ocerus-engine_INCLUDE_DIRS ${DbgLib_INCLUDE_DIRS})
+    list(APPEND ocerus-engine_LIBRARIES ${DbgLib_LIBRARIES})
+
+    list(APPEND ocerus-engine_SYMBOLS USE_DBGLIB)
+    if (USE_LEAKDETECTOR)
+        list(APPEND ocerus-engine_SYMBOLS USE_LEAKDETECTOR)
+    endif (USE_LEAKDETECTOR)
+
+endif (USE_DBGLIB OR USE_LEAKDETECTOR)
 
 ###############################################################################
 ###                             dependencies                                ###
@@ -89,6 +123,18 @@ if (UNITTEST++_FOUND)
 else (UNITTEST++_FOUND)
     message(FATAL_ERROR "UnitTest++ library cannot be found in your system.")
 endif (UNITTEST++_FOUND)
+
+###############
+# ICU
+###############
+find_package(ICU 4.2 REQUIRED)
+if (ICU_FOUND)
+    include_directories(${ICU_INCLUDE_DIRS})
+else (ICU_FOUND)
+    message(FATAL_ERROR "ICU library cannot be found in your system.")
+endif (ICU_FOUND)
+
+
 
 
 ###############################################################################
@@ -166,6 +212,7 @@ set(Setup_SRCS
 )
 
 set(StringSystem_SRCS
+    #    src/StringSystem/TextData.cpp
     src/StringSystem/TextResource.cpp
     src/StringSystem/StringMgr.cpp
 )
@@ -186,14 +233,14 @@ set(Utils_SRCS
     src/Utils/MathUtils.cpp
 )
 
-include_directories(
-    ${Box2D_INCLUDE_DIRS}
-    ${rudeconfig_INCLUDE_DIRS}
-)
+include_directories(${ocerus-engine_INCLUDE_DIRS})
 
 set(CMAKE_CXX_FLAGS "")
 set(CMAKE_CXX_FLAGS_DEBUG "-g -Wall -DUSE_ASSERT -D_DEBUG")
 
+foreach(SYMBOL ${ocerus-engine_SYMBOLS})
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D${SYMBOL}")
+endforeach(SYMBOL)
 
 add_library(ocerus-engine STATIC
     ${Core_SRCS}
@@ -210,13 +257,13 @@ add_library(ocerus-engine STATIC
 )
 
 target_link_libraries(ocerus-engine
-    ${Box2D_LIBRARIES}
-    ${rudeconfig_LIBRARIES}
+    ${ocerus-engine_LIBRARIES}
     ${OIS_LIBRARIES}
     ${Boost_LIBRARIES}
     ${EXPAT_LIBRARIES}
     ${CEGUI_LIBRARIES}
     ${UNITTEST++_LIBRARY}
+    ${ICU_LIBRARIES}
 )
 
 add_executable(ocerus-main src/Runner/main.cpp)
