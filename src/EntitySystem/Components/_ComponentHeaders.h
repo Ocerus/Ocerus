@@ -10,5 +10,6 @@
 #include "../Components/CmpPlatformPhysics.h"
 #include "../Components/CmpPlatformLogic.h"
 #include "../Components/CmpPlatformVisual.h"
+#include "../Components/OnInitScript.h"
 
 #endif // _ComponentHeaders_h__

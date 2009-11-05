@@ -9,6 +9,7 @@
 #include "../StringSystem/TextResource.h"
 #include "../GfxSystem/ParticleResource.h"
 #include "../ResourceSystem/XMLResource.h"
+#include "../ScriptSystem/ScriptResource.h"
 
 #ifdef __WIN__
 #pragma warning(disable: 4996)
@@ -37,6 +38,7 @@ void ResourceSystem::ResourceMgr::Init( const string& basepath )
 	mResourceCreationMethods[RESTYPE_TEXTRESOURCE] = StringSystem::TextResource::CreateMe;
 	mResourceCreationMethods[RESTYPE_XMLRESOURCE] = XMLResource::CreateMe;
 	mResourceCreationMethods[RESTYPE_PARTICLERESOURCE] = GfxSystem::ParticleResource::CreateMe;
+	mResourceCreationMethods[RESTYPE_SCRIPTRESOURCE] = ScriptSystem::ScriptResource::CreateMe;
 	mExtToTypeMap["png"] = RESTYPE_TEXTURE;
 	mExtToTypeMap["bmp"] = RESTYPE_TEXTURE;
 	mExtToTypeMap["jpg"] = RESTYPE_TEXTURE;
@@ -51,6 +53,7 @@ void ResourceSystem::ResourceMgr::Init( const string& basepath )
 	mExtToTypeMap["str"] = RESTYPE_TEXTRESOURCE;
 	mExtToTypeMap["xml"] = RESTYPE_XMLRESOURCE;
 	mExtToTypeMap["psi"] = RESTYPE_PARTICLERESOURCE;
+	mExtToTypeMap["as"] = RESTYPE_SCRIPTRESOURCE;
 
 	OC_ASSERT_MSG(mResourceCreationMethods[NUM_RESTYPES-1], "Not all resource types are registered");
 

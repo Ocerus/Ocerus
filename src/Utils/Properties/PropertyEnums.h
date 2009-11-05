@@ -14,7 +14,7 @@ namespace Reflection
 	/// It is used for runtime type checks.
 	enum ePropertyType
 	{
-		#define PROPERTY_TYPE(typeID, typeClass, defaultValue) typeID,
+		#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName) typeID,
 		#include "PropertyTypes.h"
 		#undef PROPERTY_TYPE
 
@@ -32,7 +32,7 @@ namespace Reflection
 		template<typename T> T GetDefaultValue(void) { return 0; }
 
 		/// Template specialization.
-		#define PROPERTY_TYPE(typeID, typeClass, defaultValue) \
+		#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName) \
 			template<> ePropertyType GetTypeID<typeClass>(void); \
 			template<> typeClass GetDefaultValue<typeClass>(void);
 		#include "PropertyTypes.h"

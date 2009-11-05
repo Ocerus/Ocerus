@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../src/Precompiled;../src/Utils;../externalLibs/boost/inc;../externalLibs/hge/include;../externalLibs/ois/includes;../externalLibs/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib"
+				AdditionalIncludeDirectories="../src/Precompiled;../src/Utils;../externalLibs/boost/inc;../externalLibs/hge/include;../externalLibs/ois/includes;../externalLibs/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib;../externalLibs/angelscript/include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;USE_ASSERT"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="true"
@@ -270,6 +270,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\src\EntitySystem\Components\OnInitScript.h"
+						>
+					</File>
+					<File
 						RelativePath="..\src\EntitySystem\Components\Transform.h"
 						>
 					</File>
@@ -303,6 +307,10 @@
 					</File>
 					<File
 						RelativePath="..\src\EntitySystem\Components\CmpPlatformVisual.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\src\EntitySystem\Components\OnInitScript.cpp"
 						>
 					</File>
 					<File
@@ -1088,6 +1096,54 @@
 					RelativePath="..\src\Memory\GlobalAlloc.cpp"
 					>
 				</File>
+			</Filter>
+		</Filter>
+		<Filter
+			Name="ScriptSystem"
+			>
+			<Filter
+				Name="inc"
+				>
+				<File
+					RelativePath="..\src\ScriptSystem\ScriptMgr.h"
+					>
+				</File>
+				<File
+					RelativePath="..\src\ScriptSystem\ScriptResource.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="src"
+				>
+				<File
+					RelativePath="..\src\ScriptSystem\ScriptMgr.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src\ScriptSystem\ScriptResource.cpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="AddOn"
+				>
+				<Filter
+					Name="inc"
+					>
+					<File
+						RelativePath="..\src\ScriptSystem\AddOn\scriptstring.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="src"
+					>
+					<File
+						RelativePath="..\src\ScriptSystem\AddOn\scriptstring.cpp"
+						>
+					</File>
+				</Filter>
 			</Filter>
 		</Filter>
 		<File

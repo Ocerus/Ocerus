@@ -16,7 +16,7 @@ namespace Reflection
 {
 
 	/// Template specialization.
-	#define PROPERTY_TYPE(typeID, typeClass, defaultValue) \
+	#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName) \
 		template<> ePropertyType PropertyTypes::GetTypeID<typeClass>(void) { return typeID; } \
 		template<> typeClass PropertyTypes::GetDefaultValue<typeClass>(void) {return defaultValue; }
 	#include "PropertyTypes.h"

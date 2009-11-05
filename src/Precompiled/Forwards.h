@@ -56,6 +56,11 @@ namespace InputSystem
 	class InputMgr;
 }
 
+namespace ScriptSystem
+{
+	class ScriptMgr;
+}
+
 namespace StringSystem
 {
 	class StringMgr;

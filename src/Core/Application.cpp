@@ -45,6 +45,8 @@ void Application::Init()
 
 	InputSystem::InputMgr::CreateSingleton();
 
+	ScriptSystem::ScriptMgr::CreateSingleton();
+	
 	EntitySystem::EntityMgr::CreateSingleton();
 
 	GUISystem::GUIMgr::CreateSingleton();
@@ -61,6 +63,8 @@ void Application::Init()
 
 	// FPS counter init
 	ResetStats();
+
+	EntityComponents::OnInitScript::TestRunTime();
 }
 
 Application::~Application()
@@ -74,6 +78,7 @@ Application::~Application()
 	ResourceSystem::ResourceMgr::GetSingleton().UnloadAllResources();
 
 	EntitySystem::EntityMgr::DestroySingleton();
+	ScriptSystem::ScriptMgr::DestroySingleton();
 	delete mGame;
 	InputSystem::InputMgr::DestroySingleton();
 	GfxSystem::GfxRenderer::DestroySingleton();

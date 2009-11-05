@@ -47,4 +47,12 @@ namespace GUISystem
 	typedef SmartPointer<CEGUIResource> CEGUIResourcePtr;
 }
 
+namespace ScriptSystem
+{
+	class ScriptResource;
+
+	/// Smart pointer to ScriptResource.
+	typedef SmartPointer<ScriptResource> ScriptResourcePtr;
+}
+
 #endif // ResourcePointers_h__

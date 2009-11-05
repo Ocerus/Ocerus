@@ -32,6 +32,9 @@
 #include "../ResourceSystem/ResourceMgr.h"
 #include "../ResourceSystem/Resource.h"
 
+#include "../ScriptSystem/ScriptMgr.h"
+#include "../ScriptSystem/AddOn/scriptstring.h"
+
 #include "../StringSystem/StringMgr.h"
 
 #include "../Utils/Array.h"
@@ -48,6 +51,8 @@
 
 #include "../LogSystem/LogMacros.h"
 #include "../LogSystem/Logger.h"
+
+#include "../EntitySystem/Components/_ComponentHeaders.h"
 
 
 #endif
