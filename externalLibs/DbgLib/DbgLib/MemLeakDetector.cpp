@@ -3,6 +3,12 @@
 #include "MemLeakDetector.h"
 #include "Utils.h"
 
+
+#if defined(PLATFORM_WINDOWS)
+#pragma warning(disable: 4748)
+#endif
+
+
 #if defined(PLATFORM_WINDOWS)
 // we have to define _CRTBLD in order to include dbgint.h and mtdll.h
 #define _CRTBLD

@@ -9,6 +9,11 @@
 #include "TypedProperty.h"
 #include "PropertyEnums.h"
 
+#ifdef __WIN__
+#pragma warning(push)
+#pragma warning (disable: 4121)
+#endif
+
 namespace Reflection
 {
 	/// Fully defined property class.
@@ -61,5 +66,10 @@ namespace Reflection
 
 	};
 }
+
+#ifdef __WIN__
+#pragma warning(pop)
+#endif
+
 
 #endif	// _PROPERTY_H

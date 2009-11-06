@@ -299,6 +299,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\Utils\test\TestCOWPtr.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\Utils\test\TestGlobalProperties.cpp"
 				>
 			</File>

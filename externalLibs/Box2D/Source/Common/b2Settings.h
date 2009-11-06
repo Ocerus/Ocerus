@@ -29,6 +29,8 @@
 #ifdef __WIN__
 // Disable warning 'conditional expression is constant'. The compiler will optimize it away.
 #pragma warning(disable: 4127)
+/// Disable warning '/GS can not protect parameters and local variables from local buffer overrun because optimizations are disabled in function'.
+#pragma warning(disable: 4748)
 #endif
 
 

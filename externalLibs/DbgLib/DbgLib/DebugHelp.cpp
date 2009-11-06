@@ -2,6 +2,12 @@
 #include "DebugHelp.h"
 #include "Utils.h"
 
+
+#if defined(PLATFORM_WINDOWS)
+#pragma warning(disable: 4748)
+#endif
+
+
 namespace DbgLib
 {
 
