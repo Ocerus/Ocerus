@@ -332,8 +332,8 @@
 		</Configuration>
 		<Configuration
 			Name="Develop|Win32"
-			OutputDirectory="$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			OutputDirectory="..\lib"
+			IntermediateDirectory="..\lib\obj\develop"
 			ConfigurationType="4"
 			CharacterSet="2"
 			>
