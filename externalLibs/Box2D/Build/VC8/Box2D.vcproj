@@ -19,7 +19,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="../../Library"
-			IntermediateDirectory="Box2D/Debug"
+			IntermediateDirectory="bin/Debug"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			CharacterSet="2"
@@ -89,7 +89,7 @@
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="../../Library"
-			IntermediateDirectory="Box2D/Release"
+			IntermediateDirectory="bin/Release"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			CharacterSet="2"
@@ -158,8 +158,8 @@
 		</Configuration>
 		<Configuration
 			Name="Develop|Win32"
-			OutputDirectory="$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			OutputDirectory="../../Library"
+			IntermediateDirectory="bin/Develop"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			CharacterSet="2"
