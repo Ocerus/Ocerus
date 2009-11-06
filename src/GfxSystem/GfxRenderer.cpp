@@ -41,10 +41,10 @@ using namespace GfxSystem;
 
 
 GfxRenderer::GfxRenderer( void ):
+	mHGE(0),
 	mCameraX(0),
 	mCameraY(0),
-	mCameraScale(1.0f),
-	mHGE(0)
+	mCameraScale(1.0f)
 {
 
 }

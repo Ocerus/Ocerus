@@ -265,7 +265,7 @@ bool EntitySystem::EntityMgr::LoadFromResource( ResourceSystem::ResourcePtr res 
 					PropertyList::iterator prop = props.find(*propIt);
 					if (prop == props.end())
 					{
-						ocError << "XML:Entity: Unknown entity property '" << *propIt, "'";
+						ocError << "XML:Entity: Unknown entity property '" << *propIt << "'";
 					}
 					else
 					{
