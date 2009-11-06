@@ -125,7 +125,7 @@ static int StringCmp(const string &a, const string &b)
 	return cmp;
 }
 
-static void StringCmp_Generic(asIScriptGeneric * gen) 
+static void StringCmp_Generic(asIScriptGeneric * gen)
 {
   string * a = static_cast<string *>(gen->GetObject());
   string * b = static_cast<string *>(gen->GetArgAddress(0));
@@ -496,14 +496,15 @@ static void StringCopyFactory_Generic(asIScriptGeneric *gen)
     *(bool*)gen->GetAddressOfReturnLocation() = r;
 }*/
 
-static void StringEquals_Generic(asIScriptGeneric * gen) 
+static void StringEquals_Generic(asIScriptGeneric * gen)
 {
 	string * a = static_cast<string *>(gen->GetObject());
 	string * b = static_cast<string *>(gen->GetArgAddress(0));
 	*(bool*)gen->GetAddressOfReturnLocation() = (*a == *b);
 }
 
-/*static void StringNotEqual_Generic(asIScriptGeneric *gen)
+#if 0
+static void StringNotEqual_Generic(asIScriptGeneric *gen)
 {
 	string *a = (string*)gen->GetArgAddress(0);
 	string *b = (string*)gen->GetArgAddress(1);
@@ -519,7 +520,7 @@ static void StringLesserOrEqual_Generic(asIScriptGeneric *gen)
     *(bool*)gen->GetAddressOfReturnLocation() = r;
 }
 
-/*static void StringGreaterOrEqual_Generic(asIScriptGeneric *gen)
+static void StringGreaterOrEqual_Generic(asIScriptGeneric *gen)
 {
 	string *a = (string*)gen->GetArgAddress(0);
 	string *b = (string*)gen->GetArgAddress(1);
@@ -541,7 +542,8 @@ static void StringGreater_Generic(asIScriptGeneric *gen)
 	string *b = (string*)gen->GetArgAddress(1);
 	bool r = *a > *b;
     *(bool*)gen->GetAddressOfReturnLocation() = r;
-}*/
+}
+#endif
 
 static void StringLength_Generic(asIScriptGeneric *gen)
 {
@@ -582,7 +584,7 @@ void RegisterScriptString_Native(asIScriptEngine *engine)
 	// otherwise the library will not allow the use of object handles for this type
 	r = engine->RegisterStringFactory("string@", asFUNCTION(StringFactory), asCALL_CDECL); assert( r >= 0 );
 
-	r = engine->RegisterObjectMethod("string", "bool opEquals(const string &in) const", asFUNCTION(operator ==), asCALL_CDECL_OBJFIRST); assert( r >= 0 );
+    r = engine->RegisterObjectMethod("string", "bool opEquals(const string &in) const", asMETHOD(CScriptString, operator==), asCALL_CDECL_OBJFIRST); assert( r >= 0 );
 	r = engine->RegisterObjectMethod("string", "int opCmp(const string &in) const", asFUNCTION(StringCmp), asCALL_CDECL_OBJFIRST); assert( r >= 0 );
 	r = engine->RegisterObjectMethod("string", "string@ opAdd(const string &in) const", asFUNCTIONPR(operator +, (const CScriptString &, const CScriptString &), CScriptString*), asCALL_CDECL_OBJFIRST); assert( r >= 0 );
 

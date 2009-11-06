@@ -74,13 +74,13 @@ SUITE(COWPtr)
 	/// Tests whether copies are made only when non-const operations/methods are used.
 	TEST(TestLazyCopyContract)
 	{
-		CHECK_EQUAL(MockWithCounting<int>::RefCount(), 0);
+		CHECK_EQUAL(MockWithCounting<int>::RefCount(), 0U);
 		COWPtr<MockWithCounting<int> > myPtr1(new MockWithCounting<int>(42));
-		CHECK_EQUAL(MockWithCounting<int>::RefCount(), 1);
+		CHECK_EQUAL(MockWithCounting<int>::RefCount(), 1U);
 		COWPtr<MockWithCounting<int> > myPtr2(myPtr1);
-		CHECK_EQUAL(MockWithCounting<int>::RefCount(), 1);
+		CHECK_EQUAL(MockWithCounting<int>::RefCount(), 1U);
 		COWPtr<MockWithCounting<int> > myPtr3(myPtr1);
-		CHECK_EQUAL(MockWithCounting<int>::RefCount(), 1);
+		CHECK_EQUAL(MockWithCounting<int>::RefCount(), 1U);
 		const COWPtr<MockWithCounting<int> >& rMyPtr1 = myPtr1;
 		CHECK_EQUAL(rMyPtr1->GetData(), 42);
 		CHECK_EQUAL(1, MockWithCounting<int>::RefCount());

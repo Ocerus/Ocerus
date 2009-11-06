@@ -45,12 +45,25 @@ list(APPEND ocerus-engine_INCLUDE_DIRS ${rudeconfig_INCLUDE_DIRS})
 list(APPEND ocerus-engine_LIBRARIES ${rudeconfig_LIBRARIES})
 
 ###############
+# angelscript
+###############
+ADD_SUBDIRECTORY(externalLibs/angelscript)
+
+set(angelscript_INCLUDE_DIRS
+    ${CMAKE_CURRENT_SOURCE_DIR}/externalLibs/angelscript/include
+)
+set(angelscript_LIBRARIES angelscript)
+
+list(APPEND ocerus-engine_INCLUDE_DIRS ${angelscript_INCLUDE_DIRS})
+list(APPEND ocerus-engine_LIBRARIES ${angelscript_LIBRARIES})
+
+###############
 # DbgLib
 ###############
 if (USE_DBGLIB OR USE_LEAKDETECTOR)
-    
+
     ADD_SUBDIRECTORY(externalLibs/DbgLib)
-    
+
     set(DbgLib_INCLUDE_DIRS
         ${CMAKE_CURRENT_SOURCE_DIR}/externalLibs/DbgLib
     )
@@ -169,6 +182,7 @@ set(EntitySystem_SRCS
     src/EntitySystem/Components/CmpPlatformPhysics.cpp
     src/EntitySystem/Components/CmpPlatformParams.cpp
     src/EntitySystem/Components/Transform.cpp
+    src/EntitySystem/Components/OnInitScript.cpp
     src/EntitySystem/ComponentMgr/Component.cpp
     src/EntitySystem/ComponentMgr/ComponentEnums.cpp
     src/EntitySystem/ComponentMgr/ComponentMgr.cpp
@@ -205,6 +219,12 @@ set(ResourceSystem_SRCS
     src/ResourceSystem/ResourceMgr.cpp
     src/ResourceSystem/XMLResource.cpp
     src/ResourceSystem/Resource.cpp
+)
+
+set(ScriptSystem_SRCS
+    src/ScriptSystem/AddOn/scriptstring.cpp
+    src/ScriptSystem/ScriptMgr.cpp
+    src/ScriptSystem/ScriptResource.cpp
 )
 
 set(Setup_SRCS
@@ -251,6 +271,7 @@ add_library(ocerus-engine STATIC
     ${LogSystem_SRCS}
     ${Memory_SRCS}
     ${ResourceSystem_SRCS}
+    ${ScriptSystem_SRCS}
     ${Setup_SRCS}
     ${StringSystem_SRCS}
     ${Utils_SRCS}
