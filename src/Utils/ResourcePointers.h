@@ -4,7 +4,7 @@
 #ifndef ResourcePointers_h__
 #define ResourcePointers_h__
 
-#include "SmartPointer.h"
+#include <boost/shared_ptr.hpp>
 
 namespace GfxSystem
 {
@@ -13,11 +13,11 @@ namespace GfxSystem
 	class Texture;
 
 	/// Smart pointer to ParticleSystem.
-	typedef SmartPointer<ParticleSystem> ParticleSystemPtr;
+	typedef boost::shared_ptr<ParticleSystem> ParticleSystemPtr;
 	/// Smart pointer to ParticleResource.
-	typedef SmartPointer<ParticleResource> ParticleResourcePtr;
+    typedef boost::shared_ptr<ParticleResource> ParticleResourcePtr;
 	/// Smart pointer to Texture.
-	typedef SmartPointer<Texture> TexturePtr;
+    typedef boost::shared_ptr<Texture> TexturePtr;
 }
 
 namespace StringSystem
@@ -25,7 +25,7 @@ namespace StringSystem
 	class TextResource;
 
 	/// Smart pointer to TextResource.
-	typedef SmartPointer<TextResource> TextResourcePtr;
+    typedef boost::shared_ptr<TextResource> TextResourcePtr;
 }
 
 namespace ResourceSystem
@@ -34,9 +34,9 @@ namespace ResourceSystem
 	class XMLResource;
 
 	/// Smar pointer to Resource.
-	typedef SmartPointer<Resource> ResourcePtr;
+    typedef boost::shared_ptr<Resource> ResourcePtr;
 	/// Smart pointer to XMLResource.
-	typedef SmartPointer<XMLResource> XMLResourcePtr;
+    typedef boost::shared_ptr<XMLResource> XMLResourcePtr;
 }
 
 namespace GUISystem
@@ -44,7 +44,7 @@ namespace GUISystem
 	class CEGUIResource;
 
 	/// Smart pointer to CEGUIResource.
-	typedef SmartPointer<CEGUIResource> CEGUIResourcePtr;
+    typedef boost::shared_ptr<CEGUIResource> CEGUIResourcePtr;
 }
 
 namespace ScriptSystem
@@ -52,7 +52,7 @@ namespace ScriptSystem
 	class ScriptResource;
 
 	/// Smart pointer to ScriptResource.
-	typedef SmartPointer<ScriptResource> ScriptResourcePtr;
+    typedef boost::shared_ptr<ScriptResource> ScriptResourcePtr;
 }
 
 #endif // ResourcePointers_h__

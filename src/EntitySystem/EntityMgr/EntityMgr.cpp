@@ -88,7 +88,7 @@ EntityHandle EntityMgr::CreateEntity(EntityDescription& desc, PropertyList& out)
 		// create the component
 		Component* cmp = mComponentMgr->CreateComponent(h, cmpType);
 		OC_ASSERT(cmp);
-		
+
 		// check dependencies of the component
 		ComponentDependencyList depList;
 		cmp->GetRTTI()->EnumComponentDependencies(depList);
@@ -186,7 +186,7 @@ bool EntitySystem::EntityMgr::GetEntityProperties( const EntityHandle h, Propert
 	{
 		(*it)->GetRTTI()->EnumProperties(*it, out, flagMask);
 	}
-	
+
 	return true;
 }
 
@@ -227,8 +227,8 @@ EntitySystem::EntityHandle EntitySystem::EntityMgr::FindFirstEntity( const strin
 
 bool EntitySystem::EntityMgr::LoadFromResource( ResourceSystem::ResourcePtr res )
 {
-	ResourceSystem::XMLResourcePtr xml = res;
-	if (xml.IsNull())
+    ResourceSystem::XMLResourcePtr xml = boost::static_pointer_cast<ResourceSystem::XMLResource>(res);
+	if (xml == 0)
 	{
 		ocError << "XML: Can't load data";
 		return false;
@@ -334,7 +334,7 @@ bool EntitySystem::EntityMgr::EntityExists( const EntityHandle h ) const
 }
 
 EntitySystem::EntityMgr::EntityInfo::EntityInfo( void ):
-	mType(ET_UNKNOWN), 
+	mType(ET_UNKNOWN),
 	mFullyInited(false)
 {
 
@@ -348,7 +348,7 @@ bool EntitySystem::EntityMgr::HasEntityComponentOfType(const EntityHandle h, con
 	}
 	return false;
 }
-	
+
 bool EntitySystem::EntityMgr::GetEntityComponentTypes(const EntityHandle h, ComponentTypeList& out)
 {
 	out.clear();

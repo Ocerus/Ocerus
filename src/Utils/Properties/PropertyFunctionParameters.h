@@ -41,7 +41,7 @@ namespace Reflection
 		/// Adds a parameter to the end of the list.
 		inline void PushParameter(PropertyFunctionParameter toAdd)
 		{
-			OC_DASSERT(!mParameters.IsNull());
+			OC_DASSERT(mParameters != 0);
 			OC_DASSERT_MSG(mParametersCount < mParametersMaxCount, "Too many parameters added!");
 			(*mParameters)[mParametersCount++] = toAdd;
 		}
@@ -49,7 +49,7 @@ namespace Reflection
 		/// Returns a parameter specified by the index.
 		inline PropertyFunctionParameter GetParameter(int32 index) const
 		{
-			OC_DASSERT(!mParameters.IsNull());
+			OC_DASSERT(mParameters != 0);
 			OC_DASSERT_MSG(index>=0 && index<mParametersCount, "Parameter index out of bounds!");
 			return (*mParameters)[index];
 		}
@@ -61,7 +61,7 @@ namespace Reflection
 
 		int32 mParametersCount;
 		int32 mParametersMaxCount;
-		SmartPointer< Array<PropertyFunctionParameter> > mParameters;
+		boost::shared_ptr< Array<PropertyFunctionParameter> > mParameters;
 	};
 }
 

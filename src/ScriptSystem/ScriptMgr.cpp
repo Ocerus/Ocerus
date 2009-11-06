@@ -82,7 +82,7 @@ void ScriptMgr::ConfigureEngine(void)
 		OC_ASSERT_MSG(r >= 0, msg);
 
 	// Register EntityHandle class and it's methods
-	r = engine->RegisterObjectType("EntityHandle", sizeof(EntitySystem::EntityHandle), 
+	r = engine->RegisterObjectType("EntityHandle", sizeof(EntitySystem::EntityHandle),
 		asOBJ_VALUE | asOBJ_POD); OC_ASSERT_MSG(r >= 0, msg); // Register class EntityHandle as value
 
 	r = engine->RegisterEnum("eEntityType"); OC_ASSERT_MSG(r>=0, msg); // Register enum eEntityType
@@ -90,7 +90,7 @@ void ScriptMgr::ConfigureEngine(void)
 	{
 		r = engine->RegisterEnumValue("eEntityType", EntitySystem::EntityTypeNames[entityType], entityType); OC_ASSERT_MSG(r >= 0, msg);
 	}
-	r = engine->RegisterObjectMethod("EntityHandle", "eEntityType GetType() const", 
+	r = engine->RegisterObjectMethod("EntityHandle", "eEntityType GetType() const",
 		asMETHOD(EntitySystem::EntityHandle, GetType), asCALL_THISCALL); OC_ASSERT_MSG(r >= 0, msg); // Register EntityHandle::GetType()
 
 	// Register getters and setters for supported types of properties
@@ -116,7 +116,7 @@ asIScriptContext* ScriptMgr::PrepareContext(const char* moduleName, const char* 
 		ocError << "Script module '" << moduleName << "' not found!";
 		return 0;
 	}
-	
+
 	// Get function ID from declaration
 	int funcId = mod->GetFunctionIdByDecl(funcDecl);
 	if (funcId < 0)
@@ -158,7 +158,7 @@ bool ScriptMgr::ExecuteContext(asIScriptContext* ctx, uint32 timeOut)
 		r = ctx->SetLineCallback(asFUNCTION(LineCallback), to, asCALL_CDECL);
 		OC_ASSERT_MSG(r >= 0, "Failed to register line callback function.");
 	}
-	
+
 	// Reset timer and execute script function
 	if (to) to->Reset();
 	r = ctx->Execute();
@@ -168,11 +168,11 @@ bool ScriptMgr::ExecuteContext(asIScriptContext* ctx, uint32 timeOut)
 	switch (r)
 	{
 	case asEXECUTION_ABORTED:  // Script was aborted by another thread.
-		ocError << "Execution of script function '" << funcDecl << "' in module '" << moduleName 
+		ocError << "Execution of script function '" << funcDecl << "' in module '" << moduleName
 			<< "' was aborted.";
 		return false;
 	case asEXECUTION_SUSPENDED: // Script was suspended due to time out.
-		ocError << "Execution of script function '" << funcDecl << "' in module '" << moduleName 
+		ocError << "Execution of script function '" << funcDecl << "' in module '" << moduleName
 			<< "' was suspended due to time out.";
 		ctx->Abort();
 		return false;
@@ -198,15 +198,15 @@ asIScriptModule* ScriptMgr::GetModule(const char* fileName)
 	if (mod != 0) return mod;
 
 	// Try to get existing script resource
-	ScriptResourcePtr sp = static_cast<ScriptResourcePtr>(gResourceMgr.GetResource("scripts", fileName));
-	if (sp.IsNull())
+	ScriptResourcePtr sp = boost::static_pointer_cast<ScriptResource>(gResourceMgr.GetResource("scripts", fileName));
+	if (sp == 0)
 	{
 		// Load script resource from file
-		gResourceMgr.AddResourceFileToGroup(mBasePath + fileName, "scripts", 
+		gResourceMgr.AddResourceFileToGroup(mBasePath + fileName, "scripts",
 			ResourceSystem::RESTYPE_SCRIPTRESOURCE, true);
-		sp = static_cast<ScriptResourcePtr>(gResourceMgr.GetResource("scripts", fileName));
+		sp = boost::static_pointer_cast<ScriptResource>(gResourceMgr.GetResource("scripts", fileName));
 	}
-	if (sp.IsNull()) return 0;
+	if (sp == 0) return 0;
 
 	mod = engine->GetModule(fileName, asGM_ALWAYS_CREATE);
 

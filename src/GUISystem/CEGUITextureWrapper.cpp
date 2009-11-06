@@ -17,10 +17,9 @@ namespace GUISystem {
 	const string CEGUITextureWrapper::mResourceGroupName = "CEGUI_created";
 
 	void CEGUITextureWrapper::loadFromFile(const CEGUI::String& filename, const CEGUI::String& resourceGroup) {
-		mTexture.SetNull();
-		mTexture = (GfxSystem::TexturePtr)gResourceMgr.GetResource(resourceGroup.c_str(), filename.c_str());		
+		mTexture = boost::static_pointer_cast<GfxSystem::Texture>(gResourceMgr.GetResource(resourceGroup.c_str(), filename.c_str()));
 		mOriginalHeight = mTexture->GetHeight();
-		mOriginalWidth = mTexture->GetWidth();		
+		mOriginalWidth = mTexture->GetWidth();
 	}
 
 	CEGUITextureWrapper::CEGUITextureWrapper(RendererGate * gate) : CEGUI::Texture(gate) {
@@ -29,14 +28,14 @@ namespace GUISystem {
 	void CEGUITextureWrapper::loadFromMemory(const void* buffPtr, CEGUI::uint buffWidth,
 		CEGUI::uint buffHeight, CEGUI::Texture::PixelFormat pixelFormat) {
 
-		mTexture.SetNull();
+		mTexture.reset();
 
 		uint32 bytesize = ((buffWidth * sizeof(uint32)) * buffHeight);
 
 		string name = GetNextTextureName();
 		gResourceMgr.AddManualResourceToGroup(name, mResourceGroupName, ResourceSystem::RESTYPE_TEXTURE);
-						
-		mTexture = (GfxSystem::TexturePtr)gResourceMgr.GetResource(mResourceGroupName, name);
+
+		mTexture = boost::static_pointer_cast<GfxSystem::Texture>(gResourceMgr.GetResource(mResourceGroupName, name));
 		// warning, medved error, medved thought that position of A doesnt matter :)
 /*
 		uint32* color_shift_buff = new uint32[bytesize];
@@ -52,14 +51,14 @@ namespace GUISystem {
 		mTexture->LoadFromBitmap(color_shift_buff, bytesize, buffWidth, buffHeight, (GfxSystem::Texture::ePixelFormat)pixelFormat);
 		delete[] color_shift_buff;
 */
-		mTexture->LoadFromBitmap(buffPtr, bytesize, buffWidth, buffHeight, (GfxSystem::Texture::ePixelFormat)pixelFormat);		
+		mTexture->LoadFromBitmap(buffPtr, bytesize, buffWidth, buffHeight, (GfxSystem::Texture::ePixelFormat)pixelFormat);
 		mOriginalHeight = buffHeight;
 		mOriginalWidth = buffWidth;
 	}
 
 	CEGUITextureWrapper::~CEGUITextureWrapper(void) {
 		mTexture->Unload(true);
-		mTexture.SetNull();		
+		mTexture.reset();
 	}
 
 	string CEGUITextureWrapper::GetNextTextureName() {

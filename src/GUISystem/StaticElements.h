@@ -5,7 +5,6 @@
 #include "CEGUIBase.h"
 #include "CEGUIcolour.h"
 #include "CEGUIWindow.h"
-#include "SmartPointer.h"
 
 namespace GUISystem {
 	class StaticElement {
@@ -13,7 +12,7 @@ namespace GUISystem {
 		CEGUI::Window* mElement;
 		static int32 mID;
 		void SetSize();
-	public:	
+	public:
 		Vector2 GetSize();
 		void SetPosition( float32 x, float32 y,
 			uint8 text_anchor = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP,
@@ -38,7 +37,7 @@ namespace GUISystem {
 			uint8 screen_anchor = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP,
 			const string & fontid = "" );
 
-		void SetColor( const GfxSystem::Color & color );		
+		void SetColor( const GfxSystem::Color & color );
 		void SetFont( const string & fontid );
 		void SetText( const string & text );
 

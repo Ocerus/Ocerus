@@ -13,7 +13,7 @@ Reflection::PropertyFunctionParameters::PropertyFunctionParameters( void ):
 	mParametersMaxCount(0),
 	mParameters()
 {
-	
+
 }
 
 Reflection::PropertyFunctionParameters::PropertyFunctionParameters( const PropertyFunctionParameters& rhs )
@@ -33,7 +33,7 @@ void Reflection::PropertyFunctionParameters::Reset( int32 numParameters )
 {
 	mParametersCount = 0;
 	mParametersMaxCount = numParameters;
-	mParameters = SmartPointer< Array<PropertyFunctionParameter> >(new Array<PropertyFunctionParameter>(numParameters));
+	mParameters = boost::shared_ptr< Array<PropertyFunctionParameter> >(new Array<PropertyFunctionParameter>(numParameters));
 }
 
 Reflection::PropertyFunctionParameters::~PropertyFunctionParameters( void )

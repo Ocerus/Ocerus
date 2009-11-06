@@ -26,7 +26,7 @@ void ParticleSystemMgr::Update(float32 delta)
 			if ((*i)->GetLifeTime() != -1.0f) del.push_back(*i);
 		}
 	}
-	while (!del.empty()) 
+	while (!del.empty())
 	{
 		UnregisterPS(del.back());
 		del.pop_back();
@@ -36,7 +36,7 @@ void ParticleSystemMgr::Update(float32 delta)
 void ParticleSystemMgr::Render(float32 scale)
 {
 	for(PSList::iterator i = mPsList.begin(); i != mPsList.end(); ++i)
-	{ 
+	{
 		if (!(*i)->GetRenderDone())
 		{
 			if (scale != -1.0f) (*i)->SetScale(scale);
@@ -54,42 +54,42 @@ void ParticleSystemMgr::SetScale(float32 s)
 
 ParticleSystemPtr ParticleSystemMgr::SpawnPS(StringKey group, StringKey name)
 {
-	ParticleResourcePtr psi = gResourceMgr.GetResource(group, name);
+	ParticleResourcePtr psi = boost::static_pointer_cast<ParticleResource>(gResourceMgr.GetResource(group, name));
 	if (psi.IsNull())
 		return ParticleSystemPtr();
 	mPsList.push_back(ParticleSystemPtr(new ParticleSystem(new hgeParticleSystem(psi->GetPsi()))));
-	return mPsList.back();	
+	return mPsList.back();
 }
 
 ParticleSystemPtr ParticleSystemMgr::SpawnPS(char* groupSlashName)
 {
-	ParticleResourcePtr psi = gResourceMgr.GetResource(groupSlashName);
+	ParticleResourcePtr psi = boost::static_pointer_cast<ParticleResource>(gResourceMgr.GetResource(groupSlashName));
 	if (psi.IsNull())
 		return ParticleSystemPtr();
 	mPsList.push_back(ParticleSystemPtr(new ParticleSystem(new hgeParticleSystem(psi->GetPsi()))));
-	return mPsList.back();	
+	return mPsList.back();
 }
 
 ParticleSystemPtr ParticleSystemMgr::SpawnPS(StringKey group, StringKey name, int32 x, int32 y)
 {
-	ParticleResourcePtr psi = gResourceMgr.GetResource(group, name);
+	ParticleResourcePtr psi = boost::static_pointer_cast<ParticleResource>(gResourceMgr.GetResource(group, name));
 	if (psi.IsNull())
 		return ParticleSystemPtr();
 	mPsList.push_back(ParticleSystemPtr(new ParticleSystem(new hgeParticleSystem(psi->GetPsi()))));
 	mPsList.back()->SetScale(mScale);
 	mPsList.back()->FireAt(gGfxRenderer.ScreenToWorldX(x), gGfxRenderer.ScreenToWorldY(y));
-	return mPsList.back();	
+	return mPsList.back();
 }
 
 ParticleSystemPtr ParticleSystemMgr::SpawnPS(char* groupSlashName, int32 x, int32 y)
 {
-	ParticleResourcePtr psi = gResourceMgr.GetResource(groupSlashName);
+	ParticleResourcePtr psi = boost::static_pointer_cast<ParticleResource>(gResourceMgr.GetResource(groupSlashName));
 	if (psi.IsNull())
 		return ParticleSystemPtr();
 	mPsList.push_back(ParticleSystemPtr(new ParticleSystem(new hgeParticleSystem(psi->GetPsi()))));
 	mPsList.back()->SetScale(mScale);
 	mPsList.back()->FireAt(gGfxRenderer.ScreenToWorldX(x), gGfxRenderer.ScreenToWorldY(y));
-	return mPsList.back();	
+	return mPsList.back();
 }
 
 bool ParticleSystemMgr::IsPSAlive(ParticleSystemPtr ps)

@@ -78,7 +78,7 @@ void EntityComponents::CmpPlatformLogic::Die( void )
 	prop = mBlueprints.GetProperty("ResourceGroup");
 	StringKey resGroup = prop.GetValue<StringKey>();
 	GfxSystem::ParticleSystemPtr ps = gPSMgr.SpawnPS(resGroup, effect);
-	if (!ps.IsNull())
+	if (ps.get() != 0)
 	{
 		prop = mBlueprints.GetProperty("ExplodeEffectScale");
 		float32 scale = prop.GetValue<float32>();

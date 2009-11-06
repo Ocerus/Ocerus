@@ -21,16 +21,14 @@ namespace GfxSystem
 			return mPsi;
 		}
 
-	protected:	
+	protected:
 		hgeAnimation* mSprite;
 
 		hgeParticleSystemInfo* mPsi;
 
 		virtual bool LoadImpl(void);
-		virtual bool UnloadImpl(void);	
+		virtual bool UnloadImpl(void);
 	};
-	
-	typedef SmartPointer<ParticleResource> ParticleResourcePtr;
 }
 
 

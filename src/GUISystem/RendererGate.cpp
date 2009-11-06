@@ -9,7 +9,7 @@
 namespace GUISystem {
 
 	Quad_info::Quad_info() : dest_rect(0,0,0,0), z(0), texture_rect(0,0,0,0) {
-		tex.SetNull();
+		tex.reset();
 	}
 
 	Quad_info::Quad_info(const GfxSystem::Rect& dest_rect, float32 z, GfxSystem::TexturePtr tex, const GfxSystem::Rect& texture_rect,
@@ -19,7 +19,7 @@ namespace GUISystem {
 	}
 
 	Quad_info::~Quad_info() {
-		tex.SetNull();
+		tex.reset();
 	}
 
 	RendererGate::RendererGate() : mQueueing(false) {
@@ -39,8 +39,8 @@ namespace GUISystem {
 
 	/// add's a quad to the list to be rendered
 	void RendererGate::addQuad(const CEGUI::Rect& dest_rect, float z, const CEGUI::Texture* tex,
-			const CEGUI::Rect& texture_rect, const CEGUI::ColourRect& colors, CEGUI::QuadSplitMode quad_split_mode) 
-	{		
+			const CEGUI::Rect& texture_rect, const CEGUI::ColourRect& colors, CEGUI::QuadSplitMode quad_split_mode)
+	{
 		GfxSystem::Rect conv_dest_rect(MathUtils::Round(dest_rect.d_left), MathUtils::Round(dest_rect.d_top),
 			MathUtils::Round(dest_rect.getWidth()), MathUtils::Round(dest_rect.getHeight()));
 		GfxSystem::TexturePtr conv_tex = ((CEGUITextureWrapper*)tex)->getTexture();
@@ -67,7 +67,7 @@ namespace GUISystem {
 	// perform final rendering for all queued renderable quads.
 	void RendererGate::doRender() {
 		vector<Quad_info>::const_iterator iter = mQuads.begin();
-		while (iter != mQuads.end()) {			
+		while (iter != mQuads.end()) {
 			DrawQuad(*iter);
 			++iter;
 		}
@@ -81,7 +81,7 @@ namespace GUISystem {
 	CEGUI::Texture* RendererGate::createTexture(void) {
 		CEGUITextureWrapper * wrap = new CEGUITextureWrapper(this);
 		mTextures.insert(wrap);
-		
+
 		return wrap;
 	}
 

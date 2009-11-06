@@ -35,15 +35,15 @@ float32 ReadFloat(InputStream& is)
 	dat1.b[1] = (uint8)is.get();
 	dat1.b[2] = (uint8)is.get();
 	dat1.b[3] = (uint8)is.get();
-	return dat1.f;	
+	return dat1.f;
 }
 
 
 bool ParticleResource::LoadImpl(void)
 {
 	mPsi = new hgeParticleSystemInfo();
-	
-	GfxSystem::TexturePtr tex = gResourceMgr.GetResource("psi", "particles.png");
+
+	GfxSystem::TexturePtr tex = boost::static_pointer_cast<Texture>(gResourceMgr.GetResource("psi", "particles.png"));
 	mSprite = new hgeAnimation(tex->GetTexture(), 16, 1.0f, 0, 0, 32, 32);
 	mSprite->SetHotSpot(16,16);
 
@@ -51,7 +51,7 @@ bool ParticleResource::LoadImpl(void)
 
 	mPsi->sprite = (hgeSprite*)ReadInt(is);
 	mPsi->nEmission = ReadInt(is);
-	
+
 	mPsi->fLifetime = ReadFloat(is);
 
 	mPsi->fParticleLifeMin = ReadFloat(is);
@@ -59,7 +59,7 @@ bool ParticleResource::LoadImpl(void)
 
 	mPsi->fDirection = ReadFloat(is);
 	mPsi->fSpread = ReadFloat(is);
-	
+
 	mPsi->bRelative = ((ReadInt(is) > 0) ? true : false);
 
 	mPsi->fSpeedMin = ReadFloat(is);
@@ -82,7 +82,7 @@ bool ParticleResource::LoadImpl(void)
 	mPsi->fSpinEnd = ReadFloat(is);
 	mPsi->fSpinVar = ReadFloat(is);
 
-	mPsi->colColorStart.r = ReadFloat(is); 
+	mPsi->colColorStart.r = ReadFloat(is);
 	mPsi->colColorStart.g = ReadFloat(is);
 	mPsi->colColorStart.b = ReadFloat(is);
 	mPsi->colColorStart.a = ReadFloat(is);
@@ -96,10 +96,10 @@ bool ParticleResource::LoadImpl(void)
 	mPsi->fAlphaVar = ReadFloat(is);
 
 	CloseInputStream();
-		
+
 	mSprite->SetFrame((DWORD)mPsi->sprite & 0xFFFF);
 	mSprite->SetBlendMode((DWORD)mPsi->sprite >> 16);
-	mPsi->sprite = mSprite; 
+	mPsi->sprite = mSprite;
 
 	return true;
 }
