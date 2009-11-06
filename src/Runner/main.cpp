@@ -18,6 +18,12 @@
 
 
 
+#if defined(USE_LEAKDETECTOR) && defined(NDEBUG)
+#error Cannot use the leak detector in non debug builds!
+#endif
+
+
+
 #ifdef USE_DBGLIB
 /// Callback function from the DbgLib.
 void DbgLibExceptionCallback(void* params)

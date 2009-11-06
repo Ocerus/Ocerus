@@ -13,16 +13,10 @@ void DisplayAssert(const char* msg, const char* file, const int line);
 #ifdef __WIN__
 
 #define OC_ASSERT(expr) \
-	__pragma(warning(push)) \
-	__pragma(warning(disable:4127)) \
-	do { if (!(expr)) { DisplayAssert(#expr, __FILE__, __LINE__); __debugbreak(); } } while (0) \
-	__pragma(warning(pop))
+	do { if (!(expr)) { DisplayAssert(#expr, __FILE__, __LINE__); __debugbreak(); } } while (0)
 
 #define OC_ASSERT_MSG(expr, msg) \
-	__pragma(warning(push)) \
-	__pragma(warning(disable:4127)) \
-	do { if (!(expr)) { DisplayAssert(msg, __FILE__, __LINE__); __debugbreak(); } } while (0) \
-	__pragma(warning(pop))
+	do { if (!(expr)) { DisplayAssert(msg, __FILE__, __LINE__); __debugbreak(); } } while (0)
 
 #else // __WIN__
 
@@ -43,7 +37,7 @@ void DisplayAssert(const char* msg, const char* file, const int line);
 #else // _DEBUG
 
 #define OC_DASSERT(expr) do { (void)sizeof(expr); } while(0)
-#define OC_DASSERT_MSG(expr, msg) do { (void)sizeof(expr); } while(0)
+#define OC_DASSERT_MSG(expr, msg) do { (void)sizeof(expr); (void)sizeof(msg); } while(0)
 
 #endif // _DEBUG
 
@@ -52,9 +46,9 @@ void DisplayAssert(const char* msg, const char* file, const int line);
 
 
 #define OC_ASSERT(expr) do { (void)sizeof(expr); } while(0)
-#define OC_ASSERT_MSG(expr, msg) do { (void)sizeof(expr); } while(0)
+#define OC_ASSERT_MSG(expr, msg) do { (void)sizeof(expr); (void)sizeof(msg); } while(0)
 #define OC_DASSERT(expr) do { (void)sizeof(expr); } while(0)
-#define OC_DASSERT_MSG(expr, msg) do { (void)sizeof(expr); } while(0)
+#define OC_DASSERT_MSG(expr, msg) do { (void)sizeof(expr); (void)sizeof(msg); } while(0)
 
 
 #endif // USE_ASSERT

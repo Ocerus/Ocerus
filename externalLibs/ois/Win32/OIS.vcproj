@@ -130,7 +130,7 @@
 				PrecompiledHeaderFile="$(IntDir)/$(TargetName).pch"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="false"
-				DebugInformationFormat="3"
+				DebugInformationFormat="0"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"

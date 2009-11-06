@@ -25,6 +25,13 @@
     #define __UNIX__
 #endif
 
+
+#ifdef __WIN__
+// Disable warning 'conditional expression is constant'. The compiler will optimize it away.
+#pragma warning(disable: 4127)
+#endif
+
+
 #include "SmartAssert.h"
 
 #define B2_NOT_USED(x) (void)x

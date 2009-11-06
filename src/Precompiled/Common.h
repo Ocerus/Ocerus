@@ -52,7 +52,6 @@
 #include "../LogSystem/LogMacros.h"
 #include "../LogSystem/Logger.h"
 
-#include "../EntitySystem/Components/_ComponentHeaders.h"
 
 
 #endif

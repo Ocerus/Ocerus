@@ -6,6 +6,9 @@
 #include "StringConverter.h"
 #include "../LogSystem/LogMgr.h"
 
+// DEBUG only
+#include "../EntitySystem/Components/OnInitScript.h"
+
 using namespace Core;
 
 #define MAX_DELTA_TIME 0.5f

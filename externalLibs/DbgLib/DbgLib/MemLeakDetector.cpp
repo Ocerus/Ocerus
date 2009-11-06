@@ -221,6 +221,8 @@ void CMemLeakDetector::SetModuleInfoCaching(bool p_Enable)
 //////////////////////////////////////////////////////////////////////////
 void CMemLeakDetector::ReportLeaks()
 {
+#ifdef _DEBUG
+
 	// hooks must be disabled for reporting
 	assert(!m_HooksEnabled);
 
@@ -277,12 +279,16 @@ void CMemLeakDetector::ReportLeaks()
 		// finished reporting
 		m_Reporter->WriteFooter();
 	}
+
+#endif // _DEBUG
 }
 
 #if defined(PLATFORM_WINDOWS)
 //////////////////////////////////////////////////////////////////////////
 int CMemLeakDetector::CrtAllocHook(int allocType, void *userData, size_t size, int blockType, long requestNumber, const unsigned char *filename, int lineNumber)
 {
+#ifdef _DEBUG
+
 	UNREFERENCED_PARAMETER(size);
 	UNREFERENCED_PARAMETER(filename);
 	UNREFERENCED_PARAMETER(lineNumber);
@@ -327,6 +333,8 @@ int CMemLeakDetector::CrtAllocHook(int allocType, void *userData, size_t size, i
 	if(g_MemLeakDetector.m_OldHook)
 		return g_MemLeakDetector.m_OldHook(blockType, userData, size, blockType, requestNumber, filename, lineNumber);
 	
+#endif // _DEBUG
+
 	return TRUE;
 }
 
