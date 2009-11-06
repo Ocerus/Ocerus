@@ -55,7 +55,7 @@ void ParticleSystemMgr::SetScale(float32 s)
 ParticleSystemPtr ParticleSystemMgr::SpawnPS(StringKey group, StringKey name)
 {
 	ParticleResourcePtr psi = boost::static_pointer_cast<ParticleResource>(gResourceMgr.GetResource(group, name));
-	if (psi.IsNull())
+	if (psi == 0)
 		return ParticleSystemPtr();
 	mPsList.push_back(ParticleSystemPtr(new ParticleSystem(new hgeParticleSystem(psi->GetPsi()))));
 	return mPsList.back();
@@ -64,7 +64,7 @@ ParticleSystemPtr ParticleSystemMgr::SpawnPS(StringKey group, StringKey name)
 ParticleSystemPtr ParticleSystemMgr::SpawnPS(char* groupSlashName)
 {
 	ParticleResourcePtr psi = boost::static_pointer_cast<ParticleResource>(gResourceMgr.GetResource(groupSlashName));
-	if (psi.IsNull())
+	if (psi == 0)
 		return ParticleSystemPtr();
 	mPsList.push_back(ParticleSystemPtr(new ParticleSystem(new hgeParticleSystem(psi->GetPsi()))));
 	return mPsList.back();
@@ -73,7 +73,7 @@ ParticleSystemPtr ParticleSystemMgr::SpawnPS(char* groupSlashName)
 ParticleSystemPtr ParticleSystemMgr::SpawnPS(StringKey group, StringKey name, int32 x, int32 y)
 {
 	ParticleResourcePtr psi = boost::static_pointer_cast<ParticleResource>(gResourceMgr.GetResource(group, name));
-	if (psi.IsNull())
+	if (psi == 0)
 		return ParticleSystemPtr();
 	mPsList.push_back(ParticleSystemPtr(new ParticleSystem(new hgeParticleSystem(psi->GetPsi()))));
 	mPsList.back()->SetScale(mScale);
@@ -84,7 +84,7 @@ ParticleSystemPtr ParticleSystemMgr::SpawnPS(StringKey group, StringKey name, in
 ParticleSystemPtr ParticleSystemMgr::SpawnPS(char* groupSlashName, int32 x, int32 y)
 {
 	ParticleResourcePtr psi = boost::static_pointer_cast<ParticleResource>(gResourceMgr.GetResource(groupSlashName));
-	if (psi.IsNull())
+	if (psi == 0)
 		return ParticleSystemPtr();
 	mPsList.push_back(ParticleSystemPtr(new ParticleSystem(new hgeParticleSystem(psi->GetPsi()))));
 	mPsList.back()->SetScale(mScale);

@@ -216,7 +216,7 @@ void InitQuad(hgeQuad& q,const TexturePtr& image, const Rect& textureRect, const
 
 bool GfxRenderer::DrawImage( const TexturePtr& image, int32 x, int32 y, uint8 anchor, float32 angle, const Color& color, float32 scale) const
 {	
-	if (image.IsNull())
+	if (image == 0)
 	{
 		ocError << "DrawImage: texture is null";
 		return false;
@@ -284,7 +284,7 @@ bool GfxRenderer::DrawImage( const TexturePtr& image, int32 x, int32 y, uint8 an
 
 bool GfxRenderer::DrawImage( const TexturePtr& image, const Point& pos, uint8 anchor, float32 angle, const Color& color, float32 scale ) const
 {
-	if (image.IsNull())
+	if (image == 0)
 	{
 		ocError << "DrawImage: texture is null";
 		return false;
@@ -294,7 +294,7 @@ bool GfxRenderer::DrawImage( const TexturePtr& image, const Point& pos, uint8 an
 
 bool GfxRenderer::DrawImageWithConversion( const TexturePtr& image, const Vector2& pos, uint8 anchor, float32 angle, const Color& color, float32 scale ) const
 {
-	if (image.IsNull())
+	if (image == 0)
 	{
 		ocError << "DrawImage: texture is null";
 		return false;
@@ -304,7 +304,7 @@ bool GfxRenderer::DrawImageWithConversion( const TexturePtr& image, const Vector
 
 bool GfxRenderer::DrawImage( const TexturePtr& image, const Rect& destRect ) const
 {
-	if (image.IsNull())
+	if (image == 0)
 	{
 		ocError << "DrawImage: texture is null";
 		return false;
@@ -314,7 +314,7 @@ bool GfxRenderer::DrawImage( const TexturePtr& image, const Rect& destRect ) con
 
 bool GfxRenderer::DrawImage( const TexturePtr& image, const Rect& textureRect, const Rect& destRect, const ColorRect& colors ) const
 {
-	if (image.IsNull())
+	if (image == 0)
 	{
 		ocError << "DrawImage: texture is null";
 		return false;
@@ -389,7 +389,7 @@ bool GfxRenderer::DrawPolygon( Point* vertices, int vertices_len, const TextureP
 
 bool GfxRenderer::DrawPolygon( const vector<Point>& vertices, const TexturePtr& image, const Pen& outline, float32 angle, const Color& color, float32 scale, float32 textureAngle, float32 textureScale ) const
 {
-	if (image.IsNull())
+	if (image == 0)
 	{
 		ocError << "DrawPolygon: texture is null";
 		return false;
@@ -588,7 +588,7 @@ Vector2 GfxRenderer::GetTextSize( const string & text, const string & fontid )
 
 bool GfxRenderer::DrawQuad( GfxSystem::Point* const vertices, const TexturePtr texture, Vector2* const textureCoords, Color* const vertexColors )
 {
-	if (texture.IsNull())
+	if (texture == 0)
 	{
 		ocError << "DrawQuad: texture is null";
 		return false;
