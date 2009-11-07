@@ -140,7 +140,6 @@
 				PrecompiledHeaderThrough="Common.h"
 				PrecompiledHeaderFile="$(IntDir)\Common.pch"
 				WarningLevel="4"
-				WarnAsError="true"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="0"
 			/>

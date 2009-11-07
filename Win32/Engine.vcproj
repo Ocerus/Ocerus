@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../src/Precompiled;../src/Utils;../externalLibs/boost/inc;../externalLibs/hge/include;../externalLibs/ois/includes;../externalLibs/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib;../externalLibs/SDL/inc;../externalLibs/angelscript/include"
+				AdditionalIncludeDirectories="../src/Precompiled;../src/Utils;../externalLibs/boost/inc;../externalLibs/hge/include;../externalLibs/ois/includes;../externalLibs/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib;../externalLibs/angelscript/include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;USE_ASSERT"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="true"
@@ -115,7 +115,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="../src/Precompiled;../src/Utils;../externalLibs/boost/inc;../externalLibs/hge/include;../externalLibs/ois/includes;../externalLibs/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib;../externalLibs/SDL/inc;../externalLibs/angelscript/include"
+				AdditionalIncludeDirectories="../src/Precompiled;../src/Utils;../externalLibs/boost/inc;../externalLibs/hge/include;../externalLibs/ois/includes;../externalLibs/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib;../externalLibs/angelscript/include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="false"
@@ -184,7 +184,7 @@
 				Optimization="2"
 				InlineFunctionExpansion="1"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories="../src/Precompiled;../src/Utils;../externalLibs/boost/inc;../externalLibs/hge/include;../externalLibs/ois/includes;../externalLibs/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib;../externalLibs/SDL/inc;../externalLibs/angelscript/include"
+				AdditionalIncludeDirectories="../src/Precompiled;../src/Utils;../externalLibs/boost/inc;../externalLibs/hge/include;../externalLibs/ois/includes;../externalLibs/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib;../externalLibs/angelscript/include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;USE_ASSERT"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="true"
@@ -700,11 +700,27 @@
 					>
 				</File>
 				<File
-					RelativePath="..\src\GfxSystem\OGlRenderer.h"
+					RelativePath="..\src\GfxSystem\IScreenListener.h"
+					>
+				</File>
+				<File
+					RelativePath="..\src\GfxSystem\ParticleResource.h"
+					>
+				</File>
+				<File
+					RelativePath="..\src\GfxSystem\ParticleSystem.h"
+					>
+				</File>
+				<File
+					RelativePath="..\src\GfxSystem\ParticleSystemMgr.h"
 					>
 				</File>
 				<File
 					RelativePath="..\src\GfxSystem\Texture.h"
+					>
+				</File>
+				<File
+					RelativePath="..\src\GfxSystem\Triangulate.h"
 					>
 				</File>
 			</Filter>
@@ -720,11 +736,23 @@
 					>
 				</File>
 				<File
-					RelativePath="..\src\GfxSystem\OGlRenderer.cpp"
+					RelativePath="..\src\GfxSystem\ParticleResource.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src\GfxSystem\ParticleSystem.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src\GfxSystem\ParticleSystemMgr.cpp"
 					>
 				</File>
 				<File
 					RelativePath="..\src\GfxSystem\Texture.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src\GfxSystem\Triangulate.cpp"
 					>
 				</File>
 			</Filter>
@@ -1072,21 +1100,17 @@
 			</Filter>
 		</Filter>
 		<Filter
-			Name="SceneSystem"
+			Name="ScriptSystem"
 			>
 			<Filter
 				Name="inc"
 				>
 				<File
-					RelativePath="..\src\SceneSystem\GfxWindow.h"
+					RelativePath="..\src\ScriptSystem\ScriptMgr.h"
 					>
 				</File>
 				<File
-					RelativePath="..\src\SceneSystem\IScreenListener.h"
-					>
-				</File>
-				<File
-					RelativePath="..\src\SceneSystem\SceneMgr.h"
+					RelativePath="..\src\ScriptSystem\ScriptResource.h"
 					>
 				</File>
 			</Filter>
@@ -1094,13 +1118,33 @@
 				Name="src"
 				>
 				<File
-					RelativePath="..\src\SceneSystem\GfxWindow.cpp"
+					RelativePath="..\src\ScriptSystem\ScriptMgr.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\SceneSystem\SceneMgr.cpp"
+					RelativePath="..\src\ScriptSystem\ScriptResource.cpp"
 					>
 				</File>
+			</Filter>
+			<Filter
+				Name="AddOn"
+				>
+				<Filter
+					Name="inc"
+					>
+					<File
+						RelativePath="..\src\ScriptSystem\AddOn\scriptstring.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="src"
+					>
+					<File
+						RelativePath="..\src\ScriptSystem\AddOn\scriptstring.cpp"
+						>
+					</File>
+				</Filter>
 			</Filter>
 		</Filter>
 		<File
