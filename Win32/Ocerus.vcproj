@@ -138,6 +138,7 @@
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderThrough="Common.h"
 				WarningLevel="4"
+				WarnAsError="true"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="0"
 			/>

@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../src/Precompiled;../src/Utils;../externalLibs/boost/inc;../externalLibs/hge/include;../externalLibs/ois/includes;../externalLibs/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib;../externalLibs/SDL/inc"
+				AdditionalIncludeDirectories="../src/Precompiled;../src/Utils;../externalLibs/boost/inc;../externalLibs/hge/include;../externalLibs/ois/includes;../externalLibs/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib;../externalLibs/SDL/inc;../externalLibs/angelscript/include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;USE_ASSERT"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="true"
@@ -115,7 +115,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="../src/Precompiled;../src/Utils;../externalLibs/boost/inc;../externalLibs/hge/include;../externalLibs/ois/includes;../externalLibs/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib"
+				AdditionalIncludeDirectories="../src/Precompiled;../src/Utils;../externalLibs/boost/inc;../externalLibs/hge/include;../externalLibs/ois/includes;../externalLibs/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib;../externalLibs/SDL/inc;../externalLibs/angelscript/include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="false"
@@ -123,6 +123,7 @@
 				PrecompiledHeaderThrough="Common.h"
 				PrecompiledHeaderFile="$(IntDir)\Common.pch"
 				WarningLevel="4"
+				WarnAsError="true"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="0"
 			/>
@@ -183,7 +184,7 @@
 				Optimization="2"
 				InlineFunctionExpansion="1"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories="../src/Precompiled;../src/Utils;../externalLibs/boost/inc;../externalLibs/hge/include;../externalLibs/ois/includes;../externalLibs/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib"
+				AdditionalIncludeDirectories="../src/Precompiled;../src/Utils;../externalLibs/boost/inc;../externalLibs/hge/include;../externalLibs/ois/includes;../externalLibs/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib;../externalLibs/SDL/inc;../externalLibs/angelscript/include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;USE_ASSERT"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="true"
@@ -270,6 +271,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\src\EntitySystem\Components\OnInitScript.h"
+						>
+					</File>
+					<File
 						RelativePath="..\src\EntitySystem\Components\Transform.h"
 						>
 					</File>
@@ -303,6 +308,10 @@
 					</File>
 					<File
 						RelativePath="..\src\EntitySystem\Components\CmpPlatformVisual.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\src\EntitySystem\Components\OnInitScript.cpp"
 						>
 					</File>
 					<File
