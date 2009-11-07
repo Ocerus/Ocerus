@@ -14,8 +14,6 @@
 /// Scipt system allows users to define behaviour of components and entities
 namespace ScriptSystem
 {
-	typedef void (EntitySystem::Component::*ContextEdit)(asIScriptContext* ctx);
-	
 	/// This class encapsulates script engine and manages access to script modules
 	class ScriptMgr : public Singleton<ScriptMgr>
 	{

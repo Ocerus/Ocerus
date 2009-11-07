@@ -55,6 +55,7 @@ void DisplayAssert(const char* msg, const char* file, const int line);
 
 
 #define OC_NOT_REACHED() OC_ASSERT_MSG(0, "NOT_REACHED")
+#define OC_SCRIPT_ASSERT() OC_ASSERT_MSG(r >= 0, "Something cannot be registered to script engine.")
 
 //@}
 

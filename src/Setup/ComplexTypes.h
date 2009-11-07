@@ -38,6 +38,7 @@ inline std::ios_base::openmode InputStreamMode(eInputStreamMode mode)
 
 #include <sstream>
 typedef std::stringstream stringstream;
+typedef std::ostringstream ostringstream;
 
 
 #endif // ComplexTypes_h__

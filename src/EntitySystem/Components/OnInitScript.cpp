@@ -1,5 +1,6 @@
 #include "Common.h"
 #include "OnInitScript.h"
+#include <angelscript.h>
 
 using namespace EntityComponents;
 
@@ -34,6 +35,7 @@ bool OnInitScript::RunScript()
 {
 	// Return new context prepared to call function from module
 	asIScriptContext* ctx = gScriptMgr.PrepareContext(mOnInitScript.c_str(), "void OnInit(EntityHandle handle)");
+	if (ctx == 0) return false;
 	// Set parent entity handle as first argument
 	int r = ctx->SetArgObject(0, GetOwnerPtr());
 	OC_ASSERT(r >= 0);

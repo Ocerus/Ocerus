@@ -1,8 +1,10 @@
 #include "Common.h"
 #include "ScriptMgr.h"
 #include "ScriptResource.h"
+#include "../ScriptSystem/AddOn/scriptstring.h"
 
 using namespace ScriptSystem;
+using namespace EntitySystem;
 
 struct TimeOut
 {
@@ -53,8 +55,7 @@ ScriptMgr::ScriptMgr(const string& basepath)
 ScriptMgr::~ScriptMgr(void)
 {
 	ocInfo << "*** ScriptMgr deinit ***";
-	/*UnloadData();
-	ocInfo << "*** ScriptMgr unloaded ***";*/
+	engine->Release();
 }
 
 template<class T>
@@ -69,38 +70,182 @@ void EntityHandleSetValue(EntitySystem::EntityHandle& handle, string& propName, 
 	gEntityMgr.GetEntityProperty(handle, StringKey(propName), Reflection::PA_SCRIPT_WRITE).SetValue<T>(value);
 }
 
+// Functions for register Vector2 to script
+
+static void Vector2DefaultConstructor(Vector2* self)
+{
+	new(self) Vector2();
+}
+
+static void Vector2CopyConstructor(const Vector2& other, Vector2* self)
+{
+	new(self) Vector2(other.x, other.y);
+}
+
+static void Vector2InitConstructor(float32 x, float32 y, Vector2* self)
+{
+	new(self) Vector2(x,y);
+}
+
+void RegisterScriptVector2(asIScriptEngine* engine)
+{
+	int32 r;
+	// Register the type
+	r = engine->RegisterObjectType("Vector2", sizeof(Vector2), asOBJ_VALUE | asOBJ_POD | asOBJ_APP_CLASS_CA); OC_SCRIPT_ASSERT();
+
+	// Register the object properties
+	r = engine->RegisterObjectProperty("Vector2", "float x", offsetof(Vector2, x)); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectProperty("Vector2", "float y", offsetof(Vector2, y)); OC_SCRIPT_ASSERT();
+
+	// Register the constructors
+	r = engine->RegisterObjectBehaviour("Vector2", asBEHAVE_CONSTRUCT,  "void f()", asFUNCTION(Vector2DefaultConstructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectBehaviour("Vector2", asBEHAVE_CONSTRUCT,  "void f(const Vector2 &in)", asFUNCTION(Vector2CopyConstructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectBehaviour("Vector2", asBEHAVE_CONSTRUCT,  "void f(float, float)",  asFUNCTION(Vector2InitConstructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+
+	// Register the operator overloads
+	//r = engine->RegisterObjectMethod("Vector2", "Vector2 &opAddAssign(const Vector2 &in)", asMETHODPR(Vector2, operator+=, (const Vector2 &), Vector2&), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	//r = engine->RegisterObjectMethod("Vector2", "Vector2 &opSubAssign(const Vector2 &in)", asMETHODPR(Vector2, operator-=, (const Vector2 &), Vector2&), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	//r = engine->RegisterObjectMethod("Vector2", "Vector2 &opMulAssign(float)", asMETHODPR(Vector2, operator*=, (float32), Vector2&), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Vector2", "void &opAddAssign(const Vector2 &in)", asMETHODPR(Vector2, operator+=, (const Vector2 &), void), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Vector2", "void &opSubAssign(const Vector2 &in)", asMETHODPR(Vector2, operator-=, (const Vector2 &), void), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Vector2", "void &opMulAssign(float)", asMETHODPR(Vector2, operator*=, (float32), void), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	//r = engine->RegisterObjectMethod("Vector2", "Vector2 &opDivAssign(float)", asMETHODPR(Vector2, operator/=, (float32), Vector2&), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Vector2", "Vector2 opNeg() const", asMETHOD(Vector2, operator-), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Vector2", "bool opEquals(const Vector2 &in) const", asFUNCTIONPR(operator==, (const Vector2&, const Vector2&), bool), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Vector2", "Vector2 opAdd(const Vector2 &in) const", asFUNCTIONPR(operator+, (const Vector2&, const Vector2&), Vector2), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Vector2", "Vector2 opSub(const Vector2 &in) const", asFUNCTIONPR(operator-, (const Vector2&, const Vector2&), Vector2), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+	//r = engine->RegisterObjectMethod("Vector2", "Vector2 opMul(float) const", asFUNCTIONPR(operator*, (const Vector2&, float32), Vector2), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Vector2", "Vector2 opMul_r(float) const", asFUNCTIONPR(operator*, (float32, const Vector2&), Vector2), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+	//r = engine->RegisterObjectMethod("Vector2", "Vector2 opDiv(float) const", asFUNCTIONPR(operator/, (const Vector2&, float32), Vector2), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+
+	// Register the object methods
+	r = engine->RegisterObjectMethod("Vector2", "float Length() const", asMETHOD(Vector2, Length), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Vector2", "float LengthSquared() const", asMETHOD(Vector2, LengthSquared), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Vector2", "void Set(float, float)", asMETHODPR(Vector2, Set, (float32, float32), void), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Vector2", "void SetZero(float, float)", asMETHOD(Vector2, SetZero), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Vector2", "float Normalize()", asMETHOD(Vector2, Normalize), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Vector2", "bool IsValid() const", asMETHOD(Vector2, IsValid), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Vector2", "float Dot(const Vector2 &in) const", asFUNCTION(b2Dot), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+}
+
+// Functions for register StringKey to script
+
+static void StringKeyDefaultConstructor(StringKey* self)
+{
+	new(self) StringKey();
+}
+
+static void StringKeyCopyConstructor(const StringKey& other, StringKey* self)
+{
+	new(self) StringKey(other);
+}
+
+static void StringKeyInitConstructor(const string& str, Vector2* self)
+{
+	new(self) StringKey(str);
+}
+
+static void StringKeyDestructor(StringKey* self)
+{
+	self->~StringKey();
+}
+
+void RegisterScriptStringKey(asIScriptEngine* engine)
+{
+	int32 r;
+	// Register the type
+	r = engine->RegisterObjectType("StringKey", sizeof(StringKey), asOBJ_VALUE | asOBJ_POD | asOBJ_APP_CLASS_CA); OC_SCRIPT_ASSERT();
+
+	// Register the constructors and destructor
+	r = engine->RegisterObjectBehaviour("StringKey", asBEHAVE_CONSTRUCT, "void f()", asFUNCTION(StringKeyDefaultConstructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectBehaviour("StringKey", asBEHAVE_CONSTRUCT, "void f(const StringKey &in)", asFUNCTION(StringKeyCopyConstructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectBehaviour("StringKey", asBEHAVE_CONSTRUCT, "void f(const string &in)", asFUNCTION(StringKeyInitConstructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectBehaviour("StringKey", asBEHAVE_DESTRUCT, "void f()", asFUNCTION(StringKeyDestructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+
+	// Register the operator overloads
+	r = engine->RegisterObjectMethod("StringKey", "bool opEquals(const StringKey &in) const", asMETHOD(StringKey, operator==), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("StringKey", "StringKey& opAssign(const StringKey &in)", asMETHOD(StringKey, operator=), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+
+	// Register the object methods
+	r = engine->RegisterObjectMethod("StringKey", "string ToString() const", asMETHOD(StringKey, ToString), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+}
+
+// Functions for register EntityHandle to script
+
+static void EntityHandleDefaultConstructor(EntityHandle* self)
+{
+	new(self) EntityHandle();
+}
+
+static void EntityHandleCopyConstructor(const EntityHandle& other, EntityHandle* self)
+{
+	new(self) EntityHandle(other);
+}
+
+static void EntityHandleDestructor(EntityHandle* self)
+{
+	self->~EntityHandle();
+}
+
+void RegisterScriptEntityHandle(asIScriptEngine* engine)
+{
+	int32 r;
+	// Register the type
+	r = engine->RegisterObjectType("EntityHandle", sizeof(EntityHandle), asOBJ_VALUE | asOBJ_POD | asOBJ_APP_CLASS_CA); OC_SCRIPT_ASSERT();
+
+	// Register the constructors and destructor
+	r = engine->RegisterObjectBehaviour("EntityHandle", asBEHAVE_CONSTRUCT, "void f()", asFUNCTION(EntityHandleDefaultConstructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectBehaviour("EntityHandle", asBEHAVE_CONSTRUCT, "void f(const EntityHandle &in)", asFUNCTION(EntityHandleCopyConstructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectBehaviour("EntityHandle", asBEHAVE_DESTRUCT, "void f()", asFUNCTION(EntityHandleDestructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+
+	// Register the operator overloads
+	r = engine->RegisterObjectMethod("EntityHandle", "bool opEquals(const EntityHandle &in) const", asMETHOD(EntityHandle, operator==), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("EntityHandle", "EntityHandle& opAssign(const EntityHandle &in)", asMETHOD(EntityHandle, operator=), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+
+	// Register enum eEntityType
+	r = engine->RegisterEnum("eEntityType"); OC_SCRIPT_ASSERT();
+	for (int32 entityType = 0; entityType<EntitySystem::NUM_ENTITY_TYPES; ++entityType)
+	{
+		r = engine->RegisterEnumValue("eEntityType", EntitySystem::EntityTypeNames[entityType], entityType); OC_SCRIPT_ASSERT();
+	}
+	
+	// Register typedef EntityID
+	r = engine->RegisterTypedef("EntityID", "int32");
+	
+	// Register the object methods
+	r = engine->RegisterObjectMethod("EntityHandle", "bool IsValid() const", asMETHOD(EntityHandle, IsValid), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("EntityHandle", "bool Exists() const", asMETHOD(EntityHandle, Exists), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("EntityHandle", "eEntityType GetType() const", asMETHOD(EntityHandle, GetType), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("EntityHandle", "EntityID GetID() const", asMETHOD(EntityHandle, GetID), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+}
+
 void ScriptMgr::ConfigureEngine(void)
 {
 	int32 r;
-    const char* msg = "Class, function or variable cannot be registered to script engine."; // Assert message
 
 	// Register the script string type
-	RegisterScriptString(engine);
+	RegisterStdString(engine);
 
 	// Register log function
-	r = engine->RegisterGlobalFunction("void Log(string &in)", asFUNCTION(ScriptLog), asCALL_CDECL);
-		OC_ASSERT_MSG(r >= 0, msg);
+	r = engine->RegisterGlobalFunction("void Log(string &in)", asFUNCTION(ScriptLog), asCALL_CDECL); OC_SCRIPT_ASSERT();
 
-	// Register EntityHandle class and it's methods
-	r = engine->RegisterObjectType("EntityHandle", sizeof(EntitySystem::EntityHandle),
-		asOBJ_VALUE | asOBJ_POD); OC_ASSERT_MSG(r >= 0, msg); // Register class EntityHandle as value
+	// Register Vector2 class and it's methods
+	RegisterScriptVector2(engine);
 
-	r = engine->RegisterEnum("eEntityType"); OC_ASSERT_MSG(r>=0, msg); // Register enum eEntityType
-	for (int32 entityType = 0; entityType<EntitySystem::NUM_ENTITY_TYPES; ++entityType)
-	{
-		r = engine->RegisterEnumValue("eEntityType", EntitySystem::EntityTypeNames[entityType], entityType); OC_ASSERT_MSG(r >= 0, msg);
-	}
-	r = engine->RegisterObjectMethod("EntityHandle", "eEntityType GetType() const",
-		asMETHOD(EntitySystem::EntityHandle, GetType), asCALL_THISCALL); OC_ASSERT_MSG(r >= 0, msg); // Register EntityHandle::GetType()
+	// Register Vector2 class and it's methods
+	RegisterScriptStringKey(engine);
+		
+    // Register EntityHandle class and it's methods
+	RegisterScriptEntityHandle(engine);
 
 	// Register getters and setters for supported types of properties
     #define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName) \
 	r = engine->RegisterObjectMethod("EntityHandle", (string(typeName) + " Get_" + typeName + "(string &in)").c_str(), \
 		asFUNCTIONPR(EntityHandleGetValue, (EntitySystem::EntityHandle&, string&), typeClass), \
-		asCALL_CDECL_OBJFIRST); OC_ASSERT_MSG(r >= 0, msg); \
+		asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT(); \
 	r = engine->RegisterObjectMethod("EntityHandle", (string("void Set_") + typeName + "(string &in, " + typeName + ")").c_str(), \
 		asFUNCTIONPR(EntityHandleSetValue, (EntitySystem::EntityHandle&, string&, typeClass), void), \
-		asCALL_CDECL_OBJFIRST); OC_ASSERT_MSG(r >= 0, msg);
+		asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
 	#define SCRIPT_ONLY
 	#include "../Utils/Properties/PropertyTypes.h"
 	#undef SCRIPT_ONLY
@@ -116,7 +261,7 @@ asIScriptContext* ScriptMgr::PrepareContext(const char* moduleName, const char* 
 		ocError << "Script module '" << moduleName << "' not found!";
 		return 0;
 	}
-
+	
 	// Get function ID from declaration
 	int funcId = mod->GetFunctionIdByDecl(funcDecl);
 	if (funcId < 0)
@@ -158,7 +303,7 @@ bool ScriptMgr::ExecuteContext(asIScriptContext* ctx, uint32 timeOut)
 		r = ctx->SetLineCallback(asFUNCTION(LineCallback), to, asCALL_CDECL);
 		OC_ASSERT_MSG(r >= 0, "Failed to register line callback function.");
 	}
-
+	
 	// Reset timer and execute script function
 	if (to) to->Reset();
 	r = ctx->Execute();
@@ -168,11 +313,11 @@ bool ScriptMgr::ExecuteContext(asIScriptContext* ctx, uint32 timeOut)
 	switch (r)
 	{
 	case asEXECUTION_ABORTED:  // Script was aborted by another thread.
-		ocError << "Execution of script function '" << funcDecl << "' in module '" << moduleName
+		ocError << "Execution of script function '" << funcDecl << "' in module '" << moduleName 
 			<< "' was aborted.";
 		return false;
 	case asEXECUTION_SUSPENDED: // Script was suspended due to time out.
-		ocError << "Execution of script function '" << funcDecl << "' in module '" << moduleName
+		ocError << "Execution of script function '" << funcDecl << "' in module '" << moduleName 
 			<< "' was suspended due to time out.";
 		ctx->Abort();
 		return false;
@@ -199,14 +344,14 @@ asIScriptModule* ScriptMgr::GetModule(const char* fileName)
 
 	// Try to get existing script resource
 	ScriptResourcePtr sp = boost::static_pointer_cast<ScriptResource>(gResourceMgr.GetResource("scripts", fileName));
-	if (sp == 0)
+	if (!sp)
 	{
 		// Load script resource from file
-		gResourceMgr.AddResourceFileToGroup(mBasePath + fileName, "scripts",
+		gResourceMgr.AddResourceFileToGroup(mBasePath + fileName, "scripts", 
 			ResourceSystem::RESTYPE_SCRIPTRESOURCE, true);
 		sp = boost::static_pointer_cast<ScriptResource>(gResourceMgr.GetResource("scripts", fileName));
 	}
-	if (sp == 0) return 0;
+	if (!sp) return 0;
 
 	mod = engine->GetModule(fileName, asGM_ALWAYS_CREATE);
 

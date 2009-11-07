@@ -33,7 +33,6 @@
 #include "../ResourceSystem/Resource.h"
 
 #include "../ScriptSystem/ScriptMgr.h"
-#include "../ScriptSystem/AddOn/scriptstring.h"
 
 #include "../StringSystem/StringMgr.h"
 
@@ -51,7 +50,5 @@
 
 #include "../LogSystem/LogMacros.h"
 #include "../LogSystem/Logger.h"
-
-
 
 #endif
