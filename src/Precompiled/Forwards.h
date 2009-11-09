@@ -22,11 +22,15 @@ namespace EntitySystem
 	class Component;
 }
 
+namespace SceneSystem
+{
+	class IScreenListener;
+}
+
 namespace GfxSystem
 {
 	class GfxRenderer;
-	class ParticleSystemMgr;
-	class IScreenListener;
+	//class ParticleSystemMgr;
 	struct Color;
 }
 

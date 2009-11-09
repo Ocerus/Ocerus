@@ -6,7 +6,7 @@
 
 #include "Base.h"
 #include "Singleton.h"
-#include "../GfxSystem/IScreenListener.h"
+#include "../SceneSystem/IScreenListener.h"
 
 /// Macro for easier use.
 #define gInputMgr InputSystem::InputMgr::GetSingleton()
@@ -21,7 +21,7 @@ namespace InputSystem
 	/// This class processes all input from external devices such as mouse, keyboard or joystick. You can query its
 	///	current state or register for event callbacks.
 	/// Note that it must be updated reguralry by calling CaptureInput.
-	class InputMgr : public Singleton<InputMgr>, public GfxSystem::IScreenListener
+	class InputMgr : public Singleton<InputMgr>, public SceneSystem::IScreenListener
 	{
 	public:
 

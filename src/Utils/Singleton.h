@@ -34,6 +34,14 @@ namespace Utils
 			new T();
 		}
 
+		/// Constructs the singleton for abstract class. F must implement T.
+		template <typename F>
+		static void CreateSingleton(void)
+		{
+			OC_ASSERT(!msSingleton);
+			new F();
+		}
+
 		/// Destructs the singleton instance.
 		static void DestroySingleton(void)
 		{

@@ -61,13 +61,14 @@ void EntityComponents::CmpPlatformLogic::RegisterReflection()
 
 void EntityComponents::CmpPlatformLogic::DrawSelectionOverlay( const bool hover ) const
 {
-	Vector2 pos = GetProperty("Position").GetValue<Vector2>();
-	float32 angle = GetProperty("Angle").GetValue<float32>();
-	GfxSystem::Color color(255,0,0,180);
-	if (hover)
-		color = GfxSystem::Color(255,255,255,180);
-	gGfxRenderer.DrawCircle(gGfxRenderer.WorldToScreen(MathUtils::Multiply(Matrix22(angle), mPickCircleCenter) + pos), gGfxRenderer.WorldToScreenScalar(mPickCircleRadius),
-		GfxSystem::Color::NullColor, GfxSystem::Pen(color));
+	//TODO:Gfx
+	//Vector2 pos = GetProperty("Position").GetValue<Vector2>();
+	//float32 angle = GetProperty("Angle").GetValue<float32>();
+	//GfxSystem::Color color(255,0,0,180);
+	//if (hover)
+	//	color = GfxSystem::Color(255,255,255,180);
+	//gGfxRenderer.DrawCircle(gGfxRenderer.WorldToScreen(MathUtils::Multiply(Matrix22(angle), mPickCircleCenter) + pos), gGfxRenderer.WorldToScreenScalar(mPickCircleRadius),
+	//	GfxSystem::Color::NullColor, GfxSystem::Pen(color));
 }
 
 void EntityComponents::CmpPlatformLogic::Die( void )
@@ -77,7 +78,8 @@ void EntityComponents::CmpPlatformLogic::Die( void )
 	StringKey effect = prop.GetValue<StringKey>();
 	prop = mBlueprints.GetProperty("ResourceGroup");
 	StringKey resGroup = prop.GetValue<StringKey>();
-	GfxSystem::ParticleSystemPtr ps = gPSMgr.SpawnPS(resGroup, effect);
+	//TODO:Gfx
+	/*GfxSystem::ParticleSystemPtr ps = gPSMgr.SpawnPS(resGroup, effect);
 	if (ps.get() != 0)
 	{
 		prop = mBlueprints.GetProperty("ExplodeEffectScale");
@@ -102,7 +104,7 @@ void EntityComponents::CmpPlatformLogic::Die( void )
 		prop = GetProperty("Position");
 		ps->MoveTo(prop.GetValue<Vector2>());
 		ps->Fire();
-	}
+	}*/
 
 	mHitpoints = 0;
 

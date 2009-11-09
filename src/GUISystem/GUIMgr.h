@@ -63,9 +63,9 @@ namespace GUISystem {
 		/// Static text related methods
 		//@{
 		void AddStaticText( float32 x, float32 y, const string & id, const string & text,
-			const GfxSystem::Color color = GfxSystem::Color(255,255,255),
-			uint8 text_anchor = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP,
-			uint8 screen_anchor = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP,
+			const GfxSystem::Color color/*TODO:Gfx = GfxSystem::Color(255,255,255)*/,
+			uint8 text_anchor = ANCHOR_LEFT | ANCHOR_TOP,
+			uint8 screen_anchor = ANCHOR_LEFT | ANCHOR_TOP,
 			const string & fontid = "");
 		Vector2 GetTextSize( const string & text, const string & fontid = "" );
 		StaticText* GetStaticText( const string & id );

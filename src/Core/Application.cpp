@@ -42,8 +42,11 @@ void Application::Init()
 
 	StringSystem::StringMgr::CreateSingleton();
 
-	GfxSystem::GfxRenderer::CreateSingleton();
-	GfxSystem::GfxRenderer::GetSingleton().Init(GfxSystem::Point(1024,768), false);
+	SceneSystem::GfxWindow::CreateSingleton();
+	SceneSystem::GfxWindow::GetSingleton().Init(1024, 768, false, "Ocerus");
+
+	GfxSystem::GfxRenderer::CreateSingleton<GfxSystem::OGlRenderer>();
+	GfxSystem::GfxRenderer::GetSingleton().Init();
 
 	InputSystem::InputMgr::CreateSingleton();
 
@@ -53,7 +56,8 @@ void Application::Init()
 
 	GUISystem::GUIMgr::CreateSingleton();
 
-	GfxSystem::ParticleSystemMgr::CreateSingleton();
+	//TODO:Gfx
+	//GfxSystem::ParticleSystemMgr::CreateSingleton();
 
 	// create core states
 	mLoadingScreen = new LoadingScreen();
@@ -86,7 +90,8 @@ Application::~Application()
 	GfxSystem::GfxRenderer::DestroySingleton();
 	StringSystem::StringMgr::DestroySingleton();
 	ResourceSystem::ResourceMgr::DestroySingleton();
-	GfxSystem::ParticleSystemMgr::DestroySingleton();
+	//TODO:Gfx
+	//GfxSystem::ParticleSystemMgr::DestroySingleton();
 	Utils::Hash::ClearHashMap();
 
 	// must come last
@@ -137,10 +142,13 @@ void Application::RunMainLoop()
 				break;
 			}
 
+			gGfxRenderer.DrawTestQuad();
+
 			// draw stats (from previous frame)
-			gGfxRenderer.DrawString(0.0f, 0.0f, "FPS", "FPS: " + StringConverter::ToString(mAvgFPS),
-				GfxSystem::Color(0,180,0), GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_BOTTOM,
-				GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_BOTTOM);
+			//TODO:Gfx
+			//gGfxRenderer.DrawString(0.0f, 0.0f, "FPS", "FPS: " + StringConverter::ToString(mAvgFPS),
+			//	GfxSystem::Color(0,180,0), ANCHOR_LEFT | ANCHOR_BOTTOM,
+			//	ANCHOR_LEFT | ANCHOR_BOTTOM);
 
 			gGfxRenderer.EndRendering();
 		}

@@ -1,7 +1,7 @@
 #include "Common.h"
 #include "InputMgr.h"
 #include "OISListener.h"
-#include "../GfxSystem/GfxRenderer.h"
+#include "../SceneSystem/GfxWindow.h"
 #include "StringConverter.h"
 #include "IInputListener.h"
 #include <OISInputManager.h>
@@ -25,7 +25,7 @@ InputSystem::OISListener::OISListener(): mOIS(0), mMouse(0), mKeyboard(0)
 
 #ifdef __WIN__
     // let the OIS know what window we have so that it can capture its events
-	uint32 hWnd = GfxSystem::GfxRenderer::GetSingleton()._GetWindowHandle();
+	uint32 hWnd = SceneSystem::GfxWindow::GetSingleton()._GetWindowHandle();
 	pl.insert(OIS::ParamList::value_type("WINDOW", StringConverter::ToString(hWnd)));
 
 	// let the standard mouse cursor be

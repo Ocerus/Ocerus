@@ -47,11 +47,12 @@ void Core::LoadingScreen::Draw()
 	if (mType == TYPE_BASIC_RESOURCES) // can't draw when we don't have the gui ready
 		return;
 
-	if (gGfxRenderer.BeginRendering())
+	//TODO:Gfx
+	/*if (gGfxRenderer.BeginRendering())
 	{
 		gGfxRenderer.ClearScreen(GfxSystem::Color(255,0,0));
 		gGfxRenderer.EndRendering();
-	}
+	}*/
 }
 
 void Core::LoadingScreen::ResourceGroupLoadStarted( const string& groupName, uint32 resourceCount )

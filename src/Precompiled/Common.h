@@ -34,8 +34,10 @@
 #include "../EntitySystem/EntityMgr/EntityEnums.h"
 #include "../EntitySystem/EntityMgr/EntityPicker.h"
 
+#include "../SceneSystem/GfxWindow.h"
 #include "../GfxSystem/GfxRenderer.h"
-#include "../GfxSystem/ParticleSystemMgr.h"
+#include "../GfxSystem/OGlRenderer.h"
+//#include "../GfxSystem/ParticleSystemMgr.h" -old
 
 #include "../GUISystem/GUIMgr.h"
 

@@ -113,8 +113,8 @@ namespace GUISystem {
 			string args = message.substr(8);
 			if (prefix == "addtext")
 				AddStaticText( 0.0f, 0.0f, "test text", args, GfxSystem::Color( 255, 0, 0),
-					GfxSystem::ANCHOR_BOTTOM | GfxSystem::ANCHOR_RIGHT,
-					GfxSystem::ANCHOR_BOTTOM | GfxSystem::ANCHOR_RIGHT );
+					ANCHOR_BOTTOM | ANCHOR_RIGHT,
+					ANCHOR_BOTTOM | ANCHOR_RIGHT );
 		}
 		AddLastCommand(message);
 		AddConsoleMessage(message);
@@ -148,8 +148,8 @@ namespace GUISystem {
 			font = CEGUI::FontManager::getSingleton().getFont(fontid);
 		else
 			font = CEGUI::System::getSingleton().getDefaultFont();
-		return Vector2(font->getTextExtent(text)/gGfxRenderer.GetScreenWidth(),
-			font->getFontHeight()/gGfxRenderer.GetScreenHeight());
+		return Vector2(font->getTextExtent(text)/gGfxWindow.GetResolutionWidth(),
+			font->getFontHeight()/gGfxWindow.GetResolutionHeight());
 	}
 
 	void GUIMgr::AddConsoleMessage(string message, const GfxSystem::Color& color) {
@@ -218,8 +218,8 @@ namespace GUISystem {
 
 	void GUIMgr::AddStaticText( float32 x, float32 y, const string & id, const string & text,
 			const GfxSystem::Color color/* = GfxSystem::Color(255,255,255)*/,
-			uint8 text_anchor/* = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP*/,
-			uint8 screen_anchor/* = GfxSystem::ANCHOR_LEFT | GfxSystem::ANCHOR_TOP*/,
+			uint8 text_anchor/* = ANCHOR_LEFT | ANCHOR_TOP*/,
+			uint8 screen_anchor/* = ANCHOR_LEFT | ANCHOR_TOP*/,
 			const string & fontid )
 	{
 		map<string, StaticElement*>::iterator iter = mCreatedStaticElements.find( id );

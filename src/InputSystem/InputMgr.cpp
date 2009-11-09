@@ -2,7 +2,7 @@
 #include "InputMgr.h"
 #include "IInputListener.h"
 #include "OISListener.h"
-#include "../GfxSystem/GfxRenderer.h"
+#include "../SceneSystem/GfxWindow.h"
 
 using namespace InputSystem;
 
@@ -11,8 +11,8 @@ InputSystem::InputMgr::InputMgr( void )
 	ocInfo << "*** InputMgr init ***";
 	mOISListener = new OISListener();
 
-	gGfxRenderer.AddScreenListener(this);
-	ResolutionChanged(gGfxRenderer.GetResolution().x, gGfxRenderer.GetResolution().y);
+	gGfxWindow.AddScreenListener(this);
+	ResolutionChanged(gGfxWindow.GetResolutionWidth(), gGfxWindow.GetResolutionHeight());
 }
 
 InputSystem::InputMgr::~InputMgr( void )

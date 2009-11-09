@@ -34,8 +34,9 @@ EntitySystem::EntityPicker::EntityPicker( const int32 screenCursorX, const int32
 	mResult(),
 	mResultType(ET_UNKNOWN)
 {
-	mCursorWorldPosition.x = gGfxRenderer.ScreenToWorldX(screenCursorX);
-	mCursorWorldPosition.y = gGfxRenderer.ScreenToWorldY(screenCursorY);
+	//TODO:Gfx
+	//mCursorWorldPosition.x = gGfxRenderer.ScreenToWorldX(screenCursorX);
+	//mCursorWorldPosition.y = gGfxRenderer.ScreenToWorldY(screenCursorY);
 }
 
 void EntitySystem::EntityPicker::Update( const EntityHandle entity, const Vector2& circleCenter, const float32 circleRadius )

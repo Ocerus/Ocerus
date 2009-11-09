@@ -7,7 +7,8 @@
 #include "../GfxSystem/Texture.h"
 #include "../GUISystem/CEGUIResource.h"
 #include "../StringSystem/TextResource.h"
-#include "../GfxSystem/ParticleResource.h"
+//TODO:Gfx
+//#include "../GfxSystem/ParticleResource.h"
 #include "../ResourceSystem/XMLResource.h"
 #include "../ScriptSystem/ScriptResource.h"
 
@@ -37,7 +38,8 @@ void ResourceSystem::ResourceMgr::Init( const string& basepath )
 	mResourceCreationMethods[RESTYPE_CEGUIRESOURCE] = GUISystem::CEGUIResource::CreateMe;
 	mResourceCreationMethods[RESTYPE_TEXTRESOURCE] = StringSystem::TextResource::CreateMe;
 	mResourceCreationMethods[RESTYPE_XMLRESOURCE] = XMLResource::CreateMe;
-	mResourceCreationMethods[RESTYPE_PARTICLERESOURCE] = GfxSystem::ParticleResource::CreateMe;
+	//TODO:Gfx
+	//mResourceCreationMethods[RESTYPE_PARTICLERESOURCE] = GfxSystem::ParticleResource::CreateMe;
 	mResourceCreationMethods[RESTYPE_SCRIPTRESOURCE] = ScriptSystem::ScriptResource::CreateMe;
 	mExtToTypeMap["png"] = RESTYPE_TEXTURE;
 	mExtToTypeMap["bmp"] = RESTYPE_TEXTURE;
@@ -52,7 +54,8 @@ void ResourceSystem::ResourceMgr::Init( const string& basepath )
 	mExtToTypeMap["looknfeel"] = RESTYPE_CEGUIRESOURCE;
 	mExtToTypeMap["str"] = RESTYPE_TEXTRESOURCE;
 	mExtToTypeMap["xml"] = RESTYPE_XMLRESOURCE;
-	mExtToTypeMap["psi"] = RESTYPE_PARTICLERESOURCE;
+	//TODO:Gfx
+	//mExtToTypeMap["psi"] = RESTYPE_PARTICLERESOURCE;
 	mExtToTypeMap["as"] = RESTYPE_SCRIPTRESOURCE;
 
 	OC_ASSERT_MSG(mResourceCreationMethods[NUM_RESTYPES-1], "Not all resource types are registered");

@@ -3,7 +3,7 @@
 
 #include "Base.h"
 #include "../GfxSystem/GfxRenderer.h"
-#include "../GfxSystem/IScreenListener.h"
+#include "../SceneSystem/IScreenListener.h"
 #include "../GfxSystem/Texture.h"
 #include "CEGUIRenderer.h"
 #include "ResourceGate.h"
@@ -27,7 +27,7 @@ namespace GUISystem {
 		virtual ~Quad_info();
 	};
 
-	class RendererGate : public CEGUI::Renderer, GfxSystem::IScreenListener
+	class RendererGate : public CEGUI::Renderer, SceneSystem::IScreenListener
 	{
 	public:
 		RendererGate();
@@ -58,13 +58,13 @@ namespace GUISystem {
 
 		inline virtual bool isQueueingEnabled(void) const { return mQueueing; }
 
-		inline virtual float getWidth(void) const { return (float)gGfxRenderer.GetResolution().x; };
+		inline virtual float getWidth(void) const { return (float)gGfxWindow.GetResolutionWidth(); };
 
-		inline virtual float getHeight(void) const { return (float)gGfxRenderer.GetResolution().y; };
+		inline virtual float getHeight(void) const { return (float)gGfxWindow.GetResolutionHeight(); };
 
 		// Return the size of the display in pixels
 		inline virtual CEGUI::Size getSize(void) const {
-			GfxSystem::Point pt = gGfxRenderer.GetResolution();
+			GfxSystem::Point pt ( gGfxWindow.GetResolutionWidth(), gGfxWindow.GetResolutionHeight() );
 			return CEGUI::Size((float)pt.x, (float)pt.y);
 		}
 

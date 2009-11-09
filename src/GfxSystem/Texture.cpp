@@ -1,7 +1,7 @@
 #include "Common.h"
 #include "Texture.h"
 #include "DataContainer.h"
-#include <hge.h>
+//#include <hge.h>
 
 using namespace GfxSystem;
 
@@ -26,7 +26,8 @@ bool Texture::LoadImpl()
 	GetRawInputData(dc);
 
 	// load it to HGE
-	mHandle = gGfxRenderer.mHGE->Texture_Load((const char*)dc.GetData(),dc.GetSize(),false);
+	//TODO
+	//mHandle = gGfxRenderer.mHGE->Texture_Load((const char*)dc.GetData(),dc.GetSize(),false);
 
 	return true;
 }
@@ -34,7 +35,8 @@ bool Texture::LoadImpl()
 bool Texture::UnloadImpl()
 {
 	// free texture from HGE
-	gGfxRenderer.mHGE->Texture_Free(mHandle);
+	//TODO
+	//gGfxRenderer.mHGE->Texture_Free(mHandle);
 
 	// set ini value
 	mHandle = 0;
@@ -45,13 +47,15 @@ bool Texture::UnloadImpl()
 uint32 Texture::GetWidth(/*bool bOriginal*/)
 {
 	EnsureLoaded();
-	return gGfxRenderer.mHGE->Texture_GetWidth(mHandle, false);
+	//TODO
+	return 0;//gGfxRenderer.mHGE->Texture_GetWidth(mHandle, false);
 }
 
 uint32 Texture::GetHeight(/*bool bOriginal */)
 {
 	EnsureLoaded();
-	return gGfxRenderer.mHGE->Texture_GetHeight(mHandle, false);
+	//TODO
+	return 0;//gGfxRenderer.mHGE->Texture_GetHeight(mHandle, false);
 }
 
 uint32 Texture::GetTexture()
@@ -62,7 +66,8 @@ uint32 Texture::GetTexture()
 
 bool Texture::LoadFromBitmap( const void* pixels, uint32 pixelsLength, uint32 width, uint32 height, ePixelFormat format )
 {
-	SetState(STATE_LOADING);
+	//TODO
+	/*SetState(STATE_LOADING);
 	
 	mFormat = format;
 	HTEXTURE tex = gGfxRenderer.mHGE->Texture_Create(width, height);
@@ -74,6 +79,7 @@ bool Texture::LoadFromBitmap( const void* pixels, uint32 pixelsLength, uint32 wi
 	
 	SetState(STATE_LOADED);
 
-	return (tex != 0)?true:false;
+	return (tex != 0)?true:false;*/
+	return false;
 }
 

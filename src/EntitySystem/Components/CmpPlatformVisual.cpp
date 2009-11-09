@@ -46,5 +46,6 @@ void EntityComponents::CmpPlatformVisual::Draw( void ) const
 		col = fillColor.b + 30;
 		fillColor.b = col > 255 ? 255 : (uint8)col;
 	}
-	gGfxRenderer.DrawPolygonWithConversion(GetProperty("Shape").GetValue<Vector2*>(), GetProperty("ShapeLength").GetValue<uint32>(), pos, angle, fillColor, GfxSystem::Pen(GfxSystem::Color(48, 30, 27, 200)));
+	//TODO:Gfx
+	//gGfxRenderer.DrawPolygonWithConversion(GetProperty("Shape").GetValue<Vector2*>(), GetProperty("ShapeLength").GetValue<uint32>(), pos, angle, fillColor, GfxSystem::Pen(GfxSystem::Color(48, 30, 27, 200)));
 }

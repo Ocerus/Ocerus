@@ -75,10 +75,12 @@ void Core::Game::Init()
 	if (ship.IsValid())
 	{
 		Vector2 shipPos = ship.GetProperty("Position").GetValue<Vector2>();
-		gGfxRenderer.SetCameraPos(shipPos);
+		//TODO:Gfx
+		//gGfxRenderer.SetCameraPos(shipPos);
 		mCameraFocus = ship;
 	}
-	gGfxRenderer.SetCameraScale(50.0f);
+	//TODO:Gfx
+	//gGfxRenderer.SetCameraScale(50.0f);
 
 
 	gInputMgr.AddInputListener(this);
@@ -161,13 +163,15 @@ void Core::Game::Update( const float32 delta )
 	mPhysicsResidualDelta = physicsDelta;
 
 	//particle effects
-	gPSMgr.Update(delta);
+	//TODO:Gfx
+	//gPSMgr.Update(delta);
 };
 
 void Core::Game::Draw( const float32 delta)
 {
+	//TODO:Gfx
 	// move camera in reaction to the user input
-	if (gInputMgr.IsKeyDown(KC_LEFT))
+	/*if (gInputMgr.IsKeyDown(KC_LEFT))
 	{
 		gGfxRenderer.MoveCamera(-CAMERA_SPEED_RATIO / gGfxRenderer.GetCameraScale() * delta, 0.0f);
 		mCameraFocus.Invalidate();
@@ -232,7 +236,7 @@ void Core::Game::Draw( const float32 delta)
 
 
 	// draw remaining (undrawn) particle effects
-	gPSMgr.Render();
+	gPSMgr.Render();*/
 }
 
 void Core::Game::KeyPressed( const KeyInfo& ke )
@@ -249,7 +253,8 @@ void Core::Game::KeyReleased( const KeyInfo& ke )
 
 void Core::Game::MouseMoved( const MouseInfo& mi )
 {
-	if (gInputMgr.IsMouseButtonPressed(MBTN_MIDDLE))
+	//TODO:Gfx
+	/*if (gInputMgr.IsMouseButtonPressed(MBTN_MIDDLE))
 	{
 		mCameraFocus.Invalidate();
 		Vector2 cursor = gGfxRenderer.ScreenToWorld(GfxSystem::Point(mi.x, mi.y));
@@ -258,7 +263,7 @@ void Core::Game::MouseMoved( const MouseInfo& mi )
 
 	// zoom camera
 	if (mi.wheelDelta)
-		gGfxRenderer.ZoomCamera(CAMERA_SCALE_RATIO * gGfxRenderer.GetCameraScale() * mi.wheelDelta);
+		gGfxRenderer.ZoomCamera(CAMERA_SCALE_RATIO * gGfxRenderer.GetCameraScale() * mi.wheelDelta);*/
 }
 
 void Core::Game::MouseButtonPressed( const MouseInfo& mi, const eMouseButton btn )
@@ -304,7 +309,8 @@ void Core::Game::MouseButtonPressed( const MouseInfo& mi, const eMouseButton btn
 	}
 	else if (btn == MBTN_RIGHT)
 	{
-		Vector2 cursor = gGfxRenderer.ScreenToWorld(GfxSystem::Point(mi.x, mi.y));
+		//TODO:Gfx
+		//Vector2 cursor = gGfxRenderer.ScreenToWorld(GfxSystem::Point(mi.x, mi.y));
 		for (EntityList::iterator i=mSelectedEntities.begin(); i!=mSelectedEntities.end(); ++i)
 		{
 			// eEntityType type = i->GetType();
@@ -312,7 +318,8 @@ void Core::Game::MouseButtonPressed( const MouseInfo& mi, const eMouseButton btn
 	}
 	else if (btn == MBTN_MIDDLE)
 	{
-		mCameraGrabWorldPos = gGfxRenderer.ScreenToWorld(GfxSystem::Point(mi.x, mi.y));
+		//TODO:Gfx
+		//mCameraGrabWorldPos = gGfxRenderer.ScreenToWorld(GfxSystem::Point(mi.x, mi.y));
 	}
 }
 

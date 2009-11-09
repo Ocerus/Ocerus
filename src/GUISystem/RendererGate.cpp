@@ -1,7 +1,7 @@
 #include "Common.h"
 #include "RendererGate.h"
 #include "CEGUITextureWrapper.h"
-#include "../GfxSystem/GfxRenderer.h"
+#include "../SceneSystem/GfxWindow.h"
 #include "../GfxSystem/Texture.h"
 #include "../ResourceSystem/ResourceMgr.h"
 #include "../LogSystem/LogMgr.h"
@@ -27,7 +27,7 @@ namespace GUISystem {
 		this->d_identifierString = "Black_Hand's wrapper around that disgusting piece of code created by Santhos :PPP";
 		this->setQueueingEnabled(false);
 
-		gGfxRenderer.AddScreenListener(this);
+		gGfxWindow.AddScreenListener(this);
 	}
 
 	RendererGate::~RendererGate() {
@@ -115,7 +115,8 @@ namespace GUISystem {
 	}
 
 	void RendererGate::DrawQuad(const Quad_info & quad) const {
-		gGfxRenderer.DrawImage(quad.tex, quad.texture_rect, quad.dest_rect, quad.colors);
+		//TODO:Gfx
+		//gGfxRenderer.DrawImage(quad.tex, quad.texture_rect, quad.dest_rect, quad.colors);
 	}
 /*
 	void RendererGate::ClearProviders() {

@@ -12,6 +12,9 @@
 #include <Windows.h>
 #endif
 
+
+//#undef USE_DBGLIB		//Muhe: dbglib nefunguje v express VS
+
 #ifdef USE_DBGLIB
 #include <DbgLib/DbgLib.h>
 #endif
@@ -21,7 +24,6 @@
 #if defined(USE_LEAKDETECTOR) && defined(NDEBUG)
 #error Cannot use the leak detector in non debug builds!
 #endif
-
 
 
 #ifdef USE_DBGLIB
