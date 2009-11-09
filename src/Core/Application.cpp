@@ -4,6 +4,7 @@
 #include "Game.h"
 #include "Config.h"
 #include "../LogSystem/LogMgr.h"
+#include "../GfxSystem/OGlRenderer.h"
 
 // DEBUG only
 #include "../EntitySystem/Components/OnInitScript.h"
