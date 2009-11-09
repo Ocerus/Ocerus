@@ -85,6 +85,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				CommandLine="copy /V /Y /B ..\externalLibs\cegui\bin\vs9\Debug\*.dll &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /V /Y /B ..\externalLibs\expat\bin\Debug\*.dll &quot;$(OutDir)&quot;&#x0D;&#x0A;"
+				ExcludedFromBuild="true"
 			/>
 		</Configuration>
 		<Configuration
@@ -155,6 +156,7 @@
 				Name="VCPostBuildEventTool"
 				Description="Copying DLL files to output dir..."
 				CommandLine="copy /V /Y /B ..\externalLibs\cegui\bin\vs9\Release\*.dll &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /V /Y /B ..\externalLibs\expat\bin\Release\*.dll &quot;$(OutDir)&quot;&#x0D;&#x0A;"
+				ExcludedFromBuild="true"
 			/>
 		</Configuration>
 		<Configuration
@@ -227,6 +229,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				CommandLine="copy /V /Y /B ..\externalLibs\cegui\bin\vs9\Release\*.dll &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /V /Y /B ..\externalLibs\expat\bin\Develop\*.dll &quot;$(OutDir)&quot;&#x0D;&#x0A;"
+				ExcludedFromBuild="true"
 			/>
 		</Configuration>
 	</Configurations>

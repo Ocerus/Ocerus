@@ -100,7 +100,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				CommandLine="copy /V /Y /B ..\externalLibs\DbgHelp\Win32\*.dll &quot;$(OutDir)&quot;"
-				ExcludedFromBuild="false"
+				ExcludedFromBuild="true"
 			/>
 		</Configuration>
 		<Configuration
@@ -188,7 +188,7 @@
 				Name="VCPostBuildEventTool"
 				Description="Copying DLL files to output dir..."
 				CommandLine="copy /V /Y /B ..\externalLibs\DbgHelp\Win32\*.dll &quot;$(OutDir)&quot;"
-				ExcludedFromBuild="false"
+				ExcludedFromBuild="true"
 			/>
 		</Configuration>
 		<Configuration
@@ -283,7 +283,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				CommandLine="copy /V /Y /B ..\externalLibs\DbgHelp\Win32\*.dll &quot;$(OutDir)&quot;"
-				ExcludedFromBuild="false"
+				ExcludedFromBuild="true"
 			/>
 		</Configuration>
 	</Configurations>
