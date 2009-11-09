@@ -12,7 +12,7 @@
 #define LL_ERROR 4
 #if LOGGER_LEVEL <= LL_ERROR
 /// Error messages logging. For enabling/disabling see the LOGGER_LEVEL macro.
-#define ocError LogSystem::Logger(LL_ERROR)
+#define ocError LogSystem::Logger(LL_ERROR) << "!!ERROR!! in " << __FILE__ << ":" << __LINE__ << "\n          "
 #else
 #define ocError if(1);else LogSystem::Logger(LL_ERROR)
 #endif
@@ -21,7 +21,7 @@
 #define LL_WARNING 3
 #if LOGGER_LEVEL <= LL_WARNING
 /// Warning messages logging. For enabling/disabling see the LOGGER_LEVEL macro.
-#define ocWarning LogSystem::Logger(LL_WARNING)
+#define ocWarning LogSystem::Logger(LL_WARNING) << "WARNING "
 #else
 #define ocWarning if(1);else LogSystem::Logger(LL_WARNING)
 #endif

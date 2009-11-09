@@ -31,6 +31,12 @@ namespace Reflection
 			return *this;
 		}
 
+		/// Copies data from the specified abstract property. The property must be of the same type as this property.
+		inline void CopyFrom(const PropertyHolder propertyToCopy)
+		{
+			mProperty->CopyFrom(mOwner, propertyToCopy.mOwner, propertyToCopy.mProperty);
+		}
+
 		/// Returns the typed value of this property.
 		template<class T>
 		T GetValue(void)

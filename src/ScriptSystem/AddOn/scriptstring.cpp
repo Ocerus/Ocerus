@@ -2,6 +2,7 @@
 #include "scriptstring.h"
 #include <sstream>
 
+#undef assert
 #define assert(A) OC_ASSERT(A)
 
 BEGIN_AS_NAMESPACE

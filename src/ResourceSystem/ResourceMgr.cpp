@@ -246,14 +246,14 @@ ResourcePtr ResourceMgr::GetResource(const StringKey& group, const StringKey& na
 {
 	ResourceGroupMap::const_iterator gi = mResourceGroups.find(group);
 	if (gi == mResourceGroups.end()){
-		//gLogMgr.LogMessage("Resource group '", group, "' not found", LOG_WARNING);
+		ocWarning << "Resource group '" << group << "' not found";
 		return ResourcePtr(); // null
 	}
 	const ResourceMap& resmap = *gi->second;
 	ResourceMap::const_iterator ri = resmap.find(name);
 	if (ri == resmap.end())
 	{
-		//gLogMgr.LogMessage("Resource '",  name, "' in group '", group, "' not found", LOG_WARNING);
+		ocWarning << "Resource '" <<  name << "' in group '" << group << "' not found";
 		return ResourcePtr(); // null
 	}
 	return ri->second;

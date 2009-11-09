@@ -15,6 +15,18 @@
 /// Our custom headers come here.
 #include "../Core/Config.h"
 
+#include "../Utils/Array.h"
+#include "../Utils/DataContainer.h"
+#include "../Utils/Hash.h"
+#include "../Utils/MathUtils.h"
+#include "../Utils/Properties.h"
+#include "../Utils/ResourcePointers.h"
+#include "../Utils/SmartAssert.h"
+#include "../Utils/StringConverter.h"
+#include "../Utils/StringKey.h"
+#include "../Utils/Timer.h"
+#include "../Utils/GlobalProperties.h"
+
 #include "../EntitySystem/EntityMgr/EntityMgr.h"
 #include "../EntitySystem/EntityMgr/EntityHandle.h"
 #include "../EntitySystem/EntityMgr/EntityDescription.h"
@@ -35,18 +47,6 @@
 #include "../ScriptSystem/ScriptMgr.h"
 
 #include "../StringSystem/StringMgr.h"
-
-#include "../Utils/Array.h"
-#include "../Utils/DataContainer.h"
-#include "../Utils/Hash.h"
-#include "../Utils/MathUtils.h"
-#include "../Utils/Properties.h"
-#include "../Utils/ResourcePointers.h"
-#include "../Utils/SmartAssert.h"
-#include "../Utils/StringConverter.h"
-#include "../Utils/StringKey.h"
-#include "../Utils/Timer.h"
-#include "../Utils/GlobalProperties.h"
 
 #include "../LogSystem/LogMacros.h"
 #include "../LogSystem/Logger.h"

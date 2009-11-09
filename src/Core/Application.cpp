@@ -3,7 +3,6 @@
 #include "LoadingScreen.h"
 #include "Game.h"
 #include "Config.h"
-#include "StringConverter.h"
 #include "../LogSystem/LogMgr.h"
 
 // DEBUG only

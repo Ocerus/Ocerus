@@ -32,6 +32,9 @@ namespace ResourceSystem
 		{
 		public:
 
+			/// Returns true if the attribute of the current node exists.
+			inline bool HasAttribute(const string& name) { return mOwner->HasAttribute(*this, name); }
+
 			/// Returns the value of an attribute of the current node.
 			template<typename T>
 			inline T GetAttribute(const string& name) { return mOwner->GetAttribute<T>(*this, name); }
@@ -78,6 +81,13 @@ namespace ResourceSystem
 
 		/// End iterator for IterateChildren.
 		NodeIterator EndChildren(const NodeIterator iter);
+
+		/// Returns true if the attribute of the specified node exists.
+		bool HasAttribute(const NodeIterator iter, const string& attributeName)
+		{
+			XMLDataMap::sibling_iterator attr = find(mDataMap.begin(iter), mDataMap.end(iter), attributeName);
+			return attr != mDataMap.end(iter);
+		}
 
 		/// Returns the value of an attribute of the specified node.
 		template<typename T>

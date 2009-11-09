@@ -11,8 +11,11 @@
 
 namespace EntitySystem
 {
-	/// Entity identifier.
-	typedef uint32 EntityID;
+	/// Entity identifier. Positive IDs determine actual entities while negative IDs determine entity prototypes.
+	typedef int32 EntityID;
+
+	/// Invalid ID for an entity.
+	const EntityID INVALID_ENTITY_ID = 0;
 
 	/// This class represents one unique entity in the entity system.
 	class EntityHandle
@@ -34,13 +37,13 @@ namespace EntitySystem
 		bool operator!=(const EntityHandle& rhs);
 
 		/// Returns true if this handle is valid (not null).
-		bool IsValid(void) const { return mEntityID != 0; }
+		bool IsValid(void) const { return mEntityID != INVALID_ENTITY_ID; }
 
 		/// Returns true if this entity still exists in the system.
 		bool Exists(void) const;
 
 		/// Sets this handle to an invalid state.
-		void Invalidate(void) { mEntityID = 0; }
+		void Invalidate(void) { mEntityID = INVALID_ENTITY_ID; }
 
 		/// Finishes the initialization of this entity. Must be called once only!
 		void FinishInit(void);
@@ -75,9 +78,14 @@ namespace EntitySystem
 
 		EntityID mEntityID;
 
-		static EntityID sLastID;
+		static EntityID sLastFreeID;
 		static EntityHandle CreateUniqueHandle();
-		static EntityID GetMaxID(void) { return sLastID; }
+		static EntityHandle CreateUniquePrototypeHandle();
+		static EntityHandle CreateHandleFromID(const EntityID id);
+		static bool IsPrototypeID(const EntityID id);
+		static EntityID GetMaxID(void) { return sLastFreeID; }
+		static void IncID(EntityID& id);
+		static void DecID(EntityID& id);
 
 		/// New entities can be created only by the EntityMgr, that's why it's private.
 		EntityHandle(EntityID ID): mEntityID(ID) {}

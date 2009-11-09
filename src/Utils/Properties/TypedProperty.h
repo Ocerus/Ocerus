@@ -24,7 +24,7 @@ namespace Reflection
 		virtual ePropertyType GetType(void) const { return PropertyTypes::GetTypeID<T>(); }
 
 		/// Returns the value of this property. An owner of the property must be specified.
-		virtual T GetValue( RTTIBaseClass* owner ) = 0;
+		virtual T GetValue( const RTTIBaseClass* owner ) const = 0;
 
 		/// Sets this property to a specified value. An owner of the property must be specified.
 		virtual void SetValue( RTTIBaseClass* owner, T value ) = 0;

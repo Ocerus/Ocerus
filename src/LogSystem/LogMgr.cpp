@@ -47,9 +47,6 @@ void LogSystem::LogMgr::LogMessage(const string& msg, int32 loggingLevel)
 	   << std::setw(2) << std::setfill('0') << locTime->tm_min  << ":" 
 	   << std::setw(2) << std::setfill('0') << locTime->tm_sec	<< ": ";
 
-	if (loggingLevel == LL_ERROR) ss << "!!ERROR!! ";
-	else if (loggingLevel == LL_WARNING) ss << "WARNING ";
-
 	ss << msg << std::endl;
 
 	string str = ss.str();

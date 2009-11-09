@@ -8,6 +8,7 @@
 
 #include "Base.h"
 #include "Properties/PropertyAccess.h"
+#include "../../EntitySystem/ComponentMgr/ComponentEnums.h"
 
 /// A set of classes implementing custom %RTTI and reflection.
 /// The word 'reflection' means that classes are aware of what they are. They can generate their string name
@@ -22,6 +23,9 @@ namespace Reflection
 {
 	/// A list of generic properties.
 	typedef vector<AbstractProperty*> AbstractPropertyList;
+
+	/// A map of abstract properties.
+	typedef hash_map<StringKey, AbstractProperty*> AbstractPropertyMap;
 
 	/// Type of the identifier of a class.
 	typedef uint32 ClassID;
@@ -109,14 +113,11 @@ namespace Reflection
 
 	private:
 
-		/// A map of properties of this RTTI.
-		typedef hash_map<StringKey, AbstractProperty*> PropertyMap;
-
 		ClassID	mCLID;
 		char mClassName[CLASSNAME_LENGTH];
 		RTTI* mBaseRTTI;
 		ClassFactoryFunc mClassFactory;
-		PropertyMap mProperties;
+		AbstractPropertyMap mProperties;
 		ComponentDependencyList mComponentDependencies;
 
 	};

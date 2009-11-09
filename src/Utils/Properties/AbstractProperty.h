@@ -24,7 +24,7 @@ namespace Reflection
 		/// Constructor.
 		/// @param accessFlags This parameter controls access to this property. It's similar to visibility in C++.
 		inline AbstractProperty( const char* szName, const PropertyAccessFlags accessFlags ):
-		mKey(szName),
+			mKey(szName),
 			mName(szName),
 			mAccessFlags(accessFlags) {}
 
@@ -46,9 +46,19 @@ namespace Reflection
 		/// Returns flags indicating what is accessible in this property.
 		inline PropertyAccessFlags GetAccessFlags(void) const { return mAccessFlags; }
 
+		/// Returns true if the property can be read.
+		virtual bool IsReadable(void) const = 0;
+
+		/// Returns true if the property can be written.
+		virtual bool IsWriteable(void) const = 0;
+
+		/// Copies data from the specified abstract property. The property must be of the same type as this property.
+		/// Returns true if the copy was performed, false otherwise.
+		virtual bool CopyFrom(RTTIBaseClass* owner, const RTTIBaseClass* otherOwner, const AbstractProperty* otherProperty) = 0;
+
 		/// Returns the value of this property. An owner of the property must be specified.
 		template<class T>
-		T GetValue(RTTIBaseClass* owner)
+		T GetValue(const RTTIBaseClass* owner) const
 		{
 			ePropertyType desiredType = PropertyTypes::GetTypeID<T>();
 			ePropertyType myType = GetType();
@@ -79,13 +89,13 @@ namespace Reflection
 	protected:
 
 		/// Reports an error when the property is accessed with a wrong type and cannot be converted between these types.
-		void ReportConvertProblem(ePropertyType wrongType);
+		void ReportConvertProblem(ePropertyType wrongType) const;
 
 		/// Reports an error when the property is being read, but doesn't support reading data.
-		void ReportReadonlyProblem(void);
+		void ReportReadonlyProblem(void) const;
 
 		/// Reports an error when the property is being written, but doesn't support writing data.
-		void ReportWriteonlyProblem(void);
+		void ReportWriteonlyProblem(void) const;
 
 	private :
 

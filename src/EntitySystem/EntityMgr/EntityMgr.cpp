@@ -5,6 +5,53 @@
 #include "../ComponentMgr/Component.h"
 #include "../../ResourceSystem/XMLResource.h"
 
+namespace EntitySystem
+{
+	/// This struct holds info about an instance of an entity in the system.
+	struct EntityInfo
+	{
+		EntityInfo(const eEntityType type, const string& name, const EntityHandle prototype):
+			mType(type), 
+			mFullyInited(false), 
+			mName(name), 
+			mPrototype(prototype)
+		{
+
+		}
+
+		/// User type of the entity.
+		eEntityType mType;
+		/// True if this entity was fully inited in the system by the user.
+		bool mFullyInited;
+		/// Human readable user ID.
+		string mName;
+		/// Handle to the prototype entity (can be invalid).
+		EntityHandle mPrototype;
+
+	private:
+		EntityInfo(const EntityInfo& rhs);
+		EntityInfo& operator=(const EntityInfo& rhs);
+	};
+
+	/// This struct holds info specific for prototype entities.
+	struct PrototypeInfo
+	{
+		PrototypeInfo(void): mCopy(INVALID_ENTITY_ID), mInstancesCount(0) {}
+
+		/// Copy of the prototype to hold old values of properties.
+		EntityID mCopy;
+		/// Number of instances of this prototype.
+		int32 mInstancesCount;
+		/// Set of properties marked as shared with instances of the prototype.
+		set<StringKey> mSharedProperties;
+
+	private:
+		PrototypeInfo(const PrototypeInfo& rhs);
+		PrototypeInfo& operator=(const PrototypeInfo& rhs);
+	};
+}
+
+
 using namespace EntitySystem;
 
 EntityMgr::EntityMgr()
@@ -32,6 +79,11 @@ EntityMessage::eResult EntityMgr::PostMessage(EntityID id, const EntityMessage& 
 	{
 		ocError << "Can't find entity with ID '" << id << "'";
 		return EntityMessage::RESULT_ERROR;
+	}
+	if (EntityHandle::IsPrototypeID(id))
+	{
+		// the prototype nor its copy can't receive any messages
+		return EntityMessage::RESULT_IGNORED;
 	}
 	if (msg.type != EntityMessage::INIT && msg.type != EntityMessage::POST_INIT && !ei->second->mFullyInited)
 	{
@@ -69,18 +121,38 @@ EntityHandle EntityMgr::CreateEntity(EntityDescription& desc, PropertyList& out)
 {
 	OC_ASSERT(mComponentMgr);
 
+	bool isPrototype = desc.mKind == EntityDescription::EK_PROTOTYPE || desc.mKind == EntityDescription::EK_PROTOTYPE_COPY;
+
 	if (desc.mComponents.size() == 0)
 	{
 		ocWarning << "Attempting to create an entity without components";
 		return EntityHandle::Null; // no components, so we can't create the entity
 	}
+	if (isPrototype && desc.mPrototype != INVALID_ENTITY_ID)
+	{
+		ocError << "Can't create an entity prototype which is an instance of another prototype; invalidating the prototype link...";
+		desc.mPrototype = INVALID_ENTITY_ID;
+	}
+	if (desc.mPrototype != INVALID_ENTITY_ID && mEntities.find(desc.mPrototype)==mEntities.end())
+	{
+		ocError << "Can't create an entity: it's prototype can't be found";
+		return EntityHandle::Null;
+	}
 
 	// create the handle for the new entity
-	EntityHandle h = EntityHandle::CreateUniqueHandle();
+	EntityHandle h;
+	if (desc.mID != INVALID_ENTITY_ID)
+	{
+		h = EntityHandle::CreateHandleFromID(desc.mID);
+	}
+	else
+	{
+		if (isPrototype) h = EntityHandle::CreateUniquePrototypeHandle();
+		else h = EntityHandle::CreateUniqueHandle();
+	}
 
 	bool dependencyFailure = false;
 	set<eComponentType> createdComponentTypes;
-
 	for (ComponentDependencyList::const_iterator cmpDescIt=desc.mComponents.begin(); cmpDescIt!=desc.mComponents.end(); ++cmpDescIt)
 	{
 		eComponentType cmpType = *cmpDescIt;
@@ -100,8 +172,18 @@ EntityHandle EntityMgr::CreateEntity(EntityDescription& desc, PropertyList& out)
 		createdComponentTypes.insert(cmpType);
 	}
 
-	// inits the attributes for the new components
-	mEntities[h.GetID()] = new EntityInfo(desc.mType, desc.mID);
+	// inits etity attributes
+	mEntities[h.GetID()] = new EntityInfo(desc.mType, desc.mName, EntityHandle(desc.mPrototype));
+	if (desc.mKind == EntityDescription::EK_PROTOTYPE) mPrototypes[h.GetID()] = new PrototypeInfo();
+
+	// link the entity to its prototype
+	PrototypeMap::iterator protIt = mPrototypes.find(desc.mPrototype);
+	if (protIt != mPrototypes.end())
+	{
+		if (protIt->second->mInstancesCount == 0) UpdatePrototypeCopy(desc.mPrototype);
+		protIt->second->mInstancesCount++;
+		UpdatePrototypeInstance(desc.mPrototype, h.GetID());
+	}
 
 	// security checks
 	if (dependencyFailure)
@@ -131,8 +213,9 @@ void EntitySystem::EntityMgr::ProcessDestroyQueue( void )
 		EntityMap::iterator mapIt = mEntities.find(*it);
 		if (mapIt != mEntities.end()) // it can happen that we added one entity multiple times to the queue
 		{
-			DestroyEntity(mapIt);
+			DestroyEntityImmediately(*it, false);
 			mEntities.erase(mapIt);
+			mPrototypes.erase(*it);
 		}
 	}
 	mEntityDestroyQueue.clear();
@@ -142,19 +225,34 @@ void EntityMgr::DestroyAllEntities()
 {
 	OC_ASSERT(mComponentMgr);
 	for (EntityMap::const_iterator i = mEntities.begin(); i!=mEntities.end(); ++i)
-		DestroyEntity(i);
+	{
+		DestroyEntityImmediately(i->first, false);
+	}
+	mEntityDestroyQueue.clear(); // new entities could be marked for removal during deleting another entities
 	mEntities.clear();
+	mPrototypes.clear();
 }
 
-void EntityMgr::DestroyEntity( EntityMap::const_iterator it )
+void EntityMgr::DestroyEntityImmediately( const EntityID id, const bool erase )
 {
-	if (it != mEntities.end())
+	PrototypeMap::iterator protIt = mPrototypes.find(id);
+	if (protIt != mPrototypes.end())
 	{
-		mComponentMgr->DestroyEntityComponents(it->first);
-		delete it->second;
+		if (erase) DestroyEntityImmediately(protIt->second->mCopy, erase);
+		else DestroyEntity(protIt->second->mCopy); // if we can't erase the entity from the map, it has to be deleted in the next round
+		delete protIt->second;
+		protIt->second = 0;
+		if (erase) mPrototypes.erase(protIt);
+	}
+	EntityMap::iterator entityIt = mEntities.find(id);
+	if (entityIt != mEntities.end())
+	{
+		mComponentMgr->DestroyEntityComponents(id);
+		delete entityIt->second;
+		entityIt->second = 0;
+		if (erase) mEntities.erase(entityIt);
 	}
 }
-
 
 EntitySystem::eEntityType EntitySystem::EntityMgr::GetEntityType( const EntityHandle h ) const
 {
@@ -178,11 +276,11 @@ bool EntitySystem::EntityMgr::IsEntityInited( const EntityHandle h ) const
 	return ei->second->mFullyInited;
 }
 
-bool EntitySystem::EntityMgr::GetEntityProperties( const EntityHandle h, PropertyList& out, const PropertyAccessFlags flagMask ) const
+bool EntitySystem::EntityMgr::GetEntityProperties( const EntityID entityID, PropertyList& out, const PropertyAccessFlags flagMask ) const
 {
 	out.clear();
 
-	for (EntityComponentsIterator it=mComponentMgr->GetEntityComponents(h); it.HasMore(); ++it)
+	for (EntityComponentsIterator it=mComponentMgr->GetEntityComponents(entityID); it.HasMore(); ++it)
 	{
 		(*it)->GetRTTI()->EnumProperties(*it, out, flagMask);
 	}
@@ -190,9 +288,9 @@ bool EntitySystem::EntityMgr::GetEntityProperties( const EntityHandle h, Propert
 	return true;
 }
 
-PropertyHolder EntitySystem::EntityMgr::GetEntityProperty( const EntityHandle h, const StringKey key, const PropertyAccessFlags flagMask /*= 0xff*/ ) const
+PropertyHolder EntitySystem::EntityMgr::GetEntityProperty( const EntityID id, const StringKey key, const PropertyAccessFlags flagMask /*= 0xff*/ ) const
 {
-	for (EntityComponentsIterator it=mComponentMgr->GetEntityComponents(h); it.HasMore(); ++it)
+	for (EntityComponentsIterator it=mComponentMgr->GetEntityComponents(id); it.HasMore(); ++it)
 	{
 		AbstractProperty* prop = (*it)->GetRTTI()->GetProperty(key, flagMask);
 		if (prop) return PropertyHolder(*it, prop);
@@ -203,7 +301,7 @@ PropertyHolder EntitySystem::EntityMgr::GetEntityProperty( const EntityHandle h,
 	ocError << "EntityMgr: unknown property '" << key << "'";
 	PropertyList propertyList;
 	string propertiesString;
-	GetEntityProperties(h, propertyList, flagMask);
+	GetEntityProperties(id, propertyList, flagMask);
 	for (PropertyList::iterator it=propertyList.begin(); it!=propertyList.end(); )
 	{
 		propertiesString += it->second.GetName();
@@ -217,15 +315,15 @@ PropertyHolder EntitySystem::EntityMgr::GetEntityProperty( const EntityHandle h,
 	return PropertyHolder();
 }
 
-EntitySystem::EntityHandle EntitySystem::EntityMgr::FindFirstEntity( const string& ID )
+EntitySystem::EntityHandle EntitySystem::EntityMgr::FindFirstEntity( const string& name )
 {
 	for(EntityMap::const_iterator i=mEntities.begin(); i!=mEntities.end(); ++i)
-		if (i->second->mID.compare(ID) == 0)
+		if (i->second->mName.compare(name) == 0)
 			return i->first;
 	return EntityHandle::Null;
 }
 
-bool EntitySystem::EntityMgr::LoadFromResource( ResourceSystem::ResourcePtr res )
+bool EntitySystem::EntityMgr::LoadFromResource( ResourceSystem::ResourcePtr res, const bool isPrototype )
 {
     ResourceSystem::XMLResourcePtr xml = boost::static_pointer_cast<ResourceSystem::XMLResource>(res);
 	if (xml == 0)
@@ -241,15 +339,27 @@ bool EntitySystem::EntityMgr::LoadFromResource( ResourceSystem::ResourcePtr res 
 			// init the entity description
 			EntityDescription desc;
 			eEntityType type = DetectEntityType(entIt.GetAttribute<string>("Type"));
-			string ID = entIt.GetAttribute<string>("Name");
-			desc.Init(type, ID);
+			desc.Init(type);
+			if (entIt.HasAttribute("Name"))	desc.mName = entIt.GetAttribute<string>("Name");
+			if (entIt.HasAttribute("ID")) desc.mID = entIt.GetAttribute<EntityID>("ID");
+			if (entIt.HasAttribute("Prototype")) desc.mPrototype = entIt.GetAttribute<EntityID>("Prototype");
+			if (isPrototype) desc.SetKind(EntityDescription::EK_PROTOTYPE);
+
 			// add component types
 			for (ResourceSystem::XMLResource::NodeIterator cmpIt=xml->IterateChildren(entIt); cmpIt!=xml->EndChildren(entIt); ++cmpIt)
 				if ((*cmpIt).compare("Component") == 0)
 					desc.AddComponent(DetectComponentType(cmpIt.GetAttribute<string>("Type")));
+			
 			// create the entity
 			PropertyList props;
 			EntityHandle entity = CreateEntity(desc, props);
+			PrototypeInfo* prototypeInfo = 0;
+			if (isPrototype)
+			{
+				OC_ASSERT(mPrototypes.find(entity.GetID()) != mPrototypes.end());
+				prototypeInfo = mPrototypes[entity.GetID()];
+			}
+			
 			// set properties loaded from the file
 			for (ResourceSystem::XMLResource::NodeIterator cmpIt=xml->IterateChildren(entIt); cmpIt!=xml->EndChildren(entIt); ++cmpIt)
 			{
@@ -269,7 +379,11 @@ bool EntitySystem::EntityMgr::LoadFromResource( ResourceSystem::ResourcePtr res 
 					}
 					else
 					{
+						// the property was stored in the XML file for the prototype, so it's a shared property
+						if (isPrototype) prototypeInfo->mSharedProperties.insert(prop->first);
+
 						PropertyHolder p = prop->second;
+
 						if (p.GetType() == PT_VECTOR2_ARRAY)
 						{
 							string lengthParam;
@@ -293,19 +407,15 @@ bool EntitySystem::EntityMgr::LoadFromResource( ResourceSystem::ResourcePtr res 
 							}
 							else
 							{
+								// the property was stored in the XML file for the prototype, so it's a shared property
+								if (isPrototype) prototypeInfo->mSharedProperties.insert(lengthParam);
+
 								props[lengthParam].SetValue<uint32>(vertices.size());
 								Vector2* vertArray = new Vector2[vertices.size()];
 								for (uint32 i=0; i<vertices.size(); ++i)
 									vertArray[i] = vertices[i];
 								p.SetValue<Vector2*>(vertArray);
 							}
-						}
-						else if (p.GetType() == PT_ENTITYHANDLE)
-						{
-							EntityHandle e = FindFirstEntity(propIt.GetChildValue<string>());
-							if (!e.IsValid())
-								ocError << "XML:Entity: Entity for property '" << *propIt << "' of name '" << propIt.GetChildValue<string>() << "' was not found";
-							p.SetValue(e);
 						}
 						else
 						{
@@ -314,7 +424,9 @@ bool EntitySystem::EntityMgr::LoadFromResource( ResourceSystem::ResourcePtr res 
 					}
 				}
 			}
+			
 			// finish init
+			if (isPrototype) UpdatePrototypeCopy(entity.GetID());
 			entity.FinishInit();
 		}
 		else
@@ -331,13 +443,6 @@ bool EntitySystem::EntityMgr::EntityExists( const EntityHandle h ) const
 	if (!h.IsValid())
 		return false;
 	return mEntities.find(h.GetID()) != mEntities.end();
-}
-
-EntitySystem::EntityMgr::EntityInfo::EntityInfo( void ):
-	mType(ET_UNKNOWN),
-	mFullyInited(false)
-{
-
 }
 
 bool EntitySystem::EntityMgr::HasEntityComponentOfType(const EntityHandle h, const eComponentType componentType)
@@ -357,4 +462,90 @@ bool EntitySystem::EntityMgr::GetEntityComponentTypes(const EntityHandle h, Comp
 		out.push_back((*it)->GetType());
 	}
 	return true;
+}
+
+void EntitySystem::EntityMgr::UpdatePrototypeCopy( const EntityID prototype )
+{
+	EntityMap::iterator entityIter = mEntities.find(prototype);
+	if (entityIter == mEntities.end())
+	{
+		ocError << "Can't update prototype copy; can't find entity " << prototype;
+		return;
+	}
+	PrototypeMap::iterator prototypeIter = mPrototypes.find(prototype);
+	if (prototypeIter == mPrototypes.end())
+	{
+		ocError << "Can't update prototype copy; entity " << prototype << " is not a prototype";
+		return;
+	}
+
+	EntityInfo* entityInfo = entityIter->second;
+	PrototypeInfo* prototypeInfo = prototypeIter->second;
+
+	// recreate the copy from scratch
+	if (mEntities.find(prototypeInfo->mCopy) != mEntities.end())
+	{
+		DestroyEntityImmediately(prototypeInfo->mCopy, true);
+	}
+	EntityDescription desc;
+	desc.Init(entityInfo->mType);
+	desc.SetKind(EntityDescription::EK_PROTOTYPE_COPY);
+	for (EntityComponentsIterator it=mComponentMgr->GetEntityComponents(prototype); it.HasMore(); ++it)
+	{
+		desc.AddComponent((*it)->GetType());
+	}
+	PropertyList copyPropList;
+	EntityHandle copyHandle = CreateEntity(desc, copyPropList);
+	prototypeInfo->mCopy = copyHandle.GetID();
+
+	// copy the properties
+	PropertyList propList;
+	GetEntityProperties(prototype, propList, PA_INIT); // only initable properties can be copied
+	for (PropertyList::iterator it=propList.begin(); it!=propList.end(); ++it)
+	{
+		PropertyList::iterator copyPropIter = copyPropList.find(it->first);
+		OC_ASSERT(copyPropIter != copyPropList.end());
+		copyPropIter->second.CopyFrom(it->second);
+	}
+}
+
+void EntitySystem::EntityMgr::UpdatePrototypeInstances( const EntityID prototype )
+{
+	for (EntityMap::iterator it=mEntities.begin(); it!=mEntities.end(); ++it)
+	{
+		if (it->second->mPrototype.GetID() == prototype)
+		{
+			UpdatePrototypeInstance(prototype, it->first);
+		}
+	}
+}
+
+void EntitySystem::EntityMgr::UpdatePrototypeInstance( const EntityID prototype, const EntityID instance )
+{
+	PropertyList prototypeProperties;
+	GetEntityProperties(prototype, prototypeProperties);
+	OC_ASSERT(mPrototypes.find(prototype) != mPrototypes.end());
+	PrototypeInfo* prototypeInfo = mPrototypes[prototype];
+
+	for (PropertyList::iterator protPropIter=prototypeProperties.begin(); protPropIter!=prototypeProperties.end(); ++protPropIter)
+	{
+		if (prototypeInfo->mSharedProperties.find(protPropIter->first) == prototypeInfo->mSharedProperties.end())
+			continue;
+
+		GetEntityProperty(instance, protPropIter->first).CopyFrom(protPropIter->second);
+	}
+
+}
+
+bool EntitySystem::EntityMgr::IsEntity( const EntityID id ) const
+{
+	return mEntities.find(id) != mEntities.end();
+}
+
+bool EntitySystem::EntityMgr::IsEntityPrototype( const EntityID id ) const
+{
+	if (!EntityHandle::IsPrototypeID(id))
+		return false;
+
+	return mPrototypes.find(id) != mPrototypes.end();
 }

@@ -2,17 +2,17 @@
 #include "AbstractProperty.h"
 
 
-void AbstractProperty::ReportConvertProblem( ePropertyType wrongType )
+void AbstractProperty::ReportConvertProblem( ePropertyType wrongType ) const
 {
 	ocError << "Can't convert property '" << GetName() << "' from '" << GetType() << "' to '" << wrongType << "'";
 }
 
-void AbstractProperty::ReportReadonlyProblem( void )
+void AbstractProperty::ReportReadonlyProblem( void ) const
 {
 	ocWarning << "Property '" << GetName() << "' is read-only";
 }
 
-void AbstractProperty::ReportWriteonlyProblem( void )
+void AbstractProperty::ReportWriteonlyProblem( void ) const
 {
 	ocWarning << "Property '" << GetName() << "' is write-only";
 }
@@ -63,8 +63,14 @@ void Reflection::AbstractProperty::SetValueFromString( RTTIBaseClass* owner, con
 	case PT_VECTOR2:
 		SetValue(owner, StringConverter::FromString<Vector2>(str));
 		break;
-	case PT_VECTOR2_ARRAY:
 	case PT_ENTITYHANDLE:
+		{
+			EntitySystem::EntityHandle e = gEntityMgr.FindFirstEntity(str);
+			if (!e.IsValid()) ocError << "Can't parse property of EntityHandle '" << GetType() << "' from string '" << str << "'; it could not been found";
+			SetValue(owner, e);
+			break;
+		}
+	case PT_VECTOR2_ARRAY:
 	case PT_ENTITYHANDLE_ARRAY:
 		ocError << "Can't parse property of type '" << GetType() << "' from string (not allowed)";
 		break;

@@ -38,8 +38,30 @@ namespace Reflection
 			mGetter (getter),
 			mSetter (setter) {}
 
+		/// Returns true if the property can be read.
+		virtual bool IsReadable(void) const
+		{
+			return mGetter != 0;
+		}
+
+		/// Returns true if the property can be written.
+		virtual bool IsWriteable(void) const
+		{
+			return mSetter != 0;
+		}
+
+		/// Copies data from the specified abstract property. The property must be of the same type as this property.
+		/// Returns true if the copy was performed, false otherwise.
+		virtual bool CopyFrom(RTTIBaseClass* owner, const RTTIBaseClass* otherOwner, const AbstractProperty* otherProperty)
+		{
+			if (!IsWriteable() || !otherProperty->IsReadable())
+				return false;
+			SetValue(owner, otherProperty->GetValue<T>(otherOwner));
+			return true;
+		}
+
 		/// Returns the value of this property. The owner of this property must be specified.
-		virtual T GetValue(RTTIBaseClass* owner)
+		virtual T GetValue(const RTTIBaseClass* owner) const
 		{
 			if (!mGetter)
 			{
