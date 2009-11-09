@@ -219,6 +219,51 @@ void RegisterScriptEntityHandle(asIScriptEngine* engine)
 	r = engine->RegisterObjectMethod("EntityHandle", "EntityID GetID() const", asMETHOD(EntityHandle, GetID), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 }
 
+// Functions for register Color to script
+
+static void ColorDefaultConstructor(GfxSystem::Color* self)
+{
+	new(self) GfxSystem::Color();
+}
+
+
+static void ColorInit4Constructor(uint8 r, uint8 g, uint8 b, uint8 a, GfxSystem::Color* self)
+{
+	new(self) GfxSystem::Color(r, g, b, a);
+}
+
+static void ColorInit3Constructor(uint8 r, uint8 g, uint8 b, GfxSystem::Color* self)
+{
+	new(self) GfxSystem::Color(r, g, b);
+}
+
+static void ColorInit1Constructor(uint32 color, GfxSystem::Color* self)
+{
+	new(self) GfxSystem::Color(color);
+}
+
+void RegisterScriptColor(asIScriptEngine* engine)
+{
+	int32 r;
+	// Register the type
+	r = engine->RegisterObjectType("Color", sizeof(GfxSystem::Color), asOBJ_VALUE | asOBJ_POD | asOBJ_APP_CLASS_CA); OC_SCRIPT_ASSERT();
+
+	// Register the object properties
+	r = engine->RegisterObjectProperty("Color", "uint8 r", offsetof(GfxSystem::Color, r)); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectProperty("Color", "uint8 g", offsetof(GfxSystem::Color, g)); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectProperty("Color", "uint8 b", offsetof(GfxSystem::Color, b)); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectProperty("Color", "uint8 a", offsetof(GfxSystem::Color, a)); OC_SCRIPT_ASSERT();
+
+	// Register the constructors and destructor
+	r = engine->RegisterObjectBehaviour("Color", asBEHAVE_CONSTRUCT, "void f()", asFUNCTION(ColorDefaultConstructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectBehaviour("Color", asBEHAVE_CONSTRUCT, "void f(uint8, uint8, uint8, uint8)", asFUNCTION(ColorInit4Constructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectBehaviour("Color", asBEHAVE_CONSTRUCT, "void f(uint8, uint8, uint8)", asFUNCTION(ColorInit3Constructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectBehaviour("Color", asBEHAVE_CONSTRUCT, "void f(uint32)", asFUNCTION(ColorInit1Constructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+	
+	// Register the object methods
+	r = engine->RegisterObjectMethod("Color", "uint32 GetARGB() const", asMETHOD(GfxSystem::Color, GetARGB), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+}
+
 void ScriptMgr::ConfigureEngine(void)
 {
 	int32 r;
@@ -232,11 +277,14 @@ void ScriptMgr::ConfigureEngine(void)
 	// Register Vector2 class and it's methods
 	RegisterScriptVector2(engine);
 
-	// Register Vector2 class and it's methods
+	// Register StringKey class and it's methods
 	RegisterScriptStringKey(engine);
 		
     // Register EntityHandle class and it's methods
 	RegisterScriptEntityHandle(engine);
+
+	// Register Color struct and it's methods
+	RegisterScriptColor(engine);
 
 	// Register getters and setters for supported types of properties
     #define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName) \

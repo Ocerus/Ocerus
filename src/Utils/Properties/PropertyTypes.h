@@ -15,10 +15,10 @@ PROPERTY_TYPE(PT_VECTOR2, Vector2, Vector2_Zero, "Vector2")
 PROPERTY_TYPE(PT_STRING, string, 0, "string")
 PROPERTY_TYPE(PT_STRING_KEY, Utils::StringKey, Utils::StringKey::Null, "StringKey")
 PROPERTY_TYPE(PT_ENTITYHANDLE, EntitySystem::EntityHandle, EntitySystem::EntityHandle::Null, "EntityHandle")
+PROPERTY_TYPE(PT_COLOR, GfxSystem::Color, GfxSystem::Color::NullColor, "Color")
 #ifndef SCRIPT_ONLY
 PROPERTY_TYPE(PT_VECTOR2_ARRAY, Vector2*, 0, "Vector2[]")
 PROPERTY_TYPE(PT_ENTITYHANDLE_ARRAY, EntitySystem::EntityHandle*, 0, "EntityHandle[]")
-PROPERTY_TYPE(PT_COLOR, GfxSystem::Color, GfxSystem::Color::NullColor, "Color")
 PROPERTY_TYPE(PT_FUNCTION_PARAMETER, PropertyFunctionParameters, 0, "PropertyFunctionParameters")
 #endif
 
