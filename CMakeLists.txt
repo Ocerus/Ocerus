@@ -118,6 +118,18 @@ else (EXPAT_FOUND)
 endif (EXPAT_FOUND)
 
 ###############
+# SDL
+###############
+#find_package(OpenGL 7.0 REQUIRED)
+find_package(SDL 1.2 REQUIRED)
+#find_package(SDL_image REQUIRED)
+if (SDL_FOUND)
+    include_directories(${SDL_INCLUDE_DIR})
+else (SDL_FOUND)
+    message(FATAL_ERROR "SDL library cannot be found in your system.")
+endif (SDL_FOUND)
+
+###############
 # CEGUI
 ###############
 find_package(CEGUI 0.6.2 REQUIRED)
@@ -189,8 +201,17 @@ set(EntitySystem_SRCS
 )
 
 set(GfxSystem_SRCS
-    src/GfxSystem/_UnixVoidImpl.cpp
+    src/GfxSystem/GfxRenderer.cpp
+    src/GfxSystem/GfxStructures.cpp
+    src/GfxSystem/OGlRenderer.cpp
+    src/GfxSystem/Texture.cpp
 )
+
+set(SceneSystem_SRCS
+    src/SceneSystem/GfxWindow.cpp
+    src/SceneSystem/SceneMgr.cpp
+)
+
 
 set(GUISystem_SRCS
     src/GUISystem/CEGUIResource.cpp
@@ -266,6 +287,7 @@ add_library(ocerus-engine STATIC
     ${Core_SRCS}
     ${EntitySystem_SRCS}
     ${GfxSystem_SRCS}
+    ${SceneSystem_SRCS}
     ${GUISystem_SRCS}
     ${InputSystem_SRCS}
     ${LogSystem_SRCS}
@@ -282,6 +304,7 @@ target_link_libraries(ocerus-engine
     ${OIS_LIBRARIES}
     ${Boost_LIBRARIES}
     ${EXPAT_LIBRARIES}
+    ${SDL_LIBRARY}
     ${CEGUI_LIBRARIES}
     ${UNITTEST++_LIBRARY}
     ${ICU_LIBRARIES}

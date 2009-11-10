@@ -5,6 +5,7 @@
 #include "Config.h"
 #include "../LogSystem/LogMgr.h"
 #include "../GfxSystem/OGlRenderer.h"
+#include "../SceneSystem/GfxWindow.h"
 
 
 using namespace Core;
@@ -218,7 +219,17 @@ void Core::Application::Shutdown( void )
 	RequestStateChange(AS_SHUTDOWN);
 }
 
-
+void Application::MessagePump( void )
+{
+    SceneSystem::EWindowEvent event;
+    while (SceneSystem::GfxWindow::GetSingleton().PopEvent(event))
+	{
+		if (event == SceneSystem::WE_QUIT)
+		{
+			RequestStateChange(AS_SHUTDOWN, true);
+		}
+	}
+}
 
 //-----------------------------------------------------
 // Platfofm specific functions follow.
@@ -229,23 +240,6 @@ void Core::Application::Shutdown( void )
 //------------
 #define WIN32_LEAN_AND_MEAN	// Exclude rarely-used stuff from Windows headers
 #include <Windows.h>
-
-void Application::MessagePump( void )
-{
-	MSG msg;
-	while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
-	{
-		if (msg.message == WM_QUIT)
-		{
-			RequestStateChange(AS_SHUTDOWN, true);
-		}
-		else
-		{
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-		}
-	}
-}
 
 void Core::Application::ShowConsole( void )
 {
@@ -295,26 +289,6 @@ void Core::Application::WriteToConsole( const string& str )
 //------------
 // Unix
 //------------
-
-#include <X11/Xlib.h>
-#include <X11/Xatom.h>
-
-void Application::MessagePump( void )
-{
-	_XDisplay* display = GfxSystem::GfxRenderer::GetSingleton()._GetDisplay();
-	if (display == NULL)
-		return;
-
-	while (XPending(display) > 0)
-	{
-		XEvent ev;
-		XNextEvent(display, &ev);
-		if (ev.type == DestroyNotify)
-		{
-			RequestStateChange(AS_SHUTDOWN, true);
-		}
-	}
-}
 
 void Core::Application::ShowConsole( void )
 {

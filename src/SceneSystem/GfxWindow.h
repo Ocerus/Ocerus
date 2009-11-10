@@ -6,8 +6,10 @@
 
 #include "../GfxSystem/GfxStructures.h"
 
+#ifdef __WIN__
 #pragma comment(lib, "SDL.lib")
 #pragma comment(lib, "SDLmain.lib")
+#endif
 
 struct SDL_Surface;
 class IScreenListener;
@@ -21,6 +23,11 @@ namespace SceneSystem
     /// maybe we will add another events in future
 	};
 
+#ifdef __WIN__
+    typedef uint32 WindowHandle;
+#else
+    typedef uint64 WindowHandle;
+#endif
 
 	class GfxWindow : public Singleton<GfxWindow>
 	{
@@ -39,7 +46,7 @@ namespace SceneSystem
 		inline int32 GetResolutionHeight() const {return mResy;}
 
 		/// Gets windows handle. Windows OS only.
-		uint32 GfxWindow::_GetWindowHandle() const;
+		WindowHandle _GetWindowHandle() const;
 
 		inline virtual void AddScreenListener(IScreenListener * listener) { mScreenListeners.insert(listener); }
 		inline virtual void RemoveResolutionChangeListener(IScreenListener * listener) { mScreenListeners.erase(listener); }

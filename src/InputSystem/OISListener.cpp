@@ -23,30 +23,28 @@ InputSystem::OISListener::OISListener(): mOIS(0), mMouse(0), mKeyboard(0)
 
 	OIS::ParamList pl;
 
-#ifdef __WIN__
     // let the OIS know what window we have so that it can capture its events
-	uint32 hWnd = SceneSystem::GfxWindow::GetSingleton()._GetWindowHandle();
-	pl.insert(OIS::ParamList::value_type("WINDOW", StringConverter::ToString(hWnd)));
+    SceneSystem::WindowHandle hWnd = SceneSystem::GfxWindow::GetSingleton()._GetWindowHandle();
+    pl.insert(OIS::ParamList::value_type("WINDOW", StringConverter::ToString(hWnd)));
 
+#ifdef __WIN__
 	// let the standard mouse cursor be
 	pl.insert(Containers::make_pair(string("w32_mouse"), string("DISCL_BACKGROUND" )));
 	pl.insert(Containers::make_pair(string("w32_mouse"), string("DISCL_NONEXCLUSIVE")));
 #else
-    uint64 windowId = GfxSystem::GfxRenderer::GetSingleton()._GetWindowId();
-    pl.insert(OIS::ParamList::value_type("WINDOW", StringConverter::ToString(windowId)));
-
-    // let the standard mouse cursor be
-    pl.insert(Containers::make_pair(string("x11_mouse_grab"), string("false" )));
-    pl.insert(Containers::make_pair(string("x11_mouse_hide"), string("true")));
+	// let the standard mouse cursor be
+	pl.insert(Containers::make_pair(string("x11_mouse_grab"), string("false" )));
+	pl.insert(Containers::make_pair(string("x11_mouse_hide"), string("true")));
 #endif
+
 	mOIS = OIS::InputManager::createInputSystem(pl);
 	ocInfo << "OIS created";
 	mKeyboard = static_cast<OIS::Keyboard*>(mOIS->createInputObject(OIS::OISKeyboard, true));
 	ocInfo << "OIS keyboard inited";
-	mMouse = static_cast<OIS::Mouse*>(mOIS->createInputObject(OIS::OISMouse, true));
+    mMouse = static_cast<OIS::Mouse*>(mOIS->createInputObject(OIS::OISMouse, true));
 	ocInfo << "OIS mouse inited";
 	mKeyboard->setEventCallback(this);
-	mMouse->setEventCallback(this);
+    mMouse->setEventCallback(this);
 }
 
 InputSystem::OISListener::~OISListener()
