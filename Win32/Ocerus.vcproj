@@ -156,7 +156,7 @@
 				AdditionalDependencies="CEGUIBase.lib freetype.lib pcre.lib CEGUIExpatParser.lib CEGUIFalagardWRBase_Static.lib "
 				OutputFile="$(OutDir)/Ocerus.exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="../externalLibs/boost/lib;../externalLibs/cegui/lib;../externalLibs/cegui/dependencies/lib;../externalLibs/SDL/lib"
+				AdditionalLibraryDirectories="../externalLibs/boost/lib;../externalLibs/cegui/lib;../externalLibs/SDL/lib;../externalLibs/cegui/dependencies/lib"
 				IgnoreDefaultLibraryNames="libci.lib;libcmt.lib"
 				GenerateDebugInformation="false"
 				SubSystem="2"
@@ -194,7 +194,7 @@
 		<Configuration
 			Name="Develop|Win32"
 			OutputDirectory="bin\$(ConfigurationName)"
-			IntermediateDirectory="bin\$(ConfigurationName)_Ocerus"
+			IntermediateDirectory="bin\$(ConfigurationName)"
 			ConfigurationType="1"
 			CharacterSet="0"
 			>
@@ -247,7 +247,7 @@
 				AdditionalDependencies="CEGUIBase.lib freetype.lib pcre.lib CEGUIExpatParser.lib CEGUIFalagardWRBase_Static.lib "
 				OutputFile="$(OutDir)/Ocerus.exe"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="../externalLibs/boost/lib;../externalLibs/cegui/lib;../externalLibs/cegui/dependencies/lib;../externalLibs/SDL/lib"
+				AdditionalLibraryDirectories="../externalLibs/boost/lib;../externalLibs/cegui/lib;../externalLibs/SDL/lib;../externalLibs/cegui/dependencies/lib"
 				IgnoreAllDefaultLibraries="false"
 				IgnoreDefaultLibraryNames="libci.lib;libcmt.lib"
 				GenerateDebugInformation="true"

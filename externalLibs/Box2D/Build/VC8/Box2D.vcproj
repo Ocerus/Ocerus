@@ -192,7 +192,7 @@
 				RuntimeLibrary="0"
 				RuntimeTypeInfo="false"
 				UsePrecompiledHeader="0"
-				ProgramDataBaseFileName="$(OutDir)\box2d_d.pdb"
+				ProgramDataBaseFileName="$(OutDir)\box2d_dev.pdb"
 				WarningLevel="4"
 				WarnAsError="true"
 				Detect64BitPortabilityProblems="false"
