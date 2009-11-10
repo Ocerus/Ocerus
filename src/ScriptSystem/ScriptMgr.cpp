@@ -30,6 +30,34 @@ void LineCallback(asIScriptContext* ctx, TimeOut* timeOut)
 	if (timeOut->IsTimeOut()) ctx->Suspend();
 }
 
+// Except non-const char* as last argument that means basepath for files, will be deleted in function
+int IncludeCallback(const char *fileName, const char *from, CScriptBuilder *builder, void *basePath)
+{
+	// Try to get existing script resource
+	ScriptResourcePtr sp = boost::static_pointer_cast<ScriptResource>(gResourceMgr.GetResource("scripts", fileName));
+	if (!sp)
+	{
+		// Load script resource from file
+		gResourceMgr.AddResourceFileToGroup(string((char*)basePath) + fileName, "scripts", 
+			ResourceSystem::RESTYPE_SCRIPTRESOURCE, true);
+		sp = boost::static_pointer_cast<ScriptResource>(gResourceMgr.GetResource("Scripts", fileName));
+	}
+	// Base path is allocated char*, so we must delete it
+	delete[] basePath;
+	if (!sp)
+	{
+		ocError << "Failed to load script file " << fileName << ".";
+		return -1;
+	}
+
+	// Get script data from resource and add as script section
+	const char* script = sp->GetScript();
+	int r = builder->AddSectionFromMemory(script, fileName);
+	sp->Unload();
+	if (r < 0) ocError << "Failed to add script file " << fileName << " due to dependecy on unloadable file(s).";
+	return r;
+}
+
 void ScriptLog(string& msg)
 {
 	ocInfo << msg;
@@ -41,21 +69,24 @@ ScriptMgr::ScriptMgr(const string& basepath)
 	mBasePath = basepath;
 
 	// Create the script engine
-	engine = asCreateScriptEngine(ANGELSCRIPT_VERSION);
+	mEngine = asCreateScriptEngine(ANGELSCRIPT_VERSION);
 
-	OC_ASSERT_MSG(engine, "Failed to create script engine.");
+	OC_ASSERT_MSG(mEngine, "Failed to create script engine.");
 
 	// The script compiler will send any compiler messages to the callback function
-	engine->SetMessageCallback(asFUNCTION(MessageCallback), 0, asCALL_CDECL);
+	mEngine->SetMessageCallback(asFUNCTION(MessageCallback), 0, asCALL_CDECL);
 
 	// Add functions and variables that can be called from script
 	ConfigureEngine();
+
+	// Set include callback for script builder
+	mScriptBuilder.SetIncludeCallback(IncludeCallback, Utils::StringConverter::FromString<char*>(mBasePath));
 }
 
 ScriptMgr::~ScriptMgr(void)
 {
 	ocInfo << "*** ScriptMgr deinit ***";
-	engine->Release();
+	mEngine->Release();
 }
 
 template<class T>
@@ -269,29 +300,29 @@ void ScriptMgr::ConfigureEngine(void)
 	int32 r;
 
 	// Register the script string type
-	RegisterStdString(engine);
+	RegisterStdString(mEngine);
 
 	// Register log function
-	r = engine->RegisterGlobalFunction("void Log(string &in)", asFUNCTION(ScriptLog), asCALL_CDECL); OC_SCRIPT_ASSERT();
+	r = mEngine->RegisterGlobalFunction("void Log(string &in)", asFUNCTION(ScriptLog), asCALL_CDECL); OC_SCRIPT_ASSERT();
 
 	// Register Vector2 class and it's methods
-	RegisterScriptVector2(engine);
+	RegisterScriptVector2(mEngine);
 
 	// Register StringKey class and it's methods
-	RegisterScriptStringKey(engine);
+	RegisterScriptStringKey(mEngine);
 		
     // Register EntityHandle class and it's methods
-	RegisterScriptEntityHandle(engine);
+	RegisterScriptEntityHandle(mEngine);
 
 	// Register Color struct and it's methods
-	RegisterScriptColor(engine);
+	RegisterScriptColor(mEngine);
 
 	// Register getters and setters for supported types of properties
     #define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName) \
-	r = engine->RegisterObjectMethod("EntityHandle", (string(typeName) + " Get_" + typeName + "(string &in)").c_str(), \
+	r = mEngine->RegisterObjectMethod("EntityHandle", (string(typeName) + " Get_" + typeName + "(string &in)").c_str(), \
 		asFUNCTIONPR(EntityHandleGetValue, (EntitySystem::EntityHandle&, string&), typeClass), \
 		asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT(); \
-	r = engine->RegisterObjectMethod("EntityHandle", (string("void Set_") + typeName + "(string &in, " + typeName + ")").c_str(), \
+	r = mEngine->RegisterObjectMethod("EntityHandle", (string("void Set_") + typeName + "(string &in, " + typeName + ")").c_str(), \
 		asFUNCTIONPR(EntityHandleSetValue, (EntitySystem::EntityHandle&, string&, typeClass), void), \
 		asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
 	#define SCRIPT_ONLY
@@ -320,7 +351,7 @@ asIScriptContext* ScriptMgr::PrepareContext(const char* moduleName, const char* 
 	}
 
 	// Create context
-	asIScriptContext* ctx = engine->CreateContext();
+	asIScriptContext* ctx = mEngine->CreateContext();
 	OC_ASSERT_MSG(ctx, "Failed to create the script context.");
 
 	// Prepare function on context
@@ -336,7 +367,7 @@ bool ScriptMgr::ExecuteContext(asIScriptContext* ctx, uint32 timeOut)
 	OC_ASSERT_MSG(ctx->GetState() == asEXECUTION_PREPARED, "Cannot execute unprepared context!");
 
 	int funcId = ctx->GetCurrentFunction();
-	const asIScriptFunction *function = engine->GetFunctionDescriptorById(funcId);
+	const asIScriptFunction *function = mEngine->GetFunctionDescriptorById(funcId);
 	const char* funcDecl = function->GetDeclaration();
 	const char* moduleName = function->GetModuleName();
 	int r;
@@ -387,35 +418,25 @@ bool ScriptMgr::ExecuteContext(asIScriptContext* ctx, uint32 timeOut)
 asIScriptModule* ScriptMgr::GetModule(const char* fileName)
 {
 	// Get existing module
-	asIScriptModule* mod = engine->GetModule(fileName, asGM_ONLY_IF_EXISTS);
+	asIScriptModule* mod = mEngine->GetModule(fileName, asGM_ONLY_IF_EXISTS);
 	if (mod != 0) return mod;
 
-	// Try to get existing script resource
-	ScriptResourcePtr sp = boost::static_pointer_cast<ScriptResource>(gResourceMgr.GetResource("scripts", fileName));
-	if (!sp)
-	{
-		// Load script resource from file
-		gResourceMgr.AddResourceFileToGroup(mBasePath + fileName, "scripts", 
-			ResourceSystem::RESTYPE_SCRIPTRESOURCE, true);
-		sp = boost::static_pointer_cast<ScriptResource>(gResourceMgr.GetResource("Scripts", fileName));
-	}
-	if (!sp) return 0;
+	int r;
+	// Create script builder to build new module
+	r = mScriptBuilder.StartNewModule(mEngine, fileName);
+	OC_ASSERT_MSG(r==0, "Failed to add module to script engine.");
 
-	mod = engine->GetModule(fileName, asGM_ALWAYS_CREATE);
-
-	// Get script data from resource and add as script section
-	const char* script = sp->GetScript();
-	int r = mod->AddScriptSection(fileName, script);
-	OC_ASSERT_MSG(r >= 0, "Failed to add script section.");
-	sp->Unload();
+	// Include main file
+	r = IncludeCallback(fileName, "", &mScriptBuilder, Utils::StringConverter::FromString<char*>(mBasePath));
+	if (r < 0) return 0;
 
 	// Build module
-	r = mod->Build();
+	r = mScriptBuilder.BuildModule();
 	if (r < 0)
 	{
 		ocError << "Failed to build module '" << fileName << "'!";
 		return 0;
 	}
 
-	return mod;
+	return mEngine->GetModule(fileName, asGM_ONLY_IF_EXISTS);
 }
