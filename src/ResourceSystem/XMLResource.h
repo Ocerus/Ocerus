@@ -15,11 +15,10 @@ namespace ResourceSystem
 	/// This iterator serves to go through nodes on one level of the XML tree.
 	class XMLNodeIterator : public XMLDataMap::sibling_iterator
 	{
-		friend class XMLResource;
 	public:
 
 		/// Returns true if the attribute of the current node exists.
-		bool HasAttribute(const string& name);
+		inline bool HasAttribute(const string& name);
 
 		/// Returns the value of an attribute of the current node.
 		template<typename T>
@@ -37,13 +36,16 @@ namespace ResourceSystem
 		XMLNodeIterator(const XMLNodeIterator& rhs) { operator=(rhs); }
 
 		/// Copy operator.
-		XMLNodeIterator& operator=(const XMLNodeIterator& rhs) 		{
+		XMLNodeIterator& operator=(const XMLNodeIterator& rhs)
+		{
 			XMLDataMap::sibling_iterator::operator=(rhs);
 			mOwner = rhs.mOwner;
 			return *this;
 		}
 
 	private:
+
+		friend class XMLResource;
 
 		/// Private ctor for internal use by XMLResource.
 		XMLNodeIterator(XMLResource* xml, const XMLDataMap::sibling_iterator iter):
@@ -65,6 +67,7 @@ namespace ResourceSystem
 	{
 	public:
 
+		/// Virtual destructor.
 		virtual ~XMLResource(void);
 
 		/// Factory function.
@@ -133,6 +136,12 @@ namespace ResourceSystem
 		XMLDataMap::iterator mTopNode;
 	};
 	
+
+	inline bool XMLNodeIterator::HasAttribute( const string& name )
+	{
+		return mOwner->HasAttribute(*this, name);
+	}
+
     template<typename T>
 	inline T XMLNodeIterator::GetAttribute(const string& name)
     {
@@ -144,13 +153,11 @@ namespace ResourceSystem
         return mOwner->GetValue<T>(*this);
     }
 
-	/// Returns the value of the first child of the current node.
 	template<typename T>
 	T XMLNodeIterator::GetChildValue(void)
     { 
         return mOwner->GetChildValue<T>(*this);
     }
-
 }
 
 #endif

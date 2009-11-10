@@ -114,8 +114,3 @@ ResourceSystem::XMLNodeIterator ResourceSystem::XMLResource::EndChildren( const 
 {
 	return XMLNodeIterator(this, mDataMap.end(iter));
 }
-
-bool ResourceSystem::XMLNodeIterator::HasAttribute( const string& name )
-{
-	return mOwner->HasAttribute(*this, name);
-}
