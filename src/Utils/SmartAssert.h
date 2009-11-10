@@ -1,9 +1,20 @@
-
-/// @name Smart assert macro implementation.
-/// Note that it is also used by Box2d (b2Settings.h) and Boost (assert.hpp).
+/// @file Smart assert macro implementation.
+/// Note that it is also used by Box2d (b2Settings.h) and Boost (assert.hpp) and Angelscript (as_config.h).
 //@{
 
+#ifndef SmartAssert_h__
+#define SmartAssert_h__
+
+#include "../Setup/Platform.h"
+
 #undef assert
+
+
+#define EXPRESSION_COMPILED_OUT(expr) (void)sizeof((char)(expr))
+#define OC_DISABLED_ASSERT(expr) do { EXPRESSION_COMPILED_OUT(expr); } while(0)
+#define OC_DISABLED_ASSERT_MSG(expr, msg) do { EXPRESSION_COMPILED_OUT(expr); EXPRESSION_COMPILED_OUT(msg); } while(0)
+
+
 
 #ifdef USE_ASSERT
 
@@ -36,8 +47,8 @@ void DisplayAssert(const char* msg, const char* file, const int line);
 
 #else // _DEBUG
 
-#define OC_DASSERT(expr) do { (void)sizeof(expr); } while(0)
-#define OC_DASSERT_MSG(expr, msg) do { (void)sizeof(expr); (void)sizeof(msg); } while(0)
+#define OC_DASSERT(expr) OC_DISABLED_ASSERT(expr)
+#define OC_DASSERT_MSG(expr, msg) OC_DISABLED_ASSERT_MSG(expr, msg)
 
 #endif // _DEBUG
 
@@ -45,17 +56,17 @@ void DisplayAssert(const char* msg, const char* file, const int line);
 #else // USE_ASSERT
 
 
-#define OC_ASSERT(expr) do { (void)sizeof(expr); } while(0)
-#define OC_ASSERT_MSG(expr, msg) do { (void)sizeof(expr); (void)sizeof(msg); } while(0)
-#define OC_DASSERT(expr) do { (void)sizeof(expr); } while(0)
-#define OC_DASSERT_MSG(expr, msg) do { (void)sizeof(expr); (void)sizeof(msg); } while(0)
+#define OC_ASSERT(expr) OC_DISABLED_ASSERT(expr)
+#define OC_ASSERT_MSG(expr, msg) OC_DISABLED_ASSERT_MSG(expr, msg)
+#define OC_DASSERT(expr) OC_DISABLED_ASSERT(expr)
+#define OC_DASSERT_MSG(expr, msg) OC_DISABLED_ASSERT_MSG(expr, msg)
 
 
 #endif // USE_ASSERT
 
 
 #define OC_NOT_REACHED() OC_ASSERT_MSG(0, "NOT_REACHED")
-#define OC_SCRIPT_ASSERT() OC_ASSERT_MSG(r >= 0, "Something cannot be registered to script engine.")
+#define OC_SCRIPT_ASSERT() OC_ASSERT_MSG(r >= 0, "Something cannot be registered to the script engine.")
 
 //@}
 
@@ -63,4 +74,6 @@ void DisplayAssert(const char* msg, const char* file, const int line);
 /// Override Boost's assert. The override function is in SmartAssert.cpp
 #define BOOST_ENABLE_ASSERT_HANDLER
 
+
+#endif // SmartAssert_h__
 

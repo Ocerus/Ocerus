@@ -1,10 +1,13 @@
 #include "Common.h"
 #include "ScriptMgr.h"
 #include "ScriptResource.h"
-#include "../ScriptSystem/AddOn/scriptstring.h"
+#include <angelscript.h>
+#include "AddOn/scriptbuilder.h"
+#include "AddOn/scriptstring.h"
 
 using namespace ScriptSystem;
 using namespace EntitySystem;
+using namespace AngelScript;
 
 struct TimeOut
 {
@@ -31,7 +34,7 @@ void LineCallback(asIScriptContext* ctx, TimeOut* timeOut)
 }
 
 // Except non-const char* as last argument that means basepath for files, will be deleted in function
-int IncludeCallback(const char *fileName, const char *from, CScriptBuilder *builder, void *basePath)
+int IncludeCallback(const char* fileName, const char* from, CScriptBuilder* builder, void* basePath)
 {
 	// Try to get existing script resource
 	ScriptResourcePtr sp = boost::static_pointer_cast<ScriptResource>(gResourceMgr.GetResource("scripts", fileName));
@@ -66,7 +69,10 @@ void ScriptLog(string& msg)
 ScriptMgr::ScriptMgr(const string& basepath)
 {
 	ocInfo << "*** ScriptMgr init ***";
+	
 	mBasePath = basepath;
+
+	mScriptBuilder = new CScriptBuilder();
 
 	// Create the script engine
 	mEngine = asCreateScriptEngine(ANGELSCRIPT_VERSION);
@@ -80,13 +86,14 @@ ScriptMgr::ScriptMgr(const string& basepath)
 	ConfigureEngine();
 
 	// Set include callback for script builder
-	mScriptBuilder.SetIncludeCallback(IncludeCallback, Utils::StringConverter::FromString<char*>(mBasePath));
+	mScriptBuilder->SetIncludeCallback(IncludeCallback, Utils::StringConverter::FromString<char*>(mBasePath));
 }
 
 ScriptMgr::~ScriptMgr(void)
 {
 	ocInfo << "*** ScriptMgr deinit ***";
 	mEngine->Release();
+	delete mScriptBuilder;
 }
 
 template<class T>
@@ -423,15 +430,15 @@ asIScriptModule* ScriptMgr::GetModule(const char* fileName)
 
 	int r;
 	// Create script builder to build new module
-	r = mScriptBuilder.StartNewModule(mEngine, fileName);
+	r = mScriptBuilder->StartNewModule(mEngine, fileName);
 	OC_ASSERT_MSG(r==0, "Failed to add module to script engine.");
 
 	// Include main file
-	r = IncludeCallback(fileName, "", &mScriptBuilder, Utils::StringConverter::FromString<char*>(mBasePath));
+	r = IncludeCallback(fileName, "", mScriptBuilder, Utils::StringConverter::FromString<char*>(mBasePath));
 	if (r < 0) return 0;
 
 	// Build module
-	r = mScriptBuilder.BuildModule();
+	r = mScriptBuilder->BuildModule();
 	if (r < 0)
 	{
 		ocError << "Failed to build module '" << fileName << "'!";
@@ -439,4 +446,9 @@ asIScriptModule* ScriptMgr::GetModule(const char* fileName)
 	}
 
 	return mEngine->GetModule(fileName, asGM_ONLY_IF_EXISTS);
+}
+
+void ScriptSystem::ScriptMgr::DefineWord( const char* word )
+{
+	mScriptBuilder->DefineWord(word);
 }

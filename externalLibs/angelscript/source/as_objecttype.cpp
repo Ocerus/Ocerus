@@ -194,7 +194,7 @@ int asCObjectType::GetInterfaceCount() const
 
 asIObjectType *asCObjectType::GetInterface(asUINT index) const
 {
-	assert(index < interfaces.GetLength());
+	asASSERT(index < interfaces.GetLength());
 
 	return interfaces[index];
 }

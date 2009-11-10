@@ -41,6 +41,9 @@
 
 #include <stddef.h>
 
+// Added by Hardwire
+#define AS_USE_NAMESPACE
+
 #ifdef AS_USE_NAMESPACE
  #define BEGIN_AS_NAMESPACE namespace AngelScript {
  #define END_AS_NAMESPACE }

@@ -651,9 +651,8 @@
 
 
 // The assert macro
-#include <assert.h>
-#define asASSERT(x) assert(x)
-
+#include "SmartAssert.h"
+#define asASSERT(x) OC_ASSERT(x)
 
 
 //

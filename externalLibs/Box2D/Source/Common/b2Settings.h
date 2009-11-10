@@ -19,12 +19,11 @@
 #ifndef B2_SETTINGS_H
 #define B2_SETTINGS_H
 
-#ifdef _WIN32
-    #define __WIN__
-#else
-    #define __UNIX__
-#endif
+#include "Platform.h"
+#include "SmartAssert.h"
 
+#define B2_NOT_USED(x) (void)x
+#define b2Assert(A) OC_ASSERT(A)
 
 #ifdef __WIN__
 // Disable warning 'conditional expression is constant'. The compiler will optimize it away.
@@ -33,11 +32,6 @@
 #pragma warning(disable: 4748)
 #endif
 
-
-#include "SmartAssert.h"
-
-#define B2_NOT_USED(x) (void)x
-#define b2Assert(A) OC_ASSERT(A)
 
 
 #include <math.h>

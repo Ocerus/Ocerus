@@ -1050,6 +1050,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\Setup\Platform.h"
+				>
+			</File>
+			<File
 				RelativePath="..\src\Setup\Settings.h"
 				>
 			</File>

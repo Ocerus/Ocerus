@@ -8,11 +8,11 @@
 #include "../Setup/Settings.h"
 
 
-/// Big standard libraries come here. But only if they are needed by some of the headers below.
+// Big standard libraries come here. But only if they are needed by some of the headers below.
 #include <boost/filesystem/fstream.hpp>
 
 
-/// Our custom headers come here.
+// Our custom headers come here.
 #include "../Core/Config.h"
 
 #include "../Utils/Array.h"
@@ -36,7 +36,6 @@
 
 #include "../SceneSystem/GfxWindow.h"
 #include "../GfxSystem/GfxRenderer.h"
-//#include "../GfxSystem/ParticleSystemMgr.h" -old
 
 #include "../GUISystem/GUIMgr.h"
 
