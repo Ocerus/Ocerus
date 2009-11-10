@@ -43,7 +43,7 @@ int IncludeCallback(const char *fileName, const char *from, CScriptBuilder *buil
 		sp = boost::static_pointer_cast<ScriptResource>(gResourceMgr.GetResource("Scripts", fileName));
 	}
 	// Base path is allocated char*, so we must delete it
-	delete[] basePath;
+	delete[] (char*)basePath;
 	if (!sp)
 	{
 		ocError << "Failed to load script file " << fileName << ".";

@@ -33,6 +33,7 @@ void OnInitScript::RegisterReflection()
 
 bool OnInitScript::RunScript()
 {
+	gScriptMgr.DefineWord("TEST");
 	// Return new context prepared to call function from module
 	asIScriptContext* ctx = gScriptMgr.PrepareContext(mOnInitScript.c_str(), "void OnInit(EntityHandle handle)");
 	if (ctx == 0) return false;
