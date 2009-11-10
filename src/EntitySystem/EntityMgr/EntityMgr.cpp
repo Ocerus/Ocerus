@@ -323,6 +323,108 @@ EntitySystem::EntityHandle EntitySystem::EntityMgr::FindFirstEntity( const strin
 	return EntityHandle::Null;
 }
 
+void EntitySystem::EntityMgr::LoadEntityPropertyFromXML( PrototypeInfo* prototypeInfo, PropertyList::iterator prop, ResourceSystem::XMLResourcePtr xml, ResourceSystem::XMLNodeIterator &propIt, PropertyList &props )
+{
+	// the property was stored in the XML file for the prototype, so it's a shared property
+	if (prototypeInfo) prototypeInfo->mSharedProperties.insert(prop->first);
+
+	PropertyHolder p = prop->second;
+
+	if (p.GetType() == PT_VECTOR2_ARRAY)
+	{
+		string lengthParam;
+		vector<Vector2> vertices;
+		for (ResourceSystem::XMLNodeIterator vertIt=xml->IterateChildren(propIt); vertIt!=xml->EndChildren(propIt); ++vertIt)
+		{
+			if ((*vertIt).compare("Vertex") == 0)
+				vertices.push_back(vertIt.GetChildValue<Vector2>());
+			else if ((*vertIt).compare("LengthParam") == 0)
+				lengthParam = vertIt.GetChildValue<string>();
+			else
+				ocError << "XML:Entity: Expected 'Vertex' or 'LengthParam', found '" << *vertIt << "'";
+		}
+		if (lengthParam.length() == 0)
+		{
+			ocError << "XML:Entity: LengthParam of an array not specified";
+		}
+		else if (props.find(lengthParam) == props.end())
+		{
+			ocError << "XML:Entity: LengthParam of name '" << lengthParam << "' not found in entity";
+		}
+		else
+		{
+			// the property was stored in the XML file for the prototype, so it's a shared property
+			if (prototypeInfo) prototypeInfo->mSharedProperties.insert(lengthParam);
+
+			props[lengthParam].SetValue<uint32>(vertices.size());
+			Vector2* vertArray = new Vector2[vertices.size()];
+			for (uint32 i=0; i<vertices.size(); ++i)
+				vertArray[i] = vertices[i];
+			p.SetValue<Vector2*>(vertArray);
+		}
+	}
+	else
+	{
+		p.SetValueFromString(propIt.GetChildValue<string>());
+	}
+}
+
+void EntitySystem::EntityMgr::LoadEntityFromXML( ResourceSystem::XMLNodeIterator &entIt, const bool isPrototype, ResourceSystem::XMLResourcePtr xml ) 
+{
+
+	// init the entity description
+	EntityDescription desc;
+	eEntityType type = DetectEntityType(entIt.GetAttribute<string>("Type"));
+	desc.Init(type);
+	if (entIt.HasAttribute("Name"))	desc.SetName(entIt.GetAttribute<string>("Name"));
+	if (entIt.HasAttribute("ID")) desc.SetDesiredID(entIt.GetAttribute<EntityID>("ID"));
+	if (entIt.HasAttribute("Prototype")) desc.SetPrototype(entIt.GetAttribute<EntityID>("Prototype"));
+	if (isPrototype) desc.SetKind(EntityDescription::EK_PROTOTYPE);
+
+	// add component types
+	for (ResourceSystem::XMLNodeIterator cmpIt=xml->IterateChildren(entIt); cmpIt!=xml->EndChildren(entIt); ++cmpIt)
+		if ((*cmpIt).compare("Component") == 0)
+			desc.AddComponent(DetectComponentType(cmpIt.GetAttribute<string>("Type")));
+
+	// create the entity
+	PropertyList props;
+	EntityHandle entity = gEntityMgr.CreateEntity(desc, props);
+	PrototypeInfo* prototypeInfo = 0;
+	if (isPrototype)
+	{
+		OC_ASSERT(mPrototypes.find(entity.GetID()) != mPrototypes.end());
+		prototypeInfo = mPrototypes[entity.GetID()];
+	}
+
+	// set properties loaded from the file
+	for (ResourceSystem::XMLNodeIterator cmpIt=xml->IterateChildren(entIt); cmpIt!=xml->EndChildren(entIt); ++cmpIt)
+	{
+		// skip unwanted data
+		if ((*cmpIt).compare("Component") != 0)
+			continue;
+
+		for (ResourceSystem::XMLNodeIterator propIt=xml->IterateChildren(cmpIt); propIt!=xml->EndChildren(cmpIt); ++propIt)
+		{
+			// skip unwanted data
+			if ((*propIt).compare("Type") == 0)
+				continue;
+			PropertyList::iterator prop = props.find(*propIt);
+			if (prop == props.end())
+			{
+				ocError << "XML:Entity: Unknown entity property '" << *propIt << "'";
+			}
+			else
+			{
+				LoadEntityPropertyFromXML(prototypeInfo, prop, xml, propIt, props);
+			}
+		}
+	}
+
+	// finish init
+	if (isPrototype) gEntityMgr.UpdatePrototypeCopy(entity.GetID());
+	entity.FinishInit();
+}
+
 bool EntitySystem::EntityMgr::LoadFromResource( ResourceSystem::ResourcePtr res, const bool isPrototype )
 {
     ResourceSystem::XMLResourcePtr xml = boost::static_pointer_cast<ResourceSystem::XMLResource>(res);
@@ -332,102 +434,11 @@ bool EntitySystem::EntityMgr::LoadFromResource( ResourceSystem::ResourcePtr res,
 		return false;
 	}
 
-	for (ResourceSystem::XMLResource::NodeIterator entIt=xml->IterateTopLevel(); entIt!=xml->EndTopLevel(); ++entIt)
+	for (ResourceSystem::XMLNodeIterator entIt=xml->IterateTopLevel(); entIt!=xml->EndTopLevel(); ++entIt)
 	{
 		if ((*entIt).compare("Entity") == 0)
 		{
-			// init the entity description
-			EntityDescription desc;
-			eEntityType type = DetectEntityType(entIt.GetAttribute<string>("Type"));
-			desc.Init(type);
-			if (entIt.HasAttribute("Name"))	desc.mName = entIt.GetAttribute<string>("Name");
-			if (entIt.HasAttribute("ID")) desc.mID = entIt.GetAttribute<EntityID>("ID");
-			if (entIt.HasAttribute("Prototype")) desc.mPrototype = entIt.GetAttribute<EntityID>("Prototype");
-			if (isPrototype) desc.SetKind(EntityDescription::EK_PROTOTYPE);
-
-			// add component types
-			for (ResourceSystem::XMLResource::NodeIterator cmpIt=xml->IterateChildren(entIt); cmpIt!=xml->EndChildren(entIt); ++cmpIt)
-				if ((*cmpIt).compare("Component") == 0)
-					desc.AddComponent(DetectComponentType(cmpIt.GetAttribute<string>("Type")));
-			
-			// create the entity
-			PropertyList props;
-			EntityHandle entity = CreateEntity(desc, props);
-			PrototypeInfo* prototypeInfo = 0;
-			if (isPrototype)
-			{
-				OC_ASSERT(mPrototypes.find(entity.GetID()) != mPrototypes.end());
-				prototypeInfo = mPrototypes[entity.GetID()];
-			}
-			
-			// set properties loaded from the file
-			for (ResourceSystem::XMLResource::NodeIterator cmpIt=xml->IterateChildren(entIt); cmpIt!=xml->EndChildren(entIt); ++cmpIt)
-			{
-				// skip unwanted data
-				if ((*cmpIt).compare("Component") != 0)
-					continue;
-
-				for (ResourceSystem::XMLResource::NodeIterator propIt=xml->IterateChildren(cmpIt); propIt!=xml->EndChildren(cmpIt); ++propIt)
-				{
-					// skip unwanted data
-					if ((*propIt).compare("Type") == 0)
-						continue;
-					PropertyList::iterator prop = props.find(*propIt);
-					if (prop == props.end())
-					{
-						ocError << "XML:Entity: Unknown entity property '" << *propIt << "'";
-					}
-					else
-					{
-						// the property was stored in the XML file for the prototype, so it's a shared property
-						if (isPrototype) prototypeInfo->mSharedProperties.insert(prop->first);
-
-						PropertyHolder p = prop->second;
-
-						if (p.GetType() == PT_VECTOR2_ARRAY)
-						{
-							string lengthParam;
-							vector<Vector2> vertices;
-							for (ResourceSystem::XMLResource::NodeIterator vertIt=xml->IterateChildren(propIt); vertIt!=xml->EndChildren(propIt); ++vertIt)
-							{
-								if ((*vertIt).compare("Vertex") == 0)
-									vertices.push_back(vertIt.GetChildValue<Vector2>());
-								else if ((*vertIt).compare("LengthParam") == 0)
-									lengthParam = vertIt.GetChildValue<string>();
-								else
-									ocError << "XML:Entity: Expected 'Vertex' or 'LengthParam', found '" << *vertIt << "'";
-							}
-							if (lengthParam.length() == 0)
-							{
-								ocError << "XML:Entity: LengthParam of an array not specified";
-							}
-							else if (props.find(lengthParam) == props.end())
-							{
-								ocError << "XML:Entity: LengthParam of name '" << lengthParam << "' not found in entity";
-							}
-							else
-							{
-								// the property was stored in the XML file for the prototype, so it's a shared property
-								if (isPrototype) prototypeInfo->mSharedProperties.insert(lengthParam);
-
-								props[lengthParam].SetValue<uint32>(vertices.size());
-								Vector2* vertArray = new Vector2[vertices.size()];
-								for (uint32 i=0; i<vertices.size(); ++i)
-									vertArray[i] = vertices[i];
-								p.SetValue<Vector2*>(vertArray);
-							}
-						}
-						else
-						{
-							p.SetValueFromString(propIt.GetChildValue<string>());
-						}
-					}
-				}
-			}
-			
-			// finish init
-			if (isPrototype) UpdatePrototypeCopy(entity.GetID());
-			entity.FinishInit();
+			LoadEntityFromXML(entIt, isPrototype, xml);
 		}
 		else
 		{

@@ -12,6 +12,49 @@ namespace ResourceSystem
 	/// Container for data stored in this resource.
 	typedef tree<string> XMLDataMap;
 
+	/// This iterator serves to go through nodes on one level of the XML tree.
+	class XMLNodeIterator : public XMLDataMap::sibling_iterator
+	{
+	public:
+
+		/// Returns true if the attribute of the current node exists.
+		bool HasAttribute(const string& name);
+
+		/// Returns the value of an attribute of the current node.
+		template<typename T>
+		inline T GetAttribute(const string& name) { return mOwner->GetAttribute<T>(*this, name); }
+
+		/// Returns the value of the current node.
+		template<typename T>
+		T GetValue(void) { return mOwner->GetValue<T>(*this); }
+
+		/// Returns the value of the first child of the current node.
+		template<typename T>
+		T GetChildValue(void) { return mOwner->GetChildValue<T>(*this); }
+
+		/// Copy constructor.
+		XMLNodeIterator(const XMLNodeIterator& rhs) { operator=(rhs); }
+
+		/// Copy operator.
+		XMLNodeIterator& operator=(const XMLNodeIterator& rhs) 		{
+			XMLDataMap::sibling_iterator::operator=(rhs);
+			mOwner = rhs.mOwner;
+			return *this;
+		}
+
+	private:
+		friend class XMLResource;
+
+		/// Private ctor for internal use by XMLResource.
+		XMLNodeIterator(XMLResource* xml, const XMLDataMap::sibling_iterator iter):
+		XMLDataMap::sibling_iterator(iter), mOwner(xml) {}
+
+		XMLNodeIterator(void) {}
+
+		XMLResource* mOwner;
+	};
+
+
 	/// This class is used to load and maintain XML resources.
 	/// The XML file is automatically parsed into the pairs of
 	/// node->value. Values are NOT stored typed, but as a raw text data. You have to know the type of a node to
@@ -27,63 +70,20 @@ namespace ResourceSystem
 		/// Factory function.
 		static ResourcePtr CreateMe(void);
 
-		/// This iterator serves to go through nodes on one level of the XML tree.
-		class NodeIterator : public XMLDataMap::sibling_iterator
-		{
-		public:
-
-			/// Returns true if the attribute of the current node exists.
-			inline bool HasAttribute(const string& name) { return mOwner->HasAttribute(*this, name); }
-
-			/// Returns the value of an attribute of the current node.
-			template<typename T>
-			inline T GetAttribute(const string& name) { return mOwner->GetAttribute<T>(*this, name); }
-
-			/// Returns the value of the current node.
-			template<typename T>
-			T GetValue(void) { return mOwner->GetValue<T>(*this); }
-
-			/// Returns the value of the first child of the current node.
-			template<typename T>
-			T GetChildValue(void) { return mOwner->GetChildValue<T>(*this); }
-
-			/// Copy constructor.
-			NodeIterator(const NodeIterator& rhs) { operator=(rhs); }
-
-			/// Copy operator.
-			NodeIterator& operator=(const NodeIterator& rhs)
-			{
-				XMLDataMap::sibling_iterator::operator=(rhs);
-				mOwner = rhs.mOwner;
-				return *this;
-			}
-
-		private:
-			friend class XMLResource;
-
-			/// Private ctor for internal use by XMLResource.
-			NodeIterator(XMLResource* xml, const XMLDataMap::sibling_iterator iter):
-				XMLDataMap::sibling_iterator(iter), mOwner(xml) {}
-
-			NodeIterator(void) {}
-
-			XMLResource* mOwner;
-		};
-
 		/// Returns a node iterator to the top level nodes of the XML document.
-		NodeIterator IterateTopLevel(void);
+		XMLNodeIterator IterateTopLevel(void);
 
 		/// End iterator for IterateTopLevel.
-		NodeIterator EndTopLevel(void);
+		XMLNodeIterator EndTopLevel(void);
 
 		/// Returns a node iterator for children of the specified node.
-		NodeIterator IterateChildren(const NodeIterator iter);
+		XMLNodeIterator IterateChildren(const XMLNodeIterator iter);
 
 		/// End iterator for IterateChildren.
-		NodeIterator EndChildren(const NodeIterator iter);
+		XMLNodeIterator EndChildren(const XMLNodeIterator iter);
 
 		/// Returns true if the attribute of the specified node exists.
-		bool HasAttribute(const NodeIterator iter, const string& attributeName)
+		bool HasAttribute(const XMLNodeIterator iter, const string& attributeName)
 		{
 			XMLDataMap::sibling_iterator attr = find(mDataMap.begin(iter), mDataMap.end(iter), attributeName);
 			return attr != mDataMap.end(iter);
@@ -91,7 +91,7 @@ namespace ResourceSystem
 
 		/// Returns the value of an attribute of the specified node.
 		template<typename T>
-		T GetAttribute(const NodeIterator iter, const string& attributeName)
+		T GetAttribute(const XMLNodeIterator iter, const string& attributeName)
 		{
 			XMLDataMap::sibling_iterator attr = find(mDataMap.begin(iter), mDataMap.end(iter), attributeName);
 			if (attr == mDataMap.end(iter))
@@ -104,14 +104,14 @@ namespace ResourceSystem
 
 		/// Returns the value of the specified node.
 		template<typename T>
-		T GetValue(const NodeIterator iter)
+		T GetValue(const XMLNodeIterator iter)
 		{
 			return StringConverter::FromString<T>(*iter);
 		}
 
 		/// Returns the value of the first child of the specified node.
 		template<typename T>
-		T GetChildValue(const NodeIterator iter)
+		T GetChildValue(const XMLNodeIterator iter)
 		{
 			XMLDataMap::sibling_iterator child = mDataMap.begin(iter);
 			if (child == mDataMap.end(iter))

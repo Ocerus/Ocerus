@@ -119,6 +119,11 @@ namespace EntitySystem
 		/// Propagates the current state of properties of the prototype to its instances.
 		void UpdatePrototypeInstances(const EntityID prototype);
 
+		/// Load an entity from the XML file given a node iterator to its node.
+		void LoadEntityFromXML( ResourceSystem::XMLNodeIterator &entIt, const bool isPrototype, ResourceSystem::XMLResourcePtr xml );
+
+		/// Load a property for the given entity from a XML file.
+		void LoadEntityPropertyFromXML( PrototypeInfo* prototypeInfo, PropertyList::iterator prop, ResourceSystem::XMLResourcePtr xml, ResourceSystem::XMLNodeIterator &propIt, PropertyList &props );
 	};
 }
 

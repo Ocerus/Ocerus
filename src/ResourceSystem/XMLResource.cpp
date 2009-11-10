@@ -95,22 +95,27 @@ ResourcePtr XMLResource::CreateMe(void)
 
 XMLResource::~XMLResource(void) {}
 
-ResourceSystem::XMLResource::NodeIterator ResourceSystem::XMLResource::IterateTopLevel( void )
+ResourceSystem::XMLNodeIterator ResourceSystem::XMLResource::IterateTopLevel( void )
 {
-	return NodeIterator(this, mDataMap.begin(mTopNode));
+	return XMLNodeIterator(this, mDataMap.begin(mTopNode));
 }
 
-ResourceSystem::XMLResource::NodeIterator ResourceSystem::XMLResource::IterateChildren( const NodeIterator iter )
+ResourceSystem::XMLNodeIterator ResourceSystem::XMLResource::IterateChildren( const XMLNodeIterator iter )
 {
-	return NodeIterator(this, mDataMap.begin(iter));
+	return XMLNodeIterator(this, mDataMap.begin(iter));
 }
 
-ResourceSystem::XMLResource::NodeIterator ResourceSystem::XMLResource::EndTopLevel( void )
+ResourceSystem::XMLNodeIterator ResourceSystem::XMLResource::EndTopLevel( void )
 {
-	return NodeIterator(this, mDataMap.end(mTopNode));
+	return XMLNodeIterator(this, mDataMap.end(mTopNode));
 }
 
-ResourceSystem::XMLResource::NodeIterator ResourceSystem::XMLResource::EndChildren( const NodeIterator iter )
+ResourceSystem::XMLNodeIterator ResourceSystem::XMLResource::EndChildren( const XMLNodeIterator iter )
 {
-	return NodeIterator(this, mDataMap.end(iter));
+	return XMLNodeIterator(this, mDataMap.end(iter));
+}
+
+bool ResourceSystem::XMLNodeIterator::HasAttribute( const string& name )
+{
+	return mOwner->HasAttribute(*this, name);
 }
