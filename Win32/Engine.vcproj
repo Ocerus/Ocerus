@@ -706,6 +706,10 @@
 					RelativePath="..\src\GfxSystem\OGlRenderer.h"
 					>
 				</File>
+				<File
+					RelativePath="..\src\GfxSystem\Texture.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="src"

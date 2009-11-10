@@ -6,8 +6,6 @@
 #include "../LogSystem/LogMgr.h"
 #include "../GfxSystem/OGlRenderer.h"
 
-// DEBUG only
-#include "../EntitySystem/Components/OnInitScript.h"
 
 using namespace Core;
 
@@ -70,8 +68,6 @@ void Application::Init()
 
 	// FPS counter init
 	ResetStats();
-
-	EntityComponents::OnInitScript::TestRunTime();
 }
 
 Application::~Application()

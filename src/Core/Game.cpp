@@ -6,6 +6,10 @@
 #include "StringConverter.h"
 #include "Box2D.h"
 
+
+// DEBUG only
+#include "../EntitySystem/Components/OnInitScript.h"
+
 using namespace Core;
 using namespace EntitySystem;
 using namespace InputSystem;
@@ -90,6 +94,9 @@ void Core::Game::Init()
 
 	ocInfo << "Game inited";
 
+
+	// an example of a script
+	EntityComponents::OnInitScript::TestRunTime();
 
 
 	// an example of how to use functions registered in the reflection system

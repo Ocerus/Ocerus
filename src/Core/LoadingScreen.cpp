@@ -17,9 +17,11 @@ void Core::LoadingScreen::DoLoading( eType type )
 
 		gResourceMgr.AddResourceDirToGroup("ships", "Ships");
 		gResourceMgr.AddResourceDirToGroup("prototypes", "Prototypes");
+		gResourceMgr.AddResourceDirToGroup("scripts", "Scripts");
 
 		gResourceMgr.LoadResourcesInGroup("Ships");
 		gResourceMgr.LoadResourcesInGroup("Prototypes");
+		gResourceMgr.LoadResourcesInGroup("Scripts");
 
 		gGUIMgr.LoadStyle();
 		break;

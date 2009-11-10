@@ -397,7 +397,7 @@ asIScriptModule* ScriptMgr::GetModule(const char* fileName)
 		// Load script resource from file
 		gResourceMgr.AddResourceFileToGroup(mBasePath + fileName, "scripts", 
 			ResourceSystem::RESTYPE_SCRIPTRESOURCE, true);
-		sp = boost::static_pointer_cast<ScriptResource>(gResourceMgr.GetResource("scripts", fileName));
+		sp = boost::static_pointer_cast<ScriptResource>(gResourceMgr.GetResource("Scripts", fileName));
 	}
 	if (!sp) return 0;
 
