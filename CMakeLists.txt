@@ -246,6 +246,7 @@ set(ScriptSystem_SRCS
     src/ScriptSystem/AddOn/scriptstring.cpp
     src/ScriptSystem/ScriptMgr.cpp
     src/ScriptSystem/ScriptResource.cpp
+    src/ScriptSystem/AddOn/scriptbuilder.cpp
 )
 
 set(Setup_SRCS
