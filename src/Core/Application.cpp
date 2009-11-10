@@ -85,6 +85,7 @@ Application::~Application()
 	delete mGame;
 	InputSystem::InputMgr::DestroySingleton();
 	GfxSystem::GfxRenderer::DestroySingleton();
+	SceneSystem::GfxWindow::DestroySingleton();
 	StringSystem::StringMgr::DestroySingleton();
 	ResourceSystem::ResourceMgr::DestroySingleton();
 	//TODO:Gfx
