@@ -9,6 +9,7 @@
 #include "EntityHandle.h"
 #include "EntityEnums.h"
 #include "../ComponentMgr/ComponentEnums.h"
+#include "../ComponentMgr/ComponentID.h"
 #include "Properties/PropertyAccess.h"
 
 /// Macro for easier use.
@@ -85,6 +86,12 @@ namespace EntitySystem
 
 		/// Fills the given list with types of components present in the given entity. Returns true if everything was ok.
 		bool GetEntityComponentTypes(const EntityHandle h, ComponentTypeList& out);
+
+		/// Adds a component of the specified type to the entity. Returned is an ID of the new component.
+		inline ComponentID AddComponentToEntity(const EntityHandle h, const eComponentType componentType) { return AddComponentToEntity(h.GetID(), componentType); }
+
+		/// Adds a component of the specified type to the entity. Returned is an ID of the new component.
+		ComponentID AddComponentToEntity(const EntityID id, const eComponentType componentType);
 
 		/// Actually destroyes all entities marked for destruction.
 		void ProcessDestroyQueue(void);

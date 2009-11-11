@@ -75,6 +75,7 @@ namespace EntitySystem
 	private:
 
 		friend class EntityMgr;
+		friend class ComponentMgr;
 
 		EntityID mEntityID;
 

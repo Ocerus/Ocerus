@@ -338,6 +338,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\src\EntitySystem\ComponentMgr\ComponentID.h"
+						>
+					</File>
+					<File
 						RelativePath="..\src\EntitySystem\ComponentMgr\ComponentIterators.h"
 						>
 					</File>

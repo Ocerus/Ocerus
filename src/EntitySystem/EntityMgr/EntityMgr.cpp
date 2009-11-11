@@ -158,7 +158,8 @@ EntityHandle EntityMgr::CreateEntity(EntityDescription& desc, PropertyList& out)
 		eComponentType cmpType = *cmpDescIt;
 
 		// create the component
-		Component* cmp = mComponentMgr->CreateComponent(h, cmpType);
+		ComponentID cmpID = mComponentMgr->CreateComponent(h, cmpType);
+		Component* cmp = mComponentMgr->GetEntityComponent(h, cmpID);
 		OC_ASSERT(cmp);
 
 		// check dependencies of the component
@@ -538,6 +539,7 @@ void EntitySystem::EntityMgr::UpdatePrototypeInstance( const EntityID prototype,
 	OC_ASSERT(mPrototypes.find(prototype) != mPrototypes.end());
 	PrototypeInfo* prototypeInfo = mPrototypes[prototype];
 
+	// update shared properties
 	for (PropertyList::iterator protPropIter=prototypeProperties.begin(); protPropIter!=prototypeProperties.end(); ++protPropIter)
 	{
 		if (prototypeInfo->mSharedProperties.find(protPropIter->first) == prototypeInfo->mSharedProperties.end())
@@ -559,4 +561,10 @@ bool EntitySystem::EntityMgr::IsEntityPrototype( const EntityID id ) const
 		return false;
 
 	return mPrototypes.find(id) != mPrototypes.end();
+}
+
+EntitySystem::ComponentID EntitySystem::EntityMgr::AddComponentToEntity( const EntityID id, const eComponentType componentType )
+{
+	OC_ASSERT(mComponentMgr);
+	return mComponentMgr->CreateComponent(id, componentType);
 }

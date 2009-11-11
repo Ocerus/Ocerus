@@ -30,21 +30,22 @@ EntityComponentsIterator ComponentMgr::GetEntityComponents(EntityID id) const
 	return EntityComponentsIterator(eci->second);
 }
 
-Component* ComponentMgr::CreateComponent(EntityHandle h, const eComponentType type)
+ComponentID ComponentMgr::CreateComponent(const EntityID id, const eComponentType type)
 {
 	OC_ASSERT(type < NUM_COMPONENT_TYPES && type >= 0);
 	Component* cmp = mComponentCreationMethod[type]();
-	EntityComponentsMap::const_iterator entIt = mEntityComponentsMap.find(h.GetID());
+	EntityComponentsMap::const_iterator entIt = mEntityComponentsMap.find(id);
 	if (entIt == mEntityComponentsMap.end())
 	{
-		mEntityComponentsMap[h.GetID()] = new ComponentsList();
-		entIt = mEntityComponentsMap.find(h.GetID());
+		mEntityComponentsMap[id] = new ComponentsList();
+		entIt = mEntityComponentsMap.find(id);
 	}
 	entIt->second->push_back(cmp);
-	cmp->SetOwner(h);
+	cmp->SetOwner(EntityHandle(id));
 	cmp->SetType(type);
 	cmp->Create();
-	return cmp;
+	ComponentID cmpID = entIt->second->size()-1;
+	return cmpID;
 }
 
 void ComponentMgr::DestroyEntityComponents(EntityID id)
@@ -63,4 +64,34 @@ void ComponentMgr::DestroyEntityComponents(EntityID id)
 	}
 	delete iter->second;
 	mEntityComponentsMap.erase(iter);
+}
+
+Component* EntitySystem::ComponentMgr::GetEntityComponent( const EntityID id, const ComponentID cmpID ) const
+{
+	EntityComponentsMap::const_iterator iter = mEntityComponentsMap.find(id);
+	if (iter == mEntityComponentsMap.end())
+	{
+		ocError << "Entity " << id << " doesn't have components";
+		return 0;
+	}
+
+	OC_ASSERT(iter->second);
+
+	if ((size_t)cmpID >= iter->second->size())
+	{
+		ocError << "Invalid ComponentID of " << cmpID << " when trying to get a component of entity " << id;
+		return 0;
+	}
+
+	return (*iter->second)[cmpID];	
+}
+
+int32 EntitySystem::ComponentMgr::GetNumberOfEntityComponents( const EntityID id ) const
+{
+	EntityComponentsMap::const_iterator iter = mEntityComponentsMap.find(id);
+	if (iter == mEntityComponentsMap.end())
+		return 0; // no components
+
+	OC_ASSERT(iter->second);
+	return iter->second->size();
 }

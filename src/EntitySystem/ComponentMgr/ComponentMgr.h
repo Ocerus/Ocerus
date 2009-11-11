@@ -7,6 +7,7 @@
 #include "Base.h"
 #include "Singleton.h"
 #include "ComponentIterators.h"
+#include "ComponentID.h"
 
 /// Entity system manages game entities and their parts. 
 /// However, it takes care of their logical representation and
@@ -30,7 +31,10 @@ namespace EntitySystem
 		~ComponentMgr(void);
 		
 		/// Creates a component and attaches it to an entity.
-		Component* CreateComponent(const EntityHandle h, const eComponentType type);
+		inline ComponentID CreateComponent(const EntityHandle h, const eComponentType type) { return CreateComponent(h.GetID(), type); }
+
+		/// Creates a component and attaches it to an entity.
+		ComponentID CreateComponent(const EntityID id, const eComponentType type);
 
 		/// Destroys all components of a specified entity.
 		inline void DestroyEntityComponents(const EntityHandle h) { DestroyEntityComponents(h.GetID()); }
@@ -43,6 +47,15 @@ namespace EntitySystem
 
 		/// Returns a collection of components (represented by an iterator) of a specified entity.
 		EntityComponentsIterator GetEntityComponents(const EntityID id) const;
+
+		/// Returns a component of the given entity.
+		inline Component* GetEntityComponent(const EntityHandle h, const ComponentID cmpID) const { return GetEntityComponent(h.GetID(), cmpID); }
+
+		/// Returns a component of the given entity.
+		Component* GetEntityComponent(const EntityID id, const ComponentID cmpID) const;
+
+		/// Returns the number of components of an entity.
+		int32 GetNumberOfEntityComponents(const EntityID id) const;
 
 	private:
 
