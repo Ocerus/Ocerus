@@ -4,6 +4,7 @@
 #include <angelscript.h>
 #include "AddOn/scriptbuilder.h"
 #include "AddOn/scriptstring.h"
+#include "AddOn/contextmgr.h"
 
 using namespace ScriptSystem;
 using namespace EntitySystem;
@@ -29,8 +30,8 @@ void MessageCallback(const asSMessageInfo* msg, void* param)
 
 void LineCallback(asIScriptContext* ctx, TimeOut* timeOut)
 {
-	// If the time out is reached we suspend the script
-	if (timeOut->IsTimeOut()) ctx->Suspend();
+	// If the time out is reached we abort the script
+	if (timeOut->IsTimeOut()) ctx->Abort();
 }
 
 // Except non-const char* as last argument that means basepath for files, will be deleted in function
@@ -61,6 +62,12 @@ int IncludeCallback(const char* fileName, const char* from, CScriptBuilder* buil
 	return r;
 }
 
+uint32 GetTime()
+{
+	static Utils::Timer timer;
+	return (uint32)timer.GetMilliseconds();
+}
+
 void ScriptLog(string& msg)
 {
 	ocInfo << msg;
@@ -72,8 +79,6 @@ ScriptMgr::ScriptMgr(const string& basepath)
 	
 	mBasePath = basepath;
 
-	mScriptBuilder = new CScriptBuilder();
-
 	// Create the script engine
 	mEngine = asCreateScriptEngine(ANGELSCRIPT_VERSION);
 
@@ -82,18 +87,24 @@ ScriptMgr::ScriptMgr(const string& basepath)
 	// The script compiler will send any compiler messages to the callback function
 	mEngine->SetMessageCallback(asFUNCTION(MessageCallback), 0, asCALL_CDECL);
 
+	// Create script builder and set include callback for it
+	mScriptBuilder = new CScriptBuilder();
+	mScriptBuilder->SetIncludeCallback(IncludeCallback, Utils::StringConverter::FromString<char*>(mBasePath));
+
+	// Create context manager and set get time callback for it
+	mContextMgr = new CContextMgr();
+	mContextMgr->SetGetTimeCallback(GetTime);
+
 	// Add functions and variables that can be called from script
 	ConfigureEngine();
-
-	// Set include callback for script builder
-	mScriptBuilder->SetIncludeCallback(IncludeCallback, Utils::StringConverter::FromString<char*>(mBasePath));
 }
 
 ScriptMgr::~ScriptMgr(void)
 {
 	ocInfo << "*** ScriptMgr deinit ***";
-	mEngine->Release();
+	delete mContextMgr;
 	delete mScriptBuilder;
+	mEngine->Release();
 }
 
 template<class T>
@@ -160,7 +171,7 @@ void RegisterScriptVector2(asIScriptEngine* engine)
 	r = engine->RegisterObjectMethod("Vector2", "float Length() const", asMETHOD(Vector2, Length), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("Vector2", "float LengthSquared() const", asMETHOD(Vector2, LengthSquared), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("Vector2", "void Set(float, float)", asMETHODPR(Vector2, Set, (float32, float32), void), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-	r = engine->RegisterObjectMethod("Vector2", "void SetZero(float, float)", asMETHOD(Vector2, SetZero), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Vector2", "void SetZero()", asMETHOD(Vector2, SetZero), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("Vector2", "float Normalize()", asMETHOD(Vector2, Normalize), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("Vector2", "bool IsValid() const", asMETHOD(Vector2, IsValid), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("Vector2", "float Dot(const Vector2 &in) const", asFUNCTION(b2Dot), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
@@ -302,12 +313,47 @@ void RegisterScriptColor(asIScriptEngine* engine)
 	r = engine->RegisterObjectMethod("Color", "uint32 GetARGB() const", asMETHOD(GfxSystem::Color, GetARGB), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 }
 
+// Functions for creating co-routines
+
+void ScriptCreateCoRoutine(string &func, EntityHandle arg)
+{
+	asIScriptContext *ctx = asGetActiveContext();
+	if (ctx)
+	{
+		asIScriptEngine *engine = ctx->GetEngine();
+		string mod = engine->GetFunctionDescriptorById(ctx->GetCurrentFunction())->GetModuleName();
+
+		// We need to find the function that will be created as the co-routine
+		string decl = "void " + func + "(EntityHandle handle)"; 
+		int32 funcId = engine->GetModule(mod.c_str())->GetFunctionIdByDecl(decl.c_str());
+		if (funcId < 0)
+		{
+			// No function could be found, raise an exception
+			ctx->SetException(("Function '" + decl + "' doesn't exist").c_str());
+			return;
+		}
+
+		// Create a new context for the co-routine
+		asIScriptContext *coctx = gScriptMgr.AddContextAsCoRoutineToManager(ctx, funcId);
+
+		// Pass the argument to the context
+		int32 r = coctx->SetArgObject(0, &arg);
+		OC_ASSERT(r >= 0);
+	}
+}
+
 void ScriptMgr::ConfigureEngine(void)
 {
 	int32 r;
 
 	// Register the script string type
 	RegisterStdString(mEngine);
+
+	// Registers the script function "void sleep(uint milliseconds)"
+	mContextMgr->RegisterThreadSupport(mEngine);
+
+	// Registers the script function "void yield()"
+	mContextMgr->RegisterCoRoutineSupport(mEngine);
 
 	// Register log function
 	r = mEngine->RegisterGlobalFunction("void Log(string &in)", asFUNCTION(ScriptLog), asCALL_CDECL); OC_SCRIPT_ASSERT();
@@ -324,6 +370,10 @@ void ScriptMgr::ConfigureEngine(void)
 	// Register Color struct and it's methods
 	RegisterScriptColor(mEngine);
 
+	// Register function for creating co-routine
+	r = mEngine->RegisterGlobalFunction("void createCoRoutine(const string &in, EntityHandle handle)", 
+		asFUNCTIONPR(ScriptCreateCoRoutine, (string&, EntityHandle), void), asCALL_CDECL); OC_SCRIPT_ASSERT();
+
 	// Register getters and setters for supported types of properties
     #define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName) \
 	r = mEngine->RegisterObjectMethod("EntityHandle", (string(typeName) + " Get_" + typeName + "(string &in)").c_str(), \
@@ -338,31 +388,16 @@ void ScriptMgr::ConfigureEngine(void)
 	#undef PROPERTY_TYPE
 }
 
-asIScriptContext* ScriptMgr::PrepareContext(const char* moduleName, const char* funcDecl)
+asIScriptContext* ScriptMgr::PrepareContext(int32 funcId)
 {
-	// Get module by name
-	asIScriptModule* mod = GetModule(moduleName);
-	if (mod == 0)
-	{
-		ocError << "Script module '" << moduleName << "' not found!";
-		return 0;
-	}
-	
-	// Get function ID from declaration
-	int funcId = mod->GetFunctionIdByDecl(funcDecl);
-	if (funcId < 0)
-	{
-		ocError << "Script function '" << funcDecl << "' not found/multiple found in module '"
-			<< moduleName << "' or module was not compiled successfully!";
-		return 0;
-	}
+	OC_ASSERT_MSG(funcId >= 0, "Invalid function ID passed.");
 
 	// Create context
 	asIScriptContext* ctx = mEngine->CreateContext();
 	OC_ASSERT_MSG(ctx, "Failed to create the script context.");
 
 	// Prepare function on context
-	int r = ctx->Prepare(funcId);
+	int32 r = ctx->Prepare(funcId);
 	OC_ASSERT_MSG(r >= 0, "Failed to prepare the script function.");
 
 	return ctx;
@@ -373,11 +408,11 @@ bool ScriptMgr::ExecuteContext(asIScriptContext* ctx, uint32 timeOut)
 	OC_ASSERT_MSG(ctx, "Cannot execute null context!");
 	OC_ASSERT_MSG(ctx->GetState() == asEXECUTION_PREPARED, "Cannot execute unprepared context!");
 
-	int funcId = ctx->GetCurrentFunction();
+	int32 funcId = ctx->GetCurrentFunction();
 	const asIScriptFunction *function = mEngine->GetFunctionDescriptorById(funcId);
 	const char* funcDecl = function->GetDeclaration();
 	const char* moduleName = function->GetModuleName();
-	int r;
+	int32 r;
 
 	ocDebug << "Executing script function '" << funcDecl << "' in module '" << moduleName << "'.";
 
@@ -398,18 +433,17 @@ bool ScriptMgr::ExecuteContext(asIScriptContext* ctx, uint32 timeOut)
 	// Get result of execution
 	switch (r)
 	{
-	case asEXECUTION_ABORTED:  // Script was aborted by another thread.
+	case asEXECUTION_ABORTED:  // Script was aborted due to time out.
 		ocError << "Execution of script function '" << funcDecl << "' in module '" << moduleName 
-			<< "' was aborted.";
+			<< "' was aborted due to time out.";
 		return false;
-	case asEXECUTION_SUSPENDED: // Script was suspended due to time out.
-		ocError << "Execution of script function '" << funcDecl << "' in module '" << moduleName 
-			<< "' was suspended due to time out.";
-		ctx->Abort();
-		return false;
+	case asEXECUTION_SUSPENDED: // Script was suspended by itself. Caller can continue the script.
+		ocDebug << "Execution of script function '" << funcDecl << "' in module '" << moduleName 
+			<< "' was suspended.";
+		return true;
 	case asEXECUTION_FINISHED: // Script was completed successfully
 		ocDebug << "Execution of script function '" << funcDecl << "' in module '" << moduleName
-			<< "' completed successfully";
+			<< "' completed successfully.";
 		return true;
 	case asEXECUTION_EXCEPTION: // Exception occured in the script
 		ocError << "Exception '" << ctx->GetExceptionString() << "' at line " <<
@@ -422,13 +456,41 @@ bool ScriptMgr::ExecuteContext(asIScriptContext* ctx, uint32 timeOut)
 	}
 }
 
+asIScriptContext* ScriptMgr::AddContextToManager(int32 funcId)
+{
+	OC_ASSERT_MSG(funcId >= 0, "Invalid function ID passed.");
+
+	// Add context to context manager
+	asIScriptContext* ctx = mContextMgr->AddContext(mEngine, funcId);
+	OC_ASSERT_MSG(ctx, "Failed to create or prepare the script context.");
+
+	return ctx;
+}
+
+asIScriptContext* ScriptMgr::AddContextAsCoRoutineToManager(asIScriptContext* currCtx, int32 funcId)
+{
+	OC_ASSERT_MSG(currCtx, "Parent context for co-routine must not be null.");
+	OC_ASSERT_MSG(funcId >= 0, "Invalid function ID passed.");
+
+	// Add context to context manager
+	asIScriptContext* ctx = mContextMgr->AddContextForCoRoutine(currCtx, funcId);
+	OC_ASSERT_MSG(ctx, "Failed to create or prepare the script context.");
+
+	return ctx;
+}
+
+inline void ScriptMgr::ExecuteScripts()
+{
+	mContextMgr->ExecuteScripts();
+}
+
 asIScriptModule* ScriptMgr::GetModule(const char* fileName)
 {
 	// Get existing module
 	asIScriptModule* mod = mEngine->GetModule(fileName, asGM_ONLY_IF_EXISTS);
 	if (mod != 0) return mod;
 
-	int r;
+	int32 r;
 	// Create script builder to build new module
 	r = mScriptBuilder->StartNewModule(mEngine, fileName);
 	OC_ASSERT_MSG(r==0, "Failed to add module to script engine.");
@@ -446,6 +508,28 @@ asIScriptModule* ScriptMgr::GetModule(const char* fileName)
 	}
 
 	return mEngine->GetModule(fileName, asGM_ONLY_IF_EXISTS);
+}
+
+int32 ScriptMgr::GetFunctionID(const char* moduleName, const char* funcDecl)
+{
+	// Get module by name
+	asIScriptModule* mod = GetModule(moduleName);
+	if (mod == 0)
+	{
+		ocError << "Script module '" << moduleName << "' not found!";
+		return -1;
+	}
+	
+	// Get function ID from declaration
+	return mod->GetFunctionIdByDecl(funcDecl);
+	/*if (funcId < 0)
+	{
+		ocError << "Script function '" << funcDecl << "' not found/multiple found in module '"
+			<< moduleName << "' or module was not compiled successfully!";
+		return -1;
+	}
+
+	return funcId;*/
 }
 
 void ScriptSystem::ScriptMgr::DefineWord( const char* word )

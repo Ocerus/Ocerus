@@ -34,11 +34,14 @@ void OnInitScript::RegisterReflection()
 bool OnInitScript::RunScript()
 {
 	gScriptMgr.DefineWord("TEST");
+	// Get function ID
+	int32 funcId = gScriptMgr.GetFunctionID(mOnInitScript.c_str(), "void OnInit(EntityHandle handle)");
+	if (funcId < 0) return false;
 	// Return new context prepared to call function from module
-	AngelScript::asIScriptContext* ctx = gScriptMgr.PrepareContext(mOnInitScript.c_str(), "void OnInit(EntityHandle handle)");
+	AngelScript::asIScriptContext* ctx = gScriptMgr.PrepareContext(funcId);
 	if (ctx == 0) return false;
 	// Set parent entity handle as first argument
-	int r = ctx->SetArgObject(0, GetOwnerPtr());
+	int32 r = ctx->SetArgObject(0, GetOwnerPtr());
 	OC_ASSERT(r >= 0);
 	// Execute script with time out
 	bool res = gScriptMgr.ExecuteContext(ctx, mOnInitTimeOut);

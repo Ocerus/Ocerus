@@ -10,10 +10,14 @@
 /// Macro for easier use
 #define gScriptMgr ScriptSystem::ScriptMgr::GetSingleton()
 
-namespace AngelScript {	class asIScriptEngine; }
-namespace AngelScript { class asIScriptModule; }
-namespace AngelScript { class asIScriptContext; }
-namespace AngelScript { class CScriptBuilder; }
+namespace AngelScript
+{	 
+	class asIScriptEngine;
+	class asIScriptModule;
+	class asIScriptContext;
+	class CScriptBuilder;
+	class CContextMgr;
+}
 
 /// Scipt system allows users to define behaviour of components and entities.
 namespace ScriptSystem
@@ -29,9 +33,8 @@ namespace ScriptSystem
 		~ScriptMgr(void);
 
 		/// Returns new context prepared for passing the argument values.
-		///	@param modulName Name of file where the main function of module is.
-		/// @param funcDecl Declaration of function to be called in the script.
-		AngelScript::asIScriptContext* PrepareContext(const char* moduleName, const char* funcDecl);
+		///	@param funcId ID of function to prepare (can get from GetFunctionID)
+		AngelScript::asIScriptContext* PrepareContext(int32 funcId);
 
 		/// Executes prepared context with specific time out. Don't forger to release context.
 		/// @param ctx Prepared context with function arguments passed
@@ -39,8 +42,31 @@ namespace ScriptSystem
 		/// @return True if execution is successful (can get return value)
 		bool ExecuteContext(AngelScript::asIScriptContext* ctx, uint32 timeOut = 0);
 
+		/// Add new context to context manager and return it prepared for passing the argument values.
+		/// The context will be executed when ExecuteScripts() is called and then released.
+		///	@param funcId ID of function to prepare (can get from GetFunctionID)
+		AngelScript::asIScriptContext* AddContextToManager(int32 funcId);
+
+		/// Add new context to context manager as a co-routine in the same thread as the currCtx
+		/// and return it prepared for passing the argument values.
+		/// The context will be executed when ExecuteScripts() is called and then released.
+		/// @param currCtx The context will be added as a co-routine in the same thread as this context
+		///	@param funcId ID of function to prepare (can get from GetFunctionID)
+		AngelScript::asIScriptContext* AddContextAsCoRoutineToManager(AngelScript::asIScriptContext* currCtx,
+			int32 funcId);
+
+		/// Execute each script that is not currently sleeping. The function returns after 
+		/// each script has been executed once.
+		inline void ExecuteScripts();
+
 		// Add a pre-processor define for conditional compilation.
 		void DefineWord(const char* word);
+
+		/// Get script function ID from module name and function declaration.
+		///	@param modulName Name of file where the main function of module is.
+		/// @param funcDecl Declaration of function to be called in the script.
+		/// @return Number greater than or equal to zero that is function ID, number less than zero for not found
+		int32 GetFunctionID(const char* moduleName, const char* funcDecl);
 	protected:
 		/// Get script module represented by the name of file where the main function is.
 		/// This function loads and builds module if necessary.
@@ -54,6 +80,9 @@ namespace ScriptSystem
 
 		/// Object that helps building scripts.
 		AngelScript::CScriptBuilder* mScriptBuilder;
+
+		/// Manages contexts that can sleep or can create co-routines.
+		AngelScript::CContextMgr* mContextMgr;
 
 		/// Configure the script engine with all the functions and variables that the script should be able to use.
 		void ConfigureEngine(void);
