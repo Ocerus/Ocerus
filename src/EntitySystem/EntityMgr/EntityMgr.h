@@ -121,7 +121,7 @@ namespace EntitySystem
 		void UpdatePrototypeCopy(const EntityID prototype);
 
 		/// Propagates the current state of properties of the prototype to the specified instances.
-		void UpdatePrototypeInstance(const EntityID prototype, const EntityID instance);
+		void UpdatePrototypeInstance(const EntityID prototype, const EntityID instance, const bool forceOverwrite);
 
 		/// Propagates the current state of properties of the prototype to its instances.
 		void UpdatePrototypeInstances(const EntityID prototype);

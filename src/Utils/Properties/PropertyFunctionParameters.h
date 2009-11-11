@@ -32,6 +32,9 @@ namespace Reflection
 		/// Assignment operator.
 		PropertyFunctionParameters& operator=(const PropertyFunctionParameters& rhs);
 
+		/// Comparison operator.
+		bool operator==(const PropertyFunctionParameters& rhs);
+
 		/// Reinitializes the parameters.
 		void Reset(int32 numParameters);
 

@@ -31,6 +31,12 @@ namespace Reflection
 			return *this;
 		}
 
+		/// Returns true if the properties' values are equal. The properties must be of the same type.
+		inline bool IsEqual(const PropertyHolder propertyToCopy)
+		{
+			return mProperty->IsEqual(mOwner, propertyToCopy.mOwner, propertyToCopy.mProperty);
+		}
+
 		/// Copies data from the specified abstract property. The property must be of the same type as this property.
 		inline void CopyFrom(const PropertyHolder propertyToCopy)
 		{

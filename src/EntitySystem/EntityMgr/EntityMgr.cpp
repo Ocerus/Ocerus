@@ -183,7 +183,7 @@ EntityHandle EntityMgr::CreateEntity(EntityDescription& desc, PropertyList& out)
 	{
 		if (protIt->second->mInstancesCount == 0) UpdatePrototypeCopy(desc.mPrototype);
 		protIt->second->mInstancesCount++;
-		UpdatePrototypeInstance(desc.mPrototype, h.GetID());
+		UpdatePrototypeInstance(desc.mPrototype, h.GetID(), true);
 	}
 
 	// security checks
@@ -527,12 +527,12 @@ void EntitySystem::EntityMgr::UpdatePrototypeInstances( const EntityID prototype
 	{
 		if (it->second->mPrototype.GetID() == prototype)
 		{
-			UpdatePrototypeInstance(prototype, it->first);
+			UpdatePrototypeInstance(prototype, it->first, false);
 		}
 	}
 }
 
-void EntitySystem::EntityMgr::UpdatePrototypeInstance( const EntityID prototype, const EntityID instance )
+void EntitySystem::EntityMgr::UpdatePrototypeInstance( const EntityID prototype, const EntityID instance, const bool forceOverwrite )
 {
 	PropertyList prototypeProperties;
 	GetEntityProperties(prototype, prototypeProperties);
@@ -545,7 +545,17 @@ void EntitySystem::EntityMgr::UpdatePrototypeInstance( const EntityID prototype,
 		if (prototypeInfo->mSharedProperties.find(protPropIter->first) == prototypeInfo->mSharedProperties.end())
 			continue;
 
-		GetEntityProperty(instance, protPropIter->first).CopyFrom(protPropIter->second);
+		StringKey propertyKey = protPropIter->first;
+		PropertyHolder instanceProperty = GetEntityProperty(instance, propertyKey);
+		PropertyHolder copyProperty = GetEntityProperty(prototypeInfo->mCopy, propertyKey);
+		PropertyHolder prototypeProperty = protPropIter->second;
+		
+		// if the property has different value from the prototype copy, then it means the property was specialized
+		// by the user and we should leave it alone
+		if (forceOverwrite || copyProperty.IsEqual(instanceProperty))
+		{
+			instanceProperty.CopyFrom(prototypeProperty);
+		}
 	}
 
 }

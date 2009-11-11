@@ -28,6 +28,12 @@ namespace GfxSystem
 			b((uint8)( color&0x000000FF )), a((uint8)(color >> 24)) {}
 		Color(void): r(0), g(0), b(0), a(255) {}
 		inline uint32 GetARGB() const { return a << 24 | r << 16 | g << 8 | b; }
+
+		bool operator==(const Color& rhs)
+		{
+			return r==rhs.r && g==rhs.g && b==rhs.b && a==rhs.a;
+		}
+
 		uint8 r, g, b, a;
 
 		static Color NullColor;

@@ -41,3 +41,7 @@ Reflection::PropertyFunctionParameters::~PropertyFunctionParameters( void )
 	// we are not deleting the parameters as they'll be deleted automatically by the smart pointer
 };
 
+bool Reflection::PropertyFunctionParameters::operator==( const PropertyFunctionParameters& rhs )
+{
+	return mParametersCount==rhs.mParametersCount && mParameters==rhs.mParameters;
+}
