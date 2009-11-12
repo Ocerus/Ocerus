@@ -546,6 +546,32 @@ void EntitySystem::EntityMgr::UpdatePrototypeInstance( const EntityID prototype,
 	OC_ASSERT(mPrototypes.find(prototype) != mPrototypes.end());
 	PrototypeInfo* prototypeInfo = mPrototypes[prototype];
 
+	// security check
+	ComponentTypeList prototypeComponentTypes;
+	ComponentTypeList instanceComponentTypes;
+	GetEntityComponentTypes(prototype, prototypeComponentTypes);
+	GetEntityComponentTypes(instance, instanceComponentTypes);
+	bool componentsAreEqual = true;
+	if (prototypeComponentTypes.size() > instanceComponentTypes.size())
+	{
+		componentsAreEqual = false;
+	}
+	else
+	{
+		ComponentTypeList::iterator protIt=prototypeComponentTypes.begin();
+		ComponentTypeList::iterator instIt=instanceComponentTypes.begin();
+		for (; protIt!=prototypeComponentTypes.end(); ++protIt, ++instIt)
+		{
+			if (*protIt != *instIt) componentsAreEqual = false;
+		}
+	}
+	if (!componentsAreEqual)
+	{
+		ocError << "Cannot propagate prototype " << prototype << " to instance " << instance << "; components mismatch";
+		return;
+	}
+	
+
 	// update shared properties
 	for (PropertyList::iterator protPropIter=prototypeProperties.begin(); protPropIter!=prototypeProperties.end(); ++protPropIter)
 	{
