@@ -241,16 +241,32 @@ void EntityMgr::DestroyEntityImmediately( const EntityID id, const bool erase )
 	{
 		if (erase) DestroyEntityImmediately(protIt->second->mCopy, erase);
 		else DestroyEntity(protIt->second->mCopy); // if we can't erase the entity from the map, it has to be deleted in the next round
+
 		delete protIt->second;
 		protIt->second = 0;
+
 		if (erase) mPrototypes.erase(protIt);
 	}
+
 	EntityMap::iterator entityIt = mEntities.find(id);
 	if (entityIt != mEntities.end())
 	{
 		mComponentMgr->DestroyEntityComponents(id);
+
+		if (entityIt->second->mPrototype.IsValid())
+		{
+			EntityID parentPrototypeID = entityIt->second->mPrototype.GetID();
+			PrototypeMap::iterator parentPrototypeIter = mPrototypes.find(parentPrototypeID);
+			if (parentPrototypeIter != mPrototypes.end())
+			{
+				// this was an instance of a prototype, so after its removal we have to notify the prototype
+				parentPrototypeIter->second->mInstancesCount--;
+			}
+		}
+
 		delete entityIt->second;
 		entityIt->second = 0;
+
 		if (erase) mEntities.erase(entityIt);
 	}
 }
