@@ -372,7 +372,6 @@ void EntitySystem::EntityMgr::LoadEntityPropertyFromXML( PrototypeInfo* prototyp
 
 void EntitySystem::EntityMgr::LoadEntityFromXML( ResourceSystem::XMLNodeIterator &entIt, const bool isPrototype, ResourceSystem::XMLResourcePtr xml ) 
 {
-
 	// init the entity description
 	EntityDescription desc;
 	eEntityType type = DetectEntityType(entIt.GetAttribute<string>("Type"));
@@ -422,7 +421,8 @@ void EntitySystem::EntityMgr::LoadEntityFromXML( ResourceSystem::XMLNodeIterator
 	}
 
 	// finish init
-	if (isPrototype) gEntityMgr.UpdatePrototypeCopy(entity.GetID());
+	// note: the prototype copy can't be created here since all prototypes must be loaded first before any copy is created.
+	//       otherwise it would screw up their IDs.
 	entity.FinishInit();
 }
 

@@ -26,6 +26,12 @@ EntitySystem::EntityHandle EntitySystem::EntityHandle::CreateUniquePrototypeHand
 
 EntitySystem::EntityHandle EntitySystem::EntityHandle::CreateHandleFromID( const EntityID id )
 {
+	if (gEntityMgr.IsEntity(id))
+	{
+		ocError << "Cannot create entity with predetermined ID; another entity is already using the ID: " << id;
+		return EntityHandle::Null;
+	}
+
 	if (IsPrototypeID(id))
 	{
 		Core::Config& config = GlobalProperties::Get<Core::Config>("GlobalConfig");
