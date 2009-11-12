@@ -24,11 +24,18 @@ namespace Reflection
 		/// Constructs the holder from an instance of a class the property is bound to and the actual property.
 		PropertyHolder(RTTIBaseClass* owner, AbstractProperty* prop): mOwner(owner), mProperty(prop) {}
 
+		/// Assignment operator.
 		PropertyHolder& operator=(const PropertyHolder& rhs)
 		{
 			mOwner = rhs.mOwner;
 			mProperty = rhs.mProperty;
 			return *this;
+		}
+
+		/// Returns the access flags to this property.
+		inline PropertyAccessFlags GetAccessFlags(void) const
+		{
+			return mProperty->GetAccessFlags();
 		}
 
 		/// Returns true if the properties' values are equal. The properties must be of the same type.

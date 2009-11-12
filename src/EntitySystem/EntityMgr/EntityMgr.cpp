@@ -412,7 +412,7 @@ void EntitySystem::EntityMgr::LoadEntityFromXML( ResourceSystem::XMLNodeIterator
 			PropertyList::iterator propertyIter = properties.find(*xmlPropertyIter);
 			if (propertyIter == properties.end())
 			{
-				ocError << "XML:Entity: Unknown entity property '" << *xmlPropertyIter << "'";
+				ocError << "XML:Entity: Unknown entity property '" << *xmlPropertyIter << "' (it might not be marked as initable (PA_INIT))";
 			}
 			else
 			{
@@ -597,6 +597,13 @@ void EntitySystem::EntityMgr::SetPrototypePropertyShared( const EntityHandle pro
 	if (!IsEntityPrototype(prototype))
 	{
 		ocError << "Entity " << prototype << " is not a prototype";
+		return;
+	}
+
+	PropertyHolder prop = GetEntityProperty(prototype.GetID(), propertyToMark);
+	if (!(prop.GetAccessFlags() & Reflection::PA_INIT))
+	{
+		ocError << "Only properties marked as initable (PA_INIT) can be marked as shared";
 		return;
 	}
 
