@@ -7,7 +7,7 @@
     <Component Type="CT_MATERIAL">
     </Component>
     <Component Type="CT_PLATFORM_PARAMS">
-      <FillColor>90 119 114</FillColor>
+      <FillColor>1 2 3</FillColor>
     </Component>
     <Component Type="CT_PLATFORM_LOGIC">
     </Component>

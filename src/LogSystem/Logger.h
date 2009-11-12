@@ -23,11 +23,17 @@ namespace LogSystem
 		/// Destructs the logger and actually writes the logged message into the output.
 		~Logger(void);
 
-	    inline Logger& operator<<(EntitySystem::EntityHandle value)
+	    inline Logger& operator<<(const EntitySystem::EntityHandle& value)
 	    {
 	        *this << "Entity(" << value.GetID() << ")";
 		    return *this;
 	    }
+
+		inline Logger& operator<<(const GfxSystem::Color& value)
+		{
+			*this << "Color(" << (uint32)value.r << ", " << (uint32)value.g << ", " << (uint32)value.b << ", " << (uint32)value.a << ")";
+			return *this;
+		}
 
 	    inline Logger& operator<<(Utils::StringKey value)
     	{
