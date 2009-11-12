@@ -36,6 +36,9 @@ namespace EntitySystem
 		/// Creates a component and attaches it to an entity.
 		ComponentID CreateComponent(const EntityID id, const eComponentType type);
 
+		/// Destroys a component of the entity.
+		void DestroyComponent(const EntityID id, const ComponentID componentToDestroy);
+
 		/// Destroys all components of a specified entity.
 		inline void DestroyEntityComponents(const EntityHandle h) { DestroyEntityComponents(h.GetID()); }
 

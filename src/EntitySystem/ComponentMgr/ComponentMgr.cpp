@@ -95,3 +95,19 @@ int32 EntitySystem::ComponentMgr::GetNumberOfEntityComponents( const EntityID id
 	OC_ASSERT(iter->second);
 	return iter->second->size();
 }
+
+void EntitySystem::ComponentMgr::DestroyComponent( const EntityID id, const ComponentID componentToDestroy )
+{
+	EntityComponentsMap::iterator iter = mEntityComponentsMap.find(id);
+	if (iter == mEntityComponentsMap.end())
+		return; // no components
+	
+	ComponentsList* components = iter->second;
+	if ((size_t)componentToDestroy >= components->size())
+	{
+		ocWarning << "Invalid component ID to destroy: " << componentToDestroy;
+		return;
+	}
+
+	components->erase(components->begin() + componentToDestroy);
+}

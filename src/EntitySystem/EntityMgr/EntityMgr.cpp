@@ -178,12 +178,9 @@ EntityHandle EntityMgr::CreateEntity(EntityDescription& desc, PropertyList& out)
 	if (desc.mKind == EntityDescription::EK_PROTOTYPE) mPrototypes[h.GetID()] = new PrototypeInfo();
 
 	// link the entity to its prototype
-	PrototypeMap::iterator protIt = mPrototypes.find(desc.mPrototype);
-	if (protIt != mPrototypes.end())
+	if (mPrototypes.find(desc.mPrototype) != mPrototypes.end())
 	{
-		if (protIt->second->mInstancesCount == 0) UpdatePrototypeCopy(desc.mPrototype);
-		protIt->second->mInstancesCount++;
-		UpdatePrototypeInstance(desc.mPrototype, h.GetID(), true);
+		LinkEntityToPrototype(h.GetID(), desc.mPrototype);
 	}
 
 	// security checks
@@ -255,13 +252,7 @@ void EntityMgr::DestroyEntityImmediately( const EntityID id, const bool erase )
 
 		if (entityIt->second->mPrototype.IsValid())
 		{
-			EntityID parentPrototypeID = entityIt->second->mPrototype.GetID();
-			PrototypeMap::iterator parentPrototypeIter = mPrototypes.find(parentPrototypeID);
-			if (parentPrototypeIter != mPrototypes.end())
-			{
-				// this was an instance of a prototype, so after its removal we have to notify the prototype
-				parentPrototypeIter->second->mInstancesCount--;
-			}
+			UnlinkEntityFromPrototype(id);
 		}
 
 		delete entityIt->second;
@@ -482,10 +473,10 @@ bool EntitySystem::EntityMgr::HasEntityComponentOfType(const EntityHandle h, con
 	return false;
 }
 
-bool EntitySystem::EntityMgr::GetEntityComponentTypes(const EntityHandle h, ComponentTypeList& out)
+bool EntitySystem::EntityMgr::GetEntityComponentTypes(const EntityID id, ComponentTypeList& out)
 {
 	out.clear();
-	for (EntityComponentsIterator it=mComponentMgr->GetEntityComponents(h); it.HasMore(); ++it)
+	for (EntityComponentsIterator it=mComponentMgr->GetEntityComponents(id); it.HasMore(); ++it)
 	{
 		out.push_back((*it)->GetType());
 	}
@@ -639,4 +630,79 @@ void EntitySystem::EntityMgr::SetPrototypePropertyNonShared( const EntityHandle 
 	PrototypeMap::const_iterator protIter = mPrototypes.find(prototype.GetID());
 	PrototypeInfo* protInfo = protIter->second;
 	protInfo->mSharedProperties.erase(propertyToMark);
+}
+
+void EntitySystem::EntityMgr::DestroyEntityComponent( const EntityID id, const ComponentID componentToDestroy )
+{
+	OC_ASSERT(mComponentMgr);
+	EntityMap::iterator entityIter = mEntities.find(id);
+	if (entityIter == mEntities.end())
+	{
+		ocError << "Entity " << id << " not found";
+		return;
+	}
+
+	// make a security check if we are not removing a component linked to the prototype
+	if (entityIter->second->mPrototype.IsValid())
+	{
+		EntityID prototypeID = entityIter->second->mPrototype.GetID();
+		if (IsEntityPrototype(prototypeID))
+		{
+			// here we suppose the entity has the same types of components (from the beginning) as the prototype.
+			// so if the user wants to remove the component linked to the prototype, we have to break the link
+			if (componentToDestroy < GetNumberOfEntityComponents(prototypeID))
+			{
+				ocInfo << "Unlinking entity from prototype because of component destruction";
+				UnlinkEntityFromPrototype(id);
+			}
+		}
+	}
+
+	mComponentMgr->DestroyComponent(id, componentToDestroy);
+}
+
+int32 EntitySystem::EntityMgr::GetNumberOfEntityComponents( const EntityID id ) const
+{
+	OC_DASSERT(mComponentMgr);
+	return mComponentMgr->GetNumberOfEntityComponents(id);
+}
+
+void EntitySystem::EntityMgr::LinkEntityToPrototype( const EntityID id, const EntityID prototype )
+{
+	PrototypeMap::iterator protIt = mPrototypes.find(prototype);
+	if (protIt == mPrototypes.end())
+	{
+		ocError << "Cannot find prototype " << prototype << " to link";
+		return;
+	}
+
+	if (protIt->second->mInstancesCount == 0) UpdatePrototypeCopy(prototype);
+	protIt->second->mInstancesCount++;
+	UpdatePrototypeInstance(prototype, id, true);
+}
+
+void EntitySystem::EntityMgr::UnlinkEntityFromPrototype( const EntityID id )
+{
+	EntityMap::iterator entityIt = mEntities.find(id);
+	if (entityIt == mEntities.end())
+	{
+		ocError << "Cannot unlink entity " << id << " ; not found";
+		return;
+	}
+
+	if (!entityIt->second->mPrototype.IsValid())
+	{
+		ocError << "Entity " << id << " is not linked to any prototype";
+		return;
+	}
+
+	EntityID parentPrototypeID = entityIt->second->mPrototype.GetID();
+	PrototypeMap::iterator parentPrototypeIter = mPrototypes.find(parentPrototypeID);
+	if (parentPrototypeIter == mPrototypes.end())
+	{
+		ocError << "Entity prototype not found: " << parentPrototypeID;
+		return;
+	}
+
+	parentPrototypeIter->second->mInstancesCount--;
 }

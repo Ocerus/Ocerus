@@ -63,6 +63,12 @@ namespace EntitySystem
 		/// Returns true if the entity is a prototype.
 		bool IsEntityPrototype(const EntityID id) const;
 
+		/// Assigns the given entity to the prototype.
+		void LinkEntityToPrototype(const EntityID id, const EntityID prototype);
+
+		/// Destroys the link between the component and its prototype.
+		void UnlinkEntityFromPrototype(const EntityID id);
+
 		/// Returns true if the ID belongs to an existing entity.
 		bool IsEntity(const EntityID id) const;
 
@@ -94,13 +100,28 @@ namespace EntitySystem
 		bool HasEntityComponentOfType(const EntityHandle h, const eComponentType componentType);
 
 		/// Fills the given list with types of components present in the given entity. Returns true if everything was ok.
-		bool GetEntityComponentTypes(const EntityHandle h, ComponentTypeList& out);
+		inline bool GetEntityComponentTypes(const EntityHandle h, ComponentTypeList& out) { return GetEntityComponentTypes(h.GetID(), out); }
+
+		/// Fills the given list with types of components present in the given entity. Returns true if everything was ok.
+		bool GetEntityComponentTypes(const EntityID id, ComponentTypeList& out);
+
+		/// Returns the number of components attached to the entity.
+		inline int32 GetNumberOfEntityComponents(const EntityHandle h) const { return GetNumberOfEntityComponents(h.GetID()); }
+
+		/// Returns the number of components attached to the entity.
+		int32 GetNumberOfEntityComponents(const EntityID id) const;
 
 		/// Adds a component of the specified type to the entity. Returned is an ID of the new component.
 		inline ComponentID AddComponentToEntity(const EntityHandle h, const eComponentType componentType) { return AddComponentToEntity(h.GetID(), componentType); }
 
 		/// Adds a component of the specified type to the entity. Returned is an ID of the new component.
 		ComponentID AddComponentToEntity(const EntityID id, const eComponentType componentType);
+
+		/// Destroyes a component of the entity.
+		inline void DestroyEntityComponent(const EntityHandle h, const ComponentID componentToDestroy) { DestroyEntityComponent(h.GetID(), componentToDestroy); }
+
+		/// Destroyes a component of the entity.
+		void DestroyEntityComponent(const EntityID id, const ComponentID componentToDestroy);
 
 		/// Actually destroyes all entities marked for destruction.
 		void ProcessDestroyQueue(void);
