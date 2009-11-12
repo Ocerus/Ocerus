@@ -78,6 +78,15 @@ namespace EntitySystem
 		/// Retrieves a property of an entity. A filter related to properties' flags can be specified.
 		PropertyHolder GetEntityProperty(const EntityID id, const StringKey key, const PropertyAccessFlags flagMask = PA_FULL_ACCESS) const;
 
+		/// Returns true if the property of the prototype is marked as shared (and thus propagated to instances).
+		bool IsPrototypePropertyShared(const EntityHandle prototype, const StringKey testedProperty) const;
+
+		/// Marks the property as shared among instances of the prototype.
+		void SetPrototypePropertyShared(const EntityHandle prototype, const StringKey propertyToMark);
+
+		/// Marks the property as non shared among instances of the prototype.
+		void SetPrototypePropertyNonShared(const EntityHandle prototype, const StringKey propertyToMark);
+
 		/// Returns EntityHandle to an entity of a specified ID. If there are more of them, then returns the first one.
 		EntityHandle FindFirstEntity(const string& name);
 
@@ -130,7 +139,7 @@ namespace EntitySystem
 		void LoadEntityFromXML( ResourceSystem::XMLNodeIterator &entIt, const bool isPrototype, ResourceSystem::XMLResourcePtr xml );
 
 		/// Load a property for the given entity from a XML file.
-		void LoadEntityPropertyFromXML( PrototypeInfo* prototypeInfo, PropertyList::iterator prop, ResourceSystem::XMLResourcePtr xml, ResourceSystem::XMLNodeIterator &propIt, PropertyList &props );
+		void LoadEntityPropertyFromXML( PrototypeInfo* prototypeInfo, PropertyList::iterator propertyIter, ResourceSystem::XMLResourcePtr xml, ResourceSystem::XMLNodeIterator& xmlPropertyIterator, PropertyList& properties );
 	};
 }
 
