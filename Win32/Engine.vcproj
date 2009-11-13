@@ -715,7 +715,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\src\GfxSystem\OGlRenderer.h"
+					RelativePath="..\src\GfxSystem\OglRenderer.h"
 					>
 				</File>
 				<File
@@ -739,7 +739,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\src\GfxSystem\OGlRenderer.cpp"
+					RelativePath="..\src\GfxSystem\OglRenderer.cpp"
 					>
 				</File>
 				<File
