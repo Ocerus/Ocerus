@@ -6,11 +6,11 @@
 
 #include "GfxRenderer.h"
 
-#define gOGlRenderer GfxSystem::OGlRenderer::GetSingleton()
+#define gOglRenderer GfxSystem::OglRenderer::GetSingleton()
 
 namespace GfxSystem
 {
-	class OGlRenderer : public GfxRenderer, public Singleton<OGlRenderer> 
+	class OglRenderer : public GfxRenderer, public Singleton<OglRenderer> 
 	{
 	public:
 		virtual void Init();

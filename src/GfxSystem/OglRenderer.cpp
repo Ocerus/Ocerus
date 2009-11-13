@@ -1,5 +1,5 @@
 #include "Common.h"
-#include "OGlRenderer.h"
+#include "OglRenderer.h"
 
 #ifdef __WIN__
 #pragma comment (lib,"opengl32.lib")
@@ -13,7 +13,7 @@
 using namespace GfxSystem;
 
 
-void OGlRenderer::Init()
+void OglRenderer::Init()
 {
 	ocInfo << "*** OpenGL init ***";
 	//Initialize OpenGL
@@ -35,19 +35,19 @@ void OGlRenderer::Init()
 	SDL_GL_SwapBuffers();
 }
 
-bool OGlRenderer::BeginRendering()
+bool OglRenderer::BeginRendering()
 {
 	glClear( GL_COLOR_BUFFER_BIT );
     glLoadIdentity();
 	return true;
 }
 
-void OGlRenderer::EndRendering()
+void OglRenderer::EndRendering()
 {
 	SDL_GL_SwapBuffers();
 }
 
-void OGlRenderer::DrawTestQuad()
+void OglRenderer::DrawTestQuad()
 {
 	glTranslatef( 412, 283, 0 );
 
