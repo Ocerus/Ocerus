@@ -707,6 +707,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\GfxSystem\GfxWindow.h"
+					>
+				</File>
+				<File
+					RelativePath="..\src\GfxSystem\IGfxWindowListener.h"
+					>
+				</File>
+				<File
 					RelativePath="..\src\GfxSystem\OGlRenderer.h"
 					>
 				</File>
@@ -724,6 +732,10 @@
 				</File>
 				<File
 					RelativePath="..\src\GfxSystem\GfxStructures.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src\GfxSystem\GfxWindow.cpp"
 					>
 				</File>
 				<File
@@ -1153,14 +1165,6 @@
 				Name="inc"
 				>
 				<File
-					RelativePath="..\src\SceneSystem\GfxWindow.h"
-					>
-				</File>
-				<File
-					RelativePath="..\src\SceneSystem\IScreenListener.h"
-					>
-				</File>
-				<File
 					RelativePath="..\src\SceneSystem\SceneMgr.h"
 					>
 				</File>
@@ -1168,10 +1172,6 @@
 			<Filter
 				Name="src"
 				>
-				<File
-					RelativePath="..\src\SceneSystem\GfxWindow.cpp"
-					>
-				</File>
 				<File
 					RelativePath="..\src\SceneSystem\SceneMgr.cpp"
 					>

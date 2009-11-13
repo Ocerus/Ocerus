@@ -14,9 +14,9 @@
 struct SDL_Surface;
 class IScreenListener;
 
-#define gGfxWindow SceneSystem::GfxWindow::GetSingleton()
+#define gGfxWindow GfxSystem::GfxWindow::GetSingleton()
 
-namespace SceneSystem
+namespace GfxSystem
 {
 	enum EWindowEvent {
     WE_QUIT         ///< User tries to close the window (map to SDL_QUIT)
@@ -48,8 +48,8 @@ namespace SceneSystem
 		/// Gets windows handle. Windows OS only.
 		WindowHandle _GetWindowHandle() const;
 
-		inline virtual void AddScreenListener(IScreenListener * listener) { mScreenListeners.insert(listener); }
-		inline virtual void RemoveResolutionChangeListener(IScreenListener * listener) { mScreenListeners.erase(listener); }
+		inline virtual void AddScreenListener(IGfxWindowListener * listener) { mGfxWindowListeners.insert(listener); }
+		inline virtual void RemoveResolutionChangeListener(IGfxWindowListener * listener) { mGfxWindowListeners.erase(listener); }
 
 	private:
 		// maybe not needed ...
@@ -58,7 +58,7 @@ namespace SceneSystem
 		int32 mResx, mResy;
 		bool mFullscreen;
 		
-		set<IScreenListener*> mScreenListeners;
+		set<IGfxWindowListener*> mGfxWindowListeners;
 
 	};
 }

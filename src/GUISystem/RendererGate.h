@@ -3,7 +3,7 @@
 
 #include "Base.h"
 #include "../GfxSystem/GfxRenderer.h"
-#include "../SceneSystem/IScreenListener.h"
+#include "../GfxSystem/IGfxWindowListener.h"
 #include "../GfxSystem/Texture.h"
 #include "CEGUIRenderer.h"
 #include "ResourceGate.h"
@@ -27,7 +27,7 @@ namespace GUISystem {
 		virtual ~Quad_info();
 	};
 
-	class RendererGate : public CEGUI::Renderer, SceneSystem::IScreenListener
+	class RendererGate : public CEGUI::Renderer, GfxSystem::IGfxWindowListener
 	{
 	public:
 		RendererGate();

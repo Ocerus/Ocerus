@@ -4,8 +4,8 @@
 #include "Game.h"
 #include "Config.h"
 #include "../LogSystem/LogMgr.h"
-#include "../GfxSystem/OGlRenderer.h"
-#include "../SceneSystem/GfxWindow.h"
+#include "../GfxSystem/OglRenderer.h"
+#include "../GfxSystem/GfxWindow.h"
 
 
 using namespace Core;
@@ -42,10 +42,10 @@ void Application::Init()
 
 	StringSystem::StringMgr::CreateSingleton();
 
-	SceneSystem::GfxWindow::CreateSingleton();
-	SceneSystem::GfxWindow::GetSingleton().Init(1024, 768, false, "Ocerus");
+	GfxSystem::GfxWindow::CreateSingleton();
+	GfxSystem::GfxWindow::GetSingleton().Init(1024, 768, false, "Ocerus");
 
-	GfxSystem::GfxRenderer::CreateSingleton<GfxSystem::OGlRenderer>();
+	GfxSystem::GfxRenderer::CreateSingleton<GfxSystem::OglRenderer>();
 	GfxSystem::GfxRenderer::GetSingleton().Init();
 
 	InputSystem::InputMgr::CreateSingleton();
@@ -86,7 +86,7 @@ Application::~Application()
 	delete mGame;
 	InputSystem::InputMgr::DestroySingleton();
 	GfxSystem::GfxRenderer::DestroySingleton();
-	SceneSystem::GfxWindow::DestroySingleton();
+	GfxSystem::GfxWindow::DestroySingleton();
 	StringSystem::StringMgr::DestroySingleton();
 	ResourceSystem::ResourceMgr::DestroySingleton();
 	//TODO:Gfx
@@ -221,10 +221,10 @@ void Core::Application::Shutdown( void )
 
 void Application::MessagePump( void )
 {
-    SceneSystem::EWindowEvent event;
-    while (SceneSystem::GfxWindow::GetSingleton().PopEvent(event))
+    GfxSystem::EWindowEvent event;
+    while (GfxSystem::GfxWindow::GetSingleton().PopEvent(event))
 	{
-		if (event == SceneSystem::WE_QUIT)
+		if (event == GfxSystem::WE_QUIT)
 		{
 			RequestStateChange(AS_SHUTDOWN, true);
 		}

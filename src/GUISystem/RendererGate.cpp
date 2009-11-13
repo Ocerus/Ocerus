@@ -1,7 +1,7 @@
 #include "Common.h"
 #include "RendererGate.h"
 #include "CEGUITextureWrapper.h"
-#include "../SceneSystem/GfxWindow.h"
+#include "../GfxSystem/GfxWindow.h"
 #include "../GfxSystem/Texture.h"
 #include "../ResourceSystem/ResourceMgr.h"
 #include "../LogSystem/LogMgr.h"

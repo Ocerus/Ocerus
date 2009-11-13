@@ -34,7 +34,7 @@
 #include "../EntitySystem/EntityMgr/EntityEnums.h"
 #include "../EntitySystem/EntityMgr/EntityPicker.h"
 
-#include "../SceneSystem/GfxWindow.h"
+#include "../GfxSystem/GfxWindow.h"
 #include "../GfxSystem/GfxRenderer.h"
 
 #include "../GUISystem/GUIMgr.h"

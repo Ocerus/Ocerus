@@ -4,16 +4,16 @@
 #ifndef IScreenResolutionChangeListener_h__
 #define IScreenResolutionChangeListener_h__
 
-namespace SceneSystem
+namespace GfxSystem
 {
 	/// Receives notifications from the GfxSystem of changes to the screen.
-	class IScreenListener {
+	class IGfxWindowListener {
 	public:
 		
 		/// Called when a screen resolution changes.
 		virtual void ResolutionChanged(int width, int height) = 0;
 
-		virtual ~IScreenListener(void) {}
+		virtual ~IGfxWindowListener(void) {}
 	};
 }
 

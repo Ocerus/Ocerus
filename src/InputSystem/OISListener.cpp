@@ -1,7 +1,7 @@
 #include "Common.h"
 #include "InputMgr.h"
 #include "OISListener.h"
-#include "../SceneSystem/GfxWindow.h"
+#include "../GfxSystem/GfxWindow.h"
 #include "StringConverter.h"
 #include "IInputListener.h"
 #include <OISInputManager.h>
@@ -24,7 +24,7 @@ InputSystem::OISListener::OISListener(): mOIS(0), mMouse(0), mKeyboard(0)
 	OIS::ParamList pl;
 
     // let the OIS know what window we have so that it can capture its events
-    SceneSystem::WindowHandle hWnd = SceneSystem::GfxWindow::GetSingleton()._GetWindowHandle();
+    GfxSystem::WindowHandle hWnd = GfxSystem::GfxWindow::GetSingleton()._GetWindowHandle();
     pl.insert(OIS::ParamList::value_type("WINDOW", StringConverter::ToString(hWnd)));
 
 #ifdef __WIN__

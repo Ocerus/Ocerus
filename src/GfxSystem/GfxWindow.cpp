@@ -1,16 +1,16 @@
 #include "Common.h"
 #include "GfxWindow.h"
 
-#include "IScreenListener.h"
+#include "IGfxWindowListener.h"
 
 #include <SDL/SDL.h>
 #include <SDL/SDL_syswm.h>
 
 
-using namespace SceneSystem;
+using namespace GfxSystem;
 
 
- void GfxWindow::Init(const int32 resx, const int32 resy, const bool fullscreen, const string title)
+void GfxWindow::Init(const int32 resx, const int32 resy, const bool fullscreen, const string title)
 {
 	ocInfo << "*** GfxWindow Init ***";
 	// Initializes the video subsystem

@@ -2,7 +2,7 @@
 #include "InputMgr.h"
 #include "IInputListener.h"
 #include "OISListener.h"
-#include "../SceneSystem/GfxWindow.h"
+#include "../GfxSystem/GfxWindow.h"
 
 using namespace InputSystem;
 

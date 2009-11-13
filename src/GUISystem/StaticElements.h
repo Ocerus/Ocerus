@@ -1,7 +1,7 @@
 #ifndef _STATICELEMENTS_H_
 #define _STATICELEMENTS_H_
 
-#include "../SceneSystem/GfxWindow.h"
+//#include "../SceneSystem/GfxWindow.h"
 #include "CEGUIBase.h"
 #include "CEGUIcolour.h"
 #include "CEGUIWindow.h"

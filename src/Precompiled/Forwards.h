@@ -24,12 +24,12 @@ namespace EntitySystem
 
 namespace SceneSystem
 {
-	class IScreenListener;
 }
 
 namespace GfxSystem
 {
 	class GfxRenderer;
+	class IGfxWindowListener;
 	//class ParticleSystemMgr;
 	struct Color;
 }
