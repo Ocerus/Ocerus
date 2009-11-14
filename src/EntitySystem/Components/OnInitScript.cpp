@@ -27,8 +27,8 @@ EntityMessage::eResult OnInitScript::HandleMessage(const EntityMessage& msg)
 
 void OnInitScript::RegisterReflection()
 {
-	RegisterProperty<string>("OnInitScript", &OnInitScript::GetOnInitScript, &OnInitScript::SetOnInitScript, PA_INIT | PA_EDIT_READ | PA_SCRIPT_READ);
-	RegisterProperty<uint32>("OnInitTimeOut", &OnInitScript::GetOnInitTimeOut, &OnInitScript::SetOnInitTimeOut, PA_INIT | PA_EDIT_READ | PA_SCRIPT_READ);
+	RegisterProperty<string>("OnInitScript", &OnInitScript::GetOnInitScript, &OnInitScript::SetOnInitScript, PA_INIT | PA_EDIT_READ | PA_SCRIPT_READ, "");
+	RegisterProperty<uint32>("OnInitTimeOut", &OnInitScript::GetOnInitTimeOut, &OnInitScript::SetOnInitTimeOut, PA_INIT | PA_EDIT_READ | PA_SCRIPT_READ, "");
 }
 
 bool OnInitScript::RunScript()

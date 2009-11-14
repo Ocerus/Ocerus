@@ -27,7 +27,7 @@ EntityMessage::eResult EntityComponents::CmpPlatformVisual::HandleMessage( const
 
 void EntityComponents::CmpPlatformVisual::RegisterReflection()
 {
-	RegisterFunction("MyFunction", &CmpPlatformVisual::MyFunction, PA_FULL_ACCESS);
+	RegisterFunction("MyFunction", &CmpPlatformVisual::MyFunction, PA_FULL_ACCESS, "");
 }
 
 void EntityComponents::CmpPlatformVisual::Draw( void ) const

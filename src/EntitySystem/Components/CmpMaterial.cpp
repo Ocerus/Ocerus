@@ -16,6 +16,6 @@ EntityMessage::eResult EntityComponents::CmpMaterial::HandleMessage( const Entit
 
 void EntityComponents::CmpMaterial::RegisterReflection()
 {
-    RegisterProperty<float32>("Density", &CmpMaterial::GetDensity, &CmpMaterial::SetDensity, PA_INIT | PA_EDIT_READ | PA_SCRIPT_READ);
-	RegisterProperty<float32>("DurabilityRatio", &CmpMaterial::GetDurabilityRatio, &CmpMaterial::SetDurabilityRatio, PA_INIT | PA_EDIT_READ | PA_SCRIPT_READ);
+    RegisterProperty<float32>("Density", &CmpMaterial::GetDensity, &CmpMaterial::SetDensity, PA_INIT | PA_EDIT_READ | PA_SCRIPT_READ, "");
+	RegisterProperty<float32>("DurabilityRatio", &CmpMaterial::GetDurabilityRatio, &CmpMaterial::SetDurabilityRatio, PA_INIT | PA_EDIT_READ | PA_SCRIPT_READ, "");
 }

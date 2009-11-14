@@ -34,11 +34,12 @@ namespace Reflection
 		/// Registers a property. Takes in the property name, its getter and setter functions, and the property
 		///	type as a template parameter.
 		/// This function should be called only from within a user-defined RegisterReflection function.
-		template <class PropertyTypes> 
-		static void RegisterProperty(const char* name, typename Property<T, PropertyTypes>::GetterType getter, 
-			typename Property<T, PropertyTypes>::SetterType setter, const PropertyAccessFlags accessFlags)
+		template <class PropertyTypes>
+		static void RegisterProperty(const char* name, typename Property<T, PropertyTypes>::GetterType getter,
+			typename Property<T, PropertyTypes>::SetterType setter, const PropertyAccessFlags accessFlags,
+			const string& comment)
 		{
-			Property<T, PropertyTypes>* pProperty = new Property<T, PropertyTypes>( name, getter, setter, accessFlags );
+			Property<T, PropertyTypes>* pProperty = new Property<T, PropertyTypes>( name, getter, setter, accessFlags, comment );
 			if (T::GetClassRTTI()->AddProperty(pProperty))
 			{
 				PropertySystem::GetProperties()->push_back( pProperty );
@@ -51,9 +52,9 @@ namespace Reflection
 
 		/// Registers a function. Takes in the function name and its address.
 		/// This function should be called only from within a user-defined RegisterReflection function.
-		inline static void RegisterFunction(const char* name, typename Property<T, PropertyFunctionParameters>::SetterType function, const PropertyAccessFlags accessFlags)
+		inline static void RegisterFunction(const char* name, typename Property<T, PropertyFunctionParameters>::SetterType function, const PropertyAccessFlags accessFlags, const string& comment)
 		{
-			RegisterProperty<PropertyFunctionParameters>(name, 0, function, accessFlags);
+			RegisterProperty<PropertyFunctionParameters>(name, 0, function, accessFlags, comment);
 		}
 
 		/// Registers an entity component dependant on the owner of this class.

@@ -99,9 +99,9 @@ EntityMessage::eResult EntityComponents::CmpPlatformPhysics::HandleMessage( cons
 
 void EntityComponents::CmpPlatformPhysics::RegisterReflection()
 {
-	RegisterProperty<float32>("InitShapeAngle", &CmpPlatformPhysics::GetInitShapeAngle, &CmpPlatformPhysics::SetInitShapeAngle, PA_INIT);
-	RegisterProperty<bool>("InitShapeFlip", &CmpPlatformPhysics::GetInitShapeFlip, &CmpPlatformPhysics::SetInitShapeFlip, PA_INIT);
-	RegisterProperty<Vector2>("LinearVelocity", &CmpPlatformPhysics::GetLinearVelocity, &CmpPlatformPhysics::SetLinearVelocity, PA_EDIT_READ | PA_SCRIPT_READ);
+	RegisterProperty<float32>("InitShapeAngle", &CmpPlatformPhysics::GetInitShapeAngle, &CmpPlatformPhysics::SetInitShapeAngle, PA_INIT, "");
+	RegisterProperty<bool>("InitShapeFlip", &CmpPlatformPhysics::GetInitShapeFlip, &CmpPlatformPhysics::SetInitShapeFlip, PA_INIT, "");
+	RegisterProperty<Vector2>("LinearVelocity", &CmpPlatformPhysics::GetLinearVelocity, &CmpPlatformPhysics::SetLinearVelocity, PA_EDIT_READ | PA_SCRIPT_READ, "");
 	//RegisterProperty<Vector2*>("Shape", &CmpPlatformPhysics::GetShape, 0, PA_EDIT_READ | PA_SCRIPT_READ);
 	//RegisterProperty<uint32>("ShapeLength", &CmpPlatformPhysics::GetShapeLength, 0, PA_EDIT_READ | PA_SCRIPT_READ);
 }

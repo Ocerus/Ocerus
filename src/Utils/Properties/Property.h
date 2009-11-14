@@ -33,10 +33,13 @@ namespace Reflection
 		typedef void (OwnerType::*SetterType)( T Value );
 
 		/// Constructor.
-		inline Property( const char* name, GetterType getter, SetterType setter, const PropertyAccessFlags accessFlags ):
+		inline Property( const char* name, GetterType getter, SetterType setter, const PropertyAccessFlags accessFlags, const string& comment ):
 		TypedProperty<T> (name, accessFlags),
 			mGetter (getter),
-			mSetter (setter) {}
+			mSetter (setter)
+		{
+			AbstractProperty::SetComment(comment);
+		}
 
 		/// Returns true if the property can be read.
 		virtual bool IsReadable(void) const
@@ -84,7 +87,7 @@ namespace Reflection
 		{
 			if ( !mSetter)
 			{
-				this->ReportReadonlyProblem();		
+				this->ReportReadonlyProblem();
 				return;
 			}
 			(((OwnerType*)owner)->*mSetter)( Value );
