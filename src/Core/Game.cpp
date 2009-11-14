@@ -108,6 +108,15 @@ void Core::Game::Init()
 		string str("Calling my function");
 		params.PushParameter(&str);
 		prop.CallFunction(params);
+
+		PropertyList props;
+		ship.GetProperties(props);
+		for (PropertyList::iterator it=props.begin(); it!=props.end(); ++it)
+		{
+			if (it->GetKey() == "DurabilityRatio") ocInfo << "Durability from the properties' list: " << it->GetValue<float32>();
+		}
+
+		ocInfo << "Durability from the last component: " << ship.GetComponentProperty(gEntityMgr.GetNumberOfEntityComponents(ship)-1, "DurabilityRatio").GetValue<float32>();
 	}
 }
 

@@ -57,8 +57,7 @@ void OnInitScript::TestRunTime()
 	entDesc.SetName("Test entity");
 	entDesc.AddComponent(CT_ON_INIT_SCRIPT);
 
-	Reflection::PropertyList propList;
-	EntitySystem::EntityHandle handle = gEntityMgr.CreateEntity(entDesc, propList);
+	EntitySystem::EntityHandle handle = gEntityMgr.CreateEntity(entDesc);
 	handle.GetProperty("OnInitScript").SetValue<string>("TestOnInitScript.as");
 	handle.GetProperty("OnInitTimeOut").SetValue<uint32>(1000);
 	// Calls script

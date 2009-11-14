@@ -35,18 +35,28 @@ namespace Reflection
 		/// Returns the access flags to this property.
 		inline PropertyAccessFlags GetAccessFlags(void) const
 		{
+			OC_DASSERT(mProperty);
 			return mProperty->GetAccessFlags();
+		}
+		
+		/// Returns the key representing this property.
+		inline StringKey GetKey(void) const
+		{
+			OC_DASSERT(mProperty);
+			return mProperty->GetKey();
 		}
 
 		/// Returns true if the properties' values are equal. The properties must be of the same type.
 		inline bool IsEqual(const PropertyHolder propertyToCopy)
 		{
+			OC_DASSERT(mProperty);
 			return mProperty->IsEqual(mOwner, propertyToCopy.mOwner, propertyToCopy.mProperty);
 		}
 
 		/// Copies data from the specified abstract property. The property must be of the same type as this property.
 		inline void CopyFrom(const PropertyHolder propertyToCopy)
 		{
+			OC_DASSERT(mProperty);
 			mProperty->CopyFrom(mOwner, propertyToCopy.mOwner, propertyToCopy.mProperty);
 		}
 
@@ -77,6 +87,7 @@ namespace Reflection
 		/// Parses the typed value of this property from the input string.
 		inline void SetValueFromString(const string& str)
 		{
+			OC_DASSERT(mProperty);
 			mProperty->SetValueFromString(mOwner, str);
 		}
 

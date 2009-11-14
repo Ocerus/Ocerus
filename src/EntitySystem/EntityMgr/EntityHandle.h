@@ -8,6 +8,7 @@
 #include "EntityMessage.h"
 #include "Properties/PropertyAccess.h"
 #include "EntityEnums.h"
+#include "../ComponentMgr/ComponentID.h"
 
 namespace EntitySystem
 {
@@ -57,6 +58,9 @@ namespace EntitySystem
 		/// Retrieves a property of this entity. A filter related to properties' flags can be specified.
 		PropertyHolder GetProperty(const StringKey key, const PropertyAccessFlags mask = PA_FULL_ACCESS) const;
 
+		/// Retrieves a property of a component of this entity. A filter related to properties' flags can be specified.
+		PropertyHolder GetComponentProperty(const ComponentID componentID, const StringKey key, const PropertyAccessFlags mask = PA_FULL_ACCESS) const;
+
 		/// Sends a message to this entity.
 		EntityMessage::eResult PostMessage(const EntityMessage& msg);
 
@@ -67,7 +71,7 @@ namespace EntitySystem
 		eEntityType GetType(void) const;
 
 		/// Returns the internal ID of this entity.
-		EntityID GetID(void) const;
+		inline EntityID GetID(void) const;
 
 		/// Invalid handle representing no entity in the system.
 		static const EntityHandle Null;
@@ -91,6 +95,14 @@ namespace EntitySystem
 		/// New entities can be created only by the EntityMgr, that's why it's private.
 		EntityHandle(EntityID ID): mEntityID(ID) {}
 	};
+
+
+	inline EntityID EntityHandle::GetID(void) const
+	{
+		OC_DASSERT_MSG(mEntityID!=INVALID_ENTITY_ID, "Invalid entity handle");
+		return mEntityID;
+	}
+
 }
 
 #endif

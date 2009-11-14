@@ -117,7 +117,7 @@ void EntityMgr::BroadcastMessage(const EntityMessage& msg)
 		PostMessage(i->first, msg);
 }
 
-EntityHandle EntityMgr::CreateEntity(EntityDescription& desc, PropertyList& out)
+EntityHandle EntityMgr::CreateEntity(EntityDescription& desc)
 {
 	OC_ASSERT(mComponentMgr);
 
@@ -189,10 +189,6 @@ EntityHandle EntityMgr::CreateEntity(EntityDescription& desc, PropertyList& out)
 		ocError << "Component dependency failure on entity '" << h << "' of type '" << desc.mType << "'";
 		DestroyEntity(h);
 		return h; // do like nothing's happened, but don't enum properties or they will access invalid memory
-	}
-	if (!GetEntityProperties(h.GetID(), out, PA_INIT))
-	{
-		ocError << "Can't get properties for created entity of type" << desc.mType;
 	}
 
 	return h;
@@ -298,6 +294,7 @@ bool EntitySystem::EntityMgr::GetEntityProperties( const EntityID entityID, Prop
 
 PropertyHolder EntitySystem::EntityMgr::GetEntityProperty( const EntityID id, const StringKey key, const PropertyAccessFlags flagMask /*= 0xff*/ ) const
 {
+	OC_DASSERT(mComponentMgr);
 	for (EntityComponentsIterator it=mComponentMgr->GetEntityComponents(id); it.HasMore(); ++it)
 	{
 		AbstractProperty* prop = (*it)->GetRTTI()->GetProperty(key, flagMask);
@@ -312,15 +309,26 @@ PropertyHolder EntitySystem::EntityMgr::GetEntityProperty( const EntityID id, co
 	GetEntityProperties(id, propertyList, flagMask);
 	for (PropertyList::iterator it=propertyList.begin(); it!=propertyList.end(); )
 	{
-		propertiesString += it->second.GetName();
+		propertiesString += it->GetName();
 		++it;
 		if (it==propertyList.end()) propertiesString += ".";
 		else propertiesString += ", ";
 	}
-	ocError << "Available properties: " << propertiesString;
+	ocError << "Available properties (flags=" << flagMask << "): " << propertiesString;
 
 	// return an invalid holder
 	return PropertyHolder();
+}
+
+bool EntitySystem::EntityMgr::HasEntityProperty( const EntityHandle h, const StringKey key, const PropertyAccessFlags flagMask /*= PA_FULL_ACCESS*/ ) const
+{
+	OC_DASSERT(mComponentMgr);
+	for (EntityComponentsIterator it=mComponentMgr->GetEntityComponents(h.GetID()); it.HasMore(); ++it)
+	{
+		AbstractProperty* prop = (*it)->GetRTTI()->GetProperty(key, flagMask);
+		if (prop) return true;
+	}
+	return false;
 }
 
 EntitySystem::EntityHandle EntitySystem::EntityMgr::FindFirstEntity( const string& name )
@@ -331,12 +339,14 @@ EntitySystem::EntityHandle EntitySystem::EntityMgr::FindFirstEntity( const strin
 	return EntityHandle::Null;
 }
 
-void EntitySystem::EntityMgr::LoadEntityPropertyFromXML( PrototypeInfo* prototypeInfo, PropertyList::iterator propertyIter, ResourceSystem::XMLResourcePtr xml, ResourceSystem::XMLNodeIterator& xmlPropertyIterator, PropertyList& properties )
+void EntitySystem::EntityMgr::LoadEntityPropertyFromXML( const EntityID entityID, const ComponentID componentID, PrototypeInfo* prototypeInfo, ResourceSystem::XMLResourcePtr xml, ResourceSystem::XMLNodeIterator& xmlPropertyIterator )
 {
-	// the property was stored in the XML file for the prototype, so it's a shared property
-	if (prototypeInfo) prototypeInfo->mSharedProperties.insert(propertyIter->first);
+	StringKey propertyKey(*xmlPropertyIterator);
 
-	PropertyHolder prop = propertyIter->second;
+	// the property was stored in the XML file for the prototype, so it's a shared property
+	if (prototypeInfo) prototypeInfo->mSharedProperties.insert(propertyKey);
+
+	PropertyHolder prop = GetEntityComponentProperty(entityID, componentID, propertyKey);
 
 	if (prop.GetType() == PT_VECTOR2_ARRAY)
 	{
@@ -355,7 +365,7 @@ void EntitySystem::EntityMgr::LoadEntityPropertyFromXML( PrototypeInfo* prototyp
 		{
 			ocError << "XML:Entity: LengthParam of an array not specified";
 		}
-		else if (properties.find(lengthParam) == properties.end())
+		else if (!HasEntityComponentProperty(entityID, componentID, prop.GetKey(), PA_INIT))
 		{
 			ocError << "XML:Entity: LengthParam of name '" << lengthParam << "' not found in entity";
 		}
@@ -364,7 +374,7 @@ void EntitySystem::EntityMgr::LoadEntityPropertyFromXML( PrototypeInfo* prototyp
 			// the property was stored in the XML file for the prototype, so it's a shared property
 			if (prototypeInfo) prototypeInfo->mSharedProperties.insert(lengthParam);
 
-			properties[lengthParam].SetValue<uint32>(vertices.size());
+			GetEntityComponentProperty(entityID, componentID, lengthParam).SetValue<uint32>(vertices.size());
 			Vector2* vertArray = new Vector2[vertices.size()];
 			for (uint32 i=0; i<vertices.size(); ++i)
 				vertArray[i] = vertices[i];
@@ -390,12 +400,12 @@ void EntitySystem::EntityMgr::LoadEntityFromXML( ResourceSystem::XMLNodeIterator
 
 	// add component types
 	for (ResourceSystem::XMLNodeIterator cmpIt=xml->IterateChildren(entIt); cmpIt!=xml->EndChildren(entIt); ++cmpIt)
-		if ((*cmpIt).compare("Component") == 0)
-			desc.AddComponent(DetectComponentType(cmpIt.GetAttribute<string>("Type")));
+	{
+		if ((*cmpIt).compare("Component") == 0)	desc.AddComponent(DetectComponentType(cmpIt.GetAttribute<string>("Type")));
+	}
 
 	// create the entity
-	PropertyList properties;
-	EntityHandle entity = gEntityMgr.CreateEntity(desc, properties);
+	EntityHandle entity = gEntityMgr.CreateEntity(desc);
 	PrototypeInfo* prototypeInfo = 0;
 	if (isPrototype)
 	{
@@ -404,25 +414,27 @@ void EntitySystem::EntityMgr::LoadEntityFromXML( ResourceSystem::XMLNodeIterator
 	}
 
 	// set properties loaded from the file
+	ComponentID currentComponent = -1;
 	for (ResourceSystem::XMLNodeIterator cmpIt=xml->IterateChildren(entIt); cmpIt!=xml->EndChildren(entIt); ++cmpIt)
 	{
 		// skip unwanted data
 		if ((*cmpIt).compare("Component") != 0)
 			continue;
 
+		++currentComponent;
+
 		for (ResourceSystem::XMLNodeIterator xmlPropertyIter=xml->IterateChildren(cmpIt); xmlPropertyIter!=xml->EndChildren(cmpIt); ++xmlPropertyIter)
 		{
 			// skip unwanted data
 			if ((*xmlPropertyIter).compare("Type") == 0)
 				continue;
-			PropertyList::iterator propertyIter = properties.find(*xmlPropertyIter);
-			if (propertyIter == properties.end())
+			if (!HasEntityComponentProperty(entity.GetID(), currentComponent, *xmlPropertyIter, PA_INIT))
 			{
 				ocError << "XML:Entity: Unknown entity property '" << *xmlPropertyIter << "' (it might not be marked as initable (PA_INIT))";
 			}
 			else
 			{
-				LoadEntityPropertyFromXML(prototypeInfo, propertyIter, xml, xmlPropertyIter, properties);
+				LoadEntityPropertyFromXML(entity.GetID(), currentComponent, prototypeInfo, xml, xmlPropertyIter);
 			}
 		}
 	}
@@ -513,18 +525,17 @@ void EntitySystem::EntityMgr::UpdatePrototypeCopy( const EntityID prototype )
 	{
 		desc.AddComponent((*it)->GetType());
 	}
-	PropertyList copyPropList;
-	EntityHandle copyHandle = CreateEntity(desc, copyPropList);
+	EntityHandle copyHandle = CreateEntity(desc);
 	prototypeInfo->mCopy = copyHandle.GetID();
 
 	// copy the properties
+	// only initable properties can be copied
 	PropertyList propList;
-	GetEntityProperties(prototype, propList, PA_INIT); // only initable properties can be copied
+	GetEntityProperties(prototype, propList, PA_INIT);
 	for (PropertyList::iterator it=propList.begin(); it!=propList.end(); ++it)
 	{
-		PropertyList::iterator copyPropIter = copyPropList.find(it->first);
-		OC_ASSERT(copyPropIter != copyPropList.end());
-		copyPropIter->second.CopyFrom(it->second);
+		PropertyHolder copyProperty = GetEntityProperty(copyHandle, it->GetKey(), PA_INIT);
+		copyProperty.CopyFrom(*it);
 	}
 }
 
@@ -575,13 +586,13 @@ void EntitySystem::EntityMgr::UpdatePrototypeInstance( const EntityID prototype,
 	// update shared properties
 	for (PropertyList::iterator protPropIter=prototypeProperties.begin(); protPropIter!=prototypeProperties.end(); ++protPropIter)
 	{
-		if (prototypeInfo->mSharedProperties.find(protPropIter->first) == prototypeInfo->mSharedProperties.end())
+		if (prototypeInfo->mSharedProperties.find(protPropIter->GetKey()) == prototypeInfo->mSharedProperties.end())
 			continue;
 
-		StringKey propertyKey = protPropIter->first;
+		StringKey propertyKey = protPropIter->GetKey();
 		PropertyHolder instanceProperty = GetEntityProperty(instance, propertyKey);
 		PropertyHolder copyProperty = GetEntityProperty(prototypeInfo->mCopy, propertyKey);
-		PropertyHolder prototypeProperty = protPropIter->second;
+		PropertyHolder prototypeProperty = *protPropIter;
 		
 		// if the property has different value from the prototype copy, then it means the property was specialized
 		// by the user and we should leave it alone
@@ -731,4 +742,68 @@ void EntitySystem::EntityMgr::UnlinkEntityFromPrototype( const EntityID id )
 	}
 
 	parentPrototypeIter->second->mInstancesCount--;
+}
+
+Reflection::PropertyHolder EntitySystem::EntityMgr::GetEntityComponentProperty( const EntityHandle entity, const ComponentID component, const StringKey propertyKey, const PropertyAccessFlags flagMask /*= PA_FULL_ACCESS*/ ) const
+{
+	if (component >= mComponentMgr->GetNumberOfEntityComponents(entity.GetID()))
+	{
+		ocError << "Invalid component ID: " << component;
+		return PropertyHolder();
+	}
+
+	Component* cmp = mComponentMgr->GetEntityComponent(entity.GetID(), component);
+	AbstractProperty* prop = cmp->GetRTTI()->GetProperty(propertyKey, flagMask);
+	if (prop) return PropertyHolder(cmp, prop);
+
+
+	// property not found, print some info about why
+	ocError << "EntityMgr: unknown property '" << propertyKey << "'";
+	PropertyList propertyList;
+	string propertiesString;
+	GetEntityComponentProperties(entity.GetID(), component, propertyList, flagMask);
+	for (PropertyList::iterator it=propertyList.begin(); it!=propertyList.end(); )
+	{
+		propertiesString += it->GetName();
+		++it;
+		if (it==propertyList.end()) propertiesString += ".";
+		else propertiesString += ", ";
+	}
+	ocError << "Available properties (flags=" << flagMask << "): " << propertiesString;
+
+	// return an invalid holder
+	return PropertyHolder();	
+}
+
+bool EntitySystem::EntityMgr::GetEntityComponentProperties( const EntityHandle entity, const ComponentID component, PropertyList& out, const PropertyAccessFlags flagMask /*= PA_FULL_ACCESS*/ ) const
+{
+	out.clear();
+
+	if (component >= mComponentMgr->GetNumberOfEntityComponents(entity.GetID()))
+	{
+		ocError << "Invalid component ID: " << component;
+		return false;
+	}
+
+	Component* cmp = mComponentMgr->GetEntityComponent(entity.GetID(), component);
+	cmp->GetRTTI()->EnumProperties(cmp, out, flagMask);
+
+	return true;
+}
+
+bool EntitySystem::EntityMgr::HasEntityComponentProperty( const EntityHandle entity, const ComponentID componentID, const StringKey propertyKey, const PropertyAccessFlags flagMask /*= PA_FULL_ACCESS*/ ) const
+{
+	OC_DASSERT(mComponentMgr);
+
+	if (componentID >= mComponentMgr->GetNumberOfEntityComponents(entity.GetID()))
+	{
+		ocError << "Invalid component ID: " << componentID;
+		return false;
+	}
+
+	Component* cmp = mComponentMgr->GetEntityComponent(entity.GetID(), componentID);
+	AbstractProperty* prop = cmp->GetRTTI()->GetProperty(propertyKey, flagMask);
+	if (prop) return true;
+
+	return false;
 }

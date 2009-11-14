@@ -37,7 +37,7 @@ namespace EntitySystem
 		~EntityMgr(void);
 
 		/// Creates new entity accorindgly to its description and returns its handle.
-		EntityHandle CreateEntity(EntityDescription& desc, PropertyList& out);
+		EntityHandle CreateEntity(EntityDescription& desc);
 
 		/// Destroys a specified entity if it exists.
 		void DestroyEntity(const EntityHandle h);
@@ -81,11 +81,23 @@ namespace EntitySystem
 		/// Retrieves properties of an entity. A filter related to properties' flags can be specified.
 		bool GetEntityProperties(const EntityID entityID, PropertyList& out, const PropertyAccessFlags flagMask = PA_FULL_ACCESS) const;
 
+		/// Returns true if the component of the entity has the given property.
+		bool HasEntityComponentProperty(const EntityHandle h, const ComponentID componentID, const StringKey key, const PropertyAccessFlags flagMask = PA_FULL_ACCESS) const;
+
+		/// Returns true if the entity has the given property.
+		bool HasEntityProperty(const EntityHandle h, const StringKey key, const PropertyAccessFlags flagMask = PA_FULL_ACCESS) const;
+
 		/// Retrieves a property of an entity. A filter related to properties' flags can be specified.
 		inline PropertyHolder GetEntityProperty(const EntityHandle h, const StringKey key, const PropertyAccessFlags flagMask = PA_FULL_ACCESS) const { return GetEntityProperty(h.GetID(), key, flagMask); }
 
 		/// Retrieves a property of an entity. A filter related to properties' flags can be specified.
 		PropertyHolder GetEntityProperty(const EntityID id, const StringKey key, const PropertyAccessFlags flagMask = PA_FULL_ACCESS) const;
+
+		/// Retrieves properties of a component of an entity. A filter related to properties' flags can be specified.
+		bool GetEntityComponentProperties(const EntityHandle entity, const ComponentID component, PropertyList& out, const PropertyAccessFlags flagMask = PA_FULL_ACCESS) const;
+
+		/// Retrieves a property of a component of an entity. A filter related to properties' flags can be specified.
+		PropertyHolder GetEntityComponentProperty(const EntityHandle entity, const ComponentID component, const StringKey propertyKey, const PropertyAccessFlags flagMask = PA_FULL_ACCESS) const;
 
 		/// Returns true if the property of the prototype is marked as shared (and thus propagated to instances).
 		bool IsPrototypePropertyShared(const EntityHandle prototype, const StringKey testedProperty) const;
@@ -163,7 +175,7 @@ namespace EntitySystem
 		void LoadEntityFromXML( ResourceSystem::XMLNodeIterator &entIt, const bool isPrototype, ResourceSystem::XMLResourcePtr xml );
 
 		/// Load a property for the given entity from a XML file.
-		void LoadEntityPropertyFromXML( PrototypeInfo* prototypeInfo, PropertyList::iterator propertyIter, ResourceSystem::XMLResourcePtr xml, ResourceSystem::XMLNodeIterator& xmlPropertyIterator, PropertyList& properties );
+		void LoadEntityPropertyFromXML( const EntityID entityID, const ComponentID componentID, PrototypeInfo* prototypeInfo, ResourceSystem::XMLResourcePtr xml, ResourceSystem::XMLNodeIterator& xmlPropertyIterator );
 	};
 }
 

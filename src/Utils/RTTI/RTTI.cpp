@@ -12,9 +12,9 @@ RTTI::RTTI(	uint8 dwStub, ClassID CLID, const char* szClassName, RTTI* pBaseClas
 {
 	OC_ASSERT( CLID != 0 );
 	OC_ASSERT( strlen(szClassName) <= CLASSNAME_LENGTH && "RTTI:Class name too long" );
-#ifdef __WIN__
+	#ifdef __WIN__
 	#pragma warning(disable: 4996)
-#endif
+	#endif
 	strcpy( mClassName, szClassName );
 
 	if ( pReflectionFunc )
@@ -35,15 +35,12 @@ void RTTI::EnumProperties( RTTIBaseClass* owner, PropertyList& out, const Proper
 	if ( mBaseRTTI )
 		mBaseRTTI->EnumProperties( owner, out, flagMask );
 	for ( AbstractPropertyMap::const_iterator it = mProperties.begin(); it != mProperties.end(); ++it )
+	{
 		if ((it->second->GetAccessFlags()&flagMask) != 0)
 		{
-			StringKey key = it->second->GetKey();
-			if (out.find(key) != out.end())
-			{
-				ocWarning << "EnumProperties:Duplicate property name '" << it->second->GetName() << "' -> overwriting";
-			}
-			out[key] = PropertyHolder(owner, it->second);
+			out.push_back(PropertyHolder(owner, it->second));
 		}
+	}
 }
 
 void RTTI::EnumComponentDependencies( ComponentDependencyList& out ) const
@@ -59,12 +56,10 @@ AbstractProperty* RTTI::GetProperty( const StringKey key, const PropertyAccessFl
 	AbstractPropertyMap::const_iterator it = mProperties.find(key);
 	if (it != mProperties.end())
 	{
-		if ((it->second->GetAccessFlags()&flagMask) != 0)
-			return it->second;
+		if ((it->second->GetAccessFlags()&flagMask) != 0) return it->second;
 		return 0;
 	}
-	if (mBaseRTTI)
-		return mBaseRTTI->GetProperty(key);
+	if (mBaseRTTI) return mBaseRTTI->GetProperty(key);
 	return 0;
 }
 

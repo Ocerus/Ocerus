@@ -35,6 +35,12 @@ namespace LogSystem
 			return *this;
 		}
 
+		inline Logger& operator<<(const Reflection::PropertyHolder& value)
+		{
+			*this << "Property(" << value.GetKey().ToString() << ")";
+			return *this;
+		}
+
 	    inline Logger& operator<<(Utils::StringKey value)
     	{
 		    *this << value.ToString();

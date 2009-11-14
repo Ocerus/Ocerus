@@ -75,7 +75,7 @@ Component* EntitySystem::ComponentMgr::GetEntityComponent( const EntityID id, co
 		return 0;
 	}
 
-	OC_ASSERT(iter->second);
+	OC_DASSERT(iter->second);
 
 	if ((size_t)cmpID >= iter->second->size())
 	{
@@ -92,7 +92,7 @@ int32 EntitySystem::ComponentMgr::GetNumberOfEntityComponents( const EntityID id
 	if (iter == mEntityComponentsMap.end())
 		return 0; // no components
 
-	OC_ASSERT(iter->second);
+	OC_DASSERT(iter->second);
 	return iter->second->size();
 }
 

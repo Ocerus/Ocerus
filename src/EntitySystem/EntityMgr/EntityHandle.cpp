@@ -83,12 +83,6 @@ EntitySystem::EntityHandle::EntityHandle( const EntityHandle& handle ): mEntityI
 
 EntitySystem::EntityHandle::EntityHandle( void ): mEntityID(0) {}
 
-EntitySystem::EntityID EntitySystem::EntityHandle::GetID( void ) const
-{
-	OC_DASSERT_MSG(mEntityID, "Invalid entity handle");
-	return mEntityID;
-}
-
 bool EntitySystem::EntityHandle::operator==( const EntityHandle& rhs )
 {
 	return mEntityID == rhs.mEntityID;
@@ -127,6 +121,12 @@ PropertyHolder EntitySystem::EntityHandle::GetProperty( const StringKey key, con
 {
 	// if this is not optimized by the linker, then we have to inline it in both EntityMgr and EntityHandle
 	return gEntityMgr.GetEntityProperty(*this, key, mask);
+}
+
+Reflection::PropertyHolder EntitySystem::EntityHandle::GetComponentProperty( const ComponentID componentID, const StringKey key, const PropertyAccessFlags mask /*= PA_FULL_ACCESS*/ ) const
+{
+	// if this is not optimized by the linker, then we have to inline it in both EntityMgr and EntityHandle
+	return gEntityMgr.GetEntityComponentProperty(*this, componentID, key, mask);
 }
 
 bool EntitySystem::EntityHandle::Exists( void ) const
