@@ -43,6 +43,7 @@ set(SRC_FILES
 
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/source
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../src/Utils
 )
 
 add_library( angelscript ${SRC_FILES} )

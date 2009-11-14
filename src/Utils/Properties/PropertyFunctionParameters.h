@@ -6,11 +6,52 @@
 
 #include "Base.h"
 #include "Array.h"
+#include "PropertyEnums.h"
 
 namespace Reflection
 {
 	/// A single parameter which can be passed to a function accessed through the properties system.
-	typedef void* PropertyFunctionParameter;
+	class PropertyFunctionParameter
+	{
+	public:
+		/// Constructs a null PropertyFunctionParameter.
+		PropertyFunctionParameter(): mType(PT_UNKNOWN), mData(0)
+		{
+		}
+
+		/// Constructs a PropertyFunctionParameter that will hold given property.
+		template<class T>
+		PropertyFunctionParameter(const T& property): mType(PropertyTypes::GetTypeID<T>()), mData(&property)
+		{
+		}
+
+		/// Sets the PropertyFunctionParameter to given property.
+		template<class T>
+		void SetData(const T& property)
+		{
+			mType = PropertyTypes::GetTypeID<T>();
+			mData = &property;
+		}
+
+		/// Returns the property.
+		template<class T>
+		const T* GetData() const
+		{
+			if (PropertyTypes::GetTypeID<T>() != mType)
+			{
+				//ocInfo << "PropertyFunctionParameter: calling `const " <<
+				//		PropertyTypes::GetTypeID<T>() << "* GetData() const'" <<
+				//		" for PropertyFunctionParameter containing `" << mType;
+
+				return 0;
+			}
+			return static_cast<T>(mData);
+		}
+
+	private:
+		ePropertyType   mType;
+		const void*     mData;
+	};
 
 	/// This class represents generic parameters passed to a function accessed through the properties system.
 	class PropertyFunctionParameters

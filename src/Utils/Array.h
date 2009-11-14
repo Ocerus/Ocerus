@@ -17,7 +17,7 @@ namespace Utils
 	public:
 
 		/// Constructs new array with a given size.
-		inline Array(const int32 size)
+		inline Array(const int32 size): mSize(size)
 		{
 			mData = new T[size];
 		}
@@ -33,10 +33,14 @@ namespace Utils
 
 		/// Write accessor to an array item.
 		inline T& operator[](const int32 index) { return mData[index]; }
-		
+
+		/// Returns size of the array
+		inline int32 GetSize() const { return mSize; }
+
 	private:
 		T* mData;
 
+		const int32 mSize;
 		/// Copy ctor and assignment operator are disabled.
 		Array(const Array& rhs);
 		Array& operator=(const Array& rhs);

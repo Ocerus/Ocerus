@@ -201,14 +201,14 @@ set(EntitySystem_SRCS
 )
 
 set(GfxSystem_SRCS
-    src/GfxSystem/GfxRenderer.cpp
-    src/GfxSystem/GfxStructures.cpp
-    src/GfxSystem/OGlRenderer.cpp
+    src/GfxSystem/OglRenderer.cpp
     src/GfxSystem/Texture.cpp
+    src/GfxSystem/GfxWindow.cpp
+    src/GfxSystem/GfxStructures.cpp
+    src/GfxSystem/GfxRenderer.cpp
 )
 
 set(SceneSystem_SRCS
-    src/SceneSystem/GfxWindow.cpp
     src/SceneSystem/SceneMgr.cpp
 )
 
@@ -243,10 +243,11 @@ set(ResourceSystem_SRCS
 )
 
 set(ScriptSystem_SRCS
-    src/ScriptSystem/AddOn/scriptstring.cpp
     src/ScriptSystem/ScriptMgr.cpp
     src/ScriptSystem/ScriptResource.cpp
+    src/ScriptSystem/AddOn/scriptstring.cpp
     src/ScriptSystem/AddOn/scriptbuilder.cpp
+    src/ScriptSystem/AddOn/contextmgr.cpp
 )
 
 set(Setup_SRCS

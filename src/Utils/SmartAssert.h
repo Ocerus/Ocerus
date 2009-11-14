@@ -10,7 +10,7 @@
 #undef assert
 
 
-#define EXPRESSION_COMPILED_OUT(expr) (void)sizeof((char)(expr))
+#define EXPRESSION_COMPILED_OUT(expr) (void)sizeof(reinterpret_cast<const void*>(expr))
 #define OC_DISABLED_ASSERT(expr) do { EXPRESSION_COMPILED_OUT(expr); } while(0)
 #define OC_DISABLED_ASSERT_MSG(expr, msg) do { EXPRESSION_COMPILED_OUT(expr); EXPRESSION_COMPILED_OUT(msg); } while(0)
 
