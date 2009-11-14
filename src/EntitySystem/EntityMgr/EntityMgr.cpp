@@ -548,60 +548,57 @@ void EntitySystem::EntityMgr::UpdatePrototypeInstances( const EntityID prototype
 			UpdatePrototypeInstance(prototype, it->first, false);
 		}
 	}
+	UpdatePrototypeCopy(prototype);
 }
 
 void EntitySystem::EntityMgr::UpdatePrototypeInstance( const EntityID prototype, const EntityID instance, const bool forceOverwrite )
 {
-	PropertyList prototypeProperties;
-	GetEntityProperties(prototype, prototypeProperties);
 	OC_ASSERT(mPrototypes.find(prototype) != mPrototypes.end());
 	PrototypeInfo* prototypeInfo = mPrototypes[prototype];
 
-	// security check
 	ComponentTypeList prototypeComponentTypes;
 	ComponentTypeList instanceComponentTypes;
 	GetEntityComponentTypes(prototype, prototypeComponentTypes);
 	GetEntityComponentTypes(instance, instanceComponentTypes);
-	bool componentsAreEqual = true;
 	if (prototypeComponentTypes.size() > instanceComponentTypes.size())
 	{
-		componentsAreEqual = false;
-	}
-	else
-	{
-		ComponentTypeList::iterator protIt=prototypeComponentTypes.begin();
-		ComponentTypeList::iterator instIt=instanceComponentTypes.begin();
-		for (; protIt!=prototypeComponentTypes.end(); ++protIt, ++instIt)
-		{
-			if (*protIt != *instIt) componentsAreEqual = false;
-		}
-	}
-	if (!componentsAreEqual)
-	{
-		ocError << "Cannot propagate prototype " << prototype << " to instance " << instance << "; components mismatch";
+		ocError << "Cannot propagate prototype " << prototype << " to instance " << instance << "; not enough components in instance";
 		return;
 	}
-	
 
-	// update shared properties
-	for (PropertyList::iterator protPropIter=prototypeProperties.begin(); protPropIter!=prototypeProperties.end(); ++protPropIter)
+	// iterate through components of the prototype
+	ComponentID currentComponent = 0;
+	ComponentTypeList::iterator protIt=prototypeComponentTypes.begin();
+	ComponentTypeList::iterator instIt=instanceComponentTypes.begin();
+	for (; protIt!=prototypeComponentTypes.end(); ++protIt, ++instIt, ++currentComponent)
 	{
-		if (prototypeInfo->mSharedProperties.find(protPropIter->GetKey()) == prototypeInfo->mSharedProperties.end())
-			continue;
-
-		StringKey propertyKey = protPropIter->GetKey();
-		PropertyHolder instanceProperty = GetEntityProperty(instance, propertyKey);
-		PropertyHolder copyProperty = GetEntityProperty(prototypeInfo->mCopy, propertyKey);
-		PropertyHolder prototypeProperty = *protPropIter;
-		
-		// if the property has different value from the prototype copy, then it means the property was specialized
-		// by the user and we should leave it alone
-		if (forceOverwrite || copyProperty.IsEqual(instanceProperty))
+		if (*protIt != *instIt)
 		{
-			instanceProperty.CopyFrom(prototypeProperty);
+			ocError << "Cannot propagate prototype " << prototype << " to instance " << instance << "; components mismatch";
+			return;
+		}
+
+		// update shared properties
+		PropertyList prototypeProperties;
+		GetEntityComponentProperties(prototype, currentComponent, prototypeProperties);
+		for (PropertyList::iterator protPropIter=prototypeProperties.begin(); protPropIter!=prototypeProperties.end(); ++protPropIter)
+		{
+			if (prototypeInfo->mSharedProperties.find(protPropIter->GetKey()) == prototypeInfo->mSharedProperties.end())
+				continue;
+
+			StringKey propertyKey = protPropIter->GetKey();
+			PropertyHolder instanceProperty = GetEntityComponentProperty(instance, currentComponent, propertyKey);
+			PropertyHolder copyProperty = GetEntityComponentProperty(prototypeInfo->mCopy, currentComponent, propertyKey);
+			PropertyHolder prototypeProperty = *protPropIter;
+
+			// if the property has different value from the prototype copy, then it means the property was specialized
+			// by the user and we should leave it alone
+			if (forceOverwrite || copyProperty.IsEqual(instanceProperty))
+			{
+				instanceProperty.CopyFrom(prototypeProperty);
+			}
 		}
 	}
-
 }
 
 bool EntitySystem::EntityMgr::IsEntity( const EntityID id ) const
