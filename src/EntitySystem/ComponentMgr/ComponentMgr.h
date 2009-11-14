@@ -31,28 +31,16 @@ namespace EntitySystem
 		~ComponentMgr(void);
 		
 		/// Creates a component and attaches it to an entity.
-		inline ComponentID CreateComponent(const EntityHandle h, const eComponentType type) { return CreateComponent(h.GetID(), type); }
-
-		/// Creates a component and attaches it to an entity.
 		ComponentID CreateComponent(const EntityID id, const eComponentType type);
 
 		/// Destroys a component of the entity.
 		void DestroyComponent(const EntityID id, const ComponentID componentToDestroy);
 
 		/// Destroys all components of a specified entity.
-		inline void DestroyEntityComponents(const EntityHandle h) { DestroyEntityComponents(h.GetID()); }
-
-		/// Destroys all components of a specified entity.
 		void DestroyEntityComponents(const EntityID id);
 
 		/// Returns a collection of components (represented by an iterator) of a specified entity.
-		inline EntityComponentsIterator GetEntityComponents(const EntityHandle h) const { return GetEntityComponents(h.GetID()); }
-
-		/// Returns a collection of components (represented by an iterator) of a specified entity.
 		EntityComponentsIterator GetEntityComponents(const EntityID id) const;
-
-		/// Returns a component of the given entity.
-		inline Component* GetEntityComponent(const EntityHandle h, const ComponentID cmpID) const { return GetEntityComponent(h.GetID(), cmpID); }
 
 		/// Returns a component of the given entity.
 		Component* GetEntityComponent(const EntityID id, const ComponentID cmpID) const;

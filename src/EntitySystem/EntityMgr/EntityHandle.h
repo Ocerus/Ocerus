@@ -99,7 +99,7 @@ namespace EntitySystem
 
 	inline EntityID EntityHandle::GetID(void) const
 	{
-		OC_DASSERT_MSG(mEntityID!=INVALID_ENTITY_ID, "Invalid entity handle");
+		OC_DASSERT_MSG(IsValid(), "Invalid entity handle");
 		return mEntityID;
 	}
 

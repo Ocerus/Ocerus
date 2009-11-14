@@ -26,7 +26,7 @@ EntitySystem::EntityHandle EntitySystem::EntityHandle::CreateUniquePrototypeHand
 
 EntitySystem::EntityHandle EntitySystem::EntityHandle::CreateHandleFromID( const EntityID id )
 {
-	if (gEntityMgr.IsEntity(id))
+	if (gEntityMgr.EntityExists(id))
 	{
 		ocError << "Cannot create entity with predetermined ID; another entity is already using the ID: " << id;
 		return EntityHandle::Null;
@@ -55,7 +55,7 @@ void EntitySystem::EntityHandle::IncID( EntityID& id )
 	{
 		++id;
 		if (id <= 0) id = 1;
-	} while (gEntityMgr.IsEntity(id));
+	} while (gEntityMgr.EntityExists(id));
 }
 
 void EntitySystem::EntityHandle::DecID( EntityID& id )
@@ -64,7 +64,7 @@ void EntitySystem::EntityHandle::DecID( EntityID& id )
 	{
 		--id;
 		if (id >= 0) id = -1;
-	} while (gEntityMgr.IsEntity(id));
+	} while (gEntityMgr.EntityExists(id));
 }
 
 bool EntitySystem::EntityHandle::IsPrototypeID( const EntityID id )

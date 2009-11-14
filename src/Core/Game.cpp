@@ -69,9 +69,9 @@ void Core::Game::Init()
 
 	//// TEST ////
 
-	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("Prototypes/ship0.xml"), true);
+	gEntityMgr.LoadEntitiesFromResource(gResourceMgr.GetResource("Prototypes/ship0.xml"), true);
 
-	gEntityMgr.LoadFromResource(gResourceMgr.GetResource("Ships/ship0.xml"));
+	gEntityMgr.LoadEntitiesFromResource(gResourceMgr.GetResource("Ships/ship0.xml"));
 
 
 	// set camera

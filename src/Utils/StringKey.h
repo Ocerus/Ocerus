@@ -57,7 +57,7 @@ namespace Utils
 		struct StringKeyData
 		{
 			StringKeyData(string refString): mRefCount(0), mRefString(refString) {}
-			uint    mRefCount;
+			uint8   mRefCount;
 			string  mRefString;
 		};
 
