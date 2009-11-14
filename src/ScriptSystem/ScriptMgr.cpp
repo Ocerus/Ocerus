@@ -38,7 +38,7 @@ void LineCallback(asIScriptContext* ctx, TimeOut* timeOut)
 int IncludeCallback(const char* fileName, const char* from, CScriptBuilder* builder, void* basePath)
 {
 	// Try to get existing script resource
-	ScriptResourcePtr sp = boost::static_pointer_cast<ScriptResource>(gResourceMgr.GetResource("scripts", fileName));
+	ScriptResourcePtr sp = boost::static_pointer_cast<ScriptResource>(gResourceMgr.GetResource("Scripts", fileName));
 	if (!sp)
 	{
 		// Load script resource from file
