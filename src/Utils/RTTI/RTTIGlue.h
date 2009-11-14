@@ -39,8 +39,14 @@ namespace Reflection
 			typename Property<T, PropertyTypes>::SetterType setter, const PropertyAccessFlags accessFlags)
 		{
 			Property<T, PropertyTypes>* pProperty = new Property<T, PropertyTypes>( name, getter, setter, accessFlags );
-			T::GetClassRTTI()->AddProperty(pProperty);
-			PropertySystem::GetProperties()->push_back( pProperty );
+			if (T::GetClassRTTI()->AddProperty(pProperty))
+			{
+				PropertySystem::GetProperties()->push_back( pProperty );
+			}
+			else
+			{
+				delete pProperty;
+			}
 		}
 
 		/// Registers a function. Takes in the function name and its address.

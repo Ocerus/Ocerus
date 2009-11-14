@@ -1,6 +1,7 @@
 #include "Common.h"
 #include "RTTI.h"
 #include "../Properties.h"
+#include "../../LogSystem/LogMgr.h"
 
 RTTI::RTTI(	uint8 dwStub, ClassID CLID, const char* szClassName, RTTI* pBaseClassRTTI,
 				ClassFactoryFunc pFactory, RegisterReflectionFunc pReflectionFunc ) :
@@ -67,12 +68,32 @@ AbstractProperty* RTTI::GetProperty( const StringKey key, const PropertyAccessFl
 	return 0;
 }
 
-void RTTI::AddProperty( AbstractProperty* prop )
+bool RTTI::AddProperty( AbstractProperty* prop )
 {
+	OC_ASSERT(prop);
+	if (HasProperty(prop->GetKey()))
+	{
+		if (LogSystem::LogMgr::SingletonExists())
+		{
+			ocError << "Property can't be registered; it already exists: " << prop->GetName();
+		}
+		else
+		{
+			OC_ASSERT_MSG(false, "Property can't be registered; it already exists");
+		}
+		return false;
+	}
+
 	mProperties[prop->GetKey()] = prop;
+	return true;
 }
 
 void RTTI::AddComponentDependency( const EntitySystem::eComponentType dep )
 {
 	mComponentDependencies.push_back(dep);
+}
+
+bool Reflection::RTTI::HasProperty( const StringKey key )
+{
+	return mProperties.find(key) != mProperties.end();
 }

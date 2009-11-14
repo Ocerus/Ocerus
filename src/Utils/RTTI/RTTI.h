@@ -78,8 +78,11 @@ namespace Reflection
 		/// Returns a property identified by it's string key. Access restriction filter can be defined.
 		AbstractProperty* GetProperty(const StringKey key, const PropertyAccessFlags flagMask = PA_FULL_ACCESS) const;
 
+		/// Returns true if the property exists.
+		bool HasProperty(const StringKey key);
+
 		/// Adds a property to the RTTI.
-		void AddProperty(AbstractProperty* prop);
+		bool AddProperty(AbstractProperty* prop);
 
 		/// Adds a component dependency to the RTTI.
 		/// A component can define that it depends on other components. This is then used to determine the order

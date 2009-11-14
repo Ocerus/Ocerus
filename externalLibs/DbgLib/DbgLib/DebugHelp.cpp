@@ -101,7 +101,8 @@ class CDbgHelpDll
 #define CHECK_FUNC_PTR(ptr_) if((ptr_) == NULL) DebugBreak();
 		void LoadMethods()
 		{
-#if defined(_UNICODE)
+			// Hardwire: the unicode version doesn't work apparently...
+#if defined(_UNICODE) && 0
 			CHECK_FUNC_PTR(SymInitialize = reinterpret_cast<fpSymInitialize>(GetProcAddress(m_hDll, _AT("SymInitializeW"))));
 			CHECK_FUNC_PTR(SymFromAddr = reinterpret_cast<fpSymFromAddr>(GetProcAddress(m_hDll, _AT("SymFromAddrW"))));
 			CHECK_FUNC_PTR(SymFromName = reinterpret_cast<fpSymFromName>(GetProcAddress(m_hDll, _AT("SymFromNameW"))));

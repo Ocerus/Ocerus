@@ -49,6 +49,12 @@ namespace Utils
 			delete msSingleton;
 		}
 
+		/// Returns true if the singleton exists.
+		static bool SingletonExists(void)
+		{
+			return msSingleton != 0;
+		}
+
 		/// Returns reference to the singleton instance.
 		static T& GetSingleton(void)
 		{

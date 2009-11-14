@@ -30,7 +30,10 @@ namespace EntitySystem
 	{
 	public:
 
+		/// Default constructor.
 		EntityMgr(void);
+
+		/// Default destructor.
 		~EntityMgr(void);
 
 		/// Creates new entity accorindgly to its description and returns its handle.
