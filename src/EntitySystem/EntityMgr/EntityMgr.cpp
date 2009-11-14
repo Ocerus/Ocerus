@@ -165,9 +165,15 @@ EntityHandle EntityMgr::CreateEntity(EntityDescription& desc)
 		// check dependencies of the component
 		ComponentDependencyList depList;
 		cmp->GetRTTI()->EnumComponentDependencies(depList);
-		for (ComponentDependencyList::const_iterator depIt=depList.begin(); depIt!=depList.end(); ++depIt)
+		for (ComponentDependencyList::iterator depIt=depList.begin(); depIt!=depList.end(); ++depIt)
+		{
 			if (createdComponentTypes.find(*depIt) == createdComponentTypes.end())
+			{
 				dependencyFailure = true;
+				ocError << "Component dependency failure on entity " << entityHandle;
+				ocError << "Component " << GetComponentTypeName(cmpType) << " depends on " << GetComponentTypeName(*depIt) << " which was not created yet";
+			}
+		}
 
 		// take a note that this component type was already created
 		createdComponentTypes.insert(cmpType);
@@ -186,7 +192,6 @@ EntityHandle EntityMgr::CreateEntity(EntityDescription& desc)
 	// security checks
 	if (dependencyFailure)
 	{
-		ocError << "Component dependency failure on entity '" << entityHandle << "' of type '" << desc.mType << "'";
 		DestroyEntity(entityHandle);
 		return entityHandle; // do like nothing's happened, but don't enum properties or they will access invalid memory
 	}
@@ -681,7 +686,7 @@ void EntitySystem::EntityMgr::DestroyEntityComponent( const EntityHandle entity,
 			// so if the user wants to remove the component linked to the prototype, we have to break the link
 			if (componentToDestroy < GetNumberOfEntityComponents(prototypeID))
 			{
-				ocInfo << "Unlinking entity from prototype because of component destruction";
+				ocInfo << "Unlinking " << entity << " from prototype " << prototypeID << " because of component destruction";
 				UnlinkEntityFromPrototype(entity.GetID());
 			}
 		}
