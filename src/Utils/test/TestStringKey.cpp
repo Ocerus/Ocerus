@@ -20,7 +20,5 @@ SUITE(StringKey)
 		CHECK_EQUAL(a==e, false);
 		e=a;
 		CHECK_EQUAL(a==e, true);
-		StringKey f = "";
-		CHECK_EQUAL(f, Hash::INVALID_HASH);
 	}
 }

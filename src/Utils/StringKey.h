@@ -17,12 +17,12 @@ namespace Utils
 		/// Constructs the key from a c-style string (null terminated).
 		StringKey(const char* str);
 
-		/// Constructs the key from a string with a known length.
-		StringKey(const char* str, const int32 numChars);
+		/// Constructs the key from a c-style string (null terminated).
+		StringKey(const char* str, size_t length);
 
 		/// Constructs the key from a standard string.
 		StringKey(const string& str);
-		
+
 		/// Copy constructor.
 		StringKey(const StringKey& rhs);
 
@@ -40,16 +40,32 @@ namespace Utils
 		operator size_t (void) const;
 
 		/// Comparison operator needed by containers.
-		bool operator==(const StringKey& rhs) const;
+		inline bool operator==(const StringKey& rhs) const
+		{
+			return mData == rhs.mData;
+		}
 
 		/// Comparison operator needed by containers.
-		bool operator<(const StringKey& rhs) const;
+		bool operator<(const StringKey& rhs) const
+		{
+			return mData < rhs.mData;
+		}
 
 		/// Invalid key representing no real string.
 		static const StringKey Null;
 
+		struct StringKeyData
+		{
+			StringKeyData(string refString): mRefCount(0), mRefString(refString) {}
+			uint    mRefCount;
+			string  mRefString;
+		};
+
 	private:
-		uint32 mData;
+		void RefCntInc();
+		void RefCntDec();
+
+		StringKeyData* mData;
 	};
 }
 
