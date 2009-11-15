@@ -30,7 +30,10 @@ namespace ResourceSystem
 		void Init(const string& basepath);
 
 		/// Assings resources in a directory to a group. In this case the resource types will be autodetected.
-		bool AddResourceDirToGroup(const string& path, const StringKey& group, const string& includeRegexp = "*.*", const string& excludeRegexp = "");
+		/// The regular expression use the syntax as defined here:
+		/// http://www.boost.org/doc/libs/1_40_0/libs/regex/doc/html/boost_regex/syntax/basic_extended.html
+		/// The matching is not case sensitive!
+		bool AddResourceDirToGroup(const string& path, const StringKey& group, const string& includeRegexp = ".*", const string& excludeRegexp = "");
 
 		/// Assigns a resource to a group.
 		/// The resource type if autodetected if you don't specify it.

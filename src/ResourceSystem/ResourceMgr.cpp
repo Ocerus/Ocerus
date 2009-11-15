@@ -1,6 +1,7 @@
 #include "Common.h"
 #include <stdio.h>
 #include <boost/filesystem.hpp>
+#include <boost/regex.hpp>
 #include "ResourceMgr.h"
 #include "IResourceLoadingListener.h"
 
@@ -85,23 +86,54 @@ bool ResourceMgr::AddResourceDirToGroup(const string& path, const StringKey& gro
 		return false;
 	}
 
+	boost::regex includeFilter;
+	boost::regex excludeFilter;
+
+	try	
+	{
+		if (includeRegexp.size()>0) includeFilter.assign(includeRegexp, boost::regex::extended|boost::regex::icase); 
+	}
+	catch (std::exception& e) 
+	{
+		ocError << "includeRegexp '" << includeRegexp << "' is not valid: " << e.what();
+		return false; 
+	}
+	try	
+	{ 
+		if (excludeRegexp.size()>0) excludeFilter.assign(excludeRegexp, boost::regex::extended|boost::regex::icase);
+	}
+	catch (std::exception& e) 
+	{
+		ocError << "excludeRegexp '" << excludeRegexp << "' is not valid: " << e.what();
+		return false;
+	}
+
 	bool result = true;
+
 	boost::filesystem::directory_iterator iend;
 	for (boost::filesystem::directory_iterator i(boostPath); i!=iend; ++i)
 	{
+		string filePath = i->path().string();
 		if (boost::filesystem::is_directory(i->status()))
 		{
 			string dirStr = i->path().filename();
 			if (dirStr.compare(".svn")!=0)
-				if (!AddResourceDirToGroup(i->path().string(), group, includeRegexp, excludeRegexp))
+			{
+				if (!AddResourceDirToGroup(filePath, group, includeRegexp, excludeRegexp))
+				{
 					result = false;
+				}
+			}
 		}
-		else
+		else if (regex_match(filePath, includeFilter) && (excludeFilter.empty() || !regex_match(filePath, excludeFilter)))
 		{
-			if (!AddResourceFileToGroup(i->path().string(), group, RESTYPE_AUTODETECT, false))
+			if (!AddResourceFileToGroup(filePath, group, RESTYPE_AUTODETECT, false))
+			{
 				result = false;
+			}
 		}
 	}
+
 	return result;
 }
 
@@ -110,11 +142,10 @@ bool ResourceMgr::AddResourceFileToGroup(const string& filepath, const StringKey
 	ocInfo << "Adding resource '" << filepath << "' to group '" << group << "'";
 
 	boost::filesystem::path boostPath;
-	if (pathRelative)
-		boostPath = mBasePath + filepath;
-	else
-		boostPath = filepath;
-	if (!boost::filesystem::exists(boostPath)){
+	if (pathRelative) boostPath = mBasePath + filepath;
+	else boostPath = filepath;
+	if (!boost::filesystem::exists(boostPath))
+	{
 		ocError << "Resource located at '" << boostPath.string() << "' not found";
 		return false;
 	}
