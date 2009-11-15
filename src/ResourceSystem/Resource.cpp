@@ -108,7 +108,7 @@ void ResourceSystem::Resource::GetRawInputData( DataContainer& outData )
 {
 	outData.Release();
 	vector<uint8*> tmps;
-	const uint32 tmpMaxSize = 1024; // size of one tmp buffer
+	const uint32 tmpMaxSize = 2048; // size of one tmp buffer
 	uint32 tmpLastSize = 0; // size of the last tmp buffer in the vector
 	uint32 bufferSize = 0; // resulting size
 	InputStream& is = OpenInputStream(ISM_BINARY);

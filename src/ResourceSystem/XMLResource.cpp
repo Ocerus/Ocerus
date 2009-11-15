@@ -76,7 +76,7 @@ bool XMLResource::LoadImpl(void)
 	++mTopNode;
 
 	XML_ParserFree(p);
-	delete[] cont.GetData();
+	cont.Release();
 	return true;
 }
 
