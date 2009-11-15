@@ -38,8 +38,21 @@ namespace Reflection
 		#include "PropertyTypes.h"
 		#undef PROPERTY_TYPE
 
-	};
+		/// String names of property types.
+		const char* const PropertyTypeNames[] =
+		{
+			#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName) typeName,
+			#include "PropertyTypes.h"
+			#undef PROPERTY_TYPE
 
+			"Unknown",
+			"NUM_PROPERTY_TYPES"
+		};
+
+		/// Returns the string name of this property type.
+		const char* GetStringName(const ePropertyType type);
+
+	}
 }
 
 #endif	// _PROPERTY_ENUMS_H

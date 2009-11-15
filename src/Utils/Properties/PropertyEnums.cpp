@@ -23,5 +23,10 @@ namespace Reflection
 	#undef PROPERTY_TYPE
 
 
+
+	const char* PropertyTypes::GetStringName( const ePropertyType type )
+	{
+		return PropertyTypeNames[type];
+	}
 }
 

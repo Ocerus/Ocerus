@@ -4,7 +4,7 @@
 
 void AbstractProperty::ReportConvertProblem( ePropertyType wrongType ) const
 {
-	ocError << "Can't convert property '" << GetName() << "' from '" << GetType() << "' to '" << wrongType << "'";
+	ocError << "Can't convert property '" << GetName() << "' from '" << PropertyTypes::GetStringName(GetType()) << "' to '" << PropertyTypes::GetStringName(wrongType) << "'";
 }
 
 void AbstractProperty::ReportReadonlyProblem( void ) const
@@ -66,15 +66,15 @@ void Reflection::AbstractProperty::SetValueFromString( RTTIBaseClass* owner, con
 	case PT_ENTITYHANDLE:
 		{
 			EntitySystem::EntityHandle e = gEntityMgr.FindFirstEntity(str);
-			if (!e.IsValid()) ocError << "Can't parse property of EntityHandle '" << GetType() << "' from string '" << str << "'; it could not been found";
+			if (!e.IsValid()) ocError << "Can't parse property of EntityHandle '" << PropertyTypes::GetStringName(GetType()) << "' from string '" << str << "'; it could not been found";
 			SetValue(owner, e);
 			break;
 		}
 	case PT_VECTOR2_ARRAY:
 	case PT_ENTITYHANDLE_ARRAY:
-		ocError << "Can't parse property of type '" << GetType() << "' from string (not allowed)";
+		ocError << "Can't parse property of type '" << PropertyTypes::GetStringName(GetType()) << "' from string (not allowed)";
 		break;
 	default:
-		ocError << "Parsing property of type '" << GetType() << "' from string is not implemented in the file " << __FILE__;
+		ocError << "Parsing property of type '" << PropertyTypes::GetStringName(GetType()) << "' from string is not implemented in the file " << __FILE__;
     }
 }
