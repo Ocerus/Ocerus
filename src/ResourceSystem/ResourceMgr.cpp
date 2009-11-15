@@ -79,6 +79,7 @@ bool ResourceMgr::AddResourceDirToGroup(const string& path, const StringKey& gro
 {
 	ocInfo << "Adding dir '" << path << "' to group '" << group << "'";
 
+	// check the path
 	boost::filesystem::path boostPath = mBasePath + path;
 	if (!boost::filesystem::exists(boostPath))
 	{
@@ -86,12 +87,18 @@ bool ResourceMgr::AddResourceDirToGroup(const string& path, const StringKey& gro
 		return false;
 	}
 
+	// if the group is empty, add at least something so that it actually exists
+	if (mResourceGroups.find(group) == mResourceGroups.end())
+	{
+		mResourceGroups[group] = new ResourceMap();
+	}
+
 	boost::regex includeFilter;
 	boost::regex excludeFilter;
 
 	try	
 	{
-		if (includeRegexp.size()>0) includeFilter.assign(includeRegexp, boost::regex::extended|boost::regex::icase); 
+		includeFilter.assign(includeRegexp, boost::regex::extended|boost::regex::icase); 
 	}
 	catch (std::exception& e) 
 	{

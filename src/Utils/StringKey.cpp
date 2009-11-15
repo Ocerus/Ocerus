@@ -1,6 +1,5 @@
 #include "Common.h"
 #include "StringKey.h"
-#include "Hash.h"
 #include <iostream>
 
 const StringKey StringKey::Null;
@@ -13,7 +12,7 @@ inline hash_map<string, StringKey::StringKeyData*>& GetStringKeyMap()
 
 inline StringKey::StringKeyData* GetStringKeyData(const string& str)
 {
-	StringKey::StringKeyData* res;
+	StringKey::StringKeyData* res = 0;
 	if (GetStringKeyMap().find(str) == GetStringKeyMap().end())
 	{
 		res = new StringKey::StringKeyData(str);
