@@ -22,21 +22,6 @@ PROPERTY_TYPE(PT_STRING_KEY, Utils::StringKey, Utils::StringKey::Null, "StringKe
 PROPERTY_TYPE(PT_ENTITYHANDLE, EntitySystem::EntityHandle, EntitySystem::EntityHandle::Null, "EntityHandle")
 PROPERTY_TYPE(PT_COLOR, GfxSystem::Color, GfxSystem::Color::NullColor, "Color")
 #ifndef SCRIPT_ONLY
-PROPERTY_TYPE(PT_BOOL_ARRAY, Array<bool>*, 0, "Array<bool>*")
-PROPERTY_TYPE(PT_INT8_ARRAY, Array<int8>*, 0, "Array<int8>*")
-PROPERTY_TYPE(PT_INT16_ARRAY, Array<int16>*, 0, "Array<int16>*")
-PROPERTY_TYPE(PT_INT32_ARRAY, Array<int32>*, 0, "Array<int32>*")
-PROPERTY_TYPE(PT_INT64_ARRAY, Array<int64>*, 0, "Array<int64>*")
-PROPERTY_TYPE(PT_UINT8_ARRAY, Array<uint8>*, 0, "Array<uint8>*")
-PROPERTY_TYPE(PT_UINT16_ARRAY, Array<uint16>*, 0, "Array<uint16>*")
-PROPERTY_TYPE(PT_UINT32_ARRAY, Array<uint32>*, 0, "Array<uint32>*")
-PROPERTY_TYPE(PT_UINT64_ARRAY, Array<uint64>*, 0, "Array<uint64>*")
-PROPERTY_TYPE(PT_FLOAT32_ARRAY, Array<float32>*, 0, "Array<float>*")
-PROPERTY_TYPE(PT_VECTOR2_ARRAY, Array<Vector2>*, 0, "Array<Vector2>*")
-PROPERTY_TYPE(PT_STRING_ARRAY, Array<string>*, 0, "Array<string>*")
-PROPERTY_TYPE(PT_STRING_KEY_ARRAY, Array<Utils::StringKey>*, 0, "Array<StringKey>*")
-PROPERTY_TYPE(PT_ENTITYHANDLE_ARRAY, Array<EntitySystem::EntityHandle>*, 0, "Array<EntityHandle>*")
-PROPERTY_TYPE(PT_COLOR_ARRAY, Array<GfxSystem::Color>*, 0, "Array<Color>*")
 PROPERTY_TYPE(PT_FUNCTION_PARAMETER, PropertyFunctionParameters, 0, "PropertyFunctionParameters")
 #endif
 

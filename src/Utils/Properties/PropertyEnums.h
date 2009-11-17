@@ -10,11 +10,20 @@
 
 namespace Reflection
 {
+	// Macros for automatically declaring array property types based on common types.
+	#define ARRAY_PROPERTY_TYPE_ID(typeID) typeID##_ARRAY
+	#define ARRAY_PROPERTY_TYPE_NAME(typeName) "Array<"typeName">*"
+	#define ARRAY_PROPERTY_TYPE_CLASS(typeClass) Array<typeClass>*
+
 	/// Value type of a property.
 	/// It is used for runtime type checks.
 	enum ePropertyType
 	{
 		#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName) typeID,
+		#include "PropertyTypes.h"
+		#undef PROPERTY_TYPE
+
+		#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName) ARRAY_PROPERTY_TYPE_ID(typeID),
 		#include "PropertyTypes.h"
 		#undef PROPERTY_TYPE
 
@@ -38,10 +47,21 @@ namespace Reflection
 		#include "PropertyTypes.h"
 		#undef PROPERTY_TYPE
 
+		/// Template specialization.
+		#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName) \
+			template<> ePropertyType GetTypeID<ARRAY_PROPERTY_TYPE_CLASS(typeClass)>(void); \
+			template<> ARRAY_PROPERTY_TYPE_CLASS(typeClass) GetDefaultValue<ARRAY_PROPERTY_TYPE_CLASS(typeClass)>(void);
+		#include "PropertyTypes.h"
+		#undef PROPERTY_TYPE
+
 		/// String names of property types.
 		const char* const PropertyTypeNames[] =
 		{
 			#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName) typeName,
+			#include "PropertyTypes.h"
+			#undef PROPERTY_TYPE
+
+			#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName) ARRAY_PROPERTY_TYPE_NAME(typeName),
 			#include "PropertyTypes.h"
 			#undef PROPERTY_TYPE
 
