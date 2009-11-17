@@ -9,6 +9,7 @@
 
 // DEBUG only
 #include "../EntitySystem/Components/OnInitScript.h"
+#include "../EntitySystem/Components/Script.h"
 
 
 using namespace Core;
@@ -98,6 +99,7 @@ void Core::Game::Init()
 
 	// an example of a script
 	EntityComponents::OnInitScript::TestRunTime();
+	EntityComponents::Script::TestRunTime();
 
 
 	// an example of how to use functions registered in the reflection system

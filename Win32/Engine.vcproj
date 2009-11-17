@@ -278,6 +278,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\src\EntitySystem\Components\Script.h"
+						>
+					</File>
+					<File
 						RelativePath="..\src\EntitySystem\Components\Transform.h"
 						>
 					</File>
@@ -315,6 +319,10 @@
 					</File>
 					<File
 						RelativePath="..\src\EntitySystem\Components\OnInitScript.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\src\EntitySystem\Components\Script.cpp"
 						>
 					</File>
 					<File
@@ -406,6 +414,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\src\EntitySystem\EntityMgr\EntityMessageTypes.h"
+						>
+					</File>
+					<File
 						RelativePath="..\src\EntitySystem\EntityMgr\EntityMgr.h"
 						>
 					</File>
@@ -431,6 +443,10 @@
 					</File>
 					<File
 						RelativePath="..\src\EntitySystem\EntityMgr\EntityHandle.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\src\EntitySystem\EntityMgr\EntityMessage.cpp"
 						>
 					</File>
 					<File

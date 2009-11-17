@@ -11,5 +11,6 @@
 #include "../Components/CmpPlatformLogic.h"
 #include "../Components/CmpPlatformVisual.h"
 #include "../Components/OnInitScript.h"
+#include "../Components/Script.h"
 
 #endif // _ComponentHeaders_h__

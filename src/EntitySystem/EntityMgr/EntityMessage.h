@@ -25,31 +25,19 @@ namespace EntitySystem
 		/// Defines user types of messages.
 		enum eType
 		{ 
-			/// Sent shortly after the entity is created and all initial properties are set.
-			INIT=0,
-			/// Sent shortly after the INIT message is sent. This allows initialization of components which need other
-			/// components to be inited first.
-			POST_INIT,
-			/// Sent shortly before the entity is destroyed.
-			DESTROY,
-			/// Sent when the entity is to be redrawn.
-			DRAW,
-			/// Sent when the underlay under the entity is to be redrawn.
-			DRAW_UNDERLAY,
-			/// Sent when the overlay above the entity is to be redrawn.
-			DRAW_OVERLAY,
-			/// Sent when the selected entity is to be redrawn.
-			DRAW_SELECTED,
-			/// Sent when the logic of the entity is to be updated.
-			UPDATE_LOGIC,
-			/// Sent when the physics of the entity is to be updated.
-			UPDATE_PHYSICS,
-			/// Sent when the mouse attempts to pick the entity.
-			MOUSE_PICK,
+			#define ENTITY_MESSAGE_TYPE(typeID, handlerDecl) typeID,
+			#include "EntityMessageTypes.h"
+			#undef ENTITY_MESSAGE_TYPE
 
 			/// Number of entity message types.
 			NUM_TYPES
 		};
+
+		/// String names of property types.
+		static const char* const HandleDeclaration[];
+
+		/// Returns the string name of this property type.
+		static const char* GetHandleDeclaration(const eType type);
 
 		/// User type of this message.
 		eType type;
