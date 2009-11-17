@@ -341,19 +341,32 @@ ResourceSystem::ResourcePtr ResourceSystem::ResourceMgr::GetResource( const char
 	const char* lastSlashPos = 0;
 	const char* str = groupSlashName;
 	for(; *str; ++str)
-		if (*str == '/')
-			lastSlashPos = str;
-	if (!lastSlashPos)
-		return ResourcePtr();
+	{
+		if (*str == '/') lastSlashPos = str;
+	}
+	if (!lastSlashPos) return ResourcePtr();
 	return GetResource(StringKey(groupSlashName, lastSlashPos-groupSlashName), StringKey(lastSlashPos+1, str-lastSlashPos-1));
 }
 
 void ResourceSystem::ResourceMgr::DeleteAllResources( void )
 {
-	for (ResourceGroupMap::const_iterator i=mResourceGroups.begin(); i!=mResourceGroups.end(); ++i)
+	for (ResourceGroupMap::iterator i=mResourceGroups.begin(); i!=mResourceGroups.end(); ++i)
 	{
 		UnloadResourcesInGroup(i->first, true);
 		delete i->second;
 	}
 	mResourceGroups.clear();
+}
+
+void ResourceSystem::ResourceMgr::RefreshAllResources( void )
+{
+	for (ResourceGroupMap::iterator groupIter=mResourceGroups.begin(); groupIter!=mResourceGroups.end(); ++groupIter)
+	{
+		ResourceMap* resMap = groupIter->second;
+		OC_ASSERT(resMap);
+		for (ResourceMap::iterator resIter=resMap->begin(); resIter!=resMap->end(); ++resIter)
+		{
+			resIter->second->Refresh();
+		}
+	}
 }

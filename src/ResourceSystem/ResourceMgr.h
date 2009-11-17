@@ -63,6 +63,9 @@ namespace ResourceSystem
 		/// Deletes everything. Nothing can be reloaded.
 		void DeleteAllResources(void);
 
+		/// Makes sure all loaded resources are up to date.
+		void RefreshAllResources(void);
+
 		/// Loading listener receives callbacks from the manager when a resource is being loaded.
 		void SetLoadingListener(IResourceLoadingListener* listener);
 

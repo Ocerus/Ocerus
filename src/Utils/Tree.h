@@ -593,8 +593,18 @@ template <class T, class tree_node_allocator>
 void tree<T, tree_node_allocator>::clear()
 {
 	if(head)
+	{
 		while(head->next_sibling!=feet)
+		{
 			erase(pre_order_iterator(head->next_sibling));
+		}
+		// Hardwire: this had to be added to make it working properly. Otherwise the nodes under the feet would never be
+		//           erased
+		if (feet->first_child)
+		{
+			erase_children(pre_order_iterator(feet));
+		}
+	}
 }
 
 template<class T, class tree_node_allocator> 

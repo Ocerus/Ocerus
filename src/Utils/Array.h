@@ -39,7 +39,7 @@ namespace Utils
 		inline int32 GetSize() const { return mSize; }
 
 		/// Resize array to newSize
-		inline void Resize(const int32 newSize)
+		void Resize(const int32 newSize)
 		{
 			OC_ASSERT(newSize>=0);
 			if (mSize == newSize) return;

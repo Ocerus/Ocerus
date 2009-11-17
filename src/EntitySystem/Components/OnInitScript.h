@@ -5,7 +5,6 @@
 #define OnInitScript_h__
 
 #include "../ComponentMgr/Component.h"
-#include "Array.h"
 
 namespace EntityComponents
 {

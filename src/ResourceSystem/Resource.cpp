@@ -48,6 +48,7 @@ bool Resource::Load()
 		return false; // manual resources must be loaded by the user
 	SetState(STATE_LOADING);
 	ocInfo << "Loading resource '" << mName << "'";
+	RefreshResourceInfo();
 	bool result = LoadImpl();
 	if (result)
 	{
@@ -106,6 +107,8 @@ void ResourceSystem::Resource::EnsureLoaded( void )
 
 void ResourceSystem::Resource::GetRawInputData( DataContainer& outData )
 {
+	// The data is read in small chunks and the resulting buffer is then composed by merging the chunks together.
+
 	outData.Release();
 	vector<uint8*> tmps;
 	const uint32 tmpMaxSize = 2048; // size of one tmp buffer
@@ -133,4 +136,33 @@ void ResourceSystem::Resource::GetRawInputData( DataContainer& outData )
 	}
 	OC_ASSERT(buffer+bufferSize == lastBufferPos);
 	outData.SetData(buffer, bufferSize);
+}
+
+void ResourceSystem::Resource::Refresh( void )
+{
+	if (GetState() == STATE_LOADED)
+	{
+		int64 currentWriteTime = boost::filesystem::last_write_time(mFilePath);
+		if (currentWriteTime > mLastWriteTime)
+		{
+			ocInfo << "Refreshing resource " << mName << " from " << mFilePath;
+			Reload();
+		}
+	}
+}
+
+void ResourceSystem::Resource::RefreshResourceInfo( void )
+{
+	mLastWriteTime = boost::filesystem::last_write_time(mFilePath);
+}
+
+void ResourceSystem::Resource::Reload( void )
+{
+	if (GetState() != STATE_LOADED)
+	{
+		ocError << "Resource " << mName << " cannot be reloaded; it is not loaded";
+		return;
+	}
+	Unload();
+	Load();
 }

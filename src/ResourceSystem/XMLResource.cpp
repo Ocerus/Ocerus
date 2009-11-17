@@ -35,15 +35,16 @@ void XMLCALL DataHandle(void* data, const XML_Char *s, int len)
 	XMLMapDataHolder* me = (XMLMapDataHolder*)data;
 	if (len > 0) 
 	{
-		//FIXME neco udelat s tim, at to tady zbytecne nealokuju a neprevadim na string...je to kvuli tomu, ze s neni ukoncene nulou
 		XML_Char* buf = new XML_Char[len+1];
 		memcpy(buf, s, len);
 		buf[len] = '\0';
 		string str = buf;
-		str.erase(remove_if(str.begin(),str.end(),iscntrl),str.end()); // remove contrl sequence chars
+		str.erase(remove_if(str.begin(),str.end(),iscntrl),str.end());
 		boost::trim(str);
 		if (!str.empty())
+		{
 			me->mDataMapPtr->append_child(me->mCurrentNode, str);
+		}
 		delete[] buf;
 	}
 }
@@ -77,6 +78,7 @@ bool XMLResource::LoadImpl(void)
 
 	XML_ParserFree(p);
 	cont.Release();
+
 	return true;
 }
 

@@ -46,6 +46,12 @@ namespace ResourceSystem
 		///	@param allowManual If allowManual is true, the resource will be unloaded even if it was manually created.
 		virtual bool Unload(bool allowManual = false);
 
+		/// Reloads the resource
+		virtual void Reload(void);
+
+		/// If the resource is out of date (with respect to the source of its data), it will be reloaded.
+		virtual void Refresh(void);
+
 		/// Returns the user type of this resource.
 		inline eResourceType GetType(void) const { return mType; }
 
@@ -95,9 +101,10 @@ namespace ResourceSystem
 
 		friend class ResourceMgr;
 		string mFilePath;
+		string mName;
+		int64 mLastWriteTime;
 		bool mIsManual;
 		eResourceType mType;
-		string mName;
 		eState mState;
 
 		/// Used by the implementation of OpenInputStream.
@@ -108,6 +115,7 @@ namespace ResourceSystem
 		inline void SetFilepath(const string& filepath) { mFilePath = filepath; }
 		inline void SetManual(bool manual) { mIsManual = manual; }
 		inline void SetType(const eResourceType newType) { mType = newType; }
+		void RefreshResourceInfo(void);
 	};
 
 }
