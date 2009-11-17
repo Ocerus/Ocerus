@@ -20,7 +20,9 @@ namespace EntityComponents
 		static void TestRunTime();
 
 		/// Names of the script modules that are searched for script message handlers.
-		Utils::Array<string>* GetModules(void) const { return mModules; }
+		//@{
+		Utils::Array<string>* GetModules(void) const { return const_cast<Utils::Array<string>*>(&mModules); }
+		void SetModules(Utils::Array<string>* modules) { mModules.CopyFrom(*modules); }
 		//@}
 		/// Maximum time of execution the scripts in ms (0 means infinity).
 		//@{
@@ -31,7 +33,7 @@ namespace EntityComponents
 		/// Find message handlers in modules (mModules) and store them to map (mMessageHandlers)
 		void UpdateMessageHandlers(void);
 	private:
-		Utils::Array<string>* mModules;
+		Utils::Array<string> mModules;
 		uint32 mTimeOut;
 
 		/// Stores appropriate handler to message

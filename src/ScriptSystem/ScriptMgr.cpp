@@ -410,7 +410,7 @@ void RegisterScriptColor(asIScriptEngine* engine)
 
 // Functions for creating co-routines
 
-void ScriptCreateCoRoutine(string &func, EntityHandle arg)
+void ScriptCreateCoRoutine(string &func)
 {
 	asIScriptContext *ctx = asGetActiveContext();
 	if (ctx)
@@ -419,7 +419,7 @@ void ScriptCreateCoRoutine(string &func, EntityHandle arg)
 		string mod = engine->GetFunctionDescriptorById(ctx->GetCurrentFunction())->GetModuleName();
 
 		// We need to find the function that will be created as the co-routine
-		string decl = "void " + func + "(EntityHandle handle)"; 
+		string decl = "void " + func + "()"; 
 		int32 funcId = engine->GetModule(mod.c_str())->GetFunctionIdByDecl(decl.c_str());
 		if (funcId < 0)
 		{
@@ -429,12 +429,23 @@ void ScriptCreateCoRoutine(string &func, EntityHandle arg)
 		}
 
 		// Create a new context for the co-routine
-		asIScriptContext *coctx = gScriptMgr.AddContextAsCoRoutineToManager(ctx, funcId);
+		/*asIScriptContext *coctx = */gScriptMgr.AddContextAsCoRoutineToManager(ctx, funcId);
 
 		// Pass the argument to the context
-		int32 r = coctx->SetArgObject(0, &arg);
-		OC_ASSERT(r >= 0);
+		//int32 r = coctx->SetArgObject(0, &arg);
+		//OC_ASSERT(r >= 0);
 	}
+}
+
+EntityHandle GetCurrentEntityHandle(void)
+{
+	asIScriptContext *ctx = asGetActiveContext();
+	if (ctx)
+	{
+		EntityHandle *handle = static_cast<EntityHandle*>(ctx->GetUserData());
+		if (handle) return *handle;
+	}
+	return EntityHandle::Null;
 }
 
 void ScriptMgr::ConfigureEngine(void)
@@ -466,8 +477,12 @@ void ScriptMgr::ConfigureEngine(void)
 	RegisterScriptColor(mEngine);
 
 	// Register function for creating co-routine
-	r = mEngine->RegisterGlobalFunction("void createCoRoutine(const string &in, EntityHandle handle)", 
-		asFUNCTIONPR(ScriptCreateCoRoutine, (string&, EntityHandle), void), asCALL_CDECL); OC_SCRIPT_ASSERT();
+	r = mEngine->RegisterGlobalFunction("void createCoRoutine(const string &in)", 
+		asFUNCTIONPR(ScriptCreateCoRoutine, (string&), void), asCALL_CDECL); OC_SCRIPT_ASSERT();
+
+	// Register function for getting current owner entity handle
+	r = mEngine->RegisterGlobalFunction("EntityHandle getCurrentEntityHandle()", 
+		asFUNCTION(GetCurrentEntityHandle), asCALL_CDECL); OC_SCRIPT_ASSERT();
 
 	// Register getters, setters and array for supported types of properties
 

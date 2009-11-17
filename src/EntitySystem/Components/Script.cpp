@@ -7,18 +7,18 @@ using namespace EntitySystem;
 
 void Script::Create(void)
 {
-	mModules = new Utils::Array<string>(0);
+	
 }
 
 void Script::Destroy(void)
 {
-	delete mModules;
+
 }
 
 void Script::UpdateMessageHandlers(void)
 {
 	mMessageHandlers.clear();
-	for (int32 i=0; i<mModules->GetSize(); ++i) AnalyseModule((*mModules)[i]);
+	for (int32 i=0; i<mModules.GetSize(); ++i) AnalyseModule(mModules[i]);
 }
 
 void Script::AnalyseModule(const string& module)
@@ -41,9 +41,10 @@ EntityMessage::eResult Script::HandleMessage(const EntityMessage& msg)
 	// Return new context prepared to call function from module
 	AngelScript::asIScriptContext* ctx = gScriptMgr.PrepareContext(funcId);
 	if (ctx == 0) return EntityMessage::RESULT_IGNORED;
-	// Set parent entity handle as first argument
-	int32 r = ctx->SetArgObject(0, GetOwnerPtr());
-	OC_ASSERT(r >= 0);
+	// Set parent entity handle as context user data
+	ctx->SetUserData(GetOwnerPtr());
+	//int32 r = ctx->SetArgObject(0, GetOwnerPtr());
+	//OC_ASSERT(r >= 0);
 
 	// Add additional parameters depended on message type
 	switch(msg.type)
@@ -61,9 +62,9 @@ EntityMessage::eResult Script::HandleMessage(const EntityMessage& msg)
 
 void Script::RegisterReflection()
 {
-	RegisterProperty<Array<string>*>("Modules", &Script::GetModules, 0, PA_INIT | PA_EDIT_READ | 
+	RegisterProperty<Array<string>*>("ScriptModules", &Script::GetModules, 0, PA_INIT | PA_EDIT_READ | 
 		PA_EDIT_WRITE | PA_SCRIPT_READ, "Names of the script modules that are searched for script message handlers.");
-	RegisterProperty<uint32>("TimeOut", &Script::GetTimeOut, &Script::SetTimeOut, 
+	RegisterProperty<uint32>("ScriptTimeOut", &Script::GetTimeOut, &Script::SetTimeOut, 
 		PA_INIT | PA_EDIT_READ | PA_EDIT_WRITE | PA_SCRIPT_READ, "Maximum time of execution the scripts in ms (0 means infinity).");
 }
 
@@ -75,10 +76,10 @@ void Script::TestRunTime()
 	entDesc.AddComponent(CT_SCRIPT);
 
 	EntitySystem::EntityHandle handle = gEntityMgr.CreateEntity(entDesc);
-	Utils::Array<string>* a = handle.GetProperty("Modules").GetValue<Utils::Array<string>*>();
+	Utils::Array<string>* a = handle.GetProperty("ScriptModules").GetValue<Utils::Array<string>*>();
 	a->Resize(1);
 	(*a)[0] = "TestScript.as";
-	handle.GetProperty("TimeOut").SetValue<uint32>(1000);
+	handle.GetProperty("ScriptTimeOut").SetValue<uint32>(1000);
 	// Calls script
 	handle.FinishInit();
 }
