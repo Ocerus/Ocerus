@@ -107,6 +107,7 @@ ScriptMgr::~ScriptMgr(void)
 	mEngine->Release();
 }
 
+// Template function called from scripts that finds property (propName) of entity handle (handle) and gets its value.
 template<typename T>
 T EntityHandleGetValue(EntitySystem::EntityHandle& handle, string& propName)
 {
@@ -119,6 +120,7 @@ T EntityHandleGetValue(EntitySystem::EntityHandle& handle, string& propName)
 	}
 }
 
+// Template function called from scripts that finds property (propName) of entity handle (handle) and sets its value.
 template<typename T>
 void EntityHandleSetValue(EntitySystem::EntityHandle& handle, string& propName, T value)
 {
@@ -130,13 +132,14 @@ void EntityHandleSetValue(EntitySystem::EntityHandle& handle, string& propName, 
 	}
 }
 
+// Template proxy class that wrap Utils::Array<T> for better communication with scripts.
 template<typename T>
 class ScriptArray
 {
 public:
 	inline ScriptArray(Utils::Array<T>* array = 0) : mArray(array) {}
 
-	/// Read accessor to an array item.
+	// Read accessor to an array item.
 	inline T operator[](const int32 index) const 
 	{ 
 		if (!mArray) asGetActiveContext()->SetException("Used uninicialized array!"); 
@@ -148,7 +151,7 @@ public:
 		}
 	}
 
-	/// Write accessor to an array item.
+	// Write accessor to an array item.
 	inline T& operator[](const int32 index)
 	{ 
 		if (!mArray) asGetActiveContext()->SetException("Used uninicialized array!");
@@ -160,10 +163,10 @@ public:
 		}
 	}
 	
-	/// Returns size of the array
+	// Returns size of the array
 	inline int32 GetSize() const { return mArray->GetSize(); }
 
-	/// Resize array to newSize
+	// Resize array to newSize
 	inline void Resize(int32 newSize)
 	{ 
 		if (newSize<0)
@@ -177,6 +180,7 @@ private:
 	Utils::Array<T>* mArray;
 };
 
+// Template function called from scripts that finds array property (propName) of entity handle (handle) and returns it as non-const.
 template<typename U>
 ScriptArray<U> EntityHandleGetArrayValue(EntitySystem::EntityHandle& handle, string& propName)
 {
@@ -189,6 +193,7 @@ ScriptArray<U> EntityHandleGetArrayValue(EntitySystem::EntityHandle& handle, str
 	}
 }
 
+// Template function called from scripts that finds array property (propName) of entity handle (handle) and returns it as const.
 template<typename U>
 const ScriptArray<U> EntityHandleGetConstArrayValue(EntitySystem::EntityHandle& handle, string& propName)
 {
