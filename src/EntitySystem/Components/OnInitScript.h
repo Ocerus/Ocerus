@@ -5,6 +5,7 @@
 #define OnInitScript_h__
 
 #include "../ComponentMgr/Component.h"
+#include "Array.h"
 
 namespace EntityComponents
 {
@@ -29,9 +30,12 @@ namespace EntityComponents
 		uint32 GetOnInitTimeOut(void) const { return mOnInitTimeOut; }
 		void SetOnInitTimeOut(const uint32 timeOut) { mOnInitTimeOut = timeOut; }
 		//@}
+
+		Utils::Array<int32>* GetArrayTest(void) const { return mArrayTest; }
 	private:
 		string mOnInitScript;
 		uint32 mOnInitTimeOut;
+		Utils::Array<int32>* mArrayTest;
 
 		bool RunScript(void);
 	};

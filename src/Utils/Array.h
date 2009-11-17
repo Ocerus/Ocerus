@@ -8,9 +8,10 @@
 
 namespace Utils
 {
-	/// Templated representation of an array without the information about its size.
-	/// The array doesn't know it's size. The purpose of this class is to allow access to an array in the
-	/// same way as to C++ objects. There should be no performance decrease since every method is inlined.
+	/// Templated representation of an array with the information about its size.
+	/// The array knows its size and it can be resized. The purpose of this class is to allow access
+	/// to an array in the same way as to C++ objects and to access arrays from scripts.
+	/// There should be no performance decrease since every method is inlined.
 	template<typename T>
 	class Array
 	{
@@ -37,10 +38,27 @@ namespace Utils
 		/// Returns size of the array
 		inline int32 GetSize() const { return mSize; }
 
+		/// Resize array to newSize
+		inline void Resize(const int32 newSize)
+		{
+			OC_ASSERT(newSize>=0);
+			if (mSize == newSize) return;
+
+			T* newData = new T[newSize];
+			// Copy old data to new array
+			for (int32 i=0; i<newSize && i<mSize; ++i)
+			{
+				newData[i] = mData[i];
+			}
+			delete[] mData;
+			mData = newData;
+			mSize = newSize;
+		}
+
 	private:
 		T* mData;
 
-		const int32 mSize;
+		int32 mSize;
 		/// Copy ctor and assignment operator are disabled.
 		Array(const Array& rhs);
 		Array& operator=(const Array& rhs);

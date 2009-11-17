@@ -7,11 +7,15 @@ using namespace EntityComponents;
 void OnInitScript::Create(void)
 {
 	mOnInitScript.clear();
+	mArrayTest = new Array<int32>(3);
+	(*mArrayTest)[0] = 10;
+	(*mArrayTest)[1] = 11;
+	(*mArrayTest)[2] = 12;
 }
 
 void OnInitScript::Destroy(void)
 {
-
+	delete mArrayTest;
 }
 
 EntityMessage::eResult OnInitScript::HandleMessage(const EntityMessage& msg)
@@ -29,6 +33,7 @@ void OnInitScript::RegisterReflection()
 {
 	RegisterProperty<string>("OnInitScript", &OnInitScript::GetOnInitScript, &OnInitScript::SetOnInitScript, PA_INIT | PA_EDIT_READ | PA_SCRIPT_READ, "");
 	RegisterProperty<uint32>("OnInitTimeOut", &OnInitScript::GetOnInitTimeOut, &OnInitScript::SetOnInitTimeOut, PA_INIT | PA_EDIT_READ | PA_SCRIPT_READ, "");
+	RegisterProperty<Array<int32>*>("ArrayTest", &OnInitScript::GetArrayTest, 0, PA_INIT | PA_EDIT_READ | PA_SCRIPT_READ | PA_SCRIPT_WRITE, "");
 }
 
 bool OnInitScript::RunScript()
@@ -47,6 +52,8 @@ bool OnInitScript::RunScript()
 	bool res = gScriptMgr.ExecuteContext(ctx, mOnInitTimeOut);
 	// Release context
 	ctx->Release();
+	ocInfo << "ArrayTest[2] is " << (*mArrayTest)[2] << ".";
+	ocInfo << "ArrayTest[3] is " << (*mArrayTest)[3] << ".";
 	return res;
 }
 

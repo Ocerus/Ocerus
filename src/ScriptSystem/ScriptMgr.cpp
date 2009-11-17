@@ -107,16 +107,106 @@ ScriptMgr::~ScriptMgr(void)
 	mEngine->Release();
 }
 
-template<class T>
+template<typename T>
 T EntityHandleGetValue(EntitySystem::EntityHandle& handle, string& propName)
 {
-	return gEntityMgr.GetEntityProperty(handle, StringKey(propName), Reflection::PA_SCRIPT_READ).GetValue<T>();
+	Reflection::PropertyHolder ph = gEntityMgr.GetEntityProperty(handle, StringKey(propName), Reflection::PA_SCRIPT_READ);
+	if (ph.IsValid()) return ph.GetValue<T>();
+	else
+	{
+		asGetActiveContext()->SetException(("Property '" + propName + "' does not exist or you don't have access rights!").c_str());
+		return Reflection::PropertyTypes::GetDefaultValue<T>();
+	}
 }
 
-template<class T>
+template<typename T>
 void EntityHandleSetValue(EntitySystem::EntityHandle& handle, string& propName, T value)
 {
-	gEntityMgr.GetEntityProperty(handle, StringKey(propName), Reflection::PA_SCRIPT_WRITE).SetValue<T>(value);
+	Reflection::PropertyHolder ph = gEntityMgr.GetEntityProperty(handle, StringKey(propName), Reflection::PA_SCRIPT_WRITE);
+	if (ph.IsValid()) ph.SetValue<T>(value);
+	else
+	{
+		asGetActiveContext()->SetException(("Property '" + propName + "' does not exist or you don't have access rights!").c_str());
+	}
+}
+
+template<typename T>
+class ScriptArray
+{
+public:
+	inline ScriptArray(Utils::Array<T>* array = 0) : mArray(array) {}
+
+	/// Read accessor to an array item.
+	inline T operator[](const int32 index) const 
+	{ 
+		if (!mArray) asGetActiveContext()->SetException("Used uninicialized array!"); 
+		if (index>=0 && index<mArray->GetSize()) return (*mArray)[index];
+		else
+		{ 
+			asGetActiveContext()->SetException("Array index out of bounds!"); 
+			return PropertyTypes::GetDefaultValue<T>();
+		}
+	}
+
+	/// Write accessor to an array item.
+	inline T& operator[](const int32 index)
+	{ 
+		if (!mArray) asGetActiveContext()->SetException("Used uninicialized array!");
+		if (index>=0 && index<mArray->GetSize()) return (*mArray)[index];
+		else
+		{
+			asGetActiveContext()->SetException("Array index out of bounds!");
+			return (*mArray)[0];
+		}
+	}
+	
+	/// Returns size of the array
+	inline int32 GetSize() const { return mArray->GetSize(); }
+
+	/// Resize array to newSize
+	inline void Resize(int32 newSize)
+	{ 
+		if (newSize<0)
+		{
+			asGetActiveContext()->SetException("Cannot resize array to negative size!");
+			return;
+		}
+		mArray->Resize(newSize);
+	}
+private:
+	Utils::Array<T>* mArray;
+};
+
+template<typename U>
+ScriptArray<U> EntityHandleGetArrayValue(EntitySystem::EntityHandle& handle, string& propName)
+{
+	Reflection::PropertyHolder ph = gEntityMgr.GetEntityProperty(handle, StringKey(propName), Reflection::PA_SCRIPT_WRITE);
+	if (ph.IsValid()) return ScriptArray<U>(ph.GetValue<Array<U>*>());
+	else
+	{
+		asGetActiveContext()->SetException(("Property '" + propName + "' does not exist or you don't have access rights!").c_str());
+		return ScriptArray<U>(0);
+	}
+}
+
+template<typename U>
+const ScriptArray<U> EntityHandleGetConstArrayValue(EntitySystem::EntityHandle& handle, string& propName)
+{
+	Reflection::PropertyHolder ph = gEntityMgr.GetEntityProperty(handle, StringKey(propName), Reflection::PA_SCRIPT_READ);
+	if (ph.IsValid()) return ScriptArray<U>(ph.GetValue<Array<U>*>());
+	else
+	{
+		asGetActiveContext()->SetException(("Property '" + propName + "' does not exist or you don't have access rights!").c_str());
+		return ScriptArray<U>(0);
+	}
+}
+
+// Functions for register ScriptArray<U> to script
+
+template<typename U>
+static void ArrayDefaultConstructor(ScriptArray<U>* self)
+{
+	new(self) ScriptArray<U>();
 }
 
 // Functions for register Vector2 to script
@@ -374,18 +464,37 @@ void ScriptMgr::ConfigureEngine(void)
 	r = mEngine->RegisterGlobalFunction("void createCoRoutine(const string &in, EntityHandle handle)", 
 		asFUNCTIONPR(ScriptCreateCoRoutine, (string&, EntityHandle), void), asCALL_CDECL); OC_SCRIPT_ASSERT();
 
-	// Register getters and setters for supported types of properties
+	// Register getters, setters and array for supported types of properties
+
     #define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName) \
+	/* Register getter and setter */ \
 	r = mEngine->RegisterObjectMethod("EntityHandle", (string(typeName) + " Get_" + typeName + "(string &in)").c_str(), \
 		asFUNCTIONPR(EntityHandleGetValue, (EntitySystem::EntityHandle&, string&), typeClass), \
 		asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT(); \
 	r = mEngine->RegisterObjectMethod("EntityHandle", (string("void Set_") + typeName + "(string &in, " + typeName + ")").c_str(), \
 		asFUNCTIONPR(EntityHandleSetValue, (EntitySystem::EntityHandle&, string&, typeClass), void), \
+		asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT(); \
+	/* Register the array type */ \
+	r = mEngine->RegisterObjectType((string("array_") + typeName).c_str(), sizeof(ScriptArray<typeClass>), asOBJ_VALUE | asOBJ_POD | asOBJ_APP_CLASS_CA); OC_SCRIPT_ASSERT(); \
+	/* Register the default (dummy) constructor of array type */ \
+	r = mEngine->RegisterObjectBehaviour((string("array_") + typeName).c_str(), asBEHAVE_CONSTRUCT, "void f()", asFUNCTION(ArrayDefaultConstructor<typeClass>), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT(); \
+	/* Register the array methods */ \
+	r = mEngine->RegisterObjectMethod((string("array_") + typeName).c_str(), "int32 GetSize() const", asMETHOD(ScriptArray<typeClass>, GetSize), asCALL_THISCALL); OC_SCRIPT_ASSERT(); \
+	r = mEngine->RegisterObjectMethod((string("array_") + typeName).c_str(), "void Resize(int32)", asMETHOD(ScriptArray<typeClass>, Resize), asCALL_THISCALL); OC_SCRIPT_ASSERT(); \
+	/* Register both the const and non-const alternative for index behaviour of array */ \
+	r = mEngine->RegisterObjectBehaviour((string("array_") + typeName).c_str(), asBEHAVE_INDEX, (string(typeName) + " &f(int32)").c_str(), asMETHODPR(ScriptArray<typeClass>, operator[], (int32), typeClass&), asCALL_THISCALL); OC_SCRIPT_ASSERT(); \
+	r = mEngine->RegisterObjectBehaviour((string("array_") + typeName).c_str(), asBEHAVE_INDEX, (string(typeName) + " f(int32) const").c_str(), asMETHODPR(ScriptArray<typeClass>, operator[], (int32) const, typeClass), asCALL_THISCALL); OC_SCRIPT_ASSERT(); \
+	/* Register array const and non-const getter */ \
+	r = mEngine->RegisterObjectMethod("EntityHandle", (string("array_") + typeName + " Get_array_" + typeName + "(string &in)").c_str(), \
+		asFUNCTIONPR(EntityHandleGetArrayValue, (EntitySystem::EntityHandle&, string&), ScriptArray<typeClass>), \
+		asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT(); \
+	r = mEngine->RegisterObjectMethod("EntityHandle", (string("const array_") + typeName + " Get_const_array_" + typeName + "(string &in)").c_str(), \
+		asFUNCTIONPR(EntityHandleGetConstArrayValue, (EntitySystem::EntityHandle&, string&), const ScriptArray<typeClass>), \
 		asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
 	#define SCRIPT_ONLY
 	#include "../Utils/Properties/PropertyTypes.h"
 	#undef SCRIPT_ONLY
-	#undef PROPERTY_TYPE
+	#undef PROPERTY_TYPE	
 }
 
 asIScriptContext* ScriptMgr::PrepareContext(int32 funcId)
