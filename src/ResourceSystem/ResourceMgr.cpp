@@ -19,8 +19,11 @@
 
 using namespace ResourceSystem;
 
+
+const uint64 RESOURCE_UPDATES_DELAY_MILLIS = 500;
+
 ResourceMgr::ResourceMgr( void ):
-	mBasePath(), mListener(0)
+	mBasePath(), mListener(0), mResourceUpdatesTimer(false)
 {
 
 }
@@ -60,6 +63,8 @@ void ResourceSystem::ResourceMgr::Init( const string& basepath )
 	mExtToTypeMap["as"] = RESTYPE_SCRIPTRESOURCE;
 
 	OC_ASSERT_MSG(mResourceCreationMethods[NUM_RESTYPES-1], "Not all resource types are registered");
+
+	mLastUpdateTime = 0;
 
 	ocInfo << "All resource types registered";
 }
@@ -368,5 +373,15 @@ void ResourceSystem::ResourceMgr::RefreshAllResources( void )
 		{
 			resIter->second->Refresh();
 		}
+	}
+}
+
+void ResourceSystem::ResourceMgr::CheckForResourcesUpdates( void )
+{
+	uint64 currentTime = mResourceUpdatesTimer.GetMilliseconds();
+	if (currentTime - mLastUpdateTime >= RESOURCE_UPDATES_DELAY_MILLIS)
+	{
+		mLastUpdateTime = currentTime;
+		RefreshAllResources();
 	}
 }

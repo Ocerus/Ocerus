@@ -325,6 +325,37 @@ PropertyHolder EntitySystem::EntityMgr::GetEntityProperty( const EntityHandle en
 	return PropertyHolder();
 }
 
+Reflection::PropertyHolder EntitySystem::EntityMgr::GetEntityComponentProperty( const EntityHandle entity, const ComponentID component, const StringKey propertyKey, const PropertyAccessFlags flagMask /*= PA_FULL_ACCESS*/ ) const
+{
+	if (component >= mComponentMgr->GetNumberOfEntityComponents(entity.GetID()))
+	{
+		ocError << "Invalid component ID: " << component;
+		return PropertyHolder();
+	}
+
+	Component* cmp = mComponentMgr->GetEntityComponent(entity.GetID(), component);
+	AbstractProperty* prop = cmp->GetRTTI()->GetProperty(propertyKey, flagMask);
+	if (prop) return PropertyHolder(cmp, prop);
+
+
+	// property not found, print some info about why
+	ocError << "EntityMgr: unknown property '" << propertyKey << "'";
+	PropertyList propertyList;
+	string propertiesString;
+	GetEntityComponentProperties(entity.GetID(), component, propertyList, flagMask);
+	for (PropertyList::iterator it=propertyList.begin(); it!=propertyList.end(); )
+	{
+		propertiesString += it->GetName();
+		++it;
+		if (it==propertyList.end()) propertiesString += ".";
+		else propertiesString += ", ";
+	}
+	ocError << "Available properties (flags=" << (uint32)flagMask << "): " << propertiesString;
+
+	// return an invalid holder
+	return PropertyHolder();	
+}
+
 bool EntitySystem::EntityMgr::HasEntityProperty( const EntityHandle entity, const StringKey key, const PropertyAccessFlags flagMask /*= PA_FULL_ACCESS*/ ) const
 {
 	OC_DASSERT(mComponentMgr);
@@ -724,37 +755,6 @@ void EntitySystem::EntityMgr::UnlinkEntityFromPrototype( const EntityHandle enti
 	}
 
 	parentPrototypeIter->second->mInstancesCount--;
-}
-
-Reflection::PropertyHolder EntitySystem::EntityMgr::GetEntityComponentProperty( const EntityHandle entity, const ComponentID component, const StringKey propertyKey, const PropertyAccessFlags flagMask /*= PA_FULL_ACCESS*/ ) const
-{
-	if (component >= mComponentMgr->GetNumberOfEntityComponents(entity.GetID()))
-	{
-		ocError << "Invalid component ID: " << component;
-		return PropertyHolder();
-	}
-
-	Component* cmp = mComponentMgr->GetEntityComponent(entity.GetID(), component);
-	AbstractProperty* prop = cmp->GetRTTI()->GetProperty(propertyKey, flagMask);
-	if (prop) return PropertyHolder(cmp, prop);
-
-
-	// property not found, print some info about why
-	ocError << "EntityMgr: unknown property '" << propertyKey << "'";
-	PropertyList propertyList;
-	string propertiesString;
-	GetEntityComponentProperties(entity.GetID(), component, propertyList, flagMask);
-	for (PropertyList::iterator it=propertyList.begin(); it!=propertyList.end(); )
-	{
-		propertiesString += it->GetName();
-		++it;
-		if (it==propertyList.end()) propertiesString += ".";
-		else propertiesString += ", ";
-	}
-	ocError << "Available properties (flags=" << (uint32)flagMask << "): " << propertiesString;
-
-	// return an invalid holder
-	return PropertyHolder();	
 }
 
 bool EntitySystem::EntityMgr::GetEntityComponentProperties( const EntityHandle entity, const ComponentID component, PropertyList& out, const PropertyAccessFlags flagMask /*= PA_FULL_ACCESS*/ ) const

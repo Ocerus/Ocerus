@@ -74,6 +74,9 @@ namespace Core
 		/// Application states.
 		LoadingScreen* mLoadingScreen;
 		Game* mGame;
+
+		/// Application settings.
+		bool mDevelopMode; // if true editor support is turned on
 		
 		/// Represents global settings of the application.
 		Config* mGlobalConfig;

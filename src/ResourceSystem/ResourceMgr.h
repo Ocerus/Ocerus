@@ -66,6 +66,10 @@ namespace ResourceSystem
 		/// Makes sure all loaded resources are up to date.
 		void RefreshAllResources(void);
 
+		/// Performs a periodic test on resources to determine if they're up to date. The function is non-blocking.
+		/// The function is meant to be called each frame.
+		void CheckForResourcesUpdates(void);
+
 		/// Loading listener receives callbacks from the manager when a resource is being loaded.
 		void SetLoadingListener(IResourceLoadingListener* listener);
 
@@ -92,6 +96,8 @@ namespace ResourceSystem
 		ExtToTypeMap mExtToTypeMap;
 		IResourceLoadingListener* mListener;
 		ResourceCreationMethod mResourceCreationMethods[NUM_RESTYPES];
+		Utils::Timer mResourceUpdatesTimer;
+		uint64 mLastUpdateTime;
 
 		void AddResourceToGroup(const StringKey& group, const StringKey& name, const ResourcePtr res);
 	};

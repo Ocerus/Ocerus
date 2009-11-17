@@ -27,6 +27,9 @@ void Application::Init()
 	mGlobalConfig = new Config("config.txt");
 	GlobalProperties::SetPointer("GlobalConfig", mGlobalConfig);
 
+	// make the app settings public
+	GlobalProperties::SetPointer("DevelopMode", &mDevelopMode);
+
 	// load console properties
 	mConsoleX = mGlobalConfig->GetInt32("ConsoleX", 0, "Windows");
 	mConsoleY = mGlobalConfig->GetInt32("ConsoleY", 0, "Windows");
@@ -107,6 +110,9 @@ void Application::RunMainLoop()
 
 		// process input events
 		gInputMgr.CaptureInput();
+
+		// make sure the resources are up to date
+		if (mDevelopMode) gResourceMgr.CheckForResourcesUpdates();
 
 		// calculate time since last frame
 		float32 delta = CalculateFrameDeltaTime();
