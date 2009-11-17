@@ -1,5 +1,10 @@
 /// @file
 /// Here are definitions of types for all properties in the system. The macro used for definition is inside PropertyEnums.h.
+/// @remarks
+/// Note that array types are not presented here. Instead, they are generated automatically. As an example imagine type
+/// PROPERTY_TYPE(PT_BOOL, bool, false, "bool")
+/// The corresponding array would be
+/// PROPERTY_TYPE(PT_BOOL_ARRAY, Array<bool>*, 0, "Array<bool>*")
 
 PROPERTY_TYPE(PT_BOOL, bool, false, "bool")
 PROPERTY_TYPE(PT_INT8, int8, 0, "int8")
@@ -27,14 +32,11 @@ PROPERTY_TYPE(PT_UINT16_ARRAY, Array<uint16>*, 0, "Array<uint16>*")
 PROPERTY_TYPE(PT_UINT32_ARRAY, Array<uint32>*, 0, "Array<uint32>*")
 PROPERTY_TYPE(PT_UINT64_ARRAY, Array<uint64>*, 0, "Array<uint64>*")
 PROPERTY_TYPE(PT_FLOAT32_ARRAY, Array<float32>*, 0, "Array<float>*")
-//PROPERTY_TYPE(PT_VECTOR2_ARRAY, Array<Vector2>*, 0, "Array<Vector2>*")
+PROPERTY_TYPE(PT_VECTOR2_ARRAY, Array<Vector2>*, 0, "Array<Vector2>*")
 PROPERTY_TYPE(PT_STRING_ARRAY, Array<string>*, 0, "Array<string>*")
 PROPERTY_TYPE(PT_STRING_KEY_ARRAY, Array<Utils::StringKey>*, 0, "Array<StringKey>*")
-//PROPERTY_TYPE(PT_ENTITYHANDLE_ARRAY, Array<EntitySystem::EntityHandle>*, 0, "Array<EntityHandle>*")
+PROPERTY_TYPE(PT_ENTITYHANDLE_ARRAY, Array<EntitySystem::EntityHandle>*, 0, "Array<EntityHandle>*")
 PROPERTY_TYPE(PT_COLOR_ARRAY, Array<GfxSystem::Color>*, 0, "Array<Color>*")
-
-PROPERTY_TYPE(PT_VECTOR2_ARRAY, Vector2*, 0, "Vector2[]")
-PROPERTY_TYPE(PT_ENTITYHANDLE_ARRAY, EntitySystem::EntityHandle*, 0, "EntityHandle[]")
 PROPERTY_TYPE(PT_FUNCTION_PARAMETER, PropertyFunctionParameters, 0, "PropertyFunctionParameters")
 #endif
 

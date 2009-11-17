@@ -319,7 +319,7 @@ PropertyHolder EntitySystem::EntityMgr::GetEntityProperty( const EntityHandle en
 		if (it==propertyList.end()) propertiesString += ".";
 		else propertiesString += ", ";
 	}
-	ocError << "Available properties (flags=" << flagMask << "): " << propertiesString;
+	ocError << "Available properties (flags=" << (uint32)flagMask << "): " << propertiesString;
 
 	// return an invalid holder
 	return PropertyHolder();
@@ -355,36 +355,21 @@ void EntitySystem::EntityMgr::LoadEntityPropertyFromXML( const EntityID entityID
 
 	if (prop.GetType() == PT_VECTOR2_ARRAY)
 	{
-		string lengthParam;
 		vector<Vector2> vertices;
 		for (ResourceSystem::XMLNodeIterator vertIt=xml->IterateChildren(xmlPropertyIterator); vertIt!=xml->EndChildren(xmlPropertyIterator); ++vertIt)
 		{
 			if ((*vertIt).compare("Vertex") == 0)
 				vertices.push_back(vertIt.GetChildValue<Vector2>());
-			else if ((*vertIt).compare("LengthParam") == 0)
-				lengthParam = vertIt.GetChildValue<string>();
 			else
-				ocError << "XML:Entity: Expected 'Vertex' or 'LengthParam', found '" << *vertIt << "'";
+				ocError << "XML:Entity: Expected 'Vertex', found '" << *vertIt << "'";
 		}
-		if (lengthParam.length() == 0)
+		
+		Array<Vector2> vertArray(vertices.size());
+		for (uint32 i=0; i<vertices.size(); ++i)
 		{
-			ocError << "XML:Entity: LengthParam of an array not specified";
+			vertArray[i] = vertices[i];
 		}
-		else if (!HasEntityComponentProperty(entityID, componentID, prop.GetKey(), PA_INIT))
-		{
-			ocError << "XML:Entity: LengthParam of name '" << lengthParam << "' not found in entity";
-		}
-		else
-		{
-			// the property was stored in the XML file for the prototype, so it's a shared property
-			if (prototypeInfo) prototypeInfo->mSharedProperties.insert(lengthParam);
-
-			GetEntityComponentProperty(entityID, componentID, lengthParam).SetValue<uint32>(vertices.size());
-			Vector2* vertArray = new Vector2[vertices.size()];
-			for (uint32 i=0; i<vertices.size(); ++i)
-				vertArray[i] = vertices[i];
-			prop.SetValue<Vector2*>(vertArray);
-		}
+		prop.SetValue<Array<Vector2>*>(&vertArray);
 	}
 	else
 	{
@@ -766,7 +751,7 @@ Reflection::PropertyHolder EntitySystem::EntityMgr::GetEntityComponentProperty( 
 		if (it==propertyList.end()) propertiesString += ".";
 		else propertiesString += ", ";
 	}
-	ocError << "Available properties (flags=" << flagMask << "): " << propertiesString;
+	ocError << "Available properties (flags=" << (uint32)flagMask << "): " << propertiesString;
 
 	// return an invalid holder
 	return PropertyHolder();	

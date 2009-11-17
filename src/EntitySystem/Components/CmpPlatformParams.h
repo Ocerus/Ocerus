@@ -50,15 +50,10 @@ namespace EntityComponents
 		float32 GetBaseDetachingChance(void) const { return mBaseDetachingChance; }
 		void SetBaseDetachingChance(const float32 chance) { mBaseDetachingChance = chance; }
 		//@}
-		/// @name Number of vertices of the shape.
-		//@{
-		uint32 GetShapeLength(void) const { return mShapeLength; }
-		void SetShapeLength(const uint32 len) { mShapeLength = len; }
-		//@}
 		/// @name Shape of this platform.
 		//@{
-		Vector2* GetShape(void) const { return mShape; }
-		void SetShape(Vector2* shape);
+		Array<Vector2>* GetShape(void) const;
+		void SetShape(Array<Vector2>* shape);
 		//@}
 		/// @name Effect used when the platform is destroyed.
 		//@{
@@ -86,8 +81,7 @@ namespace EntityComponents
 		float32 mArea;
 		float32 mMass;
 		float32 mBaseDetachingChance;
-		uint32 mShapeLength;
-		Vector2* mShape;
+		Array<Vector2> mShape;
 		float32 mExplodeEffectScale;
 		StringKey mExplodeEffect;
 		StringKey mResourceGroup;

@@ -17,6 +17,9 @@ namespace Utils
 	{
 	public:
 
+		/// Constructs an empty array.
+		inline Array(void): mSize(0), mData(0) {}
+
 		/// Constructs new array with a given size.
 		inline Array(const int32 size): mSize(size)
 		{
@@ -24,9 +27,17 @@ namespace Utils
 		}
 
 		/// Destructs the array correctly.
-		inline ~Array(void)
+		~Array(void)
 		{
-			delete[] mData;
+			Clear();
+		}
+
+		/// Destroys the data the array carries.
+		void Clear(void)
+		{
+			if (mData) delete[] mData;
+			mData = 0;
+			mSize = 0;
 		}
 
 		/// Read accessor to an array item.
@@ -35,10 +46,13 @@ namespace Utils
 		/// Write accessor to an array item.
 		inline T& operator[](const int32 index) { return mData[index]; }
 
-		/// Returns size of the array
-		inline int32 GetSize() const { return mSize; }
+		/// Returns size of the array.
+		inline int32 GetSize(void) const { return mSize; }
 
-		/// Resize array to newSize
+		/// Returns the C-like array pointer.
+		inline T* GetRawArrayPtr(void) const { return mData; }
+
+		/// Resize array to newSize.
 		void Resize(const int32 newSize)
 		{
 			OC_ASSERT(newSize>=0);
@@ -50,9 +64,19 @@ namespace Utils
 			{
 				newData[i] = mData[i];
 			}
-			delete[] mData;
+			if (mData) delete[] mData;
 			mData = newData;
 			mSize = newSize;
+		}
+
+		/// Makes a deep copy of the array.
+		void CopyFrom(const Array<T>& toCopy)
+		{
+			Resize(toCopy.GetSize());
+			for (int32 i=0; i<mSize; ++i)
+			{
+				mData[i] = toCopy[i];
+			}
 		}
 
 	private:

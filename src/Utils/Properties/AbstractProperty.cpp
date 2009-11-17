@@ -70,11 +70,7 @@ void Reflection::AbstractProperty::SetValueFromString( RTTIBaseClass* owner, con
 			SetValue(owner, e);
 			break;
 		}
-	case PT_VECTOR2_ARRAY:
-	case PT_ENTITYHANDLE_ARRAY:
-		ocError << "Can't parse property of type '" << PropertyTypes::GetStringName(GetType()) << "' from string (not allowed)";
-		break;
 	default:
-		ocError << "Parsing property of type '" << PropertyTypes::GetStringName(GetType()) << "' from string is not implemented in the file " << __FILE__;
+		ocError << "Parsing property of type '" << PropertyTypes::GetStringName(GetType()) << "' from string is not implemented";
     }
 }

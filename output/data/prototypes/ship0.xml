@@ -10,7 +10,6 @@
     </Component>
     <Component Type="CT_PLATFORM_PARAMS">
       <Shape>
-        <LengthParam>ShapeLength</LengthParam>
         <Vertex>-1.33 -0.33</Vertex>
         <Vertex>0.58 -0.33</Vertex>
       	<Vertex>1.17 0.25</Vertex>

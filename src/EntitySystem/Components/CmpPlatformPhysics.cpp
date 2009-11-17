@@ -51,14 +51,13 @@ void EntityComponents::CmpPlatformPhysics::CreateBody( const bool hasParentShip 
 	float32 density = GetProperty("Density").GetValue<float32>();;
 	shapeDef.density = density;
 	// retrieve original shape
-	Vector2* poly = GetProperty("Shape").GetValue<Vector2*>();
-	uint32 polyLen = GetProperty("ShapeLength").GetValue<uint32>();
+	Array<Vector2>& poly = *GetProperty("Shape").GetValue<Array<Vector2>*>();
 	// retrieve shape transformation info
 	bool flip = mInitShapeFlip;
 	float32 angle = mInitShapeAngle;
 	b2XForm xform(Vector2_Zero, b2Mat22(angle));
 	// create the shape
-	for (int i=flip?(polyLen-1):(0); flip?(i>=0):(i<(int)polyLen); flip?(--i):(++i))
+	for (int i=flip?(poly.GetSize()-1):(0); flip?(i>=0):(i<(int)poly.GetSize()); flip?(--i):(++i))
 	{
 		Vector2 vec = poly[i];
 		if (flip)

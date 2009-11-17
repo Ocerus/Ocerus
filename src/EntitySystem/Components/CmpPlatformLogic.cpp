@@ -119,16 +119,15 @@ void EntityComponents::CmpPlatformLogic::Die( void )
 void EntityComponents::CmpPlatformLogic::ComputePickStuff( void )
 {
 	// compute pick stuff
-	Vector2* shape = GetProperty("Shape").GetValue<Vector2*>();
-	int32 shapeLen = GetProperty("ShapeLength").GetValue<uint32>();
+	Array<Vector2>& shape = *GetProperty("Shape").GetValue<Array<Vector2>*>();
 	// compute center
 	mPickCircleCenter.SetZero();
-	for (int i=0; i<shapeLen; ++i)
+	for (int i=0; i<shape.GetSize(); ++i)
 		mPickCircleCenter += shape[i];
-	mPickCircleCenter *= 1.0f/shapeLen;
+	mPickCircleCenter *= 1.0f/shape.GetSize();
 	// compute radius
 	mPickCircleRadius = 0.0f;
-	for (int i=0; i<shapeLen; ++i)
+	for (int i=0; i<shape.GetSize(); ++i)
 	{
 		float32 dist = MathUtils::Distance(mPickCircleCenter, shape[i]);
 		if (dist > mPickCircleRadius)

@@ -11,8 +11,6 @@ using namespace EntityComponents;
 void EntityComponents::CmpPlatformParams::Create( void )
 {
 	mMaterial.Invalidate();
-	mShapeLength = 0;
-	mShape = 0;
 	mResourceGroup = "";
 	mExplodeEffect = "";
 	mExplodeEffectScale = 1;
@@ -28,11 +26,7 @@ void EntityComponents::CmpPlatformParams::Create( void )
 
 void EntityComponents::CmpPlatformParams::Destroy( void )
 {
-	if (mShape)
-	{
-		delete[] mShape;
-		mShape = 0;
-	}
+	mShape.Clear();
 }
 
 EntityMessage::eResult EntityComponents::CmpPlatformParams::HandleMessage( const EntityMessage& msg )
@@ -50,7 +44,7 @@ EntityMessage::eResult EntityComponents::CmpPlatformParams::HandleMessage( const
 
 void CmpPlatformParams::ComputeParams()
 {
-	mArea = MathUtils::ComputePolygonArea(mShape, mShapeLength);
+	mArea = MathUtils::ComputePolygonArea(mShape.GetRawArrayPtr(), mShape.GetSize());
 	float32 density = GetProperty("Density").GetValue<float32>();
 	mMass = mArea * density;
 	float32 durabilityRatio = GetProperty("DurabilityRatio").GetValue<float32>();;
@@ -59,11 +53,11 @@ void CmpPlatformParams::ComputeParams()
 
 	// compute perimeter of the BS of the platform
 	Vector2 center(0, 0);
-	for (uint32 i=0; i<mShapeLength; ++i)
+	for (int32 i=0; i<mShape.GetSize(); ++i)
 		center += mShape[i];
-	center *= 1.0f/mShapeLength;
+	center *= 1.0f/mShape.GetSize();
 	float32 perimeter = 0.0f;
-	for (uint32 i=0; i<mShapeLength; ++i)
+	for (int32 i=0; i<mShape.GetSize(); ++i)
 	{
 		float32 dist = MathUtils::Distance(mShape[i], center);
 		if (dist > perimeter)
@@ -73,13 +67,14 @@ void CmpPlatformParams::ComputeParams()
 	mBaseDetachingChance = 0.5f;
 }
 
-void EntityComponents::CmpPlatformParams::SetShape(Vector2* shape)
+Array<Vector2>* EntityComponents::CmpPlatformParams::GetShape( void ) const
 {
-	if (mShape)
-		delete[] mShape;
-	mShape = new Vector2[mShapeLength];
-	for (uint32 i=0; i<mShapeLength; ++i)
-		mShape[i] = shape[i];
+	return const_cast<Array<Vector2>*>(&mShape);
+}
+
+void EntityComponents::CmpPlatformParams::SetShape(Array<Vector2>* shape)
+{
+	mShape.CopyFrom(*shape);
 }
 
 void EntityComponents::CmpPlatformParams::RegisterReflection()
@@ -91,8 +86,7 @@ void EntityComponents::CmpPlatformParams::RegisterReflection()
 	RegisterProperty<float32>("Area", &CmpPlatformParams::GetArea, &CmpPlatformParams::SetArea, PA_EDIT_READ | PA_SCRIPT_READ, "");
 	RegisterProperty<float32>("Mass", &CmpPlatformParams::GetMass, &CmpPlatformParams::SetMass, PA_EDIT_READ | PA_SCRIPT_READ, "");
 	RegisterProperty<float32>("BaseDetachingChance", &CmpPlatformParams::GetBaseDetachingChance, &CmpPlatformParams::SetBaseDetachingChance, PA_EDIT_READ | PA_SCRIPT_READ, "");
-	RegisterProperty<uint32>("ShapeLength", &CmpPlatformParams::GetShapeLength, &CmpPlatformParams::SetShapeLength, PA_INIT | PA_EDIT_READ | PA_SCRIPT_READ, "");
-	RegisterProperty<Vector2*>("Shape", &CmpPlatformParams::GetShape, &CmpPlatformParams::SetShape, PA_INIT | PA_EDIT_READ | PA_SCRIPT_READ, "");
+	RegisterProperty<Array<Vector2>*>("Shape", &CmpPlatformParams::GetShape, &CmpPlatformParams::SetShape, PA_INIT | PA_EDIT_READ | PA_SCRIPT_READ, "");
 	RegisterProperty<float32>("ExplodeEffectScale", &CmpPlatformParams::GetExplodeEffectScale, &CmpPlatformParams::SetExplodeEffectScale, PA_INIT | PA_EDIT_READ | PA_SCRIPT_READ, "");
 	RegisterProperty<StringKey>("ExplodeEffect", &CmpPlatformParams::GetExplodeEffect, &CmpPlatformParams::SetExplodeEffect, PA_INIT | PA_EDIT_READ | PA_SCRIPT_READ, "");
 	RegisterProperty<StringKey>("ResourceGroup", &CmpPlatformParams::GetResourceGroup, &CmpPlatformParams::SetResourceGroup, PA_INIT | PA_EDIT_READ | PA_SCRIPT_READ, "");
