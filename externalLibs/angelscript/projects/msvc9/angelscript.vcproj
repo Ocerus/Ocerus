@@ -115,7 +115,7 @@
 				AdditionalIncludeDirectories="../../../../src/Setup;../../../../src/Utils"
 				PreprocessorDefinitions="ANGELSCRIPT_EXPORT;WIN32;NDEBUG;_LIB"
 				StringPooling="true"
-				ExceptionHandling="0"
+				ExceptionHandling="1"
 				RuntimeLibrary="0"
 				BufferSecurityCheck="false"
 				RuntimeTypeInfo="false"
