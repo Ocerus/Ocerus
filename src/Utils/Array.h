@@ -18,7 +18,7 @@ namespace Utils
 	public:
 
 		/// Constructs an empty array.
-		inline Array(void): mSize(0), mData(0) {}
+		inline Array(void): mData(0), mSize(0) {}
 
 		/// Constructs new array with a given size.
 		inline Array(const int32 size): mSize(size)
@@ -81,7 +81,6 @@ namespace Utils
 
 	private:
 		T* mData;
-
 		int32 mSize;
 		/// Copy ctor and assignment operator are disabled.
 		Array(const Array& rhs);

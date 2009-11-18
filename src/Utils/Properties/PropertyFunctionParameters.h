@@ -57,55 +57,45 @@ namespace Reflection
 	class PropertyFunctionParameters
 	{
 	public:
+		/// Empty parameters.
+		static PropertyFunctionParameters Null;
 
-		/// No parameters.
-		static PropertyFunctionParameters None;
-
-		/// Constructs new empty parameters. No parameter will be allowed to add when using this constructor.
-		PropertyFunctionParameters(void);
-
-		/// Constructs new parameters and allocates necessary memory for them. Maximum number of parameter is required.
-		PropertyFunctionParameters(int32 numParameters);
-
-		/// Copy constructor.
-		PropertyFunctionParameters(const PropertyFunctionParameters& rhs);
-
-		/// Assignment operator.
-		PropertyFunctionParameters& operator=(const PropertyFunctionParameters& rhs);
-
-		/// Comparison operator.
-		bool operator==(const PropertyFunctionParameters& rhs);
-
-		/// Reinitializes the parameters.
-		void Reset(int32 numParameters);
+		/// Constructs new empty parameters.
+		PropertyFunctionParameters();
 
 		/// Destroys the parameters and deallocates used memory.
 		~PropertyFunctionParameters(void);
 
+		/// Comparison operator.
+		bool operator==(const PropertyFunctionParameters& rhs);
+
+
 		/// Adds a parameter to the end of the list.
-		inline void PushParameter(PropertyFunctionParameter toAdd)
+		inline void PushParameter(const PropertyFunctionParameter& toAdd)
 		{
-			OC_DASSERT(mParameters != 0);
-			OC_DASSERT_MSG(mParametersCount < mParametersMaxCount, "Too many parameters added!");
-			(*mParameters)[mParametersCount++] = toAdd;
+			mParameters->push_back(toAdd);
 		}
 
-		/// Returns a parameter specified by the index.
-		inline PropertyFunctionParameter GetParameter(int32 index) const
+		/// Returns a parameter specified by the index. If index out of range is
+		/// supplied, returns null parameter.
+		inline PropertyFunctionParameter GetParameter(uint32 index) const
 		{
-			OC_DASSERT(mParameters != 0);
-			OC_DASSERT_MSG(index>=0 && index<mParametersCount, "Parameter index out of bounds!");
-			return (*mParameters)[index];
+			if (index < 0 || index >= mParameters->size())
+			{
+				return PropertyFunctionParameter();
+			}
+			return mParameters->at(index);
 		}
 
 		/// Returns the number of actual parameters inserted into this parameter holder.
-		inline int32 GetParametersCount(void) const { return mParametersCount; }
+		inline int32 GetParametersCount(void) const { return mParameters->size(); }
 
 	private:
 
-		int32 mParametersCount;
-		int32 mParametersMaxCount;
-		boost::shared_ptr< Array<PropertyFunctionParameter> > mParameters;
+		//int32 mParametersCount;
+		//int32 mParametersMaxCount;
+		boost::shared_ptr< vector<PropertyFunctionParameter> > mParameters;
+		//boost::shared_ptr< Array<PropertyFunctionParameter> > mParameters;
 	};
 }
 

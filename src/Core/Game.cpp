@@ -106,7 +106,7 @@ void Core::Game::Init()
 	if (ship.IsValid())
 	{
 		PropertyHolder prop = ship.GetFunction("MyFunction");
-		PropertyFunctionParameters params(1);
+		PropertyFunctionParameters params;
 		string str("Calling my function");
 		params.PushParameter(&str);
 		prop.CallFunction(params);

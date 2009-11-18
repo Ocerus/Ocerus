@@ -41,8 +41,7 @@ set(SRC_FILES
 
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/Source/Common
-    ${CMAKE_SOURCE_DIR}/src/Setup
-    ${CMAKE_SOURCE_DIR}/src/Utils
+    ${CMAKE_SOURCE_DIR}/src
 )
 
 add_library( box2d ${SRC_FILES} )

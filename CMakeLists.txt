@@ -99,7 +99,7 @@ endif (OIS_FOUND)
 ###############
 set(Boost_USE_STATIC_LIBS   ON)
 set(Boost_USE_MULTITHREADED ON)
-find_package( Boost 1.36 REQUIRED COMPONENTS system filesystem )
+find_package( Boost 1.36 REQUIRED COMPONENTS system filesystem regex )
 if (Boost_FOUND)
     link_directories(${Boost_LIBRARY_DIRS})
     include_directories(${BOOST_INCLUDE_DIRS})
@@ -188,11 +188,13 @@ set(EntitySystem_SRCS
     src/EntitySystem/EntityMgr/EntityDescription.cpp
     src/EntitySystem/EntityMgr/EntityMgr.cpp
     src/EntitySystem/EntityMgr/EntityHandle.cpp
+    src/EntitySystem/EntityMgr/EntityMessage.cpp
     src/EntitySystem/Components/CmpMaterial.cpp
     src/EntitySystem/Components/CmpPlatformLogic.cpp
     src/EntitySystem/Components/CmpPlatformVisual.cpp
     src/EntitySystem/Components/CmpPlatformPhysics.cpp
     src/EntitySystem/Components/CmpPlatformParams.cpp
+    src/EntitySystem/Components/Script.cpp
     src/EntitySystem/Components/Transform.cpp
     src/EntitySystem/Components/OnInitScript.cpp
     src/EntitySystem/ComponentMgr/Component.cpp
@@ -279,7 +281,7 @@ set(Utils_SRCS
 include_directories(${ocerus-engine_INCLUDE_DIRS})
 
 set(CMAKE_CXX_FLAGS "-O3 -Wall")
-set(CMAKE_CXX_FLAGS_DEBUG "-g -Wall -DUSE_ASSERT -D_DEBUG")
+set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g -Wall -DUSE_ASSERT -D_DEBUG")
 
 foreach(SYMBOL ${ocerus-engine_SYMBOLS})
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D${SYMBOL}")
