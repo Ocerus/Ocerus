@@ -7,7 +7,7 @@
 #define ComplexTypes_h__
 
 #include "BasicTypes.h"
-#include "../Source/Common/b2Math.h"
+#include "../../externalLibs/Box2D/Source/Common/b2Math.h"
 
 typedef b2Vec2 Vector2;
 extern const Vector2 Vector2_Zero;

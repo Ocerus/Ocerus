@@ -1,5 +1,5 @@
 Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual C++ Express 2008
+# Visual Studio 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_Ocerus", "Ocerus.vcproj", "{685FB3A5-4080-4FA7-8C69-AF6406E38DA6}"
 	ProjectSection(ProjectDependencies) = postProject
 		{5E06B00E-DAB1-41D2-81B6-B3D0A31B7E49} = {5E06B00E-DAB1-41D2-81B6-B3D0A31B7E49}
@@ -21,6 +21,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_Engine", "Engine.vcproj", 
 		{ABD59B39-A335-43E3-8087-0CEB68C4BEEA} = {ABD59B39-A335-43E3-8087-0CEB68C4BEEA}
 		{7A2DFC3D-516A-471D-A215-BD40E5E5AD9A} = {7A2DFC3D-516A-471D-A215-BD40E5E5AD9A}
 		{8AEC6643-4014-4B8F-A154-4F2172B202A8} = {8AEC6643-4014-4B8F-A154-4F2172B202A8}
+		{F988AD85-AD6C-4F25-A383-9BEDE2ACE1F2} = {F988AD85-AD6C-4F25-A383-9BEDE2ACE1F2}
 		{39E6AF97-6BA3-4A72-8C61-BCEBF214EBFD} = {39E6AF97-6BA3-4A72-8C61-BCEBF214EBFD}
 		{9CC704CB-4956-4479-BDEC-57CBC03F700E} = {9CC704CB-4956-4479-BDEC-57CBC03F700E}
 	EndProjectSection
@@ -34,6 +35,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DbgLib", "..\externalLibs\DbgLib\DbgLib\DbgLib.vcproj", "{5E06B00E-DAB1-41D2-81B6-B3D0A31B7E49}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "angelscript", "..\externalLibs\angelscript\projects\msvc9\angelscript.vcproj", "{39E6AF97-6BA3-4A72-8C61-BCEBF214EBFD}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RTHProfiler", "..\externalLibs\RTHProfiler\projects\msvc9\RTHProfiler.vcproj", "{F988AD85-AD6C-4F25-A383-9BEDE2ACE1F2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -102,6 +105,12 @@ Global
 		{39E6AF97-6BA3-4A72-8C61-BCEBF214EBFD}.Develop|Win32.Build.0 = Develop|Win32
 		{39E6AF97-6BA3-4A72-8C61-BCEBF214EBFD}.Release|Win32.ActiveCfg = Release|Win32
 		{39E6AF97-6BA3-4A72-8C61-BCEBF214EBFD}.Release|Win32.Build.0 = Release|Win32
+		{F988AD85-AD6C-4F25-A383-9BEDE2ACE1F2}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F988AD85-AD6C-4F25-A383-9BEDE2ACE1F2}.Debug|Win32.Build.0 = Debug|Win32
+		{F988AD85-AD6C-4F25-A383-9BEDE2ACE1F2}.Develop|Win32.ActiveCfg = Develop|Win32
+		{F988AD85-AD6C-4F25-A383-9BEDE2ACE1F2}.Develop|Win32.Build.0 = Develop|Win32
+		{F988AD85-AD6C-4F25-A383-9BEDE2ACE1F2}.Release|Win32.ActiveCfg = Release|Win32
+		{F988AD85-AD6C-4F25-A383-9BEDE2ACE1F2}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

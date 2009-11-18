@@ -19,8 +19,8 @@
 #ifndef B2_SETTINGS_H
 #define B2_SETTINGS_H
 
-#include "Platform.h"
-#include "SmartAssert.h"
+#include "Setup/Platform.h"
+#include "Utils/SmartAssert.h"
 
 #define B2_NOT_USED(x) (void)x
 #define b2Assert(A) OC_ASSERT(A)
@@ -45,7 +45,7 @@
 
 #else
 
-#include "BasicTypes.h"
+#include "Setup/BasicTypes.h"
 
 #endif
 

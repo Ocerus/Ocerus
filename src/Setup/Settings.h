@@ -14,14 +14,14 @@
 
 
 // These must come first!
-#include "SmartAssert.h"
+#include "../Utils/SmartAssert.h"
 #include "Memory_pre.h"
 
 
 
 #include "BasicTypes.h"
 #include "ComplexTypes.h"
-#include "MathConsts.h"
+#include "../Utils/MathConsts.h"
 
 template<typename T, typename U>
 inline void swap(T& first, U& second) { std::swap(first, second); } 
