@@ -8,6 +8,9 @@
 **
 ***************************************************************************************************/
 
+#ifndef RTHProfiler_h__
+#define RTHProfiler_h__
+
 #include "Setup/BasicTypes.h"
 
 namespace RTHProfiler
@@ -131,3 +134,5 @@ namespace RTHProfiler
 	};
 
 }
+
+#endif // RTHProfiler_h__
