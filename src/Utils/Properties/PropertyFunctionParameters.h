@@ -63,6 +63,8 @@ namespace Reflection
 		/// Comparison operator.
 		bool operator==(const PropertyFunctionParameters& rhs);
 
+		/// Assignment operator.
+		PropertyFunctionParameters& operator=(const PropertyFunctionParameters& rhs);
 
 		/// Adds a parameter to the end of the list.
 		inline void PushParameter(const PropertyFunctionParameter& toAdd)

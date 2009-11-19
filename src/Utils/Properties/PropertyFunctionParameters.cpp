@@ -16,3 +16,9 @@ bool Reflection::PropertyFunctionParameters::operator==( const PropertyFunctionP
 {
 	return mParameters == rhs.mParameters;
 }
+
+PropertyFunctionParameters& Reflection::PropertyFunctionParameters::operator=(const PropertyFunctionParameters& rhs)
+{
+    mParameters = rhs.mParameters;
+    return *this;
+}
