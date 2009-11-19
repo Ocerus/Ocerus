@@ -10,32 +10,26 @@
 
 namespace Reflection
 {
+
+
 	/// A single parameter which can be passed to a function accessed through the properties system.
 	class PropertyFunctionParameter
 	{
 	public:
 		/// Constructs a null PropertyFunctionParameter.
-		PropertyFunctionParameter(): mType(PT_UNKNOWN), mData(0)
+		PropertyFunctionParameter(): mType(PT_UNKNOWN)
 		{
 		}
 
 		/// Constructs a PropertyFunctionParameter that will hold given property.
 		template<class T>
-		PropertyFunctionParameter(const T& property): mType(PropertyTypes::GetTypeID<T>()), mData(&property)
+		PropertyFunctionParameter(const T& property): mType(PropertyTypes::GetTypeID<T>()), mData(new T(property))
 		{
-		}
-
-		/// Sets the PropertyFunctionParameter to given property.
-		template<class T>
-		void SetData(const T& property)
-		{
-			mType = PropertyTypes::GetTypeID<T>();
-			mData = &property;
 		}
 
 		/// Returns the property.
 		template<class T>
-		const T* GetData() const
+		T* GetData() const
 		{
 			if (PropertyTypes::GetTypeID<T>() != mType)
 			{
@@ -45,12 +39,12 @@ namespace Reflection
 
 				return 0;
 			}
-			return static_cast<T>(mData);
+			return boost::static_pointer_cast<T>(mData);
 		}
 
 	private:
-		ePropertyType   mType;
-		const void*     mData;
+		ePropertyType           mType;
+		boost::shared_ptr<void> mData;
 	};
 
 	/// This class represents generic parameters passed to a function accessed through the properties system.
