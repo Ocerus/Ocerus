@@ -11,8 +11,8 @@ inline void Profile_Get_Ticks(int64 * ticks)
 		push ecx;
 		mov ecx,ticks;
 		_emit 0Fh
-			_emit 31h
-			mov [ecx],eax;
+		_emit 31h
+		mov [ecx],eax;
 		mov [ecx+4],edx;
 		pop ecx;
 		pop edx;
