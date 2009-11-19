@@ -6,7 +6,10 @@
 
 #include "Base.h"
 #include "Singleton.h"
+
+#ifdef USE_PROFILER
 #include <RTHProfiler.h>
+#endif
 
 /// Macro for easier use.
 #define gProfiler LogSystem::Profiler::GetSingleton()
