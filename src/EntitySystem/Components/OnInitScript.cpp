@@ -34,6 +34,7 @@ void OnInitScript::RegisterReflection()
 	RegisterProperty<string>("OnInitScript", &OnInitScript::GetOnInitScript, &OnInitScript::SetOnInitScript, PA_INIT | PA_EDIT_READ | PA_SCRIPT_READ, "");
 	RegisterProperty<uint32>("OnInitTimeOut", &OnInitScript::GetOnInitTimeOut, &OnInitScript::SetOnInitTimeOut, PA_INIT | PA_EDIT_READ | PA_SCRIPT_READ, "");
 	RegisterProperty<Array<int32>*>("ArrayTest", &OnInitScript::GetArrayTest, 0, PA_INIT | PA_EDIT_READ | PA_SCRIPT_READ | PA_SCRIPT_WRITE, "");
+	RegisterFunction("TestFunction", &OnInitScript::TestFunction, PA_FULL_ACCESS, "");
 }
 
 bool OnInitScript::RunScript()
@@ -66,7 +67,7 @@ void OnInitScript::TestRunTime()
 
 	EntitySystem::EntityHandle handle = gEntityMgr.CreateEntity(entDesc);
 	handle.GetProperty("OnInitScript").SetValue<string>("TestOnInitScript.as");
-	handle.GetProperty("OnInitTimeOut").SetValue<uint32>(1000);
+	handle.GetProperty("OnInitTimeOut").SetValue<uint32>(100000);
 	// Calls script
 	handle.FinishInit();
 }

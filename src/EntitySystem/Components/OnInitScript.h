@@ -30,6 +30,15 @@ namespace EntityComponents
 		void SetOnInitTimeOut(const uint32 timeOut) { mOnInitTimeOut = timeOut; }
 		//@}
 
+		/// Function for testing
+		void TestFunction(Reflection::PropertyFunctionParameters params)
+		{
+			const string* param0 = params.GetParameter(0).GetData<string>();
+			const int32* param1 = params.GetParameter(1).GetData<int32>();
+			if (param0 && param1) ocInfo << "The first parameter is '" << *param0 << "', the second is '" << *param1 << "'.";
+			else ocInfo << "Wrong type of parameters!";
+		}
+
 		Utils::Array<int32>* GetArrayTest(void) const { return mArrayTest; }
 	private:
 		string mOnInitScript;

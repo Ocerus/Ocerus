@@ -132,6 +132,17 @@ void EntityHandleSetValue(EntitySystem::EntityHandle& handle, string& propName, 
 	}
 }
 
+// Function called from scripts that finds property (propName) of entity handle (handle) and call it as function with parameters (value).
+void EntityHandleCallFunction(EntitySystem::EntityHandle& handle, string& propName, Reflection::PropertyFunctionParameters& value)
+{
+	Reflection::PropertyHolder ph = gEntityMgr.GetEntityProperty(handle, StringKey(propName), Reflection::PA_SCRIPT_WRITE);
+	if (ph.IsValid()) ph.SetValue<PropertyFunctionParameters>(value);
+	else
+	{
+		asGetActiveContext()->SetException(("Function '" + propName + "' does not exist or you don't have access rights!").c_str());
+	}
+}
+
 // Template proxy class that wrap Utils::Array<T> for better communication with scripts.
 template<typename T>
 class ScriptArray
@@ -231,15 +242,39 @@ static void Vector2InitConstructor(float32 x, float32 y, Vector2* self)
 	new(self) Vector2(x,y);
 }
 
+inline static float32 Vector2GetX(const Vector2& self)
+{
+	return self.x;
+}
+
+inline static void Vector2SetX(Vector2& self, float32 value)
+{
+	self.x = value;
+}
+
+inline static float32 Vector2GetY(const Vector2& self)
+{
+	return self.y;
+}
+
+inline static void Vector2SetY(Vector2& self, float32 value)
+{
+	self.y = value;
+}
+
 void RegisterScriptVector2(asIScriptEngine* engine)
 {
 	int32 r;
 	// Register the type
 	r = engine->RegisterObjectType("Vector2", sizeof(Vector2), asOBJ_VALUE | asOBJ_POD | asOBJ_APP_CLASS_CA); OC_SCRIPT_ASSERT();
 
-	// Register the object properties
-	r = engine->RegisterObjectProperty("Vector2", "float x", offsetof(Vector2, x)); OC_SCRIPT_ASSERT();
-	r = engine->RegisterObjectProperty("Vector2", "float y", offsetof(Vector2, y)); OC_SCRIPT_ASSERT();
+	// Register the object properties getters and setters
+	//r = engine->RegisterObjectProperty("Vector2", "float x", offsetof(Vector2, x)); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Vector2", "float get_x() const", asFUNCTION(Vector2GetX), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Vector2", "void set_x(float)", asFUNCTION(Vector2SetX), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+	//r = engine->RegisterObjectProperty("Vector2", "float y", offsetof(Vector2, y)); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Vector2", "float get_y() const", asFUNCTION(Vector2GetY), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Vector2", "void set_y(float)", asFUNCTION(Vector2SetY), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
 
 	// Register the constructors
 	r = engine->RegisterObjectBehaviour("Vector2", asBEHAVE_CONSTRUCT,  "void f()", asFUNCTION(Vector2DefaultConstructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
@@ -386,17 +421,65 @@ static void ColorInit1Constructor(uint32 color, GfxSystem::Color* self)
 	new(self) GfxSystem::Color(color);
 }
 
+inline static uint8 ColorGetR(const GfxSystem::Color& self)
+{
+	return self.r;
+}
+
+inline static void ColorSetR(GfxSystem::Color& self, int8 value)
+{
+	self.r = value;
+}
+
+inline static uint8 ColorGetG(const GfxSystem::Color& self)
+{
+	return self.g;
+}
+
+inline static void ColorSetG(GfxSystem::Color& self, int8 value)
+{
+	self.g = value;
+}
+
+inline static uint8 ColorGetB(const GfxSystem::Color& self)
+{
+	return self.b;
+}
+
+inline static void ColorSetB(GfxSystem::Color& self, int8 value)
+{
+	self.b = value;
+}
+
+inline static uint8 ColorGetA(const GfxSystem::Color& self)
+{
+	return self.a;
+}
+
+inline static void ColorSetA(GfxSystem::Color& self, int8 value)
+{
+	self.a = value;
+}
+
 void RegisterScriptColor(asIScriptEngine* engine)
 {
 	int32 r;
 	// Register the type
 	r = engine->RegisterObjectType("Color", sizeof(GfxSystem::Color), asOBJ_VALUE | asOBJ_POD | asOBJ_APP_CLASS_CA); OC_SCRIPT_ASSERT();
 
-	// Register the object properties
-	r = engine->RegisterObjectProperty("Color", "uint8 r", offsetof(GfxSystem::Color, r)); OC_SCRIPT_ASSERT();
-	r = engine->RegisterObjectProperty("Color", "uint8 g", offsetof(GfxSystem::Color, g)); OC_SCRIPT_ASSERT();
-	r = engine->RegisterObjectProperty("Color", "uint8 b", offsetof(GfxSystem::Color, b)); OC_SCRIPT_ASSERT();
-	r = engine->RegisterObjectProperty("Color", "uint8 a", offsetof(GfxSystem::Color, a)); OC_SCRIPT_ASSERT();
+	// Register the object properties getters and setters
+	//r = engine->RegisterObjectProperty("Color", "uint8 r", offsetof(GfxSystem::Color, r)); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Color", "uint8 get_r() const", asFUNCTION(ColorGetR), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Color", "void set_r(uint8)", asFUNCTION(ColorSetR), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+	//r = engine->RegisterObjectProperty("Color", "uint8 g", offsetof(GfxSystem::Color, g)); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Color", "uint8 get_g() const", asFUNCTION(ColorGetG), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Color", "void set_g(uint8)", asFUNCTION(ColorSetG), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+	//r = engine->RegisterObjectProperty("Color", "uint8 b", offsetof(GfxSystem::Color, b)); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Color", "uint8 get_b() const", asFUNCTION(ColorGetB), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Color", "void set_b(uint8)", asFUNCTION(ColorSetB), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+	//r = engine->RegisterObjectProperty("Color", "uint8 a", offsetof(GfxSystem::Color, a)); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Color", "uint8 get_a() const", asFUNCTION(ColorGetA), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Color", "void set_a(uint8)", asFUNCTION(ColorSetA), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
 
 	// Register the constructors and destructor
 	r = engine->RegisterObjectBehaviour("Color", asBEHAVE_CONSTRUCT, "void f()", asFUNCTION(ColorDefaultConstructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
@@ -406,6 +489,40 @@ void RegisterScriptColor(asIScriptEngine* engine)
 	
 	// Register the object methods
 	r = engine->RegisterObjectMethod("Color", "uint32 GetARGB() const", asMETHOD(GfxSystem::Color, GetARGB), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+}
+
+// Functions for register PropertyFunctionParameters to script
+
+static void PropertyFunctionParametersDefaultConstructor(Reflection::PropertyFunctionParameters* self)
+{
+	new(self) Reflection::PropertyFunctionParameters();
+}
+
+static void PropertyFunctionParametersDestructor(Reflection::PropertyFunctionParameters* self)
+{
+	self->~PropertyFunctionParameters();
+}
+
+template <typename T>
+void PropertyFunctionParametersPushParameter(Reflection::PropertyFunctionParameters& pfp, const T& param)
+{
+	pfp.PushParameter(Reflection::PropertyFunctionParameter(param));
+}
+
+void RegisterScriptPropertyFunctionParameters(asIScriptEngine* engine)
+{
+	int32 r;
+	// Register the type
+	r = engine->RegisterObjectType("PropertyFunctionParameters", sizeof(Reflection::PropertyFunctionParameters), 
+		asOBJ_VALUE | asOBJ_APP_CLASS_CDA); OC_SCRIPT_ASSERT();
+
+	// Register the constructors and destructor
+	r = engine->RegisterObjectBehaviour("PropertyFunctionParameters", asBEHAVE_CONSTRUCT, "void f()", asFUNCTION(PropertyFunctionParametersDefaultConstructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectBehaviour("PropertyFunctionParameters", asBEHAVE_DESTRUCT, "void f()", asFUNCTION(PropertyFunctionParametersDestructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+
+	// Register the operator overloads
+	r = engine->RegisterObjectMethod("PropertyFunctionParameters", "bool opEquals(const PropertyFunctionParameters &in) const", asMETHOD(PropertyFunctionParameters, operator==), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("PropertyFunctionParameters", "PropertyFunctionParameters& opAssign(const PropertyFunctionParameters &in)", asMETHOD(PropertyFunctionParameters, operator=), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 }
 
 // Functions for creating co-routines
@@ -476,6 +593,9 @@ void ScriptMgr::ConfigureEngine(void)
 	// Register Color struct and it's methods
 	RegisterScriptColor(mEngine);
 
+	// Register PropertyFunctionParameter class and it's methods
+	RegisterScriptPropertyFunctionParameters(mEngine);
+
 	// Register function for creating co-routine
 	r = mEngine->RegisterGlobalFunction("void createCoRoutine(const string &in)", 
 		asFUNCTIONPR(ScriptCreateCoRoutine, (string&), void), asCALL_CDECL); OC_SCRIPT_ASSERT();
@@ -484,6 +604,10 @@ void ScriptMgr::ConfigureEngine(void)
 	r = mEngine->RegisterGlobalFunction("EntityHandle getCurrentEntityHandle()", 
 		asFUNCTION(GetCurrentEntityHandle), asCALL_CDECL); OC_SCRIPT_ASSERT();
 
+	// Register call function on EntityHandle
+	r = mEngine->RegisterObjectMethod("EntityHandle", "void CallFunction(string &in, PropertyFunctionParameters &in)", 
+		asFUNCTION(EntityHandleCallFunction), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT(); 
+	
 	// Register getters, setters and array for supported types of properties
 
     #define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName) \
@@ -510,11 +634,24 @@ void ScriptMgr::ConfigureEngine(void)
 		asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT(); \
 	r = mEngine->RegisterObjectMethod("EntityHandle", (string("const array_") + typeName + " Get_const_array_" + typeName + "(string &in)").c_str(), \
 		asFUNCTIONPR(EntityHandleGetConstArrayValue, (EntitySystem::EntityHandle&, string&), const ScriptArray<typeClass>), \
+		asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT(); \
+	/* Register PushParameter method for PropertyFunctionParameters */ \
+	r = mEngine->RegisterObjectMethod("PropertyFunctionParameters", (string("void Push_") + typeName + "(const " + typeName + " &in)").c_str(), \
+		asFUNCTIONPR(PropertyFunctionParametersPushParameter, (Reflection::PropertyFunctionParameters&, const typeClass&), void), \
+		asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT(); \
+	r = mEngine->RegisterObjectMethod("PropertyFunctionParameters", (string("void Push_array") + typeName + "(const array_" + typeName + " &in)").c_str(), \
+		asFUNCTIONPR(PropertyFunctionParametersPushParameter, (Reflection::PropertyFunctionParameters&, const ScriptArray<typeClass>&), void), \
 		asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
 	#define SCRIPT_ONLY
 	#include "../Utils/Properties/PropertyTypes.h"
 	#undef SCRIPT_ONLY
-	#undef PROPERTY_TYPE	
+	#undef PROPERTY_TYPE
+
+	/*Reflection::PropertyFunctionParameters pfp;
+	pfp.PushParameter(int32(5+4));
+	
+	const int32* param = pfp.GetParameter(0).GetData<int32>();
+	ocInfo << *param;*/
 }
 
 asIScriptContext* ScriptMgr::PrepareContext(int32 funcId)

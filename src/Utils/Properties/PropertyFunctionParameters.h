@@ -10,8 +10,6 @@
 
 namespace Reflection
 {
-
-
 	/// A single parameter which can be passed to a function accessed through the properties system.
 	class PropertyFunctionParameter
 	{
@@ -39,7 +37,7 @@ namespace Reflection
 
 				return 0;
 			}
-			return boost::static_pointer_cast<T>(mData);
+			return &*boost::static_pointer_cast<T>(mData);
 		}
 
 	private:
@@ -60,11 +58,11 @@ namespace Reflection
 		/// Destroys the parameters and deallocates used memory.
 		~PropertyFunctionParameters(void);
 
-		/// Comparison operator.
-		bool operator==(const PropertyFunctionParameters& rhs);
-
 		/// Assignment operator.
 		PropertyFunctionParameters& operator=(const PropertyFunctionParameters& rhs);
+		
+		/// Comparison operator.
+		bool operator==(const PropertyFunctionParameters& rhs);
 
 		/// Adds a parameter to the end of the list.
 		inline void PushParameter(const PropertyFunctionParameter& toAdd)
