@@ -1,9 +1,7 @@
 #include "Common.h"
 #include "PropertySystem.h"
 
-PropertySystem gPropertySystem;
-
-PropertySystem::~PropertySystem()
+void Reflection::PropertySystem::DestroyProperties(void)
 {
 	std::list<AbstractProperty*>* propertyList = GetProperties();
 	// Destroy properties
@@ -13,7 +11,7 @@ PropertySystem::~PropertySystem()
 	delete propertyList;
 }
 
-std::list<AbstractProperty*>* PropertySystem::GetProperties(void)
+std::list<AbstractProperty*>* Reflection::PropertySystem::GetProperties(void)
 {
 	static std::list<AbstractProperty*>* propertyList = new std::list<AbstractProperty*>();
 	return propertyList;

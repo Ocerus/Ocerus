@@ -13,16 +13,14 @@ namespace Reflection
 {
 	/// Global manager of all properties.
 	/// This class is used to release properties when the program exits.
-	class PropertySystem : protected Singleton<PropertySystem>
+	namespace PropertySystem
 	{
-	public :
-
 		/// The destructor responsible for releasing the properties.
-		~PropertySystem();
+		void DestroyProperties(void);
 
 		/// Returns the static list of all %RTTI properties in the program.
 		/// The proeprties are released in the destructor.
-		static std::list<AbstractProperty*>* GetProperties(void);
+		std::list<AbstractProperty*>* GetProperties(void);
 	};
 }
 

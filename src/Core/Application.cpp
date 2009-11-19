@@ -101,6 +101,7 @@ Application::~Application()
 	delete mGlobalConfig;
 	LogSystem::Profiler::DestroySingleton();
 	LogSystem::LogMgr::DestroySingleton();
+	Reflection::PropertySystem::DestroyProperties();
 }
 
 void Application::RunMainLoop()
