@@ -1,5 +1,5 @@
 Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual C++ Express 2008
+# Visual Studio 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_Ocerus", "Ocerus.vcproj", "{685FB3A5-4080-4FA7-8C69-AF6406E38DA6}"
 	ProjectSection(ProjectDependencies) = postProject
 		{5E06B00E-DAB1-41D2-81B6-B3D0A31B7E49} = {5E06B00E-DAB1-41D2-81B6-B3D0A31B7E49}
@@ -116,8 +116,8 @@ Global
 		{F988AD85-AD6C-4F25-A383-9BEDE2ACE1F2}.Release|Win32.Build.0 = Release|Win32
 		{C32FB2B4-500C-43CD-A099-EECCE079D3F1}.Debug|Win32.ActiveCfg = Debug|Win32
 		{C32FB2B4-500C-43CD-A099-EECCE079D3F1}.Debug|Win32.Build.0 = Debug|Win32
-		{C32FB2B4-500C-43CD-A099-EECCE079D3F1}.Develop|Win32.ActiveCfg = Debug|Win32
-		{C32FB2B4-500C-43CD-A099-EECCE079D3F1}.Develop|Win32.Build.0 = Debug|Win32
+		{C32FB2B4-500C-43CD-A099-EECCE079D3F1}.Develop|Win32.ActiveCfg = Develop|Win32
+		{C32FB2B4-500C-43CD-A099-EECCE079D3F1}.Develop|Win32.Build.0 = Develop|Win32
 		{C32FB2B4-500C-43CD-A099-EECCE079D3F1}.Release|Win32.ActiveCfg = Release|Win32
 		{C32FB2B4-500C-43CD-A099-EECCE079D3F1}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
