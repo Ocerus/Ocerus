@@ -15,7 +15,14 @@ namespace GfxSystem
 
 		static ResourceSystem::ResourcePtr CreateMe(void);
 
-		enum ePixelFormat { FORMAT_RGB, FORMAT_ARGB };
+		enum ePixelFormat
+		{
+			AUTO = 0,
+			L = 1,
+			LA = 2,
+			RGB = 3,
+			RGBA = 4
+		};
 
 		bool LoadFromBitmap(const void* pixels, uint32 pixelsLength, uint32 width, uint32 height, ePixelFormat format);
 

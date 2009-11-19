@@ -1,7 +1,6 @@
 #include "Common.h"
 #include "Texture.h"
 #include "DataContainer.h"
-//#include <hge.h>
 
 using namespace GfxSystem;
 
@@ -25,20 +24,20 @@ bool Texture::LoadImpl()
 	DataContainer dc;
 	GetRawInputData(dc);
 
-	// load it to HGE
-	//TODO
-	//mHandle = gGfxRenderer.mHGE->Texture_Load((const char*)dc.GetData(),dc.GetSize(),false);
+	// load it to OpenGL
+	mHandle = gGfxRenderer.LoadTexture((const unsigned char*)dc.GetData(),dc.GetSize(), RGB, 0);
 
-	return true;
+
+	if (mHandle != 0)
+		return true;
+	else
+		return false;
 }
 
 bool Texture::UnloadImpl()
 {
-	// free texture from HGE
-	//TODO
-	//gGfxRenderer.mHGE->Texture_Free(mHandle);
-
-	// set ini value
+	// free texture from OpenGL
+	gGfxRenderer.DeleteTexture(mHandle);
 	mHandle = 0;
 	
 	return true;

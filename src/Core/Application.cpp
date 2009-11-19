@@ -8,6 +8,11 @@
 #include "../GfxSystem/GfxWindow.h"
 
 
+//TODO: odstranit - pouze pro testovaci ucely
+#include "../GfxSystem/Texture.h"
+//--------------------------------------------
+
+
 using namespace Core;
 
 #define MAX_DELTA_TIME 0.5f
@@ -51,6 +56,10 @@ void Application::Init()
 
 	GfxSystem::GfxRenderer::CreateSingleton<GfxSystem::OglRenderer>();
 	GfxSystem::GfxRenderer::GetSingleton().Init();
+
+	//TODO: odstranit - pouze pro testovaci ucely
+	gResourceMgr.AddResourceFileToGroup("Textures/Logo.png", "textures", ResourceSystem::RESTYPE_TEXTURE, true);
+	//--------------------------------------------
 
 	InputSystem::InputMgr::CreateSingleton();
 
@@ -153,7 +162,11 @@ void Application::RunMainLoop()
 				break;
 			}
 
-			gGfxRenderer.DrawTestQuad();
+			//TODO: odstranit - pouze pro testovci ucely
+			boost::shared_ptr<GfxSystem::Texture> t
+				= boost::static_pointer_cast<GfxSystem::Texture>(gResourceMgr.GetResource("textures", "Logo.png"));
+			gGfxRenderer.DrawTestTexturedQuad(t->GetTexture());
+			//------------------------------------------
 
 			// draw stats (from previous frame)
 			//TODO:Gfx
