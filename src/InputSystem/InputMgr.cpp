@@ -22,6 +22,7 @@ InputSystem::InputMgr::~InputMgr( void )
 
 void InputSystem::InputMgr::CaptureInput( void )
 {
+	PROFILE_FNC();
 	OC_ASSERT(mOISListener);
 	mOISListener->CaptureInput();
 }

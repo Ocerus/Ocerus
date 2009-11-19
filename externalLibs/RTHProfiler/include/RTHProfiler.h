@@ -8,7 +8,7 @@
 **
 ***************************************************************************************************/
 
-#include "Setup/Settings.h"
+#include "Setup/BasicTypes.h"
 
 namespace RTHProfiler
 {
@@ -86,24 +86,30 @@ namespace RTHProfiler
 	/*
 	** The Manager for the Profile system
 	*/
-	class	CProfileManager {
+	class CProfileManager {
 	public:
-		static	void						Start_Profile( const char * name );
-		static	void						Stop_Profile( void );
+		static void Start_Profile( const char * name );
+		static void Stop_Profile( void );
 
-		static	void						Reset( void );
-		static	void						Increment_Frame_Counter( void );
-		static	int						Get_Frame_Count_Since_Reset( void )		{ return FrameCounter; }
-		static	float						Get_Time_Since_Reset( void );
-
-		static	CProfileIterator *	Get_Iterator( void )	{ return new CProfileIterator( &Root ); }
-		static	void						Release_Iterator( CProfileIterator * iterator ) { delete iterator; }
+		static void Reset( void );
+		static void Update( void );
+		static void Pause( void );
+		static void Resume( void );
+		inline static bool Is_Enabled(void) { return Enabled; }
+		static int Get_Frame_Count_Since_Reset( void ) { return FrameCounter; }
+		static float Get_Time_Since_Reset( void );
+		static CProfileIterator* Get_Iterator( void ) { return new CProfileIterator( &Root ); }
+		static void Release_Iterator( CProfileIterator * iterator ) { delete iterator; }
 
 	private:
-		static	CProfileNode			Root;
-		static	CProfileNode *			CurrentNode;
-		static	int						FrameCounter;
-		static	int64					ResetTime;
+		static CProfileNode Root;
+		static CProfileNode* CurrentNode;
+		static int FrameCounter;
+		static int64 ResetTime;
+		static int64 TimeAccumulator;
+		static bool Enabled;
+
+		static void Update_Time_Accumulator( void );
 	};
 
 

@@ -22,6 +22,7 @@ void Application::Init()
 	// create basic singletons
 	LogSystem::LogMgr::CreateSingleton();
 	LogSystem::LogMgr::GetSingleton().Init("CoreLog.txt");
+	LogSystem::Profiler::CreateSingleton();
 
 	// get access to config file
 	mGlobalConfig = new Config("config.txt");
@@ -98,6 +99,7 @@ Application::~Application()
 
 	// must come last
 	delete mGlobalConfig;
+	LogSystem::Profiler::DestroySingleton();
 	LogSystem::LogMgr::DestroySingleton();
 }
 
@@ -107,6 +109,9 @@ void Application::RunMainLoop()
 	{
 		// process window events
 		MessagePump();
+
+		// update the profiler
+		gProfiler.Update();
 
 		// process input events
 		gInputMgr.CaptureInput();
@@ -168,6 +173,8 @@ void Application::RunMainLoop()
 
 float32 Application::CalculateFrameDeltaTime( void )
 {
+	PROFILE_FNC();
+
 	uint64 curTime = mTimer.GetMilliseconds();
 	mFrameDeltaTimes.push_back(curTime);
 

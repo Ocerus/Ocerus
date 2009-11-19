@@ -124,6 +124,8 @@ void Core::Game::Deinit()
 
 void Core::Game::Update( const float32 delta )
 {
+	PROFILE_FNC();
+
 	UpdateGameProperties();
 
 	// pick hover entity
@@ -179,6 +181,8 @@ void Core::Game::Update( const float32 delta )
 
 void Core::Game::Draw( const float32 delta)
 {
+	PROFILE_FNC();
+
 	//TODO:Gfx
 	// move camera in reaction to the user input
 	/*if (gInputMgr.IsKeyDown(KC_LEFT))
@@ -258,6 +262,18 @@ void Core::Game::KeyPressed( const KeyInfo& ke )
 		gApp.Shutdown();
 	}
 
+	if (ke.keyAction == KC_F5 && gInputMgr.IsKeyDown(KC_LCONTROL))
+	{
+		if (gProfiler.IsRunning())
+		{
+			gProfiler.Stop();
+			gProfiler.DumpIntoConsole();
+		}
+		else
+		{
+			gProfiler.Start();
+		}
+	}
 }
 
 void Core::Game::KeyReleased( const KeyInfo& ke )

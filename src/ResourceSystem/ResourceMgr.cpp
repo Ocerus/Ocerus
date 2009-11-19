@@ -378,6 +378,8 @@ void ResourceSystem::ResourceMgr::RefreshAllResources( void )
 
 void ResourceSystem::ResourceMgr::CheckForResourcesUpdates( void )
 {
+	PROFILE_FNC();
+
 	uint64 currentTime = mResourceUpdatesTimer.GetMilliseconds();
 	if (currentTime - mLastUpdateTime >= RESOURCE_UPDATES_DELAY_MILLIS)
 	{

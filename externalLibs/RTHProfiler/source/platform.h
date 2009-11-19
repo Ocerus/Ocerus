@@ -6,6 +6,7 @@ inline void Profile_Get_Ticks(int64 * ticks)
 {
 	__asm
 	{
+		push eax;
 		push edx;
 		push ecx;
 		mov ecx,ticks;
@@ -15,6 +16,7 @@ inline void Profile_Get_Ticks(int64 * ticks)
 		mov [ecx+4],edx;
 		pop ecx;
 		pop edx;
+		pop eax;
 	}
 }
 

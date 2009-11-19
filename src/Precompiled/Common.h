@@ -50,5 +50,6 @@
 
 #include "../LogSystem/LogMacros.h"
 #include "../LogSystem/Logger.h"
+#include "../LogSystem/Profiler.h"
 
 #endif

@@ -8,8 +8,9 @@
 **
 ***************************************************************************************************/
 
-#include "profile.h"
+#include "RTHProfiler.h"
 #include "platform.h"
+#include "Utils/SmartAssert.h"
 
 using namespace RTHProfiler;
 
@@ -93,16 +94,21 @@ void	CProfileNode::Reset( void )
 
 void	CProfileNode::Call( void )
 {
-	TotalCalls++;
-	if (RecursionCounter++ == 0) {
-		Profile_Get_Ticks(&StartTime);
+	if (CProfileManager::Is_Enabled()) {
+		TotalCalls++;
+		if (RecursionCounter == 0 || StartTime == 0) {
+			Profile_Get_Ticks(&StartTime);
+		}
+	} else {
+		StartTime = 0;
 	}
+	RecursionCounter++;
 }
 
 
 bool	CProfileNode::Return( void )
 {
-	if ( --RecursionCounter == 0 && TotalCalls != 0 ) { 
+	if ( --RecursionCounter == 0 && TotalCalls != 0 && StartTime != 0 ) { 
 		int64 time;
 		Profile_Get_Ticks(&time);
 		time-=StartTime;
@@ -176,6 +182,8 @@ CProfileNode	CProfileManager::Root( "Root", NULL );
 CProfileNode *	CProfileManager::CurrentNode = &CProfileManager::Root;
 int				CProfileManager::FrameCounter = 0;
 int64			CProfileManager::ResetTime = 0;
+int64			CProfileManager::TimeAccumulator = 0;
+bool			CProfileManager::Enabled = true;
 
 
 /***********************************************************************************************
@@ -223,6 +231,21 @@ void	CProfileManager::Reset( void )
 { 
 	Root.Reset(); 
 	FrameCounter = 0;
+	TimeAccumulator = 0;
+	Profile_Get_Ticks(&ResetTime);
+}
+
+
+void	CProfileManager::Pause( void )
+{ 
+	Enabled = false;
+	Update_Time_Accumulator();
+}
+
+
+void	CProfileManager::Resume( void )
+{ 
+	Enabled = true;
 	Profile_Get_Ticks(&ResetTime);
 }
 
@@ -230,9 +253,11 @@ void	CProfileManager::Reset( void )
 /***********************************************************************************************
  * CProfileManager::Increment_Frame_Counter -- Increment the frame counter                    *
  *=============================================================================================*/
-void CProfileManager::Increment_Frame_Counter( void )
+void CProfileManager::Update( void )
 {
-	FrameCounter++;
+	if (Enabled) {
+		FrameCounter++;
+	}
 }
 
 
@@ -241,11 +266,15 @@ void CProfileManager::Increment_Frame_Counter( void )
  *=============================================================================================*/
 float CProfileManager::Get_Time_Since_Reset( void )
 {
-	int64 time;
-	Profile_Get_Ticks(&time);
-	time -= ResetTime;
-	return (float)time / Profile_Get_Tick_Rate();
+	Update_Time_Accumulator();
+	return (float)TimeAccumulator / Profile_Get_Tick_Rate();
 }
 
 
-
+void CProfileManager::Update_Time_Accumulator( void )
+{
+	int64 time;
+	Profile_Get_Ticks(&time);
+	TimeAccumulator += time - ResetTime;
+	ResetTime = time;
+}
