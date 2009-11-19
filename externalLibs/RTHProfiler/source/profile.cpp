@@ -163,12 +163,19 @@ void	CProfileIterator::Enter_Child( int index )
 }
 
 
+void	CProfileIterator::Enter_Current_Child( void )
+{
+	CurrentParent = CurrentChild;
+	CurrentChild = CurrentParent->Get_Child();
+}
+
+
 void	CProfileIterator::Enter_Parent( void )
 {
 	if ( CurrentParent->Get_Parent() != NULL ) {
+		CurrentChild = CurrentParent;
 		CurrentParent = CurrentParent->Get_Parent();
 	}
-	CurrentChild = CurrentParent->Get_Child();
 }
 
 

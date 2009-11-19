@@ -40,7 +40,9 @@ Core::Game::~Game()
 
 
 void Core::Game::UpdateGameProperties( void )
-{
+{	
+	PROFILE_FNC();
+
 	// update current game properties
 	GlobalProperties::SetPointer("CurrentGame", this);
 	GlobalProperties::SetPointer("CurrentPhysics", mPhysics);

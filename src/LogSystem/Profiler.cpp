@@ -24,12 +24,33 @@ void LogSystem::Profiler::DumpIntoConsole( void )
 	RTHProfiler::CProfileIterator* iter = RTHProfiler::CProfileManager::Get_Iterator();
 
 	gApp.WriteToConsole("PROFILER DATA:\n");
-	while (!iter->Is_Done())
+
+	int32 indentLevel = 0;
+	while (true)
 	{
+		bool done = false;
+
+		while (iter->Is_Done())
+		{
+			if (indentLevel == 0)
+			{
+				done = true;
+				break;
+			}
+			indentLevel--;
+			iter->Enter_Parent();
+			iter->Next();
+		}
+
+		if (done) break;
+
 		stringstream ss;
-		ss << iter->Get_Current_Name() << ": " << iter->Get_Current_Total_Calls() << "  " << iter->Get_Current_Total_Time() << "\n";
+		for (int32 i=0; i<indentLevel; ++i) ss << '\t';
+		ss << iter->Get_Current_Name() << ": " << iter->Get_Current_Total_Calls() << "  " << iter->Get_Current_Total_Time() << '\n';
 		gApp.WriteToConsole(ss.str());
-		iter->Next();
+
+		indentLevel++;
+		iter->Enter_Current_Child();
 	}
 
 	RTHProfiler::CProfileManager::Release_Iterator(iter);

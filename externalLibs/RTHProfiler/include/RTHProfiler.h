@@ -63,6 +63,7 @@ namespace RTHProfiler
 		bool				Is_Done(void);
 
 		void				Enter_Child( int index );		// Make the given child the new parent
+		void				Enter_Current_Child( void );	// Make the current child the new parent
 		void				Enter_Largest_Child( void );	// Make the largest child the new parent
 		void				Enter_Parent( void );			// Make the current parent's parent the new parent
 
