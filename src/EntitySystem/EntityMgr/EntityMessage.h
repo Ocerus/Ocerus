@@ -4,6 +4,8 @@
 #ifndef _ENTITYMESSAGE_H_
 #define _ENTITYMESSAGE_H_
 
+#include <Properties/PropertyFunctionParameters.h>
+
 namespace EntitySystem
 {
 	/// Defines messages which can be send to entities.
@@ -12,19 +14,19 @@ namespace EntitySystem
 	struct EntityMessage
 	{
 		/// Result the EntityMgr can receive after sending out a message to entities.
-		enum eResult 
-		{ 
+		enum eResult
+		{
 			/// Message was not received by any entity at all.
-			RESULT_IGNORED, 
+			RESULT_IGNORED,
 			/// Message was received by some entities and all of them replied OK.
-			RESULT_OK, 
+			RESULT_OK,
 			/// Message was received by some entities and at least one of them replied ERROR.
 			RESULT_ERROR
 		};
 
 		/// Defines user types of messages.
 		enum eType
-		{ 
+		{
 			#define ENTITY_MESSAGE_TYPE(typeID, handlerDecl) typeID,
 			#include "EntityMessageTypes.h"
 			#undef ENTITY_MESSAGE_TYPE
@@ -43,10 +45,10 @@ namespace EntitySystem
 		eType type;
 
 		/// Data carried by this message.
-		void* data;
+		Reflection::PropertyFunctionParameters data;
 
-		EntityMessage(eType _type): type(_type), data(0) {}
-		EntityMessage(eType _type, void* _data): type(_type), data(_data) {}
+		EntityMessage(eType _type): type(_type) {}
+		EntityMessage(eType _type, Reflection::PropertyFunctionParameters _data): type(_type), data(_data) {}
 	};
 }
 

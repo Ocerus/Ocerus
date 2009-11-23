@@ -10,18 +10,38 @@
 
 namespace Reflection
 {
+
 	/// A single parameter which can be passed to a function accessed through the properties system.
 	class PropertyFunctionParameter
 	{
+		struct NullDeleter
+		{
+			void operator()(void const*) const
+			{
+			}
+		};
 	public:
 		/// Constructs a null PropertyFunctionParameter.
 		PropertyFunctionParameter(): mType(PT_UNKNOWN)
 		{
 		}
 
-		/// Constructs a PropertyFunctionParameter that will hold given property.
+		/// Constructs a PropertyFunctionParameter that will hold a copy of given property.
+		/// Data are copied.
 		template<class T>
-		PropertyFunctionParameter(const T& property): mType(PropertyTypes::GetTypeID<T>()), mData(new T(property))
+		PropertyFunctionParameter(const T& property):
+			mType(PropertyTypes::GetTypeID<T>()),
+			mData(new T(property))
+		{
+		}
+
+		/// Constructs a PropertyFunctionParameter that will hold a reference to given property.
+		/// Data are not copied.
+		/// @todo: better disambiguation of those two constructors
+		template<class T>
+		PropertyFunctionParameter(T& property, bool):
+			mType(PropertyTypes::GetTypeID<T>()),
+			mData(&property, NullDeleter())
 		{
 		}
 

@@ -40,7 +40,7 @@ Core::Game::~Game()
 
 
 void Core::Game::UpdateGameProperties( void )
-{	
+{
 	PROFILE_FNC();
 
 	// update current game properties
@@ -133,7 +133,7 @@ void Core::Game::Update( const float32 delta )
 	// pick hover entity
 	MouseState& mouse = gInputMgr.GetMouseState();
 	EntityPicker picker(mouse.x, mouse.y);
-	gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::MOUSE_PICK, &picker));
+	gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::MOUSE_PICK, Reflection::PropertyFunctionParameters() << Reflection::PropertyFunctionParameter(picker, 0)));
 	mHoveredEntity = picker.GetResult();
 
 	// react on input
@@ -144,8 +144,8 @@ void Core::Game::Update( const float32 delta )
 	while (physicsDelta > PHYSICS_TIMESTEP)
 	{
 		float32 stepSize = PHYSICS_TIMESTEP;
-		gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::UPDATE_LOGIC, &stepSize));
-		gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::UPDATE_PHYSICS, &stepSize));
+		gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::UPDATE_LOGIC, Reflection::PropertyFunctionParameters() << stepSize));
+		gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::UPDATE_PHYSICS, Reflection::PropertyFunctionParameters() << stepSize));
 		mPhysics->Step(stepSize, PHYSICS_ITERATIONS);
 
 		// process physics events

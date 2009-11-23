@@ -5,6 +5,7 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
 
 cmake_minimum_required(VERSION 2.6.2)
 
+option(PRECOMPILED_HEADERS "Use precompiled headers." ON)
 option(BUILD_TESTS "Builds tests." ON)
 option(USE_DBGLIB "Uses DbgLib for debugging." ON)
 option(USE_LEAKDETECTOR "Uses DbgLib's leak detector." ON)
@@ -56,6 +57,19 @@ set(angelscript_LIBRARIES angelscript)
 
 list(APPEND ocerus-engine_INCLUDE_DIRS ${angelscript_INCLUDE_DIRS})
 list(APPEND ocerus-engine_LIBRARIES ${angelscript_LIBRARIES})
+
+###############
+# SOIL
+###############
+ADD_SUBDIRECTORY(externalLibs/SOIL)
+
+set(SOIL_INCLUDE_DIRS
+    ${CMAKE_CURRENT_SOURCE_DIR}/externalLibs/SOIL/src
+)
+set(SOIL_LIBRARIES SOIL)
+
+list(APPEND ocerus-engine_INCLUDE_DIRS ${SOIL_INCLUDE_DIRS})
+list(APPEND ocerus-engine_LIBRARIES ${SOIL_LIBRARIES})
 
 ###############
 # DbgLib
@@ -160,8 +174,6 @@ else (ICU_FOUND)
 endif (ICU_FOUND)
 
 
-
-
 ###############################################################################
 ###                            ocerus project                               ###
 ###############################################################################
@@ -232,6 +244,7 @@ set(InputSystem_SRCS
 set(LogSystem_SRCS
     src/LogSystem/Logger.cpp
     src/LogSystem/LogMgr.cpp
+    src/LogSystem/Profiler.cpp
 )
 
 set(Memory_SRCS
@@ -281,7 +294,7 @@ set(Utils_SRCS
 include_directories(${ocerus-engine_INCLUDE_DIRS})
 
 set(CMAKE_CXX_FLAGS "-O3 -Wall")
-set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g -Wall -DUSE_ASSERT -D_DEBUG")
+set(CMAKE_CXX_FLAGS_DEBUG "-O1 -g -Wall -DUSE_ASSERT -D_DEBUG")
 
 foreach(SYMBOL ${ocerus-engine_SYMBOLS})
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D${SYMBOL}")
@@ -303,6 +316,14 @@ add_library(ocerus-engine STATIC
     ${Utils_SRCS}
 )
 
+if (PRECOMPILED_HEADERS)
+    include("PCHSupport_26")
+    add_precompiled_header(ocerus-engine ${CMAKE_CURRENT_SOURCE_DIR}/src/Precompiled/Common.h)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpch-preprocess -fpch-deps")
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fpch-preprocess -fpch-deps")
+endif (PRECOMPILED_HEADERS)
+
+
 target_link_libraries(ocerus-engine
     ${ocerus-engine_LIBRARIES}
     ${OIS_LIBRARIES}
@@ -315,6 +336,7 @@ target_link_libraries(ocerus-engine
 )
 
 add_executable(ocerus-main src/Runner/main.cpp)
+
 
 target_link_libraries(ocerus-main ocerus-engine)
 

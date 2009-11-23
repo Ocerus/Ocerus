@@ -36,7 +36,7 @@ namespace EntitySystem
 		inline eComponentType GetType(void) const { return mType; }
 
 		/// Posts a message to the entity owning this component.
-		inline EntityMessage::eResult PostMessage(const EntityMessage::eType type, void* data = 0) const { return GetOwner().PostMessage(type, data); }
+		inline EntityMessage::eResult PostMessage(const EntityMessage::eType type, Reflection::PropertyFunctionParameters data = Reflection::PropertyFunctionParameters()) const { return GetOwner().PostMessage(type, data); }
 
 		/// Returns a property to be get or set.
 		inline PropertyHolder GetProperty(const StringKey name) const { return GetOwner().GetProperty(name); }
