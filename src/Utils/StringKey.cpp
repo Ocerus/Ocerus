@@ -4,23 +4,53 @@
 
 const StringKey StringKey::Null;
 
-inline hash_map<string, StringKey::StringKeyData*>& GetStringKeyMap()
+struct StringKeyMap: public hash_map<string, StringKey::StringKeyData*>
 {
-	static hash_map<string, StringKey::StringKeyData*> stringKeyMap;
+    StringKeyMap()
+	{
+		OC_ASSERT(smInstance == 0);
+		smInstance = this;
+	}
+
+	~StringKeyMap()
+	{
+		OC_ASSERT(smInstance != 0);
+		smInstance = 0;
+	}
+
+	static StringKeyMap* GetInstance()
+	{
+		static StringKeyMap instance;
+		return smInstance;
+	}
+
+	static StringKeyMap* smInstance;
+};
+
+StringKeyMap* StringKeyMap::smInstance = 0;
+
+inline hash_map<string, StringKey::StringKeyData*>* GetStringKeyMap()
+{
+	static hash_map<string, StringKey::StringKeyData*>* stringKeyMap;
 	return stringKeyMap;
 }
 
 inline StringKey::StringKeyData* GetStringKeyData(const string& str)
 {
 	StringKey::StringKeyData* res = 0;
-	if (GetStringKeyMap().find(str) == GetStringKeyMap().end())
+	StringKeyMap* stringKeyMap = StringKeyMap::GetInstance();
+	if (stringKeyMap == 0)
+	{
+		return 0;
+	}
+	else if (stringKeyMap->find(str) == stringKeyMap->end())
 	{
 		res = new StringKey::StringKeyData(str);
-		GetStringKeyMap()[str] = res;
+		(*stringKeyMap)[str] = res;
 	}
 	else
 	{
-		res = GetStringKeyMap()[str];
+		res = (*stringKeyMap)[str];
 	}
 	return res;
 }
@@ -87,7 +117,9 @@ void StringKey::RefCntDec()
 {
 	if (mData && --mData->mRefCount == 0)
 	{
-		GetStringKeyMap().erase(mData->mRefString);
+		StringKeyMap* stringKeyMap = StringKeyMap::GetInstance();
+		if (stringKeyMap)
+			stringKeyMap->erase(mData->mRefString);
 		delete mData;
 	}
 }

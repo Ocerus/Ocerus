@@ -60,7 +60,7 @@ namespace Reflection
 
 		/// Assignment operator.
 		PropertyFunctionParameters& operator=(const PropertyFunctionParameters& rhs);
-		
+
 		/// Comparison operator.
 		bool operator==(const PropertyFunctionParameters& rhs);
 
@@ -68,6 +68,16 @@ namespace Reflection
 		inline void PushParameter(const PropertyFunctionParameter& toAdd)
 		{
 			mParameters->push_back(toAdd);
+		}
+
+		/// This method is provided for convenience and allows to create a PropertyFunctionParameters
+		/// object and fill it with parameters with following code:
+		///
+		/// (PropertyFunctionParameters() << param1 << param2;
+		inline PropertyFunctionParameters& operator<<(const PropertyFunctionParameter& toAdd)
+		{
+			mParameters->push_back(toAdd);
+			return *this;
 		}
 
 		/// Returns a parameter specified by the index. If index out of range is
