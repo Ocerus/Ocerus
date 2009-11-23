@@ -11,9 +11,9 @@ namespace EntitySystem
 	struct EntityInfo
 	{
 		EntityInfo(const eEntityType type, const string& name, const EntityHandle prototype):
-			mType(type), 
-			mFullyInited(false), 
-			mName(name), 
+			mType(type),
+			mFullyInited(false),
+			mName(name),
 			mPrototype(prototype)
 		{
 
@@ -353,7 +353,7 @@ Reflection::PropertyHolder EntitySystem::EntityMgr::GetEntityComponentProperty( 
 	ocError << "Available properties (flags=" << (uint32)flagMask << "): " << propertiesString;
 
 	// return an invalid holder
-	return PropertyHolder();	
+	return PropertyHolder();
 }
 
 bool EntitySystem::EntityMgr::HasEntityProperty( const EntityHandle entity, const StringKey key, const PropertyAccessFlags flagMask /*= PA_FULL_ACCESS*/ ) const
@@ -394,7 +394,7 @@ void EntitySystem::EntityMgr::LoadEntityPropertyFromXML( const EntityID entityID
 			else
 				ocError << "XML:Entity: Expected 'Vertex', found '" << *vertIt << "'";
 		}
-		
+
 		Array<Vector2> vertArray(vertices.size());
 		for (uint32 i=0; i<vertices.size(); ++i)
 		{
@@ -408,7 +408,7 @@ void EntitySystem::EntityMgr::LoadEntityPropertyFromXML( const EntityID entityID
 	}
 }
 
-void EntitySystem::EntityMgr::LoadEntityFromXML( ResourceSystem::XMLNodeIterator &entIt, const bool isPrototype, ResourceSystem::XMLResourcePtr xml ) 
+void EntitySystem::EntityMgr::LoadEntityFromXML( ResourceSystem::XMLNodeIterator &entIt, const bool isPrototype, ResourceSystem::XMLResourcePtr xml )
 {
 	// init the entity description
 	EntityDescription desc;
@@ -754,7 +754,8 @@ void EntitySystem::EntityMgr::UnlinkEntityFromPrototype( const EntityHandle enti
 		return;
 	}
 
-	parentPrototypeIter->second->mInstancesCount--;
+	if (parentPrototypeIter->second != 0)
+		parentPrototypeIter->second->mInstancesCount--;
 }
 
 bool EntitySystem::EntityMgr::GetEntityComponentProperties( const EntityHandle entity, const ComponentID component, PropertyList& out, const PropertyAccessFlags flagMask /*= PA_FULL_ACCESS*/ ) const
