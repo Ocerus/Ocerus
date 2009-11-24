@@ -23,3 +23,5 @@ ENTITY_MESSAGE_TYPE(UPDATE_LOGIC, "void OnUpdateLogic()")
 ENTITY_MESSAGE_TYPE(UPDATE_PHYSICS, "void OnUpdatePhysics()")
 /// Sent when the mouse attempts to pick the entity.
 ENTITY_MESSAGE_TYPE(MOUSE_PICK, "void OnMousePick()")
+/// Sent when the resources of this entity is going to be updated.
+ENTITY_MESSAGE_TYPE(RESOURCE_UPDATE, "void OnResourceUpdate()")

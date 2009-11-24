@@ -55,11 +55,11 @@ namespace ScriptSystem
 		AngelScript::asIScriptContext* AddContextAsCoRoutineToManager(AngelScript::asIScriptContext* currCtx,
 			int32 funcId);
 
-		/// Execute each script that is not currently sleeping. The function returns after 
-		/// each script has been executed once.
+		/// Execute each script added to context manager that is not currently sleeping.
+		/// The function returns after each script has been executed once.
 		inline void ExecuteScripts();
 
-		// Add a pre-processor define for conditional compilation.
+		/// Add a pre-processor define for conditional compilation.
 		void DefineWord(const char* word);
 
 		/// Get script function ID from module name and function declaration.
@@ -67,6 +67,11 @@ namespace ScriptSystem
 		/// @param funcDecl Declaration of function to be called in the script.
 		/// @return Number greater than or equal to zero that is function ID, number less than zero for not found
 		int32 GetFunctionID(const char* moduleName, const char* funcDecl);
+
+		/// Unload all previously loaded and builded modules and abort all contexts in context manager.
+		/// All the function ID got from GetFunctionID will be superseded as well as the contexts got from
+		/// PrepareContext, AddContextToManager and AddContextAsCoRoutineToManager.
+		void ClearModules();
 	protected:
 		/// Get script module represented by the name of file where the main function is.
 		/// This function loads and builds module if necessary.
@@ -83,6 +88,9 @@ namespace ScriptSystem
 
 		/// Manages contexts that can sleep or can create co-routines.
 		AngelScript::CContextMgr* mContextMgr;
+
+		/// All loaded modules
+		vector<string> mModules;
 
 		/// Configure the script engine with all the functions and variables that the script should be able to use.
 		void ConfigureEngine(void);

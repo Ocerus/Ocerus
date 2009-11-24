@@ -7,7 +7,7 @@ using namespace EntitySystem;
 
 void Script::Create(void)
 {
-	
+	mNeedUpdate = true;
 }
 
 void Script::Destroy(void)
@@ -19,6 +19,7 @@ void Script::UpdateMessageHandlers(void)
 {
 	mMessageHandlers.clear();
 	for (int32 i=0; i<mModules.GetSize(); ++i) AnalyseModule(mModules[i]);
+	mNeedUpdate = false;
 }
 
 void Script::AnalyseModule(const string& module)
@@ -33,7 +34,8 @@ void Script::AnalyseModule(const string& module)
 
 EntityMessage::eResult Script::HandleMessage(const EntityMessage& msg)
 {
-	if (msg.type == EntityMessage::INIT) UpdateMessageHandlers();
+	if (mNeedUpdate) UpdateMessageHandlers();
+	if (msg.type == EntityMessage::RESOURCE_UPDATE) mNeedUpdate = true;
 	// Get function ID
 	map<EntitySystem::EntityMessage::eType, int32>::const_iterator it = mMessageHandlers.find(msg.type);
 	if (it == mMessageHandlers.end()) return EntityMessage::RESULT_IGNORED;
@@ -43,8 +45,6 @@ EntityMessage::eResult Script::HandleMessage(const EntityMessage& msg)
 	if (ctx == 0) return EntityMessage::RESULT_IGNORED;
 	// Set parent entity handle as context user data
 	ctx->SetUserData(GetOwnerPtr());
-	//int32 r = ctx->SetArgObject(0, GetOwnerPtr());
-	//OC_ASSERT(r >= 0);
 
 	// Add additional parameters depended on message type
 	switch(msg.type)

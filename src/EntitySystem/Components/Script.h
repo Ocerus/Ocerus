@@ -35,6 +35,7 @@ namespace EntityComponents
 	private:
 		Utils::Array<string> mModules;
 		uint32 mTimeOut;
+		bool mNeedUpdate;
 
 		/// Stores appropriate handler to message
 		map<EntitySystem::EntityMessage::eType, int32> mMessageHandlers;

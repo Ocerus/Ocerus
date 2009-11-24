@@ -760,6 +760,7 @@ asIScriptModule* ScriptMgr::GetModule(const char* fileName)
 	// Create script builder to build new module
 	r = mScriptBuilder->StartNewModule(mEngine, fileName);
 	OC_ASSERT_MSG(r==0, "Failed to add module to script engine.");
+	mModules.push_back(string(fileName));
 
 	// Include main file
 	r = IncludeCallback(fileName, "", mScriptBuilder, Utils::StringConverter::FromString<char*>(mBasePath));
@@ -798,7 +799,17 @@ int32 ScriptMgr::GetFunctionID(const char* moduleName, const char* funcDecl)
 	return funcId;*/
 }
 
-void ScriptSystem::ScriptMgr::DefineWord( const char* word )
+void ScriptMgr::DefineWord( const char* word )
 {
 	mScriptBuilder->DefineWord(word);
+}
+
+void ScriptMgr::ClearModules()
+{
+	mContextMgr->AbortAll();
+	for (vector<string>::const_iterator it = mModules.begin(); it != mModules.end(); ++it)
+	{
+		mEngine->DiscardModule(it->c_str());
+	}
+	mModules.clear();
 }
