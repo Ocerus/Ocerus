@@ -259,6 +259,7 @@ set(ResourceSystem_SRCS
 
 set(ScriptSystem_SRCS
     src/ScriptSystem/ScriptMgr.cpp
+    src/ScriptSystem/ScriptRegister.cpp
     src/ScriptSystem/ScriptResource.cpp
     src/ScriptSystem/AddOn/scriptstring.cpp
     src/ScriptSystem/AddOn/scriptbuilder.cpp

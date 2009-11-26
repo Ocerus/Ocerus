@@ -7,7 +7,7 @@
 #include "Base.h"
 #include "../ResourceSystem/Resource.h"
 
-namespace ScriptSystem 
+namespace ScriptSystem
 {
 	/// This class represents a single script resource.
 	/// Main purpose of the class is to load a script file, not to store the actual data. You should
@@ -24,10 +24,13 @@ namespace ScriptSystem
 
 		/// Returns script text.
 		const char* GetScript();
-	protected:	
+
+		/// Returns the resource type associated with this class.
+		static ResourceSystem::eResourceType GetResourceType() { return ResourceSystem::RESTYPE_SCRIPTRESOURCE; }
+	protected:
 
 		virtual bool LoadImpl(void);
-		virtual bool UnloadImpl(void);	
+		virtual bool UnloadImpl(void);
 
 	private:
 

@@ -31,7 +31,10 @@ namespace GfxSystem
 
 		virtual uint32 GetWidth(void);
 		virtual uint32 GetHeight(void);
-		
+
+		/// Returns the resource type associated with this class.
+		static ResourceSystem::eResourceType GetResourceType() { return ResourceSystem::RESTYPE_TEXTURE; }
+
 	protected:
 
 		friend class GfxRenderer;
@@ -45,7 +48,6 @@ namespace GfxSystem
 		uint32 mHeight, mWidth;
 
 	};
-
 }
 
 #endif

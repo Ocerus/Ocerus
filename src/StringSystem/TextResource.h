@@ -8,12 +8,12 @@
 #include "../ResourceSystem/Resource.h"
 #include "TextData.h"
 
-namespace StringSystem 
+namespace StringSystem
 {
 	/// This class represents a single text resource.
 	/// Main purpose of the class is to load and parse a .str file, not to store the actual data. You should
 	///	only use StringMgr to load text resources (although its possible to load it directly with ResourceMgr,
-	///	IT IS NOT recommended). Also, use StringMgr to access the actual text data, because TextResource is normally discarded 
+	///	IT IS NOT recommended). Also, use StringMgr to access the actual text data, because TextResource is normally discarded
 	///	after loading (StringMgr calls GetTextDataMap() and Unload()), thus it may be required to load it
 	///	again, which would be slow.
 	class TextResource : public ResourceSystem::Resource
@@ -35,10 +35,13 @@ namespace StringSystem
 		/// Returns the text data container used by this resource.
 		const TextDataMap* GetTextDataMap(void);
 
-	protected:	
+		/// Returns the resource type associated with this class.
+		static ResourceSystem::eResourceType GetResourceType() { return ResourceSystem::RESTYPE_TEXTRESOURCE; }
+
+	protected:
 
 		virtual bool LoadImpl(void);
-		virtual bool UnloadImpl(void);	
+		virtual bool UnloadImpl(void);
 
 	private:
 

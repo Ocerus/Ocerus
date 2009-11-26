@@ -5,6 +5,7 @@
 #define ResourcePointers_h__
 
 #include <boost/shared_ptr.hpp>
+#include <ResourceSystem/Resource.h>
 
 namespace GfxSystem
 {
@@ -33,8 +34,27 @@ namespace ResourceSystem
 	class Resource;
 	class XMLResource;
 
-	/// Smar pointer to Resource.
-    typedef boost::shared_ptr<Resource> ResourcePtr;
+	/// Smart pointer to Resource. This pointer allows type-checked casting to
+	/// specific resource pointers.
+	class ResourcePtr: public boost::shared_ptr<ResourceSystem::Resource>
+	{
+	public:
+		/// Constructs an empty ResourcePtr.
+		ResourcePtr() {}
+
+		/// Constructs a ResourcePtr for given (raw) resource pointer.
+		ResourcePtr(ResourceSystem::Resource* rhs): boost::shared_ptr<ResourceSystem::Resource>(rhs) {}
+
+		/// Converts the ResourcePtr to concrete (shared) resource pointer.
+		/// This method checks whether the conversion is valid.
+		template <class T>
+		operator boost::shared_ptr<T>()
+		{
+			OC_ASSERT(T::GetResourceType() == (*this)->GetType());
+			return boost::static_pointer_cast<T>(*this);
+		}
+	};
+
 	/// Smart pointer to XMLResource.
     typedef boost::shared_ptr<XMLResource> XMLResourcePtr;
 }

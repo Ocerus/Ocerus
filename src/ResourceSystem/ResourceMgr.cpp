@@ -101,20 +101,20 @@ bool ResourceMgr::AddResourceDirToGroup(const string& path, const StringKey& gro
 	boost::regex includeFilter;
 	boost::regex excludeFilter;
 
-	try	
+	try
 	{
-		includeFilter.assign(includeRegexp, boost::regex::extended|boost::regex::icase); 
+		includeFilter.assign(includeRegexp, boost::regex::extended|boost::regex::icase);
 	}
-	catch (std::exception& e) 
+	catch (std::exception& e)
 	{
 		ocError << "includeRegexp '" << includeRegexp << "' is not valid: " << e.what();
-		return false; 
+		return false;
 	}
-	try	
-	{ 
+	try
+	{
 		if (excludeRegexp.size()>0) excludeFilter.assign(excludeRegexp, boost::regex::extended|boost::regex::icase);
 	}
-	catch (std::exception& e) 
+	catch (std::exception& e)
 	{
 		ocError << "excludeRegexp '" << excludeRegexp << "' is not valid: " << e.what();
 		return false;
@@ -188,6 +188,7 @@ bool ResourceMgr::AddResourceFileToGroup(const string& filepath, const StringKey
 	r->SetState(Resource::STATE_INITIALIZED);
 	r->SetName(name);
 	r->SetFilepath(boostPath.string());
+	r->SetType(type);
 
 	AddResourceToGroup(group, name, r);
 

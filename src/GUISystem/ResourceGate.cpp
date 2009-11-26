@@ -9,9 +9,8 @@ namespace GUISystem {
 
 		//ResourceSystem::ResourceMgr::GetSingleton().AddResourceFileToGroup(filename.c_str(), resourceGroup.c_str());
 
-		CEGUIResourcePtr res = boost::static_pointer_cast<CEGUIResource>(
-			ResourceSystem::ResourceMgr::GetSingleton()
-			.GetResource(resourceGroup.c_str(), filename.c_str()));
+		CEGUIResourcePtr res = ResourceSystem::ResourceMgr::GetSingleton()
+			.GetResource(resourceGroup.c_str(), filename.c_str());
 
 		res->GetResource(output);
 	}

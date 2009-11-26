@@ -122,6 +122,9 @@ namespace ResourceSystem
 			return StringConverter::FromString<T>(*child);
 		}
 
+		/// Returns the resource type associated with this class.
+		static ResourceSystem::eResourceType GetResourceType() { return ResourceSystem::RESTYPE_XMLRESOURCE; }
+
 	protected:
 
 		virtual bool LoadImpl(void);
@@ -135,7 +138,7 @@ namespace ResourceSystem
 		/// Top level node iterator to be used as a reference value.
 		XMLDataMap::iterator mTopNode;
 	};
-	
+
 
 	inline bool XMLNodeIterator::HasAttribute( const string& name )
 	{
@@ -149,13 +152,13 @@ namespace ResourceSystem
     }
 	template<typename T>
 	T XMLNodeIterator::GetValue(void)
-    { 
+    {
         return mOwner->GetValue<T>(*this);
     }
 
 	template<typename T>
 	T XMLNodeIterator::GetChildValue(void)
-    { 
+    {
         return mOwner->GetChildValue<T>(*this);
     }
 }

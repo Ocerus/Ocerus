@@ -18,6 +18,9 @@ namespace GUISystem {
 
 		void GetResource(CEGUI::RawDataContainer& outData);
 
+		/// Returns the resource type associated with this class.
+		static ResourceSystem::eResourceType GetResourceType() { return ResourceSystem::RESTYPE_CEGUIRESOURCE; }
+
 	protected:
 		friend class ResourceMgr;
 

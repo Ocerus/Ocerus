@@ -1,6 +1,8 @@
 #include "Common.h"
+#include "ResourcePointers.h"
 #include "StringMgr.h"
 #include "TextResource.h"
+
 
 using namespace StringSystem;
 
@@ -40,7 +42,7 @@ bool StringMgr::LoadDataFromDir(const string& path, const string& includeRegexp,
 
 	for (it = resourceGroup.begin(); it != resourceGroup.end(); it++)
 	{
-		TextResourcePtr tp = boost::static_pointer_cast<TextResource>(*it);
+		TextResourcePtr tp = (TextResourcePtr)(*it);
 		const TextDataMap* dm = tp->GetTextDataMap();
 		mTextDataMap.insert(dm->begin(), dm->end());
 	}
@@ -63,7 +65,7 @@ bool StringMgr::LoadDataFromFile(const string& filepath, bool pathRelative)
 
 	for (it = resourceGroup.begin(); it != resourceGroup.end(); it++)
 	{
-		TextResourcePtr tp = boost::static_pointer_cast<TextResource>(*it);
+		TextResourcePtr tp = (TextResourcePtr)(*it);
 		const TextDataMap* dm = tp->GetTextDataMap();
 		mTextDataMap.insert(dm->begin(), dm->end());
 	}

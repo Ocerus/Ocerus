@@ -468,7 +468,7 @@ void EntitySystem::EntityMgr::LoadEntityFromXML( ResourceSystem::XMLNodeIterator
 
 bool EntitySystem::EntityMgr::LoadEntitiesFromResource( ResourceSystem::ResourcePtr res, const bool isPrototype )
 {
-    ResourceSystem::XMLResourcePtr xml = boost::static_pointer_cast<ResourceSystem::XMLResource>(res);
+    ResourceSystem::XMLResourcePtr xml = (ResourceSystem::XMLResourcePtr)(res);
 	if (xml == 0)
 	{
 		ocError << "XML: Can't load data";

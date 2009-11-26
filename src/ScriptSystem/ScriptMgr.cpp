@@ -39,13 +39,13 @@ void LineCallback(asIScriptContext* ctx, TimeOut* timeOut)
 int IncludeCallback(const char* fileName, const char* from, CScriptBuilder* builder, void* basePath)
 {
 	// Try to get existing script resource
-	ScriptResourcePtr sp = boost::static_pointer_cast<ScriptResource>(gResourceMgr.GetResource("Scripts", fileName));
+	ScriptResourcePtr sp = (ScriptResourcePtr)(gResourceMgr.GetResource("Scripts", fileName));
 	if (!sp)
 	{
 		// Load script resource from file
-		gResourceMgr.AddResourceFileToGroup(string((char*)basePath) + fileName, "scripts", 
+		gResourceMgr.AddResourceFileToGroup(string((char*)basePath) + fileName, "scripts",
 			ResourceSystem::RESTYPE_SCRIPTRESOURCE, true);
-		sp = boost::static_pointer_cast<ScriptResource>(gResourceMgr.GetResource("Scripts", fileName));
+		sp = (ScriptResourcePtr)(gResourceMgr.GetResource("Scripts", fileName));
 	}
 	// Base path is allocated char*, so we must delete it
 	delete[] (char*)basePath;
@@ -77,7 +77,7 @@ void ScriptLog(string& msg)
 ScriptMgr::ScriptMgr(const string& basepath)
 {
 	ocInfo << "*** ScriptMgr init ***";
-	
+
 	mBasePath = basepath;
 
 	// Create the script engine
@@ -152,20 +152,20 @@ public:
 	inline ScriptArray(Utils::Array<T>* array = 0) : mArray(array) {}
 
 	// Read accessor to an array item.
-	inline T operator[](const int32 index) const 
-	{ 
-		if (!mArray) asGetActiveContext()->SetException("Used uninicialized array!"); 
+	inline T operator[](const int32 index) const
+	{
+		if (!mArray) asGetActiveContext()->SetException("Used uninicialized array!");
 		if (index>=0 && index<mArray->GetSize()) return (*mArray)[index];
 		else
-		{ 
-			asGetActiveContext()->SetException("Array index out of bounds!"); 
+		{
+			asGetActiveContext()->SetException("Array index out of bounds!");
 			return PropertyTypes::GetDefaultValue<T>();
 		}
 	}
 
 	// Write accessor to an array item.
 	inline T& operator[](const int32 index)
-	{ 
+	{
 		if (!mArray) asGetActiveContext()->SetException("Used uninicialized array!");
 		if (index>=0 && index<mArray->GetSize()) return (*mArray)[index];
 		else
@@ -174,13 +174,13 @@ public:
 			return (*mArray)[0];
 		}
 	}
-	
+
 	// Returns size of the array
 	inline int32 GetSize() const { return mArray->GetSize(); }
 
 	// Resize array to newSize
 	inline void Resize(int32 newSize)
-	{ 
+	{
 		if (newSize<0)
 		{
 			asGetActiveContext()->SetException("Cannot resize array to negative size!");
@@ -296,7 +296,7 @@ void RegisterScriptPropertyFunctionParameters(asIScriptEngine* engine)
 {
 	int32 r;
 	// Register the type
-	r = engine->RegisterObjectType("PropertyFunctionParameters", sizeof(Reflection::PropertyFunctionParameters), 
+	r = engine->RegisterObjectType("PropertyFunctionParameters", sizeof(Reflection::PropertyFunctionParameters),
 		asOBJ_VALUE | asOBJ_APP_CLASS_CDA); OC_SCRIPT_ASSERT();
 
 	// Register the constructors and destructor
@@ -360,10 +360,10 @@ void RegisterScriptEntityHandle(asIScriptEngine* engine)
 		r = engine->RegisterEnumValue("eEntityMessageResult", EntitySystem::EntityMessage::ResultNames
 			[entityMessageResult], entityMessageResult); OC_SCRIPT_ASSERT();
 	}
-	
+
 	// Register typedef EntityID
 	r = engine->RegisterTypedef("EntityID", "int32");
-	
+
 	// Register the object methods
 	r = engine->RegisterObjectMethod("EntityHandle", "bool IsValid() const", asMETHOD(EntityHandle, IsValid), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("EntityHandle", "bool Exists() const", asMETHOD(EntityHandle, Exists), asCALL_THISCALL); OC_SCRIPT_ASSERT();
@@ -409,7 +409,7 @@ void RegisterScriptEntityDescription(asIScriptEngine* engine)
 	r = engine->RegisterEnumValue("eEntityDescriptionKind", "EK_ENTITY", EntitySystem::EntityDescription::EK_ENTITY); OC_SCRIPT_ASSERT();
 	r = engine->RegisterEnumValue("eEntityDescriptionKind", "EK_PROTOTYPE", EntitySystem::EntityDescription::EK_PROTOTYPE); OC_SCRIPT_ASSERT();
 	r = engine->RegisterEnumValue("eEntityDescriptionKind", "EK_PROTOTYPE_COPY", EntitySystem::EntityDescription::EK_PROTOTYPE_COPY); OC_SCRIPT_ASSERT();
-	
+
 	// Register the object methods
 	r = engine->RegisterObjectMethod("EntityDescription", "void Init(const eEntityType)", asMETHOD(EntityDescription, Init), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("EntityDescription", "void AddComponent(const eComponentType)", asMETHOD(EntityDescription, AddComponent), asCALL_THISCALL); OC_SCRIPT_ASSERT();
@@ -443,11 +443,11 @@ void RegisterScriptEntityMgr(asIScriptEngine* engine)
 	r = engine->RegisterEnumValue("ePropertyAccess", "PA_SCRIPT_WRITE", Reflection::PA_SCRIPT_WRITE); OC_SCRIPT_ASSERT();
 	r = engine->RegisterEnumValue("ePropertyAccess", "PA_INIT", Reflection::PA_INIT); OC_SCRIPT_ASSERT();
 	r = engine->RegisterEnumValue("ePropertyAccess", "PA_FULL_ACCESS", Reflection::PA_FULL_ACCESS); OC_SCRIPT_ASSERT();
-		
+
 	// Register typedef ComponentID, PropertyAccessFlags
 	r = engine->RegisterTypedef("ComponentID", "int32");
 	r = engine->RegisterTypedef("PropertyAccessFlags", "uint8");
-	
+
 	// Register the object methods
 	r = engine->RegisterObjectMethod("EntityMgr", "EntityHandle CreateEntity(EntityDescription &in)", asMETHOD(EntityMgr, CreateEntity), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("EntityMgr", "void DestroyEntity(const EntityHandle)", asMETHOD(EntityMgr, DestroyEntity), asCALL_THISCALL); OC_SCRIPT_ASSERT();
@@ -487,7 +487,7 @@ void ScriptCreateCoRoutine(string &func)
 		string mod = engine->GetFunctionDescriptorById(ctx->GetCurrentFunction())->GetModuleName();
 
 		// We need to find the function that will be created as the co-routine
-		string decl = "void " + func + "()"; 
+		string decl = "void " + func + "()";
 		int32 funcId = engine->GetModule(mod.c_str())->GetFunctionIdByDecl(decl.c_str());
 		if (funcId < 0)
 		{
@@ -537,31 +537,31 @@ void ScriptMgr::ConfigureEngine(void)
 
 	// Register PropertyFunctionParameter class and it's methods
 	RegisterScriptPropertyFunctionParameters(mEngine);
-		
+
     // Register EntityHandle class and it's methods
 	RegisterScriptEntityHandle(mEngine);
 
 	// Register EntityDescription class and it's methods
 	RegisterScriptEntityDescription(mEngine);
-	
+
 	// Register EntityMgr class and it's methods
 	RegisterScriptEntityMgr(mEngine);
 
 	// Register function for creating co-routine
-	r = mEngine->RegisterGlobalFunction("void createCoRoutine(const string &in)", 
+	r = mEngine->RegisterGlobalFunction("void createCoRoutine(const string &in)",
 		asFUNCTIONPR(ScriptCreateCoRoutine, (string&), void), asCALL_CDECL); OC_SCRIPT_ASSERT();
 
 	// Register function for getting current owner entity handle
-	r = mEngine->RegisterGlobalFunction("EntityHandle GetCurrentEntityHandle()", 
+	r = mEngine->RegisterGlobalFunction("EntityHandle GetCurrentEntityHandle()",
 		asFUNCTION(GetCurrentEntityHandle), asCALL_CDECL); OC_SCRIPT_ASSERT();
 
 	// Register call function on EntityHandle
-	r = mEngine->RegisterObjectMethod("EntityHandle", "void CallFunction(string &in, PropertyFunctionParameters &in)", 
-		asFUNCTION(EntityHandleCallFunction), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT(); 
-	
+	r = mEngine->RegisterObjectMethod("EntityHandle", "void CallFunction(string &in, PropertyFunctionParameters &in)",
+		asFUNCTION(EntityHandleCallFunction), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+
 	// Register all additions in ScriptRegister.cpp to script
 	RegisterAllAdditions(mEngine);
-	
+
 	// Register getters, setters and array for supported types of properties
 
     #define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName) \
@@ -645,7 +645,7 @@ bool ScriptMgr::ExecuteContext(asIScriptContext* ctx, uint32 timeOut)
 		r = ctx->SetLineCallback(asFUNCTION(LineCallback), to, asCALL_CDECL);
 		OC_ASSERT_MSG(r >= 0, "Failed to register line callback function.");
 	}
-	
+
 	// Reset timer and execute script function
 	if (to) to->Reset();
 	r = ctx->Execute();
@@ -655,11 +655,11 @@ bool ScriptMgr::ExecuteContext(asIScriptContext* ctx, uint32 timeOut)
 	switch (r)
 	{
 	case asEXECUTION_ABORTED:  // Script was aborted due to time out.
-		ocError << "Execution of script function '" << funcDecl << "' in module '" << moduleName 
+		ocError << "Execution of script function '" << funcDecl << "' in module '" << moduleName
 			<< "' was aborted due to time out.";
 		return false;
 	case asEXECUTION_SUSPENDED: // Script was suspended by itself. Caller can continue the script.
-		ocDebug << "Execution of script function '" << funcDecl << "' in module '" << moduleName 
+		ocDebug << "Execution of script function '" << funcDecl << "' in module '" << moduleName
 			<< "' was suspended.";
 		return true;
 	case asEXECUTION_FINISHED: // Script was completed successfully
@@ -741,7 +741,7 @@ int32 ScriptMgr::GetFunctionID(const char* moduleName, const char* funcDecl)
 		ocError << "Script module '" << moduleName << "' not found!";
 		return -1;
 	}
-	
+
 	// Get function ID from declaration
 	return mod->GetFunctionIdByDecl(funcDecl);
 	/*if (funcId < 0)

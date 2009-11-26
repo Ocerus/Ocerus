@@ -64,7 +64,7 @@ void Application::Init()
 	InputSystem::InputMgr::CreateSingleton();
 
 	ScriptSystem::ScriptMgr::CreateSingleton();
-	
+
 	EntitySystem::EntityMgr::CreateSingleton();
 
 	GUISystem::GUIMgr::CreateSingleton();
@@ -163,8 +163,7 @@ void Application::RunMainLoop()
 			}
 
 			//TODO: odstranit - pouze pro testovci ucely
-			boost::shared_ptr<GfxSystem::Texture> t
-				= boost::static_pointer_cast<GfxSystem::Texture>(gResourceMgr.GetResource("textures", "Logo.png"));
+			GfxSystem::TexturePtr t = gResourceMgr.GetResource("textures", "Logo.png");
 			gGfxRenderer.DrawTestTexturedQuad(t->GetTexture());
 			//------------------------------------------
 

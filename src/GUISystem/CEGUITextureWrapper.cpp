@@ -17,7 +17,10 @@ namespace GUISystem {
 	const string CEGUITextureWrapper::mResourceGroupName = "CEGUI_created";
 
 	void CEGUITextureWrapper::loadFromFile(const CEGUI::String& filename, const CEGUI::String& resourceGroup) {
-		mTexture = boost::static_pointer_cast<GfxSystem::Texture>(gResourceMgr.GetResource(resourceGroup.c_str(), filename.c_str()));
+		///@todo This is really strange on linux. It compiles only if tmp variable is used.
+		//GfxSystem::TexturePtr t = gResourceMgr.GetResource(resourceGroup.c_str(), filename.c_str());
+		//mTexture = t;
+		mTexture = (GfxSystem::TexturePtr)(gResourceMgr.GetResource(resourceGroup.c_str(), filename.c_str()));
 		mOriginalHeight = mTexture->GetHeight();
 		mOriginalWidth = mTexture->GetWidth();
 	}
@@ -35,7 +38,11 @@ namespace GUISystem {
 		string name = GetNextTextureName();
 		gResourceMgr.AddManualResourceToGroup(name, mResourceGroupName, ResourceSystem::RESTYPE_TEXTURE);
 
-		mTexture = boost::static_pointer_cast<GfxSystem::Texture>(gResourceMgr.GetResource(mResourceGroupName, name));
+		///@todo This is really strange on linux. It compiles only if tmp variable is used.
+		//GfxSystem::TexturePtr t = gResourceMgr.GetResource(mResourceGroupName, name);
+		//mTexture = t;
+		mTexture = (GfxSystem::TexturePtr)(gResourceMgr.GetResource(mResourceGroupName, name));
+
 		// warning, medved error, medved thought that position of A doesnt matter :)
 /*
 		uint32* color_shift_buff = new uint32[bytesize];
