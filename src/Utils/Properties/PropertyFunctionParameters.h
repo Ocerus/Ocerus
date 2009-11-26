@@ -94,10 +94,11 @@ namespace Reflection
 		/// object and fill it with parameters with following code:
 		///
 		/// (PropertyFunctionParameters() << param1 << param2;
-		inline PropertyFunctionParameters& operator<<(const PropertyFunctionParameter& toAdd)
+		inline PropertyFunctionParameters operator<<(const PropertyFunctionParameter& toAdd) const
 		{
-			mParameters->push_back(toAdd);
-			return *this;
+			PropertyFunctionParameters res(*this);
+			res.mParameters->push_back(toAdd);
+			return res;
 		}
 
 		/// Returns a parameter specified by the index. If index out of range is
