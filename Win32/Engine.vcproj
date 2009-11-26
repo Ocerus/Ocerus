@@ -1129,6 +1129,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\ScriptSystem\ScriptRegister.h"
+					>
+				</File>
+				<File
 					RelativePath="..\src\ScriptSystem\ScriptResource.h"
 					>
 				</File>
@@ -1138,6 +1142,10 @@
 				>
 				<File
 					RelativePath="..\src\ScriptSystem\ScriptMgr.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src\ScriptSystem\ScriptRegister.cpp"
 					>
 				</File>
 				<File

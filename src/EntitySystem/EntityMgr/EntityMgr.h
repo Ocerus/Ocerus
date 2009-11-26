@@ -143,6 +143,12 @@ namespace EntitySystem
 		/// Sends a message to all entities.
 		void BroadcastMessage(const EntityMessage& msg);
 
+		/// Sends a message to all entities.
+		inline void BroadcastMessage(const EntityMessage::eType type) {  BroadcastMessage(EntityMessage(type, Reflection::PropertyFunctionParameters())); }
+
+		/// Sends a message to all entities.
+		inline void BroadcastMessage(const EntityMessage::eType type, Reflection::PropertyFunctionParameters data) {  BroadcastMessage(EntityMessage(type, data)); }
+
 		//@}
 
 

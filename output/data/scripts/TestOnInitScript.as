@@ -33,6 +33,12 @@ void OnInit(EntityHandle handle)
   string b = "ahoj";
   handle.CallFunction("TestFunction", pfp2);
 
+  PropertyFunctionParameters pfp3;
+  pfp3 << "test <<" << int32(1);
+  handle.CallFunction("TestFunction", pfp3);
+
+  handle.CallFunction("TestFunction", PropertyFunctionParameters() << "test <<" << int32(2));
+
   Color color(1, 2, 3, 4);
   Log("R: " + color.r + ", G: " + color.g + ", B: " + color.b + ", A: " + color.a);
   color.r = 5;

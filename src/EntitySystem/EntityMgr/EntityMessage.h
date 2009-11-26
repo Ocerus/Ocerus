@@ -24,6 +24,9 @@ namespace EntitySystem
 			RESULT_ERROR
 		};
 
+		/// String names of entity message results.
+		static const char* const ResultNames[];
+
 		/// Defines user types of messages.
 		enum eType
 		{
@@ -35,10 +38,13 @@ namespace EntitySystem
 			NUM_TYPES
 		};
 
-		/// String names of property types.
+		/// String names of entity message types.
+		static const char* const TypeNames[];
+
+		/// Handle declaration of all entity message types.
 		static const char* const HandleDeclaration[];
 
-		/// Returns the string name of this property type.
+		/// Returns the handle declaration of all entity message types.
 		static const char* GetHandleDeclaration(const eType type);
 
 		/// User type of this message.

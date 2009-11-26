@@ -65,7 +65,10 @@ namespace EntitySystem
 		EntityMessage::eResult PostMessage(const EntityMessage& msg);
 
 		/// Sends a message to this entity.
-		inline EntityMessage::eResult PostMessage(const EntityMessage::eType type, Reflection::PropertyFunctionParameters data = Reflection::PropertyFunctionParameters()) {  return PostMessage(EntityMessage(type, data)); }
+		inline EntityMessage::eResult PostMessage(const EntityMessage::eType type) {  return PostMessage(EntityMessage(type, Reflection::PropertyFunctionParameters())); }
+
+		/// Sends a message to this entity.
+		inline EntityMessage::eResult PostMessage(const EntityMessage::eType type, Reflection::PropertyFunctionParameters data) {  return PostMessage(EntityMessage(type, data)); }
 
 		/// Returns the type of this entity.
 		eEntityType GetType(void) const;
