@@ -18,26 +18,13 @@ void OnInit(EntityHandle handle)
   int32 l = arrayTest.GetSize();
   Log("ArrayTest has size " + l + ".");
 
-  PropertyFunctionParameters pfp1;
-  pfp1.Push_string(name);
-  pfp1.Push_int32(timeOut);
-  handle.CallFunction("TestFunction", pfp1);
-
-  PropertyFunctionParameters pfp2;
-  pfp2.Push_string("cislo 7");
-  {
-    int32 test = 7;
-    pfp2.Push_int32(test);
-  }
+  PropertyFunctionParameters pfp;
   int32 a = 546;
+  pfp << name << int32(timeOut);
   string b = "ahoj";
-  handle.CallFunction("TestFunction", pfp2);
+  handle.CallFunction("TestFunction", pfp);
 
-  PropertyFunctionParameters pfp3;
-  pfp3 << "test <<" << int32(1);
-  handle.CallFunction("TestFunction", pfp3);
-
-  handle.CallFunction("TestFunction", PropertyFunctionParameters() << "test <<" << int32(2));
+  handle.CallFunction("TestFunction", PropertyFunctionParameters() << "cislo 7" << int32(7));
 
   Color color(1, 2, 3, 4);
   Log("R: " + color.r + ", G: " + color.g + ", B: " + color.b + ", A: " + color.a);

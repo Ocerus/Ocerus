@@ -589,18 +589,11 @@ void ScriptMgr::ConfigureEngine(void)
 	r = mEngine->RegisterObjectMethod("EntityHandle", (string("const array_") + typeName + " Get_const_array_" + typeName + "(string &in)").c_str(), \
 		asFUNCTIONPR(EntityHandleGetConstArrayValue, (EntitySystem::EntityHandle&, string&), const ScriptArray<typeClass>), \
 		asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT(); \
-	/* Register PushParameter method for PropertyFunctionParameters */ \
-	r = mEngine->RegisterObjectMethod("PropertyFunctionParameters", (string("void Push_") + typeName + "(const " + typeName + " &in)").c_str(), \
-		asFUNCTIONPR(PropertyFunctionParametersPushParameter, (Reflection::PropertyFunctionParameters&, const typeClass&), void), \
-		asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT(); \
-	r = mEngine->RegisterObjectMethod("PropertyFunctionParameters", (string("void Push_array") + typeName + "(const array_" + typeName + " &in)").c_str(), \
-		asFUNCTIONPR(PropertyFunctionParametersPushParameter, (Reflection::PropertyFunctionParameters&, const ScriptArray<typeClass>&), void), \
-		asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT(); \
 	/* Register operator<< method for PropertyFunctionParameters */ \
-	r = mEngine->RegisterObjectMethod("PropertyFunctionParameters", (string("PropertyFunctionParameters opShl(const ") + typeName + " &in)").c_str(), \
+	r = mEngine->RegisterObjectMethod("PropertyFunctionParameters", (string("PropertyFunctionParameters opShl(const ") + typeName + " &in) const").c_str(), \
 		asFUNCTIONPR(PropertyFunctionParametersOperatorShl, (Reflection::PropertyFunctionParameters&, const typeClass&), Reflection::PropertyFunctionParameters), \
 		asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT(); \
-	r = mEngine->RegisterObjectMethod("PropertyFunctionParameters", (string("PropertyFunctionParameters opShl(const array_") + typeName + " &in)").c_str(), \
+	r = mEngine->RegisterObjectMethod("PropertyFunctionParameters", (string("PropertyFunctionParameters opShl(const array_") + typeName + " &in) const").c_str(), \
 		asFUNCTIONPR(PropertyFunctionParametersOperatorShl, (Reflection::PropertyFunctionParameters&, const ScriptArray<typeClass>&), Reflection::PropertyFunctionParameters), \
 		asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
 	#define SCRIPT_ONLY
