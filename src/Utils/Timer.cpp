@@ -86,7 +86,7 @@ uint64 Timer::GetMicroseconds()
         int64 curTime = GetMicrosecondsUnix();
         uint64 micro = (uint64) (curTime - mStartTime);
 #endif
-		return micro - mTotalPauseDelta;;
+		return micro - mTotalPauseDelta;
 	}
 }
 

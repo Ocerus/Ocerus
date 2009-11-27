@@ -26,6 +26,8 @@ inline void mySleep(uint64 ms)
 
 SUITE(Timer)
 {
+	const uint64 TOLERANCY_MILLIS = 1;
+
 	TEST(ManualTimer)
 	{
 		Timer timer(true);
@@ -44,12 +46,12 @@ SUITE(Timer)
 		Timer timer;
 		mySleep(49);
 		uint64 now = timer.GetMilliseconds();
-		CHECK(now >= 49);
+		CHECK(now >= 49-TOLERANCY_MILLIS);
 
 		timer.Reset();
 		mySleep(49);
 		now = timer.GetMicroseconds();
-		CHECK(now >= 49000);
+		CHECK(now >= 49000-TOLERANCY_MILLIS*1000);
 	}
 
 	TEST(ManualTimerPausing)
@@ -71,9 +73,9 @@ SUITE(Timer)
 		mySleep(19);
 		timer.Pause();
 		mySleep(10);
-		CHECK(timer.GetMilliseconds() >= 19);
+		CHECK(timer.GetMilliseconds() >= 19-TOLERANCY_MILLIS);
 		timer.Resume();
 		mySleep(10);
-		CHECK(timer.GetMilliseconds() >= 29);
+		CHECK(timer.GetMilliseconds() >= 29-TOLERANCY_MILLIS);
 	}
 }
