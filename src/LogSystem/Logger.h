@@ -5,6 +5,9 @@
 #define Logger_h__
 
 #include "Base.h"
+#include "EntitySystem/EntityMgr/EntityHandle.h"
+#include "GfxSystem/GfxStructures.h"
+#include "Properties/PropertyHolder.h"
 
 namespace LogSystem
 {
@@ -18,7 +21,8 @@ namespace LogSystem
 	public:
 		
 		/// Constructs the logger with a given message logLevel level.
-		Logger(int32 logLevel): mLogLevel(logLevel) {}
+		/// Optionally the stack trace can be written to the log.
+		Logger(int32 logLevel, const bool generateStackTrace): mLogLevel(logLevel), mGenerateStackTrace(generateStackTrace) {}
 
 		/// Destructs the logger and actually writes the logged message into the output.
 		~Logger(void);
@@ -57,6 +61,7 @@ namespace LogSystem
 
 	private:
 		int32 mLogLevel;
+		bool mGenerateStackTrace;
 		stringstream mMessageBuffer;
 	};
 	

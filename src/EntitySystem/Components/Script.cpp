@@ -82,4 +82,9 @@ void Script::TestRunTime()
 	handle.GetProperty("ScriptTimeOut").SetValue<uint32>(1000);
 	// Calls script
 	handle.FinishInit();
+
+	ocError << "testovaci error";
+	/*int* i=0;
+	*i = 12345;
+	ocError << "testovaci error 2";*/
 }

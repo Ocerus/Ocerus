@@ -51,12 +51,6 @@ namespace Core
 		/// @name Gameplay related stuff
 		//@{
 
-		/// Returns the size of the circle used for setting the engine power.
-		int32 GetEnginePowerCircleRadius(void) const;
-
-		/// Returns the size of the circle used for setting the weapon angle.
-		int32 GetWeaponCircleRadius(void) const;
-
 		/// Returns the physics engine.
 		inline b2World* GetPhysics(void) { return mPhysics; }
 

@@ -41,8 +41,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../src;../src/Precompiled;../src/Utils;../externalLibs/SDL/inc;../externalLibs/boost/inc;../externalLibs/ois/includes;../externalLibs/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib;../externalLibs/angelscript/include;../externalLibs/RTHProfiler/include;../externalLibs/SOIL/src"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;USE_ASSERT;USE_PROFILER"
+				AdditionalIncludeDirectories="../src;../src/Precompiled;../src/Utils;../externalLibs/SDL/inc;../externalLibs/boost/inc;../externalLibs/ois/includes;../externalLibs/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib;../externalLibs/angelscript/include;../externalLibs/RTHProfiler/include;../externalLibs/SOIL/src;../externalLibs/DbgLib"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;USE_ASSERT;USE_PROFILER;USE_DBGLIB"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -115,9 +115,10 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="../src;../src/Precompiled;../src/Utils;../externalLibs/SDL/inc;../externalLibs/boost/inc;../externalLibs/ois/includes;../externalLibs/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib;../externalLibs/angelscript/include;../externalLibs/RTHProfiler/include;../externalLibs/SOIL/src"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
+				Optimization="2"
+				InlineFunctionExpansion="2"
+				AdditionalIncludeDirectories="../src;../src/Precompiled;../src/Utils;../externalLibs/SDL/inc;../externalLibs/boost/inc;../externalLibs/ois/includes;../externalLibs/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib;../externalLibs/angelscript/include;../externalLibs/RTHProfiler/include;../externalLibs/SOIL/src;../externalLibs/DbgLib"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;USE_DBGLIB"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="false"
 				UsePrecompiledHeader="2"
@@ -126,7 +127,7 @@
 				WarningLevel="4"
 				WarnAsError="true"
 				Detect64BitPortabilityProblems="false"
-				DebugInformationFormat="0"
+				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -186,8 +187,8 @@
 				Optimization="2"
 				InlineFunctionExpansion="1"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories="../src;../src/Precompiled;../src/Utils;../externalLibs/SDL/inc;../externalLibs/boost/inc;../externalLibs/ois/includes;../externalLibs/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib;../externalLibs/angelscript/include;../externalLibs/RTHProfiler/include;../externalLibs/SOIL/src"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;USE_ASSERT;USE_PROFILER"
+				AdditionalIncludeDirectories="../src;../src/Precompiled;../src/Utils;../externalLibs/SDL/inc;../externalLibs/boost/inc;../externalLibs/ois/includes;../externalLibs/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib;../externalLibs/angelscript/include;../externalLibs/RTHProfiler/include;../externalLibs/SOIL/src;../externalLibs/DbgLib"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;USE_ASSERT;USE_PROFILER;USE_DBGLIB"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="true"
 				ExceptionHandling="1"

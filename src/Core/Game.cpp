@@ -16,22 +16,17 @@ using namespace Core;
 using namespace EntitySystem;
 using namespace InputSystem;
 
-#define PHYSICS_TIMESTEP 0.016f
-#define PHYSICS_ITERATIONS 10
-#define ENGINE_VISIBLE_MAX_POWER 80
-#define WEAPON_VISIBLE_ARC_RADIUS 80
-#define CAMERA_SPEED_RATIO 700.0f
-#define CAMERA_SCALE_RATIO 0.001f
-#define WEAPON_ANGLECHANGE_SPEED 2.0f
-#define ENGINE_ANGLECHANGE_SPEED 2.0f
-#define ENGINE_POWERCHANGE_SPEED 1.0f
+const float PHYSICS_TIMESTEP = 0.016f;
+const int32 PHYSICS_ITERATIONS = 10;
 
-#define WATER_TEXTURE_SCALE 0.01f
 
 Core::Game::Game():
 	StateMachine<eGameState>(GS_NORMAL),
 	mPhysics(0),
-	mLastClickTime(0) {}
+	mLastClickTime(0)
+{
+	
+}
 
 Core::Game::~Game()
 {
@@ -358,16 +353,6 @@ void Core::Game::MouseButtonPressed( const MouseInfo& mi, const eMouseButton btn
 void Core::Game::MouseButtonReleased( const MouseInfo& mi, const eMouseButton btn )
 {
 
-}
-
-int32 Core::Game::GetEnginePowerCircleRadius( void ) const
-{
-	return ENGINE_VISIBLE_MAX_POWER;
-}
-
-int32 Core::Game::GetWeaponCircleRadius( void ) const
-{
-	return WEAPON_VISIBLE_ARC_RADIUS;
 }
 
 bool Core::Game::ShouldCollide( b2Shape* shape1, b2Shape* shape2 )

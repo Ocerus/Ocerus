@@ -7,6 +7,8 @@
 #ifndef DBGLIB_DEBUGFX_H
 #define DBGLIB_DEBUGFX_H
 
+#include <string>
+
 namespace DbgLib
 {
 
@@ -14,7 +16,7 @@ namespace DbgLib
 class CMemLeakDetector;
 
 // declaration of the user-defined callback, called by the exception handler
-typedef void (*EXCEPTION_CALLBACK)(void*);
+typedef void (*EXCEPTION_CALLBACK)(const tstring&, void*);
 
 //*****************************************************************************
 // Debugging framework class that installs exception filters and 
@@ -34,6 +36,9 @@ class CDebugFx
 
 		// returns the memory leak detector object
 		static CMemLeakDetector* GetMemLeakDetector();
+
+		// fills the string buffer with the current stack trace, returns the number of elements written
+		static size_t GenerateStackTrace(tstring* p_StackTrace, const size_t p_BufferSize);
 
 	private:
 		// user defined callback that is called after the exception handler finished its work

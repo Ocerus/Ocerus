@@ -17,6 +17,58 @@ LPTOP_LEVEL_EXCEPTION_FILTER CDebugFx::m_PrevUnhandledExceptionHandler = NULL;
 #endif
 
 //////////////////////////////////////////////////////////////////////////
+size_t CDebugFx::GenerateStackTrace(tstring* p_StackTrace, const size_t p_BufferSize)
+{
+	uintx* callstack = new uintx[p_BufferSize];
+	uintx callstackSize = CDebugHelp::DoStackWalk(callstack, p_BufferSize, 2);
+	CSymbolResolver* symbolResolver = new CSymbolResolver(CSymbolResolver::GetDefaultSymbolSearchPath().c_str());
+
+	for (uintx stackIndex=0; stackIndex<callstackSize; ++stackIndex)
+	{
+		// we have not cached any module names, so we set them null
+		const tchar* moduleName = NULL;
+		ModuleHandle hModule = NULL;
+
+		// resolve debug symbols
+		tstring symFunc;
+		tstring symFile;
+		uintx symLine;
+		symbolResolver->ResolveSymbol(callstack[stackIndex], hModule, moduleName, symFunc, symFile, symLine);
+
+		// set unknown symbols
+		if(symFunc.empty())
+			symFunc = _T("Unknown Function");
+		if(symFile.empty())
+			symFile = _T("Unknown File");	
+
+		// print symbols
+		tostringstream stackInfoStream;
+		stackInfoStream << symFunc;
+
+		// align the file name a bit
+		const int fileNamePosition = 45; // number of characters before the file name (alignment from left)
+		stackInfoStream.fill(_T(' '));
+		if(stackInfoStream.tellp() < fileNamePosition)
+			stackInfoStream << std::setw(fileNamePosition - stackInfoStream.tellp()) << _T(" ") << std::setw(1);
+
+		#if defined(PLATFORM_WINDOWS)
+		const char pathSeparator = '\\';
+		#else
+		const char pathSeparator = '/';
+		#endif
+
+		// write the file name and line
+		stackInfoStream << _T("(") << symFile.substr(symFile.find_last_of(pathSeparator)+1) << _T(":") << std::dec << symLine << _T(")");
+
+		// save the string to the buffer
+		p_StackTrace[stackIndex].assign(stackInfoStream.str());
+	}
+
+	delete[] callstack;
+	return callstackSize;
+}
+
+//////////////////////////////////////////////////////////////////////////
 void CDebugFx::SetExceptionHandler(bool p_Enable)
 {
 #if defined(PLATFORM_WINDOWS)
@@ -94,17 +146,21 @@ DWORD WINAPI CDebugFx::UnhandledExceptionHandlerFunc(LPVOID p_Param)
 {
 	EXCEPTION_POINTERS* excInfo = reinterpret_cast<EXCEPTION_POINTERS*>(p_Param);
 
+	tstring dumpFilePath;
+
 #if defined(USE_WER)
 	// create a new report
-	CDebugHelp::CreateWERReport(excInfo);	
+	dumpFilePath = CDebugHelp::CreateWERReport(excInfo);	
 #else
 	// create a dump
-	CDebugHelp::CreateMiniDump(excInfo, (excInfo->ExceptionRecord->ExceptionCode == EXCEPTION_STACK_OVERFLOW) ? true : false);
+	dumpFilePath = CDebugHelp::CreateMiniDump(excInfo, (excInfo->ExceptionRecord->ExceptionCode == EXCEPTION_STACK_OVERFLOW) ? true : false);
 #endif
 
 	// call the user-defined callback method
 	if(m_ExceptionCallback)
-		m_ExceptionCallback(m_Param);
+	{
+		m_ExceptionCallback(dumpFilePath, m_Param);
+	}
 
 	return 0;
 }

@@ -73,7 +73,7 @@
 				IgnoreAllDefaultLibraries="false"
 				IgnoreDefaultLibraryNames="libci.lib;libcmtd.lib"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(TargetDir)$(TargetName)_Ocerus.pdb"
+				ProgramDatabaseFile="$(TargetDir)$(TargetName).pdb"
 				SubSystem="2"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -130,7 +130,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				InlineFunctionExpansion="1"
+				Optimization="2"
+				InlineFunctionExpansion="2"
 				AdditionalIncludeDirectories="../src;../src/Precompiled;../src/Utils;../externalLibs/boost/inc;../externalLibs/hge/include;../externalLibs/ois/includes;../externalLibs/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib;../externalLibs/angelscript/include;../externalLibs/angelscript/add_on/scriptstring;../externalLibs/DbgLib"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;USE_DBGLIB"
 				RuntimeLibrary="2"
@@ -140,7 +141,7 @@
 				WarningLevel="4"
 				WarnAsError="true"
 				Detect64BitPortabilityProblems="false"
-				DebugInformationFormat="0"
+				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -158,7 +159,8 @@
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="../externalLibs/boost/lib;../externalLibs/cegui/lib;../externalLibs/SDL/lib;../externalLibs/cegui/dependencies/lib"
 				IgnoreDefaultLibraryNames="libci.lib;libcmt.lib"
-				GenerateDebugInformation="false"
+				GenerateDebugInformation="true"
+				ProgramDatabaseFile="$(TargetDir)$(TargetName).pdb"
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
@@ -186,9 +188,9 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				Description="Copying DLL files to output dir..."
-				CommandLine="copy /V /Y /B ..\externalLibs\DbgHelp\Win32\*.dll &quot;$(OutDir)&quot;"
-				ExcludedFromBuild="true"
+				Description="Copying binaries to the output directory..."
+				CommandLine="copy /V /Y /B &quot;$(TargetPath)&quot; &quot;../output&quot;"
+				ExcludedFromBuild="false"
 			/>
 		</Configuration>
 		<Configuration
@@ -251,7 +253,7 @@
 				IgnoreAllDefaultLibraries="false"
 				IgnoreDefaultLibraryNames="libci.lib;libcmt.lib"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(TargetDir)$(TargetName)_Ocerus.pdb"
+				ProgramDatabaseFile="$(TargetDir)$(TargetName).pdb"
 				GenerateMapFile="false"
 				MapFileName="link.map"
 				SubSystem="2"

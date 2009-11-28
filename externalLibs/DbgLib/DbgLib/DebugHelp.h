@@ -34,18 +34,21 @@ class CDebugHelp
 		static void SetDumpPath(const tchar* p_Path);
 
 		// creates a mini dump (if IgnoreThread is true the current thread will be excluded from the dump)
-		static void CreateMiniDump(bool p_IgnoreThread);
+		// returns the file name the dump was written to
+		static tstring CreateMiniDump(bool p_IgnoreThread);
 
 #if defined(PLATFORM_WINDOWS)
 		// creates a mini dump (if IgnoreThread is true the current thread will be excluded from the dump)
-		static void CreateMiniDump(PEXCEPTION_POINTERS p_ExceptionInfo, bool p_IgnoreThread);
+		// returns the file name the dump was written to
+		static tstring CreateMiniDump(PEXCEPTION_POINTERS p_ExceptionInfo, bool p_IgnoreThread);
 
 		// creates a wer error report
-		static void CreateWERReport(PEXCEPTION_POINTERS p_ExceptionInfo);
+		// returns the file name the dump was written to
+		static tstring CreateWERReport(PEXCEPTION_POINTERS p_ExceptionInfo);
 #endif
 
 		// fills the buffer with the current stack trace, returns the number of elements written into p_Stack
-		static uintx DoStackWalk(uintx* p_CallStack, uintx p_BufferSize);
+		static uintx DoStackWalk(uintx* p_CallStack, uintx p_BufferSize, int numCallsToSkip = 1);
 
 	private:
 		// path were we store our dumps

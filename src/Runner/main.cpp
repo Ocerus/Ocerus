@@ -13,12 +13,9 @@
 #endif
 
 
-//#undef USE_DBGLIB		//Muhe: dbglib nefunguje v express VS
-
 #ifdef USE_DBGLIB
 #include <DbgLib/DbgLib.h>
 #endif
-
 
 
 #if defined(USE_LEAKDETECTOR) && defined(NDEBUG)
@@ -28,13 +25,20 @@
 
 #ifdef USE_DBGLIB
 /// Callback function from the DbgLib.
-void DbgLibExceptionCallback(void* params)
+void DbgLibExceptionCallback(const DbgLib::tstring& dumpFilePath, void* params)
 {
-	const char* message = "A system exception has occured!\nTODO how to retrieve any detailed info?";
+	stringstream ss;
+	ss << "A system exception has occured!" << std::endl << std::endl;
+	ss << "The MiniDump was written to" << std::endl;
+	ss << dumpFilePath << std::endl << std::endl;
+	ss << "Stack trace is stored in the MiniDump file.";
+
+	string message = ss.str();
+
 	#ifdef __WIN__
-	MessageBox(NULL, message, "A Windows exception has occured!", MB_OK | MB_ICONERROR | MB_TASKMODAL);
+	MessageBox(NULL, message.c_str(), "A Windows exception has occured!", MB_OK | MB_ICONERROR | MB_TASKMODAL);
 	#else
-	fprintf(stderr, "%s\n",  message);
+	fprintf(stderr, "%s\n",  message.c_str());
 	#endif
 
 	// terminate the application, this exception is not fixable

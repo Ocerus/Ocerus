@@ -239,7 +239,7 @@ BOOL CALLBACK CDebugHelp::MiniDumpCallback(PVOID CallbackParam, const PMINIDUMP_
 }
 
 //////////////////////////////////////////////////////////////////////////
-void CDebugHelp::CreateMiniDump(PEXCEPTION_POINTERS p_ExceptionInfo, bool p_IgnoreThread)
+tstring CDebugHelp::CreateMiniDump(PEXCEPTION_POINTERS p_ExceptionInfo, bool p_IgnoreThread)
 {
 	// build our MINIDUMP_EXCEPTION_INFORMATION (if we got EXCEPTION_POINTERS in p_Param)
 	MINIDUMP_EXCEPTION_INFORMATION excInfo;
@@ -281,11 +281,15 @@ void CDebugHelp::CreateMiniDump(PEXCEPTION_POINTERS p_ExceptionInfo, bool p_Igno
 		CloseHandle(hFile);
 	}
 	else
+	{
 		_tprintf(_T("CreateFile failed: %d\n"), GetLastError());
+	}
+
+	return fileName;
 }
 
 //////////////////////////////////////////////////////////////////////////
-void CDebugHelp::CreateWERReport(PEXCEPTION_POINTERS p_ExceptionInfo)
+tstring CDebugHelp::CreateWERReport(PEXCEPTION_POINTERS p_ExceptionInfo)
 {
 #if defined(USE_WER)
 	bool werSuccess = false;
@@ -327,12 +331,15 @@ void CDebugHelp::CreateWERReport(PEXCEPTION_POINTERS p_ExceptionInfo)
 	{
 		// terminate the process (so that we don't activate WER 2 times for one crash)
 		TerminateProcess(GetCurrentProcess(), 1);
+		return tstring();
 	}
 	else
 	{
 		// if we couldn't create an error report - just create a mini dump
-		CreateMiniDump(p_ExceptionInfo, false);
+		return CreateMiniDump(p_ExceptionInfo, false);
 	}
+#else // USER_WER
+	return tstring();
 #endif // USER_WER
 }
 
@@ -367,10 +374,10 @@ void CDebugHelp::SetDumpPath(const tchar* p_Path)
 }
 
 //////////////////////////////////////////////////////////////////////////
-void CDebugHelp::CreateMiniDump(bool p_IgnoreThread)
+tstring CDebugHelp::CreateMiniDump(bool p_IgnoreThread)
 {
 #if defined(PLATFORM_WINDOWS)
-	CreateMiniDump(NULL, p_IgnoreThread);
+	return CreateMiniDump(NULL, p_IgnoreThread);
 #else // PLATFORM_WINDOWS
 	// get current time and format into a string
 	char buf[101];
@@ -394,11 +401,12 @@ void CDebugHelp::CreateMiniDump(bool p_IgnoreThread)
 	fileName << m_DumpPath << _AT("Dump-") << buf << tv.tv_usec << _AT(".dmp");
 #endif // _UNICODE
 	WriteCoreDump(fileName.str().c_str());
+	return fileName.str();
 #endif // _PLATFORM_WINDOWS
 }
 
 //////////////////////////////////////////////////////////////////////////
-uintx CDebugHelp::DoStackWalk(uintx* p_CallStack, uintx p_BufferSize)
+uintx CDebugHelp::DoStackWalk(uintx* p_CallStack, uintx p_BufferSize, int numCallsToSkip)
 {
 #if defined(PLATFORM_WINDOWS)
 	if(!g_DbgHelpDll.IsLoaded())
@@ -482,9 +490,13 @@ uintx CDebugHelp::DoStackWalk(uintx* p_CallStack, uintx p_BufferSize)
 				// end of stack.
 				break;
 			}
-			// stack position is stored in StackFrame.AddrPC.Offset
-			p_CallStack[curFrame] = (uintx)stackFrame.AddrPC.Offset;
-			++curFrame;
+
+			if (numCallsToSkip-- <= 0)
+			{
+				// stack position is stored in StackFrame.AddrPC.Offset
+				p_CallStack[curFrame] = (uintx)stackFrame.AddrPC.Offset;
+				++curFrame;
+			}
 		}
 	}
 	__finally
