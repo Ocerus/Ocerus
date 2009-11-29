@@ -20,7 +20,12 @@ LPTOP_LEVEL_EXCEPTION_FILTER CDebugFx::m_PrevUnhandledExceptionHandler = NULL;
 size_t CDebugFx::GenerateStackTrace(tstring* p_StackTrace, const size_t p_BufferSize)
 {
 	uintx* callstack = new uintx[p_BufferSize];
-	uintx callstackSize = CDebugHelp::DoStackWalk(callstack, p_BufferSize, 2);
+	#ifdef _DEBUG
+	const int numCallsToSkip = 2;
+	#else
+	const int numCallsToSkip = 0;
+	#endif
+	uintx callstackSize = CDebugHelp::DoStackWalk(callstack, p_BufferSize, numCallsToSkip);
 	CSymbolResolver* symbolResolver = new CSymbolResolver(CSymbolResolver::GetDefaultSymbolSearchPath().c_str());
 
 	for (uintx stackIndex=0; stackIndex<callstackSize; ++stackIndex)

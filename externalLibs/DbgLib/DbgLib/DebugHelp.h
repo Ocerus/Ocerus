@@ -48,7 +48,7 @@ class CDebugHelp
 #endif
 
 		// fills the buffer with the current stack trace, returns the number of elements written into p_Stack
-		static uintx DoStackWalk(uintx* p_CallStack, uintx p_BufferSize, int numCallsToSkip = 1);
+		static uintx DoStackWalk(uintx* p_CallStack, uintx p_BufferSize, int numCallsToSkip = 0);
 
 	private:
 		// path were we store our dumps

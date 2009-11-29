@@ -75,6 +75,8 @@ void Script::TestRunTime()
 	entDesc.SetName("Test script entity");
 	entDesc.AddComponent(CT_SCRIPT);
 
+	ocError << "testovaci error";
+
 	EntitySystem::EntityHandle handle = gEntityMgr.CreateEntity(entDesc);
 	Utils::Array<string>* a = handle.GetProperty("ScriptModules").GetValue<Utils::Array<string>*>();
 	a->Resize(1);
@@ -82,9 +84,4 @@ void Script::TestRunTime()
 	handle.GetProperty("ScriptTimeOut").SetValue<uint32>(1000);
 	// Calls script
 	handle.FinishInit();
-
-	ocError << "testovaci error";
-	/*int* i=0;
-	*i = 12345;
-	ocError << "testovaci error 2";*/
 }
