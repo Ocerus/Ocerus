@@ -28,11 +28,17 @@
 
 void* operator new( std::size_t sz ) throw(std::bad_alloc)
 {
+	// WARNING:
+	// note that if you remove calls to the standard malloc, you have to hook your custom malloc to DbgLib's hooks
+	// detecting memory leaks
 	return malloc(sz);
 }
 
 void operator delete( void* ptr ) throw()
 {
+	// WARNING:
+	// note that if you remove calls to the standard free, you have to hook your custom free to DbgLib's hooks
+	// detecting memory leaks
 	free(ptr);
 }
 
