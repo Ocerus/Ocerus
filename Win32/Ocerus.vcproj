@@ -189,7 +189,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Copying binaries to the output directory..."
-				CommandLine="copy /V /Y /B &quot;$(TargetPath)&quot; &quot;../output&quot;"
+				CommandLine="copy /V /Y /B &quot;$(TargetPath)&quot; &quot;../output&quot;&#x0D;&#x0A;copy /V /Y /B &quot;$(TargetDir)$(TargetName).pdb&quot; &quot;../output&quot;"
 				ExcludedFromBuild="false"
 			/>
 		</Configuration>
