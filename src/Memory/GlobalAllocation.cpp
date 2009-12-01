@@ -71,3 +71,22 @@ void operator delete[]( void* ptr, const std::nothrow_t& )
 {
 	free(ptr);
 }
+
+
+#include "GlobalAllocation.h"
+#include <angelscript.h>
+
+void* myMalloc(std::size_t sz)
+{
+	return malloc(sz);
+}
+
+void myFree(void* ptr)
+{
+	free(ptr);
+}
+
+void Memory::initGlobalMemoryAllocation( void )
+{
+	AngelScript::asSetGlobalMemoryFunctions(myMalloc, myFree);
+}

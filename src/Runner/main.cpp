@@ -5,6 +5,7 @@
 #include "../Core/Application.h"
 #include "../LogSystem/LogMgr.h"
 #include "../LogSystem/LogMacros.h"
+#include "../Memory/GlobalAllocation.h"
 #include <exception>
 
 #ifdef __WIN__
@@ -53,6 +54,9 @@ INT WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 int main(int argc, char* argv[])
 #endif // __WIN__
 {	
+	// initialize memory
+	Memory::initGlobalMemoryAllocation();
+
 	// register debugging support using DbgLib
 	#ifdef USE_DBGLIB
 

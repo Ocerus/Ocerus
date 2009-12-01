@@ -1106,7 +1106,11 @@
 				Name="inc"
 				>
 				<File
-					RelativePath="..\src\Memory\MemoryAlloc.h"
+					RelativePath="..\src\Memory\ClassAllocation.h"
+					>
+				</File>
+				<File
+					RelativePath="..\src\Memory\GlobalAllocation.h"
 					>
 				</File>
 			</Filter>
@@ -1114,7 +1118,7 @@
 				Name="src"
 				>
 				<File
-					RelativePath="..\src\Memory\GlobalAlloc.cpp"
+					RelativePath="..\src\Memory\GlobalAllocation.cpp"
 					>
 				</File>
 			</Filter>

@@ -1,8 +1,8 @@
 /// @file
 /// Memory allocations overrides in the per-class scope.
 
-#ifndef MemoryAlloc_h__
-#define MemoryAlloc_h__
+#ifndef ClassAllocation_h__
+#define ClassAllocation_h__
 
 #include <exception>
 #include <new>
@@ -33,15 +33,15 @@ namespace Memory
 	};
 
 	/// Custom dynamic memory allocator to allow specialized allocation of classes.
-	/// The Heap template parameter specifies the heap which will be used for allocation. To make use of this
+	/// The AllocType template parameter specifies the heap which will be used for allocation. To make use of this
 	/// allocator, simply extend the class by it.
 	template<eAllocationType AllocType>
-	class MemoryAlloc
+	class ClassAllocation
 	{
 	public:
 
-		explicit MemoryAlloc(void) {}
-		~MemoryAlloc(void) {}
+		explicit ClassAllocation(void) {}
+		~ClassAllocation(void) {}
 
 		void* operator new( std::size_t sz ) throw(std::bad_alloc)
 		{
@@ -85,4 +85,4 @@ namespace Memory
 	};
 }
 
-#endif // MemoryAlloc_h__
+#endif // ClassAllocation_h__

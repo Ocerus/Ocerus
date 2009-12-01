@@ -7,7 +7,7 @@
 #define Memory_h__
 
 
-#include "../Memory/MemoryAlloc.h"
+#include "../Memory/ClassAllocation.h"
 using namespace Memory;
 
 
