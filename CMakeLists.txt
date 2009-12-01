@@ -248,7 +248,7 @@ set(LogSystem_SRCS
 )
 
 set(Memory_SRCS
-    src/Memory/GlobalAlloc.cpp
+    src/Memory/GlobalAllocation.cpp
 )
 
 set(ResourceSystem_SRCS
