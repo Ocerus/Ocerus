@@ -468,7 +468,7 @@ void EntitySystem::EntityMgr::LoadEntityFromXML( ResourceSystem::XMLNodeIterator
 
 bool EntitySystem::EntityMgr::LoadEntitiesFromResource( ResourceSystem::ResourcePtr res, const bool isPrototype )
 {
-    ResourceSystem::XMLResourcePtr xml = (ResourceSystem::XMLResourcePtr)(res);
+    ResourceSystem::XMLResourcePtr xml = res;
 	if (xml == 0)
 	{
 		ocError << "XML: Can't load data";
