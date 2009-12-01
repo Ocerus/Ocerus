@@ -26,11 +26,14 @@ int32 b2_byteCount = 0;
 
 
 // Memory allocators. Modify these to use your own allocator.
+
+#include "Memory/GlobalAllocation.h"
+
 void* b2Alloc(int32 size)
 {
 	size += 4;
 	b2_byteCount += size;
-	char* bytes = (char*)malloc(size);
+	char* bytes = (char*)Memory::CustomMalloc(size);
 	*(int32*)bytes = size;
 	return bytes + 4;
 }
@@ -47,5 +50,5 @@ void b2Free(void* mem)
 	int32 size = *(int32*)bytes;
 	b2Assert(b2_byteCount >= size);
 	b2_byteCount -= size;
-	free(bytes);
+	Memory::CustomFree(bytes);
 }

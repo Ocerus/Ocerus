@@ -19,9 +19,7 @@
 #pragma warning(disable: 4290)
 #endif
 
-// We are currently using the standard memory allocator. Remove this when we switch to custom memory allocator.
-#include <cstdlib>
-
+#include "GlobalAllocation.h"
 
 /// Custom memory management.
 namespace Memory
@@ -43,44 +41,44 @@ namespace Memory
 		explicit ClassAllocation(void) {}
 		~ClassAllocation(void) {}
 
-		void* operator new( std::size_t sz ) throw(std::bad_alloc)
+		inline void* operator new( std::size_t sz ) throw(std::bad_alloc)
 		{
-			return malloc(sz);
+			return CustomMalloc(sz);
 		}
 
-		void operator delete( void* ptr ) throw()
+		inline void operator delete( void* ptr ) throw()
 		{
-			free(ptr);
+			CustomFree(ptr);
 		}
 
-		void* operator new( std::size_t sz, const std::nothrow_t& )
+		inline void* operator new( std::size_t sz, const std::nothrow_t& )
 		{
-			return malloc(sz);
+			return CustomMalloc(sz);
 		}
 
-		void operator delete( void* ptr, const std::nothrow_t& )
+		inline void operator delete( void* ptr, const std::nothrow_t& )
 		{
-			free(ptr);
+			CustomFree(ptr);
 		}
 
-		void* operator new[]( std::size_t sz ) throw(std::bad_alloc)
+		inline void* operator new[]( std::size_t sz ) throw(std::bad_alloc)
 		{
-			return malloc(sz);
+			return CustomMalloc(sz);
 		}
 
-		void operator delete[]( void* ptr ) throw()
+		inline void operator delete[]( void* ptr ) throw()
 		{
-			free(ptr);
+			CustomFree(ptr);
 		}
 
-		void* operator new[]( std::size_t sz, const std::nothrow_t& )
+		inline void* operator new[]( std::size_t sz, const std::nothrow_t& )
 		{
-			return malloc(sz);
+			return CustomMalloc(sz);
 		}
 
-		void operator delete[]( void* ptr, const std::nothrow_t& )
+		inline void operator delete[]( void* ptr, const std::nothrow_t& )
 		{
-			free(ptr);
+			CustomFree(ptr);
 		}
 	};
 }

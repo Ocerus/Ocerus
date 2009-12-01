@@ -55,7 +55,7 @@ int main(int argc, char* argv[])
 #endif // __WIN__
 {	
 	// initialize memory
-	Memory::initGlobalMemoryAllocation();
+	Memory::InitGlobalMemoryAllocation();
 
 	// register debugging support using DbgLib
 	#ifdef USE_DBGLIB

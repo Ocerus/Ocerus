@@ -5,6 +5,7 @@
 /// as well.
 
 #include "Common.h"
+#include "GlobalAllocation.h"
 #include <exception>
 #include <new>
 
@@ -20,73 +21,51 @@
 #pragma warning(disable: 4290)
 #endif
 
-// We are using standard memory allocators now, so we need this include for malloc and free.
-#include <cstdlib>
-#undef malloc
-#undef free
-
 
 void* operator new( std::size_t sz ) throw(std::bad_alloc)
 {
-	// WARNING:
-	// note that if you remove calls to the standard malloc, you have to hook your custom malloc to DbgLib's hooks
-	// detecting memory leaks
-	return malloc(sz);
+	return CustomMalloc(sz);
 }
 
 void operator delete( void* ptr ) throw()
 {
-	// WARNING:
-	// note that if you remove calls to the standard free, you have to hook your custom free to DbgLib's hooks
-	// detecting memory leaks
-	free(ptr);
+	CustomFree(ptr);
 }
 
 void* operator new( std::size_t sz, const std::nothrow_t& )
 {
-	return malloc(sz);
+	return CustomMalloc(sz);
 }
 
 void operator delete( void* ptr, const std::nothrow_t& )
 {
-	free(ptr);
+	CustomFree(ptr);
 }
 
 void* operator new[]( std::size_t sz ) throw(std::bad_alloc)
 {
-	return malloc(sz);
+	return CustomMalloc(sz);
 }
 
 void operator delete[]( void* ptr ) throw()
 {
-	free(ptr);
+	CustomFree(ptr);
 }
 
 void* operator new[]( std::size_t sz, const std::nothrow_t& )
 {
-	return malloc(sz);
+	return CustomMalloc(sz);
 }
 
 void operator delete[]( void* ptr, const std::nothrow_t& )
 {
-	free(ptr);
+	CustomFree(ptr);
 }
 
 
-#include "GlobalAllocation.h"
 #include <angelscript.h>
 
-void* myMalloc(std::size_t sz)
+void Memory::InitGlobalMemoryAllocation( void )
 {
-	return malloc(sz);
-}
-
-void myFree(void* ptr)
-{
-	free(ptr);
-}
-
-void Memory::initGlobalMemoryAllocation( void )
-{
-	AngelScript::asSetGlobalMemoryFunctions(myMalloc, myFree);
+	AngelScript::asSetGlobalMemoryFunctions(CustomMalloc, CustomFree);
 }
