@@ -24,42 +24,42 @@
 
 void* operator new( std::size_t sz ) throw(std::bad_alloc)
 {
-	return CustomMalloc(sz);
+	return Memory::CustomMalloc(sz);
 }
 
 void operator delete( void* ptr ) throw()
 {
-	CustomFree(ptr);
+	Memory::CustomFree(ptr);
 }
 
 void* operator new( std::size_t sz, const std::nothrow_t& )
 {
-	return CustomMalloc(sz);
+	return Memory::CustomMalloc(sz);
 }
 
 void operator delete( void* ptr, const std::nothrow_t& )
 {
-	CustomFree(ptr);
+	Memory::CustomFree(ptr);
 }
 
 void* operator new[]( std::size_t sz ) throw(std::bad_alloc)
 {
-	return CustomMalloc(sz);
+	return Memory::CustomMalloc(sz);
 }
 
 void operator delete[]( void* ptr ) throw()
 {
-	CustomFree(ptr);
+	Memory::CustomFree(ptr);
 }
 
 void* operator new[]( std::size_t sz, const std::nothrow_t& )
 {
-	return CustomMalloc(sz);
+	return Memory::CustomMalloc(sz);
 }
 
 void operator delete[]( void* ptr, const std::nothrow_t& )
 {
-	CustomFree(ptr);
+	Memory::CustomFree(ptr);
 }
 
 
