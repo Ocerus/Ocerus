@@ -51,7 +51,11 @@ void XMLCALL DataHandle(void* data, const XML_Char *s, int len)
 
 bool XMLResource::LoadImpl(void)
 {
-	XML_Parser p = XML_ParserCreate(NULL);
+	XML_Memory_Handling_Suite mmhs;
+	mmhs.malloc_fcn = CustomMalloc;
+	mmhs.free_fcn = CustomFree;
+	mmhs.realloc_fcn = NULL;
+	XML_Parser p = XML_ParserCreate_MM(NULL, &mmhs, NULL);
 	OC_ASSERT(p);
 
 	XMLMapDataHolder holder;
