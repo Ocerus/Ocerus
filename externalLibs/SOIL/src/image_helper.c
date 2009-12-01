@@ -6,6 +6,9 @@
     MIT license
 */
 
+// Hardwire: pushing custom allocator into SOIL
+#include "settings.h"
+
 #include "image_helper.h"
 #include <stdlib.h>
 #include <math.h>

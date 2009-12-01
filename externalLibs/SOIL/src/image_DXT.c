@@ -7,6 +7,9 @@
 	public domain
 */
 
+// Hardwire: pushing custom allocator into SOIL
+#include "settings.h"
+
 #include "image_DXT.h"
 #include <math.h>
 #include <stdlib.h>

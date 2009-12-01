@@ -13,6 +13,9 @@
 	* everybody at gamedev.net
 */
 
+// Hardwire: pushing custom allocator into SOIL
+#include "settings.h"
+
 #define SOIL_CHECK_FOR_GL_ERRORS 0
 
 #ifdef WIN32

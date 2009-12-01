@@ -4,7 +4,8 @@
 #ifndef settings_h__
 #define settings_h__
 
-#include "Memory/GlobalAllocation.h"
+#include "Memory/GlobalAllocation_c.h"
+#include <stdlib.h>
 
 #define malloc(size) CustomMalloc(size)
 #define free(ptr) CustomFree(ptr)

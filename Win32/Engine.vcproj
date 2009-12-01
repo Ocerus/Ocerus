@@ -1113,6 +1113,10 @@
 					RelativePath="..\src\Memory\GlobalAllocation.h"
 					>
 				</File>
+				<File
+					RelativePath="..\src\Memory\GlobalAllocation_c.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="src"

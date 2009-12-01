@@ -63,6 +63,9 @@
              on 'test' only check type, not whether we support this variant
 */
 
+// Hardwire: pushing custom allocator into SOIL
+#include "settings.h"
+
 #include "stb_image_aug.h"
 
 #ifndef STBI_NO_HDR

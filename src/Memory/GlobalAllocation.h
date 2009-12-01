@@ -5,7 +5,7 @@
 #define GlobalAllocation_h__
 
 // We are currently using the standard memory allocator. Remove this when we switch to custom memory allocator.
-#include <cstdlib>
+#include <malloc.h>
 
 namespace Memory
 {

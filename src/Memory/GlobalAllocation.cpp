@@ -69,3 +69,16 @@ void Memory::InitGlobalMemoryAllocation( void )
 {
 	AngelScript::asSetGlobalMemoryFunctions(CustomMalloc, CustomFree);
 }
+
+
+#include "GlobalAllocation_c.h"
+
+void* CustomMalloc(size_t sz)
+{
+	return Memory::CustomMalloc(sz);
+}
+
+void CustomFree(void* ptr)
+{
+	Memory::CustomFree(ptr);
+}
