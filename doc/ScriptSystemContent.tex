@@ -1,0 +1,200 @@
+\noindent\textbf{Namespaces:} ScriptSystem
+
+\noindent\textbf{Headers:} ScriptMgr.h, ScriptRegister.h, ScriptResource.h
+
+\noindent\textbf{Source files:} ScriptMgr.cpp, ScriptRegister.cpp, ScriptResource.cpp
+
+\noindent\textbf{Classes:} ScriptMgr, ScriptResource
+
+\noindent\textbf{Libraries used:} AngelScript
+
+\section{Purpose of script system}
+
+\section{Introduction to used script language}
+\label{script-language}
+
+\section{Linking script engine to game engine}
+
+% explain engine, module, source file, context, function
+
+\subsection{Interface of script manager}
+
+The script manager is represented by the class \emph{ScriptSystem::ScriptMgr} that encapsulates the script engine and manages an access to the script modules. This class is a singleton and it is created when the game starts. It initializes the AngelScript engine and registers all integral classes and functions (see \ref{sub:script-registered}) as well as all user-defined ones (see \ref{script-registering}).
+
+The first thing a caller of a script function must do is to obtain a function ID. It can be get from the method \emph{ScriptMgr::GetFunctionID} that needs the name of the module where the function is and its declaration. For example if the name of function to be called is ``IncreaseArgument'' and it receives one integer argument and returns also an integer, the declaration of it will be ``int32 IncreaseArgument(int32)''. The method returns the integer that means the desired function ID (greater than or equal to zero) or the error code (less than zero) which means the function with this declaration could not be find in the mentioned module or this module does not exist or cannot be builded from sources (see log for further information). The function ID is valid all time the module exists in memory so it can be stored for later usage.
+
+The function mentioned above calls \emph{ScriptMgr::GetModule} to obtain desired module. This method returns the module from a memory or loads its sources from disc and builds it if necessary. If it is inconvenient that the module is builded at the first call of its function, this method can be called before to get a confidence that the module is ready to use.
+
+There are two ways of calling script functions. The first one is used when the script function should be called entire at once and the caller needs the return value of it. It can done with two methods. First the caller calls \emph{ScriptMgr::PrepareContext} which needs function ID and returns context prepared for passing the argument values. See the script documentation \cite{angelscript} or an example in \ref{script-component} for appropriate methods. Then the \emph{ScriptMgr::ExecuteContext} should be called with the prepared context as the first argument and a maximum time of executing script to prevent cycling as the second one. This method executes the script with given arguments and returns whether the execution was successful. If so it is possible to get return value of function with corresponding methods of context. In the end the context should be released to avoid memory leaks.
+
+The second way of calling script function is used when it should run for a longer time with breaks caused by calling sleep and yield functions. In this case contexts are created within the context manager and they are executed by it subsequently when the \emph{ScriptMgr::ExecuteScripts} method is called which should be done in a game loop. Script functions are added to context manager by \emph{ScriptMgr::AddContextToManager} and \emph{Script\-Mgr\-::\-Add\-Context\-As\-Co\-Routine\-To\-Manager\-} which both needs a function ID as a parameter and returns context prepared for passing arguments. The first method adds the context as a new thread independent of others whereas the second one adds it as co-routine to the context passed by parameter which means when one of the co-routined contexts calls the yield function then the next context in queue will resume executing. The context added to the manager is released by itself when it finishes its execution.
+
+As mentioned in the section \ref{script-language} it is possible to use a conditional compilation of scripts. The method \emph{ScriptMgr::DefineWord} adds a pre-processor define passed as the string argument. The last method of this class is \emph{ScriptMgr::ClearModules} that unloads all previously loaded and builded modules and abort all contexts in context manager. All function IDs and contexts got from methods of this class will be superseded so the caller should inform all objects that holds them about it. This method could be called when it is needed to free all memory used by modules but when it is better not to destroy the whole script engine.
+
+\subsection{Binding entity system}
+\label{script-entity}
+
+The script system is binded to the entity system to provide an easy work with components, entities and theirs properties from scripts. The class \emph{EntityHandle} is registered to the script engine with a most of its methods but the work with entity properties differs from using them from a source code. There are registered common methods of this class for all defined property types (in \emph{PropertyTypes.h}) to get and set a simple property value, to get a non-constant or constant array and to call a property function with parameters. Methods for working with array property values (get and set a size of array, an index operator) and property function parameters (add a simple or array value as a property function parameter) are also registered. See table \ref{tab:script-properties} for method declarations.
+
+\begin{table}[htbp]
+	\centering
+		{\scriptsize 
+		\begin{tabular}{|p{0.38\hsize}|p{0.55\hsize}|}
+			\hline
+			An action & A declaration\\
+			\hline
+			\multicolumn{2}{|c|}{\emph{EntityHandle} methods}\\
+			\hline
+			Get a simple property value & \verb/type Get_type(string& property_name)/\\
+			Set a simple property value & \verb/void Set_type(string& property_name, type value)/\\
+			Get a non-constant array property value & \verb/array_type Get_array_type(string& property_name)/\\
+			Get a constant array property value & \verb/const array_type Get_const_array_type/ \verb/  (string& property_name)/\\
+			Call an entity function & \verb/void CallFunction(string& function_name,/ \verb/  PropertyFunctionParameters& parameters)/\\
+			\hline
+			\multicolumn{2}{|c|}{\emph{array\_type} methods}\\
+			\hline
+			Get a size of array & \verb/int32 GetSize() const/\\
+			Set a size of non-constant array & \verb/void Resize(int32 size)/\\
+			An index for a constant array & \verb/type operator[](int32 index) const/\\
+			An index for a non-constant array & \verb/type& operator[](int32 index)/\\
+			\hline
+			\multicolumn{2}{|c|}{\emph{PropertyFunctionParameters} methods}\\
+			\hline
+			Add a simple property as a property function parameter & \verb/PropertyFunctionParameters operator<</ \verb/  (const type& value)/\\
+			Add an array property as a property function parameter & \verb/PropertyFunctionParameters operator<</ \verb/  (const array_type& value)/\\
+			\hline
+		\end{tabular}
+		}
+	\caption[Working with entity properties]{Declarations of methods for working with entity properties where type means simple property type from \emph{PropertyTypes.h}}
+	\label{tab:script-properties}
+\end{table}
+
+For example if an entity represented by its handle, that can be get from \verb/GetCurrentEntityHandle/ global function when script is handling a message to entity (see section \ref{script-component} for details), has an integer property \verb/Integer/ then the command to save it to an integer script variable will be following: \verb/int32 n = GetCurrentEntityHandle().Get_int32("Integer")/. If the property \verb/Integer/ does not exist in this entity or has an other type than \verb/int32/ the error message is written to the log and the default value (for \verb/int32/ 0) is returned.
+
+For managing entities the \emph{EntityMgr} class is registered as no-handle object which means that only way to use it is calling methods on the return value from \verb/GetEntityMgr/ global function. For example if the script should destroy the entity represented by the variable \verb/handle/, the code will be following: \verb/GetEntityMgr().DestroyEntity(handle)/. For creation of entities the \emph{EntityDescription} class is registered, where it is possible to specify contained components, name, kind etc., as well as method \emph{CreateEntity} of \emph{EntityMgr} which has this class as parameter and returns handle of created entity.
+
+\subsection{Registered classes and functions}
+\label{sub:script-registered}
+
+Beside the classes from the entity system mentioned in the section \ref{script-entity}, other base classes and functions are registered to the script engine. For storing a text data there are two classes. The first one is a standard C++ \emph{string} class registered with a most of its method, the second one is a class \emph{StringKey} which is an integer representation of text for faster comparing and assignment and which can be construct from \emph{string} and which can be cast to \emph{string} by the \emph{ToString} method.
+
+For a thread and co-routine support there are registered three global functions which should be used when the context is executed by the context manager. The function \verb/void sleep(uint32 time)/ suspends the script execution for at least \verb/time/ milliseconds so contexts in the other threads can be executed. The function \verb/void createCoRoutine(const string& declaration)/ creates a co-routine to the current context that calls the script function in the same module without parameters with the declaration equal to the parameter of this function. The function \verb/void yield()/ suspends the current script execution and executes the next co-routine from the same thread. For example calling the last two function subsequently means that the co-routine is created and immediately executed while the current execution is suspended waiting for the co-routine function calling \verb/yield()/.
+
+The last registered global function is \verb/void Log(string& message)/ that prints the string in parameter to the log so it is useful for debugging scripts.
+
+\section{Using and extending script system}
+
+% situations for registering new classes
+
+\subsection{Registering new classes and functions}
+\label{script-registering}
+
+If it is necessary to register a new class with its methods or a global function, the registration function should be implemented in the \emph{ScriptRegister.cpp} file and called by the global function \emph{RegisterAllAdditions} with the pointer to script engine as a parameter because a registration is done by calling methods of it.
+
+The registration function should first declare the integer variable \verb/int32 r/ to which should be assign all return values from calling registration methods and after each calling the \verb/OC_SCRIPT_ASSERT()/ should be used to check if the registration is successful (it checks the variable \verb/r/ to be positive). First it is necessary to register the whole class which is done by the \emph{RegisterObjectType} method. The first parameter is a name of class in a script, the second is a size of class (use \verb/sizeof(class)/ for register a class as value, \verb/0/ otherwise) and the last parameter is flag. See table \ref{tab:script-objecttype} or documentation of AngelScript \cite{angelscript} for some flag combination.
+
+\begin{table}[htbp]
+	\centering
+		{\scriptsize
+		\begin{tabular}{|p{0.43\hsize}|p{0.50\hsize}|}
+		\hline
+		A class type & Flags\\
+		\hline
+		A primitive value type without any special management & \verb/asOBJ_VALUE | asOBJ_POD | asOBJ_APP_CLASS_CA/\\
+		A value type needed to be properly initialized and uninitialized & \verb/asOBJ_VALUE | asOBJ_APP_CLASS_CA/\\
+		A basic reference type & \verb/asOBJ_REF/\\
+		A single-reference type (singleton) & \verb/asOBJ_REF | asOBJ_NOHANDLE/\\
+		\hline
+		\end{tabular}
+		}
+	\caption{Flags in register function method}
+	\label{tab:script-objecttype}
+\end{table}
+
+After the registration the whole class it is possible to register methods of it with the \emph{RegisterObjectMethod} method. The first parameter is the name of the registered class, the second is the declaration of method in a script, the third is a pointer to the C++ function that should be called and the last is the calling convention. The pointer to C++ function should be get from one of the four macros described in the table \ref{tab:script-macros} (\verb/PR/ variants must be used when functions or methods are overloaded) and the possible calling conventions are listed in the table \ref{tab:script-conventions}. For example the registering of method \emph{bool EntityHandle::IsValid() const} as a method of the \verb/EntityHandle/ script class the code will be following:
+
+{\footnotesize\begin{verbatim}
+r = engine->RegisterObjectMethod("EntityHandle", "bool IsValid() const",
+  asMETHOD(EntityHandle, IsValid), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+\end{verbatim}}
+
+\begin{table}[htbp]
+	\centering
+		{\scriptsize
+		\begin{tabular}{|p{0.55\hsize}|p{0.38\hsize}|}
+		\hline
+		A macro declaration & An example\\
+		\hline
+		\verb/asFUNCTION(global_function_name)/ & \verb/asFUNCTION(Add)/\\
+		\verb/asFUNCTIONPR(global_function_name, (parameters),/ \verb/  return_type)/ & \verb/asFUNCTIONPR(Add, (int), void)/\\
+		\verb/asMETHOD(class_name, method_name)/ & \verb/asMETHOD(Object, Add)/\\
+		\verb/asMETHODPR(class_name, method_name, (parameters),/ \verb/  return_type)/ & \verb/asMETHOD(Object, Add, (int), void)/\\
+		\hline
+		\end{tabular}
+		}
+	\caption{Used macros for a function and method registration}
+	\label{tab:script-macros}
+\end{table}
+
+\begin{table}[htbp]
+	\centering
+		{\scriptsize
+		\begin{tabular}{|p{0.24\hsize}|p{0.69\hsize}|}
+		\hline
+		A call convention & An use case\\
+		\hline
+		\verb/asCALL_CDECL/ & \verb/A cdecl function (for global functions)/\\
+		\verb/asCALL_STDCALL/ & \verb/A stdcall function (for global functions)/\\
+		\verb/asCALL_THISCALL / & \verb/A thiscall class method (for class methods)/\\
+		\verb/asCALL_CDECL_OBJLAST / & \verb/A cdecl function with the object pointer as the last parameter/\\
+		\verb/asCALL_CDECL_OBJFIRST / & \verb/A cdecl function with the object pointer as the first parameter/\\
+		\hline
+		\end{tabular}
+		}
+	\caption{Used calling conventions for a function and method registration}
+	\label{tab:script-conventions}
+\end{table}
+
+Operators are registered as common methods but they have a special script declaration name such as \verb/opEquals/ or \verb/opAssign/. See AngelScript documentation \cite{angelscript} for further operator names.
+
+If the class has some special constructors or destructor, they need to be registered by the \emph{RegisterObjectBehaviour} method which has same parameters as the \emph{RegisterObjectMethod} except an inserted second parameter that means which behavior is registered (see table \ref{tab:script-behaviors} for possible values). They must be registered by proxy functions that take a pointer to an object as the last argument (so the \verb/asFUNCTION/ macro and the \verb/asCALL_CDECL_OBJLAST/ calling convention are used) and fill it with a constructed object or call a correct destructor on it.
+
+If the class is registered as a basic reference type, it needs to have a reference counter, a factory function and add-reference and release methods. These methods are registered by \emph{RegisterObjectBehaviour} method as well as constructor and destructor. The single-reference type does not need these methods but it cannot be passed as function parameter or stored to variable.
+
+\begin{table}[htbp]
+	\centering
+		{\scriptsize
+		\begin{tabular}{|p{0.63\hsize}|p{0.30\hsize}|}
+		\hline
+		A C++ function declaration & A behavior\\
+		\hline
+		\verb/void ObjectDefaultConstructor(Object* self)/ & \verb/asBEHAVE_CONSTRUCT/\\
+		\verb/void ObjectCopyConstructor(Object& other, Object* self)/ & \verb/asBEHAVE_CONSTRUCT/\\
+		\verb/void ObjectDestructor(Object* self)/ & \verb/asBEHAVE_DESTRUCT/\\
+		\verb/Object *ObjectFactory()/ & \verb/asBEHAVE_FACTORY/\\
+		\verb/void Object::Addref()/ & \verb/asBEHAVE_ADDREF/\\
+		\verb/void Object::Release()/ & \verb/asBEHAVE_RELEASE/\\
+		\hline
+		\end{tabular}
+		}
+	\caption{Possible behaviors for the \emph{RegisterObjectBehaviour} method}
+	\label{tab:script-behaviors}
+\end{table}
+
+It is also possible to register class properties by the \emph{RegisterObjectProperty} method but more portable is to register theirs getters and setters as class methods with strict declarations (\verb/type get_propname() const/ and \verb/void set_propname(type)/) so they can be used almost as registered directly (\verb/object.propname/).
+
+Global functions are registered by the \emph{RegisterGlobalFunction} method that has almost same parameters as the \emph{RegisterObjectMethod} (does not have the first), global properties by \emph{RegisterGlobalProperty} method. There are also methods for registering enumerations (\emph{RegisterEnum}, \emph{RegisterEnumValue}) and typedefs for primitive types (\emph{RegisterTypedef}) that are easy to use. Further information about registering types can be found at the AngelScript documentation \cite{angelscript}, examples of using are in the \emph{ScriptRegister.cpp} file.
+
+\subsection{Sample component}
+\label{script-component}
+
+\subsection{Tip for using context manager}
+
+\section{Possible extension}
+
+\section{Glossary}
+
+\begin{thebibliography}{9}                                                                                                
+\bibitem {angelscript}AngelScript documentation, file /AngelScript/index.html
+
+\end{thebibliography}

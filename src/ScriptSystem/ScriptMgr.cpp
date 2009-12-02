@@ -3,6 +3,7 @@
 #include "ScriptResource.h"
 #include "ScriptRegister.h"
 #include <angelscript.h>
+#include "../Core/Application.h"
 #include "AddOn/scriptbuilder.h"
 #include "AddOn/scriptstring.h"
 #include "AddOn/contextmgr.h"
@@ -10,16 +11,6 @@
 using namespace ScriptSystem;
 using namespace EntitySystem;
 using namespace AngelScript;
-
-struct TimeOut
-{
-	Utils::Timer timer;
-	uint32 timeOut;
-
-	TimeOut(uint32 to) : timeOut(to) {};
-	bool IsTimeOut() { return timer.GetMilliseconds() > timeOut; }
-	void Reset() { timer.Reset(); }
-};
 
 void MessageCallback(const asSMessageInfo* msg, void* param)
 {
@@ -29,10 +20,10 @@ void MessageCallback(const asSMessageInfo* msg, void* param)
 		<< messageType[msg->type] << ": " << msg->message;
 }
 
-void LineCallback(asIScriptContext* ctx, TimeOut* timeOut)
+void LineCallback(asIScriptContext* ctx, uint64* deadline)
 {
 	// If the time out is reached we abort the script
-	if (timeOut->IsTimeOut()) ctx->Abort();
+	if (*deadline <= gApp.GetCurrentTimeMillis()) ctx->Abort();
 }
 
 // Except non-const char* as last argument that means basepath for files, will be deleted in function
@@ -65,8 +56,7 @@ int IncludeCallback(const char* fileName, const char* from, CScriptBuilder* buil
 
 uint32 GetTime()
 {
-	static Utils::Timer timer;
-	return (uint32)timer.GetMilliseconds();
+	return (uint32)gApp.GetCurrentTimeMillis();
 }
 
 void ScriptLog(string& msg)
@@ -529,6 +519,10 @@ void ScriptMgr::ConfigureEngine(void)
 	// Registers the script function "void yield()"
 	mContextMgr->RegisterCoRoutineSupport(mEngine);
 
+	// Register function for creating co-routine
+	r = mEngine->RegisterGlobalFunction("void createCoRoutine(const string &in)",
+		asFUNCTIONPR(ScriptCreateCoRoutine, (string&), void), asCALL_CDECL); OC_SCRIPT_ASSERT();
+
 	// Register log function
 	r = mEngine->RegisterGlobalFunction("void Log(string &in)", asFUNCTION(ScriptLog), asCALL_CDECL); OC_SCRIPT_ASSERT();
 
@@ -546,10 +540,6 @@ void ScriptMgr::ConfigureEngine(void)
 
 	// Register EntityMgr class and it's methods
 	RegisterScriptEntityMgr(mEngine);
-
-	// Register function for creating co-routine
-	r = mEngine->RegisterGlobalFunction("void createCoRoutine(const string &in)",
-		asFUNCTIONPR(ScriptCreateCoRoutine, (string&), void), asCALL_CDECL); OC_SCRIPT_ASSERT();
 
 	// Register function for getting current owner entity handle
 	r = mEngine->RegisterGlobalFunction("EntityHandle GetCurrentEntityHandle()",
@@ -631,18 +621,16 @@ bool ScriptMgr::ExecuteContext(asIScriptContext* ctx, uint32 timeOut)
 	ocDebug << "Executing script function '" << funcDecl << "' in module '" << moduleName << "'.";
 
 	// Set line callback function to avoid script cycling
-	TimeOut* to = 0;
+	uint64 deadline = 0;
 	if (timeOut != 0)
 	{
-		to = new TimeOut(timeOut);
-		r = ctx->SetLineCallback(asFUNCTION(LineCallback), to, asCALL_CDECL);
+		r = ctx->SetLineCallback(asFUNCTION(LineCallback), &deadline, asCALL_CDECL);
 		OC_ASSERT_MSG(r >= 0, "Failed to register line callback function.");
+		deadline = gApp.GetCurrentTimeMillis() + timeOut;
 	}
 
-	// Reset timer and execute script function
-	if (to) to->Reset();
+	// Execute script function
 	r = ctx->Execute();
-	if (to) delete to;
 
 	// Get result of execution
 	switch (r)

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="windows-1250"?>
+<VisualStudioProject
+	ProjectType="Visual C++"
+	Version="9,00"
+	Name="doc"
+	ProjectGUID="{57D797D3-5853-4E8B-A89A-6F9D01B136F8}"
+	RootNamespace="doc"
+	SccProjectName="Svn"
+	SccAuxPath="Svn"
+	SccLocalPath="Svn"
+	SccProvider="SubversionScc"
+	TargetFrameworkVersion="196613"
+	>
+	<Platforms>
+		<Platform
+			Name="Win32"
+		/>
+	</Platforms>
+	<ToolFiles>
+	</ToolFiles>
+	<Configurations>
+		<Configuration
+			Name="Debug|Win32"
+			OutputDirectory="."
+			IntermediateDirectory="."
+			ConfigurationType="10"
+			CharacterSet="2"
+			DeleteExtensionsOnClean="*.pdf;*.log;*.aux;*.lof;*.toc;*.lot;$(TargetPath)"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Release|Win32"
+			OutputDirectory="."
+			IntermediateDirectory="."
+			ConfigurationType="10"
+			CharacterSet="2"
+			DeleteExtensionsOnClean="*.pdf;*.log;*.aux;*.lof;*.toc;*.lot;$(TargetPath)"
+			WholeProgramOptimization="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+	</Configurations>
+	<References>
+	</References>
+	<Files>
+		<Filter
+			Name="LaTex documents"
+			Filter="*.tex"
+			>
+			<File
+				RelativePath=".\Documentation.tex"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Building whole documentation..."
+						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet Documentation.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet Documentation.tex"
+						AdditionalDependencies="Documentation.tex;*Content.tex"
+						Outputs="Documentation.pdf"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Building whole documentation..."
+						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet Documentation.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet Documentation.tex"
+						AdditionalDependencies="Documentation.tex;*Content.tex"
+						Outputs="Documentation.pdf"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\ScriptSystem.tex"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Building Script System documentation..."
+						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet ScriptSystem.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet ScriptSystem.tex"
+						AdditionalDependencies="ScriptSystem.tex;ScriptSystemContent.tex"
+						Outputs="ScriptSystem.pdf"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Building Script System documentation..."
+						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet ScriptSystem.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet ScriptSystem.tex"
+						AdditionalDependencies="ScriptSystem.tex;ScriptSystemContent.tex"
+						Outputs="ScriptSystem.pdf"
+					/>
+				</FileConfiguration>
+			</File>
+		</Filter>
+		<Filter
+			Name="LaTex sources"
+			Filter="*Content.tex"
+			>
+			<File
+				RelativePath=".\ScriptSystemContent.tex"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+		</Filter>
+	</Files>
+	<Globals>
+	</Globals>
+</VisualStudioProject>
