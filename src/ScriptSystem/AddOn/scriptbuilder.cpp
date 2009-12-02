@@ -44,6 +44,12 @@ int CScriptBuilder::StartNewModule(asIScriptEngine *engine, const char *moduleNa
 	return 0;
 }
 
+const char* CScriptBuilder::GetModuleName(void)
+{
+	if (module == 0) return 0;
+	else return module->GetName();
+}
+
 int CScriptBuilder::AddSectionFromFile(const char *filename)
 {
 	if( IncludeIfNotAlreadyIncluded(filename) )

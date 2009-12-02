@@ -90,6 +90,9 @@ public:
 	// Start a new module
 	int StartNewModule(asIScriptEngine *engine, const char *moduleName);
 
+	// Get a module name
+	const char* GetModuleName(void);
+
 	// Load a script section from a file on disk
 	int AddSectionFromFile(const char *filename);
 

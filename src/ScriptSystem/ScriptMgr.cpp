@@ -26,20 +26,17 @@ void LineCallback(asIScriptContext* ctx, uint64* deadline)
 	if (*deadline <= gApp.GetCurrentTimeMillis()) ctx->Abort();
 }
 
-// Except non-const char* as last argument that means basepath for files, will be deleted in function
-int IncludeCallback(const char* fileName, const char* from, CScriptBuilder* builder, void* basePath)
+int ScriptMgr::IncludeCallback(const char* fileName, const char* from, AngelScript::CScriptBuilder* builder, void* userParam)
 {
 	// Try to get existing script resource
 	ScriptResourcePtr sp = (ScriptResourcePtr)(gResourceMgr.GetResource("Scripts", fileName));
 	if (!sp)
 	{
 		// Load script resource from file
-		gResourceMgr.AddResourceFileToGroup(string((char*)basePath) + fileName, "scripts",
+		gResourceMgr.AddResourceFileToGroup(gScriptMgr.mBasePath + fileName, "Scripts",
 			ResourceSystem::RESTYPE_SCRIPTRESOURCE, true);
 		sp = (ScriptResourcePtr)(gResourceMgr.GetResource("Scripts", fileName));
 	}
-	// Base path is allocated char*, so we must delete it
-	delete[] (char*)basePath;
 	if (!sp)
 	{
 		ocError << "Failed to load script file " << fileName << ".";
@@ -49,7 +46,11 @@ int IncludeCallback(const char* fileName, const char* from, CScriptBuilder* buil
 	// Get script data from resource and add as script section
 	const char* script = sp->GetScript();
 	int r = builder->AddSectionFromMemory(script, fileName);
-	sp->Unload();
+	
+	// Add file as module dependency
+	sp->GetDependentModules().insert(string(builder->GetModuleName()));
+	gScriptMgr.mModules[string(builder->GetModuleName())].push_back(sp);
+
 	if (r < 0) ocError << "Failed to add script file " << fileName << " due to dependecy on unloadable file(s).";
 	return r;
 }
@@ -80,11 +81,14 @@ ScriptMgr::ScriptMgr(const string& basepath)
 
 	// Create script builder and set include callback for it
 	mScriptBuilder = new CScriptBuilder();
-	mScriptBuilder->SetIncludeCallback(IncludeCallback, Utils::StringConverter::FromString<char*>(mBasePath));
+	mScriptBuilder->SetIncludeCallback(&ScriptMgr::IncludeCallback, 0);
 
 	// Create context manager and set get time callback for it
 	mContextMgr = new CContextMgr();
 	mContextMgr->SetGetTimeCallback(GetTime);
+
+	// Set script resource reload callback
+	ScriptResource::SetReloadCallback(&ResourceReloadCallback);
 
 	// Add functions and variables that can be called from script
 	ConfigureEngine();
@@ -696,7 +700,7 @@ asIScriptModule* ScriptMgr::GetModule(const char* fileName)
 	// Create script builder to build new module
 	r = mScriptBuilder->StartNewModule(mEngine, fileName);
 	OC_ASSERT_MSG(r==0, "Failed to add module to script engine.");
-	mModules.push_back(string(fileName));
+	mModules[string(fileName)] = vector<ScriptResourcePtr>();
 
 	// Include main file
 	r = IncludeCallback(fileName, "", mScriptBuilder, Utils::StringConverter::FromString<char*>(mBasePath));
@@ -740,12 +744,30 @@ void ScriptMgr::DefineWord( const char* word )
 	mScriptBuilder->DefineWord(word);
 }
 
+void ScriptMgr::ReloadModule(const char* fileName)
+{
+	mContextMgr->AbortAll();
+	int32 r = mEngine->DiscardModule(fileName);
+	if (r < 0) return;
+
+	map<string, vector<ScriptResourcePtr>>::iterator moduleIter;
+	if ((moduleIter = mModules.find(string(fileName))) != mModules.end())
+	{
+		for (vector<ScriptResourcePtr>::iterator resourceIter = moduleIter->second.begin();
+			resourceIter != moduleIter->second.end(); ++resourceIter)
+		{
+			(*resourceIter)->GetDependentModules().erase(string(fileName));
+		}
+		mModules.erase(moduleIter);
+	}
+}
+
 void ScriptMgr::ClearModules()
 {
 	mContextMgr->AbortAll();
-	for (vector<string>::const_iterator it = mModules.begin(); it != mModules.end(); ++it)
+	map<string, vector<ScriptResourcePtr>>::iterator iter;
+	while ((iter = mModules.begin()) != mModules.end())
 	{
-		mEngine->DiscardModule(it->c_str());
+		ReloadModule(iter->first.c_str());
 	}
-	mModules.clear();
 }

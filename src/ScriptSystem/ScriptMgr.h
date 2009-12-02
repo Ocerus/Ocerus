@@ -72,6 +72,10 @@ namespace ScriptSystem
 		/// This function loads and builds module if necessary.
 		AngelScript::asIScriptModule* GetModule(const char* fileName);
 
+		/// Reaload script module represented by the name of file where the main function is.
+		/// All the function ID from this module got from GetFunctionID will be superseded.
+		void ReloadModule(const char* fileName);
+		
 		/// Unload all previously loaded and builded modules and abort all contexts in context manager.
 		/// All the function ID got from GetFunctionID will be superseded as well as the contexts got from
 		/// PrepareContext, AddContextToManager and AddContextAsCoRoutineToManager.
@@ -89,12 +93,17 @@ namespace ScriptSystem
 		/// Manages contexts that can sleep or can create co-routines.
 		AngelScript::CContextMgr* mContextMgr;
 
-		/// All loaded modules
-		vector<string> mModules;
+		/// Depencency of loaded modules to resources
+		map<string, vector<ScriptResourcePtr>> mModules;
 
 		/// Configure the script engine with all the functions and variables that the script should be able to use.
 		void ConfigureEngine(void);
+
+		/// Callback for including files to module.
+		static int IncludeCallback(const char* fileName, const char* from, AngelScript::CScriptBuilder* builder, void* userParam);
 	};
 }
+
+int IncludeCallback(const char* fileName, const char* from, AngelScript::CScriptBuilder* builder, void* basePath);
 
 #endif // ScriptMgr_h__

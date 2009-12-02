@@ -188,3 +188,9 @@ void ScriptSystem::RegisterAllAdditions(AngelScript::asIScriptEngine* engine)
 	// Register Color struct and it's methods
 	RegisterScriptColor(engine);
 }
+
+void ScriptSystem::ResourceReloadCallback(ScriptResource* resource)
+{
+	// Broadcast message that resources has been updated
+	gEntityMgr.BroadcastMessage(EntitySystem::EntityMessage::RESOURCE_UPDATE);
+}
