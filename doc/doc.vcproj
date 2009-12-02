@@ -5,10 +5,6 @@
 	Name="doc"
 	ProjectGUID="{57D797D3-5853-4E8B-A89A-6F9D01B136F8}"
 	RootNamespace="doc"
-	SccProjectName="Svn"
-	SccAuxPath="Svn"
-	SccLocalPath="Svn"
-	SccProvider="SubversionScc"
 	TargetFrameworkVersion="196613"
 	>
 	<Platforms>
@@ -79,7 +75,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Building whole documentation..."
-						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet Documentation.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet Documentation.tex"
+						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet Documentation.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet Documentation.tex&#x0D;&#x0A;"
 						AdditionalDependencies="Documentation.tex;*Content.tex"
 						Outputs="Documentation.pdf"
 					/>
@@ -90,7 +86,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Building whole documentation..."
-						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet Documentation.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet Documentation.tex"
+						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet Documentation.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet Documentation.tex&#x0D;&#x0A;"
 						AdditionalDependencies="Documentation.tex;*Content.tex"
 						Outputs="Documentation.pdf"
 					/>
@@ -105,7 +101,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Building Script System documentation..."
-						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet ScriptSystem.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet ScriptSystem.tex"
+						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet ScriptSystem.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet ScriptSystem.tex&#x0D;&#x0A;"
 						AdditionalDependencies="ScriptSystem.tex;ScriptSystemContent.tex"
 						Outputs="ScriptSystem.pdf"
 					/>
@@ -116,7 +112,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Building Script System documentation..."
-						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet ScriptSystem.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet ScriptSystem.tex"
+						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet ScriptSystem.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet ScriptSystem.tex&#x0D;&#x0A;"
 						AdditionalDependencies="ScriptSystem.tex;ScriptSystemContent.tex"
 						Outputs="ScriptSystem.pdf"
 					/>
