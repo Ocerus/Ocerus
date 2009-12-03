@@ -11,7 +11,7 @@
 #define gScriptMgr ScriptSystem::ScriptMgr::GetSingleton()
 
 namespace AngelScript
-{	 
+{
 	class asIScriptEngine;
 	class asIScriptModule;
 	class asIScriptContext;
@@ -37,7 +37,7 @@ namespace ScriptSystem
 		/// @param funcDecl Declaration of function to be called in the script.
 		/// @return Number greater than or equal to zero that is function ID, number less than zero for not found
 		int32 GetFunctionID(const char* moduleName, const char* funcDecl);
-		
+
 		/// Returns new context prepared for passing the argument values.
 		///	@param funcId ID of function to prepare (can get from GetFunctionID)
 		AngelScript::asIScriptContext* PrepareContext(int32 funcId);
@@ -75,7 +75,7 @@ namespace ScriptSystem
 		/// Reaload script module represented by the name of file where the main function is.
 		/// All the function ID from this module got from GetFunctionID will be superseded.
 		void ReloadModule(const char* fileName);
-		
+
 		/// Unload all previously loaded and builded modules and abort all contexts in context manager.
 		/// All the function ID got from GetFunctionID will be superseded as well as the contexts got from
 		/// PrepareContext, AddContextToManager and AddContextAsCoRoutineToManager.
@@ -83,7 +83,7 @@ namespace ScriptSystem
 	private:
 		/// Pointer to script engine.
 		AngelScript::asIScriptEngine* mEngine;
-		
+
 		/// Basepath for script data. The root is in the ResourceMgr's basepath.
 		string mBasePath;
 
@@ -94,7 +94,7 @@ namespace ScriptSystem
 		AngelScript::CContextMgr* mContextMgr;
 
 		/// Depencency of loaded modules to resources
-		map<string, vector<ScriptResourcePtr>> mModules;
+		map<string, vector<ScriptResourcePtr> > mModules;
 
 		/// Configure the script engine with all the functions and variables that the script should be able to use.
 		void ConfigureEngine(void);

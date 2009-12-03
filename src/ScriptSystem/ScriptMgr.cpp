@@ -46,7 +46,7 @@ int ScriptMgr::IncludeCallback(const char* fileName, const char* from, AngelScri
 	// Get script data from resource and add as script section
 	const char* script = sp->GetScript();
 	int r = builder->AddSectionFromMemory(script, fileName);
-	
+
 	// Add file as module dependency
 	sp->GetDependentModules().insert(string(builder->GetModuleName()));
 	gScriptMgr.mModules[string(builder->GetModuleName())].push_back(sp);
@@ -750,7 +750,7 @@ void ScriptMgr::ReloadModule(const char* fileName)
 	int32 r = mEngine->DiscardModule(fileName);
 	if (r < 0) return;
 
-	map<string, vector<ScriptResourcePtr>>::iterator moduleIter;
+	map<string, vector<ScriptResourcePtr> >::iterator moduleIter;
 	if ((moduleIter = mModules.find(string(fileName))) != mModules.end())
 	{
 		for (vector<ScriptResourcePtr>::iterator resourceIter = moduleIter->second.begin();
@@ -765,7 +765,7 @@ void ScriptMgr::ReloadModule(const char* fileName)
 void ScriptMgr::ClearModules()
 {
 	mContextMgr->AbortAll();
-	map<string, vector<ScriptResourcePtr>>::iterator iter;
+	map<string, vector<ScriptResourcePtr> >::iterator iter;
 	while ((iter = mModules.begin()) != mModules.end())
 	{
 		ReloadModule(iter->first.c_str());

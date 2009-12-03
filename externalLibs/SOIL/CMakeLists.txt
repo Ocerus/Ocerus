@@ -11,6 +11,7 @@ set(SRC_FILES
 
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/src
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../src
 )
 
 add_library( SOIL ${SRC_FILES} )
