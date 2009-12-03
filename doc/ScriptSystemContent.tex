@@ -8,16 +8,16 @@
 
 \noindent\textbf{Libraries used:} AngelScript
 
-\section{Purpose of script system}
+\section{Purpose of the script system}
 
-\section{Introduction to used script language}
+\section{Introduction to the used script language}
 \label{script-language}
 
-\section{Linking script engine to game engine}
+\section{Linking the script system to the application}
 
-% explain engine, module, source file, context, function
+This section is about linking the script system to the rest of the application. The script system consist of the script engine to which every class and function must be registered if it should be used from script. The engine manages script modules and contexts. The script module consists of one or more files that are connected with include directives and are builded together. The name of module is the same as the name of file that includes the rest files. The script context wraps the function calling. When the application wants to call a function from a script it must create the script context, prepare it with a function ID got from the function declaration and the name of the module where the function is, add function parameters, execute it, get the return values and release it.
 
-\subsection{Interface of script manager}
+\subsection{Interface of the script manager}
 
 The script manager is represented by the class \emph{ScriptSystem::ScriptMgr} that encapsulates the script engine and manages an access to the script modules. This class is a singleton and it is created when the game starts. It initializes the AngelScript engine and registers all integral classes and functions (see \ref{sub:script-registered}) as well as all user-defined ones (see \ref{script-registering}).
 
@@ -29,9 +29,9 @@ There are two ways of calling script functions. The first one is used when the s
 
 The second way of calling script function is used when it should run for a longer time with breaks caused by calling sleep and yield functions. In this case contexts are created within the context manager and they are executed by it subsequently when the \emph{ScriptMgr::ExecuteScripts} method is called which should be done in a game loop. Script functions are added to context manager by \emph{ScriptMgr::AddContextToManager} and \emph{Script\-Mgr\-::\-Add\-Context\-As\-Co\-Routine\-To\-Manager\-} which both needs a function ID as a parameter and returns context prepared for passing arguments. The first method adds the context as a new thread independent of others whereas the second one adds it as co-routine to the context passed by parameter which means when one of the co-routined contexts calls the yield function then the next context in queue will resume executing. The context added to the manager is released by itself when it finishes its execution.
 
-As mentioned in the section \ref{script-language} it is possible to use a conditional compilation of scripts. The method \emph{ScriptMgr::DefineWord} adds a pre-processor define passed as the string argument. The last method of this class is \emph{ScriptMgr::ClearModules} that unloads all previously loaded and builded modules and abort all contexts in context manager. All function IDs and contexts got from methods of this class will be superseded so the caller should inform all objects that holds them about it. This method could be called when it is needed to free all memory used by modules but when it is better not to destroy the whole script engine.
+As mentioned in the section \ref{script-language} it is possible to use a conditional compilation of scripts. The method \emph{ScriptMgr::DefineWord} adds a pre-processor define passed as the string argument. The last two methods of this class are \emph{ScriptMgr::UnloadModule} and \emph{ScriptMgr::ClearModules} that unload one/all previously loaded and builded modules and abort all contexts in context manager. All function IDs and contexts associated with these modules will be superseded so the caller should inform all objects that holds them about it (use \emph{ResourceReloadCallback} in ScriptRegister.cpp for specify actions done when modules are unloaded). These methods could be called when it is needed to reload modules or free all memory used by them but when it is better not to destroy the whole script engine.
 
-\subsection{Binding entity system}
+\subsection{Binding the entity system}
 \label{script-entity}
 
 The script system is binded to the entity system to provide an easy work with components, entities and theirs properties from scripts. The class \emph{EntityHandle} is registered to the script engine with a most of its methods but the work with entity properties differs from using them from a source code. There are registered common methods of this class for all defined property types (in \emph{PropertyTypes.h}) to get and set a simple property value, to get a non-constant or constant array and to call a property function with parameters. Methods for working with array property values (get and set a size of array, an index operator) and property function parameters (add a simple or array value as a property function parameter) are also registered. See table \ref{tab:script-properties} for method declarations.
@@ -82,7 +82,7 @@ For a thread and co-routine support there are registered three global functions 
 
 The last registered global function is \verb/void Log(string& message)/ that prints the string in parameter to the log so it is useful for debugging scripts.
 
-\section{Using and extending script system}
+\section{Using and extending the script system}
 
 % situations for registering new classes
 
@@ -188,7 +188,13 @@ Global functions are registered by the \emph{RegisterGlobalFunction} method that
 \subsection{Sample component}
 \label{script-component}
 
-\subsection{Tip for using context manager}
+As an example how to link the script and the entity system the Script component was created. The purpose of this component is to provide a possibility for an entity to respond to a received message by a script. When the message is received it should find an appropriate handler, which is a script function with a strict declaration (see EntityMessageTypes.h for an entity message handler declarations), in defined modules and call it with the arguments provided in the message data.
+
+The component has two registered properties. The first one is an array of module names that are searched for message handlers, the second represents the maximum script execution time in milliseconds after that the script will be aborted. For better performance this component caches function IDs founded in modules in a map so it is necessary to inform it when the modules are going to change by sending a message \verb/RESOURCE_UPDATE/ to its entity.
+
+The most important method of this component is the \emph{Script::Handle\-Me\-ssa\-ge} that accept message structure as parameter and returns if the message was processed well or it was ignored. First it checks whether the function IDs should be updated and if the message is \verb/RESOURCE_UPDATE/ it ensures to do an update before the next message processing. Then it gets an appropriate function ID depended on a message type and calls the script manager to prepare a new context with this function. After that the pointer to the parent entity is stored to the context data so the \verb/GetCurrentEntityHandle/ function can be called from a script to get the current entity handle. Then it adds additional parameters to a function call from the message data according to the message type and executes the context with defined timeout. Finally it releases the context and returns whether the execution was successful.
+
+\subsection{Tip for using the context manager}
 
 \section{Possible extension}
 

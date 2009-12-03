@@ -72,9 +72,9 @@ namespace ScriptSystem
 		/// This function loads and builds module if necessary.
 		AngelScript::asIScriptModule* GetModule(const char* fileName);
 
-		/// Reaload script module represented by the name of file where the main function is.
+		/// Unload script module represented by the name of file where the main function is.
 		/// All the function ID from this module got from GetFunctionID will be superseded.
-		void ReloadModule(const char* fileName);
+		void UnloadModule(const char* fileName);
 
 		/// Unload all previously loaded and builded modules and abort all contexts in context manager.
 		/// All the function ID got from GetFunctionID will be superseded as well as the contexts got from

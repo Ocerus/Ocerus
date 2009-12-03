@@ -744,7 +744,7 @@ void ScriptMgr::DefineWord( const char* word )
 	mScriptBuilder->DefineWord(word);
 }
 
-void ScriptMgr::ReloadModule(const char* fileName)
+void ScriptMgr::UnloadModule(const char* fileName)
 {
 	mContextMgr->AbortAll();
 	int32 r = mEngine->DiscardModule(fileName);
@@ -768,6 +768,6 @@ void ScriptMgr::ClearModules()
 	map<string, vector<ScriptResourcePtr> >::iterator iter;
 	while ((iter = mModules.begin()) != mModules.end())
 	{
-		ReloadModule(iter->first.c_str());
+		UnloadModule(iter->first.c_str());
 	}
 }

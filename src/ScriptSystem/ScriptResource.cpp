@@ -48,7 +48,7 @@ void ScriptResource::Reload(void)
 	set<string>::iterator iter;
 	while ((iter = mDependentModules.begin()) != mDependentModules.end())
 	{
-		gScriptMgr.ReloadModule(iter->c_str());	
+		gScriptMgr.UnloadModule(iter->c_str());	
 	}
 	ResourceSystem::Resource::Reload();
 }
