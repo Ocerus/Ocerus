@@ -176,11 +176,11 @@ DWORD WINAPI CDebugFx::UnhandledExceptionHandlerFunc(LPVOID p_Param)
 void CDebugFx::SigAbortHandler(int p_Signal)
 {
 	// create a dump
-	CDebugHelp::CreateMiniDump(false);
+	tstring dumpFilePath = CDebugHelp::CreateMiniDump(false);
 
 	// call the user-defined callback method
 	if(m_ExceptionCallback)
-		m_ExceptionCallback(m_Param);
+		m_ExceptionCallback(dumpFilePath, m_Param);
 
 	// reset to defaucmalt signal handler and core dump
 	signal(SIGABRT, SIG_DFL);
@@ -190,11 +190,11 @@ void CDebugFx::SigAbortHandler(int p_Signal)
 void CDebugFx::SigSegvHandler(int p_Signal)
 {
 	// create a dump
-	CDebugHelp::CreateMiniDump(false);
+	tstring dumpFilePath = CDebugHelp::CreateMiniDump(false);
 
 	// call the user-defined callback method
 	if(m_ExceptionCallback)
-		m_ExceptionCallback(m_Param);
+		m_ExceptionCallback(dumpFilePath, m_Param);
 
 	// reset to default signal handler and core dump
 	signal(SIGSEGV, SIG_DFL);
