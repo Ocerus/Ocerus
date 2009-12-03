@@ -4,7 +4,7 @@
 #ifndef GlobalAllocation_c_h__
 #define GlobalAllocation_c_h__
 
-#include <crtdefs.h>
+#include <stddef.h>
 
 #ifdef __cplusplus
 extern "C" {
