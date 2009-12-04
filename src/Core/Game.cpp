@@ -316,8 +316,7 @@ void Core::Game::MouseButtonPressed( const MouseInfo& mi, const eMouseButton btn
 				// add to the current selection if SHIFT down
 				if (mSelectedEntities.size()>0 && (gInputMgr.IsKeyDown(KC_RSHIFT) || gInputMgr.IsKeyDown(KC_LSHIFT)))
 				{
-					if (mHoveredEntity.IsValid() && mHoveredEntity.GetType() == mSelectedEntities[0].GetType()
-						&& find(mSelectedEntities.begin(), mSelectedEntities.end(), mHoveredEntity) == mSelectedEntities.end())
+					if (find(mSelectedEntities.begin(), mSelectedEntities.end(), mHoveredEntity) == mSelectedEntities.end())
 						mSelectedEntities.push_back(mHoveredEntity);
 				}
 				// clear the selection and add the hovered one if any
@@ -381,11 +380,4 @@ void Core::Game::ProcessPhysicsEvent( const PhysicsEvent& evt )
 {
 	if (!evt.entity1.IsValid() || !evt.entity2.IsValid())
 		return;
-	EntityHandle ent1 = evt.entity1;
-	EntityHandle ent2 = evt.entity2;
-	eEntityType type1 = gEntityMgr.GetEntityType(ent1);
-	eEntityType type2 = gEntityMgr.GetEntityType(ent2);
-	// Suppress unused warning
-	(void)type1;
-	(void)type2;
 }

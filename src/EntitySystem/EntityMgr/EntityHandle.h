@@ -7,7 +7,6 @@
 #include "Base.h"
 #include "EntityMessage.h"
 #include "Properties/PropertyAccess.h"
-#include "EntityEnums.h"
 #include "../ComponentMgr/ComponentID.h"
 
 namespace EntitySystem
@@ -69,9 +68,6 @@ namespace EntitySystem
 
 		/// Sends a message to this entity.
 		inline EntityMessage::eResult PostMessage(const EntityMessage::eType type, Reflection::PropertyFunctionParameters data) {  return PostMessage(EntityMessage(type, data)); }
-
-		/// Returns the type of this entity.
-		eEntityType GetType(void) const;
 
 		/// Returns the internal ID of this entity.
 		inline EntityID GetID(void) const;

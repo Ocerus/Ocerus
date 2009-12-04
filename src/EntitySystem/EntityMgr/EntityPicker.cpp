@@ -3,36 +3,16 @@
 
 using namespace EntitySystem;
 
-uint8* EntityPicker::msPriorities = 0;
-
-void EntitySystem::EntityPicker::SetupPriorities( void )
-{
-	OC_ASSERT_MSG(!msPriorities, "Priorities are already set up");
-	msPriorities = new uint8[NUM_ENTITY_TYPES];
-	for (int i=0; i<NUM_ENTITY_TYPES; ++i)
-		msPriorities[i] = 0;
-	msPriorities[ET_PLATFORM] = 50;
-	msPriorities[ET_ENGINE] = 70;
-	msPriorities[ET_WEAPON] = 80;
-}
-
-void EntitySystem::EntityPicker::CleanPriorities( void )
-{
-	if (msPriorities)
-		delete[] msPriorities;
-}
 
 EntitySystem::EntityPicker::EntityPicker( const Vector2& worldCursorPos ):
 	mCursorWorldPosition(worldCursorPos),
-	mResult(),
-	mResultType(ET_UNKNOWN)
+	mResult()
 {
 
 }
 
 EntitySystem::EntityPicker::EntityPicker( const int32 screenCursorX, const int32 screenCursorY ):
-	mResult(),
-	mResultType(ET_UNKNOWN)
+	mResult()
 {
 	//TODO:Gfx
 	//mCursorWorldPosition.x = gGfxRenderer.ScreenToWorldX(screenCursorX);
@@ -59,11 +39,6 @@ EntitySystem::EntityHandle EntitySystem::EntityPicker::GetResult( void ) const
 
 void EntitySystem::EntityPicker::PickIfHigherPriority( const EntityHandle entity )
 {
-	eEntityType type = entity.GetType();
-	if (msPriorities[type] > msPriorities[mResultType])
-	{
-		mResult = entity;
-		mResultType = type;
-	}
+	mResult = entity;
 }
 

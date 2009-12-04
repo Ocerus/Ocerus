@@ -22,7 +22,7 @@ namespace EntitySystem
 		~EntityDescription(void);
 
 		/// Call this before each subsequent filling of the description.
-		void Init(const eEntityType type);
+		void Init(void);
 
 		/// Addd new component specified by its type.
 		void AddComponent(const eComponentType type);
@@ -53,9 +53,6 @@ namespace EntitySystem
 
 		/// Index of current component description.
 		uint32 mIndex;
-
-		/// Type of this entity.
-		eEntityType mType;
 
 		/// Custom identifier (not neccessarily unique) of this entity.
 		string mName;

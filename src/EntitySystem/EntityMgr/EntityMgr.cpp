@@ -10,8 +10,7 @@ namespace EntitySystem
 	/// This struct holds info about an instance of an entity in the system.
 	struct EntityInfo
 	{
-		EntityInfo(const eEntityType type, const string& name, const EntityHandle prototype):
-			mType(type),
+		EntityInfo(const string& name, const EntityHandle prototype):
 			mFullyInited(false),
 			mName(name),
 			mPrototype(prototype)
@@ -19,8 +18,6 @@ namespace EntitySystem
 
 		}
 
-		/// User type of the entity.
-		eEntityType mType;
 		/// True if this entity was fully inited in the system by the user.
 		bool mFullyInited;
 		/// Human readable user ID.
@@ -60,16 +57,12 @@ EntityMgr::EntityMgr()
 
 	mComponentMgr = new ComponentMgr();
 
-	// this assumes EntityMgr is a singleton
-	EntityPicker::SetupPriorities();
 }
 
 EntityMgr::~EntityMgr()
 {
 	DestroyAllEntities();
 	delete mComponentMgr;
-
-	EntityPicker::CleanPriorities();
 }
 
 EntityMessage::eResult EntityMgr::PostMessage(EntityID targetEntity, const EntityMessage& msg)
@@ -180,7 +173,7 @@ EntityHandle EntityMgr::CreateEntity(EntityDescription& desc)
 	}
 
 	// inits etity attributes
-	mEntities[entityHandle.GetID()] = new EntityInfo(desc.mType, desc.mName, EntityHandle(desc.mPrototype));
+	mEntities[entityHandle.GetID()] = new EntityInfo(desc.mName, EntityHandle(desc.mPrototype));
 	if (desc.mKind == EntityDescription::EK_PROTOTYPE) mPrototypes[entityHandle.GetID()] = new PrototypeInfo();
 
 	// link the entity to its prototype
@@ -261,17 +254,6 @@ void EntityMgr::DestroyEntityImmediately( const EntityID entityToDestroy, const 
 
 		if (erase) mEntities.erase(entityIt);
 	}
-}
-
-EntitySystem::eEntityType EntitySystem::EntityMgr::GetEntityType( const EntityHandle h ) const
-{
-	EntityMap::const_iterator ei = mEntities.find(h.GetID());
-	if (ei == mEntities.end())
-	{
-		ocError << "Can't find entity " << h;
-		return ET_UNKNOWN;
-	}
-	return ei->second->mType;
 }
 
 bool EntitySystem::EntityMgr::IsEntityInited( const EntityHandle h ) const
@@ -412,8 +394,7 @@ void EntitySystem::EntityMgr::LoadEntityFromXML( ResourceSystem::XMLNodeIterator
 {
 	// init the entity description
 	EntityDescription desc;
-	eEntityType type = DetectEntityType(entIt.GetAttribute<string>("Type"));
-	desc.Init(type);
+	desc.Init();
 	if (entIt.HasAttribute("Name"))	desc.SetName(entIt.GetAttribute<string>("Name"));
 	if (entIt.HasAttribute("ID")) desc.SetDesiredID(entIt.GetAttribute<EntityID>("ID"));
 	if (entIt.HasAttribute("Prototype")) desc.SetPrototype(entIt.GetAttribute<EntityID>("Prototype"));
@@ -531,7 +512,6 @@ void EntitySystem::EntityMgr::UpdatePrototypeCopy( const EntityHandle prototype 
 		return;
 	}
 
-	EntityInfo* entityInfo = entityIter->second;
 	PrototypeInfo* prototypeInfo = prototypeIter->second;
 
 	// recreate the copy from scratch
@@ -540,7 +520,7 @@ void EntitySystem::EntityMgr::UpdatePrototypeCopy( const EntityHandle prototype 
 		DestroyEntityImmediately(prototypeInfo->mCopy, true);
 	}
 	EntityDescription desc;
-	desc.Init(entityInfo->mType);
+	desc.Init();
 	desc.SetKind(EntityDescription::EK_PROTOTYPE_COPY);
 	for (EntityComponentsIterator it=mComponentMgr->GetEntityComponents(prototype.GetID()); it.HasMore(); ++it)
 	{

@@ -28,23 +28,13 @@ namespace EntitySystem
 		/// Returns result of the search.
 		EntityHandle GetResult(void) const;
 
-		/// Sets priorities for all entity types in the system.
-		static void SetupPriorities(void);
-
-		/// Cleans the priority data of all entity types in the system.
-		static void CleanPriorities(void);
-
 	private:
-
-		/// Priorities of entity types
-		static uint8* msPriorities;
 
 		/// Picking data.
 		Vector2 mCursorWorldPosition;
 
 		/// Found entities.
 		EntityHandle mResult;
-		eEntityType mResultType;
 
 		void PickIfHigherPriority(const EntityHandle entity);
 

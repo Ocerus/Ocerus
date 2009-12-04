@@ -61,7 +61,7 @@ bool OnInitScript::RunScript()
 void OnInitScript::TestRunTime()
 {
 	EntitySystem::EntityDescription entDesc;
-	entDesc.Init(ET_TEST);
+	entDesc.Init();
 	entDesc.SetName("Test entity");
 	entDesc.AddComponent(CT_ON_INIT_SCRIPT);
 

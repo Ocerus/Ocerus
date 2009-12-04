@@ -197,7 +197,6 @@ set(Core_SRCS
 
 set(EntitySystem_SRCS
     src/EntitySystem/EntityMgr/EntityPicker.cpp
-    src/EntitySystem/EntityMgr/EntityEnums.cpp
     src/EntitySystem/EntityMgr/EntityDescription.cpp
     src/EntitySystem/EntityMgr/EntityMgr.cpp
     src/EntitySystem/EntityMgr/EntityHandle.cpp

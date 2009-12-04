@@ -403,10 +403,6 @@
 						>
 					</File>
 					<File
-						RelativePath="..\src\EntitySystem\EntityMgr\EntityEnums.h"
-						>
-					</File>
-					<File
 						RelativePath="..\src\EntitySystem\EntityMgr\EntityHandle.h"
 						>
 					</File>
@@ -426,20 +422,12 @@
 						RelativePath="..\src\EntitySystem\EntityMgr\EntityPicker.h"
 						>
 					</File>
-					<File
-						RelativePath="..\src\EntitySystem\EntityMgr\EntityTypes.h"
-						>
-					</File>
 				</Filter>
 				<Filter
 					Name="src"
 					>
 					<File
 						RelativePath="..\src\EntitySystem\EntityMgr\EntityDescription.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\src\EntitySystem\EntityMgr\EntityEnums.cpp"
 						>
 					</File>
 					<File

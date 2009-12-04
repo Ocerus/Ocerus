@@ -7,7 +7,6 @@
 #include "Base.h"
 #include "Singleton.h"
 #include "EntityHandle.h"
-#include "EntityEnums.h"
 #include "../ComponentMgr/ComponentEnums.h"
 #include "../ComponentMgr/ComponentID.h"
 #include "Properties/PropertyAccess.h"
@@ -67,9 +66,6 @@ namespace EntitySystem
 
 		/// @name Entity attributes
 		//@{
-
-		/// Returns the type of a specified entity.
-		eEntityType GetEntityType(const EntityHandle h) const;
 
 		/// Returns true if the entity was fully initialized.
 		bool IsEntityInited(const EntityHandle h) const;

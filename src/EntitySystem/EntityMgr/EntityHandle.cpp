@@ -93,12 +93,6 @@ bool EntitySystem::EntityHandle::operator!=( const EntityHandle& rhs )
 	return mEntityID != rhs.mEntityID;
 }
 
-EntitySystem::eEntityType EntitySystem::EntityHandle::GetType( void ) const
-{
-	// if this is not optimized by the linker, then we have to inline it
-	return gEntityMgr.GetEntityType(*this);
-}
-
 void EntitySystem::EntityHandle::FinishInit( void )
 {
 	// avoid ignored message by using EntityMgr directly for posting messages
@@ -146,11 +140,11 @@ EntityMessage::eResult EntityHandle::PostMessage(const EntityMessage& msg)
 	EntityMessage::eResult result = gEntityMgr.PostMessage(*this, msg);
 	if (result == EntityMessage::RESULT_ERROR)
 	{
-		ocError << "Message '" << msg.type << "' on entity '" << mEntityID << "' of type '" << GetType() << "' returned error";
+		ocError << "Message '" << msg.type << "' on entity '" << mEntityID << "' returned error";
 	}
 	else if (result == EntityMessage::RESULT_IGNORED)
 	{
-		ocWarning << "Message '" << msg.type << "' on entity '" << mEntityID << "' of type '" << GetType() << "' was ignored";
+		ocWarning << "Message '" << msg.type << "' on entity '" << mEntityID << "' was ignored";
 	}
 	return result;
 }

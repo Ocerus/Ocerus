@@ -31,7 +31,6 @@
 #include "../EntitySystem/EntityMgr/EntityHandle.h"
 #include "../EntitySystem/EntityMgr/EntityDescription.h"
 #include "../EntitySystem/ComponentMgr/ComponentEnums.h"
-#include "../EntitySystem/EntityMgr/EntityEnums.h"
 #include "../EntitySystem/EntityMgr/EntityPicker.h"
 
 #include "../GfxSystem/GfxWindow.h"

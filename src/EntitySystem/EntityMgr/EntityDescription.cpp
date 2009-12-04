@@ -22,11 +22,10 @@ void EntityDescription::Clear(void)
 	mID = INVALID_ENTITY_ID;
 }
 
-void EntityDescription::Init(const eEntityType type)
+void EntityDescription::Init()
 {
 	Clear();
 	mIndex = 0;
-	mType = type;
 }
 
 void EntityDescription::AddComponent(const eComponentType type)
