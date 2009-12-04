@@ -5,27 +5,21 @@ using namespace EntitySystem;
 
 EntityDescription::EntityDescription()
 {
-
+	Reset();
 }
 
 EntityDescription::~EntityDescription()
 {
-	Clear();
+
 }
 
-void EntityDescription::Clear(void)
+void EntityDescription::Reset(void)
 {
 	mName = "";
 	mComponents.clear();
 	mKind = EK_ENTITY;
 	mPrototype = INVALID_ENTITY_ID;
 	mID = INVALID_ENTITY_ID;
-}
-
-void EntityDescription::Init()
-{
-	Clear();
-	mIndex = 0;
 }
 
 void EntityDescription::AddComponent(const eComponentType type)

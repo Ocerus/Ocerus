@@ -398,7 +398,7 @@ void RegisterScriptEntityDescription(asIScriptEngine* engine)
 	r = engine->RegisterEnumValue("eEntityDescriptionKind", "EK_PROTOTYPE_COPY", EntitySystem::EntityDescription::EK_PROTOTYPE_COPY); OC_SCRIPT_ASSERT();
 
 	// Register the object methods
-	r = engine->RegisterObjectMethod("EntityDescription", "void Init()", asMETHOD(EntityDescription, Init), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("EntityDescription", "void Reset()", asMETHOD(EntityDescription, Reset), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("EntityDescription", "void AddComponent(const eComponentType)", asMETHOD(EntityDescription, AddComponent), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("EntityDescription", "void SetName(const string &in)", asMETHOD(EntityDescription, SetName), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("EntityDescription", "void SetKind(const eEntityDescriptionKind)", asMETHOD(EntityDescription, SetKind), asCALL_THISCALL); OC_SCRIPT_ASSERT();

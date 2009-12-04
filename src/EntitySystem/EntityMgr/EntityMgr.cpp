@@ -394,7 +394,7 @@ void EntitySystem::EntityMgr::LoadEntityFromXML( ResourceSystem::XMLNodeIterator
 {
 	// init the entity description
 	EntityDescription desc;
-	desc.Init();
+	desc.Reset();
 	if (entIt.HasAttribute("Name"))	desc.SetName(entIt.GetAttribute<string>("Name"));
 	if (entIt.HasAttribute("ID")) desc.SetDesiredID(entIt.GetAttribute<EntityID>("ID"));
 	if (entIt.HasAttribute("Prototype")) desc.SetPrototype(entIt.GetAttribute<EntityID>("Prototype"));
@@ -520,7 +520,7 @@ void EntitySystem::EntityMgr::UpdatePrototypeCopy( const EntityHandle prototype 
 		DestroyEntityImmediately(prototypeInfo->mCopy, true);
 	}
 	EntityDescription desc;
-	desc.Init();
+	desc.Reset();
 	desc.SetKind(EntityDescription::EK_PROTOTYPE_COPY);
 	for (EntityComponentsIterator it=mComponentMgr->GetEntityComponents(prototype.GetID()); it.HasMore(); ++it)
 	{

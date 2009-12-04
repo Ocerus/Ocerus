@@ -72,7 +72,7 @@ void Script::RegisterReflection()
 void Script::TestRunTime()
 {
 	EntitySystem::EntityDescription entDesc;
-	entDesc.Init();
+	entDesc.Reset();
 	entDesc.SetName("Test script entity");
 	entDesc.AddComponent(CT_SCRIPT);
 
