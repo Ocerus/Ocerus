@@ -77,6 +77,8 @@ uint32 OglRenderer::LoadTexture(
 	uint32 result = SOIL_create_OGL_texture(
 			img, *width, *height, channels,
 			reuse_texture_ID, 0);
+
+	SOIL_free_image_data( img );
 	
 	if( 0 == result )
 	{
