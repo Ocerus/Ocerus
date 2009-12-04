@@ -37,13 +37,13 @@ namespace EntitySystem
 		bool operator!=(const EntityHandle& rhs);
 
 		/// Returns true if this handle is valid (not null).
-		bool IsValid(void) const { return mEntityID != INVALID_ENTITY_ID; }
+		inline bool IsValid(void) const { return mEntityID != INVALID_ENTITY_ID; }
 
 		/// Returns true if this entity still exists in the system.
 		bool Exists(void) const;
 
 		/// Sets this handle to an invalid state.
-		void Invalidate(void) { mEntityID = INVALID_ENTITY_ID; }
+		inline void Invalidate(void) { mEntityID = INVALID_ENTITY_ID; }
 
 		/// Finishes the initialization of this entity. Must be called once only!
 		void FinishInit(void);
