@@ -23,13 +23,19 @@ bool Texture::LoadImpl()
 	// get texture data
 	DataContainer dc;
 	GetRawInputData(dc);
-
+	
 	// load it to OpenGL
-	mHandle = gGfxRenderer.LoadTexture((const unsigned char*)dc.GetData(),dc.GetSize(), RGB, 0);
+	int width, height;
+	mHandle = gGfxRenderer.LoadTexture((const unsigned char*)dc.GetData(),
+										dc.GetSize(),
+										PF_AUTO, 0,			//pixel format, reuse texture handle (0 = create new)
+										&width, &height);
+
+	mWidth = width;
+	mHeight = height;
 
 	// we don't need the data buffer anymore
 	dc.Release();
-
 
 	if (mHandle != 0)
 		return true;
@@ -49,15 +55,13 @@ bool Texture::UnloadImpl()
 uint32 Texture::GetWidth(/*bool bOriginal*/)
 {
 	EnsureLoaded();
-	//TODO
-	return 0;//gGfxRenderer.mHGE->Texture_GetWidth(mHandle, false);
+	return mWidth;
 }
 
 uint32 Texture::GetHeight(/*bool bOriginal */)
 {
 	EnsureLoaded();
-	//TODO
-	return 0;//gGfxRenderer.mHGE->Texture_GetHeight(mHandle, false);
+	return mHeight;
 }
 
 uint32 Texture::GetTexture()

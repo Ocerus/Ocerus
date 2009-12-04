@@ -17,11 +17,11 @@ namespace GfxSystem
 
 		enum ePixelFormat
 		{
-			AUTO = 0,
-			L = 1,
-			LA = 2,
-			RGB = 3,
-			RGBA = 4
+			PF_AUTO = 0,
+			PF_L = 1,
+			PF_LA = 2,
+			PF_RGB = 3,
+			PF_RGBA = 4
 		};
 
 		bool LoadFromBitmap(const void* pixels, uint32 pixelsLength, uint32 width, uint32 height, ePixelFormat format);

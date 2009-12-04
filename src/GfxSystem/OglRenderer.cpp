@@ -50,11 +50,33 @@ void OglRenderer::EndRendering()  const
 
 uint32 OglRenderer::LoadTexture(
 			const unsigned char *const buffer,
-			int buffer_length,
-			int force_channels,
-			unsigned int reuse_texture_ID ) const
+			const int buffer_length,
+			const int force_channels,
+			const unsigned int reuse_texture_ID,
+			int *width, int *height) const
 {
-	uint32 result = SOIL_load_OGL_texture_from_memory(buffer, buffer_length, force_channels, reuse_texture_ID, 0);
+	// this doesnt say anything about width and height
+	//uint32 result = SOIL_load_OGL_texture_from_memory(buffer, buffer_length, 1, reuse_texture_ID, 0);
+
+	unsigned char* img;
+	int channels;
+	img = SOIL_load_image_from_memory(
+					buffer, buffer_length,
+					width, height, &channels,
+					force_channels );
+	if( NULL == img )
+	{
+		ocError << "SOIL error: " << SOIL_last_result();
+		return 0;
+	}
+	if( (force_channels >= 1) && (force_channels <= 4) )
+	{
+		channels = force_channels;
+	}
+
+	uint32 result = SOIL_create_OGL_texture(
+			img, *width, *height, channels,
+			reuse_texture_ID, 0);
 	
 	if( 0 == result )
 	{
@@ -66,7 +88,7 @@ uint32 OglRenderer::LoadTexture(
 
 void OglRenderer::DeleteTexture(const uint32 &handle) const
 {
-	glDeleteTextures(1, &handle);
+	glDeleteTextures(100, &handle);
 }
 
 void OglRenderer::DrawTestQuad() const

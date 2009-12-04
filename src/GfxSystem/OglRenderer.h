@@ -28,13 +28,15 @@ namespace GfxSystem
 	\param buffer_length the size of the buffer in bytes
 	\param force_channels 0-image format, 1-luminous, 2-luminous/alpha, 3-RGB, 4-RGBA
 	\param reuse_texture_ID 0-generate a new texture ID, otherwise reuse the texture ID (overwriting the old texture)
+	\param width, height returns size of texture
 	\return 0-failed, otherwise returns the OpenGL texture handle
 **/
 		virtual uint32 LoadTexture(
 			const unsigned char *const buffer,
-			int buffer_length,
-			int force_channels,
-			unsigned int reuse_texture_ID ) const;
+			const int buffer_length,
+			const int force_channels,
+			const unsigned int reuse_texture_ID,
+			int *width, int *height ) const;
 
 		/// Deletes texture from renderers memory
 		virtual void DeleteTexture(const uint32 &handle) const;
