@@ -16,7 +16,8 @@ namespace Utils
 		inline float32 Abs(const float32 num) { return b2Abs(num); }
 		inline int32 Abs(const int32 num) { return num<0?-num:num; }
 
-		inline float32 Min(const float32 num1, const float32 num2) { return b2Min(num1, num2); }
+		template<typename T>
+		inline T Min(const T num1, const T num2) { return b2Min(num1, num2); }
 
 		inline void Swap(float32& num1, float32& num2) { b2Swap(num1, num2); }
 
