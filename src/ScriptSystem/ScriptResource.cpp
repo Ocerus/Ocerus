@@ -3,7 +3,7 @@
 
 using namespace ScriptSystem;
 
-ScriptResourceReloadCallback ScriptResource::mReloadCallback;
+ScriptResourceUnloadCallback ScriptResource::mUnloadCallback;
 
 ResourceSystem::ResourcePtr ScriptResource::CreateMe(void)
 {
@@ -28,6 +28,13 @@ bool ScriptResource::LoadImpl()
 bool ScriptResource::UnloadImpl()
 {
 	mScript.clear();
+	if (ScriptResource::mUnloadCallback != 0) ScriptResource::mUnloadCallback(this);
+	set<string>::iterator iter;
+	while ((iter = mDependentModules.begin()) != mDependentModules.end())
+	{
+		string moduleName = (*iter); // it is important to copy string here because iter will be invalidated
+		gScriptMgr.UnloadModule(moduleName.c_str());	
+	}
 	return true;
 }
 
@@ -37,18 +44,7 @@ const char* ScriptResource::GetScript()
 	return mScript.c_str();
 }
 
-void ScriptResource::SetReloadCallback(ScriptResourceReloadCallback callback)
+void ScriptResource::SetUnloadCallback(ScriptResourceUnloadCallback callback)
 {
-	ScriptResource::mReloadCallback = callback;
-}
-
-void ScriptResource::Reload(void)
-{
-	if (ScriptResource::mReloadCallback != 0) ScriptResource::mReloadCallback(this);
-	set<string>::iterator iter;
-	while ((iter = mDependentModules.begin()) != mDependentModules.end())
-	{
-		gScriptMgr.UnloadModule(iter->c_str());	
-	}
-	ResourceSystem::Resource::Reload();
+	ScriptResource::mUnloadCallback = callback;
 }

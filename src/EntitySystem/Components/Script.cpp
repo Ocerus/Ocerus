@@ -35,8 +35,11 @@ void Script::AnalyseModule(const string& module)
 EntityMessage::eResult Script::HandleMessage(const EntityMessage& msg)
 {
 	// Updating message handlers if necessary
-	if (mNeedUpdate) UpdateMessageHandlers();
-	if (msg.type == EntityMessage::RESOURCE_UPDATE) mNeedUpdate = true;
+	if (msg.type == EntityMessage::RESOURCE_UPDATE)
+	{
+		mNeedUpdate = true;
+		return EntityMessage::RESULT_OK;
+	} else if (mNeedUpdate) UpdateMessageHandlers();
 	// Get function ID
 	map<EntitySystem::EntityMessage::eType, int32>::const_iterator it = mMessageHandlers.find(msg.type);
 	if (it == mMessageHandlers.end()) return EntityMessage::RESULT_IGNORED;

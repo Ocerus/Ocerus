@@ -6,6 +6,7 @@
 #include "../LogSystem/LogMgr.h"
 #include "../GfxSystem/OglRenderer.h"
 #include "../GfxSystem/GfxWindow.h"
+#include "../ScriptSystem/ScriptResource.h"
 
 
 //TODO: odstranit - pouze pro testovaci ucely
@@ -92,6 +93,8 @@ Application::~Application()
 
 	GUISystem::GUIMgr::DestroySingleton();
 
+	// cancel unload callback for script resources
+	ScriptSystem::ScriptResource::SetUnloadCallback(0);
 	ResourceSystem::ResourceMgr::GetSingleton().UnloadAllResources();
 
 	EntitySystem::EntityMgr::DestroySingleton();

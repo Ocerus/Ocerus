@@ -189,8 +189,8 @@ void ScriptSystem::RegisterAllAdditions(AngelScript::asIScriptEngine* engine)
 	RegisterScriptColor(engine);
 }
 
-void ScriptSystem::ResourceReloadCallback(ScriptResource* resource)
+void ScriptSystem::ResourceUnloadCallback(ScriptResource* resource)
 {
-	// Broadcast message that resources has been updated
+	// Broadcast message that resources will be updated
 	gEntityMgr.BroadcastMessage(EntitySystem::EntityMessage::RESOURCE_UPDATE);
 }

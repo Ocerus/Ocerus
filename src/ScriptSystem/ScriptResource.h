@@ -11,7 +11,7 @@ namespace ScriptSystem
 {
 	class ScriptResource;
 	
-	typedef void (*ScriptResourceReloadCallback)(ScriptResource* resource);
+	typedef void (*ScriptResourceUnloadCallback)(ScriptResource* resource);
 	
 	/// This class represents a single script resource.
 	/// Main purpose of the class is to load a script file, not to store the actual data. You should
@@ -33,14 +33,10 @@ namespace ScriptSystem
 		static ResourceSystem::eResourceType GetResourceType() { return ResourceSystem::RESTYPE_SCRIPTRESOURCE; }
 
 		/// Register the callback for reloading the script resource
-		static void SetReloadCallback(ScriptResourceReloadCallback callback);
+		static void SetUnloadCallback(ScriptResourceUnloadCallback callback);
 
 		/// Return dependence modules
 		set<string>& GetDependentModules(void) { return mDependentModules; }
-
-		/// Reloads the resource
-		virtual void Reload(void);
-
 	protected:
 
 		virtual bool LoadImpl(void);
@@ -55,7 +51,7 @@ namespace ScriptSystem
 		set<string> mDependentModules;
 
 		/// Callback for reloading the script resource
-		static ScriptResourceReloadCallback mReloadCallback;
+		static ScriptResourceUnloadCallback mUnloadCallback;
 	};
 }
 

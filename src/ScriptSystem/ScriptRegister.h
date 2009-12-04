@@ -17,7 +17,7 @@ namespace ScriptSystem
 	void RegisterAllAdditions(AngelScript::asIScriptEngine* engine);
 
 	/// Callback for reloading script resources.
-	void ResourceReloadCallback(ScriptResource* resource);
+	void ResourceUnloadCallback(ScriptResource* resource);
 }
 
 #endif // ScriptRegister_h__

@@ -87,8 +87,8 @@ ScriptMgr::ScriptMgr(const string& basepath)
 	mContextMgr = new CContextMgr();
 	mContextMgr->SetGetTimeCallback(GetTime);
 
-	// Set script resource reload callback
-	ScriptResource::SetReloadCallback(&ResourceReloadCallback);
+	// Set script resource unload callback
+	ScriptResource::SetUnloadCallback(&ResourceUnloadCallback);
 
 	// Add functions and variables that can be called from script
 	ConfigureEngine();
@@ -506,6 +506,10 @@ void ScriptMgr::ConfigureEngine(void)
 {
 	int32 r;
 
+	// Register typedefs for real numbers
+	r = mEngine->RegisterTypedef("float32", "float"); OC_SCRIPT_ASSERT();
+	r = mEngine->RegisterTypedef("float64", "double"); OC_SCRIPT_ASSERT();
+	
 	// Register the script string type
 	RegisterStdString(mEngine);
 
