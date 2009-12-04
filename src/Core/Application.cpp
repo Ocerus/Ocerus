@@ -318,17 +318,15 @@ void Core::Application::WriteToConsole( const string& str )
 
 void Core::Application::ShowConsole( void )
 {
-    ///@todo port me to unix
 }
 
 void Core::Application::HideConsole( void )
 {
-    ///@todo port me to unix
 }
 
-void Core::Application::WriteToConsole( const string& str )
+void Core::Application::WriteToConsole( const string& message )
 {
-    ///@todo port me to unix
+    fprintf(stderr, "%s\n", message.c_str());
 }
 
 #endif
