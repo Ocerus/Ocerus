@@ -27,6 +27,9 @@ bool Texture::LoadImpl()
 	// load it to OpenGL
 	mHandle = gGfxRenderer.LoadTexture((const unsigned char*)dc.GetData(),dc.GetSize(), RGB, 0);
 
+	// we don't need the data buffer anymore
+	dc.Release();
+
 
 	if (mHandle != 0)
 		return true;
