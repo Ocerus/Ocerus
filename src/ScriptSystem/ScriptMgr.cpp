@@ -338,15 +338,13 @@ void RegisterScriptEntityHandle(asIScriptEngine* engine)
 	r = engine->RegisterEnum("eEntityMessageType"); OC_SCRIPT_ASSERT();
 	for (int32 entityMessageType = 0; entityMessageType<EntitySystem::EntityMessage::NUM_TYPES; ++entityMessageType)
 	{
-		r = engine->RegisterEnumValue("eEntityMessageType", EntitySystem::EntityMessage::TypeNames
-			[entityMessageType], entityMessageType); OC_SCRIPT_ASSERT();
+		r = engine->RegisterEnumValue("eEntityMessageType", EntitySystem::EntityMessage::GetTypeName((EntitySystem::EntityMessage::eType)entityMessageType), entityMessageType); OC_SCRIPT_ASSERT();
 	}
 	// Register enum eEntityMessageResult
 	r = engine->RegisterEnum("eEntityMessageResult"); OC_SCRIPT_ASSERT();
 	for (int32 entityMessageResult = 0; entityMessageResult<=EntitySystem::EntityMessage::RESULT_ERROR; ++entityMessageResult)
 	{
-		r = engine->RegisterEnumValue("eEntityMessageResult", EntitySystem::EntityMessage::ResultNames
-			[entityMessageResult], entityMessageResult); OC_SCRIPT_ASSERT();
+		r = engine->RegisterEnumValue("eEntityMessageResult", EntitySystem::EntityMessage::GetResultName((EntitySystem::EntityMessage::eResult)entityMessageResult), entityMessageResult); OC_SCRIPT_ASSERT();
 	}
 
 	// Register typedef EntityID
@@ -554,7 +552,7 @@ void ScriptMgr::ConfigureEngine(void)
 
 	// Register getters, setters and array for supported types of properties
 
-    #define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName) \
+    #define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter) \
 	/* Register getter and setter */ \
 	r = mEngine->RegisterObjectMethod("EntityHandle", (string(typeName) + " Get_" + typeName + "(string &in)").c_str(), \
 		asFUNCTIONPR(EntityHandleGetValue, (EntitySystem::EntityHandle&, string&), typeClass), \
@@ -681,7 +679,7 @@ asIScriptContext* ScriptMgr::AddContextAsCoRoutineToManager(asIScriptContext* cu
 	return ctx;
 }
 
-inline void ScriptMgr::ExecuteScripts()
+void ScriptMgr::ExecuteScripts()
 {
 	mContextMgr->ExecuteScripts();
 }
@@ -766,4 +764,39 @@ void ScriptMgr::ClearModules()
 	{
 		UnloadModule(iter->first.c_str());
 	}
+}
+
+// These macros allow us to automatically define the setter function and its value type for the script function arguments.
+#define ARGVALUE_Address(ptr) (void*)(ptr)
+#define ARGVALUE_Object(ptr) (void*)(ptr)
+#define ARGVALUE_Byte(ptr) (AngelScript::asBYTE)(*ptr)
+#define ARGVALUE_Word(ptr) (AngelScript::asWORD)(*ptr)
+#define ARGVALUE_DWord(ptr) (AngelScript::asDWORD)(*ptr)
+#define ARGVALUE_QWord(ptr) (AngelScript::asQWORD)(*ptr)
+#define ARGVALUE_Float(ptr) (float)(*ptr)
+#define ARGVALUE_Double(ptr) (double)(*ptr)
+
+bool ScriptSystem::ScriptMgr::SetFunctionArgument( AngelScript::asIScriptContext* functionContext, const uint32 parameterIndex, const Reflection::PropertyFunctionParameter& parameter )
+{
+	int errorCode = 0;
+
+	switch (parameter.GetType())
+	{
+	#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter) \
+		case typeID: \
+			errorCode = functionContext->SetArg##scriptSetter(parameterIndex, ARGVALUE_##scriptSetter(parameter.GetData<typeClass>())); \
+			break;
+	#include "Utils/Properties/PropertyTypes.h"
+	#undef PROPERTY_TYPE
+	
+	default:
+		OC_ASSERT_MSG(false, "Unknown or unsupported property type");
+	}
+
+	if (errorCode != 0) {
+		ocError << "Can't set script function argument: error code = " << errorCode;
+		return false;
+	}
+
+	return true;
 }

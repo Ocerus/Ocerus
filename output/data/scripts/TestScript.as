@@ -16,6 +16,11 @@ void OnPostInit()
   if (GetEntityMgr().EntityExists(handle)) handle.PostMessage(DRAW);
 }
 
+void OnUpdateLogic(float32 delta)
+{
+	//Log("Update logic: " + delta);
+}
+
 void OnDraw()
 {
   EntityHandle handle = GetCurrentEntityHandle();

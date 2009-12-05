@@ -5,6 +5,7 @@
 using namespace EntityComponents;
 using namespace EntitySystem;
 
+
 void Script::Create(void)
 {
 	mNeedUpdate = true;
@@ -27,7 +28,7 @@ void Script::AnalyseModule(const string& module)
 	for (int32 type=0; type<EntityMessage::NUM_TYPES; ++type)
 	{
 		int32 funcId = gScriptMgr.GetFunctionID(module.c_str(),
-			EntityMessage::GetHandleDeclaration(EntityMessage::eType(type)));
+			EntityMessage::GetHandlerDeclaration(EntityMessage::eType(type)));
 		if (funcId >= 0) mMessageHandlers[EntityMessage::eType(type)]=funcId;
 	}
 }
@@ -51,10 +52,10 @@ EntityMessage::eResult Script::HandleMessage(const EntityMessage& msg)
 	ctx->SetUserData(GetOwnerPtr());
 
 	// Add additional parameters depended on message type
-	switch(msg.type)
+	for (uint32 i=0; i<msg.parameters.GetParametersCount(); ++i)
 	{
-	case EntityMessage::INIT: break;
-	default: break;
+		bool result = gScriptMgr.SetFunctionArgument(ctx, i, msg.parameters.GetParameter(i));
+		OC_ASSERT_MSG(result, "Can't set script function argument; check EntityMessageTypes.h");
 	}
 
 	// Execute script with time out

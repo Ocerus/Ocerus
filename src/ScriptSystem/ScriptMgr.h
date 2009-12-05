@@ -38,6 +38,10 @@ namespace ScriptSystem
 		/// @return Number greater than or equal to zero that is function ID, number less than zero for not found
 		int32 GetFunctionID(const char* moduleName, const char* funcDecl);
 
+		/// Sets an argument to a function being prepared to be called. The type and value of the argument is determined
+		/// from PropertyFunctionParameter.
+		bool SetFunctionArgument(AngelScript::asIScriptContext* functionContext, const uint32 parameterIndex, const Reflection::PropertyFunctionParameter& parameter);
+
 		/// Returns new context prepared for passing the argument values.
 		///	@param funcId ID of function to prepare (can get from GetFunctionID)
 		AngelScript::asIScriptContext* PrepareContext(int32 funcId);
@@ -63,7 +67,7 @@ namespace ScriptSystem
 
 		/// Execute each script added to context manager that is not currently sleeping.
 		/// The function returns after each script has been executed once.
-		inline void ExecuteScripts();
+		void ExecuteScripts();
 
 		/// Add a pre-processor define for conditional compilation.
 		void DefineWord(const char* word);
@@ -80,6 +84,7 @@ namespace ScriptSystem
 		/// All the function ID got from GetFunctionID will be superseded as well as the contexts got from
 		/// PrepareContext, AddContextToManager and AddContextAsCoRoutineToManager.
 		void ClearModules();
+
 	private:
 		/// Pointer to script engine.
 		AngelScript::asIScriptEngine* mEngine;

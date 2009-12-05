@@ -22,15 +22,17 @@ namespace EntityComponents
 		static void TestRunTime();
 
 		/// Names of the script modules that are searched for script message handlers.
-		//@{
 		Utils::Array<string>* GetModules(void) const { return const_cast<Utils::Array<string>*>(&mModules); }
+
+		/// Names of the script modules that are searched for script message handlers.
 		void SetModules(Utils::Array<string>* modules) { mModules.CopyFrom(*modules); }
-		//@}
+
 		/// Maximum time of execution the scripts in ms (0 means infinity).
-		//@{
 		uint32 GetTimeOut(void) const { return mTimeOut; }
+
+		/// Maximum time of execution the scripts in ms (0 means infinity).
 		void SetTimeOut(const uint32 timeOut) { mTimeOut = timeOut; }
-		//@}
+
 	private:
 		Utils::Array<string> mModules;
 		uint32 mTimeOut;

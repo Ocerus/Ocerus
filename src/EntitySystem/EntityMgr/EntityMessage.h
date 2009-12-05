@@ -13,6 +13,8 @@ namespace EntitySystem
 	/// of them picks it up.
 	struct EntityMessage
 	{
+	public:
+
 		/// Result the EntityMgr can receive after sending out a message to entities.
 		enum eResult
 		{
@@ -24,13 +26,13 @@ namespace EntitySystem
 			RESULT_ERROR
 		};
 
-		/// String names of entity message results.
-		static const char* const ResultNames[];
+		/// String name of an entity message results.
+		static const char* GetResultName(const eResult messageResult);
 
 		/// Defines user types of messages.
 		enum eType
 		{
-			#define ENTITY_MESSAGE_TYPE(typeID, handlerDecl) typeID,
+			#define ENTITY_MESSAGE_TYPE(typeID, handlerDecl, params) typeID,
 			#include "EntityMessageTypes.h"
 			#undef ENTITY_MESSAGE_TYPE
 
@@ -38,23 +40,33 @@ namespace EntitySystem
 			NUM_TYPES
 		};
 
-		/// String names of entity message types.
-		static const char* const TypeNames[];
-
-		/// Handle declaration of all entity message types.
-		static const char* const HandleDeclaration[];
+		/// Returns the string name of a message type.
+		static const char* GetTypeName(const eType messageType);
 
 		/// Returns the handle declaration of all entity message types.
-		static const char* GetHandleDeclaration(const eType type);
+		static const char* GetHandlerDeclaration(const eType messageType);
+
+		/// Returns the array of property types the given message type accepts.
+		static const Reflection::ePropertyType* GetParameterTypes(const eType messageType);
+
+		/// Returns the number of arguments the given message type accepts.
+		static const uint32 GetParametersCount(const eType messageType);
 
 		/// User type of this message.
 		eType type;
 
 		/// Data carried by this message.
-		Reflection::PropertyFunctionParameters data;
+		Reflection::PropertyFunctionParameters parameters;
 
+		/// Constructs a new message with no parameters.
 		EntityMessage(eType _type): type(_type) {}
-		EntityMessage(eType _type, Reflection::PropertyFunctionParameters _data): type(_type), data(_data) {}
+
+		/// Constructs a new message with given parameters.
+		EntityMessage(eType _type, Reflection::PropertyFunctionParameters _data): type(_type), parameters(_data) {}
+
+		/// Returns true if the parameters of the message match the definition of its type (see EntityMessageTypes.h).
+		bool AreParametersValid(void) const;
+
 	};
 }
 

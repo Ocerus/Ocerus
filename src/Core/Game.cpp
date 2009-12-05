@@ -128,7 +128,7 @@ void Core::Game::Update( const float32 delta )
 	// pick hover entity
 	MouseState& mouse = gInputMgr.GetMouseState();
 	EntityPicker picker(mouse.x, mouse.y);
-	gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::MOUSE_PICK, Reflection::PropertyFunctionParameters() << Reflection::PropertyFunctionParameter(picker, 0)));
+	gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::MOUSE_PICK));
 	mHoveredEntity = picker.GetResult();
 
 	// react on input

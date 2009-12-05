@@ -19,11 +19,11 @@ namespace Reflection
 	/// It is used for runtime type checks.
 	enum ePropertyType
 	{
-		#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName) typeID,
+		#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter) typeID,
 		#include "PropertyTypes.h"
 		#undef PROPERTY_TYPE
 
-		#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName) ARRAY_PROPERTY_TYPE_ID(typeID),
+		#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter) ARRAY_PROPERTY_TYPE_ID(typeID),
 		#include "PropertyTypes.h"
 		#undef PROPERTY_TYPE
 
@@ -41,14 +41,14 @@ namespace Reflection
 		template<typename T> T GetDefaultValue(void) { return 0; }
 
 		/// Template specialization.
-		#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName) \
+		#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter) \
 			template<> ePropertyType GetTypeID<typeClass>(void); \
 			template<> typeClass GetDefaultValue<typeClass>(void);
 		#include "PropertyTypes.h"
 		#undef PROPERTY_TYPE
 
 		/// Template specialization.
-		#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName) \
+		#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter) \
 			template<> ePropertyType GetTypeID<ARRAY_PROPERTY_TYPE_CLASS(typeClass)>(void); \
 			template<> ARRAY_PROPERTY_TYPE_CLASS(typeClass) GetDefaultValue<ARRAY_PROPERTY_TYPE_CLASS(typeClass)>(void);
 		#include "PropertyTypes.h"
@@ -57,11 +57,11 @@ namespace Reflection
 		/// String names of property types.
 		const char* const PropertyTypeNames[] =
 		{
-			#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName) typeName,
+			#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter) typeName,
 			#include "PropertyTypes.h"
 			#undef PROPERTY_TYPE
 
-			#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName) ARRAY_PROPERTY_TYPE_NAME(typeName),
+			#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter) ARRAY_PROPERTY_TYPE_NAME(typeName),
 			#include "PropertyTypes.h"
 			#undef PROPERTY_TYPE
 

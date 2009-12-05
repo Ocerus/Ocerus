@@ -35,16 +35,16 @@ EntityMessage::eResult EntityComponents::CmpPlatformLogic::HandleMessage(const E
 		Die();
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::MOUSE_PICK:
-		OC_DASSERT(msg.data.GetParametersCount() == 1);
+		/*OC_DASSERT(msg.parameters.GetParametersCount() == 1);
 		{
 			Vector2 pos = GetProperty("Position").GetValue<Vector2>();
 			float32 angle = GetProperty("Angle").GetValue<float32>();
-			msg.data.GetParameter(0).GetData<EntityPicker>()->Update(GetOwner(), MathUtils::Multiply(Matrix22(angle), mPickCircleCenter) + pos, mPickCircleRadius);
-		}
+			msg.parameters.GetParameter(0).GetData<EntityPicker>()->Update(GetOwner(), MathUtils::Multiply(Matrix22(angle), mPickCircleCenter) + pos, mPickCircleRadius);
+		}*/
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::DRAW_OVERLAY:
-		OC_DASSERT(msg.data.GetParametersCount() == 1);
-		DrawSelectionOverlay(*msg.data.GetParameter(0).GetData<bool>());
+		OC_DASSERT(msg.parameters.GetParametersCount() == 1);
+		DrawSelectionOverlay(*msg.parameters.GetParameter(0).GetData<bool>());
 		return EntityMessage::RESULT_OK;
 	default:
 		break;

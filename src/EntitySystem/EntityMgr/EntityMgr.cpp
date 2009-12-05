@@ -70,7 +70,7 @@ EntityMessage::eResult EntityMgr::PostMessage(EntityID targetEntity, const Entit
 	EntityMap::iterator ei = mEntities.find(targetEntity);
 	if (ei == mEntities.end())
 	{
-		ocError << "Can't find entity with ID '" << targetEntity << "'";
+		ocError << "Can't post message: Can't find entity with ID '" << targetEntity << "'";
 		return EntityMessage::RESULT_ERROR;
 	}
 	if (EntityHandle::IsPrototypeID(targetEntity))
@@ -80,18 +80,22 @@ EntityMessage::eResult EntityMgr::PostMessage(EntityID targetEntity, const Entit
 	}
 	if (msg.type != EntityMessage::INIT && msg.type != EntityMessage::POST_INIT && !ei->second->mFullyInited)
 	{
-		ocError << "Entity with ID '" << targetEntity << "' is not initialized -> can't post messages";
+		ocError << "Can't post message: Entity with ID '" << targetEntity << "' is not initialized";
 		return EntityMessage::RESULT_ERROR;
 	}
 	if (msg.type != EntityMessage::INIT && msg.type == EntityMessage::POST_INIT && ei->second->mFullyInited)
 	{
-		ocError << "Entity with ID '" << targetEntity << "' is already initialized";
+		ocError << "Can't post message: Entity with ID '" << targetEntity << "' is already initialized";
 		return EntityMessage::RESULT_ERROR;
 	}
-	if (msg.type == EntityMessage::POST_INIT)
+	if (!msg.AreParametersValid())
 	{
-		ei->second->mFullyInited = true;
+		ocError << "Can't post message: Parameters passed are not valid";
+		return EntityMessage::RESULT_ERROR;
 	}
+
+
+	if (msg.type == EntityMessage::POST_INIT) ei->second->mFullyInited = true;
 
 	EntityMessage::eResult result = EntityMessage::RESULT_IGNORED;
 	for (EntityComponentsIterator iter = mComponentMgr->GetEntityComponents(targetEntity); iter.HasMore(); ++iter)
@@ -99,7 +103,9 @@ EntityMessage::eResult EntityMgr::PostMessage(EntityID targetEntity, const Entit
 		EntityMessage::eResult r = (*iter)->HandleMessage(msg);
 		if ((r == EntityMessage::RESULT_ERROR)
 			|| (r == EntityMessage::RESULT_OK && result == EntityMessage::RESULT_IGNORED))
+		{
 			result = r;
+		}
 	}
 	return result;
 }

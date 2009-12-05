@@ -21,6 +21,7 @@ namespace Reflection
 			}
 		};
 	public:
+
 		/// Constructs a null PropertyFunctionParameter.
 		PropertyFunctionParameter(): mType(PT_UNKNOWN)
 		{
@@ -51,14 +52,13 @@ namespace Reflection
 		{
 			if (PropertyTypes::GetTypeID<T>() != mType)
 			{
-				//ocInfo << "PropertyFunctionParameter: calling `const " <<
-				//		PropertyTypes::GetTypeID<T>() << "* GetData() const'" <<
-				//		" for PropertyFunctionParameter containing `" << mType;
-
 				return 0;
 			}
 			return &*boost::static_pointer_cast<T>(mData);
 		}
+
+		/// Returns the type of this property.
+		inline ePropertyType GetType(void) const { return mType; }
 
 	private:
 		ePropertyType           mType;
@@ -113,14 +113,11 @@ namespace Reflection
 		}
 
 		/// Returns the number of actual parameters inserted into this parameter holder.
-		inline int32 GetParametersCount(void) const { return mParameters->size(); }
+		inline uint32 GetParametersCount(void) const { return mParameters->size(); }
 
 	private:
 
-		//int32 mParametersCount;
-		//int32 mParametersMaxCount;
 		boost::shared_ptr< vector<PropertyFunctionParameter> > mParameters;
-		//boost::shared_ptr< Array<PropertyFunctionParameter> > mParameters;
 	};
 }
 

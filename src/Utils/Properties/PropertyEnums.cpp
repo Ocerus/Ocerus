@@ -16,14 +16,14 @@ namespace Reflection
 {
 
 	/// Template specialization.
-	#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName) \
+	#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter) \
 		template<> ePropertyType PropertyTypes::GetTypeID<typeClass>(void) { return typeID; } \
 		template<> typeClass PropertyTypes::GetDefaultValue<typeClass>(void) {return defaultValue; }
 	#include "PropertyTypes.h"
 	#undef PROPERTY_TYPE
 
 	/// Template specialization.
-	#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName) \
+	#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter) \
 		template<> ePropertyType PropertyTypes::GetTypeID<ARRAY_PROPERTY_TYPE_CLASS(typeClass)>(void) { return ARRAY_PROPERTY_TYPE_ID(typeID); } \
 		template<> ARRAY_PROPERTY_TYPE_CLASS(typeClass) PropertyTypes::GetDefaultValue<ARRAY_PROPERTY_TYPE_CLASS(typeClass)>(void) {return 0; }
 	#include "PropertyTypes.h"
