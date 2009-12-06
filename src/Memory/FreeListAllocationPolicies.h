@@ -285,7 +285,7 @@ namespace Memory
 						{
 							break;
 						}
-						if( it->blocksAvailable > 0 )
+						if( it->mBlocksAvailable > 0 )
 						{
 							mAllocChunk = &*it;
 							break;

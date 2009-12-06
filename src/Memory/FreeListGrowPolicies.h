@@ -15,7 +15,7 @@ namespace Memory
 		/// The freelist will growth always by the same number blocks. A maximum number of blocks must be specified as well
 		/// to prevent unwanted freelist overgrowths.
 		template< int32 NumToPrealloc, int32 NumToGrow, int32 MaxAllocated >
-		struct ConstantGrowthPolicy
+		struct ConstantGrowth
 		{
 			inline static uint32 GetNumberToPreallocate()
 			{
@@ -36,7 +36,7 @@ namespace Memory
 		/// The freelist will growth always by the same number blocks. The number is determined from the desired size of a block
 		/// and the size of a freelist item. The number will always be at least 8.
 		template< typename T, int32 BlockSize >
-		struct ConstantChunkSizeGrowthPolicy
+		struct ConstantChunkSizeGrowth
 		{
 			static const int32 numberToGrow = (BlockSize / sizeof(T) > 8) ? (BlockSize / sizeof(T)) : 8;
 
@@ -52,8 +52,10 @@ namespace Memory
 		};
 
 
+
 		/// The freelist will growth the twice its size. An initial size must be supplied.
-		template< int InitialSize > struct DoubleGrowthSize
+		template< int InitialSize > 
+		struct DoubleGrowth
 		{
 			static unsigned int GetNumberToPreallocate()
 			{

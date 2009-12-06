@@ -24,7 +24,7 @@ namespace Memory
 		typename T, 
 		class AllocationPolicy = Policies::LinkedListAllocation<T>,
 		class ConstructionPolicy = Policies::PlacementNewConstruction<T>,
-		class GrowthPolicy = Policies::DoubleGrowthSize<16> 
+		class GrowthPolicy = Policies::DoubleGrowth<16> 
 	>
 	class FreeList: public AllocationPolicy, public ConstructionPolicy, public GrowthPolicy
 	{
