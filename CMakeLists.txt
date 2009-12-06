@@ -249,6 +249,7 @@ set(LogSystem_SRCS
 
 set(Memory_SRCS
     src/Memory/GlobalAllocation.cpp
+    src/Memory/FreeListPolicyHelpers.cpp
 )
 
 set(ResourceSystem_SRCS

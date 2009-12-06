@@ -363,6 +363,14 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="Memory"
+			>
+			<File
+				RelativePath="..\src\Memory\test\TestFreeList.cpp"
+				>
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>

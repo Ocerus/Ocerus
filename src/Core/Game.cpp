@@ -250,8 +250,6 @@ void Core::Game::Draw( const float32 delta)
 	gPSMgr.Render();*/
 }
 
-#include "../ResourceSystem/XMLResource.h"
-
 void Core::Game::KeyPressed( const KeyInfo& ke )
 {
 	if (ke.keyAction == KC_ESCAPE)

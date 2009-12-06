@@ -1106,6 +1106,26 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\Memory\FreeList.h"
+					>
+				</File>
+				<File
+					RelativePath="..\src\Memory\FreeListAllocationPolicies.h"
+					>
+				</File>
+				<File
+					RelativePath="..\src\Memory\FreeListConstructionPolicies.h"
+					>
+				</File>
+				<File
+					RelativePath="..\src\Memory\FreeListGrowPolicies.h"
+					>
+				</File>
+				<File
+					RelativePath="..\src\Memory\FreeListPolicyHelpers.h"
+					>
+				</File>
+				<File
 					RelativePath="..\src\Memory\GlobalAllocation.h"
 					>
 				</File>
@@ -1117,6 +1137,10 @@
 			<Filter
 				Name="src"
 				>
+				<File
+					RelativePath="..\src\Memory\FreeListPolicyHelpers.cpp"
+					>
+				</File>
 				<File
 					RelativePath="..\src\Memory\GlobalAllocation.cpp"
 					>
