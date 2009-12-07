@@ -283,6 +283,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\src\EntitySystem\Components\Sprite.h"
+						>
+					</File>
+					<File
 						RelativePath="..\src\EntitySystem\Components\Transform.h"
 						>
 					</File>
@@ -324,6 +328,10 @@
 					</File>
 					<File
 						RelativePath="..\src\EntitySystem\Components\Script.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\src\EntitySystem\Components\Sprite.cpp"
 						>
 					</File>
 					<File
@@ -716,6 +724,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\GfxSystem\GfxSceneMgr.h"
+					>
+				</File>
+				<File
 					RelativePath="..\src\GfxSystem\GfxStructures.h"
 					>
 				</File>
@@ -741,6 +753,10 @@
 				>
 				<File
 					RelativePath="..\src\GfxSystem\GfxRenderer.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src\GfxSystem\GfxSceneMgr.cpp"
 					>
 				</File>
 				<File

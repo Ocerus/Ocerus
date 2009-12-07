@@ -66,6 +66,16 @@ namespace GfxSystem
 
 		static Pen NullPen;
 	};
+
+	struct Sprite
+	{
+		Vector2 position, size;
+		float32 z;
+		uint32 texture;
+		
+		Sprite(const Vector2& _position, const Vector2& _size, const float32 _z, const uint32 _texture): 
+			position(_position), size(_size), z(_z), texture(_texture) {}
+	};
 }
 
 #endif // GfxStructures_h__

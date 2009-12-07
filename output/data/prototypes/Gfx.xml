@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Entities>
+  <Entity Type="ET_VISUAL" Name="Visual_prototype" ID="3" >
+    <Component Type="CT_SPRITE"/>
+    <Component Type="CT_TRANSFORM"/>
+  </Entity>
+
+</Entities>

@@ -4,6 +4,7 @@
 #include "../ComponentMgr/ComponentMgr.h"
 #include "../ComponentMgr/Component.h"
 #include "../../ResourceSystem/XMLResource.h"
+#include "../../GfxSystem/GfxSceneMgr.h"
 
 namespace EntitySystem
 {
@@ -193,6 +194,12 @@ EntityHandle EntityMgr::CreateEntity(EntityDescription& desc)
 	{
 		DestroyEntity(entityHandle);
 		return entityHandle; // do like nothing's happened, but don't enum properties or they will access invalid memory
+	}
+
+	// add entities with sprites to GfxSceneMagr
+	if (!isPrototype && HasEntityComponentOfType(entityHandle, CT_SPRITE))
+	{
+		gGfxSceneMgr.AddEntity(entityHandle);
 	}
 
 	return entityHandle;

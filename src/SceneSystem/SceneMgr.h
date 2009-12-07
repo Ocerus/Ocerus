@@ -5,15 +5,11 @@
 #include "Singleton.h"
 #include "../GfxSystem/GfxStructures.h"
 
+/// Macro for easier use.
+#define gSceneMgr SceneSystem::SceneMgr::GetSingleton()
+
 namespace SceneSystem
 {
-
-
-	class SceneMgr : public Singleton<SceneMgr>
-	{
-	public:
-
-	};
 }
 
 #endif

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Entities>
+  <Entity Type="ET_VISUAL" Name="Visual" Prototype="3">
+
+    <Component Type="CT_SPRITE">
+      <Size>512 256</Size>
+      <Path>Textures/Logo.png</Path>
+    </Component>
+    
+    <Component Type="CT_TRANSFORM">
+	    <Position>384 384</Position>
+      <Depth>0</Depth>
+    </Component>
+  </Entity>
+
+  <Entity Type="ET_VISUAL" Name="Visual" Prototype="3">
+
+    <Component Type="CT_SPRITE">
+      <Size>512 256</Size>
+      <Path>Textures/Logo2.png</Path>
+    </Component>
+
+    <Component Type="CT_TRANSFORM">
+      <Position>64 128</Position>
+      <Depth>0</Depth>
+    </Component>
+  </Entity>
+
+</Entities>

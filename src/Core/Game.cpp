@@ -6,6 +6,9 @@
 #include "StringConverter.h"
 #include "Box2D.h"
 
+//temporary here
+//#include "../GfxSystem/Texture.h"
+
 
 // DEBUG only
 #include "../EntitySystem/Components/OnInitScript.h"
@@ -67,10 +70,20 @@ void Core::Game::Init()
 
 	//// TEST ////
 
+	//--------------------------------------------
+	//gResourceMgr.AddResourceFileToGroup("Textures/Logo.png", "textures", ResourceSystem::RESTYPE_TEXTURE, true);
+	//--------------------------------------------
+
+
 	gEntityMgr.LoadEntitiesFromResource(gResourceMgr.GetResource("Prototypes/ship0.xml"), true);
 
 	gEntityMgr.LoadEntitiesFromResource(gResourceMgr.GetResource("Ships/ship0.xml"));
+	
 
+	//-------------------
+	gEntityMgr.LoadEntitiesFromResource(gResourceMgr.GetResource("Prototypes/Gfx.xml"), true);
+	gEntityMgr.LoadEntitiesFromResource(gResourceMgr.GetResource("Ships/Gfx.xml"));
+	//-------------------
 
 	// set camera
 	mCameraFocus.Invalidate();
@@ -179,6 +192,14 @@ void Core::Game::Update( const float32 delta )
 void Core::Game::Draw( const float32 delta)
 {
 	PROFILE_FNC();
+
+	gGfxRenderer.DrawSprites();
+	gGfxRenderer.Reset();
+	
+	//TODO: odstranit - pouze pro testovaci ucely
+	//GfxSystem::TexturePtr t = gResourceMgr.GetResource("textures", "Logo.png");
+	//gGfxRenderer.DrawTestTexturedQuad(t->GetTexture());
+	//------------------------------------------
 
 	//TODO:Gfx
 	// move camera in reaction to the user input

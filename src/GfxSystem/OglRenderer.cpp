@@ -13,7 +13,6 @@
 
 using namespace GfxSystem;
 
-
 void OglRenderer::Init()  const
 {
 	ocInfo << "*** OpenGL init ***";
@@ -90,7 +89,36 @@ uint32 OglRenderer::LoadTexture(
 
 void OglRenderer::DeleteTexture(const uint32 &handle) const
 {
-	glDeleteTextures(100, &handle);
+	glDeleteTextures(1, &handle);
+}
+
+void OglRenderer::SetTexture(const uint32 texture) const
+{
+	glBindTexture(GL_TEXTURE_2D, texture);
+}
+
+void OglRenderer::DrawTexturedQuad(const Vector2& position, const Vector2& size, const float32 z) const
+{
+	glLoadIdentity();
+	glTranslatef( position.x, position.y, z );
+
+	glEnable(GL_TEXTURE_2D); //TODO: presunout jinam
+
+	glBegin( GL_QUADS );
+
+        //Draw square
+		glTexCoord2f(0.0f, 0.0f);
+	    glVertex3f( 0,		0,		0 );
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f( size.x,	0,		0 );
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f( size.x,	size.y,	0 );
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f( 0,		size.y,	0 );
+
+    //End quad
+    glEnd();
+	glDisable(GL_TEXTURE_2D); //TODO: presunout jinam
 }
 
 void OglRenderer::DrawTestQuad() const

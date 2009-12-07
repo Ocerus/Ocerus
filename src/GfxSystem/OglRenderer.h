@@ -40,6 +40,12 @@ namespace GfxSystem
 
 		/// Deletes texture from renderers memory
 		virtual void DeleteTexture(const uint32 &handle) const;
+		
+		/// Adds srite to queue for rendering
+		virtual void SetTexture(const uint32 texture) const;
+		
+		/// Draws sprites from queue
+		virtual void DrawTexturedQuad(const Vector2& position, const Vector2& size, const float32 z) const;
 
 		/// Draws simple quad
 		virtual void DrawTestQuad() const;

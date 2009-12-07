@@ -12,5 +12,6 @@
 #include "../Components/CmpPlatformVisual.h"
 #include "../Components/OnInitScript.h"
 #include "../Components/Script.h"
+#include "../Components/Sprite.h"
 
 #endif // _ComponentHeaders_h__

@@ -7,11 +7,7 @@
 #include "../GfxSystem/OglRenderer.h"
 #include "../GfxSystem/GfxWindow.h"
 #include "../ScriptSystem/ScriptResource.h"
-
-
-//TODO: odstranit - pouze pro testovaci ucely
-#include "../GfxSystem/Texture.h"
-//--------------------------------------------
+#include "../GfxSystem/GfxSceneMgr.h"
 
 
 using namespace Core;
@@ -58,9 +54,7 @@ void Application::Init()
 	GfxSystem::GfxRenderer::CreateSingleton<GfxSystem::OglRenderer>();
 	GfxSystem::GfxRenderer::GetSingleton().Init();
 
-	//TODO: odstranit - pouze pro testovaci ucely
-	gResourceMgr.AddResourceFileToGroup("Textures/Logo.png", "textures", ResourceSystem::RESTYPE_TEXTURE, true);
-	//--------------------------------------------
+	GfxSystem::GfxSceneMgr::CreateSingleton();
 
 	InputSystem::InputMgr::CreateSingleton();
 
@@ -164,11 +158,6 @@ void Application::RunMainLoop()
 			default:
 				break;
 			}
-
-			//TODO: odstranit - pouze pro testovci ucely
-			GfxSystem::TexturePtr t = gResourceMgr.GetResource("textures", "Logo.png");
-			gGfxRenderer.DrawTestTexturedQuad(t->GetTexture());
-			//------------------------------------------
 
 			// draw stats (from previous frame)
 			//TODO:Gfx
