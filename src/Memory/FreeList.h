@@ -58,6 +58,9 @@ namespace Memory
 		/// Allocates a new objects from the freelist while passing additional parameters to its constructor.
 		template< typename A1, typename A2, typename A3, typename A4 > T* Allocate( A1 a1, A2 a2, A3 a3, A4 a4 );
 
+		/// Returns the size of an item in the freelist.
+		inline static size_t GetItemSize() { return sizeof(T); }
+
 	private:
 
 		/// Disabled.

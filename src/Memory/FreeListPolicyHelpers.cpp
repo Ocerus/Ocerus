@@ -46,18 +46,18 @@ namespace Memory
 
 		SharedFreeList::FreeList* SharedFreeList::GetSharedListFromSize( size_t size )
 		{
-			assert( size != 0 );
-			assert( size < maxBytes );
+			OC_ASSERT( size != 0 );
+			OC_ASSERT( size < maxBytes );
 
 			unsigned int index = (size-1) / listSpacing;
-			assert( index < SharedFreeList::numLists );
+			OC_ASSERT( index < SharedFreeList::numLists );
 
 			return smSharedLists + index;
 		}
 
 		size_t SharedFreeList::GetAlignmentFromSize( size_t size )
 		{
-			assert( size != 0 );
+			OC_ASSERT( size != 0 );
 			
 			// Round up the size to the nearest listSpacing
 			size_t roundedSize = ( size + (listSpacing+1) ) & (~(listSpacing-1));

@@ -512,10 +512,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\src\Utils\SmartPointer.h"
-					>
-				</File>
-				<File
 					RelativePath="..\src\Utils\StateMachine.h"
 					>
 				</File>
@@ -1147,6 +1143,10 @@
 				</File>
 				<File
 					RelativePath="..\src\Memory\GlobalAllocation_c.h"
+					>
+				</File>
+				<File
+					RelativePath="..\src\Memory\StlPoolAllocator.h"
 					>
 				</File>
 			</Filter>

@@ -74,7 +74,7 @@ namespace Memory
 				char* pNewChunk = (char*)AlignedMalloc( numBlocks * sizeof(T), AlignOf(T) );
 				numBlocksAllocated += numBlocks;
 
-				for( unsigned int ix = 0; ix < numBlocks; ++ix )
+				for( uint32 ix = 0; ix < numBlocks; ++ix )
 				{
 					IncrementNumBlocksInUse();	// Make this call to offset the decrement inside push
 					Push( pNewChunk + ix*sizeof(T) );
@@ -157,7 +157,7 @@ namespace Memory
 
 				for( std::vector< Chunk >::iterator it = mChunks.begin(); it != mChunks.end(); ++it )
 				{
-					delete [] (it->pObjects);
+					::AlignedFree((void*)it->pObjects);
 				}
 
 				mChunks.clear();
@@ -193,7 +193,7 @@ namespace Memory
 			void Grow( uint32 numObjects )
 			{
 				Chunk newChunk;
-				newChunk.pObjects = new T[numObjects];
+				newChunk.pObjects = (T*)AlignedMalloc( numObjects * sizeof(T), AlignOf(T) );
 				newChunk.numObjects = numObjects;
 
 				for( uint32 ix = 0; ix < newChunk.numObjects; ++ix )
@@ -262,12 +262,12 @@ namespace Memory
 
 			void Push( void* pItem )
 			{
-				assert(!mChunks.empty());
-				assert(&mChunks.front() <= mDeallocChunk);
-				assert(&mChunks.back() >= mDeallocChunk);
+				OC_ASSERT(!mChunks.empty());
+				OC_ASSERT(&mChunks.front() <= mDeallocChunk);
+				OC_ASSERT(&mChunks.back() >= mDeallocChunk);
 
 				mDeallocChunk  = VicinityFind(pItem);
-				assert(mDeallocChunk);
+				OC_ASSERT(mDeallocChunk);
 
 				DoDeallocate(pItem);
 				DecrementNumBlocksInUse();
@@ -304,7 +304,7 @@ namespace Memory
 
 			void Grow( uint32 numBlocks )
 			{
-				assert( mAllocChunk == 0 || mAllocChunk->mBlocksAvailable == 0 );
+				OC_ASSERT( mAllocChunk == 0 || mAllocChunk->mBlocksAvailable == 0 );
 
 				Chunk newChunk;
 				newChunk.Init(numBlocks);
@@ -321,10 +321,10 @@ namespace Memory
 			{
 				void Init(uint32 blocks)
 				{
-					assert( blocks > 0 );
+					OC_ASSERT( blocks > 0 );
 
 					mData = (uint8*)AlignedMalloc( sizeof(T) * blocks, AlignOf(T) );
-					assert( mData );
+					OC_ASSERT( mData );
 
 					mNumBlocks = blocks;
 					mBlocksAvailable = blocks;
@@ -344,7 +344,7 @@ namespace Memory
 					if( !mBlocksAvailable )
 						return 0;
 
-					assert( mFirst != 0 );
+					OC_ASSERT( mFirst != 0 );
 
 					void* pResult = mFirst;
 					mFirst = *(void**)pResult;
@@ -359,7 +359,7 @@ namespace Memory
 					mFirst = pBlock;
 
 					++mBlocksAvailable;
-					assert( mBlocksAvailable <= mNumBlocks );
+					OC_ASSERT( mBlocksAvailable <= mNumBlocks );
 				}
 
 				void Release()
@@ -386,8 +386,8 @@ namespace Memory
 
 			Chunk* VicinityFind( void* p )
 			{
-				assert(!mChunks.empty());
-				assert(mDeallocChunk);
+				OC_ASSERT(!mChunks.empty());
+				OC_ASSERT(mDeallocChunk);
 
 				Chunk* lo = mDeallocChunk;
 				Chunk* hi = mDeallocChunk + 1;
@@ -418,14 +418,14 @@ namespace Memory
 						if (++hi == hiBound) hi = 0;
 					}
 				}
-				assert(false);
+				OC_ASSERT(false);
 				return 0;
 			}
 
 			void DoDeallocate( void* p )
 			{
-				assert(mDeallocChunk->mData <= p);
-				assert(mDeallocChunk->mData + mDeallocChunk->mNumBlocks * sizeof(T) > p);
+				OC_ASSERT(mDeallocChunk->mData <= p);
+				OC_ASSERT(mDeallocChunk->mData + mDeallocChunk->mNumBlocks * sizeof(T) > p);
 
 				// call into the chunk, will adjust the inner list but won't release memory
 				mDeallocChunk->Deallocate(p);

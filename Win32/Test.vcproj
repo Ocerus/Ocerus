@@ -370,6 +370,10 @@
 				RelativePath="..\src\Memory\test\TestFreeList.cpp"
 				>
 			</File>
+			<File
+				RelativePath="..\src\Memory\test\TestStlPoolAllocator.cpp"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>
