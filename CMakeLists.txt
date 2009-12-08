@@ -207,6 +207,7 @@ set(EntitySystem_SRCS
     src/EntitySystem/Components/CmpPlatformPhysics.cpp
     src/EntitySystem/Components/CmpPlatformParams.cpp
     src/EntitySystem/Components/Script.cpp
+    src/EntitySystem/Components/Sprite.cpp
     src/EntitySystem/Components/Transform.cpp
     src/EntitySystem/Components/OnInitScript.cpp
     src/EntitySystem/ComponentMgr/Component.cpp
@@ -218,8 +219,9 @@ set(GfxSystem_SRCS
     src/GfxSystem/OglRenderer.cpp
     src/GfxSystem/Texture.cpp
     src/GfxSystem/GfxWindow.cpp
-    src/GfxSystem/GfxStructures.cpp
     src/GfxSystem/GfxRenderer.cpp
+    src/GfxSystem/GfxSceneMgr.cpp
+    src/GfxSystem/GfxStructures.cpp
 )
 
 set(SceneSystem_SRCS

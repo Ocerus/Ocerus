@@ -15,20 +15,20 @@ namespace Memory
 	{
 		/// This allocation policy is arguably the simplest, and probably the most useful and robust.
 		///
-		/// When a grow request is processed, an uninitialized chunk of memory is allocated 
-		/// to exactly hold the new blocks.  Each new uninitialized block is then cast to a FreeBlock, 
-		/// which is a simple link list node, and added to the link list of free blocks.  
+		/// When a grow request is processed, an uninitialized chunk of memory is allocated
+		/// to exactly hold the new blocks.  Each new uninitialized block is then cast to a FreeBlock,
+		/// which is a simple link list node, and added to the link list of free blocks.
 		/// This effectively hijacks the first sizeof( FreeBlock* ) of each block to point to the next free block.
 		///
-		/// When an object is allocated, the head block is taken from the linked list and a new T is 
-		/// constructed with placement new.  When an object is freed, the destructor is called and 
+		/// When an object is allocated, the head block is taken from the linked list and a new T is
+		/// constructed with placement new.  When an object is freed, the destructor is called and
 		/// then it is cast back to a FreeBlock item and put back into the list of free blocks
 		///
 		/// This gives lightning fast allocation and deallocation performance while supporting objects
-		/// with arbitrarily complex destructors and constructors.  It also has no per-block overhead (and only 
+		/// with arbitrarily complex destructors and constructors.  It also has no per-block overhead (and only
 		/// 4 bytes of overhead per chunk)
 		///
-		template< typename T > 
+		template< typename T >
 		class LinkedListAllocation: public PolicyHelpers::AllocationTracker
 		{
 		public:
@@ -109,8 +109,8 @@ namespace Memory
 		/// Since the objects are not reconstructed using placement new on each allocation,
 		/// the trick of hijacking part of each object to link to succeeding objects can not be relied on
 		/// to work since this may overwrite an object's vtable, leading to some very ugly crashes.
-		/// So a separate list of free pointers is maintained as a stack.  This unfortunately adds 
-		/// sizof( void* ) overhead to each object allocated using this policy. 
+		/// So a separate list of free pointers is maintained as a stack.  This unfortunately adds
+		/// sizof( void* ) overhead to each object allocated using this policy.
 		///
 		/// Because the aim of freelists is roughly to replace heap allocation using new, I strongly
 		/// recommend using an implementation more similar to LinkedListAllocation unless you have good
@@ -123,12 +123,17 @@ namespace Memory
 		template< typename T >
 		class StackAllocation: public PolicyHelpers::AllocationTracker
 		{
-		public:
+			struct Chunk
+			{
+				T* pObjects;
+				uint32 numObjects;
+			};
 
+		public:
 			StackAllocation() {}
 
-			/// The FreeAll class returns all outstanding elements to the FreeList.  This might be called at the end of 
-			/// a level or something.  It does not free the underlying memory.  This is the same behavior as the 
+			/// The FreeAll class returns all outstanding elements to the FreeList.  This might be called at the end of
+			/// a level or something.  It does not free the underlying memory.  This is the same behavior as the
 			/// FreeAll function from GPG4.
 			/// @remarks
 			/// This is an example of a policy class exposing additional functionality to client classes. This
@@ -208,11 +213,6 @@ namespace Memory
 
 		private:
 
-			struct Chunk
-			{
-				T* pObjects;
-				uint32 numObjects;
-			};
 
 			// The STL containers are here of a purpose to make sure we use the standard STL allocator.
 			std::vector< Chunk > mChunks;
@@ -229,18 +229,18 @@ namespace Memory
 		/// from one of the chunks is returned (and constructed with placement new).  When a deallocation
 		/// occurs, the block is returned to the appropriate chunk.  If the policy detects that two chunks
 		/// are completely unused, then it will actually return the memory of the larger of the two chunks to the heap.
-		/// This may be useful if you have many freelists in operation, which may have bursts of usage followed 
+		/// This may be useful if you have many freelists in operation, which may have bursts of usage followed
 		/// by relatively little usage, and it is important that every freelist is not consuming peak memory
 		/// at all times.
 		///
 		/// Notthing is free though, and it should be noted that this policy is not as fast as the above two.
 		/// Most notably, in a worst case, Free performs a linear search through all allocated chunks to find
-		/// the chunk a given block was allocated from. It is likely still significantly faster than most 
+		/// the chunk a given block was allocated from. It is likely still significantly faster than most
 		/// general heap allocators.
 		///
 		/// This policy works best when your allocation pattern is roughly many allocations followed by many deallocations
 		/// in roughly reverse order from the allocations.
-		template< typename T > 
+		template< typename T >
 		class CompactableChunkAllocation: public PolicyHelpers::AllocationTracker
 		{
 		public:
@@ -432,14 +432,14 @@ namespace Memory
 
 				if (mDeallocChunk->mBlocksAvailable == mDeallocChunk->mNumBlocks)
 				{
-					// deallocChunk_ is completely free, should we release it? 
+					// deallocChunk_ is completely free, should we release it?
 					Chunk& lastChunk = mChunks.back();
 
 					if (&lastChunk == mDeallocChunk)
 					{
 						// check if we have two last chunks empty
 
-						if (mChunks.size() > 1 && 
+						if (mChunks.size() > 1 &&
 							mDeallocChunk[-1].mBlocksAvailable == mDeallocChunk[-1].mNumBlocks)
 						{
 							// Two free chunks, discard the last one
@@ -483,10 +483,10 @@ namespace Memory
 
 
 
-		// SharedChunkAllocation is an allocation policy that actually defers its allocations to 
+		// SharedChunkAllocation is an allocation policy that actually defers its allocations to
 		// a global shared free list.
 		//
-		// This means that two freelists allocating objects that are identical (or nearly identical) 
+		// This means that two freelists allocating objects that are identical (or nearly identical)
 		// in size will actually share chunks and blocks of memory.  If an application uses
 		// a significant number of freelists, this can eliminate much of the excess memory stored
 		// in freelists waiting to be allocated while still giving you virtually all of the benefits of
@@ -496,7 +496,7 @@ namespace Memory
 		//
 		// It should be noted that STLPort's default allocator behaves remarkably similar to this
 		// allocation policy
-		template< typename T > 
+		template< typename T >
 		class SharedChunkAllocation
 		{
 		public:
@@ -538,7 +538,7 @@ namespace Memory
 			}
 
 			// This class only works on objects that fit inside one of SharedFreeList's internal lists
-			STATIC_CHECK( sizeof(T) <= PolicyHelpers::SharedFreeList::maxBytes, 
+			STATIC_CHECK( sizeof(T) <= PolicyHelpers::SharedFreeList::maxBytes,
 				SharedChunkPolicy_requires_sizeof_T_not_greater_than_max_SharedFreeList_size );
 		};
 

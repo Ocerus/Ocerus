@@ -13,7 +13,7 @@ namespace Memory
 	namespace PolicyHelpers
 	{
 		// These may need to be redefined for other platforms.  They are necessary so that
-		// memory may be allocated aligned in such a manner that it can be later used by 
+		// memory may be allocated aligned in such a manner that it can be later used by
 		// classes with certain alignment requirements.
 		#define AlignOf( T ) __alignof( T )
 		#define AlignedMalloc( size, alignment ) CustomMalloc( size )
@@ -25,14 +25,14 @@ namespace Memory
 
 
 
-		/// Simple helper class each policy can use by deriving from to provide 
+		/// Simple helper class each policy can use by deriving from to provide
 		/// the GetNumBlocksAllocated interface necessary for Allocation Policies
 		class AllocationTracker
 		{
 		public:
 
 			/// Default constructor.
-			AllocationTracker() 
+			AllocationTracker()
 				: numBlocksAllocated(0)
 				, mNumBlocksInUse(0)
 				, mPeakBlocksInUse(0)
@@ -87,8 +87,8 @@ namespace Memory
 
 		/// This class is used by SharedChunkPolicy, and is, itself, effectively an array of
 		/// simple linked lists.  Note, that it only supports allocating objects <= maxBytes
-		/// in size, and each allocation is rounded up to the nearest listSpacing size.  
-		/// These numbers can be easily tweaked below.  
+		/// in size, and each allocation is rounded up to the nearest listSpacing size.
+		/// These numbers can be easily tweaked below.
 		class SharedFreeList
 		{
 		public:
@@ -151,8 +151,8 @@ namespace Memory
 				uint32 peakBlocksInUse;
 			};
 
-			static FreeList* GetSharedListFromSize( uint32 size );
-			static uint32 GetAlignmentFromSize( uint32 size );
+			static FreeList* GetSharedListFromSize( size_t size );
+			static size_t GetAlignmentFromSize( size_t size );
 
 			static SharedFreeList* smInstance;
 

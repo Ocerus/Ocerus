@@ -5,7 +5,7 @@ namespace Memory
 {
 	namespace PolicyHelpers
 	{
-		SharedFreeList* SharedFreeList::smInstance = 0; 
+		SharedFreeList* SharedFreeList::smInstance = 0;
 		SharedFreeList::FreeList SharedFreeList::smSharedLists[SharedFreeList::numLists];
 		std::vector< void* > SharedFreeList::smChunks;
 
@@ -47,10 +47,10 @@ namespace Memory
 		SharedFreeList::FreeList* SharedFreeList::GetSharedListFromSize( size_t size )
 		{
 			OC_ASSERT( size != 0 );
-			OC_ASSERT( size < maxBytes );
+			OC_ASSERT( size < (size_t)maxBytes );
 
 			unsigned int index = (size-1) / listSpacing;
-			OC_ASSERT( index < SharedFreeList::numLists );
+			OC_ASSERT( index < (unsigned int)SharedFreeList::numLists );
 
 			return smSharedLists + index;
 		}
@@ -58,7 +58,7 @@ namespace Memory
 		size_t SharedFreeList::GetAlignmentFromSize( size_t size )
 		{
 			OC_ASSERT( size != 0 );
-			
+
 			// Round up the size to the nearest listSpacing
 			size_t roundedSize = ( size + (listSpacing+1) ) & (~(listSpacing-1));
 

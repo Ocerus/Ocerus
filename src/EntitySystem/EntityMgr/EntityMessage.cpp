@@ -36,10 +36,9 @@ const char* const HandlerDeclaration[] =
 };
 
 #define ENTITY_MESSAGE_TYPE(typeID, handlerDecl, parameters) \
-	const Reflection::ePropertyType MessageParameterTypes_##typeID##[] = parameters;
+	const Reflection::ePropertyType MessageParameterTypes_##typeID[] = parameters;
 #include "EntityMessageTypes.h"
 #undef ENTITY_MESSAGE_TYPE
-
 
 const char* EntityMessage::GetHandlerDeclaration(const EntityMessage::eType type)
 {
@@ -55,7 +54,7 @@ const Reflection::ePropertyType* EntitySystem::EntityMessage::GetParameterTypes(
 	#include "EntityMessageTypes.h"
 	#undef ENTITY_MESSAGE_TYPE
 	}
-	
+
 	OC_ASSERT_MSG(false, "Unknown entity message type");
 
 	return 0;
@@ -75,7 +74,7 @@ const uint32 EntitySystem::EntityMessage::GetParametersCount( const eType messag
 
 	return 0;
 }
-	
+
 const char* EntitySystem::EntityMessage::GetTypeName( const eType messageType )
 {
 	return TypeNames[messageType];

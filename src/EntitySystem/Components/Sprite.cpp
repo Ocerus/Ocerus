@@ -27,10 +27,7 @@ EntityMessage::eResult EntityComponents::Sprite::HandleMessage( const EntityMess
 				{
 					if (*str == '/') lastSlashPos = str;
 				}
-
-				GfxSystem::TexturePtr t = gResourceMgr.GetResource("textures", StringKey(lastSlashPos+1, str-lastSlashPos-1));
-				//nejak nechapu proc to nejde priradit rovnou ...
-				mTextureHandle = t;
+				mTextureHandle = (GfxSystem::TexturePtr)gResourceMgr.GetResource("textures", StringKey(lastSlashPos+1, str-lastSlashPos-1));
 				return EntityMessage::RESULT_OK;
 			}
 		}
@@ -48,6 +45,6 @@ EntityMessage::eResult EntityComponents::Sprite::HandleMessage( const EntityMess
 
 void EntityComponents::Sprite::RegisterReflection()
 {
-	RegisterProperty<string>	("Path",	&GetResPath,	&SetResPath,	PA_FULL_ACCESS, "");
-	RegisterProperty<Vector2>	("Size",	&GetSize,		&SetSize,		PA_FULL_ACCESS, "");
+	RegisterProperty<string>	("Path",	&Sprite::GetResPath,	&Sprite::SetResPath,	PA_FULL_ACCESS, "");
+	RegisterProperty<Vector2>	("Size",	&Sprite::GetSize,		&Sprite::SetSize,		PA_FULL_ACCESS, "");
 }
