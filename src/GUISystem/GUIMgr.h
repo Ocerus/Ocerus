@@ -96,14 +96,14 @@ namespace GUISystem
 
 	protected:
 
-		/// Registers CEGUI event callbacks.
-		void RegisterEvents();
-
 		/// @name CEGUI event callbacks
 		//@{
 		//bool QuitEvent(const CEGUI::EventArgs& e);
 
-		/// This callback is called when user types a command to the console.
+		/// Initializes console.
+		void InitConsole();
+
+		/// This callback is called when user types a command to the console and presses enter.
 		bool ConsoleCommandEvent(const CEGUI::EventArgs& e);
 		//@}
 
@@ -112,6 +112,9 @@ namespace GUISystem
 
 		CEGUI::System* mCegui;
 		CEGUI::Window* mCurrentWindowRoot;
+
+		CEGUI::Window* mConsoleRoot;
+		CEGUI::Window* mConsolePrompt;
 
 		CEGUI::OpenGLRenderer* mRenderer;
 		ResourceProvider* mResourceProvider;

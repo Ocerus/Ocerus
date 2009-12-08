@@ -6,8 +6,8 @@
 #include "InputSystem/InputMgr.h"
 #include "InputSystem/InputActions.h"
 
-#include "CEGUI.h"
-#include "RendererModules/OpenGL/CEGUIOpenGLRenderer.h"
+#include "CEGUI/CEGUI.h"
+#include "CEGUI/RendererModules/OpenGL/CEGUIOpenGLRenderer.h"
 
 namespace GUISystem
 {
@@ -20,6 +20,8 @@ namespace GUISystem
 	GUIMgr::GUIMgr():
 		mCegui(0),
 		mCurrentWindowRoot(0),
+		mConsoleRoot(0),
+		mConsolePrompt(0),
 		mRenderer(0),
 		mResourceProvider(0),
 		mConsoleIsLoaded(false)
@@ -93,11 +95,12 @@ namespace GUISystem
 		CEGUI::SchemeManager::getSingleton().create("Console.scheme");
 		mCurrentWindowRoot = CEGUI::WindowManager::getSingleton().loadWindowLayout("Console.layout");
 		CEGUI::System::getSingleton().setGUISheet(mCurrentWindowRoot);
-		mConsoleIsLoaded = true;
+
 
 		mCegui->setDefaultFont("Commonwealth-10");
 		mCegui->setDefaultMouseCursor("Lightweight", "MouseArrow");
-		RegisterEvents();
+
+		InitConsole();
 	}
 
 
@@ -169,7 +172,7 @@ namespace GUISystem
 	{
 		if (!mConsoleIsLoaded)
 		{
-			ocWarning << "Trying to write to game console, but console is not loaded. Message: " << message;
+			ocWarning << "AddConsoleMessage: " << message;
 			return;
 		}
 #if 0 // TODO
@@ -195,18 +198,6 @@ namespace GUISystem
 #endif
 }
 
-
-
-
-	void GUIMgr::RegisterEvents()
-	{
-		OC_DASSERT(mCegui);
-
-		CEGUI::Window* console = CEGUI::WindowManager::getSingleton().getWindow("ConsoleRoot/ConsolePrompt");
-		console->subscribeEvent(CEGUI::Editbox::EventTextAccepted, CEGUI::Event::Subscriber(&GUIMgr::ConsoleCommandEvent, this));
-	}
-
-
 #if 0
 	bool GUIMgr::QuitEvent(const CEGUI::EventArgs& e) {
 		gApp.RequestStateChange(Core::AS_SHUTDOWN);
@@ -214,14 +205,31 @@ namespace GUISystem
 	}
 #endif
 
+	void GUIMgr::InitConsole()
+	{
+		OC_DASSERT(mCegui);
+		OC_DASSERT(mConsoleRoot == 0);
+		OC_DASSERT(mConsolePrompt == 0);
+		try
+		{
+			mConsoleRoot = CEGUI::WindowManager::getSingleton().getWindow("ConsoleRoot");
+			mConsolePrompt = CEGUI::WindowManager::getSingleton().getWindow("ConsoleRoot/ConsolePrompt");
+			mConsolePrompt->subscribeEvent(CEGUI::Editbox::EventTextAccepted,
+				CEGUI::Event::Subscriber(&GUIMgr::ConsoleCommandEvent, this));
+			mConsoleIsLoaded = true;
+		}
+		catch(const CEGUI::UnknownObjectException& e)
+		{
+			ocError << "Could not initialize console - necessary GUI components not found.";
+		}
+	}
+
 	bool GUIMgr::ConsoleCommandEvent(const CEGUI::EventArgs& e)
 	{
-		///@todo Implement me!
+		OC_DASSERT(mConsoleIsLoaded);
+		string message(mConsolePrompt->getText().c_str());
+
 #if 0
-		CEGUI::Window* prompt = CEGUI::WindowManager::getSingleton().getWindow("ConsoleRoot/ConsolePrompt");
-		string message(prompt->getText().c_str());
-		if (message == "quit")
-			gApp.RequestStateChange( Core::AS_SHUTDOWN );
 		if ( message.length() >= 9 ) {
 			string prefix = message.substr(0, 7);
 			string args = message.substr(8);
@@ -230,26 +238,20 @@ namespace GUISystem
 					ANCHOR_BOTTOM | ANCHOR_RIGHT,
 					ANCHOR_BOTTOM | ANCHOR_RIGHT );
 		}
-		AddLastCommand(message);
-		AddConsoleMessage(message);
-		prompt->setText("");
 #endif
+		//AddLastCommand(message);
+		AddConsoleMessage(message);
+		mConsolePrompt->setText("");
 		return true;
 	}
 
 	void GUIMgr::ToggleConsole()
 	{
-		try
-		{
-			CEGUI::Window* Root = CEGUI::WindowManager::getSingleton().getWindow("ConsoleRoot");
-			Root->setVisible( !Root->isVisible() );
-			CEGUI::Window* Console = CEGUI::WindowManager::getSingleton().getWindow("ConsoleRoot/ConsolePrompt");
-			Console->activate();
-		}
-		catch(const CEGUI::UnknownObjectException&)
-		{
-			OC_ASSERT_MSG(false, "Could not toggle console - necessary GUI components not found.");
-		}
+		if (!mConsoleIsLoaded)
+			return;
+
+		mConsoleRoot->setVisible(!mConsoleRoot->isVisible());
+		mConsolePrompt->activate();
 	}
 
 #if 0
