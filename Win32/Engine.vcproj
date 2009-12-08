@@ -905,88 +905,36 @@
 			Name="GUISystem"
 			>
 			<Filter
-				Name="GUIMgr"
+				Name="inc"
 				>
-				<Filter
-					Name="inc"
+				<File
+					RelativePath="..\src\GUISystem\CEGUIResource.h"
 					>
-					<File
-						RelativePath="..\src\GUISystem\GUIMgr.h"
-						>
-					</File>
-					<File
-						RelativePath="..\src\GUISystem\StaticElements.h"
-						>
-					</File>
-				</Filter>
-				<Filter
-					Name="src"
+				</File>
+				<File
+					RelativePath="..\src\GUISystem\GUIMgr.h"
 					>
-					<File
-						RelativePath="..\src\GUISystem\GUIMgr.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\src\GUISystem\StaticElements.cpp"
-						>
-					</File>
-				</Filter>
+				</File>
+				<File
+					RelativePath="..\src\GUISystem\ResourceProvider.h"
+					>
+				</File>
 			</Filter>
 			<Filter
-				Name="ResourceGate"
+				Name="src"
 				>
-				<Filter
-					Name="inc"
+				<File
+					RelativePath="..\src\GUISystem\CEGUIResource.cpp"
 					>
-					<File
-						RelativePath="..\src\GUISystem\CEGUIResource.h"
-						>
-					</File>
-					<File
-						RelativePath="..\src\GUISystem\ResourceGate.h"
-						>
-					</File>
-				</Filter>
-				<Filter
-					Name="src"
+				</File>
+				<File
+					RelativePath="..\src\GUISystem\GUIMgr.cpp"
 					>
-					<File
-						RelativePath="..\src\GUISystem\CEGUIResource.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\src\GUISystem\ResourceGate.cpp"
-						>
-					</File>
-				</Filter>
-			</Filter>
-			<Filter
-				Name="RendererGate"
-				>
-				<Filter
-					Name="inc"
+				</File>
+				<File
+					RelativePath="..\src\GUISystem\ResourceProvider.cpp"
 					>
-					<File
-						RelativePath="..\src\GUISystem\CEGUITextureWrapper.h"
-						>
-					</File>
-					<File
-						RelativePath="..\src\GUISystem\RendererGate.h"
-						>
-					</File>
-				</Filter>
-				<Filter
-					Name="src"
-					>
-					<File
-						RelativePath="..\src\GUISystem\CEGUITextureWrapper.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\src\GUISystem\RendererGate.cpp"
-						>
-					</File>
-				</Filter>
+				</File>
 			</Filter>
 		</Filter>
 		<Filter

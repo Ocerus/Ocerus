@@ -6,8 +6,8 @@
 #include "InputSystem/InputMgr.h"
 #include "InputSystem/InputActions.h"
 
-#include "CEGUI/CEGUI.h"
-#include "CEGUI/RendererModules/OpenGL/CEGUIOpenGLRenderer.h"
+#include "CEGUI.h"
+#include "RendererModules/OpenGL/CEGUIOpenGLRenderer.h"
 
 namespace GUISystem
 {
@@ -246,7 +246,7 @@ namespace GUISystem
 			CEGUI::Window* Console = CEGUI::WindowManager::getSingleton().getWindow("ConsoleRoot/ConsolePrompt");
 			Console->activate();
 		}
-		catch(const CEGUI::UnknownObjectException& e)
+		catch(const CEGUI::UnknownObjectException&)
 		{
 			OC_ASSERT_MSG(false, "Could not toggle console - necessary GUI components not found.");
 		}
