@@ -30,10 +30,10 @@
 #ifndef _CEGUIMultiLineEditbox_h_
 #define _CEGUIMultiLineEditbox_h_
 
-#include "CEGUIBase.h"
-#include "CEGUIWindow.h"
-#include "CEGUIFont.h"
-#include "elements/CEGUIMultiLineEditboxProperties.h"
+#include "../CEGUIBase.h"
+#include "../CEGUIWindow.h"
+#include "../CEGUIFont.h"
+#include "CEGUIMultiLineEditboxProperties.h"
 
 #include <vector>
 
@@ -69,6 +69,10 @@ public:
         Rect object describing the area of the Window to be used for rendering text.
     */
     virtual Rect getTextRenderArea(void) const = 0;
+
+protected:
+    // base class overrides
+    void onLookNFeelAssigned();
 };
 
 /*!
