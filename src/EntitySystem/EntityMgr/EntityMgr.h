@@ -39,7 +39,7 @@ namespace EntitySystem
 		/// @name Entity manipulation
 		//@{
 
-		/// Creates new entity accorindgly to its description and returns its handle.
+		/// Creates new entity accordingly to its description and returns its handle.
 		EntityHandle CreateEntity(EntityDescription& desc);
 
 		/// Destroys a specified entity if it exists.
@@ -51,7 +51,7 @@ namespace EntitySystem
 		/// Returns true if the entity exists.
 		bool EntityExists(const EntityHandle h) const;
 
-		/// Returns EntityHandle to an entity of a specified ID. If there are more of them, then returns the first one.
+		/// Returns EntityHandle to the first entity of a specified name.
 		EntityHandle FindFirstEntity(const string& name);
 
 		/// Actually destroyes all entities marked for destruction.
@@ -164,7 +164,7 @@ namespace EntitySystem
 		/// Adds a component of the specified type to the entity. Returned is an ID of the new component.
 		ComponentID AddComponentToEntity(const EntityHandle entity, const eComponentType componentType);
 
-		/// Destroyes a component of the entity.
+		/// Destroys a component of the entity.
 		void DestroyEntityComponent(const EntityHandle entity, const ComponentID componentToDestroy);
 
 		//@}

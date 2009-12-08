@@ -21,17 +21,17 @@ namespace EntitySystem
 		EntityDescription(void);
 		~EntityDescription(void);
 
+		/// Clears everything.
 		/// Call this before each subsequent filling of the description.
-		/// Clears everything
 		void Reset(void);
 
-		/// Addd new component specified by its type.
+		/// Add a new component specified by its type.
 		void AddComponent(const eComponentType type);
 
 		/// Sets a custom name for this entity.
 		inline void SetName(const string& toSet) { mName = toSet; }
 
-		/// Sets this entity to be a prototype.
+		/// Sets this entity to be an ordinary entity or a prototype.
 		inline void SetKind(const eKind kind) { mKind = kind; }
 
 		/// Sets the prototype the entity is to be linked to.

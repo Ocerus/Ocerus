@@ -169,10 +169,10 @@ public:
 		}
 	}
 
-	// Returns size of the array
+	// Returns a size of the array
 	inline int32 GetSize() const { return mArray->GetSize(); }
 
-	// Resize array to newSize
+	// Resize an array to a newSize
 	inline void Resize(int32 newSize)
 	{
 		if (newSize<0)
@@ -539,11 +539,11 @@ void ScriptMgr::ConfigureEngine(void)
 	// Register EntityMgr class and it's methods
 	RegisterScriptEntityMgr(mEngine);
 
-	// Register function for getting current owner entity handle
+	// Register a function for getting current owner entity handle
 	r = mEngine->RegisterGlobalFunction("EntityHandle GetCurrentEntityHandle()",
 		asFUNCTION(GetCurrentEntityHandle), asCALL_CDECL); OC_SCRIPT_ASSERT();
 
-	// Register call function on EntityHandle
+	// Register a call function on EntityHandle
 	r = mEngine->RegisterObjectMethod("EntityHandle", "void CallFunction(string &in, PropertyFunctionParameters &in)",
 		asFUNCTION(EntityHandleCallFunction), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
 
@@ -776,15 +776,19 @@ void ScriptMgr::ClearModules()
 #define ARGVALUE_Float(ptr) (float)(*ptr)
 #define ARGVALUE_Double(ptr) (double)(*ptr)
 
-bool ScriptSystem::ScriptMgr::SetFunctionArgument( AngelScript::asIScriptContext* functionContext, const uint32 parameterIndex, const Reflection::PropertyFunctionParameter& parameter )
+bool ScriptMgr::SetFunctionArgument(AngelScript::asIScriptContext* ctx, const uint32 parameterIndex, 
+									const Reflection::PropertyFunctionParameter& parameter)
 {
+	OC_ASSERT_MSG(ctx, "Cannot set function arguments to null context!");
+	OC_ASSERT_MSG(ctx->GetState() == asEXECUTION_PREPARED, "Cannot set function arguments to unprepared context!");
+	
 	int errorCode = 0;
 
 	switch (parameter.GetType())
 	{
 	#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter) \
 		case typeID: \
-			errorCode = functionContext->SetArg##scriptSetter(parameterIndex, ARGVALUE_##scriptSetter(parameter.GetData<typeClass>())); \
+			errorCode = ctx->SetArg##scriptSetter(parameterIndex, ARGVALUE_##scriptSetter(parameter.GetData<typeClass>())); \
 			break;
 	#include "Utils/Properties/PropertyTypes.h"
 	#undef PROPERTY_TYPE

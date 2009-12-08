@@ -14,9 +14,8 @@ namespace ScriptSystem
 	typedef void (*ScriptResourceUnloadCallback)(ScriptResource* resource);
 	
 	/// This class represents a single script resource.
-	/// Main purpose of the class is to load a script file, not to store the actual data. You should
-	///	only use ScriptMgr to work with script resource, although its possible to load it directly with ResourceMgr.
-	/// All data will be unload after first use from ScriptMgr.
+	/// Main purpose of the class is to load a script file and store module dependencies. You should only
+	///	use ScriptMgr to work with script resource, although its possible to load it directly with ResourceMgr.
 	class ScriptResource : public ResourceSystem::Resource
 	{
 	public:

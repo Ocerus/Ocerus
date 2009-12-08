@@ -22,10 +22,10 @@ namespace EntitySystem
 	{
 	public:
 
-		/// Default ctor will init the handle to an invalid state
+		/// Default constructor will initialize the handle to an invalid state
 		EntityHandle(void);
 
-		/// Only the copy ctor is enabled. We want new entities to be added only by the EntityMgr.
+		/// Only the copy constructor is enabled. New entities should be added only by the EntityMgr.
 		EntityHandle(const EntityHandle& handle);
 
 		~EntityHandle(void);

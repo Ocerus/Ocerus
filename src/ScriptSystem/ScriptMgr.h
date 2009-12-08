@@ -38,13 +38,18 @@ namespace ScriptSystem
 		/// @return Number greater than or equal to zero that is function ID, number less than zero for not found
 		int32 GetFunctionID(const char* moduleName, const char* funcDecl);
 
-		/// Sets an argument to a function being prepared to be called. The type and value of the argument is determined
-		/// from PropertyFunctionParameter.
-		bool SetFunctionArgument(AngelScript::asIScriptContext* functionContext, const uint32 parameterIndex, const Reflection::PropertyFunctionParameter& parameter);
-
 		/// Returns new context prepared for passing the argument values.
 		///	@param funcId ID of function to prepare (can get from GetFunctionID)
 		AngelScript::asIScriptContext* PrepareContext(int32 funcId);
+
+		/// Sets an argument to a function being prepared to be called. The type and value of the argument
+		/// is determined from PropertyFunctionParameter.
+		/// @param ctx Prepared context
+		/// @param parameterIndex Index of function parameter (zero based)
+		/// @param parameter Function parameter in form of PropertyFunctionParameter
+		/// @return True if set is successful
+		bool SetFunctionArgument(AngelScript::asIScriptContext* ctx, 
+			const uint32 parameterIndex, const Reflection::PropertyFunctionParameter& parameter);
 
 		/// Executes prepared context with specific time out. Don't forger to release context.
 		/// @param ctx Prepared context with function arguments passed
