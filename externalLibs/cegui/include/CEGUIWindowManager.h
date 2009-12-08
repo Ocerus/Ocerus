@@ -35,6 +35,7 @@
 #include "CEGUISingleton.h"
 #include "CEGUILogger.h"
 #include "CEGUIIteratorBase.h"
+#include "CEGUIEventSet.h"
 #include <map>
 #include <vector>
 
@@ -57,13 +58,20 @@ namespace CEGUI
 	WindowFactoryManager.  Additionally, the WindowManager tracks every Window object created, and can be
 	used to access those Window objects by name.
 */
-class CEGUIEXPORT WindowManager : public Singleton <WindowManager>
+class CEGUIEXPORT WindowManager : public Singleton <WindowManager>,
+                                  public EventSet
 {
 public:
     /*************************************************************************
         Public static data
     *************************************************************************/
     static const String GeneratedWindowNameBase;      //!< Base name to use for generated window names.
+    //! Namespace for global events.
+    static const String EventNamespace;
+    //! Event fired when a new Window object is created.
+    static const String EventWindowCreated;
+    //! Event fired when a Window object is destroyed.
+    static const String EventWindowDestroyed;
 
 	/*!
 	\brief
@@ -129,11 +137,13 @@ public:
 	\return
 		Pointer to the newly created Window object.
 
+    \exception  InvalidRequestException WindowManager is locked and no Windows
+                                        may be created.
 	\exception	AlreadyExistsException		A Window object with the name \a name already exists.
 	\exception	UnknownObjectException		No WindowFactory is registered for \a type Window objects.
 	\exception	GenericException			Some other error occurred (Exception message has details).
 	*/
-	Window* createWindow(const String& type, const String& name = "", const String& prefix = "");
+	Window* createWindow(const String& type, const String& name = "");
 
 
 	/*!
@@ -237,8 +247,6 @@ public:
 	\exception InvalidRequestException	thrown if \a filename appears to be invalid.
 	*/
 	Window*	loadWindowLayout(const String& filename, const String& name_prefix = "", const String& resourceGroup = "", PropertyCallback* callback = 0, void* userdata = 0);
-	
-	Window*	loadWindowLayout(const String& filename, bool generateRandomPrefix);
 
     /*!
     \brief
@@ -358,6 +366,54 @@ public:
     static void setDefaultResourceGroup(const String& resourceGroup)
         { d_defaultResourceGroup = resourceGroup; }
 
+    /*!
+    \brief
+        Put WindowManager into the locked state.
+
+        While WindowManager is in the locked state all attempts to create a
+        Window of any type will fail with an InvalidRequestException being
+        thrown.  Calls to lock/unlock are recursive; if multiple calls to lock
+        are made, WindowManager is only unlocked after a matching number of
+        calls to unlock.
+
+    \note
+        This is primarily intended for internal use within the system.
+    */
+    void lock();
+
+    /*!
+    \brief
+        Put WindowManager into the unlocked state.
+
+        While WindowManager is in the locked state all attempts to create a
+        Window of any type will fail with an InvalidRequestException being
+        thrown.  Calls to lock/unlock are recursive; if multiple calls to lock
+        are made, WindowManager is only unlocked after a matching number of
+        calls to unlock.
+
+    \note
+        This is primarily intended for internal use within the system.
+    */
+    void unlock();
+
+    /*!
+    \brief
+        Returns whether WindowManager is currently in the locked state.
+
+        While WindowManager is in the locked state all attempts to create a
+        Window of any type will fail with an InvalidRequestException being
+        thrown.  Calls to lock/unlock are recursive; if multiple calls to lock
+        are made, WindowManager is only unlocked after a matching number of
+        calls to unlock.
+
+    \return
+        - true to indicate WindowManager is locked and that any attempt to
+        create Window objects will fail.
+        - false to indicate WindowManager is unlocked and that Window objects
+        may be created as normal.
+    */
+    bool isLocked() const;
+
 private:
     /*************************************************************************
         Implementation Methods
@@ -367,8 +423,6 @@ private:
         Implementation method to generate a unique name to use for a window.
     */
     String generateUniqueWindowName();
-
-	String generateUniqueWindowPrefix();
 
 	/*************************************************************************
 		Implementation Constants
@@ -387,6 +441,8 @@ private:
 
     unsigned long   d_uid_counter;  //!< Counter used to generate unique window names.
     static String d_defaultResourceGroup;   //!< holds default resource group
+    //! count of times WM is locked against new window creation.
+    uint    d_lockCount;
 
 public:
 	/*************************************************************************
