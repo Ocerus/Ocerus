@@ -1,5 +1,6 @@
 #include "Common.h"
 #include "ComponentEnums.h"
+#include <cstring>
 
 
 EntitySystem::eComponentType EntitySystem::DetectComponentType( const string& type )

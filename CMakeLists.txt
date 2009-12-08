@@ -98,6 +98,16 @@ endif (USE_DBGLIB OR USE_LEAKDETECTOR)
 ###                             dependencies                                ###
 ###############################################################################
 
+###############
+# CEGUI
+###############
+find_package(CEGUI 0.7.1 REQUIRED)
+if (CEGUI_FOUND)
+    include_directories(BEFORE SYSTEM ${CEGUI_INCLUDE_DIRS})
+else (CEGUI_FOUND)
+    message(FATAL_ERROR "CEGUI library cannot be found in your system.")
+endif (CEGUI_FOUND)
+
 
 ###############
 # OIS
@@ -143,16 +153,6 @@ if (SDL_FOUND)
 else (SDL_FOUND)
     message(FATAL_ERROR "SDL library cannot be found in your system.")
 endif (SDL_FOUND)
-
-###############
-# CEGUI
-###############
-find_package(CEGUI 0.6.2 REQUIRED)
-if (CEGUI_FOUND)
-    include_directories(${CEGUI_INCLUDE_DIRS}/CEGUI)
-else (CEGUI_FOUND)
-    message(FATAL_ERROR "CEGUI library cannot be found in your system.")
-endif (CEGUI_FOUND)
 
 ###############
 # UnitTest++
@@ -228,14 +228,10 @@ set(SceneSystem_SRCS
     src/SceneSystem/SceneMgr.cpp
 )
 
-
 set(GUISystem_SRCS
+    src/GUISystem/ResourceProvider.cpp
     src/GUISystem/CEGUIResource.cpp
-    src/GUISystem/StaticElements.cpp
     src/GUISystem/GUIMgr.cpp
-    src/GUISystem/ResourceGate.cpp
-    src/GUISystem/CEGUITextureWrapper.cpp
-    src/GUISystem/RendererGate.cpp
 )
 
 set(InputSystem_SRCS
@@ -298,7 +294,7 @@ set(Utils_SRCS
 include_directories(${ocerus-engine_INCLUDE_DIRS})
 
 set(CMAKE_CXX_FLAGS "-O3 -Wall")
-set(CMAKE_CXX_FLAGS_DEBUG "-O1 -g -Wall -DUSE_ASSERT -D_DEBUG")
+set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g -Wall -DUSE_ASSERT -D_DEBUG")
 
 foreach(SYMBOL ${ocerus-engine_SYMBOLS})
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D${SYMBOL}")
@@ -326,6 +322,13 @@ if (PRECOMPILED_HEADERS)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpch-preprocess -fpch-deps")
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fpch-preprocess -fpch-deps")
 endif (PRECOMPILED_HEADERS)
+
+
+link_directories(
+    ${CEGUI_LIBRARY_DIRS}
+)
+
+message("LIBS: " ${CEGUI_LIBRARY_DIRS} )
 
 
 target_link_libraries(ocerus-engine

@@ -21,7 +21,8 @@ namespace Utils
 		/// Note that the destructor doesn't destroy the carried data.
 		~DataContainer(void) {}
 
-		/// Sets the data to be carried.
+		/// Sets the data to be carried. The pointer to such data must be obtained
+		/// with new[] operator.
 		void SetData(uint8* data, int32 size) { mData = data; mSize = size; }
 
 		/// Returns the carried data pointer.

@@ -1,30 +1,36 @@
 #include "Common.h"
-#include "GUIMgr.h"
-#include "CEGUI.h"
-#include "../InputSystem/InputMgr.h"
-#include "../InputSystem/InputActions.h"
-#include "RendererGate.h"
-#include "ResourceGate.h"
-#include "../Core/Application.h"
 
-namespace GUISystem {
+#include "GUIMgr.h"
+#include "ResourceProvider.h"
+
+#include "InputSystem/InputMgr.h"
+#include "InputSystem/InputActions.h"
+
+#include "CEGUI/CEGUI.h"
+#include "CEGUI/RendererModules/OpenGL/CEGUIOpenGLRenderer.h"
+
+namespace GUISystem
+{
 	/// @name Prototypes for utility functions
 	//@{
 	CEGUI::uint KeyMapperOIStoCEGUI(InputSystem::eKeyCode key);
 	CEGUI::MouseButton ConvertMouseButtonEnum(const InputSystem::eMouseButton btn);
 	//@}
 
-	GUIMgr::GUIMgr() :
-		mConsoleIsLoaded(false),
+	GUIMgr::GUIMgr():
 		mCegui(0),
 		mCurrentWindowRoot(0),
-		mResourceGate(0),
-		mRendererGate(0)
+		mRenderer(0),
+		mResourceProvider(0),
+		mConsoleIsLoaded(false)
 	{
 		ocInfo << "*** GUIMgr init ***";
-		mRendererGate = new RendererGate();
-		mResourceGate = new ResourceGate();
-		mCegui = new CEGUI::System( mRendererGate, mResourceGate );
+
+		mRenderer = &CEGUI::OpenGLRenderer::create();
+		mResourceProvider = new ResourceProvider();
+
+		mCegui = &CEGUI::System::create(*mRenderer, mResourceProvider);
+
 		gInputMgr.AddInputListener(this);
 		CEGUI::Imageset::setDefaultResourceGroup("imagesets");
 		CEGUI::Font::setDefaultResourceGroup("fonts");
@@ -33,6 +39,19 @@ namespace GUISystem {
 		CEGUI::WindowManager::setDefaultResourceGroup("layouts");
 	}
 
+	GUIMgr::~GUIMgr()
+	{
+		gInputMgr.RemoveInputListener(this);
+
+		CEGUI::System::destroy();
+		CEGUI::OpenGLRenderer::destroy(*mRenderer);
+		delete mResourceProvider;
+		//delete mCurrentWindowRoot;
+	}
+
+
+
+#if 0 // TODO
 	void GUIMgr::LoadGUI() {
 		ocInfo << "GUI Menu init";
 		//CEGUI::SchemeManager::getSingleton().loadScheme( "TaharezLook.scheme");
@@ -54,56 +73,151 @@ namespace GUISystem {
 		RegisterEvents();
 
 	}
+#endif
 
 	void GUIMgr::LoadStyle( void )
 	{
-		ocInfo << "load style";
-		gResourceMgr.AddResourceDirToGroup("gui/schemes", "schemes");
-		gResourceMgr.AddResourceDirToGroup("gui/imagesets", "imagesets");
-		gResourceMgr.AddResourceDirToGroup("gui/fonts", "fonts");
-		gResourceMgr.AddResourceDirToGroup("gui/layouts", "layouts");
-		gResourceMgr.AddResourceDirToGroup("gui/looknfeel", "looknfeels");
+		ocInfo << "*** GUIMgr load style ***";
 
-		CEGUI::SchemeManager::getSingleton().loadScheme("Lightweight.scheme");
-		if( !CEGUI::FontManager::getSingleton().isFontPresent( "Commonwealth-10" ) )
-			CEGUI::FontManager::getSingleton().createFont( "Commonwealth-10.font" );
+		gResourceMgr.AddResourceDirToGroup("gui/schemes", "schemes", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
+		gResourceMgr.AddResourceDirToGroup("gui/imagesets", "imagesets", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
+		gResourceMgr.AddResourceDirToGroup("gui/fonts", "fonts", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
+		gResourceMgr.AddResourceDirToGroup("gui/layouts", "layouts", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
+		gResourceMgr.AddResourceDirToGroup("gui/looknfeel", "looknfeels", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
 
-		CEGUI::SchemeManager::getSingleton().loadScheme("Console.scheme");
-		mCurrentWindowRoot = CEGUI::WindowManager::getSingleton().loadWindowLayout( "Console.layout" );
-		CEGUI::System::getSingleton().setGUISheet( mCurrentWindowRoot );
+		CEGUI::SchemeManager::getSingleton().create("Lightweight.scheme");
+
+		if (!CEGUI::FontManager::getSingleton().isDefined("Commonwealth-10"))
+			CEGUI::FontManager::getSingleton().create("Commonwealth-10.font");
+
+		CEGUI::SchemeManager::getSingleton().create("Console.scheme");
+		mCurrentWindowRoot = CEGUI::WindowManager::getSingleton().loadWindowLayout("Console.layout");
+		CEGUI::System::getSingleton().setGUISheet(mCurrentWindowRoot);
 		mConsoleIsLoaded = true;
 
-		mCegui->setDefaultFont( "Commonwealth-10" );
-		mCegui->setDefaultMouseCursor( "Lightweight", "MouseArrow" );
+		mCegui->setDefaultFont("Commonwealth-10");
+		mCegui->setDefaultMouseCursor("Lightweight", "MouseArrow");
 		RegisterEvents();
 	}
 
 
-	void GUIMgr::AddConsoleListener(IConsoleListener* listener) {
-		mConsoleListeners.insert(listener);
+
+	void GUIMgr::RenderGUI() const
+	{
+		OC_DASSERT(mCegui);
+		mCegui->renderGUI();
 	}
 
-	void GUIMgr::RegisterEvents() {
-		OC_ASSERT(mCegui);
+	void GUIMgr::Update(float32 delta)
+	{
+		OC_DASSERT(mCegui);
+		mCegui->injectTimePulse(delta);
+		/// @note: For some reason we injected mouse position here, instead of in
+		///        MouseMoved(). Delete this comment after you are sure that everything
+		///        is working well.
+	}
+
+	void GUIMgr::KeyPressed(const InputSystem::KeyInfo& ke)
+	{
+		OC_DASSERT(mCegui);
+
+		// ToggleConsole button is hardwired here.
+		if (ke.keyAction == InputSystem::KC_GRAVE) {
+			ToggleConsole();
+			return;
+		}
+
+		if (!mCegui->injectKeyDown(KeyMapperOIStoCEGUI(ke.keyAction)))
+		{
+			// If the key was not processed by the gui system,
+			// inject corresponding character.
+			mCegui->injectChar(ke.keyCode);
+		}
+	}
+
+	void GUIMgr::KeyReleased(const InputSystem::KeyInfo& ke)
+	{
+		OC_DASSERT(mCegui);
+		mCegui->injectKeyUp(KeyMapperOIStoCEGUI(ke.keyAction));
+	}
+
+	void GUIMgr::MouseMoved(const InputSystem::MouseInfo& mi)
+	{
+		OC_DASSERT(mCegui);
+		mCegui->injectMouseWheelChange(float(mi.wheelDelta));
+		mCegui->injectMousePosition(float(mi.x), float(mi.y));
+	}
+
+	void GUIMgr::MouseButtonPressed(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn)
+	{
+		OC_DASSERT(mCegui);
+		mCegui->injectMouseButtonDown(ConvertMouseButtonEnum(btn));
+	}
+
+	void GUIMgr::MouseButtonReleased(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn)
+	{
+		OC_DASSERT(mCegui);
+		mCegui->injectMouseButtonUp(ConvertMouseButtonEnum(btn));
+	}
+
+	void GUIMgr::AddConsoleListener(IConsoleListener* listener)
+	{
+		mConsoleListeners.push_back(listener);
+	}
+
+	void GUIMgr::AddConsoleMessage(string message, const GfxSystem::Color& color)
+	{
+		if (!mConsoleIsLoaded)
+		{
+			ocWarning << "Trying to write to game console, but console is not loaded. Message: " << message;
+			return;
+		}
+#if 0 // TODO
+		CEGUI::Listbox* pane = (CEGUI::Listbox*)CEGUI::WindowManager::getSingleton().getWindow("ConsoleRoot/Pane");
+
+		CEGUI::ListboxTextItem* new_item = new CEGUI::ListboxTextItem(message);
+		new_item->setTextColours(CEGUI::colour( color.GetARGB() ) );
+
+		pane->addItem(new_item);
+		pane->ensureItemIsVisible(new_item);
+
+		uint32 item_count;
+		while ((item_count = pane->getItemCount()) > 50)
+			pane->removeItem(pane->getListboxItemFromIndex(item_count - 1));
+
+		set<IConsoleListener*>::iterator iter = mConsoleListeners.begin();
+		while (iter != mConsoleListeners.end())
+		{
+			(*iter)->EventConsoleCommand(message);
+			++iter;
+		}
+	}
+#endif
+}
+
+
+
+
+	void GUIMgr::RegisterEvents()
+	{
+		OC_DASSERT(mCegui);
 
 		CEGUI::Window* console = CEGUI::WindowManager::getSingleton().getWindow("ConsoleRoot/ConsolePrompt");
 		console->subscribeEvent(CEGUI::Editbox::EventTextAccepted, CEGUI::Event::Subscriber(&GUIMgr::ConsoleCommandEvent, this));
 	}
 
-	void GUIMgr::ConsoleTrigger() {
-		CEGUI::Window* Root = CEGUI::WindowManager::getSingleton().getWindow("ConsoleRoot");
-		Root->setVisible( !Root->isVisible() );
 
-		CEGUI::Window* Console = CEGUI::WindowManager::getSingleton().getWindow("ConsoleRoot/ConsolePrompt");
-		Console->activate();
-	}
-
+#if 0
 	bool GUIMgr::QuitEvent(const CEGUI::EventArgs& e) {
 		gApp.RequestStateChange(Core::AS_SHUTDOWN);
 		return true;
 	}
+#endif
 
-	bool GUIMgr::ConsoleCommandEvent(const CEGUI::EventArgs& e) {
+	bool GUIMgr::ConsoleCommandEvent(const CEGUI::EventArgs& e)
+	{
+		///@todo Implement me!
+#if 0
 		CEGUI::Window* prompt = CEGUI::WindowManager::getSingleton().getWindow("ConsoleRoot/ConsolePrompt");
 		string message(prompt->getText().c_str());
 		if (message == "quit")
@@ -119,11 +233,28 @@ namespace GUISystem {
 		AddLastCommand(message);
 		AddConsoleMessage(message);
 		prompt->setText("");
-
+#endif
 		return true;
 	}
 
-	void GUIMgr::AddLastCommand(string command) {
+	void GUIMgr::ToggleConsole()
+	{
+		try
+		{
+			CEGUI::Window* Root = CEGUI::WindowManager::getSingleton().getWindow("ConsoleRoot");
+			Root->setVisible( !Root->isVisible() );
+			CEGUI::Window* Console = CEGUI::WindowManager::getSingleton().getWindow("ConsoleRoot/ConsolePrompt");
+			Console->activate();
+		}
+		catch(const CEGUI::UnknownObjectException& e)
+		{
+			OC_ASSERT_MSG(false, "Could not toggle console - necessary GUI components not found.");
+		}
+	}
+
+#if 0
+	void GUIMgr::AddLastCommand(string command)
+	{
 		if (mLastCommands.size() == 25)
 			mLastCommands.pop_back();
 		mLastCommands.push_front( command );
@@ -152,69 +283,8 @@ namespace GUISystem {
 			font->getFontHeight()/gGfxWindow.GetResolutionHeight());
 	}
 
-	void GUIMgr::AddConsoleMessage(string message, const GfxSystem::Color& color) {
-		if (!mConsoleIsLoaded)
-			return;
 
-		CEGUI::Listbox* pane = (CEGUI::Listbox*)CEGUI::WindowManager::getSingleton().getWindow("ConsoleRoot/Pane");
 
-		CEGUI::ListboxTextItem* new_item = new CEGUI::ListboxTextItem(message);
-		new_item->setTextColours(CEGUI::colour( color.GetARGB() ) );
-
-		pane->addItem(new_item);
-		pane->ensureItemIsVisible(new_item);
-
-		uint32 item_count;
-		while ((item_count = pane->getItemCount()) > 50)
-			pane->removeItem(pane->getListboxItemFromIndex(item_count - 1));
-
-		set<IConsoleListener*>::iterator iter = mConsoleListeners.begin();
-		while (iter != mConsoleListeners.end())
-		{
-			(*iter)->EventConsoleCommand(message);
-			++iter;
-		}
-	}
-
-	void GUIMgr::Update( float32 delta ) {
-		OC_ASSERT(mCegui);
-		mCegui->injectTimePulse( delta );
-		InputSystem::MouseState& m = gInputMgr.GetMouseState();
-		mCegui->injectMousePosition(float(m.x), float(m.y));
-	}
-
-	void GUIMgr::KeyPressed(const InputSystem::KeyInfo& ke) {
-		OC_ASSERT(mCegui);
-
-		if (ke.keyAction == InputSystem::KC_GRAVE) {
-			ConsoleTrigger();
-			return;
-		}
-
-		bool res = mCegui->injectKeyDown(KeyMapperOIStoCEGUI(ke.keyAction));
-		if (!res)
-			mCegui->injectChar(ke.keyCode);
-	}
-
-	void GUIMgr::KeyReleased(const InputSystem::KeyInfo& ke) {
-		OC_ASSERT(mCegui);
-		CEGUI::System::getSingleton().injectKeyUp(KeyMapperOIStoCEGUI(ke.keyAction));
-	}
-
-	void GUIMgr::MouseMoved(const InputSystem::MouseInfo& mi) {
-		OC_ASSERT(mCegui);
-		CEGUI::System::getSingleton().injectMouseWheelChange(float(mi.wheelDelta));
-	}
-
-	void GUIMgr::MouseButtonPressed(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn) {
-		OC_ASSERT(mCegui);
-		CEGUI::System::getSingleton().injectMouseButtonDown( ConvertMouseButtonEnum(btn) );
-	}
-
-	void GUIMgr::MouseButtonReleased(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn) {
-		OC_ASSERT(mCegui);
-		CEGUI::System::getSingleton().injectMouseButtonUp( ConvertMouseButtonEnum(btn) );
-	}
 
 	void GUIMgr::AddStaticText( float32 x, float32 y, const string & id, const string & text,
 			const GfxSystem::Color color/* = GfxSystem::Color(255,255,255)*/,
@@ -237,19 +307,7 @@ namespace GUISystem {
 		return (StaticText*)(iter->second);
 	}
 
-	GUIMgr::~GUIMgr() {
-		gInputMgr.RemoveInputListener(this);
-
-		//FIXME mCreatedStaticElements se nedealokuji!
-
-		if (mCurrentWindowRoot)
-			delete mCurrentWindowRoot;
-
-		//FIXME nejde dealokovat, proc? Mozna pouzivame starou vezi CEGUI.
-		//delete mCegui;
-		delete mRendererGate;
-		delete mResourceGate;
-	}
+#endif
 
 	CEGUI::uint KeyMapperOIStoCEGUI(InputSystem::eKeyCode key)
 	{

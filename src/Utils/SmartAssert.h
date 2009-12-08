@@ -23,22 +23,20 @@ void DisplayAssert(const char* msg, const char* file, const int line);
 
 #ifdef __WIN__
 
-#define OC_ASSERT(expr) \
-	do { if (!(expr)) { DisplayAssert(#expr, __FILE__, __LINE__); __debugbreak(); } } while (0)
+#define DEBUG_BREAK __debugbreak()
 
-#define OC_ASSERT_MSG(expr, msg) \
-	do { if (!(expr)) { DisplayAssert(msg, __FILE__, __LINE__); __debugbreak(); } } while (0)
+#else
 
-#else // __WIN__
-
-#define OC_ASSERT(expr) \
-	do { if (!(expr)) { DisplayAssert(#expr, __FILE__, __LINE__); } } while (0)
-
-#define OC_ASSERT_MSG(expr, msg) \
-	do { if (!(expr)) { DisplayAssert(msg, __FILE__, __LINE__); } } while (0)
+#define DEBUG_BREAK asm("int $3")
+//#define DEBUG_BREAK raise(SIGTRAP);
 
 #endif
 
+#define OC_ASSERT(expr) \
+	do { if (!(expr)) { DisplayAssert(#expr, __FILE__, __LINE__); DEBUG_BREAK; } } while (0)
+
+#define OC_ASSERT_MSG(expr, msg) \
+	do { if (!(expr)) { DisplayAssert(msg, __FILE__, __LINE__); DEBUG_BREAK; } } while (0)
 
 #ifdef _DEBUG
 

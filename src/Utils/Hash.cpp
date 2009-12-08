@@ -1,5 +1,6 @@
 #include "Common.h"
 #include "Hash.h"
+#include <cstring>
 
 /// Initial seed used for hashing.
 #define HASH_INIT	0x811c9dc5
@@ -27,7 +28,7 @@ uint32 Hash::HashString(const char* hashString, const int32 strLen)
 	// hash computation and string conversion
 	int32 len  = strLen==-1 ? strlen(hashString) : strLen;
 	uint32 hash = HASH_INIT;
-	char* str = new char[len+1]; 
+	char* str = new char[len+1];
 	for (int32 i=0; i<len; ++i)
 	{
 		hash *= HASH_PRIME;
@@ -41,7 +42,7 @@ uint32 Hash::HashString(const char* hashString, const int32 strLen)
 	    hash ^= (uint32)(str[i]);
 	}
 	str[len] = 0;
-	
+
 	// save hash and string to StringHashMap and resolve collision
 	StringHashMap& stringMap = GetStringHashMap();
 	StringHashMap::const_iterator it = stringMap.find(hash);
@@ -49,7 +50,7 @@ uint32 Hash::HashString(const char* hashString, const int32 strLen)
 	{
 		stringMap[hash] = str;
 	}
-	else 
+	else
 	{
 		while (strncmp(it->second, str, len+1)) // collision
 		{

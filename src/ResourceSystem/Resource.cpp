@@ -3,6 +3,7 @@
 #include <boost/filesystem/fstream.hpp>
 #include "Resource.h"
 #include "DataContainer.h"
+#include <cstring>
 
 using namespace ResourceSystem;
 
@@ -82,7 +83,7 @@ bool Resource::Unload(bool allowManual)
 	{
 		// we have a real problem if we can't dealloc a resource
 		ocError << "Resource '" << mName << "' could NOT be unloaded";
-	} 
+	}
 	else
 	{
 		ocInfo << "Resource '" << mName << "' unloaded";

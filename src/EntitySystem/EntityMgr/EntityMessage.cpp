@@ -53,6 +53,7 @@ const Reflection::ePropertyType* EntitySystem::EntityMessage::GetParameterTypes(
 		case typeID: return MessageParameterTypes_##typeID;
 	#include "EntityMessageTypes.h"
 	#undef ENTITY_MESSAGE_TYPE
+	case NUM_TYPES: break;
 	}
 
 	OC_ASSERT_MSG(false, "Unknown entity message type");
@@ -68,6 +69,7 @@ const uint32 EntitySystem::EntityMessage::GetParametersCount( const eType messag
 		case typeID: return (sizeof(MessageParameterTypes_##typeID) / sizeof(ePropertyType)) - 1;
 	#include "EntityMessageTypes.h"
 	#undef ENTITY_MESSAGE_TYPE
+	case NUM_TYPES: break;
 	}
 
 	OC_ASSERT_MSG(false, "Unknown entity message type");

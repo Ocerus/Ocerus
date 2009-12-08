@@ -308,6 +308,8 @@ void Core::Application::WriteToConsole( const string& str )
 // Unix
 //------------
 
+#include <iostream>
+
 void Core::Application::ShowConsole( void )
 {
 }
@@ -318,7 +320,7 @@ void Core::Application::HideConsole( void )
 
 void Core::Application::WriteToConsole( const string& message )
 {
-    fprintf(stderr, "%s\n", message.c_str());
+    std::cerr << message;
 }
 
 #endif

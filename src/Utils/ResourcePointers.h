@@ -4,7 +4,8 @@
 #ifndef ResourcePointers_h__
 #define ResourcePointers_h__
 
-#include "ResourceSystem/Resource.h"
+#include <SmartAssert.h>
+#include <ResourceSystem/Resource.h>
 #include <boost/shared_ptr.hpp>
 
 namespace GfxSystem

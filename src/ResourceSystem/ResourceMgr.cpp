@@ -80,7 +80,7 @@ void ResourceMgr::UnloadAllResources()
 		UnloadResourcesInGroup(i->first);
 }
 
-bool ResourceMgr::AddResourceDirToGroup(const string& path, const StringKey& group, const string& includeRegexp, const string& excludeRegexp)
+bool ResourceMgr::AddResourceDirToGroup(const string& path, const StringKey& group, const string& includeRegexp, const string& excludeRegexp, eResourceType type)
 {
 	ocInfo << "Adding dir '" << path << "' to group '" << group << "'";
 
@@ -139,7 +139,7 @@ bool ResourceMgr::AddResourceDirToGroup(const string& path, const StringKey& gro
 		}
 		else if (regex_match(filePath, includeFilter) && (excludeFilter.empty() || !regex_match(filePath, excludeFilter)))
 		{
-			if (!AddResourceFileToGroup(filePath, group, RESTYPE_AUTODETECT, false))
+			if (!AddResourceFileToGroup(filePath, group, type, false))
 			{
 				result = false;
 			}

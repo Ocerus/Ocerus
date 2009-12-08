@@ -3,19 +3,28 @@
 
 #include "Base.h"
 #include "ResourcePointers.h"
-#include "../ResourceSystem/Resource.h"
+#include "ResourceSystem/Resource.h"
 
 namespace CEGUI { class RawDataContainer; }
 
 namespace GUISystem {
-
-	class CEGUIResource : public ResourceSystem::Resource
+	/**
+	 * The CEGUIResource class is a resource wrapper that allows loading of CEGUI
+	 * resources through Ocerus resource system. Unfortunately CEGUI is not designed
+	 * to allow automatic resource unloading and reloading on demand, thus CEGUIResource
+	 * is considered unloaded as soon as the resource is delivered to CEGUI.
+	 * @warning: Again, CEGUI resources cannot be unloaded by resource manager because of
+	 * simple CEGUI architecture.
+	 */
+	class CEGUIResource: public ResourceSystem::Resource
 	{
 	public:
-		virtual ~CEGUIResource(void) {}
+		virtual ~CEGUIResource() {}
 
+		/// Factory method.
 		static ResourceSystem::ResourcePtr CreateMe(void);
 
+		/// Copies the resource data to outData and unloads the resource.
 		void GetResource(CEGUI::RawDataContainer& outData);
 
 		/// Returns the resource type associated with this class.
@@ -27,8 +36,7 @@ namespace GUISystem {
 		virtual bool LoadImpl(void);
 		virtual bool UnloadImpl(void);
 
-		uint8* mDataBlock;
-		uint32 mDataBlockSize;
+		DataContainer mData;
 	};
 }
 

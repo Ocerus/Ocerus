@@ -2,6 +2,7 @@
 #include "RTTI.h"
 #include "../Properties.h"
 #include "../../LogSystem/LogMgr.h"
+#include <cstring>
 
 RTTI::RTTI(	uint8 dwStub, ClassID CLID, const char* szClassName, RTTI* pBaseClassRTTI,
 				ClassFactoryFunc pFactory, RegisterReflectionFunc pReflectionFunc ) :

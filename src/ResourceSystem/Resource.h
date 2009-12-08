@@ -68,6 +68,8 @@ namespace ResourceSystem
 		/// Returns true if this resource was manually created and is not managed by the ResourceMgr.
 		inline bool IsManual(void) const { return mIsManual; }
 
+
+
 	protected:
 
 		/// Called whenever the resource is to be loaded.

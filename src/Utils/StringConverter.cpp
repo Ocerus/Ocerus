@@ -1,5 +1,6 @@
 #include "Common.h"
 #include "StringConverter.h"
+#include <cstring>
 
 using namespace StringConverter;
 
@@ -10,7 +11,7 @@ string StringConverter::ToString(bool& val)
 	out << std::boolalpha << val;
 	return out.str();
 }
-		
+
 template<>
 string StringConverter::ToString(bool val)
 {

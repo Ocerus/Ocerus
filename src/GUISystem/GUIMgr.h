@@ -3,63 +3,85 @@
 
 #include "Base.h"
 #include "Singleton.h"
-#include "../InputSystem/IInputListener.h"
-#include "StaticElements.h"
-#include "CEGUIBase.h"
-#include "CEGUISystem.h"
-#include "CEGUIWindow.h"
+#include "InputSystem/IInputListener.h"
 
 #define gGUIMgr GUISystem::GUIMgr::GetSingleton()
 
-namespace GUISystem {
+namespace CEGUI
+{
+	class OpenGLRenderer;
+	class System;
+	class Window;
+	class EventArgs;
+}
 
-	class ResourceGate;
-	class RendererGate;
+namespace GUISystem
+{
+	class ResourceProvider;
 
+	/**
+	 * The IConsoleListener interface defines an interface for listening to
+	 * commands from in-game console.
+	 */
 	class IConsoleListener {
 	public:
 		virtual void EventConsoleCommand(string command) = 0;
 	};
 
+	/**
+	 * The GUIMgr class manages the GUI.
+	 * ...
+	 * It MUST be created after InputMgr, because it registers for user input.
+	 */
 	class GUIMgr : public Singleton<GUIMgr>, public InputSystem::IInputListener
 	{
-	public:	
-
+	public:
+		/// Constructs a GUIMgr. Do not use this directly, use CreateSingleton() instead.
+		/// Also note that InputMgr must be initialized before construction of GUIMgr.
 		GUIMgr();
 
-		virtual void KeyPressed(const InputSystem::KeyInfo& ke);
+		/// Destroys the GUIMgr.
+		virtual ~GUIMgr();
 
-		virtual void KeyReleased(const InputSystem::KeyInfo& ke);
-
-		virtual void MouseMoved(const InputSystem::MouseInfo& mi);
-
-		virtual void MouseButtonPressed(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn);
-
-		virtual void MouseButtonReleased(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn);
-
+		/*TODO
 		/// Don't call this now.
 		virtual void LoadGUI();
+		*/
 
 		/// Loads basic stuff common for all schemes.
 		void LoadStyle(void);
 
-		inline virtual void RenderGUI() const {
-			OC_ASSERT(mCegui);
-			CEGUI::System::getSingleton().renderGUI();
-		}
-		
+		/// Renders the GUI.
+		void RenderGUI() const;
+
+		/// Injects given amount of time into GUI system.
 		virtual void Update(float32 delta);
 
+		/// @name IInputListener interface methods
+		/// Those methods inject input into GUI system.
+		//@{
+		virtual void KeyPressed(const InputSystem::KeyInfo& ke);
+		virtual void KeyReleased(const InputSystem::KeyInfo& ke);
+		virtual void MouseMoved(const InputSystem::MouseInfo& mi);
+		virtual void MouseButtonPressed(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn);
+		virtual void MouseButtonReleased(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn);
+		//@}
 
 		/// @name Console related methods
 		//@{
-		/// Registers a class that implements IConsoleListener/
+
+		/// Registers a console listener.
 		void AddConsoleListener(IConsoleListener* listener);
-		/// If you wish to post a new message into console, call this method.
-		void AddConsoleMessage(string message, const GfxSystem::Color& color = GfxSystem::Color(255,255,255,255));
-		bool IsConsoleLoaded(void) const { return mConsoleIsLoaded; }
+
+		/// Adds a message to console.
+		void AddConsoleMessage(string message, const GfxSystem::Color& color = GfxSystem::Color(255,255,255));
+
+		/// Returns whether console is loaded.
+		inline bool IsConsoleLoaded(void) const { return mConsoleIsLoaded; }
+
 		//@}
 
+#if 0   //TODO
 		/// Static text related methods
 		//@{
 		void AddStaticText( float32 x, float32 y, const string & id, const string & text,
@@ -70,30 +92,32 @@ namespace GUISystem {
 		Vector2 GetTextSize( const string & text, const string & fontid = "" );
 		StaticText* GetStaticText( const string & id );
 		//@}
-
-		virtual ~GUIMgr();
+#endif
 
 	protected:
 
-		/// Registers callbacks in CEGUI.
+		/// Registers CEGUI event callbacks.
 		void RegisterEvents();
 
-		/// @name CEGUI events callbacks
+		/// @name CEGUI event callbacks
 		//@{
-		bool QuitEvent(const CEGUI::EventArgs& e);
+		//bool QuitEvent(const CEGUI::EventArgs& e);
+
+		/// This callback is called when user types a command to the console.
 		bool ConsoleCommandEvent(const CEGUI::EventArgs& e);
 		//@}
 
-		/// Called after ` is hit.
-		void ConsoleTrigger();
+		/// Toggle console visibility. This is usually called after ` is pressed.
+		void ToggleConsole();
 
-		bool mConsoleIsLoaded;
-		CEGUI::System * mCegui;
-		CEGUI::Window * mCurrentWindowRoot;
-		ResourceGate * mResourceGate;
-		RendererGate * mRendererGate;
-		friend class RendererGate;
+		CEGUI::System* mCegui;
+		CEGUI::Window* mCurrentWindowRoot;
 
+		CEGUI::OpenGLRenderer* mRenderer;
+		ResourceProvider* mResourceProvider;
+
+
+#if 0   //TODO
 		/// @name Commands memory
 		//@{
 		void AddLastCommand(string command);
@@ -101,9 +125,16 @@ namespace GUISystem {
 		deque<string>::const_iterator mCurrentLastSelected;
 		deque<string> mLastCommands;
 		//@}
+#endif
 
-		set<IConsoleListener*> mConsoleListeners;		
-		map<string, StaticElement*> mCreatedStaticElements;
+		/// Collection of ConsoleListeners.
+		typedef vector<IConsoleListener*> ConsoleListeners;
+		ConsoleListeners mConsoleListeners;
+
+		bool mConsoleIsLoaded;
+
+
+		//map<string, StaticElement*> mCreatedStaticElements;
 	};
 }
 #endif

@@ -12,28 +12,22 @@ ResourceSystem::ResourcePtr CEGUIResource::CreateMe()
 
 bool CEGUIResource::LoadImpl()
 {
-	DataContainer dc;
-	GetRawInputData(dc);
-	mDataBlock = dc.GetData();
-	mDataBlockSize = dc.GetSize();
+	GetRawInputData(mData);
 	return true;
 }
 
 bool CEGUIResource::UnloadImpl()
 {
-	//delete[] mDataBlock;
+	mData.Release();
 	return true;
 }
 
-void CEGUIResource::GetResource( CEGUI::RawDataContainer& outData )
+/// The copy operation is omitted, only pointers are copied instead.
+void CEGUIResource::GetResource(CEGUI::RawDataContainer& outData)
 {
 	EnsureLoaded();
-	/*
-	uint8* mDataBlockCopy = new uint8[mDataBlockSize];
-	memcpy(mDataBlockCopy, mDataBlock, mDataBlockSize);
-	outData.setData(mDataBlockCopy);
-	*/
-	outData.setData(mDataBlock);
-	outData.setSize(mDataBlockSize);
+	outData.setData(mData.GetData());
+	outData.setSize(mData.GetSize());
+	mData.SetData(0, 0);
 	Unload(true);
 }
