@@ -97,6 +97,7 @@ Application::~Application()
 	InputSystem::InputMgr::DestroySingleton();
 	GfxSystem::GfxRenderer::DestroySingleton();
 	GfxSystem::GfxWindow::DestroySingleton();
+	GfxSystem::GfxSceneMgr::DestroySingleton();
 	StringSystem::StringMgr::DestroySingleton();
 	ResourceSystem::ResourceMgr::DestroySingleton();
 	//TODO:Gfx

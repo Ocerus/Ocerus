@@ -48,12 +48,14 @@ void GfxWindow::Init(const int32 resx, const int32 resy, const bool fullscreen, 
 		mResx = resx;
 		mResy = resy;
 		mFullscreen = fullscreen;
+		SDL_ShowCursor(0);
 	}
 	else
 	{
 		ocError << "Video initialization failed: " << SDL_GetError();
 		SDL_Quit();
 	}
+
 
 #ifdef __UNIX__
 	/// SDL automatically registers handling of mouse events, but X11 allows only one client

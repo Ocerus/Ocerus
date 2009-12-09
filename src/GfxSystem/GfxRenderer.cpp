@@ -13,8 +13,6 @@ void GfxRenderer::DrawSprites() const
 {
 	gGfxSceneMgr.Draw();
 
-	BeginRendering();
-
 	GfxRenderer::SpriteVector::const_iterator it;
 	for(it = mSprites.begin(); it != mSprites.end(); ++it)
 	{
@@ -27,5 +25,4 @@ void GfxRenderer::DrawSprites() const
 
 		DrawTexturedQuad(pos, size, z);
 	}
-	EndRendering();
 }
