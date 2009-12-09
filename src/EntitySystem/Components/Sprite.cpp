@@ -30,6 +30,7 @@ EntityMessage::eResult EntityComponents::Sprite::HandleMessage( const EntityMess
 				mTextureHandle = (GfxSystem::TexturePtr)gResourceMgr.GetResource("textures", StringKey(lastSlashPos+1, str-lastSlashPos-1));
 				return EntityMessage::RESULT_OK;
 			}
+			return EntityMessage::RESULT_ERROR;
 		}
 	case EntityMessage::DRAW:
 		{
@@ -37,6 +38,8 @@ EntityMessage::eResult EntityComponents::Sprite::HandleMessage( const EntityMess
 			float32 z = (float32) GetProperty("Depth").GetValue<int32>();
 
 			gGfxRenderer.AddSprite(GfxSystem::Sprite(pos, mSize, z, mTextureHandle->GetTexture()));
+
+			return EntityMessage::RESULT_OK;
 		}
 	default:
 		return EntityMessage::RESULT_IGNORED;
