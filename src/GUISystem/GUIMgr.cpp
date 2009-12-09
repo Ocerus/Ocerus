@@ -6,8 +6,8 @@
 #include "InputSystem/InputMgr.h"
 #include "InputSystem/InputActions.h"
 
-#include "CEGUI/CEGUI.h"
-#include "CEGUI/RendererModules/OpenGL/CEGUIOpenGLRenderer.h"
+#include "CEGUI.h"
+#include "RendererModules/OpenGL/CEGUIOpenGLRenderer.h"
 
 namespace GUISystem
 {
@@ -218,7 +218,7 @@ namespace GUISystem
 				CEGUI::Event::Subscriber(&GUIMgr::ConsoleCommandEvent, this));
 			mConsoleIsLoaded = true;
 		}
-		catch(const CEGUI::UnknownObjectException& e)
+		catch(const CEGUI::UnknownObjectException&)
 		{
 			ocError << "Could not initialize console - necessary GUI components not found.";
 		}
