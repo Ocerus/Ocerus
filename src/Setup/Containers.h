@@ -66,6 +66,13 @@ public:
 	inline map(): std::map<Key, Value>() {}
 };
 
+template<typename Key, typename Value>
+class multimap: public std::multimap<Key, Value>
+{
+public:
+	inline multimap(): std::multimap<Key, Value>() {}
+};
+
 #if defined(_MSC_VER) || defined(__BORLANDC__)
 
 	#include <hash_map>

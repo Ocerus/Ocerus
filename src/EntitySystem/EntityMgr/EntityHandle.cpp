@@ -81,7 +81,7 @@ EntityHandle& EntityHandle::operator=(const EntityHandle& rhs)
 
 EntitySystem::EntityHandle::EntityHandle( const EntityHandle& handle ): mEntityID(handle.mEntityID) {}
 
-EntitySystem::EntityHandle::EntityHandle( void ): mEntityID(0) {}
+EntitySystem::EntityHandle::EntityHandle( void ): mEntityID(INVALID_ENTITY_ID) {}
 
 bool EntitySystem::EntityHandle::operator==( const EntityHandle& rhs )
 {

@@ -22,6 +22,9 @@ namespace AngelScript
 /// Scipt system allows users to define behaviour of components and entities.
 namespace ScriptSystem
 {
+	/// Vector of pointers to ScriptResource
+	typedef vector<ScriptResourcePtr> ScriptResourcePtrs;
+	
 	/// This class encapsulates script engine and manages access to script modules.
 	class ScriptMgr : public Singleton<ScriptMgr>
 	{
@@ -54,9 +57,17 @@ namespace ScriptSystem
 		/// Executes prepared context with specific time out. Don't forger to release context.
 		/// @param ctx Prepared context with function arguments passed
 		/// @param timeOut Time in ms after the execution of script will be aborted
-		/// @return True if execution is successful (can get return value)
+		/// @return True if the execution was successful (can get return value)
 		bool ExecuteContext(AngelScript::asIScriptContext* ctx, uint32 timeOut = 0);
 
+		/// Builds and executes a string as an implementation of a function without parameters
+		/// in context of defined module.
+		/// @param script The script string that will be executed
+		/// @param moduleName The name of the module in which the string should be executed (default null)
+		/// @return True if the building and the execution were successful
+		bool ExecuteString(const char* script, const char* moduleName = 0);
+
+		/*
 		/// Add new context to context manager and return it prepared for passing the argument values.
 		/// The context will be executed when ExecuteScripts() is called and then released.
 		///	@param funcId ID of function to prepare (can get from GetFunctionID)
@@ -73,6 +84,7 @@ namespace ScriptSystem
 		/// Execute each script added to context manager that is not currently sleeping.
 		/// The function returns after each script has been executed once.
 		void ExecuteScripts();
+		*/
 
 		/// Add a pre-processor define for conditional compilation.
 		void DefineWord(const char* word);
@@ -100,11 +112,13 @@ namespace ScriptSystem
 		/// Object that helps building scripts.
 		AngelScript::CScriptBuilder* mScriptBuilder;
 
+		/*
 		/// Manages contexts that can sleep or can create co-routines.
 		AngelScript::CContextMgr* mContextMgr;
+		*/
 
 		/// Depencency of loaded modules to resources
-		map<string, vector<ScriptResourcePtr> > mModules;
+		map<string, ScriptResourcePtrs> mModules;
 
 		/// Configure the script engine with all the functions and variables that the script should be able to use.
 		void ConfigureEngine(void);

@@ -83,9 +83,11 @@ ScriptMgr::ScriptMgr(const string& basepath)
 	mScriptBuilder = new CScriptBuilder();
 	mScriptBuilder->SetIncludeCallback(&ScriptMgr::IncludeCallback, 0);
 
+	/*
 	// Create context manager and set get time callback for it
 	mContextMgr = new CContextMgr();
 	mContextMgr->SetGetTimeCallback(GetTime);
+	*/
 
 	// Set script resource unload callback
 	ScriptResource::SetUnloadCallback(&ResourceUnloadCallback);
@@ -97,7 +99,7 @@ ScriptMgr::ScriptMgr(const string& basepath)
 ScriptMgr::~ScriptMgr(void)
 {
 	ocInfo << "*** ScriptMgr deinit ***";
-	delete mContextMgr;
+	/*delete mContextMgr;*/
 	delete mScriptBuilder;
 	mEngine->Release();
 }
@@ -460,6 +462,7 @@ void RegisterScriptEntityMgr(asIScriptEngine* engine)
 	r = engine->RegisterGlobalFunction("EntityMgr& GetEntityMgr()", asFUNCTION(GetEntityMgr), asCALL_CDECL); OC_SCRIPT_ASSERT();
 }
 
+/*
 // Functions for creating co-routines
 
 void ScriptCreateCoRoutine(string &func)
@@ -481,14 +484,16 @@ void ScriptCreateCoRoutine(string &func)
 		}
 
 		// Create a new context for the co-routine
-		/*asIScriptContext *coctx = */gScriptMgr.AddContextAsCoRoutineToManager(ctx, funcId);
+		//asIScriptContext *coctx = 
+		gScriptMgr.AddContextAsCoRoutineToManager(ctx, funcId);
 
 		// Pass the argument to the context
 		//int32 r = coctx->SetArgObject(0, &arg);
 		//OC_ASSERT(r >= 0);
 	}
-}
+}*/
 
+// Get handle of entity which ran the script
 EntityHandle GetCurrentEntityHandle(void)
 {
 	asIScriptContext *ctx = asGetActiveContext();
@@ -498,6 +503,63 @@ EntityHandle GetCurrentEntityHandle(void)
 		if (handle) return *handle;
 	}
 	return EntityHandle::Null;
+}
+
+// Get state of current OnAction handler
+int32 ScriptGetCurrentState(void)
+{
+	string exception;
+	// Find current entity handle
+	EntityHandle handle = GetCurrentEntityHandle();
+	if (handle.IsValid())
+	{
+		// Find current array index
+		Reflection::PropertyHolder holder = handle.GetProperty("ScriptCurrentArrayIndex");
+		if (holder.IsValid())
+		{
+			int32 index = holder.GetValue<int32>();
+			Array<int32>* states = handle.GetProperty("ScriptStates").GetValue<Array<int32>*>();
+			if (states != 0 && index >= 0 && states->GetSize() > index )
+			{
+				// Return current state
+				return (*states)[index];
+			} else exception = "This function must be called from OnAction handler.";
+		} else exception = "This function must be called from entity with Script component.";
+	} else exception = "This function must be called from an entity message handler.";
+	
+	// Solve exceptions
+	asIScriptContext *ctx = asGetActiveContext();
+	if (ctx) ctx->SetException(exception.c_str());
+	return 0;
+}
+
+void ScriptSetAndSleep(int32 state, uint64 time)
+{
+	string exception;
+	// Find current entity handle
+	EntityHandle handle = GetCurrentEntityHandle();
+	if (handle.IsValid())
+	{
+		// Find current array index
+		Reflection::PropertyHolder holder = handle.GetProperty("ScriptCurrentArrayIndex");
+		if (holder.IsValid())
+		{
+			int32 index = holder.GetValue<int32>();
+			Array<int32>* states = handle.GetProperty("ScriptStates").GetValue<Array<int32>*>();
+			Array<uint64>* times = handle.GetProperty("ScriptTimes").GetValue<Array<uint64>*>();
+			if (states != 0 && times != 0 && index >= 0 && states->GetSize() > index && times->GetSize() > index)
+			{
+				// Set state and time
+				(*states)[index] = state;
+				(*times)[index] = gApp.GetCurrentTimeMillis() + time;
+				return;
+			} else exception = "This function must be called from OnAction handler.";
+		} else exception = "This function must be called from entity with Script component.";
+	} else exception = "This function must be called from an entity message handler.";
+	
+	// Solve exceptions
+	asIScriptContext *ctx = asGetActiveContext();
+	if (ctx) ctx->SetException(exception.c_str());
 }
 
 void ScriptMgr::ConfigureEngine(void)
@@ -511,7 +573,7 @@ void ScriptMgr::ConfigureEngine(void)
 	// Register the script string type
 	RegisterStdString(mEngine);
 
-	// Registers the script function "void sleep(uint milliseconds)"
+	/*// Registers the script function "void sleep(uint milliseconds)"
 	mContextMgr->RegisterThreadSupport(mEngine);
 
 	// Registers the script function "void yield()"
@@ -519,7 +581,11 @@ void ScriptMgr::ConfigureEngine(void)
 
 	// Register function for creating co-routine
 	r = mEngine->RegisterGlobalFunction("void createCoRoutine(const string &in)",
-		asFUNCTIONPR(ScriptCreateCoRoutine, (string&), void), asCALL_CDECL); OC_SCRIPT_ASSERT();
+		asFUNCTIONPR(ScriptCreateCoRoutine, (string&), void), asCALL_CDECL); OC_SCRIPT_ASSERT();*/
+
+	// Register functions for OnAction state and time of execution support
+	r = mEngine->RegisterGlobalFunction("int32 GetState()", asFUNCTION(ScriptGetCurrentState), asCALL_CDECL); OC_SCRIPT_ASSERT();
+	r = mEngine->RegisterGlobalFunction("void SetAndSleep(int32, uint64)", asFUNCTION(ScriptSetAndSleep), asCALL_CDECL); OC_SCRIPT_ASSERT();
 
 	// Register log function
 	r = mEngine->RegisterGlobalFunction("void Log(string &in)", asFUNCTION(ScriptLog), asCALL_CDECL); OC_SCRIPT_ASSERT();
@@ -627,11 +693,8 @@ bool ScriptMgr::ExecuteContext(asIScriptContext* ctx, uint32 timeOut)
 		deadline = gApp.GetCurrentTimeMillis() + timeOut;
 	}
 
-	// Execute script function
-	r = ctx->Execute();
-
-	// Get result of execution
-	switch (r)
+	// Execute the script function and get result
+	switch (ctx->Execute())
 	{
 	case asEXECUTION_ABORTED:  // Script was aborted due to time out.
 		ocError << "Execution of script function '" << funcDecl << "' in module '" << moduleName
@@ -656,7 +719,34 @@ bool ScriptMgr::ExecuteContext(asIScriptContext* ctx, uint32 timeOut)
 	}
 }
 
-asIScriptContext* ScriptMgr::AddContextToManager(int32 funcId)
+bool ScriptMgr::ExecuteString(const char* script, const char* moduleName)
+{
+	// Get the module by name
+	asIScriptModule* mod = GetModule(moduleName);
+	if (mod == 0)
+	{
+		ocError << "Script module '" << moduleName << "' not found!";
+		return false;
+	}
+
+	// Execute the script string and get result
+	switch(mEngine->ExecuteString(moduleName, script))
+	{
+		case asERROR: // failed to build
+		case asBUILD_IN_PROGRESS:
+		case asEXECUTION_ABORTED:
+		case asEXECUTION_SUSPENDED:
+		case asEXECUTION_EXCEPTION:
+			return false;
+		case asEXECUTION_FINISHED:
+			return true;
+		default:
+			OC_NOT_REACHED();
+			return false;
+	}
+}
+
+/*asIScriptContext* ScriptMgr::AddContextToManager(int32 funcId)
 {
 	OC_ASSERT_MSG(funcId >= 0, "Invalid function ID passed.");
 
@@ -682,10 +772,12 @@ asIScriptContext* ScriptMgr::AddContextAsCoRoutineToManager(asIScriptContext* cu
 void ScriptMgr::ExecuteScripts()
 {
 	mContextMgr->ExecuteScripts();
-}
+}*/
 
 asIScriptModule* ScriptMgr::GetModule(const char* fileName)
 {
+	if (fileName == 0) return mEngine->GetModule(0, asGM_ALWAYS_CREATE);
+
 	// Get existing module
 	asIScriptModule* mod = mEngine->GetModule(fileName, asGM_ONLY_IF_EXISTS);
 	if (mod != 0) return mod;
@@ -694,7 +786,7 @@ asIScriptModule* ScriptMgr::GetModule(const char* fileName)
 	// Create script builder to build new module
 	r = mScriptBuilder->StartNewModule(mEngine, fileName);
 	OC_ASSERT_MSG(r==0, "Failed to add module to script engine.");
-	mModules[string(fileName)] = vector<ScriptResourcePtr>();
+	mModules[string(fileName)] = ScriptResourcePtrs();
 
 	// Include main file
 	r = IncludeCallback(fileName, "", mScriptBuilder, Utils::StringConverter::FromString<char*>(mBasePath));
@@ -740,11 +832,11 @@ void ScriptMgr::DefineWord( const char* word )
 
 void ScriptMgr::UnloadModule(const char* fileName)
 {
-	mContextMgr->AbortAll();
+	/*mContextMgr->AbortAll();*/
 	int32 r = mEngine->DiscardModule(fileName);
 	if (r < 0) return;
 
-	map<string, vector<ScriptResourcePtr> >::iterator moduleIter;
+	map<string, ScriptResourcePtrs>::iterator moduleIter;
 	if ((moduleIter = mModules.find(string(fileName))) != mModules.end())
 	{
 		for (vector<ScriptResourcePtr>::iterator resourceIter = moduleIter->second.begin();
@@ -758,8 +850,8 @@ void ScriptMgr::UnloadModule(const char* fileName)
 
 void ScriptMgr::ClearModules()
 {
-	mContextMgr->AbortAll();
-	map<string, vector<ScriptResourcePtr> >::iterator iter;
+	/*mContextMgr->AbortAll();*/
+	map<string, ScriptResourcePtrs>::iterator iter;
 	while ((iter = mModules.begin()) != mModules.end())
 	{
 		UnloadModule(iter->first.c_str());

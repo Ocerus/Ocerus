@@ -147,6 +147,9 @@ void Core::Game::Update( const float32 delta )
 	// react on input
 	// ... TODO
 
+	// check action scripts
+	gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::CHECK_ACTION));
+
 	// advance the physics forward in time
 	float32 physicsDelta = delta + mPhysicsResidualDelta;
 	while (physicsDelta > PHYSICS_TIMESTEP)

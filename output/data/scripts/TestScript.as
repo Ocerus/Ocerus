@@ -28,3 +28,21 @@ void OnDraw()
   uint32 timeOut = handle.Get_uint32("ScriptTimeOut");
   Log("Time out of this script is " + timeOut + " ms.");
 }
+
+void OnAction()
+{
+  switch (GetState())
+  {
+    case 0:
+    {
+      Log("First call of OnAction(). This function will be called every 10 seconds.");
+      SetAndSleep(1, 10000);
+      break;
+    }
+    case 1:
+    {
+      Log("Message from OnAction(). Wait 10 seconds for another.");
+      SetAndSleep(1, 10000);
+    }
+  }
+}
