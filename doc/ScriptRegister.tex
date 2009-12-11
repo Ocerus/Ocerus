@@ -151,6 +151,8 @@ This class manages all game entities. It is registered as a no-handle reference 
   \item void Log(string \&in) -- writes a message to the log
   \item EntityHandle GetCurrentEntityHandle() -- returns the handle of entity that calls the current function, invalid handle if no entity calls it
   \item EntityMgr\& GetEntityMgr() -- returns the reference to the entity manager on which it is possible to call methods, this reference cannot be stored to a variable or passed to a function
+  \item int32 GetState() -- returns the state of script when it is called from the OnAction() handler, an error otherwise
+  \item void SetAndSleep(int32, uint64) -- sets the state of script to the first argument and the time of the next execution to the current time plus the second argument in milliseconds when it is called from the OnAction() handler, throws an error otherwise
 \end{titled-itemize}
 
 \subsection{Enumerations}

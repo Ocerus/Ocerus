@@ -43,6 +43,7 @@ void OnAction()
     {
       Log("Message from OnAction(). Wait 10 seconds for another.");
       SetAndSleep(1, 10000);
+      break;
     }
   }
 }
