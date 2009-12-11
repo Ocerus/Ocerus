@@ -12,6 +12,8 @@
 // Disable MSVC warnings about use of 'unsafe' functions like strcpy().
 #define _CRT_SECURE_NO_WARNINGS
 
+// We need to link CEGUI static to overload it's operator new.
+#define CEGUI_STATIC
 
 // These must come first!
 #include "../Utils/SmartAssert.h"

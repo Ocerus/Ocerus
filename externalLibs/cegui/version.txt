@@ -1,0 +1,1 @@
+0.7.1 built by Hardwire from the CEGUI source.

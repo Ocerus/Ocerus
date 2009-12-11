@@ -66,10 +66,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="CEGUIBase_d.lib CEGUIOpenGLRenderer_d.lib"
 				OutputFile="$(OutDir)/Ocerus.exe"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="../externalLibs/boost/lib;../externalLibs/cegui/lib;../externalLibs/SDL/lib;../externalLibs/cegui/dependencies/lib"
+				AdditionalLibraryDirectories="../externalLibs/boost/lib;../externalLibs/SDL/lib"
 				IgnoreAllDefaultLibraries="false"
 				IgnoreDefaultLibraryNames="libci.lib;libcmtd.lib"
 				GenerateDebugInformation="true"
@@ -157,7 +156,7 @@
 				AdditionalDependencies="CEGUIBase.lib CEGUIOpenGLRenderer.lib"
 				OutputFile="$(OutDir)/Ocerus.exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="../externalLibs/boost/lib;../externalLibs/cegui/lib;../externalLibs/SDL/lib;../externalLibs/cegui/dependencies/lib"
+				AdditionalLibraryDirectories="../externalLibs/boost/lib;../externalLibs/cegui/dependencies/lib/static;../externalLibs/SDL/lib"
 				IgnoreDefaultLibraryNames="libci.lib;libcmt.lib"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(TargetDir)$(TargetName).pdb"
@@ -246,10 +245,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="CEGUIBase.lib CEGUIOpenGLRenderer.lib"
+				AdditionalDependencies="CEGUIBase_d.lib CEGUIOpenGLRenderer_d.lib"
 				OutputFile="$(OutDir)/Ocerus.exe"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="../externalLibs/boost/lib;../externalLibs/cegui/lib;../externalLibs/SDL/lib;../externalLibs/cegui/dependencies/lib"
+				AdditionalLibraryDirectories="../externalLibs/boost/lib;../externalLibs/cegui/dependencies/lib/static;../externalLibs/SDL/lib"
 				IgnoreAllDefaultLibraries="false"
 				IgnoreDefaultLibraryNames="libci.lib;libcmt.lib"
 				GenerateDebugInformation="true"

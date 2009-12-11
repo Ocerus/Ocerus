@@ -67,10 +67,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="CEGUIBase_d.lib CEGUIOpenGLRenderer_d.lib"
 				OutputFile="$(OutDir)/OcerusTest.exe"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="../externalLibs/boost/lib;../externalLibs/cegui/lib;../externalLibs/cegui/dependencies/lib;../externalLibs/SDL/lib"
+				AdditionalLibraryDirectories="../externalLibs/boost/lib;../externalLibs/SDL/lib"
 				IgnoreAllDefaultLibraries="false"
 				IgnoreDefaultLibraryNames="libci.lib;libcmtd.lib"
 				GenerateDebugInformation="true"
