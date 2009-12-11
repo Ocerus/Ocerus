@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="CEGUISILLYImageCodec"
-	ProjectGUID="{DF6787C8-0FA1-0D4D-AE81-0F3450F4ACB7}"
-	RootNamespace="CEGUISILLYImageCodec"
+	Name="CEGUIDirect3D9Renderer"
+	ProjectGUID="{A3E45416-08D7-3F45-A773-FAFBA278A4CB}"
+	RootNamespace="CEGUIDirect3D9Renderer"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="0"
 	>
@@ -41,8 +41,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../../../../cegui/include;../../../../dependencies/include;../../../../cegui/include/ImageCodecModules/SILLYImageCodec/"
-				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;HAVE_CONFIG_H;CEGUISILLYIMAGECODEC_EXPORTS;_DEBUG"
+				AdditionalIncludeDirectories="../../../../cegui/include;../../../../dependencies/include;../../../../cegui/include/RendererModules/Direct3D9/;../../../../"
+				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;HAVE_CONFIG_H;DIRECT3D9_GUIRENDERER_EXPORTS;_DEBUG"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -56,22 +56,22 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;HAVE_CONFIG_H;CEGUISILLYIMAGECODEC_EXPORTS;_DEBUG"
-				AdditionalIncludeDirectories="../../../../cegui/include;../../../../dependencies/include;../../../../cegui/include/ImageCodecModules/SILLYImageCodec/"
+				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;HAVE_CONFIG_H;DIRECT3D9_GUIRENDERER_EXPORTS;_DEBUG"
+				AdditionalIncludeDirectories="../../../../cegui/include;../../../../dependencies/include;../../../../cegui/include/RendererModules/Direct3D9/;../../../../"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="../../../../lib/CEGUIBase_d.lib SILLY_d.lib"
-				OutputFile="$(OutDir)/CEGUISILLYImageCodec_d.dll"
+				AdditionalDependencies="../../../../lib/CEGUIBase_d.lib dxerr.lib d3dx9d.lib"
+				OutputFile="$(OutDir)/CEGUIDirect3D9Renderer_d.dll"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="../../../../lib;../../../../dependencies/lib/dynamic"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(OutDir)/CEGUISILLYImageCodec_d.pdb"
+				ProgramDatabaseFile="$(OutDir)/CEGUIDirect3D9Renderer_d.pdb"
 				SubSystem="2"
-				ImportLibrary="../../../../lib/CEGUISILLYImageCodec_d.lib"
+				ImportLibrary="../../../../lib/CEGUIDirect3D9Renderer_d.lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -121,8 +121,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../../../../cegui/include;../../../../dependencies/include;../../../../cegui/include/ImageCodecModules/SILLYImageCodec/"
-				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;HAVE_CONFIG_H;CEGUISILLYIMAGECODEC_EXPORTS;_DEBUG;CEGUI_STATIC;TOLUA_STATIC;SILLY_STATIC"
+				AdditionalIncludeDirectories="../../../../cegui/include;../../../../dependencies/include;../../../../cegui/include/RendererModules/Direct3D9/;../../../../"
+				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;HAVE_CONFIG_H;DIRECT3D9_GUIRENDERER_EXPORTS;_DEBUG;CEGUI_STATIC;TOLUA_STATIC"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -136,17 +136,15 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;HAVE_CONFIG_H;CEGUISILLYIMAGECODEC_EXPORTS;_DEBUG;CEGUI_STATIC;TOLUA_STATIC;SILLY_STATIC"
-				AdditionalIncludeDirectories="../../../../cegui/include;../../../../dependencies/include;../../../../cegui/include/ImageCodecModules/SILLYImageCodec/"
+				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;HAVE_CONFIG_H;DIRECT3D9_GUIRENDERER_EXPORTS;_DEBUG;CEGUI_STATIC;TOLUA_STATIC"
+				AdditionalIncludeDirectories="../../../../cegui/include;../../../../dependencies/include;../../../../cegui/include/RendererModules/Direct3D9/;../../../../"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalDependencies="SILLY_dynamic_d.lib"
-				OutputFile="$(OutDir)/CEGUISILLYImageCodec_Static_d.lib"
-				AdditionalLibraryDirectories="../../../../dependencies/lib"
+				OutputFile="$(OutDir)/CEGUIDirect3D9Renderer_Static_d.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -189,8 +187,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../../../../cegui/include;../../../../dependencies/include;../../../../cegui/include/ImageCodecModules/SILLYImageCodec/"
-				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;HAVE_CONFIG_H;CEGUISILLYIMAGECODEC_EXPORTS"
+				AdditionalIncludeDirectories="../../../../cegui/include;../../../../dependencies/include;../../../../cegui/include/RendererModules/Direct3D9/;../../../../"
+				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;HAVE_CONFIG_H;DIRECT3D9_GUIRENDERER_EXPORTS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -204,22 +202,22 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;HAVE_CONFIG_H;CEGUISILLYIMAGECODEC_EXPORTS"
-				AdditionalIncludeDirectories="../../../../cegui/include;../../../../dependencies/include;../../../../cegui/include/ImageCodecModules/SILLYImageCodec/"
+				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;HAVE_CONFIG_H;DIRECT3D9_GUIRENDERER_EXPORTS"
+				AdditionalIncludeDirectories="../../../../cegui/include;../../../../dependencies/include;../../../../cegui/include/RendererModules/Direct3D9/;../../../../"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="../../../../lib/CEGUIBase.lib SILLY.lib"
-				OutputFile="$(OutDir)/CEGUISILLYImageCodec.dll"
+				AdditionalDependencies="../../../../lib/CEGUIBase.lib dxerr.lib d3dx9.lib"
+				OutputFile="$(OutDir)/CEGUIDirect3D9Renderer.dll"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="../../../../lib;../../../../dependencies/lib/dynamic"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(OutDir)/CEGUISILLYImageCodec.pdb"
+				ProgramDatabaseFile="$(OutDir)/CEGUIDirect3D9Renderer.pdb"
 				SubSystem="2"
-				ImportLibrary="../../../../lib/CEGUISILLYImageCodec.lib"
+				ImportLibrary="../../../../lib/CEGUIDirect3D9Renderer.lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -270,8 +268,8 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				OmitFramePointers="true"
-				AdditionalIncludeDirectories="../../../../cegui/include;../../../../dependencies/include;../../../../cegui/include/ImageCodecModules/SILLYImageCodec/"
-				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;HAVE_CONFIG_H;CEGUISILLYIMAGECODEC_EXPORTS"
+				AdditionalIncludeDirectories="../../../../cegui/include;../../../../dependencies/include;../../../../cegui/include/RendererModules/Direct3D9/;../../../../"
+				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;HAVE_CONFIG_H;DIRECT3D9_GUIRENDERER_EXPORTS"
 				StringPooling="true"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -284,23 +282,23 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;HAVE_CONFIG_H;CEGUISILLYIMAGECODEC_EXPORTS"
-				AdditionalIncludeDirectories="../../../../cegui/include;../../../../dependencies/include;../../../../cegui/include/ImageCodecModules/SILLYImageCodec/"
+				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;HAVE_CONFIG_H;DIRECT3D9_GUIRENDERER_EXPORTS"
+				AdditionalIncludeDirectories="../../../../cegui/include;../../../../dependencies/include;../../../../cegui/include/RendererModules/Direct3D9/;../../../../"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="../../../../lib/CEGUIBase.lib SILLY.lib"
-				OutputFile="$(OutDir)/CEGUISILLYImageCodec.dll"
+				AdditionalDependencies="../../../../lib/CEGUIBase.lib dxerr.lib d3dx9.lib"
+				OutputFile="$(OutDir)/CEGUIDirect3D9Renderer.dll"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="../../../../lib;../../../../dependencies/lib/dynamic"
 				GenerateDebugInformation="false"
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
-				ImportLibrary="../../../../lib/CEGUISILLYImageCodec.lib"
+				ImportLibrary="../../../../lib/CEGUIDirect3D9Renderer.lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -351,8 +349,8 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				OmitFramePointers="true"
-				AdditionalIncludeDirectories="../../../../cegui/include;../../../../dependencies/include;../../../../cegui/include/ImageCodecModules/SILLYImageCodec/"
-				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;HAVE_CONFIG_H;CEGUISILLYIMAGECODEC_EXPORTS;CEGUI_STATIC;TOLUA_STATIC;SILLY_STATIC"
+				AdditionalIncludeDirectories="../../../../cegui/include;../../../../dependencies/include;../../../../cegui/include/RendererModules/Direct3D9/;../../../../"
+				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;HAVE_CONFIG_H;DIRECT3D9_GUIRENDERER_EXPORTS;CEGUI_STATIC;TOLUA_STATIC"
 				StringPooling="true"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -365,17 +363,15 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;HAVE_CONFIG_H;CEGUISILLYIMAGECODEC_EXPORTS;CEGUI_STATIC;TOLUA_STATIC;SILLY_STATIC"
-				AdditionalIncludeDirectories="../../../../cegui/include;../../../../dependencies/include;../../../../cegui/include/ImageCodecModules/SILLYImageCodec/"
+				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;HAVE_CONFIG_H;DIRECT3D9_GUIRENDERER_EXPORTS;CEGUI_STATIC;TOLUA_STATIC"
+				AdditionalIncludeDirectories="../../../../cegui/include;../../../../dependencies/include;../../../../cegui/include/RendererModules/Direct3D9/;../../../../"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalDependencies="SILLY_dynamic.lib"
-				OutputFile="$(OutDir)/CEGUISILLYImageCodec_Static.lib"
-				AdditionalLibraryDirectories="../../../../dependencies/lib"
+				OutputFile="$(OutDir)/CEGUIDirect3D9Renderer_Static.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -404,17 +400,33 @@
 				Name="src"
 				>
 				<Filter
-					Name="ImageCodecModules"
+					Name="RendererModules"
 					>
 					<Filter
-						Name="SILLYImageCodec"
+						Name="Direct3D9"
 						>
 						<File
-							RelativePath="..\..\..\..\cegui\src\ImageCodecModules\SILLYImageCodec\CEGUISILLYImageCodec.cpp"
+							RelativePath="..\..\..\..\cegui\src\RendererModules\Direct3D9\CEGUIDirect3D9GeometryBuffer.cpp"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\..\cegui\src\ImageCodecModules\SILLYImageCodec\CEGUISILLYImageCodecModule.cpp"
+							RelativePath="..\..\..\..\cegui\src\RendererModules\Direct3D9\CEGUIDirect3D9Renderer.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\cegui\src\RendererModules\Direct3D9\CEGUIDirect3D9RenderTarget.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\cegui\src\RendererModules\Direct3D9\CEGUIDirect3D9Texture.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\cegui\src\RendererModules\Direct3D9\CEGUIDirect3D9TextureTarget.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\cegui\src\RendererModules\Direct3D9\CEGUIDirect3D9ViewportTarget.cpp"
 							>
 						</File>
 					</Filter>
@@ -424,17 +436,33 @@
 				Name="include"
 				>
 				<Filter
-					Name="ImageCodecModules"
+					Name="RendererModules"
 					>
 					<Filter
-						Name="SILLYImageCodec"
+						Name="Direct3D9"
 						>
 						<File
-							RelativePath="..\..\..\..\cegui\include\ImageCodecModules\SILLYImageCodec\CEGUISILLYImageCodec.h"
+							RelativePath="..\..\..\..\cegui\include\RendererModules\Direct3D9\CEGUIDirect3D9GeometryBuffer.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\..\cegui\include\ImageCodecModules\SILLYImageCodec\CEGUISILLYImageCodecModule.h"
+							RelativePath="..\..\..\..\cegui\include\RendererModules\Direct3D9\CEGUIDirect3D9Renderer.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\cegui\include\RendererModules\Direct3D9\CEGUIDirect3D9RenderTarget.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\cegui\include\RendererModules\Direct3D9\CEGUIDirect3D9Texture.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\cegui\include\RendererModules\Direct3D9\CEGUIDirect3D9TextureTarget.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\cegui\include\RendererModules\Direct3D9\CEGUIDirect3D9ViewportTarget.h"
 							>
 						</File>
 					</Filter>

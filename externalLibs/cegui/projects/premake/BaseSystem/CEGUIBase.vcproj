@@ -373,7 +373,9 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
+				AdditionalDependencies="freetype_static.lib pcre_static.lib Winmm.lib"
 				OutputFile="$(OutDir)/CEGUIBase_Static.lib"
+				AdditionalLibraryDirectories="../../../dependencies/lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
