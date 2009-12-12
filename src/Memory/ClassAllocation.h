@@ -96,7 +96,6 @@ namespace Memory
 
 		inline void* operator new( std::size_t sz ) throw(std::bad_alloc)
 		{
-			OC_ASSERT(sz == sizeof(Allocable));
 			return (void*)smFreeList.Allocate();
 		}
 
