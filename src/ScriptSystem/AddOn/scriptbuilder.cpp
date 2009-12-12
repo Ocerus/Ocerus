@@ -621,7 +621,7 @@ int CScriptBuilder::ExtractDeclaration(int pos, string &declaration, int &type)
 
 const char *CScriptBuilder::GetMetadataStringForType(int typeId)
 {
-	map<int,string>::iterator it = typeMetadataMap.find(typeId);
+	std::map<int,std::string>::iterator it = typeMetadataMap.find(typeId);
 	if( it != typeMetadataMap.end() )
 		return it->second.c_str();
 
@@ -630,7 +630,7 @@ const char *CScriptBuilder::GetMetadataStringForType(int typeId)
 
 const char *CScriptBuilder::GetMetadataStringForFunc(int funcId)
 {
-	map<int,string>::iterator it = funcMetadataMap.find(funcId);
+	std::map<int,std::string>::iterator it = funcMetadataMap.find(funcId);
 	if( it != funcMetadataMap.end() )
 		return it->second.c_str();
 
@@ -639,7 +639,7 @@ const char *CScriptBuilder::GetMetadataStringForFunc(int funcId)
 
 const char *CScriptBuilder::GetMetadataStringForVar(int varIdx)
 {
-	map<int,string>::iterator it = varMetadataMap.find(varIdx);
+	std::map<int,std::string>::iterator it = varMetadataMap.find(varIdx);
 	if( it != varMetadataMap.end() )
 		return it->second.c_str();
 

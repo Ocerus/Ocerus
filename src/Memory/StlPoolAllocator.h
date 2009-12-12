@@ -6,7 +6,6 @@
 #ifndef StlPoolAllocator_h__
 #define StlPoolAllocator_h__
 
-#include "Base.h"
 #include "FreeList.h"
 #include <boost/shared_ptr.hpp>
 
