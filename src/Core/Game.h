@@ -92,7 +92,7 @@ namespace Core
 		float32 mPhysicsResidualDelta;
 
 		/// A structure for queuing events from the physics engine.
-		struct PhysicsEvent
+		struct PhysicsEvent: ClassAllocation<PhysicsEvent, ALLOCATION_POOLED>
 		{
 			// Note that here shouldn't be any pointer to a shape cos it can be destroyed during ProcessPhysicsEvent.
 			EntitySystem::EntityHandle entity1;

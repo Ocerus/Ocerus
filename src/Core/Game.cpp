@@ -159,6 +159,9 @@ void Core::Game::Update( const float32 delta )
 		gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::UPDATE_PHYSICS, Reflection::PropertyFunctionParameters() << stepSize));
 		mPhysics->Step(stepSize, PHYSICS_ITERATIONS);
 
+		mPhysicsEvents.push_back(new PhysicsEvent());
+		mPhysicsEvents.push_back(new PhysicsEvent());
+
 		// process physics events
 		for (PhysicsEventList::const_iterator i=mPhysicsEvents.begin(); i!=mPhysicsEvents.end(); ++i)
 		{
