@@ -5,7 +5,7 @@
 #ifndef FreeListGrowPolicies_h__
 #define FreeListGrowPolicies_h__
 
-#include "Base.h"
+#include "BasicTypes.h"
 #include "FreeListPolicyHelpers.h"
 
 namespace Memory

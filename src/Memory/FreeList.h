@@ -5,7 +5,7 @@
 #ifndef FREELIST_H__
 #define FREELIST_H__
 
-#include "Base.h"
+#include "BasicTypes.h"
 #include "FreeListAllocationPolicies.h"
 #include "FreeListConstructionPolicies.h"
 #include "FreeListGrowPolicies.h"

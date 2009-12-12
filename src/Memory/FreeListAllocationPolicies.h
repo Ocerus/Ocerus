@@ -5,7 +5,7 @@
 #ifndef FreeListAllocationPolicies_h__
 #define FreeListAllocationPolicies_h__
 
-#include "Base.h"
+#include "BasicTypes.h"
 #include "FreeListPolicyHelpers.h"
 
 namespace Memory
@@ -35,6 +35,7 @@ namespace Memory
 
 			LinkedListAllocation() : mFreeBlocks( 0 )
 			{
+				OC_ASSERT_MSG(sizeof(T) >= sizeof(FreeBlock*), "T must be bigger then T* to use the LinkedListAllocation free list policy");
 			}
 
 		protected:
@@ -96,7 +97,8 @@ namespace Memory
 
 			// Verify at compile time that T is large enough to safely hold a FreeList*
 			// NOTE, there are ways around this--pad blocks to be at least sizeof(FreeList*) or use byte offsets instead of pointers
-			STATIC_CHECK( sizeof(T) >= sizeof(FreeBlock*), PlacementNewLinkedList_Requires_sizeof_T_greater_equal_sizeof_pointer );
+			// Hardwire: I had to make this a run-time check since the sizeof didn't work with templates.
+			//STATIC_CHECK( sizeof(T) >= sizeof(FreeBlock*), LinkedListAllocation_Requires_sizeof_T_greater_equal_sizeof_pointer );
 		};
 
 
@@ -418,8 +420,10 @@ namespace Memory
 						if (++hi == hiBound) hi = 0;
 					}
 				}
-				OC_ASSERT(false);
-				return 0;
+
+				// unreachable code
+				//OC_ASSERT(false);
+				//return 0;
 			}
 
 			void DoDeallocate( void* p )

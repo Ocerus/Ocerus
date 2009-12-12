@@ -364,6 +364,10 @@
 			Name="Memory"
 			>
 			<File
+				RelativePath="..\src\Memory\TestClassAllocation.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\Memory\test\TestFreeList.cpp"
 				>
 			</File>

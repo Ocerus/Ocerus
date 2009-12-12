@@ -5,7 +5,7 @@
 #ifndef FreeListConstructionPolicies_h__
 #define FreeListConstructionPolicies_h__
 
-#include "Base.h"
+#include "BasicTypes.h"
 #include "FreeListPolicyHelpers.h"
 
 namespace Memory
@@ -73,7 +73,7 @@ namespace Memory
 				return reinterpret_cast< T* >( pMemory );
 			}
 
-			inline static void Destroy( T* pItem )
+			inline static void Destroy( T* )
 			{
 
 			}

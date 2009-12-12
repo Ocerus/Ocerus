@@ -5,7 +5,10 @@
 #ifndef FreeListPolicyHelpers_h__
 #define FreeListPolicyHelpers_h__
 
-#include "Base.h"
+#include "BasicTypes.h"
+
+// We need to use STL explicitely here because we have to use the default STL allocator.
+#include <vector>
 
 namespace Memory
 {
