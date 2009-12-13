@@ -201,6 +201,7 @@ set(EntitySystem_SRCS
     src/EntitySystem/EntityMgr/EntityMgr.cpp
     src/EntitySystem/EntityMgr/EntityHandle.cpp
     src/EntitySystem/EntityMgr/EntityMessage.cpp
+    src/EntitySystem/Components/Camera.cpp
     src/EntitySystem/Components/CmpMaterial.cpp
     src/EntitySystem/Components/CmpPlatformLogic.cpp
     src/EntitySystem/Components/CmpPlatformVisual.cpp

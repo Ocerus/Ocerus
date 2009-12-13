@@ -49,7 +49,7 @@ struct pooled_list
 		_Ty _Myval;	// the stored value, unused if head
 	};
 
-	typedef typename _Node allocable;
+	typedef typename pooled_list::_Node allocable;
 	typedef std::list< _Ty, StlPoolAllocator<_Ty, allocable> > type; 
 };
 
@@ -113,7 +113,7 @@ struct pooled_map
 		char _Isnil;	// true only if head (also nil) node
 	};
 
-	typedef typename _Node allocable;
+	typedef typename pooled_map::_Node allocable;
 	typedef std::map< _Key, _Ty, std::less<_Key>, StlPoolAllocator<value_type, allocable> > type; 
 };
 
@@ -130,7 +130,7 @@ public:
 template<typename _Key, typename _Ty>
 struct pooled_multimap: public pooled_map<_Key, _Ty>
 {
-	typedef std::multimap< _Key, _Ty, std::less<_Key>, StlPoolAllocator<value_type, allocable> > type; 
+	typedef std::multimap< _Key, _Ty, std::less<_Key>, Memory::StlPoolAllocator<typename pooled_map<_Key, _Ty>::value_type, typename pooled_map<_Key, _Ty>::allocable> > type; 
 };
 
 template<typename Key, typename Value>
@@ -199,8 +199,8 @@ struct pooled_set
 		char _Isnil;	// true only if head (also nil) node
 	};
 
-	typedef typename _Node allocable;
-	typedef std::set< _Key, std::less<_Key>, StlPoolAllocator<value_type, allocable> > type; 
+	typedef typename pooled_set::_Node allocable;
+	typedef std::set< _Key, std::less<_Key>, Memory::StlPoolAllocator<value_type, allocable> > type; 
 };
 
 template<typename T>

@@ -13,12 +13,9 @@ namespace GUISystem {
 
 	void ResourceProvider::unloadRawDataContainer(CEGUI::RawDataContainer& data)
 	{
-/*
-		uint8* ptr = data.getDataPtr();
-		delete[] ptr;
+		delete[] data.getDataPtr();
 		data.setData(0);
 		data.setSize(0);
-*/
 	}
 
 	size_t ResourceProvider::getResourceGroupFileNames(std::vector<CEGUI::String> &out_vec,

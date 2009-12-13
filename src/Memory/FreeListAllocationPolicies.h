@@ -169,7 +169,7 @@ namespace Memory
 
 				for( typename ChunkVector::iterator it = mChunks.begin(); it != mChunks.end(); ++it )
 				{
-					::AlignedFree((void*)it->pObjects);
+					AlignedFree((void*)it->pObjects);
 				}
 
 				mChunks.clear();
@@ -547,7 +547,7 @@ namespace Memory
 			}
 
 			// This class only works on objects that fit inside one of SharedFreeList's internal lists
-			STATIC_CHECK( sizeof(T) <= PolicyHelpers::SharedFreeList::maxBytes,
+			STATIC_CHECK( sizeof(T) <= (unsigned)PolicyHelpers::SharedFreeList::maxBytes,
 				SharedChunkPolicy_requires_sizeof_T_not_greater_than_max_SharedFreeList_size );
 		};
 
