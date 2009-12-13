@@ -19,8 +19,11 @@ namespace GfxSystem
 		/// Prepares OpenGL for drawing
 		virtual bool BeginRendering() const;
 		
-		/// Finilize drawing (swap buffers etc ...)
+		/// Finilize drawing whole screen (swap buffers etc ...)
 		virtual void EndRendering() const;
+		
+		/// Finilize drawing current viewpoint (reset depth buffer ...)
+		virtual void FinalizeViewport() const;
 
 /**
 	Loads an image from RAM into an OpenGL texture.
@@ -44,8 +47,11 @@ namespace GfxSystem
 		/// Adds srite to queue for rendering
 		virtual void SetTexture(const uint32 texture) const;
 		
-		/// Draws sprites from queue
-		virtual void DrawTexturedQuad(const Vector2& position, const Vector2& size, const float32 z) const;
+		/// Draws sprite
+		virtual void DrawTexturedQuad(	const Vector2& position,
+										const Vector2& size,
+										const float32 z,
+										const float32 transp) const;
 
 		/// Draws simple quad
 		virtual void DrawTestQuad() const;

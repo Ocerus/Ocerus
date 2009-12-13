@@ -13,7 +13,7 @@
 
 using namespace GfxSystem;
 
-void OglRenderer::Init()  const
+void OglRenderer::Init() const
 {
 	ocInfo << "*** OpenGL init ***";
 	//Initialize OpenGL
@@ -24,7 +24,18 @@ void OglRenderer::Init()  const
 	glOrtho( -smOrthoSizeX/2, smOrthoSizeX/2, -smOrthoSizeY/2, smOrthoSizeY/2, -1, 1 );
 	glMatrixMode( GL_MODELVIEW );
 	glLoadIdentity();
-	glClear( GL_COLOR_BUFFER_BIT );
+
+	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glEnable(GL_DEPTH_TEST);
+	glClearDepth(1.0);
+	glDepthFunc(GL_LEQUAL);						
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
+	glAlphaFunc(GL_GREATER, 0.1f);
+	glEnable(GL_ALPHA_TEST);
+	glEnable(GL_TEXTURE_2D);
+	//glEnable(GL_CULL_FACE);
+
 
 	if( glGetError() != GL_NO_ERROR )
     {
@@ -35,16 +46,21 @@ void OglRenderer::Init()  const
 	SDL_GL_SwapBuffers();
 }
 
-bool OglRenderer::BeginRendering()  const
+bool OglRenderer::BeginRendering() const
 {
-	glClear( GL_COLOR_BUFFER_BIT );
+	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
 	return true;
 }
 
-void OglRenderer::EndRendering()  const
+void OglRenderer::EndRendering() const
 {
 	SDL_GL_SwapBuffers();
+}
+
+void OglRenderer::FinalizeViewport() const
+{
+	glClear ( GL_DEPTH_BUFFER_BIT );
 }
 
 uint32 OglRenderer::LoadTexture(
@@ -97,30 +113,32 @@ void OglRenderer::SetTexture(const uint32 texture) const
 	glBindTexture(GL_TEXTURE_2D, texture);
 }
 
-void OglRenderer::DrawTexturedQuad(const Vector2& position, const Vector2& size, const float32 z) const
-{
-	//glLoadIdentity();
-	
+void OglRenderer::DrawTexturedQuad(	const Vector2& position,
+									const Vector2& size,
+									const float32 z,
+									const float32 transp) const
+{	
 	glPushMatrix();
+
+	glColor4f( 1.0f, 1.0f, 1.0f, 1.0f - transp );
 
 	glTranslatef( position.x, position.y, z );
 
-	glEnable(GL_TEXTURE_2D); //TODO: presunout jinam
+	float32 x = size.x/2;
+	float32 y = size.y/2;
 
 	glBegin( GL_QUADS );
 
         //Draw square
-	    glTexCoord2f(0.0f, 0.0f); glVertex3f( -size.x/2,	 size.y/2,	0 );
-		glTexCoord2f(1.0f, 0.0f); glVertex3f(  size.x/2,	 size.y/2,	0 );
-		glTexCoord2f(1.0f, 1.0f); glVertex3f(  size.x/2,	-size.y/2,	0 );
-		glTexCoord2f(0.0f, 1.0f); glVertex3f( -size.x/2,	-size.y/2,	0 );
+	    glTexCoord2f(0.0f, 0.0f); glVertex3f( -x,  y, z );
+		glTexCoord2f(1.0f, 0.0f); glVertex3f(  x,  y, z );
+		glTexCoord2f(1.0f, 1.0f); glVertex3f(  x, -y, z );
+		glTexCoord2f(0.0f, 1.0f); glVertex3f( -x, -y, z );
 
     //End quad
     glEnd();
 
 	glPopMatrix();
-
-	glDisable(GL_TEXTURE_2D); //TODO: presunout jinam
 }
 
 void OglRenderer::DrawTestQuad() const

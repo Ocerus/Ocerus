@@ -25,11 +25,15 @@ namespace EntityComponents
 		
 		Vector2 GetSize(void) const { return mSize; }
 		void SetSize(Vector2 value) { mSize = value; }
+		
+		float32 GetTransparency(void) const { return mTransparency; }
+		void SetTransparency(float32 value) { mTransparency = value; }
 
 	private:
 		GfxSystem::TexturePtr mTextureHandle;
 		string mResPath;
 		Vector2 mSize;
+		float32 mTransparency;
 	};
 }
 

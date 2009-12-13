@@ -27,7 +27,8 @@ EntityMessage::eResult EntityComponents::Sprite::HandleMessage( const EntityMess
 				{
 					if (*str == '/') lastSlashPos = str;
 				}
-				mTextureHandle = (GfxSystem::TexturePtr)gResourceMgr.GetResource("textures", StringKey(lastSlashPos+1, str-lastSlashPos-1));
+				mTextureHandle = (GfxSystem::TexturePtr)gResourceMgr.GetResource("textures",
+												StringKey(lastSlashPos+1, str-lastSlashPos-1));
 				return EntityMessage::RESULT_OK;
 			}
 			return EntityMessage::RESULT_ERROR;
@@ -37,7 +38,7 @@ EntityMessage::eResult EntityComponents::Sprite::HandleMessage( const EntityMess
 			Vector2 pos = GetProperty("Position").GetValue<Vector2>();
 			float32 z = (float32) GetProperty("Depth").GetValue<int32>();
 
-			gGfxRenderer.AddSprite(GfxSystem::Sprite(pos, mSize, z, mTextureHandle->GetTexture()));
+			gGfxRenderer.AddSprite(GfxSystem::Sprite(pos, mSize, z, mTextureHandle->GetTexture(), mTransparency));
 
 			return EntityMessage::RESULT_OK;
 		}
@@ -48,6 +49,7 @@ EntityMessage::eResult EntityComponents::Sprite::HandleMessage( const EntityMess
 
 void EntityComponents::Sprite::RegisterReflection()
 {
-	RegisterProperty<string>	("Path",	&Sprite::GetResPath,	&Sprite::SetResPath,	PA_FULL_ACCESS, "");
-	RegisterProperty<Vector2>	("Size",	&Sprite::GetSize,		&Sprite::SetSize,		PA_FULL_ACCESS, "");
+	RegisterProperty<string> ("Path",			&Sprite::GetResPath,		&Sprite::SetResPath,		PA_FULL_ACCESS, "");
+	RegisterProperty<Vector2>("Size",			&Sprite::GetSize,			&Sprite::SetSize,			PA_FULL_ACCESS, "");
+	RegisterProperty<float32>("Transparency",	&Sprite::GetTransparency,	&Sprite::SetTransparency,	PA_FULL_ACCESS, "");
 }

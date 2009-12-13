@@ -213,6 +213,7 @@ void Core::Game::Draw( const float32 delta)
 	gGfxRenderer.SetCamera(pos_holder.GetValue<Vector2>(), zoom_holder.GetValue<float32>(), rot_holder.GetValue<float32>());
 
 	gGfxRenderer.DrawSprites();
+	gGfxRenderer.FinalizeViewport();
 	
 	// Viewport 2 -------------------------------------
 	vp.position =  Vector2(0.0, 0.0);
@@ -228,6 +229,8 @@ void Core::Game::Draw( const float32 delta)
 
 	gGfxRenderer.DrawSprites();
 
+	gGfxRenderer.FinalizeViewport();
+
 	// Viewport 3 -------------------------------------
 	vp.position =  Vector2(0.5, 0.5);
 	vp.size = Vector2(0.5, 0.5);
@@ -241,6 +244,7 @@ void Core::Game::Draw( const float32 delta)
 	gGfxRenderer.SetCamera(pos_holder.GetValue<Vector2>(), zoom_holder.GetValue<float32>(), rot_holder.GetValue<float32>());
 
 	gGfxRenderer.DrawSprites();
+	gGfxRenderer.FinalizeViewport();
 	
 	//TODO: odstranit - pouze pro testovaci ucely
 	//GfxSystem::TexturePtr t = gResourceMgr.GetResource("textures", "Logo.png");

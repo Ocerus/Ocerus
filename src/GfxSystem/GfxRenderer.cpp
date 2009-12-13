@@ -20,10 +20,11 @@ void GfxRenderer::DrawSprites()
 		Vector2 pos = (*it).position;
 		Vector2 size = (*it).size;
 		float32 z = (*it).z;
+		float32 transp = (*it).transparency;
 
 		SetTexture((*it).texture);
 
-		DrawTexturedQuad(pos, size, z);
+		DrawTexturedQuad(pos, size, z, transp);
 	}
 
 	ResetSprites();

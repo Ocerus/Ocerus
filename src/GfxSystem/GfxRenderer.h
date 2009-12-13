@@ -20,6 +20,9 @@ namespace GfxSystem
 		/// Finilize drawing (swap buffers etc ...)
 		virtual void EndRendering() const = 0;
 
+		/// Finilize drawing current viewpoint (reset depth buffer ...)
+		virtual void FinalizeViewport() const = 0;
+
 		/**
 			Loads an image from RAM into an Renderer texture.
 			\param buffer the image data in RAM just as if it were still in a file
@@ -49,7 +52,10 @@ namespace GfxSystem
 		virtual void SetTexture(const uint32 texture) const = 0;
 		
 		/// Draws quad with currently chosen texture
-		virtual void DrawTexturedQuad(const Vector2& position, const Vector2& size, const float32 z) const = 0;
+		virtual void DrawTexturedQuad(	const Vector2& position,
+										const Vector2& size,
+										const float32 z,
+										const float32 transp) const = 0;
 
 		/// Resets rendering queue
 		inline void ResetSprites() {mSprites.clear();}

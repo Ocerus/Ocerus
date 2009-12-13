@@ -5,7 +5,8 @@
 
     <Component Type="CT_SPRITE">
       <Size>512 256</Size>
-      <Path>Textures/Logo.png</Path>
+      <Path>Textures/Logo_alpha.png</Path>
+      <Transparency>0</Transparency>
     </Component>
     
     <Component Type="CT_TRANSFORM">
@@ -19,6 +20,7 @@
     <Component Type="CT_SPRITE">
       <Size>512 256</Size>
       <Path>Textures/Logo2.png</Path>
+      <Transparency>0.9</Transparency>
     </Component>
 
     <Component Type="CT_TRANSFORM">
