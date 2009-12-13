@@ -5,5 +5,9 @@
     <Component Type="CT_SPRITE"/>
     <Component Type="CT_TRANSFORM"/>
   </Entity>
+  
+  <Entity Name="Camera_prototype" ID="4" >
+    <Component Type="CT_CAMERA"/>
+  </Entity>
 
 </Entities>

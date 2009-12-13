@@ -7,7 +7,7 @@
 #include "Box2D.h"
 
 //temporary here
-//#include "../GfxSystem/Texture.h"
+#include "../GfxSystem/GfxSceneMgr.h"
 
 
 // DEBUG only
@@ -199,8 +199,48 @@ void Core::Game::Draw( const float32 delta)
 {
 	PROFILE_FNC();
 
+	// ----------------TESTING-------------------------
+	// Viewport 1 -------------------------------------
+	GfxSystem::GfxViewport vp (Vector2(0, 0.5), Vector2(0.5, 0.5));
+	gGfxRenderer.SetViewport(vp);
+
+	EntitySystem::EntityHandle cam_handle = gGfxSceneMgr.GetCamera(0);
+
+	Reflection::PropertyHolder pos_holder = gEntityMgr.GetEntityProperty(cam_handle, "Position" );
+	Reflection::PropertyHolder zoom_holder = gEntityMgr.GetEntityProperty(cam_handle, "Zoom" );
+	Reflection::PropertyHolder rot_holder = gEntityMgr.GetEntityProperty(cam_handle, "Rotation" );
+
+	gGfxRenderer.SetCamera(pos_holder.GetValue<Vector2>(), zoom_holder.GetValue<float32>(), rot_holder.GetValue<float32>());
+
 	gGfxRenderer.DrawSprites();
-	gGfxRenderer.Reset();
+	
+	// Viewport 2 -------------------------------------
+	vp.position =  Vector2(0.0, 0.0);
+	vp.size = Vector2(1, 0.5);
+	gGfxRenderer.SetViewport(vp);
+
+	cam_handle = gGfxSceneMgr.GetCamera(1);
+	pos_holder = gEntityMgr.GetEntityProperty(cam_handle, "Position" );
+	zoom_holder = gEntityMgr.GetEntityProperty(cam_handle, "Zoom" );
+	rot_holder = gEntityMgr.GetEntityProperty(cam_handle, "Rotation" );
+
+	gGfxRenderer.SetCamera(pos_holder.GetValue<Vector2>(), zoom_holder.GetValue<float32>(), rot_holder.GetValue<float32>());
+
+	gGfxRenderer.DrawSprites();
+
+	// Viewport 3 -------------------------------------
+	vp.position =  Vector2(0.5, 0.5);
+	vp.size = Vector2(0.5, 0.5);
+	gGfxRenderer.SetViewport(vp);
+
+	cam_handle = gGfxSceneMgr.GetCamera(2);
+	pos_holder = gEntityMgr.GetEntityProperty(cam_handle, "Position" );
+	zoom_holder = gEntityMgr.GetEntityProperty(cam_handle, "Zoom" );
+	rot_holder = gEntityMgr.GetEntityProperty(cam_handle, "Rotation" );
+
+	gGfxRenderer.SetCamera(pos_holder.GetValue<Vector2>(), zoom_holder.GetValue<float32>(), rot_holder.GetValue<float32>());
+
+	gGfxRenderer.DrawSprites();
 	
 	//TODO: odstranit - pouze pro testovaci ucely
 	//GfxSystem::TexturePtr t = gResourceMgr.GetResource("textures", "Logo.png");

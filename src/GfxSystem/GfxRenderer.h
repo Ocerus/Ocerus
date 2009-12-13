@@ -43,7 +43,7 @@ namespace GfxSystem
 		void AddSprite(const Sprite spr);
 
 		/// Draws sprites from queue
-		void DrawSprites() const;
+		void DrawSprites();
 
 		/// Changes renderers texture
 		virtual void SetTexture(const uint32 texture) const = 0;
@@ -52,7 +52,7 @@ namespace GfxSystem
 		virtual void DrawTexturedQuad(const Vector2& position, const Vector2& size, const float32 z) const = 0;
 
 		/// Resets rendering queue
-		inline void Reset() {mSprites.clear();}
+		inline void ResetSprites() {mSprites.clear();}
 
 		/// Draws simple quad
 		virtual void DrawTestQuad() const = 0;
@@ -60,9 +60,20 @@ namespace GfxSystem
 		/// Draws simple textured quad
 		virtual void DrawTestTexturedQuad(const uint32 text_handle) const = 0;
 
+
+		virtual void SetViewport(const GfxViewport& viewport) const = 0;
+
+		
+		virtual void SetCamera(const Vector2& position, const float32 zoom, const float32 rotation) const = 0;
+
 	private:
 		typedef vector<Sprite> SpriteVector;
 		SpriteVector mSprites;
+
+	protected:
+		/// Size of window in world coordination system (regardless of window actual pixel size in OS)
+		static const int smOrthoSizeX = 1024;
+		static const int smOrthoSizeY = 768;
 	};
 }
 

@@ -18,10 +18,10 @@ void OglRenderer::Init()  const
 	ocInfo << "*** OpenGL init ***";
 	//Initialize OpenGL
 
-	glClearColor( 0, 0, 0, 0 );
+
+	glClearColor( 0.1f, 0.1f, 0.1f, 0 );
 	glMatrixMode( GL_PROJECTION );
-	glLoadIdentity();
-	glOrtho( 0, 1024, 768, 0, -1, 1 );
+	glOrtho( -smOrthoSizeX/2, smOrthoSizeX/2, -smOrthoSizeY/2, smOrthoSizeY/2, -1, 1 );
 	glMatrixMode( GL_MODELVIEW );
 	glLoadIdentity();
 	glClear( GL_COLOR_BUFFER_BIT );
@@ -99,7 +99,10 @@ void OglRenderer::SetTexture(const uint32 texture) const
 
 void OglRenderer::DrawTexturedQuad(const Vector2& position, const Vector2& size, const float32 z) const
 {
-	glLoadIdentity();
+	//glLoadIdentity();
+	
+	glPushMatrix();
+
 	glTranslatef( position.x, position.y, z );
 
 	glEnable(GL_TEXTURE_2D); //TODO: presunout jinam
@@ -107,17 +110,16 @@ void OglRenderer::DrawTexturedQuad(const Vector2& position, const Vector2& size,
 	glBegin( GL_QUADS );
 
         //Draw square
-		glTexCoord2f(0.0f, 0.0f);
-	    glVertex3f( 0,		0,		0 );
-		glTexCoord2f(1.0f, 0.0f);
-		glVertex3f( size.x,	0,		0 );
-		glTexCoord2f(1.0f, 1.0f);
-		glVertex3f( size.x,	size.y,	0 );
-		glTexCoord2f(0.0f, 1.0f);
-		glVertex3f( 0,		size.y,	0 );
+	    glTexCoord2f(0.0f, 0.0f); glVertex3f( -size.x/2,	 size.y/2,	0 );
+		glTexCoord2f(1.0f, 0.0f); glVertex3f(  size.x/2,	 size.y/2,	0 );
+		glTexCoord2f(1.0f, 1.0f); glVertex3f(  size.x/2,	-size.y/2,	0 );
+		glTexCoord2f(0.0f, 1.0f); glVertex3f( -size.x/2,	-size.y/2,	0 );
 
     //End quad
     glEnd();
+
+	glPopMatrix();
+
 	glDisable(GL_TEXTURE_2D); //TODO: presunout jinam
 }
 
@@ -164,7 +166,35 @@ void OglRenderer::DrawTestTexturedQuad(const uint32 text_handle) const
     //End quad
     glEnd();
 	glDisable(GL_TEXTURE_2D);
-	glFlush ();
 
 
+}
+
+void OglRenderer::SetViewport(const GfxViewport& viewport) const
+{
+	int32 resx = gGfxWindow.GetResolutionWidth();
+	int32 resy = gGfxWindow.GetResolutionHeight();
+
+	// set viewport (part of window)
+	glViewport (	(int32)(viewport.position.x *	resx),	(int32)(viewport.position.y * resy),
+					(int32)(viewport.size.x		*	resx),	(int32)(viewport.size.y		* resy));
+	
+	glMatrixMode( GL_PROJECTION );
+	glLoadIdentity();
+
+	// set projection (part of world)
+	glOrtho(	-smOrthoSizeX/2 * viewport.size.x, smOrthoSizeX/2 * viewport.size.x,
+				-smOrthoSizeY/2 * viewport.size.y, smOrthoSizeY/2 * viewport.size.y,
+				-1, 1 );
+
+	glMatrixMode( GL_MODELVIEW );
+}
+
+		
+void OglRenderer::SetCamera(const Vector2& position, const float32 zoom, const float32 rotation) const
+{
+	glLoadIdentity();
+	glRotatef(rotation, 0, 0, 1);
+	glScalef(zoom, zoom, zoom);
+	glTranslatef(-position.x, -position.y, 0);
 }

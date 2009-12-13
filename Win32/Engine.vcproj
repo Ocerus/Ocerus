@@ -256,6 +256,10 @@
 					Name="inc"
 					>
 					<File
+						RelativePath="..\src\EntitySystem\Components\Camera.h"
+						>
+					</File>
+					<File
 						RelativePath="..\src\EntitySystem\Components\CmpMaterial.h"
 						>
 					</File>
@@ -295,6 +299,10 @@
 				<Filter
 					Name="src"
 					>
+					<File
+						RelativePath="..\src\EntitySystem\Components\Camera.cpp"
+						>
+					</File>
 					<File
 						RelativePath="..\src\EntitySystem\Components\CmpMaterial.cpp"
 						>

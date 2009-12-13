@@ -196,10 +196,15 @@ EntityHandle EntityMgr::CreateEntity(EntityDescription& desc)
 		return entityHandle; // do like nothing's happened, but don't enum properties or they will access invalid memory
 	}
 
-	// add entities with sprites to GfxSceneMagr
+	// add entities with sprites to GfxSceneMgr
 	if (!isPrototype && HasEntityComponentOfType(entityHandle, CT_SPRITE))
 	{
-		gGfxSceneMgr.AddEntity(entityHandle);
+		gGfxSceneMgr.AddSpriteEntity(entityHandle);
+	}
+	// add camera to GfxSceneMgr
+	if (!isPrototype && HasEntityComponentOfType(entityHandle, CT_CAMERA))
+	{
+		gGfxSceneMgr.AddCamera(entityHandle);
 	}
 
 	return entityHandle;
@@ -208,6 +213,18 @@ EntityHandle EntityMgr::CreateEntity(EntityDescription& desc)
 
 void EntityMgr::DestroyEntity(const EntityHandle entityToDestroy)
 {
+	//TODO: HasEntityComponentOfType() fails assert
+	/*// remove entities with sprites from GfxSceneMgr			
+	if (HasEntityComponentOfType(entityToDestroy, CT_SPRITE))
+	{
+		gGfxSceneMgr.RemoveSpriteEntity(entityToDestroy);
+	}
+	// remove camera from GfxSceneMgr
+	if (HasEntityComponentOfType(entityToDestroy, CT_CAMERA))
+	{
+		gGfxSceneMgr.RemoveCamera(entityToDestroy);
+	}*/
+
 	mEntityDestroyQueue.push_back(entityToDestroy.GetID());
 }
 

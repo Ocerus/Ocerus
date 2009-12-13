@@ -10,24 +10,28 @@
 
 namespace GfxSystem
 {
-	typedef vector<EntitySystem::EntityHandle> EntityHandleVector;
 
 	class GfxSceneMgr : public Singleton<GfxSceneMgr>
 	{
 	public:
-		void AddEntity(EntitySystem::EntityHandle ent)
-		{
-			mEntities.push_back(ent);
-		}
-		void Draw()
-		{
-			EntityHandleVector::iterator it;
-			for(it = mEntities.begin(); it != mEntities.end(); ++it)
-			{
-				gEntityMgr.PostMessage(*(it), EntitySystem::EntityMessage::DRAW);
-			}
-		}
-		EntityHandleVector mEntities;	//temprorary
+		
+		void AddSpriteEntity(EntitySystem::EntityHandle ent);
+
+		void RemoveSpriteEntity(EntitySystem::EntityHandle ent);
+		
+		void AddCamera(EntitySystem::EntityHandle ent);
+
+		void RemoveCamera(EntitySystem::EntityHandle ent);
+
+		EntitySystem::EntityHandle GetCamera(int32 i);
+		
+		/// Sends DRAW message to stored sprite entities
+		void Draw();
+		
+	private:	
+		typedef vector<EntitySystem::EntityHandle> EntityHandleVector;
+		EntityHandleVector mSprites;	//temprorary
+		EntityHandleVector mCameras;
 	};
 }
 

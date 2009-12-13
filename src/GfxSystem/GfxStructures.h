@@ -76,6 +76,15 @@ namespace GfxSystem
 		Sprite(const Vector2& _position, const Vector2& _size, const float32 _z, const uint32 _texture): 
 			position(_position), size(_size), z(_z), texture(_texture) {}
 	};
+	
+	struct GfxViewport
+	{
+		GfxViewport(const Vector2& _pos, const Vector2& _size): position(_pos), size(_size) {}
+		
+		// relatative (0,1) to window size
+		Vector2 position;
+		Vector2 size;
+	};
 }
 
 #endif // GfxStructures_h__

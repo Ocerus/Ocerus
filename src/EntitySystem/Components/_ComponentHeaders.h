@@ -13,5 +13,6 @@
 #include "../Components/OnInitScript.h"
 #include "../Components/Script.h"
 #include "../Components/Sprite.h"
+#include "../Components/Camera.h"
 
 #endif // _ComponentHeaders_h__

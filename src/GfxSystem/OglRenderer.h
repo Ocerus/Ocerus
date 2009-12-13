@@ -52,6 +52,12 @@ namespace GfxSystem
 
 		/// Draws simple textured quad
 		virtual void DrawTestTexturedQuad(const uint32 text_handle) const;
+
+
+		virtual void SetViewport(const GfxViewport& viewport) const;
+
+		
+		virtual void SetCamera(const Vector2& position, const float32 zoom, const float32 rotation) const;
 	};
 }
 

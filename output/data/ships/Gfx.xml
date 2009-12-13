@@ -9,7 +9,7 @@
     </Component>
     
     <Component Type="CT_TRANSFORM">
-	    <Position>384 384</Position>
+	    <Position>-256 256</Position>
       <Depth>0</Depth>
     </Component>
   </Entity>
@@ -22,8 +22,32 @@
     </Component>
 
     <Component Type="CT_TRANSFORM">
-      <Position>64 128</Position>
+      <Position>256 -256</Position>
       <Depth>0</Depth>
+    </Component>
+  </Entity>
+
+  <Entity Name="Camera1" Prototype="4" >
+    <Component Type="CT_CAMERA">
+      <Position>-50 -100</Position>
+      <Zoom>0.4</Zoom>
+      <Rotation>45</Rotation>
+    </Component>
+  </Entity>
+  
+  <Entity Name="Camera2" Prototype="4" >
+    <Component Type="CT_CAMERA">
+      <Position>100 0</Position>
+      <Zoom>0.5</Zoom>
+      <Rotation>0.0</Rotation>
+    </Component>
+  </Entity>
+
+  <Entity Name="Camera3" Prototype="4" >
+    <Component Type="CT_CAMERA">
+      <Position>-256 256</Position>
+      <Zoom>1.5</Zoom>
+      <Rotation>0.0</Rotation>
     </Component>
   </Entity>
 
