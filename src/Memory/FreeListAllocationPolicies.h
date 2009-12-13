@@ -125,11 +125,15 @@ namespace Memory
 		template< typename T >
 		class StackAllocation: public PolicyHelpers::AllocationTracker
 		{
+		private:
 			struct Chunk
 			{
 				T* pObjects;
 				uint32 numObjects;
 			};
+
+			typedef std::vector<Chunk> ChunkVector;
+			typedef std::vector<void*> PointerVector;
 
 		public:
 			StackAllocation() {}
@@ -145,7 +149,7 @@ namespace Memory
 				mFreeObjects.clear();
 				ResetBlocksInUse();
 
-				for( std::vector< Chunk >::iterator it = mChunks.begin(); it != mChunks.end(); ++it )
+				for( ChunkVector::iterator it = mChunks.begin(); it != mChunks.end(); ++it )
 				{
 					for( unsigned int ix = 0; ix < it->numObjects; ++ix )
 					{
@@ -162,7 +166,7 @@ namespace Memory
 				mFreeObjects.clear();
 				ResetBlocksInUse();
 
-				for( std::vector< Chunk >::iterator it = mChunks.begin(); it != mChunks.end(); ++it )
+				for( ChunkVector::iterator it = mChunks.begin(); it != mChunks.end(); ++it )
 				{
 					::AlignedFree((void*)it->pObjects);
 				}
@@ -217,8 +221,8 @@ namespace Memory
 
 
 			// The STL containers are here of a purpose to make sure we use the standard STL allocator.
-			std::vector< Chunk > mChunks;
-			std::vector< void* > mFreeObjects;
+			ChunkVector mChunks;
+			PointerVector mFreeObjects;
 		};
 
 
