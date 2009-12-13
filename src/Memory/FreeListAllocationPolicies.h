@@ -7,6 +7,7 @@
 
 #include "BasicTypes.h"
 #include "FreeListPolicyHelpers.h"
+#include "GlobalAllocation.h"
 
 namespace Memory
 {
@@ -149,7 +150,7 @@ namespace Memory
 				mFreeObjects.clear();
 				ResetBlocksInUse();
 
-				for( ChunkVector::iterator it = mChunks.begin(); it != mChunks.end(); ++it )
+				for( typename ChunkVector::iterator it = mChunks.begin(); it != mChunks.end(); ++it )
 				{
 					for( unsigned int ix = 0; ix < it->numObjects; ++ix )
 					{
@@ -166,7 +167,7 @@ namespace Memory
 				mFreeObjects.clear();
 				ResetBlocksInUse();
 
-				for( ChunkVector::iterator it = mChunks.begin(); it != mChunks.end(); ++it )
+				for( typename ChunkVector::iterator it = mChunks.begin(); it != mChunks.end(); ++it )
 				{
 					::AlignedFree((void*)it->pObjects);
 				}
@@ -260,7 +261,7 @@ namespace Memory
 
 			~CompactableChunkAllocation()
 			{
-				for( Chunks::iterator it = mChunks.begin(); it != mChunks.end(); ++it )
+				for( typename Chunks::iterator it = mChunks.begin(); it != mChunks.end(); ++it )
 				{
 					it->Release();
 				}
@@ -284,7 +285,7 @@ namespace Memory
 				if( mAllocChunk == 0 || mAllocChunk->mBlocksAvailable == 0 )
 				{
 					// Try to find a valid chunk with an available block
-					Chunks::iterator it = mChunks.begin();
+					typename Chunks::iterator it = mChunks.begin();
 					for(;; ++it)
 					{
 						if( it == mChunks.end() )
