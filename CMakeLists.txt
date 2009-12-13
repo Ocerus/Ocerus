@@ -328,8 +328,8 @@ link_directories(
     ${CEGUI_LIBRARY_DIRS}
 )
 
-message("LIBS: " ${CEGUI_LIBRARY_DIRS} )
-
+message("CEGUI_LIBRARY_DIRS: " ${CEGUI_LIBRARY_DIRS} )
+message("CEGUI_LIBRARIES: " ${CEGUI_LIBRARIES} )
 
 target_link_libraries(ocerus-engine
     ${ocerus-engine_LIBRARIES}
