@@ -505,63 +505,6 @@ EntityHandle GetCurrentEntityHandle(void)
 	return EntityHandle::Null;
 }
 
-// Get state of current OnAction handler
-int32 ScriptGetCurrentState(void)
-{
-	string exception;
-	// Find current entity handle
-	EntityHandle handle = GetCurrentEntityHandle();
-	if (handle.IsValid())
-	{
-		// Find current array index
-		Reflection::PropertyHolder holder = handle.GetProperty("ScriptCurrentArrayIndex");
-		if (holder.IsValid())
-		{
-			int32 index = holder.GetValue<int32>();
-			Array<int32>* states = handle.GetProperty("ScriptStates").GetValue<Array<int32>*>();
-			if (states != 0 && index >= 0 && states->GetSize() > index )
-			{
-				// Return current state
-				return (*states)[index];
-			} else exception = "This function must be called from OnAction handler.";
-		} else exception = "This function must be called from entity with Script component.";
-	} else exception = "This function must be called from an entity message handler.";
-	
-	// Solve exceptions
-	asIScriptContext *ctx = asGetActiveContext();
-	if (ctx) ctx->SetException(exception.c_str());
-	return 0;
-}
-
-void ScriptSetAndSleep(int32 state, uint64 time)
-{
-	string exception;
-	// Find current entity handle
-	EntityHandle handle = GetCurrentEntityHandle();
-	if (handle.IsValid())
-	{
-		// Find current array index
-		Reflection::PropertyHolder holder = handle.GetProperty("ScriptCurrentArrayIndex");
-		if (holder.IsValid())
-		{
-			int32 index = holder.GetValue<int32>();
-			Array<int32>* states = handle.GetProperty("ScriptStates").GetValue<Array<int32>*>();
-			Array<uint64>* times = handle.GetProperty("ScriptTimes").GetValue<Array<uint64>*>();
-			if (states != 0 && times != 0 && index >= 0 && states->GetSize() > index && times->GetSize() > index)
-			{
-				// Set state and time
-				(*states)[index] = state;
-				(*times)[index] = gApp.GetCurrentTimeMillis() + time;
-				return;
-			} else exception = "This function must be called from OnAction handler.";
-		} else exception = "This function must be called from entity with Script component.";
-	} else exception = "This function must be called from an entity message handler.";
-	
-	// Solve exceptions
-	asIScriptContext *ctx = asGetActiveContext();
-	if (ctx) ctx->SetException(exception.c_str());
-}
-
 void ScriptMgr::ConfigureEngine(void)
 {
 	int32 r;
@@ -582,10 +525,6 @@ void ScriptMgr::ConfigureEngine(void)
 	// Register function for creating co-routine
 	r = mEngine->RegisterGlobalFunction("void createCoRoutine(const string &in)",
 		asFUNCTIONPR(ScriptCreateCoRoutine, (string&), void), asCALL_CDECL); OC_SCRIPT_ASSERT();*/
-
-	// Register functions for OnAction state and time of execution support
-	r = mEngine->RegisterGlobalFunction("int32 GetState()", asFUNCTION(ScriptGetCurrentState), asCALL_CDECL); OC_SCRIPT_ASSERT();
-	r = mEngine->RegisterGlobalFunction("void SetAndSleep(int32, uint64)", asFUNCTION(ScriptSetAndSleep), asCALL_CDECL); OC_SCRIPT_ASSERT();
 
 	// Register log function
 	r = mEngine->RegisterGlobalFunction("void Log(string &in)", asFUNCTION(ScriptLog), asCALL_CDECL); OC_SCRIPT_ASSERT();

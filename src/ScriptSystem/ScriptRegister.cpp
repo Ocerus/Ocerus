@@ -1,5 +1,7 @@
 #include "Common.h"
 #include "ScriptRegister.h"
+#include "ScriptMgr.h"
+#include "../Core/Application.h"
 #include <angelscript.h>
 
 using namespace ScriptSystem;
@@ -183,6 +185,64 @@ void RegisterScriptColor(asIScriptEngine* engine)
 	r = engine->RegisterObjectMethod("Color", "uint32 GetARGB() const", asMETHOD(GfxSystem::Color, GetARGB), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 }
 
+// Get state of current OnAction handler
+int32 ScriptGetCurrentState(void)
+{
+	string exception;
+	// Find current entity handle
+	EntitySystem::EntityHandle handle = GetCurrentEntityHandle();
+	if (handle.IsValid())
+	{
+		// Find current array index
+		Reflection::PropertyHolder holder = handle.GetProperty("ScriptCurrentArrayIndex");
+		if (holder.IsValid())
+		{
+			int32 index = holder.GetValue<int32>();
+			Array<int32>* states = handle.GetProperty("ScriptStates").GetValue<Array<int32>*>();
+			if (states != 0 && index >= 0 && states->GetSize() > index )
+			{
+				// Return current state
+				return (*states)[index];
+			} else exception = "This function must be called from OnAction handler.";
+		} else exception = "This function must be called from entity with Script component.";
+	} else exception = "This function must be called from an entity message handler.";
+	
+	// Solve exceptions
+	asIScriptContext *ctx = asGetActiveContext();
+	if (ctx) ctx->SetException(exception.c_str());
+	return 0;
+}
+
+// Set state of current OnAction handler and set time to current time plus time
+void ScriptSetAndSleep(int32 state, uint64 time)
+{
+	string exception;
+	// Find current entity handle
+	EntitySystem::EntityHandle handle = GetCurrentEntityHandle();
+	if (handle.IsValid())
+	{
+		// Find current array index
+		Reflection::PropertyHolder holder = handle.GetProperty("ScriptCurrentArrayIndex");
+		if (holder.IsValid())
+		{
+			int32 index = holder.GetValue<int32>();
+			Array<int32>* states = handle.GetProperty("ScriptStates").GetValue<Array<int32>*>();
+			Array<uint64>* times = handle.GetProperty("ScriptTimes").GetValue<Array<uint64>*>();
+			if (states != 0 && times != 0 && index >= 0 && states->GetSize() > index && times->GetSize() > index)
+			{
+				// Set state and time
+				(*states)[index] = state;
+				(*times)[index] = gApp.GetCurrentTimeMillis() + time;
+				return;
+			} else exception = "This function must be called from OnAction handler.";
+		} else exception = "This function must be called from entity with Script component.";
+	} else exception = "This function must be called from an entity message handler.";
+	
+	// Solve exceptions
+	asIScriptContext *ctx = asGetActiveContext();
+	if (ctx) ctx->SetException(exception.c_str());
+}
+
 void ScriptSystem::RegisterAllAdditions(AngelScript::asIScriptEngine* engine)
 {
 	// Register Vector2 class and it's methods
@@ -190,6 +250,11 @@ void ScriptSystem::RegisterAllAdditions(AngelScript::asIScriptEngine* engine)
 
 	// Register Color struct and it's methods
 	RegisterScriptColor(engine);
+
+	int32 r;
+	// Register functions for OnAction state and time of execution support
+	r = engine->RegisterGlobalFunction("int32 GetState()", asFUNCTION(ScriptGetCurrentState), asCALL_CDECL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterGlobalFunction("void SetAndSleep(int32, uint64)", asFUNCTION(ScriptSetAndSleep), asCALL_CDECL); OC_SCRIPT_ASSERT();
 }
 
 void ScriptSystem::ResourceUnloadCallback(ScriptResource* resource)

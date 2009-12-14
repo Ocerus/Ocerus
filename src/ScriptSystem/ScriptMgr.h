@@ -129,5 +129,6 @@ namespace ScriptSystem
 }
 
 int IncludeCallback(const char* fileName, const char* from, AngelScript::CScriptBuilder* builder, void* basePath);
+EntitySystem::EntityHandle GetCurrentEntityHandle(void);
 
 #endif // ScriptMgr_h__
