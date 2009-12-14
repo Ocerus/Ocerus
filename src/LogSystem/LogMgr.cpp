@@ -53,6 +53,9 @@ void LogSystem::LogMgr::LogMessage(const string& msg, int32 loggingLevel)
 
 	gApp.WriteToConsole(str);
 
+	if (GUISystem::GUIMgr::SingletonExists())
+		gGUIMgr.WriteLogMessageToConsole(str, loggingLevel);
+
 	(*mOutStream) << str;
 	mOutStream->flush();
 }

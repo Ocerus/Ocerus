@@ -9,6 +9,7 @@
 
 namespace CEGUI
 {
+	class Listbox;
 	class OpenGLRenderer;
 	class System;
 	class Window;
@@ -76,6 +77,9 @@ namespace GUISystem
 		/// Adds a message to console.
 		void AddConsoleMessage(string message, const GfxSystem::Color& color = GfxSystem::Color(255,255,255));
 
+		/// Writes a log message to console, if its logging level is higher than set treshold.
+		void WriteLogMessageToConsole(const string& msg, int32 loggingLevel);
+		
 		/// Returns whether console is loaded.
 		inline bool IsConsoleLoaded(void) const { return mConsoleIsLoaded; }
 
@@ -115,6 +119,7 @@ namespace GUISystem
 
 		CEGUI::Window* mConsoleRoot;
 		CEGUI::Window* mConsolePrompt;
+		CEGUI::Listbox* mConsoleMessages;
 
 		CEGUI::OpenGLRenderer* mRenderer;
 		ResourceProvider* mResourceProvider;

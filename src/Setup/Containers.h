@@ -47,6 +47,9 @@ struct pooled_list
 		_Nodeptr _Next;	// successor node, or first element if head
 		_Nodeptr _Prev;	// predecessor node, or last element if head
 		_Ty _Myval;	// the stored value, unused if head
+		#ifdef __UNIX__
+		int _Another;
+		#endif
 	};
 
 	typedef typename pooled_list::_Node allocable;
@@ -197,6 +200,9 @@ struct pooled_set
 		value_type _Myval;	// the stored value, unused if head
 		char _Color;	// _Red or _Black, _Black if head
 		char _Isnil;	// true only if head (also nil) node
+		#ifdef __UNIX__
+		int _Another1;
+		#endif
 	};
 
 	typedef typename pooled_set::_Node allocable;

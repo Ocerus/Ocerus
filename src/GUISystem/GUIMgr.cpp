@@ -22,6 +22,7 @@ namespace GUISystem
 		mCurrentWindowRoot(0),
 		mConsoleRoot(0),
 		mConsolePrompt(0),
+		mConsoleMessages(0),
 		mRenderer(0),
 		mResourceProvider(0),
 		mConsoleIsLoaded(false)
@@ -175,28 +176,30 @@ namespace GUISystem
 			ocWarning << "AddConsoleMessage: " << message;
 			return;
 		}
-#if 0 // TODO
-		CEGUI::Listbox* pane = (CEGUI::Listbox*)CEGUI::WindowManager::getSingleton().getWindow("ConsoleRoot/Pane");
 
 		CEGUI::ListboxTextItem* new_item = new CEGUI::ListboxTextItem(message);
 		new_item->setTextColours(CEGUI::colour( color.GetARGB() ) );
 
-		pane->addItem(new_item);
-		pane->ensureItemIsVisible(new_item);
+		mConsoleMessages->addItem(new_item);
+		mConsoleMessages->ensureItemIsVisible(new_item);
 
 		uint32 item_count;
-		while ((item_count = pane->getItemCount()) > 50)
-			pane->removeItem(pane->getListboxItemFromIndex(item_count - 1));
+		while ((item_count = mConsoleMessages->getItemCount()) > 50)
+			mConsoleMessages->removeItem(mConsoleMessages->getListboxItemFromIndex(item_count - 1));
 
-		set<IConsoleListener*>::iterator iter = mConsoleListeners.begin();
+		vector<IConsoleListener*>::iterator iter = mConsoleListeners.begin();
 		while (iter != mConsoleListeners.end())
 		{
 			(*iter)->EventConsoleCommand(message);
 			++iter;
 		}
 	}
-#endif
-}
+
+	void GUIMgr::WriteLogMessageToConsole(const string& msg, int32 loggingLevel)
+	{
+		if (!mConsoleIsLoaded) return;
+		AddConsoleMessage(msg);
+	}
 
 #if 0
 	bool GUIMgr::QuitEvent(const CEGUI::EventArgs& e) {
@@ -210,10 +213,12 @@ namespace GUISystem
 		OC_DASSERT(mCegui);
 		OC_DASSERT(mConsoleRoot == 0);
 		OC_DASSERT(mConsolePrompt == 0);
+		OC_DASSERT(mConsoleMessages == 0);
 		try
 		{
 			mConsoleRoot = CEGUI::WindowManager::getSingleton().getWindow("ConsoleRoot");
 			mConsolePrompt = CEGUI::WindowManager::getSingleton().getWindow("ConsoleRoot/ConsolePrompt");
+			mConsoleMessages = (CEGUI::Listbox*)CEGUI::WindowManager::getSingleton().getWindow("ConsoleRoot/Pane");
 			mConsolePrompt->subscribeEvent(CEGUI::Editbox::EventTextAccepted,
 				CEGUI::Event::Subscriber(&GUIMgr::ConsoleCommandEvent, this));
 			mConsoleIsLoaded = true;
@@ -333,7 +338,8 @@ namespace GUISystem
 		}
 	}
 
-	CEGUI::MouseButton ConvertMouseButtonEnum(const InputSystem::eMouseButton btn) {
+	CEGUI::MouseButton ConvertMouseButtonEnum(const InputSystem::eMouseButton btn)
+	{
 		switch (btn) {
 		case InputSystem::MBTN_LEFT:
 			return CEGUI::LeftButton;
