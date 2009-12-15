@@ -213,18 +213,6 @@ EntityHandle EntityMgr::CreateEntity(EntityDescription& desc)
 
 void EntityMgr::DestroyEntity(const EntityHandle entityToDestroy)
 {
-	//TODO: HasEntityComponentOfType() fails assert
-	/*// remove entities with sprites from GfxSceneMgr			
-	if (HasEntityComponentOfType(entityToDestroy, CT_SPRITE))
-	{
-		gGfxSceneMgr.RemoveSpriteEntity(entityToDestroy);
-	}
-	// remove camera from GfxSceneMgr
-	if (HasEntityComponentOfType(entityToDestroy, CT_CAMERA))
-	{
-		gGfxSceneMgr.RemoveCamera(entityToDestroy);
-	}*/
-
 	mEntityDestroyQueue.push_back(entityToDestroy.GetID());
 }
 
@@ -272,15 +260,28 @@ void EntityMgr::DestroyEntityImmediately( const EntityID entityToDestroy, const 
 	EntityMap::iterator entityIt = mEntities.find(entityToDestroy);
 	if (entityIt != mEntities.end())
 	{
+		// remove entities with sprites from GfxSceneMgr			
+		if (HasEntityComponentOfType(entityToDestroy, CT_SPRITE))
+		{
+			gGfxSceneMgr.RemoveSpriteEntity(entityToDestroy);
+		}
+
+		// remove camera from GfxSceneMgr
+		if (HasEntityComponentOfType(entityToDestroy, CT_CAMERA))
+		{
+			gGfxSceneMgr.RemoveCamera(entityToDestroy);
+		}
+
+		// destroy components of the entity
 		mComponentMgr->DestroyEntityComponents(entityToDestroy);
 
+		// destroy the link between the entity and its prototype
 		if (entityIt->second->mPrototype.IsValid())
 		{
 			UnlinkEntityFromPrototype(entityToDestroy);
 		}
 
 		delete entityIt->second;
-		entityIt->second = 0;
 
 		if (erase) mEntities.erase(entityIt);
 	}
