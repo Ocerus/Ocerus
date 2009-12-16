@@ -1,6 +1,6 @@
 /*=============================================================================
     Copyright (c) 2001-2007 Joel de Guzman
-    Copyright (c) 2001-2008 Hartmut Kaiser
+    Copyright (c) 2001-2009 Hartmut Kaiser
 
     Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -24,11 +24,14 @@ namespace boost { namespace spirit { namespace qi
     ///////////////////////////////////////////////////////////////////////////
     // forwards
     ///////////////////////////////////////////////////////////////////////////
+    struct main_meta_grammar;
+
     struct none;
     struct eps_parser;
     struct semantic_predicate;
     struct lazy_parser;
     struct functor_director;
+    struct confix_director;
 
     struct eol_director;
     struct eoi_director;
@@ -50,18 +53,28 @@ namespace boost { namespace spirit { namespace qi
     // none, eps and eps(f)
     struct auxiliary_meta_grammar1
       : proto::or_<
+        // none
             meta_grammar::empty_terminal_rule<
                 qi::domain, tag::none, none>
+        // eps
           , meta_grammar::empty_terminal_rule<
                 qi::domain, tag::eps, eps_parser>
+        // eps()
           , meta_grammar::function1_rule<
                 qi::domain, tag::eps, semantic_predicate>
+        // lazy()
           , meta_grammar::function1_rule<
                 qi::domain, tag::lazy, lazy_parser>
+        // functor parser
           , meta_grammar::terminal_rule<
                 qi::domain
               , functor_holder<proto::_, proto::_>
               , functor_director
+            >
+        // confix(..., ...)[...]
+          , meta_grammar::subscript_rule<
+                qi::domain, tag::confix_tag<proto::_, proto::_>, 
+                confix_director, main_meta_grammar
             >
         >
     {

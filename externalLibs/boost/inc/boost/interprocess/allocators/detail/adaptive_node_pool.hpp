@@ -17,6 +17,7 @@
 
 #include <boost/interprocess/detail/config_begin.hpp>
 #include <boost/interprocess/detail/workaround.hpp>
+#include <boost/pointer_to_other.hpp>
 #include <boost/interprocess/interprocess_fwd.hpp>
 #include <boost/interprocess/sync/interprocess_mutex.hpp>
 #include <boost/interprocess/detail/utilities.hpp>
@@ -27,10 +28,11 @@
 #include <boost/intrusive/slist.hpp>
 #include <boost/math/common_factor_ct.hpp>
 #include <boost/interprocess/detail/type_traits.hpp>
+#include <boost/interprocess/mem_algo/detail/mem_algo_common.hpp>
 #include <boost/interprocess/allocators/detail/node_tools.hpp>
 #include <boost/interprocess/allocators/detail/allocator_common.hpp>
 #include <cstddef>
-#include <cmath>
+#include <boost/config/no_tr1/cmath.hpp>
 #include <cassert>
 
 //!\file
@@ -53,7 +55,6 @@ class private_adaptive_node_pool_impl
    public:
    typedef typename node_slist<void_pointer>::node_t node_t;
    typedef typename node_slist<void_pointer>::node_slist_t free_nodes_t;
-   typedef typename SegmentManagerBase::multiallocation_iterator  multiallocation_iterator;
    typedef typename SegmentManagerBase::multiallocation_chain     multiallocation_chain;
 
    private:
@@ -200,8 +201,9 @@ class private_adaptive_node_pool_impl
    //!Deallocates an array pointed by ptr. Never throws
    void deallocate_node(void *pElem)
    {
-      this->priv_reinsert_nodes_in_block
-         (multiallocation_iterator::create_simple_range(pElem));
+      multiallocation_chain chain;
+      chain.push_front(void_pointer(pElem));
+      this->priv_reinsert_nodes_in_block(chain, 1);
       //Update free block count
       if(m_totally_free_blocks > m_max_free_blocks){
          this->priv_deallocate_free_blocks(m_max_free_blocks);
@@ -209,13 +211,14 @@ class private_adaptive_node_pool_impl
       priv_invariants();
    }
 
-   //!Allocates a singly linked list of n nodes ending in null pointer. 
-   //!can throw boost::interprocess::bad_alloc
-   void allocate_nodes(multiallocation_chain &nodes, const std::size_t n)
+   //!Allocates n nodes. 
+   //!Can throw boost::interprocess::bad_alloc
+   multiallocation_chain allocate_nodes(const std::size_t n)
    {
+      multiallocation_chain chain;
+      std::size_t i = 0;
       try{
          priv_invariants();
-         std::size_t i = 0;
          while(i != n){
             //If there are no free nodes we allocate all needed blocks
             if (m_block_multiset.empty()){
@@ -230,9 +233,9 @@ class private_adaptive_node_pool_impl
             for(std::size_t j = 0; j != num_elems; ++j){
                void *new_node = &free_nodes.front();
                free_nodes.pop_front();
-               nodes.push_back(new_node);
+               chain.push_back(new_node);
             }
-            
+
             if(free_nodes.empty()){
                m_block_multiset.erase(m_block_multiset.begin());
             }
@@ -240,41 +243,23 @@ class private_adaptive_node_pool_impl
          }
       }
       catch(...){
-         this->deallocate_nodes(nodes, nodes.size());
+         this->deallocate_nodes(chain, i);
          throw;
       }
       priv_invariants();
-   }
-
-   //!Allocates n nodes, pointed by the multiallocation_iterator. 
-   //!Can throw boost::interprocess::bad_alloc
-   multiallocation_iterator allocate_nodes(const std::size_t n)
-   {
-      multiallocation_chain chain;
-      this->allocate_nodes(chain, n);
-      return chain.get_it();
+      return boost::interprocess::move(chain);
    }
 
    //!Deallocates a linked list of nodes. Never throws
-   void deallocate_nodes(multiallocation_chain &nodes)
+   void deallocate_nodes(multiallocation_chain nodes)
    {
-      this->deallocate_nodes(nodes.get_it());
-      nodes.reset();
+      return deallocate_nodes(nodes, nodes.size());
    }
 
    //!Deallocates the first n nodes of a linked list of nodes. Never throws
    void deallocate_nodes(multiallocation_chain &nodes, std::size_t n)
    {
-      assert(nodes.size() >= n);
-      for(std::size_t i = 0; i < n; ++i){
-         this->deallocate_node(nodes.pop_front());
-      }
-   }
-
-   //!Deallocates the nodes pointed by the multiallocation iterator. Never throws
-   void deallocate_nodes(multiallocation_iterator it)
-   {
-      this->priv_reinsert_nodes_in_block(it);
+      this->priv_reinsert_nodes_in_block(nodes, n);
       if(m_totally_free_blocks > m_max_free_blocks){
          this->priv_deallocate_free_blocks(m_max_free_blocks);
       }
@@ -331,13 +316,12 @@ class private_adaptive_node_pool_impl
       }
    }
 
-   void priv_reinsert_nodes_in_block(multiallocation_iterator it)
+   void priv_reinsert_nodes_in_block(multiallocation_chain &chain, std::size_t n)
    {
-      multiallocation_iterator itend;
       block_iterator block_it(m_block_multiset.end());
-      while(it != itend){
-         void *pElem = &*it;
-         ++it;
+      while(n--){
+         void *pElem = detail::get_pointer(chain.front());
+         chain.pop_front();
          priv_invariants();
          block_info_t *block_info = this->priv_block_from_node(pElem);
          assert(block_info->free_nodes.size() < m_real_num_node);
@@ -410,14 +394,14 @@ class private_adaptive_node_pool_impl
          (void)free_nodes;
          assert(free_nodes == mp_impl->m_real_num_node);
          assert(0 == to_deallocate->hdr_offset);
-         hdr_offset_holder *hdr_off_holder = mp_impl->priv_first_subblock_from_block((block_info_t*)detail::get_pointer(to_deallocate));
+         hdr_offset_holder *hdr_off_holder = mp_impl->priv_first_subblock_from_block(detail::get_pointer(to_deallocate));
          mp_impl->mp_segment_mngr_base->deallocate(hdr_off_holder);
       }
       const private_adaptive_node_pool_impl *mp_impl;
    };
 
    //This macro will activate invariant checking. Slow, but helpful for debugging the code.
-   #define BOOST_INTERPROCESS_ADAPTIVE_NODE_POOL_CHECK_INVARIANTS
+   //#define BOOST_INTERPROCESS_ADAPTIVE_NODE_POOL_CHECK_INVARIANTS
    void priv_invariants()
    #ifdef BOOST_INTERPROCESS_ADAPTIVE_NODE_POOL_CHECK_INVARIANTS
    #undef BOOST_INTERPROCESS_ADAPTIVE_NODE_POOL_CHECK_INVARIANTS
@@ -463,10 +447,10 @@ class private_adaptive_node_pool_impl
       for(; it != itend; ++it){
          hdr_offset_holder *hdr_off_holder = priv_first_subblock_from_block(&*it);
          for(std::size_t i = 0, max = m_num_subblocks; i < max; ++i){
-            assert(hdr_off_holder->hdr_offset == std::size_t((char*)&*it- (char*)hdr_off_holder));
+            assert(hdr_off_holder->hdr_offset == std::size_t(reinterpret_cast<char*>(&*it)- reinterpret_cast<char*>(hdr_off_holder)));
             assert(0 == ((std::size_t)hdr_off_holder & (m_real_block_alignment - 1)));
             assert(0 == (hdr_off_holder->hdr_offset & (m_real_block_alignment - 1)));
-            hdr_off_holder = (hdr_offset_holder *)((char*)hdr_off_holder + m_real_block_alignment);
+            hdr_off_holder = reinterpret_cast<hdr_offset_holder *>(reinterpret_cast<char*>(hdr_off_holder) + m_real_block_alignment);
          }
       }
       }
@@ -484,6 +468,7 @@ class private_adaptive_node_pool_impl
       std::size_t num_free_nodes = 0;
       for(; it != itend; ++it){
          //Check for memory leak
+         std::size_t n = (std::size_t)it->free_nodes.size(); (void)n;
          assert(it->free_nodes.size() == m_real_num_node);
          ++num_free_nodes;
       }
@@ -498,19 +483,20 @@ class private_adaptive_node_pool_impl
    block_info_t *priv_block_from_node(void *node) const
    {
       hdr_offset_holder *hdr_off_holder =
-         (hdr_offset_holder*)((std::size_t)node & std::size_t(~(m_real_block_alignment - 1)));
+         reinterpret_cast<hdr_offset_holder*>((std::size_t)node & std::size_t(~(m_real_block_alignment - 1)));
       assert(0 == ((std::size_t)hdr_off_holder & (m_real_block_alignment - 1)));
       assert(0 == (hdr_off_holder->hdr_offset & (m_real_block_alignment - 1)));
-      block_info_t *block = (block_info_t *)(((char*)hdr_off_holder) + hdr_off_holder->hdr_offset);
+      block_info_t *block = reinterpret_cast<block_info_t *>
+         (reinterpret_cast<char*>(hdr_off_holder) + hdr_off_holder->hdr_offset);
       assert(block->hdr_offset == 0);
       return block;
    }
 
    hdr_offset_holder *priv_first_subblock_from_block(block_info_t *block) const
    {
-      hdr_offset_holder *hdr_off_holder = (hdr_offset_holder*)
-            (((char*)block) - (m_num_subblocks-1)*m_real_block_alignment);
-      assert(hdr_off_holder->hdr_offset == std::size_t((char*)block - (char*)hdr_off_holder));
+      hdr_offset_holder *hdr_off_holder = reinterpret_cast<hdr_offset_holder*>
+            (reinterpret_cast<char*>(block) - (m_num_subblocks-1)*m_real_block_alignment);
+      assert(hdr_off_holder->hdr_offset == std::size_t(reinterpret_cast<char*>(block) - reinterpret_cast<char*>(hdr_off_holder)));
       assert(0 == ((std::size_t)hdr_off_holder & (m_real_block_alignment - 1)));
       assert(0 == (hdr_off_holder->hdr_offset & (m_real_block_alignment - 1)));
       return hdr_off_holder;
@@ -526,7 +512,7 @@ class private_adaptive_node_pool_impl
       for(std::size_t i = 0; i != n; ++i){
          //We allocate a new NodeBlock and put it the last
          //element of the tree
-         char *mem_address = detail::char_ptr_cast
+         char *mem_address = static_cast<char*>
             (mp_segment_mngr_base->allocate_aligned(real_block_size, m_real_block_alignment));
          if(!mem_address)   throw std::bad_alloc();
          ++m_totally_free_blocks;
@@ -564,7 +550,7 @@ class private_adaptive_node_pool_impl
    }
 
    private:
-   typedef typename pointer_to_other
+   typedef typename boost::pointer_to_other
       <void_pointer, segment_manager_base_type>::type   segment_mngr_base_ptr_t;
 
    const std::size_t m_max_free_blocks;

@@ -43,9 +43,12 @@ class basic_managed_external_buffer
    /// @cond
    typedef detail::basic_managed_memory_impl 
       <CharType, AllocationAlgorithm, IndexType>    base_t;
+   basic_managed_external_buffer(basic_managed_external_buffer&);
+   basic_managed_external_buffer & operator=(basic_managed_external_buffer&);
    /// @endcond
-
+   
    public:
+   BOOST_INTERPROCESS_ENABLE_MOVE_EMULATION(basic_managed_external_buffer)
 
    //!Default constructor. Does nothing.
    //!Useful in combination with move semantics
@@ -75,26 +78,18 @@ class basic_managed_external_buffer
    }
 
    //!Moves the ownership of "moved"'s managed memory to *this. Does not throw
-   #ifndef BOOST_INTERPROCESS_RVALUE_REFERENCE
-   basic_managed_external_buffer
-      (detail::moved_object<basic_managed_external_buffer> moved)
-   {  this->swap(moved.get());   }
-   #else
-   basic_managed_external_buffer
-      (basic_managed_external_buffer &&moved)
-   {  this->swap(moved);   }
-   #endif
+   basic_managed_external_buffer(BOOST_INTERPROCESS_RV_REF(basic_managed_external_buffer) moved)
+   {
+      this->swap(moved);
+   }
 
    //!Moves the ownership of "moved"'s managed memory to *this. Does not throw
-   #ifndef BOOST_INTERPROCESS_RVALUE_REFERENCE
-   basic_managed_external_buffer &operator=
-      (detail::moved_object<basic_managed_external_buffer> moved)
-   {  this->swap(moved.get());   return *this;  }
-   #else
-   basic_managed_external_buffer &operator=
-      (basic_managed_external_buffer &&moved)
-   {  this->swap(moved);   return *this;  }
-   #endif
+   basic_managed_external_buffer &operator=(BOOST_INTERPROCESS_RV_REF(basic_managed_external_buffer) moved)
+   {
+      basic_managed_external_buffer tmp(boost::interprocess::move(moved));
+      this->swap(tmp);
+      return *this;
+   }
 
    void grow(std::size_t extra_bytes)
    {  base_t::grow(extra_bytes);   }
@@ -103,28 +98,7 @@ class basic_managed_external_buffer
    //!Never throws.
    void swap(basic_managed_external_buffer &other)
    {  base_t::swap(other); }
-
 };
-
-///@cond
-
-//!Trait class to detect if a type is
-//!movable
-template
-      <
-         class CharType, 
-         class AllocationAlgorithm, 
-         template<class IndexConfig> class IndexType
-      >
-struct is_movable<basic_managed_external_buffer
-   <CharType,  AllocationAlgorithm, IndexType>
->
-{
-   static const bool value = true;
-};
-
-///@endcond
-
 
 }  //namespace interprocess {
 }  //namespace boost {

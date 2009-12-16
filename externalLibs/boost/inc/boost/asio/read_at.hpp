@@ -49,7 +49,7 @@ namespace asio {
  *
  * @li An error occurred.
  *
- * This operation is implemented in terms of one or more calls to the device's
+ * This operation is implemented in terms of zero or more calls to the device's
  * read_some_at function.
  *
  * @param d The device from which the data is to be read. The type must support
@@ -91,9 +91,9 @@ std::size_t read_at(SyncRandomAccessReadDevice& d,
  * @li The supplied buffers are full. That is, the bytes transferred is equal to
  * the sum of the buffer sizes.
  *
- * @li The completion_condition function object returns true.
+ * @li The completion_condition function object returns 0.
  *
- * This operation is implemented in terms of one or more calls to the device's
+ * This operation is implemented in terms of zero or more calls to the device's
  * read_some_at function.
  *
  * @param d The device from which the data is to be read. The type must support
@@ -108,16 +108,16 @@ std::size_t read_at(SyncRandomAccessReadDevice& d,
  * @param completion_condition The function object to be called to determine
  * whether the read operation is complete. The signature of the function object
  * must be:
- * @code bool completion_condition(
+ * @code std::size_t completion_condition(
  *   // Result of latest read_some_at operation.
  *   const boost::system::error_code& error,
  *
  *   // Number of bytes transferred so far.
  *   std::size_t bytes_transferred
  * ); @endcode
- * A return value of true indicates that the read operation is complete. False
- * indicates that further calls to the device's read_some_at function are
- * required.
+ * A return value of 0 indicates that the read operation is complete. A non-zero
+ * return value indicates the maximum number of bytes to be read on the next
+ * call to the device's read_some_at function.
  *
  * @returns The number of bytes transferred.
  *
@@ -147,9 +147,9 @@ std::size_t read_at(SyncRandomAccessReadDevice& d,
  * @li The supplied buffers are full. That is, the bytes transferred is equal to
  * the sum of the buffer sizes.
  *
- * @li The completion_condition function object returns true.
+ * @li The completion_condition function object returns 0.
  *
- * This operation is implemented in terms of one or more calls to the device's
+ * This operation is implemented in terms of zero or more calls to the device's
  * read_some_at function.
  *
  * @param d The device from which the data is to be read. The type must support
@@ -164,16 +164,16 @@ std::size_t read_at(SyncRandomAccessReadDevice& d,
  * @param completion_condition The function object to be called to determine
  * whether the read operation is complete. The signature of the function object
  * must be:
- * @code bool completion_condition(
- *   const boost::system::error_code& error, // Result of latest read_some_at
- *                                           // operation.
+ * @code std::size_t completion_condition(
+ *   // Result of latest read_some_at operation.
+ *   const boost::system::error_code& error,
  *
- *   std::size_t bytes_transferred           // Number of bytes transferred
- *                                           // so far.
+ *   // Number of bytes transferred so far.
+ *   std::size_t bytes_transferred
  * ); @endcode
- * A return value of true indicates that the read operation is complete. False
- * indicates that further calls to the device's read_some_at function are
- * required.
+ * A return value of 0 indicates that the read operation is complete. A non-zero
+ * return value indicates the maximum number of bytes to be read on the next
+ * call to the device's read_some_at function.
  *
  * @param ec Set to indicate what error occurred, if any.
  *
@@ -195,7 +195,7 @@ std::size_t read_at(SyncRandomAccessReadDevice& d,
  *
  * @li An error occurred.
  *
- * This operation is implemented in terms of one or more calls to the device's
+ * This operation is implemented in terms of zero or more calls to the device's
  * read_some_at function.
  *
  * @param d The device from which the data is to be read. The type must support
@@ -225,9 +225,9 @@ std::size_t read_at(SyncRandomAccessReadDevice& d,
  * random access device at the specified offset. The call will block until one
  * of the following conditions is true:
  *
- * @li The completion_condition function object returns true.
+ * @li The completion_condition function object returns 0.
  *
- * This operation is implemented in terms of one or more calls to the device's
+ * This operation is implemented in terms of zero or more calls to the device's
  * read_some_at function.
  *
  * @param d The device from which the data is to be read. The type must support
@@ -240,16 +240,16 @@ std::size_t read_at(SyncRandomAccessReadDevice& d,
  * @param completion_condition The function object to be called to determine
  * whether the read operation is complete. The signature of the function object
  * must be:
- * @code bool completion_condition(
+ * @code std::size_t completion_condition(
  *   // Result of latest read_some_at operation.
  *   const boost::system::error_code& error,
  *
  *   // Number of bytes transferred so far.
  *   std::size_t bytes_transferred
  * ); @endcode
- * A return value of true indicates that the read operation is complete. False
- * indicates that further calls to the device's read_some_at function are
- * required.
+ * A return value of 0 indicates that the read operation is complete. A non-zero
+ * return value indicates the maximum number of bytes to be read on the next
+ * call to the device's read_some_at function.
  *
  * @returns The number of bytes transferred.
  *
@@ -268,9 +268,9 @@ std::size_t read_at(SyncRandomAccessReadDevice& d,
  * random access device at the specified offset. The call will block until one
  * of the following conditions is true:
  *
- * @li The completion_condition function object returns true.
+ * @li The completion_condition function object returns 0.
  *
- * This operation is implemented in terms of one or more calls to the device's
+ * This operation is implemented in terms of zero or more calls to the device's
  * read_some_at function.
  *
  * @param d The device from which the data is to be read. The type must support
@@ -283,16 +283,16 @@ std::size_t read_at(SyncRandomAccessReadDevice& d,
  * @param completion_condition The function object to be called to determine
  * whether the read operation is complete. The signature of the function object
  * must be:
- * @code bool completion_condition(
+ * @code std::size_t completion_condition(
  *   // Result of latest read_some_at operation.
  *   const boost::system::error_code& error,
  *
  *   // Number of bytes transferred so far.
  *   std::size_t bytes_transferred
  * ); @endcode
- * A return value of true indicates that the read operation is complete. False
- * indicates that further calls to the device's read_some_at function are
- * required.
+ * A return value of 0 indicates that the read operation is complete. A non-zero
+ * return value indicates the maximum number of bytes to be read on the next
+ * call to the device's read_some_at function.
  *
  * @param ec Set to indicate what error occurred, if any.
  *
@@ -327,7 +327,7 @@ std::size_t read_at(SyncRandomAccessReadDevice& d,
  *
  * @li An error occurred.
  *
- * This operation is implemented in terms of one or more calls to the device's
+ * This operation is implemented in terms of zero or more calls to the device's
  * async_read_some_at function.
  *
  * @param d The device from which the data is to be read. The type must support
@@ -389,7 +389,7 @@ void async_read_at(AsyncRandomAccessReadDevice& d, boost::uint64_t offset,
  * @li The supplied buffers are full. That is, the bytes transferred is equal to
  * the sum of the buffer sizes.
  *
- * @li The completion_condition function object returns true.
+ * @li The completion_condition function object returns 0.
  *
  * @param d The device from which the data is to be read. The type must support
  * the AsyncRandomAccessReadDevice concept.
@@ -405,16 +405,16 @@ void async_read_at(AsyncRandomAccessReadDevice& d, boost::uint64_t offset,
  * @param completion_condition The function object to be called to determine
  * whether the read operation is complete. The signature of the function object
  * must be:
- * @code bool completion_condition(
- *   // Result of latest read_some_at operation.
+ * @code std::size_t completion_condition(
+ *   // Result of latest async_read_some_at operation.
  *   const boost::system::error_code& error,
  *
  *   // Number of bytes transferred so far.
  *   std::size_t bytes_transferred
  * ); @endcode
- * A return value of true indicates that the read operation is complete. False
- * indicates that further calls to the device's async_read_some_at function are
- * required.
+ * A return value of 0 indicates that the read operation is complete. A non-zero
+ * return value indicates the maximum number of bytes to be read on the next
+ * call to the device's async_read_some_at function.
  *
  * @param handler The handler to be called when the read operation completes.
  * Copies will be made of the handler as required. The function signature of the
@@ -459,7 +459,7 @@ void async_read_at(AsyncRandomAccessReadDevice& d,
  *
  * @li An error occurred.
  *
- * This operation is implemented in terms of one or more calls to the device's
+ * This operation is implemented in terms of zero or more calls to the device's
  * async_read_some_at function.
  *
  * @param d The device from which the data is to be read. The type must support
@@ -507,9 +507,9 @@ void async_read_at(AsyncRandomAccessReadDevice& d, boost::uint64_t offset,
  * always returns immediately. The asynchronous operation will continue until
  * one of the following conditions is true:
  *
- * @li The completion_condition function object returns true.
+ * @li The completion_condition function object returns 0.
  *
- * This operation is implemented in terms of one or more calls to the device's
+ * This operation is implemented in terms of zero or more calls to the device's
  * async_read_some_at function.
  *
  * @param d The device from which the data is to be read. The type must support
@@ -524,16 +524,16 @@ void async_read_at(AsyncRandomAccessReadDevice& d, boost::uint64_t offset,
  * @param completion_condition The function object to be called to determine
  * whether the read operation is complete. The signature of the function object
  * must be:
- * @code bool completion_condition(
- *   // Result of latest read_some_at operation.
+ * @code std::size_t completion_condition(
+ *   // Result of latest async_read_some_at operation.
  *   const boost::system::error_code& error,
  *
  *   // Number of bytes transferred so far.
  *   std::size_t bytes_transferred
  * ); @endcode
- * A return value of true indicates that the read operation is complete. False
- * indicates that further calls to the device's async_read_some_at function are
- * required.
+ * A return value of 0 indicates that the read operation is complete. A non-zero
+ * return value indicates the maximum number of bytes to be read on the next
+ * call to the device's async_read_some_at function.
  *
  * @param handler The handler to be called when the read operation completes.
  * Copies will be made of the handler as required. The function signature of the

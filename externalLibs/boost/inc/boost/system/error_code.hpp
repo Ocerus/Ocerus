@@ -207,6 +207,7 @@ namespace boost
     
 # ifndef BOOST_SYSTEM_NO_DEPRECATED
     //  deprecated synonyms
+    inline const error_category &  get_posix_category() { return get_generic_category(); }
     static const error_category &  posix_category = get_generic_category();
     static const error_category &  errno_ecat     = get_generic_category();
     static const error_category &  native_ecat    = get_system_category();
@@ -214,7 +215,7 @@ namespace boost
 
     //  class error_condition  -----------------------------------------------//
 
-    //  error_conditions are portable, error_codes are system or lib specific
+    //  error_conditions are portable, error_codes are system or library specific
 
     class error_condition
     {
@@ -224,9 +225,9 @@ namespace boost
       error_condition() : m_val(0), m_cat(&get_generic_category()) {}
       error_condition( int val, const error_category & cat ) : m_val(val), m_cat(&cat) {}
 
-      template <class ConditionEnum>
-        error_condition(ConditionEnum e,
-          typename boost::enable_if<is_error_condition_enum<ConditionEnum> >::type* = 0)
+      template <class ErrorConditionEnum>
+        error_condition(ErrorConditionEnum e,
+          typename boost::enable_if<is_error_condition_enum<ErrorConditionEnum> >::type* = 0)
       {
         *this = make_error_condition(e);
       }
@@ -239,9 +240,9 @@ namespace boost
         m_cat = &cat;
       }
                                              
-      template<typename ConditionEnum>
-        typename boost::enable_if<is_error_condition_enum<ConditionEnum>, error_condition>::type &
-          operator=( ConditionEnum val )
+      template<typename ErrorConditionEnum>
+        typename boost::enable_if<is_error_condition_enum<ErrorConditionEnum>, error_condition>::type &
+          operator=( ErrorConditionEnum val )
       { 
         *this = make_error_condition(val);
         return *this;
@@ -311,9 +312,9 @@ namespace boost
       error_code() : m_val(0), m_cat(&get_system_category()) {}
       error_code( int val, const error_category & cat ) : m_val(val), m_cat(&cat) {}
 
-      template <class CodeEnum>
-        error_code(CodeEnum e,
-          typename boost::enable_if<is_error_code_enum<CodeEnum> >::type* = 0)
+      template <class ErrorCodeEnum>
+        error_code(ErrorCodeEnum e,
+          typename boost::enable_if<is_error_code_enum<ErrorCodeEnum> >::type* = 0)
       {
         *this = make_error_code(e);
       }
@@ -325,9 +326,9 @@ namespace boost
         m_cat = &cat;
       }
                                              
-      template<typename CodeEnum>
-        typename boost::enable_if<is_error_code_enum<CodeEnum>, error_code>::type &
-          operator=( CodeEnum val )
+      template<typename ErrorCodeEnum>
+        typename boost::enable_if<is_error_code_enum<ErrorCodeEnum>, error_code>::type &
+          operator=( ErrorCodeEnum val )
       { 
         *this = make_error_code(val);
         return *this;
@@ -382,6 +383,31 @@ namespace boost
 
     };
 
+    //  predefined error_code object used as "throw on error" tag
+# ifndef BOOST_SYSTEM_NO_DEPRECATED
+    BOOST_SYSTEM_DECL extern error_code throws;
+# endif
+
+    //  Moving from a "throws" object to a "throws" function without breaking
+    //  existing code is a bit of a problem. The workaround is to place the
+    //  "throws" function in namespace boost rather than namespace boost::system.
+
+  }  // namespace system
+
+  namespace detail { inline system::error_code * throws() { return 0; } }
+    //  Misuse of the error_code object is turned into a noisy failure by
+    //  poisoning the reference. This particular implementation doesn't
+    //  produce warnings or errors from popular compilers, is very efficient
+    //  (as determined by inspecting generated code), and does not suffer
+    //  from order of initialization problems. In practice, it also seems
+    //  cause user function error handling implementation errors to be detected
+    //  very early in the development cycle.
+
+  inline system::error_code & throws()
+    { return *detail::throws(); }
+
+  namespace system
+  {
     //  non-member functions  ------------------------------------------------//
 
     inline bool operator!=( const error_code & lhs,

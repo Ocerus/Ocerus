@@ -1,6 +1,6 @@
 /*=============================================================================
     Copyright (c) 2001-2007 Joel de Guzman
-    Copyright (c) 2001-2008 Hartmut Kaiser
+    Copyright (c) 2001-2009 Hartmut Kaiser
 
     Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -8,7 +8,7 @@
 #if !defined(BOOST_SPIRIT_PLACEHOLDERS_NOV_18_2006_0326PM)
 #define BOOST_SPIRIT_PLACEHOLDERS_NOV_18_2006_0326PM
 
-#include <boost/xpressive/proto/proto.hpp>
+#include <boost/proto/core.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/type_traits/is_enum.hpp>
 
@@ -30,7 +30,7 @@ namespace boost { namespace spirit
         struct bin {};
         struct oct {};
         struct hex {};
-        
+
         struct byte {};
         struct word {};
         struct dword {};
@@ -44,7 +44,7 @@ namespace boost { namespace spirit
         struct little_qword {};
 #endif
         struct pad {};
-        
+
         struct ushort {};
         struct ulong {};
         struct uint {};
@@ -72,10 +72,10 @@ namespace boost { namespace spirit
         struct lazy {};
         struct omit {};
         struct raw {};
-        
+
         struct stream {};
         struct wstream {};
-        
+
         struct token {};
     }
 

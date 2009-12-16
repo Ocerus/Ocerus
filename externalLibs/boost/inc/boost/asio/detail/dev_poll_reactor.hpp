@@ -123,6 +123,17 @@ public:
     timer_queues_.clear();
   } 
 
+  // Initialise the task, but only if the reactor is not in its own thread.
+  void init_task()
+  {
+    if (!Own_Thread)
+    {
+      typedef task_io_service<dev_poll_reactor<Own_Thread> >
+        task_io_service_type;
+      use_service<task_io_service_type>(this->get_io_service()).init_task();
+    }
+  }
+
   // Register a socket with the reactor. Returns 0 on success, system error
   // code on failure.
   int register_descriptor(socket_type, per_descriptor_data&)
@@ -355,23 +366,26 @@ private:
 
     // Write the pending event registration changes to the /dev/poll descriptor.
     std::size_t events_size = sizeof(::pollfd) * pending_event_changes_.size();
-    errno = 0;
-    int result = ::write(dev_poll_fd_,
-        &pending_event_changes_[0], events_size);
-    if (result != static_cast<int>(events_size))
+    if (events_size > 0)
     {
-      for (std::size_t i = 0; i < pending_event_changes_.size(); ++i)
+      errno = 0;
+      int result = ::write(dev_poll_fd_,
+          &pending_event_changes_[0], events_size);
+      if (result != static_cast<int>(events_size))
       {
-        int descriptor = pending_event_changes_[i].fd;
-        boost::system::error_code ec = boost::system::error_code(
-            errno, boost::asio::error::get_system_category());
-        read_op_queue_.perform_all_operations(descriptor, ec);
-        write_op_queue_.perform_all_operations(descriptor, ec);
-        except_op_queue_.perform_all_operations(descriptor, ec);
+        for (std::size_t i = 0; i < pending_event_changes_.size(); ++i)
+        {
+          int descriptor = pending_event_changes_[i].fd;
+          boost::system::error_code ec = boost::system::error_code(
+              errno, boost::asio::error::get_system_category());
+          read_op_queue_.perform_all_operations(descriptor, ec);
+          write_op_queue_.perform_all_operations(descriptor, ec);
+          except_op_queue_.perform_all_operations(descriptor, ec);
+        }
       }
+      pending_event_changes_.clear();
+      pending_event_change_index_.clear();
     }
-    pending_event_changes_.clear();
-    pending_event_change_index_.clear();
 
     int timeout = block ? get_timeout() : 0;
     wait_in_progress_ = true;

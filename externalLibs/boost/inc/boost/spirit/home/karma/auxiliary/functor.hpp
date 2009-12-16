@@ -1,4 +1,4 @@
-//  Copyright (c) 2001-2008 Hartmut Kaiser
+//  Copyright (c) 2001-2009 Hartmut Kaiser
 // 
 //  Distributed under the Boost Software License, Version 1.0. (See accompanying 
 //  file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -178,7 +178,7 @@ namespace boost { namespace spirit { namespace karma
     //              typedef unspecified type;
     //          };
     //
-    //      which declares the given type as the expected parameter type for 
+    //      which declares the given type as the expected attribute type for 
     //      the generator to create.
     ///////////////////////////////////////////////////////////////////////////
     template <typename Functor>
@@ -187,10 +187,10 @@ namespace boost { namespace spirit { namespace karma
     {
         return functor_generator<Functor>(func);
     }
-    
+
     ///////////////////////////////////////////////////////////////////////////
     //  The as_generator_mf generator function is equivalent to the function
-    //  as_generator above except that the user has explicitly to specify a
+    //  as_generator above except that the user has to explicitly specify a
     //  type exposing an embedded apply meta function declaring the expected
     //  parameter type for the generator to create.
     ///////////////////////////////////////////////////////////////////////////
@@ -200,7 +200,7 @@ namespace boost { namespace spirit { namespace karma
     {
         return functor_generator<Functor, ParameterMF>(func, mf);
     }
-    
+
     template <typename ParameterMF, typename Functor>
     inline typename result_of::as_generator_mf<Functor, ParameterMF>::type
     as_generator_mf(Functor const& func)

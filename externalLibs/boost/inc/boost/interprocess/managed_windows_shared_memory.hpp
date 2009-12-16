@@ -60,9 +60,13 @@ class basic_managed_windows_shared_memory
 
    private:
    typedef typename base_t::char_ptr_holder_t   char_ptr_holder_t;
+   basic_managed_windows_shared_memory(basic_managed_windows_shared_memory&);
+   basic_managed_windows_shared_memory & operator=(basic_managed_windows_shared_memory&);
+
    /// @endcond
 
    public: //functions
+   BOOST_INTERPROCESS_ENABLE_MOVE_EMULATION(basic_managed_windows_shared_memory)
 
    //!Default constructor. Does nothing.
    //!Useful in combination with move semantics
@@ -121,26 +125,18 @@ class basic_managed_windows_shared_memory
 
    //!Moves the ownership of "moved"'s managed memory to *this.
    //!Does not throw
-   #ifndef BOOST_INTERPROCESS_RVALUE_REFERENCE
    basic_managed_windows_shared_memory
-      (detail::moved_object<basic_managed_windows_shared_memory> moved)
-   {  this->swap(moved.get());   }
-   #else
-   basic_managed_windows_shared_memory(basic_managed_windows_shared_memory &&moved)
+      (BOOST_INTERPROCESS_RV_REF(basic_managed_windows_shared_memory) moved)
    {  this->swap(moved);   }
-   #endif
 
    //!Moves the ownership of "moved"'s managed memory to *this.
    //!Does not throw
-   #ifndef BOOST_INTERPROCESS_RVALUE_REFERENCE
-   basic_managed_windows_shared_memory &operator=
-      (detail::moved_object<basic_managed_windows_shared_memory> moved)
-   {  this->swap(moved.get());   return *this;  }
-   #else
-   basic_managed_windows_shared_memory &operator=
-      (basic_managed_windows_shared_memory &&moved)
-   {  this->swap(moved);   return *this;  }
-   #endif
+   basic_managed_windows_shared_memory &operator=(BOOST_INTERPROCESS_RV_REF(basic_managed_windows_shared_memory) moved)
+   {
+      basic_managed_windows_shared_memory tmp(boost::interprocess::move(moved));
+      this->swap(tmp);
+      return *this;
+   }
 
    //!Destroys *this and indicates that the calling process is finished using
    //!the resource. All mapped regions are still valid after
@@ -157,6 +153,7 @@ class basic_managed_windows_shared_memory
       base_t::swap(other);
       m_wshm.swap(other.m_wshm);
    }
+
    /// @cond
 
    //!Tries to find a previous named allocation address. Returns a memory
@@ -177,25 +174,6 @@ class basic_managed_windows_shared_memory
    detail::managed_open_or_create_impl<windows_shared_memory, false> m_wshm;
    /// @endcond
 };
-
-///@cond
-
-//!Trait class to detect if a type is
-//!movable
-template
-      <
-         class CharType, 
-         class AllocationAlgorithm, 
-         template<class IndexConfig> class IndexType
-      >
-struct is_movable<basic_managed_windows_shared_memory
-   <CharType,  AllocationAlgorithm, IndexType>
->
-{
-   static const bool value = true;
-};
-
-///@endcond
 
 }  //namespace interprocess {
 }  //namespace boost {

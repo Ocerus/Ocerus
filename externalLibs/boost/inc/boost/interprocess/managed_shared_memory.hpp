@@ -60,9 +60,12 @@ class basic_managed_shared_memory
 
    private:
    typedef typename base_t::char_ptr_holder_t   char_ptr_holder_t;
+   basic_managed_shared_memory(basic_managed_shared_memory&);
+   basic_managed_shared_memory & operator=(basic_managed_shared_memory&);
    /// @endcond
 
    public: //functions
+   BOOST_INTERPROCESS_ENABLE_MOVE_EMULATION(basic_managed_shared_memory)
 
    //!Destroys *this and indicates that the calling process is finished using
    //!the resource. The destructor function will deallocate
@@ -134,25 +137,21 @@ class basic_managed_shared_memory
 
    //!Moves the ownership of "moved"'s managed memory to *this.
    //!Does not throw
-   #ifndef BOOST_INTERPROCESS_RVALUE_REFERENCE
-   basic_managed_shared_memory
-      (detail::moved_object<basic_managed_shared_memory> moved)
-   {  this->swap(moved.get());   }
-   #else
-   basic_managed_shared_memory(basic_managed_shared_memory &&moved)
-   {  this->swap(moved);   }
-   #endif
+   basic_managed_shared_memory(BOOST_INTERPROCESS_RV_REF(basic_managed_shared_memory) moved)
+   {
+      basic_managed_shared_memory tmp;
+      this->swap(moved);
+      tmp.swap(moved);
+   }
 
    //!Moves the ownership of "moved"'s managed memory to *this.
    //!Does not throw
-   #ifndef BOOST_INTERPROCESS_RVALUE_REFERENCE
-   basic_managed_shared_memory &operator=
-      (detail::moved_object<basic_managed_shared_memory> moved)
-   {  this->swap(moved.get());   return *this;  }
-   #else
-   basic_managed_shared_memory &operator=(basic_managed_shared_memory &&moved)
-   {  this->swap(moved);   return *this;  }
-   #endif
+   basic_managed_shared_memory &operator=(BOOST_INTERPROCESS_RV_REF(basic_managed_shared_memory) moved)
+   {
+      basic_managed_shared_memory tmp(boost::interprocess::move(moved));
+      this->swap(tmp);
+      return *this;
+   }
 
    //!Swaps the ownership of the managed shared memories managed by *this and other.
    //!Never throws.
@@ -167,20 +166,20 @@ class basic_managed_shared_memory
    //!
    //!This function is not synchronized so no other thread or process should
    //!be reading or writing the file
-   static bool grow(const char *filename, std::size_t extra_bytes)
+   static bool grow(const char *shmname, std::size_t extra_bytes)
    {
       return base_t::template grow
-         <basic_managed_shared_memory>(filename, extra_bytes);
+         <basic_managed_shared_memory>(shmname, extra_bytes);
    }
 
    //!Tries to resize the managed shared memory to minimized the size of the file.
    //!
    //!This function is not synchronized so no other thread or process should
    //!be reading or writing the file
-   static bool shrink_to_fit(const char *filename)
+   static bool shrink_to_fit(const char *shmname)
    {
       return base_t::template shrink_to_fit
-         <basic_managed_shared_memory>(filename);
+         <basic_managed_shared_memory>(shmname);
    }
 
    /// @cond
@@ -201,25 +200,6 @@ class basic_managed_shared_memory
 
    /// @endcond
 };
-
-///@cond
-
-//!Trait class to detect if a type is
-//!movable
-template
-      <
-         class CharType, 
-         class AllocationAlgorithm, 
-         template<class IndexConfig> class IndexType
-      >
-struct is_movable<basic_managed_shared_memory
-   <CharType,  AllocationAlgorithm, IndexType>
->
-{
-   static const bool value = true;
-};
-
-///@endcond
 
 }  //namespace interprocess {
 }  //namespace boost {

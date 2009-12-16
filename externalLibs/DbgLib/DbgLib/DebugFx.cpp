@@ -16,6 +16,8 @@ void* CDebugFx::m_Param = NULL;
 LPTOP_LEVEL_EXCEPTION_FILTER CDebugFx::m_PrevUnhandledExceptionHandler = NULL;
 #endif
 
+CSymbolResolver g_SymbolResolver(CSymbolResolver::GetDefaultSymbolSearchPath().c_str());
+
 //////////////////////////////////////////////////////////////////////////
 size_t CDebugFx::GenerateStackTrace(tstring* p_StackTrace, const size_t p_BufferSize)
 {
@@ -26,7 +28,6 @@ size_t CDebugFx::GenerateStackTrace(tstring* p_StackTrace, const size_t p_Buffer
 	const int numCallsToSkip = 0;
 	#endif
 	uintx callstackSize = CDebugHelp::DoStackWalk(callstack, p_BufferSize, numCallsToSkip);
-	CSymbolResolver* symbolResolver = new CSymbolResolver(CSymbolResolver::GetDefaultSymbolSearchPath().c_str());
 
 	for (uintx stackIndex=0; stackIndex<callstackSize; ++stackIndex)
 	{
@@ -38,7 +39,7 @@ size_t CDebugFx::GenerateStackTrace(tstring* p_StackTrace, const size_t p_Buffer
 		tstring symFunc;
 		tstring symFile;
 		uintx symLine;
-		symbolResolver->ResolveSymbol(callstack[stackIndex], hModule, moduleName, symFunc, symFile, symLine);
+		g_SymbolResolver.ResolveSymbol(callstack[stackIndex], hModule, moduleName, symFunc, symFile, symLine);
 
 		// set unknown symbols
 		if(symFunc.empty())

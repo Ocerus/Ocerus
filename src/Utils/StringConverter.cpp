@@ -23,10 +23,8 @@ string StringConverter::ToString(bool val)
 template<>
 char* StringConverter::FromString(const string& str)
 {
-	char* result = new char[str.length()+1];
-	const char* temp = str.c_str();
-	strcpy(result, temp);
-	return result;
+	OC_ASSERT_MSG(false, "Use .c_str() instead, noob!");
+	return 0;
 }
 
 template<>

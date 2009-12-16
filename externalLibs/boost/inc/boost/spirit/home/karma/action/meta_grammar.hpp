@@ -1,4 +1,4 @@
-//  Copyright (c) 2001-2008 Hartmut Kaiser
+//  Copyright (c) 2001-2009 Hartmut Kaiser
 // 
 //  Distributed under the Boost Software License, Version 1.0. (See accompanying 
 //  file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -20,7 +20,7 @@ namespace boost { namespace spirit { namespace karma
     // forwards
     /////////////////////////////////////////////////////////////////////////// 
     struct action;
-    
+
     struct main_meta_grammar;
 
     template <typename Expr, typename Enable>
@@ -35,7 +35,7 @@ namespace boost { namespace spirit { namespace karma
     struct action_meta_grammar : 
         meta_grammar::binary_rule<
             karma::domain, proto::tag::subscript, action,
-            main_meta_grammar, proto::when<proto::_, proto::_arg>
+            main_meta_grammar, proto::when<proto::_, proto::_child>
         >
     {
     };

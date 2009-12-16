@@ -28,11 +28,14 @@ namespace std{
 #endif
 
 #include <boost/cstdint.hpp>
-#include <boost/pfto.hpp>
+#include <boost/serialization/pfto.hpp>
 #include <boost/archive/detail/oserializer.hpp>
 #include <boost/archive/detail/interface_oarchive.hpp>
 #include <boost/serialization/nvp.hpp>
 #include <boost/archive/detail/register_archive.hpp>
+
+#include <boost/archive/detail/decl.hpp>
+#include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
 // determine if its necessary to handle (u)int64_t specifically
 // i.e. that its not a synonym for (unsigned) long
@@ -41,13 +44,17 @@ namespace std{
 #if defined(BOOST_NO_INT64_T)
     #define BOOST_NO_INTRINSIC_INT64_T
 #else 
-    #if defined(ULONG_MAX)
-        #if(ULONG_MAX != 0xffffffff && ULONG_MAX == 18446744073709551615u) // 2**64 - 1
-            #define BOOST_NO_INTRINSIC_INT64_T
-        #endif
-    #else 
-        #define BOOST_NO_INTRINSIC_INT64_T
-    #endif
+    #if defined(ULLONG_MAX)  
+        #if(ULONG_MAX == 18446744073709551615ul) // 2**64 - 1  
+            #define BOOST_NO_INTRINSIC_INT64_T  
+        #endif  
+    #elif defined(ULONG_MAX)  
+        #if(ULONG_MAX != 0xffffffff && ULONG_MAX == 18446744073709551615ul) // 2**64 - 1  
+            #define BOOST_NO_INTRINSIC_INT64_T  
+        #endif  
+    #else   
+        #define BOOST_NO_INTRINSIC_INT64_T  
+    #endif  
 #endif
 
 namespace boost {
@@ -58,8 +65,8 @@ namespace serialization {
 } // namespace serialization
 namespace archive {
 namespace detail {
-    class basic_oarchive;
-    class basic_oserializer;
+    class BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_oarchive;
+    class BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_oserializer;
 }
 
 class polymorphic_oarchive;
@@ -161,5 +168,7 @@ public:
 
 // required by export
 BOOST_SERIALIZATION_REGISTER_ARCHIVE(boost::archive::polymorphic_oarchive)
+
+#include <boost/archive/detail/abi_suffix.hpp> // pops abi_suffix.hpp pragmas
 
 #endif // BOOST_ARCHIVE_POLYMORPHIC_OARCHIVE_HPP

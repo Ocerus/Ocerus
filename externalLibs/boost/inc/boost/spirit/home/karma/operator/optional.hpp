@@ -1,5 +1,5 @@
 //  Copyright (c) 2001-2007 Joel de Guzman
-//  Copyright (c) 2001-2008 Hartmut Kaiser
+//  Copyright (c) 2001-2009 Hartmut Kaiser
 //
 //  Distributed under the Boost Software License, Version 1.0. (See accompanying
 //  file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -12,6 +12,7 @@
 #endif
 
 #include <boost/spirit/home/support/component.hpp>
+#include <boost/spirit/home/support/attribute_of.hpp>
 #include <boost/spirit/home/support/attribute_transform.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/optional.hpp>
@@ -27,6 +28,13 @@ namespace boost { namespace spirit { namespace karma
             return opt;
         }
 
+        template <typename Parameter>
+        inline bool
+        optional_is_valid(Parameter const& opt)
+        {
+            return true;
+        }
+
         inline bool
         optional_is_valid(unused_type)
         {
@@ -37,7 +45,14 @@ namespace boost { namespace spirit { namespace karma
         inline Parameter const&
         optional_get(boost::optional<Parameter> const& opt)
         {
-            return get(opt) ;
+            return get(opt);
+        }
+
+        template <typename Parameter>
+        inline Parameter const&
+        optional_get(Parameter const& opt)
+        {
+            return opt;
         }
 
         inline unused_type

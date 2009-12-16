@@ -11,9 +11,9 @@
 #endif
 
 #include <boost/config.hpp>
-#include <boost/strong_typedef.hpp>
-#include <boost/pfto.hpp>
-#include <boost/throw_exception.hpp>
+#include <boost/serialization/strong_typedef.hpp>
+#include <boost/serialization/pfto.hpp>
+#include <boost/serialization/throw_exception.hpp>
 #include <boost/serialization/nvp.hpp>
 
 // incremented for each "release"
@@ -95,7 +95,7 @@ inline void load_construct_data(
     // default just uses the default constructor.  going
     // through access permits usage of otherwise private default
     // constructor
-    access::construct(ar, t);
+    access::construct(t);
 }
 
 /////////////////////////////////////////////////////////////////////////////

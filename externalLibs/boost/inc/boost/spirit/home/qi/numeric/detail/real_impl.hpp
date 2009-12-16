@@ -1,6 +1,6 @@
 /*=============================================================================
     Copyright (c) 2001-2007 Joel de Guzman
-    Copyright (c) 2001-2008 Hartmut Kaiser
+    Copyright (c) 2001-2009 Hartmut Kaiser
     http://spirit.sourceforge.net/
 
     Distributed under the Boost Software License, Version 1.0. (See accompanying
@@ -9,7 +9,7 @@
 #if !defined(SPIRIT_REAL_IMPL_APR_18_2006_0901AM)
 #define SPIRIT_REAL_IMPL_APR_18_2006_0901AM
 
-#include <cmath>
+#include <boost/config/no_tr1/cmath.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/spirit/home/support/unused.hpp>
 

@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 //
 // (C) Copyright Olaf Krzikalla 2004-2006.
-// (C) Copyright Ion Gaztanaga  2006-2007
+// (C) Copyright Ion Gaztanaga  2006-2008
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -160,6 +160,9 @@ class list_iterator
       else
          return 0;
    }
+
+   list_iterator<Container, false> unconst() const
+   {  return list_iterator<Container, false>(this->pointed_node(), this->get_container());   }
 
    private:
    struct members

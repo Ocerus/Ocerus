@@ -33,7 +33,7 @@
 #include <boost/mpl/size.hpp>
 #include <boost/mpl/empty.hpp>
 
-#include <boost/throw_exception.hpp>
+#include <boost/serialization/throw_exception.hpp>
 
 #include <boost/variant.hpp>
 
@@ -81,7 +81,7 @@ struct variant_impl {
             Archive & /*ar*/,
             int /*which*/,
             V & /*v*/,
-            unsigned int /*version*/
+            const unsigned int /*version*/
         ){}
     };
 
@@ -91,7 +91,7 @@ struct variant_impl {
             Archive & ar,
             int which,
             V & v,
-            unsigned int version
+            const unsigned int version
         ){
             if(which == 0){
                 // note: A non-intrusive implementation (such as this one)
@@ -115,7 +115,7 @@ struct variant_impl {
         Archive & ar,
         int which,
         V & v,
-        unsigned int version
+        const unsigned int version
     ){
         typedef BOOST_DEDUCED_TYPENAME mpl::eval_if<mpl::empty<S>,
             mpl::identity<load_null>,
@@ -130,14 +130,14 @@ template<class Archive, BOOST_VARIANT_ENUM_PARAMS(/* typename */ class T)>
 void load(
     Archive & ar, 
     boost::variant<BOOST_VARIANT_ENUM_PARAMS(T)>& v,
-    unsigned int version
+    const unsigned int version
 ){
     int which;
     typedef BOOST_DEDUCED_TYPENAME boost::variant<BOOST_VARIANT_ENUM_PARAMS(T)>::types types;
     ar >> BOOST_SERIALIZATION_NVP(which);
     if(which >=  mpl::size<types>::value)
         // this might happen if a type was removed from the list of variant types
-        boost::throw_exception(
+        boost::serialization::throw_exception(
             boost::archive::archive_exception(
                 boost::archive::archive_exception::unsupported_version
             )
@@ -149,7 +149,7 @@ template<class Archive,BOOST_VARIANT_ENUM_PARAMS(/* typename */ class T)>
 inline void serialize(
     Archive & ar,
     boost::variant<BOOST_VARIANT_ENUM_PARAMS(T)> & v,
-    unsigned int file_version
+    const unsigned int file_version
 ){
     split_free(ar,v,file_version);
 }
@@ -158,4 +158,3 @@ inline void serialize(
 } // namespace boost
 
 #endif //BOOST_SERIALIZATION_VARIANT_HPP
-

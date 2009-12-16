@@ -47,6 +47,8 @@ class basic_managed_mapped_file
       <CharType, AllocationAlgorithm, IndexType,
       detail::managed_open_or_create_impl<detail::file_wrapper>::ManagedOpenOrCreateUserOffset>   base_t;
    typedef detail::file_wrapper device_type;
+   basic_managed_mapped_file(basic_managed_mapped_file&);
+   basic_managed_mapped_file & operator=(basic_managed_mapped_file&);
 
    private:
 
@@ -61,6 +63,7 @@ class basic_managed_mapped_file
    /// @endcond
 
    public: //functions
+   BOOST_INTERPROCESS_ENABLE_MOVE_EMULATION(basic_managed_mapped_file)
 
    //!Creates mapped file and creates and places the segment manager. 
    //!This can throw.
@@ -118,25 +121,19 @@ class basic_managed_mapped_file
 
    //!Moves the ownership of "moved"'s managed memory to *this.
    //!Does not throw
-   #ifndef BOOST_INTERPROCESS_RVALUE_REFERENCE
-   basic_managed_mapped_file
-      (detail::moved_object<basic_managed_mapped_file> moved)
-   {  this->swap(moved.get());   }
-   #else
-   basic_managed_mapped_file(basic_managed_mapped_file &&moved)
-   {  this->swap(moved);   }
-   #endif
+   basic_managed_mapped_file(BOOST_INTERPROCESS_RV_REF(basic_managed_mapped_file) moved)
+   {
+      this->swap(moved);
+   }
 
    //!Moves the ownership of "moved"'s managed memory to *this.
    //!Does not throw
-   #ifndef BOOST_INTERPROCESS_RVALUE_REFERENCE
-   basic_managed_mapped_file &operator=
-      (detail::moved_object<basic_managed_mapped_file> moved)
-   {  this->swap(moved.get());   return *this;  }
-   #else
-   basic_managed_mapped_file &operator=(basic_managed_mapped_file &&moved)
-   {  this->swap(moved);   return *this;  }
-   #endif
+   basic_managed_mapped_file &operator=(BOOST_INTERPROCESS_RV_REF(basic_managed_mapped_file) moved)
+   {
+      basic_managed_mapped_file tmp(boost::interprocess::move(moved));
+      this->swap(tmp);
+      return *this;
+   }
 
    //!Destroys *this and indicates that the calling process is finished using
    //!the resource. The destructor function will deallocate
@@ -202,27 +199,7 @@ class basic_managed_mapped_file
    /// @endcond
 };
 
-///@cond
-
-//!Trait class to detect if a type is
-//!movable
-template
-      <
-         class CharType, 
-         class AllocationAlgorithm, 
-         template<class IndexConfig> class IndexType
-      >
-struct is_movable<basic_managed_mapped_file
-   <CharType,  AllocationAlgorithm, IndexType>
->
-{
-   static const bool value = true;
-};
-
-///@endcond
-
 }  //namespace interprocess {
-
 }  //namespace boost {
 
 #include <boost/interprocess/detail/config_end.hpp>

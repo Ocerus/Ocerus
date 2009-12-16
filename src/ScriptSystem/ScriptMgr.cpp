@@ -728,7 +728,7 @@ asIScriptModule* ScriptMgr::GetModule(const char* fileName)
 	mModules[string(fileName)] = ScriptResourcePtrs();
 
 	// Include main file
-	r = IncludeCallback(fileName, "", mScriptBuilder, Utils::StringConverter::FromString<char*>(mBasePath));
+	r = IncludeCallback(fileName, "", mScriptBuilder, 0);
 	if (r < 0) return 0;
 
 	// Build module

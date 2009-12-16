@@ -5,7 +5,7 @@
     
     http://www.boost.org/
 
-    Copyright (c) 2001-2008 Hartmut Kaiser. Distributed under the Boost
+    Copyright (c) 2001-2009 Hartmut Kaiser. Distributed under the Boost
     Software License, Version 1.0. (See accompanying file
     LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
@@ -101,7 +101,11 @@ private:
     include_guards<token_type> guards;
 #endif
         
+#if BOOST_WAVE_SUPPORT_THREADING == 0
     static token_cache<string_type> const cache;
+#else
+    token_cache<string_type> const cache;
+#endif
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -344,11 +348,13 @@ private:
     lexer<IteratorT, PositionT> re2c_lexer;
 };
 
+#if BOOST_WAVE_SUPPORT_THREADING == 0
 ///////////////////////////////////////////////////////////////////////////////
 template <typename IteratorT, typename PositionT>
 token_cache<typename lexer<IteratorT, PositionT>::string_type> const
     lexer<IteratorT, PositionT>::cache = 
         token_cache<typename lexer<IteratorT, PositionT>::string_type>();
+#endif
     
 }   // namespace re2clex
 

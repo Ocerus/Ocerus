@@ -15,7 +15,7 @@
 
 #include <iterator>
 #include <complex>
-#include <cmath>
+#include <boost/config/no_tr1/cmath.hpp>
 
 #include <boost/numeric/ublas/detail/config.hpp>
 #include <boost/numeric/ublas/detail/iterator.hpp>
@@ -23,6 +23,20 @@
 
 #include <boost/type_traits.hpp>
 #include <complex>
+
+// anonymous namespace to avoid ADL issues
+namespace {
+  template<class T> T boost_numeric_ublas_sqrt (const T& t) {
+    using namespace std;
+    // we'll find either std::sqrt or else another version via ADL:
+    return sqrt (t);
+  }
+  template<class T> T boost_numeric_ublas_abs (const T& t) {
+    using namespace std;
+    // we'll find either std::abs or else another version via ADL:
+    return abs (t);
+  }
+}
 
 namespace boost { namespace numeric { namespace ublas {
 
@@ -84,17 +98,13 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         real_type type_abs (const_reference t) {
-            // we'll find either std::abs or else another version via ADL:
-            using namespace std;
-            return abs (t);
+            return boost_numeric_ublas_abs (t);
         }
         static
         BOOST_UBLAS_INLINE
         value_type type_sqrt (const_reference t) {
-            using namespace std;
             // force a type conversion back to value_type for intgral types
-            // we'll find either std::sqrt or else another version via ADL:
-            return value_type (sqrt (t));
+            return value_type (boost_numeric_ublas_sqrt (t));
         }
 
         static
@@ -500,6 +510,89 @@ namespace boost { namespace numeric { namespace ublas {
         struct has_trivial_destructor<std::complex<FLT> > : public boost::true_type {};
 
     }
+
+
+    /**  \brief Traits class to extract type information from a matrix or vector CONTAINER.
+     *
+     */
+    template < class E >
+    struct container_traits {
+        /// type of indices
+        typedef typename E::size_type             size_type;
+        /// type of differences of indices
+        typedef typename E::difference_type       difference_type;
+
+        /// storage category: \c unknown_storage_tag, \c dense_tag, \c packed_tag, ...
+        typedef typename E::storage_category      storage_category;
+
+        /// type of elements
+        typedef typename E::value_type            value_type;
+        /// reference to an element
+        typedef typename E::reference             reference;
+        /// const reference to an element
+        typedef typename E::const_reference       const_reference;
+  
+        /// type used in expressions to mark a reference to this class (usually a container_reference<E> or the class itself)
+        typedef typename E::closure_type          closure_type;
+        /// type used in expressions to mark a reference to this class (usually a const container_reference<const E> or the class itself)
+        typedef typename E::const_closure_type    const_closure_type;
+    };
+
+    /**  \brief Traits class to extract type information from a MATRIX.
+     *
+     */
+    template < class MATRIX >
+    struct matrix_traits : container_traits <MATRIX> {
+
+        /// orientation of the matrix, either \c row_major_tag, \c column_major_tag or \c unknown_orientation_tag
+        typedef typename MATRIX::orientation_category  orientation_category;
+  
+    };
+
+    /**  \brief Traits class to extract type information from a VECTOR.
+     *
+     */
+    template < class VECTOR >
+    struct vector_traits : container_traits <VECTOR> {
+
+    };
+
+    template < class T, int M, int N > 
+    struct matrix_traits < T[M][N] > {
+        typedef T              matrix_type[M][N];
+
+        typedef std::size_t          size_type;
+        typedef std::ptrdiff_t       difference_type;
+
+        typedef row_major_tag  orientation_category;
+        typedef dense_tag      storage_category;
+  
+        typedef T            value_type;
+        typedef T            *reference;
+        typedef const T      *const_reference;
+  
+        // \todo { define correct wrapper }
+        typedef matrix_reference<matrix_type>                closure_type;
+        typedef const matrix_reference<const matrix_type>    const_closure_type;
+    };
+
+    template < class T, int N  > 
+    struct vector_traits < T[N] > {
+        typedef T              vector_type[N];
+
+        typedef std::size_t          size_type;
+        typedef std::ptrdiff_t       difference_type;
+
+        typedef dense_tag      storage_category;
+  
+        typedef T            value_type;
+        typedef T            *reference;
+        typedef const T      *const_reference;
+  
+        // \todo { define correct wrapper }
+        typedef vector_reference<vector_type>                closure_type;
+        typedef const vector_reference<const vector_type>    const_closure_type;
+    };
 
 }}}
 

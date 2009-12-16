@@ -18,14 +18,17 @@
 #include <boost/interprocess/detail/config_begin.hpp>
 #include <boost/interprocess/detail/workaround.hpp>
 
+#include <boost/intrusive/slist.hpp>
+#include <boost/math/common_factor_ct.hpp>
+#include <boost/pointer_to_other.hpp>
+
 #include <boost/interprocess/sync/interprocess_mutex.hpp>
 #include <boost/interprocess/detail/utilities.hpp>
 #include <boost/interprocess/exceptions.hpp>
-#include <boost/intrusive/slist.hpp>
-#include <boost/math/common_factor_ct.hpp>
 #include <boost/interprocess/detail/math_functions.hpp>
 #include <boost/interprocess/detail/type_traits.hpp>
 #include <boost/interprocess/allocators/detail/node_tools.hpp>
+#include <boost/interprocess/mem_algo/detail/mem_algo_common.hpp>
 #include <boost/interprocess/allocators/detail/allocator_common.hpp>
 #include <cstddef>
 #include <functional>
@@ -53,7 +56,6 @@ class private_node_pool_impl
    typedef typename node_slist<void_pointer>::slist_hook_t        slist_hook_t;
    typedef typename node_slist<void_pointer>::node_t              node_t;
    typedef typename node_slist<void_pointer>::node_slist_t        free_nodes_t;
-   typedef typename SegmentManagerBase::multiallocation_iterator  multiallocation_iterator;
    typedef typename SegmentManagerBase::multiallocation_chain     multiallocation_chain;
 
    private:
@@ -96,7 +98,7 @@ class private_node_pool_impl
       if (m_freelist.empty())
          priv_alloc_block();
       //We take the first free node
-      node_t *n = (node_t*)&m_freelist.front();
+      node_t *n = &m_freelist.front();
       m_freelist.pop_front();
       ++m_allocated;
       return n;
@@ -112,25 +114,9 @@ class private_node_pool_impl
       --m_allocated;
    }
 
-   //!Allocates a singly linked list of n nodes ending in null pointer and pushes them in the chain. 
-   //!can throw boost::interprocess::bad_alloc
-   void allocate_nodes(multiallocation_chain &nodes, const std::size_t n)
-   {
-      std::size_t i = 0;
-      try{
-         for(; i < n; ++i){
-            nodes.push_front(this->allocate_node());
-         }
-      }
-      catch(...){
-         this->deallocate_nodes(nodes, i);
-         throw;
-      }
-   }
-
    //!Allocates a singly linked list of n nodes ending in null pointer 
    //!can throw boost::interprocess::bad_alloc
-   multiallocation_iterator allocate_nodes(const std::size_t n)
+   multiallocation_chain allocate_nodes(const std::size_t n)
    {
       multiallocation_chain nodes;
       std::size_t i = 0;
@@ -143,32 +129,26 @@ class private_node_pool_impl
          this->deallocate_nodes(nodes, i);
          throw;
       }
-      return nodes.get_it();
-   }
-
-   //!Deallocates a linked list of nodes. Never throws
-   void deallocate_nodes(multiallocation_chain &nodes)
-   {
-      this->deallocate_nodes(nodes.get_it());
-      nodes.reset();
+      return boost::interprocess::move(nodes);
    }
 
    //!Deallocates the first n nodes of a linked list of nodes. Never throws
-   void deallocate_nodes(multiallocation_chain &nodes, std::size_t num)
+   void deallocate_nodes(multiallocation_chain &nodes, std::size_t n)
    {
-      assert(nodes.size() >= num);
-      for(std::size_t i = 0; i < num; ++i){
-         deallocate_node(nodes.pop_front());
+      for(std::size_t i = 0; i < n; ++i){
+         void *p = detail::get_pointer(nodes.front());
+         assert(p);
+         nodes.pop_front();
+         this->deallocate_node(p);
       }
    }
 
    //!Deallocates the nodes pointed by the multiallocation iterator. Never throws
-   void deallocate_nodes(multiallocation_iterator it)
+   void deallocate_nodes(multiallocation_chain chain)
    {
-      multiallocation_iterator itend;
-      while(it != itend){
-         void *addr = &*it;
-         ++it;
+      while(!chain.empty()){
+         void *addr = detail::get_pointer(chain.front());
+         chain.pop_front();
          deallocate_node(addr);
       }
    }
@@ -292,13 +272,13 @@ class private_node_pool_impl
       :  std::unary_function<typename free_nodes_t::value_type, bool>
    {
       is_between(const void *addr, std::size_t size)
-         :  beg_((const char *)addr), end_(beg_+size)
+         :  beg_(static_cast<const char *>(addr)), end_(beg_+size)
       {}
       
       bool operator()(typename free_nodes_t::const_reference v) const
       {
-         return (beg_ <= (const char *)&v && 
-                 end_ >  (const char *)&v);
+         return (beg_ <= reinterpret_cast<const char *>(&v) && 
+                 end_ >  reinterpret_cast<const char *>(&v));
       }
       private:
       const char *      beg_;
@@ -312,7 +292,7 @@ class private_node_pool_impl
       //element in the free Node list
       std::size_t blocksize = 
          detail::get_rounded_size(m_real_node_size*m_nodes_per_block, alignment_of<node_t>::value);
-      char *pNode = detail::char_ptr_cast
+      char *pNode = reinterpret_cast<char*>
          (mp_segment_mngr_base->allocate(blocksize + sizeof(node_t)));
       if(!pNode)  throw bad_alloc();
       char *pBlock = pNode;
@@ -335,20 +315,19 @@ class private_node_pool_impl
 
    private:
    //!Returns a reference to the block hook placed in the end of the block
-   static inline node_t & get_block_hook (void *block, std::size_t blocksize)
+   static node_t & get_block_hook (void *block, std::size_t blocksize)
    {  
-      return *static_cast<node_t*>(
-               static_cast<void*>((detail::char_ptr_cast(block) + blocksize)));  
+      return *reinterpret_cast<node_t*>(reinterpret_cast<char*>(block) + blocksize);  
    }
 
    //!Returns the starting address of the block reference to the block hook placed in the end of the block
-   inline void *get_block_from_hook (node_t *hook, std::size_t blocksize)
+   void *get_block_from_hook (node_t *hook, std::size_t blocksize)
    {  
-      return static_cast<void*>((detail::char_ptr_cast(hook) - blocksize));  
+      return (reinterpret_cast<char*>(hook) - blocksize);
    }
 
    private:
-   typedef typename pointer_to_other
+   typedef typename boost::pointer_to_other
       <void_pointer, segment_manager_base_type>::type   segment_mngr_base_ptr_t;
 
    const std::size_t m_nodes_per_block;

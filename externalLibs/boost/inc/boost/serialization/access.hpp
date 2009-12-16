@@ -18,7 +18,7 @@
 
 #include <boost/config.hpp>
 
-#include <boost/pfto.hpp>
+#include <boost/serialization/pfto.hpp>
 
 namespace boost {
 
@@ -115,12 +115,20 @@ public:
         // benign on everything else
         delete const_cast<T *>(t);
     }
-    template<class Archive, class T>
-    static void construct(Archive & /* ar */, T * t){
+    template<class T>
+    static void construct(T * t){
         // default is inplace invocation of default constructor
         // Note the :: before the placement new. Required if the
         // class doesn't have a class-specific placement new defined.
         ::new(t)T;
+    }
+    template<class T, class U>
+    static T & cast_reference(U & u){
+        return static_cast<T &>(u);
+    }
+    template<class T, class U>
+    static T * cast_pointer(U * u){
+        return static_cast<T *>(u);
     }
 };
 

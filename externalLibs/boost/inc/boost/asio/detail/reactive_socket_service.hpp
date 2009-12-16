@@ -74,10 +74,21 @@ public:
 
     enum
     {
-      user_set_non_blocking = 1, // The user wants a non-blocking socket.
-      internal_non_blocking = 2, // The socket has been set non-blocking.
-      enable_connection_aborted = 4, // User wants connection_aborted errors.
-      user_set_linger = 8 // The user set the linger option.
+      // The user wants a non-blocking socket.
+      user_set_non_blocking = 1,
+
+      // The implementation wants a non-blocking socket (in order to be able to
+      // perform asynchronous read and write operations).
+      internal_non_blocking = 2,
+
+      // Helper "flag" used to determine whether the socket is non-blocking.
+      non_blocking = user_set_non_blocking | internal_non_blocking,
+
+      // User wants connection_aborted errors, which are disabled by default.
+      enable_connection_aborted = 4,
+
+      // The user set the linger option. Needs to be checked when closing. 
+      user_set_linger = 8
     };
 
     // Flags indicating the current state of the socket.
@@ -99,6 +110,7 @@ public:
         reactive_socket_service<Protocol, Reactor> >(io_service),
       reactor_(boost::asio::use_service<Reactor>(io_service))
   {
+    reactor_.init_task();
   }
 
   // Destroy all user-defined handler objects owned by the service.
@@ -120,12 +132,12 @@ public:
     {
       reactor_.close_descriptor(impl.socket_, impl.reactor_data_);
 
-      if (impl.flags_ & implementation_type::internal_non_blocking)
+      if (impl.flags_ & implementation_type::non_blocking)
       {
         ioctl_arg_type non_blocking = 0;
         boost::system::error_code ignored_ec;
         socket_ops::ioctl(impl.socket_, FIONBIO, &non_blocking, ignored_ec);
-        impl.flags_ &= ~implementation_type::internal_non_blocking;
+        impl.flags_ &= ~implementation_type::non_blocking;
       }
 
       if (impl.flags_ & implementation_type::user_set_linger)
@@ -214,12 +226,12 @@ public:
     {
       reactor_.close_descriptor(impl.socket_, impl.reactor_data_);
 
-      if (impl.flags_ & implementation_type::internal_non_blocking)
+      if (impl.flags_ & implementation_type::non_blocking)
       {
         ioctl_arg_type non_blocking = 0;
         boost::system::error_code ignored_ec;
         socket_ops::ioctl(impl.socket_, FIONBIO, &non_blocking, ignored_ec);
-        impl.flags_ &= ~implementation_type::internal_non_blocking;
+        impl.flags_ &= ~implementation_type::non_blocking;
       }
 
       if (socket_ops::close(impl.socket_, ec) == socket_error_retval)
@@ -433,11 +445,35 @@ public:
 
     if (command.name() == static_cast<int>(FIONBIO))
     {
-      if (command.get())
-        impl.flags_ |= implementation_type::user_set_non_blocking;
+      // Flags are manipulated in a temporary variable so that the socket
+      // implementation is not updated unless the ioctl operation succeeds.
+      unsigned char new_flags = impl.flags_;
+      if (*static_cast<ioctl_arg_type*>(command.data()))
+        new_flags |= implementation_type::user_set_non_blocking;
       else
-        impl.flags_ &= ~implementation_type::user_set_non_blocking;
-      ec = boost::system::error_code();
+        new_flags &= ~implementation_type::user_set_non_blocking;
+
+      // Perform ioctl on socket if the non-blocking state has changed.
+      if (!(impl.flags_ & implementation_type::non_blocking)
+          && (new_flags & implementation_type::non_blocking))
+      {
+        ioctl_arg_type non_blocking = 1;
+        socket_ops::ioctl(impl.socket_, FIONBIO, &non_blocking, ec);
+      }
+      else if ((impl.flags_ & implementation_type::non_blocking)
+          && !(new_flags & implementation_type::non_blocking))
+      {
+        ioctl_arg_type non_blocking = 0;
+        socket_ops::ioctl(impl.socket_, FIONBIO, &non_blocking, ec);
+      }
+      else
+      {
+        ec = boost::system::error_code();
+      }
+
+      // Update socket implementation's flags only if successful.
+      if (!ec)
+        impl.flags_ = new_flags;
     }
     else
     {
@@ -528,18 +564,6 @@ public:
     {
       ec = boost::system::error_code();
       return 0;
-    }
-
-    // Make socket non-blocking if user wants non-blocking.
-    if (impl.flags_ & implementation_type::user_set_non_blocking)
-    {
-      if (!(impl.flags_ & implementation_type::internal_non_blocking))
-      {
-        ioctl_arg_type non_blocking = 1;
-        if (socket_ops::ioctl(impl.socket_, FIONBIO, &non_blocking, ec))
-          return 0;
-        impl.flags_ |= implementation_type::internal_non_blocking;
-      }
     }
 
     // Send the data.
@@ -684,12 +708,15 @@ public:
       // Make socket non-blocking.
       if (!(impl.flags_ & implementation_type::internal_non_blocking))
       {
-        ioctl_arg_type non_blocking = 1;
-        boost::system::error_code ec;
-        if (socket_ops::ioctl(impl.socket_, FIONBIO, &non_blocking, ec))
+        if (!(impl.flags_ & implementation_type::non_blocking))
         {
-          this->get_io_service().post(bind_handler(handler, ec, 0));
-          return;
+          ioctl_arg_type non_blocking = 1;
+          boost::system::error_code ec;
+          if (socket_ops::ioctl(impl.socket_, FIONBIO, &non_blocking, ec))
+          {
+            this->get_io_service().post(bind_handler(handler, ec, 0));
+            return;
+          }
         }
         impl.flags_ |= implementation_type::internal_non_blocking;
       }
@@ -771,18 +798,6 @@ public:
       socket_ops::init_buf(bufs[i],
           boost::asio::buffer_cast<const void*>(buffer),
           boost::asio::buffer_size(buffer));
-    }
-
-    // Make socket non-blocking if user wants non-blocking.
-    if (impl.flags_ & implementation_type::user_set_non_blocking)
-    {
-      if (!(impl.flags_ & implementation_type::internal_non_blocking))
-      {
-        ioctl_arg_type non_blocking = 1;
-        if (socket_ops::ioctl(impl.socket_, FIONBIO, &non_blocking, ec))
-          return 0;
-        impl.flags_ |= implementation_type::internal_non_blocking;
-      }
     }
 
     // Send the data.
@@ -912,12 +927,15 @@ public:
       // Make socket non-blocking.
       if (!(impl.flags_ & implementation_type::internal_non_blocking))
       {
-        ioctl_arg_type non_blocking = 1;
-        boost::system::error_code ec;
-        if (socket_ops::ioctl(impl.socket_, FIONBIO, &non_blocking, ec))
+        if (!(impl.flags_ & implementation_type::non_blocking))
         {
-          this->get_io_service().post(bind_handler(handler, ec, 0));
-          return;
+          ioctl_arg_type non_blocking = 1;
+          boost::system::error_code ec;
+          if (socket_ops::ioctl(impl.socket_, FIONBIO, &non_blocking, ec))
+          {
+            this->get_io_service().post(bind_handler(handler, ec, 0));
+            return;
+          }
         }
         impl.flags_ |= implementation_type::internal_non_blocking;
       }
@@ -979,18 +997,6 @@ public:
     {
       ec = boost::system::error_code();
       return 0;
-    }
-
-    // Make socket non-blocking if user wants non-blocking.
-    if (impl.flags_ & implementation_type::user_set_non_blocking)
-    {
-      if (!(impl.flags_ & implementation_type::internal_non_blocking))
-      {
-        ioctl_arg_type non_blocking = 1;
-        if (socket_ops::ioctl(impl.socket_, FIONBIO, &non_blocking, ec))
-          return 0;
-        impl.flags_ |= implementation_type::internal_non_blocking;
-      }
     }
 
     // Receive some data.
@@ -1148,12 +1154,15 @@ public:
       // Make socket non-blocking.
       if (!(impl.flags_ & implementation_type::internal_non_blocking))
       {
-        ioctl_arg_type non_blocking = 1;
-        boost::system::error_code ec;
-        if (socket_ops::ioctl(impl.socket_, FIONBIO, &non_blocking, ec))
+        if (!(impl.flags_ & implementation_type::non_blocking))
         {
-          this->get_io_service().post(bind_handler(handler, ec, 0));
-          return;
+          ioctl_arg_type non_blocking = 1;
+          boost::system::error_code ec;
+          if (socket_ops::ioctl(impl.socket_, FIONBIO, &non_blocking, ec))
+          {
+            this->get_io_service().post(bind_handler(handler, ec, 0));
+            return;
+          }
         }
         impl.flags_ |= implementation_type::internal_non_blocking;
       }
@@ -1223,18 +1232,6 @@ public:
       socket_ops::init_buf(bufs[i],
           boost::asio::buffer_cast<void*>(buffer),
           boost::asio::buffer_size(buffer));
-    }
-
-    // Make socket non-blocking if user wants non-blocking.
-    if (impl.flags_ & implementation_type::user_set_non_blocking)
-    {
-      if (!(impl.flags_ & implementation_type::internal_non_blocking))
-      {
-        ioctl_arg_type non_blocking = 1;
-        if (socket_ops::ioctl(impl.socket_, FIONBIO, &non_blocking, ec))
-          return 0;
-        impl.flags_ |= implementation_type::internal_non_blocking;
-      }
     }
 
     // Receive some data.
@@ -1385,12 +1382,15 @@ public:
       // Make socket non-blocking.
       if (!(impl.flags_ & implementation_type::internal_non_blocking))
       {
-        ioctl_arg_type non_blocking = 1;
-        boost::system::error_code ec;
-        if (socket_ops::ioctl(impl.socket_, FIONBIO, &non_blocking, ec))
+        if (!(impl.flags_ & implementation_type::non_blocking))
         {
-          this->get_io_service().post(bind_handler(handler, ec, 0));
-          return;
+          ioctl_arg_type non_blocking = 1;
+          boost::system::error_code ec;
+          if (socket_ops::ioctl(impl.socket_, FIONBIO, &non_blocking, ec))
+          {
+            this->get_io_service().post(bind_handler(handler, ec, 0));
+            return;
+          }
         }
         impl.flags_ |= implementation_type::internal_non_blocking;
       }
@@ -1450,23 +1450,10 @@ public:
       return ec;
     }
 
-    // Make socket non-blocking if user wants non-blocking.
-    if (impl.flags_ & implementation_type::user_set_non_blocking)
-    {
-      if (!(impl.flags_ & implementation_type::internal_non_blocking))
-      {
-        ioctl_arg_type non_blocking = 1;
-        if (socket_ops::ioctl(impl.socket_, FIONBIO, &non_blocking, ec))
-          return ec;
-        impl.flags_ |= implementation_type::internal_non_blocking;
-      }
-    }
-
     // Accept a socket.
     for (;;)
     {
       // Try to complete the operation without blocking.
-      boost::system::error_code ec;
       socket_holder new_socket;
       std::size_t addr_len = 0;
       if (peer_endpoint)
@@ -1623,12 +1610,15 @@ public:
       // Make socket non-blocking.
       if (!(impl.flags_ & implementation_type::internal_non_blocking))
       {
-        ioctl_arg_type non_blocking = 1;
-        boost::system::error_code ec;
-        if (socket_ops::ioctl(impl.socket_, FIONBIO, &non_blocking, ec))
+        if (!(impl.flags_ & implementation_type::non_blocking))
         {
-          this->get_io_service().post(bind_handler(handler, ec));
-          return;
+          ioctl_arg_type non_blocking = 1;
+          boost::system::error_code ec;
+          if (socket_ops::ioctl(impl.socket_, FIONBIO, &non_blocking, ec))
+          {
+            this->get_io_service().post(bind_handler(handler, ec));
+            return;
+          }
         }
         impl.flags_ |= implementation_type::internal_non_blocking;
       }
@@ -1652,18 +1642,30 @@ public:
       return ec;
     }
 
-    if (impl.flags_ & implementation_type::internal_non_blocking)
-    {
-      // Mark the socket as blocking while we perform the connect.
-      ioctl_arg_type non_blocking = 0;
-      if (socket_ops::ioctl(impl.socket_, FIONBIO, &non_blocking, ec))
-        return ec;
-      impl.flags_ &= ~implementation_type::internal_non_blocking;
-    }
-
     // Perform the connect operation.
     socket_ops::connect(impl.socket_,
         peer_endpoint.data(), peer_endpoint.size(), ec);
+    if (ec != boost::asio::error::in_progress
+        && ec != boost::asio::error::would_block)
+    {
+      // The connect operation finished immediately.
+      return ec;
+    }
+
+    // Wait for socket to become ready.
+    if (socket_ops::poll_connect(impl.socket_, ec) < 0)
+      return ec;
+
+    // Get the error code from the connect operation.
+    int connect_error = 0;
+    size_t connect_error_len = sizeof(connect_error);
+    if (socket_ops::getsockopt(impl.socket_, SOL_SOCKET, SO_ERROR,
+          &connect_error, &connect_error_len, ec) == socket_error_retval)
+      return ec;
+
+    // Return the result of the connect operation.
+    ec = boost::system::error_code(connect_error,
+        boost::asio::error::get_system_category());
     return ec;
   }
 
@@ -1731,12 +1733,15 @@ public:
     // Make socket non-blocking.
     if (!(impl.flags_ & implementation_type::internal_non_blocking))
     {
-      ioctl_arg_type non_blocking = 1;
-      boost::system::error_code ec;
-      if (socket_ops::ioctl(impl.socket_, FIONBIO, &non_blocking, ec))
+      if (!(impl.flags_ & implementation_type::non_blocking))
       {
-        this->get_io_service().post(bind_handler(handler, ec));
-        return;
+        ioctl_arg_type non_blocking = 1;
+        boost::system::error_code ec;
+        if (socket_ops::ioctl(impl.socket_, FIONBIO, &non_blocking, ec))
+        {
+          this->get_io_service().post(bind_handler(handler, ec));
+          return;
+        }
       }
       impl.flags_ |= implementation_type::internal_non_blocking;
     }

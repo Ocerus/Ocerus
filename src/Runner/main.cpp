@@ -1,12 +1,18 @@
 /// @file
 /// Application entry point.
 
+struct AfterExitHook { ~AfterExitHook(void); };
+AfterExitHook gAfterExitHook;
+
 #include "../Setup/Settings.h"
 #include "../Core/Application.h"
 #include "../LogSystem/LogMgr.h"
 #include "../LogSystem/LogMacros.h"
 #include "../Memory/GlobalAllocation.h"
 #include <exception>
+
+#include <boost/regex.hpp>
+#include "Utils/StringKey.h"
 
 #ifdef __WIN__
 #define WIN32_LEAN_AND_MEAN	// Exclude rarely-used stuff from Windows headers
@@ -24,7 +30,7 @@
 #endif
 
 
-#ifdef USE_DBGLIB
+#if defined(USE_DBGLIB)
 /// Callback function from the DbgLib.
 void DbgLibExceptionCallback(const DbgLib::tstring& dumpFilePath, void* params)
 {
@@ -48,6 +54,11 @@ void DbgLibExceptionCallback(const DbgLib::tstring& dumpFilePath, void* params)
 #endif
 
 
+#if defined(USE_DBGLIB) && defined(USE_LEAKDETECTOR)
+DbgLib::CMemLeakDetector* gLeakDetector = 0;
+#endif
+
+
 #ifdef __WIN__
 INT WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow )
 #else
@@ -68,12 +79,13 @@ int main(int argc, char* argv[])
 
 		#ifdef USE_LEAKDETECTOR
 		// enable memory leak detection
-		DbgLib::CMemLeakDetector* leakDetector = DbgLib::CDebugFx::GetMemLeakDetector();
+		gLeakDetector = DbgLib::CDebugFx::GetMemLeakDetector();
 		// optional: here we can set a custom reported by calling SetReporter()
-		leakDetector->Enable();
+		gLeakDetector->Enable();
 		#endif
 
 	#endif
+
 
 	try
 	{
@@ -85,7 +97,10 @@ int main(int argc, char* argv[])
 	}
 	catch (std::exception& e)
 	{
-		LogSystem::LogMgr::GetSingleton().LogMessage(string("An exception has occured: ") + e.what(), LL_ERROR);
+		if (LogSystem::LogMgr::GetSingletonPtr())
+		{
+			LogSystem::LogMgr::GetSingleton().LogMessage(string("An exception has occured: ") + e.what(), LL_ERROR);
+		}
 		#ifdef __WIN__
 		MessageBox(NULL,  e.what(), "An exception has occured!", MB_OK | MB_ICONERROR | MB_TASKMODAL);
 		#endif
@@ -100,14 +115,16 @@ int main(int argc, char* argv[])
 		return -1;
 	}
 
-	// unregister DbgLib
-	#ifdef USE_DBGLIB
-		#ifdef USE_LEAKDETECTOR
-		leakDetector->Disable();
-		leakDetector->ReportLeaks();
-		#endif
-	#endif
-
 	return 0;
 };
 
+
+/// Callback function called after all static and global variables were destroyed.
+AfterExitHook::~AfterExitHook()
+{
+	#if defined(USE_DBGLIB) && defined(USE_LEAKDETECTOR)
+		gLeakDetector->Disable();
+		gLeakDetector->ReportLeaks();
+		// the instance should be automatically deallocated by DbgLib
+	#endif
+}

@@ -1,4 +1,4 @@
-//  Copyright (c) 2001-2008 Hartmut Kaiser
+//  Copyright (c) 2001-2009 Hartmut Kaiser
 //
 //  Distributed under the Boost Software License, Version 1.0. (See accompanying
 //  file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -18,7 +18,7 @@
 #include <boost/spirit/home/karma/char.hpp>
 #include <boost/spirit/home/karma/numeric/int.hpp>
 #include <boost/spirit/home/karma/numeric/detail/numeric_utils.hpp>
-#include <cmath>
+#include <boost/config/no_tr1/cmath.hpp>
 
 namespace boost { namespace spirit { namespace karma
 {
@@ -49,8 +49,9 @@ namespace boost { namespace spirit { namespace karma
         generate(Component const& component, OutputIterator& sink,
             Context& /*ctx*/, Delimiter const& d, Parameter const& param)
         {
-            RealPolicies const& p = detail::real_policy<RealPolicies>::get(
-                fusion::at_c<0>(component.elements));
+            RealPolicies const& p = 
+                detail::real_policy<RealPolicies>::get(spirit::subject(component));
+
             bool result = real_inserter<T, RealPolicies, Tag>::
                 call(sink, param, p);
 
@@ -66,13 +67,13 @@ namespace boost { namespace spirit { namespace karma
         generate(Component const&, OutputIterator&, Context&, Delimiter const&,
             unused_type)
         {
-            BOOST_MPL_ASSERT_MSG(false, real_not_usable_without_parameter,
+            BOOST_MPL_ASSERT_MSG(false, real_not_usable_without_attribute,
                 (Component, Context));
             return false;
         }
 
         template <typename Component, typename Context>
-        static std::string what(Component const& component, Context const& ctx)
+        static std::string what(Component const& /*component*/, Context const& /*ctx*/)
         {
             return "real number";
         }
@@ -107,7 +108,7 @@ namespace boost { namespace spirit { namespace karma
         }
 
         template <typename Component, typename Context>
-        static std::string what(Component const& component, Context const& ctx)
+        static std::string what(Component const& /*component*/, Context const& /*ctx*/)
         {
             return "real number";
         }

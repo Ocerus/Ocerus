@@ -26,13 +26,13 @@
 
 #include <boost/config.hpp>
 #include <boost/static_assert.hpp>
-#include <boost/static_warning.hpp>
 #include <boost/preprocessor/stringize.hpp>
 #include <boost/type_traits/is_polymorphic.hpp>
 
 #ifndef BOOST_SERIALIZATION_DEFAULT_TYPE_INFO   
     #include <boost/serialization/extended_type_info_typeid.hpp>   
 #endif 
+#include <boost/serialization/static_warning.hpp>
 #include <boost/serialization/type_info_implementation.hpp>
 #include <boost/serialization/assume_abstract.hpp>
 #include <boost/serialization/force_include.hpp>
@@ -86,7 +86,7 @@ struct instantiate_function {};
 template <class Archive, class Serializable>
 struct ptr_serialization_support
 {
-# if defined(BOOST_MSVC)
+# if defined(BOOST_MSVC) || defined(__SUNPRO_CC)
     virtual BOOST_DLLEXPORT void instantiate() BOOST_USED;
 # elif defined(__BORLANDC__)   
     static BOOST_DLLEXPORT void instantiate() BOOST_USED;
@@ -118,6 +118,8 @@ ptr_serialization_support<Archive,Serializable>::instantiate()
     );
 }
 
+namespace {
+
 template<class T>
 struct guid_initializer
 {  
@@ -146,33 +148,31 @@ struct guid_initializer
     }
 };
 
+template<typename T>
+struct init_guid;
+
+} // anonymous
 } // namespace detail
 } // namespace archive
 } // namespace boost
 
-#define BOOST_CLASS_EXPORT_GUID(T, K)                                               \
-namespace                                                                           \
-{                                                                                   \
-    ::boost::archive::detail::guid_initializer< T > const &                         \
-        BOOST_PP_CAT(boost_serialization_guid_initializer_, __LINE__)               \
-        = ::boost::serialization::singleton<                                        \
-            ::boost::archive::detail::guid_initializer< T >                         \
-          >::get_mutable_instance().export_guid(K);                                 \
-}
-
-// the following is solely to support de-serialization of pointers serialized
-// under 1.32
-#define BOOST_CLASS_EXPORT_GUID_1(T, K)                                             \
-namespace                                                                           \
-{                                                                                   \
-    ::boost::archive::detail::guid_initializer< T > const &                         \
-    BOOST_PP_CAT(                                                                   \
-        boost_serialization_guid_initializer_,                                      \
-        BOOST_PP_CAT(__LINE__,_1)                                                   \
-    ) = ::boost::serialization::singleton<                                          \
-            ::boost::archive::detail::guid_initializer< T >                         \
-        >::get_mutable_instance().export_guid(K);                                   \
-}
+#define BOOST_CLASS_EXPORT_GUID(T, K)                                  \
+    namespace boost {                                                  \
+    namespace archive {                                                \
+    namespace detail {                                                 \
+    namespace {                                                        \
+    template<>                                                         \
+    struct init_guid< T > {                                            \
+        static ::boost::archive::detail::guid_initializer< T > const   \
+            & guid_initializer;                                        \
+    };                                                                 \
+    ::boost::archive::detail::guid_initializer< T > const &            \
+        ::boost::archive::detail::init_guid< T >::guid_initializer =   \
+           ::boost::serialization::singleton<                          \
+               ::boost::archive::detail::guid_initializer< T >         \
+           >::get_mutable_instance().export_guid(K);                   \
+    }}}}                                                                \
+/**/
 
 #if BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3205))
 
@@ -182,11 +182,10 @@ namespace                                                                       
 // relationships for exported classes.  On all other compilers, use of
 // this macro is entirely optional.
 # define BOOST_SERIALIZATION_MWERKS_BASE_AND_DERIVED(Base,Derived)                  \
-namespace                                                                           \
-{                                                                                   \
-  int BOOST_PP_CAT(boost_serialization_mwerks_init_, __LINE__) =                    \
-      (::boost::archive::detail::instantiate_ptr_serialization((Derived*)0,0), 3);  \
-  int BOOST_PP_CAT(boost_serialization_mwerks_init2_, __LINE__) = (                 \
+namespace {                                                                         \
+  static int BOOST_PP_CAT(boost_serialization_mwerks_init_, __LINE__) =             \
+  (::boost::archive::detail::instantiate_ptr_serialization((Derived*)0,0), 3);      \
+  static int BOOST_PP_CAT(boost_serialization_mwerks_init2_, __LINE__) = (          \
       ::boost::serialization::void_cast_register((Derived*)0,(Base*)0)              \
     , 3);                                                                           \
 }
