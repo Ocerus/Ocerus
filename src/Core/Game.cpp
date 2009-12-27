@@ -26,9 +26,10 @@ const int32 PHYSICS_ITERATIONS = 10;
 Core::Game::Game():
 	StateMachine<eGameState>(GS_NORMAL),
 	mTimer(true),
-	mPhysics(0)
+	mPhysics(0),
+	mPhysicsCallbacks(0)
 {
-	
+	mPhysicsCallbacks = new PhysicsCallbacks(this);
 }
 
 Core::Game::~Game()
@@ -61,8 +62,8 @@ void Core::Game::Init()
 	worldAABB.upperBound.Set(10000.0f, 10000.0f);
 	// turn off sleeping as we are moving in a space with no gravity
 	mPhysics = new b2World(worldAABB, b2Vec2(0.0f, 0.0f), false);
-	mPhysics->SetContactFilter(this);
-	mPhysics->SetContactListener(this);
+	mPhysics->SetContactFilter(mPhysicsCallbacks);
+	mPhysics->SetContactListener(mPhysicsCallbacks);
 	mPhysicsResidualDelta = 0.0f;
 
 
@@ -441,7 +442,7 @@ void Core::Game::MouseButtonReleased( const MouseInfo& mi, const eMouseButton bt
 
 }
 
-bool Core::Game::ShouldCollide( b2Shape* shape1, b2Shape* shape2 )
+bool Core::Game::PhysicsCallbacks::ShouldCollide( b2Shape* shape1, b2Shape* shape2 )
 {
 	if (!b2ContactFilter::ShouldCollide(shape1, shape2))
 		return false;
@@ -449,7 +450,7 @@ bool Core::Game::ShouldCollide( b2Shape* shape1, b2Shape* shape2 )
 	return true;
 }
 
-void Core::Game::Add( const b2ContactPoint* point )
+void Core::Game::PhysicsCallbacks::Add( const b2ContactPoint* point )
 {
 	PhysicsEvent* evt = new PhysicsEvent();
 	if (point->shape1->GetUserData())
@@ -460,7 +461,7 @@ void Core::Game::Add( const b2ContactPoint* point )
 		evt->entity2 = *(EntityHandle*)point->shape2->GetUserData();
 	else
 		evt->entity2.Invalidate();
-	mPhysicsEvents.push_back(evt);
+	mParent->mPhysicsEvents.push_back(evt);
 }
 
 void Core::Game::ProcessPhysicsEvent( const PhysicsEvent& evt )

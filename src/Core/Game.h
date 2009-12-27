@@ -22,11 +22,14 @@ namespace Core
 	};
 
 	/// This class holds all info related directly to the game itself and takes care about rendering, input and game logic.
-	class Game : public StateMachine<eGameState>, public InputSystem::IInputListener, public b2ContactFilter, public b2ContactListener
+	class Game : public StateMachine<eGameState>, public InputSystem::IInputListener
 	{
 	public:
 
+		/// Default constructor.
 		Game(void);
+
+		/// Default destructor.
 		virtual ~Game(void);
 
 
@@ -99,12 +102,6 @@ namespace Core
 		//@}
 
 
-		/// @name Callbacks from b2ContactFilter and b2ContactListener
-		//@{
-		virtual bool ShouldCollide(b2Shape* shape1, b2Shape* shape2);
-		virtual void Add(const b2ContactPoint* point);
-		//@}
-
 	private:
 
 		/// Game control.
@@ -112,10 +109,10 @@ namespace Core
 		eActionState mActionState;
 		Utils::Timer mTimer; ///< Timer for game action related things.
 
-		/// This object represents the physics engine.
+
+		/// Physics.
 		b2World* mPhysics;
 		float32 mPhysicsResidualDelta; ///< Part of the timestep delta we didn't use for the physics update last Update.
-
 		/// A structure for queuing events from the physics engine.
 		struct PhysicsEvent: ClassAllocation<PhysicsEvent, ALLOCATION_POOLED>
 		{
@@ -127,15 +124,42 @@ namespace Core
 		PhysicsEventList mPhysicsEvents;
 		void ProcessPhysicsEvent(const PhysicsEvent& evt);
 
+
 		/// Selections stuff.
 		EntitySystem::EntityHandle mHoveredEntity;
 		typedef vector<EntitySystem::EntityHandle> EntityList;
 		EntityList mSelectedEntities;
 
+
 		/// Camera stuff.
 		EntitySystem::EntityHandle mCameraFocus; // an entity currently in focus of camera (camera is following it)
 		Vector2 mCameraGrabWorldPos;
 
+
+	private:
+
+		/// Callback receiver from physics.
+		class PhysicsCallbacks: public b2ContactFilter, public b2ContactListener
+		{
+		public:
+
+			/// Default constructor.
+			PhysicsCallbacks(Game* parent): mParent(parent) {}
+
+			/// Default destructor.
+			virtual ~PhysicsCallbacks(void) {}
+
+			/// @name Callbacks from b2ContactFilter and b2ContactListener
+			//@{
+			virtual bool ShouldCollide(b2Shape* shape1, b2Shape* shape2);
+			virtual void Add(const b2ContactPoint* point);
+			//@}
+
+		private:
+			Game* mParent;
+		};
+		friend class PhysicsCallbacks;
+		PhysicsCallbacks* mPhysicsCallbacks;
 	};
 }
 
