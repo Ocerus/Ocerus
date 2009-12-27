@@ -1,7 +1,7 @@
 #include "Common.h"
 #include "Script.h"
 #include <angelscript.h>
-#include "../../Core/Application.h"
+#include "Core/Game.h"
 
 using namespace EntityComponents;
 using namespace EntitySystem;
@@ -98,7 +98,7 @@ EntityMessage::eResult Script::HandleMessage(const EntityMessage& msg)
 		{
 			mCurrentArrayIndex = mFuncIDToArrayIndex[funcId];
 			// Check whether is time to run OnAction script
-			if (mTimes[mCurrentArrayIndex] > gApp.GetCurrentTimeMillis()) continue;
+			if (mTimes[mCurrentArrayIndex] > gScriptMgr.GetTime()) continue;
 		} else mCurrentArrayIndex = -1;
 		// Return new context prepared to call function from module
 		AngelScript::asIScriptContext* ctx = gScriptMgr.PrepareContext(funcId);

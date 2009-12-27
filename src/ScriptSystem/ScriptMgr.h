@@ -102,6 +102,9 @@ namespace ScriptSystem
 		/// PrepareContext, AddContextToManager and AddContextAsCoRoutineToManager.
 		void ClearModules();
 
+		/// Returns the current time the script manager is using.
+		uint64 GetTime() const;
+
 	private:
 		/// Pointer to script engine.
 		AngelScript::asIScriptEngine* mEngine;

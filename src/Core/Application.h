@@ -76,7 +76,7 @@ namespace Core
 		Game* mGame;
 
 		/// Application settings.
-		bool mDevelopMode; // if true editor support is turned on
+		bool mDevelopMode; ///< if true the editor support is turned on
 		
 		/// Represents global settings of the application.
 		Config* mGlobalConfig;

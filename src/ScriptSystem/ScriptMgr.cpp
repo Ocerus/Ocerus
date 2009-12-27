@@ -3,7 +3,7 @@
 #include "ScriptResource.h"
 #include "ScriptRegister.h"
 #include <angelscript.h>
-#include "../Core/Application.h"
+#include "Core/Game.h"
 #include "AddOn/scriptbuilder.h"
 #include "AddOn/scriptstring.h"
 #include "AddOn/contextmgr.h"
@@ -23,7 +23,7 @@ void MessageCallback(const asSMessageInfo* msg, void* param)
 void LineCallback(asIScriptContext* ctx, uint64* deadline)
 {
 	// If the time out is reached we abort the script
-	if (*deadline <= gApp.GetCurrentTimeMillis()) ctx->Abort();
+	if (*deadline <= gScriptMgr.GetTime()) ctx->Abort();
 }
 
 int ScriptMgr::IncludeCallback(const char* fileName, const char* from, AngelScript::CScriptBuilder* builder, void* userParam)
@@ -53,11 +53,6 @@ int ScriptMgr::IncludeCallback(const char* fileName, const char* from, AngelScri
 
 	if (r < 0) ocError << "Failed to add script file " << fileName << " due to dependecy on unloadable file(s).";
 	return r;
-}
-
-uint32 GetTime()
-{
-	return (uint32)gApp.GetCurrentTimeMillis();
 }
 
 void ScriptLog(string& msg)
@@ -629,7 +624,7 @@ bool ScriptMgr::ExecuteContext(asIScriptContext* ctx, uint32 timeOut)
 	{
 		r = ctx->SetLineCallback(asFUNCTION(LineCallback), &deadline, asCALL_CDECL);
 		OC_ASSERT_MSG(r >= 0, "Failed to register line callback function.");
-		deadline = gApp.GetCurrentTimeMillis() + timeOut;
+		deadline = GetTime() + timeOut;
 	}
 
 	// Execute the script function and get result
@@ -834,4 +829,9 @@ bool ScriptMgr::SetFunctionArgument(AngelScript::asIScriptContext* ctx, const ui
 	}
 
 	return true;
+}
+
+uint64 ScriptSystem::ScriptMgr::GetTime() const
+{
+	return GlobalProperties::Get<Core::Game>("CurrentGame").GetTimeMillis();
 }

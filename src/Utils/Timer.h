@@ -39,6 +39,9 @@ namespace Utils
 		/// Updates the time if the timer is in the manual mode.
 		void UpdateInSeconds(const float64 delta);
 
+		/// Updates the time if the timer is in the manual mode.
+		void UpdateInSeconds(const float32 delta);
+
 		/// Returns time since last reset in milliseconds.
 		uint64 GetMilliseconds(void);
 

@@ -45,6 +45,27 @@ namespace Core
 		/// Renders the game.
 		void Draw(const float32 delta);
 
+		/// State of the game action.
+		enum eActionState { AS_RUNNING, AS_PAUSED };
+
+		/// Returns true if the game action is currently running.
+		inline bool IsActionRunning(void) const { return GetActionState() == AS_RUNNING; }
+
+		/// Returns the current action state.
+		inline eActionState GetActionState(void) const { return mActionState; }
+
+		/// Pauses the game action until resumed again.
+		void PauseAction(void);
+
+		/// Resumes the game action.
+		void ResumeAction(void);
+
+		/// Restarts the game action to the initial (saved) state.
+		void RestartAction(void);
+
+		/// Returns the current game action.
+		inline uint64 GetTimeMillis(void) { return mTimer.GetMilliseconds(); }
+
 		//@}
 
 
@@ -86,10 +107,14 @@ namespace Core
 
 	private:
 
+		/// Game control.
+		void UpdateGameProperties(void); ///< Updates globally accessible properties related to game.
+		eActionState mActionState;
+		Utils::Timer mTimer; ///< Timer for game action related things.
+
 		/// This object represents the physics engine.
 		b2World* mPhysics;
-		/// Part of the timestep delta we didn't use for the physics update last Update.
-		float32 mPhysicsResidualDelta;
+		float32 mPhysicsResidualDelta; ///< Part of the timestep delta we didn't use for the physics update last Update.
 
 		/// A structure for queuing events from the physics engine.
 		struct PhysicsEvent: ClassAllocation<PhysicsEvent, ALLOCATION_POOLED>
@@ -103,7 +128,6 @@ namespace Core
 		void ProcessPhysicsEvent(const PhysicsEvent& evt);
 
 		/// Selections stuff.
-		uint64 mLastClickTime;
 		EntitySystem::EntityHandle mHoveredEntity;
 		typedef vector<EntitySystem::EntityHandle> EntityList;
 		EntityList mSelectedEntities;
@@ -111,9 +135,6 @@ namespace Core
 		/// Camera stuff.
 		EntitySystem::EntityHandle mCameraFocus; // an entity currently in focus of camera (camera is following it)
 		Vector2 mCameraGrabWorldPos;
-
-		/// Updates globally accessible properties related to game.
-		void UpdateGameProperties(void);
 
 	};
 }

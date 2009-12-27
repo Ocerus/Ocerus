@@ -25,8 +25,8 @@ const int32 PHYSICS_ITERATIONS = 10;
 
 Core::Game::Game():
 	StateMachine<eGameState>(GS_NORMAL),
-	mPhysics(0),
-	mLastClickTime(0)
+	mTimer(true),
+	mPhysics(0)
 {
 	
 }
@@ -52,6 +52,8 @@ void Core::Game::Init()
 
 	// basic init stuff
 	mHoveredEntity.Invalidate();
+	mActionState = AS_RUNNING;
+	mTimer.Reset();
 
 	// init physics engine
 	b2AABB worldAABB;
@@ -137,6 +139,11 @@ void Core::Game::Update( const float32 delta )
 	PROFILE_FNC();
 
 	UpdateGameProperties();
+	
+	if (!IsActionRunning()) return;
+	
+	mTimer.UpdateInSeconds(delta);
+
 
 	// pick hover entity
 	MouseState& mouse = gInputMgr.GetMouseState();
@@ -195,9 +202,13 @@ void Core::Game::Update( const float32 delta )
 	//gPSMgr.Update(delta);
 };
 
-void Core::Game::Draw( const float32 delta)
+void Core::Game::Draw( const float32 passedDelta)
 {
 	PROFILE_FNC();
+
+	float32 delta = passedDelta;
+	if (!IsActionRunning()) delta = 0.0f;
+
 
 	// ----------------TESTING-------------------------
 	// Viewport 1 -------------------------------------
@@ -340,6 +351,19 @@ void Core::Game::KeyPressed( const KeyInfo& ke )
 			gProfiler.Start();
 		}
 	}
+
+	if (ke.keyAction == KC_F9) {
+		if (IsActionRunning())
+		{
+			PauseAction();
+			ocInfo << "Game action paused";
+		}
+		else 
+		{
+			ResumeAction();
+			ocInfo << "Game action resumed";
+		}
+	}
 }
 
 void Core::Game::KeyReleased( const KeyInfo& ke )
@@ -366,12 +390,6 @@ void Core::Game::MouseButtonPressed( const MouseInfo& mi, const eMouseButton btn
 {
 	if (btn == MBTN_LEFT)
 	{
-		bool doubleClick = false;
-		uint64 curTime = gApp.GetCurrentTimeMillis();
-		if (curTime - mLastClickTime < 200)
-			doubleClick = true;
-		mLastClickTime = curTime;
-
 		if (mHoveredEntity.IsValid())
 		{
 			// use the hover entity as a focus
@@ -449,4 +467,20 @@ void Core::Game::ProcessPhysicsEvent( const PhysicsEvent& evt )
 {
 	if (!evt.entity1.IsValid() || !evt.entity2.IsValid())
 		return;
+}
+
+void Core::Game::PauseAction( void )
+{
+	mActionState = AS_PAUSED;
+}
+
+void Core::Game::ResumeAction( void )
+{
+	mActionState = AS_RUNNING;
+}
+
+void Core::Game::RestartAction( void )
+{
+	// first somebody has to implement scene saving
+	OC_ASSERT_MSG(false, "not implemented");
 }

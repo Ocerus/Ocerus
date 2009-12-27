@@ -124,3 +124,8 @@ void Timer::UpdateInSeconds( const float64 delta )
 {
 	UpdateInMicroseconds((uint64)(1000000.0f * delta));
 }
+
+void Timer::UpdateInSeconds( const float32 delta )
+{
+	UpdateInMicroseconds((uint64)(1000000.0f * delta));
+}
