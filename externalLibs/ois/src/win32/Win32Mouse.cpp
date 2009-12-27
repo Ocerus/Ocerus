@@ -176,14 +176,14 @@ void Win32Mouse::capture()
 		mState.Z.abs +=  mState.Z.rel;
 
 		//Clip values to window
-		if( mState.X.abs < 0 )
+		/*if( mState.X.abs < 0 )
 			mState.X.abs = 0;
 		else if( mState.X.abs > mState.width )
 			mState.X.abs = mState.width;
 		if( mState.Y.abs < 0 )
 			mState.Y.abs = 0;
 		else if( mState.Y.abs > mState.height )
-			mState.Y.abs = mState.height;
+			mState.Y.abs = mState.height;*/
 
 		//Do the move
 		if( mListener && mBuffered )

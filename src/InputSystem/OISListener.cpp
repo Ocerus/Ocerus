@@ -29,7 +29,7 @@ InputSystem::OISListener::OISListener(): mOIS(0), mMouse(0), mKeyboard(0)
 
 #ifdef __WIN__
 	// let the standard mouse cursor be
-	pl.insert(Containers::make_pair(string("w32_mouse"), string("DISCL_BACKGROUND" )));
+	pl.insert(Containers::make_pair(string("w32_mouse"), string("DISCL_FOREGROUND" )));
 	pl.insert(Containers::make_pair(string("w32_mouse"), string("DISCL_NONEXCLUSIVE")));
 #else
 	// let the standard mouse cursor be
@@ -57,6 +57,16 @@ InputSystem::OISListener::~OISListener()
 
 bool InputSystem::OISListener::mouseMoved( const OIS::MouseEvent &evt )
 {
+	if (evt.state.Z.rel != 0) {
+		// the wheel has moved; check if the mouse is still above the window; if not, ignore the event
+		//if (evt.state.X < 0)
+		if (evt.state.X.abs < 0 || evt.state.X.abs >= evt.state.width
+			|| evt.state.Y.abs < 0 || evt.state.Y.abs >= evt.state.height)
+		{
+			return true;
+		}
+	}
+
 	MouseInfo mi;
 	mi.x = evt.state.X.abs;
 	mi.dx = evt.state.X.rel;
@@ -65,7 +75,9 @@ bool InputSystem::OISListener::mouseMoved( const OIS::MouseEvent &evt )
 	mi.wheel = evt.state.Z.abs;
 	mi.wheelDelta = evt.state.Z.rel;
 	for (InputMgr::ListenersList::const_iterator i=mMgr->mListeners.begin(); i!=mMgr->mListeners.end(); ++i)
+	{
 		(*i)->MouseMoved(mi);
+	}
 	return true;
 }
 
@@ -80,7 +92,9 @@ bool InputSystem::OISListener::mousePressed( const OIS::MouseEvent &evt, OIS::Mo
 	mi.wheel = evt.state.Z.abs;
 	eMouseButton btn = OisToMbtn(id);
 	for (InputMgr::ListenersList::const_iterator i=mMgr->mListeners.begin(); i!=mMgr->mListeners.end(); ++i)
+	{
 		(*i)->MouseButtonPressed(mi, btn);
+	}
 	return true;
 }
 
@@ -95,7 +109,9 @@ bool InputSystem::OISListener::mouseReleased( const OIS::MouseEvent &evt, OIS::M
 	mi.wheel = evt.state.Z.abs;
 	eMouseButton btn = OisToMbtn(id);
 	for (InputMgr::ListenersList::const_iterator i=mMgr->mListeners.begin(); i!=mMgr->mListeners.end(); ++i)
+	{
 		(*i)->MouseButtonReleased(mi, btn);
+	}
 	return true;
 }
 
@@ -105,7 +121,9 @@ bool InputSystem::OISListener::keyPressed( const OIS::KeyEvent &evt )
 	ki.keyAction = static_cast<eKeyCode>(evt.key);
 	ki.keyCode = evt.text;
 	for (InputMgr::ListenersList::const_iterator i=mMgr->mListeners.begin(); i!=mMgr->mListeners.end(); ++i)
+	{
 		(*i)->KeyPressed(ki);
+	}
 	return true;
 }
 
@@ -115,16 +133,22 @@ bool InputSystem::OISListener::keyReleased( const OIS::KeyEvent &evt )
 	ki.keyAction = static_cast<eKeyCode>(evt.key);
 	ki.keyCode = evt.text;
 	for (InputMgr::ListenersList::const_iterator i=mMgr->mListeners.begin(); i!=mMgr->mListeners.end(); ++i)
+	{
 		(*i)->KeyReleased(ki);
+	}
 	return true;
 }
 
 void InputSystem::OISListener::CaptureInput()
 {
 	if (mKeyboard)
+	{
 		mKeyboard->capture();
+	}
 	if (mMouse)
+	{
 		mMouse->capture();
+	}
 }
 
 void InputSystem::OISListener::SetResolution( uint32 width, uint32 height )
@@ -156,7 +180,9 @@ InputSystem::eMouseButton InputSystem::OISListener::OisToMbtn( OIS::MouseButtonI
 bool InputSystem::OISListener::IsKeyDown( const eKeyCode k ) const
 {
 	if (mKeyboard)
+	{
 		return mKeyboard->isKeyDown(static_cast<OIS::KeyCode>(k));
+	}
 	return false;
 }
 
