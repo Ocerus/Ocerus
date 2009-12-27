@@ -804,6 +804,10 @@
 					RelativePath="..\src\Core\LoadingScreen.h"
 					>
 				</File>
+				<File
+					RelativePath="..\src\Core\PhysicsDraw.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="src"
@@ -830,6 +834,10 @@
 				</File>
 				<File
 					RelativePath="..\src\Core\LoadingScreen.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src\Core\PhysicsDraw.cpp"
 					>
 				</File>
 			</Filter>

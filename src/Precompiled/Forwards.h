@@ -8,6 +8,7 @@ namespace Core
 {
 	class Config;
 	class Game;
+	class PhysicsDraw;
 	class LoadingScreen;
 }
 

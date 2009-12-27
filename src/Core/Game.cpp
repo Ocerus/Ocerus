@@ -5,6 +5,7 @@
 #include "DataContainer.h"
 #include "StringConverter.h"
 #include "Box2D.h"
+#include "PhysicsDraw.h"
 
 //temporary here
 #include "../GfxSystem/GfxSceneMgr.h"
@@ -30,11 +31,14 @@ Core::Game::Game():
 	mPhysicsCallbacks(0)
 {
 	mPhysicsCallbacks = new PhysicsCallbacks(this);
+	mPhysicsDraw = new PhysicsDraw();
 }
 
 Core::Game::~Game()
 {
 	Deinit();
+	delete mPhysicsCallbacks;
+	delete mPhysicsDraw;
 }
 
 
@@ -64,6 +68,7 @@ void Core::Game::Init()
 	mPhysics = new b2World(worldAABB, b2Vec2(0.0f, 0.0f), false);
 	mPhysics->SetContactFilter(mPhysicsCallbacks);
 	mPhysics->SetContactListener(mPhysicsCallbacks);
+	mPhysics->SetDebugDraw(mPhysicsDraw);
 	mPhysicsResidualDelta = 0.0f;
 
 
@@ -240,6 +245,9 @@ void Core::Game::Draw( const float32 passedDelta)
 	gGfxRenderer.SetCamera(pos_holder.GetValue<Vector2>(), zoom_holder.GetValue<float32>(), rot_holder.GetValue<float32>());
 
 	gGfxRenderer.DrawSprites();
+
+	// Testing physics draw
+	mPhysics->DrawDebugData();
 
 	gGfxRenderer.FinalizeViewport();
 

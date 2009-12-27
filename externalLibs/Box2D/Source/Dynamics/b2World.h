@@ -160,6 +160,9 @@ public:
 	/// Change the global gravity vector.
 	void SetGravity(const b2Vec2& gravity);
 
+	/// Draws the physics representation of the world.
+	void DrawDebugData();
+
 private:
 
 	friend class b2Body;
@@ -170,7 +173,6 @@ private:
 
 	void DrawJoint(b2Joint* joint);
 	void DrawShape(b2Shape* shape, const b2XForm& xf, const b2Color& color, bool core);
-	void DrawDebugData();
 
 	b2BlockAllocator m_blockAllocator;
 	b2StackAllocator m_stackAllocator;

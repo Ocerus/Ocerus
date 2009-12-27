@@ -767,7 +767,8 @@ void b2World::Step(float32 dt, int32 iterations)
 	}
 
 	// Draw debug information.
-	DrawDebugData();
+	//Hardwire: Moved out of Step() and made it public
+	//DrawDebugData();
 
 	m_inv_dt0 = step.inv_dt;
 	m_lock = false;

@@ -6,7 +6,7 @@
 
 #include "Base.h"
 #include "StateMachine.h"
-#include "../InputSystem/IInputListener.h"
+#include "InputSystem/IInputListener.h"
 #include "Dynamics/b2WorldCallbacks.h"
 
 class b2World;
@@ -149,17 +149,16 @@ namespace Core
 			/// Default destructor.
 			virtual ~PhysicsCallbacks(void) {}
 
-			/// @name Callbacks from b2ContactFilter and b2ContactListener
-			//@{
 			virtual bool ShouldCollide(b2Shape* shape1, b2Shape* shape2);
+
 			virtual void Add(const b2ContactPoint* point);
-			//@}
 
 		private:
 			Game* mParent;
 		};
 		friend class PhysicsCallbacks;
 		PhysicsCallbacks* mPhysicsCallbacks;
+		PhysicsDraw* mPhysicsDraw;
 	};
 }
 
