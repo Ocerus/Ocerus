@@ -217,54 +217,59 @@ void Core::Game::Draw( const float32 passedDelta)
 
 
 	// ----------------TESTING-------------------------
+	EntitySystem::EntityHandle cam_handle;
+
 	// Viewport 1 -------------------------------------
-	GfxSystem::GfxViewport vp (Vector2(0, 0.5), Vector2(0.5, 0.5));
-	gGfxRenderer.SetViewport(vp);
+	cam_handle = gGfxSceneMgr.GetCamera(0);
+	if (cam_handle.IsValid())
+	{
+		PropertyHolder pos_holder = gEntityMgr.GetEntityProperty(cam_handle, "Position" );
+		PropertyHolder zoom_holder = gEntityMgr.GetEntityProperty(cam_handle, "Zoom" );
+		PropertyHolder rot_holder = gEntityMgr.GetEntityProperty(cam_handle, "Rotation" );
+		gGfxRenderer.SetCamera(pos_holder.GetValue<Vector2>(), zoom_holder.GetValue<float32>(), rot_holder.GetValue<float32>());
 
-	EntitySystem::EntityHandle cam_handle = gGfxSceneMgr.GetCamera(0);
+		GfxSystem::GfxViewport vp(Vector2(0, 0.5), Vector2(0.5, 0.5));
+		gGfxRenderer.SetViewport(vp);
 
-	Reflection::PropertyHolder pos_holder = gEntityMgr.GetEntityProperty(cam_handle, "Position" );
-	Reflection::PropertyHolder zoom_holder = gEntityMgr.GetEntityProperty(cam_handle, "Zoom" );
-	Reflection::PropertyHolder rot_holder = gEntityMgr.GetEntityProperty(cam_handle, "Rotation" );
+		gGfxRenderer.DrawSprites();
 
-	gGfxRenderer.SetCamera(pos_holder.GetValue<Vector2>(), zoom_holder.GetValue<float32>(), rot_holder.GetValue<float32>());
-
-	gGfxRenderer.DrawSprites();
-	gGfxRenderer.FinalizeViewport();
+		// Testing physics draw
+		mPhysics->DrawDebugData();
+		
+		gGfxRenderer.FinalizeViewport();
+	}
 	
 	// Viewport 2 -------------------------------------
-	vp.position =  Vector2(0.0, 0.0);
-	vp.size = Vector2(1, 0.5);
-	gGfxRenderer.SetViewport(vp);
-
 	cam_handle = gGfxSceneMgr.GetCamera(1);
-	pos_holder = gEntityMgr.GetEntityProperty(cam_handle, "Position" );
-	zoom_holder = gEntityMgr.GetEntityProperty(cam_handle, "Zoom" );
-	rot_holder = gEntityMgr.GetEntityProperty(cam_handle, "Rotation" );
+	if (cam_handle.IsValid())
+	{
+		PropertyHolder pos_holder = gEntityMgr.GetEntityProperty(cam_handle, "Position" );
+		PropertyHolder zoom_holder = gEntityMgr.GetEntityProperty(cam_handle, "Zoom" );
+		PropertyHolder rot_holder = gEntityMgr.GetEntityProperty(cam_handle, "Rotation" );
+		gGfxRenderer.SetCamera(pos_holder.GetValue<Vector2>(), zoom_holder.GetValue<float32>(), rot_holder.GetValue<float32>());
 
-	gGfxRenderer.SetCamera(pos_holder.GetValue<Vector2>(), zoom_holder.GetValue<float32>(), rot_holder.GetValue<float32>());
+		GfxSystem::GfxViewport vp(Vector2(0.0, 0.0), Vector2(1, 0.5));
+		gGfxRenderer.SetViewport(vp);
 
-	gGfxRenderer.DrawSprites();
-
-	// Testing physics draw
-	mPhysics->DrawDebugData();
-
-	gGfxRenderer.FinalizeViewport();
+		gGfxRenderer.DrawSprites();
+		gGfxRenderer.FinalizeViewport();
+	}
 
 	// Viewport 3 -------------------------------------
-	vp.position =  Vector2(0.5, 0.5);
-	vp.size = Vector2(0.5, 0.5);
-	gGfxRenderer.SetViewport(vp);
-
 	cam_handle = gGfxSceneMgr.GetCamera(2);
-	pos_holder = gEntityMgr.GetEntityProperty(cam_handle, "Position" );
-	zoom_holder = gEntityMgr.GetEntityProperty(cam_handle, "Zoom" );
-	rot_holder = gEntityMgr.GetEntityProperty(cam_handle, "Rotation" );
+	if (cam_handle.IsValid())
+	{
+		PropertyHolder pos_holder = gEntityMgr.GetEntityProperty(cam_handle, "Position" );
+		PropertyHolder zoom_holder = gEntityMgr.GetEntityProperty(cam_handle, "Zoom" );
+		PropertyHolder rot_holder = gEntityMgr.GetEntityProperty(cam_handle, "Rotation" );
+		gGfxRenderer.SetCamera(pos_holder.GetValue<Vector2>(), zoom_holder.GetValue<float32>(), rot_holder.GetValue<float32>());
 
-	gGfxRenderer.SetCamera(pos_holder.GetValue<Vector2>(), zoom_holder.GetValue<float32>(), rot_holder.GetValue<float32>());
+		GfxSystem::GfxViewport vp(Vector2(0.5, 0.5), Vector2(0.5, 0.5));
+		gGfxRenderer.SetViewport(vp);
 
-	gGfxRenderer.DrawSprites();
-	gGfxRenderer.FinalizeViewport();
+		gGfxRenderer.DrawSprites();
+		gGfxRenderer.FinalizeViewport();
+	}
 	
 	//TODO: odstranit - pouze pro testovaci ucely
 	//GfxSystem::TexturePtr t = gResourceMgr.GetResource("textures", "Logo.png");

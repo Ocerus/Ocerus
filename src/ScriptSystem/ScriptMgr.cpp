@@ -29,7 +29,13 @@ void LineCallback(asIScriptContext* ctx, uint64* deadline)
 int ScriptMgr::IncludeCallback(const char* fileName, const char* from, AngelScript::CScriptBuilder* builder, void* userParam)
 {
 	// Try to get existing script resource
-	ScriptResourcePtr sp = (ScriptResourcePtr)(gResourceMgr.GetResource("Scripts", fileName));
+	ResourceSystem::ResourcePtr resPtr = gResourceMgr.GetResource("Scripts", fileName);
+	if (!resPtr)
+	{
+		ocError << "Failed to load script file " << fileName << ".";
+		return -1;
+	}
+	ScriptResourcePtr sp = resPtr;
 	if (!sp)
 	{
 		// Load script resource from file

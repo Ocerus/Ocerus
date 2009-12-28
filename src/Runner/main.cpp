@@ -108,7 +108,10 @@ int main(int argc, char* argv[])
 	}
 	catch (...)
 	{
-		LogSystem::LogMgr::GetSingleton().LogMessage("An unknown exception has occured.", LL_ERROR);
+		if (LogSystem::LogMgr::GetSingletonPtr())
+		{
+			LogSystem::LogMgr::GetSingleton().LogMessage("An unknown exception has occured.", LL_ERROR);
+		}
 		#ifdef __WIN__
 		MessageBox(NULL, "An unknown exception has occured!", "An exception has occured!", MB_OK | MB_ICONERROR | MB_TASKMODAL);
 		#endif

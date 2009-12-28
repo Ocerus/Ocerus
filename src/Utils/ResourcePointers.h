@@ -51,6 +51,7 @@ namespace ResourceSystem
 		template <class T>
 		operator boost::shared_ptr<T>()
 		{
+			OC_ASSERT_MSG(get(), "Null resource pointer");
 			OC_ASSERT(T::GetResourceType() == (*this)->GetType());
 			return boost::static_pointer_cast<T>(*this);
 		}

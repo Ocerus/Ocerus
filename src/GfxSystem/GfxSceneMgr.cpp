@@ -42,6 +42,11 @@ void GfxSceneMgr::RemoveCamera(EntitySystem::EntityHandle ent)
 
 EntitySystem::EntityHandle GfxSceneMgr::GetCamera(int32 i)
 {
+	if (i<0 || i>=(int32)mCameras.size())
+	{
+		ocError << "Camera index out of bounds";
+		return EntitySystem::EntityHandle::Null;
+	}
 	return mCameras[i];
 }
 

@@ -38,7 +38,14 @@ EntityMessage::eResult EntityComponents::Sprite::HandleMessage( const EntityMess
 			Vector2 pos = GetProperty("Position").GetValue<Vector2>();
 			float32 z = (float32) GetProperty("Depth").GetValue<int32>();
 
-			gGfxRenderer.AddSprite(GfxSystem::Sprite(pos, mSize, z, mTextureHandle->GetTexture(), mTransparency));
+			if (mTextureHandle)
+			{
+				gGfxRenderer.AddSprite(GfxSystem::Sprite(pos, mSize, z, mTextureHandle->GetTexture(), mTransparency));
+			}
+			else
+			{
+				ocWarning << "Invalid texture";
+			}
 
 			return EntityMessage::RESULT_OK;
 		}

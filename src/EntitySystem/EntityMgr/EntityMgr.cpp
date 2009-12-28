@@ -171,7 +171,7 @@ EntityHandle EntityMgr::CreateEntity(EntityDescription& desc)
 			{
 				dependencyFailure = true;
 				ocError << "Component dependency failure on entity " << entityHandle;
-				ocError << "Component " << GetComponentTypeName(cmpType) << " depends on " << GetComponentTypeName(*depIt) << " which was not created yet";
+				ocInfo << "Component " << GetComponentTypeName(cmpType) << " depends on " << GetComponentTypeName(*depIt) << " which was not created yet";
 			}
 		}
 
@@ -248,8 +248,11 @@ void EntityMgr::DestroyEntityImmediately( const EntityID entityToDestroy, const 
 	PrototypeMap::iterator protIt = mPrototypes.find(entityToDestroy);
 	if (protIt != mPrototypes.end())
 	{
-		if (erase) DestroyEntityImmediately(protIt->second->mCopy, erase);
-		else DestroyEntity(protIt->second->mCopy); // if we can't erase the entity from the map, it has to be deleted in the next round
+		if (protIt->second->mCopy != INVALID_ENTITY_ID)
+		{
+			if (erase) DestroyEntityImmediately(protIt->second->mCopy, erase);
+			else DestroyEntity(protIt->second->mCopy); // if we can't erase the entity from the map, it has to be deleted in the next round
+		}
 
 		delete protIt->second;
 		protIt->second = 0;
@@ -313,6 +316,11 @@ bool EntitySystem::EntityMgr::GetEntityProperties( const EntityHandle entity, Pr
 PropertyHolder EntitySystem::EntityMgr::GetEntityProperty( const EntityHandle entity, const StringKey key, const PropertyAccessFlags flagMask /*= 0xff*/ ) const
 {
 	OC_DASSERT(mComponentMgr);
+	if (!entity.IsValid())
+	{
+		ocError << "Invalid entity";
+		return PropertyHolder();
+	}
 	for (EntityComponentsIterator it=mComponentMgr->GetEntityComponents(entity.GetID()); it.HasMore(); ++it)
 	{
 		AbstractProperty* prop = (*it)->GetRTTI()->GetProperty(key, flagMask);
@@ -480,12 +488,14 @@ void EntitySystem::EntityMgr::LoadEntityFromXML( ResourceSystem::XMLNodeIterator
 
 bool EntitySystem::EntityMgr::LoadEntitiesFromResource( ResourceSystem::ResourcePtr res, const bool isPrototype )
 {
-    ResourceSystem::XMLResourcePtr xml = res;
-	if (xml == 0)
+	if (res == 0)
 	{
-		ocError << "XML: Can't load data";
+		ocError << "XML: Can't load data; null resource pointer";
 		return false;
 	}
+	ResourceSystem::XMLResourcePtr xml = res;
+
+	bool result = true;
 
 	for (ResourceSystem::XMLNodeIterator entIt=xml->IterateTopLevel(); entIt!=xml->EndTopLevel(); ++entIt)
 	{
@@ -496,10 +506,11 @@ bool EntitySystem::EntityMgr::LoadEntitiesFromResource( ResourceSystem::Resource
 		else
 		{
 			ocError << "XML: Expected 'Entity', found '" << *entIt << "'";
+			result = false;
 		}
 	}
 
-	return false;
+	return result;
 }
 
 bool EntitySystem::EntityMgr::EntityExists( const EntityHandle h ) const
