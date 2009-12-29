@@ -20,7 +20,7 @@ void GfxWindow::Init(const int32 resx, const int32 resy, const bool fullscreen, 
 		return;
 	}
 
-	int32 flags = SDL_OPENGL;
+	int32 flags = SDL_OPENGL | SDL_RESIZABLE;
 	if (fullscreen)
 		flags |= SDL_FULLSCREEN;
 
@@ -38,17 +38,17 @@ void GfxWindow::Init(const int32 resx, const int32 resy, const bool fullscreen, 
 
 	// Create drawing context
 	mScreen = NULL;
-	mScreen = SDL_SetVideoMode( resx, resy, 16, flags );
+	mScreen = SDL_SetVideoMode( resx, resy, 0, flags );
 	SDL_WM_SetCaption( title. c_str(), NULL );
 
 	if (mScreen != NULL) {
 		ocInfo << "SDL created drawing context for OpenGL. The video surface bits per pixel is "
-			   << (int)mScreen->format->BitsPerPixel;
+			   << (int32)mScreen->format->BitsPerPixel;
 		ocInfo << "Resolution: " << resx << "x" << resy;
 		mResx = resx;
 		mResy = resy;
 		mFullscreen = fullscreen;
-		SDL_ShowCursor(0);
+		//SDL_ShowCursor(0);
 	}
 	else
 	{
@@ -83,7 +83,7 @@ GfxWindow::~GfxWindow()
 	SDL_Quit();
 }
 
-bool GfxWindow::PopEvent(EWindowEvent &result) const
+bool GfxWindow::PopEvent(EWindowEvent &result)
 {
 	SDL_Event event;
 	while (SDL_PollEvent(&event))
@@ -94,11 +94,28 @@ bool GfxWindow::PopEvent(EWindowEvent &result) const
 			result = WE_QUIT;
 			return true;
 			//break;
+		case SDL_VIDEORESIZE:
+			result = WE_RESIZE;
+			ChangeResolution(event.resize.w, event.resize.h);
+			return true;
 		default:
 			break;
 		}
 	}
 	return false;
+}
+
+void GfxWindow::ChangeResolution(int32 x, int32 y)
+{
+	mResx = x;
+	mResy = y;
+	gInputMgr.ResolutionChanged(mResx, mResy);
+
+	set<IGfxWindowListener*>::iterator it;
+	for(it = mGfxWindowListeners.begin(); it != mGfxWindowListeners.end(); ++it)
+	{
+		(*it)->ResolutionChanged(mResx, mResy);
+	}
 }
 
 WindowHandle GfxWindow::_GetWindowHandle() const

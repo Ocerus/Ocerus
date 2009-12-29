@@ -21,7 +21,7 @@ void OglRenderer::Init() const
 
 	glClearColor( 0.1f, 0.1f, 0.1f, 0 );
 	glMatrixMode( GL_PROJECTION );
-	glOrtho( -smOrthoSizeX/2, smOrthoSizeX/2, -smOrthoSizeY/2, smOrthoSizeY/2, -1, 1 );
+	glOrtho( -smOrthoSizeX, smOrthoSizeX, -smOrthoSizeY, smOrthoSizeY, -1, 1 );
 	glMatrixMode( GL_MODELVIEW );
 	glLoadIdentity();
 
@@ -208,9 +208,18 @@ void OglRenderer::SetViewport(const GfxViewport& viewport) const
 	glLoadIdentity();
 
 	// set projection (part of world)
-	glOrtho(	-smOrthoSizeX/2 * viewport.size.x, smOrthoSizeX/2 * viewport.size.x,
-				-smOrthoSizeY/2 * viewport.size.y, smOrthoSizeY/2 * viewport.size.y,
-				-1, 1 );
+	if (viewport.relative)
+	{
+		glOrtho(	-smOrthoSizeX * viewport.size.x, smOrthoSizeX * viewport.size.x,
+					-smOrthoSizeY * viewport.size.y, smOrthoSizeY * viewport.size.y,
+					-1, 1 );
+	}
+	else
+	{
+		glOrtho(	-resx/2 * viewport.size.x, resx/2 * viewport.size.x,
+					-resy/2 * viewport.size.y, resy/2 * viewport.size.y,
+					-1, 1 );
+	}
 
 	glMatrixMode( GL_MODELVIEW );
 }

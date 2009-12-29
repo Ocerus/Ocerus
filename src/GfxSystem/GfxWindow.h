@@ -19,7 +19,8 @@ class IScreenListener;
 namespace GfxSystem
 {
 	enum EWindowEvent {
-    WE_QUIT         ///< User tries to close the window (map to SDL_QUIT)
+    WE_QUIT,		///< User tries to close the window (map to SDL_QUIT)
+	WE_RESIZE		///< User tries to resize the window (map to SDL_VIDEORESIZE)
     /// maybe we will add another events in future
 	};
 
@@ -40,16 +41,22 @@ namespace GfxSystem
 
 		//TODO: Zahazovat neznamy eventy?
 		/// If there is known event in queue, returns it. Otherwise empties the queue and return false.
-		bool PopEvent(EWindowEvent& result) const;
+		bool PopEvent(EWindowEvent& result);
 
-		inline int32 GetResolutionWidth() const {return mResx;}
-		inline int32 GetResolutionHeight() const {return mResy;}
+		void ChangeResolution(int32 x, int32 y);
+
+		inline int32 GetResolutionWidth() const {
+			return mResx;}
+		inline int32 GetResolutionHeight() const {
+			return mResy;}
 
 		/// Gets windows handle. Windows OS only.
 		WindowHandle _GetWindowHandle() const;
 
-		inline virtual void AddScreenListener(IGfxWindowListener * listener) { mGfxWindowListeners.insert(listener); }
-		inline virtual void RemoveResolutionChangeListener(IGfxWindowListener * listener) { mGfxWindowListeners.erase(listener); }
+		inline virtual void AddScreenListener(IGfxWindowListener * listener) { 
+			mGfxWindowListeners.insert(listener); }
+		inline virtual void RemoveResolutionChangeListener(IGfxWindowListener * listener) { 
+			mGfxWindowListeners.erase(listener); }
 
 	private:
 		// maybe not needed ...

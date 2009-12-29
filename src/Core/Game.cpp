@@ -228,7 +228,7 @@ void Core::Game::Draw( const float32 passedDelta)
 		PropertyHolder rot_holder = gEntityMgr.GetEntityProperty(cam_handle, "Rotation" );
 		gGfxRenderer.SetCamera(pos_holder.GetValue<Vector2>(), zoom_holder.GetValue<float32>(), rot_holder.GetValue<float32>());
 
-		GfxSystem::GfxViewport vp(Vector2(0, 0.5), Vector2(0.5, 0.5));
+		GfxSystem::GfxViewport vp(Vector2(0, 0.5), Vector2(0.5, 0.5), true);
 		gGfxRenderer.SetViewport(vp);
 
 		gGfxRenderer.DrawSprites();
@@ -248,7 +248,7 @@ void Core::Game::Draw( const float32 passedDelta)
 		PropertyHolder rot_holder = gEntityMgr.GetEntityProperty(cam_handle, "Rotation" );
 		gGfxRenderer.SetCamera(pos_holder.GetValue<Vector2>(), zoom_holder.GetValue<float32>(), rot_holder.GetValue<float32>());
 
-		GfxSystem::GfxViewport vp(Vector2(0.0, 0.0), Vector2(1, 0.5));
+		GfxSystem::GfxViewport vp(Vector2(0.0, 0.0), Vector2(1, 0.5), false);
 		gGfxRenderer.SetViewport(vp);
 
 		gGfxRenderer.DrawSprites();
@@ -264,7 +264,7 @@ void Core::Game::Draw( const float32 passedDelta)
 		PropertyHolder rot_holder = gEntityMgr.GetEntityProperty(cam_handle, "Rotation" );
 		gGfxRenderer.SetCamera(pos_holder.GetValue<Vector2>(), zoom_holder.GetValue<float32>(), rot_holder.GetValue<float32>());
 
-		GfxSystem::GfxViewport vp(Vector2(0.5, 0.5), Vector2(0.5, 0.5));
+		GfxSystem::GfxViewport vp(Vector2(0.5, 0.5), Vector2(0.5, 0.5), true);
 		gGfxRenderer.SetViewport(vp);
 
 		gGfxRenderer.DrawSprites();

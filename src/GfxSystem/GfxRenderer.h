@@ -77,9 +77,9 @@ namespace GfxSystem
 		SpriteVector mSprites;
 
 	protected:
-		/// Size of window in world coordination system (regardless of window actual pixel size in OS)
-		static const int smOrthoSizeX = 1024;
-		static const int smOrthoSizeY = 768;
+		/// Half size of window in world coordination system (regardless of window actual pixel size in OS)
+		static const int smOrthoSizeX = 512;
+		static const int smOrthoSizeY = 384;
 	};
 }
 

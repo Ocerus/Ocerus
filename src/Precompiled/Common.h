@@ -4,6 +4,8 @@
 #ifndef _COMMON_H_
 #define _COMMON_H_
 
+#undef USE_DBGLIB
+
 
 #include "../Setup/Settings.h"
 

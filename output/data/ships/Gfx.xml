@@ -31,15 +31,15 @@
 
   <Entity Name="Camera1" Prototype="4" >
     <Component Type="CT_CAMERA">
-      <Position>-50 -100</Position>
-      <Zoom>0.4</Zoom>
+      <Position>-0 -00</Position>
+      <Zoom>0.5</Zoom>
       <Rotation>45</Rotation>
     </Component>
   </Entity>
   
   <Entity Name="Camera2" Prototype="4" >
     <Component Type="CT_CAMERA">
-      <Position>100 0</Position>
+      <Position>00 0</Position>
       <Zoom>0.5</Zoom>
       <Rotation>0.0</Rotation>
     </Component>
@@ -47,8 +47,8 @@
 
   <Entity Name="Camera3" Prototype="4" >
     <Component Type="CT_CAMERA">
-      <Position>-256 256</Position>
-      <Zoom>1.5</Zoom>
+      <Position>-0 0</Position>
+      <Zoom>0.5</Zoom>
       <Rotation>0.0</Rotation>
     </Component>
   </Entity>
