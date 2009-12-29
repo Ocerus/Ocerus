@@ -93,6 +93,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\ResourceSystem.tex"
+				>
+			</File>
+			<File
 				RelativePath=".\ScriptRegister.tex"
 				>
 				<FileConfiguration
@@ -101,7 +105,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Building script register documentation..."
-						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet ScriptRegister.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet ScriptRegister.tex"
+						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet ScriptRegister.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet ScriptRegister.tex&#x0D;&#x0A;"
 						AdditionalDependencies="ScriptRegister.tex"
 						Outputs="ScriptRegister.pdf"
 					/>
@@ -112,7 +116,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Building script register documentation..."
-						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet ScriptRegister.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet ScriptRegister.tex"
+						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet ScriptRegister.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet ScriptRegister.tex&#x0D;&#x0A;"
 						AdditionalDependencies="ScriptRegister.tex"
 						Outputs="ScriptRegister.pdf"
 					/>
@@ -149,6 +153,14 @@
 			Name="LaTex sources"
 			Filter="*Content.tex"
 			>
+			<File
+				RelativePath=".\ResourceSystemContent.tex"
+				>
+			</File>
+			<File
+				RelativePath=".\ScriptRegisterContent.tex"
+				>
+			</File>
 			<File
 				RelativePath=".\ScriptSystemContent.tex"
 				>

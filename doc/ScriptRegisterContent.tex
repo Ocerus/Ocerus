@@ -1,0 +1,219 @@
+\section{Purpose of this document}
+
+This document is an enumeration of classes, global functions etc. that are registered to the script engine so they can be used from scripts. It is divided to the section about objects from the game engine and to the section about additional user-defined objects.
+
+\section{Integral registered objects}
+
+This section is about registered objects from the game engine so it should not be edited until the game engine is changed.
+
+\subsection{Classes}
+
+\subsubsection{StringKey}
+
+This class serves as a key into maps and other structures where we want to index data using strings, but we need high speed as well. The string value is hashed and the result is then used as a decimal representation of the string. This class is registered as a value type.
+
+\begin{titled-itemize}{Constructors}
+	\item StringKey() -- default constructor
+	\item StringKey(const StringKey \&in) -- copy constructor
+	\item StringKey(const string \&in) -- constructs the key from a standard string
+\end{titled-itemize}
+
+\begin{titled-itemize}{Operators and methods}
+  \item bool operator=(const StringKey \&in) const -- assignment operator
+  \item StringKey\& operator==(const StringKey \&in) -- equality operator
+  \item string ToString() const -- converts the key to a string
+\end{titled-itemize}
+
+\subsubsection{array\_T}
+
+This is a group of classes parametrized by a type T from PropertyTypes.h that serve as an array of values of a type T corresponding to properties of the Array$<$T$>$* type. For example an array of 32-bit signed integer will be declared as \verb/array_int32/. These classes are not compatible with an script array defined as for example \verb/int32[]/ but they have similar methods. This class is registered as a value type.
+
+\begin{titled-itemize}{Constructors}
+  \item array\_T() -- default constructor that should not be used, instances of these classes are got from Get\_array\_T and Get\_const\_array\_T methods of EntityHandle class
+\end{titled-itemize}
+
+\begin{titled-itemize}{Operators and methods}
+  \item T\& operator[](int32) -- write accessor to an array item
+  \item T operator[](int32) const -- read accessor to an array item
+  \item int32 GetSize() const -- returns a size of the array
+  \item void Resize(int32) -- resize an array to a new size
+\end{titled-itemize}
+
+\subsubsection{PropertyFunctionParameters}
+
+This class represents generic parameters passed to a function accessed via the properties system. Thanks to the $<<$ operators the function parameter can be passed as \verb/PropertyFunctionParameters()/ \verb/<< param1 << param2 .../. This class is registered as a value type.
+
+\begin{titled-itemize}{Constructors}
+  \item PropertyFunctionParameters() -- constructs new empty parameters
+\end{titled-itemize}
+
+\begin{titled-itemize}{Operators and methods}
+  \item PropertyFunctionParameters\& operator=(const PropertyFunctionParameters \&in) -- assignment operator
+  \item bool operator==(const PropertyFunctionParameters \&in) const -- e\-qua\-li\-ty operator
+  \item PropertyFunctionParameters operator$<<$(const T \&in) const -- add parameter of type T from PropertyTypes.h
+  \item PropertyFunctionParameters operator$<<$(const array\_T \&in) const -- add parameter of type array\_T
+\end{titled-itemize}
+
+\subsubsection{EntityHandle}
+
+This class represents one unique entity in the entity system. This class is registered as a value type.
+
+\begin{titled-itemize}{Constructors}
+  \item EntityHandle() -- default constructor will initialize the handle to an invalid state
+  \item EntityHandle(const EntityHandle \&in) -- only the copy constructor is enabled, new entities should be added only by the EntityMgr
+\end{titled-itemize}
+
+\begin{titled-itemize}{Operators and methods}
+  \item EntityHandle\& operator=(const EntityHandle \&in) -- assignment operator
+  \item bool operator==(const EntityHandle \&in) -- equality operator
+  \item bool IsValid() const -- returns true if this handle is valid (not null)
+  \item bool Exists() const -- returns true if this entity still exists in the system
+  \item EntityID GetID() const -- returns the internal ID of this entity
+  \item eEntityMessageResult PostMessage(const eEntityMessageType, PropertyFunctionParameters = PropertyFunctionParameters()) -- sends a message to this entity (message type, parameters)
+  \item void CallFunction(string \&in, PropertyFunctionParameters \&in) -- calls a function on an entity of a specific name and with specific parameters
+  \item T Get\_T(string \&in) -- gets a value of an entity property of a specific name and type T from PropertyTypes.h
+  \item void Set\_T(string \&in, T) -- sets a value of an entity property of a specific name and type T from PropertyTypes.h
+  \item array\_T Get\_array\_T(string \&in) -- gets a non-constant value of an entity property of a specific name and type of array\_T
+  \item const array\_T Get\_const\_array\_T(string \&in) -- gets a constant value of an entity property of a specific name and type of array\_T
+\end{titled-itemize}
+
+\subsubsection{EntityDescription}
+
+This class contains all info needed to create one instance of an entity. It is basically a collection of component descriptions. This class is registered as a value type.
+
+\begin{titled-itemize}{Constructors}
+  \item EntityDescription() -- default constructor
+\end{titled-itemize}
+
+\begin{titled-itemize}{Operators and methods}
+  \item void Reset() -- clears everything, call this before each subsequent filling of the description
+  \item void AddComponent(const eComponentType) -- adds a new component specified by its type
+  \item void SetName(const string \&in) -- sets a custom name for this entity
+  \item void SetKind(const eEntityDescriptionKind) -- sets this entity to be an ordinary entity or a prototype
+  \item void SetPrototype(const EntityHandle) -- sets the prototype the entity is to be linked to
+  \item void SetPrototype(const EntityID) -- sets the prototype the entity is to be linked to
+  \item void SetDesiredID(const EntityID) -- sets a desired ID for this entity, it does not have to be used by EntityMgr
+\end{titled-itemize}
+
+\subsubsection{EntityMgr}
+
+This class manages all game entities. It is registered as a no-handle reference so the only way to use it is to get reference from a global function.
+
+\begin{titled-itemize}{Operators and methods}
+  \item EntityHandle CreateEntity(EntityDescription \&in) -- creates new entity accordingly to its description and returns its handle
+  \item void DestroyEntity(const EntityHandle) -- destroys a specified entity if it exists
+  \item bool EntityExists(const EntityHandle) const -- returns true if the entity exists
+  \item EntityHandle FindFirstEntity(const string \&in) -- returns EntityHandle to the first entity of a specified name
+  \item bool IsEntityInited(const EntityHandle) const -- returns true if the entity was fully initialized
+  \item bool IsEntityPrototype(const EntityHandle) const -- returns true if the entity is a prototype
+  \item void LinkEntityToPrototype(const EntityHandle, const EntityHandle) -- assigns the given entity to the prototype
+  \item void UnlinkEntityFromPrototype(const EntityHandle) -- destroys the link between the component and its prototype
+  \item bool IsPrototypePropertyShared(const EntityHandle, const String\-Key) const -- returns true if the property of the prototype is marked as shared (and thus propagated to instances)
+  \item void SetPrototypePropertyShared(const EntityHandle, const String\-Key) -- marks the property as shared among instances of the prototype
+  \item void SetPrototypePropertyNonShared(const EntityHandle, const String\-Key) -- marks the property as non shared among instances of the prototype
+  \item void UpdatePrototypeCopy(const EntityHandle) -- saves the current properties into the storage of shared properties of the prototype
+  \item void UpdatePrototypeInstances(const EntityHandle) -- propagates the current state of properties of the prototype to its instances
+  \item bool HasEntityProperty(const EntityHandle, const StringKey, const PropertyAccessFlags) const -- returns true if the entity has the given property
+  \item bool HasEntityComponentProperty(const EntityHandle, const ComponentID, const StringKey, const PropertyAccessFlags) const -- returns true if the component of the entity has the given property
+  \item void BroadcastMessage(const eEntityMessageType, PropertyFunctionParameters = PropertyFunctionParameters()) -- sends a message to all entities
+  \item bool HasEntityComponentOfType(const EntityHandle, const eComponentType) -- returns true if the given entity has a component of the given type
+  \item int32 GetNumberOfEntityComponents(const EntityHandle) const -- returns the number of components attached to the entity
+  \item ComponentID AddComponentToEntity(const EntityHandle, const e\-Com\-po\-nent\-Ty\-pe) -- adds a component of the specified type to the entity, returns an ID of the new component
+  \item void DestroyEntityComponent(const EntityHandle, const Com\-po\-nent\-ID) -- destroys a component of the entity
+\end{titled-itemize}
+
+\subsection{Global functions}
+
+\begin{titled-itemize}{Declaration and comment}
+  \item void Log(string \&in) -- writes a message to the log
+  \item EntityHandle GetCurrentEntityHandle() -- returns the handle of entity that calls the current function, invalid handle if no entity calls it
+  \item EntityMgr\& GetEntityMgr() -- returns the reference to the entity manager on which it is possible to call methods, this reference cannot be stored to a variable or passed to a function
+\end{titled-itemize}
+
+\subsection{Enumerations}
+
+\begin{titled-itemize}{Type \{ values \} -- comment}
+  \item eEntityMessageType \{ \ldots \} -- this is user-defined, the types are got from EntityMessageTypes.h
+  \item eEntityMessageResult \{ RESULT\_IGNORED, RESULT\_OK, RE\-SULT\-\_\-ER\-ROR \} -- result receives after sending out a message to entities (message is ignored, processed well or an error occured)
+  \item eEntityDescriptionKind \{ EK\_ENTITY, EK\_PROTOTYPE, EK\-\_\-PRO\-TO\-TY\-PE\-\_\-CO\-PY \} -- kind of an entity (an ordinary entity, a prototype, a copy of prototype)
+  \item eComponentType \{ \ldots \} -- this is user-defined, the types are got from \_ComponentTypes.h 
+  \item ePropertyAccess \{ PA\_EDIT\_READ = 1$<<$1, PA\_EDIT\_WRITE = 1$<<$2, PA\_SCRIPT\_READ = 1$<<$3, PA\_SCRIPT\_WRITE = 1$<<$4, PA\_INIT = 1$<<$5, PA\_FULL\_ACCESS = 0xff \} -- restrictions of access which can be granted to a property (the property can be read/written from editor/scripts/during the component initialization or full access is granted)
+\end{titled-itemize}
+
+\subsection{Typedefs}
+
+\begin{titled-itemize}{New type = old type}
+	\item float32 = float
+	\item float64 = double
+	\item EntityID = int32
+	\item ComponentID = int32
+	\item PropertyAccessFlags = uint8
+\end{titled-itemize}
+
+\section{Additional registered objects}
+
+This section is about additional registered objects so it should be edited when new objects are registered to the script engine.
+
+\subsection{Classes}
+
+\subsubsection{Vector2}
+
+This class represents 2D vector and it is registered as a value type.
+
+\begin{titled-itemize}{Properties}
+  \item float32 x -- x coordinate
+  \item float32 y -- y coordinate
+\end{titled-itemize}
+
+\begin{titled-itemize}{Constructors}
+  \item Vector2() -- default constructor (x = y = 0)
+  \item Vector2(const Vector2 \&in) -- copy constructor
+  \item Vector2(float32 x, float32 y)  -- constructor using coordinates
+\end{titled-itemize}
+
+\begin{titled-itemize}{Operators and methods}
+  \item void operator+=(const Vector2 \&in) -- add a vector to this vector
+  \item void operator-=(const Vector2 \&in) -- subtract a vector from this vector
+  \item void operator*=(float32) -- multiply this vector by a scalar
+  \item Vector2 operator-() const -- negate this vector
+  \item bool operator==(const Vector2 \&in) const -- equality operator
+  \item Vector2 operator+(const Vector2 \&in) const -- returns a sum of this and argument vector
+  \item Vector2 operator-(const Vector2 \&in) const -- returns a difference of this and argument vector
+  \item Vector2 operator*(float32) const -- returns a product of a scalar and this vector
+  \item float32 Length() const -- get the length of this vector (the norm)
+  \item float32 LengthSquared() const -- get the length squared
+  \item void Set(float32, float32) -- set this vector to some specified coordinates
+  \item void SetZero() -- set this vector to all zeros
+  \item float32 Normalize() -- converts this vector into a unit vector and returns the length
+  \item bool IsValid() const -- returns whether this vector contain finite coordinates
+  \item float32 Dot(const Vector2 \&in) const -- returns a scalar product of this and argument vector
+\end{titled-itemize}
+
+\subsubsection{Color}
+
+This class represents 32-bit color and it is registered as a value type.
+
+\begin{titled-itemize}{Properties}
+  \item uint8 r -- red component of color
+  \item uint8 g -- green component of color
+  \item uint8 b -- blue component of color
+  \item uint8 a -- alpha component of color
+\end{titled-itemize}
+
+\begin{titled-itemize}{Constructors}
+  \item Color() -- default constructor (r = g = b = 0, a = 255)
+  \item Color(uint8 r, uint8 g, uint8 b, uint8 a = 255) -- parameter constructor
+  \item Color(uint32 color) -- construct the color from 32-bit number
+\end{titled-itemize}
+
+\begin{titled-itemize}{Operators and methods}
+  \item bool operator==(const Color \&in) const -- equality operator
+  \item uint32 GetARGB() const -- return 32-bit representation of the color
+\end{titled-itemize}
+
+\subsection{Global functions}
+
+\begin{titled-itemize}{Declaration and comment}
+  \item int32 GetState() -- returns the state of script when it is called from the OnAction() handler, an error otherwise
+  \item void SetAndSleep(int32, uint64) -- sets the state of script to the first argument and the time of the next execution to the current time plus the second argument in milliseconds when it is called from the OnAction() handler, throws an error otherwise
+\end{titled-itemize}

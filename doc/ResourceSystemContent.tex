@@ -1,0 +1,35 @@
+\noindent\textbf{Namespaces:} ResourceSystem
+
+\noindent\textbf{Classes:} ResourceMgr, Resource, ResourcePtr
+
+\section{Introduction}
+
+Blabla.
+
+
+
+
+
+
+
+\section{Glossary}
+
+This is a glossary of the most used terms in the previous sections:
+
+\begin{description}
+  \item[Value type] -- a primitive type (integer or real number, boolean value, enumeration or string) or an object that is copied on an assignment or a passing to or from a function  \item[Reference type] -- an object that is assigned or passed to a function only through a pointer on it
+  \item[Object handle] -- an equivalent of a reference in C++ that counts references on an object
+	\item[Script class] -- a class defined and implemented in a script file, it is always used as a reference type
+	\item[Script function] -- a function defined and implemented in a script file
+	\item[Script file] -- one file containing script class and script function definitions, can include a code from other files
+	\item[Script module] -- one or more script files connected with include directives, which are managed and builded together and have a common namespace
+	\item[Function ID] -- an identification of a script function based on a module name and a function declaration
+	\item[Script context] -- an object that wraps a script function calling, it must be prepared with a function ID, executed and released, function arguments can be passed and a return value can be obtained
+	\item[Script engine] -- an object that registers C++ classes, global functions, properties etc. for use in a script code and manages script modules and contexts
+	\item[Script manager] -- a class that encapsulated a script engine and provides methods for managing script modules and calling script functions
+\end{description}
+
+\begin{thebibliography}{9}                                                                                                
+\bibitem {angelscript}AngelScript documentation, file /AngelScript/index.html
+
+\end{thebibliography}
