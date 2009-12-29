@@ -40,7 +40,7 @@ namespace StringSystem
 
 	protected:
 
-		virtual bool LoadImpl(void);
+		virtual size_t LoadImpl(void);
 		virtual bool UnloadImpl(void);
 
 	private:

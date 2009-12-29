@@ -7,7 +7,17 @@
 
 using namespace ResourceSystem;
 
-Resource::Resource(): mIsManual(false), mState(STATE_UNINITIALIZED), mInputFileStream(0) {}
+uint64 Resource::sLastUsedTime;
+
+Resource::Resource():
+	mIsManual(false),
+	mState(STATE_UNINITIALIZED),
+	mInputFileStream(0),
+	mSizeInBytes(0),
+	mLastUsedTime(0)
+{
+
+}
 
 Resource::~Resource()
 {
@@ -50,24 +60,29 @@ bool Resource::Load()
 	SetState(STATE_LOADING);
 	ocInfo << "Loading resource '" << mName << "'";
 	RefreshResourceInfo();
-	bool result = LoadImpl();
-	if (result)
+	mSizeInBytes = LoadImpl();
+	bool loadSuccessful = mSizeInBytes != 0;
+	if (loadSuccessful)
 	{
 		SetState(STATE_LOADED);
 		ocInfo << "Resource '" << mName << "' loaded";
+		// make sure the resource mgr is synchronized
+		gResourceMgr._NotifyResourceLoaded(this);
 	}
 	else
 	{
 		SetState(STATE_INITIALIZED);
 		ocError << "Resource '" << mName << "' coult NOT be loaded";
 	}
-	return result;
+	return loadSuccessful;
 }
 
 bool Resource::Unload(bool allowManual)
 {
 	// wraps around UnloadImpl and does some additional work
 	OC_ASSERT(mState != STATE_UNINITIALIZED);
+	// make sure the resource mgr is synchronized
+	gResourceMgr._NotifyResourceUnloaded(this);
 	if (GetState() == STATE_INITIALIZED)
 		return true; // true as the data are not loaded
 	if (mIsManual && !allowManual)
@@ -93,6 +108,14 @@ bool Resource::Unload(bool allowManual)
 
 void ResourceSystem::Resource::EnsureLoaded( void )
 {
+	// mark this resource as being used
+	if (mLastUsedTime != sLastUsedTime)
+	{
+		++sLastUsedTime;
+		mLastUsedTime = sLastUsedTime;
+	}
+
+	// if the resource is not load it, then load it
 	if (mState != STATE_LOADED)
 	{
 		if (IsManual())
@@ -166,4 +189,10 @@ void ResourceSystem::Resource::Reload( void )
 	}
 	Unload();
 	Load();
+}
+
+size_t ResourceSystem::Resource::GetSize( void ) const
+{
+	if (GetState() == STATE_LOADED) return mSizeInBytes;
+	else return 0;
 }

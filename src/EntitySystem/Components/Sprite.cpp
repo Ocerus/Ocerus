@@ -18,7 +18,7 @@ EntityMessage::eResult EntityComponents::Sprite::HandleMessage( const EntityMess
 		{
 			if ((mResPath == ""))
 				return EntityMessage::RESULT_IGNORED;
-			//tohle by chtelo nejak zoptimalizovat, nejspis to pridavani resourcu udelat nejak globalnejc
+			///@todo tohle by chtelo nejak zoptimalizovat, nejspis to pridavani resourcu udelat nejak globalnejc
 			if (gResourceMgr.AddResourceFileToGroup(mResPath, "textures", ResourceSystem::RESTYPE_TEXTURE, true))
 			{
 				const char* lastSlashPos = 0;

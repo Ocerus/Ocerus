@@ -49,7 +49,7 @@ void XMLCALL DataHandle(void* data, const XML_Char *s, int len)
 	}
 }
 
-bool XMLResource::LoadImpl(void)
+size_t XMLResource::LoadImpl(void)
 {
 	XML_Memory_Handling_Suite mmhs;
 	mmhs.malloc_fcn = CustomMalloc;
@@ -74,16 +74,17 @@ bool XMLResource::LoadImpl(void)
 	{
 		ocError << "XMLResource: Parse error at line " << (int32)XML_GetCurrentLineNumber(p) << ": " << (char*)XML_ErrorString(XML_GetErrorCode(p));
 		XML_ParserFree(p);
-		return false;
+		return 0;
 	}
 
 	// move the top level node one level down to the XML document element
 	++mTopNode;
 
 	XML_ParserFree(p);
+	size_t dataSize = cont.GetSize();
 	cont.Release();
 
-	return true;
+	return dataSize;
 }
 
 
@@ -103,11 +104,13 @@ XMLResource::~XMLResource(void) {}
 
 ResourceSystem::XMLNodeIterator ResourceSystem::XMLResource::IterateTopLevel( void )
 {
+	EnsureLoaded();
 	return XMLNodeIterator(this, mDataMap.begin(mTopNode));
 }
 
 ResourceSystem::XMLNodeIterator ResourceSystem::XMLResource::IterateChildren( const XMLNodeIterator iter )
 {
+	EnsureLoaded();
 	return XMLNodeIterator(this, mDataMap.begin(iter));
 }
 

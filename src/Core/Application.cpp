@@ -64,9 +64,6 @@ void Application::Init()
 
 	GUISystem::GUIMgr::CreateSingleton();
 
-	//TODO:Gfx
-	//GfxSystem::ParticleSystemMgr::CreateSingleton();
-
 	// create core states
 	mLoadingScreen = new LoadingScreen();
 	mGame = new Game();
@@ -100,8 +97,6 @@ Application::~Application()
 	GfxSystem::GfxSceneMgr::DestroySingleton();
 	StringSystem::StringMgr::DestroySingleton();
 	ResourceSystem::ResourceMgr::DestroySingleton();
-	//TODO:Gfx
-	//GfxSystem::ParticleSystemMgr::DestroySingleton();
 	Utils::Hash::ClearHashMap();
 
 	// must come last

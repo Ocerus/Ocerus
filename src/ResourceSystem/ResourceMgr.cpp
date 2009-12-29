@@ -23,7 +23,7 @@ using namespace ResourceSystem;
 const uint64 RESOURCE_UPDATES_DELAY_MILLIS = 500;
 
 ResourceMgr::ResourceMgr( void ):
-	mBasePath(), mListener(0), mResourceUpdatesTimer(false)
+	mBasePath(), mListener(0), mResourceUpdatesTimer(false), mMemoryLimit(0), mMemoryUsage(0), mEnforceMemoryLimit(true)
 {
 
 }
@@ -65,6 +65,9 @@ void ResourceSystem::ResourceMgr::Init( const string& basepath )
 	OC_ASSERT_MSG(mResourceCreationMethods[NUM_RESTYPES-1], "Not all resource types are registered");
 
 	mLastUpdateTime = 0;
+	mMemoryLimit = std::numeric_limits<size_t>::max();
+	mMemoryUsage = 0;
+	Resource::ResetLastUsedTime();
 
 	ocInfo << "All resource types registered";
 }
@@ -72,12 +75,16 @@ void ResourceSystem::ResourceMgr::Init( const string& basepath )
 ResourceMgr::~ResourceMgr()
 {
 	DeleteAllResources();
+	OC_ASSERT_MSG(mMemoryUsage==0, "Seems like we didn't unload some resources");
 }
 
 void ResourceMgr::UnloadAllResources()
 {
 	for (ResourceGroupMap::const_iterator i=mResourceGroups.begin(); i!=mResourceGroups.end(); ++i)
+	{
 		UnloadResourcesInGroup(i->first);
+	}
+	Resource::ResetLastUsedTime();
 }
 
 bool ResourceMgr::AddResourceDirToGroup(const string& path, const StringKey& group, const string& includeRegexp, const string& excludeRegexp, eResourceType type)
@@ -313,7 +320,9 @@ void ResourceMgr::GetResourceGroup(const StringKey& group, vector<ResourcePtr>& 
 		return; // empty vector
 	const ResourceMap& resmap = *gi->second;
 	for (ResourceMap::const_iterator ri = resmap.begin(); ri != resmap.end(); ri++)
+	{
 		output.push_back(ri->second);
+	}
 	return;
 }
 
@@ -387,4 +396,62 @@ void ResourceSystem::ResourceMgr::CheckForResourcesUpdates( void )
 		mLastUpdateTime = currentTime;
 		RefreshAllResources();
 	}
+}
+
+void ResourceSystem::ResourceMgr::_NotifyResourceLoaded( const Resource* loadedResource )
+{
+	mMemoryUsage += loadedResource->GetSize();
+	CheckMemoryUsage(loadedResource);
+}
+
+void ResourceSystem::ResourceMgr::_NotifyResourceUnloaded( const Resource* unloadedResource )
+{
+	mMemoryUsage -= unloadedResource->GetSize();
+}
+
+void ResourceSystem::ResourceMgr::CheckMemoryUsage( const Resource* resourceToKeep )
+{
+	if (!mEnforceMemoryLimit) return;
+
+	while (mMemoryUsage > mMemoryLimit)
+	{
+		// find a resource to unload using the LRU strategy
+		ResourcePtr leastUsedResource(0);
+		uint64 leastUsedTime = std::numeric_limits<uint64>::max();
+
+		for (ResourceGroupMap::iterator gi=mResourceGroups.begin(); gi!=mResourceGroups.end(); ++gi)
+		{
+			ResourceMap& resmap = *gi->second;
+			for (ResourceMap::iterator ri=resmap.begin(); ri!=resmap.end(); ++ri)
+			{
+				ResourcePtr testedResource = ri->second;
+				bool notToKeep = testedResource.get() != resourceToKeep;
+				bool loaded = testedResource->GetState() == Resource::STATE_LOADED;
+				bool lessUpdated = testedResource->GetLastUsedTime() < leastUsedTime;
+				if (notToKeep && loaded && lessUpdated)
+				{
+					leastUsedResource = testedResource;
+					leastUsedTime = testedResource->GetLastUsedTime();
+				}
+			}
+		}
+
+		// nothing to unload
+		if (!leastUsedResource) break;
+
+		ocInfo << "Unloading resource '" << leastUsedResource->GetName() << "' to stay under memory limits";
+		leastUsedResource->Unload();
+	}
+}
+
+void ResourceSystem::ResourceMgr::SetMemoryLimit( const size_t newLimit )
+{
+	mMemoryLimit = newLimit;
+	CheckMemoryUsage();
+}
+
+void ResourceSystem::ResourceMgr::EnableMemoryLimitEnforcing( void )
+{
+	mEnforceMemoryLimit = true;
+	CheckMemoryUsage();
 }

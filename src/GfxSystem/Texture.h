@@ -39,7 +39,7 @@ namespace GfxSystem
 
 		friend class GfxRenderer;
 
-		virtual bool LoadImpl(void);
+		virtual size_t LoadImpl(void);
 		virtual bool UnloadImpl(void);
 		void Init(void);
 

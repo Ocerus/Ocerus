@@ -15,14 +15,14 @@ ScriptResource::~ScriptResource(void)
 	UnloadImpl();
 }
 
-bool ScriptResource::LoadImpl()
+size_t ScriptResource::LoadImpl()
 {
 	InputStream& is = OpenInputStream(ISM_TEXT);
 	stringstream ss;
 	ss << is.rdbuf();
 	mScript = ss.str();
 	CloseInputStream();
-	return true;
+	return mScript.size();
 }
 
 bool ScriptResource::UnloadImpl()

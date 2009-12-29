@@ -38,7 +38,7 @@ namespace ScriptSystem
 		set<string>& GetDependentModules(void) { return mDependentModules; }
 	protected:
 
-		virtual bool LoadImpl(void);
+		virtual size_t LoadImpl(void);
 		virtual bool UnloadImpl(void);
 
 	private:

@@ -18,7 +18,7 @@ void Texture::Init()
 	mHandle = 0;
 }
 
-bool Texture::LoadImpl()
+size_t Texture::LoadImpl()
 {
 	// get texture data
 	DataContainer dc;
@@ -35,12 +35,12 @@ bool Texture::LoadImpl()
 	mHeight = height;
 
 	// we don't need the data buffer anymore
+	size_t dataSize = dc.GetSize();
 	dc.Release();
 
-	if (mHandle != 0)
-		return true;
-	else
-		return false;
+	if (!mHandle) return 0;
+
+	return dataSize;
 }
 
 bool Texture::UnloadImpl()

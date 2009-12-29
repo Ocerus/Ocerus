@@ -33,7 +33,7 @@ namespace GUISystem {
 	protected:
 		friend class ResourceMgr;
 
-		virtual bool LoadImpl(void);
+		virtual size_t LoadImpl(void);
 		virtual bool UnloadImpl(void);
 
 		DataContainer mData;

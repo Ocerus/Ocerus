@@ -13,8 +13,9 @@ TextResource::~TextResource(void)
 	UnloadImpl();
 }
 
-bool TextResource::LoadImpl()
+size_t TextResource::LoadImpl()
 {
+	size_t dataSize = 0;
 	InputStream& is = OpenInputStream(ISM_TEXT);
 	char buf[4096];
 	string key = "";
@@ -42,6 +43,7 @@ bool TextResource::LoadImpl()
 					text.resize(text.size()-1);
 					// gLogMgr.LogMessage("StringMgr: Saving key: " + key + " and data: " + text);
 					mTextDataMap.insert(pair<StringKey, TextData>(key,text));
+					dataSize += key.size() + text.size();
 					text.clear();
 					key.clear();
 				}
@@ -56,7 +58,7 @@ bool TextResource::LoadImpl()
 			}
 		}
 	}
-	return true;
+	return dataSize;
 }
 
 bool TextResource::UnloadImpl()

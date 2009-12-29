@@ -10,10 +10,10 @@ ResourceSystem::ResourcePtr CEGUIResource::CreateMe()
 	return ResourceSystem::ResourcePtr(new CEGUIResource());
 }
 
-bool CEGUIResource::LoadImpl()
+size_t CEGUIResource::LoadImpl()
 {
 	GetRawInputData(mData);
-	return true;
+	return mData.GetSize();
 }
 
 bool CEGUIResource::UnloadImpl()

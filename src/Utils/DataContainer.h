@@ -23,16 +23,16 @@ namespace Utils
 
 		/// Sets the data to be carried. The pointer to such data must be obtained
 		/// with new[] operator.
-		void SetData(uint8* data, int32 size) { mData = data; mSize = size; }
+		inline void SetData(uint8* data, int32 size) { mData = data; mSize = size; }
 
 		/// Returns the carried data pointer.
-		uint8* GetData(void) { return mData; }
+		inline uint8* GetData(void) { return mData; }
 
 		/// Returns the carried data pointer.
-		const uint8* GetData(void) const { return mData; }
+		inline const uint8* GetData(void) const { return mData; }
 
 		/// Returns the size of the carried data.
-		int32 GetSize(void) const { return mSize; }
+		inline int32 GetSize(void) const { return mSize; }
 
 		/// Destroys the carried data.
 		void Release(void)

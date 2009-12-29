@@ -22,7 +22,10 @@ namespace ResourceSystem
 	{
 	public:
 
+		/// Default constructor.
 		ResourceMgr(void);
+
+		/// Default destructor.
 		~ResourceMgr(void);
 
 		/// All resource types must be registered inside this ctor, so don't forget to add new types there!
@@ -85,6 +88,27 @@ namespace ResourceSystem
 		/// If the group can't be found, empty vector is returned.
 		void GetResourceGroup(const StringKey& group, vector<ResourcePtr>& output);
 
+		/// Sets the memory limit the resource manager should try to keep.
+		/// The limit is given in bytes.
+		void SetMemoryLimit(const size_t newLimit);
+
+		/// Returns the current memory limit.
+		inline size_t GetMemoryLimit(void) const { return mMemoryLimit; }
+
+		/// Enables unloading of resources when they're over the memory limit.
+		void EnableMemoryLimitEnforcing(void);
+
+		/// Enables unloading of resources when they're over the memory limit.
+		inline void DisableMemoryLimitEnforcing(void) { mEnforceMemoryLimit = false; }
+
+	public:
+
+		/// Callback from a resource after it was loaded.
+		void _NotifyResourceLoaded(const Resource* loadedResource);
+
+		/// Callback from a resource after it was unloaded.
+		void _NotifyResourceUnloaded(const Resource* unloadedResource);
+
 	private:
 
 		typedef ResourcePtr (*ResourceCreationMethod)();
@@ -99,8 +123,16 @@ namespace ResourceSystem
 		ResourceCreationMethod mResourceCreationMethods[NUM_RESTYPES];
 		Utils::Timer mResourceUpdatesTimer;
 		uint64 mLastUpdateTime;
+		size_t mMemoryLimit;
+		size_t mMemoryUsage;
+		bool mEnforceMemoryLimit;
 
+		/// Adds a resource to a group given a resource pointer.
 		void AddResourceToGroup(const StringKey& group, const StringKey& name, const ResourcePtr res);
+
+		/// Checks if the memory usage is within limits. If not, some of the resources will be freed.
+		/// @param resourceToKeep This resource (if valid) will be preserved at any case.
+		void CheckMemoryUsage(const Resource* resourceToKeep = 0);
 	};
 }
 

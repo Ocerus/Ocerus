@@ -68,18 +68,26 @@ namespace ResourceSystem
 		/// Returns true if this resource was manually created and is not managed by the ResourceMgr.
 		inline bool IsManual(void) const { return mIsManual; }
 
+		/// Returns the size in bytes of the loaded resource. Null if it is not loaded.
+		size_t GetSize(void) const;
+
+		/// Returns the last time (counter based) this resource was used.
+		inline uint64 GetLastUsedTime(void) const { return mLastUsedTime; }
 
 
 	protected:
 
 		/// Called whenever the resource is to be loaded.
-		/// Put your custom code inside the
-		///	implementation. You can use the OpenInputStream, CloseInputStream and GetRawInputData methods from inside.
-		virtual bool LoadImpl(void) = 0;
+		/// Put your custom code inside the implementation. You can use the OpenInputStream, CloseInputStream and
+		/// GetRawInputData methods from inside.
+		/// @returns The size of the data kept in memory for this resource after it was loaded. Null is a valid value
+		/// indicating there was a problem with the load.
+		virtual size_t LoadImpl(void) = 0;
 
 		/// Called whenever the resource is to be unloaded.
-		/// Put your custom code inside the
-		///	implementation. You can use the OpenInputStream, CloseInputStream and GetRawInputData methods from inside them.
+		/// Put your custom code inside the	implementation. You can use the OpenInputStream, CloseInputStream and
+		/// GetRawInputData methods from inside them.
+		/// @returns True if successful, false otherwise.
 		virtual bool UnloadImpl(void) = 0;
 
 		/// Opens input stream from where raw data can be read.
@@ -106,9 +114,11 @@ namespace ResourceSystem
 		string mFilePath;
 		string mName;
 		int64 mLastWriteTime;
+		uint64 mLastUsedTime;
 		bool mIsManual;
 		eResourceType mType;
 		eState mState;
+		size_t mSizeInBytes;
 
 		/// Used by the implementation of OpenInputStream.
 		boost::filesystem::ifstream* mInputFileStream;
@@ -119,6 +129,11 @@ namespace ResourceSystem
 		inline void SetManual(bool manual) { mIsManual = manual; }
 		inline void SetType(const eResourceType newType) { mType = newType; }
 		void RefreshResourceInfo(void);
+
+	private:
+
+		static uint64 sLastUsedTime;
+		inline static void ResetLastUsedTime(void) { sLastUsedTime = 0; }
 	};
 
 }
