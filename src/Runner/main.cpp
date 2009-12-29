@@ -101,9 +101,7 @@ int main(int argc, char* argv[])
 		{
 			LogSystem::LogMgr::GetSingleton().LogMessage(string("An exception has occured: ") + e.what(), LL_ERROR);
 		}
-		#ifdef __WIN__
-		MessageBox(NULL,  e.what(), "An exception has occured!", MB_OK | MB_ICONERROR | MB_TASKMODAL);
-		#endif
+		OC_FAIL(e.what());
 		return -1;
 	}
 	catch (...)
@@ -112,9 +110,7 @@ int main(int argc, char* argv[])
 		{
 			LogSystem::LogMgr::GetSingleton().LogMessage("An unknown exception has occured.", LL_ERROR);
 		}
-		#ifdef __WIN__
-		MessageBox(NULL, "An unknown exception has occured!", "An exception has occured!", MB_OK | MB_ICONERROR | MB_TASKMODAL);
-		#endif
+		OC_FAIL("An unknown exception has occured!");
 		return -1;
 	}
 

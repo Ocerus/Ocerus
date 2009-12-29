@@ -30,6 +30,6 @@ namespace boost
     {
         (void) function;
         DisplayAssert(expr, file, line);
-		DEBUG_BREAK;
+		DEBUG_BREAK();
     }
 }
