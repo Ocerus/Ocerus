@@ -93,6 +93,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\InputSystem.tex"
+				>
+			</File>
+			<File
 				RelativePath=".\ResourceSystem.tex"
 				>
 			</File>
@@ -153,6 +157,10 @@
 			Name="LaTex sources"
 			Filter="*Content.tex"
 			>
+			<File
+				RelativePath=".\InputSystemContent.tex"
+				>
+			</File>
 			<File
 				RelativePath=".\ResourceSystemContent.tex"
 				>

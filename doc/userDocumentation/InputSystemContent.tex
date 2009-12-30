@@ -1,0 +1,33 @@
+\noindent\textbf{Namespaces:} InputSystem
+
+\noindent\textbf{Classes:} InputMgr, IInputListener
+
+
+\section{Introduction}
+Each game must somehow react to the input from the player. It can come from a keyboard, a mouse or a gamepad. To keep things organized handling of those devices were concentrated into a single part of the engine - the Input System.
+
+
+\section{What Does It Do}
+The needs of games are different, but the ways they want to access the input devices are still the same. Either they want to receive a notification when something interesting happens or they want to poll the device for its current state. The \verb'InputMgr' implements both of the approaches.
+
+The first one is provided via the \verb'IInputListener' interface which you may implement and then register into the \verb'InputMgr' by using its \verb'AddInputListener()' method. You'll then receive the notification in callbacks of the interface.
+
+The second approach is supported by multiple methods in \verb'InputMgr' for querying the device state. For example, \verb'IsKeyDown()' will tell you if any specific key is currently held down and \verb'GetMouseState()' will return a whole bunch of mouse related informations.
+
+
+\section{Event Processing}
+To keep things synchronized the event processing is executed in the main game thread. At the beginning of each iteration of the game loop the \verb'Capture()' method is called. Inside the events are recognized and then distributed.
+
+
+
+%\section{Glossary}
+%This is a glossary of the most used terms in the previous sections:
+%
+%\begin{description}
+%  \item[Resource] -- a unit of data the game will be working with as a whole. The data is usually stored in an external device.
+%\end{description}
+
+
+%\begin{thebibliography}{9}                                                                                                
+%\bibitem {angelscript}AngelScript documentation, file /AngelScript/index.html
+%\end{thebibliography}
