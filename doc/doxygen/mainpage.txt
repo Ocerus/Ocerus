@@ -1,0 +1,20 @@
+
+/** 
+
+@mainpage Ocerus Reference Manual
+  
+  
+@section intro Introduction
+  
+@subsection s1 What is this?
+This is a reference manual to Ocerus - a game engine suited for middle-sized <a href="http://en.wikipedia.org/wiki/2.5D">2.5D</a> projects. 2.5D means the physics and most of the graphics are in two dimensions, but some 3D objects are supported as well.
+  
+@subsection s2 Where to start?
+It's probably best starting with the <a href="../../userDocumentation/">user guide</a> to Ocerus. It will give you a basic idea about the architecture of the engine and help you orient in the code.
+
+
+@section architecture Architecture
+The engine is divided into bigger parts which group together related code. Each of these parts correspond to a unique namespace. For example, resources are handled by ResourceSystem. So, to learn more about the architecture it's probably best to read the documentation of <a href="namespaces.html">namespaces</a>.
+
+  
+*/

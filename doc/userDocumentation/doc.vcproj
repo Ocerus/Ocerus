@@ -182,6 +182,14 @@
 				</FileConfiguration>
 			</File>
 		</Filter>
+		<Filter
+			Name="Doxygen"
+			>
+			<File
+				RelativePath="..\doxygen\mainpage.txt"
+				>
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>

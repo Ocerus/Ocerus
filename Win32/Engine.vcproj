@@ -1220,10 +1220,6 @@
 				</File>
 			</Filter>
 		</Filter>
-		<File
-			RelativePath="..\doxygen\mainpage.txt"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>
