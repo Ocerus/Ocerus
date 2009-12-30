@@ -21,7 +21,10 @@ namespace Core
 		GS_NORMAL=0 
 	};
 
-	/// This class holds all info related directly to the game itself and takes care about rendering, input and game logic.
+	/// This class holds all info related directly to the game itself and takes care about rendering, input and game
+	/// logic. Basically it connects more parts of the whole system together to create the game engine. As the application
+	/// itself it is state-driven as well which means the game can be only in a single state (Core::eGameState) at the
+	/// given point of time.
 	class Game : public StateMachine<eGameState>, public InputSystem::IInputListener
 	{
 	public:

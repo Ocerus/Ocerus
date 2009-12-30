@@ -31,7 +31,6 @@ namespace GfxSystem
 {
 	class GfxRenderer;
 	class IGfxWindowListener;
-	//class ParticleSystemMgr;
 	struct Color;
 }
 
@@ -66,6 +65,7 @@ namespace InputSystem
 namespace ScriptSystem
 {
 	class ScriptMgr;
+	class ScriptResource;
 }
 
 namespace StringSystem

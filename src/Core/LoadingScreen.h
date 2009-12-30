@@ -10,11 +10,16 @@
 namespace Core
 {
 	/// Loads resource groups into the memory and displays info about the loading progress.
+	/// The purpose of this application state is to make the user know that there are some data being loaded and it might
+	/// take a while. The user is informed about the loading progress.
 	class LoadingScreen : public ResourceSystem::IResourceLoadingListener
 	{
 	public:
 
+		/// Constructor.
 		LoadingScreen() {}
+
+		/// Destructor.
 		virtual ~LoadingScreen() {}
 
 		/// Defines resource groups to be loaded.

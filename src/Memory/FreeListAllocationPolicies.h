@@ -11,7 +11,7 @@
 
 namespace Memory
 {
-	/// Policies defining the behaviour of memory free lists.
+	/// %Policies defining the behaviour of memory free lists.
 	namespace Policies
 	{
 		/// This allocation policy is arguably the simplest, and probably the most useful and robust.

@@ -8,13 +8,22 @@
 
 namespace EntityComponents
 {
-	/// Sprite component.
+	/// Representation of a camera to be used to display the scene to the user. The camera is used by the GfxSystem
+	/// while rendering the scene.
 	class Camera : public RTTIGlue<Camera, Component>
 	{
 	public:
+
+		/// Called after the component is created.
 		virtual void Create(void);
+
+		/// Called before the component is destroyed.
 		virtual void Destroy(void);
+
+		/// Called when a new message arrives.
 		virtual EntityMessage::eResult HandleMessage(const EntityMessage& msg);
+
+		/// Called from RTTI when the component is allowed to set up its properties.
 		static void RegisterReflection(void);
 		
 		float32 GetZoom(void) const { return mZoom; }

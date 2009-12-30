@@ -8,15 +8,19 @@
 #include "Singleton.h"
 #include <boost/filesystem/fstream.hpp>
 
-/// Logging system helps with debugging of the application by allowing programmers to state when certain things happen in a human readable form.
+/// Logging system helps with debugging of the application by allowing programmers to save info about what's going on.
 namespace LogSystem
 {
-	/// This class allows storing arbitrary notes into the logfile for later reviews.
+	/// This class allows you to store arbitrary notes into the logfile for later reviews.
+	/// Note that it's not wise to use this class directly, but the macros inside LogMacros.h instead.
 	class LogMgr : public Singleton<LogMgr>
 	{
 	public:
 
+		/// Constructor.
 		LogMgr(void);
+
+		/// Destructor.
 		~LogMgr(void);
 
 		///	Initializes the logger.

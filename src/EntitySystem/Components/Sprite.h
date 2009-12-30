@@ -8,13 +8,23 @@
 
 namespace EntityComponents
 {
-	/// Sprite component.
+	/// Visual 2D representation of the entity.
+	/// It allows the entity to define its visual appearance as a flat (2D) image. It is automatically used by GfxSystem
+	/// while rendering the scene.
 	class Sprite : public RTTIGlue<Sprite, Component>
 	{
 	public:
+
+		/// Called after the component is created.
 		virtual void Create(void);
+
+		/// Called before the component is destroyed.
 		virtual void Destroy(void);
+
+		/// Called when a new message arrives.
 		virtual EntityMessage::eResult HandleMessage(const EntityMessage& msg);
+
+		/// Called from RTTI when the component is allowed to set up its properties.
 		static void RegisterReflection(void);
 
 		GfxSystem::TexturePtr GetTexture(void) const { return mTextureHandle; }

@@ -103,6 +103,7 @@ EXCLUDE_SYMBOLS        = CEGUI \
                          kp \
                          OIS \
                          rude \
+                         AngelScript \
                          Vector2d
 EXAMPLE_PATH           = 
 EXAMPLE_PATTERNS       = *

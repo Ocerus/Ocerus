@@ -13,10 +13,10 @@ namespace AngelScript
 
 namespace ScriptSystem
 {
-	/// Register all additions in this file to script engine.
+	/// Registers utility classses and functions into the script system.
 	void RegisterAllAdditions(AngelScript::asIScriptEngine* engine);
 
-	/// Callback for reloading script resources.
+	/// Callback for reloading script resources. It is called by ScriptResource before it unloads itself.
 	void ResourceUnloadCallback(ScriptResource* resource);
 }
 

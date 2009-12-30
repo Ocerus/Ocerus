@@ -7,11 +7,13 @@
 #include "../EntityMgr/EntityMessage.h"
 
 /// Set of all user defined entity components usable by entities.
+/// Each of the components is a derivation of the base abstract class EntitySystem::Component.
 namespace EntityComponents { using namespace EntitySystem; }
 
 namespace EntitySystem
 {
 	/// Base class for all entity components. This class contains the only means to communicate with entity components.
+	/// The user will never know the specific component class because they are hidden by ComponentMgr.
 	class Component : public RTTIBaseClass
 	{
 	public:

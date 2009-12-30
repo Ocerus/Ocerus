@@ -8,9 +8,11 @@
 
 namespace EntitySystem
 {
-	/// Defines messages which can be send to entities.
+	/// Defines a message which can be sent to entities.
 	/// After the message is sent to an entity, it will go through all of its components and hope one (or more)
-	/// of them picks it up.
+	/// of them picks it up. If not, RESULT_IGNORED is returned by the operation. The message can carry parameters using
+	/// the Reflection::PropertyFunctionParameters class. The run-time type check on the parameters is invoked before the
+	/// message is sent.
 	struct EntityMessage
 	{
 	public:

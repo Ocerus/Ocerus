@@ -14,17 +14,23 @@
 /// Macro for easier use.
 #define gEntityMgr EntitySystem::EntityMgr::GetSingleton()
 
+/// Entity system manages game entities and their parts. 
+/// It takes care of their logical representation and leaves optimization of other tasks to other parts of the system.
+/// For example, the rendering system can use an optimization data structure for faster visibility culling of entities.
+/// The main class is EntityMgr which provides the basic interface of the communication with entities as well as reading
+/// their attributes.
 namespace EntitySystem
 {
 	/// A list of types of components.
 	typedef vector<eComponentType> ComponentTypeList;
 
-	// Forward declaration of internal structs.
+	// Forward declaration of internal structs. Don't move them to Forwards.h.
 	struct EntityInfo;
 	struct PrototypeInfo;
 
-	/// This class manages all game entities like weapons, enemy ships, projectiles, etc. Manipulation of entities is
-	///	done via entity handles.
+	/// This class manages all game entities like weapons, enemy ships, projectiles, etc.
+	/// Manipulation with entities is done via entity handles. It provides the interface of the communication with
+	/// entities as well as their components.
 	class EntityMgr : public Singleton<EntityMgr>
 	{
 	public:

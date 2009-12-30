@@ -19,7 +19,12 @@ namespace AngelScript
 	class CContextMgr;
 }
 
-/// Scipt system allows users to define behaviour of components and entities.
+/// Scipt system allows users to compile and run simple programs during the run-time.
+/// The main class is ScriptMgr, but the script support for entities is handled via the EntityComponents::Script class.
+/// Currently the only supported script language is <a href="http://www.angelcode.com/angelscript/">AngelScript</a>.
+/// The script files are loaded as common resources by ScriptMgr which compiles them into modules. The modules are
+/// identified by they script names derived from the resource names.
+/// For more informations take a look into the user guide.
 namespace ScriptSystem
 {
 	/// Vector of pointers to ScriptResource
@@ -29,10 +34,12 @@ namespace ScriptSystem
 	class ScriptMgr : public Singleton<ScriptMgr>
 	{
 	public:
+
 		/// If the basepath parameter is provided, the manager will relate all files to this path.
 		/// Global root is in the ResourceMgr's basepath and this basepath is relative to it.
 		ScriptMgr(const string& basepath = "scripts/");
 
+		/// Destructor.
 		~ScriptMgr(void);
 
 		/// Get script function ID from module name and function declaration.

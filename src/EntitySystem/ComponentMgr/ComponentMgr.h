@@ -9,10 +9,6 @@
 #include "ComponentIterators.h"
 #include "ComponentID.h"
 
-/// Entity system manages game entities and their parts. 
-/// However, it takes care of their logical representation and
-/// leaves optimizing of other tasks to other system. For example, the rendering system can use an optimization data
-/// structure for faster visibility culling of entities.
 namespace EntitySystem
 {
 	/// Type used for a registration function of individual components.
@@ -21,13 +17,15 @@ namespace EntitySystem
 	/// This class manages instances of all entity components in the system. Every entity consist only of these
 	/// components plus some minor attributes.
 	/// @remarks
-	/// Components are registered automatically by taking their definitions from the ComponentTypes.h file. Apart
-	/// from that you can register them manually by calling appropriate methods.
+	/// Components are registered automatically by taking their definitions from the ComponentTypes.h file.
 	class ComponentMgr : public Singleton<ComponentMgr>
 	{
 	public:
 
+		/// Constructor.
 		ComponentMgr(void);
+
+		/// Destructor.
 		~ComponentMgr(void);
 		
 		/// Creates a component and attaches it to an entity.

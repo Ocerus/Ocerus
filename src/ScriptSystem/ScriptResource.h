@@ -5,21 +5,21 @@
 #define ScriptResource_h__
 
 #include "Base.h"
-#include "../ResourceSystem/Resource.h"
+#include "ResourceSystem/Resource.h"
 
 namespace ScriptSystem
 {
-	class ScriptResource;
-	
+	/// Callback invoked when a script resource is to be unloaded.
 	typedef void (*ScriptResourceUnloadCallback)(ScriptResource* resource);
 	
 	/// This class represents a single script resource.
 	/// Main purpose of the class is to load a script file and store module dependencies. You should only
-	///	use ScriptMgr to work with script resource, although its possible to load it directly with ResourceMgr.
+	///	use ScriptMgr to work with scripts, although it's possible to load it directly with ResourceMgr.
 	class ScriptResource : public ResourceSystem::Resource
 	{
 	public:
 
+		/// Destructor.
 		virtual ~ScriptResource(void);
 
 		/// Factory method.
@@ -36,6 +36,7 @@ namespace ScriptSystem
 
 		/// Return dependence modules
 		set<string>& GetDependentModules(void) { return mDependentModules; }
+
 	protected:
 
 		virtual size_t LoadImpl(void);

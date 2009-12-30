@@ -13,6 +13,11 @@
 #define gApp Core::Application::GetSingleton()
 
 /// Main namespace of the application.
+/// This is the main part of the whole system. It contains its entry point as well as other classes related to the 
+/// application itself. The main class of the system is Application representing the only single instance of the 
+/// running application and provides information about its state. The application is designed to behave like a state
+/// machine because for games it's typical to be in a single state (loading, menu, game, ...). Each of these states
+/// are represented by a class inside Core.
 namespace Core
 {
 	/// State which the application can be in.
@@ -29,6 +34,8 @@ namespace Core
 	};
 
 	/// Main class of the whole application. One instance is created at startup and the RunMainLoop() method is invoked.
+	/// The application is state-driven which means that it can be in a single state (Core::eAppState) at a given point of
+	/// time. Each of these states are represented by a class inside Core.
 	class Application : public StateMachine<eAppState>, public Singleton<Application>
 	{
 	public:

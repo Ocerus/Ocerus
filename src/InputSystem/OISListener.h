@@ -17,7 +17,10 @@ namespace InputSystem
 	{
 	public:
 
+		/// Constructor.
 		OISListener();
+
+		/// Destructor.
 		virtual ~OISListener();
 
 		/// @name Callbacks from OIS::MouseListener

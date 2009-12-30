@@ -8,45 +8,54 @@
 
 namespace EntityComponents
 {
-	/// Handles messages as script call
+	/// This component allows entities to run scripts. It may run only scripts supported by ScriptSystem. The scripts are
+	/// executed as a reaction to received EntityMessage messages. For more informations about scripts see ScriptSystem.
 	class Script : public RTTIGlue<Script, Component>
 	{
 	public:
+
+		/// Called after the component is created.
 		virtual void Create(void);
+
+		/// Called before the component is destroyed.
 		virtual void Destroy(void);
+
+		/// Called when a new message arrives.
 		virtual EntityMessage::eResult HandleMessage(const EntityMessage& msg);
 
+		/// Called from RTTI when the component is allowed to set up its properties.
 		static void RegisterReflection(void);
 		
 		/// Only for testing purpose
 		static void TestRunTime();
 
-		/// @name Names of the script modules that are searched for script message handlers.
-		//@{
+		/// Names of the script modules that are searched for script message handlers.
 		Utils::Array<string>* GetModules(void) const { return const_cast<Utils::Array<string>*>(&mModules); }
+
+		/// Names of the script modules that are searched for script message handlers.
 		void SetModules(Utils::Array<string>* modules) { mModules.CopyFrom(*modules); }
-		//@}
 
-		/// @name Maximum time of execution the scripts in ms (0 means infinity).
-		//@{
+		/// Maximum time of execution the scripts in ms (0 means infinity).
 		uint32 GetTimeOut(void) const { return mTimeOut; }
+
+		/// Maximum time of execution the scripts in ms (0 means infinity).
 		void SetTimeOut(const uint32 timeOut) { mTimeOut = timeOut; }
-		//@}
 
-		/// @name States of OnAction handlers
-		//@{
+		/// States of OnAction handlers
 		Utils::Array<int32>* GetStates(void) const { return const_cast<Utils::Array<int32>*>(&mStates); }
-		void SetStates(Utils::Array<int32>* states) { mStates.CopyFrom(*states); }
-		//@}
 
-		/// @name Times of execution of OnAction handlers
-		//@{
+		/// States of OnAction handlers
+		void SetStates(Utils::Array<int32>* states) { mStates.CopyFrom(*states); }
+
+		/// Times of execution of OnAction handlers
 		Utils::Array<uint64>* GetTimes(void) const { return const_cast<Utils::Array<uint64>*>(&mTimes); }
+
+		/// Times of execution of OnAction handlers
 		void SetTimes(Utils::Array<uint64>* times) { mTimes.CopyFrom(*times); }
-		//@}
 
 		/// Current index of mStates and mTimes
 		int32 GetCurrentArrayIndex(void) const { return mCurrentArrayIndex; }
+
 	private:
 		Utils::Array<string> mModules;
 		uint32 mTimeOut;

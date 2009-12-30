@@ -16,8 +16,8 @@
 
 namespace LogSystem
 {
-	/// Real-time interactive ingame profiling. This class controls the behaviour of the profiler and provides measured
-	/// data access.
+	/// Real-time interactive ingame profiling. This class controls the behaviour of the profiler and provides access
+	/// to the measured data.
 	class Profiler: public Singleton<Profiler>
 	{
 	public:

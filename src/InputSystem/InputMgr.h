@@ -12,6 +12,7 @@
 #define gInputMgr InputSystem::InputMgr::GetSingleton()
 
 /// Input system manages events from all input devices connected to the computer which are required by the game.
+/// The subsystem interface is provided by InputMgr.
 namespace InputSystem
 {
 	// The forward declaration here is allowed as this serves only for internal purposes of InputMgr and thus it doesn't
@@ -20,12 +21,15 @@ namespace InputSystem
 
 	/// This class processes all input from external devices such as mouse, keyboard or joystick. You can query its
 	///	current state or register for event callbacks.
-	/// Note that it must be updated regurarly by calling CaptureInput.
+	/// Note that it must be updated regurarly by calling CaptureInput().
 	class InputMgr : public Singleton<InputMgr>, public GfxSystem::IGfxWindowListener
 	{
 	public:
 
+		/// Constructor.
 		InputMgr(void);
+
+		/// Destructor.
 		~InputMgr(void);
 
 		/// Updates the state of the manager and processes all events.

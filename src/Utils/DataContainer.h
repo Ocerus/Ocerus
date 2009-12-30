@@ -6,7 +6,7 @@
 
 #include "Base.h"
 
-/// This namespace contains utility classes and functions.
+/// Utility classes and functions.
 namespace Utils
 {
 	/// This class stores a pointer to a data buffer and its size. It is used to retrieve data from a function

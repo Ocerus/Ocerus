@@ -18,6 +18,8 @@ namespace EntitySystem
 	const EntityID INVALID_ENTITY_ID = 0;
 
 	/// This class represents one unique entity in the entity system.
+	/// It provides most of the means of communication with the entity it represents. But basically it just calls
+	/// EntityMgr. So for the full list it's better to look there.
 	class EntityHandle
 	{
 	public:
@@ -28,12 +30,16 @@ namespace EntitySystem
 		/// Only the copy constructor is enabled. New entities should be added only by the EntityMgr.
 		EntityHandle(const EntityHandle& handle);
 
+		/// Destructor.
 		~EntityHandle(void);
 
+		/// Assignment operator.
 		EntityHandle& operator=(const EntityHandle& rhs);
 
+		/// Comparison operator.
 		bool operator==(const EntityHandle& rhs);
 
+		/// Comparison operator.
 		bool operator!=(const EntityHandle& rhs);
 
 		/// Returns true if this handle is valid (not null).
