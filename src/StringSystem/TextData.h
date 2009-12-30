@@ -1,3 +1,6 @@
+/// @file
+/// Definition of the data StringSystem works with.
+
 #ifndef TextData_h__
 #define TextData_h__
 

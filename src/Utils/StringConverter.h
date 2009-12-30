@@ -1,3 +1,6 @@
+/// @file
+/// Set of functions for converting different values to and from a string.
+
 #ifndef StringConverter_h__
 #define StringConverter_h__
 

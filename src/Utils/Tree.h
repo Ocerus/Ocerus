@@ -1,6 +1,8 @@
+/// @file
+/// STL-like templated %tree class.
+
 #ifndef Tree_h__
 #define Tree_h__
-
 
 /* 
 

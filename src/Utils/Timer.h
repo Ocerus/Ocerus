@@ -1,3 +1,6 @@
+/// @file
+/// Support for time measurement.
+
 #ifndef Timer_h__
 #define Timer_h__
 

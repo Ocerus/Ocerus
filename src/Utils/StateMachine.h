@@ -1,3 +1,6 @@
+/// @file
+/// Implementation of a basic finite state machine.
+
 #ifndef StateMachine_h__
 #define StateMachine_h__
 

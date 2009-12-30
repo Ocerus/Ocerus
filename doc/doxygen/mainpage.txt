@@ -16,5 +16,11 @@ It's probably best starting with the <a href="../../userDocumentation/">user gui
 @section architecture Architecture
 The engine is divided into bigger parts which group together related code. Each of these parts correspond to a unique namespace. For example, resources are handled by ResourceSystem. So, to learn more about the architecture it's probably best to read the documentation of <a href="namespaces.html">namespaces</a>.
 
+
+@section settings Project Settings
+To support multiple platforms the engine defines a set of global type definitions and macros which control the behaviour
+of the application. They all reside in headers in the <i>Setup</i> directory. The main header included in most files
+is Settings.h.
+
   
 */

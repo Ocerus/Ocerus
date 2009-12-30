@@ -1,4 +1,5 @@
-/// @file Smart assert macro implementation.
+/// @file
+/// Smart assert macro implementation.
 /// Note that it is also used by Box2d (b2Settings.h) and Boost (assert.hpp) and Angelscript (as_config.h).
 
 #ifndef SmartAssert_h__

@@ -97,6 +97,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\PlatformSetup.tex"
+				>
+			</File>
+			<File
 				RelativePath=".\ResourceSystem.tex"
 				>
 			</File>
@@ -159,6 +163,10 @@
 			>
 			<File
 				RelativePath=".\InputSystemContent.tex"
+				>
+			</File>
+			<File
+				RelativePath=".\PlatformSetupContent.tex"
 				>
 			</File>
 			<File

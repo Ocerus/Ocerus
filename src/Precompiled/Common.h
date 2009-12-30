@@ -1,5 +1,5 @@
 /// @file
-/// Precompiled headers to be included in ALL source files.
+/// Precompiled headers to be included in ALL source files. They must be included as the first header!
 
 #ifndef _COMMON_H_
 #define _COMMON_H_

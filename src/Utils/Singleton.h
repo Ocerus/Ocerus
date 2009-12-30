@@ -1,3 +1,6 @@
+/// @file
+/// A singleton pattern implementation.
+
 #ifndef _SINGLETON_H_
 #define _SINGLETON_H_
 

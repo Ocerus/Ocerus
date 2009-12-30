@@ -1,3 +1,6 @@
+/// @file
+/// Search key represented by strings.
+
 #ifndef StringKey_h__
 #define StringKey_h__
 

@@ -8,9 +8,9 @@
 
 // Disable boost exceptions.
 #define BOOST_NO_TYPEID
-
 // We need to link CEGUI static to overload it's operator new.
 #define CEGUI_STATIC
+
 
 // These must come first!
 #include "../Utils/SmartAssert.h"
@@ -18,10 +18,13 @@
 
 
 
+// Aggregation of othe setup header files.
 #include "BasicTypes.h"
 #include "ComplexTypes.h"
 #include "../Utils/MathConsts.h"
 
+
+// Some general algorithms.
 template<typename T, typename U>
 inline void swap(T& first, U& second) { std::swap(first, second); } 
 
@@ -32,6 +35,7 @@ inline void swap(T& first, U& second) { std::swap(first, second); }
 #include "Memory_post.h"
 
 
+// We're gonna use these namespaces a lot.
 namespace Utils {}
 using namespace Utils;
 namespace Reflection {}
