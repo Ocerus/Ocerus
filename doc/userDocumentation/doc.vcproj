@@ -156,6 +156,10 @@
 					/>
 				</FileConfiguration>
 			</File>
+			<File
+				RelativePath=".\Utils.tex"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="LaTex sources"
@@ -196,6 +200,10 @@
 						Name="VCCustomBuildTool"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\UtilsContent.tex"
+				>
 			</File>
 		</Filter>
 		<Filter
