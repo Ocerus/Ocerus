@@ -76,7 +76,7 @@
 						Name="VCCustomBuildTool"
 						Description="Building whole documentation..."
 						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet Documentation.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet Documentation.tex&#x0D;&#x0A;"
-						AdditionalDependencies="Documentation.tex;ScriptSystemContent.tex"
+						AdditionalDependencies="Documentation.tex;EntitySystemContent.tex;InputSystemContent.tex;PlatformSetupContent.tex;ResourceSystemContent.tex;ScriptRegisterContent.tex;ScriptSystemContent.tex;UtilsContent.tex"
 						Outputs="Documentation.pdf"
 					/>
 				</FileConfiguration>
@@ -87,22 +87,114 @@
 						Name="VCCustomBuildTool"
 						Description="Building whole documentation..."
 						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet Documentation.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet Documentation.tex&#x0D;&#x0A;"
-						AdditionalDependencies="Documentation.tex;*Content.tex"
+						AdditionalDependencies="Documentation.tex;ScriptSystemContent.tex"
 						Outputs="Documentation.pdf"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\EntitySystem.tex"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Building Entity System documentation..."
+						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet EntitySystem.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet EntitySystem.tex"
+						AdditionalDependencies="EntitySystem.tex;EntitySystemContent.tex"
+						Outputs="EntitySystem.pdf"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Building Entity System documentation..."
+						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet EntitySystem.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet EntitySystem.tex"
+						AdditionalDependencies="EntitySystem.tex;EntitySystemContent.tex"
+						Outputs="EntitySystem.pdf"
 					/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\InputSystem.tex"
 				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Building Input System documentation..."
+						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet InputSystem.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet InputSystem.tex"
+						AdditionalDependencies="InputSystem.tex;InputSystemContent.tex"
+						Outputs="InputSystem.pdf"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Building Input System documentation..."
+						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet InputSystem.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet InputSystem.tex"
+						AdditionalDependencies="InputSystem.tex;InputSystemContent.tex"
+						Outputs="InputSystem.pdf"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\PlatformSetup.tex"
 				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Building Platform Setup documentation..."
+						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet PlatformSetup.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet PlatformSetup.tex"
+						AdditionalDependencies="PlatformSetup.tex;PlatformSetupContent.tex"
+						Outputs="PlatformSetup.pdf"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Building Platform Setup documentation..."
+						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet PlatformSetup.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet PlatformSetup.tex"
+						AdditionalDependencies="PlatformSetup.tex;PlatformSetupContent.tex"
+						Outputs="PlatformSetup.pdf"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\ResourceSystem.tex"
 				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Building Resource System documentation..."
+						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet ResourceSystem.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet ResourceSystem.tex"
+						AdditionalDependencies="ResourceSystem.tex;ResourceSystemContent.tex"
+						Outputs="ResourceSystem.pdf"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Building Resource System documentation..."
+						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet ResourceSystem.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet ResourceSystem.tex"
+						AdditionalDependencies="ResourceSystem.tex;ResourceSystemContent.tex"
+						Outputs="ResourceSystem.pdf"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\ScriptRegister.tex"
@@ -112,9 +204,9 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Building script register documentation..."
+						Description="Building Script Register documentation..."
 						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet ScriptRegister.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet ScriptRegister.tex&#x0D;&#x0A;"
-						AdditionalDependencies="ScriptRegister.tex"
+						AdditionalDependencies="ScriptRegister.tex;ScriptRegisterContent.tex"
 						Outputs="ScriptRegister.pdf"
 					/>
 				</FileConfiguration>
@@ -123,9 +215,9 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Building script register documentation..."
+						Description="Building Script Register documentation..."
 						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet ScriptRegister.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet ScriptRegister.tex&#x0D;&#x0A;"
-						AdditionalDependencies="ScriptRegister.tex"
+						AdditionalDependencies="ScriptRegister.tex;ScriptRegisterContent.tex"
 						Outputs="ScriptRegister.pdf"
 					/>
 				</FileConfiguration>
@@ -159,6 +251,28 @@
 			<File
 				RelativePath=".\Utils.tex"
 				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Building Utils documentation..."
+						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet Utils.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet Utils.tex"
+						AdditionalDependencies="UtilsSystem.tex;UtilsContent.tex"
+						Outputs="Utils.pdf"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Building Utils documentation..."
+						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet Utils.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet Utils.tex"
+						AdditionalDependencies="UtilsSystem.tex;UtilsContent.tex"
+						Outputs="Utils.pdf"
+					/>
+				</FileConfiguration>
 			</File>
 		</Filter>
 		<Filter
@@ -166,20 +280,64 @@
 			Filter="*Content.tex"
 			>
 			<File
+				RelativePath=".\EntitySystemContent.tex"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath=".\InputSystemContent.tex"
 				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\PlatformSetupContent.tex"
 				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\ResourceSystemContent.tex"
 				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\ScriptRegisterContent.tex"
 				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\ScriptSystemContent.tex"
@@ -204,6 +362,14 @@
 			<File
 				RelativePath=".\UtilsContent.tex"
 				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
 			</File>
 		</Filter>
 		<Filter

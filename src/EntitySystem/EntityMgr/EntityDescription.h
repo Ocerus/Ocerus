@@ -52,9 +52,6 @@ namespace EntitySystem
 		/// List of descriptions of invidivual components this entity will consist of.
 		ComponentDescriptionsList mComponents;
 
-		/// Index of current component description.
-		uint32 mIndex;
-
 		/// Custom identifier (not neccessarily unique) of this entity.
 		string mName;
 

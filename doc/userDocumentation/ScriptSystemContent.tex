@@ -1,12 +1,10 @@
-\noindent\textbf{Namespaces:} ScriptSystem
-
-\noindent\textbf{Headers:} ScriptMgr.h, ScriptRegister.h, ScriptResource.h
-
-\noindent\textbf{Source files:} ScriptMgr.cpp, ScriptRegister.cpp, ScriptResource.cpp
-
-\noindent\textbf{Classes:} ScriptMgr, ScriptResource
-
-\noindent\textbf{Libraries used:} AngelScript
+\begin{description}
+  \item[Namespaces:] ScriptSystem
+  \item[Headers:] ScriptMgr.h, ScriptRegister.h, ScriptResource.h
+  \item[Source files:] ScriptMgr.cpp, ScriptRegister.cpp, ScriptResource.cpp
+  \item[Classes:] ScriptMgr, ScriptResource
+  \item[Libraries used:] AngelScript
+\end{description}
 
 \section{Purpose of the script system}
 
@@ -15,7 +13,7 @@ The script system allows customizing reactions to application events such as mes
 In the following sections the basics of the script language will be described as well as the connection of the script system to the rest of the engine and there will be also mentioned a process of using and extending it. In the last section there is a small glossary of used terms.
 
 \section{Introduction to the used script language}
-\label{script-language}
+\label{sec:script-language}
 
 This section is an introduction to principles and a syntax of the script language used for the writing scripts in this engine. The script language resembles C++ language but there is some differences and limitations which are described in the next paragraphs. For further information see AngelScript documentation \cite{angelscript}.
 
@@ -23,7 +21,7 @@ It is not possible to declare function prototypes, nor is it necessary as the co
 
 It is possible to declare script classes like in C++ but there are no visibility keywords (everything is public) and all class methods must be declared with their implementation (like in Java or C\#). Operator overloads are supported. Only the single inheritance is allowed but polymorphism is supported by implementing interfaces and every class method is virtual. The automatic memory management is used so it can be difficult to know exactly when the destructor is called but it is called only once.
 
-Because pointers are not safe in a scripted environment the object handles (\verb/class@ object;/) are used instead. They behave like smart pointers that control the life time of the object they hold. There are initialized to \verb/null/ by default and can be compared by \verb/is/ operator (\verb/if (a is null)/ \verb/@a = @b;/). Every object of a script class is created as a reference type while the objects of a registered class can be created as a value type (see section \ref{script-registering} for more information).
+Because pointers are not safe in a scripted environment the object handles (\verb/class@ object;/) are used instead. They behave like smart pointers that control the life time of the object they hold. There are initialized to \verb/null/ by default and can be compared by \verb/is/ operator (\verb/if (a is null)/ \verb/@a = @b;/). Every object of a script class is created as a reference type while the objects of a registered class can be created as a value type (see section \ref{sub:script-registering} for more information).
 
 Primitive data types are same as in the game engine (for example \verb/uint8/ for unsigned 8-bit integer, \verb/float64/ for 64-bit real number). Arrays are zero based and resizeable (they have methods \verb/length()/ and \verb/resize(uint32)/). It is also possible to define C++ like enumerations and typedefs (only for primitive types).
 
@@ -33,7 +31,7 @@ This section is about linking the script system to the rest of the application. 
 
 \subsection{Interface of the script manager}
 
-The script manager is represented by the class \emph{ScriptSystem::ScriptMgr} that encapsulates the script engine and manages an access to the script modules. This class is a singleton and it is created when the game starts. It initializes the AngelScript engine and registers all integral classes and functions (see \ref{sub:script-registered}) as well as all user-defined ones (see \ref{script-registering}).
+The script manager is represented by the class \emph{ScriptSystem::ScriptMgr} that encapsulates the script engine and manages an access to the script modules. This class is a singleton and it is created when the game starts. It initializes the AngelScript engine and registers all integral classes and functions (see \ref{sub:script-registered}) as well as all user-defined ones (see \ref{sub:script-registering}).
 
 The first thing a caller of a script function must do is to obtain a function ID. It can be get from the method \emph{ScriptMgr::GetFunctionID} that needs the name of the module where the function is and its declaration. For example if the name of function to be called is ``IncreaseArgument'' and it receives one integer argument and returns also an integer, the declaration of it will be ``int32 IncreaseArgument(int32)''. The method returns the integer that means the desired function ID (greater than or equal to zero) or the error code (less than zero) which means the function with this declaration could not be find in the mentioned module or this module does not exist or cannot be builded from sources (see log for further information). The function ID is valid all time the module exists in memory so it can be stored for later usage.
 
@@ -46,10 +44,10 @@ The calling of script functions can be done with three methods. First the caller
 
 There is a possibility to call a simple script string stored in a memory by the method \emph{ScriptMgr::ExecuteString} which accepts this string as the first parameter. The method wraps it to the function without parameters and builds it and calls it as a part of the module specified in the second optional parameter so it is possible to declare local variables and to call functions from the module. This is useful for example for implementing a user console.
 
-As mentioned in the section \ref{script-language} it is possible to use a conditional compilation of scripts. The method \emph{ScriptMgr::DefineWord} adds a pre-processor define passed as the string argument. The last two methods of this class are \emph{ScriptMgr::UnloadModule} and \emph{ScriptMgr::ClearModules} that unload one/all previously loaded and builded modules and abort all contexts in context manager. All function IDs and contexts associated with these modules will be superseded so the caller should inform all objects that holds them about it (use \emph{ResourceUnloadCallback} in ScriptRegister.cpp for specify actions done when modules are unloaded). These methods could be called when it is needed to reload modules or free all memory used by them but when it is better not to destroy the whole script engine.
+As mentioned in the section \ref{sec:script-language} it is possible to use a conditional compilation of scripts. The method \emph{ScriptMgr::DefineWord} adds a pre-processor define passed as the string argument. The last two methods of this class are \emph{ScriptMgr::UnloadModule} and \emph{ScriptMgr::ClearModules} that unload one/all previously loaded and builded modules and abort all contexts in context manager. All function IDs and contexts associated with these modules will be superseded so the caller should inform all objects that holds them about it (use \emph{ResourceUnloadCallback} in ScriptRegister.cpp for specify actions done when modules are unloaded). These methods could be called when it is needed to reload modules or free all memory used by them but when it is better not to destroy the whole script engine.
 
 \subsection{Binding the entity system}
-\label{script-entity}
+\label{sub:script-entity}
 
 The script system is binded to the entity system to provide an easy work with components, entities and theirs properties from scripts. The class \emph{EntityHandle} is registered to the script engine as a value type with a most of its methods but the work with entity properties differs from using them from a source code. There are registered common methods of this class for all defined property types (in \emph{PropertyTypes.h}) to get and set a simple property value, to get a non-constant or constant array and to call a property function with parameters. Methods for working with array property values (get and set a size of array, an index operator) and property function parameters (add a simple or array value as a property function parameter) are also registered. See table \ref{tab:script-properties} for method declarations.
 
@@ -86,14 +84,14 @@ The script system is binded to the entity system to provide an easy work with co
 	\label{tab:script-properties}
 \end{table}
 
-For example if an entity represented by its handle, that can be get from \verb/GetCurrentEntityHandle/ global function when script is handling a message to entity (see section \ref{script-component} for details), has an integer property \verb/Integer/ then the command to save it to an integer script variable will be following: \verb/int32 n = GetCurrentEntityHandle().Get_int32("Integer")/. If the property \verb/Integer/ does not exist in this entity or has an other type than \verb/int32/ the error message is written to the log and the default value (for \verb/int32/ 0) is returned.
+For example if an entity represented by its handle, that can be get from \verb/GetCurrentEntityHandle/ global function when script is handling a message to entity (see section \ref{sub:script-component} for details), has an integer property \verb/Integer/ then the command to save it to an integer script variable will be following: \verb/int32 n = GetCurrentEntityHandle().Get_int32("Integer")/. If the property \verb/Integer/ does not exist in this entity or has an other type than \verb/int32/ the error message is written to the log and the default value (for \verb/int32/ 0) is returned.
 
 For managing entities the \emph{EntityMgr} class is registered as no-handle object which means that only way to use it is calling methods on the return value from \verb/GetEntityMgr/ global function. For example if the script should destroy the entity represented by the variable \verb/handle/, the code will be following: \verb/GetEntityMgr().DestroyEntity(handle)/. For creation of entities the \emph{EntityDescription} class is registered as a value type, where it is possible to specify contained components, name, kind etc., as well as method \emph{CreateEntity} of \emph{EntityMgr} which has this class as parameter and returns handle of created entity.
 
 \subsection{Registered classes and functions}
 \label{sub:script-registered}
 
-Beside the classes from the entity system mentioned in the section \ref{script-entity}, other base classes and functions are registered to the script engine. For storing a text data there are two classes registered as a value type. The first one is a standard C++ \emph{string} class registered with a most of its method, the second one is a class \emph{StringKey} which is an integer representation of text for faster comparing and assignment and which can be construct from \emph{string} and which can be cast to \emph{string} by the \emph{ToString} method.
+Beside the classes from the entity system mentioned in the section \ref{sub:script-entity}, other base classes and functions are registered to the script engine. For storing a text data there are two classes registered as a value type. The first one is a standard C++ \emph{string} class registered with a most of its method, the second one is a class \emph{StringKey} which is an integer representation of text for faster comparing and assignment and which can be construct from \emph{string} and which can be cast to \emph{string} by the \emph{ToString} method.
 
 %For a thread and co-routine support there are registered three global functions which should be used when the context is executed by the context manager. The function \verb/void sleep(uint32 time)/ suspends the script execution for at least \verb/time/ milliseconds so contexts in the other threads can be executed. The function \verb/void createCoRoutine(const string& declaration)/ creates a co-routine to the current context that calls the script function in the same module without parameters with the declaration equal to the parameter of this function. The function \verb/void yield()/ suspends the current script execution and executes the next co-routine from the same thread. For example calling the last two function subsequently means that the co-routine is created and immediately executed while the current execution is suspended waiting for the co-routine function calling \verb/yield()/.
 
@@ -104,7 +102,7 @@ The only registered global function is the \verb/void Log(string& message)/ func
 This section is about using the script system and extending it. If a new property type is added to the entity system or a new system which should be accessible from scripts is created then it is necessary to register new classes and functions to the script system. For better understanding of the script system the sample component which provides a script handling of messages to entities was created and it is described in this section.
 
 \subsection{Registering new classes and functions}
-\label{script-registering}
+\label{sub:script-registering}
 
 If it is necessary to register a new class with its methods or a global function, the registration function should be implemented in the \emph{ScriptRegister.cpp} file and called by the global function \emph{RegisterAllAdditions} with the pointer to script engine as a parameter because a registration is done by calling methods of it.
 
@@ -203,7 +201,7 @@ It is also possible to register class properties by the \emph{RegisterObjectProp
 Global functions are registered by the \emph{RegisterGlobalFunction} method that has almost same parameters as the \emph{RegisterObjectMethod} (does not have the first), global properties by \emph{RegisterGlobalProperty} method. There are also methods for registering enumerations (\emph{RegisterEnum}, \emph{RegisterEnumValue}) and typedefs for primitive types (\emph{RegisterTypedef}) that are easy to use. Further information about registering types can be found at the AngelScript documentation \cite{angelscript}, examples of using are in the \emph{ScriptRegister.cpp} file.
 
 \subsection{Sample component}
-\label{script-component}
+\label{sub:script-component}
 
 As an example how to link the script and the entity system the Script component was created. The purpose of this component is to provide a possibility for an entity to respond to a received message by a script. When the message is received it should find an appropriate handler, which is a script function with a strict declaration (see EntityMessageTypes.h for an entity message handler declarations), in defined modules and call it with the arguments provided in the message data.
 
@@ -230,8 +228,3 @@ This is a glossary of the most used terms in the previous sections:
 	\item[Script engine] -- an object that registers C++ classes, global functions, properties etc. for use in a script code and manages script modules and contexts
 	\item[Script manager] -- a class that encapsulated a script engine and provides methods for managing script modules and calling script functions
 \end{description}
-
-\begin{thebibliography}{9}                                                                                                
-\bibitem {angelscript}AngelScript documentation, file /AngelScript/index.html
-
-\end{thebibliography}

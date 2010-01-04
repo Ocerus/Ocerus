@@ -6,12 +6,22 @@
 \usepackage{lmodern} %Type1-font for non-english texts and characters
 \usepackage{graphicx}
 
+\newenvironment{titled-itemize}[1]
+{
+\vspace{5mm}
+\noindent\textbf{#1}
+\begin{itemize}
+}
+{
+\end{itemize}
+}
+
 \begin{document}
 
 \pagestyle{empty} %No headings for the first pages.
 
 \title{Documentation to project Ocerus}
-\author{Lukas Hermann}
+\author{Lukas Hermann, Ondrej Mocny}
 \maketitle
 
 \tableofcontents %Table of contents
@@ -19,9 +29,29 @@
 
 \pagestyle{plain} %Now display headings: headings / fancy / ...
 
+\chapter{Entity system}
+
+\input{EntitySystemContent.tex}
+
+\chapter{Input system}
+
+\input{InputSystemContent.tex}
+
+\chapter{Resource system}
+
+\input{ResourceSystemContent.tex}
+
 \chapter{Script system}
 
 \input{ScriptSystemContent.tex}
+
+\chapter{Platform setup}
+
+\input{PlatformSetupContent.tex}
+
+\chapter{Utils}
+
+\input{UtilsContent.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% BIBLIOGRAPHY AND OTHER LISTS
@@ -32,7 +62,13 @@
 %% The Bibliography
 %% ==> You need a file 'literature.bib' for this.
 %% ==> You need to run BibTeX for this (Project | Properties... | Uses BibTeX)
-%\addcontentsline{toc}{chapter}{Bibliography} %'Bibliography' into toc
+
+\begin{thebibliography}{9}
+\addcontentsline{toc}{chapter}{Bibliography} %'Bibliography' into toc
+\bibitem {angelscript}AngelScript documentation, file /AngelScript/index.html
+\end{thebibliography}
+
+
 %\nocite{*} %Even non-cited BibTeX-Entries will be shown.
 %\bibliographystyle{alpha} %Style of Bibliography: plain / apalike / amsalpha / ...
 %\bibliography{literature} %You need a file 'literature.bib' for this.
@@ -48,6 +84,10 @@
 \listoftables
 
 \appendix
+
+\chapter{Script system registered object}
+
+\input{ScriptRegisterContent.tex}
 
 \end{document}
 

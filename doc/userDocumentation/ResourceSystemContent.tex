@@ -1,7 +1,10 @@
-\noindent\textbf{Namespaces:} ResourceSystem
-
-\noindent\textbf{Classes:} ResourceMgr, Resource, ResourcePtr
-
+\begin{description}
+  \item[Namespaces:] ResourceSystem
+  \item[Headers:] IResourceLoadingListener.h, Resource.h, ResourceMgr.h, Re\-sour\-ce\-Ty\-pes.h
+  \item[Source files:] Resource.cpp, ResourceMgr.cpp
+  \item[Classes:] ResourceMgr, Resource, ResourcePtr
+  \item[Libraries used:] Boost
+\end{description}
 
 \section{Introduction}
 
@@ -9,49 +12,54 @@ Every game needs to load packs of data from external devices such as the hard dr
 
 
 \section{Resources}
-As said before, the resource is a group of data belonging together. In the engine this is represented by the abstract \verb'Resource' class. It contains all the basic attributes of a resource and allows its users to load it or unload it, but the actual implementation depends on the specific type of the resource. For example, an XML file is loaded and parsed in a different way then an OpenGL texture. However, for the user it is never really necessary to know what type of the resource he is working with and so using \verb'Resource' as an abstraction is enough. Only the endpoint subsystem needs to work with the specific type to be able to grab the parsed data out of it. For example, the texture resource can be carried around the system as a common \verb'Resource' until it reaches the graphical subsystem which converts it to the texture resource and grabs the implementation specific texture data out of it.
+As said before, the resource is a group of data belonging together. In the engine this is represented by the abstract \emph{Resource} class. It contains all the basic attributes of a resource and allows its users to load it or unload it, but the actual implementation depends on the specific type of the resource. For example, an XML file is loaded and parsed in a different way then an OpenGL texture. However, for the user it is never really necessary to know what type of the resource he is working with and so using \emph{Resource} as an abstraction is enough. Only the endpoint subsystem needs to work with the specific type to be able to grab the parsed data out of it. For example, the texture resource can be carried around the system as a common \emph{Resource} until it reaches the graphical subsystem which converts it to the texture resource and grabs the implementation specific texture data out of it.
 
-\subsection{Resource States}
-Each resource can be in one of the following states at the given point of time:
+\subsection{Resource states}
+Each resource can be in one of the states described in the table \ref{tab:resource-states} at the given point of time:
 \begin{table}[htbp]
+	\centering
 	{\scriptsize 
 	\begin{tabular}{|p{0.13\hsize}|p{0.58\hsize}|}
+	  \hline
+	  A state & A description \\
 		\hline
-		uninitialized & the system doesn't know about it; it's not registered \\
-		initialized & the system knows about it, but the data are not loaded yet \\
-		unloading & the data are just being unloaded \\
-		loading & the data are just being loaded \\
-		loaded & the resource is fully ready to be used \\
+		Uninitialized & the system does not know about it; it's not registered \\
+		Initialized & the system knows about it, but the data are not loaded yet \\
+		Unloading & the data are just being unloaded \\
+		Loading & the data are just being loaded \\
+		Loaded & the resource is fully ready to be used \\
 		\hline
 	\end{tabular}
 	}
+	\caption[Possible resource states]{Possible resource states and their description}
+	\label{tab:resource-states}
 \end{table}
 
-\subsection{Content of the Resource}
+\subsection{Content of the resource}
 Once the data for the resource are loaded it must be parsed into the desired format. This can mean a data structure stored directly inside the resource class or just a handle to the data stored in other parts of the system. However, both of these must exist only in single instance in the whole system - in the resource which parsed the data. Otherwise the data could become desynchronized. If the resource was unloaded, a pointer to its data could still exist somewhere. 
 
 For example, the XML resource creates a tree structure for the parsed data and allows its users to traverse the tree. But nowhere in the system exists a pointer to the same tree or any of its parts. Another example is a texture. After it loads the data they are passed into the graphical subsystem which creates a platform specific texture out of it and returns only a the texture handle. The handle is then stored only in the resource.
 
-\subsection{Resource Pointers}
-Because the resources are passed all around the game system we must somehow prevent any memory leaks from appearing. Doing so is quite easy however - we simply use the shared pointer mechanism. It points to the common abstract resource (\verb'ResourcePtr' class) and to specific resources as well (\verb'ScriptResourcePtr' or \verb'XMLResourcePtr' for example). The abstract resource pointer can be automatically converted to any specific resource pointer, but if the type won't match an assertion fault will be raised to prevent memory corruption. All resource pointers are defined in \verb'ResourcePointers.h'.
+\subsection{Resource pointers}
+Because the resources are passed all around the game system we must somehow prevent any memory leaks from appearing. Doing so is quite easy however - we simply use the shared pointer mechanism. It points to the common abstract resource (\emph{ResourcePtr} class) and to specific resources as well (\emph{ScriptResourcePtr} or \emph{XMLResourcePtr} for example). The abstract resource pointer can be automatically converted to any specific resource pointer, but if the type won't match an assertion fault will be raised to prevent memory corruption. All resource pointers are defined in \verb'ResourcePointers.h'.
 
 
-\section{Resource Manager}
-The Resource Manager represented by the \verb'ResourceMgr' class takes care of organizing resources into groups and providing and interface to other parts of the system to control or grab the resources. Coupling resources into groups makes it easier to load or unload a whole bunch of them (for a single level of the game, for example).
+\section{Resource manager}
+The Resource Manager represented by the \emph{ResourceMgr} class takes care of organizing resources into groups and providing and interface to other parts of the system to control or grab the resources. Coupling resources into groups makes it easier to load or unload a whole bunch of them (for a single level of the game, for example).
 
 \subsection{Hotloading}
 To make game development easier, the source of each resource is automatically checked for an update. If it has changed, the resource is automatically reloaded if it was previously loaded. So, for example, if you change a currently loaded texture in an image editor and save it it will be immediately updated in the game.
 
-\subsection{Memory Limit}
-Because gaming systems have limited memory we must make sure we can limit the memory used by resources. Resources usually take the biggest chunk of memory, so when lowering the memory usage it's best to start here. Hopefully, \verb'ResourceMgr' allows us to define a limit which it will try to keep. When the memory is running out, it will attempt to unload resources which weren't used for a long time. These resources will remain in the system and will be ready to be loaded as soon as they are needed. However, there are certain circumstances under which the resources mustn't be unloaded. An example of such is rendering - no texture can be unloaded until the frame is ready. For this reason the unloading can be temporarily disabled.
+\subsection{Memory limit}
+Because gaming systems have limited memory we must make sure we can limit the memory used by resources. Resources usually take the biggest chunk of memory, so when lowering the memory usage it's best to start here. Hopefully, \emph{ResourceMgr} allows us to define a limit which it will try to keep. When the memory is running out, it will attempt to unload resources which were not used for a long time. These resources will remain in the system and will be ready to be loaded as soon as they are needed. However, there are certain circumstances under which the resources must not be unloaded. An example of such is rendering - no texture can be unloaded until the frame is ready. For this reason the unloading can be temporarily disabled.
 
 
-\section{Adding Custom Resource Types}
-To add a new resource type you must go through two steps. First create a class derived from \verb'Resource' implementing all abstract methods and providing accessors to the parsed data. Then add the corresponding shared pointer to your class into \verb'ResourcePointers.h'. While creating the accessor keep in mind that each of them must call \verb'EnsureLoaded()' to make sure the resource is actually loaded before it is to be used!
+\section{Adding custom resource types}
+To add a new resource type you must go through two steps. First create a class derived from \emph{Resource} implementing all abstract methods and providing accessors to the parsed data. Then add the corresponding shared pointer to your class into \verb'ResourcePointers.h'. While creating the accessor keep in mind that each of them must call \emph{EnsureLoaded} to make sure the resource is actually loaded before it is to be used!
 
 
-\section{Currently Existing Resource Types}
-To see all currently existing types of resources it's best to head into the doxygen documentation. Locate the \verb'ResourceSystem::Resource' class and see all classes derived from it.
+\section{Currently existing resource types}
+To see all currently existing types of resources it's best to head into the doxygen documentation. Locate the \emph{ResourceSystem::Resource} class and see all classes derived from it.
 
 
 %\section{Glossary}
