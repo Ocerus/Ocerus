@@ -15,7 +15,11 @@ using namespace Core;
 #define MAX_DELTA_TIME 0.5f
 
 Application::Application():
-	StateMachine<eAppState>(AS_INITING), mFrameSmoothingTime(0.5f), mConsoleHandle(0)
+	StateMachine<eAppState>(AS_INITING),
+	mDevelopMode(true),
+	mEditMode(true),
+	mFrameSmoothingTime(0.5f),
+	mConsoleHandle(0)
 {
 }
 
@@ -32,6 +36,7 @@ void Application::Init()
 
 	// make the app settings public
 	GlobalProperties::SetPointer("DevelopMode", &mDevelopMode);
+	GlobalProperties::SetPointer("EditMode", &mEditMode);
 
 	// load console properties
 	mConsoleX = mGlobalConfig->GetInt32("ConsoleX", 0, "Windows");
