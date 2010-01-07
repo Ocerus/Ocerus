@@ -1,3 +1,6 @@
+/// @file
+/// Defines various data structures used by (not only) renderer.
+
 #ifndef GfxStructures_h__
 #define GfxStructures_h__
 

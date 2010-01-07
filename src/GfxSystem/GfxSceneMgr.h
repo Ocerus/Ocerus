@@ -1,3 +1,6 @@
+/// @file
+/// Defines Gfx Scene Manager singleton (used for renderer).
+
 #ifndef _GFXSCENEMANAGER_H_
 #define _GFXSCENEMANAGER_H_
 

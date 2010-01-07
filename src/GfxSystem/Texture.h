@@ -1,3 +1,6 @@
+/// @file
+/// Derived class from Resource representing texture.
+
 #ifndef _TEXTURE_H_
 #define _TEXTURE_H_
 
@@ -15,22 +18,11 @@ namespace GfxSystem
 
 		static ResourceSystem::ResourcePtr CreateMe(void);
 
-		enum ePixelFormat
-		{
-			PF_AUTO = 0,
-			PF_L = 1,
-			PF_LA = 2,
-			PF_RGB = 3,
-			PF_RGBA = 4
-		};
-
-		bool LoadFromBitmap(const void* pixels, uint32 pixelsLength, uint32 width, uint32 height, ePixelFormat format);
-
 		/// Returns implementation specific pointer to the texture object.
 		uint32 GetTexture(void);
 
-		virtual uint32 GetWidth(void);
-		virtual uint32 GetHeight(void);
+		uint32 GetWidth(void);
+		uint32 GetHeight(void);
 
 		/// Returns the resource type associated with this class.
 		static ResourceSystem::eResourceType GetResourceType() { return ResourceSystem::RESTYPE_TEXTURE; }
@@ -43,6 +35,7 @@ namespace GfxSystem
 		virtual bool UnloadImpl(void);
 		void Init(void);
 
+	private:
 		uint32 mHandle;
 		ePixelFormat mFormat;
 		uint32 mHeight, mWidth;

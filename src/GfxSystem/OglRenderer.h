@@ -1,3 +1,6 @@
+/// @file
+/// Derived class from abstract GfxRenderer using OpenGL.
+
 #ifndef _OGLRENDERER_H_
 #define _OGLRENDERER_H_
 
@@ -37,14 +40,14 @@ namespace GfxSystem
 		virtual uint32 LoadTexture(
 			const unsigned char *const buffer,
 			const int buffer_length,
-			const int force_channels,
+			const ePixelFormat force_channels,
 			const unsigned int reuse_texture_ID,
 			int *width, int *height ) const;
 
 		/// Deletes texture from renderers memory
 		virtual void DeleteTexture(const uint32 &handle) const;
 		
-		/// Adds srite to queue for rendering
+		/// Adds sprite to queue for rendering
 		virtual void SetTexture(const uint32 texture) const;
 		
 		/// Draws sprite
@@ -53,17 +56,29 @@ namespace GfxSystem
 										const float32 z,
 										const float32 transp) const;
 
+		/// Draws line. Verts must be array of 2 Vector2s.
+		virtual void DrawLine(	const Vector2* verts, const Color& color ) const;
+
+		/// Draws polygon. Verts must be array of n Vector2s defining polygon.
+		virtual void DrawPolygon(	const Vector2* verts, const int32 n, 
+									const Color& color, const bool fill ) const;
+
+		/// Draws circle
+		virtual void DrawCircle(	const Vector2& position, const float32 radius,
+									const Color& color, const bool fill) const;
+
 		/// Draws simple quad
 		virtual void DrawTestQuad() const;
 
 		/// Draws simple textured quad
 		virtual void DrawTestTexturedQuad(const uint32 text_handle) const;
 
-
+		/// Set current viewport
 		virtual void SetViewport(const GfxViewport& viewport) const;
 
-		
+		/// Set current camera
 		virtual void SetCamera(const Vector2& position, const float32 zoom, const float32 rotation) const;
+
 	};
 }
 

@@ -41,7 +41,7 @@ namespace EntityComponents
 
 	private:
 		GfxSystem::TexturePtr mTextureHandle;
-		string mResPath;
+		string mResPath;						//path to resource (texture)
 		Vector2 mSize;
 		float32 mTransparency;
 	};

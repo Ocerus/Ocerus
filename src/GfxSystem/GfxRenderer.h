@@ -1,3 +1,6 @@
+/// @file
+/// Defines Renderer singleton.
+
 #ifndef _GFXRENDERER_H_
 #define _GFXRENDERER_H_
 
@@ -8,6 +11,16 @@
 
 namespace GfxSystem
 {
+	
+	enum ePixelFormat
+	{
+		PF_AUTO = 0,			//auto
+		PF_L = 1,				//grayscale
+		PF_LA = 2,				//grayscale with alpha
+		PF_RGB = 3,				//RGB
+		PF_RGBA = 4				//RGB with alpha
+	};
+
 	class GfxRenderer : public Singleton<GfxRenderer> 
 	{
 	public:
@@ -35,7 +48,7 @@ namespace GfxSystem
 		virtual uint32 LoadTexture(
 			const unsigned char *const buffer,
 			const int buffer_length,
-			const int force_channels,
+			const ePixelFormat force_channels,
 			const unsigned int reuse_texture_ID,
 			int *width, int *height  ) const = 0;
 
@@ -55,10 +68,22 @@ namespace GfxSystem
 		virtual void DrawTexturedQuad(	const Vector2& position,
 										const Vector2& size,
 										const float32 z,
-										const float32 transp) const = 0;
+										const float32 transp ) const = 0;
 
-		/// Resets rendering queue
-		inline void ResetSprites() {mSprites.clear();}
+		/// Draws line. Verts must be array of 2 Vector2s.
+		virtual void DrawLine(	const Vector2* verts, const Color& color ) const = 0;
+
+		/// Draws polygon. Verts must be array of n Vector2s defining polygon.
+		virtual void DrawPolygon(	const Vector2* verts, const int32 n, 
+									const Color& color, const bool fill ) const = 0;
+
+		/// Draws circle
+		virtual void DrawCircle(	const Vector2& position, const float32 radius,
+									const Color& color, const bool fill) const = 0;
+
+
+		/// Resets sprites queue
+		inline void ResetSprites() { mSprites.clear(); }
 
 		/// Draws simple quad
 		virtual void DrawTestQuad() const = 0;

@@ -18,7 +18,6 @@ void OglRenderer::Init() const
 	ocInfo << "*** OpenGL init ***";
 	//Initialize OpenGL
 
-
 	glClearColor( 0.1f, 0.1f, 0.1f, 0 );
 	glMatrixMode( GL_PROJECTION );
 	glOrtho( -smOrthoSizeX, smOrthoSizeX, -smOrthoSizeY, smOrthoSizeY, -1, 1 );
@@ -35,7 +34,6 @@ void OglRenderer::Init() const
 	glEnable(GL_ALPHA_TEST);
 	glEnable(GL_TEXTURE_2D);
 	//glEnable(GL_CULL_FACE);
-
 
 	if( glGetError() != GL_NO_ERROR )
     {
@@ -73,7 +71,7 @@ void OglRenderer::FinalizeViewport() const
 uint32 OglRenderer::LoadTexture(
 			const unsigned char *const buffer,
 			const int buffer_length,
-			const int force_channels,
+			const ePixelFormat force_channels,
 			const unsigned int reuse_texture_ID,
 			int *width, int *height) const
 {
@@ -148,6 +146,65 @@ void OglRenderer::DrawTexturedQuad(	const Vector2& position,
 	glPopMatrix();
 }
 
+ void OglRenderer::DrawLine(const Vector2* verts, const Color& color) const
+{
+	OC_ASSERT(verts);
+
+	glDisable(GL_TEXTURE_2D);
+	glColor4ub( color.r, color.g, color.b, color.a );
+	
+	glBegin( GL_LINES );
+		glVertex3f( verts[0].x,  verts[0].y, 0 );
+		glVertex3f( verts[1].x,  verts[1].y, 0 );
+    glEnd();
+
+	glEnable(GL_TEXTURE_2D);
+}
+
+ 
+void OglRenderer::DrawPolygon(const Vector2* verts, const int32 n, const Color& color, const bool fill) const
+{
+	OC_ASSERT(verts);
+
+	glDisable(GL_TEXTURE_2D);
+	glColor4ub( color.r, color.g, color.b, color.a );
+	
+	fill?
+		glBegin( GL_POLYGON ):
+		glBegin( GL_LINE_LOOP );
+
+		for (int32 i = 0; i < n; ++i)
+		{
+			glVertex3f( verts[i].x,  verts[i].y, 0 );
+		}
+    glEnd();
+
+	glEnable(GL_TEXTURE_2D);
+}
+
+void OglRenderer::DrawCircle(const Vector2& position, const float32 radius, const Color& color, const bool fill) const
+{
+	glDisable(GL_TEXTURE_2D);
+	glColor4ub( color.r, color.g, color.b, color.a );
+
+	Vector2 circle;
+	
+	fill?
+		glBegin( GL_POLYGON ):
+		glBegin( GL_LINE_LOOP );
+
+	    for(float32 angle = 0.0f; angle <= (6.2832f); angle += 0.2f)
+	    {
+	      glVertex2f(position.x + sin(angle) * radius, position.y + cos(angle) * radius);
+
+	    }
+	    glEnd();
+
+    glEnd();
+
+	glEnable(GL_TEXTURE_2D);
+}
+
 void OglRenderer::DrawTestQuad() const
 {
 	glTranslatef( 412, 283, 0 );
@@ -210,12 +267,14 @@ void OglRenderer::SetViewport(const GfxViewport& viewport) const
 	// set projection (part of world)
 	if (viewport.relative)
 	{
+		// size of objects depend on resolution
 		glOrtho(	-smOrthoSizeX * viewport.size.x, smOrthoSizeX * viewport.size.x,
 					-smOrthoSizeY * viewport.size.y, smOrthoSizeY * viewport.size.y,
 					-1, 1 );
 	}
 	else
 	{
+		// size of objects doesn't depend on resolution
 		glOrtho(	-resx/2 * viewport.size.x, resx/2 * viewport.size.x,
 					-resy/2 * viewport.size.y, resy/2 * viewport.size.y,
 					-1, 1 );

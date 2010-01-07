@@ -219,13 +219,23 @@ void Core::Game::Draw( const float32 passedDelta)
 		gGfxRenderer.SetViewport(vp);
 
 		gGfxRenderer.DrawSprites();
+		
+		Vector2 p2[5] = {	Vector2(-100, 100),
+							Vector2(200, -300),
+							Vector2(400, -200),
+							Vector2(300, 100),
+							Vector2(100, 150)
+						};
+
+		gGfxRenderer.DrawPolygon(p2, 5, GfxSystem::Color(255, 0, 0), false);
+
 
 		// Testing physics draw
 		mPhysics->DrawDebugData();
-		
+
 		gGfxRenderer.FinalizeViewport();
 	}
-	
+
 	// Viewport 2 -------------------------------------
 	cam_handle = gGfxSceneMgr.GetCamera(1);
 	if (cam_handle.IsValid())
@@ -239,6 +249,12 @@ void Core::Game::Draw( const float32 passedDelta)
 		gGfxRenderer.SetViewport(vp);
 
 		gGfxRenderer.DrawSprites();
+
+
+		Vector2 p[2] = { Vector2(-200, 200), Vector2(500, -300) };
+
+		gGfxRenderer.DrawLine(p, GfxSystem::Color(0, 255, 0));
+
 		gGfxRenderer.FinalizeViewport();
 	}
 
@@ -255,6 +271,11 @@ void Core::Game::Draw( const float32 passedDelta)
 		gGfxRenderer.SetViewport(vp);
 
 		gGfxRenderer.DrawSprites();
+
+		
+		Vector2 p3(-300, 100);
+		gGfxRenderer.DrawCircle(p3, 100,GfxSystem::Color(0, 0, 255), true);
+
 		gGfxRenderer.FinalizeViewport();
 	}
 	

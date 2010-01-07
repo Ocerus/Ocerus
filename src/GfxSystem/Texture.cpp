@@ -69,23 +69,3 @@ uint32 Texture::GetTexture()
 	EnsureLoaded();
 	return mHandle;
 }
-
-bool Texture::LoadFromBitmap( const void* pixels, uint32 pixelsLength, uint32 width, uint32 height, ePixelFormat format )
-{
-	//TODO
-	/*SetState(STATE_LOADING);
-	
-	mFormat = format;
-	HTEXTURE tex = gGfxRenderer.mHGE->Texture_Create(width, height);
-	mHandle = tex;
-	DWORD* texture_data = gGfxRenderer.mHGE->Texture_Lock(tex, false);
-	OC_ASSERT(texture_data);
-	memcpy(texture_data, pixels, pixelsLength);
-	gGfxRenderer.mHGE->Texture_Unlock(tex);
-	
-	SetState(STATE_LOADED);
-
-	return (tex != 0)?true:false;*/
-	return false;
-}
-
