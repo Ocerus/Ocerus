@@ -16,7 +16,7 @@ namespace EntitySystem
 	{
 		/// Macro used for easier definition of components. The first parameter is the type ID while the second one is 
 		/// the component class name.
-		#define COMPONENT_TYPE(x, y) x,
+		#define COMPONENT_TYPE(x) CT_##x,
 		#include "../Components/_ComponentTypes.h"
 		#undef COMPONENT_TYPE
 
@@ -29,12 +29,12 @@ namespace EntitySystem
 	{
 		/// Macro used for easier definition of components. The first parameter is the type ID while the second one is 
 		/// the component class name.
-		#define COMPONENT_TYPE(x, y) #x,
+		#define COMPONENT_TYPE(x) #x,
 		#include "../Components/_ComponentTypes.h"
 		#undef COMPONENT_TYPE
 
 		"NUM_COMPONENT_TYPES",
-		"CT_INVALID"
+		"INVALID"
 	};
 
 	/// Returns a component type based on a string.

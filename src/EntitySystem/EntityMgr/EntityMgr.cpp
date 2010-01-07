@@ -197,12 +197,12 @@ EntityHandle EntityMgr::CreateEntity(EntityDescription& desc)
 	}
 
 	// add entities with sprites to GfxSceneMgr
-	if (!isPrototype && HasEntityComponentOfType(entityHandle, CT_SPRITE))
+	if (!isPrototype && HasEntityComponentOfType(entityHandle, CT_Sprite))
 	{
 		gGfxSceneMgr.AddSpriteEntity(entityHandle);
 	}
 	// add camera to GfxSceneMgr
-	if (!isPrototype && HasEntityComponentOfType(entityHandle, CT_CAMERA))
+	if (!isPrototype && HasEntityComponentOfType(entityHandle, CT_Camera))
 	{
 		gGfxSceneMgr.AddCamera(entityHandle);
 	}
@@ -264,13 +264,13 @@ void EntityMgr::DestroyEntityImmediately( const EntityID entityToDestroy, const 
 	if (entityIt != mEntities.end())
 	{
 		// remove entities with sprites from GfxSceneMgr			
-		if (HasEntityComponentOfType(entityToDestroy, CT_SPRITE))
+		if (HasEntityComponentOfType(entityToDestroy, CT_Sprite))
 		{
 			gGfxSceneMgr.RemoveSpriteEntity(entityToDestroy);
 		}
 
 		// remove camera from GfxSceneMgr
-		if (HasEntityComponentOfType(entityToDestroy, CT_CAMERA))
+		if (HasEntityComponentOfType(entityToDestroy, CT_Camera))
 		{
 			gGfxSceneMgr.RemoveCamera(entityToDestroy);
 		}

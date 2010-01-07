@@ -140,7 +140,7 @@ void Script::TestRunTime()
 	EntitySystem::EntityDescription entDesc;
 	entDesc.Reset();
 	entDesc.SetName("Test script entity");
-	entDesc.AddComponent(CT_SCRIPT);
+	entDesc.AddComponent(CT_Script);
 
 	EntitySystem::EntityHandle handle = gEntityMgr.CreateEntity(entDesc);
 	Utils::Array<string>* a = handle.GetProperty("ScriptModules").GetValue<Utils::Array<string>*>();

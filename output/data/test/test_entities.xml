@@ -2,31 +2,31 @@
 
 <Entities>
   <Entity Name="Visual">
-    <Component Type="CT_SPRITE">
+    <Component Type="Sprite">
       <Size>512 256</Size>
       <Path>test/Logo_alpha.png</Path>
       <Transparency>0</Transparency>
     </Component>
-    <Component Type="CT_TRANSFORM">
+    <Component Type="Transform">
 	    <Position>-256 256</Position>
       <Depth>0</Depth>
     </Component>
   </Entity>
 
   <Entity Name="Visual">
-    <Component Type="CT_SPRITE">
+    <Component Type="Sprite">
       <Size>512 256</Size>
       <Path>test/Logo2.png</Path>
       <Transparency>0.9</Transparency>
     </Component>
-    <Component Type="CT_TRANSFORM">
+    <Component Type="Transform">
       <Position>256 -256</Position>
       <Depth>0</Depth>
     </Component>
   </Entity>
 
   <Entity Name="Camera1">
-    <Component Type="CT_CAMERA">
+    <Component Type="Camera">
       <Position>-0 -00</Position>
       <Zoom>0.5</Zoom>
       <Rotation>45</Rotation>
@@ -34,7 +34,7 @@
   </Entity>
   
   <Entity Name="Camera2">
-    <Component Type="CT_CAMERA">
+    <Component Type="Camera">
       <Position>00 0</Position>
       <Zoom>0.5</Zoom>
       <Rotation>0.0</Rotation>
@@ -42,7 +42,7 @@
   </Entity>
 
   <Entity Name="Camera3">
-    <Component Type="CT_CAMERA">
+    <Component Type="Camera">
       <Position>-0 0</Position>
       <Zoom>0.5</Zoom>
       <Rotation>0.0</Rotation>

@@ -11,7 +11,7 @@ ComponentMgr::ComponentMgr()
 	mComponentCreationMethod[NUM_COMPONENT_TYPES-1] = 0;
 
 	// register components
-	#define COMPONENT_TYPE(id, cls) mComponentCreationMethod[id] = (ComponentCreationMethod)cls::GetClassRTTI()->GetClassFactory();
+	#define COMPONENT_TYPE(cls) mComponentCreationMethod[CT_##cls] = (ComponentCreationMethod)cls::GetClassRTTI()->GetClassFactory();
 	#include "../Components/_ComponentTypes.h"
 	#undef COMPONENT_TYPE
 
