@@ -4,6 +4,7 @@
 #include "Base.h"
 #include "Singleton.h"
 #include "InputSystem/IInputListener.h"
+#include "GfxSystem/IGfxWindowListener.h"
 
 #define gGUIMgr GUISystem::GUIMgr::GetSingleton()
 
@@ -34,7 +35,7 @@ namespace GUISystem
 	 * ...
 	 * It MUST be created after InputMgr, because it registers for user input.
 	 */
-	class GUIMgr : public Singleton<GUIMgr>, public InputSystem::IInputListener
+	class GUIMgr : public Singleton<GUIMgr>, public InputSystem::IInputListener, public GfxSystem::IGfxWindowListener
 	{
 	public:
 		/// Constructs a GUIMgr. Do not use this directly, use CreateSingleton() instead.
@@ -68,6 +69,9 @@ namespace GUISystem
 		virtual void MouseButtonReleased(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn);
 		//@}
 
+		/// This method injects resolution change into GUI system. It is part of IGfxWindowListener interface.
+		virtual void ResolutionChanged(int width, int height);
+
 		/// @name Console related methods
 		//@{
 
@@ -79,7 +83,7 @@ namespace GUISystem
 
 		/// Writes a log message to console, if its logging level is higher than set treshold.
 		void WriteLogMessageToConsole(const string& msg, int32 loggingLevel);
-		
+
 		/// Returns whether console is loaded.
 		inline bool IsConsoleLoaded(void) const { return mConsoleIsLoaded; }
 

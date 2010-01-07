@@ -64,7 +64,7 @@ INT WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 #else
 int main(int argc, char* argv[])
 #endif // __WIN__
-{	
+{
 	// initialize memory
 	Memory::InitGlobalMemoryAllocation();
 
@@ -73,7 +73,7 @@ int main(int argc, char* argv[])
 
 		// enable exception handlers
 		DbgLib::CDebugFx::SetExceptionHandler(true);
-		
+
 		// install an exception callback
 		DbgLib::CDebugFx::SetExceptionCallback(DbgLibExceptionCallback, NULL);
 

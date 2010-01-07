@@ -10,11 +10,12 @@ using namespace ResourceSystem;
 uint64 Resource::sLastUsedTime;
 
 Resource::Resource():
+	mLastUsedTime(0),
 	mIsManual(false),
 	mState(STATE_UNINITIALIZED),
-	mInputFileStream(0),
 	mSizeInBytes(0),
-	mLastUsedTime(0)
+	mInputFileStream(0)
+
 {
 
 }

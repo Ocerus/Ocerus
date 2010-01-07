@@ -193,6 +193,7 @@ set(Core_SRCS
 	src/Core/Config.cpp
 	src/Core/Game.cpp
 	src/Core/LoadingScreen.cpp
+	src/Core/PhysicsDraw.cpp
 )
 
 set(EntitySystem_SRCS

@@ -35,6 +35,8 @@ namespace GUISystem
 		mCegui = &CEGUI::System::create(*mRenderer, mResourceProvider);
 
 		gInputMgr.AddInputListener(this);
+		gGfxWindow.AddScreenListener(this);
+
 		CEGUI::Imageset::setDefaultResourceGroup("imagesets");
 		CEGUI::Font::setDefaultResourceGroup("fonts");
 		CEGUI::Scheme::setDefaultResourceGroup("schemes");
@@ -81,27 +83,34 @@ namespace GUISystem
 	void GUIMgr::LoadStyle( void )
 	{
 		ocInfo << "*** GUIMgr load style ***";
+		try
+		{
+			gResourceMgr.AddResourceDirToGroup("gui/schemes", "schemes", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
+			gResourceMgr.AddResourceDirToGroup("gui/imagesets", "imagesets", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
+			gResourceMgr.AddResourceDirToGroup("gui/fonts", "fonts", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
+			gResourceMgr.AddResourceDirToGroup("gui/layouts", "layouts", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
+			gResourceMgr.AddResourceDirToGroup("gui/looknfeel", "looknfeels", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
 
-		gResourceMgr.AddResourceDirToGroup("gui/schemes", "schemes", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
-		gResourceMgr.AddResourceDirToGroup("gui/imagesets", "imagesets", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
-		gResourceMgr.AddResourceDirToGroup("gui/fonts", "fonts", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
-		gResourceMgr.AddResourceDirToGroup("gui/layouts", "layouts", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
-		gResourceMgr.AddResourceDirToGroup("gui/looknfeel", "looknfeels", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
+			CEGUI::SchemeManager::getSingleton().create("Lightweight.scheme");
 
-		CEGUI::SchemeManager::getSingleton().create("Lightweight.scheme");
+			if (!CEGUI::FontManager::getSingleton().isDefined("Commonwealth-10"))
+				CEGUI::FontManager::getSingleton().create("Commonwealth-10.font");
 
-		if (!CEGUI::FontManager::getSingleton().isDefined("Commonwealth-10"))
-			CEGUI::FontManager::getSingleton().create("Commonwealth-10.font");
-
-		CEGUI::SchemeManager::getSingleton().create("Console.scheme");
-		mCurrentWindowRoot = CEGUI::WindowManager::getSingleton().loadWindowLayout("Console.layout");
-		CEGUI::System::getSingleton().setGUISheet(mCurrentWindowRoot);
+			CEGUI::SchemeManager::getSingleton().create("Console.scheme");
+			mCurrentWindowRoot = CEGUI::WindowManager::getSingleton().loadWindowLayout("Console.layout");
+			CEGUI::System::getSingleton().setGUISheet(mCurrentWindowRoot);
 
 
-		mCegui->setDefaultFont("Commonwealth-10");
-		mCegui->setDefaultMouseCursor("Lightweight", "MouseArrow");
+			mCegui->setDefaultFont("Commonwealth-10");
+			mCegui->setDefaultMouseCursor("Lightweight", "MouseArrow");
 
-		InitConsole();
+			InitConsole();
+		}
+		catch (std::exception& e)
+		{
+			ocError << "EXC";
+			//ocWarning << exception.getName();
+		}
 	}
 
 
@@ -162,6 +171,12 @@ namespace GUISystem
 	{
 		OC_DASSERT(mCegui);
 		mCegui->injectMouseButtonUp(ConvertMouseButtonEnum(btn));
+	}
+
+	void GUIMgr::ResolutionChanged(int width, int height)
+	{
+		OC_DASSERT(mCegui);
+		mCegui->notifyDisplaySizeChanged(CEGUI::Size(width, height));
 	}
 
 	void GUIMgr::AddConsoleListener(IConsoleListener* listener)

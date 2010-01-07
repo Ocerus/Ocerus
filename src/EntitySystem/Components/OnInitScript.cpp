@@ -63,7 +63,7 @@ void OnInitScript::TestRunTime()
 	EntitySystem::EntityDescription entDesc;
 	entDesc.Reset();
 	entDesc.SetName("Test entity");
-	entDesc.AddComponent(CT_ON_INIT_SCRIPT);
+	//entDesc.AddComponent(CT_ON_INIT_SCRIPT);
 
 	EntitySystem::EntityHandle handle = gEntityMgr.CreateEntity(entDesc);
 	handle.GetProperty("OnInitScript").SetValue<string>("TestOnInitScript.as");
