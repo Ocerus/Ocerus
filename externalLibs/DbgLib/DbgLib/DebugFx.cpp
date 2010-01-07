@@ -52,7 +52,7 @@ size_t CDebugFx::GenerateStackTrace(tstring* p_StackTrace, const size_t p_Buffer
 		stackInfoStream << symFunc;
 
 		// align the file name a bit
-		const int fileNamePosition = 45; // number of characters before the file name (alignment from left)
+		const int fileNamePosition = 55; // number of characters before the file name (alignment from left)
 		stackInfoStream.fill(_T(' '));
 		if(stackInfoStream.tellp() < fileNamePosition)
 			stackInfoStream << std::setw(fileNamePosition - stackInfoStream.tellp()) << _T(" ") << std::setw(1);

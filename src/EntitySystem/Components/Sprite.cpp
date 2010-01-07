@@ -1,6 +1,6 @@
 #include "Common.h"
 #include "Sprite.h"
-#include "../GfxSystem/Texture.h"
+#include "GfxSystem/Texture.h"
 
 void EntityComponents::Sprite::Create( void )
 {
@@ -19,7 +19,7 @@ EntityMessage::eResult EntityComponents::Sprite::HandleMessage( const EntityMess
 			if ((mResPath == ""))
 				return EntityMessage::RESULT_IGNORED;
 			///@todo tohle by chtelo nejak zoptimalizovat, nejspis to pridavani resourcu udelat nejak globalnejc
-			if (gResourceMgr.AddResourceFileToGroup(mResPath, "textures", ResourceSystem::RESTYPE_TEXTURE, true))
+			if (gResourceMgr.AddResourceFileToGroup(mResPath, "Textures", ResourceSystem::RESTYPE_TEXTURE, true))
 			{
 				const char* lastSlashPos = 0;
 				const char* str = mResPath.c_str();
@@ -27,7 +27,7 @@ EntityMessage::eResult EntityComponents::Sprite::HandleMessage( const EntityMess
 				{
 					if (*str == '/') lastSlashPos = str;
 				}
-				mTextureHandle = (GfxSystem::TexturePtr)gResourceMgr.GetResource("textures",
+				mTextureHandle = (GfxSystem::TexturePtr)gResourceMgr.GetResource("Textures",
 												StringKey(lastSlashPos+1, str-lastSlashPos-1));
 				return EntityMessage::RESULT_OK;
 			}

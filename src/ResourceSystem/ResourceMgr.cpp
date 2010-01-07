@@ -138,7 +138,8 @@ bool ResourceMgr::AddResourceDirToGroup(const string& path, const StringKey& gro
 			string dirStr = i->path().filename();
 			if (dirStr.compare(".svn")!=0)
 			{
-				if (!AddResourceDirToGroup(filePath, group, includeRegexp, excludeRegexp))
+				string dirRelativePath = filePath.substr(mBasePath.length());
+				if (!AddResourceDirToGroup(dirRelativePath, group, includeRegexp, excludeRegexp))
 				{
 					result = false;
 				}

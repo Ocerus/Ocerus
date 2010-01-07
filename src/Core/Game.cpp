@@ -12,7 +12,6 @@
 
 
 // DEBUG only
-#include "../EntitySystem/Components/OnInitScript.h"
 #include "../EntitySystem/Components/Script.h"
 
 
@@ -78,19 +77,8 @@ void Core::Game::Init()
 
 	//// TEST ////
 
-	//--------------------------------------------
-	//gResourceMgr.AddResourceFileToGroup("Textures/Logo.png", "textures", ResourceSystem::RESTYPE_TEXTURE, true);
-	//--------------------------------------------
-
-
-	gEntityMgr.LoadEntitiesFromResource(gResourceMgr.GetResource("Prototypes/ship0.xml"), true);
-
-	gEntityMgr.LoadEntitiesFromResource(gResourceMgr.GetResource("Ships/ship0.xml"));
-	
-
 	//-------------------
-	gEntityMgr.LoadEntitiesFromResource(gResourceMgr.GetResource("Prototypes/Gfx.xml"), true);
-	gEntityMgr.LoadEntitiesFromResource(gResourceMgr.GetResource("Ships/Gfx.xml"));
+	gEntityMgr.LoadEntitiesFromResource(gResourceMgr.GetResource("TestEntities", "test_entities.xml"));
 	//-------------------
 
 	// set camera
@@ -107,16 +95,14 @@ void Core::Game::Init()
 	//gGfxRenderer.SetCameraScale(50.0f);
 
 
+
 	gInputMgr.AddInputListener(this);
-
-
 	gApp.ResetStats();
-
 	ocInfo << "Game inited";
 
 
+
 	// an example of a script
-	EntityComponents::OnInitScript::TestRunTime();
 	EntityComponents::Script::TestRunTime();
 
 
@@ -138,6 +124,7 @@ void Core::Game::Deinit()
 	for (PhysicsEventList::const_iterator i=mPhysicsEvents.begin(); i!=mPhysicsEvents.end(); ++i)
 		delete *i;
 	mPhysicsEvents.clear();
+	gInputMgr.RemoveInputListener(this);
 }
 
 void Core::Game::Update( const float32 delta )

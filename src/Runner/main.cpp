@@ -19,7 +19,6 @@ AfterExitHook gAfterExitHook;
 #include <Windows.h>
 #endif
 
-#undef USE_DBGLIB
 
 #ifdef USE_DBGLIB
 #include <DbgLib/DbgLib.h>

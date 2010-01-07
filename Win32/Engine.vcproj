@@ -260,30 +260,6 @@
 						>
 					</File>
 					<File
-						RelativePath="..\src\EntitySystem\Components\CmpMaterial.h"
-						>
-					</File>
-					<File
-						RelativePath="..\src\EntitySystem\Components\CmpPlatformLogic.h"
-						>
-					</File>
-					<File
-						RelativePath="..\src\EntitySystem\Components\CmpPlatformParams.h"
-						>
-					</File>
-					<File
-						RelativePath="..\src\EntitySystem\Components\CmpPlatformPhysics.h"
-						>
-					</File>
-					<File
-						RelativePath="..\src\EntitySystem\Components\CmpPlatformVisual.h"
-						>
-					</File>
-					<File
-						RelativePath="..\src\EntitySystem\Components\OnInitScript.h"
-						>
-					</File>
-					<File
 						RelativePath="..\src\EntitySystem\Components\Script.h"
 						>
 					</File>
@@ -301,38 +277,6 @@
 					>
 					<File
 						RelativePath="..\src\EntitySystem\Components\Camera.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\src\EntitySystem\Components\CmpMaterial.cpp"
-						>
-						<FileConfiguration
-							Name="Develop|Win32"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-								ShowIncludes="false"
-							/>
-						</FileConfiguration>
-					</File>
-					<File
-						RelativePath="..\src\EntitySystem\Components\CmpPlatformLogic.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\src\EntitySystem\Components\CmpPlatformParams.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\src\EntitySystem\Components\CmpPlatformPhysics.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\src\EntitySystem\Components\CmpPlatformVisual.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\src\EntitySystem\Components\OnInitScript.cpp"
 						>
 					</File>
 					<File

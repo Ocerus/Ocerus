@@ -1,35 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <Entities>
-  <Entity Type="ET_VISUAL" Name="Visual" Prototype="3">
-
+  <Entity Name="Visual">
     <Component Type="CT_SPRITE">
       <Size>512 256</Size>
-      <Path>Textures/Logo_alpha.png</Path>
+      <Path>test/Logo_alpha.png</Path>
       <Transparency>0</Transparency>
     </Component>
-    
     <Component Type="CT_TRANSFORM">
 	    <Position>-256 256</Position>
       <Depth>0</Depth>
     </Component>
   </Entity>
 
-  <Entity Type="ET_VISUAL" Name="Visual" Prototype="3">
-
+  <Entity Name="Visual">
     <Component Type="CT_SPRITE">
       <Size>512 256</Size>
-      <Path>Textures/Logo2.png</Path>
+      <Path>test/Logo2.png</Path>
       <Transparency>0.9</Transparency>
     </Component>
-
     <Component Type="CT_TRANSFORM">
       <Position>256 -256</Position>
       <Depth>0</Depth>
     </Component>
   </Entity>
 
-  <Entity Name="Camera1" Prototype="4" >
+  <Entity Name="Camera1">
     <Component Type="CT_CAMERA">
       <Position>-0 -00</Position>
       <Zoom>0.5</Zoom>
@@ -37,7 +33,7 @@
     </Component>
   </Entity>
   
-  <Entity Name="Camera2" Prototype="4" >
+  <Entity Name="Camera2">
     <Component Type="CT_CAMERA">
       <Position>00 0</Position>
       <Zoom>0.5</Zoom>
@@ -45,7 +41,7 @@
     </Component>
   </Entity>
 
-  <Entity Name="Camera3" Prototype="4" >
+  <Entity Name="Camera3">
     <Component Type="CT_CAMERA">
       <Position>-0 0</Position>
       <Zoom>0.5</Zoom>

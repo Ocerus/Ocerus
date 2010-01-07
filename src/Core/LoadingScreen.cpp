@@ -15,12 +15,12 @@ void Core::LoadingScreen::DoLoading( eType type )
 		break;
 	case TYPE_GENERAL_RESOURCES:
 
-		gResourceMgr.AddResourceDirToGroup("ships", "Ships");
 		gResourceMgr.AddResourceDirToGroup("prototypes", "Prototypes");
-		gResourceMgr.AddResourceDirToGroup("scripts", "Scripts");
+		gResourceMgr.AddResourceDirToGroup("test", "TestEntities", ".+\\.xml");
+		gResourceMgr.AddResourceDirToGroup(".", "Scripts", ".+\\.as");
 
-		gResourceMgr.LoadResourcesInGroup("Ships");
 		gResourceMgr.LoadResourcesInGroup("Prototypes");
+		gResourceMgr.LoadResourcesInGroup("TestEntities");
 		gResourceMgr.LoadResourcesInGroup("Scripts");
 
 		gGUIMgr.LoadStyle();
