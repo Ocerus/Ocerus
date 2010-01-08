@@ -326,7 +326,7 @@ void RegisterScriptEntityHandle(asIScriptEngine* engine)
 {
 	int32 r;
 	// Register the type
-	r = engine->RegisterObjectType("EntityHandle", sizeof(EntityHandle), asOBJ_VALUE | asOBJ_POD | asOBJ_APP_CLASS_CA); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectType("EntityHandle", sizeof(EntityHandle), asOBJ_VALUE | asOBJ_APP_CLASS_CA); OC_SCRIPT_ASSERT();
 
 	// Register the constructors and destructor
 	r = engine->RegisterObjectBehaviour("EntityHandle", asBEHAVE_CONSTRUCT, "void f()", asFUNCTION(EntityHandleDefaultConstructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();

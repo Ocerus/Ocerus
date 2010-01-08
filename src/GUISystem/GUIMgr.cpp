@@ -106,7 +106,7 @@ namespace GUISystem
 
 			InitConsole();
 		}
-		catch (std::exception& e)
+		catch (std::exception&)
 		{
 			ocError << "EXC";
 			//ocWarning << exception.getName();
@@ -176,7 +176,7 @@ namespace GUISystem
 	void GUIMgr::ResolutionChanged(int width, int height)
 	{
 		OC_DASSERT(mCegui);
-		mCegui->notifyDisplaySizeChanged(CEGUI::Size(width, height));
+		mCegui->notifyDisplaySizeChanged(CEGUI::Size((float)width, (float)height));
 	}
 
 	void GUIMgr::AddConsoleListener(IConsoleListener* listener)

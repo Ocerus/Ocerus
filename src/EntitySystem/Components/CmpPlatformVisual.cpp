@@ -32,11 +32,12 @@ void EntityComponents::CmpPlatformVisual::RegisterReflection()
 
 void EntityComponents::CmpPlatformVisual::Draw( void ) const
 {
-	Vector2 pos = GetProperty("Position").GetValue<Vector2>();
-	float32 angle = GetProperty("Angle").GetValue<float32>();
-	angle += GetProperty("InitShapeAngle").GetValue<float32>();
-	GfxSystem::Color fillColor = GetProperty("FillColor").GetValue<GfxSystem::Color>();
-	bool flip = GetProperty("InitShapeFlip").GetValue<bool>();
+	EntityHandle owner = GetOwner();
+	Vector2 pos = owner.GetProperty("Position").GetValue<Vector2>();
+	float32 angle = owner.GetProperty("Angle").GetValue<float32>();
+	angle += owner.GetProperty("InitShapeAngle").GetValue<float32>();
+	GfxSystem::Color fillColor = owner.GetProperty("FillColor").GetValue<GfxSystem::Color>();
+	bool flip = owner.GetProperty("InitShapeFlip").GetValue<bool>();
 	if (flip)
 	{
 		int32 col = fillColor.r + 30;

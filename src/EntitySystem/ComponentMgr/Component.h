@@ -41,7 +41,7 @@ namespace EntitySystem
 		inline EntityMessage::eResult PostMessage(const EntityMessage::eType type, Reflection::PropertyFunctionParameters data = Reflection::PropertyFunctionParameters()) const { return GetOwner().PostMessage(type, data); }
 
 		/// Returns a property to be get or set.
-		inline PropertyHolder GetProperty(const StringKey name) const { return GetOwner().GetProperty(name); }
+		PropertyHolder GetProperty(const StringKey name, const PropertyAccessFlags mask = PA_FULL_ACCESS) const;
 
 		/// We don't want anyone except the ComponentMgr to create new components, but it has to be public because of the RTTI.
 		Component(void);

@@ -37,8 +37,8 @@ EntityMessage::eResult EntityComponents::CmpPlatformLogic::HandleMessage(const E
 	case EntityMessage::MOUSE_PICK:
 		/*OC_DASSERT(msg.parameters.GetParametersCount() == 1);
 		{
-			Vector2 pos = GetProperty("Position").GetValue<Vector2>();
-			float32 angle = GetProperty("Angle").GetValue<float32>();
+			Vector2 pos = GetOwner().GetProperty("Position").GetValue<Vector2>();
+			float32 angle = GetOwner().GetProperty("Angle").GetValue<float32>();
 			msg.parameters.GetParameter(0).GetData<EntityPicker>()->Update(GetOwner(), MathUtils::Multiply(Matrix22(angle), mPickCircleCenter) + pos, mPickCircleRadius);
 		}*/
 		return EntityMessage::RESULT_OK;
@@ -62,8 +62,8 @@ void EntityComponents::CmpPlatformLogic::RegisterReflection()
 void EntityComponents::CmpPlatformLogic::DrawSelectionOverlay( const bool hover ) const
 {
 	//TODO:Gfx
-	//Vector2 pos = GetProperty("Position").GetValue<Vector2>();
-	//float32 angle = GetProperty("Angle").GetValue<float32>();
+	//Vector2 pos = GetOwner().GetProperty("Position").GetValue<Vector2>();
+	//float32 angle = GetOwner().GetProperty("Angle").GetValue<float32>();
 	//GfxSystem::Color color(255,0,0,180);
 	//if (hover)
 	//	color = GfxSystem::Color(255,255,255,180);
@@ -119,7 +119,7 @@ void EntityComponents::CmpPlatformLogic::Die( void )
 void EntityComponents::CmpPlatformLogic::ComputePickStuff( void )
 {
 	// compute pick stuff
-	Array<Vector2>& shape = *GetProperty("Shape").GetValue<Array<Vector2>*>();
+	Array<Vector2>& shape = *GetOwner().GetProperty("Shape").GetValue<Array<Vector2>*>();
 	// compute center
 	mPickCircleCenter.SetZero();
 	for (int i=0; i<shape.GetSize(); ++i)

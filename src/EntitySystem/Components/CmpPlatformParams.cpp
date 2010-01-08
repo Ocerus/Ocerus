@@ -45,9 +45,9 @@ EntityMessage::eResult EntityComponents::CmpPlatformParams::HandleMessage( const
 void CmpPlatformParams::ComputeParams()
 {
 	mArea = MathUtils::ComputePolygonArea(mShape.GetRawArrayPtr(), mShape.GetSize());
-	float32 density = GetProperty("Density").GetValue<float32>();
+	float32 density = GetOwner().GetProperty("Density").GetValue<float32>();
 	mMass = mArea * density;
-	float32 durabilityRatio = GetProperty("DurabilityRatio").GetValue<float32>();;
+	float32 durabilityRatio = GetOwner().GetProperty("DurabilityRatio").GetValue<float32>();;
 	mMaxHitpoints = MathUtils::Round(HITPOINTS_RATIO * durabilityRatio * MathUtils::Sqrt(mArea));
 	mNumSlots = MathUtils::Round(SLOTS_RATIO * mMass);
 

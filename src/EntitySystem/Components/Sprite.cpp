@@ -35,8 +35,8 @@ EntityMessage::eResult EntityComponents::Sprite::HandleMessage( const EntityMess
 		}
 	case EntityMessage::DRAW:
 		{
-			Vector2 pos = GetProperty("Position").GetValue<Vector2>();
-			float32 z = (float32) GetProperty("Depth").GetValue<int32>();
+			Vector2 pos = GetOwner().GetProperty("Position").GetValue<Vector2>();
+			float32 z = (float32) GetOwner().GetProperty("Depth").GetValue<int32>();
 
 			if (mTextureHandle)
 			{

@@ -26,19 +26,20 @@ void EntityComponents::CmpPlatformPhysics::Init( void )
 void EntityComponents::CmpPlatformPhysics::CreateBody( const bool hasParentShip )
 {
 	PropertyHolder prop;
+	EntityHandle owner = GetOwner();
 
 	// create body
 	if (hasParentShip)
 	{
-		prop = GetProperty("ParentShip");
+		prop = owner.GetProperty("ParentShip");
 		EntityHandle ship = prop.GetValue<EntityHandle>();
 		mBody = ship.GetProperty("PhysicsBody").GetValue<b2Body*>();
 	}
 	else
 	{
 		b2BodyDef bodyDef;
-		bodyDef.position = GetProperty("Position").GetValue<Vector2>();
-		bodyDef.angle = GetProperty("Angle").GetValue<float32>();
+		bodyDef.position = owner.GetProperty("Position").GetValue<Vector2>();
+		bodyDef.angle = owner.GetProperty("Angle").GetValue<float32>();
 		bodyDef.userData = GetOwnerPtr();
 		bodyDef.angularDamping = ANGULAR_DAMPING;
 		bodyDef.linearDamping = LINEAR_DAMPING;
@@ -48,10 +49,10 @@ void EntityComponents::CmpPlatformPhysics::CreateBody( const bool hasParentShip 
 	// create shape
 	b2PolygonDef shapeDef;
 	// set density
-	float32 density = GetProperty("Density").GetValue<float32>();;
+	float32 density = owner.GetProperty("Density").GetValue<float32>();;
 	shapeDef.density = density;
 	// retrieve original shape
-	Array<Vector2>& poly = *GetProperty("Shape").GetValue<Array<Vector2>*>();
+	Array<Vector2>& poly = *owner.GetProperty("Shape").GetValue<Array<Vector2>*>();
 	// retrieve shape transformation info
 	bool flip = mInitShapeFlip;
 	float32 angle = mInitShapeAngle;
