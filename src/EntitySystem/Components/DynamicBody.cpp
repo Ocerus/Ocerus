@@ -25,14 +25,17 @@ EntityMessage::eResult EntityComponents::DynamicBody::HandleMessage( const Entit
 	{
 	case EntityMessage::INIT:
 		Init();
-		EntityMessage::RESULT_OK;
+		return EntityMessage::RESULT_OK;
+	case EntityMessage::UPDATE_PHYSICS: //TESTING
+		mBody->ApplyForce(Vector2(10000.0f, 0.0f), Vector2_Zero);
+		return EntityMessage::RESULT_OK;
 	}
 	return EntityMessage::RESULT_IGNORED;
 }
 
 void EntityComponents::DynamicBody::RegisterReflection( void )
 {
-	RegisterProperty<PhysicalBody*>("PhysicalBody", &DynamicBody::GetBody, &DynamicBody::SetBody, 0, "");
+	RegisterProperty<PhysicalBody*>("PhysicalBody", &DynamicBody::GetBody, &DynamicBody::SetBody, PA_ENGINE, "");
 
 	// we need the transform to be able to have the position and angle ready while creating the body
 	AddComponentDependency(CT_Transform);

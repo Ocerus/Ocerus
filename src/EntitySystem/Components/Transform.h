@@ -56,6 +56,7 @@ namespace EntityComponents
 		Vector2 mScale;
 		float32 mAngle;
 		int32 mDepth;
+		bool mBoundToPhysics;
 	};
 }
 

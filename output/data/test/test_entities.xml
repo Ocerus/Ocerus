@@ -2,27 +2,38 @@
 
 <Entities>
   <Entity Name="Visual">
+    <Component Type="Transform">
+	    <Position>-256 256</Position>
+      <Depth>0</Depth>
+    </Component>
     <Component Type="Sprite">
       <Size>512 256</Size>
       <Path>test/Logo_alpha.png</Path>
       <Transparency>0</Transparency>
     </Component>
-    <Component Type="Transform">
-	    <Position>-256 256</Position>
-      <Depth>0</Depth>
+    <Component Type="DynamicBody">
+    </Component>
+    <Component Type="PolygonCollider">
+	    <Density>1.0</Density>
+      <Polygon>
+      	<Vertex>-10 -10</Vertex>
+      	<Vertex>10 -10</Vertex>
+      	<Vertex>10 10</Vertex>
+      	<Vertex>-10 10</Vertex>
+			</Polygon>
     </Component>
   </Entity>
 
   <Entity Name="Visual">
-    <Component Type="Sprite">
+    <Component Type="Transform">
+      <Position>1024 -256</Position>
+      <Depth>0</Depth>
+    </Component>
+    <!--<Component Type="Sprite">
       <Size>512 256</Size>
       <Path>test/Logo2.png</Path>
       <Transparency>0.9</Transparency>
-    </Component>
-    <Component Type="Transform">
-      <Position>256 -256</Position>
-      <Depth>0</Depth>
-    </Component>
+    </Component>-->
   </Entity>
 
   <Entity Name="Camera1">

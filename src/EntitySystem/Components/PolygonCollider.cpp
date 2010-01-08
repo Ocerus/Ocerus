@@ -17,7 +17,7 @@ EntityMessage::eResult EntityComponents::PolygonCollider::HandleMessage( const E
 {
 	switch (msg.type)
 	{
-	case EntityMessage::POST_INIT:
+	case EntityMessage::POST_INIT: // we have to wait until the physical bodies are inited, that's why we're using POST_INIT
 		Init();
 		return EntityMessage::RESULT_OK;
 	}
@@ -59,4 +59,7 @@ void EntityComponents::PolygonCollider::Init( void )
 	
 	// create the shape
 	mShape = body->CreateShape(&shapeDef);
+
+	// update the mass of the body
+	body->SetMassFromShapes();
 }

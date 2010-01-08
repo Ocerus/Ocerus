@@ -22,6 +22,8 @@ namespace Reflection
 		PA_SCRIPT_WRITE=1<<4,
 		/// The property can be written during the component init.
 		PA_INIT=1<<5,
+		/// The property can be used only by the engine itself.
+		PA_ENGINE=1<<6,
 
 		/// Full access to the property.
 		PA_FULL_ACCESS=0xff
