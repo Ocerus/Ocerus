@@ -16,11 +16,16 @@
     <Component Type="PolygonCollider">
 	    <Density>1.0</Density>
       <Polygon>
-      	<Vertex>-10 -10</Vertex>
-      	<Vertex>10 -10</Vertex>
-      	<Vertex>10 10</Vertex>
-      	<Vertex>-10 10</Vertex>
+      	<Item>-10 -10</Item>
+      	<Item>10 -10</Item>
+      	<Item>10 10</Item>
+      	<Item>-10 10</Item>
 			</Polygon>
+    </Component>
+    <Component Type="Script">
+    	<ScriptModules>
+    		<Item>ConstantMover.as</Item>
+    	</ScriptModules>
     </Component>
   </Entity>
 

@@ -26,9 +26,6 @@ EntityMessage::eResult EntityComponents::DynamicBody::HandleMessage( const Entit
 	case EntityMessage::INIT:
 		Init();
 		return EntityMessage::RESULT_OK;
-	case EntityMessage::UPDATE_PHYSICS: //TESTING
-		mBody->ApplyForce(Vector2(10000.0f, 0.0f), Vector2_Zero);
-		return EntityMessage::RESULT_OK;
 	}
 	return EntityMessage::RESULT_IGNORED;
 }
@@ -36,6 +33,7 @@ EntityMessage::eResult EntityComponents::DynamicBody::HandleMessage( const Entit
 void EntityComponents::DynamicBody::RegisterReflection( void )
 {
 	RegisterProperty<PhysicalBody*>("PhysicalBody", &DynamicBody::GetBody, &DynamicBody::SetBody, PA_ENGINE, "");
+	RegisterFunction("ApplyForce", &DynamicBody::ApplyForce, PA_SCRIPT_WRITE | PA_ENGINE, "");
 
 	// we need the transform to be able to have the position and angle ready while creating the body
 	AddComponentDependency(CT_Transform);
@@ -51,4 +49,10 @@ void EntityComponents::DynamicBody::Init( void )
 	bodyDef.userData = GetOwnerPtr();
 
 	mBody = GlobalProperties::Get<Physics>("Physics").CreateBody(&bodyDef);
+}
+
+void EntityComponents::DynamicBody::ApplyForce( PropertyFunctionParameters params )
+{
+	OC_ASSERT(mBody);
+	mBody->ApplyForce(*params.GetParameter(0).GetData<Vector2>(), *params.GetParameter(1).GetData<Vector2>());
 }

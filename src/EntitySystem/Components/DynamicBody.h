@@ -31,6 +31,9 @@ namespace EntityComponents
 		/// Physical body in the physics engine.
 		void SetBody(PhysicalBody* val) { mBody = val; }
 
+		/// Applies force to the body.
+		void ApplyForce(PropertyFunctionParameters params);
+
 	private:
 
 		PhysicalBody* mBody;

@@ -396,6 +396,24 @@ EntitySystem::EntityHandle EntitySystem::EntityMgr::FindFirstEntity( const strin
 	return EntityHandle::Null;
 }
 
+template<typename T>
+void LoadEntityPropertyArrayFromXML( PropertyHolder prop, ResourceSystem::XMLResourcePtr xml, ResourceSystem::XMLNodeIterator& xmlPropertyIterator )
+{
+	vector<T> vertices;
+	for (ResourceSystem::XMLNodeIterator vertIt=xml->IterateChildren(xmlPropertyIterator); vertIt!=xml->EndChildren(xmlPropertyIterator); ++vertIt)
+	{
+		if ((*vertIt).compare("Item") == 0) vertices.push_back(vertIt.GetChildValue<T>());
+		else ocError << "XML:Entity: Expected 'Item', found '" << *vertIt << "'";
+	}
+
+	Array<T> vertArray(vertices.size());
+	for (uint32 i=0; i<vertices.size(); ++i)
+	{
+		vertArray[i] = vertices[i];
+	}
+	prop.SetValue<Array<T>*>(&vertArray);
+}
+
 void EntitySystem::EntityMgr::LoadEntityPropertyFromXML( const EntityID entityID, const ComponentID componentID, PrototypeInfo* prototypeInfo, ResourceSystem::XMLResourcePtr xml, ResourceSystem::XMLNodeIterator& xmlPropertyIterator )
 {
 	StringKey propertyKey(*xmlPropertyIterator);
@@ -407,21 +425,11 @@ void EntitySystem::EntityMgr::LoadEntityPropertyFromXML( const EntityID entityID
 
 	if (prop.GetType() == PT_VECTOR2_ARRAY)
 	{
-		vector<Vector2> vertices;
-		for (ResourceSystem::XMLNodeIterator vertIt=xml->IterateChildren(xmlPropertyIterator); vertIt!=xml->EndChildren(xmlPropertyIterator); ++vertIt)
-		{
-			if ((*vertIt).compare("Vertex") == 0)
-				vertices.push_back(vertIt.GetChildValue<Vector2>());
-			else
-				ocError << "XML:Entity: Expected 'Vertex', found '" << *vertIt << "'";
-		}
-
-		Array<Vector2> vertArray(vertices.size());
-		for (uint32 i=0; i<vertices.size(); ++i)
-		{
-			vertArray[i] = vertices[i];
-		}
-		prop.SetValue<Array<Vector2>*>(&vertArray);
+		LoadEntityPropertyArrayFromXML<Vector2>(prop, xml, xmlPropertyIterator);
+	}
+	else if (prop.GetType() == PT_STRING_ARRAY)
+	{
+		LoadEntityPropertyArrayFromXML<string>(prop, xml, xmlPropertyIterator);
 	}
 	else
 	{
