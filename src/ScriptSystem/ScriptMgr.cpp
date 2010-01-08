@@ -839,5 +839,5 @@ bool ScriptMgr::SetFunctionArgument(AngelScript::asIScriptContext* ctx, const ui
 
 uint64 ScriptSystem::ScriptMgr::GetTime() const
 {
-	return GlobalProperties::Get<Core::Game>("CurrentGame").GetTimeMillis();
+	return GlobalProperties::Get<Core::Game>("Game").GetTimeMillis();
 }

@@ -16,6 +16,14 @@ typedef b2Mat22 Matrix22;
 extern const Matrix22 Matrix22_Identity;
 typedef b2XForm XForm;
 
+class b2World;
+typedef b2World Physics;
+class b2Body;
+typedef b2Body PhysicalBody;
+class b2Shape;
+typedef b2Shape PhysicalShape;
+
+
 #include <string>
 typedef std::string string;
 

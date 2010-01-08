@@ -10,7 +10,7 @@ namespace EntityComponents
 {
 	/// This component allows entities to run scripts. It may run only scripts supported by ScriptSystem. The scripts are
 	/// executed as a reaction to received EntityMessage messages. For more informations about scripts see ScriptSystem.
-	class Script : public RTTIGlue<Script, Component>
+	class Script: public RTTIGlue<Script, Component>
 	{
 	public:
 

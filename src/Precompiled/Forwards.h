@@ -4,6 +4,7 @@
 #ifndef Forwards_h__
 #define Forwards_h__
 
+
 namespace Core
 {
 	class Config;

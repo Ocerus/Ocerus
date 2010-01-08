@@ -260,11 +260,23 @@
 						>
 					</File>
 					<File
+						RelativePath="..\src\EntitySystem\Components\DynamicBody.h"
+						>
+					</File>
+					<File
+						RelativePath="..\src\EntitySystem\Components\PolygonCollider.h"
+						>
+					</File>
+					<File
 						RelativePath="..\src\EntitySystem\Components\Script.h"
 						>
 					</File>
 					<File
 						RelativePath="..\src\EntitySystem\Components\Sprite.h"
+						>
+					</File>
+					<File
+						RelativePath="..\src\EntitySystem\Components\StaticBody.h"
 						>
 					</File>
 					<File
@@ -280,11 +292,23 @@
 						>
 					</File>
 					<File
+						RelativePath="..\src\EntitySystem\Components\DynamicBody.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\src\EntitySystem\Components\PolygonCollider.cpp"
+						>
+					</File>
+					<File
 						RelativePath="..\src\EntitySystem\Components\Script.cpp"
 						>
 					</File>
 					<File
 						RelativePath="..\src\EntitySystem\Components\Sprite.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\src\EntitySystem\Components\StaticBody.cpp"
 						>
 					</File>
 					<File

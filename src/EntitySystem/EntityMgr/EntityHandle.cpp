@@ -110,6 +110,11 @@ PropertyHolder EntitySystem::EntityHandle::GetFunction( const StringKey key, con
 	return gEntityMgr.GetEntityProperty(*this, key, mask);
 }
 
+bool EntitySystem::EntityHandle::HasProperty( const StringKey key, const PropertyAccessFlags mask /*= PA_FULL_ACCESS*/ ) const
+{
+	return gEntityMgr.HasEntityProperty(*this, key, mask);
+}
+
 PropertyHolder EntitySystem::EntityHandle::GetProperty( const StringKey key, const PropertyAccessFlags mask ) const
 {
 	return gEntityMgr.GetEntityProperty(*this, key, mask);

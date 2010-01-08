@@ -203,15 +203,9 @@ set(EntitySystem_SRCS
     src/EntitySystem/EntityMgr/EntityHandle.cpp
     src/EntitySystem/EntityMgr/EntityMessage.cpp
     src/EntitySystem/Components/Camera.cpp
-    src/EntitySystem/Components/CmpMaterial.cpp
-    src/EntitySystem/Components/CmpPlatformLogic.cpp
-    src/EntitySystem/Components/CmpPlatformVisual.cpp
-    src/EntitySystem/Components/CmpPlatformPhysics.cpp
-    src/EntitySystem/Components/CmpPlatformParams.cpp
     src/EntitySystem/Components/Script.cpp
     src/EntitySystem/Components/Sprite.cpp
     src/EntitySystem/Components/Transform.cpp
-    src/EntitySystem/Components/OnInitScript.cpp
     src/EntitySystem/ComponentMgr/Component.cpp
     src/EntitySystem/ComponentMgr/ComponentEnums.cpp
     src/EntitySystem/ComponentMgr/ComponentMgr.cpp

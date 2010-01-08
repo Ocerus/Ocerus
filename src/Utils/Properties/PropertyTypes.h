@@ -25,5 +25,7 @@ PROPERTY_TYPE(PT_ENTITYHANDLE, EntitySystem::EntityHandle, EntitySystem::EntityH
 PROPERTY_TYPE(PT_COLOR, GfxSystem::Color, GfxSystem::Color::NullColor, "Color", Object)
 #ifndef SCRIPT_ONLY
 PROPERTY_TYPE(PT_FUNCTION_PARAMETER, PropertyFunctionParameters, PropertyFunctionParameters::Null, "PropertyFunctionParameters", Object)
+PROPERTY_TYPE(PT_PHYSICAL_BODY, PhysicalBody*, 0, "PhysicalBody", Object)
+PROPERTY_TYPE(PT_PHYSICAL_SHAPE, PhysicalShape*, 0, "PhysicalShape", Object)
 #endif
 

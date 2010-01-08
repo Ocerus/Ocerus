@@ -8,5 +8,8 @@
 #include "Script.h"
 #include "Sprite.h"
 #include "Camera.h"
+#include "StaticBody.h"
+#include "DynamicBody.h"
+#include "PolygonCollider.h"
 
 #endif // _ComponentHeaders_h__

@@ -60,6 +60,9 @@ namespace EntitySystem
 		/// Retrieves a function of this entity. A filter related to the function's flags can be specified.
 		PropertyHolder GetFunction(const StringKey key, const PropertyAccessFlags mask = PA_FULL_ACCESS) const;
 
+		/// Returns true if the entity has the given property.
+		bool HasProperty(const StringKey key, const PropertyAccessFlags mask = PA_FULL_ACCESS) const;
+
 		/// Retrieves a property of this entity. A filter related to properties' flags can be specified.
 		PropertyHolder GetProperty(const StringKey key, const PropertyAccessFlags mask = PA_FULL_ACCESS) const;
 

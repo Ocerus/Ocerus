@@ -173,10 +173,10 @@ namespace GUISystem
 		mCegui->injectMouseButtonUp(ConvertMouseButtonEnum(btn));
 	}
 
-	void GUIMgr::ResolutionChanged(int width, int height)
+	void GUIMgr::ResolutionChanged(int32 width, int32 height)
 	{
 		OC_DASSERT(mCegui);
-		mCegui->notifyDisplaySizeChanged(CEGUI::Size((float)width, (float)height));
+		mCegui->notifyDisplaySizeChanged(CEGUI::Size((float32)width, (float32)height));
 	}
 
 	void GUIMgr::AddConsoleListener(IConsoleListener* listener)

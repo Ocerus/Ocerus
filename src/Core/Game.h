@@ -9,9 +9,6 @@
 #include "InputSystem/IInputListener.h"
 #include "Dynamics/b2WorldCallbacks.h"
 
-class b2World;
-class b2Shape;
-
 namespace Core
 {
 	/// Inner states of the game state.
@@ -114,7 +111,7 @@ namespace Core
 
 
 		/// Physics.
-		b2World* mPhysics;
+		Physics* mPhysics;
 		float32 mPhysicsResidualDelta; ///< Part of the timestep delta we didn't use for the physics update last Update.
 		/// A structure for queuing events from the physics engine.
 		struct PhysicsEvent: ClassAllocation<PhysicsEvent, ALLOCATION_POOLED>

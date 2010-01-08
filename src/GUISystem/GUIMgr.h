@@ -70,7 +70,7 @@ namespace GUISystem
 		//@}
 
 		/// This method injects resolution change into GUI system. It is part of IGfxWindowListener interface.
-		virtual void ResolutionChanged(int width, int height);
+		virtual void ResolutionChanged(int32 width, int32 height);
 
 		/// @name Console related methods
 		//@{
