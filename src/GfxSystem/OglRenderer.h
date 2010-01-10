@@ -67,11 +67,9 @@ namespace GfxSystem
 		virtual void DrawCircle(	const Vector2& position, const float32 radius,
 									const Color& color, const bool fill) const;
 
-		/// Draws simple quad
-		virtual void DrawTestQuad() const;
-
-		/// Draws simple textured quad
-		virtual void DrawTestTexturedQuad(const uint32 text_handle) const;
+		/// Draws rectangle. Position is center of rectangle. Rotation in degrees.
+		virtual void DrawRect(		const Vector2& position, const Vector2& size, const float32 rotation,
+									const Color& color, const bool fill) const;
 
 		/// Set current viewport
 		virtual void SetViewport(const GfxViewport& viewport) const;

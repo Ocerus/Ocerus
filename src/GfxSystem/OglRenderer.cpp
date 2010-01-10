@@ -33,7 +33,7 @@ void OglRenderer::Init() const
 	glAlphaFunc(GL_GREATER, 0.1f);
 	glEnable(GL_ALPHA_TEST);
 	glEnable(GL_TEXTURE_2D);
-	//glEnable(GL_CULL_FACE);
+	glEnable(GL_CULL_FACE);
 
 	if( glGetError() != GL_NO_ERROR )
     {
@@ -79,7 +79,7 @@ uint32 OglRenderer::LoadTexture(
 	//uint32 result = SOIL_load_OGL_texture_from_memory(buffer, buffer_length, 1, reuse_texture_ID, 0);
 
 	unsigned char* img;
-	int channels;
+	int channels = 0;
 	img = SOIL_load_image_from_memory(
 					buffer, buffer_length,
 					width, height, &channels,
@@ -136,9 +136,9 @@ void OglRenderer::DrawTexturedQuad(	const Vector2& position,
 
         //Draw square
 	    glTexCoord2f(0.0f, 0.0f); glVertex3f( -x,  y, z );
-		glTexCoord2f(1.0f, 0.0f); glVertex3f(  x,  y, z );
-		glTexCoord2f(1.0f, 1.0f); glVertex3f(  x, -y, z );
 		glTexCoord2f(0.0f, 1.0f); glVertex3f( -x, -y, z );
+		glTexCoord2f(1.0f, 1.0f); glVertex3f(  x, -y, z );
+		glTexCoord2f(1.0f, 0.0f); glVertex3f(  x,  y, z );
 
     //End quad
     glEnd();
@@ -167,6 +167,7 @@ void OglRenderer::DrawPolygon(const Vector2* verts, const int32 n, const Color& 
 	OC_ASSERT(verts);
 
 	glDisable(GL_TEXTURE_2D);
+	glDisable(GL_CULL_FACE);
 	glColor4ub( color.r, color.g, color.b, color.a );
 	
 	fill?
@@ -179,6 +180,7 @@ void OglRenderer::DrawPolygon(const Vector2* verts, const int32 n, const Color& 
 		}
     glEnd();
 
+	glEnable(GL_CULL_FACE);
 	glEnable(GL_TEXTURE_2D);
 }
 
@@ -193,7 +195,7 @@ void OglRenderer::DrawCircle(const Vector2& position, const float32 radius, cons
 		glBegin( GL_POLYGON ):
 		glBegin( GL_LINE_LOOP );
 
-	    for(float32 angle = 0.0f; angle <= (6.2832f); angle += 0.2f)
+	    for(float32 angle = 6.2832f; angle >= 0; angle -= 0.2f)
 	    {
 	      glVertex2f(position.x + sin(angle) * radius, position.y + cos(angle) * radius);
 
@@ -205,51 +207,26 @@ void OglRenderer::DrawCircle(const Vector2& position, const float32 radius, cons
 	glEnable(GL_TEXTURE_2D);
 }
 
-void OglRenderer::DrawTestQuad() const
+void OglRenderer::DrawRect(	const Vector2& position, const Vector2& size, const float32 rotation,
+							const Color& color, const bool fill) const
 {
-	glTranslatef( 412, 283, 0 );
+	Vector2 verts[4];
 
-	glBegin( GL_QUADS );
+	float32 x = size.x/2;
+	float32 y = size.y/2;
 
-        //Set color to red
-        glColor4f( 1.0, 0.0, 0.0, 1.0 );
+	verts[0] = position + Vector2(-x,  y);
+	verts[1] = position + Vector2(-x, -y);
+	verts[2] = position + Vector2( x, -y);
+	verts[3] = position + Vector2( x,  y);
 
-        //Draw square
-	    glVertex3f( 0,		0,		0 );
-	    glVertex3f( 200,	0,		0 );
-	    glVertex3f( 200,	200,	0 );
-	    glVertex3f( 0,		200,	0 );
+	glPushMatrix();
 
-    //End quad
-    glEnd();
-}
+	glRotatef(rotation, 0, 0, 1);
 
-void OglRenderer::DrawTestTexturedQuad(const uint32 text_handle) const
-{
-	glTranslatef( 256, 256, 0 );
+	DrawPolygon(verts, 4, color, fill);
 
-	glEnable(GL_TEXTURE_2D);
-
-	glBindTexture(GL_TEXTURE_2D, text_handle);
-
-	glColor3f (1.0,1.0,1.0);
-
-	glBegin( GL_QUADS );
-        //Draw square
-		glTexCoord2f(0.0f, 0.0f);
-	    glVertex2f( 0,		0	);
-		glTexCoord2f(1.0f, 0.0f);
-	    glVertex2f( 512,	0	);
-		glTexCoord2f(1.0f, 1.0f);
-	    glVertex2f( 512,	256 );
-		glTexCoord2f(0.0f, 1.0f);
-	    glVertex2f( 0,		256 );
-
-    //End quad
-    glEnd();
-	glDisable(GL_TEXTURE_2D);
-
-
+	glPopMatrix();
 }
 
 void OglRenderer::SetViewport(const GfxViewport& viewport) const
@@ -282,8 +259,7 @@ void OglRenderer::SetViewport(const GfxViewport& viewport) const
 
 	glMatrixMode( GL_MODELVIEW );
 }
-
-		
+	
 void OglRenderer::SetCamera(const Vector2& position, const float32 zoom, const float32 rotation) const
 {
 	glLoadIdentity();

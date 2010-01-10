@@ -80,21 +80,19 @@ namespace GfxSystem
 		/// Draws circle
 		virtual void DrawCircle(	const Vector2& position, const float32 radius,
 									const Color& color, const bool fill) const = 0;
+		
+		/// Draws rectangle. Position is center of rectangle. Rotation in degrees.
+		virtual void DrawRect(		const Vector2& position, const Vector2& size, const float32 rotation,
+									const Color& color, const bool fill) const = 0;
 
 
 		/// Resets sprites queue
 		inline void ResetSprites() { mSprites.clear(); }
 
-		/// Draws simple quad
-		virtual void DrawTestQuad() const = 0;
-
-		/// Draws simple textured quad
-		virtual void DrawTestTexturedQuad(const uint32 text_handle) const = 0;
-
-
+		/// Set current viewport
 		virtual void SetViewport(const GfxViewport& viewport) const = 0;
 
-		
+		/// Set current camera
 		virtual void SetCamera(const Vector2& position, const float32 zoom, const float32 rotation) const = 0;
 
 	private:

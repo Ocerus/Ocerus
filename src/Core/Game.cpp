@@ -221,16 +221,8 @@ void Core::Game::Draw( const float32 passedDelta)
 		gGfxRenderer.SetViewport(vp);
 
 		gGfxRenderer.DrawSprites();
-		
-		Vector2 p2[5] = {	Vector2(-100, 100),
-							Vector2(200, -300),
-							Vector2(400, -200),
-							Vector2(300, 100),
-							Vector2(100, 150)
-						};
 
-		gGfxRenderer.DrawPolygon(p2, 5, GfxSystem::Color(255, 0, 0), false);
-
+		gGfxRenderer.DrawRect(Vector2(100,-100), Vector2(200,300), 45, GfxSystem::Color(255,0,0), false);
 
 		// Testing physics draw
 		mPhysics->DrawDebugData();
@@ -251,11 +243,9 @@ void Core::Game::Draw( const float32 passedDelta)
 		gGfxRenderer.SetViewport(vp);
 
 		gGfxRenderer.DrawSprites();
-
-
-		Vector2 p[2] = { Vector2(-200, 200), Vector2(500, -300) };
-
-		gGfxRenderer.DrawLine(p, GfxSystem::Color(0, 255, 0));
+		
+		// Testing physics draw
+		mPhysics->DrawDebugData();
 
 		gGfxRenderer.FinalizeViewport();
 	}
@@ -273,13 +263,15 @@ void Core::Game::Draw( const float32 passedDelta)
 		gGfxRenderer.SetViewport(vp);
 
 		gGfxRenderer.DrawSprites();
-
 		
-		Vector2 p3(-300, 100);
-		gGfxRenderer.DrawCircle(p3, 100,GfxSystem::Color(0, 0, 255), true);
+		// Testing physics draw
+		mPhysics->DrawDebugData();
 
 		gGfxRenderer.FinalizeViewport();
 	}
+
+	//GfxSystem::GfxViewport vp(Vector2(0, 0), Vector2(1, 1), true);
+	//gGfxRenderer.SetViewport(vp);
 	
 	//TODO: odstranit - pouze pro testovaci ucely
 	//GfxSystem::TexturePtr t = gResourceMgr.GetResource("textures", "Logo.png");
