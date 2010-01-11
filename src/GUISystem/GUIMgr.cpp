@@ -15,6 +15,7 @@ namespace GUISystem
 	//@{
 	CEGUI::uint KeyMapperOIStoCEGUI(InputSystem::eKeyCode key);
 	CEGUI::MouseButton ConvertMouseButtonEnum(const InputSystem::eMouseButton btn);
+	bool PropertyCallback(CEGUI::Window* window, CEGUI::String& propname, CEGUI::String& propvalue, void* userdata);
 	//@}
 
 	GUIMgr::GUIMgr():
@@ -91,20 +92,27 @@ namespace GUISystem
 			gResourceMgr.AddResourceDirToGroup("gui/layouts", "layouts", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
 			gResourceMgr.AddResourceDirToGroup("gui/looknfeel", "looknfeels", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
 
-			CEGUI::SchemeManager::getSingleton().create("Lightweight.scheme");
+			CEGUI::SchemeManager::getSingleton().create("TaharezLook.scheme");
 
 			if (!CEGUI::FontManager::getSingleton().isDefined("Commonwealth-10"))
 				CEGUI::FontManager::getSingleton().create("Commonwealth-10.font");
 
 			CEGUI::SchemeManager::getSingleton().create("Console.scheme");
-			mCurrentWindowRoot = CEGUI::WindowManager::getSingleton().loadWindowLayout("Console.layout");
+			mCurrentWindowRoot = CEGUI::WindowManager::getSingleton().createWindow("DefaultWindow", "root");
 			CEGUI::System::getSingleton().setGUISheet(mCurrentWindowRoot);
 
 
 			mCegui->setDefaultFont("Commonwealth-10");
-			mCegui->setDefaultMouseCursor("Lightweight", "MouseArrow");
+			mCegui->setDefaultMouseCursor("TaharezLook", "MouseArrow");
 
 			InitConsole();
+
+			/// -------------------------
+			/// Showing HelloWorld window
+			CEGUI::Window* helloWorldWindow = LoadWindowLayout("HelloWorld.layout");
+			mCurrentWindowRoot->addChildWindow(helloWorldWindow);
+			/// -------------------------
+
 		}
 		catch (std::exception&)
 		{
@@ -231,7 +239,8 @@ namespace GUISystem
 		OC_DASSERT(mConsoleMessages == 0);
 		try
 		{
-			mConsoleRoot = CEGUI::WindowManager::getSingleton().getWindow("ConsoleRoot");
+			mConsoleRoot = LoadWindowLayout("Console.layout");
+			mCurrentWindowRoot->addChildWindow(mConsoleRoot);
 			mConsolePrompt = CEGUI::WindowManager::getSingleton().getWindow("ConsoleRoot/ConsolePrompt");
 			mConsoleMessages = (CEGUI::Listbox*)CEGUI::WindowManager::getSingleton().getWindow("ConsoleRoot/Pane");
 			mConsolePrompt->subscribeEvent(CEGUI::Editbox::EventTextAccepted,
@@ -272,6 +281,11 @@ namespace GUISystem
 
 		mConsoleRoot->setVisible(!mConsoleRoot->isVisible());
 		mConsolePrompt->activate();
+	}
+
+	CEGUI::Window* GUIMgr::LoadWindowLayout(const CEGUI::String& filename)
+	{
+		return CEGUI::WindowManager::getSingleton().loadWindowLayout(filename, "", "", PropertyCallback);
 	}
 
 #if 0
@@ -366,5 +380,22 @@ namespace GUISystem
 			break;
 		}
 		return CEGUI::LeftButton;
+	}
+
+	/**
+	 * The PropertyCallback function is a callback used to translate textual data
+	 * from window layout. This callback should be used when loading window layouts
+	 * in CEGUI::WindowManager::loadWindowLayout.
+	 */
+	bool PropertyCallback(CEGUI::Window* window, CEGUI::String& propname, CEGUI::String& propvalue, void* userdata)
+	{
+		if (propname == "Text")
+		{
+			/// @todo Use StringMgr to translate textual data in GUI.
+			CEGUI::String translatedText = "TRANSLATE(" + propvalue + ")";
+			window->setProperty(propname, translatedText);
+			return false;
+		}
+		return true;
 	}
 }

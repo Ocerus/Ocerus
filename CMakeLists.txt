@@ -203,8 +203,11 @@ set(EntitySystem_SRCS
     src/EntitySystem/EntityMgr/EntityHandle.cpp
     src/EntitySystem/EntityMgr/EntityMessage.cpp
     src/EntitySystem/Components/Camera.cpp
+    src/EntitySystem/Components/DynamicBody.cpp
+    src/EntitySystem/Components/PolygonCollider.cpp
     src/EntitySystem/Components/Script.cpp
     src/EntitySystem/Components/Sprite.cpp
+    src/EntitySystem/Components/StaticBody.cpp
     src/EntitySystem/Components/Transform.cpp
     src/EntitySystem/ComponentMgr/Component.cpp
     src/EntitySystem/ComponentMgr/ComponentEnums.cpp

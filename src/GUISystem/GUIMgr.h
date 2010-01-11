@@ -15,6 +15,7 @@ namespace CEGUI
 	class System;
 	class Window;
 	class EventArgs;
+	class String;
 }
 
 namespace GUISystem
@@ -102,7 +103,7 @@ namespace GUISystem
 		//@}
 #endif
 
-	protected:
+	private:
 
 		/// @name CEGUI event callbacks
 		//@{
@@ -117,6 +118,10 @@ namespace GUISystem
 
 		/// Toggle console visibility. This is usually called after ` is pressed.
 		void ToggleConsole();
+
+		/// Loads the GUI layout from file and returns pointer to Window.
+		/// @see CEGUI::WindowManager::loadWindowLayout
+		CEGUI::Window* LoadWindowLayout(const CEGUI::String& filename);
 
 		CEGUI::System* mCegui;
 		CEGUI::Window* mCurrentWindowRoot;
