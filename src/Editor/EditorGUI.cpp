@@ -51,7 +51,7 @@ void EditorGUI::SetCurrentEntity(const EntitySystem::EntityHandle* newActiveEnti
 				continue;
 			mComponents.push_back(componentWindow);
 			componentsWindow->addChildWindow(componentWindow);
-			componentWindow->setArea(CEGUI::UDim(0, 0), CEGUI::UDim(0, yPos), CEGUI::UDim(1, 0), CEGUI::UDim(0, yPos + 30));
+			componentWindow->setArea(CEGUI::UDim(0, 0), CEGUI::UDim(0, (float32)yPos), CEGUI::UDim(1, 0), CEGUI::UDim(0, (float32)yPos + 30));
 			componentWindow->getChildRecursive(namePrefix + "Root/ComponentLabel")->setText(EntitySystem::GetComponentTypeName(*it));
 			yPos += 35;
 		}

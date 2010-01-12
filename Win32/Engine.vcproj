@@ -1188,6 +1188,34 @@
 				</File>
 			</Filter>
 		</Filter>
+		<Filter
+			Name="Editor"
+			>
+			<Filter
+				Name="inc"
+				>
+				<File
+					RelativePath="..\src\Editor\EditorGUI.h"
+					>
+				</File>
+				<File
+					RelativePath="..\src\Editor\EditorMgr.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="src"
+				>
+				<File
+					RelativePath="..\src\Editor\EditorGUI.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src\Editor\EditorMgr.cpp"
+					>
+				</File>
+			</Filter>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>
