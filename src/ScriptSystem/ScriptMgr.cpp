@@ -485,7 +485,7 @@ void ScriptCreateCoRoutine(string &func)
 		}
 
 		// Create a new context for the co-routine
-		//asIScriptContext *coctx = 
+		//asIScriptContext *coctx =
 		gScriptMgr.AddContextAsCoRoutineToManager(ctx, funcId);
 
 		// Pass the argument to the context
@@ -513,7 +513,7 @@ void ScriptMgr::ConfigureEngine(void)
 	// Register typedefs for real numbers
 	r = mEngine->RegisterTypedef("float32", "float"); OC_SCRIPT_ASSERT();
 	r = mEngine->RegisterTypedef("float64", "double"); OC_SCRIPT_ASSERT();
-	
+
 	// Register the script string type
 	RegisterStdString(mEngine);
 
@@ -808,12 +808,12 @@ void ScriptMgr::ClearModules()
 #define ARGVALUE_Float(ptr) (float)(*ptr)
 #define ARGVALUE_Double(ptr) (double)(*ptr)
 
-bool ScriptMgr::SetFunctionArgument(AngelScript::asIScriptContext* ctx, const uint32 parameterIndex, 
+bool ScriptMgr::SetFunctionArgument(AngelScript::asIScriptContext* ctx, const uint32 parameterIndex,
 									const Reflection::PropertyFunctionParameter& parameter)
 {
 	OC_ASSERT_MSG(ctx, "Cannot set function arguments to null context!");
 	OC_ASSERT_MSG(ctx->GetState() == asEXECUTION_PREPARED, "Cannot set function arguments to unprepared context!");
-	
+
 	int errorCode = 0;
 
 	switch (parameter.GetType())
@@ -824,7 +824,7 @@ bool ScriptMgr::SetFunctionArgument(AngelScript::asIScriptContext* ctx, const ui
 			break;
 	#include "Utils/Properties/PropertyTypes.h"
 	#undef PROPERTY_TYPE
-	
+
 	default:
 		OC_ASSERT_MSG(false, "Unknown or unsupported property type");
 	}

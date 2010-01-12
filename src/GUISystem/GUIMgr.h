@@ -54,11 +54,22 @@ namespace GUISystem
 		/// Loads basic stuff common for all schemes.
 		void LoadStyle(void);
 
+		/// Loads GUI layout from filename and sets it as root layout of the window.
+		/// Automatically unloads previously loaded root layout.
+		void LoadRootLayout(const string& filename);
+
+		/// Unloads loaded root layout or does nothing, if no root layout is loaded.
+		void UnloadRootLayout();
+
 		/// Renders the GUI.
 		void RenderGUI() const;
 
 		/// Injects given amount of time into GUI system.
 		virtual void Update(float32 delta);
+
+		/// Loads the GUI layout from file and returns pointer to Window.
+		/// @see CEGUI::WindowManager::loadWindowLayout
+		CEGUI::Window* LoadWindowLayout(const string& filename, const string& name_prefix = "", const string& resourceGroup = "");
 
 		/// @name IInputListener interface methods
 		/// Those methods inject input into GUI system.
@@ -119,12 +130,9 @@ namespace GUISystem
 		/// Toggle console visibility. This is usually called after ` is pressed.
 		void ToggleConsole();
 
-		/// Loads the GUI layout from file and returns pointer to Window.
-		/// @see CEGUI::WindowManager::loadWindowLayout
-		CEGUI::Window* LoadWindowLayout(const CEGUI::String& filename);
-
 		CEGUI::System* mCegui;
-		CEGUI::Window* mCurrentWindowRoot;
+		CEGUI::Window* mWindowRoot;
+		CEGUI::Window* mCurrentRootLayout;
 
 		CEGUI::Window* mConsoleRoot;
 		CEGUI::Window* mConsolePrompt;

@@ -1,4 +1,0 @@
-<?xml version="1.0" ?>
-<GUIScheme Name="BGGUI">
-	<Imageset Name="BGImage" Filename="bg.imageset" />
-</GUIScheme>

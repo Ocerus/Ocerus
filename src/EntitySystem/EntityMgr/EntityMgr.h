@@ -14,7 +14,7 @@
 /// Macro for easier use.
 #define gEntityMgr EntitySystem::EntityMgr::GetSingleton()
 
-/// Entity system manages game entities and their parts. 
+/// Entity system manages game entities and their parts.
 /// It takes care of their logical representation and leaves optimization of other tasks to other parts of the system.
 /// For example, the rendering system can use an optimization data structure for faster visibility culling of entities.
 /// The main class is EntityMgr which provides the basic interface of the communication with entities as well as reading
@@ -72,6 +72,9 @@ namespace EntitySystem
 
 		/// @name Entity attributes
 		//@{
+
+		/// Returns name of the entity.
+		string GetEntityName(const EntityHandle& h) const;
 
 		/// Returns true if the entity was fully initialized.
 		bool IsEntityInited(const EntityHandle h) const;
@@ -177,7 +180,7 @@ namespace EntitySystem
 
 
 	private:
-	
+
 		typedef hash_map<EntityID, EntityInfo*> EntityMap;
 		typedef hash_map<EntityID, PrototypeInfo*> PrototypeMap;
 		typedef vector<EntityID> EntityQueue;
@@ -193,7 +196,7 @@ namespace EntitySystem
 		/// Destructs an entity completely and removes it from the system.
 		/// @param erase If set to true, the entity will be removed from the entity map as well.
 		void DestroyEntityImmediately(const EntityID entityToDestroy, const bool erase);
-		
+
 		/// Propagates the current state of properties of the prototype to the specified instances.
 		void UpdatePrototypeInstance(const EntityID prototype, const EntityID instance, const bool forceOverwrite);
 

@@ -20,7 +20,8 @@ namespace GUISystem
 
 	GUIMgr::GUIMgr():
 		mCegui(0),
-		mCurrentWindowRoot(0),
+		mWindowRoot(0),
+		mCurrentRootLayout(0),
 		mConsoleRoot(0),
 		mConsolePrompt(0),
 		mConsoleMessages(0),
@@ -98,8 +99,8 @@ namespace GUISystem
 				CEGUI::FontManager::getSingleton().create("Commonwealth-10.font");
 
 			CEGUI::SchemeManager::getSingleton().create("Console.scheme");
-			mCurrentWindowRoot = CEGUI::WindowManager::getSingleton().createWindow("DefaultWindow", "root");
-			CEGUI::System::getSingleton().setGUISheet(mCurrentWindowRoot);
+			mWindowRoot = CEGUI::WindowManager::getSingleton().createWindow("DefaultWindow", "root");
+			CEGUI::System::getSingleton().setGUISheet(mWindowRoot);
 
 
 			mCegui->setDefaultFont("Commonwealth-10");
@@ -110,18 +111,34 @@ namespace GUISystem
 			/// -------------------------
 			/// Showing HelloWorld window
 			CEGUI::Window* helloWorldWindow = LoadWindowLayout("HelloWorld.layout");
-			mCurrentWindowRoot->addChildWindow(helloWorldWindow);
+			mWindowRoot->addChildWindow(helloWorldWindow);
 			/// -------------------------
 
 		}
-		catch (std::exception&)
+		catch (CEGUI::Exception& exception)
 		{
-			ocError << "EXC";
-			//ocWarning << exception.getName();
+			ocWarning << "CEGUI exception caught (" << exception.getName() << "): " << exception.getMessage();
 		}
 	}
 
+	void GUIMgr::LoadRootLayout(const string& filename)
+	{
+		OC_DASSERT(mCegui);
+		UnloadRootLayout();
+		mCurrentRootLayout = LoadWindowLayout(filename);
+		mWindowRoot->addChildWindow(mCurrentRootLayout);
+	}
 
+	void GUIMgr::UnloadRootLayout()
+	{
+		OC_DASSERT(mCegui);
+		if (mCurrentRootLayout != 0)
+		{
+			mWindowRoot->removeChildWindow(mCurrentRootLayout);
+			CEGUI::WindowManager::getSingleton().destroyWindow(mCurrentRootLayout);
+			mCurrentRootLayout = 0;
+		}
+	}
 
 	void GUIMgr::RenderGUI() const
 	{
@@ -240,7 +257,7 @@ namespace GUISystem
 		try
 		{
 			mConsoleRoot = LoadWindowLayout("Console.layout");
-			mCurrentWindowRoot->addChildWindow(mConsoleRoot);
+			mWindowRoot->addChildWindow(mConsoleRoot);
 			mConsolePrompt = CEGUI::WindowManager::getSingleton().getWindow("ConsoleRoot/ConsolePrompt");
 			mConsoleMessages = (CEGUI::Listbox*)CEGUI::WindowManager::getSingleton().getWindow("ConsoleRoot/Pane");
 			mConsolePrompt->subscribeEvent(CEGUI::Editbox::EventTextAccepted,
@@ -283,9 +300,9 @@ namespace GUISystem
 		mConsolePrompt->activate();
 	}
 
-	CEGUI::Window* GUIMgr::LoadWindowLayout(const CEGUI::String& filename)
+	CEGUI::Window* GUIMgr::LoadWindowLayout(const string& filename, const string& name_prefix, const string& resourceGroup)
 	{
-		return CEGUI::WindowManager::getSingleton().loadWindowLayout(filename, "", "", PropertyCallback);
+		return CEGUI::WindowManager::getSingleton().loadWindowLayout(filename, name_prefix, resourceGroup, PropertyCallback);
 	}
 
 #if 0
@@ -392,7 +409,7 @@ namespace GUISystem
 		if (propname == "Text")
 		{
 			/// @todo Use StringMgr to translate textual data in GUI.
-			CEGUI::String translatedText = "TRANSLATE(" + propvalue + ")";
+			CEGUI::String translatedText = "_" + propvalue;
 			window->setProperty(propname, translatedText);
 			return false;
 		}

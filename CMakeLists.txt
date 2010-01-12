@@ -196,6 +196,11 @@ set(Core_SRCS
 	src/Core/PhysicsDraw.cpp
 )
 
+set(Editor_SRCS
+    src/Editor/EditorGUI.cpp
+    src/Editor/EditorMgr.cpp
+)
+
 set(EntitySystem_SRCS
     src/EntitySystem/EntityMgr/EntityPicker.cpp
     src/EntitySystem/EntityMgr/EntityDescription.cpp
@@ -301,6 +306,7 @@ endforeach(SYMBOL)
 
 add_library(ocerus-engine STATIC
     ${Core_SRCS}
+    ${Editor_SRCS}
     ${EntitySystem_SRCS}
     ${GfxSystem_SRCS}
     ${SceneSystem_SRCS}

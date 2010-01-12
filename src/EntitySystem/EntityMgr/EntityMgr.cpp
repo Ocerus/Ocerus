@@ -263,7 +263,7 @@ void EntityMgr::DestroyEntityImmediately( const EntityID entityToDestroy, const 
 	EntityMap::iterator entityIt = mEntities.find(entityToDestroy);
 	if (entityIt != mEntities.end())
 	{
-		// remove entities with sprites from GfxSceneMgr			
+		// remove entities with sprites from GfxSceneMgr
 		if (HasEntityComponentOfType(entityToDestroy, CT_Sprite))
 		{
 			gGfxSceneMgr.RemoveSpriteEntity(entityToDestroy);
@@ -289,6 +289,18 @@ void EntityMgr::DestroyEntityImmediately( const EntityID entityToDestroy, const 
 		if (erase) mEntities.erase(entityIt);
 	}
 }
+
+string EntitySystem::EntityMgr::GetEntityName(const EntitySystem::EntityHandle& h) const
+{
+	EntityMap::const_iterator ei = mEntities.find(h.GetID());
+	if (ei == mEntities.end())
+	{
+		ocError << "Can't find entity " << h;
+		return false;
+	}
+	return ei->second->mName;
+}
+
 
 bool EntitySystem::EntityMgr::IsEntityInited( const EntityHandle h ) const
 {

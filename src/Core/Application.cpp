@@ -8,6 +8,7 @@
 #include "../GfxSystem/GfxWindow.h"
 #include "../ScriptSystem/ScriptResource.h"
 #include "../GfxSystem/GfxSceneMgr.h"
+#include "../Editor/EditorMgr.h"
 
 
 using namespace Core;
@@ -69,6 +70,8 @@ void Application::Init()
 
 	GUISystem::GUIMgr::CreateSingleton();
 
+	Editor::EditorMgr::CreateSingleton();
+
 	// create core states
 	mLoadingScreen = new LoadingScreen();
 	mGame = new Game();
@@ -86,6 +89,8 @@ Application::~Application()
 	HideConsole();
 
 	delete mLoadingScreen;
+
+	Editor::EditorMgr::DestroySingleton();
 
 	GUISystem::GUIMgr::DestroySingleton();
 
@@ -137,6 +142,9 @@ void Application::RunMainLoop()
 			mLoadingScreen->DoLoading(LoadingScreen::TYPE_BASIC_RESOURCES);
 			mLoadingScreen->DoLoading(LoadingScreen::TYPE_GENERAL_RESOURCES);
 			mGame->Init();
+
+			// Loads editor.
+			Editor::EditorMgr::GetSingleton().LoadEditor();
 			RequestStateChange(AS_GAME, true);
 			break;
 		case AS_GAME:
