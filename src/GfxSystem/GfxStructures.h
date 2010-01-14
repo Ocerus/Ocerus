@@ -76,18 +76,18 @@ namespace GfxSystem
 		float32 z;
 		uint32 texture;
 		float32 transparency;
-		
+
 		Sprite(	const Vector2& _position, const Vector2& _size, const float32 _z, const uint32 _texture,
-				const float32 _transparency ): 
+				const float32 _transparency ):
 			position(_position), size(_size), z(_z), texture(_texture),
 			transparency(_transparency) {}
 	};
-	
+
 	struct GfxViewport
 	{
 		GfxViewport(	const Vector2& _pos, const Vector2& _size, const bool _relative ):
 						position(_pos), size(_size), relative(_relative) {}
-		
+
 		// relatative (0,1) to window size
 		Vector2 position;
 		Vector2 size;

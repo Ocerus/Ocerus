@@ -28,7 +28,8 @@ namespace EntitySystem
 		EntityHandle(void);
 
 		/// Only the copy constructor is enabled. New entities should be added only by the EntityMgr.
-		EntityHandle(const EntityHandle& handle);
+		/// The copy-constructor is inline, because we often pass EntityHandle by value into functions.
+		inline EntityHandle(const EntityHandle& handle);
 
 		/// Destructor.
 		~EntityHandle(void);
@@ -104,6 +105,7 @@ namespace EntitySystem
 		EntityHandle(EntityID ID): mEntityID(ID) {}
 	};
 
+	inline EntityHandle::EntityHandle(const EntityHandle& handle): mEntityID(handle.mEntityID) {}
 
 	inline EntityID EntityHandle::GetID(void) const
 	{

@@ -30,8 +30,14 @@ namespace Utils
 		inline string ToString(const string val) { return val; }
 
 		template<>
+		string ToString(Vector2 val);
+
+		template<>
+		string ToString(GfxSystem::Color val);
+
+		template<>
 		string ToString(bool& val);
-		
+
 		template<>
 		string ToString(bool val);
 

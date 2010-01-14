@@ -93,7 +93,9 @@ namespace GUISystem
 			gResourceMgr.AddResourceDirToGroup("gui/layouts", "layouts", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
 			gResourceMgr.AddResourceDirToGroup("gui/looknfeel", "looknfeels", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
 
+			///@todo Improve GUI scheme loading. For example Editor.scheme does not need to be loaded unless in editor mode.
 			CEGUI::SchemeManager::getSingleton().create("TaharezLook.scheme");
+			CEGUI::SchemeManager::getSingleton().create("Editor.scheme");
 
 			if (!CEGUI::FontManager::getSingleton().isDefined("Commonwealth-10"))
 				CEGUI::FontManager::getSingleton().create("Commonwealth-10.font");

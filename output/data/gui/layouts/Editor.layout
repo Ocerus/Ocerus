@@ -4,40 +4,40 @@
     <Window Type="DefaultWindow" Name="EditorRoot" >
         <Property Name="UnifiedAreaRect" Value="{{-0.000781279,0},{0.00225489,0},{0.999215,0},{1.00225,0}}" />
         <Property Name="HorizontalAlignment" Value="Centre" />
-        <Window Type="TaharezLook/FrameWindow" Name="EditorRoot/EntityInfoWindow" >
+        <Window Type="Editor/FrameWindow" Name="EditorRoot/EntityInfoWindow" >
             <Property Name="Text" Value="Entity Info" />
             <Property Name="TitlebarFont" Value="DejaVuSans-10" />
             <Property Name="TitlebarEnabled" Value="True" />
             <Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{0.25,0},{0,110}}" />
             <Property Name="DragMovingEnabled" Value="False" />
             <Property Name="CloseButtonEnabled" Value="False" />
-            <Window Type="TaharezLook/StaticText" Name="EditorRoot/EntityInfoWindow/IDLabel" >
+            <Window Type="Editor/StaticText" Name="EditorRoot/EntityInfoWindow/IDLabel" >
                 <Property Name="Text" Value="ID:" />
                 <Property Name="HorzExtent" Value="29" />
                 <Property Name="VertExtent" Value="22.9357" />
                 <Property Name="UnifiedAreaRect" Value="{{0,1},{0,1},{0.303086,0},{0,35}}" />
             </Window>
-            <Window Type="TaharezLook/StaticText" Name="EditorRoot/EntityInfoWindow/IDValue" >
+            <Window Type="Editor/StaticText" Name="EditorRoot/EntityInfoWindow/IDValue" >
                 <Property Name="UnifiedAreaRect" Value="{{0.3,5},{0,1},{1,-1},{0,35}}" />
             </Window>
-            <Window Type="TaharezLook/StaticText" Name="EditorRoot/EntityInfoWindow/NameLabel" >
+            <Window Type="Editor/StaticText" Name="EditorRoot/EntityInfoWindow/NameLabel" >
                 <Property Name="Text" Value="Name:" />
                 <Property Name="HorzExtent" Value="71" />
                 <Property Name="VertExtent" Value="22.9357" />
                 <Property Name="UnifiedAreaRect" Value="{{0,1},{0,40},{0.3,0},{0,75}}" />
             </Window>
-            <Window Type="TaharezLook/StaticText" Name="EditorRoot/EntityInfoWindow/NameValue" >
+            <Window Type="Editor/StaticText" Name="EditorRoot/EntityInfoWindow/NameValue" >
                 <Property Name="UnifiedAreaRect" Value="{{0.3,5},{0,40},{1,-1},{0,75}}" />
             </Window>
         </Window>
-        <Window Type="TaharezLook/FrameWindow" Name="EditorRoot/ComponentsWindow" >
+        <Window Type="Editor/FrameWindow" Name="EditorRoot/ComponentsWindow" >
             <Property Name="Text" Value="Components" />
             <Property Name="TitlebarFont" Value="DejaVuSans-10" />
             <Property Name="TitlebarEnabled" Value="True" />
             <Property Name="UnifiedAreaRect" Value="{{0,0},{0,115},{0.25,0},{1,0}}" />
             <Property Name="DragMovingEnabled" Value="False" />
             <Property Name="CloseButtonEnabled" Value="False" />
-            <Window Type="TaharezLook/ScrollablePane" Name="EditorRoot/ComponentsWindow/Scrollable" >
+            <Window Type="Editor/ScrollablePane" Name="EditorRoot/ComponentsWindow/Scrollable" >
                 <Property Name="ContentArea" Value="l:0 t:0 r:0 b:0" />
                 <Property Name="HorzStepSize" Value="0.1" />
                 <Property Name="VertStepSize" Value="0.1" />

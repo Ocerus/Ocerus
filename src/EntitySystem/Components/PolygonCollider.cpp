@@ -10,7 +10,7 @@ void EntityComponents::PolygonCollider::Create( void )
 
 void EntityComponents::PolygonCollider::Destroy( void )
 {
-	// the shape is destroyed automatically after the body it is attached to is destroyed		
+	// the shape is destroyed automatically after the body it is attached to is destroyed
 }
 
 EntityMessage::eResult EntityComponents::PolygonCollider::HandleMessage( const EntityMessage& msg )
@@ -20,6 +20,8 @@ EntityMessage::eResult EntityComponents::PolygonCollider::HandleMessage( const E
 	case EntityMessage::POST_INIT: // we have to wait until the physical bodies are inited, that's why we're using POST_INIT
 		Init();
 		return EntityMessage::RESULT_OK;
+	default:
+		break;
 	}
 	return EntityMessage::RESULT_IGNORED;
 }
@@ -43,7 +45,7 @@ void EntityComponents::PolygonCollider::Init( void )
 		shapeDef.vertices[shapeDef.vertexCount++] = mPolygon[i];
 	}
 	shapeDef.userData = GetOwnerPtr();
-	
+
 	// find a parent body
 	PhysicalBody* body = 0;
 	if (GetOwner().HasProperty("PhysicalBody"))
@@ -56,7 +58,7 @@ void EntityComponents::PolygonCollider::Init( void )
 		/// @todo to make colliders work without bodies we must upgrade Box2d to 2.0.2+ and use b2Fixture.
 		OC_FAIL("Not implemented");
 	}
-	
+
 	// create the shape
 	mShape = body->CreateShape(&shapeDef);
 

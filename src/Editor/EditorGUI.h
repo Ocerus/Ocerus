@@ -33,6 +33,8 @@ namespace Editor
 		void SetEntityName(const string& entityName);
 		void SetText(const CEGUI::String& windowName, const CEGUI::String& text);
 
+		void UpdateComponentsWindow(const EntitySystem::EntityHandle* newActiveEntity);
+
 		typedef vector<CEGUI::Window*> CEGUIWindows;
 
 		CEGUIWindows mComponents;

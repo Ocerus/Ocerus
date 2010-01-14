@@ -5,6 +5,22 @@
 using namespace StringConverter;
 
 template<>
+string StringConverter::ToString(Vector2 val)
+{
+	std::ostringstream out;
+	out << "(" << val.x << ", " <<  val.y << ")";
+	return out.str();
+}
+
+template<>
+string StringConverter::ToString(GfxSystem::Color val)
+{
+	std::ostringstream out;
+	out << std::hex << val.r << val.g << val.b << val.a;
+	return out.str();
+}
+
+template<>
 string StringConverter::ToString(bool& val)
 {
 	std::ostringstream out;

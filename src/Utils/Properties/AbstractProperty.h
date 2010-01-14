@@ -73,6 +73,9 @@ namespace Reflection
 			return ((TypedProperty<T>*)this)->GetValue( owner );
 		}
 
+		/// Returns the string representation of the value of this property. An owner of the property must be specified.
+		string GetValueString(const RTTIBaseClass* owner) const;
+
 		/// Sets this property to a specified value. An owner of the property must be specified.
 		template<class T>
 		void SetValue(RTTIBaseClass* owner, const T value)

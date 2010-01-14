@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+<Falagard>
+	<!--
+	***************************************************
+		Editor/ComponentProperty
+	***************************************************
+	-->
+
+    
+	<WidgetLook name="Editor/ComponentProperty">
+		<Child type="TaharezLook/StaticText" NameSuffix="__auto_propertyname__" >
+			<Area>
+				<Dim type="LeftEdge"><AbsoluteDim value="0" /></Dim>
+				<Dim type="TopEdge"><AbsoluteDim value="0" /></Dim>
+				<Dim type="RightEdge"><UnifiedDim scale="0.5" type="Width" offset="-1" /></Dim>
+				<Dim type="BottomEdge"><UnifiedDim scale="1" type="Height" /></Dim>
+			</Area>
+			<Property name="Text" value="PROPNAME" />
+		</Child>
+        <StateImagery name="Enabled" />
+        <StateImagery name="Disabled" />
+	</WidgetLook>
+</Falagard>
+
+

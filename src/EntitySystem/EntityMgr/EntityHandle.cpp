@@ -36,7 +36,7 @@ EntitySystem::EntityHandle EntitySystem::EntityHandle::CreateHandleFromID( const
 	{
 		Core::Config& config = GlobalProperties::Get<Core::Config>("GlobalConfig");
 		EntityID lastPrototypeID = config.GetInt32("LastFreePrototypeID", -1, "Entities");
-		if (lastPrototypeID == id) 
+		if (lastPrototypeID == id)
 		{
 			DecID(lastPrototypeID);
 			config.SetInt32("LastFreePrototypeID", lastPrototypeID, "Entities");
@@ -51,7 +51,7 @@ EntitySystem::EntityHandle EntitySystem::EntityHandle::CreateHandleFromID( const
 
 void EntitySystem::EntityHandle::IncID( EntityID& id )
 {
-	do 
+	do
 	{
 		++id;
 		if (id <= 0) id = 1;
@@ -60,7 +60,7 @@ void EntitySystem::EntityHandle::IncID( EntityID& id )
 
 void EntitySystem::EntityHandle::DecID( EntityID& id )
 {
-	do 
+	do
 	{
 		--id;
 		if (id >= 0) id = -1;
@@ -73,13 +73,11 @@ bool EntitySystem::EntityHandle::IsPrototypeID( const EntityID id )
 }
 
 EntityHandle& EntityHandle::operator=(const EntityHandle& rhs)
-{ 
+{
 	if (this != &rhs)
-		mEntityID = rhs.mEntityID; 
+		mEntityID = rhs.mEntityID;
 	return *this;
 }
-
-EntitySystem::EntityHandle::EntityHandle( const EntityHandle& handle ): mEntityID(handle.mEntityID) {}
 
 EntitySystem::EntityHandle::EntityHandle( void ): mEntityID(INVALID_ENTITY_ID) {}
 

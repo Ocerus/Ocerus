@@ -164,6 +164,9 @@ namespace EntitySystem
 		/// Returns true if the given entity has a component of the given type.
 		bool HasEntityComponentOfType(const EntityHandle entity, const eComponentType componentType);
 
+		/// Returns the type of the given component in the given entity, or CT_INVALID if component is not found.
+		eComponentType GetEntityComponentType(const EntityHandle entity, const ComponentID componentID);
+
 		/// Fills the given list with types of components present in the given entity. Returns true if everything was ok.
 		bool GetEntityComponentTypes(const EntityHandle entity, ComponentTypeList& out);
 

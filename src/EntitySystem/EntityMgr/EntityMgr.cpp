@@ -549,6 +549,12 @@ bool EntitySystem::EntityMgr::HasEntityComponentOfType(const EntityHandle entity
 	return false;
 }
 
+eComponentType EntitySystem::EntityMgr::GetEntityComponentType(const EntityHandle entity, const ComponentID componentID)
+{
+	Component* component = mComponentMgr->GetEntityComponent(entity.GetID(), componentID);
+	return component ? component->GetType() : CT_INVALID;
+}
+
 bool EntitySystem::EntityMgr::GetEntityComponentTypes(const EntityHandle entity, ComponentTypeList& out)
 {
 	out.clear();

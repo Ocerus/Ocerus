@@ -26,6 +26,8 @@ EntityMessage::eResult EntityComponents::DynamicBody::HandleMessage( const Entit
 	case EntityMessage::INIT:
 		Init();
 		return EntityMessage::RESULT_OK;
+	default:
+		break;
 	}
 	return EntityMessage::RESULT_IGNORED;
 }

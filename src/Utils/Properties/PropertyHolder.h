@@ -38,7 +38,7 @@ namespace Reflection
 			OC_DASSERT(mProperty);
 			return mProperty->GetAccessFlags();
 		}
-		
+
 		/// Returns the key representing this property.
 		inline StringKey GetKey(void) const
 		{
@@ -70,6 +70,16 @@ namespace Reflection
 				return PropertyTypes::GetDefaultValue<T>();
 			}
 			return mProperty->GetValue<T>(mOwner);
+		}
+
+		inline string GetValueString(void)
+		{
+			if (!mProperty)
+			{
+				ReportUndefined();
+				return "";
+			}
+			return mProperty->GetValueString(mOwner);
 		}
 
 		/// Sets the typed value of this property.
@@ -106,7 +116,7 @@ namespace Reflection
 		}
 
 		/// Returns the type of this property.
-		inline ePropertyType GetType(void) const 
+		inline ePropertyType GetType(void) const
 		{
 			OC_DASSERT(mProperty);
 			return mProperty->GetType();

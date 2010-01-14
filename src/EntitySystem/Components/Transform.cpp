@@ -32,6 +32,8 @@ EntityMessage::eResult EntityComponents::Transform::HandleMessage( const EntityM
 			mAngle = body->GetAngle();
 		}
 		return EntityMessage::RESULT_OK;
+	default:
+		break;
 	}
 	return EntityMessage::RESULT_IGNORED;
 }
