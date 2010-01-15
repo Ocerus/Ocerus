@@ -42,8 +42,6 @@ namespace Editor
 		/// Sets the currently selected entity to new entity.
 		void SetCurrentEntity(const EntitySystem::EntityHandle* newCurrentEntity);
 
-		bool EntityPickerEvent(const CEGUI::EventArgs&);
-
 	private:
 		EditorGUI* mEditorGUI;
 		EntitySystem::EntityHandle*	mCurrentEntity;

@@ -94,6 +94,7 @@ namespace GUISystem
 			gResourceMgr.AddResourceDirToGroup("gui/looknfeel", "looknfeels", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
 
 			///@todo Improve GUI scheme loading. For example Editor.scheme does not need to be loaded unless in editor mode.
+			CEGUI::SchemeManager::getSingleton().create("VanillaSkin.scheme");
 			CEGUI::SchemeManager::getSingleton().create("TaharezLook.scheme");
 			CEGUI::SchemeManager::getSingleton().create("Editor.scheme");
 
@@ -105,15 +106,15 @@ namespace GUISystem
 			CEGUI::System::getSingleton().setGUISheet(mWindowRoot);
 
 
-			mCegui->setDefaultFont("Commonwealth-10");
+			mCegui->setDefaultFont("DejaVuSans-10");
 			mCegui->setDefaultMouseCursor("TaharezLook", "MouseArrow");
 
 			InitConsole();
 
 			/// -------------------------
 			/// Showing HelloWorld window
-			CEGUI::Window* helloWorldWindow = LoadWindowLayout("HelloWorld.layout");
-			mWindowRoot->addChildWindow(helloWorldWindow);
+			//CEGUI::Window* helloWorldWindow = LoadWindowLayout("HelloWorld.layout");
+			//mWindowRoot->addChildWindow(helloWorldWindow);
 			/// -------------------------
 
 		}
@@ -408,10 +409,13 @@ namespace GUISystem
 	 */
 	bool PropertyCallback(CEGUI::Window* window, CEGUI::String& propname, CEGUI::String& propvalue, void* userdata)
 	{
-		if (propname == "Text")
+		if (propname == "Text" &&
+			propvalue.size() > 2 &&
+			propvalue.at(0) == '$' &&
+			propvalue.at(propvalue.size() - 1) == '$')
 		{
 			/// @todo Use StringMgr to translate textual data in GUI.
-			CEGUI::String translatedText = "_" + propvalue;
+			CEGUI::String translatedText = "_" + propvalue.substr(1, propvalue.size() - 2);
 			window->setProperty(propname, translatedText);
 			return false;
 		}

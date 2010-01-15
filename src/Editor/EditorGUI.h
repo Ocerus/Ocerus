@@ -7,6 +7,7 @@ namespace CEGUI
 {
 	class String;
 	class Window;
+	class EventArgs;
 }
 
 
@@ -24,8 +25,14 @@ namespace Editor
 		/// Destructor.
 		~EditorGUI();
 
+		/// Loads editor GUI.
+		void LoadGUI();
+
 		/// Sets the active entity to newActiveEntity.
 		void SetCurrentEntity(const EntitySystem::EntityHandle* newActiveEntity);
+
+		bool EntityPickerHandler(const CEGUI::EventArgs&);
+
 
 	private:
 
@@ -33,7 +40,7 @@ namespace Editor
 		void SetEntityName(const string& entityName);
 		void SetText(const CEGUI::String& windowName, const CEGUI::String& text);
 
-		void UpdateComponentsWindow(const EntitySystem::EntityHandle* newActiveEntity);
+		void UpdatePropertiesWindow(const EntitySystem::EntityHandle* newActiveEntity);
 
 		typedef vector<CEGUI::Window*> CEGUIWindows;
 
