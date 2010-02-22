@@ -56,6 +56,8 @@ namespace EntityComponents
 		/// Current index of mStates and mTimes
 		int32 GetCurrentArrayIndex(void) const { return mCurrentArrayIndex; }
 
+		
+
 	private:
 		Utils::Array<string> mModules;
 		uint32 mTimeOut;
@@ -73,7 +75,7 @@ namespace EntityComponents
 		map<string, int32> mModuleToFuncID;
 		
 		/// Map function ID of OnAction handlers to index of mStates and mTimes
-		map<int32, int32> mFuncIDToArrayIndex;		
+		map<int32, int32> mFuncIDToArrayIndex;
 
 		/// Find message handlers in modules (mModules) and store them to map (mMessageHandlers).
 		void UpdateMessageHandlers(void);

@@ -33,7 +33,7 @@ namespace Reflection
 		typedef void (OwnerType::*SetterType)( T Value );
 
 		/// Constructor.
-		inline Property( const char* name, GetterType getter, SetterType setter, const PropertyAccessFlags accessFlags, const string& comment ):
+		inline Property(StringKey name, GetterType getter, SetterType setter, const PropertyAccessFlags accessFlags, const string& comment):
 		TypedProperty<T> (name, accessFlags),
 			mGetter (getter),
 			mSetter (setter)
@@ -51,25 +51,6 @@ namespace Reflection
 		virtual bool IsWriteable(void) const
 		{
 			return mSetter != 0;
-		}
-
-		/// Returns true if the properties' values are equal. The properties must be of the same type.
-		virtual bool IsEqual(RTTIBaseClass* owner, const RTTIBaseClass* otherOwner, const AbstractProperty* otherProperty)
-		{
-			if (!IsReadable() || !otherProperty->IsReadable())
-				return false;
-
-			return GetValue(owner) == otherProperty->GetValue<T>(otherOwner);
-		}
-
-		/// Copies data from the specified abstract property. The property must be of the same type as this property.
-		/// Returns true if the copy was performed, false otherwise.
-		virtual bool CopyFrom(RTTIBaseClass* owner, const RTTIBaseClass* otherOwner, const AbstractProperty* otherProperty)
-		{
-			if (!IsWriteable() || !otherProperty->IsReadable())
-				return false;
-			SetValue(owner, otherProperty->GetValue<T>(otherOwner));
-			return true;
 		}
 
 		/// Returns the value of this property. The owner of this property must be specified.

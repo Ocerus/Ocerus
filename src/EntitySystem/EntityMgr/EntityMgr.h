@@ -9,6 +9,8 @@
 #include "EntityHandle.h"
 #include "../ComponentMgr/ComponentEnums.h"
 #include "../ComponentMgr/ComponentID.h"
+#include "../ComponentMgr/Component.h"
+#include "../ComponentMgr/ComponentMgr.h"
 #include "Properties/PropertyAccess.h"
 
 /// Macro for easier use.
@@ -135,6 +137,26 @@ namespace EntitySystem
 		/// Retrieves a property of a component of an entity. A filter related to properties' flags can be specified.
 		PropertyHolder GetEntityComponentProperty(const EntityHandle entity, const ComponentID component, const StringKey propertyKey, const PropertyAccessFlags flagMask = PA_FULL_ACCESS) const;
 
+		/// Register a dynamic property to a component of an entity.
+		template <class T>
+		bool RegisterDynamicPropertyOfEntityComponent(const EntityHandle entity, const ComponentID component, 
+			const StringKey propertyKey, const PropertyAccessFlags accessFlags, const string& comment)
+		{
+			/*OC_DASSERT(mComponentMgr);
+			if (component >= mComponentMgr->GetNumberOfEntityComponents(entity.GetID()))
+			{
+				ocError << "Invalid component ID: " << component;
+				return false;
+			}*/
+
+			Component* cmp = mComponentMgr->GetEntityComponent(entity.GetID(), component);
+			return cmp->RegisterDynamicProperty<T>(propertyKey, accessFlags, comment);
+		}
+
+		/// Unregister a dynamic property of a component of an entity.
+		bool UnregisterDynamicPropertyOfEntityComponent(const EntityHandle entity, const ComponentID component,
+			const StringKey propertyKey);
+
 		//@}
 
 
@@ -178,6 +200,9 @@ namespace EntitySystem
 
 		/// Destroys a component of the entity.
 		void DestroyEntityComponent(const EntityHandle entity, const ComponentID componentToDestroy);
+
+		/// Returns an ID of the first entity component of a specific type or -1 if does not exist.
+		ComponentID FindComponentOfType(const EntityHandle entity, const eComponentType type);
 
 		//@}
 

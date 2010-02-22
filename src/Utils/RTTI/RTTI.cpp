@@ -24,24 +24,16 @@ RTTI::RTTI(	uint8 dwStub, ClassID CLID, const char* szClassName, RTTI* pBaseClas
 
 void RTTI::EnumProperties( AbstractPropertyList& out, const PropertyAccessFlags flagMask ) const
 {
-	if ( mBaseRTTI )
-		mBaseRTTI->EnumProperties( out, flagMask );
-	for ( AbstractPropertyMap::const_iterator it = mProperties.begin(); it != mProperties.end(); ++it )
-		if ((it->second->GetAccessFlags()&flagMask) != 0)
-			out.push_back( it->second );
+	if (mBaseRTTI)
+		mBaseRTTI->EnumProperties(out, flagMask);
+	mProperties.EnumProperties(out, flagMask);
 }
 
 void RTTI::EnumProperties( RTTIBaseClass* owner, PropertyList& out, const PropertyAccessFlags flagMask ) const
 {
-	if ( mBaseRTTI )
-		mBaseRTTI->EnumProperties( owner, out, flagMask );
-	for ( AbstractPropertyMap::const_iterator it = mProperties.begin(); it != mProperties.end(); ++it )
-	{
-		if ((it->second->GetAccessFlags()&flagMask) != 0)
-		{
-			out.push_back(PropertyHolder(owner, it->second));
-		}
-	}
+	if (mBaseRTTI)
+		mBaseRTTI->EnumProperties(owner, out, flagMask);
+	mProperties.EnumProperties(owner, out, flagMask);
 }
 
 void RTTI::EnumComponentDependencies( ComponentDependencyList& out ) const
@@ -54,34 +46,9 @@ void RTTI::EnumComponentDependencies( ComponentDependencyList& out ) const
 
 AbstractProperty* RTTI::GetProperty( const StringKey key, const PropertyAccessFlags flagMask ) const
 {
-	AbstractPropertyMap::const_iterator it = mProperties.find(key);
-	if (it != mProperties.end())
-	{
-		if ((it->second->GetAccessFlags()&flagMask) != 0) return it->second;
-		return 0;
-	}
-	if (mBaseRTTI) return mBaseRTTI->GetProperty(key);
-	return 0;
-}
-
-bool RTTI::AddProperty( AbstractProperty* prop )
-{
-	OC_ASSERT(prop);
-	if (HasProperty(prop->GetKey()))
-	{
-		if (LogSystem::LogMgr::SingletonExists())
-		{
-			ocError << "Property can't be registered; it already exists: " << prop->GetName();
-		}
-		else
-		{
-			OC_ASSERT_MSG(false, "Property can't be registered; it already exists");
-		}
-		return false;
-	}
-
-	mProperties[prop->GetKey()] = prop;
-	return true;
+	AbstractProperty* prop = mProperties.GetProperty(key, flagMask);
+	if (!prop && mBaseRTTI) return mBaseRTTI->GetProperty(key, flagMask);
+	return prop;
 }
 
 void RTTI::AddComponentDependency( const EntitySystem::eComponentType dep )
@@ -89,7 +56,7 @@ void RTTI::AddComponentDependency( const EntitySystem::eComponentType dep )
 	mComponentDependencies.push_back(dep);
 }
 
-bool Reflection::RTTI::HasProperty( const StringKey key )
+bool RTTI::HasProperty(const StringKey key)
 {
-	return mProperties.find(key) != mProperties.end();
+	return mProperties.HasProperty(key);
 }

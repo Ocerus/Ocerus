@@ -123,6 +123,18 @@ Reflection::PropertyHolder EntitySystem::EntityHandle::GetComponentProperty( con
 	return gEntityMgr.GetEntityComponentProperty(*this, componentID, key, mask);
 }
 
+/*template <class T>
+bool EntitySystem::EntityHandle::RegisterDynamicPropertyOfComponent(const ComponentID component, 
+	const StringKey propertyKey, const PropertyAccessFlags accessFlags, const string& comment)
+{
+
+}*/
+
+bool EntitySystem::EntityHandle::UnregisterDynamicPropertyOfComponent(const ComponentID component, const StringKey propertyKey)
+{
+	return gEntityMgr.UnregisterDynamicPropertyOfEntityComponent(*this, component, propertyKey);
+}
+
 bool EntitySystem::EntityHandle::Exists( void ) const
 {
 	return gEntityMgr.EntityExists(*this);

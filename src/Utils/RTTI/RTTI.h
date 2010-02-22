@@ -7,7 +7,8 @@
 #define __RTTI_H__
 
 #include "Base.h"
-#include "Properties/PropertyAccess.h"
+#include "../Properties/PropertyAccess.h"
+#include "../Properties/PropertyMap.h"
 #include "../../EntitySystem/ComponentMgr/ComponentEnums.h"
 
 /// A set of classes implementing custom %RTTI and reflection.
@@ -21,12 +22,6 @@
 /// and functions using the RTTIGlue::RegisterProperty and RTTIGlue::RegisterFunction functions.
 namespace Reflection
 {
-	/// A list of generic properties.
-	typedef vector<AbstractProperty*> AbstractPropertyList;
-
-	/// A map of abstract properties.
-	typedef hash_map<StringKey, AbstractProperty*> AbstractPropertyMap;
-
 	/// Type of the identifier of a class.
 	typedef uint32 ClassID;
 
@@ -82,7 +77,7 @@ namespace Reflection
 		bool HasProperty(const StringKey key);
 
 		/// Adds a property to the RTTI.
-		bool AddProperty(AbstractProperty* prop);
+		bool AddProperty(AbstractProperty* prop) { return mProperties.AddProperty(prop); };
 
 		/// Adds a component dependency to the RTTI.
 		/// A component can define that it depends on other components. This is then used to determine the order
@@ -120,7 +115,7 @@ namespace Reflection
 		char mClassName[CLASSNAME_LENGTH];
 		RTTI* mBaseRTTI;
 		ClassFactoryFunc mClassFactory;
-		AbstractPropertyMap mProperties;
+		PropertyMap mProperties;
 		ComponentDependencyList mComponentDependencies;
 
 	};

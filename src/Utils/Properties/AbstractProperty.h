@@ -23,13 +23,12 @@ namespace Reflection
 
 		/// Constructor.
 		/// @param accessFlags This parameter controls access to this property. It's similar to visibility in C++.
-		inline AbstractProperty( const char* szName, const PropertyAccessFlags accessFlags ):
+		inline AbstractProperty(StringKey szName, const PropertyAccessFlags accessFlags ):
 			mKey(szName),
-			mName(szName),
 			mAccessFlags(accessFlags) {}
 
 		/// Returns the name of this property.
-		inline const char* GetName(void) const { return mName; }
+		inline const char* GetName(void) const { return mKey.ToString().c_str(); }
 
 		/// Returns the comment of this property or empty string if no comment was set.
 		inline string GetComment(void) const { return mComment; }
@@ -106,7 +105,6 @@ namespace Reflection
 	private :
 
 		StringKey mKey;
-		const char* mName;
 		string mComment;
 		PropertyAccessFlags mAccessFlags;
 

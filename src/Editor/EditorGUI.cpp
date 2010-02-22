@@ -109,9 +109,9 @@ void EditorGUI::UpdatePropertiesWindow(const EntitySystem::EntityHandle* newActi
 			propertyListWidget->addChildWindow(componentNameWidget);
 			componentNameWidget->setArea(CEGUI::URect(
 					CEGUI::UDim(0, 2),
-					CEGUI::UDim(0, yPos + 2),
+					CEGUI::UDim(0, (float)yPos + 2),
 					CEGUI::UDim(1, -14),
-					CEGUI::UDim(0, yPos + 33)));
+					CEGUI::UDim(0, (float)yPos + 33)));
 			componentNameWidget->setText(EntitySystem::GetComponentTypeName(
 					gEntityMgr.GetEntityComponentType(*newActiveEntity, componentID)));
 
@@ -139,12 +139,12 @@ void EditorGUI::UpdatePropertiesWindow(const EntitySystem::EntityHandle* newActi
 				propertyListWidget->addChildWindow(propertyListWidget);
 				propertyListWidget->setArea(CEGUI::URect(
 						CEGUI::UDim(0, 2),
-						CEGUI::UDim(0, yPos + 35),
+						CEGUI::UDim(0, (float)yPos + 35),
 						CEGUI::UDim(1, -14),
-						CEGUI::UDim(0, yPos + 35 + 35 + (35 * propertyCount))));
+						CEGUI::UDim(0, (float)yPos + 35 + 35 + (35 * propertyCount))));
 
-				propertyListWidget->addColumn("Name", 0, CEGUI::UDim(0.4, 0));
-				propertyListWidget->addColumn("Value", 1, CEGUI::UDim(0.5, 0));
+				propertyListWidget->addColumn("Name", 0, CEGUI::UDim((float)0.4, 0));
+				propertyListWidget->addColumn("Value", 1, CEGUI::UDim((float)0.5, 0));
 
 				for (PropertyList::iterator it = propertyList.begin(); it != propertyList.end(); ++it)
 				{

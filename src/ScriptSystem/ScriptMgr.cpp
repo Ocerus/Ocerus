@@ -322,6 +322,20 @@ static void EntityHandleDestructor(EntityHandle* self)
 	self->~EntityHandle();
 }
 
+template <class T>
+bool RegisterDynamicProperty(EntityHandle& self, 
+	const StringKey propertyKey, const PropertyAccessFlags accessFlags, const string& comment)
+{
+	ComponentID id = gEntityMgr.FindComponentOfType(self, CT_Script);
+	return self.RegisterDynamicPropertyOfComponent<T>(id, propertyKey, accessFlags, comment);
+}
+
+bool UnregisterDynamicProperty(EntityHandle& self, const StringKey propertyKey)
+{
+	ComponentID id = gEntityMgr.FindComponentOfType(self, CT_Script);
+	return self.UnregisterDynamicPropertyOfComponent(id, propertyKey);
+}
+
 void RegisterScriptEntityHandle(asIScriptEngine* engine)
 {
 	int32 r;
@@ -350,8 +364,18 @@ void RegisterScriptEntityHandle(asIScriptEngine* engine)
 		r = engine->RegisterEnumValue("eEntityMessageResult", EntitySystem::EntityMessage::GetResultName((EntitySystem::EntityMessage::eResult)entityMessageResult), entityMessageResult); OC_SCRIPT_ASSERT();
 	}
 
-	// Register typedef EntityID
+	// Register enum ePropertyAccess
+	r = engine->RegisterEnum("ePropertyAccess"); OC_SCRIPT_ASSERT();
+	r = engine->RegisterEnumValue("ePropertyAccess", "PA_EDIT_READ", Reflection::PA_EDIT_READ); OC_SCRIPT_ASSERT();
+	r = engine->RegisterEnumValue("ePropertyAccess", "PA_EDIT_WRITE", Reflection::PA_EDIT_WRITE); OC_SCRIPT_ASSERT();
+	r = engine->RegisterEnumValue("ePropertyAccess", "PA_SCRIPT_READ", Reflection::PA_SCRIPT_READ); OC_SCRIPT_ASSERT();
+	r = engine->RegisterEnumValue("ePropertyAccess", "PA_SCRIPT_WRITE", Reflection::PA_SCRIPT_WRITE); OC_SCRIPT_ASSERT();
+	r = engine->RegisterEnumValue("ePropertyAccess", "PA_INIT", Reflection::PA_INIT); OC_SCRIPT_ASSERT();
+	r = engine->RegisterEnumValue("ePropertyAccess", "PA_FULL_ACCESS", Reflection::PA_FULL_ACCESS); OC_SCRIPT_ASSERT();
+
+	// Register typedef EntityID and PropertyAccessFlags
 	r = engine->RegisterTypedef("EntityID", "int32");
+	r = engine->RegisterTypedef("PropertyAccessFlags", "uint8");
 
 	// Register the object methods
 	r = engine->RegisterObjectMethod("EntityHandle", "bool IsValid() const", asMETHOD(EntityHandle, IsValid), asCALL_THISCALL); OC_SCRIPT_ASSERT();
@@ -361,6 +385,9 @@ void RegisterScriptEntityHandle(asIScriptEngine* engine)
 		asMETHODPR(EntityHandle, PostMessage, (const EntityMessage::eType), EntityMessage::eResult), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("EntityHandle", "eEntityMessageResult PostMessage(const eEntityMessageType, PropertyFunctionParameters)",
 		asMETHODPR(EntityHandle, PostMessage, (const EntityMessage::eType, Reflection::PropertyFunctionParameters), EntityMessage::eResult), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("EntityHandle", "bool UnregisterDynamicProperty(const StringKey)",
+		asFUNCTION(UnregisterDynamicProperty), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+
 }
 
 // Functions for register EntityDescription to script
@@ -423,18 +450,8 @@ void RegisterScriptEntityMgr(asIScriptEngine* engine)
 	// Register the type
 	r = engine->RegisterObjectType("EntityMgr", 0, asOBJ_REF | asOBJ_NOHANDLE); OC_SCRIPT_ASSERT();
 
-	// Register enum ePropertyAccess
-	r = engine->RegisterEnum("ePropertyAccess"); OC_SCRIPT_ASSERT();
-	r = engine->RegisterEnumValue("ePropertyAccess", "PA_EDIT_READ", Reflection::PA_EDIT_READ); OC_SCRIPT_ASSERT();
-	r = engine->RegisterEnumValue("ePropertyAccess", "PA_EDIT_WRITE", Reflection::PA_EDIT_WRITE); OC_SCRIPT_ASSERT();
-	r = engine->RegisterEnumValue("ePropertyAccess", "PA_SCRIPT_READ", Reflection::PA_SCRIPT_READ); OC_SCRIPT_ASSERT();
-	r = engine->RegisterEnumValue("ePropertyAccess", "PA_SCRIPT_WRITE", Reflection::PA_SCRIPT_WRITE); OC_SCRIPT_ASSERT();
-	r = engine->RegisterEnumValue("ePropertyAccess", "PA_INIT", Reflection::PA_INIT); OC_SCRIPT_ASSERT();
-	r = engine->RegisterEnumValue("ePropertyAccess", "PA_FULL_ACCESS", Reflection::PA_FULL_ACCESS); OC_SCRIPT_ASSERT();
-
-	// Register typedef ComponentID, PropertyAccessFlags
+	// Register typedef ComponentID
 	r = engine->RegisterTypedef("ComponentID", "int32");
-	r = engine->RegisterTypedef("PropertyAccessFlags", "uint8");
 
 	// Register the object methods
 	r = engine->RegisterObjectMethod("EntityMgr", "EntityHandle CreateEntity(EntityDescription &in)", asMETHOD(EntityMgr, CreateEntity), asCALL_THISCALL); OC_SCRIPT_ASSERT();
@@ -583,6 +600,9 @@ void ScriptMgr::ConfigureEngine(void)
 	r = mEngine->RegisterObjectMethod("EntityHandle", (string("const array_") + typeName + " Get_const_array_" + typeName + "(string &in)").c_str(), \
 		asFUNCTIONPR(EntityHandleGetConstArrayValue, (EntitySystem::EntityHandle&, string&), const ScriptArray<typeClass>), \
 		asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT(); \
+	/* Register method for registering dynamic properties */ \
+	r = mEngine->RegisterObjectMethod("EntityHandle", (string("bool RegisterDynamicProperty_") + typeName + "(const StringKey, const PropertyAccessFlags, const string &in)").c_str(), \
+		asFUNCTION(RegisterDynamicProperty<typeClass>), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT(); \
 	/* Register operator<< method for PropertyFunctionParameters */ \
 	r = mEngine->RegisterObjectMethod("PropertyFunctionParameters", (string("PropertyFunctionParameters opShl(const ") + typeName + " &in) const").c_str(), \
 		asFUNCTIONPR(PropertyFunctionParametersOperatorShl, (Reflection::PropertyFunctionParameters&, const typeClass&), Reflection::PropertyFunctionParameters), \

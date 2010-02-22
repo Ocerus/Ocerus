@@ -604,6 +604,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\src\Utils\Properties\PropertyMap.h"
+						>
+					</File>
+					<File
 						RelativePath="..\src\Utils\Properties\PropertySystem.h"
 						>
 					</File>
@@ -613,6 +617,10 @@
 					</File>
 					<File
 						RelativePath="..\src\Utils\Properties\TypedProperty.h"
+						>
+					</File>
+					<File
+						RelativePath="..\src\Utils\Properties\ValuedProperty.h"
 						>
 					</File>
 				</Filter>
@@ -633,6 +641,10 @@
 					</File>
 					<File
 						RelativePath="..\src\Utils\Properties\PropertyHolder.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\src\Utils\Properties\PropertyMap.cpp"
 						>
 					</File>
 					<File

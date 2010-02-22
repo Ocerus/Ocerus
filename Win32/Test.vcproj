@@ -323,6 +323,14 @@
 				RelativePath="..\src\Utils\test\TestTimer.cpp"
 				>
 			</File>
+			<Filter
+				Name="Properties"
+				>
+				<File
+					RelativePath="..\src\Utils\Properties\test\TestPropertyMap.cpp"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Runner"

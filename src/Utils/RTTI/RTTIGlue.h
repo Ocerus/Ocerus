@@ -10,6 +10,8 @@
 #include "RTTI.h"
 #include "../Properties/PropertySystem.h"
 #include "../Properties/Property.h"
+#include "../Properties/PropertyMap.h"
+#include "../Properties/ValuedProperty.h"
 
 namespace Reflection
 {
@@ -21,7 +23,16 @@ namespace Reflection
 	public :
 
 		/// Constructor.
-		RTTIGlue(void) {}
+		RTTIGlue(void)
+		{
+			mDynamicProperties = 0;
+		}
+
+		/// Destructor.
+		~RTTIGlue(void)
+		{
+			if (mDynamicProperties) delete mDynamicProperties;
+		}
 
 		/// Default factory function. Creates an instance of T.
 		/// The factory function is called by the system to dynamically create
@@ -35,7 +46,7 @@ namespace Reflection
 		///	type as a template parameter.
 		/// This function should be called only from within a user-defined RegisterReflection function.
 		template <class PropertyTypes>
-		static void RegisterProperty(const char* name, typename Property<T, PropertyTypes>::GetterType getter,
+		static void RegisterProperty(StringKey name, typename Property<T, PropertyTypes>::GetterType getter,
 			typename Property<T, PropertyTypes>::SetterType setter, const PropertyAccessFlags accessFlags,
 			const string& comment)
 		{
@@ -52,7 +63,7 @@ namespace Reflection
 
 		/// Registers a function. Takes in the function name and its address.
 		/// This function should be called only from within a user-defined RegisterReflection function.
-		inline static void RegisterFunction(const char* name, typename Property<T, PropertyFunctionParameters>::SetterType function, const PropertyAccessFlags accessFlags, const string& comment)
+		inline static void RegisterFunction(StringKey name, typename Property<T, PropertyFunctionParameters>::SetterType function, const PropertyAccessFlags accessFlags, const string& comment)
 		{
 			RegisterProperty<PropertyFunctionParameters>(name, 0, function, accessFlags, comment);
 		}
@@ -80,9 +91,56 @@ namespace Reflection
 		/// Returns the RTTI info associated with this class instance.
 		virtual RTTI* GetRTTI(void) const { return &mRTTI; }
 
+		/// Returns a property identified by it's string key. Access restriction filter can be defined.
+		AbstractProperty* GetPropertyPointer(const StringKey key, const PropertyAccessFlags flagMask = PA_FULL_ACCESS) const
+		{
+			if (mDynamicProperties)
+			{
+				AbstractProperty* prop = mDynamicProperties->GetProperty(key, flagMask);
+				if (prop) return prop;
+			}
+
+			return GetRTTI()->GetProperty(key, flagMask);
+		}
+
+		/// Fills a data structure with all properties.
+		void EnumProperties( RTTIBaseClass* owner, PropertyList& out, const PropertyAccessFlags flagMask = PA_FULL_ACCESS ) const
+		{
+			GetRTTI()->EnumProperties(owner, out, flagMask);
+			if (mDynamicProperties) mDynamicProperties->EnumProperties(owner, out, flagMask);
+		}
+
+		/// Registers a dynamic property. Takes in the property name, its getter and setter functions, and the property
+		///	type as a template parameter.
+		template <class PropertyTypes>
+		bool RegisterDynamicProperty(StringKey name, const PropertyAccessFlags accessFlags,
+			const string& comment)
+		{
+			if (!mDynamicProperties) mDynamicProperties = new PropertyMap();
+			ValuedProperty<PropertyTypes>* pProperty = new ValuedProperty<PropertyTypes>(name, accessFlags, comment);
+			if (mDynamicProperties->AddProperty(pProperty))
+			{
+				PropertySystem::GetProperties()->push_back(pProperty);
+				return true;
+			}
+			else
+			{
+				delete pProperty;
+				return false;
+			}
+		}
+
+		/// Unregisters a dynamic property of a certain name.
+		inline bool UnregisterDynamicProperty(const StringKey name)
+		{
+			if (!mDynamicProperties) return false;  
+			return mDynamicProperties->DeleteProperty(name);
+		}
+
 	protected :
 
 		static RTTI	mRTTI;
+		PropertyMap* mDynamicProperties;
 
 	};
 

@@ -7,6 +7,7 @@ void OnInit()
   {
     Log("Module number " + (i+1) + " is '" + modules[i] +"'.");
   }
+  handle.RegisterDynamicProperty_int32(StringKey("Counter"), PA_SCRIPT_READ | PA_SCRIPT_WRITE, "comment");
 }
 
 void OnPostInit()
@@ -31,17 +32,21 @@ void OnDraw()
 
 void OnAction()
 {
+  EntityHandle handle = GetCurrentEntityHandle();
   switch (GetState())
   {
     case 0:
     {
+      handle.Set_int32("Counter", 2);
       Log("First call of OnAction(). This function will be called every 10 seconds.");
       SetAndSleep(1, 10000);
       break;
     }
     case 1:
     {
-      Log("Message from OnAction(). Wait 10 seconds for another.");
+      int32 counter = handle.Get_int32("Counter");
+      Log("Message no. " + counter + " from OnAction(). Wait 10 seconds for another.");
+      handle.Set_int32("Counter", counter+1);
       SetAndSleep(1, 10000);
       break;
     }

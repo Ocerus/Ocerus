@@ -19,7 +19,7 @@ namespace Reflection
 		void DestroyProperties(void);
 
 		/// Returns the static list of all %RTTI properties in the program.
-		/// The proeprties are released in the destructor.
+		/// The properties are released in the destructor.
 		std::list<AbstractProperty*>* GetProperties(void);
 	};
 }

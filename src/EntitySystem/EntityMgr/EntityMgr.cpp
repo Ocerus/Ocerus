@@ -319,7 +319,7 @@ bool EntitySystem::EntityMgr::GetEntityProperties( const EntityHandle entity, Pr
 
 	for (EntityComponentsIterator it=mComponentMgr->GetEntityComponents(entity.GetID()); it.HasMore(); ++it)
 	{
-		(*it)->GetRTTI()->EnumProperties(*it, out, flagMask);
+		(*it)->EnumProperties(*it, out, flagMask);
 	}
 
 	return true;
@@ -335,7 +335,7 @@ PropertyHolder EntitySystem::EntityMgr::GetEntityProperty( const EntityHandle en
 	}
 	for (EntityComponentsIterator it=mComponentMgr->GetEntityComponents(entity.GetID()); it.HasMore(); ++it)
 	{
-		AbstractProperty* prop = (*it)->GetRTTI()->GetProperty(key, flagMask);
+		AbstractProperty* prop = (*it)->GetPropertyPointer(key, flagMask);
 		if (prop) return PropertyHolder(*it, prop);
 	}
 
@@ -367,7 +367,7 @@ Reflection::PropertyHolder EntitySystem::EntityMgr::GetEntityComponentProperty( 
 	}
 
 	Component* cmp = mComponentMgr->GetEntityComponent(entity.GetID(), component);
-	AbstractProperty* prop = cmp->GetRTTI()->GetProperty(propertyKey, flagMask);
+	AbstractProperty* prop = cmp->GetPropertyPointer(propertyKey, flagMask);
 	if (prop) return PropertyHolder(cmp, prop);
 
 
@@ -394,10 +394,32 @@ bool EntitySystem::EntityMgr::HasEntityProperty( const EntityHandle entity, cons
 	OC_DASSERT(mComponentMgr);
 	for (EntityComponentsIterator it=mComponentMgr->GetEntityComponents(entity.GetID()); it.HasMore(); ++it)
 	{
-		AbstractProperty* prop = (*it)->GetRTTI()->GetProperty(key, flagMask);
+		AbstractProperty* prop = (*it)->GetPropertyPointer(key, flagMask);
 		if (prop) return true;
 	}
 	return false;
+}
+
+/*template <class T>
+bool EntitySystem::EntityMgr::RegisterDynamicPropertyOfEntityComponent(const EntityHandle entity, const ComponentID component, 
+	const StringKey propertyKey, const PropertyAccessFlags accessFlags, const string& comment)
+{
+	
+}*/
+
+		
+bool EntitySystem::EntityMgr::UnregisterDynamicPropertyOfEntityComponent(const EntityHandle entity, const ComponentID component,
+	const StringKey propertyKey)
+{
+	OC_DASSERT(mComponentMgr);
+	if (component >= mComponentMgr->GetNumberOfEntityComponents(entity.GetID()))
+	{
+		ocError << "Invalid component ID: " << component;
+		return false;
+	}
+	
+	Component* cmp = mComponentMgr->GetEntityComponent(entity.GetID(), component);
+	return cmp->UnregisterDynamicProperty(propertyKey);
 }
 
 EntitySystem::EntityHandle EntitySystem::EntityMgr::FindFirstEntity( const string& name )
@@ -563,6 +585,16 @@ bool EntitySystem::EntityMgr::GetEntityComponentTypes(const EntityHandle entity,
 		out.push_back((*it)->GetType());
 	}
 	return true;
+}
+
+ComponentID EntitySystem::EntityMgr::FindComponentOfType(const EntityHandle entity, const eComponentType type)
+{
+	int32 i = 0;
+	for (EntityComponentsIterator it=mComponentMgr->GetEntityComponents(entity.GetID()); it.HasMore(); ++it, ++i)
+	{
+		if ((*it)->GetType() == type) return i;
+	}
+	return -1;
 }
 
 void EntitySystem::EntityMgr::UpdatePrototypeCopy( const EntityHandle prototype )
@@ -817,7 +849,7 @@ bool EntitySystem::EntityMgr::GetEntityComponentProperties( const EntityHandle e
 	}
 
 	Component* cmp = mComponentMgr->GetEntityComponent(entity.GetID(), component);
-	cmp->GetRTTI()->EnumProperties(cmp, out, flagMask);
+	cmp->EnumProperties(cmp, out, flagMask);
 
 	return true;
 }
@@ -833,7 +865,7 @@ bool EntitySystem::EntityMgr::HasEntityComponentProperty( const EntityHandle ent
 	}
 
 	Component* cmp = mComponentMgr->GetEntityComponent(entity.GetID(), componentID);
-	AbstractProperty* prop = cmp->GetRTTI()->GetProperty(propertyKey, flagMask);
+	AbstractProperty* prop = cmp->GetPropertyPointer(propertyKey, flagMask);
 	if (prop) return true;
 
 	return false;
