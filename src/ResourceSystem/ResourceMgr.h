@@ -41,7 +41,7 @@ namespace ResourceSystem
 
 		/// Assigns a resource to a group.
 		/// The resource type if autodetected if you don't specify it.
-		bool AddResourceFileToGroup(const string& filepath, const StringKey& group, eResourceType type = RESTYPE_AUTODETECT, bool pathRelative = true);
+		bool AddResourceFileToGroup(const string& filepath, const StringKey& group, eResourceType type = RESTYPE_AUTODETECT, bool pathRelative = true, const string& customName = "");
 
 		/// Assigns a resource to a group. Note that if you create the resource this way you must manually delete it later.
 		bool AddManualResourceToGroup(const StringKey& name, const StringKey& group, eResourceType type);

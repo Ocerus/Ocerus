@@ -16,8 +16,8 @@ EntityMessage::eResult EntityComponents::Sprite::HandleMessage( const EntityMess
 	{
 	case EntityMessage::INIT:
 		{
-			if ((mResPath == ""))
-				return EntityMessage::RESULT_IGNORED;
+			if ((mResPath == "")) return EntityMessage::RESULT_IGNORED;
+
 			///@todo tohle by chtelo nejak zoptimalizovat, nejspis to pridavani resourcu udelat nejak globalnejc
 			if (gResourceMgr.AddResourceFileToGroup(mResPath, "Textures", ResourceSystem::RESTYPE_TEXTURE, true))
 			{
@@ -27,8 +27,7 @@ EntityMessage::eResult EntityComponents::Sprite::HandleMessage( const EntityMess
 				{
 					if (*str == '/') lastSlashPos = str;
 				}
-				mTextureHandle = (GfxSystem::TexturePtr)gResourceMgr.GetResource("Textures",
-												StringKey(lastSlashPos+1, str-lastSlashPos-1));
+				mTextureHandle = (GfxSystem::TexturePtr)gResourceMgr.GetResource("Textures", StringKey(lastSlashPos+1, str-lastSlashPos-1));
 				return EntityMessage::RESULT_OK;
 			}
 			return EntityMessage::RESULT_ERROR;
@@ -38,14 +37,9 @@ EntityMessage::eResult EntityComponents::Sprite::HandleMessage( const EntityMess
 			Vector2 pos = GetOwner().GetProperty("Position").GetValue<Vector2>();
 			float32 z = (float32) GetOwner().GetProperty("Depth").GetValue<int32>();
 
-			if (mTextureHandle)
-			{
-				gGfxRenderer.AddSprite(GfxSystem::Sprite(pos, mSize, z, mTextureHandle->GetTexture(), mTransparency));
-			}
-			else
-			{
-				ocWarning << "Invalid texture";
-			}
+			GfxSystem::TexturePtr textureResource = mTextureHandle;
+			if (!textureResource) textureResource = (GfxSystem::TexturePtr)gResourceMgr.GetResource("General", "NullTexture");
+			gGfxRenderer.AddSprite(GfxSystem::Sprite(pos, mSize, z, textureResource->GetTexture(), mTransparency));
 
 			return EntityMessage::RESULT_OK;
 		}

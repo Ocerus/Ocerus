@@ -157,7 +157,7 @@ bool ResourceMgr::AddResourceDirToGroup(const string& path, const StringKey& gro
 	return result;
 }
 
-bool ResourceMgr::AddResourceFileToGroup(const string& filepath, const StringKey& group, eResourceType type, bool pathRelative)
+bool ResourceMgr::AddResourceFileToGroup(const string& filepath, const StringKey& group, eResourceType type, bool pathRelative, const string& customName)
 {
 	ocInfo << "Adding resource '" << filepath << "' to group '" << group << "'";
 
@@ -184,7 +184,8 @@ bool ResourceMgr::AddResourceFileToGroup(const string& filepath, const StringKey
 		return false;
 	}
 
-	string name = boostPath.filename();
+	string name = customName;
+	if (name.empty()) name = boostPath.filename();
 	ResourceGroupMap::const_iterator groupIt = mResourceGroups.find(group);
 	if (mResourceGroups.find(group) != mResourceGroups.end() && groupIt->second->find(name) != groupIt->second->end())
 	{

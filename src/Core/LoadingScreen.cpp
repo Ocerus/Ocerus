@@ -15,6 +15,17 @@ void Core::LoadingScreen::DoLoading( eType type )
 		break;
 	case TYPE_GENERAL_RESOURCES:
 
+		// basic resources needed by the program
+		gResourceMgr.AddResourceFileToGroup("general/NullTexture.png", "General", ResourceSystem::RESTYPE_TEXTURE, true, "NullTexture");
+
+		// make sure we have the necessary resources
+		if (!gResourceMgr.GetResource("General", "NullTexture")) OC_FAIL("Some essential resources are missing!");
+
+		// load the basic resources into memory
+		gResourceMgr.LoadResourcesInGroup("General");
+
+
+		// additional resources common for all projects
 		gResourceMgr.AddResourceDirToGroup("prototypes", "Prototypes");
 		gResourceMgr.AddResourceDirToGroup("test", "TestEntities", ".+\\.xml");
 		gResourceMgr.AddResourceDirToGroup(".", "Scripts", ".+\\.as");
@@ -24,6 +35,7 @@ void Core::LoadingScreen::DoLoading( eType type )
 		gResourceMgr.LoadResourcesInGroup("Scripts");
 
 		gGUIMgr.LoadStyle();
+
 		break;
 	}
 }
