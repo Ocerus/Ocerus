@@ -21,7 +21,7 @@ struct pair: public std::pair<_Ty1, _Ty2> {
 
 #include <vector>
 template<typename T>
-class vector: public std::vector<T> 
+class vector: public std::vector<T>
 {
 public:
     typedef typename std::vector<T>::size_type size_type;
@@ -36,14 +36,14 @@ public:
 
 template<typename _Ty>
 struct pooled_list
-{  
+{
 	// these definitions are taken from VS STL to exactly mimick what will be allocated by the container
 	// note that if the structure will be too small, an assert will be raised during the construction
 	struct _Node;
 	friend struct _Node;
 	typedef _Node *_Nodeptr;	// _Node allocator must have ordinary pointers
 	struct _Node
-	{	
+	{
 		_Nodeptr _Next;	// successor node, or first element if head
 		_Nodeptr _Prev;	// predecessor node, or last element if head
 		_Ty _Myval;	// the stored value, unused if head
@@ -53,7 +53,7 @@ struct pooled_list
 	};
 
 	typedef typename pooled_list::_Node allocable;
-	typedef std::list< _Ty, StlPoolAllocator<_Ty, allocable> > type; 
+	typedef std::list< _Ty, StlPoolAllocator<_Ty, allocable> > type;
 };
 
 template<typename T>
@@ -72,7 +72,7 @@ public:
 
 #include <queue>
 template<typename T>
-class queue: public std::queue<T> 
+class queue: public std::queue<T>
 {
 public:
     typedef typename std::queue<T>::container_type container_type;
@@ -84,7 +84,7 @@ public:
 
 #include <deque>
 template<typename T>
-class deque: public std::deque<T> 
+class deque: public std::deque<T>
 {
 public:
     typedef typename std::deque<T>::size_type size_type;
@@ -98,8 +98,8 @@ public:
 #include <map>
 
 template<typename _Key, typename _Ty>
-struct pooled_map 
-{ 
+struct pooled_map
+{
 	// these definitions are taken from VS STL to exactly mimick what will be allocated by the container
 	// note that if the structure will be too small, an assert will be raised during the construction
 	typedef typename std::map<_Key, _Ty>::value_type value_type;
@@ -107,7 +107,7 @@ struct pooled_map
 	friend struct _Node;
 	typedef _Node *_Nodeptr;	// _Node allocator must have ordinary pointers
 	struct _Node // tree node
-	{	
+	{
 		_Nodeptr _Left;	// left subtree, or smallest element if head
 		_Nodeptr _Parent;	// parent, or root of tree if head
 		_Nodeptr _Right;	// right subtree, or largest element if head
@@ -117,7 +117,7 @@ struct pooled_map
 	};
 
 	typedef typename pooled_map::_Node allocable;
-	typedef std::map< _Key, _Ty, std::less<_Key>, StlPoolAllocator<value_type, allocable> > type; 
+	typedef std::map< _Key, _Ty, std::less<_Key>, StlPoolAllocator<value_type, allocable> > type;
 };
 
 template<typename Key, typename Value>
@@ -133,7 +133,7 @@ public:
 template<typename _Key, typename _Ty>
 struct pooled_multimap: public pooled_map<_Key, _Ty>
 {
-	typedef std::multimap< _Key, _Ty, std::less<_Key>, Memory::StlPoolAllocator<typename pooled_map<_Key, _Ty>::value_type, typename pooled_map<_Key, _Ty>::allocable> > type; 
+	typedef std::multimap< _Key, _Ty, std::less<_Key>, Memory::StlPoolAllocator<typename pooled_map<_Key, _Ty>::value_type, typename pooled_map<_Key, _Ty>::allocable> > type;
 };
 
 template<typename Key, typename Value>
@@ -144,48 +144,35 @@ public:
 	inline multimap(): parentType() {}
 };
 
+// We are switching to boost::unordered_map which should be better than MSVC's hash_map.
+// Moreover, we do not need to split code for different platforms.
+#include <boost/unordered_map.hpp>
+
+template<typename Key, typename Mapped>
+struct pooled_hash_map
+{
+	typedef Mapped mapped_type;
+	typedef std::pair<Key const, Mapped> value_type;
+	typedef typename pooled_list< value_type >::allocable allocable;
+	typedef boost::unordered_map<Key, Mapped, boost::hash<Key>, std::equal_to<Key>, StlPoolAllocator<value_type, allocable> > type;
+};
 
 
-#if defined(_MSC_VER) || defined(__BORLANDC__)
-
-	#include <hash_map>
-
-	template<typename _Key, typename _Ty>
-	struct pooled_hash_map 
-	{ 
-		typedef _Ty value_type;
-		typedef typename pooled_list< std::pair<_Key, _Ty> >::allocable allocable; // hash_map stores its values in lists
-		typedef stdext::hash_map< _Key, _Ty, stdext::hash_compare<_Key, std::less<_Key> >, StlPoolAllocator<value_type, allocable> > type; 
-	};
-
-	// Note that we are explicitely not using pooled_hashmap here because it uses the allocator for a vector internally,
-	// which would break things up (can't use memory pools for vector efficiently).
-	template<typename Key, typename Value>
-	class hash_map: public stdext::hash_map<Key, Value>
-	{
-	public:
-		typedef typename stdext::hash_map<Key, Value> parentType;
-		inline hash_map(): parentType() {}
-	};
-
-#else
-
-	template<typename Key, typename Value>
-	class hash_map: public std::map<Key, Value>
-	{
-	public:
-		inline hash_map(): std::map<Key, Value>() {}
-	};
-
-#endif
-
-
+// Note that we are explicitely not using pooled_hashmap here because it uses the allocator for a vector internally,
+// which would break things up (can't use memory pools for vector efficiently).
+template<typename Key, typename Mapped>
+class hash_map: public boost::unordered_map<Key, Mapped>
+{
+public:
+	typedef typename boost::unordered_map<Key, Mapped> parentType;
+	inline hash_map(): parentType() {}
+};
 
 #include <set>
 
 template<typename _Key>
-struct pooled_set 
-{ 
+struct pooled_set
+{
 	// these definitions are taken from VS STL to exactly mimick what will be allocated by the container
 	// note that if the structure will be too small, an assert will be raised during the construction
 	typedef typename std::set<_Key>::value_type value_type;
@@ -193,7 +180,7 @@ struct pooled_set
 	friend struct _Node;
 	typedef _Node *_Nodeptr;	// _Node allocator must have ordinary pointers
 	struct _Node // tree node
-	{	
+	{
 		_Nodeptr _Left;	// left subtree, or smallest element if head
 		_Nodeptr _Parent;	// parent, or root of tree if head
 		_Nodeptr _Right;	// right subtree, or largest element if head
@@ -206,7 +193,7 @@ struct pooled_set
 	};
 
 	typedef typename pooled_set::_Node allocable;
-	typedef std::set< _Key, std::less<_Key>, Memory::StlPoolAllocator<value_type, allocable> > type; 
+	typedef std::set< _Key, std::less<_Key>, Memory::StlPoolAllocator<value_type, allocable> > type;
 };
 
 template<typename T>
