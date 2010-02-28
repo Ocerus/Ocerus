@@ -4,59 +4,28 @@
     <Window Type="DefaultWindow" Name="EditorRoot" >
         <Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{1,0},{1,0}}" />
         <Property Name="HorizontalAlignment" Value="Centre" />
-        <Window Type="Editor/StaticText" Name="EditorRoot/EntityInfo" >
-            <Property Name="Text" Value="Entity Info" />
-            <Property Name="Alpha" Value="0.8" />
-            <Property Name="HorzExtent" Value="92" />
-            <Property Name="VertExtent" Value="17.9156" />
-            <Property Name="HorzFormatting" Value="HorzCentred" />
-            <Property Name="VertFormatting" Value="TopAligned" />
-            <Property Name="UnifiedAreaRect" Value="{{0,4},{0,4},{0,300},{0,80}}" />
-            <Window Type="Editor/StaticText" Name="EditorRoot/EntityInfo/EntityIDLabel" >
-                <Property Name="Text" Value="ID:" />
-                <Property Name="HorzExtent" Value="24" />
-                <Property Name="VertExtent" Value="17.9156" />
-                <Property Name="FrameEnabled" Value="False" />
-                <Property Name="UnifiedAreaRect" Value="{{0,4},{0.333333,0},{0.3,-4},{0.666667,0}}" />
-                <Property Name="BackgroundEnabled" Value="False" />
-            </Window>
-            <Window Type="Editor/StaticText" Name="EditorRoot/EntityInfo/EntityNameLabel" >
-                <Property Name="Text" Value="Name:" />
-                <Property Name="HorzExtent" Value="56" />
-                <Property Name="VertExtent" Value="17.9156" />
-                <Property Name="FrameEnabled" Value="False" />
-                <Property Name="UnifiedAreaRect" Value="{{0,4},{0.666667,0},{0.3,-4},{1,0}}" />
-                <Property Name="BackgroundEnabled" Value="False" />
-            </Window>
-            <Window Type="Editor/StaticText" Name="EditorRoot/EntityInfo/EntityIDValue" >
-                <Property Name="Text" Value="NAN" />
-                <Property Name="HorzExtent" Value="37" />
-                <Property Name="VertExtent" Value="17.9156" />
-                <Property Name="FrameEnabled" Value="False" />
-                <Property Name="UnifiedAreaRect" Value="{{0.3,0},{0.333333,0},{1,-4},{0.666667,0}}" />
-                <Property Name="BackgroundEnabled" Value="False" />
-            </Window>
-            <Window Type="Editor/StaticText" Name="EditorRoot/EntityInfo/EntityNameValue" >
-                <Property Name="Text" Value="Unnamed" />
-                <Property Name="HorzExtent" Value="81" />
-                <Property Name="VertExtent" Value="17.9156" />
-                <Property Name="FrameEnabled" Value="False" />
-                <Property Name="UnifiedAreaRect" Value="{{0.3,0},{0.666667,0},{1,-4},{1,0}}" />
-                <Property Name="BackgroundEnabled" Value="False" />
-            </Window>
-        </Window>
-        <Window Type="Editor/StaticText" Name="EditorRoot/EntityProperties" >
-            <Property Name="Text" >Properties
+        <Window Type="Editor/StaticText" Name="EditorRoot/EntityEditor" >
+            <Property Name="Text" >Entity Editor
 </Property>
             <Property Name="Alpha" Value="0.8" />
-            <Property Name="HorzExtent" Value="88" />
-            <Property Name="VertExtent" Value="17.9156" />
+            <Property Name="HorzExtent" Value="96" />
+            <Property Name="VertExtent" Value="16.0604" />
             <Property Name="HorzFormatting" Value="HorzCentred" />
             <Property Name="VertFormatting" Value="TopAligned" />
-            <Property Name="UnifiedAreaRect" Value="{{0,4},{0,84},{0,300},{1,-4}}" />
-            <Window Type="Editor/MultiColumnList" Name="EditorRoot/EntityProperties/PropertyList" >
-                <Property Name="Alpha" Value="0.8" />
-                <Property Name="UnifiedAreaRect" Value="{{0,4},{0,32},{1,-4},{1,-4}}" />
+            <Property Name="UnifiedAreaRect" Value="{{0,4},{0,4},{0.25,0},{1,-4}}" />
+            <Window Type="Editor/ScrollablePane" Name="EditorRoot/EntityEditor/Scrollable" >
+                <Property Name="ContentArea" Value="l:0 t:0 r:0 b:0" />
+                <Property Name="HorzStepSize" Value="0.1" />
+                <Property Name="VertStepSize" Value="0.1" />
+                <Property Name="HorzOverlapSize" Value="0.01" />
+                <Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{1,0},{1,0}}" />
+                <Property Name="VertOverlapSize" Value="0.01" />
+                <Property Name="HorzScrollPosition" Value="0" />
+                <Property Name="VertScrollPosition" Value="0" />
+                <AutoWindow NameSuffix="__auto_container__" >
+                    <Property Name="ContentArea" Value="l:0 t:0 r:0 b:0" />
+                    <Property Name="ChildExtentsArea" Value="l:0 t:0 r:0 b:0" />
+                </AutoWindow>
             </Window>
         </Window>
     </Window>

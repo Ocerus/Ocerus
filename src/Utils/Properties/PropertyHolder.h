@@ -129,6 +129,13 @@ namespace Reflection
 			return mProperty->GetName();
 		}
 
+		/// Returns the comment of this property or empty string if no comment was set.
+		inline string GetComment(void) const
+		{
+			OC_DASSERT(mProperty);
+			return mProperty->GetComment();
+		}
+
 		/// Returns true if this holder holds a valid property.
 		inline bool IsValid(void) const { return (mOwner!=0 && mProperty!=0); }
 

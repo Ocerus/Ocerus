@@ -36,11 +36,11 @@ namespace Editor
 
 	private:
 
-		void SetEntityID(const string& entityID);
-		void SetEntityName(const string& entityName);
 		void SetText(const CEGUI::String& windowName, const CEGUI::String& text);
 
-		void UpdatePropertiesWindow(const EntitySystem::EntityHandle* newActiveEntity);
+		void UpdateEntityEditorWindow(const EntitySystem::EntityHandle* newActiveEntity);
+
+		void appendEntityEditorItem(CEGUI::Window* componentGroup, const string& itemName, const string& itemValue, int itemPos, const string& itemTooltip, bool readOnly = false);
 
 		typedef vector<CEGUI::Window*> CEGUIWindows;
 

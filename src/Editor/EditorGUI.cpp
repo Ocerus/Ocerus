@@ -5,11 +5,20 @@
 #include "EntitySystem/EntityMgr/EntityMgr.h"
 #include "CEGUI.h"
 
+#define gCEGUIWindowManager CEGUI::WindowManager::getSingleton()
+
+namespace Editor
+{
+	const string ENTITY_EDITOR_NAME = "EditorRoot/EntityEditor/Scrollable";
+	const int ENTITY_EDITOR_ITEM_HEIGHT = 26;
+	const int ENTITY_EDITOR_GROUP_HEIGHT = 30;
+}
+
+
 using namespace Editor;
 
 EditorGUI::EditorGUI()
 {
-
 }
 
 EditorGUI::~EditorGUI()
@@ -20,12 +29,15 @@ EditorGUI::~EditorGUI()
 void EditorGUI::LoadGUI()
 {
 	gGUIMgr.LoadRootLayout("Editor.layout");
+	CEGUI::System::getSingleton().setDefaultTooltip("Editor/Tooltip");
+
+/*
 	CEGUI::MultiColumnList* propertyListWidget = static_cast<CEGUI::MultiColumnList*>(
 	CEGUI::WindowManager::getSingleton().getWindow("EditorRoot/EntityProperties/PropertyList"));
 	propertyListWidget->addColumn("Component", 0, CEGUI::UDim(0.25, 0));
 	propertyListWidget->addColumn("Name", 1, CEGUI::UDim(0.25, 0));
 	propertyListWidget->addColumn("Value", 2, CEGUI::UDim(0.5, 0));
-
+*/
 
 
 
@@ -49,11 +61,8 @@ void EditorGUI::SetCurrentEntity(const EntitySystem::EntityHandle* newActiveEnti
 	{
 		newActiveEntity = 0;
 	}
-	SetEntityID(newActiveEntity ? StringConverter::ToString(newActiveEntity->GetID()) : "");
-	SetEntityName(newActiveEntity ? gEntityMgr.GetEntityName(*newActiveEntity) : "");
 
-	//// Update component window
-	UpdatePropertiesWindow(newActiveEntity);
+	UpdateEntityEditorWindow(newActiveEntity);
 }
 
 bool EditorGUI::EntityPickerHandler (const CEGUI::EventArgs& args)
@@ -64,31 +73,49 @@ bool EditorGUI::EntityPickerHandler (const CEGUI::EventArgs& args)
 	return true;
 }
 
-void EditorGUI::SetEntityID(const string& entityID)
-{
-	SetText("EditorRoot/EntityInfo/EntityIDValue", entityID);
-}
-
-void EditorGUI::SetEntityName(const string& entityName)
-{
-	SetText("EditorRoot/EntityInfo/EntityNameValue", entityName);
-}
-
 void EditorGUI::SetText(const CEGUI::String& windowName, const CEGUI::String& text)
 {
 	CEGUI::WindowManager::getSingleton().getWindow(windowName)->setText(text);
 }
 
-void EditorGUI::UpdatePropertiesWindow(const EntitySystem::EntityHandle* newActiveEntity)
+void EditorGUI::UpdateEntityEditorWindow(const EntitySystem::EntityHandle* newActiveEntity)
 {
-	CEGUI::WindowManager& winMgr = CEGUI::WindowManager::getSingleton();
+	CEGUI::ScrollablePane* entityEditorPane = static_cast<CEGUI::ScrollablePane*>( gCEGUIWindowManager.getWindow(ENTITY_EDITOR_NAME));
+	OC_ASSERT(entityEditorPane);
 
-	// Get components window
-	CEGUI::MultiColumnList* propertyListWidget = static_cast<CEGUI::MultiColumnList*>( winMgr.getWindow("EditorRoot/EntityProperties/PropertyList"));
-	OC_ASSERT(propertyListWidget);
+	// Clear all the content of Entity Editor
+	{
+		const CEGUI::Window* entityEditorContentPane = entityEditorPane->getContentPane();
+		OC_ASSERT(entityEditorContentPane);
 
-	// Clear components window
-	propertyListWidget->resetList();
+		int childCount = entityEditorContentPane->getChildCount();
+		for (int i = (childCount - 1); i >= 0; --i)
+		{
+			gCEGUIWindowManager.destroyWindow(entityEditorContentPane->getChildAtIdx(i));
+		}
+	}
+
+	int newGroupY = 22;			// The y coord for new group
+	const int groupHeight = 30;	// The height of an empty group. Items must be summed up to get the total height of a group.
+
+
+	// First "component" is general entity info
+	{
+		const string namePrefix = ENTITY_EDITOR_NAME + "/ComponentGeneralInfo";
+		CEGUI::Window* componentGroup = gCEGUIWindowManager.createWindow("Editor/GroupBox", namePrefix);
+		componentGroup->setText("General Info");
+		entityEditorPane->addChildWindow(componentGroup);
+
+		int currentItem = 0;
+		appendEntityEditorItem(componentGroup, "Entity ID", newActiveEntity ? StringConverter::ToString(newActiveEntity->GetID()) : 0, currentItem++, "Unique ID of the entity. It cannot be modified.", true);
+		appendEntityEditorItem(componentGroup, "Entity Name", newActiveEntity ? gEntityMgr.GetEntityName(*newActiveEntity) : "", currentItem++, "Name of the entity.");
+
+		componentGroup->setArea(CEGUI::URect(CEGUI::UDim(0, 4), CEGUI::UDim(0, (float)newGroupY + 1), CEGUI::UDim(1, -4), CEGUI::UDim(0, (float)newGroupY + groupHeight + (currentItem * ENTITY_EDITOR_ITEM_HEIGHT) - 1)));
+		newGroupY += groupHeight + (currentItem * ENTITY_EDITOR_ITEM_HEIGHT);
+	}
+
+	if (newActiveEntity == 0)
+		return;
 
 	int32 componentCount = EntitySystem::EntityMgr::GetSingleton().GetNumberOfEntityComponents(*newActiveEntity);
 
@@ -96,71 +123,44 @@ void EditorGUI::UpdatePropertiesWindow(const EntitySystem::EntityHandle* newActi
 	{
 		for (int componentID = 0; componentID < componentCount; ++componentID)
 		{
+			const string namePrefix = ENTITY_EDITOR_NAME + "/Component" + StringConverter::ToString(componentID);
 			const string componentName = EntitySystem::GetComponentTypeName(gEntityMgr.GetEntityComponentType(*newActiveEntity, componentID));
 
-
-			//string namePrefix = "EditorRoot/ComponentsWindow/Component" + StringConverter::ToString(componentID) + "/";
-
-			/*
-
-
-			// create component name label
-			CEGUI::Window* componentNameWidget = winMgr.createWindow("Editor/StaticText", namePrefix + "ComponentName");
-			propertyListWidget->addChildWindow(componentNameWidget);
-			componentNameWidget->setArea(CEGUI::URect(
-					CEGUI::UDim(0, 2),
-					CEGUI::UDim(0, (float)yPos + 2),
-					CEGUI::UDim(1, -14),
-					CEGUI::UDim(0, (float)yPos + 33)));
-			componentNameWidget->setText(EntitySystem::GetComponentTypeName(
-					gEntityMgr.GetEntityComponentType(*newActiveEntity, componentID)));
-
-			*/
+			CEGUI::Window* componentGroup = gCEGUIWindowManager.createWindow("Editor/GroupBox", namePrefix);
+			componentGroup->setText(componentName);
+			entityEditorPane->addChildWindow(componentGroup);
 
 			PropertyList propertyList;
 			gEntityMgr.GetEntityComponentProperties(*newActiveEntity, componentID, propertyList);
+			int currentItem = 0;
 			for (PropertyList::iterator it = propertyList.begin(); it != propertyList.end(); ++it)
 			{
-				CEGUI::ListboxTextItem* propertyNameItem = new CEGUI::ListboxTextItem(it->GetName());
-				CEGUI::ListboxTextItem* propertyValueItem = new CEGUI::ListboxTextItem(it->GetValueString());
-				CEGUI::ListboxTextItem* componentItem = new CEGUI::ListboxTextItem(componentName);
+				appendEntityEditorItem(componentGroup, it->GetName(), it->GetValueString(), currentItem, it->GetComment());
 
-				CEGUI::uint row = propertyListWidget->addRow(componentItem, 0);
-				propertyListWidget->setItem(propertyNameItem, 1, row);
-				propertyListWidget->setItem(propertyValueItem, 2, row);
-			}
-/*
-
-			if (propertyCount != 0)
-			{
-				// create property list
-				CEGUI::MultiColumnList* propertyListWidget = static_cast<CEGUI::MultiColumnList*>
-						(winMgr.createWindow("Editor/MultiColumnList", namePrefix + "PropertyList"));
-				propertyListWidget->addChildWindow(propertyListWidget);
-				propertyListWidget->setArea(CEGUI::URect(
-						CEGUI::UDim(0, 2),
-						CEGUI::UDim(0, (float)yPos + 35),
-						CEGUI::UDim(1, -14),
-						CEGUI::UDim(0, (float)yPos + 35 + 35 + (35 * propertyCount))));
-
-				propertyListWidget->addColumn("Name", 0, CEGUI::UDim((float)0.4, 0));
-				propertyListWidget->addColumn("Value", 1, CEGUI::UDim((float)0.5, 0));
-
-				for (PropertyList::iterator it = propertyList.begin(); it != propertyList.end(); ++it)
-				{
-					CEGUI::ListboxTextItem* propertyName = new CEGUI::ListboxTextItem(it->GetName());
-					CEGUI::ListboxTextItem* propertyValue = new CEGUI::ListboxTextItem(it->GetValueString());
-
-					int newRow = propertyListWidget->addRow(propertyName, 0);
-					propertyListWidget->setItem(propertyValue, 1, newRow);
-				}
-				yPos += 35 + (35 * propertyCount);
+				currentItem++;
 			}
 
-			yPos += 35 + 5;
-*/
+			componentGroup->setArea(CEGUI::URect(CEGUI::UDim(0, 4), CEGUI::UDim(0, (float)newGroupY + 1), CEGUI::UDim(1, -4), CEGUI::UDim(0, (float)newGroupY + groupHeight + (currentItem * ENTITY_EDITOR_ITEM_HEIGHT))));
+			newGroupY += groupHeight + (currentItem * ENTITY_EDITOR_ITEM_HEIGHT);
 		}
 	}
-
 }
 
+
+void EditorGUI::appendEntityEditorItem(CEGUI::Window* componentGroup, const string& itemName, const string& itemValue, int itemPos, const string& itemTooltip, bool readOnly)
+{
+	const CEGUI::String& prefixName = componentGroup->getName();
+	CEGUI::Window* groupItemName = gCEGUIWindowManager.createWindow("Editor/StaticText", prefixName + "/" + itemName + "Label");
+	groupItemName->setText(itemName);
+	groupItemName->setProperty("FrameEnabled", "False");
+	groupItemName->setProperty("BackgroundEnabled", "False");
+	groupItemName->setTooltipText(itemTooltip);
+	groupItemName->setArea(CEGUI::URect(CEGUI::UDim(0, 2), CEGUI::UDim(0, (float)(itemPos * ENTITY_EDITOR_ITEM_HEIGHT) + 1), CEGUI::UDim(0.5, -1), CEGUI::UDim(0, (float)(itemPos + 1) * ENTITY_EDITOR_ITEM_HEIGHT - 1)));
+	componentGroup->addChildWindow(groupItemName);
+
+	CEGUI::Window* groupItemValue = gCEGUIWindowManager.createWindow("Editor/Editbox", prefixName + "/" + itemName + "Value");
+	groupItemValue->setText(itemValue);
+	groupItemValue->setProperty("ReadOnly", readOnly ? "True" : "False");
+	groupItemValue->setArea(CEGUI::URect(CEGUI::UDim(0.5, 1), CEGUI::UDim(0, (float)(itemPos * ENTITY_EDITOR_ITEM_HEIGHT) + 1), CEGUI::UDim(1, -1), CEGUI::UDim(0, (float)(itemPos + 1) * ENTITY_EDITOR_ITEM_HEIGHT - 1)));
+	componentGroup->addChildWindow(groupItemValue);
+}
