@@ -29,6 +29,7 @@
 
 #include "../EntitySystem/EntityMgr/EntityMgr.h"
 #include "../EntitySystem/EntityMgr/EntityHandle.h"
+#include "../EntitySystem/EntityMgr/EntityHandleInlines.h"
 #include "../EntitySystem/EntityMgr/EntityDescription.h"
 #include "../EntitySystem/ComponentMgr/ComponentEnums.h"
 #include "../EntitySystem/EntityMgr/EntityPicker.h"

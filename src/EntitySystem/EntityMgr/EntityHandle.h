@@ -8,7 +8,6 @@
 #include "EntityMessage.h"
 #include "Properties/PropertyAccess.h"
 #include "../ComponentMgr/ComponentID.h"
-#include "EntityMgr.h"
 
 namespace EntitySystem
 {
@@ -74,12 +73,9 @@ namespace EntitySystem
 		/// Register a dynamic property to a component of this entity.
 		template <class T>
 		bool RegisterDynamicPropertyOfComponent(const ComponentID component, 
-			const StringKey propertyKey, const PropertyAccessFlags accessFlags, const string& comment)
-		{
-			return EntitySystem::EntityMgr::GetSingleton().RegisterDynamicPropertyOfEntityComponent<T>(*this, component, propertyKey, accessFlags, comment);
-		}
+			const StringKey propertyKey, const PropertyAccessFlags accessFlags, const string& comment);
 
-		/// Unregister a dynamic property of a component of this entity.
+        /// Unregister a dynamic property of a component of this entity.
 		bool UnregisterDynamicPropertyOfComponent(const ComponentID component, const StringKey propertyKey);
 
 		/// Sends a message to this entity.
@@ -126,5 +122,4 @@ namespace EntitySystem
 	}
 
 }
-
 #endif
