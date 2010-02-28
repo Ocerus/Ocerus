@@ -18,9 +18,12 @@ namespace GfxSystem
 	{
 	public:
 		
-		void AddSpriteEntity(EntitySystem::EntityHandle ent);
+		//void AddSpriteEntity(EntitySystem::EntityHandle ent);
 
-		void RemoveSpriteEntity(EntitySystem::EntityHandle ent);
+		void AddSprite(Sprite *spr);
+
+		//void RemoveSpriteEntity(EntitySystem::EntityHandle ent);
+		void RemoveSprite(Sprite *spr);
 		
 		void AddCamera(EntitySystem::EntityHandle ent);
 
@@ -28,12 +31,14 @@ namespace GfxSystem
 
 		EntitySystem::EntityHandle GetCamera(int32 i);
 		
-		/// Sends DRAW message to stored sprite entities
+		/// (not anymore) Sends DRAW message to stored sprite entities
 		void Draw();
 		
 	private:	
 		typedef vector<EntitySystem::EntityHandle> EntityHandleVector;
-		EntityHandleVector mSprites;	//temprorary
+		typedef vector<Sprite*> SpriteVector;
+		//EntityHandleVector mSprites;	//temprorary
+		SpriteVector mSprites;	//temprorary
 		EntityHandleVector mCameras;
 	};
 }

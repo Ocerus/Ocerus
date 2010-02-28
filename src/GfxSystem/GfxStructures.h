@@ -73,22 +73,26 @@ namespace GfxSystem
 	struct Sprite
 	{
 		Vector2 position, size;
+		float32 angle;
 		float32 z;
 		uint32 texture;
 		float32 transparency;
 
-		Sprite(	const Vector2& _position, const Vector2& _size, const float32 _z, const uint32 _texture,
-				const float32 _transparency ):
-			position(_position), size(_size), z(_z), texture(_texture),
-			transparency(_transparency) {}
+		Sprite(){}
+
+		Sprite(	const Vector2& _position, const Vector2& _size, const float32 _angle,
+			    const float32 _z, const uint32 _texture, const float32 _transparency ):
+			position(_position), size(_size), z(_z), angle(_angle),
+			texture(_texture), transparency(_transparency) {}
 	};
 
 	struct GfxViewport
 	{
+		GfxViewport(){}
 		GfxViewport(	const Vector2& _pos, const Vector2& _size, const bool _relative ):
 						position(_pos), size(_size), relative(_relative) {}
 
-		// relatative (0,1) to window size
+		// position relatative (0-1) to window size
 		Vector2 position;
 		Vector2 size;
 

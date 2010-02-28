@@ -4,18 +4,37 @@
 using namespace GfxSystem;
 
 
-void GfxSceneMgr::AddSpriteEntity(EntitySystem::EntityHandle ent)
+/*void GfxSceneMgr::AddSpriteEntity(EntitySystem::EntityHandle ent)
 {
 	mSprites.push_back(ent);
+}*/
+
+void GfxSceneMgr::AddSprite(Sprite *spr)
+{
+	mSprites.push_back(spr);
 }
 
-void GfxSceneMgr::RemoveSpriteEntity(EntitySystem::EntityHandle ent)
+/*void GfxSceneMgr::RemoveSpriteEntity(EntitySystem::EntityHandle ent)
 {
 	EntityHandleVector::iterator it;
 	for(it = mSprites.begin(); it != mSprites.end(); ++it)
 	{
 		if ((*it) == ent)
 		{
+			mSprites.erase(it);
+			return;
+		}
+	}
+}*/
+
+void GfxSceneMgr::RemoveSprite(Sprite *spr)
+{
+	SpriteVector::iterator it;
+	for(it = mSprites.begin(); it != mSprites.end(); ++it)
+	{
+		if ((*it) == spr)
+		{
+			delete (*it);
 			mSprites.erase(it);
 			return;
 		}
@@ -52,9 +71,10 @@ EntitySystem::EntityHandle GfxSceneMgr::GetCamera(int32 i)
 
 void GfxSceneMgr::Draw()
 {
-	EntityHandleVector::iterator it;
+	SpriteVector::iterator it;
 	for(it = mSprites.begin(); it != mSprites.end(); ++it)
 	{
-		gEntityMgr.PostMessage(*(it), EntitySystem::EntityMessage::DRAW);
+		//gEntityMgr.PostMessage(*(it), EntitySystem::EntityMessage::DRAW);
+		gGfxRenderer.AddSprite(*(*it));
 	}
 }

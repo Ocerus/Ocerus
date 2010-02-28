@@ -11,7 +11,6 @@
 // Big standard libraries come here. But only if they are needed by some of the headers below.
 #include <boost/filesystem/fstream.hpp>
 
-
 // Our custom headers come here.
 #include "../Core/Config.h"
 
@@ -36,6 +35,7 @@
 
 #include "../GfxSystem/GfxWindow.h"
 #include "../GfxSystem/GfxRenderer.h"
+#include "../GfxSystem/GfxSceneMgr.h"
 
 #include "../GUISystem/GUIMgr.h"
 
