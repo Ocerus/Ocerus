@@ -72,13 +72,14 @@ namespace GfxSystem
 
 	struct Sprite
 	{
-		Vector2 position, size;
+		Vector2 position;
+		Vector2 size;
 		float32 angle;
 		float32 z;
 		uint32 texture;
 		float32 transparency;
 
-		Sprite(){}
+		Sprite(): position(Vector2_Zero), size(Vector2_Zero), angle(0), z(0), texture(0), transparency(0) {}
 
 		Sprite(	const Vector2& _position, const Vector2& _size, const float32 _angle,
 			    const float32 _z, const uint32 _texture, const float32 _transparency ):
@@ -88,15 +89,12 @@ namespace GfxSystem
 
 	struct GfxViewport
 	{
-		GfxViewport(){}
-		GfxViewport(	const Vector2& _pos, const Vector2& _size, const bool _relative ):
-						position(_pos), size(_size), relative(_relative) {}
+		/// Constructs the viewport from position and size. If relative is set to true the position and size are vectors from
+		/// [0,1]x[0,1] and are relative to the window boundaries.
+		GfxViewport(const Vector2& _pos, const Vector2& _size, const bool _relative): position(_pos), size(_size), relative(_relative) {}
 
-		// position relatative (0-1) to window size
 		Vector2 position;
 		Vector2 size;
-
-		//true if the size of the scene shown in viewport is relative to window size
 		bool relative;
 	};
 }

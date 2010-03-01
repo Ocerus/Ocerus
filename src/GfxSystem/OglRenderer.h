@@ -17,16 +17,16 @@ namespace GfxSystem
 	{
 	public:
 		/// Intialize OpenGL
-		virtual void Init() const;
+		virtual void InitImpl() const;
 		
 		/// Prepares OpenGL for drawing
-		virtual bool BeginRendering() const;
+		virtual bool BeginRenderingImpl() const;
 		
 		/// Finilize drawing whole screen (swap buffers etc ...)
-		virtual void EndRendering() const;
+		virtual void EndRenderingImpl() const;
 		
 		/// Finilize drawing current viewpoint (reset depth buffer ...)
-		virtual void FinalizeViewport() const;
+		virtual void FinalizeRenderTargetImpl() const;
 
 /**
 	Loads an image from RAM into an OpenGL texture.
@@ -72,10 +72,10 @@ namespace GfxSystem
 									const Color& color, const bool fill) const;
 
 		/// Set current viewport
-		virtual void SetViewport(const GfxViewport& viewport) const;
+		virtual void SetCurrentViewportImpl(const GfxViewport& viewport) const;
 
 		/// Set current camera
-		virtual void SetCamera(const Vector2& position, const float32 zoom, const float32 rotation) const;
+		virtual void SetCurrentCameraImpl(const Vector2& position, const float32 zoom, const float32 rotation) const;
 
 	};
 }

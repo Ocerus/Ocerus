@@ -11,7 +11,7 @@ EntitySystem::EntityPicker::EntityPicker( const Vector2& worldCursorPos ):
 
 }
 
-EntitySystem::EntityPicker::EntityPicker( const int32 screenCursorX, const int32 screenCursorY ):
+EntitySystem::EntityPicker::EntityPicker( const int32 screenCursorX, const int32 screenCursorY, const EntityHandle camera ):
 	mResult()
 {
 	//TODO:Gfx
@@ -19,26 +19,12 @@ EntitySystem::EntityPicker::EntityPicker( const int32 screenCursorX, const int32
 	//mCursorWorldPosition.y = gGfxRenderer.ScreenToWorldY(screenCursorY);
 }
 
-void EntitySystem::EntityPicker::Update( const EntityHandle entity, const Vector2& circleCenter, const float32 circleRadius )
+EntitySystem::EntityHandle EntitySystem::EntityPicker::PickSingleEntity( void )
 {
-	if (MathUtils::DistanceSquared(circleCenter, mCursorWorldPosition) <= MathUtils::Sqr(circleRadius))
-		PickIfHigherPriority(entity);
+	return EntityHandle::Null;
 }
 
-void EntitySystem::EntityPicker::Update( const EntityHandle entity, const float32 rectX1, const float32 rectY1, const float32 rectX2, const float32 rectY2 )
+void EntitySystem::EntityPicker::PickMultipleEntities( vector<EntityHandle>& out )
 {
-	if (mCursorWorldPosition.x>=rectX1 && mCursorWorldPosition.y>=rectY1
-		&& mCursorWorldPosition.x<=rectX2 && mCursorWorldPosition.y<=rectY2)
-		PickIfHigherPriority(entity);
-}
 
-EntitySystem::EntityHandle EntitySystem::EntityPicker::GetResult( void ) const
-{
-	return mResult;
 }
-
-void EntitySystem::EntityPicker::PickIfHigherPriority( const EntityHandle entity )
-{
-	mResult = entity;
-}
-

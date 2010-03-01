@@ -729,6 +729,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\GfxSystem\ScreenToWorldConverter.h"
+					>
+				</File>
+				<File
 					RelativePath="..\src\GfxSystem\Texture.h"
 					>
 				</File>

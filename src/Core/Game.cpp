@@ -77,22 +77,22 @@ void Core::Game::Init()
 
 	//// TEST ////
 
-	//-------------------
+	// load entities
 	gEntityMgr.LoadEntitiesFromResource(gResourceMgr.GetResource("TestEntities", "test_entities.xml"));
-	//-------------------
 
-	// set camera
+	// set cameras
 	mCameraFocus.Invalidate();
 	EntityHandle ship = gEntityMgr.FindFirstEntity("ship0");
 	if (ship.IsValid())
 	{
 		Vector2 shipPos = ship.GetProperty("Position").GetValue<Vector2>();
-		//TODO:Gfx
-		//gGfxRenderer.SetCameraPos(shipPos);
 		mCameraFocus = ship;
 	}
-	//TODO:Gfx
-	//gGfxRenderer.SetCameraScale(50.0f);
+
+	// setup render targets
+	gGfxRenderer.AddRenderTarget(GfxSystem::GfxViewport(Vector2(0, 0.5), Vector2(0.5, 0.5), true), gGfxSceneMgr.GetCamera(0));
+	gGfxRenderer.AddRenderTarget(GfxSystem::GfxViewport(Vector2(0.0, 0.0), Vector2(1, 0.5), false), gGfxSceneMgr.GetCamera(1));
+	gGfxRenderer.AddRenderTarget(GfxSystem::GfxViewport(Vector2(0.5, 0.5), Vector2(0.5, 0.5), true), gGfxSceneMgr.GetCamera(2));
 
 
 
@@ -138,11 +138,10 @@ void Core::Game::Update( const float32 delta )
 	mTimer.UpdateInSeconds(delta);
 
 
-	// pick hover entity
-	MouseState& mouse = gInputMgr.GetMouseState();
+	// pick entity the mouse is hovering over right now
+	/*MouseState& mouse = gInputMgr.GetMouseState();
 	EntityPicker picker(mouse.x, mouse.y);
-	gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::MOUSE_PICK));
-	mHoveredEntity = picker.GetResult();
+	mHoveredEntity = picker.PickSingleEntity();*/
 
 	// check action scripts
 	gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::CHECK_ACTION));
@@ -191,11 +190,7 @@ void Core::Game::Update( const float32 delta )
 		physicsDelta -= stepSize;
 	}
 	mPhysicsResidualDelta = physicsDelta;
-
-	//particle effects
-	//TODO:Gfx
-	//gPSMgr.Update(delta);
-};
+}
 
 void Core::Game::Draw( const float32 passedDelta)
 {
@@ -206,146 +201,27 @@ void Core::Game::Draw( const float32 passedDelta)
 
 
 	// ----------------TESTING-------------------------
-	EntitySystem::EntityHandle cam_handle;
-
-	// Viewport 1 -------------------------------------
-	cam_handle = gGfxSceneMgr.GetCamera(0);
-	if (cam_handle.IsValid())
-	{
-		PropertyHolder pos_holder = gEntityMgr.GetEntityProperty(cam_handle, "Position" );
-		PropertyHolder zoom_holder = gEntityMgr.GetEntityProperty(cam_handle, "Zoom" );
-		PropertyHolder rot_holder = gEntityMgr.GetEntityProperty(cam_handle, "Rotation" );
-		gGfxRenderer.SetCamera(pos_holder.GetValue<Vector2>(), zoom_holder.GetValue<float32>(), rot_holder.GetValue<float32>());
-
-		GfxSystem::GfxViewport vp(Vector2(0, 0.5), Vector2(0.5, 0.5), true);
-		gGfxRenderer.SetViewport(vp);
-
-		gGfxRenderer.DrawSprites();
-
-		gGfxRenderer.DrawRect(Vector2(100,-100), Vector2(200,300), 45, GfxSystem::Color(255,0,0), false);
-
-		// Testing physics draw
-		mPhysics->DrawDebugData();
-
-		gGfxRenderer.FinalizeViewport();
-	}
-
-	// Viewport 2 -------------------------------------
-	cam_handle = gGfxSceneMgr.GetCamera(1);
-	if (cam_handle.IsValid())
-	{
-		PropertyHolder pos_holder = gEntityMgr.GetEntityProperty(cam_handle, "Position" );
-		PropertyHolder zoom_holder = gEntityMgr.GetEntityProperty(cam_handle, "Zoom" );
-		PropertyHolder rot_holder = gEntityMgr.GetEntityProperty(cam_handle, "Rotation" );
-		gGfxRenderer.SetCamera(pos_holder.GetValue<Vector2>(), zoom_holder.GetValue<float32>(), rot_holder.GetValue<float32>());
-
-		GfxSystem::GfxViewport vp(Vector2(0.0, 0.0), Vector2(1, 0.5), false);
-		gGfxRenderer.SetViewport(vp);
-
-		gGfxRenderer.DrawSprites();
-		
-		// Testing physics draw
-		mPhysics->DrawDebugData();
-
-		gGfxRenderer.FinalizeViewport();
-	}
-
-	// Viewport 3 -------------------------------------
-	cam_handle = gGfxSceneMgr.GetCamera(2);
-	if (cam_handle.IsValid())
-	{
-		PropertyHolder pos_holder = gEntityMgr.GetEntityProperty(cam_handle, "Position" );
-		PropertyHolder zoom_holder = gEntityMgr.GetEntityProperty(cam_handle, "Zoom" );
-		PropertyHolder rot_holder = gEntityMgr.GetEntityProperty(cam_handle, "Rotation" );
-		gGfxRenderer.SetCamera(pos_holder.GetValue<Vector2>(), zoom_holder.GetValue<float32>(), rot_holder.GetValue<float32>());
-
-		GfxSystem::GfxViewport vp(Vector2(0.5, 0.5), Vector2(0.5, 0.5), true);
-		gGfxRenderer.SetViewport(vp);
-
-		gGfxRenderer.DrawSprites();
-		
-		// Testing physics draw
-		mPhysics->DrawDebugData();
-
-		gGfxRenderer.FinalizeViewport();
-	}
-
-	//GfxSystem::GfxViewport vp(Vector2(0, 0), Vector2(1, 1), true);
-	//gGfxRenderer.SetViewport(vp);
-	
-	//TODO: odstranit - pouze pro testovaci ucely
-	//GfxSystem::TexturePtr t = gResourceMgr.GetResource("textures", "Logo.png");
-	//gGfxRenderer.DrawTestTexturedQuad(t->GetTexture());
-	//------------------------------------------
-
-	//TODO:Gfx
-	// move camera in reaction to the user input
-	/*if (gInputMgr.IsKeyDown(KC_LEFT))
-	{
-		gGfxRenderer.MoveCamera(-CAMERA_SPEED_RATIO / gGfxRenderer.GetCameraScale() * delta, 0.0f);
-		mCameraFocus.Invalidate();
-	}
-	if (gInputMgr.IsKeyDown(KC_RIGHT))
-	{
-		gGfxRenderer.MoveCamera(CAMERA_SPEED_RATIO / gGfxRenderer.GetCameraScale() * delta, 0.0f);
-		mCameraFocus.Invalidate();
-	}
-	if (gInputMgr.IsKeyDown(KC_UP))
-	{
-		gGfxRenderer.MoveCamera(0.0f, -CAMERA_SPEED_RATIO / gGfxRenderer.GetCameraScale() * delta);
-		mCameraFocus.Invalidate();
-	}
-	if (gInputMgr.IsKeyDown(KC_DOWN))
-	{
-		gGfxRenderer.MoveCamera(0.0f, CAMERA_SPEED_RATIO / gGfxRenderer.GetCameraScale() * delta);
-		mCameraFocus.Invalidate();
-	}
-
-	if (mCameraFocus.IsValid())
-	{
-		Vector2 pos = mCameraFocus.GetProperty("Position").GetValue<Vector2>();
-		gGfxRenderer.SetCameraPos(pos);
-	}
-
-	// clear the screen
-	gGfxRenderer.ClearScreen(GfxSystem::Color(0,0,0));
+	gGfxRenderer.SetCurrentRenderTarget(0);
+	gGfxRenderer.DrawSprites();
+	gGfxRenderer.DrawRect(Vector2(100,-100), Vector2(200,300), 45, GfxSystem::Color(255,0,0), false);
+	// Testing physics draw
+	mPhysics->DrawDebugData();
+	gGfxRenderer.FinalizeRenderTarget();
 
 
-	// draw underlay under selected/hovered entities
-	bool hoveredEntityUnderlayDrawn = false;
-	for (EntityList::iterator it=mSelectedEntities.begin(); it!=mSelectedEntities.end(); ++it)
-	{
-		bool hovered = false;
-		gEntityMgr.PostMessage(*it, EntityMessage(EntityMessage::DRAW_UNDERLAY, &hovered));
-		if ((*it) == mHoveredEntity) hoveredEntityUnderlayDrawn = true;
-	}
-	if (!hoveredEntityUnderlayDrawn && mHoveredEntity.IsValid())
-	{
-		bool hovered = true;
-		gEntityMgr.PostMessage(mHoveredEntity, EntityMessage(EntityMessage::DRAW_UNDERLAY, &hovered));
-	}
-
-	// draw entitites
-	gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::DRAW));
-
-	// draw overlay above selected/hovered entities
-	bool hoveredEntityOverlayDrawn = false;
-	for (EntityList::iterator it=mSelectedEntities.begin(); it!=mSelectedEntities.end(); ++it)
-	{
-		bool hovered = false;
-		gEntityMgr.PostMessage(*it, EntityMessage(EntityMessage::DRAW_OVERLAY, &hovered));
-		if ((*it) == mHoveredEntity) hoveredEntityOverlayDrawn = true;
-
-	}
-	if (!hoveredEntityOverlayDrawn && mHoveredEntity.IsValid())
-	{
-		bool hovered = true;
-		gEntityMgr.PostMessage(mHoveredEntity, EntityMessage(EntityMessage::DRAW_OVERLAY, &hovered));
-	}
+	gGfxRenderer.SetCurrentRenderTarget(1);
+	gGfxRenderer.DrawSprites();
+	// Testing physics draw
+	mPhysics->DrawDebugData();
+	gGfxRenderer.FinalizeRenderTarget();
 
 
-	// draw remaining (undrawn) particle effects
-	gPSMgr.Render();*/
+	gGfxRenderer.SetCurrentRenderTarget(2);
+	gGfxRenderer.DrawSprites();
+	// Testing physics draw
+	mPhysics->DrawDebugData();
+	gGfxRenderer.FinalizeRenderTarget();
+
 }
 
 void Core::Game::KeyPressed( const KeyInfo& ke )
@@ -389,17 +265,7 @@ void Core::Game::KeyReleased( const KeyInfo& ke )
 
 void Core::Game::MouseMoved( const MouseInfo& mi )
 {
-	//TODO:Gfx
-	/*if (gInputMgr.IsMouseButtonPressed(MBTN_MIDDLE))
-	{
-		mCameraFocus.Invalidate();
-		Vector2 cursor = gGfxRenderer.ScreenToWorld(GfxSystem::Point(mi.x, mi.y));
-		gGfxRenderer.SetCameraPos(gGfxRenderer.GetCameraPos() - cursor + mCameraGrabWorldPos);
-	}
 
-	// zoom camera
-	if (mi.wheelDelta)
-		gGfxRenderer.ZoomCamera(CAMERA_SCALE_RATIO * gGfxRenderer.GetCameraScale() * mi.wheelDelta);*/
 }
 
 void Core::Game::MouseButtonPressed( const MouseInfo& mi, const eMouseButton btn )
@@ -435,20 +301,6 @@ void Core::Game::MouseButtonPressed( const MouseInfo& mi, const eMouseButton btn
 		{
 			mSelectedEntities.clear();
 		}
-	}
-	else if (btn == MBTN_RIGHT)
-	{
-		//TODO:Gfx
-		//Vector2 cursor = gGfxRenderer.ScreenToWorld(GfxSystem::Point(mi.x, mi.y));
-		for (EntityList::iterator i=mSelectedEntities.begin(); i!=mSelectedEntities.end(); ++i)
-		{
-			// eEntityType type = i->GetType();
-		}
-	}
-	else if (btn == MBTN_MIDDLE)
-	{
-		//TODO:Gfx
-		//mCameraGrabWorldPos = gGfxRenderer.ScreenToWorld(GfxSystem::Point(mi.x, mi.y));
 	}
 }
 

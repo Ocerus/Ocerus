@@ -13,7 +13,7 @@
 
 using namespace GfxSystem;
 
-void OglRenderer::Init() const
+void OglRenderer::InitImpl() const
 {
 	ocInfo << "*** OpenGL init ***";
 	//Initialize OpenGL
@@ -44,7 +44,7 @@ void OglRenderer::Init() const
 	SDL_GL_SwapBuffers();
 }
 
-bool OglRenderer::BeginRendering() const
+bool OglRenderer::BeginRenderingImpl() const
 {
 	// we must disable automatic resource unloading here because the textures would be unloaded before they would be
 	// rendered on the screen
@@ -55,7 +55,7 @@ bool OglRenderer::BeginRendering() const
 	return true;
 }
 
-void OglRenderer::EndRendering() const
+void OglRenderer::EndRenderingImpl() const
 {
 	// after the rendering is done, we must again enable automatic unloading of resources
 	gResourceMgr.EnableMemoryLimitEnforcing();
@@ -63,7 +63,7 @@ void OglRenderer::EndRendering() const
 	SDL_GL_SwapBuffers();
 }
 
-void OglRenderer::FinalizeViewport() const
+void OglRenderer::FinalizeRenderTargetImpl() const
 {
 	glClear ( GL_DEPTH_BUFFER_BIT );
 }
@@ -229,7 +229,7 @@ void OglRenderer::DrawRect(	const Vector2& position, const Vector2& size, const 
 	glPopMatrix();
 }
 
-void OglRenderer::SetViewport(const GfxViewport& viewport) const
+void OglRenderer::SetCurrentViewportImpl(const GfxViewport& viewport) const
 {
 	int32 resx = gGfxWindow.GetResolutionWidth();
 	int32 resy = gGfxWindow.GetResolutionHeight();
@@ -260,7 +260,7 @@ void OglRenderer::SetViewport(const GfxViewport& viewport) const
 	glMatrixMode( GL_MODELVIEW );
 }
 	
-void OglRenderer::SetCamera(const Vector2& position, const float32 zoom, const float32 rotation) const
+void OglRenderer::SetCurrentCameraImpl(const Vector2& position, const float32 zoom, const float32 rotation) const
 {
 	glLoadIdentity();
 	glRotatef(rotation, 0, 0, 1);

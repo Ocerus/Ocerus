@@ -17,16 +17,14 @@ namespace EntitySystem
 		EntityPicker(const Vector2& worldCursorPos);
 
 		/// Creates a picker for selecting an entity under the current mouse cursor.
-		EntityPicker(const int32 screenCursorX, const int32 screenCursorY);
+		/// In this case the camera used for transformation must be defined.
+		EntityPicker(const int32 screenCursorX, const int32 screenCursorY, const EntityHandle camera);
 
-		/// Tries to pick this entity if it is in specified area and has a specified type.
-		void Update(const EntityHandle entity, const Vector2& circleCenter, const float32 circleRadius);
+		/// Runs the picking query. The result is returned directly.
+		EntityHandle PickSingleEntity(void);
 
-		/// Tries to pick this entity if it is in specified area and has a specified type.
-		void Update(const EntityHandle entity, const float32 rectX1, const float32 rectY1, const float32 rectX2, const float32 rectY2);
-
-		/// Returns result of the search.
-		EntityHandle GetResult(void) const;
+		/// Runs the picking query. The result is filled into the given vector.
+		void PickMultipleEntities(vector<EntityHandle>& out);
 
 	private:
 
@@ -35,8 +33,6 @@ namespace EntitySystem
 
 		/// Found entities.
 		EntityHandle mResult;
-
-		void PickIfHigherPriority(const EntityHandle entity);
 
 		/// Disabled.
 		EntityPicker(const EntityPicker& rhs);

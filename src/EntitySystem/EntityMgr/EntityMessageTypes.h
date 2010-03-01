@@ -25,8 +25,6 @@ ENTITY_MESSAGE_TYPE(UPDATE_LOGIC, "void OnUpdateLogic(float32)", Params(PT_FLOAT
 ENTITY_MESSAGE_TYPE(UPDATE_PHYSICS, "void OnUpdatePhysics(float32)", Params(PT_FLOAT32))
 /// Sent after the physics of the entity has been updated.
 ENTITY_MESSAGE_TYPE(UPDATE_POST_PHYSICS, "void OnUpdatePostPhysics(float32)", Params(PT_FLOAT32))
-/// Sent when the mouse attempts to pick the entity.
-ENTITY_MESSAGE_TYPE(MOUSE_PICK, "void OnMousePick()", NO_PARAMS)
 /// Sent when the resources of this entity is going to be updated.
 ENTITY_MESSAGE_TYPE(RESOURCE_UPDATE, "void OnResourceUpdate()", NO_PARAMS)
 /// Sent in every game loop.

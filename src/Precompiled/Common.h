@@ -36,6 +36,7 @@
 #include "../GfxSystem/GfxWindow.h"
 #include "../GfxSystem/GfxRenderer.h"
 #include "../GfxSystem/GfxSceneMgr.h"
+#include "../GfxSystem/ScreenToWorldConverter.h"
 
 #include "../GUISystem/GUIMgr.h"
 
