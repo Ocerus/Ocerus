@@ -236,6 +236,8 @@ set(GUISystem_SRCS
     src/GUISystem/ResourceProvider.cpp
     src/GUISystem/CEGUIResource.cpp
     src/GUISystem/GUIMgr.cpp
+    src/GUISystem/GUIConsole.cpp
+    src/GUISystem/CEGUITools.cpp
 )
 
 set(InputSystem_SRCS

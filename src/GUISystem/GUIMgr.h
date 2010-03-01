@@ -21,6 +21,7 @@ namespace CEGUI
 namespace GUISystem
 {
 	class ResourceProvider;
+	class GUIConsole;
 
 	/**
 	 * The IConsoleListener interface defines an interface for listening to
@@ -46,13 +47,11 @@ namespace GUISystem
 		/// Destroys the GUIMgr.
 		virtual ~GUIMgr();
 
-		/*TODO
-		/// Don't call this now.
-		virtual void LoadGUI();
-		*/
+		/// Initializes GUI.
+		void Init();
 
-		/// Loads basic stuff common for all schemes.
-		void LoadStyle(void);
+		/// Deinitializes GUI.
+		void Deinit();
 
 		/// Loads GUI layout from filename and sets it as root layout of the window.
 		/// Automatically unloads previously loaded root layout.
@@ -84,22 +83,7 @@ namespace GUISystem
 		/// This method injects resolution change into GUI system. It is part of IGfxWindowListener interface.
 		virtual void ResolutionChanged(int32 width, int32 height);
 
-		/// @name Console related methods
-		//@{
-
-		/// Registers a console listener.
-		void AddConsoleListener(IConsoleListener* listener);
-
-		/// Adds a message to console.
-		void AddConsoleMessage(string message, const GfxSystem::Color& color = GfxSystem::Color(255,255,255));
-
-		/// Writes a log message to console, if its logging level is higher than set treshold.
-		void WriteLogMessageToConsole(const string& msg, int32 loggingLevel);
-
-		/// Returns whether console is loaded.
-		inline bool IsConsoleLoaded(void) const { return mConsoleIsLoaded; }
-
-		//@}
+		inline GUIConsole* GetConsole();
 
 #if 0   //TODO
 		/// Static text related methods
@@ -115,28 +99,11 @@ namespace GUISystem
 #endif
 
 	private:
-
-		/// @name CEGUI event callbacks
-		//@{
-		//bool QuitEvent(const CEGUI::EventArgs& e);
-
-		/// Initializes console.
-		void InitConsole();
-
-		/// This callback is called when user types a command to the console and presses enter.
-		bool ConsoleCommandEvent(const CEGUI::EventArgs& e);
-		//@}
-
-		/// Toggle console visibility. This is usually called after ` is pressed.
-		void ToggleConsole();
-
 		CEGUI::System* mCegui;
 		CEGUI::Window* mWindowRoot;
 		CEGUI::Window* mCurrentRootLayout;
 
-		CEGUI::Window* mConsoleRoot;
-		CEGUI::Window* mConsolePrompt;
-		CEGUI::Listbox* mConsoleMessages;
+		GUIConsole* mGUIConsole;
 
 		CEGUI::OpenGLRenderer* mRenderer;
 		ResourceProvider* mResourceProvider;
@@ -161,5 +128,10 @@ namespace GUISystem
 
 		//map<string, StaticElement*> mCreatedStaticElements;
 	};
+
+	inline GUIConsole* GUIMgr::GetConsole()
+	{
+		return mGUIConsole;
+	}
 }
 #endif

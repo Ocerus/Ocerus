@@ -1,6 +1,7 @@
 #include "Common.h"
 #include "LogMgr.h"
 #include "../Core/Application.h"
+#include "../GUISystem/GUIConsole.h"
 #include <iomanip>
 
 using namespace LogSystem;
@@ -44,7 +45,7 @@ void LogSystem::LogMgr::LogMessage(const string& msg, int32 loggingLevel)
 
 	stringstream ss;
 	ss << std::setw(2) << std::setfill('0') << locTime->tm_hour	<< ":"
-	   << std::setw(2) << std::setfill('0') << locTime->tm_min  << ":" 
+	   << std::setw(2) << std::setfill('0') << locTime->tm_min  << ":"
 	   << std::setw(2) << std::setfill('0') << locTime->tm_sec	<< ": ";
 
 	ss << msg << std::endl;
@@ -53,8 +54,8 @@ void LogSystem::LogMgr::LogMessage(const string& msg, int32 loggingLevel)
 
 	gApp.WriteToConsole(str);
 
-	if (GUISystem::GUIMgr::SingletonExists())
-		gGUIMgr.WriteLogMessageToConsole(str, loggingLevel);
+	if (GUISystem::GUIMgr::SingletonExists() && gGUIMgr.GetConsole())
+		gGUIMgr.GetConsole()->AppendLogMessage(str, loggingLevel);
 
 	(*mOutStream) << str;
 	mOutStream->flush();

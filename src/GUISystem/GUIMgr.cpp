@@ -2,6 +2,8 @@
 
 #include "GUIMgr.h"
 #include "ResourceProvider.h"
+#include "GUIConsole.h"
+#include "CEGUITools.h"
 
 #include "InputSystem/InputMgr.h"
 #include "InputSystem/InputActions.h"
@@ -22,9 +24,7 @@ namespace GUISystem
 		mCegui(0),
 		mWindowRoot(0),
 		mCurrentRootLayout(0),
-		mConsoleRoot(0),
-		mConsolePrompt(0),
-		mConsoleMessages(0),
+		mGUIConsole(0),
 		mRenderer(0),
 		mResourceProvider(0),
 		mConsoleIsLoaded(false)
@@ -33,7 +33,6 @@ namespace GUISystem
 
 		mRenderer = &CEGUI::OpenGLRenderer::create();
 		mResourceProvider = new ResourceProvider();
-
 		mCegui = &CEGUI::System::create(*mRenderer, mResourceProvider);
 
 		gInputMgr.AddInputListener(this);
@@ -44,85 +43,59 @@ namespace GUISystem
 		CEGUI::Scheme::setDefaultResourceGroup("schemes");
 		CEGUI::WidgetLookManager::setDefaultResourceGroup("looknfeels");
 		CEGUI::WindowManager::setDefaultResourceGroup("layouts");
+
+		mGUIConsole = new GUIConsole();
 	}
 
 	GUIMgr::~GUIMgr()
 	{
+		delete mGUIConsole;
+
+		gGfxWindow.RemoveScreenListener(this);
 		gInputMgr.RemoveInputListener(this);
+
 
 		CEGUI::System::destroy();
 		CEGUI::OpenGLRenderer::destroy(*mRenderer);
 		delete mResourceProvider;
-		//delete mCurrentWindowRoot;
 	}
 
-
-
-#if 0 // TODO
-	void GUIMgr::LoadGUI() {
-		ocInfo << "GUI Menu init";
-		//CEGUI::SchemeManager::getSingleton().loadScheme( "TaharezLook.scheme");
-		CEGUI::SchemeManager::getSingleton().loadScheme( "BGGUI.scheme");
-
-		// load in a font.  The first font loaded automatically becomes the default font.
-		if( !CEGUI::FontManager::getSingleton().isFontPresent( "Commonwealth-10" ) )
-		  CEGUI::FontManager::getSingleton().createFont( "Commonwealth-10.font" );
-
-		mCegui->setDefaultFont( "Commonwealth-10" );
-		CEGUI::System::getSingleton().setDefaultMouseCursor( "TaharezLook", "MouseArrow" );
-
-		string layout = GlobalProperties::Get<Core::Config>("GlobalConfig").GetString("Layout", "Battleships.layout", "CEGUI");
-
-		CEGUI::Window* CurrentWindowRoot =
-			CEGUI::WindowManager::getSingleton().loadWindowLayout( layout.c_str() );
-
-		CEGUI::System::getSingleton().setGUISheet( CurrentWindowRoot );
-		RegisterEvents();
-
-	}
-#endif
-
-	void GUIMgr::LoadStyle( void )
+	void GUIMgr::Init()
 	{
-		ocInfo << "*** GUIMgr load style ***";
-		try
-		{
-			gResourceMgr.AddResourceDirToGroup("gui/schemes", "schemes", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
-			gResourceMgr.AddResourceDirToGroup("gui/imagesets", "imagesets", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
-			gResourceMgr.AddResourceDirToGroup("gui/fonts", "fonts", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
-			gResourceMgr.AddResourceDirToGroup("gui/layouts", "layouts", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
-			gResourceMgr.AddResourceDirToGroup("gui/looknfeel", "looknfeels", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
+		/// Register CEGUI resources.
+		gResourceMgr.AddResourceDirToGroup("gui/schemes", "schemes", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
+		gResourceMgr.AddResourceDirToGroup("gui/imagesets", "imagesets", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
+		gResourceMgr.AddResourceDirToGroup("gui/fonts", "fonts", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
+		gResourceMgr.AddResourceDirToGroup("gui/layouts", "layouts", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
+		gResourceMgr.AddResourceDirToGroup("gui/looknfeel", "looknfeels", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
 
+		CEGUI_EXCEPTION_BEGIN
+		{
 			///@todo Improve GUI scheme loading. For example Editor.scheme does not need to be loaded unless in editor mode.
 			CEGUI::SchemeManager::getSingleton().create("VanillaSkin.scheme");
 			CEGUI::SchemeManager::getSingleton().create("TaharezLook.scheme");
 			CEGUI::SchemeManager::getSingleton().create("Editor.scheme");
 
-			if (!CEGUI::FontManager::getSingleton().isDefined("Commonwealth-10"))
-				CEGUI::FontManager::getSingleton().create("Commonwealth-10.font");
-
-			CEGUI::SchemeManager::getSingleton().create("Console.scheme");
+			/// Create and set root widget
 			mWindowRoot = CEGUI::WindowManager::getSingleton().createWindow("DefaultWindow", "root");
-			CEGUI::System::getSingleton().setGUISheet(mWindowRoot);
+			mCegui->setGUISheet(mWindowRoot);
 
-
+			/// Set defauls
 			mCegui->setDefaultFont("DejaVuSans-10");
 			mCegui->setDefaultMouseCursor("TaharezLook", "MouseArrow");
-
-			InitConsole();
-
-			/// -------------------------
-			/// Showing HelloWorld window
-			//CEGUI::Window* helloWorldWindow = LoadWindowLayout("HelloWorld.layout");
-			//mWindowRoot->addChildWindow(helloWorldWindow);
-			/// -------------------------
-
 		}
-		catch (CEGUI::Exception& exception)
-		{
-			ocWarning << "CEGUI exception caught (" << exception.getName() << "): " << exception.getMessage();
-		}
+		CEGUI_EXCEPTION_END
+
+		mGUIConsole->Init();
 	}
+
+	void GUIMgr::Deinit()
+	{
+		mGUIConsole->Deinit();
+
+		CEGUI::WindowManager::getSingleton().destroyAllWindows();
+	}
+
 
 	void GUIMgr::LoadRootLayout(const string& filename)
 	{
@@ -164,7 +137,7 @@ namespace GUISystem
 
 		// ToggleConsole button is hardwired here.
 		if (ke.keyAction == InputSystem::KC_GRAVE) {
-			ToggleConsole();
+			mGUIConsole->ToggleConsole();
 			return;
 		}
 
@@ -207,11 +180,7 @@ namespace GUISystem
 		mCegui->notifyDisplaySizeChanged(CEGUI::Size((float32)width, (float32)height));
 	}
 
-	void GUIMgr::AddConsoleListener(IConsoleListener* listener)
-	{
-		mConsoleListeners.push_back(listener);
-	}
-
+/*
 	void GUIMgr::AddConsoleMessage(string message, const GfxSystem::Color& color)
 	{
 		if (!mConsoleIsLoaded)
@@ -243,7 +212,7 @@ namespace GUISystem
 		if (!mConsoleIsLoaded) return;
 		AddConsoleMessage(msg);
 	}
-
+*/
 #if 0
 	bool GUIMgr::QuitEvent(const CEGUI::EventArgs& e) {
 		gApp.RequestStateChange(Core::AS_SHUTDOWN);
@@ -251,34 +220,14 @@ namespace GUISystem
 	}
 #endif
 
-	void GUIMgr::InitConsole()
-	{
-		OC_DASSERT(mCegui);
-		OC_DASSERT(mConsoleRoot == 0);
-		OC_DASSERT(mConsolePrompt == 0);
-		OC_DASSERT(mConsoleMessages == 0);
-		try
-		{
-			mConsoleRoot = LoadWindowLayout("Console.layout");
-			mWindowRoot->addChildWindow(mConsoleRoot);
-			mConsolePrompt = CEGUI::WindowManager::getSingleton().getWindow("ConsoleRoot/ConsolePrompt");
-			mConsoleMessages = (CEGUI::Listbox*)CEGUI::WindowManager::getSingleton().getWindow("ConsoleRoot/Pane");
-			mConsolePrompt->subscribeEvent(CEGUI::Editbox::EventTextAccepted,
-				CEGUI::Event::Subscriber(&GUIMgr::ConsoleCommandEvent, this));
-			mConsoleIsLoaded = true;
-		}
-		catch(const CEGUI::UnknownObjectException&)
-		{
-			ocError << "Could not initialize console - necessary GUI components not found.";
-		}
-	}
 
-	bool GUIMgr::ConsoleCommandEvent(const CEGUI::EventArgs& e)
+#if 0
+bool GUIMgr::ConsoleCommandEvent(const CEGUI::EventArgs& e)
 	{
 		OC_DASSERT(mConsoleIsLoaded);
 		string message(mConsolePrompt->getText().c_str());
 
-#if 0
+
 		if ( message.length() >= 9 ) {
 			string prefix = message.substr(0, 7);
 			string args = message.substr(8);
@@ -287,21 +236,13 @@ namespace GUISystem
 					ANCHOR_BOTTOM | ANCHOR_RIGHT,
 					ANCHOR_BOTTOM | ANCHOR_RIGHT );
 		}
-#endif
 		//AddLastCommand(message);
 		AddConsoleMessage(message);
 		mConsolePrompt->setText("");
 		return true;
 	}
+	#endif
 
-	void GUIMgr::ToggleConsole()
-	{
-		if (!mConsoleIsLoaded)
-			return;
-
-		mConsoleRoot->setVisible(!mConsoleRoot->isVisible());
-		mConsolePrompt->activate();
-	}
 
 	CEGUI::Window* GUIMgr::LoadWindowLayout(const string& filename, const string& name_prefix, const string& resourceGroup)
 	{

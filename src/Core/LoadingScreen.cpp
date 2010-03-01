@@ -34,7 +34,7 @@ void Core::LoadingScreen::DoLoading( eType type )
 		gResourceMgr.LoadResourcesInGroup("TestEntities");
 		gResourceMgr.LoadResourcesInGroup("Scripts");
 
-		gGUIMgr.LoadStyle();
+		gGUIMgr.Init();
 
 		break;
 	}

@@ -56,9 +56,9 @@ namespace GfxSystem
 		/// Gets windows handle. Windows OS only.
 		WindowHandle _GetWindowHandle() const;
 
-		inline virtual void AddScreenListener(IGfxWindowListener * listener) { 
+		inline virtual void AddScreenListener(IGfxWindowListener * listener) {
 			mGfxWindowListeners.insert(listener); }
-		inline virtual void RemoveResolutionChangeListener(IGfxWindowListener * listener) { 
+		inline virtual void RemoveScreenListener(IGfxWindowListener * listener) {
 			mGfxWindowListeners.erase(listener); }
 
 	private:
@@ -67,7 +67,7 @@ namespace GfxSystem
 
 		int32 mResx, mResy;
 		bool mFullscreen;
-		
+
 		set<IGfxWindowListener*> mGfxWindowListeners;
 
 	};
