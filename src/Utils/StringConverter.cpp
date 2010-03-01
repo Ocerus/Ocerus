@@ -47,11 +47,22 @@ template<>
 Vector2 StringConverter::FromString(const string& str)
 {
 	Vector2 result;
+	char c;
 	std::istringstream iss(str);
+	if (iss.peek() == '(')
+		iss >> c;
+
 	if ((iss >> result.x).fail())
 		return Vector2_Zero;
+
+	if (iss.peek() == ',')
+		iss >> c;
+
 	if ((iss >> result.y).fail())
 		return Vector2_Zero;
+
+	if (iss.peek() == ')')
+		iss >> c;
 	return result;
 }
 

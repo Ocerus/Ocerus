@@ -4,15 +4,14 @@
     <Window Type="DefaultWindow" Name="EditorRoot" >
         <Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{1,0},{1,0}}" />
         <Property Name="HorizontalAlignment" Value="Centre" />
-        <Window Type="Editor/StaticText" Name="EditorRoot/EntityEditor" >
-            <Property Name="Text" >Entity Editor
-</Property>
+        <Window Type="Vanilla/FrameWindow" Name="EditorRoot/EntityEditor" >
+            <Property Name="Font" Value="DejaVuSans-10" />
+            <Property Name="Text" Value="Entity Editor" />
             <Property Name="Alpha" Value="0.8" />
-            <Property Name="HorzExtent" Value="96" />
-            <Property Name="VertExtent" Value="16.0604" />
-            <Property Name="HorzFormatting" Value="HorzCentred" />
-            <Property Name="VertFormatting" Value="TopAligned" />
+            <Property Name="TitlebarFont" Value="DejaVuSans-10" />
+            <Property Name="TitlebarEnabled" Value="True" />
             <Property Name="UnifiedAreaRect" Value="{{0,4},{0,4},{0.25,0},{1,-4}}" />
+            <Property Name="CloseButtonEnabled" Value="False" />
             <Window Type="Editor/ScrollablePane" Name="EditorRoot/EntityEditor/Scrollable" >
                 <Property Name="ContentArea" Value="l:0 t:0 r:0 b:0" />
                 <Property Name="HorzStepSize" Value="0.1" />

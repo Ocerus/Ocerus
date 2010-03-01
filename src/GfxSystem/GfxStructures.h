@@ -83,7 +83,7 @@ namespace GfxSystem
 
 		Sprite(	const Vector2& _position, const Vector2& _size, const float32 _angle,
 			    const float32 _z, const uint32 _texture, const float32 _transparency ):
-			position(_position), size(_size), z(_z), angle(_angle),
+			position(_position), size(_size), angle(_angle), z(_z),
 			texture(_texture), transparency(_transparency) {}
 	};
 

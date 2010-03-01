@@ -6,6 +6,7 @@
 #include "CEGUI.h"
 
 
+
 using namespace Editor;
 
 EditorMgr::EditorMgr():
@@ -35,6 +36,29 @@ void Editor::EditorMgr::UnloadEditor()
 void Editor::EditorMgr::SetCurrentEntity(const EntitySystem::EntityHandle* newCurrentEntity)
 {
 	delete mCurrentEntity;
-	mCurrentEntity = new EntitySystem::EntityHandle(*newCurrentEntity);
-	mEditorGUI->SetCurrentEntity(mCurrentEntity);
+
+	if (newCurrentEntity && newCurrentEntity->IsValid())
+	{
+		mCurrentEntity = new EntitySystem::EntityHandle(*newCurrentEntity);
+	}
+	else
+	{
+		mCurrentEntity = 0;
+	}
+
+	mEditorGUI->UpdateEntityEditorWindow();
+}
+
+void Editor::EditorMgr::UpdateCurrentEntityName(const string& newName)
+{
+	if (!mCurrentEntity) return;
+	gEntityMgr.SetEntityName(*mCurrentEntity, newName);
+}
+
+void Editor::EditorMgr::UpdateCurrentEntityProperty(const EntitySystem::ComponentID& componentId, const StringKey propertyKey, const string& newValue)
+{
+	if (!mCurrentEntity) return;
+
+	PropertyHolder property = gEntityMgr.GetEntityComponentProperty(*mCurrentEntity, componentId, propertyKey);
+	property.SetValueFromString(newValue);
 }

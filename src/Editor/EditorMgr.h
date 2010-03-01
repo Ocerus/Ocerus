@@ -7,12 +7,9 @@
 #include "Base.h"
 #include "Singleton.h"
 #include "InputSystem/IInputListener.h"
+#include "EntitySystem/ComponentMgr/ComponentID.h"
 
-/// TMP
-namespace CEGUI
-{
-	class EventArgs;
-}
+#define gEditorMgr Editor::EditorMgr::GetSingleton()
 
 /// Editor subsystem provides functionality for creating and editing games.
 namespace Editor
@@ -41,6 +38,11 @@ namespace Editor
 
 		/// Sets the currently selected entity to new entity.
 		void SetCurrentEntity(const EntitySystem::EntityHandle* newCurrentEntity);
+
+		void UpdateCurrentEntityName(const string& newName);
+
+		void UpdateCurrentEntityProperty(const EntitySystem::ComponentID& componentId, const StringKey propertyKey, const string& newValue);
+
 
 	private:
 		EditorGUI* mEditorGUI;

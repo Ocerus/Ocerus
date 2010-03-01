@@ -291,6 +291,19 @@ string EntitySystem::EntityMgr::GetEntityName(const EntitySystem::EntityHandle& 
 }
 
 
+void EntitySystem::EntityMgr::SetEntityName(const EntityHandle& h, const string& entityName)
+{
+	EntityMap::const_iterator ei = mEntities.find(h.GetID());
+	if (ei == mEntities.end())
+	{
+		ocError << "Can't find entity " << h;
+		return;
+	}
+	ei->second->mName = entityName;
+}
+
+
+
 bool EntitySystem::EntityMgr::IsEntityInited( const EntityHandle h ) const
 {
 	EntityMap::const_iterator ei = mEntities.find(h.GetID());
@@ -390,13 +403,13 @@ bool EntitySystem::EntityMgr::HasEntityProperty( const EntityHandle entity, cons
 }
 
 /*template <class T>
-bool EntitySystem::EntityMgr::RegisterDynamicPropertyOfEntityComponent(const EntityHandle entity, const ComponentID component, 
+bool EntitySystem::EntityMgr::RegisterDynamicPropertyOfEntityComponent(const EntityHandle entity, const ComponentID component,
 	const StringKey propertyKey, const PropertyAccessFlags accessFlags, const string& comment)
 {
-	
+
 }*/
 
-		
+
 bool EntitySystem::EntityMgr::UnregisterDynamicPropertyOfEntityComponent(const EntityHandle entity, const ComponentID component,
 	const StringKey propertyKey)
 {
@@ -406,7 +419,7 @@ bool EntitySystem::EntityMgr::UnregisterDynamicPropertyOfEntityComponent(const E
 		ocError << "Invalid component ID: " << component;
 		return false;
 	}
-	
+
 	Component* cmp = mComponentMgr->GetEntityComponent(entity.GetID(), component);
 	return cmp->UnregisterDynamicProperty(propertyKey);
 }

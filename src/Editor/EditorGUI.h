@@ -1,8 +1,13 @@
-#ifndef EditorGUI_h__
-#define EditorGUI_h__
+/// @file
+/// Handling GUI of editor.
+
+#ifndef _EDITORGUI_H_
+#define _EDITORGUI_H_
 
 #include "Base.h"
+#include "EntitySystem/ComponentMgr/ComponentID.h"
 
+/// Forwarded classes from CEGUI
 namespace CEGUI
 {
 	class String;
@@ -10,11 +15,9 @@ namespace CEGUI
 	class EventArgs;
 }
 
-
 namespace Editor
 {
-
-	/// The EditorGUI class provides an interface to work with editor GUI.
+	/// The EditorGUI class manages the editor GUI.
 	class EditorGUI
 	{
 	public:
@@ -28,24 +31,24 @@ namespace Editor
 		/// Loads editor GUI.
 		void LoadGUI();
 
-		/// Sets the active entity to newActiveEntity.
-		void SetCurrentEntity(const EntitySystem::EntityHandle* newActiveEntity);
+		/// Updates the entity editor.
+		void UpdateEntityEditorWindow();
 
+		/// TO BE DELETED
 		bool EntityPickerHandler(const CEGUI::EventArgs&);
 
 
 	private:
 
-		void SetText(const CEGUI::String& windowName, const CEGUI::String& text);
+		void AppendPropertyItem(CEGUI::Window* componentGroup, EntitySystem::ComponentID componentID, const string& propertyName, const string& propertyValue, const string& propertyKey, int propertyPos, const string& propTooltip, bool readOnly = false);
 
-		void UpdateEntityEditorWindow(const EntitySystem::EntityHandle* newActiveEntity);
+		bool OnEntityEditorItemChanged(const CEGUI::EventArgs& e);
 
-		void appendEntityEditorItem(CEGUI::Window* componentGroup, const string& itemName, const string& itemValue, int itemPos, const string& itemTooltip, bool readOnly = false);
 
-		typedef vector<CEGUI::Window*> CEGUIWindows;
+		int mPropertyItemHeight;
+		int mComponentGroupHeight;
 
-		CEGUIWindows mComponents;
 	};
 }
 
-#endif // EditorGUI_h__
+#endif // _EDITORGUI_H_

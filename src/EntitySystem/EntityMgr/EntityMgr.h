@@ -78,6 +78,9 @@ namespace EntitySystem
 		/// Returns name of the entity.
 		string GetEntityName(const EntityHandle& h) const;
 
+		/// Sets name of the entity.
+		void SetEntityName(const EntityHandle& h, const string& entityName);
+
 		/// Returns true if the entity was fully initialized.
 		bool IsEntityInited(const EntityHandle h) const;
 
@@ -139,7 +142,7 @@ namespace EntitySystem
 
 		/// Register a dynamic property to a component of an entity.
 		template <class T>
-		bool RegisterDynamicPropertyOfEntityComponent(const EntityHandle entity, const ComponentID component, 
+		bool RegisterDynamicPropertyOfEntityComponent(const EntityHandle entity, const ComponentID component,
 			const StringKey propertyKey, const PropertyAccessFlags accessFlags, const string& comment)
 		{
 			/*OC_DASSERT(mComponentMgr);
