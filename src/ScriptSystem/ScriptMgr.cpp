@@ -323,7 +323,7 @@ static void EntityHandleDestructor(EntityHandle* self)
 }
 
 template <class T>
-bool RegisterDynamicProperty(EntityHandle& self, 
+bool RegisterDynamicProperty(EntityHandle& self,
 	const StringKey propertyKey, const PropertyAccessFlags accessFlags, const string& comment)
 {
 	ComponentID id = gEntityMgr.FindComponentOfType(self, CT_Script);
@@ -693,6 +693,7 @@ bool ScriptMgr::ExecuteString(const char* script, const char* moduleName)
 	switch(mEngine->ExecuteString(moduleName, script))
 	{
 		case asERROR: // failed to build
+		case asINVALID_CONFIGURATION:
 		case asBUILD_IN_PROGRESS:
 		case asEXECUTION_ABORTED:
 		case asEXECUTION_SUSPENDED:
