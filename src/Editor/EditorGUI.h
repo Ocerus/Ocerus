@@ -45,8 +45,8 @@ namespace Editor
 		bool OnEntityEditorItemChanged(const CEGUI::EventArgs& e);
 
 
-		int mPropertyItemHeight;
-		int mComponentGroupHeight;
+		int32 mPropertyItemHeight;
+		int32 mComponentGroupHeight;
 
 	};
 }

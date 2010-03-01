@@ -51,10 +51,7 @@ namespace GfxSystem
 		virtual void SetTexture(const uint32 texture) const;
 		
 		/// Draws sprite
-		virtual void DrawTexturedQuad(	const Vector2& position,
-										const Vector2& size,
-										const float32 z,
-										const float32 transp) const;
+		virtual void DrawSprite(const Sprite& spr) const;
 
 		/// Draws line. Verts must be array of 2 Vector2s.
 		virtual void DrawLine(	const Vector2* verts, const Color& color ) const;

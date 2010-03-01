@@ -4,6 +4,7 @@
   <Entity Name="Visual">
     <Component Type="Transform">
 	    <Position>-256 256</Position>
+	    <Angle>30</Angle>
       <Depth>0</Depth>
     </Component>
     <Component Type="Sprite">

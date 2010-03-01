@@ -95,14 +95,14 @@ void GfxRenderer::DrawSprites()
 	for(it = mSprites.begin(); it != mSprites.end(); ++it)
 	{
 		//TODO: setridit podle textur
-		Vector2 pos = (*it).position;
+		/*Vector2 pos = (*it).position;
 		Vector2 size = (*it).size;
 		float32 z = (*it).z;
-		float32 transp = (*it).transparency;
+		float32 transp = (*it).transparency;*/
 
 		SetTexture((*it).texture);
 
-		DrawTexturedQuad(pos, size, z, transp);
+		DrawSprite(*it);
 	}
 
 	ResetSprites();

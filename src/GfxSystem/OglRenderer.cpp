@@ -118,27 +118,26 @@ void OglRenderer::SetTexture(const uint32 texture) const
 	glBindTexture(GL_TEXTURE_2D, texture);
 }
 
-void OglRenderer::DrawTexturedQuad(	const Vector2& position,
-									const Vector2& size,
-									const float32 z,
-									const float32 transp) const
+void OglRenderer::DrawSprite(const Sprite& spr) const
 {	
 	glPushMatrix();
 
-	glColor4f( 1.0f, 1.0f, 1.0f, 1.0f - transp );
+	glColor4f( 1.0f, 1.0f, 1.0f, 1.0f - spr.transparency );
 
-	glTranslatef( position.x, position.y, z );
+	glTranslatef( spr.position.x, spr.position.y, spr.z );
 
-	float32 x = size.x/2;
-	float32 y = size.y/2;
+	glRotatef(spr.angle, 0, 0, 1);
+
+	float32 x = spr.size.x/2;
+	float32 y = spr.size.y/2;
 
 	glBegin( GL_QUADS );
 
         //Draw square
-	    glTexCoord2f(0.0f, 0.0f); glVertex3f( -x,  y, z );
-		glTexCoord2f(0.0f, 1.0f); glVertex3f( -x, -y, z );
-		glTexCoord2f(1.0f, 1.0f); glVertex3f(  x, -y, z );
-		glTexCoord2f(1.0f, 0.0f); glVertex3f(  x,  y, z );
+	    glTexCoord2f(0.0f, 0.0f); glVertex3f( -x,  y, 0 );
+		glTexCoord2f(0.0f, 1.0f); glVertex3f( -x, -y, 0 );
+		glTexCoord2f(1.0f, 1.0f); glVertex3f(  x, -y, 0 );
+		glTexCoord2f(1.0f, 0.0f); glVertex3f(  x,  y, 0 );
 
     //End quad
     glEnd();
@@ -244,14 +243,14 @@ void OglRenderer::SetCurrentViewportImpl(const GfxViewport& viewport) const
 	// set projection (part of world)
 	if (viewport.relative)
 	{
-		// size of objects depend on resolution
+		// size of objects depends on window size (in fullscreen it doesn't depend on resolution)
 		glOrtho(	-smOrthoSizeX * viewport.size.x, smOrthoSizeX * viewport.size.x,
 					-smOrthoSizeY * viewport.size.y, smOrthoSizeY * viewport.size.y,
 					-1, 1 );
 	}
 	else
 	{
-		// size of objects doesn't depend on resolution
+		// size of objects doesn't depends on window size (in fullscreen it depends on resolution)
 		glOrtho(	-resx/2 * viewport.size.x, resx/2 * viewport.size.x,
 					-resy/2 * viewport.size.y, resy/2 * viewport.size.y,
 					-1, 1 );

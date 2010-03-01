@@ -32,7 +32,7 @@ void EditorGUI::LoadGUI()
 {
 	gGUIMgr.LoadRootLayout("Editor.layout");
 	CEGUI::System::getSingleton().setDefaultTooltip("Editor/Tooltip");
-	mPropertyItemHeight = gCEGUIWM.getWindow("EditorRoot")->getFont(true)->getLineSpacing(1.1) + 10;
+	mPropertyItemHeight = (int32)gCEGUIWM.getWindow("EditorRoot")->getFont(true)->getLineSpacing(1.1f) + 10;
 	mComponentGroupHeight = 28;
 
 	/// TO BE REMOVED

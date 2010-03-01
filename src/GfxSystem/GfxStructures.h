@@ -89,8 +89,9 @@ namespace GfxSystem
 
 	struct GfxViewport
 	{
-		/// Constructs the viewport from position and size. If relative is set to true the position and size are vectors from
-		/// [0,1]x[0,1] and are relative to the window boundaries.
+		/// Constructs the viewport from position and size. Those vectors are from [0,1]x[0,1] and are relative to the window boundaries.
+		/// If attribute "relative" is true and application runs in  windowed mode, it means that the scale of objects shown 
+		/// in this viewport is relative to window size. If the aplication runs in fullscreen then the scale is constant to resolution.
 		GfxViewport(const Vector2& _pos, const Vector2& _size, const bool _relative): position(_pos), size(_size), relative(_relative) {}
 
 		Vector2 position;
