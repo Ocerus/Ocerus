@@ -139,9 +139,14 @@ void Core::Game::Update( const float32 delta )
 
 
 	// pick entity the mouse is hovering over right now
-	/*MouseState& mouse = gInputMgr.GetMouseState();
-	EntityPicker picker(mouse.x, mouse.y);
-	mHoveredEntity = picker.PickSingleEntity();*/
+	MouseState& mouse = gInputMgr.GetMouseState();
+	Vector2 worldPosition;
+	if (gGfxRenderer.ConvertScreenToWorldCoords(GfxSystem::Point(mouse.x, mouse.y), worldPosition))
+	{
+		EntityPicker picker(worldPosition);
+		mHoveredEntity = picker.PickSingleEntity();
+		if (mHoveredEntity.IsValid()) ocInfo << mHoveredEntity;
+	}
 
 	// check action scripts
 	gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::CHECK_ACTION));
