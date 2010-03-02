@@ -24,6 +24,11 @@ static void Vector2InitConstructor(float32 x, float32 y, Vector2* self)
 	new(self) Vector2(x,y);
 }
 
+static void Vector2Destructor(Vector2* self)
+{
+	//
+}
+
 inline static float32 Vector2GetX(const Vector2& self)
 {
 	return self.x;
@@ -48,7 +53,7 @@ void RegisterScriptVector2(asIScriptEngine* engine)
 {
 	int32 r;
 	// Register the type
-	r = engine->RegisterObjectType("Vector2", sizeof(Vector2), asOBJ_VALUE | asOBJ_POD | asOBJ_APP_CLASS_C); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectType("Vector2", sizeof(Vector2), asOBJ_VALUE | asOBJ_APP_CLASS_C); OC_SCRIPT_ASSERT();
 
 	// Register the object properties getters and setters
 	//r = engine->RegisterObjectProperty("Vector2", "float32 x", offsetof(Vector2, x)); OC_SCRIPT_ASSERT();
@@ -58,10 +63,11 @@ void RegisterScriptVector2(asIScriptEngine* engine)
 	r = engine->RegisterObjectMethod("Vector2", "float32 get_y() const", asFUNCTION(Vector2GetY), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("Vector2", "void set_y(float32)", asFUNCTION(Vector2SetY), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
 
-	// Register the constructors
+	// Register the constructors and destructor
 	r = engine->RegisterObjectBehaviour("Vector2", asBEHAVE_CONSTRUCT,  "void f()", asFUNCTION(Vector2DefaultConstructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectBehaviour("Vector2", asBEHAVE_CONSTRUCT,  "void f(const Vector2 &in)", asFUNCTION(Vector2CopyConstructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectBehaviour("Vector2", asBEHAVE_CONSTRUCT,  "void f(float32, float32)",  asFUNCTION(Vector2InitConstructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectBehaviour("Vector2", asBEHAVE_DESTRUCT,   "void f()",  asFUNCTION(Vector2Destructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
 
 	// Register the operator overloads
 	//r = engine->RegisterObjectMethod("Vector2", "Vector2 &opAddAssign(const Vector2 &in)", asMETHODPR(Vector2, operator+=, (const Vector2 &), Vector2&), asCALL_THISCALL); OC_SCRIPT_ASSERT();
@@ -112,6 +118,11 @@ static void ColorInit1Constructor(uint32 color, GfxSystem::Color* self)
 	new(self) GfxSystem::Color(color);
 }
 
+static void ColorDestructor(GfxSystem::Color* self)
+{
+	//
+}
+
 inline static uint8 ColorGetR(const GfxSystem::Color& self)
 {
 	return self.r;
@@ -156,7 +167,7 @@ void RegisterScriptColor(asIScriptEngine* engine)
 {
 	int32 r;
 	// Register the type
-	r = engine->RegisterObjectType("Color", sizeof(GfxSystem::Color), asOBJ_VALUE | asOBJ_POD | asOBJ_APP_CLASS_C); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectType("Color", sizeof(GfxSystem::Color), asOBJ_VALUE | asOBJ_APP_CLASS_C); OC_SCRIPT_ASSERT();
 
 	// Register the object properties getters and setters
 	//r = engine->RegisterObjectProperty("Color", "uint8 r", offsetof(GfxSystem::Color, r)); OC_SCRIPT_ASSERT();
@@ -177,6 +188,7 @@ void RegisterScriptColor(asIScriptEngine* engine)
 	r = engine->RegisterObjectBehaviour("Color", asBEHAVE_CONSTRUCT, "void f(uint8, uint8, uint8, uint8)", asFUNCTION(ColorInit4Constructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectBehaviour("Color", asBEHAVE_CONSTRUCT, "void f(uint8, uint8, uint8)", asFUNCTION(ColorInit3Constructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectBehaviour("Color", asBEHAVE_CONSTRUCT, "void f(uint32)", asFUNCTION(ColorInit1Constructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectBehaviour("Color", asBEHAVE_DESTRUCT,  "void f()",  asFUNCTION(ColorDestructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
 
 	// Register the operator overloads
 	r = engine->RegisterObjectMethod("Color", "bool opEquals(const Color &in) const", asMETHOD(GfxSystem::Color, operator==), asCALL_THISCALL); OC_SCRIPT_ASSERT();
