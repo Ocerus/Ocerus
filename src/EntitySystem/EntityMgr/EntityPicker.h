@@ -16,10 +16,6 @@ namespace EntitySystem
 		/// Creates a picker for selecting an entity under the current mouse cursor.
 		EntityPicker(const Vector2& worldCursorPos);
 
-		/// Creates a picker for selecting an entity under the current mouse cursor.
-		/// In this case the camera used for transformation must be defined.
-		EntityPicker(const int32 screenCursorX, const int32 screenCursorY, const EntityHandle camera);
-
 		/// Runs the picking query. The result is returned directly.
 		EntityHandle PickSingleEntity(void);
 

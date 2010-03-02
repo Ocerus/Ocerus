@@ -16,8 +16,9 @@ namespace GfxSystem
 	class OglRenderer : public GfxRenderer, public Singleton<OglRenderer> 
 	{
 	public:
+
 		/// Intialize OpenGL
-		virtual void InitImpl() const;
+		virtual void Init() const;
 		
 		/// Prepares OpenGL for drawing
 		virtual bool BeginRenderingImpl() const;
@@ -69,10 +70,10 @@ namespace GfxSystem
 									const Color& color, const bool fill) const;
 
 		/// Set current viewport
-		virtual void SetCurrentViewportImpl(const GfxViewport& viewport) const;
+		virtual void SetViewportImpl(const GfxViewport& viewport) const;
 
 		/// Set current camera
-		virtual void SetCurrentCameraImpl(const Vector2& position, const float32 zoom, const float32 rotation) const;
+		virtual void SetCameraImpl(const Vector2& position, const float32 zoom, const float32 rotation) const;
 
 	};
 }

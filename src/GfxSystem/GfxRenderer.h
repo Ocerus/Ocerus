@@ -40,37 +40,38 @@ namespace GfxSystem
 		/// Default destructor.
 		virtual ~GfxRenderer();
 
-		/// Intialize the renderer.
-		inline void Init() const { InitImpl(); }
+		/// Intializes the renderer.
+		virtual void Init() const = 0;
 
 		/// Prepares renderer for drawing.
 		bool BeginRendering();
 		
-		/// Finilize drawing (swap buffers etc ...).
+		/// Finilizes drawing of everything this frame (swap buffers etc ...).
 		void EndRendering();
 
-		/// Finilize drawing current viewpoint (reset depth buffer ...).
+		/// Finalizes drawing of the current viewpoint (reset depth buffer ...).
 		inline void FinalizeRenderTarget() const { FinalizeRenderTargetImpl(); }
 
 		/// Adds a new render target to the list. Returns the ID of the added target. Mustn't be called while rendering.
 		/// Returns InvalidRenderTargetID if something was wrong.
 		RenderTargetID AddRenderTarget(const GfxViewport& viewport, const EntitySystem::EntityHandle camera);
 
-		/// Removew the specified render target from the list. Returns false if there was no such.
+		/// Removes the specified render target from the list. Returns false if there was no such.
 		bool RemoveRenderTarget(const RenderTargetID toRemove);
 
 		/// Sets the current render target. Returns false if no such exists.
 		bool SetCurrentRenderTarget(const RenderTargetID toSet);
 
-		/**
-			Loads an image from RAM into an Renderer texture.
-			\param buffer the image data in RAM just as if it were still in a file
-			\param buffer_length the size of the buffer in bytes
-			\param force_channels 0-image format, 1-luminous, 2-luminous/alpha, 3-RGB, 4-RGBA
-			\param reuse_texture_ID 0-generate a new texture ID, otherwise reuse the texture ID (overwriting the old texture)
-			\param width, height returns size of texture
-			\return 0-failed, otherwise returns the OpenGL texture handle
-		**/
+
+	public:
+
+		/// Loads an image from RAM into an Renderer texture.
+		///	\param buffer the image data in RAM just as if it were still in a file
+		///	\param buffer_length the size of the buffer in bytes
+		///	\param force_channels 0-image format, 1-luminous, 2-luminous/alpha, 3-RGB, 4-RGBA
+		///	\param reuse_texture_ID 0-generate a new texture ID, otherwise reuse the texture ID (overwriting the old texture)
+		///	\param width, height returns size of texture
+		///	\return 0-failed, otherwise returns the OpenGL texture handle
 		virtual uint32 LoadTexture(const unsigned char *const buffer, const int buffer_length, const ePixelFormat force_channels, const unsigned int reuse_texture_ID, int *width, int *height) const = 0;
 
 		/// Deletes texture from renderers memory.
@@ -100,10 +101,16 @@ namespace GfxSystem
 		/// Draws a rectangle. Position is center of rectangle. Rotation in degrees.
 		virtual void DrawRect(const Vector2& position, const Vector2& size, const float32 rotation, const Color& color, const bool fill) const = 0;
 
-	protected:
 
-		/// Called after the renderer is created.
-		virtual void InitImpl() const = 0;
+	public:
+
+		/// Converts coordinates from the screen space to the world space.
+		/// Returns false if the conversion failed (for example, the screen position was not in any of the viewports).
+		/// The result is returned in the second parameter.
+		bool ConvertScreenToWorldCoords(const Point& screenCoords, Vector2& worldCoords) const;
+
+
+	protected:
 
 		/// Called when the rendering is started.
 		virtual bool BeginRenderingImpl() const = 0;
@@ -115,15 +122,27 @@ namespace GfxSystem
 		virtual void FinalizeRenderTargetImpl() const = 0;
 
 		/// Called when the current viewport is changed.
-		virtual void SetCurrentViewportImpl(const GfxViewport& viewport) const = 0;
+		virtual void SetViewportImpl(const GfxViewport& viewport) const = 0;
 
 		/// Called when the current camera is changed.
-		virtual void SetCurrentCameraImpl(const Vector2& position, const float32 zoom, const float32 rotation) const = 0;
+		virtual void SetCameraImpl(const Vector2& position, const float32 zoom, const float32 rotation) const = 0;
+
+		/// Retrieves the boundaries of the viewport in the screen space.
+		void CalculateViewportScreenBoundaries(const GfxViewport& viewport, Point& topleft, Point& bottomright) const;
+
+		/// Retrieves the boundaries of the viewport in the world space. This basically maps the screen space viewport to
+		/// the world space.
+		void CalculateViewportWorldBoundaries(const GfxViewport& viewport, Vector2& topleft, Vector2& bottomright) const;
 
 		/// Resets the sprites queue.
 		inline void ResetSprites() { mSprites.clear(); }
 
 	private:
+
+		// Half the size of the window in the world coordination system (regardless of the actual pixel size).
+		// The value was determined from the 1024x768 resolution and serves as a constat to which we can related the zoom.
+		static const int smOrthoSizeX = 512;
+		static const int smOrthoSizeY = 384;
 
 		/// Vector with sprites to be rendered.
 		typedef vector<Sprite> SpriteVector;
@@ -135,10 +154,6 @@ namespace GfxSystem
 		RenderTargetsVector mRenderTargets;
 
 	protected:
-
-		/// Half size of window in world coordination system (regardless of window actual pixel size in OS)
-		static const int smOrthoSizeX = 512;
-		static const int smOrthoSizeY = 384;
 
 		/// True if the rendering began but still didn't finish.
 		bool mIsRendering;

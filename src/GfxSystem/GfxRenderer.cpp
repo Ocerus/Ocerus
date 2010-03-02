@@ -56,13 +56,13 @@ bool GfxSystem::GfxRenderer::SetCurrentRenderTarget( const RenderTargetID toSet 
 	ViewportWithCamera* viewportWithCamera = mRenderTargets[toSet];
 	if (!viewportWithCamera) return false;
 
-	SetCurrentViewportImpl(viewportWithCamera->first);
+	SetViewportImpl(viewportWithCamera->first);
 
 	// here we're sure these properties exist since we checked that the camera entity is really a camera
 	PropertyHolder position = gEntityMgr.GetEntityProperty(viewportWithCamera->second, "Position" );
 	PropertyHolder zoom = gEntityMgr.GetEntityProperty(viewportWithCamera->second, "Zoom" );
 	PropertyHolder rotation = gEntityMgr.GetEntityProperty(viewportWithCamera->second, "Rotation" );
-	SetCurrentCameraImpl(position.GetValue<Vector2>(), zoom.GetValue<float32>(), rotation.GetValue<float32>());
+	SetCameraImpl(position.GetValue<Vector2>(), zoom.GetValue<float32>(), rotation.GetValue<float32>());
 
 	return true;
 }
@@ -106,4 +106,74 @@ void GfxRenderer::DrawSprites()
 	}
 
 	ResetSprites();
+}
+
+bool GfxSystem::GfxRenderer::ConvertScreenToWorldCoords( const Point& screenCoords, Vector2& worldCoords ) const
+{
+	// find the render target the pixel is in
+	for (RenderTargetsVector::const_iterator it=mRenderTargets.begin(); it!=mRenderTargets.end(); ++it)
+	{
+		if (!*it) continue;
+
+		GfxViewport& viewport = (*it)->first;
+		Point topleft, bottomright;
+		CalculateViewportScreenBoundaries(viewport, topleft, bottomright);
+
+		if (topleft.x <= screenCoords.x && screenCoords.x <= bottomright.x && topleft.y <= screenCoords.y && screenCoords.y <= bottomright.y)
+		{
+			EntitySystem::EntityHandle camera = (*it)->second;
+			Vector2 topleftWorld, bottomrightWorld;
+			CalculateViewportWorldBoundaries(viewport, topleftWorld, bottomrightWorld);
+
+			// inverse viewport transform
+			worldCoords = Vector2((float32)screenCoords.x, (float32)screenCoords.y) - Vector2((float32)topleft.x, (float32)topleft.y);
+			
+			// inverse projection transform
+			worldCoords.x = worldCoords.x * (bottomrightWorld.x-topleftWorld.x) / (bottomright.x-topleft.x);
+			worldCoords.y = worldCoords.y * (bottomrightWorld.y-topleftWorld.y) / (bottomright.y-topleft.y);
+
+			// inverse camera transform
+			worldCoords += camera.GetProperty("Position").GetValue<Vector2>();
+			worldCoords *= 1.0f / camera.GetProperty("Zoom").GetValue<float32>();
+			Matrix22 rotationMatrix(-camera.GetProperty("Rotation").GetValue<float32>());
+			worldCoords = MathUtils::Multiply(rotationMatrix, worldCoords);
+
+			return true;
+		}
+	}
+
+	return false;
+}
+
+void GfxSystem::GfxRenderer::CalculateViewportWorldBoundaries( const GfxViewport& viewport, Vector2& topleft, Vector2& bottomright ) const
+{
+	if (viewport.relative)
+	{
+		// size of objects depends on resolution
+		topleft.x = -smOrthoSizeX * viewport.size.x;
+		bottomright.x = smOrthoSizeX * viewport.size.x;
+		topleft.y = -smOrthoSizeY * viewport.size.y;
+		bottomright.y = smOrthoSizeY * viewport.size.y;
+	}
+	else
+	{
+		// size of objects doesn't depend on resolution
+		int32 resx = gGfxWindow.GetResolutionWidth();
+		int32 resy = gGfxWindow.GetResolutionHeight();
+		topleft.x = -resx * viewport.size.x / 2;
+		bottomright.x = resx * viewport.size.x / 2;
+		topleft.y = -resy * viewport.size.y / 2;
+		bottomright.y = resy * viewport.size.y / 2;
+	}
+}
+
+void GfxSystem::GfxRenderer::CalculateViewportScreenBoundaries( const GfxViewport& viewport, Point& topleft, Point& bottomright ) const
+{
+	int32 resx = gGfxWindow.GetResolutionWidth();
+	int32 resy = gGfxWindow.GetResolutionHeight();
+
+	topleft.x = (int32)(viewport.position.x * resx);
+	topleft.y = (int32)(viewport.position.y * resy);
+	bottomright.x = topleft.x + (int32)(viewport.size.x * resx);
+	bottomright.y = topleft.y + (int32)(viewport.size.y * resy);
 }

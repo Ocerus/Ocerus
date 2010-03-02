@@ -11,14 +11,6 @@ EntitySystem::EntityPicker::EntityPicker( const Vector2& worldCursorPos ):
 
 }
 
-EntitySystem::EntityPicker::EntityPicker( const int32 screenCursorX, const int32 screenCursorY, const EntityHandle camera ):
-	mResult()
-{
-	//TODO:Gfx
-	//mCursorWorldPosition.x = gGfxRenderer.ScreenToWorldX(screenCursorX);
-	//mCursorWorldPosition.y = gGfxRenderer.ScreenToWorldY(screenCursorY);
-}
-
 EntitySystem::EntityHandle EntitySystem::EntityPicker::PickSingleEntity( void )
 {
 	return EntityHandle::Null;

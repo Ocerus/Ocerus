@@ -83,7 +83,7 @@ GfxWindow::~GfxWindow()
 	SDL_Quit();
 }
 
-bool GfxWindow::PopEvent(EWindowEvent &result)
+bool GfxWindow::PopEvent(eWindowEvent &result)
 {
 	SDL_Event event;
 	while (SDL_PollEvent(&event))

@@ -729,10 +729,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\src\GfxSystem\ScreenToWorldConverter.h"
-					>
-				</File>
-				<File
 					RelativePath="..\src\GfxSystem\Texture.h"
 					>
 				</File>
@@ -913,6 +909,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\GUISystem\CEGUITools.h"
+					>
+				</File>
+				<File
+					RelativePath="..\src\GUISystem\GUIConsole.h"
+					>
+				</File>
+				<File
 					RelativePath="..\src\GUISystem\GUIMgr.h"
 					>
 				</File>
@@ -926,6 +930,14 @@
 				>
 				<File
 					RelativePath="..\src\GUISystem\CEGUIResource.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src\GUISystem\CEGUITools.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src\GUISystem\GUIConsole.cpp"
 					>
 				</File>
 				<File

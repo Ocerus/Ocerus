@@ -13,14 +13,14 @@
 
 using namespace GfxSystem;
 
-void OglRenderer::InitImpl() const
+void OglRenderer::Init() const
 {
 	ocInfo << "*** OpenGL init ***";
 	//Initialize OpenGL
 
 	glClearColor( 0.1f, 0.1f, 0.1f, 0 );
 	glMatrixMode( GL_PROJECTION );
-	glOrtho( -smOrthoSizeX, smOrthoSizeX, -smOrthoSizeY, smOrthoSizeY, -1, 1 );
+	glLoadIdentity();
 	glMatrixMode( GL_MODELVIEW );
 	glLoadIdentity();
 
@@ -228,38 +228,23 @@ void OglRenderer::DrawRect(	const Vector2& position, const Vector2& size, const 
 	glPopMatrix();
 }
 
-void OglRenderer::SetCurrentViewportImpl(const GfxViewport& viewport) const
+void OglRenderer::SetViewportImpl(const GfxViewport& viewport) const
 {
-	int32 resx = gGfxWindow.GetResolutionWidth();
-	int32 resy = gGfxWindow.GetResolutionHeight();
-
-	// set viewport (part of window)
-	glViewport (	(int32)(viewport.position.x *	resx),	(int32)(viewport.position.y * resy),
-					(int32)(viewport.size.x		*	resx),	(int32)(viewport.size.y		* resy));
+	Point topleft, bottomright;
+	CalculateViewportScreenBoundaries(viewport, topleft, bottomright);
+	glViewport(topleft.x, topleft.y, bottomright.x-topleft.x, bottomright.y-topleft.y);
 	
-	glMatrixMode( GL_PROJECTION );
+	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
-	// set projection (part of world)
-	if (viewport.relative)
-	{
-		// size of objects depends on window size (in fullscreen it doesn't depend on resolution)
-		glOrtho(	-smOrthoSizeX * viewport.size.x, smOrthoSizeX * viewport.size.x,
-					-smOrthoSizeY * viewport.size.y, smOrthoSizeY * viewport.size.y,
-					-1, 1 );
-	}
-	else
-	{
-		// size of objects doesn't depends on window size (in fullscreen it depends on resolution)
-		glOrtho(	-resx/2 * viewport.size.x, resx/2 * viewport.size.x,
-					-resy/2 * viewport.size.y, resy/2 * viewport.size.y,
-					-1, 1 );
-	}
+	Vector2 topleftWorld, bottomrightWorld;
+	CalculateViewportWorldBoundaries(viewport, topleftWorld, bottomrightWorld);
+	glOrtho(topleftWorld.x, bottomrightWorld.x, topleftWorld.y, bottomrightWorld.y, -1, 1);
 
-	glMatrixMode( GL_MODELVIEW );
+	glMatrixMode(GL_MODELVIEW);
 }
 	
-void OglRenderer::SetCurrentCameraImpl(const Vector2& position, const float32 zoom, const float32 rotation) const
+void OglRenderer::SetCameraImpl(const Vector2& position, const float32 zoom, const float32 rotation) const
 {
 	glLoadIdentity();
 	glRotatef(rotation, 0, 0, 1);

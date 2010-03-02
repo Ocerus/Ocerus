@@ -248,7 +248,7 @@ void Core::Application::Shutdown( void )
 
 void Application::MessagePump( void )
 {
-    GfxSystem::EWindowEvent event;
+    GfxSystem::eWindowEvent event;
     while (GfxSystem::GfxWindow::GetSingleton().PopEvent(event))
 	{
 		if (event == GfxSystem::WE_QUIT)

@@ -21,7 +21,7 @@ class IScreenListener;
 
 namespace GfxSystem
 {
-	enum EWindowEvent {
+	enum eWindowEvent {
     WE_QUIT,		///< User tries to close the window (map to SDL_QUIT)
 	WE_RESIZE		///< User tries to resize the window (map to SDL_VIDEORESIZE)
     /// maybe we will add another events in future
@@ -44,7 +44,7 @@ namespace GfxSystem
 
 		//TODO: Zahazovat neznamy eventy?
 		/// If there is known event in queue, returns it. Otherwise empties the queue and return false.
-		bool PopEvent(EWindowEvent& result);
+		bool PopEvent(eWindowEvent& result);
 
 		void ChangeResolution(int32 x, int32 y);
 
@@ -52,6 +52,8 @@ namespace GfxSystem
 			return mResx;}
 		inline int32 GetResolutionHeight() const {
 			return mResy;}
+
+		inline Point GetResolution() const { return Point(mResx, mResy); }
 
 		/// Gets windows handle. Windows OS only.
 		WindowHandle _GetWindowHandle() const;
