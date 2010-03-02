@@ -29,6 +29,13 @@ static void Vector2Destructor(Vector2* self)
 	//
 }
 
+static Vector2& Vector2AssignOperator(const Vector2& other, Vector2* self)
+{
+	self->x = other.x;
+	self->y = other.y;
+	return *self;
+}
+
 inline static float32 Vector2GetX(const Vector2& self)
 {
 	return self.x;
@@ -70,6 +77,7 @@ void RegisterScriptVector2(asIScriptEngine* engine)
 	r = engine->RegisterObjectBehaviour("Vector2", asBEHAVE_DESTRUCT,   "void f()",  asFUNCTION(Vector2Destructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
 
 	// Register the operator overloads
+	r = engine->RegisterObjectMethod("Vector2", "Vector2& opAssign(const Vector2 &in)", asFUNCTION(Vector2AssignOperator), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
 	//r = engine->RegisterObjectMethod("Vector2", "Vector2 &opAddAssign(const Vector2 &in)", asMETHODPR(Vector2, operator+=, (const Vector2 &), Vector2&), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	//r = engine->RegisterObjectMethod("Vector2", "Vector2 &opSubAssign(const Vector2 &in)", asMETHODPR(Vector2, operator-=, (const Vector2 &), Vector2&), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	//r = engine->RegisterObjectMethod("Vector2", "Vector2 &opMulAssign(float32)", asMETHODPR(Vector2, operator*=, (float32), Vector2&), asCALL_THISCALL); OC_SCRIPT_ASSERT();
@@ -121,6 +129,15 @@ static void ColorInit1Constructor(uint32 color, GfxSystem::Color* self)
 static void ColorDestructor(GfxSystem::Color* self)
 {
 	//
+}
+
+static GfxSystem::Color& ColorAssignOperator(const GfxSystem::Color& other, GfxSystem::Color* self)
+{
+	self->r = other.r;
+	self->g = other.g;
+	self->b = other.b;
+	self->a = other.a;
+	return *self;
 }
 
 inline static uint8 ColorGetR(const GfxSystem::Color& self)
@@ -191,6 +208,7 @@ void RegisterScriptColor(asIScriptEngine* engine)
 	r = engine->RegisterObjectBehaviour("Color", asBEHAVE_DESTRUCT,  "void f()",  asFUNCTION(ColorDestructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
 
 	// Register the operator overloads
+	r = engine->RegisterObjectMethod("Color", "Color& opAssign(const Color &in)", asFUNCTION(ColorAssignOperator), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("Color", "bool opEquals(const Color &in) const", asMETHOD(GfxSystem::Color, operator==), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	
 	// Register the object methods
