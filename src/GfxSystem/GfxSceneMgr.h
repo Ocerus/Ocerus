@@ -17,12 +17,17 @@ namespace GfxSystem
 	class GfxSceneMgr : public Singleton<GfxSceneMgr>
 	{
 	public:
-		
-		//void AddSpriteEntity(EntitySystem::EntityHandle ent);
 
+		/// Default constructor.
+		GfxSceneMgr(void);
+
+		/// Default destructor.
+		virtual ~GfxSceneMgr(void);
+		
+		/// Adds sprite to inner strucure
 		void AddSprite(Sprite *spr);
 
-		//void RemoveSpriteEntity(EntitySystem::EntityHandle ent);
+		/// Removes sprite from inner strucure
 		void RemoveSprite(Sprite *spr);
 		
 		void AddCamera(EntitySystem::EntityHandle ent);
@@ -31,14 +36,13 @@ namespace GfxSystem
 
 		EntitySystem::EntityHandle GetCamera(int32 i);
 		
-		/// (not anymore) Sends DRAW message to stored sprite entities
+		/// Adds sprites to renderers drawing queue
 		void Draw();
 		
 	private:	
 		typedef vector<EntitySystem::EntityHandle> EntityHandleVector;
 		typedef vector<Sprite*> SpriteVector;
-		//EntityHandleVector mSprites;	//temprorary
-		SpriteVector mSprites;	//temprorary
+		SpriteVector mSprites;
 		EntityHandleVector mCameras;
 	};
 }

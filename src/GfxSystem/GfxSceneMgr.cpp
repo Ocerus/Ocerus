@@ -4,28 +4,25 @@
 using namespace GfxSystem;
 
 
-/*void GfxSceneMgr::AddSpriteEntity(EntitySystem::EntityHandle ent)
+GfxSceneMgr::GfxSceneMgr()
 {
-	mSprites.push_back(ent);
-}*/
+}
+
+GfxSceneMgr::~GfxSceneMgr()
+{
+	for(SpriteVector::iterator it = mSprites.begin(); it != mSprites.end(); ++it)
+	{
+		if (*it)
+		{
+			delete *it;
+		}
+	}
+}
 
 void GfxSceneMgr::AddSprite(Sprite *spr)
 {
 	mSprites.push_back(spr);
 }
-
-/*void GfxSceneMgr::RemoveSpriteEntity(EntitySystem::EntityHandle ent)
-{
-	EntityHandleVector::iterator it;
-	for(it = mSprites.begin(); it != mSprites.end(); ++it)
-	{
-		if ((*it) == ent)
-		{
-			mSprites.erase(it);
-			return;
-		}
-	}
-}*/
 
 void GfxSceneMgr::RemoveSprite(Sprite *spr)
 {
@@ -74,7 +71,6 @@ void GfxSceneMgr::Draw()
 	SpriteVector::iterator it;
 	for(it = mSprites.begin(); it != mSprites.end(); ++it)
 	{
-		//gEntityMgr.PostMessage(*(it), EntitySystem::EntityMessage::DRAW);
 		gGfxRenderer.AddSprite(*(*it));
 	}
 }

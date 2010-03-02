@@ -5,8 +5,11 @@
 
 void EntityComponents::Sprite::Create( void )
 {
-	mBoundToPhysics = false;
+	mResPath = "";
+	mSize = Vector2_Zero;
+	mTransparency = 0.0f;
 	mSprite = NULL;
+	mBoundToPhysics = false;
 }
 
 void EntityComponents::Sprite::Destroy( void )

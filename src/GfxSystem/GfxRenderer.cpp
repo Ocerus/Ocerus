@@ -95,11 +95,6 @@ void GfxRenderer::DrawSprites()
 	for(it = mSprites.begin(); it != mSprites.end(); ++it)
 	{
 		//TODO: setridit podle textur
-		/*Vector2 pos = (*it).position;
-		Vector2 size = (*it).size;
-		float32 z = (*it).z;
-		float32 transp = (*it).transparency;*/
-
 		SetTexture((*it).texture);
 
 		DrawSprite(*it);
@@ -147,7 +142,7 @@ bool GfxSystem::GfxRenderer::ConvertScreenToWorldCoords( const Point& screenCoor
 
 void GfxSystem::GfxRenderer::CalculateViewportWorldBoundaries( const GfxViewport& viewport, Vector2& topleft, Vector2& bottomright ) const
 {
-	if (viewport.relative)
+	if (viewport.relativeScale)
 	{
 		// size of objects depends on resolution
 		topleft.x = -smOrthoSizeX * viewport.size.x;

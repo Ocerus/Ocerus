@@ -10,14 +10,14 @@
 
 namespace GfxSystem
 {
-	class ParticleSystem;
-	class ParticleResource;
+	//class ParticleSystem;
+	//class ParticleResource;
 	class Texture;
 
 	/// Smart pointer to ParticleSystem.
-	typedef boost::shared_ptr<ParticleSystem> ParticleSystemPtr;
+	//typedef boost::shared_ptr<ParticleSystem> ParticleSystemPtr;
 	/// Smart pointer to ParticleResource.
-    typedef boost::shared_ptr<ParticleResource> ParticleResourcePtr;
+    //typedef boost::shared_ptr<ParticleResource> ParticleResourcePtr;
 	/// Smart pointer to Texture.
     typedef boost::shared_ptr<Texture> TexturePtr;
 }
