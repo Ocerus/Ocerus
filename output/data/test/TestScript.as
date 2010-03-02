@@ -7,7 +7,7 @@ void OnInit()
   {
     Log("Module number " + (i+1) + " is '" + modules[i] +"'.");
   }
-  handle.RegisterDynamicProperty_int32(StringKey("Counter"), PA_SCRIPT_READ | PA_SCRIPT_WRITE, "comment");
+  handle.RegisterDynamicProperty_int32("Counter", PA_SCRIPT_READ | PA_SCRIPT_WRITE, "comment");
 }
 
 void OnPostInit()

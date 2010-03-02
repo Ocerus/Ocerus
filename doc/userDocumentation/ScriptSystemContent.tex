@@ -49,7 +49,7 @@ As mentioned in the section \ref{sec:script-language} it is possible to use a co
 \subsection{Binding the entity system}
 \label{sub:script-entity}
 
-The script system is binded to the entity system to provide an easy work with components, entities and theirs properties from scripts. The class \emph{EntityHandle} is registered to the script engine as a value type with a most of its methods but the work with entity properties differs from using them from a source code. There are registered common methods of this class for all defined property types (in \emph{PropertyTypes.h}) to get and set a simple property value, to get a non-constant or constant array and to call a property function with parameters. Methods for working with array property values (get and set a size of array, an index operator) and property function parameters (add a simple or array value as a property function parameter) are also registered. See table \ref{tab:script-properties} for method declarations.
+The script system is binded to the entity system to provide an easy work with components, entities and theirs properties from scripts. The class \emph{EntityHandle} is registered to the script engine as a value type with a most of its methods but the work with entity properties differs from using them from a source code. There are registered common methods of this class for all defined property types (in \emph{PropertyTypes.h}) to get and set a simple property value, to get a non-constant or constant array, to call a property function with parameters and to register and unregister a dynamic property. Methods for working with array property values (get and set a size of array, an index operator) and property function parameters (add a simple or array value as a property function parameter) are also registered. See table \ref{tab:script-properties} for method declarations.
 
 \begin{table}[htbp]
 	\centering
@@ -65,6 +65,8 @@ The script system is binded to the entity system to provide an easy work with co
 			Get a non-constant array property value & \verb/array_type Get_array_type(string& property_name)/\\
 			Get a constant array property value & \verb/const array_type Get_const_array_type/ \verb/  (string& property_name)/\\
 			Call an entity function & \verb/void CallFunction(string& function_name,/ \verb/  PropertyFunctionParameters& parameters)/\\
+			Register a new dynamic property & \verb/bool RegisterDynamicProperty_type(const string&/ \verb/  property_name, const PropertyAccessFlags flags,/ \verb/  const string& comment)/\\
+			Unregister a dynamic property & \verb/bool UnregisterDynamicProperty/ \verb/  (const string& property_name)/\\
 			\hline
 			\multicolumn{2}{|c|}{\emph{array\_type} methods}\\
 			\hline
@@ -85,6 +87,12 @@ The script system is binded to the entity system to provide an easy work with co
 \end{table}
 
 For example if an entity represented by its handle, that can be get from \verb/GetCurrentEntityHandle/ global function when script is handling a message to entity (see section \ref{sub:script-component} for details), has an integer property \verb/Integer/ then the command to save it to an integer script variable will be following: \verb/int32 n = GetCurrentEntityHandle().Get_int32("Integer")/. If the property \verb/Integer/ does not exist in this entity or has an other type than \verb/int32/ the error message is written to the log and the default value (for \verb/int32/ 0) is returned.
+
+Another example is using dynamic properties. Unlike other properties dynamic ones are connected with an instance of an entity not with an entity class, they have not getters and setters and they must be registered before using. They can be used for an extension of information about the entity that should be shared by different calls of scripts. They are stored in a component Script (see section \ref{sub:script-component}) which therefore must be a part of the entity. For registering an additional boolean property \verb/Bool/ on the entity held by \verb/handle/ with an access from scripts the command will be following:
+\begin{verbatim}
+handle.RegisterDynamicProperty_bool("Bool", PA_SCRIPT_READ |
+    PA_SCRIPT_WRITE, "comment");
+\end{verbatim}
 
 For managing entities the \emph{EntityMgr} class is registered as no-handle object which means that only way to use it is calling methods on the return value from \verb/GetEntityMgr/ global function. For example if the script should destroy the entity represented by the variable \verb/handle/, the code will be following: \verb/GetEntityMgr().DestroyEntity(handle)/. For creation of entities the \emph{EntityDescription} class is registered as a value type, where it is possible to specify contained components, name, kind etc., as well as method \emph{CreateEntity} of \emph{EntityMgr} which has this class as parameter and returns handle of created entity.
 

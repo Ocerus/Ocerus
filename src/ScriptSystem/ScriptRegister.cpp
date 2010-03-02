@@ -48,7 +48,7 @@ void RegisterScriptVector2(asIScriptEngine* engine)
 {
 	int32 r;
 	// Register the type
-	r = engine->RegisterObjectType("Vector2", sizeof(Vector2), asOBJ_VALUE | asOBJ_POD | asOBJ_APP_CLASS_CA); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectType("Vector2", sizeof(Vector2), asOBJ_VALUE | asOBJ_POD | asOBJ_APP_CLASS_C); OC_SCRIPT_ASSERT();
 
 	// Register the object properties getters and setters
 	//r = engine->RegisterObjectProperty("Vector2", "float32 x", offsetof(Vector2, x)); OC_SCRIPT_ASSERT();
@@ -156,7 +156,7 @@ void RegisterScriptColor(asIScriptEngine* engine)
 {
 	int32 r;
 	// Register the type
-	r = engine->RegisterObjectType("Color", sizeof(GfxSystem::Color), asOBJ_VALUE | asOBJ_POD | asOBJ_APP_CLASS_CA); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectType("Color", sizeof(GfxSystem::Color), asOBJ_VALUE | asOBJ_POD | asOBJ_APP_CLASS_C); OC_SCRIPT_ASSERT();
 
 	// Register the object properties getters and setters
 	//r = engine->RegisterObjectProperty("Color", "uint8 r", offsetof(GfxSystem::Color, r)); OC_SCRIPT_ASSERT();

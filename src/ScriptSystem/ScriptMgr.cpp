@@ -249,7 +249,7 @@ void RegisterScriptStringKey(asIScriptEngine* engine)
 {
 	int32 r;
 	// Register the type
-	r = engine->RegisterObjectType("StringKey", sizeof(StringKey), asOBJ_VALUE | asOBJ_POD | asOBJ_APP_CLASS_CA); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectType("StringKey", sizeof(StringKey), asOBJ_VALUE | asOBJ_APP_CLASS_CDA); OC_SCRIPT_ASSERT();
 
 	// Register the constructors and destructor
 	r = engine->RegisterObjectBehaviour("StringKey", asBEHAVE_CONSTRUCT, "void f()", asFUNCTION(StringKeyDefaultConstructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
@@ -324,23 +324,23 @@ static void EntityHandleDestructor(EntityHandle* self)
 
 template <class T>
 bool RegisterDynamicProperty(EntityHandle& self,
-	const StringKey propertyKey, const PropertyAccessFlags accessFlags, const string& comment)
+	const string& propertyName, const PropertyAccessFlags accessFlags, const string& comment)
 {
 	ComponentID id = gEntityMgr.FindComponentOfType(self, CT_Script);
-	return self.RegisterDynamicPropertyOfComponent<T>(id, propertyKey, accessFlags, comment);
+	return self.RegisterDynamicPropertyOfComponent<T>(id, StringKey(propertyName), accessFlags, comment);
 }
 
-bool UnregisterDynamicProperty(EntityHandle& self, const StringKey propertyKey)
+bool UnregisterDynamicProperty(EntityHandle& self, const string& propertyName)
 {
 	ComponentID id = gEntityMgr.FindComponentOfType(self, CT_Script);
-	return self.UnregisterDynamicPropertyOfComponent(id, propertyKey);
+	return self.UnregisterDynamicPropertyOfComponent(id, StringKey(propertyName));
 }
 
 void RegisterScriptEntityHandle(asIScriptEngine* engine)
 {
 	int32 r;
 	// Register the type
-	r = engine->RegisterObjectType("EntityHandle", sizeof(EntityHandle), asOBJ_VALUE | asOBJ_APP_CLASS_CA); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectType("EntityHandle", sizeof(EntityHandle), asOBJ_VALUE | asOBJ_APP_CLASS_CDA); OC_SCRIPT_ASSERT();
 
 	// Register the constructors and destructor
 	r = engine->RegisterObjectBehaviour("EntityHandle", asBEHAVE_CONSTRUCT, "void f()", asFUNCTION(EntityHandleDefaultConstructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
@@ -385,7 +385,7 @@ void RegisterScriptEntityHandle(asIScriptEngine* engine)
 		asMETHODPR(EntityHandle, PostMessage, (const EntityMessage::eType), EntityMessage::eResult), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("EntityHandle", "eEntityMessageResult PostMessage(const eEntityMessageType, PropertyFunctionParameters)",
 		asMETHODPR(EntityHandle, PostMessage, (const EntityMessage::eType, Reflection::PropertyFunctionParameters), EntityMessage::eResult), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-	r = engine->RegisterObjectMethod("EntityHandle", "bool UnregisterDynamicProperty(const StringKey)",
+	r = engine->RegisterObjectMethod("EntityHandle", "bool UnregisterDynamicProperty(const string &in)",
 		asFUNCTION(UnregisterDynamicProperty), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
 
 }
@@ -406,7 +406,7 @@ void RegisterScriptEntityDescription(asIScriptEngine* engine)
 {
 	int32 r;
 	// Register the type
-	r = engine->RegisterObjectType("EntityDescription", sizeof(EntityDescription), asOBJ_VALUE | asOBJ_APP_CLASS_CA); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectType("EntityDescription", sizeof(EntityDescription), asOBJ_VALUE | asOBJ_APP_CLASS_CD); OC_SCRIPT_ASSERT();
 
 	// Register the constructors and destructor
 	r = engine->RegisterObjectBehaviour("EntityDescription", asBEHAVE_CONSTRUCT, "void f()", asFUNCTION(EntityDescriptionDefaultConstructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
@@ -601,7 +601,7 @@ void ScriptMgr::ConfigureEngine(void)
 		asFUNCTIONPR(EntityHandleGetConstArrayValue, (EntitySystem::EntityHandle&, string&), const ScriptArray<typeClass>), \
 		asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT(); \
 	/* Register method for registering dynamic properties */ \
-	r = mEngine->RegisterObjectMethod("EntityHandle", (string("bool RegisterDynamicProperty_") + typeName + "(const StringKey, const PropertyAccessFlags, const string &in)").c_str(), \
+	r = mEngine->RegisterObjectMethod("EntityHandle", (string("bool RegisterDynamicProperty_") + typeName + "(const string &in, const PropertyAccessFlags, const string &in)").c_str(), \
 		asFUNCTION(RegisterDynamicProperty<typeClass>), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT(); \
 	/* Register operator<< method for PropertyFunctionParameters */ \
 	r = mEngine->RegisterObjectMethod("PropertyFunctionParameters", (string("PropertyFunctionParameters opShl(const ") + typeName + " &in) const").c_str(), \
