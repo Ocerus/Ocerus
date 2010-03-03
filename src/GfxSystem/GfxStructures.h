@@ -74,9 +74,9 @@ namespace GfxSystem
 	{
 		Vector2 position;
 		Vector2 size;
+		Vector2 scale;
 		float32 angle;
 		float32 z;
-		Vector2 scale;
 		uint32 texture;
 		float32 transparency;
 
@@ -91,7 +91,7 @@ namespace GfxSystem
 	struct GfxViewport
 	{
 		/// Constructs the viewport from position and size. Those vectors are from [0,1]x[0,1] and are relative to the window boundaries.
-		/// If attribute "relativeScale" is true and application runs in windowed mode, it means that the scale of objects shown 
+		/// If attribute "relativeScale" is true and application runs in windowed mode, it means that the scale of objects shown
 		/// in this viewport is relative to window size. If the aplication runs in fullscreen then the scale is constant to resolution.
 		GfxViewport(const Vector2& _pos, const Vector2& _size, const bool _relativeScale): position(_pos), size(_size), relativeScale(_relativeScale) {}
 
