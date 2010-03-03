@@ -20,8 +20,10 @@ void GfxWindow::Init(const int32 resx, const int32 resy, const bool fullscreen, 
 		return;
 	}
 
+	mFullscreen = fullscreen;
+
 	int32 flags = SDL_OPENGL | SDL_RESIZABLE;
-	if (fullscreen)
+	if (mFullscreen)
 		flags |= SDL_FULLSCREEN;
 
 	// Set atributes for OpenGL
@@ -37,7 +39,6 @@ void GfxWindow::Init(const int32 resx, const int32 resy, const bool fullscreen, 
 #endif
 
 	// Create drawing context
-	mScreen = NULL;
 	mScreen = SDL_SetVideoMode( resx, resy, 0, flags );
 	SDL_WM_SetCaption( title. c_str(), NULL );
 
@@ -109,13 +110,19 @@ void GfxWindow::ChangeResolution(int32 x, int32 y)
 {
 	mResx = x;
 	mResy = y;
-	gInputMgr.ResolutionChanged(mResx, mResy);
 
 	set<IGfxWindowListener*>::iterator it;
 	for(it = mGfxWindowListeners.begin(); it != mGfxWindowListeners.end(); ++it)
 	{
 		(*it)->ResolutionChanged(mResx, mResy);
 	}
+	
+	// recreate drawing index
+	int32 flags = SDL_OPENGL | SDL_RESIZABLE;
+	if (mFullscreen)
+		flags |= SDL_FULLSCREEN;
+	
+	mScreen = SDL_SetVideoMode( mResx, mResy, 0, flags );
 }
 
 WindowHandle GfxWindow::_GetWindowHandle() const

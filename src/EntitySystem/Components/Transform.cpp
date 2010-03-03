@@ -6,7 +6,8 @@ void EntityComponents::Transform::Create( void )
 {
 	mBoundToPhysics = false;
 	mPosition.SetZero();
-	mScale.SetZero();
+	mScale.x = 1;
+	mScale.y = 1;
 	mAngle = 0.0f;
 	mDepth = 0;
 }

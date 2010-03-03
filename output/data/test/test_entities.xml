@@ -5,6 +5,7 @@
     <Component Type="Transform">
 	    <Position>-256 256</Position>
 	    <Angle>30</Angle>
+	    <Scale>1.2 1.5</Scale>
       <Depth>0</Depth>
     </Component>
     <Component Type="Sprite">

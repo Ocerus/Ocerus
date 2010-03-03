@@ -128,6 +128,8 @@ void OglRenderer::DrawSprite(const Sprite& spr) const
 
 	glRotatef(spr.angle, 0, 0, 1);
 
+	glScalef(spr.scale.x, spr.scale.y, 1);
+
 	float32 x = spr.size.x/2;
 	float32 y = spr.size.y/2;
 

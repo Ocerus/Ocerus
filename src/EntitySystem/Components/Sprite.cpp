@@ -39,6 +39,7 @@ EntityMessage::eResult EntityComponents::Sprite::HandleMessage( const EntityMess
 								
 				mSprite = new GfxSystem::Sprite();
 				mSprite->position = GetOwner().GetProperty("Position").GetValue<Vector2>();
+				mSprite->scale = GetOwner().GetProperty("Scale").GetValue<Vector2>();
 				mSprite->angle = GetOwner().GetProperty("Angle").GetValue<float32>();
 				mSprite->z = (float32) GetOwner().GetProperty("Depth").GetValue<int32>();
 				mSprite->size = mSize;
