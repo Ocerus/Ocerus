@@ -1,9 +1,14 @@
 #include "Common.h"
 #include "EditorGUI.h"
 #include "EditorMgr.h"
+#include "PropertyEditors/PropertyEditorCreator.h"
+
 #include "GUISystem/GUIMgr.h"
 #include "EntitySystem/EntityMgr/EntityMgr.h"
+
 #include "CEGUI.h"
+
+
 
 #define gCEGUIWM CEGUI::WindowManager::getSingleton()
 
@@ -105,17 +110,53 @@ void EditorGUI::UpdateEntityEditorWindow()
 		componentGroup->setText(componentName);
 		entityEditorPane->addChildWindow(componentGroup);
 
-		PropertyList propertyList;
-		gEntityMgr.GetEntityComponentProperties(*currentEntity, componentID, propertyList);
-		int currentItem = 0;
-		for (PropertyList::iterator it = propertyList.begin(); it != propertyList.end(); ++it)
+		for (PropertyEditors::const_iterator it = mPropertyEditors.begin(); it != mPropertyEditors.end(); ++it)
 		{
-			AppendPropertyItem(componentGroup, componentID, it->GetName(), it->GetValueString(), it->GetKey().ToString(), currentItem, it->GetComment());
-			currentItem++;
+			(*it)->ResetUpdateFlag();
 		}
 
-		componentGroup->setArea(CEGUI::URect(CEGUI::UDim(0, 4), CEGUI::UDim(0, (float)newGroupY + 1), CEGUI::UDim(1, -4), CEGUI::UDim(0, (float)newGroupY + mComponentGroupHeight + (currentItem * mPropertyItemHeight))));
-		newGroupY += mComponentGroupHeight + (currentItem * mPropertyItemHeight);
+		PropertyList propertyList;
+		gEntityMgr.GetEntityComponentProperties(*currentEntity, componentID, propertyList);
+		int currentY = 0;
+		for (PropertyList::iterator it = propertyList.begin(); it != propertyList.end(); ++it)
+		{
+			// Check whether this property is suposed to be shown in editor.
+			if (!it->GetAccessFlags() & Reflection::PA_EDIT_READ)
+				continue;
+
+			AbstractPropertyEditor* editor = 0;
+			for (PropertyEditors::iterator eit = mPropertyEditors.begin(); eit != mPropertyEditors.end(); ++eit)
+			{
+				if ((*eit)->GetProperty() == *it)
+				{
+					editor = *eit;
+					break;
+				}
+			}
+
+            CEGUI::Window* labelWidget = 0;
+            CEGUI::Window* editorWidget = 0;
+
+            if (editor == 0)
+			{
+				// Create an editor for this property
+				editor = CreatePropertyEditor(*it);
+			    labelWidget = editor->CreateLabelWidget(componentGroup);
+				editorWidget = editor->CreateEditorWidget(componentGroup);
+			
+			}
+			else
+			{
+				// Update the editor for this property
+				editor->UpdateEditorWidget();
+			}
+            labelWidget->setArea(CEGUI::URect(CEGUI::UDim(0, 2), CEGUI::UDim(0, (float)(currentY + 1)), CEGUI::UDim(0.5, -1), CEGUI::UDim(0, currentY + editor->GetEditorHeight())));
+            editorWidget->setArea(CEGUI::URect(CEGUI::UDim(0.5, 1), CEGUI::UDim(0, (float)(currentY + 1)), CEGUI::UDim(1, -1), CEGUI::UDim(0, currentY + editor->GetEditorHeight())));
+			currentY += editor->GetEditorHeight() + 2;
+		}
+
+		componentGroup->setArea(CEGUI::URect(CEGUI::UDim(0, 4), CEGUI::UDim(0, (float)newGroupY + 1), CEGUI::UDim(1, -4), CEGUI::UDim(0, (float)newGroupY + currentY)));
+		newGroupY += currentY;
 	}
 }
 

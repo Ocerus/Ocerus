@@ -17,6 +17,8 @@ namespace CEGUI
 
 namespace Editor
 {
+	class AbstractPropertyEditor;
+
 	/// The EditorGUI class manages the editor GUI.
 	class EditorGUI
 	{
@@ -48,6 +50,8 @@ namespace Editor
 		int32 mPropertyItemHeight;
 		int32 mComponentGroupHeight;
 
+		typedef vector<AbstractPropertyEditor*> PropertyEditors;
+		PropertyEditors mPropertyEditors;
 	};
 }
 

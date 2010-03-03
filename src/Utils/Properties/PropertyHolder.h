@@ -32,6 +32,12 @@ namespace Reflection
 			return *this;
 		}
 
+        /// Comparsion operator.
+        bool operator==(const PropertyHolder& rhs)
+        {
+            return rhs.mOwner == mOwner && rhs.mProperty == mProperty;
+        }
+
 		/// Returns the access flags to this property.
 		inline PropertyAccessFlags GetAccessFlags(void) const
 		{
