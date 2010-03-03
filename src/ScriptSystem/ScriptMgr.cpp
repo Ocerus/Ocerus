@@ -107,7 +107,7 @@ ScriptMgr::~ScriptMgr(void)
 
 // Template function called from scripts that finds property (propName) of entity handle (handle) and gets its value.
 template<typename T>
-T EntityHandleGetValue(EntitySystem::EntityHandle& handle, string& propName)
+T EntityHandleGetValue(EntitySystem::EntityHandle& handle, const string& propName)
 {
 	Reflection::PropertyHolder ph = gEntityMgr.GetEntityProperty(handle, StringKey(propName), Reflection::PA_SCRIPT_READ);
 	if (ph.IsValid()) return ph.GetValue<T>();
@@ -120,7 +120,7 @@ T EntityHandleGetValue(EntitySystem::EntityHandle& handle, string& propName)
 
 // Template function called from scripts that finds property (propName) of entity handle (handle) and sets its value.
 template<typename T>
-void EntityHandleSetValue(EntitySystem::EntityHandle& handle, string& propName, T value)
+void EntityHandleSetValue(EntitySystem::EntityHandle& handle, const string& propName, const T& value)
 {
 	Reflection::PropertyHolder ph = gEntityMgr.GetEntityProperty(handle, StringKey(propName), Reflection::PA_SCRIPT_WRITE);
 	if (ph.IsValid()) ph.SetValue<T>(value);
@@ -577,11 +577,11 @@ void ScriptMgr::ConfigureEngine(void)
 
     #define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter) \
 	/* Register getter and setter */ \
-	r = mEngine->RegisterObjectMethod("EntityHandle", (string(typeName) + " Get_" + typeName + "(string &in)").c_str(), \
-		asFUNCTIONPR(EntityHandleGetValue, (EntitySystem::EntityHandle&, string&), typeClass), \
+	r = mEngine->RegisterObjectMethod("EntityHandle", (string(typeName) + " Get_" + typeName + "(const string &in)").c_str(), \
+		asFUNCTIONPR(EntityHandleGetValue, (EntitySystem::EntityHandle&, const string&), typeClass), \
 		asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT(); \
-	r = mEngine->RegisterObjectMethod("EntityHandle", (string("void Set_") + typeName + "(string &in, " + typeName + ")").c_str(), \
-		asFUNCTIONPR(EntityHandleSetValue, (EntitySystem::EntityHandle&, string&, typeClass), void), \
+	r = mEngine->RegisterObjectMethod("EntityHandle", (string("void Set_") + typeName + "(const string &in, const " + typeName + "&in)").c_str(), \
+		asFUNCTIONPR(EntityHandleSetValue, (EntitySystem::EntityHandle&, const string&, const typeClass&), void), \
 		asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT(); \
 	/* Register the array type */ \
 	r = mEngine->RegisterObjectType((string("array_") + typeName).c_str(), sizeof(ScriptArray<typeClass>), asOBJ_VALUE | asOBJ_POD | asOBJ_APP_CLASS_CA); OC_SCRIPT_ASSERT(); \
