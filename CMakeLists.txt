@@ -127,7 +127,7 @@ set(Boost_USE_MULTITHREADED ON)
 find_package( Boost 1.36 REQUIRED COMPONENTS system filesystem regex )
 if (Boost_FOUND)
     link_directories(${Boost_LIBRARY_DIRS})
-    include_directories(${BOOST_INCLUDE_DIRS})
+    include_directories(${Boost_INCLUDE_DIRS})
 else (Boost_FOUND)
     message(FATAL_ERROR "BOOST library cannot be found in your system.")
 endif (Boost_FOUND)
@@ -199,6 +199,9 @@ set(Core_SRCS
 set(Editor_SRCS
     src/Editor/EditorGUI.cpp
     src/Editor/EditorMgr.cpp
+    src/Editor/PropertyEditors/AbstractPropertyEditor.cpp
+    src/Editor/PropertyEditors/StringPropertyEditor.cpp
+    src/Editor/PropertyEditors/PropertyEditorCreator.cpp
 )
 
 set(EntitySystem_SRCS
