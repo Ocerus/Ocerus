@@ -121,7 +121,7 @@ void EditorGUI::UpdateEntityEditorWindow()
 		for (PropertyList::iterator it = propertyList.begin(); it != propertyList.end(); ++it)
 		{
 			// Check whether this property is suposed to be shown in editor.
-			if (!it->GetAccessFlags() & Reflection::PA_EDIT_READ)
+			if (!(it->GetAccessFlags() & Reflection::PA_EDIT_READ))
 				continue;
 
 			AbstractPropertyEditor* editor = 0;
@@ -150,8 +150,8 @@ void EditorGUI::UpdateEntityEditorWindow()
 				// Update the editor for this property
 				editor->UpdateEditorWidget();
 			}
-            labelWidget->setArea(CEGUI::URect(CEGUI::UDim(0, 2), CEGUI::UDim(0, (float)(currentY + 1)), CEGUI::UDim(0.5, -1), CEGUI::UDim(0, currentY + editor->GetEditorHeight())));
-            editorWidget->setArea(CEGUI::URect(CEGUI::UDim(0.5, 1), CEGUI::UDim(0, (float)(currentY + 1)), CEGUI::UDim(1, -1), CEGUI::UDim(0, currentY + editor->GetEditorHeight())));
+            labelWidget->setArea(CEGUI::URect(CEGUI::UDim(0, 2), CEGUI::UDim(0, (float)(currentY + 1)), CEGUI::UDim(0.5, -1), CEGUI::UDim(0, (float32)(currentY + editor->GetEditorHeight()))));
+            editorWidget->setArea(CEGUI::URect(CEGUI::UDim(0.5, 1), CEGUI::UDim(0, (float)(currentY + 1)), CEGUI::UDim(1, -1), CEGUI::UDim(0, (float32)(currentY + editor->GetEditorHeight()))));
 			currentY += editor->GetEditorHeight() + 2;
 		}
 

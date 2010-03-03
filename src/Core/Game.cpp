@@ -162,6 +162,7 @@ void Core::Game::Update( const float32 delta )
 		
 		mPhysics->Step(stepSize, PHYSICS_ITERATIONS);
 
+		///@todo what is the purpose of this?!?
 		mPhysicsEvents.push_back(new PhysicsEvent());
 		mPhysicsEvents.push_back(new PhysicsEvent());
 

@@ -1243,6 +1243,42 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="PropertyEditors"
+				>
+				<Filter
+					Name="inc"
+					>
+					<File
+						RelativePath="..\src\Editor\PropertyEditors\AbstractPropertyEditor.h"
+						>
+					</File>
+					<File
+						RelativePath="..\src\Editor\PropertyEditors\PropertyEditorCreator.h"
+						>
+					</File>
+					<File
+						RelativePath="..\src\Editor\PropertyEditors\StringPropertyEditor.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="src"
+					>
+					<File
+						RelativePath="..\src\Editor\PropertyEditors\AbstractPropertyEditor.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\src\Editor\PropertyEditors\PropertyEditorCreator.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\src\Editor\PropertyEditors\StringPropertyEditor.cpp"
+						>
+					</File>
+				</Filter>
+			</Filter>
 		</Filter>
 	</Files>
 	<Globals>

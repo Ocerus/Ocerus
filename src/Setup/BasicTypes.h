@@ -17,6 +17,8 @@ typedef double float64;
 #define	FLOAT32_MAX	FLT_MAX
 #define	FLOAT32_MIN	FLT_MIN
 #define	FLOAT32_EPSILON	FLT_EPSILON
+#define INT32_MAX INT_MAX
+#define INT32_MIN INT_MIN
 
 #if defined(_MSC_VER) || defined(__BORLANDC__)
 typedef unsigned __int64 uint64;
