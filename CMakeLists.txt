@@ -199,9 +199,10 @@ set(Core_SRCS
 set(Editor_SRCS
     src/Editor/EditorGUI.cpp
     src/Editor/EditorMgr.cpp
-    src/Editor/PropertyEditors/AbstractPropertyEditor.cpp
-    src/Editor/PropertyEditors/StringPropertyEditor.cpp
+    src/Editor/PropertyEditors/AbstractValueEditor.cpp
+    src/Editor/PropertyEditors/StringEditor.cpp
     src/Editor/PropertyEditors/PropertyEditorCreator.cpp
+	src/Editor/PropertyEditors/EntityAttributeModel.cpp
 )
 
 set(EntitySystem_SRCS
@@ -303,7 +304,7 @@ set(Utils_SRCS
 
 include_directories(${ocerus-engine_INCLUDE_DIRS})
 
-set(CMAKE_CXX_FLAGS "-O3 -Wall")
+#set(CMAKE_CXX_FLAGS "-O3 -Wall")
 set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g -Wall -DUSE_ASSERT -D_DEBUG")
 
 foreach(SYMBOL ${ocerus-engine_SYMBOLS})

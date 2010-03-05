@@ -5,11 +5,18 @@
 #define _PROPERTYEDITORCREATOR_H_
 
 #include "Base.h"
-#include "AbstractPropertyEditor.h"
+#include "IValueEditor.h"
 
 namespace Editor
 {
-	AbstractPropertyEditor* CreatePropertyEditor(const PropertyHolder&);
+	/// Creates a property editor for given property.
+	IValueEditor* CreatePropertyEditor(const PropertyHolder&);
+
+	/// Creates an editor for EntityID.
+	IValueEditor* CreateEntityIDEditor(const EntitySystem::EntityHandle&);
+
+	/// Creates an editor for EntityName.
+	IValueEditor* CreateEntityNameEditor(const EntitySystem::EntityHandle&);
 }
 
 #endif // _PROPERTYEDITORCREATOR_H_

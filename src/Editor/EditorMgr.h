@@ -32,6 +32,9 @@ namespace Editor
 		/// Unloads editor.
 		void UnloadEditor();
 
+		/// Updates the editor.
+		void Update(const float32 delta);
+
 		/// Returns currently selected entity. If no entity is selected,
 		/// invalid EntityHandler is returned.
 		inline const EntitySystem::EntityHandle* GetCurrentEntity() const;

@@ -5,11 +5,14 @@
 #include "GUIConsole.h"
 #include "CEGUITools.h"
 
+#include "Core/Application.h"
+
 #include "InputSystem/InputMgr.h"
 #include "InputSystem/InputActions.h"
 
 #include "CEGUI.h"
 #include "RendererModules/OpenGL/CEGUIOpenGLRenderer.h"
+
 
 namespace GUISystem
 {
@@ -143,8 +146,14 @@ namespace GUISystem
 
 		if (!mCegui->injectKeyDown(KeyMapperOIStoCEGUI(ke.keyAction)))
 		{
-			// If the key was not processed by the gui system,
-			// inject corresponding character.
+			// If the key was not processed by the gui system, try to handle hotkeys.
+			if (ke.keyAction == InputSystem::KC_ESCAPE)
+			{
+				gApp.Shutdown();
+				return;
+			}
+
+			// Finally inject corresponding character.
 			mCegui->injectChar(ke.keyCode);
 		}
 	}

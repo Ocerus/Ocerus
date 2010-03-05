@@ -5,6 +5,7 @@
 #define StringConverter_h__
 
 #include "Base.h"
+#include "Array.h"
 
 // We are using the STD library for the conversion.
 #include <sstream>
@@ -20,6 +21,21 @@ namespace Utils
 		{
 			std::ostringstream out;
 			out << val;
+			return out.str();
+		}
+
+		template<typename T>
+		string ToString(Array<T>* array)
+		{
+			std::ostringstream out;
+			out << "[";
+			for (int32 i = 0; i < array->GetSize(); ++i)
+			{
+				out << ToString<T>((*array)[i]);
+				if (i != array->GetSize() - 1)
+					out << ",";
+			}
+			out << "]";
 			return out.str();
 		}
 

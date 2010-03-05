@@ -132,9 +132,9 @@ void Core::Game::Update( const float32 delta )
 	PROFILE_FNC();
 
 	UpdateGameProperties();
-	
+
 	if (!IsActionRunning()) return;
-	
+
 	mTimer.UpdateInSeconds(delta);
 
 
@@ -156,10 +156,10 @@ void Core::Game::Update( const float32 delta )
 	while (physicsDelta > PHYSICS_TIMESTEP)
 	{
 		float32 stepSize = PHYSICS_TIMESTEP;
-		
+
 		gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::UPDATE_LOGIC, Reflection::PropertyFunctionParameters() << stepSize));
 		gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::UPDATE_PHYSICS, Reflection::PropertyFunctionParameters() << stepSize));
-		
+
 		mPhysics->Step(stepSize, PHYSICS_ITERATIONS);
 
 		///@todo what is the purpose of this?!?
@@ -232,11 +232,6 @@ void Core::Game::Draw( const float32 passedDelta)
 
 void Core::Game::KeyPressed( const KeyInfo& ke )
 {
-	if (ke.keyAction == KC_ESCAPE)
-	{
-		gApp.Shutdown();
-	}
-
 	if (ke.keyAction == KC_F5 && gInputMgr.IsKeyDown(KC_LCONTROL))
 	{
 		if (gProfiler.IsRunning())
@@ -256,7 +251,7 @@ void Core::Game::KeyPressed( const KeyInfo& ke )
 			PauseAction();
 			ocInfo << "Game action paused";
 		}
-		else 
+		else
 		{
 			ResumeAction();
 			ocInfo << "Game action resumed";

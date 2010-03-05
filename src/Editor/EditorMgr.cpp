@@ -33,6 +33,11 @@ void Editor::EditorMgr::UnloadEditor()
 	gGUIMgr.UnloadRootLayout();
 }
 
+void Editor::EditorMgr::Update(const float32 delta)
+{
+	mEditorGUI->Update(delta);
+}
+
 void Editor::EditorMgr::SetCurrentEntity(const EntitySystem::EntityHandle* newCurrentEntity)
 {
 	delete mCurrentEntity;

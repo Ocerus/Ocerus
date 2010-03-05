@@ -150,6 +150,7 @@ void Application::RunMainLoop()
 		case AS_GAME:
 			mGame->Update(delta);
 			gGUIMgr.Update(delta);
+			gEditorMgr.Update(delta);
 			break;
 		default:
 			break;

@@ -17,7 +17,7 @@ namespace CEGUI
 
 namespace Editor
 {
-	class AbstractPropertyEditor;
+	class IValueEditor;
 
 	/// The EditorGUI class manages the editor GUI.
 	class EditorGUI
@@ -33,6 +33,9 @@ namespace Editor
 		/// Loads editor GUI.
 		void LoadGUI();
 
+		/// Updates the GUI.
+		void Update(const float32 delta);
+
 		/// Updates the entity editor.
 		void UpdateEntityEditorWindow();
 
@@ -41,16 +44,13 @@ namespace Editor
 
 
 	private:
-
-		void AppendPropertyItem(CEGUI::Window* componentGroup, EntitySystem::ComponentID componentID, const string& propertyName, const string& propertyValue, const string& propertyKey, int propertyPos, const string& propTooltip, bool readOnly = false);
-
-		bool OnEntityEditorItemChanged(const CEGUI::EventArgs& e);
-
+		void CreateValueEditorWidgets(IValueEditor* editor, CEGUI::Window* componentGroup, int32& currentY);
 
 		int32 mPropertyItemHeight;
 		int32 mComponentGroupHeight;
+		float32 mPropertyUpdateTimer;
 
-		typedef vector<AbstractPropertyEditor*> PropertyEditors;
+		typedef vector<IValueEditor*> PropertyEditors;
 		PropertyEditors mPropertyEditors;
 	};
 }
