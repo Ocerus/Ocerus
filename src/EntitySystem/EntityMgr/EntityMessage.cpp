@@ -61,7 +61,7 @@ const Reflection::ePropertyType* EntitySystem::EntityMessage::GetParameterTypes(
 	return 0;
 }
 
-const uint32 EntitySystem::EntityMessage::GetParametersCount( const eType messageType )
+uint32 EntitySystem::EntityMessage::GetParametersCount( const eType messageType )
 {
 	switch (messageType)
 	{

@@ -305,7 +305,7 @@ set(Utils_SRCS
 include_directories(${ocerus-engine_INCLUDE_DIRS})
 
 #set(CMAKE_CXX_FLAGS "-O3 -Wall")
-set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g -Wall -DUSE_ASSERT -D_DEBUG")
+set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g -Wall -Wextra -pedantic -Wno-variadic-macros -Wno-long-long -DUSE_ASSERT -D_DEBUG")
 
 foreach(SYMBOL ${ocerus-engine_SYMBOLS})
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D${SYMBOL}")

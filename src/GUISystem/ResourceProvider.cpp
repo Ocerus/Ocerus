@@ -31,6 +31,9 @@ namespace GUISystem {
 	size_t ResourceProvider::getResourceGroupFileNames(std::vector<CEGUI::String> &out_vec,
 		const CEGUI::String &file_pattern, const CEGUI::String &resource_group)
 	{
+		OC_UNUSED(out_vec);
+		OC_UNUSED(file_pattern);
+		OC_UNUSED(resource_group);
 		///@todo implement this;
 		return 0;
 	}

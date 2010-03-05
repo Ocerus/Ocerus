@@ -71,13 +71,14 @@ void Core::LoadingScreen::Draw()
 
 void Core::LoadingScreen::ResourceGroupLoadStarted( const string& groupName, uint32 resourceCount )
 {
-
+	OC_UNUSED(groupName);
+	OC_UNUSED(resourceCount);
 	Draw();
 }
 
 void Core::LoadingScreen::ResourceLoadStarted( const ResourceSystem::ResourcePtr& resource )
 {
-
+	OC_UNUSED(resource);
 	Draw();
 }
 

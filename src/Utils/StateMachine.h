@@ -55,7 +55,7 @@ namespace Utils
 		}
 
 		/// Callback to all derived classes. It's called whenever the state changes.
-		virtual void StateChanged(T oldState, T newState) {}
+		virtual void StateChanged(T /* oldState */, T /* newState */) {}
 
 	private:
 		T mState, mNextState;

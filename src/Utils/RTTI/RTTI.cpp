@@ -11,6 +11,7 @@ RTTI::RTTI(	uint8 dwStub, ClassID CLID, const char* szClassName, RTTI* pBaseClas
 	mClassFactory( pFactory			),
 	mComponentDependencies(0)
 {
+	OC_UNUSED(dwStub);
 	OC_ASSERT( CLID != 0 );
 	OC_ASSERT( strlen(szClassName) <= CLASSNAME_LENGTH && "RTTI:Class name too long" );
 	#ifdef __WIN__

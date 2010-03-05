@@ -42,6 +42,7 @@ void GUIConsole::Deinit()
 
 void GUIConsole::AppendLogMessage(const string& logMessage, int32 logLevel)
 {
+	OC_UNUSED(logMessage);
 	if (logLevel >= mCurrentLogLevelTreshold)
 	{
 
@@ -50,7 +51,7 @@ void GUIConsole::AppendLogMessage(const string& logMessage, int32 logLevel)
 
 void GUIConsole::AppendScriptMessage(const string& message)
 {
-
+	OC_UNUSED(message);
 }
 
 void GUIConsole::ToggleConsole()
@@ -63,8 +64,9 @@ void GUIConsole::ToggleConsole()
 }
 
 
-bool GUIConsole::CommandHandler(const CEGUI::EventArgs& e)
+bool GUIConsole::CommandHandler(const CEGUI::EventArgs& args)
 {
+	OC_UNUSED(args);
 	OC_DASSERT(mIsInited);
 	string message(mConsolePromptWidget->getText().c_str());
 	mConsolePromptWidget->setText("");

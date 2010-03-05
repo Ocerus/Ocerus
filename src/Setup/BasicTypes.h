@@ -24,8 +24,8 @@ typedef double float64;
 typedef unsigned __int64 uint64;
 typedef signed __int64 int64;
 #else
-typedef unsigned long long uint64;
-typedef signed long long int64;
+typedef unsigned long long int uint64;
+typedef signed long long int int64;
 #endif
 
 #endif // BasicTypes_h__

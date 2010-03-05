@@ -11,6 +11,7 @@ void EntityComponents::Camera::Destroy( void )
 
 EntityMessage::eResult EntityComponents::Camera::HandleMessage( const EntityMessage& msg )
 {
+	OC_UNUSED(msg);
 	return EntityMessage::RESULT_IGNORED;
 }
 

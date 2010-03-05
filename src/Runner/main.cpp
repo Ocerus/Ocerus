@@ -34,6 +34,7 @@ AfterExitHook gAfterExitHook;
 /// Callback function from the DbgLib.
 void DbgLibExceptionCallback(const DbgLib::tstring& dumpFilePath, void* params)
 {
+	OC_UNUSED(params);
 	stringstream ss;
 	ss << "A system exception has occured!" << std::endl << std::endl;
 	ss << "The MiniDump was written to" << std::endl;
@@ -61,10 +62,14 @@ DbgLib::CMemLeakDetector* gLeakDetector = 0;
 
 #ifdef __WIN__
 INT WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow )
+{
 #else
 int main(int argc, char* argv[])
-#endif // __WIN__
 {
+	OC_UNUSED(argc);
+	OC_UNUSED(argv);
+#endif
+
 	// initialize memory
 	Memory::InitGlobalMemoryAllocation();
 
@@ -115,7 +120,7 @@ int main(int argc, char* argv[])
 	}
 
 	return 0;
-};
+}
 
 
 /// Callback function called after all static and global variables were destroyed.

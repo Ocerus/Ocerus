@@ -26,6 +26,7 @@ static void Vector2InitConstructor(float32 x, float32 y, Vector2* self)
 
 static void Vector2Destructor(Vector2* self)
 {
+	OC_UNUSED(self);
 	//
 }
 
@@ -128,6 +129,7 @@ static void ColorInit1Constructor(uint32 color, GfxSystem::Color* self)
 
 static void ColorDestructor(GfxSystem::Color* self)
 {
+	OC_UNUSED(self);
 	//
 }
 
@@ -210,7 +212,7 @@ void RegisterScriptColor(asIScriptEngine* engine)
 	// Register the operator overloads
 	r = engine->RegisterObjectMethod("Color", "Color& opAssign(const Color &in)", asFUNCTION(ColorAssignOperator), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("Color", "bool opEquals(const Color &in) const", asMETHOD(GfxSystem::Color, operator==), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-	
+
 	// Register the object methods
 	r = engine->RegisterObjectMethod("Color", "uint32 GetARGB() const", asMETHOD(GfxSystem::Color, GetARGB), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 }
@@ -236,7 +238,7 @@ int32 ScriptGetCurrentState(void)
 			} else exception = "This function must be called from OnAction handler.";
 		} else exception = "This function must be called from entity with Script component.";
 	} else exception = "This function must be called from an entity message handler.";
-	
+
 	// Solve exceptions
 	asIScriptContext *ctx = asGetActiveContext();
 	if (ctx) ctx->SetException(exception.c_str());
@@ -267,7 +269,7 @@ void ScriptSetAndSleep(int32 state, uint64 time)
 			} else exception = "This function must be called from OnAction handler.";
 		} else exception = "This function must be called from entity with Script component.";
 	} else exception = "This function must be called from an entity message handler.";
-	
+
 	// Solve exceptions
 	asIScriptContext *ctx = asGetActiveContext();
 	if (ctx) ctx->SetException(exception.c_str());
@@ -289,6 +291,7 @@ void ScriptSystem::RegisterAllAdditions(AngelScript::asIScriptEngine* engine)
 
 void ScriptSystem::ResourceUnloadCallback(ScriptResource* resource)
 {
+	OC_UNUSED(resource);
 	// Broadcast message that resources will be updated
 	gEntityMgr.BroadcastMessage(EntitySystem::EntityMessage::RESOURCE_UPDATE);
 }

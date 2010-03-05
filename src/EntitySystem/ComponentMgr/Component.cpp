@@ -9,6 +9,7 @@ Component::~Component() {}
 
 EntityMessage::eResult Component::HandleMessage(const EntityMessage& msg)
 {
+	OC_UNUSED(msg);
 	return EntityMessage::RESULT_IGNORED;
 }
 

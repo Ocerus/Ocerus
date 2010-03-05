@@ -32,12 +32,12 @@ void operator delete( void* ptr ) throw()
 	Memory::CustomFree(ptr);
 }
 
-void* operator new( std::size_t sz, const std::nothrow_t& )
+void* operator new( std::size_t sz, const std::nothrow_t& ) throw()
 {
 	return Memory::CustomMalloc(sz);
 }
 
-void operator delete( void* ptr, const std::nothrow_t& )
+void operator delete( void* ptr, const std::nothrow_t& ) throw()
 {
 	Memory::CustomFree(ptr);
 }
@@ -52,12 +52,12 @@ void operator delete[]( void* ptr ) throw()
 	Memory::CustomFree(ptr);
 }
 
-void* operator new[]( std::size_t sz, const std::nothrow_t& )
+void* operator new[]( std::size_t sz, const std::nothrow_t& ) throw()
 {
 	return Memory::CustomMalloc(sz);
 }
 
-void operator delete[]( void* ptr, const std::nothrow_t& )
+void operator delete[]( void* ptr, const std::nothrow_t& ) throw()
 {
 	Memory::CustomFree(ptr);
 }

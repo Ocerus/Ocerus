@@ -61,7 +61,7 @@ enum b2ShapeType
 	e_unknownShape = -1,
 	e_circleShape,
 	e_polygonShape,
-	e_shapeTypeCount,
+	e_shapeTypeCount
 };
 
 /// A shape definition is used to construct a shape. This class defines an

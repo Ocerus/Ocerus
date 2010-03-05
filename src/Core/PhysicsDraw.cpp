@@ -34,6 +34,7 @@ void Core::PhysicsDraw::DrawCircle( const b2Vec2& center, float32 radius, const 
 
 void Core::PhysicsDraw::DrawSolidCircle( const b2Vec2& center, float32 radius, const b2Vec2& axis, const b2Color& b2color )
 {
+	OC_UNUSED(axis);
 	GfxSystem::Color color((uint8)(b2color.r*255), (uint8)(b2color.g*255), (uint8)(b2color.b*255), 80);
 	gGfxRenderer.DrawCircle(center, radius, color, true);
 }
@@ -49,5 +50,5 @@ void Core::PhysicsDraw::DrawSegment( const b2Vec2& p1, const b2Vec2& p2, const b
 
 void Core::PhysicsDraw::DrawXForm( const b2XForm& xf )
 {
-
+	OC_UNUSED(xf);
 }

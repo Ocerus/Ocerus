@@ -274,7 +274,7 @@ private:
 	friend class b2Island;
 	friend class b2ContactManager;
 	friend class b2ContactSolver;
-	
+
 	friend class b2DistanceJoint;
 	friend class b2GearJoint;
 	friend class b2MouseJoint;
@@ -290,7 +290,7 @@ private:
 		e_sleepFlag			= 0x0008,
 		e_allowSleepFlag	= 0x0010,
 		e_bulletFlag		= 0x0020,
-		e_fixedRotationFlag	= 0x0040,
+		e_fixedRotationFlag	= 0x0040
 	};
 
 	// m_type
@@ -298,7 +298,7 @@ private:
 	{
 		e_staticType,
 		e_dynamicType,
-		e_maxTypes,
+		e_maxTypes
 	};
 
 	b2Body(const b2BodyDef* bd, b2World* world);

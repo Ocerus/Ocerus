@@ -35,7 +35,7 @@ namespace Reflection
 	namespace PropertyTypes
 	{
 		/// Returns the type ID associated with the templatized type.
-		template<typename T> ePropertyType GetTypeID(void) { return PT_UNKNOWN; };
+		template<typename T> ePropertyType GetTypeID(void) { return PT_UNKNOWN; }
 
 		/// Returns the default value of this property type.
 		template<typename T> T GetDefaultValue(void) { return 0; }

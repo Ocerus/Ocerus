@@ -261,16 +261,17 @@ void Core::Game::KeyPressed( const KeyInfo& ke )
 
 void Core::Game::KeyReleased( const KeyInfo& ke )
 {
-
+	OC_UNUSED(ke);
 }
 
 void Core::Game::MouseMoved( const MouseInfo& mi )
 {
-
+	OC_UNUSED(mi);
 }
 
 void Core::Game::MouseButtonPressed( const MouseInfo& mi, const eMouseButton btn )
 {
+	OC_UNUSED(mi);
 	if (btn == MBTN_LEFT)
 	{
 		if (mHoveredEntity.IsValid())
@@ -307,7 +308,8 @@ void Core::Game::MouseButtonPressed( const MouseInfo& mi, const eMouseButton btn
 
 void Core::Game::MouseButtonReleased( const MouseInfo& mi, const eMouseButton btn )
 {
-
+	OC_UNUSED(mi);
+	OC_UNUSED(btn);
 }
 
 bool Core::Game::PhysicsCallbacks::ShouldCollide( b2Shape* shape1, b2Shape* shape2 )

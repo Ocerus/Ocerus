@@ -52,7 +52,7 @@ namespace EntitySystem
 		static const Reflection::ePropertyType* GetParameterTypes(const eType messageType);
 
 		/// Returns the number of arguments the given message type accepts.
-		static const uint32 GetParametersCount(const eType messageType);
+		static uint32 GetParametersCount(const eType messageType);
 
 		/// User type of this message.
 		eType type;

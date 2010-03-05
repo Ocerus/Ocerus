@@ -173,12 +173,14 @@ namespace GUISystem
 
 	void GUIMgr::MouseButtonPressed(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn)
 	{
+		OC_UNUSED(mi);
 		OC_DASSERT(mCegui);
 		mCegui->injectMouseButtonDown(ConvertMouseButtonEnum(btn));
 	}
 
 	void GUIMgr::MouseButtonReleased(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn)
 	{
+		OC_UNUSED(mi);
 		OC_DASSERT(mCegui);
 		mCegui->injectMouseButtonUp(ConvertMouseButtonEnum(btn));
 	}
@@ -359,6 +361,8 @@ bool GUIMgr::ConsoleCommandEvent(const CEGUI::EventArgs& e)
 	 */
 	bool PropertyCallback(CEGUI::Window* window, CEGUI::String& propname, CEGUI::String& propvalue, void* userdata)
 	{
+		/// @todo Resolve duplicate of this function in CEGUITools.cpp
+		OC_UNUSED(userdata);
 		if (propname == "Text" &&
 			propvalue.size() > 2 &&
 			propvalue.at(0) == '$' &&

@@ -43,5 +43,5 @@ EntitySystem::EntityHandle EntitySystem::EntityPicker::PickSingleEntity( void )
 
 void EntitySystem::EntityPicker::PickMultipleEntities( vector<EntityHandle>& out )
 {
-
+	OC_UNUSED(out);
 }

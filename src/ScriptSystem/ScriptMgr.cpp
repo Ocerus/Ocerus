@@ -14,6 +14,7 @@ using namespace AngelScript;
 
 void MessageCallback(const asSMessageInfo* msg, void* param)
 {
+	OC_UNUSED(param);
 	const char* messageType[] = {"ERROR", "WARNING", "INFO"};
 
 	ocError << msg->section << "(" << msg->row << ", " << msg->col << ") : "
@@ -28,6 +29,8 @@ void LineCallback(asIScriptContext* ctx, uint64* deadline)
 
 int ScriptMgr::IncludeCallback(const char* fileName, const char* from, AngelScript::CScriptBuilder* builder, void* userParam)
 {
+	OC_UNUSED(from);
+	OC_UNUSED(userParam);
 	// Try to get existing script resource
 	ResourceSystem::ResourcePtr resPtr = gResourceMgr.GetResource("Scripts", fileName);
 	if (!resPtr)

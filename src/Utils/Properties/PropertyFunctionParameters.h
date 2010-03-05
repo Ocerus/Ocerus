@@ -105,7 +105,7 @@ namespace Reflection
 		/// supplied, returns null parameter.
 		inline PropertyFunctionParameter GetParameter(uint32 index) const
 		{
-			if (index < 0 || index >= mParameters->size())
+			if (index >= mParameters->size())
 			{
 				return PropertyFunctionParameter();
 			}

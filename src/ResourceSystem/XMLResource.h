@@ -33,7 +33,7 @@ namespace ResourceSystem
 		T GetChildValue(void);
 
 		/// Copy constructor.
-		XMLNodeIterator(const XMLNodeIterator& rhs) { operator=(rhs); }
+		XMLNodeIterator(const XMLNodeIterator& rhs): XMLDataMap::sibling_iterator(rhs) { operator=(rhs); }
 
 		/// Copy operator.
 		XMLNodeIterator& operator=(const XMLNodeIterator& rhs)

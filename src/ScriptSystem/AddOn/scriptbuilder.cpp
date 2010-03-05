@@ -11,6 +11,9 @@
 #include <windows.h> // For GetModuleFileName
 #endif
 
+#ifdef __UNIX__
+#include <unistd.h>
+#endif
 
 BEGIN_AS_NAMESPACE
 
@@ -92,7 +95,7 @@ void CScriptBuilder::ClearAll()
 {
 	includedScripts.clear();
 
-#if AS_PROCESS_METADATA == 1	
+#if AS_PROCESS_METADATA == 1
 	foundDeclarations.clear();
 	typeMetadataMap.clear();
 	funcMetadataMap.clear();
@@ -136,7 +139,7 @@ int CScriptBuilder::LoadScriptSection(const char *filename)
 		engine->WriteMessage(filename, 0, 0, asMSGTYPE_ERROR, msg.c_str());
 		return -1;
 	}
-	
+
 	// Determine size of the file
 	fseek(f, 0, SEEK_END);
 	int len = ftell(f);
@@ -152,7 +155,7 @@ int CScriptBuilder::LoadScriptSection(const char *filename)
 
 	fclose(f);
 
-	if( c == 0 ) 
+	if( c == 0 )
 	{
 		// Write a message to the engine's message callback
 		char buf[256];
@@ -228,7 +231,7 @@ int CScriptBuilder::ProcessScriptSection(const char *script, const char *section
 					OverwriteCode(start, pos-start);
 					nested--;
 				}
-			}			
+			}
 		}
 		else
 			pos += len;
@@ -263,7 +266,7 @@ int CScriptBuilder::ProcessScriptSection(const char *script, const char *section
 			// Determine what this metadata is for
 			int type;
 			pos = ExtractDeclaration(pos, declaration, type);
-			
+
 			// Store away the declaration in a map for lookup after the build has completed
 			if( type > 0 )
 			{
@@ -271,7 +274,7 @@ int CScriptBuilder::ProcessScriptSection(const char *script, const char *section
 				foundDeclarations.push_back(decl);
 			}
 		}
-		else 
+		else
 #endif
 		// Is this a preprocessor directive?
 		if( modifiedScript[pos] == '#' )
@@ -310,7 +313,7 @@ int CScriptBuilder::ProcessScriptSection(const char *script, const char *section
 			}
 		}
 		// Don't search for metadata/includes within statement blocks or between tokens in statements
-		else 
+		else
 			pos = SkipStatement(pos);
 	}
 
@@ -370,7 +373,7 @@ int CScriptBuilder::Build()
 		return r;
 
 #if AS_PROCESS_METADATA == 1
-	// After the script has been built, the metadata strings should be 
+	// After the script has been built, the metadata strings should be
 	// stored for later lookup by function id, type id, and variable index
 	for( int n = 0; n < (int)foundDeclarations.size(); n++ )
 	{
@@ -482,7 +485,7 @@ int CScriptBuilder::ExcludeCode(int pos)
 	return pos;
 }
 
-// Overwrite all characters except line breaks with blanks 
+// Overwrite all characters except line breaks with blanks
 void CScriptBuilder::OverwriteCode(int start, int len)
 {
 	char *code = &modifiedScript[start];
@@ -603,8 +606,8 @@ int CScriptBuilder::ExtractDeclaration(int pos, string &declaration, int &type)
 					}
 					else if( token == "(" && varLength == 0 )
 					{
-						// This is the first parenthesis we encounter. If the parenthesis isn't followed 
-						// by a statement block, then this is a variable declaration, in which case we 
+						// This is the first parenthesis we encounter. If the parenthesis isn't followed
+						// by a statement block, then this is a variable declaration, in which case we
 						// should only store the type and name of the variable, not the initialization parameters.
 						varLength = (int)declaration.size();
 					}
@@ -656,13 +659,13 @@ static const char *GetCurrentDir(char *buf, size_t size)
     {
         GetModuleFileName(NULL, apppath, MAX_PATH);
 
-        
+
         int appLen = _tcslen(apppath);
 
         // Look for the last backslash in the path, which would be the end
         // of the path itself and the start of the filename.  We only want
         // the path part of the exe's full-path filename
-        // Safety is that we make sure not to walk off the front of the 
+        // Safety is that we make sure not to walk off the front of the
         // array (in case the path is nothing more than a filename)
         while (appLen > 1)
         {
@@ -676,15 +679,17 @@ static const char *GetCurrentDir(char *buf, size_t size)
     }
 #ifdef _UNICODE
     wcstombs(buf, apppath, min(size, wcslen(apppath)*sizeof(wchar_t)));
-#else
+#else // _UNICODE
     memcpy(buf, apppath, min(size, strlen(apppath)));
-#endif
+#endif // _UNICODE
 
     return buf;
-#else
+#else // _WIN32_WCE
 	return _getcwd(buf, (int)size);
-#endif
+#endif // _WIN32_WCE
 #elif defined(__APPLE__)
+	return getcwd(buf, size);
+#elif defined(__UNIX__)
 	return getcwd(buf, size);
 #else
 	return "";

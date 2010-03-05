@@ -39,6 +39,7 @@ string StringConverter::ToString(bool val)
 template<>
 char* StringConverter::FromString(const string& str)
 {
+	OC_UNUSED(str);
 	OC_ASSERT_MSG(false, "Use .c_str() instead, noob!");
 	return 0;
 }

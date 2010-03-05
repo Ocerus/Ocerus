@@ -7,6 +7,8 @@
 
 int main(int argc, char* argv[])
 {
+	OC_UNUSED(argc);
+	OC_UNUSED(argv);
 	UnitTest::RunAllTests();
 
 #ifdef __WIN__
@@ -14,5 +16,4 @@ int main(int argc, char* argv[])
 #endif
 
 	return 0;
-};
-
+}

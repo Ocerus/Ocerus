@@ -26,6 +26,7 @@ void XMLCALL ElementStartHandle(void *data, const XML_Char *el, const XML_Char *
 
 void XMLCALL ElementEndHandle(void *data, const XML_Char *el)
 {
+	OC_UNUSED(el);
 	XMLMapDataHolder* me = (XMLMapDataHolder*)data;
 	me->mCurrentNode = me->mDataMapPtr->parent(me->mCurrentNode);
 }
@@ -33,7 +34,7 @@ void XMLCALL ElementEndHandle(void *data, const XML_Char *el)
 void XMLCALL DataHandle(void* data, const XML_Char *s, int len)
 {
 	XMLMapDataHolder* me = (XMLMapDataHolder*)data;
-	if (len > 0) 
+	if (len > 0)
 	{
 		XML_Char* buf = new XML_Char[len+1];
 		memcpy(buf, s, len);

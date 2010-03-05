@@ -61,6 +61,15 @@ void DisplayAssert(const char* msg, const char* file, const int line);
 #define OC_SCRIPT_ASSERT() OC_ASSERT_MSG(r >= 0, "Something cannot be registered to the script engine.")
 
 
+/// OC_UNUSED macro to hide unused variable warnings
+#define OC_UNUSED(x) ((void)(x))
+/*
+#ifdef __GNUC__
+#define OC_UNUSED(x) __attribute__ ((unused) x
+#else
+#define OC_UNUSED(x)
+#endif
+*/
 /// Override Boost's assert. The override function is in SmartAssert.cpp
 #define BOOST_ENABLE_ASSERT_HANDLER
 

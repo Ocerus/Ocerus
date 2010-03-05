@@ -153,6 +153,7 @@ void EditorGUI::UpdateEntityEditorWindow()
 /// TO BE REMOVED
 bool EditorGUI::EntityPickerHandler (const CEGUI::EventArgs& args)
 {
+	OC_UNUSED(args);
 	string entityName = gCEGUIWM.getWindow("picker/edit")->getText().c_str();
 	EntitySystem::EntityHandle entity = gEntityMgr.FindFirstEntity(entityName);
 	EditorMgr::GetSingleton().SetCurrentEntity(&entity);

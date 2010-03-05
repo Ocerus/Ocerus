@@ -12,6 +12,7 @@ using namespace GUISystem;
  */
 bool PropertyCallback(CEGUI::Window* window, CEGUI::String& propname, CEGUI::String& propvalue, void* userdata)
 {
+	OC_UNUSED(userdata);
 	if (propname == "Text" &&
 		propvalue.size() > 2 &&
 		propvalue.at(0) == '$' &&

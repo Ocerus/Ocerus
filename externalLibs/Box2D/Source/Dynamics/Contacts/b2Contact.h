@@ -116,7 +116,7 @@ public:
 		e_nonSolidFlag	= 0x0001,
 		e_slowFlag		= 0x0002,
 		e_islandFlag	= 0x0004,
-		e_toiFlag		= 0x0008,
+		e_toiFlag		= 0x0008
 	};
 
 	static void AddType(b2ContactCreateFcn* createFcn, b2ContactDestroyFcn* destroyFcn,

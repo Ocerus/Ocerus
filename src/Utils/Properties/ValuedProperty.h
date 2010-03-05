@@ -45,11 +45,13 @@ namespace Reflection
 		/// Returns the value of this property. The owner of this property must be specified.
 		virtual T GetValue(const RTTIBaseClass* owner) const
 		{
+			OC_UNUSED(owner);
 			return mData;
 		}
 		/// Sets the value of this property. The owner of this property must be specified.
 		virtual void SetValue(RTTIBaseClass* owner, T Value)
 		{
+			OC_UNUSED(owner);
 			mData = Value;
 		}
 
