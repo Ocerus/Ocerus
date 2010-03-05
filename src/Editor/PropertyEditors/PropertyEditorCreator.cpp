@@ -20,10 +20,10 @@ IValueEditor* Editor::CreatePropertyEditor(const PropertyHolder& property)
 	#undef PROPERTY_TYPE
 
 	default:
-		// For everything else use StringEditor.
-		return new Editor::StringEditor<PropertyHolder>(property);
+		break;
 	}
-	return 0;
+	// For everything else use StringEditor.
+	return new Editor::StringEditor<PropertyHolder>(property);
 }
 
 Editor::IValueEditor* Editor::CreateEntityIDEditor(const EntitySystem::EntityHandle& entity)

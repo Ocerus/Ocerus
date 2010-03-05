@@ -1250,7 +1250,23 @@
 					Name="inc"
 					>
 					<File
-						RelativePath="..\src\Editor\PropertyEditors\AbstractPropertyEditor.h"
+						RelativePath="..\src\Editor\PropertyEditors\AbstractValueEditor.h"
+						>
+					</File>
+					<File
+						RelativePath="..\src\Editor\PropertyEditors\ArrayStringEditor.h"
+						>
+					</File>
+					<File
+						RelativePath="..\src\Editor\PropertyEditors\ArrayStringEditorImpl.h"
+						>
+					</File>
+					<File
+						RelativePath="..\src\Editor\PropertyEditors\EntityAttributeModel.h"
+						>
+					</File>
+					<File
+						RelativePath="..\src\Editor\PropertyEditors\IValueEditor.h"
 						>
 					</File>
 					<File
@@ -1258,7 +1274,7 @@
 						>
 					</File>
 					<File
-						RelativePath="..\src\Editor\PropertyEditors\StringPropertyEditor.h"
+						RelativePath="..\src\Editor\PropertyEditors\StringEditor.h"
 						>
 					</File>
 				</Filter>
@@ -1266,7 +1282,11 @@
 					Name="src"
 					>
 					<File
-						RelativePath="..\src\Editor\PropertyEditors\AbstractPropertyEditor.cpp"
+						RelativePath="..\src\Editor\PropertyEditors\AbstractValueEditor.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\src\Editor\PropertyEditors\EntityAttributeModel.cpp"
 						>
 					</File>
 					<File
@@ -1274,7 +1294,7 @@
 						>
 					</File>
 					<File
-						RelativePath="..\src\Editor\PropertyEditors\StringPropertyEditor.cpp"
+						RelativePath="..\src\Editor\PropertyEditors\StringEditor.cpp"
 						>
 					</File>
 				</Filter>
