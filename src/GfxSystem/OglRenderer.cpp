@@ -234,7 +234,8 @@ void OglRenderer::SetViewportImpl(const GfxViewport& viewport) const
 {
 	Point topleft, bottomright;
 	CalculateViewportScreenBoundaries(viewport, topleft, bottomright);
-	glViewport(topleft.x, topleft.y, bottomright.x-topleft.x, bottomright.y-topleft.y);
+	// note that we are subtracting the Y pos from the resolution to workaround a bug in the SDL OpenGL impl
+	glViewport(topleft.x, gGfxWindow.GetResolutionHeight()/2-topleft.y, bottomright.x-topleft.x, bottomright.y-topleft.y);
 	
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();

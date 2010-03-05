@@ -123,8 +123,6 @@ bool GfxSystem::GfxRenderer::ConvertScreenToWorldCoords( const Point& screenCoor
 			// inverse viewport transform
 			worldCoords = Vector2((float32)screenCoords.x, (float32)screenCoords.y) - Vector2((float32)topleft.x, (float32)topleft.y);
 
-			ocInfo << worldCoords;
-			
 			// inverse projection transform
 			worldCoords.x = worldCoords.x * (bottomrightWorld.x-topleftWorld.x) / (bottomright.x-topleft.x);
 			worldCoords.y = worldCoords.y * (bottomrightWorld.y-topleftWorld.y) / (bottomright.y-topleft.y);
