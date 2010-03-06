@@ -68,7 +68,7 @@ bool GUIConsole::OnEventKeyDown(const CEGUI::EventArgs& args)
 {
 	OC_DASSERT(mIsInited);
 	const CEGUI::KeyEventArgs& keyArgs = static_cast<const CEGUI::KeyEventArgs&>(args);
-	bool controlPressed = keyArgs.sysKeys & CEGUI::Control;
+	bool controlPressed = (keyArgs.sysKeys & CEGUI::Control) != 0;
 	switch (keyArgs.scancode)
 	{
 		case CEGUI::Key::C:
