@@ -197,11 +197,11 @@ set(Core_SRCS
 )
 
 set(Editor_SRCS
-    src/Editor/EditorGUI.cpp
-    src/Editor/EditorMgr.cpp
-    src/Editor/PropertyEditors/AbstractValueEditor.cpp
-    src/Editor/PropertyEditors/StringEditor.cpp
-    src/Editor/PropertyEditors/PropertyEditorCreator.cpp
+	src/Editor/EditorGUI.cpp
+	src/Editor/EditorMgr.cpp
+	src/Editor/PropertyEditors/AbstractValueEditor.cpp
+	src/Editor/PropertyEditors/StringEditor.cpp
+	src/Editor/PropertyEditors/PropertyEditorCreator.cpp
 	src/Editor/PropertyEditors/EntityAttributeModel.cpp
 )
 
