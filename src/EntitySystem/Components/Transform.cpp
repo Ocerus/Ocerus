@@ -4,7 +4,6 @@
 
 void EntityComponents::Transform::Create( void )
 {
-	mBoundToPhysics = false;
 	mPosition.SetZero();
 	mScale.x = 1;
 	mScale.y = 1;
@@ -19,23 +18,6 @@ void EntityComponents::Transform::Destroy( void )
 
 EntityMessage::eResult EntityComponents::Transform::HandleMessage( const EntityMessage& msg )
 {
-	switch (msg.type)
-	{
-	case EntityMessage::POST_INIT:
-		if (GetOwner().HasProperty("PhysicalBody")) mBoundToPhysics = true;
-		return EntityMessage::RESULT_OK;
-	case EntityMessage::UPDATE_POST_PHYSICS:
-		if (mBoundToPhysics)
-		{
-			PhysicalBody* body = GetOwner().GetProperty("PhysicalBody").GetValue<PhysicalBody*>();
-			OC_ASSERT(body);
-			mPosition = body->GetPosition();
-			mAngle = body->GetAngle();
-		}
-		return EntityMessage::RESULT_OK;
-	default:
-		break;
-	}
 	return EntityMessage::RESULT_IGNORED;
 }
 

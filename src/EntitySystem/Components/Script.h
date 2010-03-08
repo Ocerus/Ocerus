@@ -33,7 +33,7 @@ namespace EntityComponents
 		Utils::Array<string>* GetModules(void) const { return const_cast<Utils::Array<string>*>(&mModules); }
 
 		/// Names of the script modules that are searched for script message handlers.
-		void SetModules(Utils::Array<string>* modules) { mModules.CopyFrom(*modules); }
+		void SetModules(Utils::Array<string>* modules) { mModules.CopyFrom(*modules); mNeedUpdate = true; }
 
 		/// Maximum time of execution the scripts in ms (0 means infinity).
 		uint32 GetTimeOut(void) const { return mTimeOut; }

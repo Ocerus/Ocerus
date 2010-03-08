@@ -45,7 +45,6 @@ namespace EntityComponents
 		Vector2 mSize;
 		float32 mTransparency;
 		GfxSystem::Sprite* mSprite;
-		bool mBoundToPhysics;
 	};
 }
 

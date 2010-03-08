@@ -9,7 +9,6 @@ void EntityComponents::Sprite::Create( void )
 	mSize = Vector2_Zero;
 	mTransparency = 0.0f;
 	mSprite = NULL;
-	mBoundToPhysics = false;
 }
 
 void EntityComponents::Sprite::Destroy( void )
@@ -23,7 +22,6 @@ EntityMessage::eResult EntityComponents::Sprite::HandleMessage( const EntityMess
 	{
 	case EntityMessage::INIT:
 		{
-			if (GetOwner().HasProperty("PhysicalBody")) mBoundToPhysics = true;
 			if ((mResPath == "")) return EntityMessage::RESULT_IGNORED;
 
 			///@todo tohle by chtelo nejak zoptimalizovat, nejspis to pridavani resourcu udelat nejak globalnejc
@@ -52,17 +50,10 @@ EntityMessage::eResult EntityComponents::Sprite::HandleMessage( const EntityMess
 			}
 			return EntityMessage::RESULT_ERROR;
 		}
-
 	case EntityMessage::UPDATE_POST_PHYSICS:	// update new pos etc. from physics
-		if (mBoundToPhysics)
-		{
-			PhysicalBody* body = GetOwner().GetProperty("PhysicalBody").GetValue<PhysicalBody*>();
-			OC_ASSERT(body);
-			mSprite->position = body->GetPosition();
-			mSprite->angle = body->GetAngle();
-		}
+		mSprite->position = GetOwner().GetProperty("Position").GetValue<Vector2>();
+		mSprite->angle = GetOwner().GetProperty("Angle").GetValue<float32>();
 		return EntityMessage::RESULT_OK;
-
 	default:
 		return EntityMessage::RESULT_IGNORED;
 	}

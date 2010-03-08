@@ -158,7 +158,7 @@ void Core::Game::Update( const float32 delta )
 		float32 stepSize = PHYSICS_TIMESTEP;
 
 		gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::UPDATE_LOGIC, Reflection::PropertyFunctionParameters() << stepSize));
-		gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::UPDATE_PHYSICS, Reflection::PropertyFunctionParameters() << stepSize));
+		gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::UPDATE_PRE_PHYSICS, Reflection::PropertyFunctionParameters() << stepSize));
 
 		mPhysics->Step(stepSize, PHYSICS_ITERATIONS);
 
@@ -176,6 +176,8 @@ void Core::Game::Update( const float32 delta )
 
 		// destroy entities marked for destruction
 		gEntityMgr.ProcessDestroyQueue();
+
+		gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::UPDATE_PHYSICS, Reflection::PropertyFunctionParameters() << stepSize));		
 
 		// synchronize the entities with their new state after the physics was updated
 		gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::UPDATE_POST_PHYSICS, Reflection::PropertyFunctionParameters() << stepSize));

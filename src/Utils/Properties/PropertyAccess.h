@@ -24,9 +24,11 @@ namespace Reflection
 		PA_INIT=1<<5,
 		/// The property can be used only by the engine itself.
 		PA_ENGINE=1<<6,
+		/// The property should not be loaded/saved from/to stream
+		PA_TRANSIENT=1<<7,
 
 		/// Full access to the property.
-		PA_FULL_ACCESS=0xff
+		PA_FULL_ACCESS=0x7f
 	};
 
 	/// Type for storing access flags defined by ePropertyAccess.

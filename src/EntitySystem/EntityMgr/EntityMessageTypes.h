@@ -21,7 +21,9 @@ ENTITY_MESSAGE_TYPE(DRAW_OVERLAY, "void OnDrawOverlay()", NO_PARAMS)
 ENTITY_MESSAGE_TYPE(DRAW_SELECTED, "void OnDrawSelected()", NO_PARAMS)
 /// Sent when the logic of the entity is to be updated.
 ENTITY_MESSAGE_TYPE(UPDATE_LOGIC, "void OnUpdateLogic(float32)", Params(PT_FLOAT32))
-/// Sent when the physics of the entity is to be updated.
+/// Sent when the physics of the entity is going to be updated.
+ENTITY_MESSAGE_TYPE(UPDATE_PRE_PHYSICS, "void OnUpdatePrePhysics(float32)", Params(PT_FLOAT32))
+/// Sent when the physics of the entity is updating.
 ENTITY_MESSAGE_TYPE(UPDATE_PHYSICS, "void OnUpdatePhysics(float32)", Params(PT_FLOAT32))
 /// Sent after the physics of the entity has been updated.
 ENTITY_MESSAGE_TYPE(UPDATE_POST_PHYSICS, "void OnUpdatePostPhysics(float32)", Params(PT_FLOAT32))
