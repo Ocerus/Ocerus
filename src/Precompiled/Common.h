@@ -14,6 +14,11 @@
 // Our custom headers come here.
 #include "../Core/Config.h"
 
+// We may need to use Logger before other headers
+#include "../LogSystem/Logger.h"
+#include "../LogSystem/Profiler.h"
+#include "../LogSystem/LogMacros.h"
+
 #include "../Utils/Array.h"
 #include "../Utils/DataContainer.h"
 #include "../Utils/Hash.h"
@@ -48,8 +53,6 @@
 
 #include "../StringSystem/StringMgr.h"
 
-#include "../LogSystem/LogMacros.h"
-#include "../LogSystem/Logger.h"
-#include "../LogSystem/Profiler.h"
+
 
 #endif

@@ -82,8 +82,9 @@ namespace GUISystem
 			/// Create and set root widget
 			mWindowRoot = CEGUI::WindowManager::getSingleton().createWindow("DefaultWindow", "root");
 			mCegui->setGUISheet(mWindowRoot);
+			mWindowRoot->setMousePassThroughEnabled(true);
 
-			/// Set defauls
+			/// Set defaults
 			mCegui->setDefaultFont("DejaVuSans-10");
 			mCegui->setDefaultMouseCursor("TaharezLook", "MouseArrow");
 		}
