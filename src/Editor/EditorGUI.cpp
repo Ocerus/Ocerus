@@ -91,6 +91,7 @@ void EditorGUI::UpdateEntityEditorWindow()
 	{
 		delete (*it);
 	}
+	mPropertyEditors.clear();
 
 	// There is no entity to be selected.
 	if (!currentEntity.IsValid()) return;
