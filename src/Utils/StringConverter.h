@@ -17,13 +17,14 @@ namespace Utils
 	{
 		/// Converts the given arbitrary value to a string.
 		template<typename T>
-		string ToString(T val)
+		string ToString(const T& val)
 		{
 			std::ostringstream out;
 			out << val;
 			return out.str();
 		}
 
+		/// Converts the given array of arbitrary values to a string.
 		template<typename T>
 		string ToString(Array<T>* array)
 		{
@@ -39,23 +40,24 @@ namespace Utils
 			return out.str();
 		}
 
+		/// Converts the given bool value to a string.
+		template<>
+		string ToString(const bool& val);
+
 		template<>
 		inline string ToString(const string& val) { return val; }
 
 		template<>
-		inline string ToString(const string val) { return val; }
+		string ToString(const Vector2& val);
 
 		template<>
-		string ToString(Vector2 val);
+		string ToString(const GfxSystem::Color& val);
 
 		template<>
-		string ToString(GfxSystem::Color val);
+		string ToString(const PropertyFunctionParameters& val);
 
 		template<>
-		string ToString(bool& val);
-
-		template<>
-		string ToString(bool val);
+		string ToString(const EntitySystem::EntityHandle& val);
 
 
 #ifdef __WIN__

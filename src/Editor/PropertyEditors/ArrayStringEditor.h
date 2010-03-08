@@ -8,14 +8,22 @@
 #include "Base.h"
 #include "AbstractValueEditor.h"
 
-namespace Editor {
+namespace CEGUI
+{
+	class Listbox;
+	class Window;
+	class Editbox;
+}
+
+namespace Editor
+{
 
 	template<class Model, class ElementType>
 	class ArrayStringEditor: public Editor::AbstractValueEditor<Model>
 	{
 		public:
 			/// Constructs a ArrayStringEditor that uses given model.
-			ArrayStringEditor(const Model& model): AbstractValueEditor<Model>(model), mEditboxWidget(0) {}
+			ArrayStringEditor(const Model& model): AbstractValueEditor<Model>(model), mEditboxWidget(0), mArrayEditorWidget(0) {}
 
 			/// Creates an editbox and returns it. Caller must set its position
 			/// and dimensions afterward. It's recommended to use GetEditorHeight()
@@ -34,13 +42,18 @@ namespace Editor {
 
 			/// @name CEGUI callbacks
 			//@{
-				bool OnEventActivated(const CEGUI::EventArgs&) { this->Update(); this->LockUpdates(); return true;}
+				bool OnEventActivated(const CEGUI::EventArgs&);
 				bool OnEventDeactivated(const CEGUI::EventArgs&) { this->UnlockUpdates(); this->Update(); return true;}
 				bool OnEventKeyDown(const CEGUI::EventArgs&);
-				//@}
+			//@}
 
 		private:
+			typedef Array<ElementType>* ArrayType;
+			
+			string mNamePrefix;
 			CEGUI::Window* mEditboxWidget;
+			CEGUI::Window* mArrayEditorWidget;
+			CEGUI::Listbox* mArrayEditorListWidget;
 	};
 }
 

@@ -60,6 +60,9 @@ namespace GUISystem
 		/// Unloads loaded root layout or does nothing, if no root layout is loaded.
 		void UnloadRootLayout();
 
+		/// Returns current root layout.
+		CEGUI::Window* GetRootLayout() const { return mCurrentRootLayout; }
+
 		/// Renders the GUI.
 		void RenderGUI() const;
 

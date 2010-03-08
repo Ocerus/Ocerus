@@ -11,6 +11,9 @@
 namespace Reflection
 {
 	// Macros for automatically declaring array property types based on common types.
+
+	// Why do we need to have pointers to Array objects? I guess everyone who reads
+	// this code would ask, so please remove this comment and explain it, if you can.
 	#define ARRAY_PROPERTY_TYPE_ID(typeID) typeID##_ARRAY
 	#define ARRAY_PROPERTY_TYPE_NAME(typeName) "Array<"typeName">*"
 	#define ARRAY_PROPERTY_TYPE_CLASS(typeClass) Array<typeClass>*

@@ -18,6 +18,7 @@ void EntityComponents::Transform::Destroy( void )
 
 EntityMessage::eResult EntityComponents::Transform::HandleMessage( const EntityMessage& msg )
 {
+	OC_UNUSED(msg);
 	return EntityMessage::RESULT_IGNORED;
 }
 

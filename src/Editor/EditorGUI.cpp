@@ -8,8 +8,6 @@
 
 #include "CEGUI.h"
 
-
-
 #define gCEGUIWM CEGUI::WindowManager::getSingleton()
 
 namespace Editor
@@ -31,7 +29,6 @@ EditorGUI::EditorGUI():
 
 EditorGUI::~EditorGUI()
 {
-
 }
 
 void EditorGUI::LoadGUI()

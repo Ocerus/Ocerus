@@ -21,7 +21,7 @@ namespace Utils
 		inline Array(void): mData(0), mSize(0) {}
 
 		/// Constructs new array with a given size.
-		inline Array(const int32 size): mSize(size)
+		explicit inline Array(const int32 size): mSize(size)
 		{
 			mData = new T[size];
 		}

@@ -5,7 +5,7 @@
 using namespace StringConverter;
 
 template<>
-string StringConverter::ToString(Vector2 val)
+string StringConverter::ToString(const Vector2& val)
 {
 	std::ostringstream out;
 	out << "(" << val.x << ", " <<  val.y << ")";
@@ -13,7 +13,7 @@ string StringConverter::ToString(Vector2 val)
 }
 
 template<>
-string StringConverter::ToString(GfxSystem::Color val)
+string StringConverter::ToString(const GfxSystem::Color& val)
 {
 	std::ostringstream out;
 	out << std::hex << val.r << val.g << val.b << val.a;
@@ -21,7 +21,7 @@ string StringConverter::ToString(GfxSystem::Color val)
 }
 
 template<>
-string StringConverter::ToString(bool& val)
+string StringConverter::ToString(const bool& val)
 {
 	std::ostringstream out;
 	out << std::boolalpha << val;
@@ -29,12 +29,36 @@ string StringConverter::ToString(bool& val)
 }
 
 template<>
+string StringConverter::ToString(const PropertyFunctionParameters& val)
+{
+	OC_UNUSED(val);
+	ocError << "Converting value of type 'PropertyFunctionParameters' to string is not implemented";
+	return "";
+}
+
+template<>
+string StringConverter::ToString(const EntitySystem::EntityHandle& val)
+{
+	if (EntitySystem::EntityMgr::SingletonExists())
+	{
+		return EntitySystem::EntityMgr::GetSingleton().GetEntityName(val);
+	}
+	else
+	{
+		return StringConverter::ToString(val.GetID());
+	}
+}
+
+
+/*
+template<>
 string StringConverter::ToString(bool val)
 {
 	std::ostringstream out;
 	out << std::boolalpha << val;
 	return out.str();
 }
+*/
 
 template<>
 char* StringConverter::FromString(const string& str)
