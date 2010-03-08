@@ -71,6 +71,8 @@ namespace Utils
 
 		float32 Angle(const Vector2& vec1, const Vector2& vec2 = Vector2(1.0f, 0.0f));
 
+		inline float32 RadToDeg(const float32 radians) { return radians * 180 / MathUtils::PI; }
+
 		Vector2 VectorFromAngle(const float32 angle, const float32 size = 1.0f);
 
 		inline bool IsPowerOfTwo(const uint32 num) { return b2IsPowerOfTwo(num); }

@@ -69,10 +69,7 @@ void EditorGUI::Update(const float32 delta)
 
 void EditorGUI::UpdateEntityEditorWindow()
 {
-	const EntitySystem::EntityHandle* currentEntity = gEditorMgr.GetCurrentEntity();
-
-	if (currentEntity && !currentEntity->IsValid())
-		currentEntity = 0;
+	EntitySystem::EntityHandle currentEntity = gEditorMgr.GetCurrentEntity();
 
 	CEGUI::ScrollablePane* entityEditorPane = static_cast<CEGUI::ScrollablePane*>(gCEGUIWM.getWindow(ENTITY_EDITOR_NAME));
 	OC_ASSERT(entityEditorPane);
@@ -95,6 +92,9 @@ void EditorGUI::UpdateEntityEditorWindow()
 		delete (*it);
 	}
 
+	// There is no entity to be selected.
+	if (!currentEntity.IsValid()) return;
+
 	int newGroupY = 0; // The y coord for new group
 
 	// First "component" is general entity info
@@ -105,25 +105,22 @@ void EditorGUI::UpdateEntityEditorWindow()
 		entityEditorPane->addChildWindow(componentGroup);
 
 		int32 currentY = 0;
-		CreateValueEditorWidgets(CreateEntityIDEditor(*currentEntity), componentGroup, currentY);
-		CreateValueEditorWidgets(CreateEntityNameEditor(*currentEntity), componentGroup, currentY);
+		CreateValueEditorWidgets(CreateEntityIDEditor(currentEntity), componentGroup, currentY);
+		CreateValueEditorWidgets(CreateEntityNameEditor(currentEntity), componentGroup, currentY);
 		currentY += ENTITY_EDITOR_GROUP_HEIGHT;
 		componentGroup->setArea(CEGUI::URect(CEGUI::UDim(0, 4), CEGUI::UDim(0, (float)newGroupY + 1), CEGUI::UDim(1, -4), CEGUI::UDim(0, (float)newGroupY + currentY)));
 		newGroupY += currentY;
 	}
 
-	if (currentEntity == 0)
-		return;
-
-	int32 componentCount = EntitySystem::EntityMgr::GetSingleton().GetNumberOfEntityComponents(*currentEntity);
+	int32 componentCount = EntitySystem::EntityMgr::GetSingleton().GetNumberOfEntityComponents(currentEntity);
 
 	for (int componentID = 0; componentID < componentCount; ++componentID)
 	{
 		const string namePrefix = ENTITY_EDITOR_NAME + "/Component" + StringConverter::ToString(componentID);
-		const string componentName = EntitySystem::GetComponentTypeName(gEntityMgr.GetEntityComponentType(*currentEntity, componentID));
+		const string componentName = EntitySystem::GetComponentTypeName(gEntityMgr.GetEntityComponentType(currentEntity, componentID));
 
 		PropertyList propertyList;
-		gEntityMgr.GetEntityComponentProperties(*currentEntity, componentID, propertyList, Reflection::PA_EDIT_READ);
+		gEntityMgr.GetEntityComponentProperties(currentEntity, componentID, propertyList, Reflection::PA_EDIT_READ);
 
 		// Components with no readable properties are not shown.
 		if (propertyList.size() == 0)
@@ -153,7 +150,7 @@ bool EditorGUI::EntityPickerHandler (const CEGUI::EventArgs& args)
 	OC_UNUSED(args);
 	string entityName = gCEGUIWM.getWindow("picker/edit")->getText().c_str();
 	EntitySystem::EntityHandle entity = gEntityMgr.FindFirstEntity(entityName);
-	EditorMgr::GetSingleton().SetCurrentEntity(&entity);
+	EditorMgr::GetSingleton().SetCurrentEntity(entity);
 	return true;
 }
 

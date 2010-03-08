@@ -36,10 +36,10 @@ void OglRenderer::Init() const
 	glEnable(GL_CULL_FACE);
 
 	if( glGetError() != GL_NO_ERROR )
-    {
+	{
 		ocError << "OpenGL cannot initialize!";
-        return;
-    }
+		return;
+	}
 
 	SDL_GL_SwapBuffers();
 }
@@ -51,7 +51,7 @@ bool OglRenderer::BeginRenderingImpl() const
 	gResourceMgr.DisableMemoryLimitEnforcing();
 
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glLoadIdentity();
+	glLoadIdentity();
 	return true;
 }
 
@@ -69,11 +69,11 @@ void OglRenderer::FinalizeRenderTargetImpl() const
 }
 
 uint32 OglRenderer::LoadTexture(
-			const unsigned char *const buffer,
-			const int buffer_length,
-			const ePixelFormat force_channels,
-			const unsigned int reuse_texture_ID,
-			int *width, int *height) const
+								const unsigned char *const buffer,
+								const int buffer_length,
+								const ePixelFormat force_channels,
+								const unsigned int reuse_texture_ID,
+								int *width, int *height) const
 {
 	// this doesnt say anything about width and height
 	//uint32 result = SOIL_load_OGL_texture_from_memory(buffer, buffer_length, 1, reuse_texture_ID, 0);
@@ -81,9 +81,9 @@ uint32 OglRenderer::LoadTexture(
 	unsigned char* img;
 	int channels = 0;
 	img = SOIL_load_image_from_memory(
-					buffer, buffer_length,
-					width, height, &channels,
-					force_channels );
+		buffer, buffer_length,
+		width, height, &channels,
+		force_channels );
 	if( NULL == img )
 	{
 		ocError << "SOIL error: " << SOIL_last_result();
@@ -95,11 +95,11 @@ uint32 OglRenderer::LoadTexture(
 	}
 
 	uint32 result = SOIL_create_OGL_texture(
-			img, *width, *height, channels,
-			reuse_texture_ID, 0);
+		img, *width, *height, channels,
+		reuse_texture_ID, 0);
 
 	SOIL_free_image_data( img );
-	
+
 	if( 0 == result )
 	{
 		ocError << "SOIL loading error: " << SOIL_last_result();
@@ -126,7 +126,7 @@ void OglRenderer::DrawSprite(const Sprite& spr) const
 
 	glTranslatef( spr.position.x, spr.position.y, spr.z );
 
-	glRotatef(spr.angle, 0, 0, 1);
+	glRotatef(MathUtils::RadToDeg(spr.angle), 0, 0, 1);
 
 	glScalef(spr.scale.x, spr.scale.y, 1);
 
@@ -135,34 +135,34 @@ void OglRenderer::DrawSprite(const Sprite& spr) const
 
 	glBegin( GL_QUADS );
 
-        //Draw square
-	    glTexCoord2f(0.0f, 0.0f); glVertex3f( -x,  y, 0 );
-		glTexCoord2f(0.0f, 1.0f); glVertex3f( -x, -y, 0 );
-		glTexCoord2f(1.0f, 1.0f); glVertex3f(  x, -y, 0 );
-		glTexCoord2f(1.0f, 0.0f); glVertex3f(  x,  y, 0 );
+	glTexCoord2f(0.0f, 1.0f); glVertex3f( -x,  y, 0 );
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(  x,  y, 0 );
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(  x, -y, 0 );
+	glTexCoord2f(0.0f, 0.0f); glVertex3f( -x, -y, 0 );
 
-    //End quad
-    glEnd();
+	glEnd();
 
 	glPopMatrix();
 }
 
- void OglRenderer::DrawLine(const Vector2* verts, const Color& color) const
+void OglRenderer::DrawLine(const Vector2* verts, const Color& color) const
 {
 	OC_ASSERT(verts);
 
 	glDisable(GL_TEXTURE_2D);
 	glColor4ub( color.r, color.g, color.b, color.a );
-	
+
 	glBegin( GL_LINES );
-		glVertex3f( verts[0].x,  verts[0].y, 0 );
-		glVertex3f( verts[1].x,  verts[1].y, 0 );
-    glEnd();
+
+	glVertex3f( verts[0].x,  verts[0].y, 0 );
+	glVertex3f( verts[1].x,  verts[1].y, 0 );
+
+	glEnd();
 
 	glEnable(GL_TEXTURE_2D);
 }
 
- 
+
 void OglRenderer::DrawPolygon(const Vector2* verts, const int32 n, const Color& color, const bool fill) const
 {
 	OC_ASSERT(verts);
@@ -170,16 +170,16 @@ void OglRenderer::DrawPolygon(const Vector2* verts, const int32 n, const Color& 
 	glDisable(GL_TEXTURE_2D);
 	glDisable(GL_CULL_FACE);
 	glColor4ub( color.r, color.g, color.b, color.a );
-	
-	fill?
-		glBegin( GL_POLYGON ):
-		glBegin( GL_LINE_LOOP );
 
-		for (int32 i = 0; i < n; ++i)
-		{
-			glVertex3f( verts[i].x,  verts[i].y, 0 );
-		}
-    glEnd();
+	if (fill) glBegin( GL_POLYGON );
+	else glBegin( GL_LINE_LOOP );
+
+	for (int32 i = 0; i < n; ++i)
+	{
+		glVertex3f( verts[i].x,  verts[i].y, 0 );
+	}
+
+	glEnd();
 
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_TEXTURE_2D);
@@ -191,25 +191,22 @@ void OglRenderer::DrawCircle(const Vector2& position, const float32 radius, cons
 	glColor4ub( color.r, color.g, color.b, color.a );
 
 	Vector2 circle;
-	
-	fill?
-		glBegin( GL_POLYGON ):
-		glBegin( GL_LINE_LOOP );
 
-	    for(float32 angle = 6.2832f; angle >= 0; angle -= 0.2f)
-	    {
-	      glVertex2f(position.x + sin(angle) * radius, position.y + cos(angle) * radius);
+	if (fill) glBegin( GL_POLYGON );
+	else glBegin( GL_LINE_LOOP );
 
-	    }
-	    glEnd();
+	for(float32 angle = 6.2832f; angle >= 0; angle -= 0.2f)
+	{
+		glVertex2f(position.x + sin(angle) * radius, position.y + cos(angle) * radius);
+	}
 
-    glEnd();
+	glEnd();
 
 	glEnable(GL_TEXTURE_2D);
 }
 
 void OglRenderer::DrawRect(	const Vector2& position, const Vector2& size, const float32 rotation,
-							const Color& color, const bool fill) const
+						   const Color& color, const bool fill) const
 {
 	Vector2 verts[4];
 
@@ -223,7 +220,7 @@ void OglRenderer::DrawRect(	const Vector2& position, const Vector2& size, const 
 
 	glPushMatrix();
 
-	glRotatef(rotation, 0, 0, 1);
+	glRotatef(MathUtils::RadToDeg(rotation), 0, 0, 1);
 
 	DrawPolygon(verts, 4, color, fill);
 
@@ -235,22 +232,22 @@ void OglRenderer::SetViewportImpl(const GfxViewport& viewport) const
 	Point topleft, bottomright;
 	CalculateViewportScreenBoundaries(viewport, topleft, bottomright);
 	// note that we are subtracting the Y pos from the resolution to workaround a bug in the SDL OpenGL impl
-	glViewport(topleft.x, gGfxWindow.GetResolutionHeight()/2-topleft.y, bottomright.x-topleft.x, bottomright.y-topleft.y);
-	
+	glViewport(topleft.x, gGfxWindow.GetResolutionHeight()-bottomright.y, bottomright.x-topleft.x, bottomright.y-topleft.y);
+
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
 	Vector2 topleftWorld, bottomrightWorld;
 	CalculateViewportWorldBoundaries(viewport, topleftWorld, bottomrightWorld);
-	glOrtho(topleftWorld.x, bottomrightWorld.x, topleftWorld.y, bottomrightWorld.y, -1, 1);
+	glOrtho(topleftWorld.x, bottomrightWorld.x, bottomrightWorld.y, topleftWorld.y, -1, 1);
 
 	glMatrixMode(GL_MODELVIEW);
 }
-	
+
 void OglRenderer::SetCameraImpl(const Vector2& position, const float32 zoom, const float32 rotation) const
 {
 	glLoadIdentity();
-	glRotatef(rotation, 0, 0, 1);
+	glRotatef(MathUtils::RadToDeg(-rotation), 0, 0, 1);
 	glScalef(zoom, zoom, zoom);
 	glTranslatef(-position.x, -position.y, 0);
 }

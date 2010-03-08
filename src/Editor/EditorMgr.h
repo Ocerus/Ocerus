@@ -37,10 +37,10 @@ namespace Editor
 
 		/// Returns currently selected entity. If no entity is selected,
 		/// invalid EntityHandler is returned.
-		inline const EntitySystem::EntityHandle* GetCurrentEntity() const;
+		inline const EntitySystem::EntityHandle GetCurrentEntity() const;
 
 		/// Sets the currently selected entity to new entity.
-		void SetCurrentEntity(const EntitySystem::EntityHandle* newCurrentEntity);
+		void SetCurrentEntity(const EntitySystem::EntityHandle newCurrentEntity);
 
 		void UpdateCurrentEntityName(const string& newName);
 
@@ -49,10 +49,10 @@ namespace Editor
 
 	private:
 		EditorGUI* mEditorGUI;
-		EntitySystem::EntityHandle*	mCurrentEntity;
+		EntitySystem::EntityHandle mCurrentEntity;
 	};
 
-	inline const EntitySystem::EntityHandle* EditorMgr::GetCurrentEntity() const
+	inline const EntitySystem::EntityHandle EditorMgr::GetCurrentEntity() const
 	{
 		return mCurrentEntity;
 	}

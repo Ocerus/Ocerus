@@ -131,11 +131,6 @@ namespace Core
 		EntityList mSelectedEntities;
 
 
-		/// Camera stuff.
-		EntitySystem::EntityHandle mCameraFocus; // an entity currently in focus of camera (camera is following it)
-		Vector2 mCameraGrabWorldPos;
-
-
 	private:
 
 		/// Callback receiver from physics.

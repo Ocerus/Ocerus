@@ -11,7 +11,7 @@ using namespace Editor;
 
 EditorMgr::EditorMgr():
 	mEditorGUI(0),
-	mCurrentEntity(0)
+	mCurrentEntity(EntityHandle::Null)
 {
 	ocInfo << "*** EditorMgr init ***";
 	mEditorGUI = new EditorGUI();
@@ -19,7 +19,6 @@ EditorMgr::EditorMgr():
 
 EditorMgr::~EditorMgr()
 {
-	delete mCurrentEntity;
 	delete mEditorGUI;
 }
 
@@ -38,32 +37,23 @@ void Editor::EditorMgr::Update(const float32 delta)
 	mEditorGUI->Update(delta);
 }
 
-void Editor::EditorMgr::SetCurrentEntity(const EntitySystem::EntityHandle* newCurrentEntity)
+void Editor::EditorMgr::SetCurrentEntity(const EntitySystem::EntityHandle newCurrentEntity)
 {
-	delete mCurrentEntity;
-
-	if (newCurrentEntity && newCurrentEntity->IsValid())
-	{
-		mCurrentEntity = new EntitySystem::EntityHandle(*newCurrentEntity);
-	}
-	else
-	{
-		mCurrentEntity = 0;
-	}
-
+	mCurrentEntity = newCurrentEntity;
 	mEditorGUI->UpdateEntityEditorWindow();
 }
 
 void Editor::EditorMgr::UpdateCurrentEntityName(const string& newName)
 {
-	if (!mCurrentEntity) return;
-	gEntityMgr.SetEntityName(*mCurrentEntity, newName);
+	if (!mCurrentEntity.IsValid()) return;
+
+	gEntityMgr.SetEntityName(mCurrentEntity, newName);
 }
 
 void Editor::EditorMgr::UpdateCurrentEntityProperty(const EntitySystem::ComponentID& componentId, const StringKey propertyKey, const string& newValue)
 {
-	if (!mCurrentEntity) return;
+	if (!mCurrentEntity.IsValid()) return;
 
-	PropertyHolder property = gEntityMgr.GetEntityComponentProperty(*mCurrentEntity, componentId, propertyKey);
+	PropertyHolder property = gEntityMgr.GetEntityComponentProperty(mCurrentEntity, componentId, propertyKey);
 	property.SetValueFromString(newValue);
 }

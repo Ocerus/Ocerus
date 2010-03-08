@@ -29,6 +29,12 @@ EntitySystem::EntityHandle EntitySystem::EntityPicker::PickSingleEntity( void )
 	EntityHandle lowestDepthEntity = EntityHandle::Null;
 	for (int32 i=0; i<shapesCount; ++i)
 	{
+		// make sure we did really hit it
+		b2Body* shapeBody = gQueryShapes[i]->GetBody();
+		OC_DASSERT(shapeBody);
+		if (!gQueryShapes[i]->TestPoint(shapeBody->GetXForm(), mCursorWorldPosition)) continue;
+
+		// check the depth
 		EntityHandle entity = *(EntityHandle*)gQueryShapes[i]->GetUserData();
 		int32 depth = entity.GetProperty("Depth").GetValue<int32>();
 		if (depth < lowestDepth)

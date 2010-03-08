@@ -121,7 +121,8 @@ bool GfxSystem::GfxRenderer::ConvertScreenToWorldCoords( const Point& screenCoor
 			CalculateViewportWorldBoundaries(viewport, topleftWorld, bottomrightWorld);
 
 			// inverse viewport transform
-			worldCoords = Vector2((float32)screenCoords.x, (float32)screenCoords.y) - Vector2((float32)topleft.x, (float32)topleft.y);
+			Vector2 viewportCenter = 0.5f * Vector2((float32)(topleft.x + bottomright.x), (float32)(topleft.y + bottomright.y));
+			worldCoords = Vector2((float32)screenCoords.x, (float32)screenCoords.y) - viewportCenter;
 
 			// inverse projection transform
 			worldCoords.x = worldCoords.x * (bottomrightWorld.x-topleftWorld.x) / (bottomright.x-topleft.x);
@@ -130,7 +131,7 @@ bool GfxSystem::GfxRenderer::ConvertScreenToWorldCoords( const Point& screenCoor
 			// inverse camera transform
 			worldCoords += camera.GetProperty("Position").GetValue<Vector2>();
 			worldCoords *= 1.0f / camera.GetProperty("Zoom").GetValue<float32>();
-			Matrix22 rotationMatrix(-camera.GetProperty("Rotation").GetValue<float32>());
+			Matrix22 rotationMatrix(camera.GetProperty("Rotation").GetValue<float32>());
 			worldCoords = MathUtils::Multiply(rotationMatrix, worldCoords);
 
 			return true;

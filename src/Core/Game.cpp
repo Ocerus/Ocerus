@@ -6,6 +6,7 @@
 #include "StringConverter.h"
 #include "Box2D.h"
 #include "PhysicsDraw.h"
+#include "Editor/EditorMgr.h"
 
 //temporary here
 #include "../GfxSystem/GfxSceneMgr.h"
@@ -80,15 +81,6 @@ void Core::Game::Init()
 	// load entities
 	gEntityMgr.LoadEntitiesFromResource(gResourceMgr.GetResource("TestEntities", "test_entities.xml"));
 
-	// set cameras
-	mCameraFocus.Invalidate();
-	EntityHandle ship = gEntityMgr.FindFirstEntity("ship0");
-	if (ship.IsValid())
-	{
-		Vector2 shipPos = ship.GetProperty("Position").GetValue<Vector2>();
-		mCameraFocus = ship;
-	}
-
 	// setup render targets
 	gGfxRenderer.AddRenderTarget(GfxSystem::GfxViewport(Vector2(0, 0.5), Vector2(0.5, 0.5), true), gGfxSceneMgr.GetCamera(0));
 	gGfxRenderer.AddRenderTarget(GfxSystem::GfxViewport(Vector2(0.0, 0.0), Vector2(1, 0.5), false), gGfxSceneMgr.GetCamera(1));
@@ -99,22 +91,6 @@ void Core::Game::Init()
 	gInputMgr.AddInputListener(this);
 	gApp.ResetStats();
 	ocInfo << "Game inited";
-
-
-
-	// an example of a script
-	EntityComponents::Script::TestRunTime();
-
-
-	// an example of how to use functions registered in the reflection system
-	if (ship.IsValid())
-	{
-		PropertyHolder prop = ship.GetFunction("MyFunction");
-		PropertyFunctionParameters params;
-		string str("Calling my function");
-		params.PushParameter(&str);
-		prop.CallFunction(params);
-	}
 }
 
 void Core::Game::Deinit()
@@ -137,7 +113,6 @@ void Core::Game::Update( const float32 delta )
 
 	mTimer.UpdateInSeconds(delta);
 
-
 	// pick entity the mouse is hovering over right now
 	MouseState& mouse = gInputMgr.GetMouseState();
 	Vector2 worldPosition;
@@ -145,7 +120,6 @@ void Core::Game::Update( const float32 delta )
 	{
 		EntityPicker picker(worldPosition);
 		mHoveredEntity = picker.PickSingleEntity();
-		if (mHoveredEntity.IsValid()) ocInfo << mHoveredEntity;
 	}
 
 	// check action scripts
@@ -192,8 +166,6 @@ void Core::Game::Update( const float32 delta )
 			else
 				++it;
 		}
-		if (!mCameraFocus.Exists())
-			mCameraFocus.Invalidate();
 
 		physicsDelta -= stepSize;
 	}
@@ -211,7 +183,7 @@ void Core::Game::Draw( const float32 passedDelta)
 	// ----------------TESTING-------------------------
 	gGfxRenderer.SetCurrentRenderTarget(0);
 	gGfxRenderer.DrawSprites();
-	gGfxRenderer.DrawRect(Vector2(100,-100), Vector2(200,300), 45, GfxSystem::Color(255,0,0), false);
+	gGfxRenderer.DrawRect(Vector2(100,-100), Vector2(200,300), 0.0f, GfxSystem::Color(255,0,0), false);
 	// Testing physics draw
 	mPhysics->DrawDebugData();
 	gGfxRenderer.FinalizeRenderTarget();
@@ -278,32 +250,14 @@ void Core::Game::MouseButtonPressed( const MouseInfo& mi, const eMouseButton btn
 	{
 		if (mHoveredEntity.IsValid())
 		{
-			// use the hover entity as a focus
-			if (gInputMgr.IsKeyDown(KC_RCONTROL) || gInputMgr.IsKeyDown(KC_LCONTROL))
-			{
-				mCameraFocus = mHoveredEntity;
-			}
-			// select controllable entities
-			else
-			{
-				// add to the current selection if SHIFT down
-				if (mSelectedEntities.size()>0 && (gInputMgr.IsKeyDown(KC_RSHIFT) || gInputMgr.IsKeyDown(KC_LSHIFT)))
-				{
-					if (find(mSelectedEntities.begin(), mSelectedEntities.end(), mHoveredEntity) == mSelectedEntities.end())
-						mSelectedEntities.push_back(mHoveredEntity);
-				}
-				// clear the selection and add the hovered one if any
-				else
-				{
-					mSelectedEntities.clear();
-					if (mHoveredEntity.IsValid())
-						mSelectedEntities.push_back(mHoveredEntity);
-				}
-			}
+			mSelectedEntities.clear();
+			mSelectedEntities.push_back(mHoveredEntity);
+			Editor::EditorMgr::GetSingleton().SetCurrentEntity(mHoveredEntity);
 		}
 		else
 		{
 			mSelectedEntities.clear();
+			Editor::EditorMgr::GetSingleton().SetCurrentEntity(EntityHandle::Null);
 		}
 	}
 }
