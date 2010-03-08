@@ -86,7 +86,7 @@ namespace Editor
 		{
 			mArrayEditorWidget = GUISystem::LoadWindowLayout("Editor-ArrayEditor.layout", mNamePrefix + "/");
 			gGUIMgr.GetRootLayout()->addChildWindow(mArrayEditorWidget);
-			mArrayEditorWidget->setArea(CEGUI::URect(CEGUI::UDim(0.35, 0), CEGUI::UDim(0.5, -75), CEGUI::UDim(0.65, 0), CEGUI::UDim(0.5, 75)));
+			mArrayEditorWidget->setArea(CEGUI::URect(CEGUI::UDim(0.35f, 0), CEGUI::UDim(0.5f, -75), CEGUI::UDim(0.65f, 0), CEGUI::UDim(0.5f, 75)));
 
 			mArrayEditorListWidget = static_cast<CEGUI::Listbox*>(mArrayEditorWidget->getChild(mArrayEditorWidget->getName() + "/ValueList"));
 
