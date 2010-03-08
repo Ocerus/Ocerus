@@ -76,11 +76,11 @@ namespace GUISystem
 		/// @name IInputListener interface methods
 		/// Those methods inject input into GUI system.
 		//@{
-		virtual void KeyPressed(const InputSystem::KeyInfo& ke);
-		virtual void KeyReleased(const InputSystem::KeyInfo& ke);
-		virtual void MouseMoved(const InputSystem::MouseInfo& mi);
-		virtual void MouseButtonPressed(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn);
-		virtual void MouseButtonReleased(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn);
+		virtual bool KeyPressed(const InputSystem::KeyInfo& ke);
+		virtual bool KeyReleased(const InputSystem::KeyInfo& ke);
+		virtual bool MouseMoved(const InputSystem::MouseInfo& mi);
+		virtual bool MouseButtonPressed(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn);
+		virtual bool MouseButtonReleased(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn);
 		//@}
 
 		/// This method injects resolution change into GUI system. It is part of IGfxWindowListener interface.

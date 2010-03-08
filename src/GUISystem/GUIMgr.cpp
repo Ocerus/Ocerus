@@ -134,14 +134,14 @@ namespace GUISystem
 		///        is working well.
 	}
 
-	void GUIMgr::KeyPressed(const InputSystem::KeyInfo& ke)
+	bool GUIMgr::KeyPressed(const InputSystem::KeyInfo& ke)
 	{
 		OC_DASSERT(mCegui);
 
 		// ToggleConsole button is hardwired here.
 		if (ke.keyAction == InputSystem::KC_GRAVE) {
 			mGUIConsole->ToggleConsole();
-			return;
+			return true;
 		}
 
 		if (!mCegui->injectKeyDown(KeyMapperOIStoCEGUI(ke.keyAction)))
@@ -150,45 +150,48 @@ namespace GUISystem
 			if (ke.keyAction == InputSystem::KC_ESCAPE)
 			{
 				gApp.Shutdown();
-				return;
+				return true;
 			}
 
 			// Finally inject corresponding character.
-			mCegui->injectChar(ke.keyCode);
+			return mCegui->injectChar(ke.keyCode);
 		}
+
+		return false;
 	}
 
-	void GUIMgr::KeyReleased(const InputSystem::KeyInfo& ke)
+	bool GUIMgr::KeyReleased(const InputSystem::KeyInfo& ke)
 	{
 		OC_DASSERT(mCegui);
-		mCegui->injectKeyUp(KeyMapperOIStoCEGUI(ke.keyAction));
+		return mCegui->injectKeyUp(KeyMapperOIStoCEGUI(ke.keyAction));
 	}
 
-	void GUIMgr::MouseMoved(const InputSystem::MouseInfo& mi)
+	bool GUIMgr::MouseMoved(const InputSystem::MouseInfo& mi)
 	{
 		OC_DASSERT(mCegui);
-		mCegui->injectMouseWheelChange(float(mi.wheelDelta));
-		mCegui->injectMousePosition(float(mi.x), float(mi.y));
+		bool wheelInjected = mCegui->injectMouseWheelChange(float(mi.wheelDelta));
+		bool positionInjected = mCegui->injectMousePosition(float(mi.x), float(mi.y));
+		return wheelInjected || positionInjected;
 	}
 
-	void GUIMgr::MouseButtonPressed(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn)
-	{
-		OC_UNUSED(mi);
-		OC_DASSERT(mCegui);
-		mCegui->injectMouseButtonDown(ConvertMouseButtonEnum(btn));
-	}
-
-	void GUIMgr::MouseButtonReleased(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn)
+	bool GUIMgr::MouseButtonPressed(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn)
 	{
 		OC_UNUSED(mi);
 		OC_DASSERT(mCegui);
-		mCegui->injectMouseButtonUp(ConvertMouseButtonEnum(btn));
+		return mCegui->injectMouseButtonDown(ConvertMouseButtonEnum(btn));
+	}
+
+	bool GUIMgr::MouseButtonReleased(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn)
+	{
+		OC_UNUSED(mi);
+		OC_DASSERT(mCegui);
+		return mCegui->injectMouseButtonUp(ConvertMouseButtonEnum(btn));
 	}
 
 	void GUIMgr::ResolutionChanged(int32 width, int32 height)
 	{
 		OC_DASSERT(mCegui);
-		mCegui->notifyDisplaySizeChanged(CEGUI::Size((float32)width, (float32)height));
+		return mCegui->notifyDisplaySizeChanged(CEGUI::Size((float32)width, (float32)height));
 	}
 
 /*

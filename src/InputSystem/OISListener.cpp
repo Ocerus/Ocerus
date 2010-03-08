@@ -76,7 +76,7 @@ bool InputSystem::OISListener::mouseMoved( const OIS::MouseEvent &evt )
 	mi.wheelDelta = evt.state.Z.rel;
 	for (InputMgr::ListenersList::const_iterator i=mMgr->mListeners.begin(); i!=mMgr->mListeners.end(); ++i)
 	{
-		(*i)->MouseMoved(mi);
+		if ((*i)->MouseMoved(mi)) break;
 	}
 	return true;
 }
@@ -93,7 +93,7 @@ bool InputSystem::OISListener::mousePressed( const OIS::MouseEvent &evt, OIS::Mo
 	eMouseButton btn = OisToMbtn(id);
 	for (InputMgr::ListenersList::const_iterator i=mMgr->mListeners.begin(); i!=mMgr->mListeners.end(); ++i)
 	{
-		(*i)->MouseButtonPressed(mi, btn);
+		if ((*i)->MouseButtonPressed(mi, btn)) break;
 	}
 	return true;
 }
@@ -110,7 +110,7 @@ bool InputSystem::OISListener::mouseReleased( const OIS::MouseEvent &evt, OIS::M
 	eMouseButton btn = OisToMbtn(id);
 	for (InputMgr::ListenersList::const_iterator i=mMgr->mListeners.begin(); i!=mMgr->mListeners.end(); ++i)
 	{
-		(*i)->MouseButtonReleased(mi, btn);
+		if ((*i)->MouseButtonReleased(mi, btn)) break;
 	}
 	return true;
 }
@@ -122,7 +122,7 @@ bool InputSystem::OISListener::keyPressed( const OIS::KeyEvent &evt )
 	ki.keyCode = evt.text;
 	for (InputMgr::ListenersList::const_iterator i=mMgr->mListeners.begin(); i!=mMgr->mListeners.end(); ++i)
 	{
-		(*i)->KeyPressed(ki);
+		if ((*i)->KeyPressed(ki)) break;
 	}
 	return true;
 }
@@ -134,7 +134,7 @@ bool InputSystem::OISListener::keyReleased( const OIS::KeyEvent &evt )
 	ki.keyCode = evt.text;
 	for (InputMgr::ListenersList::const_iterator i=mMgr->mListeners.begin(); i!=mMgr->mListeners.end(); ++i)
 	{
-		(*i)->KeyReleased(ki);
+		if ((*i)->KeyReleased(ki)) break;
 	}
 	return true;
 }

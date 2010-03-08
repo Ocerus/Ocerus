@@ -85,19 +85,19 @@ namespace Core
 		//@{
 
 		/// Called by the InputSystem when a key is pressed.
-		virtual void KeyPressed(const InputSystem::KeyInfo& ke);
+		virtual bool KeyPressed(const InputSystem::KeyInfo& ke);
 
 		/// Called by the InputSystem when a key is released.
-		virtual void KeyReleased(const InputSystem::KeyInfo& ke);
+		virtual bool KeyReleased(const InputSystem::KeyInfo& ke);
 
 		/// Called when the mouse moves. Cursor position and other info are passed via parameter.
-		virtual void MouseMoved(const InputSystem::MouseInfo& mi);
+		virtual bool MouseMoved(const InputSystem::MouseInfo& mi);
 
 		/// Called when a mouse button is pressed. Cursor position and other info are passed via parameter.
-		virtual void MouseButtonPressed(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn);
+		virtual bool MouseButtonPressed(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn);
 
 		/// Called when a mouse button is released. Cursor position and other info are passed via parameter.
-		virtual void MouseButtonReleased(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn);
+		virtual bool MouseButtonReleased(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn);
 
 		//@}
 

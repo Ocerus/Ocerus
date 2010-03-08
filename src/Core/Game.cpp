@@ -204,7 +204,7 @@ void Core::Game::Draw( const float32 passedDelta)
 
 }
 
-void Core::Game::KeyPressed( const KeyInfo& ke )
+bool Core::Game::KeyPressed( const KeyInfo& ke )
 {
 	if (ke.keyAction == KC_F5 && gInputMgr.IsKeyDown(KC_LCONTROL))
 	{
@@ -217,6 +217,8 @@ void Core::Game::KeyPressed( const KeyInfo& ke )
 		{
 			gProfiler.Start();
 		}
+
+		return true;
 	}
 
 	if (ke.keyAction == KC_F9) {
@@ -230,22 +232,29 @@ void Core::Game::KeyPressed( const KeyInfo& ke )
 			ResumeAction();
 			ocInfo << "Game action resumed";
 		}
+
+		return true;
 	}
+
+	return false;
 }
 
-void Core::Game::KeyReleased( const KeyInfo& ke )
+bool Core::Game::KeyReleased( const KeyInfo& ke )
 {
 	OC_UNUSED(ke);
+	return false;
 }
 
-void Core::Game::MouseMoved( const MouseInfo& mi )
+bool Core::Game::MouseMoved( const MouseInfo& mi )
 {
 	OC_UNUSED(mi);
+	return false;
 }
 
-void Core::Game::MouseButtonPressed( const MouseInfo& mi, const eMouseButton btn )
+bool Core::Game::MouseButtonPressed( const MouseInfo& mi, const eMouseButton btn )
 {
 	OC_UNUSED(mi);
+
 	if (btn == MBTN_LEFT)
 	{
 		if (mHoveredEntity.IsValid())
@@ -259,13 +268,18 @@ void Core::Game::MouseButtonPressed( const MouseInfo& mi, const eMouseButton btn
 			mSelectedEntities.clear();
 			Editor::EditorMgr::GetSingleton().SetCurrentEntity(EntityHandle::Null);
 		}
+
+		return true;
 	}
+
+	return false;
 }
 
-void Core::Game::MouseButtonReleased( const MouseInfo& mi, const eMouseButton btn )
+bool Core::Game::MouseButtonReleased( const MouseInfo& mi, const eMouseButton btn )
 {
 	OC_UNUSED(mi);
 	OC_UNUSED(btn);
+	return false;
 }
 
 bool Core::Game::PhysicsCallbacks::ShouldCollide( b2Shape* shape1, b2Shape* shape2 )
