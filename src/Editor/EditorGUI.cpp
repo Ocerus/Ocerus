@@ -7,14 +7,13 @@
 #include "EntitySystem/EntityMgr/EntityMgr.h"
 
 #include "CEGUI.h"
+#include "GUISystem/VerticalLayout.h"
 
 #define gCEGUIWM CEGUI::WindowManager::getSingleton()
 
 namespace Editor
 {
 	const string ENTITY_EDITOR_NAME = "EditorRoot/EntityEditor/Scrollable";
-	const int ENTITY_EDITOR_ITEM_HEIGHT = 26;
-	const int ENTITY_EDITOR_GROUP_HEIGHT = 30;
 }
 
 
@@ -23,7 +22,8 @@ using namespace Editor;
 EditorGUI::EditorGUI():
 	mPropertyItemHeight(0),
 	mComponentGroupHeight(0),
-	mPropertyUpdateTimer(0)
+	mPropertyUpdateTimer(0),
+	mEntityEditorLayout(0)
 {
 }
 
@@ -78,11 +78,16 @@ void EditorGUI::UpdateEntityEditorWindow()
 	CEGUI::ScrollablePane* entityEditorPane = static_cast<CEGUI::ScrollablePane*>(gCEGUIWM.getWindow(ENTITY_EDITOR_NAME));
 	OC_ASSERT(entityEditorPane);
 
-	// Clear all the content of Entity Editor.
+	
 	{
 		const CEGUI::Window* entityEditorContentPane = entityEditorPane->getContentPane();
 		OC_ASSERT(entityEditorContentPane);
 
+		// Set layout on Entity Editor
+		if (!mEntityEditorLayout)
+			mEntityEditorLayout = new GUISystem::VerticalLayout(entityEditorPane, entityEditorContentPane);
+		
+		// Clear all the content of Entity Editor.
 		int childCount = entityEditorContentPane->getChildCount();
 		for (int i = (childCount - 1); i >= 0; --i)
 		{
@@ -100,21 +105,26 @@ void EditorGUI::UpdateEntityEditorWindow()
 	// There is no entity to be selected.
 	if (!currentEntity.IsValid()) return;
 
-	int newGroupY = 0; // The y coord for new group
-
 	// First "component" is general entity info
 	{
 		const string namePrefix = ENTITY_EDITOR_NAME + "/ComponentGeneralInfo";
-		CEGUI::Window* componentGroup = gCEGUIWM.createWindow("Editor/GroupBox", namePrefix);
+		CEGUI::GroupBox* componentGroup = static_cast<CEGUI::GroupBox*>(gCEGUIWM.createWindow("Editor/GroupBox", namePrefix));
 		componentGroup->setText("General Info");
-		entityEditorPane->addChildWindow(componentGroup);
+		mEntityEditorLayout->AddChildWindow(componentGroup);
+		GUISystem::VerticalLayout* layout = new GUISystem::VerticalLayout(componentGroup, componentGroup->getContentPane(), true);
 
-		int32 currentY = 0;
-		CreateValueEditorWidgets(CreateEntityIDEditor(currentEntity), componentGroup, currentY);
-		CreateValueEditorWidgets(CreateEntityNameEditor(currentEntity), componentGroup, currentY);
-		currentY += ENTITY_EDITOR_GROUP_HEIGHT;
-		componentGroup->setArea(CEGUI::URect(CEGUI::UDim(0, 4), CEGUI::UDim(0, (float)newGroupY + 1), CEGUI::UDim(1, -4), CEGUI::UDim(0, (float)newGroupY + currentY)));
-		newGroupY += currentY;
+		{
+			IValueEditor* editor = CreateEntityIDEditor(currentEntity);
+			mPropertyEditors.push_back(editor);
+			layout->AddChildWindow(editor->CreateWidget(namePrefix + "/EntityIdEditor"));
+		}
+		{
+			IValueEditor* editor = CreateEntityNameEditor(currentEntity);
+			mPropertyEditors.push_back(editor);
+			layout->AddChildWindow(editor->CreateWidget(namePrefix + "/EntityNameEditor"));
+		}
+
+		layout->UpdateLayout();
 	}
 
 	int32 componentCount = EntitySystem::EntityMgr::GetSingleton().GetNumberOfEntityComponents(currentEntity);
@@ -131,21 +141,20 @@ void EditorGUI::UpdateEntityEditorWindow()
 		if (propertyList.size() == 0)
 			continue;
 
-		CEGUI::Window* componentGroup = gCEGUIWM.createWindow("Editor/GroupBox", namePrefix);
+		CEGUI::GroupBox* componentGroup = static_cast<CEGUI::GroupBox*>(gCEGUIWM.createWindow("Editor/GroupBox", namePrefix));
 		componentGroup->setText(componentName);
-		entityEditorPane->addChildWindow(componentGroup);
-
-		int currentY = 0;
-
+		mEntityEditorLayout->AddChildWindow(componentGroup);
+		GUISystem::VerticalLayout* layout = new GUISystem::VerticalLayout(componentGroup, componentGroup->getContentPane(), true);
+		
 		for (PropertyList::iterator it = propertyList.begin(); it != propertyList.end(); ++it)
 		{
-			CreateValueEditorWidgets(CreatePropertyEditor(*it), componentGroup, currentY);
+			IValueEditor* editor = CreatePropertyEditor(*it);
+			mPropertyEditors.push_back(editor);
+			layout->AddChildWindow(editor->CreateWidget(namePrefix + "/" + it->GetKey().ToString() + "Editor"));
 		}
-		currentY += ENTITY_EDITOR_GROUP_HEIGHT;
-
-		componentGroup->setArea(CEGUI::URect(CEGUI::UDim(0, 4), CEGUI::UDim(0, (float)newGroupY + 1), CEGUI::UDim(1, -4), CEGUI::UDim(0, (float)newGroupY + currentY)));
-		newGroupY += currentY;
+		layout->UpdateLayout();
 	}
+	mEntityEditorLayout->UpdateLayout();
 }
 
 
@@ -157,15 +166,4 @@ bool EditorGUI::EntityPickerHandler (const CEGUI::EventArgs& args)
 	EntitySystem::EntityHandle entity = gEntityMgr.FindFirstEntity(entityName);
 	EditorMgr::GetSingleton().SetCurrentEntity(entity);
 	return true;
-}
-
-
-void EditorGUI::CreateValueEditorWidgets(IValueEditor* editor, CEGUI::Window* componentGroup, int32& currentY)
-{
-	mPropertyEditors.push_back(editor);
-	CEGUI::Window* labelWidget = editor->CreateLabelWidget(componentGroup);
-	CEGUI::Window* editorWidget = editor->CreateEditorWidget(componentGroup);
-	labelWidget->setArea(CEGUI::URect(CEGUI::UDim(0, 2), CEGUI::UDim(0, (float)(currentY + 1)), CEGUI::UDim(0.5, -1), CEGUI::UDim(0, (float32)(currentY + editor->GetEditorHeightHint()))));
-	editorWidget->setArea(CEGUI::URect(CEGUI::UDim(0.5, 1), CEGUI::UDim(0, (float)(currentY + 1)), CEGUI::UDim(1, -1), CEGUI::UDim(0, (float32)(currentY + editor->GetEditorHeightHint()))));
-	currentY += editor->GetEditorHeightHint() + 2;
 }

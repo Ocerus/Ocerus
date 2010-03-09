@@ -15,6 +15,11 @@ namespace CEGUI
 	class EventArgs;
 }
 
+namespace GUISystem
+{
+	class VerticalLayout;
+}
+
 namespace Editor
 {
 	class IValueEditor;
@@ -44,14 +49,14 @@ namespace Editor
 
 
 	private:
-		void CreateValueEditorWidgets(IValueEditor* editor, CEGUI::Window* componentGroup, int32& currentY);
-
 		int32 mPropertyItemHeight;
 		int32 mComponentGroupHeight;
 		float32 mPropertyUpdateTimer;
 
 		typedef vector<IValueEditor*> PropertyEditors;
 		PropertyEditors mPropertyEditors;
+		GUISystem::VerticalLayout* mEntityEditorLayout;
+		
 	};
 }
 

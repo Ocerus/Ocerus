@@ -8,6 +8,7 @@
 
 namespace CEGUI
 {
+	class String;
 	class Window;
 }
 
@@ -17,24 +18,18 @@ namespace Editor
 	/// implements the basic functionality of update locking that can be used by
 	/// subclasses.
 	/// A value editor is an object that provides a mechanism for editing an
-	/// arbitrary variable in the game. Every value editor consists of at least
-	/// two widgets: label widget and editor widget. You usually create a value
-	/// editor by constructing concrete subclass or by using a factory method
-	/// and then you can create those widgets with CreateLabelWidget() and CreateEditorWidget().
+	/// arbitrary variable in the game.
 	class IValueEditor
 	{
 	public:
 		IValueEditor(): mUpdatesLocked(false) {}
 
-		/// Creates the label widget and returns it. Caller must set its position
-		/// and dimensions afterward. It's recommended to use GetEditorHeight()
-		/// for the height.of the widget.
-		virtual CEGUI::Window* CreateLabelWidget(CEGUI::Window* parent) = 0;
-
-		/// Creates the editor widget and returns it. Caller must set its position
-		/// and dimensions afterward. It's recommended to use GetEditorHeight()
-		/// for the height.of the widget.
-		virtual CEGUI::Window* CreateEditorWidget(CEGUI::Window* parent) = 0;
+		/// Creates the editor widget and returns it. The value editor manages its
+		/// height so you should not change it. Some value editors can even change
+		/// their height during their lifetime (e.g expanding and collapsing the editor),
+		/// so you might want to handle the EventSized event (or you can use a layout
+		/// manager such as GUISystem::VerticalLayout).
+		virtual CEGUI::Window* CreateWidget(const CEGUI::String& namePrefix) = 0;
 
 		/// Polls the model for current value and updates the editor widget, unless
 		/// the editor is locked for updates.
@@ -44,9 +39,6 @@ namespace Editor
 
 		/// Submits the value from editor widget to the model.
 		virtual void Submit() = 0;
-
-		/// Returns the recommended height for editor widget.
-		virtual uint32 GetEditorHeightHint() const = 0;
 
 	protected:
 		/// Lock editor for updates. Update() will not update editor until it is unlocked again.

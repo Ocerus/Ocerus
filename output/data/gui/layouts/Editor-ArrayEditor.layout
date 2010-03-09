@@ -9,7 +9,7 @@
         <Window Type="Editor/Listbox" Name="ArrayEditor/ValueList" >
             <Property Name="UnifiedAreaRect" Value="{{0.00314465,0},{0,0},{1.00314,0},{1,-30}}" />
         </Window>
-        <Window Type="Editor/Editbox" Name="FrameWindow/Editbox" >
+        <Window Type="Editor/Editbox" Name="ArrayEditor/Editbox" >
             <Property Name="MaxTextLength" Value="4294967295" />
             <Property Name="UnifiedAreaRect" Value="{{0,0},{1,-26},{1,-60},{1,0}}" />
             <Property Name="TextParsingEnabled" Value="False" />

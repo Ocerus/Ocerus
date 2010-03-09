@@ -203,6 +203,7 @@ set(Editor_SRCS
 	src/Editor/PropertyEditors/StringEditor.cpp
 	src/Editor/PropertyEditors/PropertyEditorCreator.cpp
 	src/Editor/PropertyEditors/EntityAttributeModel.cpp
+	src/Editor/PropertyEditors/Vector2Editor.cpp
 )
 
 set(EntitySystem_SRCS
@@ -242,6 +243,7 @@ set(GUISystem_SRCS
     src/GUISystem/GUIMgr.cpp
     src/GUISystem/GUIConsole.cpp
     src/GUISystem/CEGUITools.cpp
+    src/GUISystem/VerticalLayout.cpp
 )
 
 set(InputSystem_SRCS

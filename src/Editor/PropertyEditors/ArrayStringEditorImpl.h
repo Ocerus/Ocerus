@@ -80,7 +80,6 @@ namespace Editor
 
 	template<class Model, class ElementType>
 	bool ArrayStringEditor<Model, ElementType>::OnEventActivated(const CEGUI::EventArgs&)
-	//bool ArrayStringEditor::OnEventActivated(const CEGUI::EventArgs&)
 	{
 		if (this->mArrayEditorWidget == 0)
 		{
@@ -89,12 +88,16 @@ namespace Editor
 			mArrayEditorWidget->setArea(CEGUI::URect(CEGUI::UDim(0.35f, 0), CEGUI::UDim(0.5f, -75), CEGUI::UDim(0.65f, 0), CEGUI::UDim(0.5f, 75)));
 
 			mArrayEditorListWidget = static_cast<CEGUI::Listbox*>(mArrayEditorWidget->getChild(mArrayEditorWidget->getName() + "/ValueList"));
+			mNewItemWidget = static_cast<CEGUI::Editbox*>(mArrayEditorWidget->getChild(mArrayEditorWidget->getName() + "/Editbox"));
+			
 
 			ArrayType array = AbstractValueEditor<Model>::mModel.template GetValue<ArrayType>();
 			for (int32 i = 0; i < array->GetSize(); ++i)
 			{
 				mArrayEditorListWidget->addItem(new CEGUI::ListboxTextItem(Utils::StringConverter::ToString((*array)[i])));
 			}
+
+			
 			
 			OC_ASSERT(mArrayEditorListWidget != 0);
 		}

@@ -10,6 +10,7 @@
 namespace CEGUI
 {
 	class EventArgs;
+	class String;
 }
 
 namespace Editor
@@ -24,18 +25,13 @@ namespace Editor
 	{
 	public:
 		/// Constructs a AbstractValueEditor that operates on given model.
-		AbstractValueEditor(const Model& model): mModel(model), mLabelWidget(0) {}
+		AbstractValueEditor(const Model& model): mModel(model) {}
 
-		/// Creates the label widget and returns it. Caller must set its position
-		/// and dimensions afterward. It's recommended to use GetEditorHeight()
-		/// for the height.of the widget.
-		CEGUI::Window* CreateLabelWidget(CEGUI::Window* parent);
 
 	protected:
-		Model mModel;
+		CEGUI::Window* CreateLabelWidget(const CEGUI::String& name);
 
-	private:
-		CEGUI::Window* mLabelWidget;
+		Model mModel;
 	};
 }
 

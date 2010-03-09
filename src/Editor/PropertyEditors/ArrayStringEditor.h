@@ -53,6 +53,7 @@ namespace Editor
 			string mNamePrefix;
 			CEGUI::Window* mEditboxWidget;
 			CEGUI::Window* mArrayEditorWidget;
+			CEGUI::Editbox* mNewItemWidget;
 			CEGUI::Listbox* mArrayEditorListWidget;
 	};
 }

@@ -20,7 +20,7 @@ PropertyAccessFlags Editor::EntityAttributeModel::GetAccessFlags() const
 	return 0;
 }
 
-
+/*
 StringKey EntityAttributeModel::GetKey() const
 {
 	switch(mType)
@@ -31,6 +31,7 @@ StringKey EntityAttributeModel::GetKey() const
 	}
 	return "";
 }
+*/
 
 string EntityAttributeModel::GetValueString()
 {

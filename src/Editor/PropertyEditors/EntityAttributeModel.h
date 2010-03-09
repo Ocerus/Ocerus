@@ -27,7 +27,7 @@ namespace Editor
 		Reflection::PropertyAccessFlags GetAccessFlags() const;
 
 		/// Returns the key representing this attribute.
-		StringKey GetKey() const;
+		//StringKey GetKey() const;
 
 		/// Returns the attribute value.
 		string GetValueString();

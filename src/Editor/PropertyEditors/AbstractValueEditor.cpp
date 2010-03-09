@@ -9,16 +9,14 @@
 using namespace Editor;
 
 template<class Model>
-CEGUI::Window* Editor::AbstractValueEditor<Model>::CreateLabelWidget(CEGUI::Window* parent)
+CEGUI::Window* Editor::AbstractValueEditor<Model>::CreateLabelWidget(const CEGUI::String& namePrefix)
 {
-	OC_ASSERT(mLabelWidget == 0);
-	mLabelWidget = gCEGUIWM.createWindow("Editor/StaticText", parent->getName() + "/" + mModel.GetKey() + "Label");
-	mLabelWidget->setText(mModel.GetName());
-	mLabelWidget->setProperty("FrameEnabled", "False");
-	mLabelWidget->setProperty("BackgroundEnabled", "False");
-	mLabelWidget->setTooltipText(mModel.GetComment());
-	parent->addChildWindow(mLabelWidget);
-	return mLabelWidget;
+	CEGUI::Window* labelWidget = gCEGUIWM.createWindow("Editor/StaticText", namePrefix + "/EditorLabel");
+	labelWidget->setText(mModel.GetName());
+	labelWidget->setProperty("FrameEnabled", "False");
+	labelWidget->setProperty("BackgroundEnabled", "False");
+	labelWidget->setTooltipText(mModel.GetComment());
+	return labelWidget;
 }
 
 /// Explicit Instantiation
