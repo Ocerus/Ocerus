@@ -17,7 +17,7 @@ void MessageCallback(const asSMessageInfo* msg, void* param)
 	OC_UNUSED(param);
 	const char* messageType[] = {"ERROR", "WARNING", "INFO"};
 
-	ocError << msg->section << "(" << msg->row << ", " << msg->col << ") : "
+	ocInfo << msg->section << "(" << msg->row << ", " << msg->col << ") : "
 		<< messageType[msg->type] << ": " << msg->message;
 }
 

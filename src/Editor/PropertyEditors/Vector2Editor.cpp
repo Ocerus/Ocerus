@@ -12,7 +12,7 @@ CEGUI::Window* Editor::Vector2Editor<Model>::CreateWidget(const CEGUI::String& n
 {
 	OC_ASSERT(mEditbox1Widget == 0);
 	OC_ASSERT(mEditbox2Widget == 0);
-	int editboxHeight = gCEGUIWM.getWindow("EditorRoot")->getFont(true)->getLineSpacing(1.1f) + 10;
+	float32 editboxHeight = gCEGUIWM.getWindow("EditorRoot")->getFont(true)->getLineSpacing(1.1f) + 10;
 	CEGUI::Window* widget = gCEGUIWM.createWindow("DefaultWindow", namePrefix);
 	widget->setHeight(CEGUI::UDim(0, 2 * editboxHeight + 5));
 

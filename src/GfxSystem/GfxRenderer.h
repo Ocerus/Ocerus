@@ -107,7 +107,8 @@ namespace GfxSystem
 		/// Converts coordinates from the screen space to the world space.
 		/// Returns false if the conversion failed (for example, the screen position was not in any of the viewports).
 		/// The result is returned in the second parameter.
-		bool ConvertScreenToWorldCoords(const Point& screenCoords, Vector2& worldCoords) const;
+		/// As a last parameter the desired render target can be specified.
+		bool ConvertScreenToWorldCoords(const Point& screenCoords, Vector2& worldCoords, const RenderTargetID renderTarget = InvalidRenderTargetID) const;
 
 
 	protected:
@@ -149,9 +150,17 @@ namespace GfxSystem
 		SpriteVector mSprites;
 
 		/// Render targets.
-		typedef pair<GfxViewport, EntitySystem::EntityHandle> ViewportWithCamera;
-		typedef vector<ViewportWithCamera*> RenderTargetsVector;
+		typedef pair<GfxViewport, EntitySystem::EntityHandle> RenderTarget;
+		typedef vector<RenderTarget*> RenderTargetsVector;
 		RenderTargetsVector mRenderTargets;
+
+	private:
+
+		/// Converts coordinates from the screen space to the world space.
+		/// Returns false if the conversion failed (for example, the screen position was not in any of the viewports).
+		/// The result is returned in the second parameter.
+		/// As a last parameter the desired render target must be specified.
+		bool ConvertScreenToWorldCoords( const Point& screenCoords, Vector2& worldCoords, const RenderTarget& renderTarget ) const;
 
 	protected:
 

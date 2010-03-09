@@ -924,6 +924,10 @@
 					RelativePath="..\src\GUISystem\ResourceProvider.h"
 					>
 				</File>
+				<File
+					RelativePath="..\src\GUISystem\VerticalLayout.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="src"
@@ -946,6 +950,10 @@
 				</File>
 				<File
 					RelativePath="..\src\GUISystem\ResourceProvider.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src\GUISystem\VerticalLayout.cpp"
 					>
 				</File>
 			</Filter>
@@ -1277,6 +1285,10 @@
 						RelativePath="..\src\Editor\PropertyEditors\StringEditor.h"
 						>
 					</File>
+					<File
+						RelativePath="..\src\Editor\PropertyEditors\Vector2Editor.h"
+						>
+					</File>
 				</Filter>
 				<Filter
 					Name="src"
@@ -1295,6 +1307,10 @@
 					</File>
 					<File
 						RelativePath="..\src\Editor\PropertyEditors\StringEditor.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\src\Editor\PropertyEditors\Vector2Editor.cpp"
 						>
 					</File>
 				</Filter>

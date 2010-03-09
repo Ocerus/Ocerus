@@ -91,6 +91,8 @@ void Core::Game::Init()
 	gInputMgr.AddInputListener(this);
 	gApp.ResetStats();
 	ocInfo << "Game inited";
+
+	Script::TestRunTime();
 }
 
 void Core::Game::Deinit()

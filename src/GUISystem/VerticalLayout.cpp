@@ -48,7 +48,7 @@ void GUISystem::VerticalLayout::UpdateLayout()
 	for (int i = 0; i < childCount; ++i)
 	{
 		CEGUI::Window* currentChild = mContentPane->getChildAtIdx(i);
-		currentChild->setPosition(CEGUI::UVector2(CEGUI::UDim(0, 0), CEGUI::UDim(0, currentY)));
+		currentChild->setPosition(CEGUI::UVector2(CEGUI::UDim(0, 0), CEGUI::UDim(0, (float32)currentY)));
 		currentChild->setWidth(CEGUI::UDim(1, 0));
 		currentY += (int)currentChild->getHeight().d_offset;
 		if (i != childCount - 1)
@@ -56,7 +56,7 @@ void GUISystem::VerticalLayout::UpdateLayout()
 	}
 	if (mResizeParent)
 	{
-		int resizeOffset = mManagedWindow->getHeight().d_offset - mContentPane->getHeight().d_offset;
+		float32 resizeOffset = mManagedWindow->getHeight().d_offset - mContentPane->getHeight().d_offset;
 		mManagedWindow->setHeight(CEGUI::UDim(0, currentY + resizeOffset));
 	}	
 	UnlockUpdates();
