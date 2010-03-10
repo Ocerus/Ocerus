@@ -49,7 +49,7 @@ void GfxWindow::Init(const int32 resx, const int32 resy, const bool fullscreen, 
 		mResx = resx;
 		mResy = resy;
 		mFullscreen = fullscreen;
-		//SDL_ShowCursor(0);
+		SDL_ShowCursor(0);
 	}
 	else
 	{
