@@ -12,6 +12,9 @@ namespace Reflection
 	///	Note that it is assumed that this type fits into PropertyAccessFlags!
 	enum ePropertyAccess 
 	{ 
+		/// The property is accessible only from the C++ code. This must be explicitly stated as otherwise the mask would
+		/// not work on the property. That's also why zero flag has no meaning.
+		PA_NONE=1<<0, 
 		/// The property can be read from edit tools.
 		PA_EDIT_READ=1<<1, 
 		/// The property can be written from edit tools.
@@ -22,10 +25,8 @@ namespace Reflection
 		PA_SCRIPT_WRITE=1<<4,
 		/// The property can be written during the component init.
 		PA_INIT=1<<5,
-		/// The property can be used only by the engine itself.
-		PA_ENGINE=1<<6,
 		/// The property should not be loaded/saved from/to stream
-		PA_TRANSIENT=1<<7,
+		PA_TRANSIENT=1<<6,
 
 		/// Full access to the property.
 		PA_FULL_ACCESS=0x7f

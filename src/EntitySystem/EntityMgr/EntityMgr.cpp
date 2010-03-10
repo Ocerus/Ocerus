@@ -402,14 +402,6 @@ bool EntitySystem::EntityMgr::HasEntityProperty( const EntityHandle entity, cons
 	return false;
 }
 
-/*template <class T>
-bool EntitySystem::EntityMgr::RegisterDynamicPropertyOfEntityComponent(const EntityHandle entity, const ComponentID component,
-	const StringKey propertyKey, const PropertyAccessFlags accessFlags, const string& comment)
-{
-
-}*/
-
-
 bool EntitySystem::EntityMgr::UnregisterDynamicPropertyOfEntityComponent(const EntityHandle entity, const ComponentID component,
 	const StringKey propertyKey)
 {
