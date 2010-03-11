@@ -717,6 +717,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\GfxSystem\GfxViewport.h"
+					>
+				</File>
+				<File
 					RelativePath="..\src\GfxSystem\GfxWindow.h"
 					>
 				</File>
@@ -746,6 +750,10 @@
 				</File>
 				<File
 					RelativePath="..\src\GfxSystem\GfxStructures.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src\GfxSystem\GfxViewport.cpp"
 					>
 				</File>
 				<File

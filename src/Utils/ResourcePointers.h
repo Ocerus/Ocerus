@@ -8,28 +8,6 @@
 #include <ResourceSystem/Resource.h>
 #include <boost/shared_ptr.hpp>
 
-namespace GfxSystem
-{
-	//class ParticleSystem;
-	//class ParticleResource;
-	class Texture;
-
-	/// Smart pointer to ParticleSystem.
-	//typedef boost::shared_ptr<ParticleSystem> ParticleSystemPtr;
-	/// Smart pointer to ParticleResource.
-    //typedef boost::shared_ptr<ParticleResource> ParticleResourcePtr;
-	/// Smart pointer to Texture.
-    typedef boost::shared_ptr<Texture> TexturePtr;
-}
-
-namespace StringSystem
-{
-	class TextResource;
-
-	/// Smart pointer to TextResource.
-    typedef boost::shared_ptr<TextResource> TextResourcePtr;
-}
-
 namespace ResourceSystem
 {
 	class Resource;
@@ -76,5 +54,28 @@ namespace ScriptSystem
 	/// Smart pointer to ScriptResource.
     typedef boost::shared_ptr<ScriptResource> ScriptResourcePtr;
 }
+
+namespace GfxSystem
+{
+	//class ParticleSystem;
+	//class ParticleResource;
+	class Texture;
+
+	/// Smart pointer to ParticleSystem.
+	//typedef boost::shared_ptr<ParticleSystem> ParticleSystemPtr;
+	/// Smart pointer to ParticleResource.
+	//typedef boost::shared_ptr<ParticleResource> ParticleResourcePtr;
+	/// Smart pointer to Texture.
+	typedef boost::shared_ptr<Texture> TexturePtr;
+}
+
+namespace StringSystem
+{
+	class TextResource;
+
+	/// Smart pointer to TextResource.
+	typedef boost::shared_ptr<TextResource> TextResourcePtr;
+}
+
 
 #endif // ResourcePointers_h__

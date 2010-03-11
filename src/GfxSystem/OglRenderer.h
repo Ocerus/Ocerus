@@ -42,7 +42,7 @@ namespace GfxSystem
 		virtual void DeleteTexture(const TextureHandle& handle) const;
 
 		/// Adds sprite to queue for rendering
-		virtual void SetTexture(const uint32 texture) const;
+		virtual void SetTexture(const TextureHandle texture) const;
 
 		/// Draws sprite
 		virtual void DrawSprite(const Sprite& spr) const;

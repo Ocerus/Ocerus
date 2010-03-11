@@ -113,7 +113,7 @@ void OglRenderer::DeleteTexture(const TextureHandle& handle) const
 	glDeleteTextures(1, &handle);
 }
 
-void OglRenderer::SetTexture(const uint32 texture) const
+void OglRenderer::SetTexture(const TextureHandle texture) const
 {
 	glBindTexture(GL_TEXTURE_2D, texture);
 }
@@ -230,7 +230,7 @@ void OglRenderer::DrawRect(	const Vector2& position, const Vector2& size, const 
 void OglRenderer::SetViewportImpl(const GfxViewport& viewport) const
 {
 	Point topleft, bottomright;
-	CalculateViewportScreenBoundaries(viewport, topleft, bottomright);
+	viewport.CalculateScreenBoundaries(topleft, bottomright);
 	// note that we are subtracting the Y pos from the resolution to workaround a bug in the SDL OpenGL impl
 	glViewport(topleft.x, gGfxWindow.GetResolutionHeight()-bottomright.y, bottomright.x-topleft.x, bottomright.y-topleft.y);
 
@@ -238,7 +238,7 @@ void OglRenderer::SetViewportImpl(const GfxViewport& viewport) const
 	glLoadIdentity();
 
 	Vector2 topleftWorld, bottomrightWorld;
-	CalculateViewportWorldBoundaries(viewport, topleftWorld, bottomrightWorld);
+	viewport.CalculateWorldBoundaries(topleftWorld, bottomrightWorld);
 	glOrtho(topleftWorld.x, bottomrightWorld.x, bottomrightWorld.y, topleftWorld.y, -1, 1);
 
 	glMatrixMode(GL_MODELVIEW);

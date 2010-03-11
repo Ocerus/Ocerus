@@ -11,6 +11,9 @@ namespace GfxSystem
 	/// Platform dependent handle to an arbitrary texture.
 	typedef unsigned int TextureHandle;
 
+	/// Invalid texture handle.
+	const TextureHandle InvalidTextureHandle = 0;
+
 	struct Point
 	{
 		Point(int32 _x, int32 _y): x(_x), y(_y) {}
@@ -89,18 +92,6 @@ namespace GfxSystem
 			    const float32 _z, const uint32 _texture, const float32 _transparency ):
 			position(_position), size(_size), scale(_scale), angle(_angle), z(_z),
 			texture(_texture), transparency(_transparency) {}
-	};
-
-	struct GfxViewport
-	{
-		/// Constructs the viewport from position and size. Those vectors are from [0,1]x[0,1] and are relative to the window boundaries.
-		/// If attribute "relativeScale" is true and application runs in windowed mode, it means that the scale of objects shown
-		/// in this viewport is relative to window size. If the aplication runs in fullscreen then the scale is constant to resolution.
-		GfxViewport(const Vector2& _pos, const Vector2& _size, const bool _relativeScale): position(_pos), size(_size), relativeScale(_relativeScale) {}
-
-		Vector2 position;
-		Vector2 size;
-		bool relativeScale;
 	};
 }
 

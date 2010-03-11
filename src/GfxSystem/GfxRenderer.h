@@ -6,6 +6,7 @@
 
 #include "Base.h"
 #include "GfxStructures.h"
+#include "GfxViewport.h"
 
 #define gGfxRenderer GfxSystem::GfxRenderer::GetSingleton()
 
@@ -84,7 +85,7 @@ namespace GfxSystem
 		void DrawSprites();
 
 		/// Changes renderer's texture.
-		virtual void SetTexture(const uint32 texture) const = 0;
+		virtual void SetTexture(const TextureHandle texture) const = 0;
 		
 		/// Draws a quad with currently the chosen texture.
 		virtual void DrawSprite(const Sprite& spr) const = 0;
@@ -128,22 +129,10 @@ namespace GfxSystem
 		/// Called when the current camera is changed.
 		virtual void SetCameraImpl(const Vector2& position, const float32 zoom, const float32 rotation) const = 0;
 
-		/// Retrieves the boundaries of the viewport in the screen space.
-		void CalculateViewportScreenBoundaries(const GfxViewport& viewport, Point& topleft, Point& bottomright) const;
-
-		/// Retrieves the boundaries of the viewport in the world space. This basically maps the screen space viewport to
-		/// the world space.
-		void CalculateViewportWorldBoundaries(const GfxViewport& viewport, Vector2& topleft, Vector2& bottomright) const;
-
 		/// Resets the sprites queue.
 		inline void ResetSprites() { mSprites.clear(); }
 
 	private:
-
-		// Half the size of the window in the world coordination system (regardless of the actual pixel size).
-		// The value was determined from the 1024x768 resolution and serves as a constat to which we can related the zoom.
-		static const int smOrthoSizeX = 512;
-		static const int smOrthoSizeY = 384;
 
 		/// Vector with sprites to be rendered.
 		typedef vector<Sprite> SpriteVector;
