@@ -72,10 +72,10 @@ namespace GfxSystem
 		///	\param reuse_texture_ID 0-generate a new texture ID, otherwise reuse the texture ID (overwriting the old texture)
 		///	\param width, height returns size of texture
 		///	\return 0-failed, otherwise returns the OpenGL texture handle
-		virtual uint32 LoadTexture(const unsigned char *const buffer, const int buffer_length, const ePixelFormat force_channels, const unsigned int reuse_texture_ID, int *width, int *height) const = 0;
+		virtual TextureHandle LoadTexture(const unsigned char *const buffer, const int buffer_length, const ePixelFormat force_channels, const unsigned int reuse_texture_ID, int *width, int *height) const = 0;
 
 		/// Deletes texture from renderers memory.
-		virtual void DeleteTexture(const uint32 &handle) const = 0;
+		virtual void DeleteTexture(const TextureHandle &handle) const = 0;
 
 		/// Adds srite to queue for rendering.
 		void AddSprite(const Sprite spr);

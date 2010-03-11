@@ -19,7 +19,7 @@ namespace GfxSystem
 		static ResourceSystem::ResourcePtr CreateMe(void);
 
 		/// Returns implementation specific pointer to the texture object.
-		uint32 GetTexture(void);
+		TextureHandle GetTexture(void);
 
 		uint32 GetWidth(void);
 		uint32 GetHeight(void);
@@ -36,7 +36,7 @@ namespace GfxSystem
 		void Init(void);
 
 	private:
-		uint32 mHandle;
+		TextureHandle mHandle;
 		ePixelFormat mFormat;
 		uint32 mHeight, mWidth;
 

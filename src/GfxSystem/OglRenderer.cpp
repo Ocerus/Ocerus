@@ -68,7 +68,7 @@ void OglRenderer::FinalizeRenderTargetImpl() const
 	glClear ( GL_DEPTH_BUFFER_BIT );
 }
 
-uint32 OglRenderer::LoadTexture(
+TextureHandle OglRenderer::LoadTexture(
 								const unsigned char *const buffer,
 								const int buffer_length,
 								const ePixelFormat force_channels,
@@ -94,7 +94,7 @@ uint32 OglRenderer::LoadTexture(
 		channels = force_channels;
 	}
 
-	uint32 result = SOIL_create_OGL_texture(
+	TextureHandle result = SOIL_create_OGL_texture(
 		img, *width, *height, channels,
 		reuse_texture_ID, 0);
 
@@ -108,7 +108,7 @@ uint32 OglRenderer::LoadTexture(
 }
 
 
-void OglRenderer::DeleteTexture(const uint32 &handle) const
+void OglRenderer::DeleteTexture(const TextureHandle& handle) const
 {
 	glDeleteTextures(1, &handle);
 }

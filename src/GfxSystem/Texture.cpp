@@ -52,19 +52,19 @@ bool Texture::UnloadImpl()
 	return true;
 }
 
-uint32 Texture::GetWidth(/*bool bOriginal*/)
+uint32 Texture::GetWidth()
 {
 	EnsureLoaded();
 	return mWidth;
 }
 
-uint32 Texture::GetHeight(/*bool bOriginal */)
+uint32 Texture::GetHeight()
 {
 	EnsureLoaded();
 	return mHeight;
 }
 
-uint32 Texture::GetTexture()
+TextureHandle Texture::GetTexture()
 {
 	EnsureLoaded();
 	return mHandle;

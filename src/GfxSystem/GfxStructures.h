@@ -8,6 +8,9 @@
 
 namespace GfxSystem
 {
+	/// Platform dependent handle to an arbitrary texture.
+	typedef unsigned int TextureHandle;
+
 	struct Point
 	{
 		Point(int32 _x, int32 _y): x(_x), y(_y) {}
