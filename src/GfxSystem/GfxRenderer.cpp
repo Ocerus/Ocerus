@@ -34,7 +34,7 @@ void GfxSystem::GfxRenderer::EndRendering()
 	mIsRendering = false;
 }
 
-GfxSystem::GfxRenderer::RenderTargetID GfxSystem::GfxRenderer::AddRenderTarget( const GfxViewport& viewport, const EntitySystem::EntityHandle camera )
+GfxSystem::RenderTargetID GfxSystem::GfxRenderer::AddRenderTarget( const GfxViewport& viewport, const EntitySystem::EntityHandle camera )
 {
 	OC_ASSERT(!mIsRendering);
 
@@ -56,7 +56,7 @@ bool GfxSystem::GfxRenderer::SetCurrentRenderTarget( const RenderTargetID toSet 
 	RenderTarget* renderTarget = mRenderTargets[toSet];
 	if (!renderTarget) return false;
 
-	SetViewportImpl(renderTarget->first);
+	SetViewportImpl(&renderTarget->first);
 
 	// here we're sure these properties exist since we checked that the camera entity is really a camera
 	PropertyHolder position = gEntityMgr.GetEntityProperty(renderTarget->second, "Position" );
@@ -95,8 +95,6 @@ void GfxRenderer::DrawSprites()
 	for(it = mSprites.begin(); it != mSprites.end(); ++it)
 	{
 		//TODO: setridit podle textur
-		SetTexture((*it).texture);
-
 		DrawSprite(*it);
 	}
 
@@ -126,7 +124,7 @@ bool GfxSystem::GfxRenderer::ConvertScreenToWorldCoords( const Point& screenCoor
 	for (RenderTargetsVector::const_iterator it=mRenderTargets.begin(); it!=mRenderTargets.end(); ++it)
 	{
 		if (!*it) continue;
-		if ((*it)->first.AssignedToTexture()) continue;
+		if ((*it)->first.AttachedToTexture()) continue;
 
 		if (ConvertScreenToWorldCoords(screenCoords, worldCoords, **it)) return true;
 	}

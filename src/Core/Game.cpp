@@ -14,7 +14,8 @@
 
 // DEBUG only
 #include "../EntitySystem/Components/Script.h"
-
+GfxSystem::TextureHandle gRenderTexture;
+GfxSystem::RenderTargetID gRenderTarget;
 
 using namespace Core;
 using namespace EntitySystem;
@@ -86,6 +87,9 @@ void Core::Game::Init()
 	gGfxRenderer.AddRenderTarget(GfxSystem::GfxViewport(Vector2(0.0, 0.0), Vector2(1, 0.5), false), gGfxSceneMgr.GetCamera(1));
 	gGfxRenderer.AddRenderTarget(GfxSystem::GfxViewport(Vector2(0.5, 0.5), Vector2(0.5, 0.5), true), gGfxSceneMgr.GetCamera(2));
 
+	gRenderTexture = gGfxRenderer.CreateRenderTexture(128, 128);
+	gRenderTarget = gGfxRenderer.AddRenderTarget(GfxSystem::GfxViewport(gRenderTexture, 128, 128), gGfxSceneMgr.GetCamera(1));
+	
 
 
 	gInputMgr.AddInputListener(this);
@@ -181,26 +185,37 @@ void Core::Game::Draw( const float32 passedDelta)
 	float32 delta = passedDelta;
 	if (!IsActionRunning()) delta = 0.0f;
 
-
+	
 	// ----------------TESTING-------------------------
+	gGfxRenderer.ClearScreen(GfxSystem::Color(0, 0, 0));
+
+	gGfxRenderer.SetCurrentRenderTarget(gRenderTarget);
+	gGfxRenderer.ClearScreen(GfxSystem::Color(0, 255, 0));
+	gGfxRenderer.DrawSprites();
+	gGfxRenderer.FinalizeRenderTarget();
+	
+
+
 	gGfxRenderer.SetCurrentRenderTarget(0);
 	gGfxRenderer.DrawSprites();
-	gGfxRenderer.DrawRect(Vector2(100,-100), Vector2(200,300), 0.0f, GfxSystem::Color(255,0,0), false);
-	// Testing physics draw
 	mPhysics->DrawDebugData();
 	gGfxRenderer.FinalizeRenderTarget();
 
 
 	gGfxRenderer.SetCurrentRenderTarget(1);
 	gGfxRenderer.DrawSprites();
-	// Testing physics draw
 	mPhysics->DrawDebugData();
+	GfxSystem::Sprite sprite;
+	sprite.size.x = 128;
+	sprite.size.y = 128;
+	sprite.transparency = 0.5f;
+	sprite.texture = gRenderTexture;
+	gGfxRenderer.DrawSprite(sprite);
 	gGfxRenderer.FinalizeRenderTarget();
 
 
 	gGfxRenderer.SetCurrentRenderTarget(2);
 	gGfxRenderer.DrawSprites();
-	// Testing physics draw
 	mPhysics->DrawDebugData();
 	gGfxRenderer.FinalizeRenderTarget();
 

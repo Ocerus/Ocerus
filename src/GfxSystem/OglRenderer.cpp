@@ -6,17 +6,21 @@
 #pragma comment (lib,"glu32.lib")
 #endif
 
+#define GLEW_STATIC
+#include "glew/GL/glew.h"
 #include "SDL/SDL.h"
-#include "SDL/SDL_opengl.h"
 #include "SOIL.h"
-
 
 using namespace GfxSystem;
 
-void OglRenderer::Init() const
+void OglRenderer::Init()
 {
 	ocInfo << "*** OpenGL init ***";
-	//Initialize OpenGL
+
+	mCurrentViewport = 0;
+
+	// init opengl extensions
+	glewInit();
 
 	glClearColor( 0.1f, 0.1f, 0.1f, 0 );
 	glMatrixMode( GL_PROJECTION );
@@ -35,6 +39,10 @@ void OglRenderer::Init() const
 	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_CULL_FACE);
 
+	// create buffers for render2texture
+	glGenFramebuffersEXT(1, &mFrameBuffer);
+
+
 	if( glGetError() != GL_NO_ERROR )
 	{
 		ocError << "OpenGL cannot initialize!";
@@ -50,7 +58,8 @@ bool OglRenderer::BeginRenderingImpl() const
 	// rendered on the screen
 	gResourceMgr.DisableMemoryLimitEnforcing();
 
-	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glViewport(0, 0, gGfxWindow.GetResolutionWidth(), gGfxWindow.GetResolutionHeight());
+	glClear(GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 	return true;
 }
@@ -63,27 +72,84 @@ void OglRenderer::EndRenderingImpl() const
 	SDL_GL_SwapBuffers();
 }
 
+void OglRenderer::SetViewportImpl(const GfxViewport* viewport)
+{
+	mCurrentViewport = viewport;
+
+	if (viewport->AttachedToTexture())
+	{
+		glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, mFrameBuffer);
+		glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, viewport->GetRenderTexture(), 0);
+		if (glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT) != GL_FRAMEBUFFER_COMPLETE_EXT)
+		{
+			ocError << "Failed to init framebuffer";
+		}
+
+		Point topleft, bottomright;
+		viewport->CalculateScreenBoundaries(topleft, bottomright);
+		glViewport(topleft.x, topleft.y, bottomright.x-topleft.x, bottomright.y-topleft.y);
+	}
+	else
+	{
+		Point topleft, bottomright;
+		viewport->CalculateScreenBoundaries(topleft, bottomright);
+		// note that we are subtracting the Y pos from the resolution to workaround a bug in the SDL OpenGL impl
+		glViewport(topleft.x, gGfxWindow.GetResolutionHeight()-bottomright.y, bottomright.x-topleft.x, bottomright.y-topleft.y);
+	}
+
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+
+	Vector2 topleftWorld, bottomrightWorld;
+	viewport->CalculateWorldBoundaries(topleftWorld, bottomrightWorld);
+	glOrtho(topleftWorld.x, bottomrightWorld.x, bottomrightWorld.y, topleftWorld.y, -1, 1);
+
+	glMatrixMode(GL_MODELVIEW);
+}
+
+void OglRenderer::SetCameraImpl(const Vector2& position, const float32 zoom, const float32 rotation) const
+{
+	glLoadIdentity();
+	glRotatef(MathUtils::RadToDeg(-rotation), 0, 0, 1);
+	glScalef(zoom, zoom, zoom);
+	glTranslatef(-position.x, -position.y, 0);
+}
+
 void OglRenderer::FinalizeRenderTargetImpl() const
 {
+	if (mCurrentViewport->AttachedToTexture())
+	{
+		glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
+	}
 	glClear ( GL_DEPTH_BUFFER_BIT );
 }
 
-TextureHandle OglRenderer::LoadTexture(
-								const unsigned char *const buffer,
-								const int buffer_length,
-								const ePixelFormat force_channels,
-								const unsigned int reuse_texture_ID,
-								int *width, int *height) const
+GfxSystem::TextureHandle GfxSystem::OglRenderer::CreateRenderTexture( const uint32 width, const uint32 height ) const
 {
-	// this doesnt say anything about width and height
-	//uint32 result = SOIL_load_OGL_texture_from_memory(buffer, buffer_length, 1, reuse_texture_ID, 0);
+	TextureHandle result;
+	glGenTextures(1, &result);
+	glBindTexture(GL_TEXTURE_2D, result);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8,  width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
-	unsigned char* img;
+	if( glGetError() != GL_NO_ERROR )
+	{
+		ocError << "Failed to create render texture!";
+		return InvalidTextureHandle;
+	}
+
+	return result;
+}
+
+TextureHandle OglRenderer::LoadTexture( const uint8* const buffer, const int32 buffer_length, const ePixelFormat force_channels, 
+									   const uint32 reuse_texture_ID, int32* width, int32* height ) const
+{
+	uint8* img;
 	int channels = 0;
-	img = SOIL_load_image_from_memory(
-		buffer, buffer_length,
-		width, height, &channels,
-		force_channels );
+	img = SOIL_load_image_from_memory(buffer, buffer_length, width, height, &channels, force_channels);
 	if( NULL == img )
 	{
 		ocError << "SOIL error: " << SOIL_last_result();
@@ -94,9 +160,7 @@ TextureHandle OglRenderer::LoadTexture(
 		channels = force_channels;
 	}
 
-	TextureHandle result = SOIL_create_OGL_texture(
-		img, *width, *height, channels,
-		reuse_texture_ID, 0);
+	TextureHandle result = SOIL_create_OGL_texture(img, *width, *height, channels, reuse_texture_ID, 0);
 
 	SOIL_free_image_data( img );
 
@@ -113,21 +177,14 @@ void OglRenderer::DeleteTexture(const TextureHandle& handle) const
 	glDeleteTextures(1, &handle);
 }
 
-void OglRenderer::SetTexture(const TextureHandle texture) const
-{
-	glBindTexture(GL_TEXTURE_2D, texture);
-}
-
 void OglRenderer::DrawSprite(const Sprite& spr) const
 {	
 	glPushMatrix();
 
+	glBindTexture(GL_TEXTURE_2D, spr.texture);
 	glColor4f( 1.0f, 1.0f, 1.0f, 1.0f - spr.transparency );
-
 	glTranslatef( spr.position.x, spr.position.y, spr.z );
-
 	glRotatef(MathUtils::RadToDeg(spr.angle), 0, 0, 1);
-
 	glScalef(spr.scale.x, spr.scale.y, 1);
 
 	float32 x = spr.size.x/2;
@@ -150,6 +207,7 @@ void OglRenderer::DrawLine(const Vector2* verts, const Color& color) const
 	OC_ASSERT(verts);
 
 	glDisable(GL_TEXTURE_2D);
+	
 	glColor4ub( color.r, color.g, color.b, color.a );
 
 	glBegin( GL_LINES );
@@ -227,27 +285,9 @@ void OglRenderer::DrawRect(	const Vector2& position, const Vector2& size, const 
 	glPopMatrix();
 }
 
-void OglRenderer::SetViewportImpl(const GfxViewport& viewport) const
+void GfxSystem::OglRenderer::ClearScreen( const Color& color ) const
 {
-	Point topleft, bottomright;
-	viewport.CalculateScreenBoundaries(topleft, bottomright);
-	// note that we are subtracting the Y pos from the resolution to workaround a bug in the SDL OpenGL impl
-	glViewport(topleft.x, gGfxWindow.GetResolutionHeight()-bottomright.y, bottomright.x-topleft.x, bottomright.y-topleft.y);
-
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-
-	Vector2 topleftWorld, bottomrightWorld;
-	viewport.CalculateWorldBoundaries(topleftWorld, bottomrightWorld);
-	glOrtho(topleftWorld.x, bottomrightWorld.x, bottomrightWorld.y, topleftWorld.y, -1, 1);
-
-	glMatrixMode(GL_MODELVIEW);
-}
-
-void OglRenderer::SetCameraImpl(const Vector2& position, const float32 zoom, const float32 rotation) const
-{
-	glLoadIdentity();
-	glRotatef(MathUtils::RadToDeg(-rotation), 0, 0, 1);
-	glScalef(zoom, zoom, zoom);
-	glTranslatef(-position.x, -position.y, 0);
+	glClearColor((float32)color.r / 255, (float)color.g / 255, (float32)color.b / 255, (float32)color.a / 2);
+	glColorMask(true, true, true, true);
+	glClear(GL_COLOR_BUFFER_BIT);
 }

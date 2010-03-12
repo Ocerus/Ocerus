@@ -30,9 +30,26 @@ GfxSystem::GfxViewport::GfxViewport( ResourceSystem::ResourcePtr texture ):
 	mSize.y = (float32)textureResource->GetHeight();
 }
 
+GfxSystem::GfxViewport::GfxViewport( TextureHandle texture, const uint32 width, const uint32 height ):
+	mPosition(Vector2_Zero),
+	mSize(Vector2_Zero),
+	mTexture(texture),
+	mRelativeScale(false)
+{
+	mSize.x = (float32)width;
+	mSize.y = (float32)height;
+}
+
 void GfxSystem::GfxViewport::CalculateWorldBoundaries( Vector2& topleft, Vector2& bottomright ) const
 {
-	if (mRelativeScale)
+	if (AttachedToTexture())
+	{
+		topleft.x = -ORTHO_SIZE_X;
+		bottomright.x = ORTHO_SIZE_X;
+		topleft.y = -ORTHO_SIZE_Y;
+		bottomright.y = ORTHO_SIZE_Y;
+	}
+	else if (mRelativeScale)
 	{
 		// size of objects depends on resolution
 		topleft.x = -ORTHO_SIZE_X * mSize.x;
@@ -54,7 +71,7 @@ void GfxSystem::GfxViewport::CalculateWorldBoundaries( Vector2& topleft, Vector2
 
 void GfxSystem::GfxViewport::CalculateScreenBoundaries( Point& topleft, Point& bottomright ) const
 {
-	if (AssignedToTexture())
+	if (AttachedToTexture())
 	{
 		topleft.x = 0;
 		topleft.y = 0;

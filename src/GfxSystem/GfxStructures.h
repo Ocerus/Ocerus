@@ -14,6 +14,16 @@ namespace GfxSystem
 	/// Invalid texture handle.
 	const TextureHandle InvalidTextureHandle = 0;
 
+	///@TODO popsat detailneji.
+	enum ePixelFormat
+	{
+		PF_AUTO = 0,			//auto
+		PF_L = 1,				//grayscale
+		PF_LA = 2,				//grayscale with alpha
+		PF_RGB = 3,				//RGB
+		PF_RGBA = 4				//RGB with alpha
+	};
+
 	struct Point
 	{
 		Point(int32 _x, int32 _y): x(_x), y(_y) {}
@@ -83,10 +93,10 @@ namespace GfxSystem
 		Vector2 scale;
 		float32 angle;
 		float32 z;
-		uint32 texture;
+		TextureHandle texture;
 		float32 transparency;
 
-		Sprite(): position(Vector2_Zero), size(Vector2_Zero), scale(Vector2_Zero), angle(0), z(0), texture(0), transparency(0) {}
+		Sprite(): position(Vector2_Zero), size(Vector2_Zero), scale(1.0f, 1.0f), angle(0), z(0), texture(0), transparency(0) {}
 
 		Sprite(	const Vector2& _position, const Vector2& _size, const Vector2& _scale, const float32 _angle,
 			    const float32 _z, const uint32 _texture, const float32 _transparency ):

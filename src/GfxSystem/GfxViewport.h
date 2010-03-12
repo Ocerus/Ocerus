@@ -21,6 +21,9 @@ namespace GfxSystem
 		/// Constructs the viewport which targets a texture. The rendering then results in the texture.
 		GfxViewport(ResourceSystem::ResourcePtr texture);
 
+		/// Constructs the viewport which targets a texture. The rendering then results in the texture.
+		GfxViewport(TextureHandle texture, const uint32 width, const uint32 height);
+
 		/// Returns the position of the viewport in the window.
 		inline Vector2 GetPosition(void) const { return mPosition; }
 
@@ -29,10 +32,10 @@ namespace GfxSystem
 
 		/// Returns the texture this viewport is attached to.
 		/// Returns InvalidTextureHandle if there is no such.
-		inline TextureHandle GetTexture(void) const { return mTexture; }
+		inline TextureHandle GetRenderTexture(void) const { return mTexture; }
 
 		/// Returns true if the viewport belongs to a texture.
-		inline bool AssignedToTexture(void) const { return mTexture != InvalidTextureHandle; }
+		inline bool AttachedToTexture(void) const { return mTexture != InvalidTextureHandle; }
 
 		/// Retrieves the boundaries of the viewport in the world space. This basically maps the screen space viewport to
 		/// the world space.

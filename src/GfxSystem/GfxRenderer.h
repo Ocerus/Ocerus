@@ -7,32 +7,14 @@
 #include "Base.h"
 #include "GfxStructures.h"
 #include "GfxViewport.h"
+#include "RenderTarget.h"
 
 #define gGfxRenderer GfxSystem::GfxRenderer::GetSingleton()
 
 namespace GfxSystem
 {
-	
-	///@TODO popsat detailneji.
-	enum ePixelFormat
-	{
-		PF_AUTO = 0,			//auto
-		PF_L = 1,				//grayscale
-		PF_LA = 2,				//grayscale with alpha
-		PF_RGB = 3,				//RGB
-		PF_RGBA = 4				//RGB with alpha
-	};
-
 	class GfxRenderer : public Singleton<GfxRenderer> 
 	{
-	public:
-
-		/// Unique identifier of a render target.
-		typedef int32 RenderTargetID;
-
-		/// Invalid render target ID.
-		static const RenderTargetID InvalidRenderTargetID = -1;
-
 	public:
 
 		/// Default constructor.
@@ -42,7 +24,7 @@ namespace GfxSystem
 		virtual ~GfxRenderer();
 
 		/// Intializes the renderer.
-		virtual void Init() const = 0;
+		virtual void Init() = 0;
 
 		/// Prepares renderer for drawing.
 		bool BeginRendering();
@@ -73,7 +55,11 @@ namespace GfxSystem
 		///	\param reuse_texture_ID 0-generate a new texture ID, otherwise reuse the texture ID (overwriting the old texture)
 		///	\param width, height returns size of texture
 		///	\return 0-failed, otherwise returns the OpenGL texture handle
-		virtual TextureHandle LoadTexture(const unsigned char *const buffer, const int buffer_length, const ePixelFormat force_channels, const unsigned int reuse_texture_ID, int *width, int *height) const = 0;
+		virtual TextureHandle LoadTexture(const uint8* const buffer, const int32 buffer_length, const ePixelFormat force_channels, 
+			const uint32 reuse_texture_ID, int32* width, int32* height) const = 0;
+
+		/// Creates a texture into which can be rendered.
+		virtual TextureHandle CreateRenderTexture(const uint32 width, const uint32 height) const = 0;
 
 		/// Deletes texture from renderers memory.
 		virtual void DeleteTexture(const TextureHandle &handle) const = 0;
@@ -84,9 +70,6 @@ namespace GfxSystem
 		/// Draws sprites from queue.
 		void DrawSprites();
 
-		/// Changes renderer's texture.
-		virtual void SetTexture(const TextureHandle texture) const = 0;
-		
 		/// Draws a quad with currently the chosen texture.
 		virtual void DrawSprite(const Sprite& spr) const = 0;
 
@@ -101,6 +84,9 @@ namespace GfxSystem
 
 		/// Draws a rectangle. Position is center of rectangle. Rotation in degrees.
 		virtual void DrawRect(const Vector2& position, const Vector2& size, const float32 rotation, const Color& color, const bool fill) const = 0;
+
+		/// Clears the screen with the given color.
+		virtual void ClearScreen(const Color& color) const = 0;
 
 
 	public:
@@ -124,7 +110,7 @@ namespace GfxSystem
 		virtual void FinalizeRenderTargetImpl() const = 0;
 
 		/// Called when the current viewport is changed.
-		virtual void SetViewportImpl(const GfxViewport& viewport) const = 0;
+		virtual void SetViewportImpl(const GfxViewport* viewport) = 0;
 
 		/// Called when the current camera is changed.
 		virtual void SetCameraImpl(const Vector2& position, const float32 zoom, const float32 rotation) const = 0;
@@ -139,7 +125,6 @@ namespace GfxSystem
 		SpriteVector mSprites;
 
 		/// Render targets.
-		typedef pair<GfxViewport, EntitySystem::EntityHandle> RenderTarget;
 		typedef vector<RenderTarget*> RenderTargetsVector;
 		RenderTargetsVector mRenderTargets;
 

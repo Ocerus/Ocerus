@@ -733,6 +733,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\GfxSystem\RenderTarget.h"
+					>
+				</File>
+				<File
 					RelativePath="..\src\GfxSystem\Texture.h"
 					>
 				</File>
@@ -768,6 +772,42 @@
 					RelativePath="..\src\GfxSystem\Texture.cpp"
 					>
 				</File>
+			</Filter>
+			<Filter
+				Name="glew"
+				>
+				<Filter
+					Name="inc"
+					>
+					<File
+						RelativePath="..\src\GfxSystem\glew\GL\glew.h"
+						>
+					</File>
+					<File
+						RelativePath="..\src\GfxSystem\glew\GL\glxew.h"
+						>
+					</File>
+					<File
+						RelativePath="..\src\GfxSystem\glew\GL\wglew.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="src"
+					>
+					<File
+						RelativePath="..\src\GfxSystem\glew\glew.c"
+						>
+						<FileConfiguration
+							Name="Debug|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+					</File>
+				</Filter>
 			</Filter>
 		</Filter>
 		<Filter

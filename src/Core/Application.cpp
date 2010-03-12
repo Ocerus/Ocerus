@@ -3,12 +3,12 @@
 #include "LoadingScreen.h"
 #include "Game.h"
 #include "Config.h"
-#include "../LogSystem/LogMgr.h"
-#include "../GfxSystem/OglRenderer.h"
-#include "../GfxSystem/GfxWindow.h"
-#include "../ScriptSystem/ScriptResource.h"
-#include "../GfxSystem/GfxSceneMgr.h"
-#include "../Editor/EditorMgr.h"
+#include "LogSystem/LogMgr.h"
+#include "GfxSystem/OglRenderer.h"
+#include "GfxSystem/GfxWindow.h"
+#include "ScriptSystem/ScriptResource.h"
+#include "GfxSystem/GfxSceneMgr.h"
+#include "Editor/EditorMgr.h"
 
 
 using namespace Core;
