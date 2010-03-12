@@ -40,7 +40,6 @@
 
 #include "../GfxSystem/GfxWindow.h"
 #include "../GfxSystem/GfxRenderer.h"
-#include "../GfxSystem/GfxSceneMgr.h"
 
 #include "../GUISystem/GUIMgr.h"
 

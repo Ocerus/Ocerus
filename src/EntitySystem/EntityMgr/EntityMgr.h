@@ -143,18 +143,7 @@ namespace EntitySystem
 		/// Register a dynamic property to a component of an entity.
 		template <class T>
 		bool RegisterDynamicPropertyOfEntityComponent(const EntityHandle entity, const ComponentID component,
-			const StringKey propertyKey, const PropertyAccessFlags accessFlags, const string& comment)
-		{
-			/*OC_DASSERT(mComponentMgr);
-			if (component >= mComponentMgr->GetNumberOfEntityComponents(entity.GetID()))
-			{
-				ocError << "Invalid component ID: " << component;
-				return false;
-			}*/
-
-			Component* cmp = mComponentMgr->GetEntityComponent(entity.GetID(), component);
-			return cmp->RegisterDynamicProperty<T>(propertyKey, accessFlags, comment);
-		}
+			const StringKey propertyKey, const PropertyAccessFlags accessFlags, const string& comment);
 
 		/// Unregister a dynamic property of a component of an entity.
 		bool UnregisterDynamicPropertyOfEntityComponent(const EntityHandle entity, const ComponentID component,
@@ -207,6 +196,12 @@ namespace EntitySystem
 		/// Returns an ID of the first entity component of a specific type or -1 if does not exist.
 		ComponentID FindComponentOfType(const EntityHandle entity, const eComponentType type);
 
+		/// Returns a pointer to the component of the given type. Returns null if no such exists.
+		Component* GetEntityComponent(const EntityHandle entity, const eComponentType type);
+
+		/// Returns a pointer to the specified component. Returns null if no such exists.
+		Component* GetEntityComponent(const EntityHandle entity, const ComponentID id);
+
 		//@}
 
 
@@ -238,5 +233,17 @@ namespace EntitySystem
 		void LoadEntityPropertyFromXML( const EntityID entityID, const ComponentID componentID, PrototypeInfo* prototypeInfo, ResourceSystem::XMLResourcePtr xml, ResourceSystem::XMLNodeIterator& xmlPropertyIterator );
 	};
 }
+
+
+//-----------------------------------------------------------------------------
+// Implementation
+
+template <class T>
+bool EntitySystem::EntityMgr::RegisterDynamicPropertyOfEntityComponent( const EntityHandle entity, const ComponentID component, const StringKey propertyKey, const PropertyAccessFlags accessFlags, const string& comment )
+{
+	Component* cmp = mComponentMgr->GetEntityComponent(entity.GetID(), component);
+	return cmp->RegisterDynamicProperty<T>(propertyKey, accessFlags, comment);
+}
+
 
 #endif

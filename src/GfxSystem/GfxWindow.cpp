@@ -23,8 +23,7 @@ void GfxWindow::Init(const int32 resx, const int32 resy, const bool fullscreen, 
 	mFullscreen = fullscreen;
 
 	int32 flags = SDL_OPENGL | SDL_RESIZABLE;
-	if (mFullscreen)
-		flags |= SDL_FULLSCREEN;
+	if (mFullscreen) flags |= SDL_FULLSCREEN;
 
 	// Set atributes for OpenGL
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
@@ -39,8 +38,8 @@ void GfxWindow::Init(const int32 resx, const int32 resy, const bool fullscreen, 
 #endif
 
 	// Create drawing context
+	SDL_WM_SetCaption( title.c_str(), NULL );
 	mScreen = SDL_SetVideoMode( resx, resy, 0, flags );
-	SDL_WM_SetCaption( title. c_str(), NULL );
 
 	if (mScreen != NULL) {
 		ocInfo << "SDL created drawing context for OpenGL. The video surface bits per pixel is "

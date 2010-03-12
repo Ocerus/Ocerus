@@ -1,6 +1,7 @@
 #include "Common.h"
 #include "Sprite.h"
 #include "GfxSystem/Texture.h"
+#include "GfxSystem/GfxSceneMgr.h"
 #include <Box2D.h>
 
 void EntityComponents::Sprite::Create( void )
@@ -8,12 +9,11 @@ void EntityComponents::Sprite::Create( void )
 	mResPath = "";
 	mSize = Vector2_Zero;
 	mTransparency = 0.0f;
-	mSprite = NULL;
 }
 
 void EntityComponents::Sprite::Destroy( void )
 {
-	gGfxSceneMgr.RemoveSprite(mSprite);
+	gGfxRenderer.GetSceneManager()->RemoveSprite(this);
 }
 
 EntityMessage::eResult EntityComponents::Sprite::HandleMessage( const EntityMessage& msg )
@@ -33,27 +33,15 @@ EntityMessage::eResult EntityComponents::Sprite::HandleMessage( const EntityMess
 				{
 					if (*str == '/') lastSlashPos = str;
 				}
-				mTextureHandle = (GfxSystem::TexturePtr)gResourceMgr.GetResource("Textures", StringKey(lastSlashPos+1, str-lastSlashPos-1));
+				mTextureHandle = gResourceMgr.GetResource("Textures", StringKey(lastSlashPos+1, str-lastSlashPos-1));
 								
-				mSprite = new GfxSystem::Sprite();
-				mSprite->position = GetOwner().GetProperty("Position").GetValue<Vector2>();
-				mSprite->scale = GetOwner().GetProperty("Scale").GetValue<Vector2>();
-				mSprite->angle = GetOwner().GetProperty("Angle").GetValue<float32>();
-				mSprite->z = (float32) GetOwner().GetProperty("Depth").GetValue<int32>();
-				mSprite->size = mSize;
-				mSprite->texture = mTextureHandle->GetTexture();
-				mSprite->transparency = mTransparency;
-
-				gGfxSceneMgr.AddSprite(mSprite);
+				Component* transform = gEntityMgr.GetEntityComponent(GetOwner(), CT_Transform);
+				gGfxRenderer.GetSceneManager()->AddSprite(this, transform);
 				
 				return EntityMessage::RESULT_OK;
 			}
 			return EntityMessage::RESULT_ERROR;
 		}
-	case EntityMessage::UPDATE_POST_PHYSICS:	// update new pos etc. from physics
-		mSprite->position = GetOwner().GetProperty("Position").GetValue<Vector2>();
-		mSprite->angle = GetOwner().GetProperty("Angle").GetValue<float32>();
-		return EntityMessage::RESULT_OK;
 	default:
 		return EntityMessage::RESULT_IGNORED;
 	}
@@ -61,9 +49,11 @@ EntityMessage::eResult EntityComponents::Sprite::HandleMessage( const EntityMess
 
 void EntityComponents::Sprite::RegisterReflection()
 {
-	RegisterProperty<string> ("Path",			&Sprite::GetResPath,		&Sprite::SetResPath,		PA_FULL_ACCESS, "");
-	RegisterProperty<Vector2>("Size",			&Sprite::GetSize,			&Sprite::SetSize,			PA_FULL_ACCESS, "");
-	RegisterProperty<float32>("Transparency",	&Sprite::GetTransparency,	&Sprite::SetTransparency,	PA_FULL_ACCESS, "");
+	RegisterProperty<Vector2>("Size", &Sprite::GetSize, &Sprite::SetSize, PA_FULL_ACCESS, "");
+	RegisterProperty<ResourceSystem::ResourcePtr>("Texture", &Sprite::GetTexture, &Sprite::SetTexture, PA_FULL_ACCESS, "");
+	RegisterProperty<float32>("Transparency", &Sprite::GetTransparency, &Sprite::SetTransparency, PA_FULL_ACCESS, "");
+
+	RegisterProperty<string>("Path", &Sprite::GetResPath, &Sprite::SetResPath, PA_INIT, "");
 
 	// we need the transform to be able to have the position and angle ready while creating the sprite
 	AddComponentDependency(CT_Transform);

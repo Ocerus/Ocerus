@@ -88,6 +88,7 @@ void OglRenderer::SetViewportImpl(const GfxViewport* viewport)
 		Point topleft, bottomright;
 		viewport->CalculateScreenBoundaries(topleft, bottomright);
 		glViewport(topleft.x, topleft.y, bottomright.x-topleft.x, bottomright.y-topleft.y);
+		glCullFace(GL_FRONT);
 	}
 	else
 	{
@@ -95,6 +96,7 @@ void OglRenderer::SetViewportImpl(const GfxViewport* viewport)
 		viewport->CalculateScreenBoundaries(topleft, bottomright);
 		// note that we are subtracting the Y pos from the resolution to workaround a bug in the SDL OpenGL impl
 		glViewport(topleft.x, gGfxWindow.GetResolutionHeight()-bottomright.y, bottomright.x-topleft.x, bottomright.y-topleft.y);
+		glCullFace(GL_BACK);
 	}
 
 	glMatrixMode(GL_PROJECTION);
@@ -102,7 +104,9 @@ void OglRenderer::SetViewportImpl(const GfxViewport* viewport)
 
 	Vector2 topleftWorld, bottomrightWorld;
 	viewport->CalculateWorldBoundaries(topleftWorld, bottomrightWorld);
-	glOrtho(topleftWorld.x, bottomrightWorld.x, bottomrightWorld.y, topleftWorld.y, -1, 1);
+	// just another hack to make the bloody OpenGL in SDL working right
+	if (!viewport->AttachedToTexture()) swap(bottomrightWorld.y, topleftWorld.y);
+	glOrtho(topleftWorld.x, bottomrightWorld.x, topleftWorld.y, bottomrightWorld.y, -1, 1);
 
 	glMatrixMode(GL_MODELVIEW);
 }
@@ -177,18 +181,18 @@ void OglRenderer::DeleteTexture(const TextureHandle& handle) const
 	glDeleteTextures(1, &handle);
 }
 
-void OglRenderer::DrawSprite(const Sprite& spr) const
+void OglRenderer::DrawTexturedQuad(const TexturedQuad& quad) const
 {	
 	glPushMatrix();
 
-	glBindTexture(GL_TEXTURE_2D, spr.texture);
-	glColor4f( 1.0f, 1.0f, 1.0f, 1.0f - spr.transparency );
-	glTranslatef( spr.position.x, spr.position.y, spr.z );
-	glRotatef(MathUtils::RadToDeg(spr.angle), 0, 0, 1);
-	glScalef(spr.scale.x, spr.scale.y, 1);
+	glBindTexture(GL_TEXTURE_2D, quad.texture);
+	glColor4f( 1.0f, 1.0f, 1.0f, 1.0f - quad.transparency );
+	glTranslatef( quad.position.x, quad.position.y, quad.z );
+	glRotatef(MathUtils::RadToDeg(quad.angle), 0, 0, 1);
+	glScalef(quad.scale.x, quad.scale.y, 1);
 
-	float32 x = spr.size.x/2;
-	float32 y = spr.size.y/2;
+	float32 x = quad.size.x/2;
+	float32 y = quad.size.y/2;
 
 	glBegin( GL_QUADS );
 

@@ -8,12 +8,9 @@
 #include "PhysicsDraw.h"
 #include "Editor/EditorMgr.h"
 
-//temporary here
-#include "../GfxSystem/GfxSceneMgr.h"
-
-
 // DEBUG only
-#include "../EntitySystem/Components/Script.h"
+#include "EntitySystem/Components/Script.h"
+#include "EntitySystem/Components/Transform.h"
 GfxSystem::TextureHandle gRenderTexture;
 GfxSystem::RenderTargetID gRenderTarget;
 
@@ -83,12 +80,12 @@ void Core::Game::Init()
 	gEntityMgr.LoadEntitiesFromResource(gResourceMgr.GetResource("TestEntities", "test_entities.xml"));
 
 	// setup render targets
-	gGfxRenderer.AddRenderTarget(GfxSystem::GfxViewport(Vector2(0, 0.5), Vector2(0.5, 0.5), true), gGfxSceneMgr.GetCamera(0));
-	gGfxRenderer.AddRenderTarget(GfxSystem::GfxViewport(Vector2(0.0, 0.0), Vector2(1, 0.5), false), gGfxSceneMgr.GetCamera(1));
-	gGfxRenderer.AddRenderTarget(GfxSystem::GfxViewport(Vector2(0.5, 0.5), Vector2(0.5, 0.5), true), gGfxSceneMgr.GetCamera(2));
+	gGfxRenderer.AddRenderTarget(GfxSystem::GfxViewport(Vector2(0, 0.5), Vector2(0.5, 0.5), true), gEntityMgr.FindFirstEntity("Camera1"));
+	gGfxRenderer.AddRenderTarget(GfxSystem::GfxViewport(Vector2(0.0, 0.0), Vector2(1, 0.5), false), gEntityMgr.FindFirstEntity("Camera2"));
+	gGfxRenderer.AddRenderTarget(GfxSystem::GfxViewport(Vector2(0.5, 0.5), Vector2(0.5, 0.5), true), gEntityMgr.FindFirstEntity("Camera3"));
 
 	gRenderTexture = gGfxRenderer.CreateRenderTexture(128, 128);
-	gRenderTarget = gGfxRenderer.AddRenderTarget(GfxSystem::GfxViewport(gRenderTexture, 128, 128), gGfxSceneMgr.GetCamera(1));
+	gRenderTarget = gGfxRenderer.AddRenderTarget(GfxSystem::GfxViewport(gRenderTexture, 128, 128), gEntityMgr.FindFirstEntity("Camera2"));
 	
 
 
@@ -191,31 +188,36 @@ void Core::Game::Draw( const float32 passedDelta)
 
 	gGfxRenderer.SetCurrentRenderTarget(gRenderTarget);
 	gGfxRenderer.ClearScreen(GfxSystem::Color(0, 255, 0));
-	gGfxRenderer.DrawSprites();
+	EntityComponents::Transform transform;
+	transform.Create();
+	transform.SetScale(Vector2(4.0f, 4.0f));
+	gGfxRenderer.DrawSprite(gEntityMgr.GetEntityComponent(gEntityMgr.FindFirstEntity("Visual"), EntitySystem::CT_Sprite), &transform);
+	//gGfxRenderer.DrawEntity(gEntityMgr.FindFirstEntity("Visual"));
 	gGfxRenderer.FinalizeRenderTarget();
 	
 
 
 	gGfxRenderer.SetCurrentRenderTarget(0);
-	gGfxRenderer.DrawSprites();
+	gGfxRenderer.DrawEntities();
 	mPhysics->DrawDebugData();
 	gGfxRenderer.FinalizeRenderTarget();
 
 
 	gGfxRenderer.SetCurrentRenderTarget(1);
-	gGfxRenderer.DrawSprites();
+	gGfxRenderer.DrawEntities();
 	mPhysics->DrawDebugData();
-	GfxSystem::Sprite sprite;
-	sprite.size.x = 128;
-	sprite.size.y = 128;
-	sprite.transparency = 0.5f;
-	sprite.texture = gRenderTexture;
-	gGfxRenderer.DrawSprite(sprite);
+	GfxSystem::TexturedQuad quad;
+	quad.position.y = 150.0f;
+	quad.size.x = 128;
+	quad.size.y = 128;
+	quad.transparency = 0.5f;
+	quad.texture = gRenderTexture;
+	gGfxRenderer.DrawTexturedQuad(quad);
 	gGfxRenderer.FinalizeRenderTarget();
 
 
 	gGfxRenderer.SetCurrentRenderTarget(2);
-	gGfxRenderer.DrawSprites();
+	gGfxRenderer.DrawEntities();
 	mPhysics->DrawDebugData();
 	gGfxRenderer.FinalizeRenderTarget();
 

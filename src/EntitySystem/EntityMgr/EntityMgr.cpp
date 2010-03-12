@@ -196,12 +196,6 @@ EntityHandle EntityMgr::CreateEntity(EntityDescription& desc)
 		return entityHandle; // do like nothing's happened, but don't enum properties or they will access invalid memory
 	}
 
-	// add camera to GfxSceneMgr
-	if (!isPrototype && HasEntityComponentOfType(entityHandle, CT_Camera))
-	{
-		gGfxSceneMgr.AddCamera(entityHandle);
-	}
-
 	return entityHandle;
 }
 
@@ -258,12 +252,6 @@ void EntityMgr::DestroyEntityImmediately( const EntityID entityToDestroy, const 
 	EntityMap::iterator entityIt = mEntities.find(entityToDestroy);
 	if (entityIt != mEntities.end())
 	{
-		// remove camera from GfxSceneMgr
-		if (HasEntityComponentOfType(entityToDestroy, CT_Camera))
-		{
-			gGfxSceneMgr.RemoveCamera(entityToDestroy);
-		}
-
 		// destroy components of the entity
 		mComponentMgr->DestroyEntityComponents(entityToDestroy);
 
@@ -863,4 +851,22 @@ bool EntitySystem::EntityMgr::HasEntityComponentProperty( const EntityHandle ent
 	if (prop) return true;
 
 	return false;
+}
+
+Component* EntitySystem::EntityMgr::GetEntityComponent( const EntityHandle entity, const ComponentID id )
+{
+	OC_DASSERT(mComponentMgr);
+	
+	return mComponentMgr->GetEntityComponent(entity.GetID(), id);
+}
+
+Component* EntitySystem::EntityMgr::GetEntityComponent( const EntityHandle entity, const eComponentType type )
+{
+	OC_DASSERT(mComponentMgr);
+
+	for (EntityComponentsIterator it=mComponentMgr->GetEntityComponents(entity.GetID()); it.HasMore(); ++it)
+	{
+		if ((*it)->GetType() == type) return *it;
+	}
+	return 0;
 }

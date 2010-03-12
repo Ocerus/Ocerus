@@ -10,67 +10,31 @@ GfxSceneMgr::GfxSceneMgr()
 
 GfxSceneMgr::~GfxSceneMgr()
 {
-	for(SpriteVector::iterator it = mSprites.begin(); it != mSprites.end(); ++it)
-	{
-		if (*it)
-		{
-			delete *it;
-		}
-	}
+
 }
 
-void GfxSceneMgr::AddSprite(Sprite *spr)
+void GfxSceneMgr::AddSprite(const EntitySystem::Component* sprite, const EntitySystem::Component* transform)
 {
-	mSprites.push_back(spr);
+	mSprites.push_back(SpritePair(sprite, transform));
 }
 
-void GfxSceneMgr::RemoveSprite(Sprite *spr)
+void GfxSceneMgr::RemoveSprite(const EntitySystem::Component* sprite)
 {
-	SpriteVector::iterator it;
-	for(it = mSprites.begin(); it != mSprites.end(); ++it)
+	for (SpriteVector::iterator it=mSprites.begin(); it!=mSprites.end(); ++it)
 	{
-		if ((*it) == spr)
+		if (it->first == sprite)
 		{
-			delete (*it);
 			mSprites.erase(it);
-			return;
+			break;
 		}
 	}
 }
 
-void GfxSceneMgr::AddCamera(EntitySystem::EntityHandle ent)
-{
-	mCameras.push_back(ent);
-}
-
-void GfxSceneMgr::RemoveCamera(EntitySystem::EntityHandle ent)
-{
-	EntityHandleVector::iterator it;
-	for(it = mCameras.begin(); it != mCameras.end(); ++it)
-	{
-		if ((*it) == ent)
-		{
-			mCameras.erase(it);
-			return;
-		}
-	}
-}
-
-EntitySystem::EntityHandle GfxSceneMgr::GetCamera(int32 i)
-{
-	if (i<0 || i>=(int32)mCameras.size())
-	{
-		ocError << "Camera index out of bounds";
-		return EntitySystem::EntityHandle::Null;
-	}
-	return mCameras[i];
-}
-
-void GfxSceneMgr::Draw()
+void GfxSceneMgr::DrawVisibleSprites()
 {
 	SpriteVector::iterator it;
 	for(it = mSprites.begin(); it != mSprites.end(); ++it)
 	{
-		gGfxRenderer.AddSprite(*(*it));
+		gGfxRenderer.DrawSprite(it->first, it->second);
 	}
 }

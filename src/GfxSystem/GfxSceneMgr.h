@@ -8,13 +8,10 @@
 #include "Singleton.h"
 #include "../GfxSystem/GfxStructures.h"
 
-/// Macro for easier use.
-#define gGfxSceneMgr GfxSystem::GfxSceneMgr::GetSingleton()
-
 namespace GfxSystem
 {
 
-	class GfxSceneMgr : public Singleton<GfxSceneMgr>
+	class GfxSceneMgr
 	{
 	public:
 
@@ -24,26 +21,20 @@ namespace GfxSystem
 		/// Default destructor.
 		virtual ~GfxSceneMgr(void);
 		
-		/// Adds sprite to inner strucure
-		void AddSprite(Sprite *spr);
+		/// Adds a sprite to the manager.
+		void AddSprite(const EntitySystem::Component* sprite, const EntitySystem::Component* transform);
 
-		/// Removes sprite from inner strucure
-		void RemoveSprite(Sprite *spr);
+		/// Removes a sprite from the manager.
+		void RemoveSprite(const EntitySystem::Component* sprite);
 		
-		void AddCamera(EntitySystem::EntityHandle ent);
-
-		void RemoveCamera(EntitySystem::EntityHandle ent);
-
-		EntitySystem::EntityHandle GetCamera(int32 i);
-		
-		/// Adds sprites to renderers drawing queue
-		void Draw();
+		/// Renders all sprites.
+		void DrawVisibleSprites();
 		
 	private:	
-		typedef vector<EntitySystem::EntityHandle> EntityHandleVector;
-		typedef vector<Sprite*> SpriteVector;
+
+		typedef pair<const EntitySystem::Component*, const EntitySystem::Component*> SpritePair;
+		typedef vector<SpritePair> SpriteVector;
 		SpriteVector mSprites;
-		EntityHandleVector mCameras;
 	};
 }
 

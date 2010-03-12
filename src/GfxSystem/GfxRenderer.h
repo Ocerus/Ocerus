@@ -45,6 +45,9 @@ namespace GfxSystem
 		/// Sets the current render target. Returns false if no such exists.
 		bool SetCurrentRenderTarget(const RenderTargetID toSet);
 
+		/// Returns the current scene manager.
+		inline GfxSceneMgr* GetSceneManager() const { return mSceneMgr; }
+
 
 	public:
 
@@ -64,14 +67,23 @@ namespace GfxSystem
 		/// Deletes texture from renderers memory.
 		virtual void DeleteTexture(const TextureHandle &handle) const = 0;
 
-		/// Adds srite to queue for rendering.
-		void AddSprite(const Sprite spr);
+		/// Adds a textured quad to the queue for rendering.
+		void QueueTexturedQuad(const TexturedQuad spr);
 
-		/// Draws sprites from queue.
-		void DrawSprites();
+		/// Draws all quads from the queue.
+		void ProcessTexturedQuads();
+
+		/// Draw all visible entities.
+		void DrawEntities();
 
 		/// Draws a quad with currently the chosen texture.
-		virtual void DrawSprite(const Sprite& spr) const = 0;
+		virtual void DrawTexturedQuad(const TexturedQuad& quad) const = 0;
+
+		/// Draws a sprite component.
+		void DrawSprite(const EntitySystem::Component* sprite, const EntitySystem::Component* transform) const;
+
+		/// Draws a single entity.
+		void DrawEntity(const EntitySystem::EntityHandle entity) const;
 
 		/// Draws a line. Verts must be an array of 2 Vector2s.
 		virtual void DrawLine(const Vector2* verts, const Color& color) const = 0;
@@ -115,14 +127,11 @@ namespace GfxSystem
 		/// Called when the current camera is changed.
 		virtual void SetCameraImpl(const Vector2& position, const float32 zoom, const float32 rotation) const = 0;
 
-		/// Resets the sprites queue.
-		inline void ResetSprites() { mSprites.clear(); }
-
 	private:
 
 		/// Vector with sprites to be rendered.
-		typedef vector<Sprite> SpriteVector;
-		SpriteVector mSprites;
+		typedef vector<TexturedQuad> QuadVector;
+		QuadVector mQuads;
 
 		/// Render targets.
 		typedef vector<RenderTarget*> RenderTargetsVector;
@@ -140,6 +149,7 @@ namespace GfxSystem
 
 		/// True if the rendering began but still didn't finish.
 		bool mIsRendering;
+		GfxSceneMgr* mSceneMgr;
 
 		/// Disabled.
 		GfxRenderer(const GfxRenderer&);

@@ -34,7 +34,7 @@ namespace GfxSystem
 
 		virtual void DeleteTexture(const TextureHandle& handle) const;
 
-		virtual void DrawSprite(const Sprite& spr) const;
+		virtual void DrawTexturedQuad(const TexturedQuad& quad) const;
 
 		virtual void DrawLine(const Vector2* verts, const Color& color) const;
 

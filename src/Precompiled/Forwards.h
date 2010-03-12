@@ -31,6 +31,7 @@ namespace SceneSystem
 namespace GfxSystem
 {
 	class GfxRenderer;
+	class GfxSceneMgr;
 	class IGfxWindowListener;
 	struct Color;
 }

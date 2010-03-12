@@ -27,8 +27,8 @@ namespace EntityComponents
 		/// Called from RTTI when the component is allowed to set up its properties.
 		static void RegisterReflection(void);
 
-		GfxSystem::TexturePtr GetTexture(void) const { return mTextureHandle; }
-		void SetTexture(GfxSystem::TexturePtr value) { mTextureHandle = value; }
+		ResourceSystem::ResourcePtr GetTexture(void) const { return mTextureHandle; }
+		void SetTexture(ResourceSystem::ResourcePtr value) { mTextureHandle = value; }
 		
 		string GetResPath(void) const { return mResPath; }
 		void SetResPath(string value) { mResPath = value; }
@@ -40,11 +40,10 @@ namespace EntityComponents
 		void SetTransparency(float32 value) { mTransparency = value; }
 
 	private:
-		GfxSystem::TexturePtr mTextureHandle;
+		ResourceSystem::ResourcePtr mTextureHandle;
 		string mResPath;						//path to resource (texture)
 		Vector2 mSize;
 		float32 mTransparency;
-		GfxSystem::Sprite* mSprite;
 	};
 }
 

@@ -1,12 +1,13 @@
 #include "Common.h"
 #include "GfxRenderer.h"
-#include "../GfxSystem/GfxSceneMgr.h"
+#include "GfxSystem/GfxSceneMgr.h"
+#include "GfxSystem/Texture.h"
 
 using namespace GfxSystem;
 
-GfxSystem::GfxRenderer::GfxRenderer(): mIsRendering(false)
+GfxSystem::GfxRenderer::GfxRenderer(): mIsRendering(false), mSceneMgr(0)
 {
-
+	mSceneMgr = new GfxSceneMgr();
 }
 
 GfxSystem::GfxRenderer::~GfxRenderer()
@@ -18,11 +19,16 @@ GfxSystem::GfxRenderer::~GfxRenderer()
 			delete *it;
 		}
 	}
+	if (mSceneMgr)
+	{
+		delete mSceneMgr;
+	}
 }
 
 bool GfxSystem::GfxRenderer::BeginRendering()
 {
 	OC_ASSERT(!mIsRendering);
+	OC_ASSERT(mSceneMgr);
 	mIsRendering = true;
 	return BeginRenderingImpl();
 }
@@ -80,25 +86,23 @@ bool GfxSystem::GfxRenderer::RemoveRenderTarget( const RenderTargetID toRemove )
 	return true;
 }
 
-void GfxRenderer::AddSprite(const Sprite spr)
+void GfxRenderer::QueueTexturedQuad(const TexturedQuad spr)
 {
-	mSprites.push_back(spr);
+	mQuads.push_back(spr);
 }
 
-void GfxRenderer::DrawSprites()
+void GfxRenderer::ProcessTexturedQuads()
 {
 	OC_ASSERT(mIsRendering);
 
-	gGfxSceneMgr.Draw();
-
-	SpriteVector::const_iterator it;
-	for(it = mSprites.begin(); it != mSprites.end(); ++it)
+	QuadVector::const_iterator it;
+	for(it = mQuads.begin(); it != mQuads.end(); ++it)
 	{
 		//TODO: setridit podle textur
-		DrawSprite(*it);
+		DrawTexturedQuad(*it);
 	}
 
-	ResetSprites();
+	mQuads.clear();
 }
 
 bool GfxSystem::GfxRenderer::ConvertScreenToWorldCoords( const Point& screenCoords, Vector2& worldCoords, const RenderTargetID renderTargetID ) const
@@ -163,4 +167,30 @@ bool GfxSystem::GfxRenderer::ConvertScreenToWorldCoords( const Point& screenCoor
 	}
 
 	return false;
+}
+
+void GfxSystem::GfxRenderer::DrawEntities()
+{
+	OC_ASSERT(mIsRendering);
+
+	mSceneMgr->DrawVisibleSprites();
+}
+
+void GfxSystem::GfxRenderer::DrawSprite( const EntitySystem::Component* sprite, const EntitySystem::Component* transform ) const
+{
+	TexturedQuad quad;
+	quad.position = transform->GetProperty("Position").GetValue<Vector2>();
+	quad.scale = transform->GetProperty("Scale").GetValue<Vector2>();
+	quad.angle = transform->GetProperty("Angle").GetValue<float32>();
+	quad.z = (float32)transform->GetProperty("Depth").GetValue<int32>();
+	quad.size = sprite->GetProperty("Size").GetValue<Vector2>();
+	quad.texture = ((TexturePtr)sprite->GetProperty("Texture").GetValue<ResourceSystem::ResourcePtr>())->GetTexture();
+	quad.transparency = sprite->GetProperty("Transparency").GetValue<float32>();
+
+	DrawTexturedQuad(quad);
+}
+
+void GfxSystem::GfxRenderer::DrawEntity( const EntitySystem::EntityHandle entity ) const
+{
+	DrawSprite(gEntityMgr.GetEntityComponent(gEntityMgr.FindFirstEntity("Visual"), EntitySystem::CT_Sprite), gEntityMgr.GetEntityComponent(gEntityMgr.FindFirstEntity("Visual"), CT_Transform));
 }

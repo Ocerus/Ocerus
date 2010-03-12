@@ -7,7 +7,6 @@
 #include "GfxSystem/OglRenderer.h"
 #include "GfxSystem/GfxWindow.h"
 #include "ScriptSystem/ScriptResource.h"
-#include "GfxSystem/GfxSceneMgr.h"
 #include "Editor/EditorMgr.h"
 
 
@@ -60,8 +59,6 @@ void Application::Init()
 	GfxSystem::GfxRenderer::CreateSingleton<GfxSystem::OglRenderer>();
 	GfxSystem::GfxRenderer::GetSingleton().Init();
 
-	GfxSystem::GfxSceneMgr::CreateSingleton();
-
 	InputSystem::InputMgr::CreateSingleton();
 
 	ScriptSystem::ScriptMgr::CreateSingleton();
@@ -104,7 +101,6 @@ Application::~Application()
 	InputSystem::InputMgr::DestroySingleton();
 	GfxSystem::GfxRenderer::DestroySingleton();
 	GfxSystem::GfxWindow::DestroySingleton();
-	GfxSystem::GfxSceneMgr::DestroySingleton();
 	StringSystem::StringMgr::DestroySingleton();
 	ResourceSystem::ResourceMgr::DestroySingleton();
 	Utils::Hash::ClearHashMap();

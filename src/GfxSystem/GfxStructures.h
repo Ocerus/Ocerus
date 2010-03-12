@@ -86,7 +86,7 @@ namespace GfxSystem
 		static Pen NullPen;
 	};
 
-	struct Sprite
+	struct TexturedQuad
 	{
 		Vector2 position;
 		Vector2 size;
@@ -96,9 +96,9 @@ namespace GfxSystem
 		TextureHandle texture;
 		float32 transparency;
 
-		Sprite(): position(Vector2_Zero), size(Vector2_Zero), scale(1.0f, 1.0f), angle(0), z(0), texture(0), transparency(0) {}
+		TexturedQuad(): position(Vector2_Zero), size(Vector2_Zero), scale(1.0f, 1.0f), angle(0), z(0), texture(0), transparency(0) {}
 
-		Sprite(	const Vector2& _position, const Vector2& _size, const Vector2& _scale, const float32 _angle,
+		TexturedQuad(	const Vector2& _position, const Vector2& _size, const Vector2& _scale, const float32 _angle,
 			    const float32 _z, const uint32 _texture, const float32 _transparency ):
 			position(_position), size(_size), scale(_scale), angle(_angle), z(_z),
 			texture(_texture), transparency(_transparency) {}
