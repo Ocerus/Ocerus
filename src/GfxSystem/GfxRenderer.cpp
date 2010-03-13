@@ -2,6 +2,8 @@
 #include "GfxRenderer.h"
 #include "GfxSystem/GfxSceneMgr.h"
 #include "GfxSystem/Texture.h"
+#include "EntitySystem/Components/Sprite.h"
+#include "EntitySystem/Components/Transform.h"
 
 using namespace GfxSystem;
 
@@ -176,16 +178,25 @@ void GfxSystem::GfxRenderer::DrawEntities()
 	mSceneMgr->DrawVisibleSprites();
 }
 
-void GfxSystem::GfxRenderer::DrawSprite( const EntitySystem::Component* sprite, const EntitySystem::Component* transform ) const
+void GfxSystem::GfxRenderer::DrawSprite( const EntitySystem::Component* spriteComponent, const EntitySystem::Component* transformComponent ) const
 {
+	if (spriteComponent->GetType() != EntitySystem::CT_Sprite || transformComponent->GetType() != EntitySystem::CT_Transform)
+	{
+		ocError << "Invalid components";
+		return;
+	}
+
+	EntityComponents::Sprite* sprite = (EntityComponents::Sprite*)spriteComponent;
+	EntityComponents::Transform* transform = (EntityComponents::Transform*)transformComponent;
+
 	TexturedQuad quad;
-	quad.position = transform->GetProperty("Position").GetValue<Vector2>();
-	quad.scale = transform->GetProperty("Scale").GetValue<Vector2>();
-	quad.angle = transform->GetProperty("Angle").GetValue<float32>();
-	quad.z = (float32)transform->GetProperty("Depth").GetValue<int32>();
-	quad.size = sprite->GetProperty("Size").GetValue<Vector2>();
-	quad.texture = ((TexturePtr)sprite->GetProperty("Texture").GetValue<ResourceSystem::ResourcePtr>())->GetTexture();
-	quad.transparency = sprite->GetProperty("Transparency").GetValue<float32>();
+	quad.position = transform->GetPosition();
+	quad.scale = transform->GetScale();
+	quad.angle = transform->GetAngle();
+	quad.z = (float32)transform->GetDepth();
+	quad.size = sprite->GetSize();
+	quad.texture = ((TexturePtr)sprite->GetTexture())->GetTexture();
+	quad.transparency = sprite->GetTransparency();
 
 	DrawTexturedQuad(quad);
 }
