@@ -4,7 +4,6 @@
 using namespace GfxSystem;
 
 // init null values
-Pen Pen::NullPen(Color(0,0,0,0));
-Rect Rect::NullRect(0,0,0,0);
-Color Color::NullColor(0,0,0,0);
-Color Color::FullColor(255,255,255,255);
+Rect Rect::Null(0,0,0,0);
+Color Color::Null(0,0,0,0);
+Color Color::Full(255,255,255,255);

@@ -1,16 +1,16 @@
 /// @file
-/// Defines Gfx Scene Manager singleton (used for renderer).
+/// Manages objects in the game which have a visual representation. The purpose is to speed the rendering up.
 
 #ifndef _GFXSCENEMANAGER_H_
 #define _GFXSCENEMANAGER_H_
 
 #include "Base.h"
 #include "Singleton.h"
-#include "../GfxSystem/GfxStructures.h"
+#include "GfxStructures.h"
 
 namespace GfxSystem
 {
-
+	/// Manages objects in the game which have a visual representation. The purpose is to speed the rendering up.
 	class GfxSceneMgr
 	{
 	public:

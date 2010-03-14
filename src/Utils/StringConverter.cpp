@@ -98,13 +98,13 @@ GfxSystem::Color StringConverter::FromString(const string& str)
 	uint32 val;
 	std::istringstream iss(str);
 	if ((iss >> val).fail())
-		return GfxSystem::Color::NullColor;
+		return GfxSystem::Color::Null;
 	result.r = (uint8)val;
 	if ((iss >> val).fail())
-		return GfxSystem::Color::NullColor;
+		return GfxSystem::Color::Null;
 	result.g = (uint8)val;
 	if ((iss >> val).fail())
-		return GfxSystem::Color::NullColor;
+		return GfxSystem::Color::Null;
 	result.b = (uint8)val;
 	if (!(iss >> val).fail())
 		result.a = (uint8)val;

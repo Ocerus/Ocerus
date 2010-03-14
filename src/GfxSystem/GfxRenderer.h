@@ -1,5 +1,5 @@
 /// @file
-/// Defines Renderer singleton.
+/// Entry point to the rendering subsystem.
 
 #ifndef _GFXRENDERER_H_
 #define _GFXRENDERER_H_
@@ -9,10 +9,13 @@
 #include "GfxViewport.h"
 #include "RenderTarget.h"
 
+/// Macro for easier use.
 #define gGfxRenderer GfxSystem::GfxRenderer::GetSingleton()
 
 namespace GfxSystem
 {
+	/// Rendering of everything except GUI. The rendering is done via rendering targets which define a viewport in the output
+	/// device and a camera to use while rendering.
 	class GfxRenderer : public Singleton<GfxRenderer> 
 	{
 	public:
@@ -51,7 +54,7 @@ namespace GfxSystem
 
 	public:
 
-		/// Loads an image from RAM into an Renderer texture.
+		/// Loads an image from RAM into the platform specific texture.
 		///	\param buffer the image data in RAM just as if it were still in a file
 		///	\param buffer_length the size of the buffer in bytes
 		///	\param force_channels 0-image format, 1-luminous, 2-luminous/alpha, 3-RGB, 4-RGBA
@@ -61,11 +64,11 @@ namespace GfxSystem
 		virtual TextureHandle LoadTexture(const uint8* const buffer, const int32 buffer_length, const ePixelFormat force_channels, 
 			const uint32 reuse_texture_ID, int32* width, int32* height) const = 0;
 
-		/// Creates a texture into which can be rendered.
+		/// Creates a texture into which it can be rendered.
 		virtual TextureHandle CreateRenderTexture(const uint32 width, const uint32 height) const = 0;
 
-		/// Deletes texture from renderers memory.
-		virtual void DeleteTexture(const TextureHandle &handle) const = 0;
+		/// Deletes the texture from the memory.
+		virtual void DeleteTexture(const TextureHandle& handle) const = 0;
 
 		/// Adds a textured quad to the queue for rendering.
 		void QueueTexturedQuad(const TexturedQuad spr);
@@ -73,10 +76,10 @@ namespace GfxSystem
 		/// Draws all quads from the queue.
 		void ProcessTexturedQuads();
 
-		/// Draw all visible entities.
+		/// Draws all visible entities.
 		void DrawEntities();
 
-		/// Draws a quad with currently the chosen texture.
+		/// Draws a quad with its texture.
 		virtual void DrawTexturedQuad(const TexturedQuad& quad) const = 0;
 
 		/// Draws a sprite component.
@@ -88,13 +91,13 @@ namespace GfxSystem
 		/// Draws a line. Verts must be an array of 2 Vector2s.
 		virtual void DrawLine(const Vector2* verts, const Color& color) const = 0;
 
-		/// Draws a polygon. Verts must be an array of n Vector2s defining polygon.
+		/// Draws a polygon. Verts must be an array of n Vector2s defining the polygon.
 		virtual void DrawPolygon(const Vector2* verts, const int32 n, const Color& color, const bool fill) const = 0;
 
 		/// Draws a circle.
 		virtual void DrawCircle(const Vector2& position, const float32 radius, const Color& color, const bool fill) const = 0;
 
-		/// Draws a rectangle. Position is center of rectangle. Rotation in degrees.
+		/// Draws a rectangle. Position is the center of rectangle. Rotation is given in radians.
 		virtual void DrawRect(const Vector2& position, const Vector2& size, const float32 rotation, const Color& color, const bool fill) const = 0;
 
 		/// Clears the screen with the given color.
@@ -118,7 +121,7 @@ namespace GfxSystem
 		/// Called when the rendering is finished.
 		virtual void EndRenderingImpl() const = 0;
 
-		/// Finilize drawing current viewpoint (reset depth buffer ...).
+		/// Finish rendering of the current viewpoint.
 		virtual void FinalizeRenderTargetImpl() const = 0;
 
 		/// Called when the current viewport is changed.
