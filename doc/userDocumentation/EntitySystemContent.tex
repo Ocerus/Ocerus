@@ -32,7 +32,11 @@ It is possible to send messages to entities so there is the \emph{EntitySystem::
 
 All entities are managed by the \emph{EntitySystem::EntityMgr} class that stores necessary information about them in maps indexed by their ID. The most of its methods has the entity handle as the first parameter that means it applies on the entity of the ID got from the handle. There are methods for creating entities from an entity description or an XML resource and for destroying them. Another methods manages entity prototypes - it is possible to link/unlink an instance to/from a prototype, to set a property as (non)shared and to invoke an update of instances of a specific prototype. Finally there are methods for getting entity properties even of a specific component (in case of two or more properties of a same name in different components), for posting and broadcasting messages to entities and for adding, listing and removing components of a specific entity.
 
-% dokumentace tridy EntityPicker
+\subsection{Entity picker}
+
+Entity picker is a mechanism to select one or more entities based on their location. If the picker is used to select a single entity all it needs is a position in the world coordinates. The query then returns the found entity or none. This feature can be used to select the entity the mouse cursor is currently hovering over. The cursor position must be translated into the world coordinates via the rendering subsystem and its viewports. If the picker is used to select more entities a query rectangle (along with its angle) must be defined. This feature can be used to implement a multiselect using the mouse or gamepad.
+
+
 
 \section{Extending the entity system}
 
@@ -69,4 +73,5 @@ This is a glossary of the most used terms in the previous sections:
   \item[Component] -- a class which has registered functions and properties, that can be read and written via their getters and setters, and which can handle received messages
   \item[Entity] -- a compound of one or more components, that provide specific functionalities, represented by an unique ID, it is possible to post a message to it
   \item[Prototype] -- changes of shared property values of this entity are propagated to the linked entities
+  \item[Entity picker] -- a mechanism to select one or more entities.
 \end{description}
