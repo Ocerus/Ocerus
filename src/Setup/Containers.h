@@ -93,7 +93,15 @@ public:
 	inline deque(const std::deque<T>& _Right): std::deque<T>(_Right) {}
 };
 
-
+#include <stack>
+template<typename T>
+class stack: public std::stack<T>
+{
+public:
+    typedef typename std::stack<T>::container_type container_type;
+	inline stack(): std::stack<T>() {}
+	explicit inline stack(const container_type& _Cont): std::stack<T>(_Cont) {}
+};
 
 #include <map>
 

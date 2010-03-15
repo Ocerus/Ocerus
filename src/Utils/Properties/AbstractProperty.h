@@ -51,6 +51,9 @@ namespace Reflection
 		/// Returns true if the property can be written.
 		virtual bool IsWriteable(void) const = 0;
 
+		/// Returns true if the property holds its value.
+		virtual bool IsValued(void) const = 0;
+
 		/// Returns true if the properties' values are equal. The properties must be of the same type.
 		virtual bool IsEqual(RTTIBaseClass* owner, const RTTIBaseClass* otherOwner, const AbstractProperty* otherProperty) = 0;
 

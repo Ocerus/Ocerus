@@ -677,6 +677,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\ResourceSystem\XMLOutput.h"
+					>
+				</File>
+				<File
 					RelativePath="..\src\ResourceSystem\XMLResource.h"
 					>
 				</File>
@@ -690,6 +694,10 @@
 				</File>
 				<File
 					RelativePath="..\src\ResourceSystem\ResourceMgr.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src\ResourceSystem\XMLOutput.cpp"
 					>
 				</File>
 				<File

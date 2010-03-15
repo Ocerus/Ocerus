@@ -53,6 +53,12 @@ namespace Reflection
 			return mSetter != 0;
 		}
 
+		/// Returns true if the property holds its value.
+		virtual bool IsValued(void) const
+		{
+			return false;
+		}
+
 		/// Returns the value of this property. The owner of this property must be specified.
 		virtual T GetValue(const RTTIBaseClass* owner) const
 		{

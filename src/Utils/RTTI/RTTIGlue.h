@@ -65,7 +65,7 @@ namespace Reflection
 		/// This function should be called only from within a user-defined RegisterReflection function.
 		inline static void RegisterFunction(StringKey name, typename Property<T, PropertyFunctionParameters>::SetterType function, const PropertyAccessFlags accessFlags, const string& comment)
 		{
-			RegisterProperty<PropertyFunctionParameters>(name, 0, function, accessFlags, comment);
+			RegisterProperty<PropertyFunctionParameters>(name, 0, function, accessFlags | PA_TRANSIENT, comment);
 		}
 
 		/// Registers an entity component dependant on the owner of this class.

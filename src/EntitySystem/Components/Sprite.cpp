@@ -50,7 +50,7 @@ EntityMessage::eResult EntityComponents::Sprite::HandleMessage( const EntityMess
 void EntityComponents::Sprite::RegisterReflection()
 {
 	RegisterProperty<Vector2>("Size", &Sprite::GetSize, &Sprite::SetSize, PA_FULL_ACCESS, "");
-	RegisterProperty<ResourceSystem::ResourcePtr>("Texture", &Sprite::GetTexture, &Sprite::SetTexture, PA_FULL_ACCESS, "");
+	RegisterProperty<ResourceSystem::ResourcePtr>("Texture", &Sprite::GetTexture, &Sprite::SetTexture, PA_FULL_ACCESS | PA_TRANSIENT, "");
 	RegisterProperty<float32>("Transparency", &Sprite::GetTransparency, &Sprite::SetTransparency, PA_FULL_ACCESS, "");
 
 	RegisterProperty<string>("Path", &Sprite::GetResPath, &Sprite::SetResPath, PA_INIT, "");

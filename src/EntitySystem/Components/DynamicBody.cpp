@@ -42,7 +42,7 @@ EntityMessage::eResult EntityComponents::DynamicBody::HandleMessage( const Entit
 
 void EntityComponents::DynamicBody::RegisterReflection( void )
 {
-	RegisterProperty<PhysicalBody*>("PhysicalBody", &DynamicBody::GetBody, &DynamicBody::SetBody, PA_NONE, "");
+	RegisterProperty<PhysicalBody*>("PhysicalBody", &DynamicBody::GetBody, &DynamicBody::SetBody, PA_NONE | PA_TRANSIENT, "");
 	RegisterFunction("ApplyForce", &DynamicBody::ApplyForce, PA_SCRIPT_WRITE, "");
 
 	// we need the transform to be able to have the position and angle ready while creating the body

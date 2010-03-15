@@ -10,6 +10,7 @@ using namespace EntitySystem;
 void Script::Create(void)
 {
 	mNeedUpdate = true;
+	mTimeOut = 1000;
 }
 
 void Script::Destroy(void)
@@ -98,11 +99,11 @@ EntityMessage::eResult Script::HandleMessage(const EntityMessage& msg)
 		{
 			mCurrentArrayIndex = mFuncIDToArrayIndex[funcId];
 			// Check whether is time to run OnAction script
-			if (mTimes[mCurrentArrayIndex] > gScriptMgr.GetTime()) continue;
+			if (mTimes[mCurrentArrayIndex] > gScriptMgr.GetTime()) { continue; }
 		} else mCurrentArrayIndex = -1;
 		// Return new context prepared to call function from module
 		AngelScript::asIScriptContext* ctx = gScriptMgr.PrepareContext(funcId);
-		if (ctx == 0) continue;
+		if (ctx == 0) { continue; }
 		// Set parent entity handle as context user data
 		ctx->SetUserData(GetOwnerPtr());
 
@@ -114,7 +115,7 @@ EntityMessage::eResult Script::HandleMessage(const EntityMessage& msg)
 		}
 
 		// Execute script with time out
-		if (!gScriptMgr.ExecuteContext(ctx, mTimeOut)) res = EntityMessage::RESULT_ERROR;
+		if (!gScriptMgr.ExecuteContext(ctx, mTimeOut)) { res = EntityMessage::RESULT_ERROR; }
 		// Release context
 		ctx->Release();
 	}

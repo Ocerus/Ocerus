@@ -29,7 +29,7 @@ namespace Reflection
 		PA_TRANSIENT=1<<6,
 
 		/// Full access to the property.
-		PA_FULL_ACCESS=0x7f
+		PA_FULL_ACCESS=(1<<6) - 1
 	};
 
 	/// Type for storing access flags defined by ePropertyAccess.

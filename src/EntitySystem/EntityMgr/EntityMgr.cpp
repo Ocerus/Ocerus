@@ -62,6 +62,17 @@ EntityMgr::EntityMgr()
 
 EntityMgr::~EntityMgr()
 {
+	// test uložení entit
+	ResourceSystem::XMLOutput storage("TestSave.xml");
+	if (gEntityMgr.SaveEntitiesToStorage(storage))
+	{
+		ocInfo << "Test save successful.";
+	}
+	else
+	{
+		ocError << "Test save failed!";
+	}
+	
 	DestroyAllEntities();
 	delete mComponentMgr;
 }
@@ -541,6 +552,73 @@ bool EntitySystem::EntityMgr::LoadEntitiesFromResource( ResourceSystem::Resource
 	}
 
 	return result;
+}
+
+bool EntitySystem::EntityMgr::SaveEntityToStorage(const EntitySystem::EntityID entityID, ResourceSystem::XMLOutput &storage, const bool isPrototype)
+{
+	// TODO: isPrototype == true
+	EntityInfo* info = mEntities[entityID];
+	if (!info) { return false; }
+	
+	// write header of entity tag
+	storage.BeginElementStart("Entity");
+	storage.AddAttribute("Name", info->mName);
+	storage.AddAttribute("ID", Utils::StringConverter::ToString(entityID));
+	if (info->mPrototype.IsValid())
+	{ 
+		storage.AddAttribute("Prototype", Utils::StringConverter::ToString(info->mPrototype.GetID()));
+	}
+	storage.BeginElementFinish();
+
+	// components saving
+	int32 compID = 0;
+	for (EntityComponentsIterator iter = mComponentMgr->GetEntityComponents(entityID); iter.HasMore(); ++iter)
+	{
+		Component* comp = (*iter);
+		storage.BeginElementStart("Component");
+		storage.AddAttribute("Type", GetComponentTypeName(comp->GetType()));
+		storage.BeginElementFinish();
+
+		PropertyList propertyList;
+		comp->EnumProperties(comp, propertyList);
+		for (PropertyList::iterator it = propertyList.begin(); it != propertyList.end(); ++it)
+		{
+			if ((it->GetAccessFlags() & Reflection::PA_TRANSIENT) == Reflection::PA_TRANSIENT) { continue; }
+			string propName = it->GetKey().ToString();
+			storage.BeginElementStart(propName);
+			if (it->IsValued()) // property is dynamic, so we must save a type
+			{ 
+				storage.AddAttribute("Type", Utils::StringConverter::ToString((int32)it->GetType()));
+			}
+			storage.BeginElementFinish();
+
+			// write property value (TODO: change format of string)
+			storage.WriteString(it->GetValueString());
+
+			storage.EndElement();
+		}
+
+		storage.EndElement();
+		++compID;
+	}
+	
+	storage.EndElement();
+
+	return true;
+}
+
+bool EntitySystem::EntityMgr::SaveEntitiesToStorage(ResourceSystem::XMLOutput& storage, const bool isPrototype)
+{
+	storage.BeginElement("Entities");
+	
+	bool res = true;
+	for (EntityMap::const_iterator i = mEntities.begin(); i != mEntities.end(); ++i)
+	{
+		if (!SaveEntityToStorage(i->first, storage, isPrototype)) { res = false; };
+	}
+	storage.EndElement();
+	
+	return res;
 }
 
 bool EntitySystem::EntityMgr::EntityExists( const EntityHandle h ) const

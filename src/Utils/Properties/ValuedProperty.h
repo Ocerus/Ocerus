@@ -42,6 +42,12 @@ namespace Reflection
 			return true;
 		}
 
+		/// Returns true if the property holds its value.
+		virtual bool IsValued(void) const
+		{
+			return true;
+		}
+
 		/// Returns the value of this property. The owner of this property must be specified.
 		virtual T GetValue(const RTTIBaseClass* owner) const
 		{

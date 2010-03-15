@@ -38,14 +38,14 @@ void OnAction()
     case 0:
     {
       handle.Set_int32("Counter", 2);
-      Log("First call of OnAction(). This function will be called every 10 seconds.");
+      //Log("First call of OnAction(). This function will be called every 10 seconds.");
       SetAndSleep(1, 10000);
       break;
     }
     case 1:
     {
       int32 counter = handle.Get_int32("Counter");
-      Log("Message no. " + counter + " from OnAction(). Wait 10 seconds for another.");
+      //Log("Message no. " + counter + " from OnAction(). Wait 10 seconds for another.");
       handle.Set_int32("Counter", counter+1);
       SetAndSleep(1, 10000);
       break;

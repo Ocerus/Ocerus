@@ -12,6 +12,7 @@
 #include "../ComponentMgr/Component.h"
 #include "../ComponentMgr/ComponentMgr.h"
 #include "Properties/PropertyAccess.h"
+#include "../../ResourceSystem/XMLOutput.h"
 
 /// Macro for easier use.
 #define gEntityMgr EntitySystem::EntityMgr::GetSingleton()
@@ -53,9 +54,6 @@ namespace EntitySystem
 		/// Destroys a specified entity if it exists.
 		void DestroyEntity(const EntityHandle entityToDestroy);
 
-		/// Loads all entities from an XML resource.
-		bool LoadEntitiesFromResource(ResourceSystem::ResourcePtr res, const bool isPrototype = false);
-
 		/// Returns true if the entity exists.
 		bool EntityExists(const EntityHandle h) const;
 
@@ -70,7 +68,16 @@ namespace EntitySystem
 
 		//@}
 
+		/// @name Entity persistance
+		//@{
+		
+		/// Loads all entities from an XML resource.
+		bool LoadEntitiesFromResource(ResourceSystem::ResourcePtr res, const bool isPrototype = false);
 
+		/// Saves all entities to XML stream.
+		bool SaveEntitiesToStorage(ResourceSystem::XMLOutput& storage, const bool isPrototype = false);
+
+		//@}
 
 		/// @name Entity attributes
 		//@{
@@ -231,6 +238,9 @@ namespace EntitySystem
 
 		/// Load a property for the given entity from a XML file.
 		void LoadEntityPropertyFromXML( const EntityID entityID, const ComponentID componentID, PrototypeInfo* prototypeInfo, ResourceSystem::XMLResourcePtr xml, ResourceSystem::XMLNodeIterator& xmlPropertyIterator );
+
+		/// Save and entity to the XML file.
+		bool SaveEntityToStorage(const EntityID entityID, ResourceSystem::XMLOutput& storage, const bool isPrototype);
 	};
 }
 

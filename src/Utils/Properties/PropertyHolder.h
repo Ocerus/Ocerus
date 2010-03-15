@@ -145,6 +145,13 @@ namespace Reflection
 		/// Returns true if this holder holds a valid property.
 		inline bool IsValid(void) const { return (mOwner!=0 && mProperty!=0); }
 
+		/// Returns true if this holder holds property that holds its value.
+		inline bool IsValued(void) const
+		{
+			OC_DASSERT(mProperty);
+			return mProperty->IsValued();
+		}
+
 	private:
 
 		RTTIBaseClass* mOwner;
