@@ -329,7 +329,8 @@ bool Core::Game::MouseButtonReleased( const MouseInfo& mi, const eMouseButton bt
 		// selection of multiple entities in a rectangle
 		mSelectedEntities.clear();
 		EntityPicker picker(mSelectionCursorPosition);
-		if (picker.PickMultipleEntities(worldCursorPos, mSelectedEntities) == 1)
+		float32 cameraRotation = gGfxRenderer.GetRenderTargetCameraRotation(mRenderTarget);
+		if (picker.PickMultipleEntities(worldCursorPos, cameraRotation, mSelectedEntities) == 1)
 		{
 			Editor::EditorMgr::GetSingleton().SetCurrentEntity(mSelectedEntities[0]);
 		}

@@ -30,9 +30,9 @@ EntitySystem::EntityHandle EntitySystem::EntityPicker::PickSingleEntity( void )
 	for (int32 i=0; i<shapesCount; ++i)
 	{
 		// make sure we did really hit it
-		b2Body* shapeBody = gQueryShapes[i]->GetBody();
-		OC_DASSERT(shapeBody);
-		if (!gQueryShapes[i]->TestPoint(shapeBody->GetXForm(), mCursorWorldPosition)) continue;
+		b2Body* body = gQueryShapes[i]->GetBody();
+		OC_ASSERT(body);
+		if (!gQueryShapes[i]->TestPoint(body->GetXForm(), mCursorWorldPosition)) continue;
 
 		// check the depth
 		EntityHandle entity = *(EntityHandle*)gQueryShapes[i]->GetUserData();
@@ -47,26 +47,71 @@ EntitySystem::EntityHandle EntitySystem::EntityPicker::PickSingleEntity( void )
 	return lowestDepthEntity;
 }
 
-uint32 EntitySystem::EntityPicker::PickMultipleEntities( const Vector2& worldCursorPos, vector<EntityHandle>& out )
+uint32 EntitySystem::EntityPicker::PickMultipleEntities( const Vector2& worldCursorPos, const float32 rotation, vector<EntityHandle>& out )
 {
-	b2AABB cursorAABB;
-	cursorAABB.lowerBound = mCursorWorldPosition;
-	cursorAABB.upperBound = worldCursorPos;
-	if (cursorAABB.lowerBound.x > cursorAABB.upperBound.x) MathUtils::Swap(cursorAABB.lowerBound.x, cursorAABB.upperBound.x);
-	if (cursorAABB.lowerBound.y > cursorAABB.upperBound.y) MathUtils::Swap(cursorAABB.lowerBound.y, cursorAABB.upperBound.y);
+	Vector2 A = mCursorWorldPosition;
+	Vector2 B = worldCursorPos;
+	if (A.x > B.x) MathUtils::Swap(A, B);
+
+	Vector2 r;
+	if (rotation != 0.0f)
+	{
+		// this calculation should be clear once you draw it on a paper :)
+		Vector2 diagonal = B - A;
+		Matrix22 rotator(rotation);
+		r = MathUtils::Multiply(rotator, Vector2(1,0));
+		r = MathUtils::Dot(r, diagonal) * r;
+	}
+	else if (A.y < B.y)
+	{
+		r = Vector2(B.x-A.x, 0);
+	}
+	else
+	{
+		r = Vector2(0, B.y-A.y);
+	}
+	
+	///@TODO tohle nahradit fixturou v dalsi verzi box2d
+	b2World* physics = GlobalProperties::GetPointer<b2World>("Physics");
+	b2PolygonDef shapeDef;
+	shapeDef.vertexCount = 4;
+	shapeDef.vertices[0] = A + r;
+	shapeDef.vertices[1] = B;
+	shapeDef.vertices[2] = B - r;
+	shapeDef.vertices[3] = A;
+	// make sure the shape is not inside out
+	if (MathUtils::Cross(shapeDef.vertices[1]-shapeDef.vertices[0], shapeDef.vertices[2]-shapeDef.vertices[1]) < 0.0f)
+	{
+		MathUtils::Swap(shapeDef.vertices[1], shapeDef.vertices[3]);
+	}
+	b2Body* groundBody = physics->GetGroundBody();
+	b2Shape* selectionShape = groundBody->CreateShape(&shapeDef);
 
 	// get all shapes under the cursor
-	int32 shapesCount = GlobalProperties::Get<b2World>("Physics").Query(cursorAABB, gQueryShapes, MAX_QUERY_SHAPES);
+	b2AABB aabb;
+	selectionShape->ComputeAABB(&aabb, b2XForm_identity);
+	int32 shapesCount = physics->Query(aabb, gQueryShapes, MAX_QUERY_SHAPES);
 
 	// fill the vector with results
 	for (int32 i=0; i<shapesCount; ++i)
 	{
-		b2Body* shapeBody = gQueryShapes[i]->GetBody();
-		OC_DASSERT(shapeBody);
-		EntityHandle entity = *(EntityHandle*)gQueryShapes[i]->GetUserData();
+		b2Shape* shape = gQueryShapes[i];
+		if (shape == selectionShape) continue;
 
-		out.push_back(entity);
+		b2Body* body = shape->GetBody();
+		OC_ASSERT(body);
+
+		OC_ASSERT(shape->GetType() == e_polygonShape);
+		b2Manifold manifold;
+		b2CollidePolygons(&manifold, (b2PolygonShape*)selectionShape, b2XForm_identity, (b2PolygonShape*)shape, body->GetXForm());
+		if (manifold.pointCount > 0)
+		{
+			EntityHandle entity = *(EntityHandle*)shape->GetUserData();
+			out.push_back(entity);
+		}
 	}
+
+	groundBody->DestroyShape(selectionShape);
 
 	return out.size();
 }

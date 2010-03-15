@@ -21,8 +21,9 @@ namespace EntitySystem
 
 		/// Runs the picking query. The result is filled into the given vector.
 		/// The query is defined by a rectangle between the last cursor position and the given cursor position.
+		/// The rectangle is rotated by the given angle.
 		/// Returns the number of picked entities.
-		uint32 PickMultipleEntities(const Vector2& worldCursorPos, vector<EntityHandle>& out);
+		uint32 PickMultipleEntities(const Vector2& worldCursorPos, const float32 rotation, vector<EntityHandle>& out);
 
 	private:
 
