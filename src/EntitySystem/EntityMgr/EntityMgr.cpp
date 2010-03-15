@@ -326,7 +326,10 @@ PropertyHolder EntitySystem::EntityMgr::GetEntityProperty( const EntityHandle en
 	for (EntityComponentsIterator it=mComponentMgr->GetEntityComponents(entity.GetID()); it.HasMore(); ++it)
 	{
 		AbstractProperty* prop = (*it)->GetPropertyPointer(key, flagMask);
-		if (prop) return PropertyHolder(*it, prop);
+		if (prop)
+		{
+			return PropertyHolder(*it, prop);
+		}
 	}
 
 
@@ -358,7 +361,10 @@ Reflection::PropertyHolder EntitySystem::EntityMgr::GetEntityComponentProperty( 
 
 	Component* cmp = mComponentMgr->GetEntityComponent(entity.GetID(), component);
 	AbstractProperty* prop = cmp->GetPropertyPointer(propertyKey, flagMask);
-	if (prop) return PropertyHolder(cmp, prop);
+	if (prop)
+	{
+		return PropertyHolder(cmp, prop);
+	}
 
 
 	// property not found, print some info about why

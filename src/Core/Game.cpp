@@ -20,6 +20,7 @@ using namespace InputSystem;
 
 const float PHYSICS_TIMESTEP = 0.016f;
 const int32 PHYSICS_ITERATIONS = 10;
+const float32 SELECTION_MIN_DISTANCE = 10.0f; ///< Minimum distance of the cursor position for the selection to be considered as multi-selection. The distance is given in pixels!
 
 
 Core::Game::Game():
@@ -54,6 +55,7 @@ void Core::Game::Init()
 	ocInfo << "Game init";
 
 	// basic init stuff
+	mSelectionStarted = false;
 	mHoveredEntity.Invalidate();
 	mActionState = AS_RUNNING;
 	mTimer.Reset();
@@ -80,7 +82,7 @@ void Core::Game::Init()
 	gEntityMgr.LoadEntitiesFromResource(gResourceMgr.GetResource("TestEntities", "test_entities.xml"));
 
 	// setup render targets
-	gGfxRenderer.AddRenderTarget(GfxSystem::GfxViewport(Vector2(0, 0.5), Vector2(0.5, 0.5), true), gEntityMgr.FindFirstEntity("Camera1"));
+	mRenderTarget = gGfxRenderer.AddRenderTarget(GfxSystem::GfxViewport(Vector2(0, 0.5), Vector2(0.5, 0.5), true), gEntityMgr.FindFirstEntity("Camera1"));
 	gGfxRenderer.AddRenderTarget(GfxSystem::GfxViewport(Vector2(0.0, 0.0), Vector2(1, 0.5), false), gEntityMgr.FindFirstEntity("Camera2"));
 	gGfxRenderer.AddRenderTarget(GfxSystem::GfxViewport(Vector2(0.5, 0.5), Vector2(0.5, 0.5), true), gEntityMgr.FindFirstEntity("Camera3"));
 
@@ -119,7 +121,7 @@ void Core::Game::Update( const float32 delta )
 	// pick entity the mouse is hovering over right now
 	MouseState& mouse = gInputMgr.GetMouseState();
 	Vector2 worldPosition;
-	if (gGfxRenderer.ConvertScreenToWorldCoords(GfxSystem::Point(mouse.x, mouse.y), worldPosition))
+	if (gGfxRenderer.ConvertScreenToWorldCoords(GfxSystem::Point(mouse.x, mouse.y), worldPosition, mRenderTarget))
 	{
 		EntityPicker picker(worldPosition);
 		mHoveredEntity = picker.PickSingleEntity();
@@ -190,6 +192,7 @@ void Core::Game::Draw( const float32 passedDelta)
 	gGfxRenderer.ClearScreen(GfxSystem::Color(0, 255, 0));
 	EntityComponents::Transform transform;
 	transform.Create();
+	transform._SetType(EntitySystem::CT_Transform);
 	transform.SetScale(Vector2(4.0f, 4.0f));
 	gGfxRenderer.DrawSprite(gEntityMgr.GetEntityComponent(gEntityMgr.FindFirstEntity("Visual"), EntitySystem::CT_Sprite), &transform);
 	//gGfxRenderer.DrawEntity(gEntityMgr.FindFirstEntity("Visual"));
@@ -200,6 +203,22 @@ void Core::Game::Draw( const float32 passedDelta)
 	gGfxRenderer.SetCurrentRenderTarget(0);
 	gGfxRenderer.DrawEntities();
 	mPhysics->DrawDebugData();
+	// draw the multi-selection stuff
+	OC_ASSERT(mRenderTarget==0);
+	if (mSelectionStarted)
+	{
+		MouseState& mouse = gInputMgr.GetMouseState();
+		Vector2 worldCursorPos;
+		if (gGfxRenderer.ConvertScreenToWorldCoords(GfxSystem::Point(mouse.x, mouse.y), worldCursorPos, mRenderTarget))
+		{
+			float32 minDistance = SELECTION_MIN_DISTANCE / gGfxRenderer.GetRenderTargetCameraScale(mRenderTarget);
+			if ((worldCursorPos-mSelectionCursorPosition).LengthSquared() >= MathUtils::Sqr(minDistance))
+			{
+				float32 rotation = gGfxRenderer.GetRenderTargetCameraRotation(mRenderTarget);
+				gGfxRenderer.DrawRect(mSelectionCursorPosition, worldCursorPos, rotation, GfxSystem::Color(255,255,0,150), false);
+			}
+		}
+	}
 	gGfxRenderer.FinalizeRenderTarget();
 
 
@@ -272,22 +291,9 @@ bool Core::Game::MouseMoved( const MouseInfo& mi )
 
 bool Core::Game::MouseButtonPressed( const MouseInfo& mi, const eMouseButton btn )
 {
-	OC_UNUSED(mi);
-
 	if (btn == MBTN_LEFT)
 	{
-		if (mHoveredEntity.IsValid())
-		{
-			mSelectedEntities.clear();
-			mSelectedEntities.push_back(mHoveredEntity);
-			Editor::EditorMgr::GetSingleton().SetCurrentEntity(mHoveredEntity);
-		}
-		else
-		{
-			mSelectedEntities.clear();
-			Editor::EditorMgr::GetSingleton().SetCurrentEntity(EntityHandle::Null);
-		}
-
+		mSelectionStarted = gGfxRenderer.ConvertScreenToWorldCoords(GfxSystem::Point(mi.x, mi.y), mSelectionCursorPosition, mRenderTarget);
 		return true;
 	}
 
@@ -296,9 +302,57 @@ bool Core::Game::MouseButtonPressed( const MouseInfo& mi, const eMouseButton btn
 
 bool Core::Game::MouseButtonReleased( const MouseInfo& mi, const eMouseButton btn )
 {
-	OC_UNUSED(mi);
-	OC_UNUSED(btn);
-	return false;
+	if (!mSelectionStarted)
+	{
+		// the mouse was not previously pressed probably
+		return false;
+	}
+	mSelectionStarted = false;
+
+	Vector2 worldCursorPos;
+	if (!gGfxRenderer.ConvertScreenToWorldCoords(GfxSystem::Point(mi.x, mi.y), worldCursorPos, mRenderTarget))
+	{
+		// we're not in the corrent viewport
+		return false;
+	}
+
+	bool multiSelection = false;
+	float32 minDistance = SELECTION_MIN_DISTANCE / gGfxRenderer.GetRenderTargetCameraScale(mRenderTarget);
+	if ((worldCursorPos-mSelectionCursorPosition).LengthSquared() >= MathUtils::Sqr(minDistance))
+	{
+		// the cursor moved far away enough
+		multiSelection = true;
+	}
+
+	if (multiSelection)
+	{
+		// selection of multiple entities in a rectangle
+		mSelectedEntities.clear();
+		EntityPicker picker(mSelectionCursorPosition);
+		if (picker.PickMultipleEntities(worldCursorPos, mSelectedEntities) == 1)
+		{
+			Editor::EditorMgr::GetSingleton().SetCurrentEntity(mSelectedEntities[0]);
+		}
+		else
+		{
+			Editor::EditorMgr::GetSingleton().SetCurrentEntity(EntityHandle::Null);
+		}		
+	}
+	else if (mHoveredEntity.IsValid())
+	{
+		// selection of a single entity under the cursor
+		mSelectedEntities.clear();
+		mSelectedEntities.push_back(mHoveredEntity);
+		Editor::EditorMgr::GetSingleton().SetCurrentEntity(mHoveredEntity);
+	}
+	else
+	{
+		// nothing is selected
+		mSelectedEntities.clear();
+		Editor::EditorMgr::GetSingleton().SetCurrentEntity(EntityHandle::Null);
+	}
+
+	return true;
 }
 
 bool Core::Game::PhysicsCallbacks::ShouldCollide( b2Shape* shape1, b2Shape* shape2 )

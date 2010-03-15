@@ -37,6 +37,9 @@ namespace EntitySystem
 		/// Returns the type of this components.
 		inline eComponentType GetType(void) const { return mType; }
 
+		/// Sets the type of this component. For internal use only!
+		inline void _SetType(const eComponentType type) { mType = type; }
+
 		/// Posts a message to the entity owning this component.
 		inline EntityMessage::eResult PostMessage(const EntityMessage::eType type, Reflection::PropertyFunctionParameters data = Reflection::PropertyFunctionParameters()) const { return GetOwner().PostMessage(type, data); }
 
@@ -54,7 +57,6 @@ namespace EntitySystem
 		eComponentType mType;
 		friend class ComponentMgr;
 		inline void SetOwner(const EntityHandle owner) { mOwner = owner; }
-		inline void SetType(const eComponentType type) { mType = type; }
 	};
 }
 

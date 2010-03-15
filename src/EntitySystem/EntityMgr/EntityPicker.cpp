@@ -47,7 +47,26 @@ EntitySystem::EntityHandle EntitySystem::EntityPicker::PickSingleEntity( void )
 	return lowestDepthEntity;
 }
 
-void EntitySystem::EntityPicker::PickMultipleEntities( vector<EntityHandle>& out )
+uint32 EntitySystem::EntityPicker::PickMultipleEntities( const Vector2& worldCursorPos, vector<EntityHandle>& out )
 {
-	OC_UNUSED(out);
+	b2AABB cursorAABB;
+	cursorAABB.lowerBound = mCursorWorldPosition;
+	cursorAABB.upperBound = worldCursorPos;
+	if (cursorAABB.lowerBound.x > cursorAABB.upperBound.x) MathUtils::Swap(cursorAABB.lowerBound.x, cursorAABB.upperBound.x);
+	if (cursorAABB.lowerBound.y > cursorAABB.upperBound.y) MathUtils::Swap(cursorAABB.lowerBound.y, cursorAABB.upperBound.y);
+
+	// get all shapes under the cursor
+	int32 shapesCount = GlobalProperties::Get<b2World>("Physics").Query(cursorAABB, gQueryShapes, MAX_QUERY_SHAPES);
+
+	// fill the vector with results
+	for (int32 i=0; i<shapesCount; ++i)
+	{
+		b2Body* shapeBody = gQueryShapes[i]->GetBody();
+		OC_DASSERT(shapeBody);
+		EntityHandle entity = *(EntityHandle*)gQueryShapes[i]->GetUserData();
+
+		out.push_back(entity);
+	}
+
+	return out.size();
 }

@@ -97,8 +97,8 @@ namespace GfxSystem
 		/// Draws a circle.
 		virtual void DrawCircle(const Vector2& position, const float32 radius, const Color& color, const bool fill) const = 0;
 
-		/// Draws a rectangle. Position is the center of rectangle. Rotation is given in radians.
-		virtual void DrawRect(const Vector2& position, const Vector2& size, const float32 rotation, const Color& color, const bool fill) const = 0;
+		/// Draws a rectangle. Rotation is given in radians.
+		virtual void DrawRect(const Vector2& topleft, const Vector2& bottomright, const float32 rotation, const Color& color, const bool fill) const = 0;
 
 		/// Clears the screen with the given color.
 		virtual void ClearScreen(const Color& color) const = 0;
@@ -111,6 +111,15 @@ namespace GfxSystem
 		/// The result is returned in the second parameter.
 		/// As a last parameter the desired render target can be specified.
 		bool ConvertScreenToWorldCoords(const Point& screenCoords, Vector2& worldCoords, const RenderTargetID renderTarget = InvalidRenderTargetID) const;
+
+		/// Returns the camera associated with a render target.
+		EntitySystem::EntityHandle GetRenderTargetCamera(const RenderTargetID renderTarget) const;
+
+		/// Returns the camera scale of a render target.
+		float32 GetRenderTargetCameraScale(const RenderTargetID renderTarget) const;
+
+		/// Returns the camera rotation of a render target.
+		float32 GetRenderTargetCameraRotation(const RenderTargetID renderTarget) const;
 
 
 	protected:

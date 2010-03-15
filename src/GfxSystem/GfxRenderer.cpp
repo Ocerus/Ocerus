@@ -205,3 +205,35 @@ void GfxSystem::GfxRenderer::DrawEntity( const EntitySystem::EntityHandle entity
 {
 	DrawSprite(gEntityMgr.GetEntityComponent(gEntityMgr.FindFirstEntity("Visual"), EntitySystem::CT_Sprite), gEntityMgr.GetEntityComponent(gEntityMgr.FindFirstEntity("Visual"), CT_Transform));
 }
+
+EntitySystem::EntityHandle GfxSystem::GfxRenderer::GetRenderTargetCamera( const RenderTargetID renderTarget ) const
+{
+	// we have a predefined render target
+	if (renderTarget == InvalidRenderTargetID || renderTarget<0 || renderTarget>=(RenderTargetID)mRenderTargets.size() || !mRenderTargets[renderTarget])
+	{
+		ocError << "Invalid render target";
+		return EntitySystem::EntityHandle::Null;
+	}
+
+	return mRenderTargets[renderTarget]->second;
+}
+
+float32 GfxSystem::GfxRenderer::GetRenderTargetCameraScale( const RenderTargetID renderTarget ) const
+{
+	EntitySystem::EntityHandle cameraHandle = GetRenderTargetCamera(renderTarget);
+	if (cameraHandle.IsValid())
+	{
+		return cameraHandle.GetProperty("Zoom").GetValue<float32>();
+	}
+	return 0;
+}
+
+float32 GfxSystem::GfxRenderer::GetRenderTargetCameraRotation( const RenderTargetID renderTarget ) const
+{
+	EntitySystem::EntityHandle cameraHandle = GetRenderTargetCamera(renderTarget);
+	if (cameraHandle.IsValid())
+	{
+		return cameraHandle.GetProperty("Rotation").GetValue<float32>();
+	}
+	return 0;
+}

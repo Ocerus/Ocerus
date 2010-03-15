@@ -108,6 +108,7 @@ namespace Core
 		void UpdateGameProperties(void); ///< Updates globally accessible properties related to game.
 		eActionState mActionState;
 		Utils::Timer mTimer; ///< Timer for game action related things.
+		GfxSystem::RenderTargetID mRenderTarget;
 
 
 		/// Physics.
@@ -126,9 +127,11 @@ namespace Core
 
 
 		/// Selections stuff.
-		EntitySystem::EntityHandle mHoveredEntity;
+		bool mSelectionStarted; ///< If true the user started a multi-selection mode.
+		Vector2 mSelectionCursorPosition; ///< World position where the selection started.
+		EntitySystem::EntityHandle mHoveredEntity; ///< Entity the mouse is currently hovering over.
 		typedef vector<EntitySystem::EntityHandle> EntityList;
-		EntityList mSelectedEntities;
+		EntityList mSelectedEntities; ///< Currently selected entities.
 
 
 	private:

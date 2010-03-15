@@ -267,26 +267,28 @@ void OglRenderer::DrawCircle(const Vector2& position, const float32 radius, cons
 	glEnable(GL_TEXTURE_2D);
 }
 
-void OglRenderer::DrawRect(	const Vector2& position, const Vector2& size, const float32 rotation,
+void OglRenderer::DrawRect(	const Vector2& topleft, const Vector2& bottomright, const float32 rotation,
 						   const Color& color, const bool fill) const
 {
 	Vector2 verts[4];
 
-	float32 x = size.x/2;
-	float32 y = size.y/2;
+	verts[0] = Vector2(topleft.x, bottomright.y);
+	verts[1] = topleft;
+	verts[2] = Vector2(bottomright.x, topleft.y);
+	verts[3] = bottomright;
 
-	verts[0] = position + Vector2(-x,  y);
-	verts[1] = position + Vector2(-x, -y);
-	verts[2] = position + Vector2( x, -y);
-	verts[3] = position + Vector2( x,  y);
-
-	glPushMatrix();
-
-	glRotatef(MathUtils::RadToDeg(rotation), 0, 0, 1);
+	if (rotation != 0.0f)
+	{
+		// this calculation should be clear once you draw it on a paper :)
+		Vector2 diagonal = bottomright - topleft;
+		Matrix22 rotator(rotation);
+		Vector2 r = MathUtils::Multiply(rotator, Vector2(1,0));
+		r = MathUtils::Dot(r, diagonal) * r;
+		verts[0] = topleft + r;
+		verts[2] = bottomright - r;
+	}
 
 	DrawPolygon(verts, 4, color, fill);
-
-	glPopMatrix();
 }
 
 void GfxSystem::OglRenderer::ClearScreen( const Color& color ) const

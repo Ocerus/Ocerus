@@ -110,7 +110,9 @@ bool InputSystem::OISListener::mouseReleased( const OIS::MouseEvent &evt, OIS::M
 	eMouseButton btn = OisToMbtn(id);
 	for (InputMgr::ListenersList::const_iterator i=mMgr->mListeners.begin(); i!=mMgr->mListeners.end(); ++i)
 	{
-		if ((*i)->MouseButtonReleased(mi, btn)) break;
+		//if ((*i)->MouseButtonReleased(mi, btn)) break;
+		// mouse released must be propagated to all listeners
+		((*i)->MouseButtonReleased(mi, btn));
 	}
 	return true;
 }

@@ -42,7 +42,7 @@ namespace GfxSystem
 
 		virtual void DrawCircle(const Vector2& position, const float32 radius, const Color& color, const bool fill) const;
 
-		virtual void DrawRect(const Vector2& position, const Vector2& size, const float32 rotation, const Color& color, const bool fill) const;
+		virtual void DrawRect(const Vector2& topleft, const Vector2& bottomright, const float32 rotation, const Color& color, const bool fill) const;
 
 		virtual void ClearScreen(const Color& color) const;
 

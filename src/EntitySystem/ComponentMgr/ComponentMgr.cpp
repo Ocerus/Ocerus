@@ -42,7 +42,7 @@ ComponentID ComponentMgr::CreateComponent(const EntityID id, const eComponentTyp
 	}
 	entIt->second->push_back(cmp);
 	cmp->SetOwner(EntityHandle(id));
-	cmp->SetType(type);
+	cmp->_SetType(type);
 	cmp->Create();
 	ComponentID cmpID = entIt->second->size()-1;
 	return cmpID;
