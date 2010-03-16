@@ -1,5 +1,7 @@
 #include "Common.h"
 #include "AbstractProperty.h"
+#include "../../ResourceSystem/XMLOutput.h"
+#include "../XMLConverter.h"
 
 
 void AbstractProperty::ReportConvertProblem( ePropertyType wrongType ) const
@@ -36,6 +38,27 @@ string AbstractProperty::GetValueString(const Reflection::RTTIBaseClass* owner) 
 		OC_NOT_REACHED();
 	}
 	return "";
+}
+
+void AbstractProperty::WriteValueXML(const RTTIBaseClass* owner, ResourceSystem::XMLOutput& output) const
+{
+	
+	switch (GetType())
+	{
+	// We generate cases for all property types and arrays of property types here.
+	#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter) case typeID: \
+		Utils::XMLConverter::WriteToXML(output, GetValue<typeClass>(owner)); break;
+	#include "Utils/Properties/PropertyTypes.h"
+	#undef PROPERTY_TYPE
+
+	#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter) case typeID##_ARRAY: \
+		Utils::XMLConverter::WriteToXML(output, GetValue<Array<typeClass>*>(owner)); break;
+	#include "Utils/Properties/PropertyTypes.h"
+	#undef PROPERTY_TYPE
+
+	default:
+		OC_NOT_REACHED();
+	}
 }
 
 void Reflection::AbstractProperty::SetValueFromString( RTTIBaseClass* owner, const string& str )

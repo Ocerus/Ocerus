@@ -78,6 +78,9 @@ namespace Reflection
 		/// Returns the string representation of the value of this property. An owner of the property must be specified.
 		string GetValueString(const RTTIBaseClass* owner) const;
 
+		/// Write the XML representation of the value of this property to XML output. An owner of the property must be specified.
+		void WriteValueXML(const RTTIBaseClass* owner, ResourceSystem::XMLOutput& output) const;
+
 		/// Sets this property to a specified value. An owner of the property must be specified.
 		template<class T>
 		void SetValue(RTTIBaseClass* owner, const T value)

@@ -57,6 +57,7 @@ namespace ResourceSystem
 	class IResourceLoadingListener;
 	class XMLResource;
 	class XMLNodeIterator;
+	class XMLOutput;
 }
 
 namespace InputSystem

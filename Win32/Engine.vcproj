@@ -508,6 +508,10 @@
 					RelativePath="..\src\Utils\Tree.h"
 					>
 				</File>
+				<File
+					RelativePath="..\src\Utils\XMLConverter.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="src"
@@ -538,6 +542,10 @@
 				</File>
 				<File
 					RelativePath="..\src\Utils\Timer.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src\Utils\XMLConverter.cpp"
 					>
 				</File>
 			</Filter>

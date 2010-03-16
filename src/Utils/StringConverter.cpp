@@ -49,17 +49,6 @@ string StringConverter::ToString(const EntitySystem::EntityHandle& val)
 	}
 }
 
-
-/*
-template<>
-string StringConverter::ToString(bool val)
-{
-	std::ostringstream out;
-	out << std::boolalpha << val;
-	return out.str();
-}
-*/
-
 template<>
 char* StringConverter::FromString(const string& str)
 {

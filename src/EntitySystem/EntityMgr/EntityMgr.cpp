@@ -592,8 +592,8 @@ bool EntitySystem::EntityMgr::SaveEntityToStorage(const EntitySystem::EntityID e
 			}
 			storage.BeginElementFinish();
 
-			// write property value (TODO: change format of string)
-			storage.WriteString(it->GetValueString());
+			// write property value
+			it->WriteValueXML(storage);
 
 			storage.EndElement();
 		}

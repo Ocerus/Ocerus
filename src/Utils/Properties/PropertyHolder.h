@@ -88,6 +88,16 @@ namespace Reflection
 			return mProperty->GetValueString(mOwner);
 		}
 
+		inline void WriteValueXML(ResourceSystem::XMLOutput& output)
+		{
+			if (!mProperty)
+			{
+				ReportUndefined();
+				return;
+			}
+			mProperty->WriteValueXML(mOwner, output);
+		}
+
 		/// Sets the typed value of this property.
 		template<class T>
 		void SetValue(const T value)
