@@ -7,7 +7,7 @@
 #include "Base.h"
 #include "StateMachine.h"
 #include "InputSystem/IInputListener.h"
-#include "Dynamics/b2WorldCallbacks.h"
+#include <Box2D/Dynamics/b2WorldCallbacks.h>
 
 namespace Core
 {
@@ -147,9 +147,9 @@ namespace Core
 			/// Default destructor.
 			virtual ~PhysicsCallbacks(void) {}
 
-			virtual bool ShouldCollide(b2Shape* shape1, b2Shape* shape2);
+			virtual bool ShouldCollide(b2Fixture* fixtureA, b2Fixture* fixtureB);
 
-			virtual void Add(const b2ContactPoint* point);
+			virtual void BeginContact(b2Contact* contact);
 
 		private:
 			Game* mParent;

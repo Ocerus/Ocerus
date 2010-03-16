@@ -5,7 +5,7 @@
 #define PhysicsDraw_h__
 
 #include "Base.h"
-#include "Dynamics/b2WorldCallbacks.h"
+#include <Box2D/Dynamics/b2WorldCallbacks.h>
 
 namespace Core
 {
@@ -37,7 +37,7 @@ namespace Core
 
 		/// Draw a transform. Choose your own length scale.
 		/// @param xf a transform.
-		virtual void DrawXForm(const b2XForm& xf);
+		virtual void DrawTransform(const b2Transform& xf);
 	};
 }
 

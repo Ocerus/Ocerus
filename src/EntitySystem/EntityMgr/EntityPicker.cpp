@@ -4,8 +4,26 @@
 
 using namespace EntitySystem;
 
-const size_t MAX_QUERY_SHAPES = 128;
-b2Shape* gQueryShapes[MAX_QUERY_SHAPES];
+class QueryCallback: public b2QueryCallback
+{
+public:
+
+	QueryCallback(): count(0) {}
+
+	virtual ~QueryCallback() {}
+
+	virtual bool ReportFixture(PhysicalShape* shape)
+	{
+		if (count >= MAX_QUERY_SHAPES) return false;
+		shapes[count++] = shape;
+		return true;
+	}
+
+	static const size_t MAX_QUERY_SHAPES = 128;
+	PhysicalShape* shapes[MAX_QUERY_SHAPES];
+	int32 count;
+};
+
 
 EntitySystem::EntityPicker::EntityPicker( const Vector2& worldCursorPos ):
 	mCursorWorldPosition(worldCursorPos),
@@ -22,20 +40,21 @@ EntitySystem::EntityHandle EntitySystem::EntityPicker::PickSingleEntity( void )
 	cursorAABB.upperBound = mCursorWorldPosition + delta;
 
 	// get all shapes under the cursor
-	int32 shapesCount = GlobalProperties::Get<b2World>("Physics").Query(cursorAABB, gQueryShapes, MAX_QUERY_SHAPES);
+	QueryCallback query;
+	Physics* physics = GlobalProperties::GetPointer<b2World>("Physics");
+	physics->QueryAABB(&query, cursorAABB);
 
 	// find the shape with the lowest depth value
 	int32 lowestDepth = INT32_MAX;
 	EntityHandle lowestDepthEntity = EntityHandle::Null;
-	for (int32 i=0; i<shapesCount; ++i)
+	for (int32 i=0; i<query.count; ++i)
 	{
 		// make sure we did really hit it
-		b2Body* body = gQueryShapes[i]->GetBody();
-		OC_ASSERT(body);
-		if (!gQueryShapes[i]->TestPoint(body->GetXForm(), mCursorWorldPosition)) continue;
+		PhysicalShape* shape = query.shapes[i];
+		if (!shape->TestPoint(mCursorWorldPosition)) continue;
 
 		// check the depth
-		EntityHandle entity = *(EntityHandle*)gQueryShapes[i]->GetUserData();
+		EntityHandle entity = *(EntityHandle*)shape->GetUserData();
 		int32 depth = entity.GetProperty("Depth").GetValue<int32>();
 		if (depth < lowestDepth)
 		{
@@ -72,46 +91,40 @@ uint32 EntitySystem::EntityPicker::PickMultipleEntities( const Vector2& worldCur
 	}
 	
 	///@TODO tohle nahradit fixturou v dalsi verzi box2d
-	b2World* physics = GlobalProperties::GetPointer<b2World>("Physics");
-	b2PolygonDef shapeDef;
-	shapeDef.vertexCount = 4;
-	shapeDef.vertices[0] = A + r;
-	shapeDef.vertices[1] = B;
-	shapeDef.vertices[2] = B - r;
-	shapeDef.vertices[3] = A;
+	Physics* physics = GlobalProperties::GetPointer<b2World>("Physics");
+	Vector2 vertices[4];
+	vertices[0] = A + r;
+	vertices[1] = B;
+	vertices[2] = B - r;
+	vertices[3] = A;
 	// make sure the shape is not inside out
-	if (MathUtils::Cross(shapeDef.vertices[1]-shapeDef.vertices[0], shapeDef.vertices[2]-shapeDef.vertices[1]) < 0.0f)
+	if (MathUtils::Cross(vertices[1]-vertices[0], vertices[2]-vertices[1]) < 0.0f)
 	{
-		MathUtils::Swap(shapeDef.vertices[1], shapeDef.vertices[3]);
+		MathUtils::Swap(vertices[1], vertices[3]);
 	}
-	b2Body* groundBody = physics->GetGroundBody();
-	b2Shape* selectionShape = groundBody->CreateShape(&shapeDef);
+	b2PolygonShape selectionShape;
+	selectionShape.Set(vertices, 4);
 
 	// get all shapes under the cursor
 	b2AABB aabb;
-	selectionShape->ComputeAABB(&aabb, b2XForm_identity);
-	int32 shapesCount = physics->Query(aabb, gQueryShapes, MAX_QUERY_SHAPES);
+	selectionShape.ComputeAABB(&aabb, XForm_Identity);
+	QueryCallback query;
+	physics->QueryAABB(&query, aabb);
 
 	// fill the vector with results
-	for (int32 i=0; i<shapesCount; ++i)
+	for (int32 i=0; i<query.count; ++i)
 	{
-		b2Shape* shape = gQueryShapes[i];
-		if (shape == selectionShape) continue;
+		PhysicalShape* shape = query.shapes[i];
 
 		b2Body* body = shape->GetBody();
 		OC_ASSERT(body);
 
-		OC_ASSERT(shape->GetType() == e_polygonShape);
-		b2Manifold manifold;
-		b2CollidePolygons(&manifold, (b2PolygonShape*)selectionShape, b2XForm_identity, (b2PolygonShape*)shape, body->GetXForm());
-		if (manifold.pointCount > 0)
+		if (b2TestOverlap(&selectionShape, shape->GetShape(), XForm_Identity, body->GetTransform()))
 		{
 			EntityHandle entity = *(EntityHandle*)shape->GetUserData();
 			out.push_back(entity);
 		}
 	}
-
-	groundBody->DestroyShape(selectionShape);
 
 	return out.size();
 }

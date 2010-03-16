@@ -4,9 +4,9 @@
 #include "Properties.h"
 #include "DataContainer.h"
 #include "StringConverter.h"
-#include "Box2D.h"
 #include "PhysicsDraw.h"
 #include "Editor/EditorMgr.h"
+#include <Box2D.h>
 
 // DEBUG only
 #include "EntitySystem/Components/Script.h"
@@ -19,7 +19,8 @@ using namespace EntitySystem;
 using namespace InputSystem;
 
 const float PHYSICS_TIMESTEP = 0.016f;
-const int32 PHYSICS_ITERATIONS = 10;
+const int32 PHYSICS_VELOCITY_ITERATIONS = 6;
+const int32 PHYSICS_POSITION_ITERATIONS = 2;
 const float32 SELECTION_MIN_DISTANCE = 10.0f; ///< Minimum distance of the cursor position for the selection to be considered as multi-selection. The distance is given in pixels!
 
 
@@ -61,11 +62,7 @@ void Core::Game::Init()
 	mTimer.Reset();
 
 	// init physics engine
-	b2AABB worldAABB;
-	worldAABB.lowerBound.Set(-10000.0f, -10000.0f);
-	worldAABB.upperBound.Set(10000.0f, 10000.0f);
-	// turn off sleeping as we are moving in a space with no gravity
-	mPhysics = new b2World(worldAABB, b2Vec2(0.0f, 0.0f), false);
+	mPhysics = new b2World(b2Vec2(0.0f, 0.0f), false);
 	mPhysics->SetContactFilter(mPhysicsCallbacks);
 	mPhysics->SetContactListener(mPhysicsCallbacks);
 	mPhysics->SetDebugDraw(mPhysicsDraw);
@@ -139,11 +136,7 @@ void Core::Game::Update( const float32 delta )
 		gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::UPDATE_LOGIC, Reflection::PropertyFunctionParameters() << stepSize));
 		gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::UPDATE_PRE_PHYSICS, Reflection::PropertyFunctionParameters() << stepSize));
 
-		mPhysics->Step(stepSize, PHYSICS_ITERATIONS);
-
-		///@todo what is the purpose of this?!?
-		mPhysicsEvents.push_back(new PhysicsEvent());
-		mPhysicsEvents.push_back(new PhysicsEvent());
+		mPhysics->Step(stepSize, PHYSICS_VELOCITY_ITERATIONS, PHYSICS_POSITION_ITERATIONS);
 
 		// process physics events
 		for (PhysicsEventList::const_iterator i=mPhysicsEvents.begin(); i!=mPhysicsEvents.end(); ++i)
@@ -356,25 +349,23 @@ bool Core::Game::MouseButtonReleased( const MouseInfo& mi, const eMouseButton bt
 	return true;
 }
 
-bool Core::Game::PhysicsCallbacks::ShouldCollide( b2Shape* shape1, b2Shape* shape2 )
+bool Core::Game::PhysicsCallbacks::ShouldCollide( b2Fixture* fixtureA, b2Fixture* fixtureB )
 {
-	if (!b2ContactFilter::ShouldCollide(shape1, shape2))
+	if (!b2ContactFilter::ShouldCollide(fixtureA, fixtureB))
 		return false;
 
 	return true;
 }
 
-void Core::Game::PhysicsCallbacks::Add( const b2ContactPoint* point )
+void Core::Game::PhysicsCallbacks::BeginContact( b2Contact* contact )
 {
 	PhysicsEvent* evt = new PhysicsEvent();
-	if (point->shape1->GetUserData())
-		evt->entity1 = *(EntityHandle*)point->shape1->GetUserData();
-	else
-		evt->entity1.Invalidate();
-	if (point->shape2->GetUserData())
-		evt->entity2 = *(EntityHandle*)point->shape2->GetUserData();
-	else
-		evt->entity2.Invalidate();
+	void* userData1 = contact->GetFixtureA()->GetUserData();
+	void* userData2 = contact->GetFixtureB()->GetUserData();
+	if (userData1) evt->entity1 = *(EntityHandle*)userData1;
+	else evt->entity1.Invalidate();
+	if (userData2) evt->entity2 = *(EntityHandle*)userData2;
+	else evt->entity2.Invalidate();
 	mParent->mPhysicsEvents.push_back(evt);
 }
 

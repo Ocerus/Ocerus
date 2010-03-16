@@ -10,7 +10,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OIS", "..\externalLibs\ois\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RudeConfig", "..\externalLibs\rudeconfig\RudeConfig.vcproj", "{ABD59B39-A335-43E3-8087-0CEB68C4BEEA}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Box2D", "..\externalLibs\Box2D\Build\VC8\Box2D.vcproj", "{7A2DFC3D-516A-471D-A215-BD40E5E5AD9A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Box2D", "..\externalLibs\Box2D\Build\VC9\Box2D.vcproj", "{7A2DFC3D-516A-471D-A215-BD40E5E5AD9A}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "expat", "..\externalLibs\expat\lib\expat.vcproj", "{8AEC6643-4014-4B8F-A154-4F2172B202A8}"
 EndProject

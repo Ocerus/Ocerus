@@ -7,21 +7,22 @@
 #define ComplexTypes_h__
 
 #include "BasicTypes.h"
-#include "../../externalLibs/Box2D/Source/Common/b2Math.h"
+#include "../../externalLibs/Box2D/Source/Box2D/Common/b2Math.h"
 
 typedef b2Vec2 Vector2;
 extern const Vector2 Vector2_Zero;
 extern Vector2 Vector2_Dummy;
 typedef b2Mat22 Matrix22;
 extern const Matrix22 Matrix22_Identity;
-typedef b2XForm XForm;
+typedef b2Transform XForm;
+extern const XForm XForm_Identity;
 
 class b2World;
 typedef b2World Physics;
 class b2Body;
 typedef b2Body PhysicalBody;
-class b2Shape;
-typedef b2Shape PhysicalShape;
+class b2Fixture;
+typedef b2Fixture PhysicalShape;
 
 
 #include <string>

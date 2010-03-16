@@ -101,7 +101,7 @@ void RegisterScriptVector2(asIScriptEngine* engine)
 	r = engine->RegisterObjectMethod("Vector2", "void SetZero()", asMETHOD(Vector2, SetZero), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("Vector2", "float32 Normalize()", asMETHOD(Vector2, Normalize), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("Vector2", "bool IsValid() const", asMETHOD(Vector2, IsValid), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-	r = engine->RegisterObjectMethod("Vector2", "float32 Dot(const Vector2 &in) const", asFUNCTION(b2Dot), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Vector2", "float32 Dot(const Vector2 &in) const", asFUNCTION(MathUtils::Dot), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
 }
 
 // Functions for register Color to script

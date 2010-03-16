@@ -27,7 +27,7 @@ EntityMessage::eResult EntityComponents::DynamicBody::HandleMessage( const Entit
 		Init();
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::UPDATE_PRE_PHYSICS:	
-		mBody->SetXForm(GetOwner().GetProperty("Position").GetValue<Vector2>(), 
+		mBody->SetTransform(GetOwner().GetProperty("Position").GetValue<Vector2>(), 
 			GetOwner().GetProperty("Angle").GetValue<float32>());
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::UPDATE_PHYSICS:
@@ -52,6 +52,7 @@ void EntityComponents::DynamicBody::RegisterReflection( void )
 void EntityComponents::DynamicBody::Init( void )
 {
 	b2BodyDef bodyDef;
+	bodyDef.type = b2_dynamicBody;
 	bodyDef.position = GetOwner().GetProperty("Position").GetValue<Vector2>();
 	bodyDef.angle = GetOwner().GetProperty("Angle").GetValue<float32>();
 	bodyDef.angularDamping = ANGULAR_DAMPING;

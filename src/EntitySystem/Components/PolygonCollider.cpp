@@ -38,13 +38,12 @@ void EntityComponents::PolygonCollider::RegisterReflection( void )
 void EntityComponents::PolygonCollider::Init( void )
 {
 	// define the shape
-	b2PolygonDef shapeDef;
-	shapeDef.density = mDensity;
-	for (int32 i=0; i<mPolygon.GetSize(); ++i)
-	{
-		shapeDef.vertices[shapeDef.vertexCount++] = mPolygon[i];
-	}
-	shapeDef.userData = GetOwnerPtr();
+	b2PolygonShape shapeDef;
+	shapeDef.Set(mPolygon.GetRawArrayPtr(), mPolygon.GetSize());
+	b2FixtureDef fixtureDef;
+	fixtureDef.shape = &shapeDef;
+	fixtureDef.density = mDensity;
+	fixtureDef.userData = GetOwnerPtr();
 
 	// find a parent body
 	PhysicalBody* body = 0;
@@ -60,8 +59,5 @@ void EntityComponents::PolygonCollider::Init( void )
 	}
 
 	// create the shape
-	mShape = body->CreateShape(&shapeDef);
-
-	// update the mass of the body
-	body->SetMassFromShapes();
+	mShape = body->CreateFixture(&fixtureDef);
 }

@@ -11,7 +11,7 @@ namespace Utils
 	/// Helper math functions.
 	namespace MathUtils
 	{
-		inline float32 Random(const float32 min, const float32 max) { return b2Random(min, max); }
+		inline float32 Random(const float32 min, const float32 max);
 
 		inline float32 Abs(const float32 num) { return b2Abs(num); }
 		inline int32 Abs(const int32 num) { return num<0?-num:num; }
@@ -81,5 +81,20 @@ namespace Utils
 
 	}
 }
+
+
+//-----------------------------------------------------------------------------
+// Implementation
+
+const int32 RAND_LIMIT = 32767;
+
+float32 Utils::MathUtils::Random(const float32 min, const float32 max)
+{
+	float32 r = (float32)(rand() & (RAND_LIMIT));
+	r /= RAND_LIMIT;
+	r = (max - min) * r + min;
+	return r;
+}
+
 
 #endif
