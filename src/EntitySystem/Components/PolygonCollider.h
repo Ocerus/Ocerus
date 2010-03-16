@@ -43,6 +43,7 @@ namespace EntityComponents
 	private:
 
 		PhysicalShape* mShape;
+		PhysicalBody* mSensorBody;
 		Array<Vector2> mPolygon;
 		float32 mDensity;
 

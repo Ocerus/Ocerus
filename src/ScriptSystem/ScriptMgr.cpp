@@ -760,7 +760,7 @@ asIScriptModule* ScriptMgr::GetModule(const char* fileName)
 	r = mScriptBuilder->BuildModule();
 	if (r < 0)
 	{
-		ocError << "Failed to build module '" << fileName << "'!";
+		ocInfo << "Failed to build module '" << fileName << "'!";
 		return 0;
 	}
 
@@ -773,7 +773,7 @@ int32 ScriptMgr::GetFunctionID(const char* moduleName, const char* funcDecl)
 	asIScriptModule* mod = GetModule(moduleName);
 	if (mod == 0)
 	{
-		ocError << "Script module '" << moduleName << "' not found!";
+		ocInfo << "Script module '" << moduleName << "' not found!";
 		return -1;
 	}
 

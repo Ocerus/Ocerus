@@ -6,11 +6,17 @@ void EntityComponents::PolygonCollider::Create( void )
 {
 	mShape = 0;
 	mDensity = 0;
+	mSensorBody = 0;
 }
 
 void EntityComponents::PolygonCollider::Destroy( void )
 {
 	// the shape is destroyed automatically after the body it is attached to is destroyed
+	if (mSensorBody)
+	{
+		GlobalProperties::Get<Physics>("Physics").DestroyBody(mSensorBody);
+		mSensorBody = 0;
+	}
 }
 
 EntityMessage::eResult EntityComponents::PolygonCollider::HandleMessage( const EntityMessage& msg )
@@ -19,6 +25,13 @@ EntityMessage::eResult EntityComponents::PolygonCollider::HandleMessage( const E
 	{
 	case EntityMessage::POST_INIT: // we have to wait until the physical bodies are inited, that's why we're using POST_INIT
 		Init();
+		return EntityMessage::RESULT_OK;
+	case EntityMessage::UPDATE_PRE_PHYSICS:	
+		if (mSensorBody)
+		{
+			mSensorBody->SetTransform(GetOwner().GetProperty("Position").GetValue<Vector2>(), 
+				GetOwner().GetProperty("Angle").GetValue<float32>());
+		}
 		return EntityMessage::RESULT_OK;
 	default:
 		break;
@@ -54,9 +67,19 @@ void EntityComponents::PolygonCollider::Init( void )
 	}
 	else
 	{
+		// enable collision, but disable collision response
+		fixtureDef.isSensor = true;
 
-		/// @todo to make colliders work without bodies we must upgrade Box2d to 2.0.2+ and use b2Fixture.
-		OC_FAIL("Not implemented");
+		// create a dummy body by ourself
+		b2BodyDef bodyDef;
+		bodyDef.type = b2_staticBody;
+		bodyDef.position = GetOwner().GetProperty("Position").GetValue<Vector2>();
+		bodyDef.angle = GetOwner().GetProperty("Angle").GetValue<float32>();
+		bodyDef.fixedRotation = true;
+		bodyDef.userData = GetOwnerPtr();
+		mSensorBody = GlobalProperties::Get<Physics>("Physics").CreateBody(&bodyDef);
+
+		body = mSensorBody;
 	}
 
 	// create the shape
