@@ -54,6 +54,7 @@ void EntityComponents::PolygonCollider::Init( void )
 	}
 	else
 	{
+
 		/// @todo to make colliders work without bodies we must upgrade Box2d to 2.0.2+ and use b2Fixture.
 		OC_FAIL("Not implemented");
 	}

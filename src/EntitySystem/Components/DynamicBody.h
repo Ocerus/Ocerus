@@ -38,7 +38,7 @@ namespace EntityComponents
 
 		PhysicalBody* mBody;
 
-		void Init(void);
+		void CreateBody(void);
 
 	};
 }

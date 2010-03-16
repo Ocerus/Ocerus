@@ -25,9 +25,17 @@ namespace EntityComponents
 		/// Called from RTTI when the component is allowed to set up its properties.
 		static void RegisterReflection(void);
 
+		/// Physical body in the physics engine.
+		PhysicalBody* GetBody(void) const { return mBody; }
+
+		/// Physical body in the physics engine.
+		void SetBody(PhysicalBody* val) { mBody = val; }
+
 	private:
 
 		PhysicalBody* mBody;
+
+		void CreateBody(void);
 
 	};
 }

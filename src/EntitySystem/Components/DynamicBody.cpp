@@ -24,7 +24,7 @@ EntityMessage::eResult EntityComponents::DynamicBody::HandleMessage( const Entit
 	switch (msg.type)
 	{
 	case EntityMessage::INIT:
-		Init();
+		CreateBody();
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::UPDATE_PRE_PHYSICS:	
 		mBody->SetTransform(GetOwner().GetProperty("Position").GetValue<Vector2>(), 
@@ -49,7 +49,7 @@ void EntityComponents::DynamicBody::RegisterReflection( void )
 	AddComponentDependency(CT_Transform);
 }
 
-void EntityComponents::DynamicBody::Init( void )
+void EntityComponents::DynamicBody::CreateBody( void )
 {
 	b2BodyDef bodyDef;
 	bodyDef.type = b2_dynamicBody;
