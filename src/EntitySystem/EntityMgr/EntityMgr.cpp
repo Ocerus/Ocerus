@@ -62,7 +62,7 @@ EntityMgr::EntityMgr()
 
 EntityMgr::~EntityMgr()
 {
-	// test uložení entit
+	// test ulozeni entit
 	ResourceSystem::XMLOutput storage("TestSave.xml");
 	if (gEntityMgr.SaveEntitiesToStorage(storage))
 	{

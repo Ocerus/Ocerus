@@ -19,7 +19,7 @@ public:
 		return true;
 	}
 
-	static const size_t MAX_QUERY_SHAPES = 128;
+	static const int32 MAX_QUERY_SHAPES = 128;
 	PhysicalShape* shapes[MAX_QUERY_SHAPES];
 	int32 count;
 };
