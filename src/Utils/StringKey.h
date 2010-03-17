@@ -35,7 +35,7 @@ namespace Utils
 		StringKey& operator=(const StringKey& rhs);
 
 		/// Converts the key to a string.
-		string ToString(void) const;
+		string& ToString(void) const;
 
 		/// Converts the key to a decimal value (hash).
         /// @note Is it really smart to have implicit conversion for this?

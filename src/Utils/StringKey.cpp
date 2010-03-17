@@ -95,9 +95,10 @@ StringKey::~StringKey( void )
 	RefCntDec();
 }
 
-string StringKey::ToString( void ) const
+string& StringKey::ToString( void ) const
 {
-	return mData ? mData->mRefString : "NULL StringKey";
+	static string nullStringKey("NULL StringKey");
+	return mData ? mData->mRefString : nullStringKey;
 }
 
 StringKey::operator size_t( void ) const
