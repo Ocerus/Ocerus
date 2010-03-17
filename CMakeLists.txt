@@ -207,101 +207,104 @@ set(Editor_SRCS
 )
 
 set(EntitySystem_SRCS
-    src/EntitySystem/EntityMgr/EntityPicker.cpp
-    src/EntitySystem/EntityMgr/EntityDescription.cpp
-    src/EntitySystem/EntityMgr/EntityMgr.cpp
-    src/EntitySystem/EntityMgr/EntityHandle.cpp
-    src/EntitySystem/EntityMgr/EntityMessage.cpp
-    src/EntitySystem/Components/Camera.cpp
-    src/EntitySystem/Components/DynamicBody.cpp
-    src/EntitySystem/Components/PolygonCollider.cpp
-    src/EntitySystem/Components/Script.cpp
-    src/EntitySystem/Components/Sprite.cpp
-    src/EntitySystem/Components/StaticBody.cpp
-    src/EntitySystem/Components/Transform.cpp
-    src/EntitySystem/ComponentMgr/Component.cpp
-    src/EntitySystem/ComponentMgr/ComponentEnums.cpp
-    src/EntitySystem/ComponentMgr/ComponentMgr.cpp
+	src/EntitySystem/EntityMgr/EntityPicker.cpp
+	src/EntitySystem/EntityMgr/EntityDescription.cpp
+	src/EntitySystem/EntityMgr/EntityMgr.cpp
+	src/EntitySystem/EntityMgr/EntityHandle.cpp
+	src/EntitySystem/EntityMgr/EntityMessage.cpp
+	src/EntitySystem/Components/Camera.cpp
+	src/EntitySystem/Components/DynamicBody.cpp
+	src/EntitySystem/Components/PolygonCollider.cpp
+	src/EntitySystem/Components/Script.cpp
+	src/EntitySystem/Components/Sprite.cpp
+	src/EntitySystem/Components/StaticBody.cpp
+	src/EntitySystem/Components/Transform.cpp
+	src/EntitySystem/ComponentMgr/Component.cpp
+	src/EntitySystem/ComponentMgr/ComponentEnums.cpp
+	src/EntitySystem/ComponentMgr/ComponentMgr.cpp
 )
 
 set(GfxSystem_SRCS
-    src/GfxSystem/OglRenderer.cpp
-    src/GfxSystem/Texture.cpp
-    src/GfxSystem/GfxWindow.cpp
-    src/GfxSystem/GfxRenderer.cpp
-    src/GfxSystem/GfxSceneMgr.cpp
-    src/GfxSystem/GfxStructures.cpp
+	src/GfxSystem/GfxRenderer.cpp
+	src/GfxSystem/GfxSceneMgr.cpp
+	src/GfxSystem/GfxStructures.cpp
+	src/GfxSystem/GfxViewport.cpp
+	src/GfxSystem/GfxWindow.cpp
+	src/GfxSystem/OglRenderer.cpp
+	src/GfxSystem/Texture.cpp
 )
 
 set(SceneSystem_SRCS
-    src/SceneSystem/SceneMgr.cpp
+	src/SceneSystem/SceneMgr.cpp
 )
 
 set(GUISystem_SRCS
-    src/GUISystem/ResourceProvider.cpp
-    src/GUISystem/CEGUIResource.cpp
-    src/GUISystem/GUIMgr.cpp
-    src/GUISystem/GUIConsole.cpp
-    src/GUISystem/CEGUITools.cpp
-    src/GUISystem/VerticalLayout.cpp
+	src/GUISystem/ResourceProvider.cpp
+	src/GUISystem/CEGUIResource.cpp
+	src/GUISystem/GUIMgr.cpp
+	src/GUISystem/GUIConsole.cpp
+	src/GUISystem/CEGUITools.cpp
+	src/GUISystem/VerticalLayout.cpp
 )
 
 set(InputSystem_SRCS
-    src/InputSystem/InputMgr.cpp
-    src/InputSystem/OISListener.cpp
+	src/InputSystem/InputMgr.cpp
+	src/InputSystem/OISListener.cpp
 )
 
 set(LogSystem_SRCS
-    src/LogSystem/Logger.cpp
-    src/LogSystem/LogMgr.cpp
-    src/LogSystem/Profiler.cpp
+	src/LogSystem/Logger.cpp
+	src/LogSystem/LogMgr.cpp
+	src/LogSystem/Profiler.cpp
 )
 
 set(Memory_SRCS
-    src/Memory/GlobalAllocation.cpp
-    src/Memory/FreeListPolicyHelpers.cpp
+	src/Memory/GlobalAllocation.cpp
+	src/Memory/FreeListPolicyHelpers.cpp
 )
 
 set(ResourceSystem_SRCS
-    src/ResourceSystem/ResourceMgr.cpp
-    src/ResourceSystem/XMLResource.cpp
-    src/ResourceSystem/Resource.cpp
+	src/ResourceSystem/ResourceMgr.cpp
+	src/ResourceSystem/XMLResource.cpp
+	src/ResourceSystem/Resource.cpp
+	src/ResourceSystem/XMLOutput.cpp
 )
 
 set(ScriptSystem_SRCS
-    src/ScriptSystem/ScriptMgr.cpp
-    src/ScriptSystem/ScriptRegister.cpp
-    src/ScriptSystem/ScriptResource.cpp
-    src/ScriptSystem/AddOn/scriptstring.cpp
-    src/ScriptSystem/AddOn/scriptbuilder.cpp
-    src/ScriptSystem/AddOn/contextmgr.cpp
+	src/ScriptSystem/ScriptMgr.cpp
+	src/ScriptSystem/ScriptRegister.cpp
+	src/ScriptSystem/ScriptResource.cpp
+	src/ScriptSystem/AddOn/scriptstring.cpp
+	src/ScriptSystem/AddOn/scriptbuilder.cpp
+	src/ScriptSystem/AddOn/contextmgr.cpp
 )
 
 set(Setup_SRCS
-    src/Setup/ComplexTypes.cpp
+	src/Setup/ComplexTypes.cpp
 )
 
 set(StringSystem_SRCS
-    #    src/StringSystem/TextData.cpp
-    src/StringSystem/TextResource.cpp
-    src/StringSystem/StringMgr.cpp
+#    src/StringSystem/TextData.cpp
+	src/StringSystem/TextResource.cpp
+	src/StringSystem/StringMgr.cpp
 )
 
 set(Utils_SRCS
-    src/Utils/StringKey.cpp
-    src/Utils/Properties/PropertySystem.cpp
-    src/Utils/Properties/AbstractProperty.cpp
-    src/Utils/Properties/PropertyFunctionParameters.cpp
-    src/Utils/Properties/PropertyHolder.cpp
-    src/Utils/Properties/PropertyEnums.cpp
-    src/Utils/Properties/PropertyMap.cpp
-    src/Utils/RTTI/RTTI.cpp
-    src/Utils/Hash.cpp
-    src/Utils/GlobalProperties.cpp
-    src/Utils/StringConverter.cpp
-    src/Utils/SmartAssert.cpp
-    src/Utils/Timer.cpp
-    src/Utils/MathUtils.cpp
+	src/Utils/StringKey.cpp
+	src/Utils/Properties/PropertySystem.cpp
+	src/Utils/Properties/AbstractProperty.cpp
+	src/Utils/Properties/PropertyFunctionParameters.cpp
+	src/Utils/Properties/PropertyHolder.cpp
+	src/Utils/Properties/PropertyEnums.cpp
+	src/Utils/Properties/PropertyMap.cpp
+	src/Utils/RTTI/RTTI.cpp
+	src/Utils/Hash.cpp
+	src/Utils/GlobalProperties.cpp
+	src/Utils/StringConverter.cpp
+	src/Utils/SmartAssert.cpp
+	src/Utils/Timer.cpp
+	src/Utils/MathUtils.cpp
+	src/Utils/XMLConverter.cpp
 )
 
 include_directories(${ocerus-engine_INCLUDE_DIRS})

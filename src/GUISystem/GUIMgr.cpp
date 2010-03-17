@@ -87,6 +87,7 @@ namespace GUISystem
 			/// Set defaults
 			mCegui->setDefaultFont("DejaVuSans-10");
 			mCegui->setDefaultMouseCursor("TaharezLook", "MouseArrow");
+			mCegui->setMouseClickEventGenerationEnabled(false);
 		}
 		CEGUI_EXCEPTION_END
 

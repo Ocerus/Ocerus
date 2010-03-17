@@ -556,6 +556,7 @@ bool EntitySystem::EntityMgr::LoadEntitiesFromResource( ResourceSystem::Resource
 
 bool EntitySystem::EntityMgr::SaveEntityToStorage(const EntitySystem::EntityID entityID, ResourceSystem::XMLOutput &storage, const bool isPrototype)
 {
+	OC_UNUSED(isPrototype);
 	// TODO: isPrototype == true
 	EntityInfo* info = mEntities[entityID];
 	if (!info) { return false; }

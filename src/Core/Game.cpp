@@ -295,6 +295,7 @@ bool Core::Game::MouseButtonPressed( const MouseInfo& mi, const eMouseButton btn
 
 bool Core::Game::MouseButtonReleased( const MouseInfo& mi, const eMouseButton btn )
 {
+	OC_UNUSED(btn);
 	if (!mSelectionStarted)
 	{
 		// the mouse was not previously pressed probably

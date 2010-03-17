@@ -72,6 +72,7 @@ namespace Utils
 		/// Makes a deep copy of the array.
 		void CopyFrom(const Array<T>& toCopy)
 		{
+			if (this == &toCopy) return;
 			Resize(toCopy.GetSize());
 			for (int32 i=0; i<mSize; ++i)
 			{
