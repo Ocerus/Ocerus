@@ -34,5 +34,14 @@ namespace Reflection
 	{
 		return PropertyTypeNames[type];
 	}
+
+	ePropertyType PropertyTypes::GetTypeFromName(const string& name)
+	{
+		for (int32 i = 0; i < NUM_PROPERTY_TYPES; ++i)
+		{
+			if (name.compare(PropertyTypeNames[i]) == 0) { return (ePropertyType)i; }
+		}
+		return PT_UNKNOWN;
+	}
 }
 

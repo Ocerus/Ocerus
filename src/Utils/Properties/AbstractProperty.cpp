@@ -118,3 +118,46 @@ void Reflection::AbstractProperty::SetValueFromString( RTTIBaseClass* owner, con
 		ocError << "Parsing property of type '" << PropertyTypes::GetStringName(GetType()) << "' from string is not implemented";
     }
 }
+
+template<typename T>
+void ReadArrayValueXML(Reflection::AbstractProperty* prop, RTTIBaseClass* owner, ResourceSystem::XMLNodeIterator& input)
+{
+	vector<T> vertices;
+	for (ResourceSystem::XMLNodeIterator vertIt = input.IterateChildren(); vertIt != input.EndChildren(); ++vertIt)
+	{
+		if ((*vertIt).compare("Item") == 0) { vertices.push_back(Utils::XMLConverter::ReadFromXML<T>(vertIt)); }
+		else ocError << "XML:Entity: Expected 'Item', found '" << *vertIt << "'";
+	}
+
+	Array<T> vertArray(vertices.size());
+	for (uint32 i=0; i<vertices.size(); ++i)
+	{
+		vertArray[i] = vertices[i];
+	}
+	prop->SetValue<Array<T>*>(owner, &vertArray);
+}
+
+void Reflection::AbstractProperty::ReadValueXML(RTTIBaseClass* owner, ResourceSystem::XMLNodeIterator& input)
+{
+	int32 a = Utils::XMLConverter::ReadFromXML<int32>(input);
+	if (a == 0) {}
+	switch (GetType())
+	{
+	// We generate cases for all property types and arrays of property types here.
+	#define SCRIPT_ONLY
+	#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter) case typeID: \
+		SetValue<typeClass>(owner, Utils::XMLConverter::ReadFromXML<typeClass>(input)); break;
+    #include "Utils/Properties/PropertyTypes.h"
+	#undef PROPERTY_TYPE
+
+	#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter) case typeID##_ARRAY: \
+		ReadArrayValueXML<typeClass>(this, owner, input); break;
+		//SetValue<Array<typeClass>*>(owner, Utils::XMLConverter::ReadFromXML<Array<typeClass>*>(input)); break;
+	#include "Utils/Properties/PropertyTypes.h"
+	#undef PROPERTY_TYPE
+	#undef SCRIPT_ONLY
+
+	default:
+		OC_NOT_REACHED();
+	}
+}

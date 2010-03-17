@@ -152,6 +152,10 @@ namespace EntitySystem
 		bool RegisterDynamicPropertyOfEntityComponent(const EntityHandle entity, const ComponentID component,
 			const StringKey propertyKey, const PropertyAccessFlags accessFlags, const string& comment);
 
+		bool RegisterDynamicPropertyOfEntityComponent(Reflection::ePropertyType propertyType, 
+			const EntityHandle entity, const ComponentID component, const StringKey propertyKey,
+			const PropertyAccessFlags accessFlags, const string& comment);
+
 		/// Unregister a dynamic property of a component of an entity.
 		bool UnregisterDynamicPropertyOfEntityComponent(const EntityHandle entity, const ComponentID component,
 			const StringKey propertyKey);
@@ -234,10 +238,10 @@ namespace EntitySystem
 		void UpdatePrototypeInstance(const EntityID prototype, const EntityID instance, const bool forceOverwrite);
 
 		/// Load an entity from the XML file given a node iterator to its node.
-		void LoadEntityFromXML( ResourceSystem::XMLNodeIterator &entIt, const bool isPrototype, ResourceSystem::XMLResourcePtr xml );
+		void LoadEntityFromXML(ResourceSystem::XMLNodeIterator &entIt, const bool isPrototype);
 
 		/// Load a property for the given entity from a XML file.
-		void LoadEntityPropertyFromXML( const EntityID entityID, const ComponentID componentID, PrototypeInfo* prototypeInfo, ResourceSystem::XMLResourcePtr xml, ResourceSystem::XMLNodeIterator& xmlPropertyIterator );
+		void LoadEntityPropertyFromXML(const EntityID entityID, const ComponentID componentID, PrototypeInfo* prototypeInfo, ResourceSystem::XMLNodeIterator& xmlPropertyIterator);
 
 		/// Save and entity to the XML file.
 		bool SaveEntityToStorage(const EntityID entityID, ResourceSystem::XMLOutput& storage, const bool isPrototype);

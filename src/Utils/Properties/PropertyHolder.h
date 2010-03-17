@@ -78,6 +78,7 @@ namespace Reflection
 			return mProperty->GetValue<T>(mOwner);
 		}
 
+		/// Returns the string representation of the value of this property.
 		inline string GetValueString(void)
 		{
 			if (!mProperty)
@@ -88,6 +89,7 @@ namespace Reflection
 			return mProperty->GetValueString(mOwner);
 		}
 
+		/// Write the XML representation of the value of holder's property to XML output.
 		inline void WriteValueXML(ResourceSystem::XMLOutput& output)
 		{
 			if (!mProperty)
@@ -113,8 +115,23 @@ namespace Reflection
 		/// Parses the typed value of this property from the input string.
 		inline void SetValueFromString(const string& str)
 		{
-			OC_DASSERT(mProperty);
+			if (!mProperty)
+			{
+				ReportUndefined();
+				return;
+			}
 			mProperty->SetValueFromString(mOwner, str);
+		}
+		
+		/// Parses the typed valued of this property from the XML input.
+		inline void ReadValueXML(ResourceSystem::XMLNodeIterator& input)
+		{
+			if (!mProperty)
+			{
+				ReportUndefined();
+				return;
+			}
+			mProperty->ReadValueXML(mOwner, input);
 		}
 
 		/// Calls a function this property represents.

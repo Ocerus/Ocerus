@@ -75,6 +75,9 @@ namespace Reflection
 		/// Returns the string name of this property type.
 		const char* GetStringName(const ePropertyType type);
 
+		/// Returns the property type from its string reprezentation, PT_UNKNOWN on error.
+		ePropertyType GetTypeFromName(const string& name);
+
 	}
 }
 

@@ -97,6 +97,9 @@ namespace Reflection
 		/// Parses the typed value of this property from the input string.
 		void SetValueFromString(RTTIBaseClass* owner, const string& str);
 
+		/// Parses the typed valued of this property from the XML input.
+		void ReadValueXML(RTTIBaseClass* owner, ResourceSystem::XMLNodeIterator& input);
+
 	protected:
 
 		/// Reports an error when the property is accessed with a wrong type and cannot be converted between these types.

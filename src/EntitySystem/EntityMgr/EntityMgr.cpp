@@ -407,6 +407,29 @@ bool EntitySystem::EntityMgr::HasEntityProperty( const EntityHandle entity, cons
 	return false;
 }
 
+bool EntitySystem::EntityMgr::RegisterDynamicPropertyOfEntityComponent(Reflection::ePropertyType propertyType, 
+	const EntityHandle entity, const ComponentID component, const StringKey propertyKey,
+	const Reflection::PropertyAccessFlags accessFlags, const string& comment)
+{
+	switch (propertyType)
+	{
+	// We generate cases for all property types and arrays of property types here.
+	#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter) case typeID: \
+		return RegisterDynamicPropertyOfEntityComponent<typeClass>(entity, component, propertyKey, accessFlags, comment);
+	#include "Utils/Properties/PropertyTypes.h"
+	#undef PROPERTY_TYPE
+
+	#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter) case typeID##_ARRAY: \
+		return RegisterDynamicPropertyOfEntityComponent<Array<typeClass>*>(entity, component, propertyKey, accessFlags, comment);
+	#include "Utils/Properties/PropertyTypes.h"
+	#undef PROPERTY_TYPE
+
+	default:
+		OC_NOT_REACHED();
+		return false;
+	}
+}
+
 bool EntitySystem::EntityMgr::UnregisterDynamicPropertyOfEntityComponent(const EntityHandle entity, const ComponentID component,
 	const StringKey propertyKey)
 {
@@ -447,30 +470,58 @@ void LoadEntityPropertyArrayFromXML( PropertyHolder prop, ResourceSystem::XMLRes
 	prop.SetValue<Array<T>*>(&vertArray);
 }
 
-void EntitySystem::EntityMgr::LoadEntityPropertyFromXML( const EntityID entityID, const ComponentID componentID, PrototypeInfo* prototypeInfo, ResourceSystem::XMLResourcePtr xml, ResourceSystem::XMLNodeIterator& xmlPropertyIterator )
+void EntitySystem::EntityMgr::LoadEntityPropertyFromXML(const EntityID entityID, const ComponentID componentID, 
+	PrototypeInfo* prototypeInfo, ResourceSystem::XMLNodeIterator& xmlPropertyIterator)
 {
 	StringKey propertyKey(*xmlPropertyIterator);
+	
+	// test whether it is a dynamic property
+	if (!HasEntityComponentProperty(entityID, componentID, propertyKey, PA_INIT))
+	{
+		if (xmlPropertyIterator.HasAttribute("Type"))
+		{
+			string propertyTypeName = xmlPropertyIterator.GetAttribute<string>("Type");
+			Reflection::ePropertyType propertyType = Reflection::PropertyTypes::GetTypeFromName(propertyTypeName);
+			if (propertyType == PT_UNKNOWN)
+			{
+				ocError << "XML:Entity: Unknown property type '" << propertyTypeName << "'.";
+				return;
+			}
+			Reflection::PropertyAccessFlags accessFlags = Reflection::PA_FULL_ACCESS;
+			if (xmlPropertyIterator.HasAttribute("Access"))
+			{
+				accessFlags = (uint8)xmlPropertyIterator.GetAttribute<uint16>("Access");
+			}
 
+			string comment = "";
+			if (xmlPropertyIterator.HasAttribute("Comment"))
+			{
+				comment = xmlPropertyIterator.GetAttribute<string>("Comment");
+			}
+
+			if (!RegisterDynamicPropertyOfEntityComponent(propertyType, entityID, componentID,
+				propertyKey, accessFlags, comment))
+			{
+				ocError << "XML:Entity: Cannot registry dynamic entity property '" << *xmlPropertyIterator << "'.";
+				return;
+			}
+		}
+		else
+		{
+			ocError << "XML:Entity: Unknown entity property '" << *xmlPropertyIterator << "' (it might not be marked as initable (PA_INIT))";
+			return;
+		}
+	}
+	
 	// the property was stored in the XML file for the prototype, so it's a shared property
 	if (prototypeInfo) prototypeInfo->mSharedProperties.insert(propertyKey);
 
 	PropertyHolder prop = GetEntityComponentProperty(entityID, componentID, propertyKey);
 
-	if (prop.GetType() == PT_VECTOR2_ARRAY)
-	{
-		LoadEntityPropertyArrayFromXML<Vector2>(prop, xml, xmlPropertyIterator);
-	}
-	else if (prop.GetType() == PT_STRING_ARRAY)
-	{
-		LoadEntityPropertyArrayFromXML<string>(prop, xml, xmlPropertyIterator);
-	}
-	else
-	{
-		prop.SetValueFromString(xmlPropertyIterator.GetChildValue<string>());
-	}
+	prop.ReadValueXML(xmlPropertyIterator);
 }
 
-void EntitySystem::EntityMgr::LoadEntityFromXML( ResourceSystem::XMLNodeIterator &entIt, const bool isPrototype, ResourceSystem::XMLResourcePtr xml )
+void EntitySystem::EntityMgr::LoadEntityFromXML(ResourceSystem::XMLNodeIterator &entIt, const bool isPrototype)
 {
 	// init the entity description
 	EntityDescription desc;
@@ -481,7 +532,7 @@ void EntitySystem::EntityMgr::LoadEntityFromXML( ResourceSystem::XMLNodeIterator
 	if (isPrototype) desc.SetKind(EntityDescription::EK_PROTOTYPE);
 
 	// add component types
-	for (ResourceSystem::XMLNodeIterator cmpIt=xml->IterateChildren(entIt); cmpIt!=xml->EndChildren(entIt); ++cmpIt)
+	for (ResourceSystem::XMLNodeIterator cmpIt = entIt.IterateChildren(); cmpIt != entIt.EndChildren(); ++cmpIt)
 	{
 		if ((*cmpIt).compare("Component") == 0)	desc.AddComponent(DetectComponentType(cmpIt.GetAttribute<string>("Type")));
 	}
@@ -497,7 +548,7 @@ void EntitySystem::EntityMgr::LoadEntityFromXML( ResourceSystem::XMLNodeIterator
 
 	// set properties loaded from the file
 	ComponentID currentComponent = -1;
-	for (ResourceSystem::XMLNodeIterator cmpIt=xml->IterateChildren(entIt); cmpIt!=xml->EndChildren(entIt); ++cmpIt)
+	for (ResourceSystem::XMLNodeIterator cmpIt = entIt.IterateChildren(); cmpIt != entIt.EndChildren(); ++cmpIt)
 	{
 		// skip unwanted data
 		if ((*cmpIt).compare("Component") != 0)
@@ -505,19 +556,18 @@ void EntitySystem::EntityMgr::LoadEntityFromXML( ResourceSystem::XMLNodeIterator
 
 		++currentComponent;
 
-		for (ResourceSystem::XMLNodeIterator xmlPropertyIter=xml->IterateChildren(cmpIt); xmlPropertyIter!=xml->EndChildren(cmpIt); ++xmlPropertyIter)
+		bool first = true;
+
+		for (ResourceSystem::XMLNodeIterator xmlPropertyIter = cmpIt.IterateChildren(); 
+			xmlPropertyIter != cmpIt.EndChildren(); ++xmlPropertyIter)
 		{
 			// skip unwanted data
-			if ((*xmlPropertyIter).compare("Type") == 0)
+			if (first && (*xmlPropertyIter).compare("Type") == 0)
+			{
+				first = false;
 				continue;
-			if (!HasEntityComponentProperty(entity.GetID(), currentComponent, *xmlPropertyIter, PA_INIT))
-			{
-				ocError << "XML:Entity: Unknown entity property '" << *xmlPropertyIter << "' (it might not be marked as initable (PA_INIT))";
 			}
-			else
-			{
-				LoadEntityPropertyFromXML(entity.GetID(), currentComponent, prototypeInfo, xml, xmlPropertyIter);
-			}
+			LoadEntityPropertyFromXML(entity.GetID(), currentComponent, prototypeInfo, xmlPropertyIter);
 		}
 	}
 
@@ -527,7 +577,7 @@ void EntitySystem::EntityMgr::LoadEntityFromXML( ResourceSystem::XMLNodeIterator
 	entity.FinishInit();
 }
 
-bool EntitySystem::EntityMgr::LoadEntitiesFromResource( ResourceSystem::ResourcePtr res, const bool isPrototype )
+bool EntitySystem::EntityMgr::LoadEntitiesFromResource(ResourceSystem::ResourcePtr res, const bool isPrototype)
 {
 	if (res == 0)
 	{
@@ -538,11 +588,11 @@ bool EntitySystem::EntityMgr::LoadEntitiesFromResource( ResourceSystem::Resource
 
 	bool result = true;
 
-	for (ResourceSystem::XMLNodeIterator entIt=xml->IterateTopLevel(); entIt!=xml->EndTopLevel(); ++entIt)
+	for (ResourceSystem::XMLNodeIterator entIt = xml->IterateTopLevel(); entIt != xml->EndTopLevel(); ++entIt)
 	{
 		if ((*entIt).compare("Entity") == 0)
 		{
-			LoadEntityFromXML(entIt, isPrototype, xml);
+			LoadEntityFromXML(entIt, isPrototype);
 		}
 		else
 		{
@@ -589,7 +639,11 @@ bool EntitySystem::EntityMgr::SaveEntityToStorage(const EntitySystem::EntityID e
 			storage.BeginElementStart(propName);
 			if (it->IsValued()) // property is dynamic, so we must save a type
 			{ 
-				storage.AddAttribute("Type", Utils::StringConverter::ToString((int32)it->GetType()));
+				storage.AddAttribute("Type", string(Reflection::PropertyTypes::GetStringName(it->GetType())));
+				if (it->GetAccessFlags() != Reflection::PA_FULL_ACCESS)
+					storage.AddAttribute("Access", Utils::StringConverter::ToString<uint16>(it->GetAccessFlags()));
+				if (it->GetComment() != "")
+					storage.AddAttribute("Comment", it->GetComment());
 			}
 			storage.BeginElementFinish();
 

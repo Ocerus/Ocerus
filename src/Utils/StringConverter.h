@@ -84,6 +84,9 @@ namespace Utils
 		inline string FromString(const string& str) { return str; }
 
 		template<>
+		inline Utils::StringKey FromString(const string& str) { return Utils::StringKey(str); }
+
+		template<>
 		char* FromString(const string& str);
 
 		template<>

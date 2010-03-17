@@ -93,6 +93,10 @@ namespace EntitySystem
 		/// Invalid handle representing no entity in the system.
 		static const EntityHandle Null;
 
+		/// New entities can be created only by the EntityMgr, that's why it's private.
+		/// We need to have this public for loading scene.
+		EntityHandle(EntityID ID): mEntityID(ID) {}
+
 	private:
 
 		friend class EntityMgr;
@@ -108,9 +112,6 @@ namespace EntitySystem
 		static EntityID GetMaxID(void) { return sLastFreeID; }
 		static void IncID(EntityID& id);
 		static void DecID(EntityID& id);
-
-		/// New entities can be created only by the EntityMgr, that's why it's private.
-		EntityHandle(EntityID ID): mEntityID(ID) {}
 	};
 
 	inline EntityHandle::EntityHandle(const EntityHandle& handle): mEntityID(handle.mEntityID) {}

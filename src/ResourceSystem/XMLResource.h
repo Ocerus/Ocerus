@@ -16,7 +16,13 @@ namespace ResourceSystem
 	class XMLNodeIterator : public XMLDataMap::sibling_iterator
 	{
 	public:
+		
+		/// Returns a node iterator for children of the specified node.
+		inline XMLNodeIterator IterateChildren(void);
 
+		/// End iterator for IterateChildren.
+		inline XMLNodeIterator EndChildren(void);
+		
 		/// Returns true if the attribute of the current node exists.
 		inline bool HasAttribute(const string& name);
 
@@ -140,6 +146,16 @@ namespace ResourceSystem
 	};
 
 
+	inline XMLNodeIterator XMLNodeIterator::IterateChildren(void)
+	{
+		return mOwner->IterateChildren(*this);
+	}
+	
+	inline XMLNodeIterator XMLNodeIterator::EndChildren(void)
+	{
+		return mOwner->EndChildren(*this);
+	}
+	
 	inline bool XMLNodeIterator::HasAttribute( const string& name )
 	{
 		return mOwner->HasAttribute(*this, name);
