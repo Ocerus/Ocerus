@@ -26,7 +26,7 @@ namespace Editor
 			typedef Array<ElementType> ArrayType;
 			typedef ITypedValueEditorModel<ArrayType*> Model;
 
-			ArrayEditor(Model* model): mModel(model), mWidget(0), mEditboxWidget(0), mArrayEditorWidget(0) {}
+			ArrayEditor(Model* model): mModel(model), mWidget(0), mHeaderWidget(0), mLayout(0) {}
 
 			virtual ~ArrayEditor() { ClearArray(); delete mModel; }
 
@@ -63,12 +63,8 @@ namespace Editor
 
 			CEGUI::String mNamePrefix;
 			CEGUI::Window* mWidget;
-
-			
-			CEGUI::Window* mEditboxWidget;
-			CEGUI::Window* mArrayEditorWidget;
-			CEGUI::Editbox* mNewItemWidget;
-			CEGUI::Listbox* mArrayEditorListWidget;
+			CEGUI::Window* mHeaderWidget;
+			GUISystem::VerticalLayout* mLayout;
 	};
 
 }

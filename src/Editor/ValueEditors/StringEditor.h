@@ -15,7 +15,7 @@ namespace Editor {
 		typedef ITypedValueEditorModel<string> Model;
 		
 		/// Constructs a StringEditor that uses given model.
-		StringEditor(Model* model): mModel(model), mEditboxWidget(0) {}
+		StringEditor(Model* model): mModel(model), mEditorWidget(0), mEditboxWidget(0) {}
 
 		~StringEditor();
 
@@ -37,6 +37,7 @@ namespace Editor {
 
 	private:
 		Model* mModel;
+		CEGUI::Window* mEditorWidget;
 		CEGUI::Window* mEditboxWidget;
 	};
 }

@@ -39,6 +39,7 @@ namespace GfxSystem
 namespace GUISystem 
 {
 	class GUIMgr;
+	class VerticalLayout;
 }
 
 namespace InputSystem

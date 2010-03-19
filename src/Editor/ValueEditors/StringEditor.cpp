@@ -7,15 +7,17 @@ using namespace Editor;
 Editor::StringEditor::~StringEditor()
 {
 	delete mModel;
+	gCEGUIWM.destroyWindow(mEditorWidget);
 }
 
 CEGUI::Window* Editor::StringEditor::CreateWidget(const CEGUI::String& namePrefix)
 {
-	OC_ASSERT(mEditboxWidget == 0);
+	OC_DASSERT(mEditorWidget == 0);
+	OC_DASSERT(mEditboxWidget == 0);
 
 	/// Create main editor widget
-	CEGUI::Window* widget = gCEGUIWM.createWindow("DefaultWindow", namePrefix);
-	widget->setHeight(CEGUI::UDim(0, GetEditboxHeight()));
+	mEditorWidget = gCEGUIWM.createWindow("DefaultWindow", namePrefix);
+	mEditorWidget->setHeight(CEGUI::UDim(0, GetEditboxHeight()));
 
 	/// Create label widget of the editor
 	CEGUI::Window* labelWidget = this->CreateEditorLabelWidget(namePrefix + "/Label", mModel);
@@ -25,7 +27,7 @@ CEGUI::Window* Editor::StringEditor::CreateWidget(const CEGUI::String& namePrefi
 	} else {
 		labelWidget->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), CEGUI::UDim(0.5f, -2), CEGUI::UDim(1, 0)));
 	}
-	widget->addChildWindow(labelWidget);
+	mEditorWidget->addChildWindow(labelWidget);
 
 	/// Create editbox widget of the editor
 	mEditboxWidget = static_cast<CEGUI::Editbox*>(gCEGUIWM.createWindow("Editor/Editbox", namePrefix + "/Editbox"));
@@ -36,7 +38,7 @@ CEGUI::Window* Editor::StringEditor::CreateWidget(const CEGUI::String& namePrefi
 		mEditboxWidget->setArea(CEGUI::URect(CEGUI::UDim(0.5f, 2), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
 	}
 	mEditboxWidget->setProperty("ReadOnly", mModel->IsReadOnly() ? "True" : "False");
-	widget->addChildWindow(mEditboxWidget);
+	mEditorWidget->addChildWindow(mEditboxWidget);
 
 	/// Subscribe to editbox events
 	mEditboxWidget->subscribeEvent(CEGUI::Editbox::EventActivated, CEGUI::Event::Subscriber(&Editor::StringEditor::OnEventActivated, this));
@@ -45,7 +47,7 @@ CEGUI::Window* Editor::StringEditor::CreateWidget(const CEGUI::String& namePrefi
 
 	/// Update editor and return main widget
 	Update();
-	return widget;
+	return mEditorWidget;
 }
 
 void Editor::StringEditor::Submit()
