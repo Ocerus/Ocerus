@@ -1,0 +1,60 @@
+\begin{description}
+  \item[Namespaces:] GfxSystem
+  \item[Headers:]GfxRenderer.h,GfxSceneMgr.h, GfxStructures.h, GfxWindow.h, IGfxWindowListener.h, OglRenderer.h, Texture.h, RenderTarget.h, GfxViewport.h
+  \item[Source files:] GfxRenderer.cpp,GfxSceneMgr.cpp, GfxStructures.cpp, GfxWindow.cpp, OglRenderer.cpp, Texture.cpp, GfxViewport.cpp
+  \item[Classes:] GfxRenderer, OglRenderer, GfxSceneMgr, GfxWindow, IGfxWindowListener, Texture, GfxViewport
+  \item[Libraries used:] SDL, OpenGL, SOIL
+\end{description}
+
+\section{Introduction}
+
+One of the main goals of Ocerus was that it should be as platform-independent as possible. The most troublesome part of the engine in this matter is the graphics which in Ocerus is done by the GfxSystem.
+
+
+\section{Application window}
+Creating application window very much depends on used opreating system. In Ocerus, this functionality is implemented by \emph{GfxWindow} with usage of the SDL library.
+
+SDL (Simple DirectMedia Layer) is a free cross-platform multi-media development API used for games, emulators, MPEG players, and other applications. The main advantage is that it supports many operating systems.
+
+It is used for handling window events aswell. Currently, the only event that is being handled is the "change resolution" event. There is a listener implemeted for this event(\emph{IGfxWindowListener}) so every other system that needs to be informed about a resolution change can add its own listener. This feature is used by InputSystem and GUISystem.
+
+Note that SDL also provides features in low-level audio and input management but since audio is not yet implemented and input management is done by more specialized library, the only SDL features used is Ocerus are window management and creating rendering context.
+
+\section{Rendering}
+In today's games it's quite neccesary to use hardware accelareted graphics even in 2D. It can speed up the rendering few-times, especially when rotating and blending sprites.
+
+\subsection{DirectX vs.OpenGL}
+For accelarated graphics there are basically only two suitable libraries: DirectX and OpenGL. Problem with DirectX is that it is developed by Microsoft and it runs only under Windows OS. Problem with OpenGL is the it doesn't run on X-box. 
+OpenGL support is implemented first as X-box is not actual target platform of Ocerus.
+
+\subsection{Rendering managment}
+The rendering managment is done by singleton class \emph{GfxRenderer}. Since it is necessary to be able to easily implement both OpenGL and DirectX support, the \emph{GfxRenderer} is abstract class which is therefore inherited by platform-dependent classes. Currently, \emph{OglRenderer} which uses OpenGL is implemented.
+
+Note that \emph{GUISystem} uses its own rendering management.
+
+\subsection{Textures}
+For loading textures, SOIL library is used.
+SOIL (Simple OpenGL Image Library) is a tiny C library used for uploading textures into OpenGL. It supports most of the common image formats.
+
+Loading textures is implemented in class \emph{Texture}. It inherits from  \emph{Resource} class, see \emph{ResourceSystem}. 
+
+Since SOIL depends on OpenGL, inherited class \emph{OglTexture} is introduced. It is the same concept as with the \emph{GfxRenderer/OglRender}.
+ 
+\subsection{Spatial partitioning}
+Not yet implemented.
+
+\subsection{Rendering entities}
+Not final version ready.
+
+
+%\section{Glossary}
+%This is a glossary of the most used terms in the previous sections:
+%
+%\begin{description}
+%  \item[viewport] -- part of application window to where it is possible to render scene.
+%\end{description}
+
+
+%\begin{thebibliography}{9}                                                                                                
+%\bibitem {angelscript}AngelScript documentation, file /AngelScript/index.html
+%\end{thebibliography}
