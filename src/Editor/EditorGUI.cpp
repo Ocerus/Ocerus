@@ -1,7 +1,7 @@
 #include "Common.h"
 #include "EditorGUI.h"
 #include "EditorMgr.h"
-#include "PropertyEditors/PropertyEditorCreator.h"
+#include "ValueEditors/PropertyEditorCreator.h"
 
 #include "GUISystem/GUIMgr.h"
 #include "EntitySystem/EntityMgr/EntityMgr.h"
@@ -114,12 +114,12 @@ void EditorGUI::UpdateEntityEditorWindow()
 		GUISystem::VerticalLayout* layout = new GUISystem::VerticalLayout(componentGroup, componentGroup->getContentPane(), true);
 
 		{
-			IValueEditor* editor = CreateEntityIDEditor(currentEntity);
+			AbstractValueEditor* editor = CreateEntityIDEditor(currentEntity);
 			mPropertyEditors.push_back(editor);
 			layout->AddChildWindow(editor->CreateWidget(namePrefix + "/EntityIdEditor"));
 		}
 		{
-			IValueEditor* editor = CreateEntityNameEditor(currentEntity);
+			AbstractValueEditor* editor = CreateEntityNameEditor(currentEntity);
 			mPropertyEditors.push_back(editor);
 			layout->AddChildWindow(editor->CreateWidget(namePrefix + "/EntityNameEditor"));
 		}
@@ -148,7 +148,7 @@ void EditorGUI::UpdateEntityEditorWindow()
 		
 		for (PropertyList::iterator it = propertyList.begin(); it != propertyList.end(); ++it)
 		{
-			IValueEditor* editor = CreatePropertyEditor(*it);
+			AbstractValueEditor* editor = CreatePropertyEditor(*it);
 			mPropertyEditors.push_back(editor);
 			layout->AddChildWindow(editor->CreateWidget(namePrefix + "/" + it->GetKey().ToString() + "Editor"));
 		}

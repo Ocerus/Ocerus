@@ -2,7 +2,7 @@
 #include "PropertyHolder.h"
 
 
-void PropertyHolder::ReportUndefined( void )
+void PropertyHolder::ReportUndefined( void ) const
 {
 	ocError << "PropertyHolder: Undefined property";
 }

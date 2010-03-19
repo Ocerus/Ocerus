@@ -81,13 +81,10 @@ namespace Utils
 #endif
 
 		template<>
+		bool FromString(const string& str);
+
+		template<>
 		inline string FromString(const string& str) { return str; }
-
-		template<>
-		inline Utils::StringKey FromString(const string& str) { return Utils::StringKey(str); }
-
-		template<>
-		char* FromString(const string& str);
 
 		template<>
 		Vector2 FromString(const string& str);
@@ -96,7 +93,27 @@ namespace Utils
 		GfxSystem::Color FromString(const string& str);
 
 		template<>
-		bool FromString(const string& str);
+		PropertyFunctionParameters FromString(const string& str);
+
+		template<>
+		EntitySystem::EntityHandle FromString(const string& str);
+
+		template<>
+		StringKey FromString(const string& str);
+
+		template<>
+		ResourceSystem::ResourcePtr FromString(const string& str);
+
+		template<>
+		PhysicalShape* FromString(const string& str);
+
+		template<>
+		PhysicalBody* FromString(const string& str);
+
+		//template<>
+		//char* FromString(const string& str);
+
+
 
 	}
 }

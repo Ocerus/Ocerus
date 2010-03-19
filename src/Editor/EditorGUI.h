@@ -22,7 +22,7 @@ namespace GUISystem
 
 namespace Editor
 {
-	class IValueEditor;
+	class AbstractValueEditor;
 
 	/// The EditorGUI class manages the editor GUI.
 	class EditorGUI
@@ -53,7 +53,7 @@ namespace Editor
 		int32 mComponentGroupHeight;
 		float32 mPropertyUpdateTimer;
 
-		typedef vector<IValueEditor*> PropertyEditors;
+		typedef vector<AbstractValueEditor*> PropertyEditors;
 		PropertyEditors mPropertyEditors;
 		GUISystem::VerticalLayout* mEntityEditorLayout;
 		

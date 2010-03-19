@@ -1,28 +1,30 @@
 /// @file
-/// Declares an interface for value editors.
+/// Declares an abstract value editor with model.
 
-#ifndef _IVALUEEDITOR_H_
-#define _IVALUEEDITOR_H_
+#ifndef _ABSTRACTVALUEEDITOR_H_
+#define _ABSTRACTVALUEEDITOR_H_
 
 #include "Base.h"
+#include "Models/IValueEditorModel.h"
 
 namespace CEGUI
 {
 	class String;
 	class Window;
+	class Editbox;
 }
 
 namespace Editor
 {
-	/// The IValueEditor class declares an interface for value editors and also
+	/// The AbstractValueEditor class declares an interface for value editors and also
 	/// implements the basic functionality of update locking that can be used by
-	/// subclasses.
-	/// A value editor is an object that provides a mechanism for editing an
-	/// arbitrary variable in the game.
-	class IValueEditor
+	/// subclasses. Moreover, it provides methods that can be used in subclasses.
+	class AbstractValueEditor
 	{
 	public:
-		IValueEditor(): mUpdatesLocked(false) {}
+		AbstractValueEditor(): mUpdatesLocked(false) {}
+
+		virtual ~AbstractValueEditor() {}
 
 		/// Creates the editor widget and returns it. The value editor manages its
 		/// height so you should not change it. Some value editors can even change
@@ -50,9 +52,17 @@ namespace Editor
 		/// Returns whether editor is locked for updates.
 		bool UpdatesLocked() const { return mUpdatesLocked; }
 
+		/// Creates a new static text widget, sets the common properties and returns it.
+		CEGUI::Window* CreateStaticTextWidget(const CEGUI::String& name, const CEGUI::String& text, const CEGUI::String& tooltip);
+
+		/// 
+		CEGUI::Window* CreateEditorLabelWidget(const CEGUI::String& name, const Editor::IValueEditorModel* model);
+
+		static float GetEditboxHeight();
+
 	private:
 		bool mUpdatesLocked;
 	};
 }
 
-#endif // _IVALUEEDITOR_H_
+#endif // _ABSTRACTVALUEEDITOR_H_

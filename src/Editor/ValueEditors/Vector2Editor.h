@@ -9,12 +9,15 @@
 
 namespace Editor {
 
-	template<class Model>
-	class Vector2Editor: public Editor::AbstractValueEditor<Model>
+	class Vector2Editor: public AbstractValueEditor
 	{
 	public:
+		typedef ITypedValueEditorModel<Vector2> Model;
+
 		/// Constructs a Vector2Editor that uses given model.
-		Vector2Editor(const Model& model): AbstractValueEditor<Model>(model), mEditbox1Widget(0), mEditbox2Widget(0) {}
+		Vector2Editor(Model* model): mModel(model), mEditbox1Widget(0), mEditbox2Widget(0) {}
+
+		virtual ~Vector2Editor();
 
 		virtual CEGUI::Window* CreateWidget(const CEGUI::String& namePrefix);
 
@@ -33,6 +36,7 @@ namespace Editor {
 		//@}
 
 	private:
+		Model* mModel;
 		CEGUI::Window* mEditbox1Widget;
 		CEGUI::Window* mEditbox2Widget;
 	};

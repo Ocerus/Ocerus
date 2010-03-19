@@ -9,12 +9,15 @@
 
 namespace Editor {
 
-	template<class Model>
-	class StringEditor: public Editor::AbstractValueEditor<Model>
+	class StringEditor: public AbstractValueEditor
 	{
 	public:
+		typedef ITypedValueEditorModel<string> Model;
+		
 		/// Constructs a StringEditor that uses given model.
-		StringEditor(const Model& model): AbstractValueEditor<Model>(model), mEditboxWidget(0) {}
+		StringEditor(Model* model): mModel(model), mEditboxWidget(0) {}
+
+		~StringEditor();
 
 		virtual CEGUI::Window* CreateWidget(const CEGUI::String& namePrefix);
 
@@ -33,6 +36,7 @@ namespace Editor {
 		//@}
 
 	private:
+		Model* mModel;
 		CEGUI::Window* mEditboxWidget;
 	};
 }

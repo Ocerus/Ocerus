@@ -68,7 +68,7 @@ namespace Reflection
 
 		/// Returns the typed value of this property.
 		template<class T>
-		T GetValue(void)
+		T GetValue(void) const
 		{
 			if (!mProperty)
 			{
@@ -78,8 +78,7 @@ namespace Reflection
 			return mProperty->GetValue<T>(mOwner);
 		}
 
-		/// Returns the string representation of the value of this property.
-		inline string GetValueString(void)
+		inline string GetValueString(void) const
 		{
 			if (!mProperty)
 			{
@@ -185,7 +184,7 @@ namespace Reflection
 		AbstractProperty* mProperty;
 
 		/// Problem reporting.
-		void ReportUndefined(void);
+		void ReportUndefined(void) const;
 	};
 }
 

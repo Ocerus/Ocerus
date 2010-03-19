@@ -32,7 +32,7 @@ template<>
 string StringConverter::ToString(const PropertyFunctionParameters& val)
 {
 	OC_UNUSED(val);
-	ocError << "Converting value of type 'PropertyFunctionParameters' to string is not implemented";
+	ocError << "Converting value of type 'PropertyFunctionParameters' to string is not implemented.";
 	return "";
 }
 
@@ -49,6 +49,7 @@ string StringConverter::ToString(const EntitySystem::EntityHandle& val)
 	}
 }
 
+/*
 template<>
 char* StringConverter::FromString(const string& str)
 {
@@ -56,6 +57,7 @@ char* StringConverter::FromString(const string& str)
 	OC_ASSERT_MSG(false, "Use .c_str() instead, noob!");
 	return 0;
 }
+*/
 
 template<>
 Vector2 StringConverter::FromString(const string& str)
@@ -101,6 +103,32 @@ GfxSystem::Color StringConverter::FromString(const string& str)
 }
 
 template<>
+PropertyFunctionParameters StringConverter::FromString(const string& str)
+{
+	ocError << "Converting string '" << str << "' to PropertyFunctionParameters is not valid conversion.";
+	return PropertyFunctionParameters::Null;
+}
+
+template<>
+EntitySystem::EntityHandle StringConverter::FromString(const string& str)
+{
+	if (!EntitySystem::EntityMgr::SingletonExists())
+	{
+		ocError << "Cannot convert string '" << str << "' to EntityHandle, because EntityMgr does not exist.";
+		return EntitySystem::EntityHandle::Null;
+	}
+	
+	EntitySystem::EntityHandle result = gEntityMgr.FindFirstEntity(str);
+	if (!result.IsValid())
+	{
+		ocError << "Cannot convert string '" << str << "' to EntityHandle, because no such entity exists.";
+		return EntitySystem::EntityHandle::Null;
+	}
+	return result;
+}
+
+
+template<>
 bool StringConverter::FromString(const string& str)
 {
 	bool result;
@@ -108,4 +136,31 @@ bool StringConverter::FromString(const string& str)
 	if ((iss >> std::boolalpha >> result).fail())
 		return false;
 	return result;
+}
+
+template<>
+StringKey StringConverter::FromString(const string& str)
+{
+	return StringKey(str);
+}
+
+template<>
+ResourceSystem::ResourcePtr StringConverter::FromString(const string& str)
+{
+	ocError << "Converting string '" << str << "' to ResourcePtr is not valid conversion.";
+	return ResourceSystem::ResourcePtr();
+}
+
+template<>
+PhysicalShape* StringConverter::FromString(const string& str)
+{
+	ocError << "Converting string '" << str << "' to PhysicalShape* is not valid conversion.";
+	return 0;
+}
+
+template<>
+PhysicalBody* StringConverter::FromString(const string& str)
+{
+	ocError << "Converting string '" << str << "' to PhysicalBody* is not valid conversion.";
+	return 0;
 }

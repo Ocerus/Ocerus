@@ -61,6 +61,7 @@ void AbstractProperty::WriteValueXML(const RTTIBaseClass* owner, ResourceSystem:
 	}
 }
 
+/// @todo: Use StringConverter here instead.
 void Reflection::AbstractProperty::SetValueFromString( RTTIBaseClass* owner, const string& str )
 {
     switch (GetType())
