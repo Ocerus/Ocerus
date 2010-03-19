@@ -34,22 +34,30 @@ namespace Editor
 		mHeaderWidget->addChildWindow(labelWidget);
 		
 		/// Create add element button
-		CEGUI::PushButton* buttonAddElement = static_cast<CEGUI::PushButton*>(gCEGUIWM.createWindow("Editor/Button", namePrefix + "Controls/ButtonAddElement"));
-		buttonAddElement->setText("Add");
-		buttonAddElement->setArea(CEGUI::URect(CEGUI::UDim(0.5f, 1), CEGUI::UDim(0, 0), CEGUI::UDim(0.6666f, -1), CEGUI::UDim(0, GetEditboxHeight())));
-		mHeaderWidget->addChildWindow(buttonAddElement);
+		mButtonAddElement = static_cast<CEGUI::PushButton*>(gCEGUIWM.createWindow("Editor/Button", namePrefix + "Controls/ButtonAddElement"));
+		mButtonAddElement->setText("Add");
+		mButtonAddElement->setArea(CEGUI::URect(CEGUI::UDim(0.5f, 1), CEGUI::UDim(0, 0), CEGUI::UDim(0.6666f, -1), CEGUI::UDim(0, GetEditboxHeight())));
+		mButtonAddElement->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Editor::ArrayEditor<ElementType>::OnEventButtonAddPressed, this));
+
+		
+		mHeaderWidget->addChildWindow(mButtonAddElement);
 		
 		/// Create revert button
-		CEGUI::PushButton* buttonRevert = static_cast<CEGUI::PushButton*>(gCEGUIWM.createWindow("Editor/Button", namePrefix + "Controls/ButtonRevert"));
-		buttonRevert->setText("Rvrt");
-		buttonRevert->setArea(CEGUI::URect(CEGUI::UDim(0.6666f, 1), CEGUI::UDim(0, 0), CEGUI::UDim(0.8333f, -1), CEGUI::UDim(0, GetEditboxHeight())));
-		mHeaderWidget->addChildWindow(buttonRevert);
+		mButtonRevert = static_cast<CEGUI::PushButton*>(gCEGUIWM.createWindow("Editor/Button", namePrefix + "Controls/ButtonRevert"));
+		mButtonRevert->setText("Rvrt");
+		mButtonRevert->setArea(CEGUI::URect(CEGUI::UDim(0.6666f, 1), CEGUI::UDim(0, 0), CEGUI::UDim(0.8333f, -1), CEGUI::UDim(0, GetEditboxHeight())));
+		mButtonRevert->setEnabled(false);
+		mButtonRevert->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Editor::ArrayEditor<ElementType>::OnEventButtonRevertPressed, this));
+
+		mHeaderWidget->addChildWindow(mButtonRevert);
 
 		/// Create save button
-		CEGUI::PushButton* buttonSave = static_cast<CEGUI::PushButton*>(gCEGUIWM.createWindow("Editor/Button", namePrefix + "Controls/ButtonSave"));
-		buttonSave->setText("Save");
-		buttonSave->setArea(CEGUI::URect(CEGUI::UDim(0.8333f, 1), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(0, GetEditboxHeight())));
-		mHeaderWidget->addChildWindow(buttonSave);
+		mButtonSave = static_cast<CEGUI::PushButton*>(gCEGUIWM.createWindow("Editor/Button", namePrefix + "Controls/ButtonSave"));
+		mButtonSave->setText("Save");
+		mButtonSave->setArea(CEGUI::URect(CEGUI::UDim(0.8333f, 1), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(0, GetEditboxHeight())));
+		mButtonSave->setEnabled(false);
+		mButtonSave->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Editor::ArrayEditor<ElementType>::OnEventButtonSavePressed, this));
+		mHeaderWidget->addChildWindow(mButtonSave);
 
 		/// Update editor and return main widget
 		Update();
@@ -57,9 +65,33 @@ namespace Editor
 	}
 
 	template<class ElementType>
+	void ArrayEditor<ElementType>::Submit()
+	{
+		for (typename vector<AbstractValueEditor*>::iterator it = mElementEditors.begin(); it != mElementEditors.end(); ++it)
+		{
+			(*it)->Submit();
+		}
+		ArrayType newArray(mArray.size());
+		int32 i = 0;
+		for (typename InternalArray::iterator it = mArray.begin(); it != mArray.end(); ++i, ++it)
+		{
+			newArray[i] = **it;
+		}
+		mModel->SetValue(&newArray);
+		UnlockUpdates();
+	}
+
+	template<class ElementType>
 	void ArrayEditor<ElementType>::Update()
 	{
 		if (UpdatesLocked()) return;
+
+		for (typename vector<AbstractValueEditor*>::iterator it = mElementEditors.begin(); it != mElementEditors.end(); ++it)
+		{
+			if ((*it)->UpdatesLocked())
+				LockUpdates();
+		}
+
 
 		mLayout->LockUpdates();
 		const ArrayType& array = *mModel->GetValue();
@@ -111,8 +143,26 @@ namespace Editor
 	}
 
 	template<class ElementType>
-	void ArrayEditor<ElementType>::UpdateArray()
+	bool ArrayEditor<ElementType>::OnEventButtonAddPressed(const CEGUI::EventArgs&)
 	{
+		///@todo AddElement
+		return true;
+	}
+
+	template<class ElementType>
+	bool ArrayEditor<ElementType>::OnEventButtonRevertPressed(const CEGUI::EventArgs& arg)
+	{
+		OC_UNUSED(arg);
+		UnlockUpdates();
+		return true;
+	}
+
+	template<class ElementType>
+	bool ArrayEditor<ElementType>::OnEventButtonSavePressed(const CEGUI::EventArgs& arg)
+	{
+		OC_UNUSED(arg);
+		Submit();
+		return true;
 	}
 
 	template<class ElementType>
@@ -136,6 +186,24 @@ namespace Editor
 		}
 		mArray.clear();
 	}
+
+	template<class ElementType>
+	void ArrayEditor<ElementType>::LockUpdates()
+	{
+		AbstractValueEditor::LockUpdates();
+		mButtonRevert->setEnabled(true);
+		mButtonSave->setEnabled(true);
+	}
+
+	template<class ElementType>
+	void ArrayEditor<ElementType>::UnlockUpdates()
+	{
+		AbstractValueEditor::UnlockUpdates();
+
+		mButtonRevert->setEnabled(false);
+		mButtonSave->setEnabled(false);
+	}
+
 }
 
 #endif // _ARRAYEDITORIMPL_H_

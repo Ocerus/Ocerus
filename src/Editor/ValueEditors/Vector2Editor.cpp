@@ -94,7 +94,6 @@ bool Editor::Vector2Editor::OnEventDeactivated(const CEGUI::EventArgs&)
 	if (mEditbox1Widget->isActive() || mEditbox2Widget->isActive())
 		return false;
 	this->UnlockUpdates();
-	this->Update();
 	return true;
 }
 

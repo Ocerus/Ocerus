@@ -42,15 +42,15 @@ namespace Editor
 		/// Submits the value from editor widget to the model.
 		virtual void Submit() = 0;
 
+		/// Returns whether editor is locked for updates.
+		bool UpdatesLocked() const { return mUpdatesLocked; }
+
 	protected:
 		/// Lock editor for updates. Update() will not update editor until it is unlocked again.
 		void LockUpdates() { mUpdatesLocked = true; }
 
 		/// Unlock editor for updates. Update() will update editor as long as it stays unlocked.
 		void UnlockUpdates() { mUpdatesLocked = false; }
-
-		/// Returns whether editor is locked for updates.
-		bool UpdatesLocked() const { return mUpdatesLocked; }
 
 		/// Creates a new static text widget, sets the common properties and returns it.
 		CEGUI::Window* CreateStaticTextWidget(const CEGUI::String& name, const CEGUI::String& text, const CEGUI::String& tooltip);

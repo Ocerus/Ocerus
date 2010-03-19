@@ -30,8 +30,8 @@ namespace Editor {
 
 		/// @name CEGUI callbacks
 		//@{
-		bool OnEventActivated(const CEGUI::EventArgs&) { this->Update(); this->LockUpdates(); return true;}
-		bool OnEventDeactivated(const CEGUI::EventArgs&) { this->UnlockUpdates(); this->Update(); return true;}
+		bool OnEventActivated(const CEGUI::EventArgs&) { this->LockUpdates(); return true;}
+		bool OnEventDeactivated(const CEGUI::EventArgs&) { this->UnlockUpdates(); return true;}
 		bool OnEventKeyDown(const CEGUI::EventArgs&);
 		//@}
 

@@ -26,14 +26,14 @@ namespace Editor
 			typedef Array<ElementType> ArrayType;
 			typedef ITypedValueEditorModel<ArrayType*> Model;
 
-			ArrayEditor(Model* model): mModel(model), mWidget(0), mHeaderWidget(0), mLayout(0) {}
+			ArrayEditor(Model* model): mModel(model), mWidget(0), mHeaderWidget(0), mLayout(0), mButtonAddElement(0), mButtonRevert(0), mButtonSave(0) {}
 
 			virtual ~ArrayEditor() { ClearArray(); delete mModel; }
 
 			virtual CEGUI::Window* CreateWidget(const CEGUI::String& namePrefix);
 
 			/// Submits the value from editor widget to the model.
-			virtual void Submit() {} /// @TODO
+			virtual void Submit();
 
 			/// Polls the model for current value and updates the editor widget, unless
 			/// the editor is locked for updates.
@@ -41,18 +41,17 @@ namespace Editor
 
 			/// @name CEGUI callbacks
 			//@{
-				bool OnEventActivated(const CEGUI::EventArgs&);
-				bool OnEventDeactivated(const CEGUI::EventArgs&) { this->UnlockUpdates(); this->Update(); return true;}
-				bool OnEventKeyDown(const CEGUI::EventArgs&);
+				bool OnEventButtonAddPressed(const CEGUI::EventArgs&);
+				bool OnEventButtonRevertPressed(const CEGUI::EventArgs&);
+				bool OnEventButtonSavePressed(const CEGUI::EventArgs&);
 			//@}
 
 		private:
-			
 
-			void UpdateArray();
 			void SubmitArray();
 			void ClearArray();
-
+			void LockUpdates();
+			void UnlockUpdates();
 
 			typedef vector<ElementType*> InternalArray;
 
@@ -65,6 +64,10 @@ namespace Editor
 			CEGUI::Window* mWidget;
 			CEGUI::Window* mHeaderWidget;
 			GUISystem::VerticalLayout* mLayout;
+
+			CEGUI::PushButton* mButtonAddElement;
+			CEGUI::PushButton* mButtonRevert;
+			CEGUI::PushButton* mButtonSave;
 	};
 
 }
