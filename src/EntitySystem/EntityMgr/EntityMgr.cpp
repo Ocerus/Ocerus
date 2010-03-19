@@ -190,7 +190,7 @@ EntityHandle EntityMgr::CreateEntity(EntityDescription& desc)
 		createdComponentTypes.insert(cmpType);
 	}
 
-	// inits etity attributes
+	// inits entity attributes
 	mEntities[entityHandle.GetID()] = new EntityInfo(desc.mName, EntityHandle(desc.mPrototype));
 	if (desc.mKind == EntityDescription::EK_PROTOTYPE) mPrototypes[entityHandle.GetID()] = new PrototypeInfo();
 
@@ -606,16 +606,20 @@ bool EntitySystem::EntityMgr::LoadEntitiesFromResource(ResourceSystem::ResourceP
 
 bool EntitySystem::EntityMgr::SaveEntityToStorage(const EntitySystem::EntityID entityID, ResourceSystem::XMLOutput &storage, const bool isPrototype)
 {
-	OC_UNUSED(isPrototype);
-	// TODO: isPrototype == true
 	EntityInfo* info = mEntities[entityID];
 	if (!info) { return false; }
+	PrototypeInfo* protInfo = 0;
+	if (isPrototype)
+	{
+		protInfo = mPrototypes[entityID];
+		OC_ASSERT(protInfo);
+	}
 	
 	// write header of entity tag
 	storage.BeginElementStart("Entity");
 	storage.AddAttribute("Name", info->mName);
 	storage.AddAttribute("ID", Utils::StringConverter::ToString(entityID));
-	if (info->mPrototype.IsValid())
+	if (!isPrototype && info->mPrototype.IsValid())
 	{ 
 		storage.AddAttribute("Prototype", Utils::StringConverter::ToString(info->mPrototype.GetID()));
 	}
@@ -634,16 +638,18 @@ bool EntitySystem::EntityMgr::SaveEntityToStorage(const EntitySystem::EntityID e
 		comp->EnumProperties(comp, propertyList);
 		for (PropertyList::iterator it = propertyList.begin(); it != propertyList.end(); ++it)
 		{
-			if ((it->GetAccessFlags() & Reflection::PA_TRANSIENT) == Reflection::PA_TRANSIENT) { continue; }
+			if (((it->GetAccessFlags() & Reflection::PA_TRANSIENT) == Reflection::PA_TRANSIENT)
+				|| (isPrototype && (protInfo->mSharedProperties.find(it->GetKey())
+				== protInfo->mSharedProperties.end()))) { continue; }
 			string propName = it->GetKey().ToString();
 			storage.BeginElementStart(propName);
 			if (it->IsValued()) // property is dynamic, so we must save a type
 			{ 
 				storage.AddAttribute("Type", string(Reflection::PropertyTypes::GetStringName(it->GetType())));
 				if (it->GetAccessFlags() != Reflection::PA_FULL_ACCESS)
-					storage.AddAttribute("Access", Utils::StringConverter::ToString<uint16>(it->GetAccessFlags()));
+					{ storage.AddAttribute("Access", Utils::StringConverter::ToString<uint16>(it->GetAccessFlags())); }
 				if (it->GetComment() != "")
-					storage.AddAttribute("Comment", it->GetComment());
+					{ storage.AddAttribute("Comment", it->GetComment()); }
 			}
 			storage.BeginElementFinish();
 
@@ -669,7 +675,12 @@ bool EntitySystem::EntityMgr::SaveEntitiesToStorage(ResourceSystem::XMLOutput& s
 	bool res = true;
 	for (EntityMap::const_iterator i = mEntities.begin(); i != mEntities.end(); ++i)
 	{
-		if (!SaveEntityToStorage(i->first, storage, isPrototype)) { res = false; };
+		if ((isPrototype && mPrototypes.find(i->first) != mPrototypes.end())
+			|| (!isPrototype && mPrototypes.find(i->first) == mPrototypes.end()))
+		{
+			if (!SaveEntityToStorage(i->first, storage, isPrototype)) { res = false; };
+		}
+		else { res = false; }
 	}
 	storage.EndElement();
 	

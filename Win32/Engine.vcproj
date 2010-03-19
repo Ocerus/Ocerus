@@ -1332,41 +1332,33 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="PropertyEditors"
+				Name="ValueEditors"
 				>
 				<Filter
 					Name="inc"
 					>
 					<File
-						RelativePath="..\src\Editor\PropertyEditors\AbstractValueEditor.h"
+						RelativePath="..\src\Editor\ValueEditors\AbstractValueEditor.h"
 						>
 					</File>
 					<File
-						RelativePath="..\src\Editor\PropertyEditors\ArrayStringEditor.h"
+						RelativePath="..\src\Editor\ValueEditors\ArrayEditor.h"
 						>
 					</File>
 					<File
-						RelativePath="..\src\Editor\PropertyEditors\ArrayStringEditorImpl.h"
+						RelativePath="..\src\Editor\ValueEditors\ArrayEditorImpl.h"
 						>
 					</File>
 					<File
-						RelativePath="..\src\Editor\PropertyEditors\EntityAttributeModel.h"
+						RelativePath="..\src\Editor\ValueEditors\PropertyEditorCreator.h"
 						>
 					</File>
 					<File
-						RelativePath="..\src\Editor\PropertyEditors\IValueEditor.h"
+						RelativePath="..\src\Editor\ValueEditors\StringEditor.h"
 						>
 					</File>
 					<File
-						RelativePath="..\src\Editor\PropertyEditors\PropertyEditorCreator.h"
-						>
-					</File>
-					<File
-						RelativePath="..\src\Editor\PropertyEditors\StringEditor.h"
-						>
-					</File>
-					<File
-						RelativePath="..\src\Editor\PropertyEditors\Vector2Editor.h"
+						RelativePath="..\src\Editor\ValueEditors\Vector2Editor.h"
 						>
 					</File>
 				</Filter>
@@ -1374,25 +1366,53 @@
 					Name="src"
 					>
 					<File
-						RelativePath="..\src\Editor\PropertyEditors\AbstractValueEditor.cpp"
+						RelativePath="..\src\Editor\ValueEditors\AbstractValueEditor.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\src\Editor\PropertyEditors\EntityAttributeModel.cpp"
+						RelativePath="..\src\Editor\ValueEditors\PropertyEditorCreator.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\src\Editor\PropertyEditors\PropertyEditorCreator.cpp"
+						RelativePath="..\src\Editor\ValueEditors\StringEditor.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\src\Editor\PropertyEditors\StringEditor.cpp"
+						RelativePath="..\src\Editor\ValueEditors\Vector2Editor.cpp"
 						>
 					</File>
-					<File
-						RelativePath="..\src\Editor\PropertyEditors\Vector2Editor.cpp"
+				</Filter>
+				<Filter
+					Name="Models"
+					>
+					<Filter
+						Name="inc"
 						>
-					</File>
+						<File
+							RelativePath="..\src\Editor\ValueEditors\Models\ArrayElementModel.h"
+							>
+						</File>
+						<File
+							RelativePath="..\src\Editor\ValueEditors\Models\EntityAttributeModel.h"
+							>
+						</File>
+						<File
+							RelativePath="..\src\Editor\ValueEditors\Models\IValueEditorModel.h"
+							>
+						</File>
+						<File
+							RelativePath="..\src\Editor\ValueEditors\Models\PropertyModel.h"
+							>
+						</File>
+					</Filter>
+					<Filter
+						Name="src"
+						>
+						<File
+							RelativePath="..\src\Editor\ValueEditors\Models\EntityAttributeModel.cpp"
+							>
+						</File>
+					</Filter>
 				</Filter>
 			</Filter>
 		</Filter>

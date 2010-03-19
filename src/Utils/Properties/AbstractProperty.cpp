@@ -42,7 +42,6 @@ string AbstractProperty::GetValueString(const Reflection::RTTIBaseClass* owner) 
 
 void AbstractProperty::WriteValueXML(const RTTIBaseClass* owner, ResourceSystem::XMLOutput& output) const
 {
-	
 	switch (GetType())
 	{
 	// We generate cases for all property types and arrays of property types here.
@@ -74,7 +73,7 @@ void Reflection::AbstractProperty::SetValueFromString( RTTIBaseClass* owner, con
 	#undef PROPERTY_TYPE
 
 	default:
-		ocError << "Parsing property of type '" << PropertyTypes::GetStringName(GetType()) << "' from string is not implemented";
+		ocError << "Parsing property of type '" << PropertyTypes::GetStringName(GetType()) << "' from string is not implemented.";
     }
 }
 
@@ -98,25 +97,26 @@ void ReadArrayValueXML(Reflection::AbstractProperty* prop, RTTIBaseClass* owner,
 
 void Reflection::AbstractProperty::ReadValueXML(RTTIBaseClass* owner, ResourceSystem::XMLNodeIterator& input)
 {
-	int32 a = Utils::XMLConverter::ReadFromXML<int32>(input);
-	if (a == 0) {}
 	switch (GetType())
 	{
 	// We generate cases for all property types and arrays of property types here.
 	#define SCRIPT_ONLY
-	#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter) case typeID: \
-		SetValue<typeClass>(owner, Utils::XMLConverter::ReadFromXML<typeClass>(input)); break;
+	#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter) \
+    case typeID: \
+		SetValue<typeClass>(owner, Utils::XMLConverter::ReadFromXML<typeClass>(input)); \
+		break;
     #include "Utils/Properties/PropertyTypes.h"
 	#undef PROPERTY_TYPE
 
-	#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter) case typeID##_ARRAY: \
-		ReadArrayValueXML<typeClass>(this, owner, input); break;
-		//SetValue<Array<typeClass>*>(owner, Utils::XMLConverter::ReadFromXML<Array<typeClass>*>(input)); break;
+	#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter) \
+	case typeID##_ARRAY: \
+		ReadArrayValueXML<typeClass>(this, owner, input); \
+		break;
 	#include "Utils/Properties/PropertyTypes.h"
 	#undef PROPERTY_TYPE
 	#undef SCRIPT_ONLY
 
 	default:
-		OC_NOT_REACHED();
+		ocError << "Parsing property of type '" << PropertyTypes::GetStringName(GetType()) << "' from XML is not implemented.";
 	}
 }
