@@ -21,6 +21,10 @@ namespace Editor
 		virtual bool IsReadOnly() const = 0;
 
 		virtual bool IsListElement() const = 0;
+
+		virtual bool IsRemovable() const = 0;
+
+		virtual void Remove() = 0;
 	};
 
 	template<class T>

@@ -36,6 +36,10 @@ namespace Editor
 
 		virtual bool IsListElement() const { return false; }
 
+		virtual bool IsRemovable() const { return false; }
+
+		virtual void Remove() { OC_FAIL("EnitityAttributeModel does not support Remove() operation."); }
+
 		virtual string GetValue() const;
 
 		virtual void SetValue(const string& newValue);

@@ -79,3 +79,7 @@ AbstractValueEditor* CreateArrayElementEditor(
 		return new Editor::StringEditor(new EntityAttributeModel(entity, Editor::EntityAttributeModel::TYPE_NAME));
 	}
 }
+
+// Template implementations
+#include "ArrayEditorImpl.h"
+#include "Models/ArrayElementModelImpl.h"

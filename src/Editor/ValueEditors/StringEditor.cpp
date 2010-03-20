@@ -19,27 +19,30 @@ CEGUI::Window* Editor::StringEditor::CreateWidget(const CEGUI::String& namePrefi
 	mEditorWidget = gCEGUIWM.createWindow("DefaultWindow", namePrefix);
 	mEditorWidget->setHeight(CEGUI::UDim(0, GetEditboxHeight()));
 
+	CEGUI::UDim dimMiddle = mModel->IsListElement() ? CEGUI::UDim(0, 32) : CEGUI::UDim(0.5f, 0);
+	CEGUI::UDim dimRight = mModel->IsRemovable() ? CEGUI::UDim(1, - GetEditboxHeight() - 2) : CEGUI::UDim(1, 0);
+	
 	/// Create label widget of the editor
 	CEGUI::Window* labelWidget = this->CreateEditorLabelWidget(namePrefix + "/Label", mModel);
-	if (mModel->IsListElement())
-	{
-		labelWidget->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), CEGUI::UDim(0, 32), CEGUI::UDim(1, 0)));
-	} else {
-		labelWidget->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), CEGUI::UDim(0.5f, -2), CEGUI::UDim(1, 0)));
-	}
+	labelWidget->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0),dimMiddle + CEGUI::UDim(0, -2), CEGUI::UDim(1, 0)));
 	mEditorWidget->addChildWindow(labelWidget);
 
 	/// Create editbox widget of the editor
 	mEditboxWidget = static_cast<CEGUI::Editbox*>(gCEGUIWM.createWindow("Editor/Editbox", namePrefix + "/Editbox"));
-	if (mModel->IsListElement())
-	{
-		mEditboxWidget->setArea(CEGUI::URect(CEGUI::UDim(0, 36), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
-	} else {
-		mEditboxWidget->setArea(CEGUI::URect(CEGUI::UDim(0.5f, 2), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
-	}
+	mEditboxWidget->setArea(CEGUI::URect(dimMiddle + CEGUI::UDim(0, 2), CEGUI::UDim(0, 0), dimRight, CEGUI::UDim(0, GetEditboxHeight())));
 	mEditboxWidget->setProperty("ReadOnly", mModel->IsReadOnly() ? "True" : "False");
 	mEditorWidget->addChildWindow(mEditboxWidget);
 
+	/// Create remove button, if needed
+	if (mModel->IsRemovable())
+	{
+		CEGUI::Window* removeButton = CreateRemoveElementButtonWidget(namePrefix + "/RemoveButton");
+		removeButton->setPosition(CEGUI::UVector2(dimRight + CEGUI::UDim(0, 2), CEGUI::UDim(0, 0)));
+		removeButton->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Editor::StringEditor::OnEventButtonRemovePressed, this));
+
+		mEditorWidget->addChildWindow(removeButton);
+	}
+	
 	/// Subscribe to editbox events
 	mEditboxWidget->subscribeEvent(CEGUI::Editbox::EventActivated, CEGUI::Event::Subscriber(&Editor::StringEditor::OnEventActivated, this));
 	mEditboxWidget->subscribeEvent(CEGUI::Editbox::EventDeactivated, CEGUI::Event::Subscriber(&Editor::StringEditor::OnEventDeactivated, this));
@@ -62,6 +65,12 @@ void Editor::StringEditor::Update()
 	OC_DASSERT(mEditboxWidget != 0);
 	if (UpdatesLocked()) return;
 	mEditboxWidget->setText(mModel->IsValid() ? this->mModel->GetValue() : "");
+}
+bool Editor::StringEditor::OnEventButtonRemovePressed(const CEGUI::EventArgs& args)
+{
+	OC_UNUSED(args);
+	mModel->Remove();
+	return true;
 }
 
 bool Editor::StringEditor::OnEventKeyDown(const CEGUI::EventArgs& args)

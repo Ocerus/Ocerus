@@ -32,6 +32,7 @@ namespace Editor {
 		//@{
 		bool OnEventActivated(const CEGUI::EventArgs&) { this->LockUpdates(); return true;}
 		bool OnEventDeactivated(const CEGUI::EventArgs&) { this->UnlockUpdates(); return true;}
+		bool OnEventButtonRemovePressed(const CEGUI::EventArgs&);
 		bool OnEventKeyDown(const CEGUI::EventArgs&);
 		//@}
 

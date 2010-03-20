@@ -26,6 +26,10 @@ namespace Editor
 
 		virtual bool IsListElement() const { return false; }
 
+		virtual bool IsRemovable() const { return false; }
+
+		virtual void Remove() { OC_FAIL("PropertyModel does not support Remove() operation."); }
+
 		virtual T GetValue() const { return mProperty.GetValue<T>(); }
 
 		virtual void SetValue(const T& newValue) { return mProperty.SetValue<T>(newValue); }
@@ -48,6 +52,10 @@ namespace Editor
 		virtual bool IsReadOnly() const { return !(mProperty.GetAccessFlags() & Reflection::PA_EDIT_WRITE); }
 
 		virtual bool IsListElement() const { return false; }
+
+		virtual bool IsRemovable() const { return false; }
+
+		virtual void Remove() { OC_FAIL("StringPropertyModel does not support Remove() operation."); }
 
 		virtual string GetValue() const { return mProperty.GetValueString(); }
 

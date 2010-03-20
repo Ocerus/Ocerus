@@ -22,6 +22,13 @@ CEGUI::Window* Editor::AbstractValueEditor::CreateEditorLabelWidget(const CEGUI:
 		widget->setProperty("HorzFormatting", "RightAligned");
 	return widget;
 }
+CEGUI::PushButton* Editor::AbstractValueEditor::CreateRemoveElementButtonWidget(const CEGUI::String& name)
+{
+	CEGUI::PushButton* button = static_cast<CEGUI::PushButton*>(gCEGUIWM.createWindow("Editor/Button", name));
+	button->setText("RM");
+	button->setSize(CEGUI::UVector2(CEGUI::UDim(0, GetEditboxHeight()), CEGUI::UDim(0, GetEditboxHeight())));
+	return button;
+}
 
 float Editor::AbstractValueEditor::GetEditboxHeight()
 {

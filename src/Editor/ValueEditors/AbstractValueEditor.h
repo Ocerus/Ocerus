@@ -12,6 +12,7 @@ namespace CEGUI
 	class String;
 	class Window;
 	class Editbox;
+	class PushButton;
 }
 
 namespace Editor
@@ -57,6 +58,8 @@ namespace Editor
 
 		/// 
 		CEGUI::Window* CreateEditorLabelWidget(const CEGUI::String& name, const Editor::IValueEditorModel* model);
+
+		CEGUI::PushButton* CreateRemoveElementButtonWidget(const CEGUI::String& name);
 
 		static float GetEditboxHeight();
 

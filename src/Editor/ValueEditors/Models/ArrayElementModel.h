@@ -8,17 +8,21 @@
 #include "IValueEditorModel.h"
 #include "Utils/StringConverter.h"
 
+
+
 namespace Editor
 {
+	template<class ElementType>
+	class ArrayEditor;
+
 	/// The ArrayElementModel class is a model for ValueEditors that allows to
 	/// view/edit entity attributes, such as entity ID and entity name.
 	template<class ElementType>
 	class ArrayElementModel: public ITypedValueEditorModel<ElementType>
 	{
 	public:
-
 		/// 
-		ArrayElementModel(ElementType* element, int index): mElement(element), mIndex(index) {}
+		ArrayElementModel(ArrayEditor<ElementType>* parentEditor, uint32 index): mParentEditor(parentEditor), mIndex(index) {}
 
 		virtual string GetName() const { return Utils::StringConverter::ToString(mIndex) + ":"; }
 
@@ -30,13 +34,17 @@ namespace Editor
 
 		virtual bool IsListElement() const { return true; }
 
-		virtual ElementType GetValue() const { return *mElement; }
+		virtual bool IsRemovable() const { return !IsReadOnly(); }
 
-		virtual void SetValue(const ElementType& newValue) { *mElement = newValue; }
+		virtual ElementType GetValue() const;
+
+		virtual void SetValue(const ElementType& newValue);
+
+		virtual void Remove();
 
 	private:
-		ElementType* mElement;
-		int mIndex;
+		ArrayEditor<ElementType>* mParentEditor;
+		uint32 mIndex;
 	};
 
 	template<class ElementType>
@@ -45,7 +53,7 @@ namespace Editor
 	public:
 
 		///
-		ArrayStringElementModel(ElementType* element, int index): mElement(element), mIndex(index) {}
+		ArrayStringElementModel(ArrayEditor<ElementType>* parentEditor, uint32 index): mParentEditor(parentEditor), mIndex(index) {}
 
 		virtual string GetName() const { return Utils::StringConverter::ToString(mIndex + 1) + ":"; }
 
@@ -57,13 +65,17 @@ namespace Editor
 
 		virtual bool IsListElement() const { return true; }
 
-		virtual string GetValue() const { return Utils::StringConverter::ToString(*mElement); }
+		virtual bool IsRemovable() const { return !IsReadOnly(); }
 
-		virtual void SetValue(const string& newValue) { *mElement = Utils::StringConverter::FromString<ElementType>(newValue); }
+		virtual string GetValue() const;
+
+		virtual void SetValue(const string& newValue);
+
+		virtual void Remove();
 
 	private:
-		ElementType* mElement;
-		int mIndex;
+		ArrayEditor<ElementType>* mParentEditor;
+		uint32 mIndex;
 	};
 
 }
