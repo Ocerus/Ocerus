@@ -17,8 +17,10 @@ namespace Editor {
 		/// Constructs a Vector2Editor that uses given model.
 		Vector2Editor(Model* model): mModel(model), mEditbox1Widget(0), mEditbox2Widget(0) {}
 
+		/// Destroys the Vector2Editor and its model.
 		virtual ~Vector2Editor();
 
+		/// Creates the main widget of this editor and returns it.
 		virtual CEGUI::Window* CreateWidget(const CEGUI::String& namePrefix);
 
 		/// Submits the value from editor widget to the model.
@@ -30,9 +32,10 @@ namespace Editor {
 
 		/// @name CEGUI callbacks
 		//@{
-		bool OnEventActivated(const CEGUI::EventArgs&) { this->LockUpdates(); return true;}
-		bool OnEventDeactivated(const CEGUI::EventArgs&);
-		bool OnEventKeyDown(const CEGUI::EventArgs&);
+			bool OnEventActivated(const CEGUI::EventArgs&) { this->LockUpdates(); return true;}
+			bool OnEventDeactivated(const CEGUI::EventArgs&);
+			bool OnEventButtonRemovePressed(const CEGUI::EventArgs&);
+			bool OnEventKeyDown(const CEGUI::EventArgs&);
 		//@}
 
 	private:

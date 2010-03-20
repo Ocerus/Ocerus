@@ -23,9 +23,9 @@ namespace Editor
 	class AbstractValueEditor
 	{
 	public:
-		AbstractValueEditor(): mUpdatesLocked(false) {}
+		AbstractValueEditor(): mEditorWidget(0), mUpdatesLocked(false) {}
 
-		virtual ~AbstractValueEditor() {}
+		virtual ~AbstractValueEditor();
 
 		/// Creates the editor widget and returns it. The value editor manages its
 		/// height so you should not change it. Some value editors can even change
@@ -56,13 +56,19 @@ namespace Editor
 		/// Creates a new static text widget, sets the common properties and returns it.
 		CEGUI::Window* CreateStaticTextWidget(const CEGUI::String& name, const CEGUI::String& text, const CEGUI::String& tooltip);
 
-		/// 
+		/// Creates the main editor label widget and returns it.
 		CEGUI::Window* CreateEditorLabelWidget(const CEGUI::String& name, const Editor::IValueEditorModel* model);
 
+		/// Creates a button for removing elements and returns it.
 		CEGUI::PushButton* CreateRemoveElementButtonWidget(const CEGUI::String& name);
 
+		/// Returns the recommended height of an editbox.
 		static float GetEditboxHeight();
 
+	protected:
+		/// Main widget of the editor. The widget is automatically destroyed in AbstractValueEditor's destructor.
+		CEGUI::Window* mEditorWidget;
+		
 	private:
 		bool mUpdatesLocked;
 	};

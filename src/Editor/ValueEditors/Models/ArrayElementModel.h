@@ -8,8 +8,6 @@
 #include "IValueEditorModel.h"
 #include "Utils/StringConverter.h"
 
-
-
 namespace Editor
 {
 	template<class ElementType>
@@ -21,7 +19,6 @@ namespace Editor
 	class ArrayElementModel: public ITypedValueEditorModel<ElementType>
 	{
 	public:
-		/// 
 		ArrayElementModel(ArrayEditor<ElementType>* parentEditor, uint32 index): mParentEditor(parentEditor), mIndex(index) {}
 
 		virtual string GetName() const { return Utils::StringConverter::ToString(mIndex) + ":"; }

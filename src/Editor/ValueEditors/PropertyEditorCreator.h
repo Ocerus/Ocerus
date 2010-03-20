@@ -9,9 +9,6 @@
 
 namespace Editor
 {
-//	template<class Model>
-//	IValueEditor* CreateValueEditor(const Model& model, const PropertyHolder&);
-
 	/// Creates a property editor for given property.
 	AbstractValueEditor* CreatePropertyEditor(const PropertyHolder&);
 

@@ -4,6 +4,11 @@
 
 using namespace Editor;
 
+Editor::AbstractValueEditor::~AbstractValueEditor()
+{
+	gCEGUIWM.destroyWindow(mEditorWidget);
+}
+
 CEGUI::Window* Editor::AbstractValueEditor::CreateStaticTextWidget(const CEGUI::String& name, const CEGUI::String& text, const CEGUI::String& tooltip)
 {
 	CEGUI::Window* labelWidget = gCEGUIWM.createWindow("Editor/StaticText", name);

@@ -25,7 +25,6 @@ namespace Editor
 		/// Constructs a model for given entity and type of attribute.
 		EntityAttributeModel(const EntitySystem::EntityHandle& entity, eAttributeType type);
 
-		///
 		virtual string GetName() const;
 
 		virtual string GetTooltip() const;

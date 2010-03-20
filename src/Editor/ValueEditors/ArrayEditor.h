@@ -21,18 +21,26 @@ namespace Editor
 {
 	template<class ElementType> class ArrayElementModel;
 	template<class ElementType> class ArrayStringElementModel;
-	
+
+	/// The ArrayEditor class provides a value editor for array properties. It manages the array by
+	/// creating value editors for each element in array and some other buttons for creating new elements, etc.
 	template<class ElementType>
 	class ArrayEditor: public Editor::AbstractValueEditor
 	{
 		public:
+			/// Array class that this model manages.
 			typedef Array<ElementType> ArrayType;
+
+			/// Type of model that the editor manages.
 			typedef ITypedValueEditorModel<ArrayType*> Model;
 
-			ArrayEditor(Model* model): mModel(model), mWidget(0), mHeaderWidget(0), mLayout(0), mButtonAddElement(0), mButtonRevert(0), mButtonSave(0) {}
+			/// Constructs an ArrayEditor on given model.
+			ArrayEditor(Model* model): mModel(model), mHeaderWidget(0), mLayout(0), mButtonAddElement(0), mButtonRevert(0), mButtonSave(0) {}
 
+			/// Destroys the ArrayEditor and its model.
 			virtual ~ArrayEditor() { DeleteEditors(); DeleteInternalArray(); delete mModel; }
 
+			/// Creates the main widget of this editor and returns it.
 			virtual CEGUI::Window* CreateWidget(const CEGUI::String& namePrefix);
 
 			/// Submits the value from editor widget to the model.
@@ -51,8 +59,6 @@ namespace Editor
 			//@}
 
 		protected:
-			/// The ArrayElementModel and ArrayStringElementModel classes are friends, because they need
-			/// to be able to call RemoveElement().
 			friend class ArrayElementModel<ElementType>;
 			friend class ArrayStringElementModel<ElementType>;
 
@@ -99,7 +105,6 @@ namespace Editor
 			Model* mModel;
 			vector<AbstractValueEditor*> mElementEditors;
 			CEGUI::String mNamePrefix;
-			CEGUI::Window* mWidget;
 			CEGUI::Window* mHeaderWidget;
 			GUISystem::VerticalLayout* mLayout;
 			CEGUI::PushButton* mButtonAddElement;

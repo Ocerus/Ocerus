@@ -7,7 +7,6 @@ using namespace Editor;
 Editor::StringEditor::~StringEditor()
 {
 	delete mModel;
-	gCEGUIWM.destroyWindow(mEditorWidget);
 }
 
 CEGUI::Window* Editor::StringEditor::CreateWidget(const CEGUI::String& namePrefix)
@@ -24,7 +23,7 @@ CEGUI::Window* Editor::StringEditor::CreateWidget(const CEGUI::String& namePrefi
 	
 	/// Create label widget of the editor
 	CEGUI::Window* labelWidget = this->CreateEditorLabelWidget(namePrefix + "/Label", mModel);
-	labelWidget->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0),dimMiddle + CEGUI::UDim(0, -2), CEGUI::UDim(1, 0)));
+	labelWidget->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), dimMiddle + CEGUI::UDim(0, -2), CEGUI::UDim(1, 0)));
 	mEditorWidget->addChildWindow(labelWidget);
 
 	/// Create editbox widget of the editor

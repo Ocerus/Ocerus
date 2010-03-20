@@ -15,10 +15,12 @@ namespace Editor {
 		typedef ITypedValueEditorModel<string> Model;
 		
 		/// Constructs a StringEditor that uses given model.
-		StringEditor(Model* model): mModel(model), mEditorWidget(0), mEditboxWidget(0) {}
+		StringEditor(Model* model): mModel(model), mEditboxWidget(0) {}
 
+		/// Destroys the StringEditor and its model.
 		~StringEditor();
 
+		/// Creates the main widget of this editor and returns it.
 		virtual CEGUI::Window* CreateWidget(const CEGUI::String& namePrefix);
 
 		/// Submits the value from editor widget to the model.
@@ -30,15 +32,14 @@ namespace Editor {
 
 		/// @name CEGUI callbacks
 		//@{
-		bool OnEventActivated(const CEGUI::EventArgs&) { this->LockUpdates(); return true;}
-		bool OnEventDeactivated(const CEGUI::EventArgs&) { this->UnlockUpdates(); return true;}
-		bool OnEventButtonRemovePressed(const CEGUI::EventArgs&);
-		bool OnEventKeyDown(const CEGUI::EventArgs&);
+			bool OnEventActivated(const CEGUI::EventArgs&) { this->LockUpdates(); return true;}
+			bool OnEventDeactivated(const CEGUI::EventArgs&) { this->UnlockUpdates(); return true;}
+			bool OnEventButtonRemovePressed(const CEGUI::EventArgs&);
+			bool OnEventKeyDown(const CEGUI::EventArgs&);
 		//@}
 
 	private:
 		Model* mModel;
-		CEGUI::Window* mEditorWidget;
 		CEGUI::Window* mEditboxWidget;
 	};
 }

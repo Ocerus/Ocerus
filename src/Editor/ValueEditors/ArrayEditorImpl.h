@@ -7,21 +7,37 @@
 #include "ArrayEditor.h"
 #include "Models/ArrayElementModel.h"
 #include "StringEditor.h"
+#include "Vector2Editor.h"
 #include "GUISystem/VerticalLayout.h"
 #include "Properties/PropertyEnums.h"
 
 namespace Editor
 {
+	/// Creates a value editor for given ElementType. Default implementation creates a string editor.
+	/// @todo It would be nice to join this code with election mechanism in PropertyEditorCreator.cpp,
+	///       that is used for PropertyEditors, although it might require some template hacking.
+	template<class ElementType>
+	AbstractValueEditor* CreateArrayElementEditor(ArrayEditor<ElementType>* parentEditor, uint32 index)
+	{
+		return new Editor::StringEditor(new ArrayStringElementModel<ElementType>(parentEditor, index));
+	}
 
+	template<>
+	AbstractValueEditor* CreateArrayElementEditor<Vector2>(ArrayEditor<Vector2>* parentEditor, uint32 index)
+	{
+		return new Editor::Vector2Editor(new ArrayElementModel<Vector2>(parentEditor, index));
+	}
+	
+	
 	template<class ElementType>
 	CEGUI::Window* ArrayEditor<ElementType>::CreateWidget(const CEGUI::String& namePrefix)
 	{
-		OC_ASSERT(mWidget == 0);
+		OC_ASSERT(mEditorWidget == 0);
 		mNamePrefix = namePrefix;
 
 		/// Create main editor widget
-		mWidget = gCEGUIWM.createWindow("DefaultWindow", namePrefix);
-		mLayout = new GUISystem::VerticalLayout(mWidget, 0, true);
+		mEditorWidget = gCEGUIWM.createWindow("DefaultWindow", namePrefix);
+		mLayout = new GUISystem::VerticalLayout(mEditorWidget, 0, true);
 
 
 		/// Create header widget
@@ -63,7 +79,7 @@ namespace Editor
 		/// Update editor and return main widget
 		Update();
 		mLayout->UpdateLayout();
-		return mWidget;
+		return mEditorWidget;
 	}
 
 	template<class ElementType>
@@ -166,8 +182,7 @@ namespace Editor
 
 			for (uint32 i = mElementEditors.size(); i < mArray.size(); ++i)
 			{
-				/// @todo Choose the right editor
-				AbstractValueEditor* editor = new Editor::StringEditor(new ArrayStringElementModel<ElementType>(this, i));
+				AbstractValueEditor* editor = CreateArrayElementEditor(this, i);
 				mElementEditors.push_back(editor);
 				mLayout->AddChildWindow(editor->CreateWidget(mNamePrefix + "/Editor" + Utils::StringConverter::ToString(i)));
 			}

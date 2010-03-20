@@ -15,30 +15,33 @@ CEGUI::Window* Editor::Vector2Editor::CreateWidget(const CEGUI::String& namePref
 	OC_ASSERT(mEditbox2Widget == 0);
 
 	/// Create main editor widget
-	CEGUI::Window* widget = gCEGUIWM.createWindow("DefaultWindow", namePrefix);
-	widget->setHeight(CEGUI::UDim(0, 2 * GetEditboxHeight() + 5));
+	mEditorWidget = gCEGUIWM.createWindow("DefaultWindow", namePrefix);
+	mEditorWidget->setHeight(CEGUI::UDim(0, 2 * GetEditboxHeight() + 5));
+
+	CEGUI::UDim dimMiddle = mModel->IsListElement() ? CEGUI::UDim(0, 32) : CEGUI::UDim(0.5f, 0);
+	CEGUI::UDim dimRight = mModel->IsRemovable() ? CEGUI::UDim(1, - GetEditboxHeight() - 2) : CEGUI::UDim(1, 0);
 
 	/// Create label widget of the editor
 	CEGUI::Window* labelWidget = CreateEditorLabelWidget(namePrefix + "/Label", mModel);
-	labelWidget->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), CEGUI::UDim(0.5f, -2), CEGUI::UDim(0, GetEditboxHeight())));
-	widget->addChildWindow(labelWidget);
+	//labelWidget->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), dimMiddle + CEGUI::UDim(0, -2), CEGUI::UDim(0, GetEditboxHeight())));
+	labelWidget->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), dimMiddle + CEGUI::UDim(0, -2), CEGUI::UDim(1, 0)));
+	mEditorWidget->addChildWindow(labelWidget);
 
 	/// Create label widget for x coordinate
 	CEGUI::Window* labelWidgetX = CreateStaticTextWidget(namePrefix + "/LabelX", "x:", "The x coordinate.");
-	labelWidgetX->setArea(CEGUI::URect(CEGUI::UDim(0.5f, 5), CEGUI::UDim(0, 0), CEGUI::UDim(0.5f, 18), CEGUI::UDim(0, GetEditboxHeight())));
-	widget->addChildWindow(labelWidgetX);
+	labelWidgetX->setArea(CEGUI::URect(dimMiddle + CEGUI::UDim(0, 2), CEGUI::UDim(0, 0), dimMiddle + CEGUI::UDim(0, 10), CEGUI::UDim(0, GetEditboxHeight())));
+	mEditorWidget->addChildWindow(labelWidgetX);
 
 	/// Create label widget for y coordinate
 	CEGUI::Window* labelWidgetY = CreateStaticTextWidget(namePrefix + "/LabelY", "y:", "The y coordinate.");
-	labelWidgetY->setArea(CEGUI::URect(CEGUI::UDim(0.5f, 5), CEGUI::UDim(1, -GetEditboxHeight()), CEGUI::UDim(0.5f, 18), CEGUI::UDim(1, 0)));
-	widget->addChildWindow(labelWidgetY);
+	labelWidgetY->setArea(CEGUI::URect(dimMiddle + CEGUI::UDim(0, 2), CEGUI::UDim(1, -GetEditboxHeight()), dimMiddle + CEGUI::UDim(0, 10), CEGUI::UDim(1, 0)));
+	mEditorWidget->addChildWindow(labelWidgetY);
 
-	
 	/// Create editbox widget for x coordinate
 	mEditbox1Widget = static_cast<CEGUI::Editbox*>(gCEGUIWM.createWindow("Editor/Editbox", namePrefix + "/Editbox1"));
 	mEditbox1Widget->setProperty("ReadOnly", mModel->IsReadOnly() ? "True" : "False");
-	mEditbox1Widget->setArea(CEGUI::URect(CEGUI::UDim(0.5f, 20), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(0, GetEditboxHeight())));
-	widget->addChildWindow(mEditbox1Widget);
+	mEditbox1Widget->setArea(CEGUI::URect(dimMiddle + CEGUI::UDim(0, 16), CEGUI::UDim(0, 0), dimRight, CEGUI::UDim(0, GetEditboxHeight())));
+	mEditorWidget->addChildWindow(mEditbox1Widget);
 
 	/// Subscribe to editbox1 events
 	mEditbox1Widget->subscribeEvent(CEGUI::Editbox::EventActivated, CEGUI::Event::Subscriber(&Editor::Vector2Editor::OnEventActivated, this));
@@ -48,16 +51,25 @@ CEGUI::Window* Editor::Vector2Editor::CreateWidget(const CEGUI::String& namePref
 	/// Create editbox widget for y coordinate
 	mEditbox2Widget = static_cast<CEGUI::Editbox*>(gCEGUIWM.createWindow("Editor/Editbox", namePrefix + "/Editbox2"));
 	mEditbox2Widget->setProperty("ReadOnly", mModel->IsReadOnly() ? "True" : "False");
-	mEditbox2Widget->setArea(CEGUI::URect(CEGUI::UDim(0.5f, 20), CEGUI::UDim(1, -GetEditboxHeight()), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
-	widget->addChildWindow(mEditbox2Widget);
+	mEditbox2Widget->setArea(CEGUI::URect(dimMiddle + CEGUI::UDim(0, 16), CEGUI::UDim(1, -GetEditboxHeight()), dimRight, CEGUI::UDim(1, 0)));
+	mEditorWidget->addChildWindow(mEditbox2Widget);
 
 	/// Subscribe to editbox2 events
 	mEditbox2Widget->subscribeEvent(CEGUI::Editbox::EventActivated, CEGUI::Event::Subscriber(&Editor::Vector2Editor::OnEventActivated, this));
 	mEditbox2Widget->subscribeEvent(CEGUI::Editbox::EventDeactivated, CEGUI::Event::Subscriber(&Editor::Vector2Editor::OnEventDeactivated, this));
 	mEditbox2Widget->subscribeEvent(CEGUI::Editbox::EventKeyDown, CEGUI::Event::Subscriber(&Editor::Vector2Editor::OnEventKeyDown, this));
 
+	/// Create remove button, if needed
+	if (mModel->IsRemovable())
+	{
+		CEGUI::Window* removeButton = CreateRemoveElementButtonWidget(namePrefix + "/RemoveButton");
+		removeButton->setPosition(CEGUI::UVector2(dimRight + CEGUI::UDim(0, 2), CEGUI::UDim(0, GetEditboxHeight() / 2)));
+		removeButton->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Editor::Vector2Editor::OnEventButtonRemovePressed, this));
+		mEditorWidget->addChildWindow(removeButton);
+	}
+
 	Update();
-	return widget;
+	return mEditorWidget;
 }
 
 void Editor::Vector2Editor::Submit()
@@ -94,6 +106,13 @@ bool Editor::Vector2Editor::OnEventDeactivated(const CEGUI::EventArgs&)
 	if (mEditbox1Widget->isActive() || mEditbox2Widget->isActive())
 		return false;
 	this->UnlockUpdates();
+	return true;
+}
+
+bool Editor::Vector2Editor::OnEventButtonRemovePressed(const CEGUI::EventArgs& args)
+{
+	OC_UNUSED(args);
+	mModel->Remove();
 	return true;
 }
 
