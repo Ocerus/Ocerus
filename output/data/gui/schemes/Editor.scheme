@@ -49,7 +49,8 @@
 	<FalagardMapping WindowType="Editor/ItemListbox" TargetType="CEGUI/ItemListbox" Renderer="Falagard/ItemListbox" LookNFeel="TaharezLook/ItemListbox" />
 	<FalagardMapping WindowType="Editor/ListboxItem" TargetType="CEGUI/ItemEntry"   Renderer="Falagard/ItemEntry"   LookNFeel="TaharezLook/ListboxItem" />
 	<FalagardMapping WindowType="Editor/GroupBox" TargetType="CEGUI/GroupBox"   Renderer="Falagard/Default"   LookNFeel="TaharezLook/GroupBox" />
-    <FalagardMapping WindowType="Editor/Tree" TargetType="CEGUI/Tree"   Renderer="Falagard/Tree"   LookNFeel="TaharezLook/Tree" />
+	<FalagardMapping WindowType="Editor/Tree" TargetType="CEGUI/Tree"   Renderer="Falagard/Tree"   LookNFeel="TaharezLook/Tree" />
+	<FalagardMapping WindowType="Editor/Viewport" TargetType="Ocerus/Viewport" Renderer="Falagard/FrameWindow"   LookNFeel="Vanilla/FrameWindowTransparent" />
 
 
 	<Imageset Filename="Vanilla.imageset" />
@@ -71,7 +72,9 @@
 	<FalagardMapping WindowType="Editor/ComboDropList" TargetType="CEGUI/ComboDropList" Renderer="Falagard/Listbox" LookNFeel="Vanilla/ComboDropList" />
 	<FalagardMapping WindowType="Editor/Combobox" TargetType="CEGUI/Combobox" Renderer="Falagard/Default" LookNFeel="Vanilla/Combobox" />
 	<FalagardMapping WindowType="Editor/ProgressBar" TargetType="CEGUI/ProgressBar" Renderer="Falagard/ProgressBar" LookNFeel="Vanilla/ProgressBar" />
-	<!--
+
+
+<!--
 	
 	<FalagardMapping WindowType="Editor/ScrollablePane" TargetType="CEGUI/ScrollablePane" Renderer="Falagard/ScrollablePane" LookNFeel="Vanilla/ScrollablePane" />
 	<FalagardMapping WindowType="Editor/Checkbox" TargetType="CEGUI/Checkbox" Renderer="Falagard/Checkbox" LookNFeel="Vanilla/Checkbox" />

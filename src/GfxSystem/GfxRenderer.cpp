@@ -207,6 +207,18 @@ void GfxSystem::GfxRenderer::DrawEntity( const EntitySystem::EntityHandle entity
 	DrawSprite(gEntityMgr.GetEntityComponent(gEntityMgr.FindFirstEntity("Visual"), EntitySystem::CT_Sprite), gEntityMgr.GetEntityComponent(gEntityMgr.FindFirstEntity("Visual"), CT_Transform));
 }
 
+GfxViewport* GfxSystem::GfxRenderer::GetRenderTargetViewport(const RenderTargetID renderTarget)
+{
+	// we have a predefined render target
+	if (renderTarget == InvalidRenderTargetID || renderTarget<0 || renderTarget>=(RenderTargetID)mRenderTargets.size() || !mRenderTargets[renderTarget])
+	{
+		ocError << "Invalid render target";
+		return 0;
+	}
+
+	return &mRenderTargets[renderTarget]->first;
+}
+
 EntitySystem::EntityHandle GfxSystem::GfxRenderer::GetRenderTargetCamera( const RenderTargetID renderTarget ) const
 {
 	// we have a predefined render target

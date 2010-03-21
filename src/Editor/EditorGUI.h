@@ -18,6 +18,7 @@ namespace CEGUI
 namespace GUISystem
 {
 	class VerticalLayout;
+	class ViewportWindow;
 }
 
 namespace Editor
@@ -56,7 +57,7 @@ namespace Editor
 		typedef vector<AbstractValueEditor*> PropertyEditors;
 		PropertyEditors mPropertyEditors;
 		GUISystem::VerticalLayout* mEntityEditorLayout;
-		
+		GUISystem::ViewportWindow* mViewport;
 	};
 }
 

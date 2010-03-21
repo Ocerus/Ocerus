@@ -112,6 +112,9 @@ namespace GfxSystem
 		/// As a last parameter the desired render target can be specified.
 		bool ConvertScreenToWorldCoords(const Point& screenCoords, Vector2& worldCoords, const RenderTargetID renderTarget = InvalidRenderTargetID) const;
 
+		/// Returns a pointer to the viewport associated with a render target, or NULL if render target does not exist.
+		GfxViewport* GetRenderTargetViewport(const RenderTargetID renderTarget);
+
 		/// Returns the camera associated with a render target.
 		EntitySystem::EntityHandle GetRenderTargetCamera(const RenderTargetID renderTarget) const;
 

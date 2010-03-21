@@ -245,6 +245,7 @@ set(GUISystem_SRCS
 	src/GUISystem/GUIConsole.cpp
 	src/GUISystem/CEGUITools.cpp
 	src/GUISystem/VerticalLayout.cpp
+	src/GUISystem/ViewportWindow.cpp
 )
 
 set(InputSystem_SRCS

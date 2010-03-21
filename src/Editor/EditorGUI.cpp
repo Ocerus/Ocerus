@@ -8,6 +8,7 @@
 
 #include "CEGUI.h"
 #include "GUISystem/VerticalLayout.h"
+#include "GUISystem/ViewportWindow.h"
 
 #define gCEGUIWM CEGUI::WindowManager::getSingleton()
 
@@ -23,7 +24,8 @@ EditorGUI::EditorGUI():
 	mPropertyItemHeight(0),
 	mComponentGroupHeight(0),
 	mPropertyUpdateTimer(0),
-	mEntityEditorLayout(0)
+	mEntityEditorLayout(0),
+	mViewport(0)
 {
 }
 
@@ -43,6 +45,13 @@ void EditorGUI::LoadGUI()
 
 
 	/// TO BE REMOVED
+
+	mViewport = static_cast<GUISystem::ViewportWindow*>(gCEGUIWM.createWindow("Editor/Viewport", "EditorRoot/Viewport"));
+	mViewport->setArea(CEGUI::URect(CEGUI::UDim(0.3f, 0), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(0.5f, 0)));
+	gCEGUIWM.getWindow("EditorRoot")->addChildWindow(mViewport);
+
+	mViewport->SetCamera(gEntityMgr.FindFirstEntity("Camera2"));
+
 	{
 		CEGUI::FrameWindow* picker = (CEGUI::FrameWindow*)CEGUI::WindowManager::getSingleton().createWindow("Editor/FrameWindow", "picker");
 		picker->setText("EntityPicker");

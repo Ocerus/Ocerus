@@ -30,6 +30,12 @@ namespace GfxSystem
 		/// Returns the size of the viewport in the window.
 		inline Vector2 GetSize(void) const { return mSize; }
 
+		/// Sets the position of the viewport in the window.
+		inline void SetPosition(const Vector2& newPosition) { mPosition = newPosition; }
+
+		/// Sets the size of the viewport in the window.
+		inline void SetSize(const Vector2& newSize) { mSize = newSize; }
+
 		/// Returns the texture this viewport is attached to.
 		/// Returns InvalidTextureHandle if there is no such.
 		inline TextureHandle GetRenderTexture(void) const { return mTexture; }

@@ -80,9 +80,12 @@ void Core::Game::Init()
 
 	// setup render targets
 	mRenderTarget = gGfxRenderer.AddRenderTarget(GfxSystem::GfxViewport(Vector2(0.0, 0.0), Vector2(1, 0.5), false), gEntityMgr.FindFirstEntity("Camera2"));
+
+/*
 	gGfxRenderer.AddRenderTarget(GfxSystem::GfxViewport(Vector2(0, 0.5), Vector2(0.5, 0.5), true), gEntityMgr.FindFirstEntity("Camera1"));
 	gGfxRenderer.AddRenderTarget(GfxSystem::GfxViewport(Vector2(0.5, 0.5), Vector2(0.5, 0.5), true), gEntityMgr.FindFirstEntity("Camera3"));
-
+*/
+	
 	gRenderTexture = gGfxRenderer.CreateRenderTexture(128, 128);
 	gRenderTarget = gGfxRenderer.AddRenderTarget(GfxSystem::GfxViewport(gRenderTexture, 128, 128), gEntityMgr.FindFirstEntity("Camera2"));
 	

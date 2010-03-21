@@ -13,6 +13,7 @@
 #include "CEGUI.h"
 #include "RendererModules/OpenGL/CEGUIOpenGLRenderer.h"
 
+#include "ViewportWindow.h"
 
 namespace GUISystem
 {
@@ -74,6 +75,10 @@ namespace GUISystem
 
 		CEGUI_EXCEPTION_BEGIN
 		{
+			/// Register custom Window subclasses to the CEGUI
+			CEGUI::WindowFactoryManager::addFactory<CEGUI::TplWindowFactory<ViewportWindow> >();
+			
+
 			///@todo Improve GUI scheme loading. For example Editor.scheme does not need to be loaded unless in editor mode.
 			CEGUI::SchemeManager::getSingleton().create("VanillaSkin.scheme");
 			CEGUI::SchemeManager::getSingleton().create("TaharezLook.scheme");
