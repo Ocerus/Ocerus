@@ -1008,6 +1008,10 @@
 					RelativePath="..\src\GUISystem\VerticalLayout.h"
 					>
 				</File>
+				<File
+					RelativePath="..\src\GUISystem\ViewportWindow.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="src"
@@ -1034,6 +1038,10 @@
 				</File>
 				<File
 					RelativePath="..\src\GUISystem\VerticalLayout.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src\GUISystem\ViewportWindow.cpp"
 					>
 				</File>
 			</Filter>
@@ -1390,6 +1398,10 @@
 						>
 						<File
 							RelativePath="..\src\Editor\ValueEditors\Models\ArrayElementModel.h"
+							>
+						</File>
+						<File
+							RelativePath="..\src\Editor\ValueEditors\Models\ArrayElementModelImpl.h"
 							>
 						</File>
 						<File
