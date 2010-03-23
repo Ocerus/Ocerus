@@ -27,21 +27,13 @@ void GfxWindow::Init(const int32 resx, const int32 resy, const bool fullscreen, 
 
 	// Set atributes for OpenGL
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-#ifdef __WIN__
-	// Causes "Couldn't find matching GLX visual" on my linux
-	// Maybe those values should be stored in config
-	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 8);
-	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
-	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
-	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
-	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
-#endif
 
 	// Create drawing context
 	SDL_WM_SetCaption( title.c_str(), NULL );
 	mScreen = SDL_SetVideoMode( resx, resy, 0, flags );
 
-	if (mScreen != NULL) {
+	if (mScreen != NULL) 
+	{
 		ocInfo << "SDL created drawing context for OpenGL. The video surface bits per pixel is "
 			   << (int32)mScreen->format->BitsPerPixel;
 		ocInfo << "Resolution: " << resx << "x" << resy;
@@ -93,11 +85,10 @@ bool GfxWindow::PopEvent(eWindowEvent &result)
 		case SDL_QUIT:
 			result = WE_QUIT;
 			return true;
-			//break;
 		case SDL_VIDEORESIZE:
 			result = WE_RESIZE;
 			ChangeResolution(event.resize.w, event.resize.h);
-			return true;
+			break;
 		default:
 			break;
 		}
@@ -116,7 +107,7 @@ void GfxWindow::ChangeResolution(int32 x, int32 y)
 		(*it)->ResolutionChanged(mResx, mResy);
 	}
 	
-	// recreate drawing index
+	// recreate drawing context
 	int32 flags = SDL_OPENGL | SDL_RESIZABLE;
 	if (mFullscreen)
 		flags |= SDL_FULLSCREEN;

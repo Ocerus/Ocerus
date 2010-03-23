@@ -31,7 +31,6 @@ namespace GfxSystem
 		void DrawVisibleSprites();
 		
 	private:	
-
 		typedef pair<const EntitySystem::Component*, const EntitySystem::Component*> SpritePair;
 		typedef vector<SpritePair> SpriteVector;
 		SpriteVector mSprites;

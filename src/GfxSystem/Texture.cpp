@@ -24,7 +24,7 @@ size_t Texture::LoadImpl()
 	DataContainer dc;
 	GetRawInputData(dc);
 	
-	// load it to OpenGL
+	// load it to low-level renderer
 	int width, height;
 	mHandle = gGfxRenderer.LoadTexture((const unsigned char*)dc.GetData(),
 										dc.GetSize(),
@@ -45,7 +45,7 @@ size_t Texture::LoadImpl()
 
 bool Texture::UnloadImpl()
 {
-	// free texture from OpenGL
+	// free texture from low-level renderer
 	gGfxRenderer.DeleteTexture(mHandle);
 	mHandle = 0;
 	

@@ -42,29 +42,36 @@ namespace GfxSystem
 		/// Destroys the window.
 		~GfxWindow();
 
-		//TODO: Zahazovat neznamy eventy?
 		/// If there is known event in queue, returns it. Otherwise empties the queue and return false.
 		bool PopEvent(eWindowEvent& result);
 
+		/// Changes window resolution, recreates drawing context, invokes ScreenListeners.
 		void ChangeResolution(int32 x, int32 y);
 
-		inline int32 GetResolutionWidth() const {
-			return mResx;}
-		inline int32 GetResolutionHeight() const {
-			return mResy;}
+		/// Returns the window width resolution.
+		inline int32 GetResolutionWidth() const 
+		{ return mResx; }
 
+		/// Returns the window height resolution.
+		inline int32 GetResolutionHeight() const 
+			{ return mResy; }
+
+		/// Returns the window resolution.
 		inline Point GetResolution() const { return Point(mResx, mResy); }
 
 		/// Gets windows handle. Windows OS only.
 		WindowHandle _GetWindowHandle() const;
 
-		inline virtual void AddScreenListener(IGfxWindowListener * listener) {
-			mGfxWindowListeners.insert(listener); }
-		inline virtual void RemoveScreenListener(IGfxWindowListener * listener) {
-			mGfxWindowListeners.erase(listener); }
+		/// Adds listener to window resolution change.
+		inline virtual void AddScreenListener(IGfxWindowListener * listener) 
+			{ mGfxWindowListeners.insert(listener); }
+
+		/// Removes listener to window resolution change.
+		inline virtual void RemoveScreenListener(IGfxWindowListener * listener) 
+			{ mGfxWindowListeners.erase(listener); }
 
 	private:
-		// maybe not needed ...
+		// currently not used
 		SDL_Surface* mScreen;
 
 		int32 mResx, mResy;

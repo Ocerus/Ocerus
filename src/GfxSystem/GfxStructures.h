@@ -14,7 +14,7 @@ namespace GfxSystem
 	/// Invalid texture handle.
 	const TextureHandle InvalidTextureHandle = 0;
 
-	///@TODO popsat detailneji.
+	/// Texture pixel format
 	enum ePixelFormat
 	{
 		PF_AUTO = 0,			//auto

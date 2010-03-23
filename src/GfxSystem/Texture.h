@@ -9,19 +9,27 @@
 
 namespace GfxSystem
 {
+	/// Resource class representing texture.
 	class Texture : public ResourceSystem::Resource
 	{
 	public:
 
+		/// Default constructor.
 		Texture(void);
+
+		/// Default destructor.
 		virtual ~Texture(void);
 
+		/// Returns a pointer to a new instance of the Texture
 		static ResourceSystem::ResourcePtr CreateMe(void);
 
 		/// Returns implementation specific pointer to the texture object.
 		TextureHandle GetTexture(void);
 
+		/// Returns widh in pixels of texture.
 		uint32 GetWidth(void);
+
+		/// Returns widh in pixels of texture.
 		uint32 GetHeight(void);
 
 		/// Returns the resource type associated with this class.
@@ -33,6 +41,7 @@ namespace GfxSystem
 
 		virtual size_t LoadImpl(void);
 		virtual bool UnloadImpl(void);
+
 		void Init(void);
 
 	private:

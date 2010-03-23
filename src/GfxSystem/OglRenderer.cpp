@@ -22,21 +22,43 @@ void OglRenderer::Init()
 	// init opengl extensions
 	glewInit();
 
+	// Set background color
 	glClearColor( 0.1f, 0.1f, 0.1f, 0 );
+
+	// Reset matrices
 	glMatrixMode( GL_PROJECTION );
 	glLoadIdentity();
 	glMatrixMode( GL_MODELVIEW );
 	glLoadIdentity();
 
+	// Clear buffers
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	// Enable depth testing
 	glEnable(GL_DEPTH_TEST);
+
+	// Set max depth
 	glClearDepth(1.0);
-	glDepthFunc(GL_LEQUAL);						
+
+	// Set depth testing method
+	glDepthFunc(GL_LEQUAL);
+
+	// Set blending method
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	// Enable blending
 	glEnable(GL_BLEND);
+
+	// Specify the alpha test function (only pixels with alpha > 0.1 are drawn)
 	glAlphaFunc(GL_GREATER, 0.1f);
+
+	// Enable alpha testing
 	glEnable(GL_ALPHA_TEST);
+	
+	// Enable texturing
 	glEnable(GL_TEXTURE_2D);
+
+	//Enable face culling
 	glEnable(GL_CULL_FACE);
 
 	// create buffers for render2texture
