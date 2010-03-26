@@ -1020,3 +1020,27 @@ Component* EntitySystem::EntityMgr::GetEntityComponent( const EntityHandle entit
 	}
 	return 0;
 }
+
+void EntitySystem::EntityMgr::GetEntitiesWithComponent(EntityList& out, const eComponentType componentType)
+{
+	out.clear();
+
+	for (EntityMap::const_iterator i = mEntities.begin(); i != mEntities.end(); ++i)
+	{
+		if (HasEntityComponentOfType(i->first, componentType))
+		{
+			out.push_back(EntityHandle(i->first));
+		}
+	}
+}
+
+		
+void EntitySystem::EntityMgr::GetEntities(EntityList& out)
+{
+	out.clear();
+
+	for (EntityMap::const_iterator i = mEntities.begin(); i != mEntities.end(); ++i)
+	{
+		out.push_back(EntityHandle(i->first));
+	}
+}

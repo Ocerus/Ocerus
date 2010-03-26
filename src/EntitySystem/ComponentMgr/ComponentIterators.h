@@ -23,7 +23,7 @@ namespace EntitySystem
 			ComponentsList::const_iterator(componentsList->begin()),
 			mComponentsList(componentsList) {}
 
-		/// Creates an iterator to walk across entity components in the given list. Bbeginning with the first item.
+		/// Creates an iterator to walk across entity components in the given list. Beginning with the first item.
 		EntityComponentsIterator(ComponentsList& componentsList):
 			ComponentsList::const_iterator(componentsList.begin()),
 			mComponentsList(&componentsList) {}

@@ -13,14 +13,14 @@ namespace Utils
 	/// Set of functions for reading/writing different values from/to XML.
 	namespace XMLConverter
 	{
-		/// Converts the given arbitrary value to XML.
+		/// Writes the given arbitrary value to XML.
 		template<typename T>
 		void WriteToXML(ResourceSystem::XMLOutput& output, const T& val)
 		{
 			output.WriteString(StringConverter::ToString<T>(val));
 		}
 
-		/// Converts the given array of arbitrary values to XML.
+		/// Writes the given array of arbitrary values to XML.
 		template<typename T>
 		void WriteToXML(ResourceSystem::XMLOutput& output, Array<T>* array)
 		{
@@ -39,14 +39,14 @@ namespace Utils
 		void WriteToXML(ResourceSystem::XMLOutput& output, const EntitySystem::EntityHandle& val);
 
 		
-		/// Converts the given arbitrary value to XML.
+		/// Reads the value from XML and returns it.
 		template<typename T>
 		T ReadFromXML(ResourceSystem::XMLNodeIterator& input)
 		{
 			return input.GetChildValue<T>();
 		}
 
-		/// Converts the given array of arbitrary values to XML.
+		/// Reads the array of values from XML and returns it.
 		/*template<typename U>
 		Array<U>* ReadFromXML(ResourceSystem::XMLNodeIterator& input)
 		{

@@ -52,7 +52,8 @@ void LogSystem::LogMgr::LogMessage(const string& msg, int32 loggingLevel)
 
 	string str = ss.str();
 
-	gApp.WriteToConsole(str);
+	if (Core::Application::SingletonExists())
+		gApp.WriteToConsole(str);
 
 	if (GUISystem::GUIMgr::SingletonExists() && gGUIMgr.GetConsole())
 		gGUIMgr.GetConsole()->AppendLogMessage(str, loggingLevel);

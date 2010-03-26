@@ -1326,6 +1326,10 @@
 					RelativePath="..\src\Editor\EditorMgr.h"
 					>
 				</File>
+				<File
+					RelativePath="..\src\Editor\LayerMgr.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="src"
@@ -1336,6 +1340,10 @@
 				</File>
 				<File
 					RelativePath="..\src\Editor\EditorMgr.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src\Editor\LayerMgr.cpp"
 					>
 				</File>
 			</Filter>

@@ -27,6 +27,9 @@ namespace EntitySystem
 	/// A list of types of components.
 	typedef vector<eComponentType> ComponentTypeList;
 
+	/// A list of entity handles.
+	typedef vector<EntityHandle> EntityList;
+
 	// Forward declaration of internal structs. Don't move them to Forwards.h.
 	struct EntityInfo;
 	struct PrototypeInfo;
@@ -65,6 +68,12 @@ namespace EntitySystem
 
 		/// Destroys all entities in the manager.
 		void DestroyAllEntities(void);
+
+		/// Retrieves handles of entities that have a specific component.
+		void GetEntitiesWithComponent(EntityList& out, const eComponentType componentType);
+
+		/// Retrieves handles of all entities.
+		void GetEntities(EntityList& out);
 
 		//@}
 

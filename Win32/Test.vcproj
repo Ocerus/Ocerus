@@ -384,6 +384,14 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="Editor"
+			>
+			<File
+				RelativePath="..\src\Editor\test\TestLayerMgr.cpp"
+				>
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>
