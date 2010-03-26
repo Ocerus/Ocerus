@@ -1,41 +1,38 @@
 /// @file
-/// Defines Window singleton.
+/// Application window management.
 
 #ifndef _WINDOW_H_
 #define _WINDOW_H_
 
 #include "Base.h"
 #include "Singleton.h"
+#include "GfxSystem/GfxStructures.h"
 
-#include "../GfxSystem/GfxStructures.h"
 
-#ifdef __WIN__
-#pragma comment(lib, "SDL.lib")
-#pragma comment(lib, "SDLmain.lib")
-#endif
-
+// Forward declarations.
 struct SDL_Surface;
-class IScreenListener;
 
+/// Macro for easier use.
 #define gGfxWindow GfxSystem::GfxWindow::GetSingleton()
 
 namespace GfxSystem
 {
+	/// Event that happen to the window while the app is running.
 	enum eWindowEvent {
-    WE_QUIT,		///< User tries to close the window (map to SDL_QUIT)
-	WE_RESIZE		///< User tries to resize the window (map to SDL_VIDEORESIZE)
-    /// maybe we will add another events in future
+		WE_QUIT,		///< User tries to close the window (map to SDL_QUIT)
+		WE_RESIZE		///< User tries to resize the window (map to SDL_VIDEORESIZE)
 	};
 
-#ifdef __WIN__
-    typedef uint32 WindowHandle;
-#else
-    typedef uint64 WindowHandle;
-#endif
+	/// Handle to the platform specific window.
+    typedef uintptr WindowHandle;
 
+
+	/// Represents the only window the game can have. The window can also be spanned to the whole screen when switched
+	/// to fullscreen.
 	class GfxWindow : public Singleton<GfxWindow>
 	{
 	public:
+
 		/// Constructs the window.
 		void Init(const int32 resx, const int32 resy, const bool fullscreen, const string title);
 
@@ -49,12 +46,10 @@ namespace GfxSystem
 		void ChangeResolution(int32 x, int32 y);
 
 		/// Returns the window width resolution.
-		inline int32 GetResolutionWidth() const 
-		{ return mResx; }
+		inline int32 GetResolutionWidth() const { return mResx; }
 
 		/// Returns the window height resolution.
-		inline int32 GetResolutionHeight() const 
-			{ return mResy; }
+		inline int32 GetResolutionHeight() const { return mResy; }
 
 		/// Returns the window resolution.
 		inline Point GetResolution() const { return Point(mResx, mResy); }
@@ -63,17 +58,14 @@ namespace GfxSystem
 		WindowHandle _GetWindowHandle() const;
 
 		/// Adds listener to window resolution change.
-		inline virtual void AddScreenListener(IGfxWindowListener * listener) 
-			{ mGfxWindowListeners.insert(listener); }
+		inline virtual void AddScreenListener(IGfxWindowListener * listener) { mGfxWindowListeners.insert(listener); }
 
 		/// Removes listener to window resolution change.
-		inline virtual void RemoveScreenListener(IGfxWindowListener * listener) 
-			{ mGfxWindowListeners.erase(listener); }
+		inline virtual void RemoveScreenListener(IGfxWindowListener * listener) { mGfxWindowListeners.erase(listener); }
 
 	private:
-		// currently not used
-		SDL_Surface* mScreen;
 
+		SDL_Surface* mScreen;
 		int32 mResx, mResy;
 		bool mFullscreen;
 

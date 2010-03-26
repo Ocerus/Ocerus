@@ -62,7 +62,7 @@ namespace InputSystem
 
 		/// @name Callbacks from GfxSystem::IScreenListener
 		//@{
-		virtual void ResolutionChanged(int x, int y);
+		virtual void ResolutionChanged(const uint32 width, const uint32 height);
 		//@}
 
 	private:

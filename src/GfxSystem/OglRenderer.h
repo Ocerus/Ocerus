@@ -1,5 +1,5 @@
 /// @file
-/// Derived class from abstract GfxRenderer using OpenGL.
+/// Specialized OpenGL renderer.
 
 #ifndef _OGLRENDERER_H_
 #define _OGLRENDERER_H_
@@ -10,11 +10,11 @@
 
 namespace GfxSystem
 {
+	/// Specialized OpenGL renderer.
 	class OglRenderer : public GfxRenderer
 	{
 	public:
 
-		/// Intialize OpenGL
 		virtual void Init();
 
 		virtual bool BeginRenderingImpl() const;

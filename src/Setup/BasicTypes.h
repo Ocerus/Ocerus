@@ -14,6 +14,7 @@ typedef unsigned short uint16;
 typedef unsigned int uint32;
 typedef float float32;
 typedef double float64;
+typedef uintptr_t uintptr;
 #define	FLOAT32_MAX	FLT_MAX
 #define	FLOAT32_MIN	FLT_MIN
 #define	FLOAT32_EPSILON	FLT_EPSILON

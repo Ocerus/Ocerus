@@ -6,8 +6,12 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_syswm.h>
 
-
 using namespace GfxSystem;
+
+#ifdef __WIN__
+#pragma comment(lib, "SDL.lib")
+#pragma comment(lib, "SDLmain.lib")
+#endif
 
 
 void GfxWindow::Init(const int32 resx, const int32 resy, const bool fullscreen, const string title)
@@ -128,7 +132,7 @@ WindowHandle GfxWindow::_GetWindowHandle() const
 #ifdef __WIN__
 	HWND hWnd = info.window;
 	OC_ASSERT(hWnd);
-	return (uint32)hWnd;
+	return (WindowHandle)hWnd;
 #else
     WindowHandle handle = info.info.x11.window;
     OC_ASSERT(handle);

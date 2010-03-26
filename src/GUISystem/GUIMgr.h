@@ -84,7 +84,7 @@ namespace GUISystem
 		//@}
 
 		/// This method injects resolution change into GUI system. It is part of IGfxWindowListener interface.
-		virtual void ResolutionChanged(int32 width, int32 height);
+		virtual void ResolutionChanged(const uint32 width, const uint32 height);
 
 		inline GUIConsole* GetConsole();
 

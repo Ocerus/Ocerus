@@ -11,9 +11,9 @@ namespace GfxSystem
 	public:
 
 		/// Called when a screen resolution changes.
-		virtual void ResolutionChanged(int width, int height) = 0;
+		virtual void ResolutionChanged(const uint32 width, const uint32 height) = 0;
 
-		/// Default destructor
+		/// Default destructor.
 		virtual ~IGfxWindowListener(void) {}
 	};
 }

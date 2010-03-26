@@ -46,7 +46,7 @@ void InputSystem::InputMgr::RemoveAllInputListeners( void )
 	mListeners.clear();
 }
 
-void InputSystem::InputMgr::ResolutionChanged( int width, int height )
+void InputSystem::InputMgr::ResolutionChanged( const uint32 width, const uint32 height )
 {
 	OC_ASSERT(mOISListener);
 	mOISListener->SetResolution(width, height);
