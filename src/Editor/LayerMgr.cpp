@@ -17,13 +17,13 @@ LayerMgr::~LayerMgr()
 inline LayerID GetLayerID(EntityHandle handle)
 {
 	return gEntityMgr.GetEntityComponentProperty(handle, gEntityMgr.FindComponentOfType
-		(handle, CT_Transform), "Depth").GetValue<LayerID>();
+		(handle, CT_Transform), "Layer").GetValue<LayerID>();
 }
 
 inline void SetLayerID(EntityHandle handle, LayerID id)
 {
 	gEntityMgr.GetEntityComponentProperty(handle, gEntityMgr.FindComponentOfType
-		(handle, CT_Transform), "Depth").SetValue<LayerID>(id);
+		(handle, CT_Transform), "Layer").SetValue<LayerID>(id);
 }
 
 LayerID LayerMgr::AddTopLayer(const string& name)

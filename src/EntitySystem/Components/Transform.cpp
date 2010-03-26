@@ -1,6 +1,7 @@
 #include "Common.h"
 #include "Transform.h"
 #include <Box2D.h>
+#include "Editor/LayerMgr.h"
 
 void EntityComponents::Transform::Create( void )
 {
@@ -28,4 +29,12 @@ void EntityComponents::Transform::RegisterReflection()
 	RegisterProperty<Vector2>("Scale", &Transform::GetScale, &Transform::SetScale, PA_FULL_ACCESS, "");
 	RegisterProperty<float32>("Angle", &Transform::GetAngle, &Transform::SetAngle, PA_FULL_ACCESS, "");
 	RegisterProperty<int32>("Layer", &Transform::GetDepth, &Transform::SetDepth, PA_FULL_ACCESS, "");
+}
+
+void EntityComponents::Transform::SetDepth(int32 value)
+{
+	if (gLayerMgr.ExistsLayer(value))
+	{
+		mDepth = value;
+	}
 }

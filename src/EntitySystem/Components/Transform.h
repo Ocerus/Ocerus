@@ -49,7 +49,7 @@ namespace EntityComponents
 		int32 GetDepth(void) const { return mDepth; }
 		
 		/// Depth of the entity (ala the Z coordinate).
-		void SetDepth(int32 value) { mDepth = value; }
+		void SetDepth(int32 value);
 
 	private:
 		Vector2 mPosition;
