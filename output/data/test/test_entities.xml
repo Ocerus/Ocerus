@@ -6,7 +6,7 @@
 	    <Position>0 0</Position>
 	    <Angle>0.0</Angle>
 	    <Scale>1.2 1.5</Scale>
-      <Depth>0</Depth>
+      <Layer>0</Layer>
     </Component>
     <Component Type="Sprite">
       <Size>512 256</Size>
@@ -34,7 +34,7 @@
   <!--<Entity Name="Visual">
     <Component Type="Transform">
       <Position>1024 -256</Position>
-      <Depth>0</Depth>
+      <Layer>0</Layer>
     </Component>
     <Component Type="Sprite">
       <Size>512 256</Size>

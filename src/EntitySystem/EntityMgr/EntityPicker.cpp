@@ -55,7 +55,7 @@ EntitySystem::EntityHandle EntitySystem::EntityPicker::PickSingleEntity( void )
 
 		// check the depth
 		EntityHandle entity = *(EntityHandle*)shape->GetUserData();
-		int32 depth = entity.GetProperty("Depth").GetValue<int32>();
+		int32 depth = entity.GetProperty("Layer").GetValue<int32>();
 		if (depth < lowestDepth)
 		{
 			depth = lowestDepth;
