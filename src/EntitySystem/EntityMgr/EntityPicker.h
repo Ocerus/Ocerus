@@ -14,7 +14,8 @@ namespace EntitySystem
 	public:
 
 		/// Creates a picker for selecting an entity under the current mouse cursor.
-		EntityPicker(const Vector2& worldCursorPos);
+		/// If the minimum and maximum layer is defined only entities in these layers are picked.
+		EntityPicker(const Vector2& worldCursorPos, const int32 minLayer = INT32_MIN, const int32 maxLayer = INT32_MAX);
 
 		/// Runs the picking query. The result is returned directly.
 		EntityHandle PickSingleEntity(void);
@@ -27,13 +28,15 @@ namespace EntitySystem
 
 	private:
 
-		/// Picking data.
+		// Picking data.
 		Vector2 mCursorWorldPosition;
+		int32 mMinLayer;
+		int32 mMaxLayer;
 
-		/// Found entities.
+		// Found entities.
 		EntityHandle mResult;
 
-		/// Disabled.
+		// Disabled.
 		EntityPicker(const EntityPicker& rhs);
 		EntityPicker& operator=(const EntityPicker& rhs);
 	};

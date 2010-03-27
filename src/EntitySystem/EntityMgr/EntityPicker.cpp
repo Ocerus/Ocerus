@@ -25,8 +25,10 @@ public:
 };
 
 
-EntitySystem::EntityPicker::EntityPicker( const Vector2& worldCursorPos ):
+EntitySystem::EntityPicker::EntityPicker( const Vector2& worldCursorPos, const int32 minLayer, const int32 maxLayer ):
 	mCursorWorldPosition(worldCursorPos),
+	mMinLayer(minLayer),
+	mMaxLayer(maxLayer),
 	mResult()
 {
 
@@ -53,10 +55,10 @@ EntitySystem::EntityHandle EntitySystem::EntityPicker::PickSingleEntity( void )
 		PhysicalShape* shape = query.shapes[i];
 		if (!shape->TestPoint(mCursorWorldPosition)) continue;
 
-		// check the depth
+		// check the layer
 		EntityHandle entity = *(EntityHandle*)shape->GetUserData();
 		int32 depth = entity.GetProperty("Layer").GetValue<int32>();
-		if (depth < lowestDepth)
+		if (depth >= mMinLayer && depth <= mMaxLayer && depth < lowestDepth)
 		{
 			depth = lowestDepth;
 			lowestDepthEntity = entity;
@@ -90,8 +92,9 @@ uint32 EntitySystem::EntityPicker::PickMultipleEntities( const Vector2& worldCur
 		r = Vector2(0, B.y-A.y);
 	}
 	
-	///@TODO tohle nahradit fixturou v dalsi verzi box2d
 	Physics* physics = GlobalProperties::GetPointer<b2World>("Physics");
+
+	// create the collision rectangle
 	Vector2 vertices[4];
 	vertices[0] = A + r;
 	vertices[1] = B;
@@ -122,7 +125,13 @@ uint32 EntitySystem::EntityPicker::PickMultipleEntities( const Vector2& worldCur
 		if (b2TestOverlap(&selectionShape, shape->GetShape(), XForm_Identity, body->GetTransform()))
 		{
 			EntityHandle entity = *(EntityHandle*)shape->GetUserData();
-			out.push_back(entity);
+			
+			// check the layer
+			int32 layer = entity.GetProperty("Layer").GetValue<int32>();
+			if (layer >= mMinLayer && layer <= mMaxLayer)
+			{
+				out.push_back(entity);
+			}
 		}
 	}
 
