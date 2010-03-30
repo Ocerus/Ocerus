@@ -53,7 +53,7 @@
   
   <Entity Name="Camera2">
     <Component Type="Camera">
-      <Position>00 0</Position>
+      <Position>0 0</Position>
       <Zoom>0.5</Zoom>
       <Rotation>0.0</Rotation>
     </Component>

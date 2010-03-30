@@ -160,8 +160,8 @@ bool GfxSystem::GfxRenderer::ConvertScreenToWorldCoords( const Point& screenCoor
 		worldCoords.y = worldCoords.y * (bottomrightWorld.y-topleftWorld.y) / (bottomright.y-topleft.y);
 
 		// inverse camera transform
-		worldCoords += camera.GetProperty("Position").GetValue<Vector2>();
 		worldCoords *= 1.0f / camera.GetProperty("Zoom").GetValue<float32>();
+		worldCoords += camera.GetProperty("Position").GetValue<Vector2>();
 		Matrix22 rotationMatrix(camera.GetProperty("Rotation").GetValue<float32>());
 		worldCoords = MathUtils::Multiply(rotationMatrix, worldCoords);
 
