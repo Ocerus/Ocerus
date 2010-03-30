@@ -207,7 +207,7 @@ void GfxSystem::GfxRenderer::DrawEntity( const EntitySystem::EntityHandle entity
 	DrawSprite(gEntityMgr.GetEntityComponentPtr(gEntityMgr.FindFirstEntity("Visual"), EntitySystem::CT_Sprite), gEntityMgr.GetEntityComponentPtr(gEntityMgr.FindFirstEntity("Visual"), CT_Transform));
 }
 
-GfxViewport* GfxSystem::GfxRenderer::GetRenderTargetViewport(const RenderTargetID renderTarget)
+GfxViewport* GfxSystem::GfxRenderer::GetRenderTargetViewport(const RenderTargetID renderTarget) const
 {
 	// we have a predefined render target
 	if (renderTarget == InvalidRenderTargetID || renderTarget<0 || renderTarget>=(RenderTargetID)mRenderTargets.size() || !mRenderTargets[renderTarget])
@@ -231,7 +231,7 @@ EntitySystem::EntityHandle GfxSystem::GfxRenderer::GetRenderTargetCamera( const 
 	return mRenderTargets[renderTarget]->second;
 }
 
-float32 GfxSystem::GfxRenderer::GetRenderTargetCameraScale( const RenderTargetID renderTarget ) const
+float32 GfxSystem::GfxRenderer::GetRenderTargetCameraZoom( const RenderTargetID renderTarget ) const
 {
 	EntitySystem::EntityHandle cameraHandle = GetRenderTargetCamera(renderTarget);
 	if (cameraHandle.IsValid())
@@ -239,6 +239,17 @@ float32 GfxSystem::GfxRenderer::GetRenderTargetCameraScale( const RenderTargetID
 		return cameraHandle.GetProperty("Zoom").GetValue<float32>();
 	}
 	return 0;
+}
+
+bool GfxSystem::GfxRenderer::SetRenderTargetCameraZoom( const RenderTargetID renderTarget, const float32 newZoom ) const
+{
+	EntitySystem::EntityHandle cameraHandle = GetRenderTargetCamera(renderTarget);
+	if (cameraHandle.IsValid())
+	{
+		cameraHandle.GetProperty("Zoom").SetValue<float32>(newZoom);
+		return true;
+	}
+	return false;
 }
 
 float32 GfxSystem::GfxRenderer::GetRenderTargetCameraRotation( const RenderTargetID renderTarget ) const
@@ -249,4 +260,25 @@ float32 GfxSystem::GfxRenderer::GetRenderTargetCameraRotation( const RenderTarge
 		return cameraHandle.GetProperty("Rotation").GetValue<float32>();
 	}
 	return 0;
+}
+
+Vector2 GfxSystem::GfxRenderer::GetRenderTargetCameraPosition( const RenderTargetID renderTarget ) const
+{
+	EntitySystem::EntityHandle cameraHandle = GetRenderTargetCamera(renderTarget);
+	if (cameraHandle.IsValid())
+	{
+		return cameraHandle.GetProperty("Position").GetValue<Vector2>();
+	}
+	return Vector2();
+}
+
+bool GfxSystem::GfxRenderer::SetRenderTargetCameraPosition(const RenderTargetID renderTarget, const Vector2 newPosition) const
+{
+	EntitySystem::EntityHandle cameraHandle = GetRenderTargetCamera(renderTarget);
+	if (cameraHandle.IsValid())
+	{
+		cameraHandle.GetProperty("Position").SetValue<Vector2>(newPosition);
+		return true;
+	}
+	return false;
 }

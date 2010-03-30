@@ -6,6 +6,7 @@
 #include "StringConverter.h"
 #include "PhysicsDraw.h"
 #include "Editor/EditorMgr.h"
+#include "GfxSystem/DragDropCameraMover.h"
 #include <Box2D.h>
 
 // DEBUG only
@@ -90,6 +91,9 @@ void Core::Game::Init()
 	gRenderTarget = gGfxRenderer.AddRenderTarget(GfxSystem::GfxViewport(gRenderTexture, 128, 128), gEntityMgr.FindFirstEntity("Camera2"));
 	
 
+	//drag'n'drop camera
+	gInputMgr.AddInputListener(new GfxSystem::DragDropCameraMover(mRenderTarget));
+	
 
 	gInputMgr.AddInputListener(this);
 	gApp.ResetStats();
@@ -206,7 +210,7 @@ void Core::Game::Draw( const float32 passedDelta)
 		Vector2 worldCursorPos;
 		if (gGfxRenderer.ConvertScreenToWorldCoords(GfxSystem::Point(mouse.x, mouse.y), worldCursorPos, mRenderTarget))
 		{
-			float32 minDistance = SELECTION_MIN_DISTANCE / gGfxRenderer.GetRenderTargetCameraScale(mRenderTarget);
+			float32 minDistance = SELECTION_MIN_DISTANCE / gGfxRenderer.GetRenderTargetCameraZoom(mRenderTarget);
 			if ((worldCursorPos-mSelectionCursorPosition).LengthSquared() >= MathUtils::Sqr(minDistance))
 			{
 				float32 rotation = gGfxRenderer.GetRenderTargetCameraRotation(mRenderTarget);
@@ -313,7 +317,7 @@ bool Core::Game::MouseButtonReleased( const MouseInfo& mi, const eMouseButton bt
 	}
 
 	bool multiSelection = false;
-	float32 minDistance = SELECTION_MIN_DISTANCE / gGfxRenderer.GetRenderTargetCameraScale(mRenderTarget);
+	float32 minDistance = SELECTION_MIN_DISTANCE / gGfxRenderer.GetRenderTargetCameraZoom(mRenderTarget);
 	if ((worldCursorPos-mSelectionCursorPosition).LengthSquared() >= MathUtils::Sqr(minDistance))
 	{
 		// the cursor moved far away enough

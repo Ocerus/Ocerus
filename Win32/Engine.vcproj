@@ -721,6 +721,10 @@
 				Name="inc"
 				>
 				<File
+					RelativePath="..\src\GfxSystem\DragDropCameraMover.h"
+					>
+				</File>
+				<File
 					RelativePath="..\src\GfxSystem\GfxRenderer.h"
 					>
 				</File>
@@ -760,6 +764,10 @@
 			<Filter
 				Name="src"
 				>
+				<File
+					RelativePath="..\src\GfxSystem\DragDropCameraMover.cpp"
+					>
+				</File>
 				<File
 					RelativePath="..\src\GfxSystem\GfxRenderer.cpp"
 					>

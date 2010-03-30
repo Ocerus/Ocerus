@@ -47,7 +47,7 @@ namespace GfxSystem
 
 		/// Sets the current render target. Returns false if no such exists.
 		bool SetCurrentRenderTarget(const RenderTargetID toSet);
-
+		
 		/// Returns the current scene manager.
 		inline GfxSceneMgr* GetSceneManager() const { return mSceneMgr; }
 
@@ -113,16 +113,25 @@ namespace GfxSystem
 		bool ConvertScreenToWorldCoords(const Point& screenCoords, Vector2& worldCoords, const RenderTargetID renderTarget = InvalidRenderTargetID) const;
 
 		/// Returns a pointer to the viewport associated with a render target, or NULL if render target does not exist.
-		GfxViewport* GetRenderTargetViewport(const RenderTargetID renderTarget);
+		GfxViewport* GetRenderTargetViewport(const RenderTargetID renderTarget) const;
 
 		/// Returns the camera associated with a render target.
 		EntitySystem::EntityHandle GetRenderTargetCamera(const RenderTargetID renderTarget) const;
 
-		/// Returns the camera scale of a render target.
-		float32 GetRenderTargetCameraScale(const RenderTargetID renderTarget) const;
+		/// Returns the camera zoom of a render target.
+		float32 GetRenderTargetCameraZoom(const RenderTargetID renderTarget) const;
+
+		/// Sets position of camera associated with render target. Returns false if render target does not exist.
+		bool SetRenderTargetCameraZoom(const RenderTargetID renderTarget, float32 newZoom) const;
 
 		/// Returns the camera rotation of a render target.
 		float32 GetRenderTargetCameraRotation(const RenderTargetID renderTarget) const;
+
+		/// Returns the camera position of a render target.
+		Vector2 GetRenderTargetCameraPosition(const RenderTargetID renderTarget) const;
+
+		/// Sets position of camera associated with render target. Returns false if render target does not exist.
+		bool SetRenderTargetCameraPosition(const RenderTargetID renderTarget, Vector2 newPosition) const;
 
 
 	protected:
