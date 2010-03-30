@@ -193,7 +193,7 @@ void GfxSystem::GfxRenderer::DrawSprite( const EntitySystem::Component* spriteCo
 	quad.position = transform->GetPosition();
 	quad.scale = transform->GetScale();
 	quad.angle = transform->GetAngle();
-	quad.z = (float32)transform->GetDepth();
+	quad.z = (float32)transform->GetLayer();
 	quad.size = sprite->GetSize();
 	quad.texture = ((TexturePtr)sprite->GetTexture())->GetTexture();
 	quad.transparency = sprite->GetTransparency();

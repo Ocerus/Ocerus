@@ -46,10 +46,10 @@ namespace EntityComponents
 		void SetAngle(float32 value) { mAngle = value; }
 		
 		/// Depth of the entity (ala the Z coordinate).
-		int32 GetDepth(void) const { return mDepth; }
+		int32 GetLayer(void) const { return mDepth; }
 		
 		/// Depth of the entity (ala the Z coordinate).
-		void SetDepth(int32 value);
+		void SetLayer(int32 value);
 
 	private:
 		Vector2 mPosition;

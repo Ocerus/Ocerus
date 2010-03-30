@@ -50,6 +50,7 @@ namespace Utils
 		{
 			OC_ASSERT(msSingleton);
 			delete msSingleton;
+			msSingleton = 0;
 		}
 
 		/// Returns true if the singleton exists.

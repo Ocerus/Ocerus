@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Entities>
+  <Entity Name="1">
+    <Component Type="Transform">
+	    <Position>0 0</Position>
+	    <Angle>0.0</Angle>
+	    <Scale>1.0 1.0</Scale>
+    </Component>
+  </Entity>
+
+</Entities>

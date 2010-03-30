@@ -38,10 +38,10 @@ namespace EntitySystem
 		EntityHandle& operator=(const EntityHandle& rhs);
 
 		/// Comparison operator.
-		bool operator==(const EntityHandle& rhs);
+		bool operator==(const EntityHandle& rhs) const;
 
 		/// Comparison operator.
-		bool operator!=(const EntityHandle& rhs);
+		bool operator!=(const EntityHandle& rhs) const;
 
 		/// Returns true if this handle is valid (not null).
 		inline bool IsValid(void) const { return mEntityID != INVALID_ENTITY_ID; }

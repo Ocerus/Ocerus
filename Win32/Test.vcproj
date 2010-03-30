@@ -392,6 +392,18 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="EntitySystem"
+			>
+			<Filter
+				Name="EntityMgr"
+				>
+				<File
+					RelativePath="..\src\EntitySystem\EntityMgr\test\TestEntityMgr.cpp"
+					>
+				</File>
+			</Filter>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>

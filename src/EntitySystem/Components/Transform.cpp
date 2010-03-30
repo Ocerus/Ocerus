@@ -28,10 +28,10 @@ void EntityComponents::Transform::RegisterReflection()
 	RegisterProperty<Vector2>("Position", &Transform::GetPosition, &Transform::SetPosition, PA_FULL_ACCESS, "");
 	RegisterProperty<Vector2>("Scale", &Transform::GetScale, &Transform::SetScale, PA_FULL_ACCESS, "");
 	RegisterProperty<float32>("Angle", &Transform::GetAngle, &Transform::SetAngle, PA_FULL_ACCESS, "");
-	RegisterProperty<int32>("Layer", &Transform::GetDepth, &Transform::SetDepth, PA_FULL_ACCESS, "");
+	RegisterProperty<int32>("Layer", &Transform::GetLayer, &Transform::SetLayer, PA_FULL_ACCESS, "");
 }
 
-void EntityComponents::Transform::SetDepth(int32 value)
+void EntityComponents::Transform::SetLayer(int32 value)
 {
 	if (gLayerMgr.ExistsLayer(value))
 	{

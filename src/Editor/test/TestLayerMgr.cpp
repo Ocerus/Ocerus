@@ -1,19 +1,18 @@
 #include "Common.h"
 #include "UnitTests.h"
 #include "../LayerMgr.h"
-#include "LogSystem/LogMgr.h"
 
 
-SUITE(Array)
+SUITE(LayerMgr)
 {
-	TEST(Constructor)
+	TEST(Init)
 	{
-		LogSystem::LogMgr::CreateSingleton();
-		LogSystem::LogMgr::GetSingleton().Init("CoreLog.txt");
-		EntitySystem::EntityMgr::CreateSingleton();
+		::Test::InitEntities();
 		Editor::LayerMgr::CreateSingleton();
+
 		CHECK(gLayerMgr.ExistsLayer(0));
 	}
+
 
 	TEST(PushLayers)
 	{
@@ -70,5 +69,11 @@ SUITE(Array)
 	TEST(InvariantTest)
 	{
 		CHECK(gLayerMgr.ExistsLayer(0));
+	}
+
+
+	TEST(Clean)
+	{
+		::Test::CleanSubsystems();
 	}
 }

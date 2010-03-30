@@ -138,7 +138,7 @@ EntityHandle EntityMgr::CreateEntity(EntityDescription& desc)
 
 	if (desc.mComponents.size() == 0)
 	{
-		ocWarning << "Attempting to create an entity without components";
+		ocError << "Attempting to create an entity without components";
 		return EntityHandle::Null; // no components, so we can't create the entity
 	}
 	if (isPrototype && desc.mPrototype != INVALID_ENTITY_ID)

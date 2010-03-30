@@ -81,12 +81,12 @@ EntityHandle& EntityHandle::operator=(const EntityHandle& rhs)
 
 EntitySystem::EntityHandle::EntityHandle( void ): mEntityID(INVALID_ENTITY_ID) {}
 
-bool EntitySystem::EntityHandle::operator==( const EntityHandle& rhs )
+bool EntitySystem::EntityHandle::operator==( const EntityHandle& rhs ) const
 {
 	return mEntityID == rhs.mEntityID;
 }
 
-bool EntitySystem::EntityHandle::operator!=( const EntityHandle& rhs )
+bool EntitySystem::EntityHandle::operator!=( const EntityHandle& rhs ) const
 {
 	return mEntityID != rhs.mEntityID;
 }
