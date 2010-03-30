@@ -16,14 +16,14 @@ namespace Reflection
 {
 
 	/// Template specialization.
-	#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter) \
+	#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter, cloning) \
 		template<> ePropertyType PropertyTypes::GetTypeID<typeClass>(void) { return typeID; } \
 		template<> typeClass PropertyTypes::GetDefaultValue<typeClass>(void) {return defaultValue; }
 	#include "PropertyTypes.h"
 	#undef PROPERTY_TYPE
 
 	/// Template specialization.
-	#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter) \
+	#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter, cloning) \
 		template<> ePropertyType PropertyTypes::GetTypeID<ARRAY_PROPERTY_TYPE_CLASS(typeClass)>(void) { return ARRAY_PROPERTY_TYPE_ID(typeID); } \
 		template<> ARRAY_PROPERTY_TYPE_CLASS(typeClass) PropertyTypes::GetDefaultValue<ARRAY_PROPERTY_TYPE_CLASS(typeClass)>(void) {return 0; }
 	#include "PropertyTypes.h"
@@ -43,5 +43,22 @@ namespace Reflection
 		}
 		return PT_UNKNOWN;
 	}
+
+	ePropertyCloning PropertyTypes::GetCloning( const ePropertyType type )
+	{
+		switch (type)
+		{
+		#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter, cloning) \
+			case typeID: return PC_##cloning; \
+			case ARRAY_PROPERTY_TYPE_ID(typeID): return PC_##cloning;
+		#include "PropertyTypes.h"
+		#undef PROPERTY_TYPE
+		}
+
+		OC_FAIL("Uknown property cloning");
+
+		return PC_SHALLOW;
+	}
+
 }
 

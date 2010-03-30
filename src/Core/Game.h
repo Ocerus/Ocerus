@@ -40,7 +40,7 @@ namespace Core
 		void Init(void);
 
 		/// Cleans up everything after the game is finished.
-		void Deinit(void);
+		void Clean(void);
 
 		/// Updates the physics.
 		void Update(const float32 delta);

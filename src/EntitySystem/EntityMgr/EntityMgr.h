@@ -77,6 +77,7 @@ namespace EntitySystem
 
 		//@}
 
+
 		/// @name Entity persistance
 		//@{
 		
@@ -87,6 +88,7 @@ namespace EntitySystem
 		bool SaveEntitiesToStorage(ResourceSystem::XMLOutput& storage, const bool isPrototype = false);
 
 		//@}
+
 
 		/// @name Entity attributes
 		//@{
@@ -131,6 +133,9 @@ namespace EntitySystem
 		/// Propagates the current state of properties of the prototype to its instances.
 		void UpdatePrototypeInstances(const EntityHandle prototype);
 
+		/// Create a prototype from the entity. Returns the handle to the prototype or null if there was error.
+		EntityHandle ExportEntityToPrototype(const EntityHandle entity);
+
 		//@}
 
 
@@ -161,6 +166,7 @@ namespace EntitySystem
 		bool RegisterDynamicPropertyOfEntityComponent(const EntityHandle entity, const ComponentID component,
 			const StringKey propertyKey, const PropertyAccessFlags accessFlags, const string& comment);
 
+		/// Register a dynamic property to a component of an entity.
 		bool RegisterDynamicPropertyOfEntityComponent(Reflection::ePropertyType propertyType, 
 			const EntityHandle entity, const ComponentID component, const StringKey propertyKey,
 			const PropertyAccessFlags accessFlags, const string& comment);
@@ -214,13 +220,13 @@ namespace EntitySystem
 		void DestroyEntityComponent(const EntityHandle entity, const ComponentID componentToDestroy);
 
 		/// Returns an ID of the first entity component of a specific type or -1 if does not exist.
-		ComponentID FindComponentOfType(const EntityHandle entity, const eComponentType type);
+		ComponentID GetEntityComponent(const EntityHandle entity, const eComponentType type);
 
-		/// Returns a pointer to the component of the given type. Returns null if no such exists.
-		Component* GetEntityComponent(const EntityHandle entity, const eComponentType type);
+		/// Returns a pointer to the first component of the given type. Returns null if no such exists.
+		Component* GetEntityComponentPtr(const EntityHandle entity, const eComponentType type);
 
 		/// Returns a pointer to the specified component. Returns null if no such exists.
-		Component* GetEntityComponent(const EntityHandle entity, const ComponentID id);
+		Component* GetEntityComponentPtr(const EntityHandle entity, const ComponentID id);
 
 		//@}
 

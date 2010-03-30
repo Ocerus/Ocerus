@@ -66,7 +66,7 @@ int ScriptMgr::IncludeCallback(const char* fileName, const char* from, AngelScri
 
 void ScriptLog(string& msg)
 {
-	ocInfo << msg;
+	ocInfo << "script: " << msg;
 }
 
 ScriptMgr::ScriptMgr(const string& basepath)
@@ -329,13 +329,13 @@ template <class T>
 bool RegisterDynamicProperty(EntityHandle& self,
 	const string& propertyName, const PropertyAccessFlags accessFlags, const string& comment)
 {
-	ComponentID id = gEntityMgr.FindComponentOfType(self, CT_Script);
+	ComponentID id = gEntityMgr.GetEntityComponent(self, CT_Script);
 	return self.RegisterDynamicPropertyOfComponent<T>(id, StringKey(propertyName), accessFlags, comment);
 }
 
 bool UnregisterDynamicProperty(EntityHandle& self, const string& propertyName)
 {
-	ComponentID id = gEntityMgr.FindComponentOfType(self, CT_Script);
+	ComponentID id = gEntityMgr.GetEntityComponent(self, CT_Script);
 	return self.UnregisterDynamicPropertyOfComponent(id, StringKey(propertyName));
 }
 
@@ -578,7 +578,7 @@ void ScriptMgr::ConfigureEngine(void)
 
 	// Register getters, setters and array for supported types of properties
 
-    #define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter) \
+    #define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter, cloning) \
 	/* Register getter and setter */ \
 	r = mEngine->RegisterObjectMethod("EntityHandle", (string(typeName) + " Get_" + typeName + "(const string &in)").c_str(), \
 		asFUNCTIONPR(EntityHandleGetValue, (EntitySystem::EntityHandle&, const string&), typeClass), \
@@ -842,7 +842,7 @@ bool ScriptMgr::SetFunctionArgument(AngelScript::asIScriptContext* ctx, const ui
 
 	switch (parameter.GetType())
 	{
-	#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter) \
+	#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter, cloning) \
 		case typeID: \
 			errorCode = ctx->SetArg##scriptSetter(parameterIndex, ARGVALUE_##scriptSetter(parameter.GetData<typeClass>())); \
 			break;

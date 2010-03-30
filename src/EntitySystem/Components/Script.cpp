@@ -135,19 +135,3 @@ void Script::RegisterReflection()
 	RegisterProperty<int32>("ScriptCurrentArrayIndex", &Script::GetCurrentArrayIndex, 0, 
 		PA_INIT, "Current index of ScriptStates and ScriptTimes");
 }
-
-void Script::TestRunTime()
-{
-	EntitySystem::EntityDescription entDesc;
-	entDesc.Reset();
-	entDesc.SetName("Test script entity");
-	entDesc.AddComponent(CT_Script);
-
-	EntitySystem::EntityHandle handle = gEntityMgr.CreateEntity(entDesc);
-	Utils::Array<string>* a = handle.GetProperty("ScriptModules").GetValue<Utils::Array<string>*>();
-	a->Resize(1);
-	(*a)[0] = "TestScript.as";
-	handle.GetProperty("ScriptTimeOut").SetValue<uint32>(1000);
-	// Calls script
-	handle.FinishInit();
-}

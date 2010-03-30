@@ -1,7 +1,7 @@
 void OnInit()
 {
   EntityHandle handle = GetCurrentEntityHandle();
-  Log("Inicializing entity " + handle.GetID() + "...");
+  Log("Initializing entity " + handle.GetID() + "...");
   const array_string modules = handle.Get_const_array_string("ScriptModules");
   for (int32 i = 0; i<modules.GetSize(); ++i)
   {

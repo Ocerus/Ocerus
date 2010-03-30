@@ -24,12 +24,12 @@ string AbstractProperty::GetValueString(const Reflection::RTTIBaseClass* owner) 
 	switch (GetType())
 	{
 	// We generate cases for all property types and arrays of property types here.
-	#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter) case typeID: \
+	#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter, cloning) case typeID: \
 		return StringConverter::ToString(GetValue<typeClass>(owner));
 	#include "Utils/Properties/PropertyTypes.h"
 	#undef PROPERTY_TYPE
 
-	#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter) case typeID##_ARRAY: \
+	#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter, cloning) case typeID##_ARRAY: \
 		return StringConverter::ToString(GetValue<Array<typeClass>*>(owner));
 	#include "Utils/Properties/PropertyTypes.h"
 	#undef PROPERTY_TYPE
@@ -45,12 +45,12 @@ void AbstractProperty::WriteValueXML(const RTTIBaseClass* owner, ResourceSystem:
 	switch (GetType())
 	{
 	// We generate cases for all property types and arrays of property types here.
-	#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter) case typeID: \
+	#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter, cloning) case typeID: \
 		Utils::XMLConverter::WriteToXML(output, GetValue<typeClass>(owner)); break;
 	#include "Utils/Properties/PropertyTypes.h"
 	#undef PROPERTY_TYPE
 
-	#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter) case typeID##_ARRAY: \
+	#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter, cloning) case typeID##_ARRAY: \
 		Utils::XMLConverter::WriteToXML(output, GetValue<Array<typeClass>*>(owner)); break;
 	#include "Utils/Properties/PropertyTypes.h"
 	#undef PROPERTY_TYPE
@@ -65,7 +65,7 @@ void Reflection::AbstractProperty::SetValueFromString( RTTIBaseClass* owner, con
 	switch (GetType())
 	{
 	// We generate cases for all property types and arrays of property types here.
-	#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter) \
+	#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter, cloning) \
 	case typeID: \
 		SetValue(owner, StringConverter::FromString<typeClass>(str)); \
 		break;
@@ -101,14 +101,14 @@ void Reflection::AbstractProperty::ReadValueXML(RTTIBaseClass* owner, ResourceSy
 	{
 	// We generate cases for all property types and arrays of property types here.
 	#define SCRIPT_ONLY
-	#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter) \
+	#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter, cloning) \
     case typeID: \
 		SetValue<typeClass>(owner, Utils::XMLConverter::ReadFromXML<typeClass>(input)); \
 		break;
     #include "Utils/Properties/PropertyTypes.h"
 	#undef PROPERTY_TYPE
 
-	#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter) \
+	#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter, cloning) \
 	case typeID##_ARRAY: \
 		ReadArrayValueXML<typeClass>(this, owner, input); \
 		break;

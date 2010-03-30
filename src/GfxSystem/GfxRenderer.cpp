@@ -204,7 +204,7 @@ void GfxSystem::GfxRenderer::DrawSprite( const EntitySystem::Component* spriteCo
 void GfxSystem::GfxRenderer::DrawEntity( const EntitySystem::EntityHandle entity ) const
 {
 	OC_UNUSED(entity);
-	DrawSprite(gEntityMgr.GetEntityComponent(gEntityMgr.FindFirstEntity("Visual"), EntitySystem::CT_Sprite), gEntityMgr.GetEntityComponent(gEntityMgr.FindFirstEntity("Visual"), CT_Transform));
+	DrawSprite(gEntityMgr.GetEntityComponentPtr(gEntityMgr.FindFirstEntity("Visual"), EntitySystem::CT_Sprite), gEntityMgr.GetEntityComponentPtr(gEntityMgr.FindFirstEntity("Visual"), CT_Transform));
 }
 
 GfxViewport* GfxSystem::GfxRenderer::GetRenderTargetViewport(const RenderTargetID renderTarget)

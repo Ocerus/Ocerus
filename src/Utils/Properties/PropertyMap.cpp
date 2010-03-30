@@ -6,8 +6,12 @@
 void PropertyMap::EnumProperties( AbstractPropertyList& out, const PropertyAccessFlags flagMask ) const
 {
 	for ( AbstractPropertyMap::const_iterator it = mProperties.begin(); it != mProperties.end(); ++it )
+	{
 		if ((it->second->GetAccessFlags()&flagMask) != 0)
+		{
 			out.push_back( it->second );
+		}
+	}
 }
 
 void PropertyMap::EnumProperties( RTTIBaseClass* owner, PropertyList& out, const PropertyAccessFlags flagMask ) const

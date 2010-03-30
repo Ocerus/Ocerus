@@ -25,9 +25,6 @@ namespace EntityComponents
 
 		/// Called from RTTI when the component is allowed to set up its properties.
 		static void RegisterReflection(void);
-		
-		/// Only for testing purpose
-		static void TestRunTime();
 
 		/// Names of the script modules that are searched for script message handlers.
 		Utils::Array<string>* GetModules(void) const { return const_cast<Utils::Array<string>*>(&mModules); }

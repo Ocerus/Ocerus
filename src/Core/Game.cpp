@@ -36,7 +36,7 @@ Core::Game::Game():
 
 Core::Game::~Game()
 {
-	Deinit();
+	Clean();
 	delete mPhysicsCallbacks;
 	delete mPhysicsDraw;
 }
@@ -94,16 +94,15 @@ void Core::Game::Init()
 	gInputMgr.AddInputListener(this);
 	gApp.ResetStats();
 	ocInfo << "Game inited";
-
-	Script::TestRunTime();
 }
 
-void Core::Game::Deinit()
+void Core::Game::Clean()
 {	
-	if (mPhysics)
-		delete mPhysics;
+	if (mPhysics) delete mPhysics;
 	for (PhysicsEventList::const_iterator i=mPhysicsEvents.begin(); i!=mPhysicsEvents.end(); ++i)
+	{
 		delete *i;
+	}
 	mPhysicsEvents.clear();
 	gInputMgr.RemoveInputListener(this);
 }
@@ -190,7 +189,7 @@ void Core::Game::Draw( const float32 passedDelta)
 	transform.Create();
 	transform._SetType(EntitySystem::CT_Transform);
 	transform.SetScale(Vector2(4.0f, 4.0f));
-	gGfxRenderer.DrawSprite(gEntityMgr.GetEntityComponent(gEntityMgr.FindFirstEntity("Visual"), EntitySystem::CT_Sprite), &transform);
+	gGfxRenderer.DrawSprite(gEntityMgr.GetEntityComponentPtr(gEntityMgr.FindFirstEntity("Visual"), EntitySystem::CT_Sprite), &transform);
 	//gGfxRenderer.DrawEntity(gEntityMgr.FindFirstEntity("Visual"));
 	gGfxRenderer.FinalizeRenderTarget();
 	

@@ -19,7 +19,7 @@ namespace Editor
 		{
 
 		// We generate cases for all Array types here. ArrayEditor is used for such properties.
-		#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter) case typeID##_ARRAY: \
+		#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter, cloning) case typeID##_ARRAY: \
 			return new Editor::ArrayEditor<typeClass>(new PropertyModel<Array<typeClass>*>(property));
 		#include "Utils/Properties/PropertyTypes.h"
 		#undef PROPERTY_TYPE

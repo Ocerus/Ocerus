@@ -35,7 +35,7 @@ EntityMessage::eResult EntityComponents::Sprite::HandleMessage( const EntityMess
 				}
 				mTextureHandle = gResourceMgr.GetResource("Textures", StringKey(lastSlashPos+1, str-lastSlashPos-1));
 								
-				Component* transform = gEntityMgr.GetEntityComponent(GetOwner(), CT_Transform);
+				Component* transform = gEntityMgr.GetEntityComponentPtr(GetOwner(), CT_Transform);
 				gGfxRenderer.GetSceneManager()->AddSprite(this, transform);
 				
 				return EntityMessage::RESULT_OK;

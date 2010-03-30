@@ -22,16 +22,23 @@ namespace Reflection
 	/// It is used for runtime type checks.
 	enum ePropertyType
 	{
-		#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter) typeID,
+		#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter, cloning) typeID,
 		#include "PropertyTypes.h"
 		#undef PROPERTY_TYPE
 
-		#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter) ARRAY_PROPERTY_TYPE_ID(typeID),
+		#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter, cloning) ARRAY_PROPERTY_TYPE_ID(typeID),
 		#include "PropertyTypes.h"
 		#undef PROPERTY_TYPE
 
 		PT_UNKNOWN,
 		NUM_PROPERTY_TYPES
+	};
+
+	/// The way a property can be cloned.
+	enum ePropertyCloning
+	{
+		PC_SHALLOW, ///< Can be copied implicitly.
+		PC_DEEP ///< It's probably a pointer.
 	};
 
 	/// This namespace contains templatized functions associated in compile-time with specific property types and values.
@@ -44,14 +51,14 @@ namespace Reflection
 		template<typename T> T GetDefaultValue(void) { return 0; }
 
 		/// Template specialization.
-		#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter) \
+		#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter, cloning) \
 			template<> ePropertyType GetTypeID<typeClass>(void); \
 			template<> typeClass GetDefaultValue<typeClass>(void);
 		#include "PropertyTypes.h"
 		#undef PROPERTY_TYPE
 
 		/// Template specialization.
-		#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter) \
+		#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter, cloning) \
 			template<> ePropertyType GetTypeID<ARRAY_PROPERTY_TYPE_CLASS(typeClass)>(void); \
 			template<> ARRAY_PROPERTY_TYPE_CLASS(typeClass) GetDefaultValue<ARRAY_PROPERTY_TYPE_CLASS(typeClass)>(void);
 		#include "PropertyTypes.h"
@@ -60,11 +67,11 @@ namespace Reflection
 		/// String names of property types.
 		const char* const PropertyTypeNames[] =
 		{
-			#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter) typeName,
+			#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter, cloning) typeName,
 			#include "PropertyTypes.h"
 			#undef PROPERTY_TYPE
 
-			#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter) ARRAY_PROPERTY_TYPE_NAME(typeName),
+			#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter, cloning) ARRAY_PROPERTY_TYPE_NAME(typeName),
 			#include "PropertyTypes.h"
 			#undef PROPERTY_TYPE
 
@@ -77,6 +84,9 @@ namespace Reflection
 
 		/// Returns the property type from its string reprezentation, PT_UNKNOWN on error.
 		ePropertyType GetTypeFromName(const string& name);
+
+		/// Returns the way the property type can be cloned.
+		ePropertyCloning GetCloning(const ePropertyType type);
 
 	}
 }

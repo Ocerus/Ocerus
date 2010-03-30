@@ -124,8 +124,10 @@ EntityMessage::eResult EntityMgr::PostMessage(EntityID targetEntity, const Entit
 
 void EntityMgr::BroadcastMessage(const EntityMessage& msg)
 {
-	for (EntityMap::const_iterator i = mEntities.begin(); i!=mEntities.end(); ++i)
+	for (EntityMap::iterator i = mEntities.begin(); i!=mEntities.end(); ++i)
+	{
 		PostMessage(i->first, msg);
+	}
 }
 
 EntityHandle EntityMgr::CreateEntity(EntityDescription& desc)
@@ -207,6 +209,8 @@ EntityHandle EntityMgr::CreateEntity(EntityDescription& desc)
 		return entityHandle; // do like nothing's happened, but don't enum properties or they will access invalid memory
 	}
 
+	ocTrace << "Entity created: " << entityHandle;
+
 	return entityHandle;
 }
 
@@ -276,6 +280,8 @@ void EntityMgr::DestroyEntityImmediately( const EntityID entityToDestroy, const 
 
 		if (erase) mEntities.erase(entityIt);
 	}
+
+	ocTrace << "Entity destroyed " << entityToDestroy;
 }
 
 string EntitySystem::EntityMgr::GetEntityName(const EntitySystem::EntityHandle& h) const
@@ -414,12 +420,12 @@ bool EntitySystem::EntityMgr::RegisterDynamicPropertyOfEntityComponent(Reflectio
 	switch (propertyType)
 	{
 	// We generate cases for all property types and arrays of property types here.
-	#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter) case typeID: \
+	#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter, cloning) case typeID: \
 		return RegisterDynamicPropertyOfEntityComponent<typeClass>(entity, component, propertyKey, accessFlags, comment);
 	#include "Utils/Properties/PropertyTypes.h"
 	#undef PROPERTY_TYPE
 
-	#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter) case typeID##_ARRAY: \
+	#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter, cloning) case typeID##_ARRAY: \
 		return RegisterDynamicPropertyOfEntityComponent<Array<typeClass>*>(entity, component, propertyKey, accessFlags, comment);
 	#include "Utils/Properties/PropertyTypes.h"
 	#undef PROPERTY_TYPE
@@ -575,6 +581,8 @@ void EntitySystem::EntityMgr::LoadEntityFromXML(ResourceSystem::XMLNodeIterator 
 	// note: the prototype copy can't be created here since all prototypes must be loaded first before any copy is created.
 	//       otherwise it would screw up their IDs.
 	entity.FinishInit();
+
+	ocInfo << "Entity loaded from XML: " << entity;
 }
 
 bool EntitySystem::EntityMgr::LoadEntitiesFromResource(ResourceSystem::ResourcePtr res, const bool isPrototype)
@@ -719,7 +727,7 @@ bool EntitySystem::EntityMgr::GetEntityComponentTypes(const EntityHandle entity,
 	return true;
 }
 
-ComponentID EntitySystem::EntityMgr::FindComponentOfType(const EntityHandle entity, const eComponentType type)
+ComponentID EntitySystem::EntityMgr::GetEntityComponent(const EntityHandle entity, const eComponentType type)
 {
 	int32 i = 0;
 	for (EntityComponentsIterator it=mComponentMgr->GetEntityComponents(entity.GetID()); it.HasMore(); ++it, ++i)
@@ -1003,14 +1011,14 @@ bool EntitySystem::EntityMgr::HasEntityComponentProperty( const EntityHandle ent
 	return false;
 }
 
-Component* EntitySystem::EntityMgr::GetEntityComponent( const EntityHandle entity, const ComponentID id )
+Component* EntitySystem::EntityMgr::GetEntityComponentPtr( const EntityHandle entity, const ComponentID id )
 {
 	OC_DASSERT(mComponentMgr);
 	
 	return mComponentMgr->GetEntityComponent(entity.GetID(), id);
 }
 
-Component* EntitySystem::EntityMgr::GetEntityComponent( const EntityHandle entity, const eComponentType type )
+Component* EntitySystem::EntityMgr::GetEntityComponentPtr( const EntityHandle entity, const eComponentType type )
 {
 	OC_DASSERT(mComponentMgr);
 
@@ -1043,4 +1051,58 @@ void EntitySystem::EntityMgr::GetEntities(EntityList& out)
 	{
 		out.push_back(EntityHandle(i->first));
 	}
+}
+
+EntitySystem::EntityHandle EntitySystem::EntityMgr::ExportEntityToPrototype( const EntityHandle entity )
+{
+	OC_DASSERT(mComponentMgr);
+
+	// create the prototype entity in the system
+	EntityDescription desc;
+	desc.SetKind(EntityDescription::EK_PROTOTYPE);
+	desc.SetName(GetEntityName(entity));
+	ComponentTypeList componentTypes;
+	GetEntityComponentTypes(entity, componentTypes);
+	for (ComponentTypeList::iterator it=componentTypes.begin(); it!=componentTypes.end(); ++it)
+	{
+		desc.AddComponent(*it);
+	}
+	EntityHandle prototype = CreateEntity(desc);
+
+	// copy properties
+	OC_ASSERT(mComponentMgr->GetNumberOfEntityComponents(entity.GetID()) == mComponentMgr->GetNumberOfEntityComponents(prototype.GetID()));
+	EntityComponentsIterator cmpItOld = mComponentMgr->GetEntityComponents(entity.GetID());
+	EntityComponentsIterator cmpItNew = mComponentMgr->GetEntityComponents(prototype.GetID());
+
+	for (; cmpItOld.HasMore(); ++cmpItOld, ++cmpItNew)
+	{
+		PropertyList propsOld;
+		PropertyList propsNew;
+		(*cmpItOld)->EnumProperties(*cmpItOld, propsOld, PA_FULL_ACCESS);
+		(*cmpItNew)->EnumProperties(*cmpItNew, propsNew, PA_FULL_ACCESS);
+
+		// duplicate dynamic properties
+		for (PropertyList::iterator itOld=propsOld.begin(); itOld!=propsOld.end(); ++itOld)
+		{
+			PropertyList::iterator it = find(propsNew.begin(), propsNew.end(), *itOld);
+			if (it == propsNew.end())
+			{
+				propsNew.insert(propsNew.end(), *itOld);
+			}
+		}
+
+		// copy data
+		OC_ASSERT(propsOld.size()==propsNew.size());
+		PropertyList::iterator propItOld = propsOld.begin();
+		PropertyList::iterator propItNew = propsNew.begin();
+		for (; propItOld != propsOld.end(); ++propItOld, ++propItNew)
+		{
+			propItNew->CopyFrom(*propItOld);
+		}
+	}
+
+
+	ocInfo << "Created prototype " << prototype << " from " << entity;
+
+	return prototype;
 }

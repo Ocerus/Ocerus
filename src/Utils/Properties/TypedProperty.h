@@ -36,10 +36,15 @@ namespace Reflection
 		/// Returns true if the copy was performed, false otherwise.
 		virtual bool CopyFrom(RTTIBaseClass* owner, const RTTIBaseClass* otherOwner, const AbstractProperty* otherProperty)
 		{
-			if (!IsWriteable() || !otherProperty->IsReadable())
+			if (IsWriteable() && otherProperty->IsReadable() && PropertyTypes::GetCloning(GetType()) == PC_SHALLOW)
+			{
+				SetValue(owner, otherProperty->GetValue<T>(otherOwner));
+				return true;
+			}
+			else
+			{
 				return false;
-			SetValue(owner, otherProperty->GetValue<T>(otherOwner));
-			return true;
+			}
 		}
 
 		/// Returns the value of this property. An owner of the property must be specified.

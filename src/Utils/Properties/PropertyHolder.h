@@ -35,7 +35,7 @@ namespace Reflection
         /// Comparsion operator.
         bool operator==(const PropertyHolder& rhs)
         {
-            return rhs.mOwner == mOwner && rhs.mProperty == mProperty;
+            return rhs.mProperty == mProperty;
         }
 
 		/// Returns the access flags to this property.
