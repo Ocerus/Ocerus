@@ -35,8 +35,9 @@ namespace GfxSystem
 		/// Finilizes drawing of everything this frame (swap buffers etc ...).
 		void EndRendering();
 
-		/// Finalizes drawing of the current viewpoint (reset depth buffer ...).
-		inline void FinalizeRenderTarget() const { FinalizeRenderTargetImpl(); }
+		/// Finalizes drawing of the current viewpoint
+		inline void FinalizeRenderTarget() const { DrawGrid( mCurrentRenderTargetID );
+												   FinalizeRenderTargetImpl(); }
 
 		/// Adds a new render target to the list. Returns the ID of the added target. Mustn't be called while rendering.
 		/// Returns InvalidRenderTargetID if something was wrong.
@@ -133,6 +134,8 @@ namespace GfxSystem
 		/// Sets position of camera associated with render target. Returns false if render target does not exist.
 		bool SetRenderTargetCameraPosition(const RenderTargetID renderTarget, Vector2 newPosition) const;
 
+		/// Retrieves render targets camera view boundaries in world space.
+		void CalculateRenderTargetWorldBoundaries( const RenderTargetID renderTarget, Vector2& topleft, Vector2& bottomright ) const;
 
 	protected:
 
@@ -161,6 +164,8 @@ namespace GfxSystem
 		typedef vector<RenderTarget*> RenderTargetsVector;
 		RenderTargetsVector mRenderTargets;
 
+		RenderTargetID mCurrentRenderTargetID;
+
 	private:
 
 		/// Converts coordinates from the screen space to the world space.
@@ -168,6 +173,12 @@ namespace GfxSystem
 		/// The result is returned in the second parameter.
 		/// As a last parameter the desired render target must be specified.
 		bool ConvertScreenToWorldCoords( const Point& screenCoords, Vector2& worldCoords, const RenderTarget& renderTarget ) const;
+
+		/// Does inverse camera transformation on the given vector and returns result.
+		Vector2 GetInverseCameraTranform( const EntitySystem::EntityHandle& camera, const Vector2& vec ) const;
+
+		/// Draws grid (defined in viewport) ontop of everything
+		void DrawGrid( const RenderTargetID renderTargetID ) const;
 
 	protected:
 

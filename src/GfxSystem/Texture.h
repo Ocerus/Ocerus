@@ -26,10 +26,10 @@ namespace GfxSystem
 		/// Returns implementation specific pointer to the texture object.
 		TextureHandle GetTexture(void);
 
-		/// Returns widh in pixels of texture.
+		/// Returns width in pixels of texture.
 		uint32 GetWidth(void);
 
-		/// Returns widh in pixels of texture.
+		/// Returns height in pixels of texture.
 		uint32 GetHeight(void);
 
 		/// Returns the resource type associated with this class.

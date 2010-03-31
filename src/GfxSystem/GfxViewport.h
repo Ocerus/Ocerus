@@ -5,6 +5,7 @@
 #define GfxViewport_h__
 
 #include "Base.h"
+#include "GfxStructures.h"
 
 namespace GfxSystem
 {
@@ -36,6 +37,18 @@ namespace GfxSystem
 		/// Sets the size of the viewport in the window.
 		inline void SetSize(const Vector2& newSize) { mSize = newSize; }
 
+		/// Returns grid attributes.
+		inline GridInfo GetGridInfo(void) const { return mGridInfo; }
+		
+		/// Sets grid attributes.
+		inline void SetGridInfo(const GridInfo& newGridInfo) { mGridInfo = newGridInfo; }
+		
+		/// Returns true if drawing grid is enabled.
+		inline bool GetGridEnabled(void) const { return mGridEnabled; }
+		
+		/// Enables or disables drawing grid.
+		inline void SetGridEnabled(const bool newGridEnabled) { mGridEnabled = newGridEnabled; }
+
 		/// Returns the texture this viewport is attached to.
 		/// Returns InvalidTextureHandle if there is no such.
 		inline TextureHandle GetRenderTexture(void) const { return mTexture; }
@@ -44,7 +57,7 @@ namespace GfxSystem
 		inline bool AttachedToTexture(void) const { return mTexture != InvalidTextureHandle; }
 
 		/// Retrieves the boundaries of the viewport in the world space. This basically maps the screen space viewport to
-		/// the world space.
+		/// the world space. It is without camera transormation.
 		void CalculateWorldBoundaries( Vector2& topleft, Vector2& bottomright ) const;
 
 		/// Retrieves the boundaries of the viewport in the screen space.
@@ -56,6 +69,9 @@ namespace GfxSystem
 		Vector2 mSize;
 		TextureHandle mTexture;
 		bool mRelativeScale;
+
+		bool mGridEnabled;
+		GridInfo mGridInfo;
 	};
 }
 

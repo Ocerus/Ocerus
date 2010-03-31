@@ -86,6 +86,14 @@ namespace GfxSystem
 		TextureHandle texture;
 		float32 transparency;
 	};
+
+	/// Grid attributes. Used in viewports.
+	struct GridInfo
+	{
+		GridInfo(): cellSize(100), color(Color::Full) {}
+		float32 cellSize;
+		Color color;
+	};
 }
 
 #endif // GfxStructures_h__

@@ -125,6 +125,7 @@ bool GfxSystem::DragDropCameraMover::MouseButtonPressed( const MouseInfo& mi, co
 
 bool GfxSystem::DragDropCameraMover::MouseButtonReleased( const MouseInfo& mi, const eMouseButton btn )
 {
+	OC_UNUSED(mi);
 	if (btn != MBTN_MIDDLE)		// instrested only in middle button
 		return false;
 

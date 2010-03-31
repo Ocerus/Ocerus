@@ -7,7 +7,7 @@
 
 using namespace GfxSystem;
 
-GfxSystem::GfxRenderer::GfxRenderer(): mIsRendering(false), mSceneMgr(0)
+GfxSystem::GfxRenderer::GfxRenderer(): mIsRendering(false), mSceneMgr(0), mCurrentRenderTargetID(-1)
 {
 	mSceneMgr = new GfxSceneMgr();
 }
@@ -40,6 +40,7 @@ void GfxSystem::GfxRenderer::EndRendering()
 	OC_ASSERT(mIsRendering);
 	EndRenderingImpl();
 	mIsRendering = false;
+	mCurrentRenderTargetID = -1;
 }
 
 GfxSystem::RenderTargetID GfxSystem::GfxRenderer::AddRenderTarget( const GfxViewport& viewport, const EntitySystem::EntityHandle camera )
@@ -63,6 +64,8 @@ bool GfxSystem::GfxRenderer::SetCurrentRenderTarget( const RenderTargetID toSet 
 	if (toSet < 0 || toSet >= (int32)mRenderTargets.size()) return false;
 	RenderTarget* renderTarget = mRenderTargets[toSet];
 	if (!renderTarget) return false;
+
+	mCurrentRenderTargetID = toSet;
 
 	SetViewportImpl(&renderTarget->first);
 
@@ -160,10 +163,8 @@ bool GfxSystem::GfxRenderer::ConvertScreenToWorldCoords( const Point& screenCoor
 		worldCoords.y = worldCoords.y * (bottomrightWorld.y-topleftWorld.y) / (bottomright.y-topleft.y);
 
 		// inverse camera transform
-		worldCoords *= 1.0f / camera.GetProperty("Zoom").GetValue<float32>();
-		worldCoords += camera.GetProperty("Position").GetValue<Vector2>();
-		Matrix22 rotationMatrix(camera.GetProperty("Rotation").GetValue<float32>());
-		worldCoords = MathUtils::Multiply(rotationMatrix, worldCoords);
+
+		worldCoords = GetInverseCameraTranform(camera, worldCoords);
 
 		return true;
 	}
@@ -272,7 +273,7 @@ Vector2 GfxSystem::GfxRenderer::GetRenderTargetCameraPosition( const RenderTarge
 	return Vector2();
 }
 
-bool GfxSystem::GfxRenderer::SetRenderTargetCameraPosition(const RenderTargetID renderTarget, const Vector2 newPosition) const
+bool GfxSystem::GfxRenderer::SetRenderTargetCameraPosition( const RenderTargetID renderTarget, const Vector2 newPosition ) const
 {
 	EntitySystem::EntityHandle cameraHandle = GetRenderTargetCamera(renderTarget);
 	if (cameraHandle.IsValid())
@@ -281,4 +282,94 @@ bool GfxSystem::GfxRenderer::SetRenderTargetCameraPosition(const RenderTargetID 
 		return true;
 	}
 	return false;
+}
+
+Vector2 GfxSystem::GfxRenderer::GetInverseCameraTranform( const EntitySystem::EntityHandle& cameraHandle, const Vector2& vec ) const
+{
+	Vector2 result = vec;
+	// inverse camera transform
+	result *= 1.0f / cameraHandle.GetProperty("Zoom").GetValue<float32>();
+	Matrix22 rotationMatrix(cameraHandle.GetProperty("Rotation").GetValue<float32>());
+	result = MathUtils::Multiply(rotationMatrix, result);
+	result += cameraHandle.GetProperty("Position").GetValue<Vector2>();
+	return result;
+}
+
+void GfxSystem::GfxRenderer::CalculateRenderTargetWorldBoundaries( const RenderTargetID renderTargetID, Vector2& min, Vector2& max ) const
+{
+	GfxViewport* viewport = GetRenderTargetViewport(renderTargetID);
+	EntitySystem::EntityHandle cameraHandle = GetRenderTargetCamera(renderTargetID);
+
+	// compute four boundary vecrors in projection space 
+	Vector2 topleft, bottomright;
+	viewport->CalculateWorldBoundaries(topleft, bottomright);
+	
+	Vector2 topright, bottomleft;
+	topright.x = bottomright.x;
+	topright.y = topleft.y;
+	bottomleft.x = topleft.x;
+	bottomleft.y = bottomright.y;
+
+	// compute four boundary vecrors in world space
+	topleft = GetInverseCameraTranform(cameraHandle, topleft);
+	bottomright = GetInverseCameraTranform(cameraHandle, bottomright);
+	topright = GetInverseCameraTranform(cameraHandle, topright);
+	bottomleft = GetInverseCameraTranform(cameraHandle, bottomleft);
+
+	// select mins and maxes
+	min.x = MathUtils::Min(topleft.x, MathUtils::Min(bottomright.x, MathUtils::Min( topright.x, bottomleft.x)));
+	min.y = MathUtils::Min(topleft.y, MathUtils::Min(bottomright.y, MathUtils::Min( topright.y, bottomleft.y)));
+	
+	max.x = MathUtils::Max(topleft.x, MathUtils::Max(bottomright.x, MathUtils::Max( topright.x, bottomleft.x)));
+	max.y = MathUtils::Max(topleft.y, MathUtils::Max(bottomright.y, MathUtils::Max( topright.y, bottomleft.y)));
+}
+
+void GfxSystem::GfxRenderer::DrawGrid( const RenderTargetID renderTargetID ) const
+{
+	GfxViewport* viewport = GetRenderTargetViewport(renderTargetID);
+
+	if (!viewport->GetGridEnabled())		
+		return;
+	
+	Vector2 min, max;
+
+	// get camera view boundaries in world space
+	CalculateRenderTargetWorldBoundaries(renderTargetID, min, max);
+
+	GridInfo grid = viewport->GetGridInfo();
+
+	//calculate first vertical line x position
+	float32 firstVLineXPos = ceil(min.x / grid.cellSize) * grid.cellSize;
+
+	// calculate vertical lines count
+	int32 VLineCount = (int32) ceil((max.x - min.x) / grid.cellSize);
+	
+
+	// draw horizontal lines
+	for (int i = 0; i < VLineCount; ++i)
+	{
+		Vector2 line[2];
+		line[0].x = line[1].x = firstVLineXPos + i * grid.cellSize;
+		line[0].y = min.y;
+		line[1].y = max.y;
+
+		DrawLine(line, grid.color);
+	}
+
+	//calculate first horizontal line y position
+	float32 firstHLineYPos = ceil(min.y / grid.cellSize) * grid.cellSize;
+
+	// calculate horizontal lines count
+	int32 HLineCount = (int32) ceil((max.y - min.y) / grid.cellSize);
+
+	// draw horizontal lines
+	for (int i = 0; i < HLineCount; ++i)
+	{
+		Vector2 line[2];
+		line[0].x = min.x;
+		line[1].x = max.x;
+		line[0].y = line[1].y = firstHLineYPos + i * grid.cellSize;
+
+		DrawLine(line, grid.color);
+	}
 }

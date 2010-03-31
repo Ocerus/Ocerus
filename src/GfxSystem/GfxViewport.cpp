@@ -12,7 +12,8 @@ GfxSystem::GfxViewport::GfxViewport( const Vector2& position, const Vector2& siz
 	mPosition(position),
 	mSize(size),
 	mTexture(InvalidTextureHandle),
-	mRelativeScale(relativeScale)
+	mRelativeScale(relativeScale),
+	mGridEnabled(true)
 {
 
 }
@@ -21,7 +22,8 @@ GfxSystem::GfxViewport::GfxViewport( ResourceSystem::ResourcePtr texture ):
 	mPosition(Vector2_Zero),
 	mSize(Vector2_Zero),
 	mTexture(InvalidTextureHandle),
-	mRelativeScale(false)
+	mRelativeScale(false),
+	mGridEnabled(true)
 {
 	OC_ASSERT(texture->GetType() == ResourceSystem::RESTYPE_TEXTURE);
 	TexturePtr textureResource = (TexturePtr)texture; 
@@ -34,7 +36,8 @@ GfxSystem::GfxViewport::GfxViewport( TextureHandle texture, const uint32 width, 
 	mPosition(Vector2_Zero),
 	mSize(Vector2_Zero),
 	mTexture(texture),
-	mRelativeScale(false)
+	mRelativeScale(false),
+	mGridEnabled(true)
 {
 	mSize.x = (float32)width;
 	mSize.y = (float32)height;

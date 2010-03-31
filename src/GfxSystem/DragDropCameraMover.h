@@ -20,10 +20,7 @@ namespace GfxSystem
 		DragDropCameraMover( const RenderTargetID renderTarget );
 
 		/// Constructs Drag'n'Drop camera
-		GfxSystem::DragDropCameraMover::DragDropCameraMover(	const RenderTargetID renderTarget,
-																const float32 zoomSensitivity,
-																const float32 minZoom,
-																const float32 maxZoom	);
+		DragDropCameraMover( const RenderTargetID renderTarget,	const float32 zoomSensitivity, const float32 minZoom, const float32 maxZoom	);
 
 		/// Returns associated render target
 		inline RenderTargetID GetRenderTarget() { return mRenderTarget; }
