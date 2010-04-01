@@ -36,8 +36,7 @@ namespace GfxSystem
 		void EndRendering();
 
 		/// Finalizes drawing of the current viewpoint
-		inline void FinalizeRenderTarget() const { DrawGrid( mCurrentRenderTargetID );
-												   FinalizeRenderTargetImpl(); }
+		inline void FinalizeRenderTarget() const;
 
 		/// Adds a new render target to the list. Returns the ID of the added target. Mustn't be called while rendering.
 		/// Returns InvalidRenderTargetID if something was wrong.
@@ -190,6 +189,17 @@ namespace GfxSystem
 		GfxRenderer(const GfxRenderer&);
 		GfxRenderer& operator=(const GfxRenderer&);
 	};
+}
+
+//-----------------------------------------------------------------------------
+// Implementation
+
+
+
+void GfxSystem::GfxRenderer::FinalizeRenderTarget() const
+{
+	DrawGrid( mCurrentRenderTargetID );
+	FinalizeRenderTargetImpl();
 }
 
 #endif
