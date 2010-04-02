@@ -24,7 +24,7 @@ EntityMessage::eResult EntityComponents::StaticBody::HandleMessage( const Entity
 	case EntityMessage::INIT:
 		CreateBody();
 		return EntityMessage::RESULT_OK;
-	case EntityMessage::UPDATE_PRE_PHYSICS:	
+	case EntityMessage::SYNC_PRE_PHYSICS:	
 		mBody->SetTransform(GetOwner().GetProperty("Position").GetValue<Vector2>(), 
 			GetOwner().GetProperty("Angle").GetValue<float32>());
 		return EntityMessage::RESULT_OK;

@@ -7,7 +7,6 @@
 #include "Base.h"
 #include "StateMachine.h"
 #include "InputSystem/IInputListener.h"
-#include <Box2D/Dynamics/b2WorldCallbacks.h>
 
 namespace Core
 {
@@ -104,14 +103,14 @@ namespace Core
 
 	private:
 
-		/// Game control.
+		// Game control.
 		void UpdateGameProperties(void); ///< Updates globally accessible properties related to game.
 		eActionState mActionState;
 		Utils::Timer mTimer; ///< Timer for game action related things.
 		GfxSystem::RenderTargetID mRenderTarget;
 
 
-		/// Physics.
+		// Physics.
 		Physics* mPhysics;
 		float32 mPhysicsResidualDelta; ///< Part of the timestep delta we didn't use for the physics update last Update.
 		/// A structure for queuing events from the physics engine.
@@ -126,34 +125,17 @@ namespace Core
 		void ProcessPhysicsEvent(const PhysicsEvent& evt);
 
 
-		/// Selections stuff.
+		// Selections stuff.
 		bool mSelectionStarted; ///< If true the user started a multi-selection mode.
 		Vector2 mSelectionCursorPosition; ///< World position where the selection started.
 		EntitySystem::EntityHandle mHoveredEntity; ///< Entity the mouse is currently hovering over.
 		typedef vector<EntitySystem::EntityHandle> EntityList;
 		EntityList mSelectedEntities; ///< Currently selected entities.
-
+		GfxSystem::DragDropCameraMover* mCameraMover; ///< Allows camera movement using mouse.
 
 	private:
 
-		/// Callback receiver from physics.
-		class PhysicsCallbacks: public b2ContactFilter, public b2ContactListener
-		{
-		public:
-
-			/// Default constructor.
-			PhysicsCallbacks(Game* parent): mParent(parent) {}
-
-			/// Default destructor.
-			virtual ~PhysicsCallbacks(void) {}
-
-			virtual bool ShouldCollide(b2Fixture* fixtureA, b2Fixture* fixtureB);
-
-			virtual void BeginContact(b2Contact* contact);
-
-		private:
-			Game* mParent;
-		};
+		class PhysicsCallbacks;
 		friend class PhysicsCallbacks;
 		PhysicsCallbacks* mPhysicsCallbacks;
 		PhysicsDraw* mPhysicsDraw;

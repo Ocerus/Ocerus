@@ -24,15 +24,12 @@ namespace EntitySystem
 	class Component;
 }
 
-namespace SceneSystem
-{
-}
-
 namespace GfxSystem
 {
 	class GfxRenderer;
 	class GfxSceneMgr;
 	class IGfxWindowListener;
+	class DragDropCameraMover;
 	struct Color;
 }
 

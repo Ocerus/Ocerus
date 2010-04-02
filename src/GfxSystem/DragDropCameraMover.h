@@ -13,37 +13,38 @@ namespace GfxSystem
 	class DragDropCameraMover : public InputSystem::IInputListener
 	{
 	public:
-		/// Constructs Drag'n'Drop camera
+
+		/// Constructs the Drag'n'Drop camera mover.
 		DragDropCameraMover();
 
-		/// Constructs Drag'n'Drop camera
+		/// Constructs the Drag'n'Drop camera mover.
 		DragDropCameraMover( const RenderTargetID renderTarget );
 
-		/// Constructs Drag'n'Drop camera
+		/// Constructs the Drag'n'Drop camera mover.
 		DragDropCameraMover( const RenderTargetID renderTarget,	const float32 zoomSensitivity, const float32 minZoom, const float32 maxZoom	);
 
-		/// Returns associated render target
-		inline RenderTargetID GetRenderTarget() { return mRenderTarget; }
+		/// Returns the associated render target.
+		inline RenderTargetID GetRenderTarget() const { return mRenderTarget; }
 
-		/// Sets new render target
+		/// Sets a new render target.
 		inline void SetRenderTarget(const RenderTargetID newRenderTarget) { mRenderTarget = newRenderTarget; }
 
-		/// Returns zoom sensitivity
-		inline float32 GetZoomSensitivity() { return mZoomSensitivity / cmZoomModifier; }
+		/// Returns the zoom sensitivity.
+		inline float32 GetZoomSensitivity() const { return mZoomSensitivity / cmZoomModifier; }
 
-		/// Sets new zoom sensitivity
+		/// Sets a new zoom sensitivity.
 		inline void SetZoomSensitivity(const float32 zoomSensitivity) { mZoomSensitivity = zoomSensitivity * cmZoomModifier; }
 		
-		/// Returns minimal zoom
-		inline float32 GetMinZoom() { return mMinZoom; }
+		/// Returns the minimal zoom.
+		inline float32 GetMinZoom() const { return mMinZoom; }
 
-		/// Sets new minimal zoom
+		/// Sets a new minimal zoom.
 		inline void SetMinZoom(const float32 minZoom) { mMinZoom = minZoom; }
 		
-		/// Returns maximal zoom
-		inline float32 GetMaxZoom() { return mMaxZoom; }
+		/// Returns the maximal zoom.
+		inline float32 GetMaxZoom() const { return mMaxZoom; }
 
-		/// Sets new maximal zoom
+		/// Sets a new maximal zoom.
 		inline void SetMaxZoom(const float32 maxZoom) { mMaxZoom = maxZoom; }
 		
 		/// Called by the InputSystem when a key is pressed. Not used here.

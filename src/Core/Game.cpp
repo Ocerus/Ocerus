@@ -8,12 +8,8 @@
 #include "Editor/EditorMgr.h"
 #include "GfxSystem/DragDropCameraMover.h"
 #include <Box2D.h>
+#include <Box2D/Dynamics/b2WorldCallbacks.h>
 
-// DEBUG only
-#include "EntitySystem/Components/Script.h"
-#include "EntitySystem/Components/Transform.h"
-GfxSystem::TextureHandle gRenderTexture;
-GfxSystem::RenderTargetID gRenderTarget;
 
 using namespace Core;
 using namespace EntitySystem;
@@ -23,6 +19,26 @@ const float PHYSICS_TIMESTEP = 0.016f;
 const int32 PHYSICS_VELOCITY_ITERATIONS = 6;
 const int32 PHYSICS_POSITION_ITERATIONS = 2;
 const float32 SELECTION_MIN_DISTANCE = 10.0f; ///< Minimum distance of the cursor position for the selection to be considered as multi-selection. The distance is given in pixels!
+
+
+/// Callback receiver from physics.
+class Core::Game::PhysicsCallbacks: public b2ContactFilter, public b2ContactListener
+{
+public:
+
+	/// Default constructor.
+	PhysicsCallbacks(Core::Game* parent): mParent(parent) {}
+
+	/// Default destructor.
+	virtual ~PhysicsCallbacks(void) {}
+
+	virtual bool ShouldCollide(b2Fixture* fixtureA, b2Fixture* fixtureB);
+
+	virtual void BeginContact(b2Contact* contact);
+
+private:
+	Core::Game* mParent;
+};
 
 
 Core::Game::Game():
@@ -74,29 +90,22 @@ void Core::Game::Init()
 	UpdateGameProperties();
 
 
-	//// TEST ////
-
+	// DEBUG
 	// load entities
 	gEntityMgr.LoadEntitiesFromResource(gResourceMgr.GetResource("TestEntities", "test_entities.xml"));
 
 	// setup render targets
 	mRenderTarget = gGfxRenderer.AddRenderTarget(GfxSystem::GfxViewport(Vector2(0.0, 0.0), Vector2(1, 0.5), false), gEntityMgr.FindFirstEntity("Camera2"));
 
-/*
-	gGfxRenderer.AddRenderTarget(GfxSystem::GfxViewport(Vector2(0, 0.5), Vector2(0.5, 0.5), true), gEntityMgr.FindFirstEntity("Camera1"));
-	gGfxRenderer.AddRenderTarget(GfxSystem::GfxViewport(Vector2(0.5, 0.5), Vector2(0.5, 0.5), true), gEntityMgr.FindFirstEntity("Camera3"));
-*/
 	
-	gRenderTexture = gGfxRenderer.CreateRenderTexture(128, 128);
-	gRenderTarget = gGfxRenderer.AddRenderTarget(GfxSystem::GfxViewport(gRenderTexture, 128, 128), gEntityMgr.FindFirstEntity("Camera2"));
-	
-
-	//drag'n'drop camera
-	gInputMgr.AddInputListener(new GfxSystem::DragDropCameraMover(mRenderTarget));
+	// drag'n'drop camera movement
+	mCameraMover = new GfxSystem::DragDropCameraMover(mRenderTarget);
+	gInputMgr.AddInputListener(mCameraMover);
 	
 
 	gInputMgr.AddInputListener(this);
 	gApp.ResetStats();
+
 	ocInfo << "Game inited";
 }
 
@@ -109,6 +118,11 @@ void Core::Game::Clean()
 	}
 	mPhysicsEvents.clear();
 	gInputMgr.RemoveInputListener(this);
+	if (mCameraMover)
+	{
+		gInputMgr.RemoveInputListener(mCameraMover);
+		delete mCameraMover;
+	}
 }
 
 void Core::Game::Update( const float32 delta )
@@ -139,10 +153,17 @@ void Core::Game::Update( const float32 delta )
 	{
 		float32 stepSize = PHYSICS_TIMESTEP;
 
+		// run scripts and game logic
 		gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::UPDATE_LOGIC, Reflection::PropertyFunctionParameters() << stepSize));
-		gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::UPDATE_PRE_PHYSICS, Reflection::PropertyFunctionParameters() << stepSize));
 
+		// synchronize properties before physics
+		gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::SYNC_PRE_PHYSICS, Reflection::PropertyFunctionParameters() << stepSize));
+
+		// physical step forward
 		mPhysics->Step(stepSize, PHYSICS_VELOCITY_ITERATIONS, PHYSICS_POSITION_ITERATIONS);
+
+		// synchronize properties after physics
+		gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::SYNC_POST_PHYSICS, Reflection::PropertyFunctionParameters() << stepSize));		
 
 		// process physics events
 		for (PhysicsEventList::const_iterator i=mPhysicsEvents.begin(); i!=mPhysicsEvents.end(); ++i)
@@ -155,9 +176,7 @@ void Core::Game::Update( const float32 delta )
 		// destroy entities marked for destruction
 		gEntityMgr.ProcessDestroyQueue();
 
-		gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::UPDATE_PHYSICS, Reflection::PropertyFunctionParameters() << stepSize));		
-
-		// synchronize the entities with their new state after the physics was updated
+		// update game logic after the physics was processed
 		gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::UPDATE_POST_PHYSICS, Reflection::PropertyFunctionParameters() << stepSize));
 
 		// if some of the selected entities were destroyed, remove them from the selection
@@ -184,26 +203,11 @@ void Core::Game::Draw( const float32 passedDelta)
 	if (!IsActionRunning()) delta = 0.0f;
 
 	
-	// ----------------TESTING-------------------------
+	gGfxRenderer.SetCurrentRenderTarget(mRenderTarget);
 	gGfxRenderer.ClearScreen(GfxSystem::Color(0, 0, 0));
-
-	gGfxRenderer.SetCurrentRenderTarget(gRenderTarget);
-	gGfxRenderer.ClearScreen(GfxSystem::Color(0, 255, 0));
-	EntityComponents::Transform transform;
-	transform.Create();
-	transform._SetType(EntitySystem::CT_Transform);
-	transform.SetScale(Vector2(4.0f, 4.0f));
-	gGfxRenderer.DrawSprite(gEntityMgr.GetEntityComponentPtr(gEntityMgr.FindFirstEntity("Visual"), EntitySystem::CT_Sprite), &transform);
-	//gGfxRenderer.DrawEntity(gEntityMgr.FindFirstEntity("Visual"));
-	gGfxRenderer.FinalizeRenderTarget();
-	
-
-
-	gGfxRenderer.SetCurrentRenderTarget(0);
 	gGfxRenderer.DrawEntities();
 	mPhysics->DrawDebugData();
 	// draw the multi-selection stuff
-	OC_ASSERT(mRenderTarget==0);
 	if (mSelectionStarted)
 	{
 		MouseState& mouse = gInputMgr.GetMouseState();
@@ -219,26 +223,6 @@ void Core::Game::Draw( const float32 passedDelta)
 		}
 	}
 	gGfxRenderer.FinalizeRenderTarget();
-
-
-	gGfxRenderer.SetCurrentRenderTarget(1);
-	gGfxRenderer.DrawEntities();
-	mPhysics->DrawDebugData();
-	GfxSystem::TexturedQuad quad;
-	quad.position.y = 150.0f;
-	quad.size.x = 128;
-	quad.size.y = 128;
-	quad.transparency = 0.5f;
-	quad.texture = gRenderTexture;
-	gGfxRenderer.DrawTexturedQuad(quad);
-	gGfxRenderer.FinalizeRenderTarget();
-
-
-	gGfxRenderer.SetCurrentRenderTarget(2);
-	gGfxRenderer.DrawEntities();
-	mPhysics->DrawDebugData();
-	gGfxRenderer.FinalizeRenderTarget();
-
 }
 
 bool Core::Game::KeyPressed( const KeyInfo& ke )

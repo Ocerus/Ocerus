@@ -26,11 +26,11 @@ EntityMessage::eResult EntityComponents::DynamicBody::HandleMessage( const Entit
 	case EntityMessage::INIT:
 		CreateBody();
 		return EntityMessage::RESULT_OK;
-	case EntityMessage::UPDATE_PRE_PHYSICS:	
+	case EntityMessage::SYNC_PRE_PHYSICS:	
 		mBody->SetTransform(GetOwner().GetProperty("Position").GetValue<Vector2>(), 
 			GetOwner().GetProperty("Angle").GetValue<float32>());
 		return EntityMessage::RESULT_OK;
-	case EntityMessage::UPDATE_PHYSICS:
+	case EntityMessage::SYNC_POST_PHYSICS:
 		GetOwner().GetProperty("Position").SetValue<Vector2>(mBody->GetPosition());
 		GetOwner().GetProperty("Angle").SetValue<float32>(mBody->GetAngle());
 		return EntityMessage::RESULT_OK;

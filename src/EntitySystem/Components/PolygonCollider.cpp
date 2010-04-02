@@ -26,7 +26,7 @@ EntityMessage::eResult EntityComponents::PolygonCollider::HandleMessage( const E
 	case EntityMessage::POST_INIT: // we have to wait until the physical bodies are inited, that's why we're using POST_INIT
 		Init();
 		return EntityMessage::RESULT_OK;
-	case EntityMessage::UPDATE_PRE_PHYSICS:	
+	case EntityMessage::SYNC_PRE_PHYSICS:	
 		if (mSensorBody)
 		{
 			mSensorBody->SetTransform(GetOwner().GetProperty("Position").GetValue<Vector2>(), 
