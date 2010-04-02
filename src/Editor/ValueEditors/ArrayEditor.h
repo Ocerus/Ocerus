@@ -35,7 +35,7 @@ namespace Editor
 			typedef ITypedValueEditorModel<ArrayType*> Model;
 
 			/// Constructs an ArrayEditor on given model.
-			ArrayEditor(Model* model): mModel(model), mHeaderWidget(0), mLayout(0), mButtonAddElement(0), mButtonRevert(0), mButtonSave(0) {}
+			ArrayEditor(Model* model): mModel(model), mHeaderWidget(0), mLayout(0), mButtonAddElement(0), mButtonRevert(0), mButtonSave(0) { PROFILE_FNC(); }
 
 			/// Destroys the ArrayEditor and its model.
 			virtual ~ArrayEditor() { DeleteEditors(); DeleteInternalArray(); delete mModel; }

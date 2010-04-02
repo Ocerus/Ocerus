@@ -15,6 +15,8 @@ namespace Editor
 {
 	AbstractValueEditor* CreatePropertyEditor(const PropertyHolder& property)
 	{
+		PROFILE_FNC();
+
 		switch (property.GetType())
 		{
 

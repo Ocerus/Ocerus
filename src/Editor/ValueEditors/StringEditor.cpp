@@ -11,6 +11,8 @@ Editor::StringEditor::~StringEditor()
 
 CEGUI::Window* Editor::StringEditor::CreateWidget(const CEGUI::String& namePrefix)
 {
+	PROFILE_FNC();
+
 	OC_DASSERT(mEditorWidget == 0);
 	OC_DASSERT(mEditboxWidget == 0);
 

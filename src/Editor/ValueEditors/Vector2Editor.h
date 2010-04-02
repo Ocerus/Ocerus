@@ -15,7 +15,7 @@ namespace Editor {
 		typedef ITypedValueEditorModel<Vector2> Model;
 
 		/// Constructs a Vector2Editor that uses given model.
-		Vector2Editor(Model* model): mModel(model), mEditbox1Widget(0), mEditbox2Widget(0) {}
+		Vector2Editor(Model* model): mModel(model), mEditbox1Widget(0), mEditbox2Widget(0) { PROFILE_FNC(); }
 
 		/// Destroys the Vector2Editor and its model.
 		virtual ~Vector2Editor();

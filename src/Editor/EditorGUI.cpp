@@ -90,6 +90,8 @@ void EditorGUI::Update(const float32 delta)
 
 void EditorGUI::UpdateEntityEditorWindow()
 {
+	PROFILE_FNC();
+
 	EntitySystem::EntityHandle currentEntity = gEditorMgr.GetCurrentEntity();
 
 	CEGUI::ScrollablePane* entityEditorPane = static_cast<CEGUI::ScrollablePane*>(gCEGUIWM.getWindow(ENTITY_EDITOR_NAME));

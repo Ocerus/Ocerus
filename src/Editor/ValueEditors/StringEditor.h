@@ -15,7 +15,7 @@ namespace Editor {
 		typedef ITypedValueEditorModel<string> Model;
 		
 		/// Constructs a StringEditor that uses given model.
-		StringEditor(Model* model): mModel(model), mEditboxWidget(0) {}
+		StringEditor(Model* model): mModel(model), mEditboxWidget(0) { PROFILE_FNC(); }
 
 		/// Destroys the StringEditor and its model.
 		~StringEditor();

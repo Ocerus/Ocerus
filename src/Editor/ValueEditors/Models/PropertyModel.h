@@ -16,7 +16,7 @@ namespace Editor
 	{
 	public:
 		/// Constructs a new ProperyModel that manages given property.
-		PropertyModel(const PropertyHolder& property): mProperty(property) {}
+		PropertyModel(const PropertyHolder& property): mProperty(property) { PROFILE_FNC(); }
 
 		/// Returns the name of the property.
 		virtual string GetName() const { return mProperty.GetName(); }

@@ -11,7 +11,10 @@ Editor::AbstractValueEditor::~AbstractValueEditor()
 
 CEGUI::Window* Editor::AbstractValueEditor::CreateStaticTextWidget(const CEGUI::String& name, const CEGUI::String& text, const CEGUI::String& tooltip)
 {
-	CEGUI::Window* labelWidget = gCEGUIWM.createWindow("Editor/StaticText", name);
+	PROFILE_FNC();
+
+	CEGUI::Window* labelWidget;
+	labelWidget = gCEGUIWM.createWindow("Editor/StaticText", name);
 	labelWidget->setText(text);
 	labelWidget->setProperty("FrameEnabled", "False");
 	labelWidget->setProperty("BackgroundEnabled", "False");
@@ -22,6 +25,8 @@ CEGUI::Window* Editor::AbstractValueEditor::CreateStaticTextWidget(const CEGUI::
 
 CEGUI::Window* Editor::AbstractValueEditor::CreateEditorLabelWidget(const CEGUI::String& name, const IValueEditorModel* model)
 {
+	PROFILE_FNC();
+
 	CEGUI::Window* widget = CreateStaticTextWidget(name, model->GetName(), model->GetTooltip());
 	if (model->IsListElement())
 		widget->setProperty("HorzFormatting", "RightAligned");

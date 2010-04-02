@@ -11,6 +11,8 @@ Editor::Vector2Editor::~Vector2Editor()
 
 CEGUI::Window* Editor::Vector2Editor::CreateWidget(const CEGUI::String& namePrefix)
 {
+	PROFILE_FNC();
+
 	OC_ASSERT(mEditbox1Widget == 0);
 	OC_ASSERT(mEditbox2Widget == 0);
 

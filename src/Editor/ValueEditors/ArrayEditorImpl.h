@@ -32,6 +32,8 @@ namespace Editor
 	template<class ElementType>
 	CEGUI::Window* ArrayEditor<ElementType>::CreateWidget(const CEGUI::String& namePrefix)
 	{
+		PROFILE_FNC();
+
 		OC_ASSERT(mEditorWidget == 0);
 		mNamePrefix = namePrefix;
 

@@ -40,6 +40,8 @@ bool GUISystem::VerticalLayout::OnManagedWindowDestructionStarted(const CEGUI::E
 
 void GUISystem::VerticalLayout::UpdateLayout()
 {
+	PROFILE_FNC();
+
 	if (LockedUpdates()) return;
 	LockUpdates();
 
