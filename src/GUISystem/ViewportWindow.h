@@ -24,10 +24,13 @@ namespace GUISystem
 		/// Sets the camera of the viewport to newCamera.
 		void SetCamera(const EntitySystem::EntityHandle& newCamera);
 
+		/// Returns the render target associated with the window.
+		inline GfxSystem::RenderTargetID GetRenderTarget() const { return mRenderTarget; }
+
 		/// @name Overridden members from CEGUI::FrameWindow
 		//@{
-			virtual void initialiseComponents();
-			static const CEGUI::String WidgetTypeName;
+		virtual void initialiseComponents();
+		static const CEGUI::String WidgetTypeName;
 		//@}
 
 	protected:

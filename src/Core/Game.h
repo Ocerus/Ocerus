@@ -35,6 +35,9 @@ namespace Core
 		/// @name Game control
 		//@{
 
+		/// Sets the target where the game will be rendered to.
+		void SetRenderTarget(const GfxSystem::RenderTargetID renderTarget);
+
 		/// Prepares game data structures and loads all necessary resources.
 		void Init(void);
 
@@ -105,9 +108,10 @@ namespace Core
 
 		// Game control.
 		void UpdateGameProperties(void); ///< Updates globally accessible properties related to game.
-		eActionState mActionState;
+		eActionState mActionState; ///< Is the game running or what?
 		Utils::Timer mTimer; ///< Timer for game action related things.
-		GfxSystem::RenderTargetID mRenderTarget;
+		GfxSystem::RenderTargetID mRenderTarget; ///< Where the game is to be rendered?
+		EntitySystem::EntityHandle mCamera; ///< Camera used for rendering.
 
 
 		// Physics.

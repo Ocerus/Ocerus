@@ -5,6 +5,7 @@
 
 #include "GUISystem/GUIMgr.h"
 #include "EntitySystem/EntityMgr/EntityMgr.h"
+#include "Core/Game.h"
 
 #include "CEGUI.h"
 #include "GUISystem/VerticalLayout.h"
@@ -50,7 +51,14 @@ void EditorGUI::LoadGUI()
 	mViewport->setArea(CEGUI::URect(CEGUI::UDim(0.3f, 0), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(0.5f, 0)));
 	gCEGUIWM.getWindow("EditorRoot")->addChildWindow(mViewport);
 
-	mViewport->SetCamera(gEntityMgr.FindFirstEntity("Camera2"));
+	EntitySystem::EntityDescription desc;
+	desc.SetName("GameCamera1");
+	desc.AddComponent(EntitySystem::CT_Camera);
+	EntitySystem::EntityHandle camera = gEntityMgr.CreateEntity(desc);
+	camera.FinishInit();
+	mViewport->SetCamera(camera);
+
+	GlobalProperties::Get<Core::Game>("Game").SetRenderTarget(mViewport->GetRenderTarget());
 
 	{
 		CEGUI::FrameWindow* picker = (CEGUI::FrameWindow*)CEGUI::WindowManager::getSingleton().createWindow("Editor/FrameWindow", "picker");

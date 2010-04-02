@@ -140,10 +140,10 @@ void Application::RunMainLoop()
 		case AS_LOADING:
 			mLoadingScreen->DoLoading(LoadingScreen::TYPE_BASIC_RESOURCES);
 			mLoadingScreen->DoLoading(LoadingScreen::TYPE_GENERAL_RESOURCES);
+
+			gEditorMgr.LoadEditor();
 			mGame->Init();
 
-			// Loads editor.
-			Editor::EditorMgr::GetSingleton().LoadEditor();
 			RequestStateChange(AS_GAME, true);
 			break;
 		case AS_GAME:
@@ -167,12 +167,6 @@ void Application::RunMainLoop()
 			default:
 				break;
 			}
-
-			// draw stats (from previous frame)
-			//TODO:Gfx
-			//gGfxRenderer.DrawString(0.0f, 0.0f, "FPS", "FPS: " + StringConverter::ToString(mAvgFPS),
-			//	GfxSystem::Color(0,180,0), ANCHOR_LEFT | ANCHOR_BOTTOM,
-			//	ANCHOR_LEFT | ANCHOR_BOTTOM);
 
 			gGfxRenderer.EndRendering();
 		}

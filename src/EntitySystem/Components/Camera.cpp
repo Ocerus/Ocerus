@@ -3,6 +3,9 @@
 
 void EntityComponents::Camera::Create( void )
 {
+	mPosition = Vector2_Zero;
+	mRotation = 0.0f;
+	mZoom = 1.0f;
 }
 
 void EntityComponents::Camera::Destroy( void )

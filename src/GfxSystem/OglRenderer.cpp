@@ -319,3 +319,25 @@ void GfxSystem::OglRenderer::ClearScreen( const Color& color ) const
 	glColorMask(true, true, true, true);
 	glClear(GL_COLOR_BUFFER_BIT);
 }
+
+void GfxSystem::OglRenderer::ClearViewport( const GfxViewport& viewport, const Color& color ) const
+{
+	if (viewport.AttachedToTexture())
+	{
+		ClearScreen(color);
+		return;
+	}
+
+	Point topleft, bottomright;
+	viewport.CalculateScreenBoundaries(topleft, bottomright);
+	// note that we are subtracting the Y pos from the resolution to workaround a bug in the SDL OpenGL impl
+	glScissor(topleft.x, gGfxWindow.GetResolutionHeight()-bottomright.y, bottomright.x-topleft.x, bottomright.y-topleft.y);
+
+	glEnable(GL_SCISSOR_TEST);
+
+	glClearColor((float32)color.r / 255, (float)color.g / 255, (float32)color.b / 255, (float32)color.a / 2);
+	glColorMask(true, true, true, true);
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	glDisable(GL_SCISSOR_TEST);
+}

@@ -103,6 +103,15 @@ namespace GfxSystem
 		/// Clears the screen with the given color.
 		virtual void ClearScreen(const Color& color) const = 0;
 
+		/// Clears the designated render target with the given color.
+		void ClearRenderTarget(const RenderTargetID target, const Color& color) const;
+
+		/// Clears the current render target with the given color.
+		void ClearCurrentRenderTarget(const Color& color) const;
+
+		/// Clears the given viewport with the given color.
+		virtual void ClearViewport(const GfxViewport& viewport, const Color& color) const = 0;
+
 
 	public:
 
@@ -155,14 +164,13 @@ namespace GfxSystem
 
 	private:
 
-		/// Vector with sprites to be rendered.
+		// Vector with sprites to be rendered.
 		typedef vector<TexturedQuad> QuadVector;
 		QuadVector mQuads;
 
-		/// Render targets.
+		// Render targets.
 		typedef vector<RenderTarget*> RenderTargetsVector;
 		RenderTargetsVector mRenderTargets;
-
 		RenderTargetID mCurrentRenderTargetID;
 
 	private:

@@ -46,6 +46,9 @@ namespace GfxSystem
 
 		virtual void ClearScreen(const Color& color) const;
 
+		virtual void ClearViewport(const GfxViewport& viewport, const Color& color) const;
+
+
 	private:
 
 		typedef unsigned int OpenGLHandle;

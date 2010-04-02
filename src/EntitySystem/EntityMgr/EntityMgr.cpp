@@ -92,6 +92,7 @@ EntityMessage::eResult EntityMgr::PostMessage(EntityID targetEntity, const Entit
 	}
 	if (msg.type != EntityMessage::INIT && msg.type != EntityMessage::POST_INIT && !ei->second->mFullyInited)
 	{
+		// the entity was not initialized by calling FinishInit() or something similar
 		ocError << "Can't post message: Entity with ID '" << targetEntity << "' is not initialized";
 		return EntityMessage::RESULT_ERROR;
 	}

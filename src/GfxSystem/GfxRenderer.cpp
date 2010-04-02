@@ -7,7 +7,7 @@
 
 using namespace GfxSystem;
 
-GfxSystem::GfxRenderer::GfxRenderer(): mIsRendering(false), mSceneMgr(0), mCurrentRenderTargetID(-1)
+GfxSystem::GfxRenderer::GfxRenderer(): mIsRendering(false), mSceneMgr(0), mCurrentRenderTargetID(InvalidRenderTargetID)
 {
 	mSceneMgr = new GfxSceneMgr();
 }
@@ -32,7 +32,15 @@ bool GfxSystem::GfxRenderer::BeginRendering()
 	OC_ASSERT(!mIsRendering);
 	OC_ASSERT(mSceneMgr);
 	mIsRendering = true;
-	return BeginRenderingImpl();
+	if (BeginRenderingImpl())
+	{
+		ClearScreen(Color(100,100,100));
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 void GfxSystem::GfxRenderer::EndRendering()
@@ -54,7 +62,11 @@ GfxSystem::RenderTargetID GfxSystem::GfxRenderer::AddRenderTarget( const GfxView
 	}
 
 	mRenderTargets.push_back(new RenderTarget(viewport, camera));
-	return mRenderTargets.size()-1;
+	RenderTargetID result = mRenderTargets.size()-1;
+
+	ocInfo << "Created new render target " << result;
+
+	return result;
 }
 
 bool GfxSystem::GfxRenderer::SetCurrentRenderTarget( const RenderTargetID toSet )
@@ -87,6 +99,8 @@ bool GfxSystem::GfxRenderer::RemoveRenderTarget( const RenderTargetID toRemove )
 	
 	delete mRenderTargets[toRemove];
 	mRenderTargets[toRemove] = 0;
+
+	ocInfo << "Deleted render target " << toRemove;
 	
 	return true;
 }
@@ -372,4 +386,14 @@ void GfxSystem::GfxRenderer::DrawGrid( const RenderTargetID renderTargetID ) con
 
 		DrawLine(line, grid.color);
 	}
+}
+
+void GfxSystem::GfxRenderer::ClearCurrentRenderTarget( const Color& color ) const
+{
+	ClearRenderTarget(mCurrentRenderTargetID, color);
+}
+
+void GfxSystem::GfxRenderer::ClearRenderTarget( const RenderTargetID target, const Color& color ) const
+{
+	ClearViewport(mRenderTargets[target]->first, color);
 }

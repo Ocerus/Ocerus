@@ -44,11 +44,15 @@ private:
 Core::Game::Game():
 	StateMachine<eGameState>(GS_NORMAL),
 	mTimer(true),
+	mRenderTarget(GfxSystem::InvalidRenderTargetID),
+	mCamera(EntitySystem::EntityHandle::Null),
 	mPhysics(0),
 	mPhysicsCallbacks(0)
 {
 	mPhysicsCallbacks = new PhysicsCallbacks(this);
 	mPhysicsDraw = new PhysicsDraw();
+
+	GlobalProperties::SetPointer("Game", this);
 }
 
 Core::Game::~Game()
@@ -56,8 +60,16 @@ Core::Game::~Game()
 	Clean();
 	delete mPhysicsCallbacks;
 	delete mPhysicsDraw;
+
+	GlobalProperties::SetPointer("Game", 0);
 }
 
+void Core::Game::SetRenderTarget( const GfxSystem::RenderTargetID renderTarget )
+{
+	OC_ASSERT(mRenderTarget == GfxSystem::InvalidRenderTargetID);
+	mRenderTarget = renderTarget;
+	mCamera = gGfxRenderer.GetRenderTargetCamera(mRenderTarget);
+}
 
 void Core::Game::UpdateGameProperties( void )
 {
@@ -66,11 +78,19 @@ void Core::Game::UpdateGameProperties( void )
 	// update current game properties
 	GlobalProperties::SetPointer("Game", this);
 	GlobalProperties::SetPointer("Physics", mPhysics);
+	GlobalProperties::SetPointer("GameCamera", &mCamera);
 }
 
 void Core::Game::Init()
 {
 	ocInfo << "Game init";
+
+	// security check
+	if (mRenderTarget == GfxSystem::InvalidRenderTargetID)
+	{
+		ocError << "Invalid render target for game";
+		return;
+	}
 
 	// basic init stuff
 	mSelectionStarted = false;
@@ -93,9 +113,6 @@ void Core::Game::Init()
 	// DEBUG
 	// load entities
 	gEntityMgr.LoadEntitiesFromResource(gResourceMgr.GetResource("TestEntities", "test_entities.xml"));
-
-	// setup render targets
-	mRenderTarget = gGfxRenderer.AddRenderTarget(GfxSystem::GfxViewport(Vector2(0.0, 0.0), Vector2(1, 0.5), false), gEntityMgr.FindFirstEntity("Camera2"));
 
 	
 	// drag'n'drop camera movement
@@ -204,7 +221,7 @@ void Core::Game::Draw( const float32 passedDelta)
 
 	
 	gGfxRenderer.SetCurrentRenderTarget(mRenderTarget);
-	gGfxRenderer.ClearScreen(GfxSystem::Color(0, 0, 0));
+	gGfxRenderer.ClearCurrentRenderTarget(GfxSystem::Color(0, 0, 0));
 	gGfxRenderer.DrawEntities();
 	mPhysics->DrawDebugData();
 	// draw the multi-selection stuff
