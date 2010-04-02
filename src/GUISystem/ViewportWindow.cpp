@@ -22,6 +22,7 @@ void GUISystem::ViewportWindow::initialiseComponents()
 	setText("Viewport without camera");
 	setCloseButtonEnabled(false);
 	setFrameEnabled(true);
+	setMousePassThroughEnabled(true);
 }
 
 void GUISystem::ViewportWindow::SetCamera(const EntitySystem::EntityHandle& camera)
