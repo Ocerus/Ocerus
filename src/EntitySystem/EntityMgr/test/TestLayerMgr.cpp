@@ -2,13 +2,14 @@
 #include "UnitTests.h"
 #include "../LayerMgr.h"
 
+using namespace EntitySystem;
 
 SUITE(LayerMgr)
 {
 	TEST(Init)
 	{
 		::Test::InitEntities();
-		Editor::LayerMgr::CreateSingleton();
+		LayerMgr::CreateSingleton();
 
 		CHECK(gLayerMgr.ExistsLayer(0));
 	}
@@ -26,7 +27,7 @@ SUITE(LayerMgr)
 
 	TEST(SetLayerName)
 	{
-		Editor::LayerID id = gLayerMgr.AddTopLayer("Really second foreground");
+		LayerID id = gLayerMgr.AddTopLayer("Really second foreground");
 		CHECK_EQUAL(gLayerMgr.SetLayerName(id, "First foreground"), false);
 		CHECK(gLayerMgr.SetLayerName(id, "Second foreground"));
 		CHECK_EQUAL(gLayerMgr.GetLayerName(id), "Second foreground");
@@ -34,23 +35,23 @@ SUITE(LayerMgr)
 
 	TEST(InsertLayer)
 	{
-		Editor::LayerID id = gLayerMgr.InsertLayerBehind(gLayerMgr.GetTopLayerID(), "Really second foreground");
+		LayerID id = gLayerMgr.InsertLayerBehind(gLayerMgr.GetTopLayerID(), "Really second foreground");
 		CHECK_EQUAL(id, gLayerMgr.GetTopLayerID() - 1);
 	}
 
 	TEST(MoveLayer)
 	{
-		Editor::LayerID id = gLayerMgr.AddBottomLayer("Second background"); 
-		Editor::LayerID topID = gLayerMgr.GetTopLayerID(); 
-		Editor::LayerID newID = gLayerMgr.MoveLayerBehind(topID - 1, id + 1); 
+		LayerID id = gLayerMgr.AddBottomLayer("Second background"); 
+		LayerID topID = gLayerMgr.GetTopLayerID(); 
+		LayerID newID = gLayerMgr.MoveLayerBehind(topID - 1, id + 1); 
 		CHECK_EQUAL(newID, id);
 		CHECK_EQUAL(topID, gLayerMgr.GetTopLayerID() + 1);
 	}
 
 	TEST(MoveLayer2)
 	{
-		Editor::LayerID bottomID = gLayerMgr.GetBottomLayerID();
-		Editor::LayerID newID = gLayerMgr.MoveLayerBehind(bottomID + 1, 0);
+		LayerID bottomID = gLayerMgr.GetBottomLayerID();
+		LayerID newID = gLayerMgr.MoveLayerBehind(bottomID + 1, 0);
 		CHECK_EQUAL(newID, -1);
 		CHECK_EQUAL(bottomID, gLayerMgr.GetBottomLayerID());
 	}
@@ -58,8 +59,8 @@ SUITE(LayerMgr)
 	TEST(DeleteLayer)
 	{
 		CHECK_EQUAL(gLayerMgr.DeleteLayer(0, false), false);
-		Editor::LayerID bottomID = gLayerMgr.GetBottomLayerID();
-		Editor::LayerID topID = gLayerMgr.GetTopLayerID();
+		LayerID bottomID = gLayerMgr.GetBottomLayerID();
+		LayerID topID = gLayerMgr.GetTopLayerID();
 		CHECK(gLayerMgr.DeleteLayer(-1, false));
 		CHECK_EQUAL(bottomID, gLayerMgr.GetBottomLayerID() - 1);
 		CHECK(gLayerMgr.DeleteLayer(topID, false));

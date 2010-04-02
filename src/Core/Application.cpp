@@ -8,7 +8,7 @@
 #include "GfxSystem/GfxWindow.h"
 #include "ScriptSystem/ScriptResource.h"
 #include "Editor/EditorMgr.h"
-#include "Editor/LayerMgr.h"
+#include "EntitySystem/EntityMgr/LayerMgr.h"
 
 
 using namespace Core;
@@ -69,7 +69,7 @@ void Application::Init()
 	GUISystem::GUIMgr::CreateSingleton();
 
 	Editor::EditorMgr::CreateSingleton();
-	Editor::LayerMgr::CreateSingleton();
+	EntitySystem::LayerMgr::CreateSingleton();
 
 	// create core states
 	mLoadingScreen = new LoadingScreen();
@@ -89,7 +89,7 @@ Application::~Application()
 
 	delete mLoadingScreen;
 
-	Editor::LayerMgr::DestroySingleton();
+	EntitySystem::LayerMgr::DestroySingleton();
 	Editor::EditorMgr::DestroySingleton();
 
 	GUISystem::GUIMgr::DestroySingleton();

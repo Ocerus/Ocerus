@@ -407,6 +407,10 @@
 						RelativePath="..\src\EntitySystem\EntityMgr\EntityPicker.h"
 						>
 					</File>
+					<File
+						RelativePath="..\src\EntitySystem\EntityMgr\LayerMgr.h"
+						>
+					</File>
 				</Filter>
 				<Filter
 					Name="src"
@@ -437,6 +441,10 @@
 					</File>
 					<File
 						RelativePath="..\src\EntitySystem\EntityMgr\EntityPicker.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\src\EntitySystem\EntityMgr\LayerMgr.cpp"
 						>
 					</File>
 				</Filter>
@@ -1334,10 +1342,6 @@
 					RelativePath="..\src\Editor\EditorMgr.h"
 					>
 				</File>
-				<File
-					RelativePath="..\src\Editor\LayerMgr.h"
-					>
-				</File>
 			</Filter>
 			<Filter
 				Name="src"
@@ -1348,10 +1352,6 @@
 				</File>
 				<File
 					RelativePath="..\src\Editor\EditorMgr.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\src\Editor\LayerMgr.cpp"
 					>
 				</File>
 			</Filter>

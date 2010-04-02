@@ -4,7 +4,7 @@
 #include "Common.h"
 #include "UnitTests.h"
 #include "LogSystem/LogMgr.h"
-#include "Editor/LayerMgr.h"
+#include "EntitySystem/EntityMgr/LayerMgr.h"
 
 
 int main(int argc, char* argv[])
@@ -51,5 +51,5 @@ void Test::CleanSubsystems( void )
 {
 	if (ResourceSystem::ResourceMgr::SingletonExists()) ResourceSystem::ResourceMgr::DestroySingleton();
 	if (EntitySystem::EntityMgr::SingletonExists()) EntitySystem::EntityMgr::DestroySingleton();
-	if (Editor::LayerMgr::SingletonExists()) Editor::LayerMgr::DestroySingleton();
+	if (EntitySystem::LayerMgr::SingletonExists()) EntitySystem::LayerMgr::DestroySingleton();
 }

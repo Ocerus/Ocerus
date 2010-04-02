@@ -387,10 +387,6 @@
 		<Filter
 			Name="Editor"
 			>
-			<File
-				RelativePath="..\src\Editor\test\TestLayerMgr.cpp"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="EntitySystem"
@@ -400,6 +396,10 @@
 				>
 				<File
 					RelativePath="..\src\EntitySystem\EntityMgr\test\TestEntityMgr.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src\EntitySystem\EntityMgr\test\TestLayerMgr.cpp"
 					>
 				</File>
 			</Filter>

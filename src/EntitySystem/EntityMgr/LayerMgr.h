@@ -8,10 +8,11 @@
 #include "Singleton.h"
 #include "EntitySystem/ComponentMgr/ComponentID.h"
 
-#define gLayerMgr Editor::LayerMgr::GetSingleton()
+#define gLayerMgr EntitySystem::LayerMgr::GetSingleton()
 
-namespace Editor
+namespace EntitySystem
 {
+	/// Unique identifier of a layer of entities.
 	typedef int32 LayerID;
 	
 	/// Manages the layers for entities in editor.

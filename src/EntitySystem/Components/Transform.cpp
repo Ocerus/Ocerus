@@ -1,7 +1,7 @@
 #include "Common.h"
 #include "Transform.h"
 #include <Box2D.h>
-#include "Editor/LayerMgr.h"
+#include "EntitySystem/EntityMgr/LayerMgr.h"
 
 void EntityComponents::Transform::Create( void )
 {

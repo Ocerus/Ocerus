@@ -1,7 +1,7 @@
 #include "Common.h"
 #include "LayerMgr.h"
 
-using namespace Editor;
+using namespace EntitySystem;
 
 LayerMgr::LayerMgr() : mLayers(), mDifference(0), mList()
 {
@@ -207,7 +207,7 @@ inline void LayerMgr::RefreshList()
 	gEntityMgr.GetEntitiesWithComponent(mList, CT_Transform);
 }
 
-void LayerMgr::ShiftEntities(Editor::LayerID from, bool front)
+void LayerMgr::ShiftEntities(EntitySystem::LayerID from, bool front)
 {
 	OC_ASSERT(from != 0);
 	bool foreground = from > 0;
