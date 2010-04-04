@@ -212,6 +212,7 @@ set(EntitySystem_SRCS
 	src/EntitySystem/EntityMgr/EntityMgr.cpp
 	src/EntitySystem/EntityMgr/EntityHandle.cpp
 	src/EntitySystem/EntityMgr/EntityMessage.cpp
+	src/EntitySystem/EntityMgr/LayerMgr.cpp
 	src/EntitySystem/Components/Camera.cpp
 	src/EntitySystem/Components/DynamicBody.cpp
 	src/EntitySystem/Components/PolygonCollider.cpp
@@ -225,6 +226,7 @@ set(EntitySystem_SRCS
 )
 
 set(GfxSystem_SRCS
+	src/GfxSystem/DragDropCameraMover.cpp
 	src/GfxSystem/GfxRenderer.cpp
 	src/GfxSystem/GfxSceneMgr.cpp
 	src/GfxSystem/GfxStructures.cpp
@@ -277,7 +279,6 @@ set(ScriptSystem_SRCS
 	src/ScriptSystem/ScriptResource.cpp
 	src/ScriptSystem/AddOn/scriptstring.cpp
 	src/ScriptSystem/AddOn/scriptbuilder.cpp
-	src/ScriptSystem/AddOn/contextmgr.cpp
 )
 
 set(Setup_SRCS

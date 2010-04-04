@@ -41,7 +41,7 @@ LayerID LayerMgr::AddBottomLayer(const string& name)
 	return GetBottomLayerID();
 }
 
-inline bool LayerMgr::ExistsLayer(LayerID id) const
+bool LayerMgr::ExistsLayer(LayerID id) const
 {
 	return (id + mDifference >= 0) && (id + mDifference < (int32)mLayers.size());
 }
@@ -55,12 +55,12 @@ bool LayerMgr::ExistsLayerName(const string& name) const
 	return false;
 }
 
-inline LayerID LayerMgr::GetTopLayerID() const
+LayerID LayerMgr::GetTopLayerID() const
 {
 	return mLayers.size() - 1 - mDifference;
 }
 
-inline LayerID LayerMgr::GetBottomLayerID() const
+LayerID LayerMgr::GetBottomLayerID() const
 {
 	return -mDifference;
 }

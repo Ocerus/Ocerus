@@ -83,4 +83,4 @@ namespace GfxSystem
 	};
 }
 
-#endif DragDropCameraMover_h__
+#endif // DragDropCameraMover_h__

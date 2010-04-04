@@ -35,16 +35,16 @@ namespace EntitySystem
 		LayerID AddBottomLayer(const string& name);
 
 		/// Returns whether the layer exists.
-		inline bool ExistsLayer(LayerID id) const;
+		bool ExistsLayer(LayerID id) const;
 
 		/// Returns whether exists a layer with this name.
 		bool ExistsLayerName(const string& name) const;
 
 		/// Returns the ID of the top layer.
-		inline LayerID GetTopLayerID() const;
+		LayerID GetTopLayerID() const;
 
 		/// Returns the ID of the bottom layer.
-		inline LayerID GetBottomLayerID() const;
+		LayerID GetBottomLayerID() const;
 
 		/// Inserts the layer behind the specific layer.
 		/// Use AddTopLayer to add the top layer instead.
