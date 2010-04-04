@@ -12,7 +12,7 @@
 #include "../ComponentMgr/Component.h"
 #include "../ComponentMgr/ComponentMgr.h"
 #include "Properties/PropertyAccess.h"
-#include "../../ResourceSystem/XMLOutput.h"
+#include "ResourceSystem/XMLOutput.h"
 
 /// Macro for easier use.
 #define gEntityMgr EntitySystem::EntityMgr::GetSingleton()
@@ -111,6 +111,9 @@ namespace EntitySystem
 
 		/// Returns true if the entity is a prototype.
 		bool IsEntityPrototype(const EntityHandle entity) const;
+
+		/// Returns true if the entity is linked to a prototype.
+		bool IsEntityLinkedToPrototype(const EntityHandle entity) const;
 
 		/// Assigns the given entity to the prototype.
 		void LinkEntityToPrototype(const EntityHandle entity, const EntityHandle prototype);
@@ -215,6 +218,9 @@ namespace EntitySystem
 
 		/// Adds a component of the specified type to the entity. Returned is an ID of the new component.
 		ComponentID AddComponentToEntity(const EntityHandle entity, const eComponentType componentType);
+
+		/// Returns true if the component can be destroyed. For example, it could violate dependencies among components.
+		bool CanDestroyEntityComponent(const EntityHandle entity, const ComponentID componentToDestroy);
 
 		/// Destroys a component of the entity.
 		void DestroyEntityComponent(const EntityHandle entity, const ComponentID componentToDestroy);

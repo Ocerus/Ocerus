@@ -51,8 +51,8 @@ ComponentID ComponentMgr::CreateComponent(const EntityID id, const eComponentTyp
 void ComponentMgr::DestroyEntityComponents(EntityID id)
 {
 	EntityComponentsMap::iterator iter = mEntityComponentsMap.find(id);
-	if (iter == mEntityComponentsMap.end())
-		return;
+	if (iter == mEntityComponentsMap.end()) return;
+
 	ComponentsList& cmpList = *iter->second;
 	for (ComponentsList::iterator i=cmpList.begin(); i!=cmpList.end(); ++i)
 	{
@@ -64,6 +64,29 @@ void ComponentMgr::DestroyEntityComponents(EntityID id)
 	}
 	delete iter->second;
 	mEntityComponentsMap.erase(iter);
+}
+
+void EntitySystem::ComponentMgr::DestroyComponent( const EntityID id, const ComponentID componentToDestroy )
+{
+	EntityComponentsMap::iterator iter = mEntityComponentsMap.find(id);
+	if (iter == mEntityComponentsMap.end())
+	{
+		// no components
+		return;
+	}
+
+	ComponentsList* components = iter->second;
+	if ((size_t)componentToDestroy >= components->size())
+	{
+		ocError << "Invalid component ID to destroy: " << componentToDestroy;
+		return;
+	}
+
+	Component* cmp = (*components)[componentToDestroy];
+	cmp->Destroy();
+	delete cmp;
+
+	components->erase(components->begin() + componentToDestroy);
 }
 
 Component* EntitySystem::ComponentMgr::GetEntityComponent( const EntityID id, const ComponentID cmpID ) const
@@ -94,20 +117,4 @@ int32 EntitySystem::ComponentMgr::GetNumberOfEntityComponents( const EntityID id
 
 	OC_DASSERT(iter->second);
 	return iter->second->size();
-}
-
-void EntitySystem::ComponentMgr::DestroyComponent( const EntityID id, const ComponentID componentToDestroy )
-{
-	EntityComponentsMap::iterator iter = mEntityComponentsMap.find(id);
-	if (iter == mEntityComponentsMap.end())
-		return; // no components
-	
-	ComponentsList* components = iter->second;
-	if ((size_t)componentToDestroy >= components->size())
-	{
-		ocWarning << "Invalid component ID to destroy: " << componentToDestroy;
-		return;
-	}
-
-	components->erase(components->begin() + componentToDestroy);
 }

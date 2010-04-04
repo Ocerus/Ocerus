@@ -47,7 +47,11 @@ namespace EntityComponents
 		Array<Vector2> mPolygon;
 		float32 mDensity;
 
-		void Init(void);
+		/// Creates the shape from scratch. If any previous shape existed it gets deleted.
+		void RecreateShape(void);
+
+		/// Removes the shape from world (body).
+		void DestroyShape(void);
 
 	};
 }

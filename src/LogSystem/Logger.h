@@ -27,6 +27,12 @@ namespace LogSystem
 		/// Destructs the logger and actually writes the logged message into the output.
 		~Logger(void);
 
+		inline Logger& operator<<(const bool value)
+		{
+			*this << (value ? "true" : "false");
+			return *this;
+		}
+
 		inline Logger& operator<<(const Vector2& value)
 		{
 			*this << "Vector2(" << value.x << " ; " << value.y << ")";

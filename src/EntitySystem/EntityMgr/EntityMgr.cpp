@@ -266,21 +266,24 @@ void EntityMgr::DestroyEntityImmediately( const EntityID entityToDestroy, const 
 	}
 
 	EntityMap::iterator entityIt = mEntities.find(entityToDestroy);
-	if (entityIt != mEntities.end())
+	if (entityIt == mEntities.end())
 	{
-		// destroy components of the entity
-		mComponentMgr->DestroyEntityComponents(entityToDestroy);
-
-		// destroy the link between the entity and its prototype
-		if (entityIt->second->mPrototype.IsValid())
-		{
-			UnlinkEntityFromPrototype(entityToDestroy);
-		}
-
-		delete entityIt->second;
-
-		if (erase) mEntities.erase(entityIt);
+		ocError << "Cannot destroy entity " << entityToDestroy << "; not found";
+		return;
 	}
+
+	// destroy components of the entity
+	mComponentMgr->DestroyEntityComponents(entityToDestroy);
+
+	// destroy the link between the entity and its prototype
+	if (entityIt->second->mPrototype.IsValid())
+	{
+		UnlinkEntityFromPrototype(entityToDestroy);
+	}
+
+	delete entityIt->second;
+
+	if (erase) mEntities.erase(entityIt);
 
 	ocTrace << "Entity destroyed " << entityToDestroy;
 }
@@ -905,7 +908,14 @@ void EntitySystem::EntityMgr::SetPrototypePropertyNonShared( const EntityHandle 
 
 void EntitySystem::EntityMgr::DestroyEntityComponent( const EntityHandle entity, const ComponentID componentToDestroy )
 {
-	OC_ASSERT(mComponentMgr);
+	OC_DASSERT(mComponentMgr);
+
+	if (!CanDestroyEntityComponent(entity, componentToDestroy))
+	{
+		ocError << "Cannot destroy component " << componentToDestroy << " of " << entity;
+		return;
+	}
+
 	EntityMap::iterator entityIter = mEntities.find(entity.GetID());
 	if (entityIter == mEntities.end())
 	{
@@ -929,7 +939,13 @@ void EntitySystem::EntityMgr::DestroyEntityComponent( const EntityHandle entity,
 		}
 	}
 
+	eComponentType cmpType = mComponentMgr->GetEntityComponent(entity.GetID(), componentToDestroy)->GetType();
+
 	mComponentMgr->DestroyComponent(entity.GetID(), componentToDestroy);
+
+	ocInfo << "Destroyed component " << componentToDestroy << " of " << entity;
+
+	PostMessage(entity, EntityMessage(EntityMessage::COMPONENT_DESTROYED, Reflection::PropertyFunctionParameters() << (uint32)cmpType));
 }
 
 int32 EntitySystem::EntityMgr::GetNumberOfEntityComponents( const EntityHandle entity ) const
@@ -1106,4 +1122,54 @@ EntitySystem::EntityHandle EntitySystem::EntityMgr::ExportEntityToPrototype( con
 	ocInfo << "Created prototype " << prototype << " from " << entity;
 
 	return prototype;
+}
+
+bool EntitySystem::EntityMgr::CanDestroyEntityComponent( const EntityHandle entity, const ComponentID componentToDestroy )
+{
+	OC_DASSERT(mComponentMgr);
+	EntityMap::iterator entityIter = mEntities.find(entity.GetID());
+	if (entityIter == mEntities.end())
+	{
+		ocError << "Entity " << entity << " not found";
+		return false;
+	}
+
+	Component* cmp = mComponentMgr->GetEntityComponent(entity.GetID(), componentToDestroy);
+	if (!cmp) return false;
+
+	eComponentType typeToDestroy = cmp->GetType();
+	EntityComponentsIterator cmpIter = mComponentMgr->GetEntityComponents(entity.GetID());
+	while (*cmpIter != cmp) ++cmpIter;
+
+	for (++cmpIter; cmpIter.HasMore(); ++cmpIter)
+	{
+		ComponentDependencyList depList;
+		(*cmpIter)->GetRTTI()->EnumComponentDependencies(depList);
+		if (find(depList.begin(), depList.end(), typeToDestroy) != depList.end())
+		{
+			// dependency failure
+			return false;
+		}
+	}
+
+	return true;
+}
+
+bool EntitySystem::EntityMgr::IsEntityLinkedToPrototype( const EntityHandle entity ) const
+{
+	OC_DASSERT(mComponentMgr);
+	EntityMap::const_iterator entityIter = mEntities.find(entity.GetID());
+	if (entityIter == mEntities.end())
+	{
+		ocError << "Entity " << entity << " not found";
+		return false;
+	}
+
+	if (entityIter->second->mPrototype.IsValid())
+	{
+		EntityID prototypeID = entityIter->second->mPrototype.GetID();
+		return IsEntityPrototype(prototypeID);
+	}
+
+	return false;
 }

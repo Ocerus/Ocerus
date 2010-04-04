@@ -11,12 +11,7 @@ void EntityComponents::PolygonCollider::Create( void )
 
 void EntityComponents::PolygonCollider::Destroy( void )
 {
-	// the shape is destroyed automatically after the body it is attached to is destroyed
-	if (mSensorBody)
-	{
-		GlobalProperties::Get<Physics>("Physics").DestroyBody(mSensorBody);
-		mSensorBody = 0;
-	}
+	DestroyShape();
 }
 
 EntityMessage::eResult EntityComponents::PolygonCollider::HandleMessage( const EntityMessage& msg )
@@ -24,7 +19,7 @@ EntityMessage::eResult EntityComponents::PolygonCollider::HandleMessage( const E
 	switch (msg.type)
 	{
 	case EntityMessage::POST_INIT: // we have to wait until the physical bodies are inited, that's why we're using POST_INIT
-		Init();
+		RecreateShape();
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::SYNC_PRE_PHYSICS:	
 		if (mSensorBody)
@@ -33,6 +28,17 @@ EntityMessage::eResult EntityComponents::PolygonCollider::HandleMessage( const E
 				GetOwner().GetProperty("Angle").GetValue<float32>());
 		}
 		return EntityMessage::RESULT_OK;
+	case EntityMessage::COMPONENT_DESTROYED:
+		{
+			eComponentType cmpType = (eComponentType)*msg.parameters.GetParameter(0).GetData<uint32>();
+			if (cmpType == CT_DynamicBody || cmpType == CT_StaticBody)
+			{
+				// the body with the shape was already deleted
+				mShape = 0;
+				RecreateShape();
+			}
+			break;
+		}
 	default:
 		break;
 	}
@@ -48,8 +54,14 @@ void EntityComponents::PolygonCollider::RegisterReflection( void )
 	AddComponentDependency(CT_Transform);
 }
 
-void EntityComponents::PolygonCollider::Init( void )
+void EntityComponents::PolygonCollider::RecreateShape( void )
 {
+	// delete the old shape
+	if (mShape)
+	{
+		DestroyShape();
+	}
+
 	// define the shape
 	b2PolygonShape shapeDef;
 	shapeDef.Set(mPolygon.GetRawArrayPtr(), mPolygon.GetSize());
@@ -84,4 +96,23 @@ void EntityComponents::PolygonCollider::Init( void )
 
 	// create the shape
 	mShape = body->CreateFixture(&fixtureDef);
+}
+
+void EntityComponents::PolygonCollider::DestroyShape( void )
+{
+	if (mSensorBody)
+	{
+		GlobalProperties::Get<Physics>("Physics").DestroyBody(mSensorBody);
+		mSensorBody = 0;
+	}
+	else
+	{
+		// remove the shape from the body
+		PhysicalBody* body = GetOwner().GetProperty("PhysicalBody").GetValue<PhysicalBody*>();
+		if (body)
+		{
+			body->DestroyFixture(mShape);
+		}
+	}
+	mShape = 0;
 }
