@@ -74,25 +74,6 @@ namespace ScriptSystem
 		/// @return True if the building and the execution were successful
 		bool ExecuteString(const char* script, const char* moduleName = 0);
 
-		/*
-		/// Add new context to context manager and return it prepared for passing the argument values.
-		/// The context will be executed when ExecuteScripts() is called and then released.
-		///	@param funcId ID of function to prepare (can get from GetFunctionID)
-		AngelScript::asIScriptContext* AddContextToManager(int32 funcId);
-
-		/// Add new context to context manager as a co-routine in the same thread as the currCtx
-		/// and return it prepared for passing the argument values.
-		/// The context will be executed when ExecuteScripts() is called and then released.
-		/// @param currCtx The context will be added as a co-routine in the same thread as this context
-		///	@param funcId ID of function to prepare (can get from GetFunctionID)
-		AngelScript::asIScriptContext* AddContextAsCoRoutineToManager(AngelScript::asIScriptContext* currCtx,
-			int32 funcId);
-
-		/// Execute each script added to context manager that is not currently sleeping.
-		/// The function returns after each script has been executed once.
-		void ExecuteScripts();
-		*/
-
 		/// Add a pre-processor define for conditional compilation.
 		void DefineWord(const char* word);
 
@@ -121,11 +102,6 @@ namespace ScriptSystem
 
 		/// Object that helps building scripts.
 		AngelScript::CScriptBuilder* mScriptBuilder;
-
-		/*
-		/// Manages contexts that can sleep or can create co-routines.
-		AngelScript::CContextMgr* mContextMgr;
-		*/
 
 		/// Depencency of loaded modules to resources
 		map<string, ScriptResourcePtrs> mModules;

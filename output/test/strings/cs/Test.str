@@ -1,0 +1,4 @@
+# text that will be overwritten by language
+language_specific=Language
+# text that will be overwritten by country
+country_specific=Language

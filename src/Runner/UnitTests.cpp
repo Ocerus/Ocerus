@@ -5,6 +5,7 @@
 #include "UnitTests.h"
 #include "LogSystem/LogMgr.h"
 #include "EntitySystem/EntityMgr/LayerMgr.h"
+#include "StringSystem/StringMgr.h"
 
 
 int main(int argc, char* argv[])
@@ -31,8 +32,7 @@ int main(int argc, char* argv[])
 void Test::InitResources( void )
 {
 	ResourceSystem::ResourceMgr::CreateSingleton();
-	gResourceMgr.Init("test");
-	gResourceMgr.AddResourceDirToGroup(".", "Test");
+	gResourceMgr.Init("test/");
 }
 
 void Test::InitEntities( void )
@@ -44,7 +44,8 @@ void Test::InitEntities( const string& resourceFileName )
 {
 	InitEntities();
 	OC_ASSERT(ResourceSystem::ResourceMgr::SingletonExists());
-	gEntityMgr.LoadEntitiesFromResource(gResourceMgr.GetResource("Test", "entities.xml"));
+	gResourceMgr.AddResourceFileToGroup("entities.xml", "entities"); 
+	gEntityMgr.LoadEntitiesFromResource(gResourceMgr.GetResource("entities", "entities.xml"));
 }
 
 void Test::CleanSubsystems( void )
@@ -52,4 +53,5 @@ void Test::CleanSubsystems( void )
 	if (ResourceSystem::ResourceMgr::SingletonExists()) ResourceSystem::ResourceMgr::DestroySingleton();
 	if (EntitySystem::EntityMgr::SingletonExists()) EntitySystem::EntityMgr::DestroySingleton();
 	if (EntitySystem::LayerMgr::SingletonExists()) EntitySystem::LayerMgr::DestroySingleton();
+	if (StringSystem::StringMgr::SingletonExists()) StringSystem::StringMgr::DestroySingleton();
 }

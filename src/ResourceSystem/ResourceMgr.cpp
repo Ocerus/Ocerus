@@ -87,7 +87,8 @@ void ResourceMgr::UnloadAllResources()
 	Resource::ResetLastUsedTime();
 }
 
-bool ResourceMgr::AddResourceDirToGroup(const string& path, const StringKey& group, const string& includeRegexp, const string& excludeRegexp, eResourceType type)
+bool ResourceMgr::AddResourceDirToGroup(const string& path, const StringKey& group, const string& includeRegexp, 
+  const string& excludeRegexp, eResourceType type, bool recursive)
 {
 	ocInfo << "Adding dir '" << path << "' to group '" << group << "'";
 
@@ -133,13 +134,13 @@ bool ResourceMgr::AddResourceDirToGroup(const string& path, const StringKey& gro
 	for (boost::filesystem::directory_iterator i(boostPath); i!=iend; ++i)
 	{
 		string filePath = i->path().string();
-		if (boost::filesystem::is_directory(i->status()))
+		if (recursive && boost::filesystem::is_directory(i->status()))
 		{
 			string dirStr = i->path().filename();
 			if (dirStr.compare(".svn")!=0)
 			{
 				string dirRelativePath = filePath.substr(mBasePath.length());
-				if (!AddResourceDirToGroup(dirRelativePath, group, includeRegexp, excludeRegexp))
+				if (!AddResourceDirToGroup(dirRelativePath, group, includeRegexp, excludeRegexp, type))
 				{
 					result = false;
 				}

@@ -1,0 +1,6 @@
+# text that appears only here
+default_string=Default
+# text that will be overwritten by language
+language_specific=Default
+# text that will be overwritten by country
+country_specific=Default

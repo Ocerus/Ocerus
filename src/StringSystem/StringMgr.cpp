@@ -20,21 +20,37 @@ StringMgr::~StringMgr(void)
 	ocInfo << "*** StringMgr unloaded ***";
 }
 
-bool StringMgr::LoadLanguagePack(const string& lang)
+bool StringMgr::LoadLanguagePack(const string& lang, const string& country)
 {
 	bool result = true;
-	result = LoadDataFromDir(lang);
+	ocInfo << "StringMgr: Changing language to " << lang << "-" << country << ".";
+	UnloadData();
+	if (!lang.empty())
+	{
+	  if (!country.empty())
+	  {
+	    // Load country specific texts.
+	    if (!LoadDataFromDir(lang + "/" + country)) { result = false; }
+	  }
+	  // Load language specific texts.
+	  if (!LoadDataFromDir(lang)) { result = false; }
+	}
+	// Load default texts.
+	if (!LoadDataFromDir("")) { result = false; }
 	mLanguage = lang;
+	mCountry = country;
 	return result;
 }
 
-bool StringMgr::LoadDataFromDir(const string& path, const string& includeRegexp, const string& excludeRegexp)
+bool StringMgr::LoadDataFromDir(const string& path, const string& includeRegexp, const string& excludeRegexp, 
+  bool recursive)
 {
 	bool result = true;
-	result = gResourceMgr.AddResourceDirToGroup(mBasePath + path, "strings", includeRegexp, excludeRegexp);
+	result = gResourceMgr.AddResourceDirToGroup(mBasePath + path, "strings", includeRegexp, 
+	  excludeRegexp, ResourceSystem::RESTYPE_TEXTRESOURCE, recursive);
 	gResourceMgr.LoadResourcesInGroup("strings");
 
-	ocInfo << "StringMgr: Loading data from resource group ""strings""";
+	//ocInfo << "StringMgr: Loading data from resource group ""strings""";
 	vector<ResourceSystem::ResourcePtr> resourceGroup;
 	gResourceMgr.GetResourceGroup("strings", resourceGroup);
 
@@ -47,7 +63,7 @@ bool StringMgr::LoadDataFromDir(const string& path, const string& includeRegexp,
 		mTextDataMap.insert(dm->begin(), dm->end());
 	}
 
-	gResourceMgr.UnloadResourcesInGroup("strings");
+	gResourceMgr.DeleteGroup("strings");
 	return result;
 }
 
@@ -57,7 +73,7 @@ bool StringMgr::LoadDataFromFile(const string& filepath, bool pathRelative)
 	result = gResourceMgr.AddResourceFileToGroup(mBasePath + filepath, "strings", ResourceSystem::RESTYPE_TEXTRESOURCE, pathRelative);
 	gResourceMgr.LoadResourcesInGroup("strings");
 
-	ocInfo << "StringMgr: Loading data from resource group ""strings""";
+	//ocInfo << "StringMgr: Loading data from resource group ""strings""";
 	vector<ResourceSystem::ResourcePtr> resourceGroup;
 	gResourceMgr.GetResourceGroup("strings", resourceGroup);
 
@@ -70,7 +86,7 @@ bool StringMgr::LoadDataFromFile(const string& filepath, bool pathRelative)
 		mTextDataMap.insert(dm->begin(), dm->end());
 	}
 
-	gResourceMgr.UnloadResourcesInGroup("strings");
+	gResourceMgr.DeleteGroup("strings");
 	return result;
 }
 

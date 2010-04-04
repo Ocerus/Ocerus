@@ -29,13 +29,15 @@ namespace StringSystem
 
 		~StringMgr(void);
 
-		/// Loads all strings for a given language.
+		/// Loads all strings for a given language and unloads a previous data.
 		/// Every language's strings should be stored in a separate directory, preferabely using 
 		/// ISO 639-1 codes (http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)
-		bool LoadLanguagePack(const string& lang = "en");
+		/// and ISO 3166-1 alpha-2 codes (http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
+		bool LoadLanguagePack(const string& lang = "", const string& country = "");
 
-		/// Ads all text resources in a given directory and loads them into the memory.
-		bool LoadDataFromDir(const string& path, const string& includeRegexp = "*.*", const string& excludeRegexp = "");
+		/// Adds all text resources in a given directory and loads them into the memory.
+		bool LoadDataFromDir(const string& path, const string& includeRegexp = ".*", const string& excludeRegexp = "",
+		  bool recursive = false);
 
 		/// Loads the text resource from a provided file.
 		bool LoadDataFromFile(const string& filepath, bool pathRelative = true);
@@ -57,6 +59,9 @@ namespace StringSystem
 
 		/// Current language of loaded texts.
 		string mLanguage;
+		
+		/// Current country of loaded texts.
+		string mCountry; 
 
 		/// Basepath for string data. The root is in the ResourceMgr's basepath.
 		string mBasePath;

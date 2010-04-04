@@ -1278,10 +1278,6 @@
 					Name="inc"
 					>
 					<File
-						RelativePath="..\src\ScriptSystem\AddOn\contextmgr.h"
-						>
-					</File>
-					<File
 						RelativePath="..\src\ScriptSystem\AddOn\scriptbuilder.h"
 						>
 					</File>
@@ -1293,10 +1289,6 @@
 				<Filter
 					Name="src"
 					>
-					<File
-						RelativePath="..\src\ScriptSystem\AddOn\contextmgr.cpp"
-						>
-					</File>
 					<File
 						RelativePath="..\src\ScriptSystem\AddOn\scriptbuilder.cpp"
 						>
