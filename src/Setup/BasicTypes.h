@@ -6,7 +6,10 @@
 
 #include <math.h>
 #include <limits.h>
+#if defined(GCC_VERSION)
 #include <stdint.h>
+#endif
+
 typedef signed char	int8;
 typedef signed short int16;
 typedef signed int int32;
