@@ -8,12 +8,12 @@
 #include <limits.h>
 #include <boost/cstdint.hpp>
 
-typedef boost::int8_t int8;
-typedef boost::int16_t int16;
-typedef boost::int32_t int32;
-typedef boost::uint8_t uint8;
-typedef boost::uint16_t uint16;
-typedef boost::uint32_t uint32;
+typedef signed char	int8;
+typedef signed short int16;
+typedef signed int int32;
+typedef unsigned char uint8;
+typedef unsigned short uint16;
+typedef unsigned int uint32;
 typedef float float32;
 typedef double float64;
 typedef uintptr_t uintptr;
