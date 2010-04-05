@@ -13,8 +13,12 @@ namespace Core
 	/// Inner states of the game state.
 	enum eGameState 
 	{ 
+		/// The game is loading.
+		GS_INITING=0,
+		/// The game is cleaning its resources.
+		GS_CLEANING,
 		/// Standard state of a running game.
-		GS_NORMAL=0 
+		GS_NORMAL
 	};
 
 	/// This class holds all info related directly to the game itself and takes care about rendering, input and game

@@ -28,5 +28,11 @@ bool PropertyCallback(CEGUI::Window* window, CEGUI::String& propname, CEGUI::Str
 
 CEGUI::Window* GUISystem::LoadWindowLayout(const CEGUI::String& filename, const CEGUI::String& name_prefix, const CEGUI::String& resourceGroup)
 {
-	return CEGUI::WindowManager::getSingleton().loadWindowLayout(filename, name_prefix, resourceGroup, PropertyCallback);
+	CEGUI::Window* result = 0;
+	CEGUI_EXCEPTION_BEGIN
+	{
+		result = CEGUI::WindowManager::getSingleton().loadWindowLayout(filename, name_prefix, resourceGroup, PropertyCallback);
+	}
+	CEGUI_EXCEPTION_END;
+	return result;
 }

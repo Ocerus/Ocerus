@@ -395,5 +395,11 @@ void GfxSystem::GfxRenderer::ClearCurrentRenderTarget( const Color& color ) cons
 
 void GfxSystem::GfxRenderer::ClearRenderTarget( const RenderTargetID target, const Color& color ) const
 {
+	OC_ASSERT((size_t)target < mRenderTargets.size());
 	ClearViewport(mRenderTargets[target]->first, color);
+}
+
+bool GfxSystem::GfxRenderer::IsRenderTargetValid( const RenderTargetID toCheck )
+{
+	return toCheck != InvalidRenderTargetID && (size_t)toCheck < mRenderTargets.size();
 }

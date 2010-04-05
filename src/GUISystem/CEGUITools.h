@@ -6,8 +6,14 @@
 #include "CEGUI.h"
 
 #define CEGUI_EXCEPTION_BEGIN try {
-#define CEGUI_EXCEPTION_END } catch(const CEGUI::UnknownObjectException& e) { \
-		ocError << "CEGUI Error: " << e.getMessage(); }
+#define CEGUI_EXCEPTION_END } catch(const CEGUI::Exception& e) { \
+		ocError << "CEGUI Error: " << e.getMessage(); \
+	}
+#define CEGUI_EXCEPTION_END_CRITICAL } catch(const CEGUI::Exception& e) { \
+		ocError << "CEGUI Error: " << e.getMessage(); \
+		ocInfo << "Critical failure, shutting down..."; \
+		exit(1); \
+	}
 
 #define gCEGUIWM CEGUI::WindowManager::getSingleton()
 

@@ -55,7 +55,7 @@ namespace GUISystem
 
 		/// Loads GUI layout from filename and sets it as root layout of the window.
 		/// Automatically unloads previously loaded root layout.
-		void LoadRootLayout(const string& filename);
+		bool LoadRootLayout(const string& filename);
 
 		/// Unloads loaded root layout or does nothing, if no root layout is loaded.
 		void UnloadRootLayout();

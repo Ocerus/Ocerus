@@ -20,6 +20,13 @@ namespace Utils
 		/// Returns the current state of the machine.
 		inline T GetState() { return mState; }
 
+		/// Immediately changes the state.
+		void ForceStateChange(T newState)
+		{
+			RequestStateChange(newState);
+			UpdateState();
+		}
+
 		/// Requests a change of state of the machine.
 		/// The state will be changed after the machine is updated.
 		/// If lock is set to true all subsequent requests to state change will be discarded until the machine is either

@@ -48,6 +48,9 @@ namespace GfxSystem
 		/// Sets the current render target. Returns false if no such exists.
 		bool SetCurrentRenderTarget(const RenderTargetID toSet);
 		
+		/// Returns true if the render target is valid.
+		bool IsRenderTargetValid(const RenderTargetID toCheck);
+		
 		/// Returns the current scene manager.
 		inline GfxSceneMgr* GetSceneManager() const { return mSceneMgr; }
 

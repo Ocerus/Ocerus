@@ -94,7 +94,7 @@ namespace GUISystem
 			mCegui->setDefaultMouseCursor("TaharezLook", "MouseArrow");
 			mCegui->setMouseClickEventGenerationEnabled(false);
 		}
-		CEGUI_EXCEPTION_END
+		CEGUI_EXCEPTION_END_CRITICAL
 
 		mGUIConsole->Init();
 	}
@@ -107,12 +107,15 @@ namespace GUISystem
 	}
 
 
-	void GUIMgr::LoadRootLayout(const string& filename)
+	bool GUIMgr::LoadRootLayout(const string& filename)
 	{
 		OC_DASSERT(mCegui);
 		UnloadRootLayout();
-		mCurrentRootLayout = LoadWindowLayout(filename);
+		CEGUI::Window* newLayout = LoadWindowLayout(filename);
+		if (!newLayout) return false;
+		mCurrentRootLayout = newLayout;
 		mWindowRoot->addChildWindow(mCurrentRootLayout);
+		return true;
 	}
 
 	void GUIMgr::UnloadRootLayout()
@@ -267,7 +270,13 @@ bool GUIMgr::ConsoleCommandEvent(const CEGUI::EventArgs& e)
 
 	CEGUI::Window* GUIMgr::LoadWindowLayout(const string& filename, const string& name_prefix, const string& resourceGroup)
 	{
-		return CEGUI::WindowManager::getSingleton().loadWindowLayout(filename, name_prefix, resourceGroup, PropertyCallback);
+		CEGUI::Window* result = 0;
+		CEGUI_EXCEPTION_BEGIN
+		{
+			result = CEGUI::WindowManager::getSingleton().loadWindowLayout(filename, name_prefix, resourceGroup, PropertyCallback);
+		}
+		CEGUI_EXCEPTION_END
+		return result;
 	}
 
 #if 0

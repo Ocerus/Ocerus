@@ -42,11 +42,12 @@ private:
 
 
 Core::Game::Game():
-	StateMachine<eGameState>(GS_NORMAL),
+	StateMachine<eGameState>(GS_INITING),
 	mTimer(true),
 	mRenderTarget(GfxSystem::InvalidRenderTargetID),
 	mCamera(EntitySystem::EntityHandle::Null),
 	mPhysics(0),
+	mCameraMover(0),
 	mPhysicsCallbacks(0)
 {
 	mPhysicsCallbacks = new PhysicsCallbacks(this);
@@ -84,9 +85,10 @@ void Core::Game::UpdateGameProperties( void )
 void Core::Game::Init()
 {
 	ocInfo << "Game init";
+	ForceStateChange(GS_INITING);
 
 	// security check
-	if (mRenderTarget == GfxSystem::InvalidRenderTargetID)
+	if (!gGfxRenderer.IsRenderTargetValid(mRenderTarget))
 	{
 		ocError << "Invalid render target for game";
 		return;
@@ -123,11 +125,14 @@ void Core::Game::Init()
 	gInputMgr.AddInputListener(this);
 	gApp.ResetStats();
 
+	ForceStateChange(GS_NORMAL);
 	ocInfo << "Game inited";
 }
 
 void Core::Game::Clean()
 {	
+	ForceStateChange(GS_CLEANING);
+
 	if (mPhysics) delete mPhysics;
 	for (PhysicsEventList::const_iterator i=mPhysicsEvents.begin(); i!=mPhysicsEvents.end(); ++i)
 	{
@@ -145,6 +150,8 @@ void Core::Game::Clean()
 void Core::Game::Update( const float32 delta )
 {
 	PROFILE_FNC();
+
+	if (GetState() != GS_NORMAL) return;
 
 	UpdateGameProperties();
 
@@ -215,6 +222,8 @@ void Core::Game::Update( const float32 delta )
 void Core::Game::Draw( const float32 passedDelta)
 {
 	PROFILE_FNC();
+
+	if (GetState() != GS_NORMAL) return;
 
 	float32 delta = passedDelta;
 	if (!IsActionRunning()) delta = 0.0f;
