@@ -162,6 +162,7 @@ void Application::RunMainLoop()
 			{
 			case AS_GAME:
 				mGame->Draw(delta);
+				gEditorMgr.Draw(delta);
 				gGUIMgr.RenderGUI();
 				break;
 			default:

@@ -27,6 +27,14 @@ namespace GUISystem
 		/// Returns the render target associated with the window.
 		inline GfxSystem::RenderTargetID GetRenderTarget() const { return mRenderTarget; }
 
+		/// Sets whether the content can be panned, zoomed, etc.
+		/// @see GfxSystem::DragDropCameraMover
+		void SetMovableContent(bool isMovableContent);
+		
+		/// Returns whether the content can be panned, zoomed, etc.
+		/// @see GfxSystem::DragDropCameraMover
+		inline bool GetMovableContent() const { return mIsMovableContent; }
+
 		/// @name Overridden members from CEGUI::FrameWindow
 		//@{
 		virtual void initialiseComponents();
@@ -42,9 +50,17 @@ namespace GUISystem
 
 		/// Sets the size and position parameters with the area of the window.
 		void GetArea(Vector2& position, Vector2& size) const;
+		
+		/// Creates a camera mover on current render target.
+		void CreateCameraMover();
+		
+		/// Destroys the camera mover.
+		void DeleteCameraMover();
 
 	private:
 		GfxSystem::RenderTargetID mRenderTarget;
+		bool mIsMovableContent;
+		GfxSystem::DragDropCameraMover* mCameraMover;
 	};
 }
 

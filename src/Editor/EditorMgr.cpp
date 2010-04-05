@@ -37,6 +37,11 @@ void Editor::EditorMgr::Update(const float32 delta)
 	mEditorGUI->Update(delta);
 }
 
+void Editor::EditorMgr::Draw(float32 delta)
+{
+	mEditorGUI->Draw(delta);
+}
+
 void Editor::EditorMgr::SetCurrentEntity(const EntitySystem::EntityHandle newCurrentEntity)
 {
 	mCurrentEntity = newCurrentEntity;

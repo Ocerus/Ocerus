@@ -40,14 +40,13 @@ namespace Editor
 		void LoadGUI();
 
 		/// Updates the GUI.
-		void Update(const float32 delta);
+		void Update(float32 delta);
 
+		/// Draws viewports managed by Editor
+		void Draw(float32 delta);
+		
 		/// Updates the entity editor.
 		void UpdateEntityEditorWindow();
-
-		/// TO BE DELETED
-		bool EntityPickerHandler(const CEGUI::EventArgs&);
-
 
 	private:
 		int32 mPropertyItemHeight;
@@ -57,7 +56,8 @@ namespace Editor
 		typedef vector<AbstractValueEditor*> PropertyEditors;
 		PropertyEditors mPropertyEditors;
 		GUISystem::VerticalLayout* mEntityEditorLayout;
-		GUISystem::ViewportWindow* mViewport;
+		GUISystem::ViewportWindow* mTopViewport;
+		GUISystem::ViewportWindow* mBottomViewport;
 	};
 }
 

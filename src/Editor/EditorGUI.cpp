@@ -26,7 +26,8 @@ EditorGUI::EditorGUI():
 	mComponentGroupHeight(0),
 	mPropertyUpdateTimer(0),
 	mEntityEditorLayout(0),
-	mViewport(0)
+	mTopViewport(0),
+	mBottomViewport(0)
 {
 }
 
@@ -47,39 +48,41 @@ void EditorGUI::LoadGUI()
 	mComponentGroupHeight = 28;
 	gCEGUIWM.getWindow("EditorRoot")->setMousePassThroughEnabled(true);
 	
-
-
-	/// TO BE REMOVED
-
-	mViewport = static_cast<GUISystem::ViewportWindow*>(gCEGUIWM.createWindow("Editor/Viewport", "EditorRoot/Viewport"));
-	mViewport->setArea(CEGUI::URect(CEGUI::UDim(0.3f, 0), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(0.5f, 0)));
-	gCEGUIWM.getWindow("EditorRoot")->addChildWindow(mViewport);
-
-	EntitySystem::EntityDescription desc;
-	desc.SetName("GameCamera1");
-	desc.AddComponent(EntitySystem::CT_Camera);
-	EntitySystem::EntityHandle camera = gEntityMgr.CreateEntity(desc);
-	camera.FinishInit();
-	mViewport->SetCamera(camera);
-
-	GlobalProperties::Get<Core::Game>("Game").SetRenderTarget(mViewport->GetRenderTarget());
-
+	/// Initialize top viewport
 	{
-		CEGUI::FrameWindow* picker = (CEGUI::FrameWindow*)CEGUI::WindowManager::getSingleton().createWindow("Editor/FrameWindow", "picker");
-		picker->setText("EntityPicker");
-		picker->setSize(CEGUI::UVector2(CEGUI::UDim(0, 200), CEGUI::UDim(0, 50)));
-		picker->setPosition(CEGUI::UVector2(CEGUI::UDim(1, -210), CEGUI::UDim(1, -80)));
-		CEGUI::WindowManager::getSingleton().getWindow("EditorRoot")->addChildWindow(picker);
+		/// Create game camera.
+		EntitySystem::EntityDescription desc;
+		desc.SetName("GameCamera1");
+		desc.AddComponent(EntitySystem::CT_Camera);
+		EntitySystem::EntityHandle camera = gEntityMgr.CreateEntity(desc);
+		camera.FinishInit();
 
-		CEGUI::Editbox* pickerInput = (CEGUI::Editbox*)CEGUI::WindowManager::getSingleton().createWindow("Editor/Editbox", "picker/edit");
-		picker->addChildWindow(pickerInput);
-		pickerInput->setArea(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0));
+		/// Assign game camera to top viewport.
+		mTopViewport = static_cast<GUISystem::ViewportWindow*>(gCEGUIWM.getWindow("EditorRoot/TopViewport"));
+		mTopViewport->SetCamera(camera);
+		mTopViewport->SetMovableContent(true);
 
-		pickerInput->subscribeEvent(CEGUI::Editbox::EventTextAccepted, CEGUI::Event::Subscriber(&EditorGUI::EntityPickerHandler, this));
+		/// Pass render target from viewport to Game instance.
+		GlobalProperties::Get<Core::Game>("Game").SetRenderTarget(mTopViewport->GetRenderTarget());
+	}
+
+	/// Initialize bottom viewport
+	{
+		/// Create editor camera.
+		EntitySystem::EntityDescription desc;
+		desc.SetName("EditorCamera1");
+		desc.AddComponent(EntitySystem::CT_Camera);
+		EntitySystem::EntityHandle camera = gEntityMgr.CreateEntity(desc);
+		camera.FinishInit();
+
+		/// Assign game camera to bottom viewport.
+		mBottomViewport = static_cast<GUISystem::ViewportWindow*>(gCEGUIWM.getWindow("EditorRoot/BottomViewport"));
+		mBottomViewport->SetCamera(camera);
+		mBottomViewport->SetMovableContent(true);
 	}
 }
 
-void EditorGUI::Update(const float32 delta)
+void EditorGUI::Update(float32 delta)
 {
 	mPropertyUpdateTimer += delta;
 	if (mPropertyUpdateTimer > 0.3)
@@ -91,6 +94,36 @@ void EditorGUI::Update(const float32 delta)
 		}
 	}
 }
+
+void EditorGUI::Draw(float32 delta)
+{
+	OC_UNUSED(delta);	// It may be handy one day
+	
+	/// Render bottom viewport (top viewport is rendered by Game object)
+	gGfxRenderer.SetCurrentRenderTarget(mBottomViewport->GetRenderTarget());
+	gGfxRenderer.ClearCurrentRenderTarget(GfxSystem::Color(0, 0, 0));
+	gGfxRenderer.DrawEntities();
+	
+/*
+	// draw the multi-selection stuff
+	if (mSelectionStarted)
+	{
+		MouseState& mouse = gInputMgr.GetMouseState();
+		Vector2 worldCursorPos;
+		if (gGfxRenderer.ConvertScreenToWorldCoords(GfxSystem::Point(mouse.x, mouse.y), worldCursorPos, mRenderTarget))
+		{
+			float32 minDistance = SELECTION_MIN_DISTANCE / gGfxRenderer.GetRenderTargetCameraZoom(mRenderTarget);
+			if ((worldCursorPos-mSelectionCursorPosition).LengthSquared() >= MathUtils::Sqr(minDistance))
+			{
+				float32 rotation = gGfxRenderer.GetRenderTargetCameraRotation(mRenderTarget);
+				gGfxRenderer.DrawRect(mSelectionCursorPosition, worldCursorPos, rotation, GfxSystem::Color(255,255,0,150), false);
+			}
+		}
+	}
+*/
+	gGfxRenderer.FinalizeRenderTarget();
+}
+
 
 void EditorGUI::UpdateEntityEditorWindow()
 {
@@ -178,15 +211,4 @@ void EditorGUI::UpdateEntityEditorWindow()
 		layout->UpdateLayout();
 	}
 	mEntityEditorLayout->UpdateLayout();
-}
-
-
-/// TO BE REMOVED
-bool EditorGUI::EntityPickerHandler (const CEGUI::EventArgs& args)
-{
-	OC_UNUSED(args);
-	string entityName = gCEGUIWM.getWindow("picker/edit")->getText().c_str();
-	EntitySystem::EntityHandle entity = gEntityMgr.FindFirstEntity(entityName);
-	EditorMgr::GetSingleton().SetCurrentEntity(entity);
-	return true;
 }

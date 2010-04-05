@@ -6,7 +6,6 @@
 #include "StringConverter.h"
 #include "PhysicsDraw.h"
 #include "Editor/EditorMgr.h"
-#include "GfxSystem/DragDropCameraMover.h"
 #include <Box2D.h>
 #include <Box2D/Dynamics/b2WorldCallbacks.h>
 
@@ -47,7 +46,6 @@ Core::Game::Game():
 	mRenderTarget(GfxSystem::InvalidRenderTargetID),
 	mCamera(EntitySystem::EntityHandle::Null),
 	mPhysics(0),
-	mCameraMover(0),
 	mPhysicsCallbacks(0)
 {
 	mPhysicsCallbacks = new PhysicsCallbacks(this);
@@ -116,12 +114,6 @@ void Core::Game::Init()
 	// load entities
 	gEntityMgr.LoadEntitiesFromResource(gResourceMgr.GetResource("TestEntities", "test_entities.xml"));
 
-	
-	// drag'n'drop camera movement
-	mCameraMover = new GfxSystem::DragDropCameraMover(mRenderTarget);
-	gInputMgr.AddInputListener(mCameraMover);
-	
-
 	gInputMgr.AddInputListener(this);
 	gApp.ResetStats();
 
@@ -140,11 +132,6 @@ void Core::Game::Clean()
 	}
 	mPhysicsEvents.clear();
 	gInputMgr.RemoveInputListener(this);
-	if (mCameraMover)
-	{
-		gInputMgr.RemoveInputListener(mCameraMover);
-		delete mCameraMover;
-	}
 }
 
 void Core::Game::Update( const float32 delta )
@@ -221,7 +208,7 @@ void Core::Game::Update( const float32 delta )
 
 void Core::Game::Draw( const float32 passedDelta)
 {
-	PROFILE_FNC();
+	PROFILE_FNC();	
 
 	if (GetState() != GS_NORMAL) return;
 

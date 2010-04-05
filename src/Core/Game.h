@@ -139,7 +139,6 @@ namespace Core
 		EntitySystem::EntityHandle mHoveredEntity; ///< Entity the mouse is currently hovering over.
 		typedef vector<EntitySystem::EntityHandle> EntityList;
 		EntityList mSelectedEntities; ///< Currently selected entities.
-		GfxSystem::DragDropCameraMover* mCameraMover; ///< Allows camera movement using mouse.
 
 	private:
 

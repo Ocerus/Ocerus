@@ -33,7 +33,10 @@ namespace Editor
 		void UnloadEditor();
 
 		/// Updates the editor.
-		void Update(const float32 delta);
+		void Update(float32 delta);
+
+		/// Draws the editor viewports.
+		void Draw(float32 delta);
 
 		/// Returns currently selected entity. If no entity is selected,
 		/// invalid EntityHandler is returned.
