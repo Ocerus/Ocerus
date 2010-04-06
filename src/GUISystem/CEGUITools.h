@@ -26,6 +26,8 @@ namespace GUISystem
 {
 	///
 	CEGUI::Window* LoadWindowLayout(const CEGUI::String& filename, const CEGUI::String& name_prefix = "", const CEGUI::String& resourceGroup = "");
+
+	void ShowPopup(CEGUI::PopupMenu* popupMenu, const CEGUI::MouseEventArgs& e);
 }
 
 

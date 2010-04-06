@@ -62,3 +62,16 @@ void Editor::EditorMgr::UpdateCurrentEntityProperty(const EntitySystem::Componen
 	PropertyHolder property = gEntityMgr.GetEntityComponentProperty(mCurrentEntity, componentId, propertyKey);
 	property.SetValueFromString(newValue);
 }
+
+void Editor::EditorMgr::AddComponent(EntitySystem::eComponentType componentType)
+{
+	OC_ASSERT(mCurrentEntity.IsValid());
+	gEntityMgr.AddComponentToEntity(mCurrentEntity, componentType);
+}
+
+
+void Editor::EditorMgr::RemoveComponent(const EntitySystem::ComponentID& componentId)
+{
+	OC_ASSERT(mCurrentEntity.IsValid());
+	gEntityMgr.DestroyEntityComponent(mCurrentEntity, componentId);
+}

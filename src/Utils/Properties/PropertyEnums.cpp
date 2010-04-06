@@ -53,6 +53,7 @@ namespace Reflection
 			case ARRAY_PROPERTY_TYPE_ID(typeID): return PC_##cloning;
 		#include "PropertyTypes.h"
 		#undef PROPERTY_TYPE
+		default: OC_NOT_REACHED();
 		}
 
 		OC_FAIL("Uknown property cloning");

@@ -60,14 +60,18 @@ namespace GUISystem
 		//@{
 		bool OnManagedWindowDestructionStarted(const CEGUI::EventArgs&);
 		bool OnChildWindowSized(const CEGUI::EventArgs&) { if (LockedUpdates()) return false; UpdateLayout(); return true; }
+		bool OnChildWindowDestructionStarted(const CEGUI::EventArgs&);
 		//@}
 
 	private:
 		VerticalLayout(const VerticalLayout&);
 		VerticalLayout& operator=(const VerticalLayout&);
 
+		typedef vector<CEGUI::Window*> WindowList;
+		
 		CEGUI::Window* mManagedWindow;
 		const CEGUI::Window* mContentPane;
+		WindowList mChildWindows;
 		bool mResizeParent;
 		int mSpacing;
 		bool mLockedUpdates;

@@ -48,7 +48,23 @@ namespace Editor
 		/// Updates the entity editor.
 		void UpdateEntityEditorWindow();
 
+		/// @name CEGUI Callbacks
+		//@{
+			bool OnComponentAddClicked(const CEGUI::EventArgs&);
+			bool OnComponentRemoveClicked(const CEGUI::EventArgs&);
+			bool OnComponentMenuOpened(const CEGUI::EventArgs&);
+			bool OnMouseEntersMenuItem(const CEGUI::EventArgs&);
+			bool OnMouseLeavesMenuItem(const CEGUI::EventArgs&);
+			bool OnMouseLeavesPopupMenuItem(const CEGUI::EventArgs&);
+			bool OnMenuItemClicked(const CEGUI::EventArgs&);
+		//@}
+
+		
 	private:
+		/// Recursively subscribes every menu item to the mouse enters/leaves/clicked events
+		void ConfigureMenu(CEGUI::Window* parent, bool isMenubar);
+
+		
 		int32 mPropertyItemHeight;
 		int32 mComponentGroupHeight;
 		float32 mPropertyUpdateTimer;

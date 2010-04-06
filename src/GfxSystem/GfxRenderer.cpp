@@ -7,7 +7,7 @@
 
 using namespace GfxSystem;
 
-GfxSystem::GfxRenderer::GfxRenderer(): mIsRendering(false), mSceneMgr(0), mCurrentRenderTargetID(InvalidRenderTargetID)
+GfxSystem::GfxRenderer::GfxRenderer(): mCurrentRenderTargetID(InvalidRenderTargetID), mIsRendering(false), mSceneMgr(0)
 {
 	mSceneMgr = new GfxSceneMgr();
 }

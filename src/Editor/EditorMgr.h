@@ -8,6 +8,7 @@
 #include "Singleton.h"
 #include "InputSystem/IInputListener.h"
 #include "EntitySystem/ComponentMgr/ComponentID.h"
+#include "EntitySystem/ComponentMgr/ComponentEnums.h"
 
 #define gEditorMgr Editor::EditorMgr::GetSingleton()
 
@@ -50,6 +51,16 @@ namespace Editor
 		void UpdateCurrentEntityProperty(const EntitySystem::ComponentID& componentId, const StringKey propertyKey, const string& newValue);
 
 
+	protected:
+		friend class EditorGUI;
+
+		/// Adds a new component of componentType to current entity.
+		void AddComponent(EntitySystem::eComponentType componentType);
+
+		/// Removes the component with given componentId from current entity.
+		void RemoveComponent(const EntitySystem::ComponentID& componentId);
+		
+		
 	private:
 		EditorGUI* mEditorGUI;
 		EntitySystem::EntityHandle mCurrentEntity;
