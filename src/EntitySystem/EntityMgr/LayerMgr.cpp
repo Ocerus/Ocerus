@@ -180,12 +180,28 @@ LayerID LayerMgr::MoveLayerUp(LayerID id)
 {
 	if (id == GetTopLayerID() || !ExistsLayer(id)) { return id; }
 	LayerID higherLayerId = id + 1;
-	return higherLayerId == GetTopLayerID() ? MoveLayerTop(id) : MoveLayerBehind(id, higherLayerId + 1);
+	if (id != 0)
+	{
+		return higherLayerId == GetTopLayerID() ? MoveLayerTop(id) : MoveLayerBehind(id, higherLayerId + 1);
+	}
+	else
+	{
+		MoveLayerDown(higherLayerId);
+		return 0;
+	}
 }
 
 LayerID LayerMgr::MoveLayerDown(LayerID id)
 {
-	return MoveLayerBehind(id, id - 1);
+	if (id != 0)
+	{
+		return MoveLayerBehind(id, id - 1);
+	}
+	else
+	{
+		MoveLayerUp(id - 1);
+		return 0;
+	}
 }
 
 bool LayerMgr::MoveEntities(LayerID from, LayerID to)
