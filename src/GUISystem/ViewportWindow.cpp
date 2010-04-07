@@ -37,7 +37,7 @@ void GUISystem::ViewportWindow::SetCamera(const EntitySystem::EntityHandle& came
 	}
 	Vector2 position, size;
 	GetArea(position, size);
-	mRenderTarget = gGfxRenderer.AddRenderTarget(GfxSystem::GfxViewport(position, size, false), camera);
+	mRenderTarget = gGfxRenderer.AddRenderTarget(GfxSystem::GfxViewport(position, size, false, true), camera);
 	
 	if (mIsMovableContent)
 	{

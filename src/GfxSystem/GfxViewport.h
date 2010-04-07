@@ -17,7 +17,7 @@ namespace GfxSystem
 		/// Constructs the viewport from a position and a size. Those vectors are from [0,1]x[0,1] and are relative to the window boundaries.
 		/// If attribute "relativeScale" is true and application runs in windowed mode, it means that the scale of objects shown
 		/// in this viewport is relative to window size. If the aplication runs in fullscreen then the scale is constant to resolution.
-		GfxViewport(const Vector2& position, const Vector2& size, const bool relativeScale);
+		GfxViewport(const Vector2& position, const Vector2& size, const bool relativeScale, const bool gridEnabled);
 
 		/// Constructs the viewport which targets a texture. The rendering then results in the texture.
 		GfxViewport(ResourceSystem::ResourcePtr texture);

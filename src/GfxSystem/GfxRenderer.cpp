@@ -352,39 +352,135 @@ void GfxSystem::GfxRenderer::DrawGrid( const RenderTargetID renderTargetID ) con
 
 	GridInfo grid = viewport->GetGridInfo();
 
-	//calculate first vertical line x position
-	float32 firstVLineXPos = ceil(min.x / grid.cellSize) * grid.cellSize;
+	float32 zoom = GetRenderTargetCameraZoom(renderTargetID);
+
+	bool drawMinors = zoom > grid.minShowMinorsZoom;
+
+	//calculate first vertical x position for minor line
+	float32 firstVLineXPos = ceil(min.x / grid.minorCellSize) * grid.minorCellSize;
+	
+	//calculate first vertical x position for major line
+	float32 firstMajorVLineXPos = ceil(min.x / (grid.minorsInMajor * grid.minorCellSize)) * grid.minorCellSize*grid.minorsInMajor;
+
+	//calculate first index for major line
+	int32 majorVIndex = (int32) ((firstMajorVLineXPos - firstVLineXPos) / grid.minorCellSize);
 
 	// calculate vertical lines count
-	int32 VLineCount = (int32) ceil((max.x - min.x) / grid.cellSize);
+	int32 VLineCount = (int32) ceil((max.x - min.x) / grid.minorCellSize);
+
+	// size of cell, depend on whether minor lines should be drawn
+	float32 cellSize = grid.minorCellSize;
+	
+	//recalculations if minors are not drawn
+	if (!drawMinors)
+	{
+		firstVLineXPos = firstMajorVLineXPos;
+		VLineCount = (int32) ceil((float32)VLineCount / (float32)grid.minorsInMajor);
+		cellSize = cellSize * grid.minorsInMajor;
+	}
 	
 
 	// draw horizontal lines
-	for (int i = 0; i < VLineCount; ++i)
+	for (int32 i = 0; i < VLineCount; ++i)
 	{
 		Vector2 line[2];
-		line[0].x = line[1].x = firstVLineXPos + i * grid.cellSize;
+		line[0].x = line[1].x = firstVLineXPos + i * cellSize;
 		line[0].y = min.y;
 		line[1].y = max.y;
 
-		DrawLine(line, grid.color);
+		if (line[0].x == 0)
+		{
+			DrawLine(line, grid.axisYColor, 2.0f);
+			majorVIndex += grid.minorsInMajor;
+		}
+		else
+		if ((i == majorVIndex) || !drawMinors)
+		{
+			DrawLine(line, grid.majorColor);
+			majorVIndex += grid.minorsInMajor;
+		}
+		else
+		if (drawMinors)
+			DrawLine(line, grid.minorColor);
+
+		/*// draw minor line if others shouldn't be drawn
+		if (((i != majorVIndex) && (line[0].x != 0)) && drawMinors)
+		{
+			DrawLine(line, grid.minorColor);
+		}
+		else
+		// draw major line if axis line shouldn't be drawn
+		if (((i == majorVIndex) || !drawMinors) && (line[0].x != 0))
+		{
+			DrawLine(line, grid.majorColor);
+			majorVIndex += grid.minorsInMajor;
+		}
+		else
+		{
+			DrawLine(line, grid.axisYColor, 2.0f);
+			majorVIndex += grid.minorsInMajor;
+		}*/
 	}
 
-	//calculate first horizontal line y position
-	float32 firstHLineYPos = ceil(min.y / grid.cellSize) * grid.cellSize;
+	//calculate first horizontal y position for minor line
+	float32 firstHLineYPos = ceil(min.y / grid.minorCellSize) * grid.minorCellSize;
+	
+	//calculate first horizontal y position for major line
+	float32 firstMajorHLineYPos = ceil(min.y / (grid.minorsInMajor * grid.minorCellSize)) * grid.minorCellSize * grid.minorsInMajor;
+
+	//calculate first index for major line
+	int32 majorHIndex = (int32) ((firstMajorHLineYPos - firstHLineYPos) / grid.minorCellSize);
 
 	// calculate horizontal lines count
-	int32 HLineCount = (int32) ceil((max.y - min.y) / grid.cellSize);
+	int32 HLineCount = (int32) ceil((max.y - min.y) / grid.minorCellSize);
+
+	//recalculations if minors are not drawn
+	if (!drawMinors)
+	{
+		firstHLineYPos = firstMajorHLineYPos;
+		HLineCount = (int32) ceil((float32)HLineCount / (float32)grid.minorsInMajor);
+	}
 
 	// draw horizontal lines
-	for (int i = 0; i < HLineCount; ++i)
+	for (int32 i = 0; i < HLineCount; ++i)
 	{
 		Vector2 line[2];
 		line[0].x = min.x;
 		line[1].x = max.x;
-		line[0].y = line[1].y = firstHLineYPos + i * grid.cellSize;
+		line[0].y = line[1].y = firstHLineYPos + i * cellSize;
 
-		DrawLine(line, grid.color);
+		if (line[0].y == 0)
+		{
+			DrawLine(line, grid.axisXColor, 2.0f);
+			majorHIndex += grid.minorsInMajor;
+		}
+		else
+		if ((i == majorHIndex) || !drawMinors)
+		{
+			DrawLine(line, grid.majorColor);
+			majorHIndex += grid.minorsInMajor;
+		}
+		else
+		if (drawMinors)
+			DrawLine(line, grid.minorColor);
+
+		// draw minor line if others shouldn't be drawn
+		/*if (((i != majorHIndex) && (line[0].y != 0)) && drawMinors)
+		{
+			DrawLine(line, grid.minorColor);
+		}
+		else
+		// draw major line if axis line shouldn't be drawn
+		if (((i == majorHIndex) || !drawMinors) && (line[0].y != 0))
+		{
+			DrawLine(line, grid.majorColor);
+			majorHIndex += grid.minorsInMajor;
+		}
+		else
+		{
+			DrawLine(line, grid.axisXColor, 2.0f);
+			majorHIndex += grid.minorsInMajor;
+		}*/
 	}
 }
 

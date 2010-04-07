@@ -36,7 +36,7 @@ namespace GfxSystem
 
 		virtual void DrawTexturedQuad(const TexturedQuad& quad) const;
 
-		virtual void DrawLine(const Vector2* verts, const Color& color) const;
+		virtual void DrawLine(const Vector2* verts, const Color& color, const float32 width = 1.0f) const;
 
 		virtual void DrawPolygon(const Vector2* verts, const int32 n, const Color& color, const bool fill ) const;
 

@@ -92,7 +92,7 @@ namespace GfxSystem
 		void DrawEntity(const EntitySystem::EntityHandle entity) const;
 
 		/// Draws a line. Verts must be an array of 2 Vector2s.
-		virtual void DrawLine(const Vector2* verts, const Color& color) const = 0;
+		virtual void DrawLine(const Vector2* verts, const Color& color, const float32 width = 1.0f) const = 0;
 
 		/// Draws a polygon. Verts must be an array of n Vector2s defining the polygon.
 		virtual void DrawPolygon(const Vector2* verts, const int32 n, const Color& color, const bool fill) const = 0;
@@ -187,7 +187,7 @@ namespace GfxSystem
 		/// Does inverse camera transformation on the given vector and returns result.
 		Vector2 GetInverseCameraTranform( const EntitySystem::EntityHandle& camera, const Vector2& vec ) const;
 
-		/// Draws grid (defined in viewport) ontop of everything
+		/// Draws grid (defined in viewport) ontop of everything.
 		void DrawGrid( const RenderTargetID renderTargetID ) const;
 
 	protected:

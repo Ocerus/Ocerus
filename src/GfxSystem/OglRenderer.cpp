@@ -228,13 +228,15 @@ void OglRenderer::DrawTexturedQuad(const TexturedQuad& quad) const
 	glPopMatrix();
 }
 
-void OglRenderer::DrawLine(const Vector2* verts, const Color& color) const
+void OglRenderer::DrawLine(const Vector2* verts, const Color& color, const float32 width) const
 {
 	OC_ASSERT(verts);
 
 	glDisable(GL_TEXTURE_2D);
 	
 	glColor4ub( color.r, color.g, color.b, color.a );
+
+	glLineWidth(width);
 
 	glBegin( GL_LINES );
 

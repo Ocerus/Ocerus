@@ -90,9 +90,15 @@ namespace GfxSystem
 	/// Grid attributes. Used in viewports.
 	struct GridInfo
 	{
-		GridInfo(): cellSize(100), color(Color::Full) {}
-		float32 cellSize;
-		Color color;
+		GridInfo(): minorCellSize(20), minorsInMajor(10), minShowMinorsZoom(0.4f), minorColor(Color(255,255,255,50)), majorColor(Color(255,255,255,150)),
+			axisXColor(Color(50,50,255,80)), axisYColor(Color(255,50,50,200)) {}
+		float32 minorCellSize;
+		int32 minorsInMajor;
+		float32 minShowMinorsZoom;
+		Color minorColor;
+		Color majorColor;
+		Color axisXColor;
+		Color axisYColor;
 	};
 }
 

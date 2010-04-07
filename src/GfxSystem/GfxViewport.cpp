@@ -8,12 +8,13 @@
 const int ORTHO_SIZE_X = 512;
 const int ORTHO_SIZE_Y = 384;
 
-GfxSystem::GfxViewport::GfxViewport( const Vector2& position, const Vector2& size, const bool relativeScale ):
+GfxSystem::GfxViewport::GfxViewport( const Vector2& position, const Vector2& size, const bool relativeScale,
+									 const bool gridEnabled ):
 	mPosition(position),
 	mSize(size),
 	mTexture(InvalidTextureHandle),
 	mRelativeScale(relativeScale),
-	mGridEnabled(true)
+	mGridEnabled(gridEnabled)
 {
 
 }
