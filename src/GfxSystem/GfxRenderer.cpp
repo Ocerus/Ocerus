@@ -11,7 +11,7 @@ using namespace GfxSystem;
 const float32 GfxRenderer::PIXELS_PER_WORLD_UNIT = 50;
 
 
-GfxSystem::GfxRenderer::GfxRenderer(): mIsRendering(false), mSceneMgr(0), mCurrentRenderTargetID(InvalidRenderTargetID)
+GfxSystem::GfxRenderer::GfxRenderer(): mCurrentRenderTargetID(InvalidRenderTargetID), mIsRendering(false), mSceneMgr(0)
 {
 	mSceneMgr = new GfxSceneMgr();
 }

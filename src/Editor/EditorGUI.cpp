@@ -2,9 +2,10 @@
 
 #include "Editor/EditorGUI.h"
 #include "Editor/EditorMgr.h"
+#include "Editor/EditorMenu.h"
+#include "Editor/LayerMgrWidget.h"
 #include "Editor/ValueEditors/PropertyEditorCreator.h"
 
-#include "Core/Application.h"
 #include "Core/Game.h"
 
 #include "EntitySystem/EntityMgr/EntityMgr.h"
@@ -14,6 +15,7 @@
 #include "GUISystem/CEGUITools.h"
 #include "GUISystem/VerticalLayout.h"
 #include "GUISystem/ViewportWindow.h"
+
 
 namespace Editor
 {
@@ -29,12 +31,15 @@ EditorGUI::EditorGUI():
 	mPropertyUpdateTimer(0),
 	mEntityEditorLayout(0),
 	mTopViewport(0),
-	mBottomViewport(0)
+	mBottomViewport(0),
+	mLayerMgrWidget(0)
 {
 }
 
 EditorGUI::~EditorGUI()
 {
+	delete mLayerMgrWidget;
+	delete mEditorMenu;
 }
 
 void EditorGUI::LoadGUI()
@@ -50,25 +55,13 @@ void EditorGUI::LoadGUI()
 	mComponentGroupHeight = 28;
 	gCEGUIWM.getWindow("EditorRoot")->setMousePassThroughEnabled(true);
 
-	/// Initialize menu
-	{
-		CEGUI::Window* menubar = gCEGUIWM.getWindow("EditorRoot/Menubar");
+	/// Initialize EditorMenu
+	mEditorMenu = new EditorMenu();
+	mEditorMenu->Init();
 
-		/// Initialize component types in Add Component menu
-		CEGUI::Window* addComponentMenu = gCEGUIWM.getWindow("EditorRoot/Menubar/Edit/NewComponent/AutoPopup");
-		for (int i = 0; i < EntitySystem::NUM_COMPONENT_TYPES; ++i)
-		{
-			const string& componentName = EntitySystem::GetComponentTypeName((EntitySystem::eComponentType)i);
-			CEGUI::Window* componentMenuItem = gCEGUIWM.createWindow("Editor/MenuItem", "EditorRoot/Menubar/Edit/NewComponent/Component" + StringConverter::ToString(i));
-			componentMenuItem->setText(componentName);
-			addComponentMenu->addChildWindow(componentMenuItem);
-		}
-
-		ConfigureMenu(menubar, true);
-	}
-
-	/// Initialize LayerMgr
-	InitLayerMgrWindow();
+	/// Initialize LayerMgrWidget
+	mLayerMgrWidget = new LayerMgrWidget(gCEGUIWM.getWindow("EditorRoot/LayerMgr"));
+	mLayerMgrWidget->Init();
 
 	/// Initialize popup pseudomenu
 	{
@@ -120,8 +113,8 @@ void EditorGUI::Update(float32 delta)
 		{
 			(*it)->Update();
 		}
-		RefreshLayerMgrWindow();
 	}
+	mLayerMgrWidget->Update(delta);
 }
 
 void EditorGUI::Draw(float32 delta)
@@ -273,304 +266,11 @@ void EditorGUI::UpdateEntityEditorWindow()
 	}
 }
 
-bool Editor::EditorGUI::OnComponentAddClicked(const CEGUI::EventArgs& e)
-{
-	const CEGUI::WindowEventArgs& args = static_cast<const CEGUI::WindowEventArgs&>(e);
-	CEGUI::PopupMenu* componentTypeMenu = static_cast<CEGUI::PopupMenu*>(gCEGUIWM.getWindow("EditorRoot/Popup/ComponentPopup/AutoPopup"));
-
-	/// Fake MouseEvent to open popup menu
-	CEGUI::MouseEventArgs me(args.window);
-
-	me.position.d_x = CEGUI::CoordConverter::windowToScreenX(*me.window, 0);
-	me.position.d_y = CEGUI::CoordConverter::windowToScreenY(*me.window, me.window->getHeight());
-
-	GUISystem::ShowPopup(componentTypeMenu, me);
-	return true;
-}
-
 bool Editor::EditorGUI::OnComponentRemoveClicked(const CEGUI::EventArgs& e)
 {
 	const CEGUI::WindowEventArgs& args = static_cast<const CEGUI::WindowEventArgs&>(e);
 	const CEGUI::String& componentIDString = args.window->getUserString("ComponentID");
 	EntitySystem::ComponentID componentID = StringConverter::FromString<EntitySystem::ComponentID>(componentIDString.c_str());
 	gEditorMgr.RemoveComponent(componentID);
-	UpdateEntityEditorWindow();
 	return true;
 }
-
-bool Editor::EditorGUI::OnComponentMenuOpened(const CEGUI::EventArgs& e)
-{
-	const CEGUI::WindowEventArgs& args = static_cast<const CEGUI::WindowEventArgs&>(e);
-	ocWarning << "OnComponentMenuOpened: " << args.window->getName();
-	return true;
-}
-
-bool Editor::EditorGUI::OnMouseEntersMenuItem(const CEGUI::EventArgs& )
-{
-	return true;
-}
-
-bool Editor::EditorGUI::OnMouseLeavesMenuItem(const CEGUI::EventArgs& )
-{
-	return true;
-}
-
-bool Editor::EditorGUI::OnMouseLeavesPopupMenuItem(const CEGUI::EventArgs& )
-{
-	return true;
-}
-
-
-/// Actions for all menu items are handled here.
-bool Editor::EditorGUI::OnMenuItemClicked(const CEGUI::EventArgs& e)
-{
-	const CEGUI::WindowEventArgs& args = static_cast<const CEGUI::WindowEventArgs&>(e);
-	const CEGUI::String& itemName = args.window->getName();
-	const string itemNameStr = itemName.c_str();
-
-	/// ---- File menu ----
-	if (itemName == "EditorRoot/Menubar/File")
-	{
-		return true;
-	}
-	
-	if (itemName == "EditorRoot/Menubar/File/CreateProject")
-	{
-		return true;
-	}
-
-	if (itemName == "EditorRoot/Menubar/File/OpenProject")
-	{
-		return true;
-	}
-
-	if (itemName == "EditorRoot/Menubar/File/ExportGame")
-	{
-		return true;
-	}
-
-	if (itemName == "EditorRoot/Menubar/File/Quit")
-	{
-		gApp.Shutdown();
-		return true;
-	}
-
-	/// ---- Scene menu ----
-	if (itemName == "EditorRoot/Menubar/Scene")
-	{
-		return true;
-	}
-
-	if (itemName == "EditorRoot/Menubar/Scene/NewScene")
-	{
-		return true;
-	}
-
-	if (itemName == "EditorRoot/Menubar/Scene/OpenScene")
-	{
-		return true;
-	}
-
-	if (itemName == "EditorRoot/Menubar/Scene/SaveScene")
-	{
-		return true;
-	}
-
-	/// ---- Edit menu ----
-	if (itemName == "EditorRoot/Menubar/Edit")
-	{
-		return true;
-	}
-
-	if (itemName == "EditorRoot/Menubar/Edit/NewEntity")
-	{
-		return true;
-	}
-
-	if (itemName == "EditorRoot/Menubar/Edit/NewComponent")
-	{
-		return true;
-	}
-
-	/// New component
-	{
-		string pattern = "EditorRoot/Menubar/Edit/NewComponent/Component";
-		if (itemNameStr.substr(0, pattern.size()) == pattern)
-		{
-			OC_DASSERT(itemNameStr.size() > pattern.size());
-			int componentType = StringConverter::FromString<int>(itemNameStr.substr(pattern.size()));
-			gEditorMgr.AddComponent((EntitySystem::eComponentType)componentType);
-			UpdateEntityEditorWindow();
-			return true;
-		}
-	}
-
-	if (itemName == "EditorRoot/Menubar/Edit/DuplicateEntity")
-	{
-		return true;
-	}
-
-	if (itemName == "EditorRoot/Menubar/Edit/DeleteEntity")
-	{
-		return true;
-	}
-
-	if (itemName == "EditorRoot/Menubar/Edit/CreatePrototype")
-	{
-		return true;
-	}
-
-	ocWarning << "MenuItem " << itemName << " clicked, but no action defined.";
-	return true;
-}
-
-void Editor::EditorGUI::ConfigureMenu(CEGUI::Window* parent, bool isMenubar)
-{
-	size_t childCount = parent->getChildCount();
-	for(size_t childIdx = 0; childIdx < childCount; childIdx++)
-	{
-		if (parent->getChildAtIdx(childIdx)->testClassName("MenuItem")
-				|| parent->getChildAtIdx(childIdx)->testClassName("PopupMenu"))
-		{
-			parent->getChildAtIdx(childIdx)->subscribeEvent(CEGUI::MenuItem::EventMouseEnters,
-					CEGUI::Event::Subscriber(&Editor::EditorGUI::OnMouseEntersMenuItem, this));
-
-			parent->getChildAtIdx(childIdx)->subscribeEvent(CEGUI::MenuItem::EventMouseLeaves, isMenubar ?
-					CEGUI::Event::Subscriber(&Editor::EditorGUI::OnMouseLeavesMenuItem, this) :
-					CEGUI::Event::Subscriber(&Editor::EditorGUI::OnMouseLeavesPopupMenuItem, this));
-
-			if(parent->getChildAtIdx(childIdx)->testClassName("MenuItem"))
-			{
-				parent->getChildAtIdx(childIdx)->subscribeEvent(CEGUI::MenuItem::EventClicked,
-						CEGUI::Event::Subscriber(&Editor::EditorGUI::OnMenuItemClicked, this));
-			}
-		}
-		ConfigureMenu(parent->getChildAtIdx(childIdx), isMenubar);
-	}
-}
-
-
-void Editor::EditorGUI::InitLayerMgrWindow()
-{
-	CEGUI::Window* newLayerButton = gCEGUIWM.getWindow("EditorRoot/LayerMgr/NewLayerButton");
-	newLayerButton->subscribeEvent(CEGUI::PushButton::EventClicked,
-			CEGUI::SubscriberSlot(&Editor::EditorGUI::OnAddLayerClicked, this));
-
-	CEGUI::Window* upButton = gCEGUIWM.getWindow("EditorRoot/LayerMgr/ButtonUp");
-	upButton->subscribeEvent(CEGUI::PushButton::EventClicked,
-			CEGUI::SubscriberSlot(&Editor::EditorGUI::OnLayerUpDownButtonClicked, this));
-
-	CEGUI::Window* downButton = gCEGUIWM.getWindow("EditorRoot/LayerMgr/ButtonDown");
-	downButton->subscribeEvent(CEGUI::PushButton::EventClicked,
-			CEGUI::SubscriberSlot(&Editor::EditorGUI::OnLayerUpDownButtonClicked, this));
-
-	RefreshLayerMgrWindow();
-}
-
-void Editor::EditorGUI::RefreshLayerMgrWindow()
-{
-	CEGUI::Tree* tree = static_cast<CEGUI::Tree*>(gCEGUIWM.getWindow("EditorRoot/LayerMgr/Tree"));
-	CEGUI::TreeItem* selectedItem = tree->getFirstSelectedItem();
-
-	CEGUI::String selectedLayerName;
-
-	if (selectedItem)
-	{
-		mLayerMgrSelectedID = selectedItem->getID();
-		mLayerMgrIsSelectedLayer = selectedItem->getUserData() == 0;
-		selectedLayerName = selectedItem->getText();
-	}
-	else
-	{
-		mLayerMgrSelectedID = 0;
-		mLayerMgrIsSelectedLayer = false;
-	}
-
-	tree->resetList();
-	selectedItem = 0;
-	
-	for (EntitySystem::LayerID layerID = gLayerMgr.GetTopLayerID(); layerID >= gLayerMgr.GetBottomLayerID(); --layerID)
-	{
-		CEGUI::TreeItem* layerItem = new CEGUI::TreeItem(gLayerMgr.GetLayerName(layerID));
-		layerItem->setSelectionBrushImage("TaharezLook", "GenericBrush");
-		layerItem->setID(layerID);
-		layerItem->setUserData(0);
-
-		if (mLayerMgrIsSelectedLayer && selectedLayerName == layerItem->getText())
-			selectedItem = layerItem;
-
-		tree->addItem(layerItem);
-
-		EntitySystem::EntityList entityList;
-		gLayerMgr.GetEntitiesFromLayer(layerID, entityList);
-		for (EntitySystem::EntityList::const_iterator it = entityList.begin(); it != entityList.end(); ++it)
-		{
-			CEGUI::TreeItem* entityItem = new CEGUI::TreeItem(gEntityMgr.GetEntityName(*it));
-			entityItem->setSelectionBrushImage("TaharezLook", "GenericBrush");
-			entityItem->setUserData((void*)1);
-			entityItem->setID(it->GetID());
-			layerItem->addItem(entityItem);
-
-			
-			if (!mLayerMgrIsSelectedLayer && mLayerMgrSelectedID == it->GetID())
-				selectedItem = entityItem;
-
-		}
-		layerItem->toggleIsOpen();
-	}
-
-	if (selectedItem)
-		tree->setItemSelectState(selectedItem, true);
-}
-
-bool Editor::EditorGUI::OnAddLayerClicked(const CEGUI::EventArgs& )
-{
-	CEGUI::Editbox* newLayerEditbox = static_cast<CEGUI::Editbox*>(gCEGUIWM.getWindow("EditorRoot/LayerMgr/NewLayerEdit"));
-	OC_DASSERT(newLayerEditbox);
-	const CEGUI::String& newLayerName = newLayerEditbox->getText();
-	gLayerMgr.AddBottomLayer(newLayerName.c_str());
-	newLayerEditbox->setText("");
-	RefreshLayerMgrWindow();
-	return true;
-}
-
-bool Editor::EditorGUI::OnLayerUpDownButtonClicked(const CEGUI::EventArgs& e)
-{
-	const CEGUI::WindowEventArgs& we = static_cast<const CEGUI::WindowEventArgs&>(e);
-
-	CEGUI::Tree* tree = static_cast<CEGUI::Tree*>(gCEGUIWM.getWindow("EditorRoot/LayerMgr/Tree"));
-	CEGUI::TreeItem* item = tree->getFirstSelectedItem();
-	if (item == 0) return true;
-
-	bool movingUp = (we.window->getName() == "EditorRoot/LayerMgr/ButtonUp");
-
-	if (item->getUserData() == 0)
-	{
-		/// We are moving layer
-		EntitySystem::LayerID layerId = item->getID();
-		if (movingUp)
-		{
-			gLayerMgr.MoveLayerUp(layerId);
-		}
-		else
-		{
-			gLayerMgr.MoveLayerDown(layerId);
-		}
-	}
-	else
-	{
-		/// We are moving entity
-		EntitySystem::EntityHandle entity = gEntityMgr.GetEntity(item->getID());
-		if (movingUp)
-		{
-			gLayerMgr.MoveEntityUp(entity);
-		}
-		else
-		{
-			gLayerMgr.MoveEntityDown(entity);
-		}
-	}
-	RefreshLayerMgrWindow();
-	return true;
-}
-

@@ -16,6 +16,7 @@
 namespace Editor
 {
 	class EditorGUI;
+	class EditorMenu;
 
 	class EditorMgr: public Singleton<EditorMgr>
 	{
@@ -53,6 +54,7 @@ namespace Editor
 
 	protected:
 		friend class EditorGUI;
+		friend class EditorMenu;
 
 		/// Adds a new component of componentType to current entity.
 		void AddComponent(EntitySystem::eComponentType componentType);

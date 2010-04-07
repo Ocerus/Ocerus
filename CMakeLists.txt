@@ -198,7 +198,9 @@ set(Core_SRCS
 
 set(Editor_SRCS
 	src/Editor/EditorGUI.cpp
+	src/Editor/EditorMenu.cpp
 	src/Editor/EditorMgr.cpp
+	src/Editor/LayerMgrWidget.cpp
 	src/Editor/ValueEditors/AbstractValueEditor.cpp
 	src/Editor/ValueEditors/StringEditor.cpp
 	src/Editor/ValueEditors/PropertyEditorCreator.cpp
@@ -232,8 +234,10 @@ set(GfxSystem_SRCS
 	src/GfxSystem/GfxStructures.cpp
 	src/GfxSystem/GfxViewport.cpp
 	src/GfxSystem/GfxWindow.cpp
+	src/GfxSystem/Mesh.cpp
 	src/GfxSystem/OglRenderer.cpp
 	src/GfxSystem/Texture.cpp
+	src/GfxSystem/objloader/model_obj.cpp
 )
 
 set(SceneSystem_SRCS

@@ -24,6 +24,8 @@ namespace GUISystem
 namespace Editor
 {
 	class AbstractValueEditor;
+	class LayerMgrWidget;
+	class EditorMenu;
 
 	/// The EditorGUI class manages the editor GUI.
 	class EditorGUI
@@ -50,25 +52,12 @@ namespace Editor
 
 		/// @name CEGUI Callbacks
 		//@{
-			bool OnComponentAddClicked(const CEGUI::EventArgs&);
 			bool OnComponentRemoveClicked(const CEGUI::EventArgs&);
-			bool OnComponentMenuOpened(const CEGUI::EventArgs&);
-			bool OnMouseEntersMenuItem(const CEGUI::EventArgs&);
-			bool OnMouseLeavesMenuItem(const CEGUI::EventArgs&);
-			bool OnMouseLeavesPopupMenuItem(const CEGUI::EventArgs&);
-			bool OnMenuItemClicked(const CEGUI::EventArgs&);
-			bool OnAddLayerClicked(const CEGUI::EventArgs&);
-			bool OnLayerUpDownButtonClicked(const CEGUI::EventArgs&);
 		//@}
 
-		
 	private:
 		/// Recursively subscribes every menu item to the mouse enters/leaves/clicked events
 		void ConfigureMenu(CEGUI::Window* parent, bool isMenubar);
-
-		void InitLayerMgrWindow();
-
-		void RefreshLayerMgrWindow();
 		
 		int32 mPropertyItemHeight;
 		int32 mComponentGroupHeight;
@@ -79,9 +68,8 @@ namespace Editor
 		GUISystem::VerticalLayout* mEntityEditorLayout;
 		GUISystem::ViewportWindow* mTopViewport;
 		GUISystem::ViewportWindow* mBottomViewport;
-
-		int32 mLayerMgrSelectedID;
-		bool mLayerMgrIsSelectedLayer;
+		LayerMgrWidget* mLayerMgrWidget;
+		EditorMenu* mEditorMenu;
 	};
 }
 
