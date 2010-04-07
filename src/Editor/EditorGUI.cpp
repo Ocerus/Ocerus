@@ -8,6 +8,7 @@
 #include "Core/Game.h"
 
 #include "EntitySystem/EntityMgr/EntityMgr.h"
+#include "EntitySystem/EntityMgr/LayerMgr.h"
 
 #include "GUISystem/GUIMgr.h"
 #include "GUISystem/CEGUITools.h"
@@ -66,6 +67,9 @@ void EditorGUI::LoadGUI()
 		ConfigureMenu(menubar, true);
 	}
 
+	/// Initialize LayerMgr
+	InitLayerMgrWindow();
+
 	/// Initialize popup pseudomenu
 	{
 		CEGUI::Window* popupMenubar = gCEGUIWM.getWindow("EditorRoot/Popup");
@@ -116,6 +120,7 @@ void EditorGUI::Update(float32 delta)
 		{
 			(*it)->Update();
 		}
+		RefreshLayerMgrWindow();
 	}
 }
 
@@ -156,6 +161,7 @@ void EditorGUI::UpdateEntityEditorWindow()
 	EntitySystem::EntityHandle currentEntity = gEditorMgr.GetCurrentEntity();
 
 	CEGUI::ScrollablePane* entityEditorPane = static_cast<CEGUI::ScrollablePane*>(gCEGUIWM.getWindow(ENTITY_EDITOR_NAME));
+	float savedScrollPosition = entityEditorPane->getVerticalScrollPosition() * entityEditorPane->getContentPaneArea().getHeight();
 	OC_ASSERT(entityEditorPane);
 
 	{
@@ -257,6 +263,8 @@ void EditorGUI::UpdateEntityEditorWindow()
 	mEntityEditorLayout->UnlockUpdates();
 	mEntityEditorLayout->UpdateLayout();
 
+	entityEditorPane->setVerticalScrollPosition(savedScrollPosition / entityEditorPane->getContentPaneArea().getHeight());
+	
 	/// Nasty hack to solve scrollbar issue
 	{
 		const CEGUI::UDim height = entityEditorPane->getHeight();
@@ -441,4 +449,128 @@ void Editor::EditorGUI::ConfigureMenu(CEGUI::Window* parent, bool isMenubar)
 	}
 }
 
+
+void Editor::EditorGUI::InitLayerMgrWindow()
+{
+	CEGUI::Window* newLayerButton = gCEGUIWM.getWindow("EditorRoot/LayerMgr/NewLayerButton");
+	newLayerButton->subscribeEvent(CEGUI::PushButton::EventClicked,
+			CEGUI::SubscriberSlot(&Editor::EditorGUI::OnAddLayerClicked, this));
+
+	CEGUI::Window* upButton = gCEGUIWM.getWindow("EditorRoot/LayerMgr/ButtonUp");
+	upButton->subscribeEvent(CEGUI::PushButton::EventClicked,
+			CEGUI::SubscriberSlot(&Editor::EditorGUI::OnLayerUpDownButtonClicked, this));
+
+	CEGUI::Window* downButton = gCEGUIWM.getWindow("EditorRoot/LayerMgr/ButtonDown");
+	downButton->subscribeEvent(CEGUI::PushButton::EventClicked,
+			CEGUI::SubscriberSlot(&Editor::EditorGUI::OnLayerUpDownButtonClicked, this));
+
+	RefreshLayerMgrWindow();
+}
+
+void Editor::EditorGUI::RefreshLayerMgrWindow()
+{
+	CEGUI::Tree* tree = static_cast<CEGUI::Tree*>(gCEGUIWM.getWindow("EditorRoot/LayerMgr/Tree"));
+	CEGUI::TreeItem* selectedItem = tree->getFirstSelectedItem();
+
+	CEGUI::String selectedLayerName;
+
+	if (selectedItem)
+	{
+		mLayerMgrSelectedID = selectedItem->getID();
+		mLayerMgrIsSelectedLayer = selectedItem->getUserData() == 0;
+		selectedLayerName = selectedItem->getText();
+	}
+	else
+	{
+		mLayerMgrSelectedID = 0;
+		mLayerMgrIsSelectedLayer = false;
+	}
+
+	tree->resetList();
+	selectedItem = 0;
+	
+	for (EntitySystem::LayerID layerID = gLayerMgr.GetTopLayerID(); layerID >= gLayerMgr.GetBottomLayerID(); --layerID)
+	{
+		CEGUI::TreeItem* layerItem = new CEGUI::TreeItem(gLayerMgr.GetLayerName(layerID));
+		layerItem->setSelectionBrushImage("TaharezLook", "GenericBrush");
+		layerItem->setID(layerID);
+		layerItem->setUserData(0);
+
+		if (mLayerMgrIsSelectedLayer && selectedLayerName == layerItem->getText())
+			selectedItem = layerItem;
+
+		tree->addItem(layerItem);
+
+		EntitySystem::EntityList entityList;
+		gLayerMgr.GetEntitiesFromLayer(layerID, entityList);
+		for (EntitySystem::EntityList::const_iterator it = entityList.begin(); it != entityList.end(); ++it)
+		{
+			CEGUI::TreeItem* entityItem = new CEGUI::TreeItem(gEntityMgr.GetEntityName(*it));
+			entityItem->setSelectionBrushImage("TaharezLook", "GenericBrush");
+			entityItem->setUserData((void*)1);
+			entityItem->setID(it->GetID());
+			layerItem->addItem(entityItem);
+
+			
+			if (!mLayerMgrIsSelectedLayer && mLayerMgrSelectedID == it->GetID())
+				selectedItem = entityItem;
+
+		}
+		layerItem->toggleIsOpen();
+	}
+
+	if (selectedItem)
+		tree->setItemSelectState(selectedItem, true);
+}
+
+bool Editor::EditorGUI::OnAddLayerClicked(const CEGUI::EventArgs& )
+{
+	CEGUI::Editbox* newLayerEditbox = static_cast<CEGUI::Editbox*>(gCEGUIWM.getWindow("EditorRoot/LayerMgr/NewLayerEdit"));
+	OC_DASSERT(newLayerEditbox);
+	const CEGUI::String& newLayerName = newLayerEditbox->getText();
+	gLayerMgr.AddBottomLayer(newLayerName.c_str());
+	newLayerEditbox->setText("");
+	RefreshLayerMgrWindow();
+	return true;
+}
+
+bool Editor::EditorGUI::OnLayerUpDownButtonClicked(const CEGUI::EventArgs& e)
+{
+	const CEGUI::WindowEventArgs& we = static_cast<const CEGUI::WindowEventArgs&>(e);
+
+	CEGUI::Tree* tree = static_cast<CEGUI::Tree*>(gCEGUIWM.getWindow("EditorRoot/LayerMgr/Tree"));
+	CEGUI::TreeItem* item = tree->getFirstSelectedItem();
+	if (item == 0) return true;
+
+	bool movingUp = (we.window->getName() == "EditorRoot/LayerMgr/ButtonUp");
+
+	if (item->getUserData() == 0)
+	{
+		/// We are moving layer
+		EntitySystem::LayerID layerId = item->getID();
+		if (movingUp)
+		{
+			gLayerMgr.MoveLayerUp(layerId);
+		}
+		else
+		{
+			gLayerMgr.MoveLayerDown(layerId);
+		}
+	}
+	else
+	{
+		/// We are moving entity
+		EntitySystem::EntityHandle entity = gEntityMgr.GetEntity(item->getID());
+		if (movingUp)
+		{
+			gLayerMgr.MoveEntityUp(entity);
+		}
+		else
+		{
+			gLayerMgr.MoveEntityDown(entity);
+		}
+	}
+	RefreshLayerMgrWindow();
+	return true;
+}
 

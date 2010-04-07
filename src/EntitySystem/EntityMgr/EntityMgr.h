@@ -63,6 +63,9 @@ namespace EntitySystem
 		/// Returns EntityHandle to the first entity of a specified name.
 		EntityHandle FindFirstEntity(const string& name);
 
+		/// Returns EntityHandle to the entity with specified id.
+		EntityHandle GetEntity(EntityID id) const;
+
 		/// Actually destroyes all entities marked for destruction.
 		void ProcessDestroyQueue(void);
 

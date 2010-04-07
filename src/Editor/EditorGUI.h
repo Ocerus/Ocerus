@@ -57,6 +57,8 @@ namespace Editor
 			bool OnMouseLeavesMenuItem(const CEGUI::EventArgs&);
 			bool OnMouseLeavesPopupMenuItem(const CEGUI::EventArgs&);
 			bool OnMenuItemClicked(const CEGUI::EventArgs&);
+			bool OnAddLayerClicked(const CEGUI::EventArgs&);
+			bool OnLayerUpDownButtonClicked(const CEGUI::EventArgs&);
 		//@}
 
 		
@@ -64,6 +66,9 @@ namespace Editor
 		/// Recursively subscribes every menu item to the mouse enters/leaves/clicked events
 		void ConfigureMenu(CEGUI::Window* parent, bool isMenubar);
 
+		void InitLayerMgrWindow();
+
+		void RefreshLayerMgrWindow();
 		
 		int32 mPropertyItemHeight;
 		int32 mComponentGroupHeight;
@@ -74,6 +79,9 @@ namespace Editor
 		GUISystem::VerticalLayout* mEntityEditorLayout;
 		GUISystem::ViewportWindow* mTopViewport;
 		GUISystem::ViewportWindow* mBottomViewport;
+
+		int32 mLayerMgrSelectedID;
+		bool mLayerMgrIsSelectedLayer;
 	};
 }
 

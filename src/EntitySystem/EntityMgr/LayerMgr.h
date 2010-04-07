@@ -16,6 +16,7 @@ namespace EntitySystem
 	typedef int32 LayerID;
 	
 	/// Manages the layers for entities in editor.
+	/// @todo It's very unfortunate to signal errors by returning zero LayerID, because zero is valid LayerID.
 	class LayerMgr: public Singleton<LayerMgr>
 	{
 	public:
@@ -62,6 +63,14 @@ namespace EntitySystem
 		/// @return A new ID of the moved layer, 0 in case of error.
 		LayerID MoveLayerTop(LayerID id);
 
+		/// Moves the layer one position up, or does nothing, if it is already on the top.
+		/// @return New ID of the moved layer.
+		LayerID MoveLayerUp(LayerID id);
+
+		/// Moves the layer one position down, or does nothing, if it is already on the bottom.
+		/// @return New ID of the moved layer.
+		LayerID MoveLayerDown(LayerID id);
+
 		/// Moves the entites from one layer to another one.
 		bool MoveEntities(LayerID from, LayerID to);
 
@@ -82,6 +91,12 @@ namespace EntitySystem
 
 		/// Set the layer of specific entities.
 		bool SetLayerOfEntities(LayerID id, EntityList& entities);
+
+		/// Moves the specified entity to higher layer.
+		void MoveEntityUp(EntityHandle entity);
+
+		/// Moves the specified entity to lower layer.
+		void MoveEntityDown(EntityHandle entity);
 	private:
 
 		typedef deque<string> Layers;

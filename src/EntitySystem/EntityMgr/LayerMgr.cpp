@@ -139,6 +139,7 @@ bool LayerMgr::DeleteLayer(LayerID id, bool destroyEntities)
 LayerID LayerMgr::MoveLayerBehind(LayerID id, LayerID behind)
 {
 	if (id == 0 || id == behind || !ExistsLayer(id) || !ExistsLayer(behind)) { return 0; }	
+
 	// remember entites in the layer to move and layer name
 	EntityList toMove;
 	GetEntitiesFromLayer(id, toMove);
@@ -174,6 +175,18 @@ LayerID LayerMgr::MoveLayerTop(LayerID id)
 	return newID;
 }
 
+LayerID LayerMgr::MoveLayerUp(LayerID id)
+{
+	if (id == GetTopLayerID() || !ExistsLayer(id)) { return id; }
+	LayerID higherLayerId = id + 1;
+	return higherLayerId == GetTopLayerID() ? MoveLayerTop(id) : MoveLayerBehind(id, higherLayerId + 1);
+}
+
+LayerID LayerMgr::MoveLayerDown(LayerID id)
+{
+	return MoveLayerBehind(id, id - 1);
+}
+
 bool LayerMgr::MoveEntities(LayerID from, LayerID to)
 {
 	if (!ExistsLayer(from)) { return false; }
@@ -200,6 +213,20 @@ bool LayerMgr::SetLayerOfEntities(LayerID id, EntityList& entities)
 		SetLayerID(*it, id);
 	}
 	return true;
+}
+
+void LayerMgr::MoveEntityUp(EntityHandle entity)
+{
+	LayerID entityLayer = GetLayerID(entity);
+	if (entityLayer != GetTopLayerID())
+		SetLayerID(entity, entityLayer + 1);
+}
+
+void LayerMgr::MoveEntityDown(EntityHandle entity)
+{
+	LayerID entityLayer = GetLayerID(entity);
+	if (entityLayer != GetBottomLayerID())
+		SetLayerID(entity, entityLayer - 1);
 }
 
 inline void LayerMgr::RefreshList()

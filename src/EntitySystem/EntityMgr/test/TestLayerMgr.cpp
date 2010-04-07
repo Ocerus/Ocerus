@@ -56,6 +56,30 @@ SUITE(LayerMgr)
 		CHECK_EQUAL(bottomID, gLayerMgr.GetBottomLayerID());
 	}
 
+	TEST(MoveLayer3)
+	{
+		LayerID layer1ID = gLayerMgr.AddBottomLayer("Layer1");
+		gLayerMgr.AddBottomLayer("Layer2");
+
+		CHECK_EQUAL("Layer1", gLayerMgr.GetLayerName(layer1ID));
+		CHECK_EQUAL("Layer2", gLayerMgr.GetLayerName(layer1ID - 1));
+
+		LayerID newLayer1 = gLayerMgr.MoveLayerBehind(layer1ID, layer1ID - 1);
+
+		CHECK_EQUAL("Layer1", gLayerMgr.GetLayerName(newLayer1));
+		CHECK_EQUAL("Layer2", gLayerMgr.GetLayerName(newLayer1 + 1));
+	}
+
+	TEST(MoveLayer4)
+	{
+		LayerID layerID = 0;
+		CHECK(gLayerMgr.ExistsLayer(layerID));
+		string layerName = gLayerMgr.GetLayerName(layerID);
+
+		gLayerMgr.MoveLayerBehind(layerID, gLayerMgr.GetBottomLayerID());
+		CHECK_EQUAL(layerName, gLayerMgr.GetLayerName(gLayerMgr.GetBottomLayerID()));
+	}
+
 	TEST(DeleteLayer)
 	{
 		CHECK_EQUAL(gLayerMgr.DeleteLayer(0, false), false);

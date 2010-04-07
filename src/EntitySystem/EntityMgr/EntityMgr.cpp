@@ -706,6 +706,14 @@ bool EntitySystem::EntityMgr::EntityExists( const EntityHandle h ) const
 	return mEntities.find(h.GetID()) != mEntities.end();
 }
 
+EntityHandle EntitySystem::EntityMgr::GetEntity(EntityID id) const
+{
+	if (mEntities.find(id) != mEntities.end())
+		return EntityHandle(id);
+	else
+		return EntityHandle::Null;
+}
+
 bool EntitySystem::EntityMgr::HasEntityComponentOfType(const EntityHandle entity, const eComponentType componentType)
 {
 	for (EntityComponentsIterator it=mComponentMgr->GetEntityComponents(entity.GetID()); it.HasMore(); ++it)
