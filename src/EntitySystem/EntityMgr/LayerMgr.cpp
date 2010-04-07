@@ -149,7 +149,8 @@ LayerID LayerMgr::MoveLayerBehind(LayerID id, LayerID behind)
 	EraseAndShift(id);
 
 	// correct the insertion place due to deletion, insert a new layer to layers, shift entities in other layers
-	if ((id < 0 && behind < 0 && id > behind) || (id > 0 && behind > 0 && id < behind)) { --behind; }
+	if (id < 0 && behind < 0 && id > behind) { ++behind; }
+	else if (id > 0 && behind > 0 && id < behind) { --behind; }
 	LayerID newID = InsertAndShift(behind, name);	
 	
 	// correct the layer of entities in the moved layer and return a new layer ID

@@ -56,6 +56,17 @@ SUITE(LayerMgr)
 		CHECK_EQUAL(bottomID, gLayerMgr.GetBottomLayerID());
 	}
 
+	TEST(DeleteLayer)
+	{
+		CHECK_EQUAL(gLayerMgr.DeleteLayer(0, false), false);
+		LayerID bottomID = gLayerMgr.GetBottomLayerID();
+		LayerID topID = gLayerMgr.GetTopLayerID();
+		CHECK(gLayerMgr.DeleteLayer(-1, false));
+		CHECK_EQUAL(bottomID, gLayerMgr.GetBottomLayerID() - 1);
+		CHECK(gLayerMgr.DeleteLayer(topID, false));
+		CHECK_EQUAL(topID, gLayerMgr.GetTopLayerID() + 1);
+	}
+
 	TEST(MoveLayer3)
 	{
 		LayerID layer1ID = gLayerMgr.AddBottomLayer("Layer1");
@@ -74,21 +85,17 @@ SUITE(LayerMgr)
 	{
 		LayerID layerID = 0;
 		CHECK(gLayerMgr.ExistsLayer(layerID));
-		string layerName = gLayerMgr.GetLayerName(layerID);
 
-		gLayerMgr.MoveLayerBehind(layerID, gLayerMgr.GetBottomLayerID());
-		CHECK_EQUAL(layerName, gLayerMgr.GetLayerName(gLayerMgr.GetBottomLayerID()));
+		CHECK_EQUAL(0, gLayerMgr.MoveLayerBehind(layerID, gLayerMgr.GetBottomLayerID()));
 	}
 
-	TEST(DeleteLayer)
+	TEST(MoveLayer5)
 	{
-		CHECK_EQUAL(gLayerMgr.DeleteLayer(0, false), false);
-		LayerID bottomID = gLayerMgr.GetBottomLayerID();
-		LayerID topID = gLayerMgr.GetTopLayerID();
-		CHECK(gLayerMgr.DeleteLayer(-1, false));
-		CHECK_EQUAL(bottomID, gLayerMgr.GetBottomLayerID() - 1);
-		CHECK(gLayerMgr.DeleteLayer(topID, false));
-		CHECK_EQUAL(topID, gLayerMgr.GetTopLayerID() + 1);
+		LayerID layerID = -1;
+		string layerName = gLayerMgr.GetLayerName(layerID);
+		LayerID newLayerID = gLayerMgr.MoveLayerUp(layerID);
+		CHECK_EQUAL(1, newLayerID);
+		CHECK_EQUAL(layerName, gLayerMgr.GetLayerName(1));
 	}
 
 	TEST(InvariantTest)
