@@ -57,16 +57,14 @@ namespace ScriptSystem
 
 namespace GfxSystem
 {
-	//class ParticleSystem;
-	//class ParticleResource;
 	class Texture;
+	class Mesh;
 
-	/// Smart pointer to ParticleSystem.
-	//typedef boost::shared_ptr<ParticleSystem> ParticleSystemPtr;
-	/// Smart pointer to ParticleResource.
-	//typedef boost::shared_ptr<ParticleResource> ParticleResourcePtr;
 	/// Smart pointer to Texture.
 	typedef boost::shared_ptr<Texture> TexturePtr;
+
+	/// Smart pointer to Mesh.
+	typedef boost::shared_ptr<Mesh> MeshPtr;
 }
 
 namespace StringSystem

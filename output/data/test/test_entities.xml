@@ -18,10 +18,10 @@
     <Component Type="PolygonCollider">
 	    <Density>1.0</Density>
       <Polygon>
-      	<Item>-100 -100</Item>
-      	<Item>100 -100</Item>
-      	<Item>100 100</Item>
-      	<Item>-100 100</Item>
+      	<Item>-3 -2</Item>
+      	<Item>3 -2</Item>
+      	<Item>3 2</Item>
+      	<Item>-3 2</Item>
 			</Polygon>
     </Component>
     <Component Type="Script">

@@ -201,3 +201,10 @@ size_t ResourceSystem::Resource::GetSize( void ) const
 	if (GetState() == STATE_LOADED) return mSizeInBytes;
 	else return 0;
 }
+
+string ResourceSystem::Resource::GetFileDir( void ) const
+{
+	boost::filesystem::path filePath(GetFilePath());
+	string result = filePath.branch_path().native_directory_string();
+	return result;
+}

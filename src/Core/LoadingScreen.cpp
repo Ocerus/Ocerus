@@ -27,11 +27,9 @@ void Core::LoadingScreen::DoLoading( eType type )
 
 		// additional resources common for all projects
 		gResourceMgr.AddResourceDirToGroup("prototypes", "Prototypes");
-		gResourceMgr.AddResourceDirToGroup("test", "TestEntities", ".+\\.xml");
 		gResourceMgr.AddResourceDirToGroup(".", "Scripts", ".+\\.as");
 
 		gResourceMgr.LoadResourcesInGroup("Prototypes");
-		gResourceMgr.LoadResourcesInGroup("TestEntities");
 		gResourceMgr.LoadResourcesInGroup("Scripts");
 
 		gGUIMgr.Init();

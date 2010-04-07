@@ -10,6 +10,7 @@ namespace ResourceSystem
 	enum eResourceType 
 	{ 
 		RESTYPE_TEXTURE=0, 
+		RESTYPE_MESH,
 		RESTYPE_CEGUIRESOURCE, 
 		RESTYPE_TEXTRESOURCE, 
 		RESTYPE_XMLRESOURCE, 

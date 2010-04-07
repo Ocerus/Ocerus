@@ -1,5 +1,7 @@
 #include "Common.h"
 #include "OglRenderer.h"
+#include "Texture.h"
+#include "objloader/model_obj.h"
 
 #ifdef __WIN__
 #pragma comment (lib,"opengl32.lib")
@@ -118,7 +120,7 @@ void OglRenderer::SetViewportImpl(const GfxViewport* viewport)
 		viewport->CalculateScreenBoundaries(topleft, bottomright);
 		// note that we are subtracting the Y pos from the resolution to workaround a bug in the SDL OpenGL impl
 		glViewport(topleft.x, gGfxWindow.GetResolutionHeight()-bottomright.y, bottomright.x-topleft.x, bottomright.y-topleft.y);
-		glCullFace(GL_BACK);
+		glCullFace(GL_FRONT);
 	}
 
 	glMatrixMode(GL_PROJECTION);
@@ -128,7 +130,7 @@ void OglRenderer::SetViewportImpl(const GfxViewport* viewport)
 	viewport->CalculateWorldBoundaries(topleftWorld, bottomrightWorld);
 	// just another hack to make the bloody OpenGL in SDL working right
 	if (!viewport->AttachedToTexture()) swap(bottomrightWorld.y, topleftWorld.y);
-	glOrtho(topleftWorld.x, bottomrightWorld.x, topleftWorld.y, bottomrightWorld.y, -1, 1);
+	glOrtho(topleftWorld.x, bottomrightWorld.x, topleftWorld.y, bottomrightWorld.y, -10, 10);
 
 	glMatrixMode(GL_MODELVIEW);
 }
@@ -147,7 +149,8 @@ void OglRenderer::FinalizeRenderTargetImpl() const
 	{
 		glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
 	}
-	glClear ( GL_DEPTH_BUFFER_BIT );
+	glDisable(GL_CULL_FACE);
+	glClear(GL_DEPTH_BUFFER_BIT);
 }
 
 GfxSystem::TextureHandle GfxSystem::OglRenderer::CreateRenderTexture( const uint32 width, const uint32 height ) const
@@ -213,17 +216,86 @@ void OglRenderer::DrawTexturedQuad(const TexturedQuad& quad) const
 	glRotatef(MathUtils::RadToDeg(quad.angle), 0, 0, 1);
 	glScalef(quad.scale.x, quad.scale.y, 1);
 
-	float32 x = quad.size.x/2;
-	float32 y = quad.size.y/2;
+	float32 x = 0.5f * quad.size.x / PIXELS_PER_WORLD_UNIT;
+	float32 y = 0.5f * quad.size.y / PIXELS_PER_WORLD_UNIT;
 
 	glBegin( GL_QUADS );
 
 	glTexCoord2f(0.0f, 1.0f); glVertex3f( -x,  y, 0 );
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(  x,  y, 0 );
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(  x, -y, 0 );
 	glTexCoord2f(0.0f, 0.0f); glVertex3f( -x, -y, 0 );
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(  x, -y, 0 );
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(  x,  y, 0 );
 
 	glEnd();
+
+	glPopMatrix();
+}
+
+void GfxSystem::OglRenderer::DrawTexturedMesh( const TexturedMesh& mesh ) const
+{
+	glPushMatrix();
+
+	glColor4f( 1.0f, 1.0f, 1.0f, 1.0f - mesh.transparency );
+	glTranslatef( mesh.position.x, mesh.position.y, mesh.z );
+	glRotatef(MathUtils::RadToDeg(mesh.zAngle), 0, 1, 0);
+	glRotatef(MathUtils::RadToDeg(mesh.angle), 0, 0, 1);
+	glScalef(mesh.scale, mesh.scale, mesh.scale);
+
+	ModelOBJ* model = (ModelOBJ*)mesh.mesh;
+	OC_DASSERT(model);
+
+	for (int i=0; i<model->getNumberOfMeshes(); ++i)
+	{
+		const ModelOBJ::Mesh* objMesh = &model->getMesh(i);
+		const ModelOBJ::Material* objMaterial = objMesh->pMaterial;
+
+		glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, objMaterial->ambient);
+		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, objMaterial->diffuse);
+		glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, objMaterial->specular);
+		glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, objMaterial->shininess * 128.0f);
+
+		if (!objMaterial->colorMapFilename.empty())
+		{
+			glEnable(GL_TEXTURE_2D);
+			TexturePtr texRes = (TexturePtr)gResourceMgr.GetResource("MeshTextures", objMaterial->colorMapFilename);
+			glBindTexture(GL_TEXTURE_2D, texRes->GetTexture());
+		}
+
+		if (model->hasPositions())
+		{
+			glEnableClientState(GL_VERTEX_ARRAY);
+			glVertexPointer(3, GL_FLOAT, model->getVertexSize(), model->getVertexBuffer()->position);
+		}
+
+		if (model->hasTextureCoords())
+		{
+			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+			glTexCoordPointer(2, GL_FLOAT, model->getVertexSize(), model->getVertexBuffer()->texCoord);
+		}
+
+		if (model->hasNormals())
+		{
+			glEnableClientState(GL_NORMAL_ARRAY);
+			glNormalPointer(GL_FLOAT, model->getVertexSize(), model->getVertexBuffer()->normal);
+		}
+
+		glDrawElements(GL_TRIANGLES, objMesh->triangleCount * 3, GL_UNSIGNED_INT, model->getIndexBuffer() + objMesh->startIndex);
+
+		if (model->hasNormals())
+		{
+			glDisableClientState(GL_NORMAL_ARRAY);
+		}
+
+		if (model->hasTextureCoords())
+		{
+			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+		}
+
+		if (model->hasPositions())
+		{
+			glDisableClientState(GL_VERTEX_ARRAY);
+		}
+	}
 
 	glPopMatrix();
 }

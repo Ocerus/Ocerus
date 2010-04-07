@@ -65,6 +65,9 @@ namespace ResourceSystem
 		/// Returns the path to the file this resource belongs to. An empty string is returned when no such exists.
 		inline string GetFilePath(void) const { return mFilePath; }
 
+		/// Returns the path to the directory containing the file.
+		string GetFileDir(void) const;
+
 		/// Returns true if this resource was manually created and is not managed by the ResourceMgr.
 		inline bool IsManual(void) const { return mIsManual; }
 

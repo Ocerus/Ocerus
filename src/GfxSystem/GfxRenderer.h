@@ -85,6 +85,9 @@ namespace GfxSystem
 		/// Draws a quad with its texture.
 		virtual void DrawTexturedQuad(const TexturedQuad& quad) const = 0;
 
+		/// Draws a 3d model.
+		virtual void DrawTexturedMesh(const TexturedMesh& mesh) const = 0;
+
 		/// Draws a sprite component.
 		void DrawSprite(const EntitySystem::Component* sprite, const EntitySystem::Component* transform) const;
 
@@ -189,6 +192,11 @@ namespace GfxSystem
 
 		/// Draws grid (defined in viewport) ontop of everything.
 		void DrawGrid( const RenderTargetID renderTargetID ) const;
+
+	public:
+
+		/// Constant which binds pixel and world units together. And image of this size will be 1.0 units big in the world.
+		static const float32 PIXELS_PER_WORLD_UNIT;
 
 	protected:
 

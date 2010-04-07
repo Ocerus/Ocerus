@@ -11,6 +11,9 @@ namespace GfxSystem
 	/// Platform dependent handle to an arbitrary texture.
 	typedef unsigned int TextureHandle;
 
+	/// Platform dependent handle to an arbitrary mesh.
+	typedef uintptr_t MeshHandle;
+
 	/// Invalid texture handle.
 	const TextureHandle InvalidTextureHandle = 0;
 
@@ -84,6 +87,21 @@ namespace GfxSystem
 		float32 angle;
 		float32 z;
 		TextureHandle texture;
+		float32 transparency;
+	};
+
+	/// Mesh with a texture attached to it.
+	struct TexturedMesh
+	{
+		TexturedMesh(): position(Vector2_Zero), scale(1.0f), angle(0), z(0), 
+			zAngle(0), mesh(0), transparency(0) {}
+
+		Vector2 position;
+		float32 scale;
+		float32 angle;
+		float32 z;
+		float32 zAngle;
+		MeshHandle mesh;
 		float32 transparency;
 	};
 

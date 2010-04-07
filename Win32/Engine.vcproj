@@ -757,6 +757,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\GfxSystem\Mesh.h"
+					>
+				</File>
+				<File
 					RelativePath="..\src\GfxSystem\OglRenderer.h"
 					>
 				</File>
@@ -794,6 +798,10 @@
 				</File>
 				<File
 					RelativePath="..\src\GfxSystem\GfxWindow.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src\GfxSystem\Mesh.cpp"
 					>
 				</File>
 				<File
@@ -854,6 +862,26 @@
 								CompileAs="2"
 							/>
 						</FileConfiguration>
+					</File>
+				</Filter>
+			</Filter>
+			<Filter
+				Name="objloader"
+				>
+				<Filter
+					Name="inc"
+					>
+					<File
+						RelativePath="..\src\GfxSystem\objloader\model_obj.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="src"
+					>
+					<File
+						RelativePath="..\src\GfxSystem\objloader\model_obj.cpp"
+						>
 					</File>
 				</Filter>
 			</Filter>

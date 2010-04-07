@@ -71,6 +71,12 @@ void GfxSystem::GfxViewport::CalculateWorldBoundaries( Vector2& topleft, Vector2
 		topleft.y = -resy * mSize.y / 2;
 		bottomright.y = resy * mSize.y / 2;
 	}
+
+	// now do some scaling so that the world units appear in a reasonable size
+	topleft.x /= GfxRenderer::PIXELS_PER_WORLD_UNIT;
+	topleft.y /= GfxRenderer::PIXELS_PER_WORLD_UNIT;
+	bottomright.x /= GfxRenderer::PIXELS_PER_WORLD_UNIT;
+	bottomright.y /= GfxRenderer::PIXELS_PER_WORLD_UNIT;
 }
 
 void GfxSystem::GfxViewport::CalculateScreenBoundaries( Point& topleft, Point& bottomright ) const

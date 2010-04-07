@@ -7,7 +7,11 @@
 
 using namespace GfxSystem;
 
-GfxSystem::GfxRenderer::GfxRenderer(): mCurrentRenderTargetID(InvalidRenderTargetID), mIsRendering(false), mSceneMgr(0)
+/// Constant which binds pixel and world units together. And image of this size will be 1.0 units big in the world.
+const float32 GfxRenderer::PIXELS_PER_WORLD_UNIT = 50;
+
+
+GfxSystem::GfxRenderer::GfxRenderer(): mIsRendering(false), mSceneMgr(0), mCurrentRenderTargetID(InvalidRenderTargetID)
 {
 	mSceneMgr = new GfxSceneMgr();
 }
