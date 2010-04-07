@@ -116,6 +116,7 @@ bool Editor::EditorMenu::OnMenuItemClicked(const CEGUI::EventArgs& e)
 
 	if (itemName == menubarPrefix + "/Edit/NewEntity")
 	{
+		gEditorMgr.CreateEntity();
 		return true;
 	}
 
@@ -138,11 +139,13 @@ bool Editor::EditorMenu::OnMenuItemClicked(const CEGUI::EventArgs& e)
 
 	if (itemName == menubarPrefix + "/Edit/DuplicateEntity")
 	{
+		gEditorMgr.DuplicateEntity();
 		return true;
 	}
 
 	if (itemName == menubarPrefix + "/Edit/DeleteEntity")
 	{
+		gEditorMgr.DeleteEntity();
 		return true;
 	}
 

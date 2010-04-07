@@ -186,20 +186,23 @@
             </Window>
             <Window Type="Editor/Editbox" Name="EditorRoot/LayerMgr/EditNewLayer" >
                 <Property Name="MaxTextLength" Value="4294967295" />
-                <Property Name="UnifiedAreaRect" Value="{{0,0},{1,-26},{1,-75},{1,0}}" />
+                <Property Name="UnifiedAreaRect" Value="{{0,0},{1,-26},{1,-78},{1,0}}" />
                 <Property Name="TextParsingEnabled" Value="False" />
             </Window>
             <Window Type="Editor/Button" Name="EditorRoot/LayerMgr/ButtonAddLayer" >
                 <Property Name="Text" Value="OK" />
-                <Property Name="UnifiedAreaRect" Value="{{1,-72},{1,-25},{1,-48},{1,-1}}" />
+                <Property Name="UnifiedAreaRect" Value="{{1,-76},{1,-25},{1,-52},{1,-1}}" />
             </Window>
-
+            <Window Type="Editor/Button" Name="EditorRoot/LayerMgr/ButtonEditEntity" >
+                <Property Name="Text" Value="ED" />
+                <Property Name="UnifiedAreaRect" Value="{{1,-50},{1,-25},{1,-26},{1,-1}}" />
+            </Window>
             <Window Type="Editor/StaticText" Name="EditorRoot/LayerMgr/LabelNewLayer" >
                 <Property Name="Text" Value="New layer:" />
                 <Property Name="HorzExtent" Value="64" />
                 <Property Name="VertExtent" Value="13.9688" />
                 <Property Name="FrameEnabled" Value="False" />
-                <Property Name="UnifiedAreaRect" Value="{{0,0},{1,-50},{1,-50},{1,-27}}" />
+                <Property Name="UnifiedAreaRect" Value="{{0,0},{1,-50},{1,-78},{1,-27}}" />
                 <Property Name="BackgroundEnabled" Value="False" />
             </Window>
             <Window Type="Editor/Button" Name="EditorRoot/LayerMgr/ButtonDown" >

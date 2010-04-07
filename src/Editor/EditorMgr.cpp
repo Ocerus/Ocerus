@@ -63,6 +63,28 @@ void Editor::EditorMgr::UpdateCurrentEntityProperty(const EntitySystem::Componen
 	property.SetValueFromString(newValue);
 }
 
+void Editor::EditorMgr::CreateEntity()
+{
+	EntitySystem::EntityDescription desc;
+	desc.SetName("New Entity");
+	desc.AddComponent(EntitySystem::CT_Transform);
+	EntityHandle newEntity = gEntityMgr.CreateEntity(desc);
+	newEntity.FinishInit();
+}
+
+void Editor::EditorMgr::DuplicateEntity()
+{
+	if (!mCurrentEntity.Exists()) return;
+	/// @todo duplicate entity
+}
+
+void Editor::EditorMgr::DeleteEntity()
+{
+	if (!mCurrentEntity.Exists()) return;
+	gEntityMgr.DestroyEntity(mCurrentEntity);
+	SetCurrentEntity(EntityHandle::Null);
+}
+
 void Editor::EditorMgr::AddComponent(EntitySystem::eComponentType componentType)
 {
 	if (!mCurrentEntity.IsValid()) return;

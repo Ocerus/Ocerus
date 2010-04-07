@@ -1,5 +1,6 @@
 #include "Common.h"
 #include "Editor/LayerMgrWidget.h"
+#include "Editor/EditorMgr.h"
 #include "GUISystem/CEGUITools.h"
 #include "EntitySystem/EntityMgr/LayerMgr.h"
 
@@ -29,6 +30,10 @@ void Editor::LayerMgrWidget::Init()
 	CEGUI::Window* btnAddLayer = gCEGUIWM.getWindow(prefix + "/ButtonAddLayer");
 	btnAddLayer->subscribeEvent(CEGUI::PushButton::EventClicked,
 			CEGUI::SubscriberSlot(&Editor::LayerMgrWidget::OnButtonAddLayerClicked, this));
+
+	CEGUI::Window* btnEditEntity = gCEGUIWM.getWindow(prefix + "/ButtonEditEntity");
+	btnEditEntity->subscribeEvent(CEGUI::PushButton::EventClicked,
+			CEGUI::SubscriberSlot(&Editor::LayerMgrWidget::OnButtonEditEntityClicked, this));
 
 	mUpButton = gCEGUIWM.getWindow(prefix + "/ButtonUp");
 	mUpButton->subscribeEvent(CEGUI::PushButton::EventClicked,
@@ -94,6 +99,15 @@ bool Editor::LayerMgrWidget::OnButtonUpDownClicked(const CEGUI::EventArgs& args)
 			gLayerMgr.MoveEntityDown(entity);
 	}
 	UpdateTree();
+	return true;
+}
+
+bool Editor::LayerMgrWidget::OnButtonEditEntityClicked(const CEGUI::EventArgs&)
+{
+	CEGUI::TreeItem* currentItem = mTreeWindow->getFirstSelectedItem();
+	if (currentItem == 0 || currentItem->getUserData() == 0) return true;
+	EntitySystem::EntityHandle entity = gEntityMgr.GetEntity(currentItem->getID());
+	gEditorMgr.SetCurrentEntity(entity);
 	return true;
 }
 

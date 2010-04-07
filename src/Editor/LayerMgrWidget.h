@@ -34,6 +34,7 @@ namespace Editor
 			bool OnEditNewLayerKeyDown(const CEGUI::EventArgs&);
 			bool OnButtonAddLayerClicked(const CEGUI::EventArgs&);
 			bool OnButtonUpDownClicked(const CEGUI::EventArgs&);
+			bool OnButtonEditEntityClicked(const CEGUI::EventArgs&);
 		//@}
 
 	private:

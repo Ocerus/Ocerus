@@ -56,6 +56,15 @@ namespace Editor
 		friend class EditorGUI;
 		friend class EditorMenu;
 
+		/// Creates a new entity.
+		void CreateEntity();
+
+		/// Duplicates current entity.
+		void DuplicateEntity();
+
+		/// Delete current entity.
+		void DeleteEntity();
+		
 		/// Adds a new component of componentType to current entity.
 		void AddComponent(EntitySystem::eComponentType componentType);
 
