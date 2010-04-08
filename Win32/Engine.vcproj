@@ -1359,7 +1359,15 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\Editor\EditorMenu.h"
+					>
+				</File>
+				<File
 					RelativePath="..\src\Editor\EditorMgr.h"
+					>
+				</File>
+				<File
+					RelativePath="..\src\Editor\LayerMgrWidget.h"
 					>
 				</File>
 			</Filter>
@@ -1371,7 +1379,15 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\Editor\EditorMenu.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\src\Editor\EditorMgr.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src\Editor\LayerMgrWidget.cpp"
 					>
 				</File>
 			</Filter>

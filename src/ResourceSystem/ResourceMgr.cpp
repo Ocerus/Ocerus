@@ -29,7 +29,7 @@ ResourceMgr::ResourceMgr( void ):
 
 void ResourceSystem::ResourceMgr::Init( const string& basepath )
 {
-	mBasePath = basepath;
+	mBasePath[BPT_SYSTEM] = basepath;
 
 	ocInfo << "*** ResourceMgr init ***";
 	ocInfo << "Base directory = " << basepath;
@@ -84,13 +84,18 @@ void ResourceMgr::UnloadAllResources()
 	Resource::ResetLastUsedTime();
 }
 
-bool ResourceMgr::AddResourceDirToGroup(const string& path, const StringKey& group, const string& includeRegexp, 
+bool ResourceMgr::AddResourceDirToGroup(const eBasePathType basePathType, const string& path, const StringKey& group, const string& includeRegexp, 
   const string& excludeRegexp, eResourceType type, bool recursive)
 {
-	ocInfo << "Adding dir '" << path << "' to group '" << group << "'";
+	boost::filesystem::path boostPath;
+	if (basePathType == BPT_ABSOLUTE) 
+		boostPath = path;
+	else 
+		boostPath = mBasePath[basePathType] + path;
+
+	ocInfo << "Adding dir '" << boostPath << "' to group '" << group << "'";
 
 	// check the path
-	boost::filesystem::path boostPath = mBasePath + path;
 	if (!boost::filesystem::exists(boostPath))
 	{
 		ocError << "Path does not exist '" << boostPath.string() << "'";
@@ -136,8 +141,8 @@ bool ResourceMgr::AddResourceDirToGroup(const string& path, const StringKey& gro
 			string dirStr = i->path().filename();
 			if (dirStr.compare(".svn")!=0)
 			{
-				string dirRelativePath = filePath.substr(mBasePath.length());
-				if (!AddResourceDirToGroup(dirRelativePath, group, includeRegexp, excludeRegexp, type))
+				string dirRelativePath = filePath.substr(mBasePath[basePathType].length());
+				if (!AddResourceDirToGroup(basePathType, dirRelativePath, group, includeRegexp, excludeRegexp, type))
 				{
 					result = false;
 				}
@@ -145,7 +150,7 @@ bool ResourceMgr::AddResourceDirToGroup(const string& path, const StringKey& gro
 		}
 		else if (regex_match(filePath, includeFilter) && (excludeFilter.empty() || !regex_match(filePath, excludeFilter)))
 		{
-			if (!AddResourceFileToGroup(filePath, group, type, false))
+			if (!AddResourceFileToGroup(filePath, group, type, BPT_ABSOLUTE))
 			{
 				result = false;
 			}
@@ -155,13 +160,15 @@ bool ResourceMgr::AddResourceDirToGroup(const string& path, const StringKey& gro
 	return result;
 }
 
-bool ResourceMgr::AddResourceFileToGroup(const string& filepath, const StringKey& group, eResourceType type, bool pathRelative, const string& customName)
+bool ResourceMgr::AddResourceFileToGroup(const string& filepath, const StringKey& group, eResourceType type, const eBasePathType basePathType, const string& customName)
 {
-	ocInfo << "Adding resource '" << filepath << "' to group '" << group << "'";
-
 	boost::filesystem::path boostPath;
-	if (pathRelative) boostPath = mBasePath + filepath;
-	else boostPath = filepath;
+	if (basePathType == BPT_ABSOLUTE)
+		boostPath = filepath;
+	else
+		boostPath = mBasePath[basePathType] + filepath;
+	
+	ocInfo << "Adding resource '" << filepath << "' to group '" << group << "'";
 	if (!boost::filesystem::exists(boostPath))
 	{
 		ocError << "Resource located at '" << boostPath.string() << "' not found";
@@ -196,6 +203,7 @@ bool ResourceMgr::AddResourceFileToGroup(const string& filepath, const StringKey
 	r->SetName(name);
 	r->SetFilepath(boostPath.string());
 	r->SetType(type);
+	r->SetBasePathType(basePathType);
 
 	AddResourceToGroup(group, name, r);
 
@@ -213,6 +221,7 @@ bool ResourceSystem::ResourceMgr::AddManualResourceToGroup( const StringKey& nam
 	r->SetState(Resource::STATE_INITIALIZED);
 	r->SetName(name.ToString());
 	r->SetManual(true);
+	r->SetBasePathType(BPT_ABSOLUTE);
 
 	AddResourceToGroup(group, name, r);
 

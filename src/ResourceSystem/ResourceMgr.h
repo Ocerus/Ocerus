@@ -36,13 +36,14 @@ namespace ResourceSystem
 		/// The regular expression use the syntax as defined here:
 		/// http://www.boost.org/doc/libs/1_40_0/libs/regex/doc/html/boost_regex/syntax/basic_extended.html
 		/// The matching is not case sensitive!
+		/// @param basePathType Type of base path to which is the "path" parameter related.
 		/// @param resourceType Type of resources in the directory.
-		bool AddResourceDirToGroup(const string& path, const StringKey& group, const string& includeRegexp = ".*", 
+		bool AddResourceDirToGroup(const eBasePathType basePathType, const string& path, const StringKey& group, const string& includeRegexp = ".*", 
 		  const string& excludeRegexp = "", eResourceType resourceType = RESTYPE_AUTODETECT, bool recursive = true);
 
 		/// Assigns a resource to a group.
 		/// The resource type if autodetected if you don't specify it.
-		bool AddResourceFileToGroup(const string& filepath, const StringKey& group, eResourceType type = RESTYPE_AUTODETECT, bool pathRelative = true, const string& customName = "");
+		bool AddResourceFileToGroup(const string& filepath, const StringKey& group, eResourceType type = RESTYPE_AUTODETECT, const eBasePathType basePathType = BPT_SYSTEM, const string& customName = "");
 
 		/// Assigns a resource to a group. Note that if you create the resource this way you must manually delete it later.
 		bool AddManualResourceToGroup(const StringKey& name, const StringKey& group, eResourceType type);
@@ -102,6 +103,9 @@ namespace ResourceSystem
 		/// Enables unloading of resources when they're over the memory limit.
 		inline void DisableMemoryLimitEnforcing(void) { mEnforceMemoryLimit = false; }
 
+		/// Sets new base path of given type.
+		inline void SetBasePath(const eBasePathType newPathType, const string& newPath) { mBasePath[newPathType] = newPath; }
+
 	public:
 
 		/// Callback from a resource after it was loaded.
@@ -117,7 +121,7 @@ namespace ResourceSystem
 		typedef map<StringKey, ResourceMap*> ResourceGroupMap;
 		typedef map<StringKey, eResourceType> ExtToTypeMap;
 
-		string mBasePath;
+		string mBasePath[NUM_BASEPATHTYPES];
 		ResourceGroupMap mResourceGroups;
 		ExtToTypeMap mExtToTypeMap;
 		IResourceLoadingListener* mListener;

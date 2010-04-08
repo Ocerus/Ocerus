@@ -67,11 +67,11 @@ namespace GUISystem
 	void GUIMgr::Init()
 	{
 		/// Register CEGUI resources.
-		gResourceMgr.AddResourceDirToGroup("gui/schemes", "schemes", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
-		gResourceMgr.AddResourceDirToGroup("gui/imagesets", "imagesets", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
-		gResourceMgr.AddResourceDirToGroup("gui/fonts", "fonts", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
-		gResourceMgr.AddResourceDirToGroup("gui/layouts", "layouts", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
-		gResourceMgr.AddResourceDirToGroup("gui/looknfeel", "looknfeels", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
+		gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_SYSTEM, "gui/schemes", "schemes", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
+		gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_SYSTEM, "gui/imagesets", "imagesets", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
+		gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_SYSTEM, "gui/fonts", "fonts", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
+		gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_SYSTEM, "gui/layouts", "layouts", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
+		gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_SYSTEM, "gui/looknfeel", "looknfeels", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
 
 		CEGUI_EXCEPTION_BEGIN
 		{

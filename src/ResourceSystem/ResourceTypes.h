@@ -20,6 +20,16 @@ namespace ResourceSystem
 		NUM_RESTYPES, 
 		RESTYPE_AUTODETECT 
 	};
+	
+	/// Types of path. Relative to some base path or the last one is absolute path.
+	enum eBasePathType
+	{
+		BPT_SYSTEM = 0,
+		BPT_PROJECT,
+		
+		NUM_BASEPATHTYPES,
+		BPT_ABSOLUTE
+	};
 }
 
 

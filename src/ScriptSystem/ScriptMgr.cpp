@@ -42,7 +42,7 @@ int ScriptMgr::IncludeCallback(const char* fileName, const char* from, AngelScri
 	{
 		// Load script resource from file
 		gResourceMgr.AddResourceFileToGroup(gScriptMgr.mBasePath + fileName, "Scripts",
-			ResourceSystem::RESTYPE_SCRIPTRESOURCE, true);
+			ResourceSystem::RESTYPE_SCRIPTRESOURCE, ResourceSystem::BPT_ABSOLUTE);
 		sp = (ScriptResourcePtr)(gResourceMgr.GetResource("Scripts", fileName));
 	}
 	if (!sp)

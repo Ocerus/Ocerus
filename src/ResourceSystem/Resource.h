@@ -76,6 +76,9 @@ namespace ResourceSystem
 
 		/// Returns the last time (counter based) this resource was used.
 		inline uint64 GetLastUsedTime(void) const { return mLastUsedTime; }
+		
+		/// Returns base path type of this resource.
+		inline eBasePathType GetBasePathType(void) const { return mBasePathType; }
 
 
 	protected:
@@ -122,6 +125,7 @@ namespace ResourceSystem
 		eResourceType mType;
 		eState mState;
 		size_t mSizeInBytes;
+		eBasePathType mBasePathType;
 
 		/// Used by the implementation of OpenInputStream.
 		boost::filesystem::ifstream* mInputFileStream;
@@ -131,6 +135,7 @@ namespace ResourceSystem
 		inline void SetFilepath(const string& filepath) { mFilePath = filepath; }
 		inline void SetManual(bool manual) { mIsManual = manual; }
 		inline void SetType(const eResourceType newType) { mType = newType; }
+		inline void SetBasePathType(const eBasePathType newBasePathType) { mBasePathType = newBasePathType; }
 		void RefreshResourceInfo(void);
 
 	private:

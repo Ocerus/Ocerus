@@ -38,7 +38,7 @@ size_t Mesh::LoadImpl()
 			const ModelOBJ::Material* objMaterial = &mModel->getMaterial(0);
 			if (!objMaterial->colorMapFilename.empty())
 			{
-				gResourceMgr.AddResourceFileToGroup(GetFileDir() + "/" + objMaterial->colorMapFilename, "MeshTextures", ResourceSystem::RESTYPE_TEXTURE, false);
+				gResourceMgr.AddResourceFileToGroup(GetFileDir() + "/" + objMaterial->colorMapFilename, "MeshTextures", ResourceSystem::RESTYPE_TEXTURE, ResourceSystem::BPT_ABSOLUTE);
 			}
 		}
 	}

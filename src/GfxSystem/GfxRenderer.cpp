@@ -405,25 +405,9 @@ void GfxSystem::GfxRenderer::DrawGrid( const RenderTargetID renderTargetID ) con
 		}
 		else
 		if (drawMinors)
-			DrawLine(line, grid.minorColor);
-
-		/*// draw minor line if others shouldn't be drawn
-		if (((i != majorVIndex) && (line[0].x != 0)) && drawMinors)
 		{
 			DrawLine(line, grid.minorColor);
 		}
-		else
-		// draw major line if axis line shouldn't be drawn
-		if (((i == majorVIndex) || !drawMinors) && (line[0].x != 0))
-		{
-			DrawLine(line, grid.majorColor);
-			majorVIndex += grid.minorsInMajor;
-		}
-		else
-		{
-			DrawLine(line, grid.axisYColor, 2.0f);
-			majorVIndex += grid.minorsInMajor;
-		}*/
 	}
 
 	//calculate first horizontal y position for minor line
@@ -466,25 +450,9 @@ void GfxSystem::GfxRenderer::DrawGrid( const RenderTargetID renderTargetID ) con
 		}
 		else
 		if (drawMinors)
-			DrawLine(line, grid.minorColor);
-
-		// draw minor line if others shouldn't be drawn
-		/*if (((i != majorHIndex) && (line[0].y != 0)) && drawMinors)
 		{
 			DrawLine(line, grid.minorColor);
 		}
-		else
-		// draw major line if axis line shouldn't be drawn
-		if (((i == majorHIndex) || !drawMinors) && (line[0].y != 0))
-		{
-			DrawLine(line, grid.majorColor);
-			majorHIndex += grid.minorsInMajor;
-		}
-		else
-		{
-			DrawLine(line, grid.axisXColor, 2.0f);
-			majorHIndex += grid.minorsInMajor;
-		}*/
 	}
 }
 

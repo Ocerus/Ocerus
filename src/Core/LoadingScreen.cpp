@@ -16,7 +16,7 @@ void Core::LoadingScreen::DoLoading( eType type )
 	case TYPE_GENERAL_RESOURCES:
 
 		// basic resources needed by the program
-		gResourceMgr.AddResourceFileToGroup("general/NullTexture.png", "General", ResourceSystem::RESTYPE_TEXTURE, true, "NullTexture");
+		gResourceMgr.AddResourceFileToGroup("general/NullTexture.png", "General", ResourceSystem::RESTYPE_TEXTURE, ResourceSystem::BPT_SYSTEM, "NullTexture");
 
 		// make sure we have the necessary resources
 		if (!gResourceMgr.GetResource("General", "NullTexture")) OC_FAIL("Some essential resources are missing!");
@@ -26,8 +26,8 @@ void Core::LoadingScreen::DoLoading( eType type )
 
 
 		// additional resources common for all projects
-		gResourceMgr.AddResourceDirToGroup("prototypes", "Prototypes");
-		gResourceMgr.AddResourceDirToGroup(".", "Scripts", ".+\\.as");
+		gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_SYSTEM, "prototypes", "Prototypes");
+		gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_SYSTEM, ".", "Scripts", ".+\\.as");
 
 		gResourceMgr.LoadResourcesInGroup("Prototypes");
 		gResourceMgr.LoadResourcesInGroup("Scripts");

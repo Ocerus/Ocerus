@@ -46,7 +46,7 @@ bool StringMgr::LoadDataFromDir(const string& path, const string& includeRegexp,
   bool recursive)
 {
 	bool result = true;
-	result = gResourceMgr.AddResourceDirToGroup(mBasePath + path, "strings", includeRegexp, 
+	result = gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_SYSTEM, mBasePath + path, "strings", includeRegexp, 
 	  excludeRegexp, ResourceSystem::RESTYPE_TEXTRESOURCE, recursive);
 	gResourceMgr.LoadResourcesInGroup("strings");
 
@@ -69,8 +69,14 @@ bool StringMgr::LoadDataFromDir(const string& path, const string& includeRegexp,
 
 bool StringMgr::LoadDataFromFile(const string& filepath, bool pathRelative)
 {
+	ResourceSystem::eBasePathType pathType;
+	if (pathRelative)
+		pathType = ResourceSystem::BPT_SYSTEM;
+	else
+		pathType = ResourceSystem::BPT_ABSOLUTE;
+
 	bool result = true;
-	result = gResourceMgr.AddResourceFileToGroup(mBasePath + filepath, "strings", ResourceSystem::RESTYPE_TEXTRESOURCE, pathRelative);
+	result = gResourceMgr.AddResourceFileToGroup(mBasePath + filepath, "strings", ResourceSystem::RESTYPE_TEXTRESOURCE, pathType);
 	gResourceMgr.LoadResourcesInGroup("strings");
 
 	//ocInfo << "StringMgr: Loading data from resource group ""strings""";
