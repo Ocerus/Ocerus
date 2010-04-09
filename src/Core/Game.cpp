@@ -223,16 +223,6 @@ void Core::Game::Draw( const float32 passedDelta)
 	
 	gGfxRenderer.DrawEntities();
 
-	GfxSystem::TexturedMesh mesh;
-	mesh.mesh = ((GfxSystem::MeshPtr)gResourceMgr.GetResource("Test", "cube.model"))->GetMesh();
-	mesh.scale = 1.5f;
-	mesh.z = 0.0f;
-	static float32 zAngle = 0.0f;
-	mesh.zAngle = zAngle;
-	zAngle += 0.8f * delta;
-	mesh.angle = 0.8f;
-	gGfxRenderer.DrawTexturedMesh(mesh);
-
 	mPhysics->DrawDebugData();
 
 	// draw the multi-selection stuff

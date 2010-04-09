@@ -2,7 +2,9 @@
 #include "GfxRenderer.h"
 #include "GfxSystem/GfxSceneMgr.h"
 #include "GfxSystem/Texture.h"
+#include "GfxSystem/Mesh.h"
 #include "EntitySystem/Components/Sprite.h"
+#include "EntitySystem/Components/Model.h"
 #include "EntitySystem/Components/Transform.h"
 
 using namespace GfxSystem;
@@ -195,6 +197,7 @@ void GfxSystem::GfxRenderer::DrawEntities()
 	OC_ASSERT(mIsRendering);
 
 	mSceneMgr->DrawVisibleSprites();
+	mSceneMgr->DrawVisibleModels();
 }
 
 void GfxSystem::GfxRenderer::DrawSprite( const EntitySystem::Component* spriteComponent, const EntitySystem::Component* transformComponent ) const
@@ -213,18 +216,47 @@ void GfxSystem::GfxRenderer::DrawSprite( const EntitySystem::Component* spriteCo
 	quad.scale = transform->GetScale();
 	quad.angle = transform->GetAngle();
 	quad.z = (float32)transform->GetLayer();
+	quad.transparency = sprite->GetTransparency();
 	TexturePtr tex = ((TexturePtr)sprite->GetTexture());
 	quad.size.Set((float32)tex->GetWidth(), (float32)tex->GetHeight());
 	quad.texture = tex->GetTexture();
-	quad.transparency = sprite->GetTransparency();
 
 	DrawTexturedQuad(quad);
 }
 
+void GfxSystem::GfxRenderer::DrawModel( const EntitySystem::Component* modelComponent, const EntitySystem::Component* transformComponent ) const
+{
+	if (modelComponent->GetType() != EntitySystem::CT_Model || transformComponent->GetType() != EntitySystem::CT_Transform)
+	{
+		ocError << "Invalid components";
+		return;
+	}
+
+	EntityComponents::Model* model = (EntityComponents::Model*)modelComponent;
+	EntityComponents::Transform* transform = (EntityComponents::Transform*)transformComponent;
+
+	TexturedMesh mesh;
+	mesh.position = transform->GetPosition();
+	mesh.scale = MathUtils::Max(transform->GetScale().x, transform->GetScale().y);
+	mesh.angle = transform->GetAngle();
+	mesh.z = (float32)transform->GetLayer();
+	mesh.zAngle = model->GetZAngle();
+	mesh.transparency = model->GetTransparency();
+	mesh.mesh = (((MeshPtr)model->GetMesh())->GetMesh());
+
+	DrawTexturedMesh(mesh);
+}
+
 void GfxSystem::GfxRenderer::DrawEntity( const EntitySystem::EntityHandle entity ) const
 {
-	OC_UNUSED(entity);
-	DrawSprite(gEntityMgr.GetEntityComponentPtr(gEntityMgr.FindFirstEntity("Visual"), EntitySystem::CT_Sprite), gEntityMgr.GetEntityComponentPtr(gEntityMgr.FindFirstEntity("Visual"), CT_Transform));
+	if (gEntityMgr.HasEntityComponentOfType(entity, CT_Sprite))
+	{
+		DrawSprite(gEntityMgr.GetEntityComponentPtr(entity, EntitySystem::CT_Sprite), gEntityMgr.GetEntityComponentPtr(entity, CT_Transform));
+	}
+	if (gEntityMgr.HasEntityComponentOfType(entity, CT_Model))
+	{
+		DrawModel(gEntityMgr.GetEntityComponentPtr(entity, EntitySystem::CT_Model), gEntityMgr.GetEntityComponentPtr(entity, CT_Transform));
+	}
 }
 
 GfxViewport* GfxSystem::GfxRenderer::GetRenderTargetViewport(const RenderTargetID renderTarget) const

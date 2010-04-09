@@ -91,6 +91,9 @@ namespace GfxSystem
 		/// Draws a sprite component.
 		void DrawSprite(const EntitySystem::Component* sprite, const EntitySystem::Component* transform) const;
 
+		/// Draws a 3d model component.
+		void DrawModel(const EntitySystem::Component* model, const EntitySystem::Component* transform) const;
+
 		/// Draws a single entity.
 		void DrawEntity(const EntitySystem::EntityHandle entity) const;
 

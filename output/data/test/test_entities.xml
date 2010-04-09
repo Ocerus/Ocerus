@@ -4,13 +4,18 @@
   <Entity Name="Visual">
     <Component Type="Transform">
 	    <Position>0 0</Position>
-	    <Angle>0.0</Angle>
+	    <Angle>0.4</Angle>
 	    <Scale>1.2 1.5</Scale>
       <Layer>0</Layer>
     </Component>
     <Component Type="Sprite">
       <Texture>Test/Logo_alpha.png</Texture>
       <Transparency>0</Transparency>
+    </Component>
+    <Component Type="Model">
+      <Mesh>Test/cube.model</Mesh>
+      <Transparency>0</Transparency>
+      <ZAngle>0.6</ZAngle>
     </Component>
     <Component Type="DynamicBody">
     </Component>

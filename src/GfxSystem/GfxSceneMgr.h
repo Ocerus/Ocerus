@@ -27,13 +27,22 @@ namespace GfxSystem
 		/// Removes a sprite from the manager.
 		void RemoveSprite(const EntitySystem::Component* sprite);
 		
+		/// Adds a 3d model to the manager.
+		void AddModel(const EntitySystem::Component* model, const EntitySystem::Component* transform);
+
+		/// Removes a model from the manager.
+		void RemoveModel(const EntitySystem::Component* model);
+
 		/// Renders all sprites.
 		void DrawVisibleSprites();
-		
+
+		/// Renders all 3d models.
+		void DrawVisibleModels();
+
 	private:	
-		typedef pair<const EntitySystem::Component*, const EntitySystem::Component*> SpritePair;
-		typedef vector<SpritePair> SpriteVector;
-		SpriteVector mSprites;
+		typedef pair<const EntitySystem::Component*, const EntitySystem::Component*> DrawablePair;
+		typedef vector<DrawablePair> DrawableVector;
+		DrawableVector mDrawables;
 	};
 }
 
