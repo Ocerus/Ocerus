@@ -213,8 +213,9 @@ void GfxSystem::GfxRenderer::DrawSprite( const EntitySystem::Component* spriteCo
 	quad.scale = transform->GetScale();
 	quad.angle = transform->GetAngle();
 	quad.z = (float32)transform->GetLayer();
-	quad.size = sprite->GetSize();
-	quad.texture = ((TexturePtr)sprite->GetTexture())->GetTexture();
+	TexturePtr tex = ((TexturePtr)sprite->GetTexture());
+	quad.size.Set((float32)tex->GetWidth(), (float32)tex->GetHeight());
+	quad.texture = tex->GetTexture();
 	quad.transparency = sprite->GetTransparency();
 
 	DrawTexturedQuad(quad);

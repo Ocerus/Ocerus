@@ -1,17 +1,17 @@
 /// @file
-/// Sprite component.
+/// 3D model component.
 
-#ifndef Sprite_h__
-#define Sprite_h__
+#ifndef Model_h__
+#define Model_h__
 
 #include "../ComponentMgr/Component.h"
 
 namespace EntityComponents
 {
-	/// Visual 2D representation of the entity.
-	/// It allows the entity to define its visual appearance as a flat (2D) image. It is automatically used by GfxSystem
-	/// while rendering the scene.
-	class Sprite : public RTTIGlue<Sprite, Component>
+	/// Visual 3D representation of the entity.
+	/// It allows the entity to define its visual appearance as a 3D model loaded from a resource. It is automatically
+	/// used by GfxSystem while rendering the scene.
+	class Model : public RTTIGlue<Model, Component>
 	{
 	public:
 
@@ -27,11 +27,11 @@ namespace EntityComponents
 		/// Called from RTTI when the component is allowed to set up its properties.
 		static void RegisterReflection(void);
 
-		/// Texture used for rendering the sprite.
-		ResourceSystem::ResourcePtr GetTexture(void) const { return mTextureHandle; }
+		/// Mesh used for rendering.
+		ResourceSystem::ResourcePtr GetMesh(void) const { return mMeshHandle; }
 
-		/// Texture used for rendering the sprite.
-		void SetTexture(ResourceSystem::ResourcePtr value) { mTextureHandle = value; }
+		/// Mesh used for rendering.
+		void SetMesh(ResourceSystem::ResourcePtr value) { mMeshHandle = value; }
 
 		/// Transparency from 0 to 1.
 		float32 GetTransparency(void) const { return mTransparency; }
@@ -41,9 +41,9 @@ namespace EntityComponents
 
 	private:
 
-		ResourceSystem::ResourcePtr mTextureHandle;
+		ResourceSystem::ResourcePtr mMeshHandle;
 		float32 mTransparency;
 	};
 }
 
-#endif
+#endif // Model_h__

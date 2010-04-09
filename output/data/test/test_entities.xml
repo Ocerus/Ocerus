@@ -9,8 +9,7 @@
       <Layer>0</Layer>
     </Component>
     <Component Type="Sprite">
-      <Size>512 256</Size>
-      <Path>test/Logo_alpha.png</Path>
+      <Texture>Test/Logo_alpha.png</Texture>
       <Transparency>0</Transparency>
     </Component>
     <Component Type="DynamicBody">

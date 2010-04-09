@@ -116,6 +116,13 @@ void Reflection::AbstractProperty::ReadValueXML(RTTIBaseClass* owner, ResourceSy
 	#undef PROPERTY_TYPE
 	#undef SCRIPT_ONLY
 
+	case PT_RESOURCE:
+		{
+			string inputText = Utils::XMLConverter::ReadFromXML<string>(input);
+			SetValue<ResourceSystem::ResourcePtr>(owner, gResourceMgr.GetResource(inputText.c_str()));
+			break;
+		}
+
 	default:
 		ocError << "Parsing property of type '" << PropertyTypes::GetStringName(GetType()) << "' from XML is not implemented.";
 	}

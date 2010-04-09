@@ -46,25 +46,6 @@ namespace Utils
 			return input.GetChildValue<T>();
 		}
 
-		/// Reads the array of values from XML and returns it.
-		/*template<typename U>
-		Array<U>* ReadFromXML(ResourceSystem::XMLNodeIterator& input)
-		{
-			vector<U> vertices;
-			for (ResourceSystem::XMLNodeIterator vertIt = input.IterateChildren(); vertIt != input.EndChildren(); ++vertIt)
-			{
-				if ((*vertIt).compare("Item") == 0) { vertices.push_back(vertIt.GetChildValue<U>()); }
-				else ocError << "XML:Entity: Expected 'Item', found '" << *vertIt << "'";
-			}
-
-			Array<U> vertArray(vertices.size());
-			for (uint32 i=0; i<vertices.size(); ++i)
-			{
-				vertArray[i] = vertices[i];
-			}
-			return &vertArray; //!!!
-		}*/
-
 		template<>
 		Vector2 ReadFromXML(ResourceSystem::XMLNodeIterator& input);
 

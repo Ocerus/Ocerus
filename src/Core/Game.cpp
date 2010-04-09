@@ -112,7 +112,7 @@ void Core::Game::Init()
 
 
 	// DEBUG
-	gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_SYSTEM, "test", "Test", ".+\\.(xml|model)");
+	gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_SYSTEM, "test", "Test", ".+\\.(xml|model|png)");
 	gResourceMgr.LoadResourcesInGroup("Test");
 	gEntityMgr.LoadEntitiesFromResource(gResourceMgr.GetResource("Test", "test_entities.xml"));
 

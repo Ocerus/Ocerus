@@ -7,6 +7,7 @@
 #include "Transform.h"
 #include "Script.h"
 #include "Sprite.h"
+#include "Model.h"
 #include "Camera.h"
 #include "StaticBody.h"
 #include "DynamicBody.h"

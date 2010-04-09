@@ -264,6 +264,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\src\EntitySystem\Components\Model.h"
+						>
+					</File>
+					<File
 						RelativePath="..\src\EntitySystem\Components\PolygonCollider.h"
 						>
 					</File>
@@ -293,6 +297,10 @@
 					</File>
 					<File
 						RelativePath="..\src\EntitySystem\Components\DynamicBody.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\src\EntitySystem\Components\Model.cpp"
 						>
 					</File>
 					<File
