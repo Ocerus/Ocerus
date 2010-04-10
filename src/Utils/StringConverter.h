@@ -54,6 +54,9 @@ namespace Utils
 		string ToString(const GfxSystem::Color& val);
 
 		template<>
+		string ToString(const ResourceSystem::ResourcePtr& val);
+
+		template<>
 		string ToString(const PropertyFunctionParameters& val);
 
 		template<>
@@ -109,11 +112,6 @@ namespace Utils
 
 		template<>
 		PhysicalBody* FromString(const string& str);
-
-		//template<>
-		//char* FromString(const string& str);
-
-
 
 	}
 }

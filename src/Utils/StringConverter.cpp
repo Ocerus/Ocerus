@@ -21,6 +21,14 @@ string StringConverter::ToString(const GfxSystem::Color& val)
 }
 
 template<>
+string StringConverter::ToString(const ResourceSystem::ResourcePtr& val)
+{
+	if (!val) return "NULL";
+
+	return val->GetName();
+}
+
+template<>
 string StringConverter::ToString(const bool& val)
 {
 	std::ostringstream out;
@@ -48,16 +56,6 @@ string StringConverter::ToString(const EntitySystem::EntityHandle& val)
 		return StringConverter::ToString(val.GetID());
 	}
 }
-
-/*
-template<>
-char* StringConverter::FromString(const string& str)
-{
-	OC_UNUSED(str);
-	OC_ASSERT_MSG(false, "Use .c_str() instead, noob!");
-	return 0;
-}
-*/
 
 template<>
 Vector2 StringConverter::FromString(const string& str)
