@@ -55,6 +55,9 @@ namespace EntitySystem
 		/// Finishes the initialization of this entity. Must be called once only!
 		void FinishInit(void);
 
+		/// True if the entity is already initialized.
+		bool IsInited(void) const;
+
 		/// Retrieves properties of this entity. A filter related to properties' flags can be specified.
 		bool GetProperties(PropertyList& out, const PropertyAccessFlags mask = PA_FULL_ACCESS);
 

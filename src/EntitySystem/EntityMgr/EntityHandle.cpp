@@ -98,6 +98,11 @@ void EntitySystem::EntityHandle::FinishInit( void )
 	gEntityMgr.PostMessage(*this, EntityMessage(EntityMessage::POST_INIT));
 }
 
+bool EntitySystem::EntityHandle::IsInited( void ) const
+{
+	return gEntityMgr.IsEntityInited(*this);
+}
+
 bool EntitySystem::EntityHandle::GetProperties( PropertyList& out, const PropertyAccessFlags mask )
 {
 	return gEntityMgr.GetEntityProperties(*this, out, mask);

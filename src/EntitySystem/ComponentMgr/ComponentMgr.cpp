@@ -45,6 +45,8 @@ ComponentID ComponentMgr::CreateComponent(const EntityID id, const eComponentTyp
 	cmp->_SetType(type);
 	cmp->Create();
 	ComponentID cmpID = entIt->second->size()-1;
+
+	ocTrace << "Created component " << cmpID << " in entity " << id << " of type " << type;
 	return cmpID;
 }
 

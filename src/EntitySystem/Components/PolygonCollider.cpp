@@ -5,7 +5,7 @@
 void EntityComponents::PolygonCollider::Create( void )
 {
 	mShape = 0;
-	mDensity = 0;
+	mDensity = 1;
 	mSensorBody = 0;
 }
 
@@ -21,8 +21,12 @@ EntityMessage::eResult EntityComponents::PolygonCollider::HandleMessage( const E
 	case EntityMessage::POST_INIT: // we have to wait until the physical bodies are inited, that's why we're using POST_INIT
 		RecreateShape();
 		return EntityMessage::RESULT_OK;
-	case EntityMessage::SYNC_PRE_PHYSICS:	
-		if (mSensorBody)
+	case EntityMessage::SYNC_PRE_PHYSICS:
+		if (mPolygon.GetSize() != 0 && !(mPolygonScale == GetOwner().GetProperty("Scale").GetValue<Vector2>()))
+		{
+			RecreateShape();
+		}
+		else if (mSensorBody)
 		{
 			mSensorBody->SetTransform(GetOwner().GetProperty("Position").GetValue<Vector2>(), 
 				GetOwner().GetProperty("Angle").GetValue<float32>());
@@ -62,9 +66,18 @@ void EntityComponents::PolygonCollider::RecreateShape( void )
 		DestroyShape();
 	}
 
+	if (mPolygon.GetSize() == 0) return;
+
 	// define the shape
 	b2PolygonShape shapeDef;
-	shapeDef.Set(mPolygon.GetRawArrayPtr(), mPolygon.GetSize());
+	mPolygonScale = GetOwner().GetProperty("Scale").GetValue<Vector2>();
+	b2Vec2* vertices = new b2Vec2[mPolygon.GetSize()];
+	for (int i=0; i<mPolygon.GetSize(); ++i)
+	{
+		vertices[i].x = mPolygonScale.x * mPolygon.GetRawArrayPtr()[i].x;
+		vertices[i].y = mPolygonScale.y * mPolygon.GetRawArrayPtr()[i].y;
+	}
+	shapeDef.Set(vertices, mPolygon.GetSize());
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &shapeDef;
 	fixtureDef.density = mDensity;
@@ -115,4 +128,11 @@ void EntityComponents::PolygonCollider::DestroyShape( void )
 		}
 	}
 	mShape = 0;
+}
+
+void EntityComponents::PolygonCollider::SetPolygon( Array<Vector2>* val )
+{
+	if (val->GetSize() < 3) return;
+	mPolygon.CopyFrom(*val);
+	if (GetOwner().IsInited()) RecreateShape();
 }

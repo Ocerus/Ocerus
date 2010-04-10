@@ -31,7 +31,7 @@ namespace EntityComponents
 
 		/// Definition of the polygon.
 		/// @todo Update the physics when the value changes.
-		void SetPolygon(Array<Vector2>* val) { mPolygon.CopyFrom(*val); }
+		void SetPolygon(Array<Vector2>* val);
 
 		/// Density of the shape's material.
 		float32 GetDensity(void) const { return mDensity; }
@@ -45,6 +45,7 @@ namespace EntityComponents
 		PhysicalShape* mShape;
 		PhysicalBody* mSensorBody;
 		Array<Vector2> mPolygon;
+		Vector2 mPolygonScale;
 		float32 mDensity;
 
 		/// Creates the shape from scratch. If any previous shape existed it gets deleted.

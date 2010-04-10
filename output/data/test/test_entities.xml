@@ -4,7 +4,7 @@
   <Entity Name="Visual">
     <Component Type="Transform">
 	    <Position>0 0</Position>
-	    <Angle>0.4</Angle>
+	    <Angle>0.0</Angle>
 	    <Scale>1.2 1.5</Scale>
       <Layer>0</Layer>
     </Component>
