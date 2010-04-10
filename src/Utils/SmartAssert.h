@@ -12,6 +12,9 @@
 /// Displays an error assertion message and terminates the program.
 void DisplayAssert(const char* msg, const char* file, const int line);
 
+/// Displays a critical error message and terminates the program.
+void CRITICAL_FAILURE(const char* msg);
+
 #ifdef __WIN__
 /// Breaks the execution at this line.
 #define DEBUG_BREAK() __debugbreak()

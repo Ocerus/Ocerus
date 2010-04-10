@@ -11,8 +11,7 @@
 	}
 #define CEGUI_EXCEPTION_END_CRITICAL } catch(const CEGUI::Exception& e) { \
 		ocError << "CEGUI Error: " << e.getMessage(); \
-		ocInfo << "Critical failure, shutting down..."; \
-		exit(1); \
+		CRITICAL_FAILURE("Last error was critical"); \
 	}
 
 #define gCEGUIWM CEGUI::WindowManager::getSingleton()

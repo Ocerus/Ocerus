@@ -64,7 +64,9 @@ void OglRenderer::Init()
 	glEnable(GL_CULL_FACE);
 
 	// create buffers for render2texture
-	glGenFramebuffersEXT(1, &mFrameBuffer);
+	mFrameBuffer = 0;
+	if (GLEW_EXT_framebuffer_object) glGenFramebuffersEXT(1, &mFrameBuffer);
+	else ocWarning << "Missing OpenGL extension EXT_framebuffer_object";
 
 
 	if( glGetError() != GL_NO_ERROR )
@@ -102,6 +104,7 @@ void OglRenderer::SetViewportImpl(const GfxViewport* viewport)
 
 	if (viewport->AttachedToTexture())
 	{
+		OC_ASSERT(mFrameBuffer);
 		glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, mFrameBuffer);
 		glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, viewport->GetRenderTexture(), 0);
 		if (glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT) != GL_FRAMEBUFFER_COMPLETE_EXT)
