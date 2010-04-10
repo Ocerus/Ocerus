@@ -2,6 +2,7 @@
 #include "EditorMgr.h"
 #include "EditorGUI.h"
 #include "GUISystem/GUIMgr.h"
+#include "GUISystem/ViewportWindow.h"
 
 #include "CEGUI.h"
 
@@ -25,10 +26,12 @@ EditorMgr::~EditorMgr()
 void EditorMgr::LoadEditor()
 {
 	mEditorGUI->LoadGUI();
+	gInputMgr.AddInputListener(this);
 }
 
 void Editor::EditorMgr::UnloadEditor()
 {
+	gInputMgr.RemoveInputListener(this);
 	gGUIMgr.UnloadRootLayout();
 }
 
@@ -98,4 +101,36 @@ void Editor::EditorMgr::RemoveComponent(const EntitySystem::ComponentID& compone
 	if (!mCurrentEntity.IsValid()) return;
 	gEntityMgr.DestroyEntityComponent(mCurrentEntity, componentId);
 	mEditorGUI->UpdateEntityEditorWindow();
+}
+
+bool Editor::EditorMgr::KeyPressed( const InputSystem::KeyInfo& ke )
+{
+	return false;
+}
+
+bool Editor::EditorMgr::KeyReleased( const InputSystem::KeyInfo& ke )
+{
+	return false;
+}
+
+bool Editor::EditorMgr::MouseMoved( const InputSystem::MouseInfo& mi )
+{
+	return false;
+}
+
+bool Editor::EditorMgr::MouseButtonPressed( const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn )
+{
+	return false;
+}
+
+bool Editor::EditorMgr::MouseButtonReleased( const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn )
+{
+	return false;
+}
+
+bool Editor::EditorMgr::GetWorldCursorPos(Vector2& worldCursorPos) const
+{
+	InputSystem::MouseState& ms = gInputMgr.GetMouseState();
+	GfxSystem::RenderTargetID rt = mEditorGUI->GetEditorViewport()->GetRenderTarget();
+	return gGfxRenderer.ConvertScreenToWorldCoords(GfxSystem::Point(ms.x, ms.y), worldCursorPos, rt);
 }

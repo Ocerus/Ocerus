@@ -50,6 +50,9 @@ namespace Editor
 		/// Updates the entity editor.
 		void UpdateEntityEditorWindow();
 
+		/// Returns the viewport of the editor window.
+		inline GUISystem::ViewportWindow* GetEditorViewport() const { return mEditorViewport; }
+
 		/// @name CEGUI Callbacks
 		//@{
 			bool OnComponentRemoveClicked(const CEGUI::EventArgs&);
@@ -66,8 +69,8 @@ namespace Editor
 		typedef vector<AbstractValueEditor*> PropertyEditors;
 		PropertyEditors mPropertyEditors;
 		GUISystem::VerticalLayout* mEntityEditorLayout;
-		GUISystem::ViewportWindow* mTopViewport;
-		GUISystem::ViewportWindow* mBottomViewport;
+		GUISystem::ViewportWindow* mGameViewport;
+		GUISystem::ViewportWindow* mEditorViewport;
 		LayerMgrWidget* mLayerMgrWidget;
 		EditorMenu* mEditorMenu;
 	};

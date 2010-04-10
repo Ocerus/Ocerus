@@ -17,8 +17,7 @@ GUISystem::ViewportWindow::ViewportWindow(const CEGUI::String& type, const CEGUI
 
 GUISystem::ViewportWindow::~ViewportWindow()
 {
-	if (mIsMovableContent)
-		DeleteCameraMover();
+	if (mIsMovableContent) DeleteCameraMover();
 }
 
 void GUISystem::ViewportWindow::initialiseComponents()
@@ -52,10 +51,8 @@ void GUISystem::ViewportWindow::SetMovableContent(bool isMovableContent)
 	mIsMovableContent = isMovableContent;
 	if (!valueChanged) return;
 
-	if (mIsMovableContent)
-		CreateCameraMover();
-	else
-		DeleteCameraMover();
+	if (mIsMovableContent) CreateCameraMover();
+	else DeleteCameraMover();
 }
 
 void GUISystem::ViewportWindow::onSized(CEGUI::WindowEventArgs& e)

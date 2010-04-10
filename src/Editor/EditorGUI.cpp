@@ -30,8 +30,8 @@ EditorGUI::EditorGUI():
 	mComponentGroupHeight(0),
 	mPropertyUpdateTimer(0),
 	mEntityEditorLayout(0),
-	mTopViewport(0),
-	mBottomViewport(0),
+	mGameViewport(0),
+	mEditorViewport(0),
 	mLayerMgrWidget(0)
 {
 }
@@ -79,12 +79,12 @@ void EditorGUI::LoadGUI()
 		camera.FinishInit();
 
 		/// Assign game camera to top viewport.
-		mTopViewport = static_cast<GUISystem::ViewportWindow*>(gCEGUIWM.getWindow("EditorRoot/TopViewport"));
-		mTopViewport->SetCamera(camera);
-		mTopViewport->SetMovableContent(true);
+		mGameViewport = static_cast<GUISystem::ViewportWindow*>(gCEGUIWM.getWindow("EditorRoot/TopViewport"));
+		mGameViewport->SetCamera(camera);
+		mGameViewport->SetMovableContent(false);
 
 		/// Pass render target from viewport to Game instance.
-		GlobalProperties::Get<Core::Game>("Game").SetRenderTarget(mTopViewport->GetRenderTarget());
+		GlobalProperties::Get<Core::Game>("Game").SetRenderTarget(mGameViewport->GetRenderTarget());
 	}
 
 	/// Initialize bottom viewport
@@ -97,9 +97,9 @@ void EditorGUI::LoadGUI()
 		camera.FinishInit();
 
 		/// Assign game camera to bottom viewport.
-		mBottomViewport = static_cast<GUISystem::ViewportWindow*>(gCEGUIWM.getWindow("EditorRoot/BottomViewport"));
-		mBottomViewport->SetCamera(camera);
-		mBottomViewport->SetMovableContent(true);
+		mEditorViewport = static_cast<GUISystem::ViewportWindow*>(gCEGUIWM.getWindow("EditorRoot/BottomViewport"));
+		mEditorViewport->SetCamera(camera);
+		mEditorViewport->SetMovableContent(true);
 	}
 }
 
@@ -122,7 +122,7 @@ void EditorGUI::Draw(float32 delta)
 	OC_UNUSED(delta);	// It may be handy one day
 	
 	/// Render bottom viewport (top viewport is rendered by Game object)
-	gGfxRenderer.SetCurrentRenderTarget(mBottomViewport->GetRenderTarget());
+	gGfxRenderer.SetCurrentRenderTarget(mEditorViewport->GetRenderTarget());
 	gGfxRenderer.ClearCurrentRenderTarget(GfxSystem::Color(0, 0, 0));
 	gGfxRenderer.DrawEntities();
 	
