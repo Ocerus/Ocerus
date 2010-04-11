@@ -239,6 +239,49 @@ void ResourceSystem::ResourceMgr::AddResourceToGroup( const StringKey& group, co
 	}
 	(*groupIt->second)[name] = res;
 }
+void ResourceMgr::RefreshBasePathToGroup(const eBasePathType basePathType, const StringKey& group)
+{
+	OC_ASSERT(basePathType != BPT_ABSOLUTE);
+
+	ocInfo << "Refreshing dir '" << mBasePath[basePathType] << "' to group '" << group << "'";
+
+	RefreshPathToGroup(mBasePath[basePathType], group);
+}
+
+void ResourceMgr::RefreshPathToGroup(const string& path, const StringKey& group)
+{
+	boost::filesystem::path boostPath = path;
+
+	// check the path
+	if (!boost::filesystem::exists(boostPath))
+	{
+		ocError << "Path does not exist '" << boostPath.string() << "'";
+	}
+
+	// if the group is empty, add at least something so that it actually exists
+	if (mResourceGroups.find(group) == mResourceGroups.end())
+	{
+		mResourceGroups[group] = new ResourceMap();
+	}
+
+	boost::filesystem::directory_iterator iend;
+	for (boost::filesystem::directory_iterator i(boostPath); i!=iend; ++i)
+	{
+		string filePath = i->path().string();
+		if (boost::filesystem::is_directory(i->status()))
+		{
+			string dirStr = i->path().filename();
+			if (dirStr.compare(".svn")!=0)
+			{
+				RefreshPathToGroup(filePath, group);
+			}
+		}
+		else
+		{
+			AddResourceFileToGroup(filePath, group, RESTYPE_AUTODETECT, BPT_ABSOLUTE);
+		}
+	}
+}
 
 void ResourceMgr::LoadResourcesInGroup(const StringKey& group)
 {

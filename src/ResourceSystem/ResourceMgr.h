@@ -48,6 +48,9 @@ namespace ResourceSystem
 		/// Assigns a resource to a group. Note that if you create the resource this way you must manually delete it later.
 		bool AddManualResourceToGroup(const StringKey& name, const StringKey& group, eResourceType type);
 
+		/// Refreshes given base path, resources are added to given group.
+		void RefreshBasePathToGroup(const eBasePathType basePathType, const StringKey& group);
+
 		/// Loads all resources in the specified group.
 		/// It doesn't need to be called, resources are loaded on-the-fly if someone needs them. But it's
 		/// always better to preload them.
@@ -134,6 +137,9 @@ namespace ResourceSystem
 
 		/// Adds a resource to a group given a resource pointer.
 		void AddResourceToGroup(const StringKey& group, const StringKey& name, const ResourcePtr res);
+
+		/// Refreshes given path, resources are added to given group.
+		void ResourceMgr::RefreshPathToGroup(const string& path, const StringKey& group);
 
 		/// Checks if the memory usage is within limits. If not, some of the resources will be freed.
 		/// @param resourceToKeep This resource (if valid) will be preserved at any case.
