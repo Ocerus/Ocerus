@@ -3,12 +3,13 @@
 #include "EditorGUI.h"
 #include "GUISystem/GUIMgr.h"
 #include "GUISystem/ViewportWindow.h"
+#include <Box2D.h>
 
 #include "CEGUI.h"
 
 using namespace Editor;
 
-const float32 SELECTION_MIN_DISTANCE = 10.0f; ///< Minimum distance of the cursor position for the selection to be considered as multi-selection. The distance is given in pixels!
+const float32 SELECTION_MIN_DISTANCE = 0.2f; ///< Minimum distance of the cursor position for the selection to be considered as multi-selection. The distance is given in pixels!
 
 
 EditorMgr::EditorMgr():
@@ -26,7 +27,8 @@ EditorMgr::~EditorMgr()
 
 void EditorMgr::LoadEditor()
 {
-	mSelectionStarted = false;
+	mMultiselectStarted = false;
+	mEditToolWorking = false;
 	mHoveredEntity.Invalidate();
 
 	mEditorGUI->LoadGUI();
@@ -76,8 +78,11 @@ void Editor::EditorMgr::Draw(float32 delta)
 	gGfxRenderer.ClearCurrentRenderTarget(GfxSystem::Color(0, 0, 0));
 	gGfxRenderer.DrawEntities();
 
+	// draw the physical representation of all entities
+	GlobalProperties::Get<Physics>("Physics").DrawDebugData();
+
 	// draw the multi-selection stuff
-	if (mSelectionStarted)
+	if (mMultiselectStarted)
 	{
 		InputSystem::MouseState& mouse = gInputMgr.GetMouseState();
 		Vector2 worldCursorPos;
@@ -99,6 +104,7 @@ void Editor::EditorMgr::Draw(float32 delta)
 
 void Editor::EditorMgr::SetCurrentEntity(const EntitySystem::EntityHandle newCurrentEntity)
 {
+	if (mCurrentEntity == newCurrentEntity) return;
 	mCurrentEntity = newCurrentEntity;
 	mEditorGUI->UpdateEntityEditorWindow();
 }
@@ -170,6 +176,19 @@ bool Editor::EditorMgr::KeyReleased( const InputSystem::KeyInfo& ke )
 bool Editor::EditorMgr::MouseMoved( const InputSystem::MouseInfo& mi )
 {
 	OC_UNUSED(mi);
+
+	if (mEditToolWorking)
+	{
+		///@TODO add other tools here
+		Vector2 worldCursorPos;
+		if (gGfxRenderer.ConvertScreenToWorldCoords(GfxSystem::Point(mi.x, mi.y), worldCursorPos, mEditorGUI->GetEditorViewport()->GetRenderTarget()))
+		{
+			OC_ASSERT(GetCurrentEntity());
+			GetCurrentEntity().GetProperty("Position").SetValue<Vector2>(worldCursorPos - mEditToolRelativeBodyPosition);
+			return true;
+		}				
+	}
+
 	return false;
 }
 
@@ -177,8 +196,34 @@ bool Editor::EditorMgr::MouseButtonPressed( const InputSystem::MouseInfo& mi, co
 {
 	if (btn == InputSystem::MBTN_LEFT)
 	{
-		mSelectionStarted = gGfxRenderer.ConvertScreenToWorldCoords(GfxSystem::Point(mi.x, mi.y), mSelectionCursorPosition, mEditorGUI->GetEditorViewport()->GetRenderTarget());
-		return true;
+		Vector2 worldCursorPos;
+		if (!gGfxRenderer.ConvertScreenToWorldCoords(GfxSystem::Point(mi.x, mi.y), worldCursorPos, mEditorGUI->GetEditorViewport()->GetRenderTarget()))
+		{
+			// the cursor is out of the window
+			return false;
+		}
+
+		if (gInputMgr.IsKeyDown(InputSystem::KC_RSHIFT) || gInputMgr.IsKeyDown(InputSystem::KC_RSHIFT))
+		{
+			mMultiselectStarted = true;
+			mSelectionCursorPosition = worldCursorPos;
+			return true;
+		}
+		else
+		{
+			mSelectedEntities.clear();
+			if (mHoveredEntity.IsValid()) mSelectedEntities.push_back(mHoveredEntity);
+			SetCurrentEntity(GetSelectedEntity());
+
+			if (GetCurrentEntity().IsValid())
+			{
+				// we've got an entity to edit, so let's init the right tool
+				mEditToolWorking = true;
+				///@TODO add other tools here
+				mEditToolCursorPosition = worldCursorPos;
+				mEditToolRelativeBodyPosition = worldCursorPos - GetCurrentEntity().GetProperty("Position").GetValue<Vector2>();
+			}
+		}
 	}
 
 	return false;
@@ -189,60 +234,62 @@ bool Editor::EditorMgr::MouseButtonReleased( const InputSystem::MouseInfo& mi, c
 	OC_UNUSED(mi);
 	OC_UNUSED(btn);
 
-	if (!mSelectionStarted)
-	{
-		// the mouse was not previously pressed probably
-		return false;
-	}
-	mSelectionStarted = false;
+	mEditToolWorking = false;
 
-	Vector2 worldCursorPos;
-	if (!GetWorldCursorPos(worldCursorPos))
+	if (mMultiselectStarted)
 	{
-		// we're not in the corrent viewport
-		return false;
-	}
+		mMultiselectStarted = false;
 
-	GfxSystem::RenderTargetID rt = mEditorGUI->GetEditorViewport()->GetRenderTarget();
-
-	bool multiSelection = false;
-	float32 minDistance = SELECTION_MIN_DISTANCE / gGfxRenderer.GetRenderTargetCameraZoom(rt);
-	if ((worldCursorPos-mSelectionCursorPosition).LengthSquared() >= MathUtils::Sqr(minDistance))
-	{
-		// the cursor moved far away enough
-		multiSelection = true;
-	}
-
-	if (multiSelection)
-	{
-		// selection of multiple entities in a rectangle
-		mSelectedEntities.clear();
-		EntityPicker picker(mSelectionCursorPosition);
-		float32 cameraRotation = gGfxRenderer.GetRenderTargetCameraRotation(rt);
-		if (picker.PickMultipleEntities(worldCursorPos, cameraRotation, mSelectedEntities) == 1)
+		Vector2 worldCursorPos;
+		if (!GetWorldCursorPos(worldCursorPos))
 		{
-			SetCurrentEntity(mSelectedEntities[0]);
+			// we're not in the corrent viewport
+			return false;
+		}
+
+		GfxSystem::RenderTargetID rt = mEditorGUI->GetEditorViewport()->GetRenderTarget();
+
+		bool multiSelection = false;
+		float32 minDistance = SELECTION_MIN_DISTANCE / gGfxRenderer.GetRenderTargetCameraZoom(rt);
+		if ((worldCursorPos-mSelectionCursorPosition).LengthSquared() >= MathUtils::Sqr(minDistance))
+		{
+			// the cursor moved far away enough
+			multiSelection = true;
+		}
+
+		if (multiSelection)
+		{
+			// selection of multiple entities in a rectangle
+			mSelectedEntities.clear();
+			EntityPicker picker(mSelectionCursorPosition);
+			float32 cameraRotation = gGfxRenderer.GetRenderTargetCameraRotation(rt);
+			if (picker.PickMultipleEntities(worldCursorPos, cameraRotation, mSelectedEntities) == 1)
+			{
+				SetCurrentEntity(GetSelectedEntity());
+			}
+			else
+			{
+				SetCurrentEntity(EntityHandle::Null);
+			}		
+		}
+		else if (mHoveredEntity.IsValid())
+		{
+			// selection of a single entity under the cursor
+			mSelectedEntities.clear();
+			mSelectedEntities.push_back(mHoveredEntity);
+			SetCurrentEntity(GetSelectedEntity());
 		}
 		else
 		{
-			SetCurrentEntity(EntityHandle::Null);
-		}		
-	}
-	else if (mHoveredEntity.IsValid())
-	{
-		// selection of a single entity under the cursor
-		mSelectedEntities.clear();
-		mSelectedEntities.push_back(mHoveredEntity);
-		SetCurrentEntity(mHoveredEntity);
-	}
-	else
-	{
-		// nothing is selected
-		mSelectedEntities.clear();
-		SetCurrentEntity(EntityHandle::Null);
+			// nothing is selected
+			mSelectedEntities.clear();
+			SetCurrentEntity(GetSelectedEntity());
+		}
+
+		return true;
 	}
 
-	return true;
+	return false;
 }
 
 bool Editor::EditorMgr::GetWorldCursorPos(Vector2& worldCursorPos) const

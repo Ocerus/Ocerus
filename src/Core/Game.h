@@ -82,7 +82,7 @@ namespace Core
 		//@{
 
 		/// Returns the physics engine.
-		inline b2World* GetPhysics(void) { return mPhysics; }
+		inline Physics* GetPhysics(void) { return mPhysics; }
 
 		//@}
 

@@ -13,6 +13,12 @@ namespace Core
 	class LoadingScreen;
 }
 
+namespace Editor
+{
+	class EditorGUI;
+	class EditorMgr;
+}
+
 namespace EntitySystem
 {
 	class EntityMgr;

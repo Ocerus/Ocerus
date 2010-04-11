@@ -43,6 +43,9 @@ namespace EntitySystem
 		/// Comparison operator.
 		bool operator!=(const EntityHandle& rhs) const;
 
+		/// Returns true if this handle is not valid.
+		inline bool operator!(void) const { return !IsValid(); }
+
 		/// Returns true if this handle is valid (not null).
 		inline bool IsValid(void) const { return mEntityID != INVALID_ENTITY_ID; }
 

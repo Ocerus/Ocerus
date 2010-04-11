@@ -17,8 +17,6 @@
 /// Editor subsystem provides functionality for creating and editing games.
 namespace Editor
 {
-	class EditorGUI;
-
 	class EditorMgr: public Singleton<EditorMgr>, public InputSystem::IInputListener
 	{
 	public:
@@ -106,11 +104,16 @@ namespace Editor
 		EntitySystem::EntityHandle mCurrentEntity; ///< Currently edited entity in the components' window.
 
 		// Selections stuff.
-		bool mSelectionStarted; ///< True if the user started a multi-selection mode.
+		bool mMultiselectStarted; ///< True if the user started a multi-selection mode.
 		Vector2 mSelectionCursorPosition; ///< World position where the selection started.
 		EntitySystem::EntityHandle mHoveredEntity; ///< Entity the mouse is currently hovering over.
 		typedef vector<EntitySystem::EntityHandle> EntityList;
 		EntityList mSelectedEntities; ///< Currently selected entities.
+
+		// Tools.
+		bool mEditToolWorking; ///< If true the tool is currently doing something.
+		Vector2 mEditToolCursorPosition; ///< World position where the tool started.
+		Vector2 mEditToolRelativeBodyPosition; ///< Relative position to the body center.
 
 	};
 
