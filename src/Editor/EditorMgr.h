@@ -17,6 +17,8 @@
 /// Editor subsystem provides functionality for creating and editing games.
 namespace Editor
 {
+	class EditorGUI;
+
 	class EditorMgr: public Singleton<EditorMgr>, public InputSystem::IInputListener
 	{
 	public:

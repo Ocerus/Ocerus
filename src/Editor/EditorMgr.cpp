@@ -157,16 +157,19 @@ void Editor::EditorMgr::RemoveComponent(const EntitySystem::ComponentID& compone
 
 bool Editor::EditorMgr::KeyPressed( const InputSystem::KeyInfo& ke )
 {
+	OC_UNUSED(ke);
 	return false;
 }
 
 bool Editor::EditorMgr::KeyReleased( const InputSystem::KeyInfo& ke )
 {
+	OC_UNUSED(ke);
 	return false;
 }
 
 bool Editor::EditorMgr::MouseMoved( const InputSystem::MouseInfo& mi )
 {
+	OC_UNUSED(mi);
 	return false;
 }
 
@@ -183,6 +186,7 @@ bool Editor::EditorMgr::MouseButtonPressed( const InputSystem::MouseInfo& mi, co
 
 bool Editor::EditorMgr::MouseButtonReleased( const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn )
 {
+	OC_UNUSED(mi);
 	OC_UNUSED(btn);
 
 	if (!mSelectionStarted)

@@ -217,6 +217,7 @@ set(EntitySystem_SRCS
 	src/EntitySystem/EntityMgr/LayerMgr.cpp
 	src/EntitySystem/Components/Camera.cpp
 	src/EntitySystem/Components/DynamicBody.cpp
+	src/EntitySystem/Components/Model.cpp
 	src/EntitySystem/Components/PolygonCollider.cpp
 	src/EntitySystem/Components/Script.cpp
 	src/EntitySystem/Components/Sprite.cpp
