@@ -3,9 +3,11 @@
 #include "EditorGUI.h"
 #include "GUISystem/GUIMgr.h"
 #include "GUISystem/ViewportWindow.h"
+#include "Core/Game.h"
 #include <Box2D.h>
 
 #include "CEGUI.h"
+
 
 using namespace Editor;
 
@@ -159,6 +161,16 @@ void Editor::EditorMgr::RemoveComponent(const EntitySystem::ComponentID& compone
 	if (!mCurrentEntity.IsValid()) return;
 	gEntityMgr.DestroyEntityComponent(mCurrentEntity, componentId);
 	mEditorGUI->UpdateEntityEditorWindow();
+}
+
+void Editor::EditorMgr::ResumeAction()
+{
+	GlobalProperties::Get<Core::Game>("Game").ResumeAction();
+}
+
+void Editor::EditorMgr::PauseAction()
+{
+	GlobalProperties::Get<Core::Game>("Game").PauseAction();
 }
 
 bool Editor::EditorMgr::KeyPressed( const InputSystem::KeyInfo& ke )

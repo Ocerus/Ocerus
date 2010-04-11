@@ -31,6 +31,26 @@
         <Window Type="Editor/Menubar" Name="EditorRoot/Menubar" >
             <Property Name="ItemSpacing" Value="10" />
             <Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{1,0},{0,24}}" />
+            <Window Type="DefaultWindow" Name="EditorRoot/Toolbar">
+                <Property Name="UnifiedAreaRect" Value="{{0.5,0},{0,4},{1,0},{0,20}}" />
+
+                <Window Type="Editor/ImageButton" Name="EditorRoot/Toolbar/ResumeAction">
+                    <Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{0,16},{1,0}}" />
+                    <Property Name="NormalImage" Value="set:EditorToolbar image:btnResumeActionNormal" />
+                    <Property Name="HoverImage" Value="set:EditorToolbar image:btnResumeActionHover"  />
+                    <Property Name="PushedImage" Value="set:EditorToolbar image:btnResumeActionPushed" />
+                    <Property Name="DisabledImage" Value="set:EditorToolbar image:btnResumeActionDisabled" />
+                    <Property Name="Tooltip" Value="Start action." />
+                </Window>
+                <Window Type="Editor/ImageButton" Name="EditorRoot/Toolbar/PauseAction">
+                    <Property Name="UnifiedAreaRect" Value="{{0,20},{0,0},{0,36},{1,0}}" />
+                    <Property Name="NormalImage" Value="set:EditorToolbar image:btnPauseActionNormal" />
+                    <Property Name="HoverImage" Value="set:EditorToolbar image:btnPauseActionHover"  />
+                    <Property Name="PushedImage" Value="set:EditorToolbar image:btnPauseActionPushed" />
+                    <Property Name="DisabledImage" Value="set:EditorToolbar image:btnPauseActionDisabled" />
+                    <Property Name="Tooltip" Value="Stop action." />
+                </Window>
+            </Window>
             <Window Type="Editor/MenuItem" Name="EditorRoot/Menubar/File" >
                 <Property Name="Text" Value="File" />
                 <Property Name="UnifiedAreaRect" Value="{{0,7},{0,0},{0,33},{0,19}}" />

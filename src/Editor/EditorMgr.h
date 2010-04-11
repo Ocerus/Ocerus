@@ -96,7 +96,12 @@ namespace Editor
 
 		/// Removes the component with given componentId from current entity.
 		void RemoveComponent(const EntitySystem::ComponentID& componentId);
-		
+
+		/// Resumes action of the edited game.
+		void ResumeAction();
+
+		/// Pauses action of the edited game until it is resumed again.
+		void PauseAction();
 		
 	private:
 

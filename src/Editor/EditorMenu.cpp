@@ -9,6 +9,7 @@ using namespace Editor;
 namespace Editor
 {
 	const string menubarPrefix = "EditorRoot/Menubar";
+	const string toolbarPrefix = "EditorRoot/Toolbar";
 }
 
 Editor::EditorMenu::EditorMenu()
@@ -22,6 +23,9 @@ void Editor::EditorMenu::Init()
 	ConfigureMenu(menubar);
 	menubar->subscribeEvent(CEGUI::Window::EventDeactivated,
 			CEGUI::Event::Subscriber(&Editor::EditorMenu::OnMouseLeavesMenuItem, this));
+
+	CEGUI::Window* toolbar = gCEGUIWM.getWindow(toolbarPrefix);
+	ConfigureToolbar(toolbar);
 }
 
 bool Editor::EditorMenu::OnMouseEntersMenuItem(const CEGUI::EventArgs& )
@@ -158,6 +162,31 @@ bool Editor::EditorMenu::OnMenuItemClicked(const CEGUI::EventArgs& e)
 	return true;
 }
 
+bool Editor::EditorMenu::OnToolbarButtonClicked(const CEGUI::EventArgs& e)
+{
+	const CEGUI::WindowEventArgs& args = static_cast<const CEGUI::WindowEventArgs&>(e);
+	const CEGUI::String& buttonName = args.window->getName();
+
+	ocDebug << "Toolbar button " << buttonName << " clicked.";
+
+	/// ---- Resume action ----
+	if (buttonName == toolbarPrefix + "/ResumeAction")
+	{
+		gEditorMgr.ResumeAction();
+		return true;
+	}
+
+	/// ---- Pause action ----
+	if (buttonName == toolbarPrefix + "/PauseAction")
+	{
+		gEditorMgr.PauseAction();
+		return true;
+	}
+
+	ocWarning << "Toolbar button " << buttonName << " clicked, but no action defined.";
+	return true;
+}
+
 void Editor::EditorMenu::InitComponentMenu()
 {
 	CEGUI::Window* addComponentMenu = gCEGUIWM.getWindow(menubarPrefix + "/Edit/NewComponent/AutoPopup");
@@ -192,5 +221,20 @@ void Editor::EditorMenu::ConfigureMenu(CEGUI::Window* parent)
 			}
 		}
 		ConfigureMenu(parent->getChildAtIdx(childIdx));
+	}
+}
+
+void Editor::EditorMenu::ConfigureToolbar(CEGUI::Window* parent)
+{
+	size_t childCount = parent->getChildCount();
+	for(size_t childIdx = 0; childIdx < childCount; childIdx++)
+	{
+		CEGUI::Window* child = parent->getChildAtIdx(childIdx);
+		if (child->testClassName("PushButton"))
+		{
+			child->subscribeEvent(CEGUI::PushButton::EventClicked,
+					CEGUI::Event::Subscriber(&Editor::EditorMenu::OnToolbarButtonClicked, this));
+		}
+		ConfigureToolbar(child);
 	}
 }

@@ -44,6 +44,13 @@ EditorGUI::~EditorGUI()
 
 void EditorGUI::LoadGUI()
 {
+	CEGUI_EXCEPTION_BEGIN
+
+	// Load Imagesets for Editor.
+	CEGUI::ImagesetManager::getSingleton().create("EditorToolbar.imageset");
+
+	CEGUI_EXCEPTION_END
+	
 	/// @todo This code is quite ugly and will be changed
 	if (!gGUIMgr.LoadRootLayout("Editor.layout"))
 	{
