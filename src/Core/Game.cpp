@@ -18,7 +18,6 @@ using namespace InputSystem;
 const float PHYSICS_TIMESTEP = 0.016f;
 const int32 PHYSICS_VELOCITY_ITERATIONS = 6;
 const int32 PHYSICS_POSITION_ITERATIONS = 2;
-const float32 SELECTION_MIN_DISTANCE = 10.0f; ///< Minimum distance of the cursor position for the selection to be considered as multi-selection. The distance is given in pixels!
 
 
 /// Callback receiver from physics.
@@ -94,8 +93,6 @@ void Core::Game::Init()
 	}
 
 	// basic init stuff
-	mSelectionStarted = false;
-	mHoveredEntity.Invalidate();
 	mActionState = AS_RUNNING;
 	mTimer.Reset();
 
@@ -148,15 +145,6 @@ void Core::Game::Update( const float32 delta )
 
 	mTimer.UpdateInSeconds(delta);
 
-	// pick entity the mouse is hovering over right now
-	MouseState& mouse = gInputMgr.GetMouseState();
-	Vector2 worldPosition;
-	if (gGfxRenderer.ConvertScreenToWorldCoords(GfxSystem::Point(mouse.x, mouse.y), worldPosition, mRenderTarget))
-	{
-		EntityPicker picker(worldPosition);
-		mHoveredEntity = picker.PickSingleEntity();
-	}
-
 	// check action scripts
 	gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::CHECK_ACTION));
 
@@ -192,17 +180,6 @@ void Core::Game::Update( const float32 delta )
 		// update game logic after the physics was processed
 		gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::UPDATE_POST_PHYSICS, Reflection::PropertyFunctionParameters() << stepSize));
 
-		// if some of the selected entities were destroyed, remove them from the selection
-		if (!mHoveredEntity.Exists())
-			mHoveredEntity.Invalidate();
-		for (EntityList::iterator it=mSelectedEntities.begin(); it!=mSelectedEntities.end();)
-		{
-			if (!it->Exists())
-				it = mSelectedEntities.erase(it);
-			else
-				++it;
-		}
-
 		physicsDelta -= stepSize;
 	}
 	mPhysicsResidualDelta = physicsDelta;
@@ -223,23 +200,6 @@ void Core::Game::Draw( const float32 passedDelta)
 	
 	gGfxRenderer.DrawEntities();
 
-	mPhysics->DrawDebugData();
-
-	// draw the multi-selection stuff
-	if (mSelectionStarted)
-	{
-		MouseState& mouse = gInputMgr.GetMouseState();
-		Vector2 worldCursorPos;
-		if (gGfxRenderer.ConvertScreenToWorldCoords(GfxSystem::Point(mouse.x, mouse.y), worldCursorPos, mRenderTarget))
-		{
-			float32 minDistance = SELECTION_MIN_DISTANCE / gGfxRenderer.GetRenderTargetCameraZoom(mRenderTarget);
-			if ((worldCursorPos-mSelectionCursorPosition).LengthSquared() >= MathUtils::Sqr(minDistance))
-			{
-				float32 rotation = gGfxRenderer.GetRenderTargetCameraRotation(mRenderTarget);
-				gGfxRenderer.DrawRect(mSelectionCursorPosition, worldCursorPos, rotation, GfxSystem::Color(255,255,0,150), false);
-			}
-		}
-	}
 	gGfxRenderer.FinalizeRenderTarget();
 }
 
@@ -292,70 +252,16 @@ bool Core::Game::MouseMoved( const MouseInfo& mi )
 
 bool Core::Game::MouseButtonPressed( const MouseInfo& mi, const eMouseButton btn )
 {
-	if (btn == MBTN_LEFT)
-	{
-		mSelectionStarted = gGfxRenderer.ConvertScreenToWorldCoords(GfxSystem::Point(mi.x, mi.y), mSelectionCursorPosition, mRenderTarget);
-		return true;
-	}
-
+	OC_UNUSED(mi);
+	OC_UNUSED(btn);
 	return false;
 }
 
 bool Core::Game::MouseButtonReleased( const MouseInfo& mi, const eMouseButton btn )
 {
 	OC_UNUSED(btn);
-	if (!mSelectionStarted)
-	{
-		// the mouse was not previously pressed probably
-		return false;
-	}
-	mSelectionStarted = false;
-
-	Vector2 worldCursorPos;
-	if (!gGfxRenderer.ConvertScreenToWorldCoords(GfxSystem::Point(mi.x, mi.y), worldCursorPos, mRenderTarget))
-	{
-		// we're not in the corrent viewport
-		return false;
-	}
-
-	bool multiSelection = false;
-	float32 minDistance = SELECTION_MIN_DISTANCE / gGfxRenderer.GetRenderTargetCameraZoom(mRenderTarget);
-	if ((worldCursorPos-mSelectionCursorPosition).LengthSquared() >= MathUtils::Sqr(minDistance))
-	{
-		// the cursor moved far away enough
-		multiSelection = true;
-	}
-
-	if (multiSelection)
-	{
-		// selection of multiple entities in a rectangle
-		mSelectedEntities.clear();
-		EntityPicker picker(mSelectionCursorPosition);
-		float32 cameraRotation = gGfxRenderer.GetRenderTargetCameraRotation(mRenderTarget);
-		if (picker.PickMultipleEntities(worldCursorPos, cameraRotation, mSelectedEntities) == 1)
-		{
-			Editor::EditorMgr::GetSingleton().SetCurrentEntity(mSelectedEntities[0]);
-		}
-		else
-		{
-			Editor::EditorMgr::GetSingleton().SetCurrentEntity(EntityHandle::Null);
-		}		
-	}
-	else if (mHoveredEntity.IsValid())
-	{
-		// selection of a single entity under the cursor
-		mSelectedEntities.clear();
-		mSelectedEntities.push_back(mHoveredEntity);
-		Editor::EditorMgr::GetSingleton().SetCurrentEntity(mHoveredEntity);
-	}
-	else
-	{
-		// nothing is selected
-		mSelectedEntities.clear();
-		Editor::EditorMgr::GetSingleton().SetCurrentEntity(EntityHandle::Null);
-	}
-
-	return true;
+	OC_UNUSED(mi);
+	return false;
 }
 
 bool Core::Game::PhysicsCallbacks::ShouldCollide( b2Fixture* fixtureA, b2Fixture* fixtureB )

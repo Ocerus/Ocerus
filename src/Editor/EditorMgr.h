@@ -39,12 +39,16 @@ namespace Editor
 		/// Draws the editor viewports.
 		void Draw(float32 delta);
 
-		/// Returns currently selected entity. If no entity is selected,
+		/// Returns currently edited entity. If no entity is edited,
 		/// invalid EntityHandler is returned.
 		inline const EntitySystem::EntityHandle GetCurrentEntity() const;
 
-		/// Sets the currently selected entity to new entity.
+		/// Sets the currently edited entity.
 		void SetCurrentEntity(const EntitySystem::EntityHandle newCurrentEntity);
+
+		/// Returns currently selected entity. If no entity is selected, invalid EntityHandler is returned.
+		/// If there are more selected entities only one of them is chosen.
+		inline const EntitySystem::EntityHandle GetSelectedEntity() const;
 
 		/// Sets a new name for the selected entity.
 		void UpdateCurrentEntityName(const string& newName);
@@ -95,13 +99,28 @@ namespace Editor
 		
 		
 	private:
+
 		EditorGUI* mEditorGUI;
-		EntitySystem::EntityHandle mCurrentEntity;
+		EntitySystem::EntityHandle mCurrentEntity; ///< Currently edited entity in the components' window.
+
+		// Selections stuff.
+		bool mSelectionStarted; ///< True if the user started a multi-selection mode.
+		Vector2 mSelectionCursorPosition; ///< World position where the selection started.
+		EntitySystem::EntityHandle mHoveredEntity; ///< Entity the mouse is currently hovering over.
+		typedef vector<EntitySystem::EntityHandle> EntityList;
+		EntityList mSelectedEntities; ///< Currently selected entities.
+
 	};
 
 	inline const EntitySystem::EntityHandle EditorMgr::GetCurrentEntity() const
 	{
 		return mCurrentEntity;
+	}
+
+	inline const EntitySystem::EntityHandle EditorMgr::GetSelectedEntity() const
+	{
+		if (mSelectedEntities.size() == 0) return EntitySystem::EntityHandle::Null;
+		else return mSelectedEntities[0];
 	}
 }
 

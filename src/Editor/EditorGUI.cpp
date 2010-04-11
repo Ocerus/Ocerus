@@ -120,30 +120,6 @@ void EditorGUI::Update(float32 delta)
 void EditorGUI::Draw(float32 delta)
 {
 	OC_UNUSED(delta);	// It may be handy one day
-	
-	/// Render bottom viewport (top viewport is rendered by Game object)
-	gGfxRenderer.SetCurrentRenderTarget(mEditorViewport->GetRenderTarget());
-	gGfxRenderer.ClearCurrentRenderTarget(GfxSystem::Color(0, 0, 0));
-	gGfxRenderer.DrawEntities();
-	
-/*
-	// draw the multi-selection stuff
-	if (mSelectionStarted)
-	{
-		MouseState& mouse = gInputMgr.GetMouseState();
-		Vector2 worldCursorPos;
-		if (gGfxRenderer.ConvertScreenToWorldCoords(GfxSystem::Point(mouse.x, mouse.y), worldCursorPos, mRenderTarget))
-		{
-			float32 minDistance = SELECTION_MIN_DISTANCE / gGfxRenderer.GetRenderTargetCameraZoom(mRenderTarget);
-			if ((worldCursorPos-mSelectionCursorPosition).LengthSquared() >= MathUtils::Sqr(minDistance))
-			{
-				float32 rotation = gGfxRenderer.GetRenderTargetCameraRotation(mRenderTarget);
-				gGfxRenderer.DrawRect(mSelectionCursorPosition, worldCursorPos, rotation, GfxSystem::Color(255,255,0,150), false);
-			}
-		}
-	}
-*/
-	gGfxRenderer.FinalizeRenderTarget();
 }
 
 

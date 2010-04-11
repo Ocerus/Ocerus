@@ -133,13 +133,6 @@ namespace Core
 		void ProcessPhysicsEvent(const PhysicsEvent& evt);
 
 
-		// Selections stuff.
-		bool mSelectionStarted; ///< If true the user started a multi-selection mode.
-		Vector2 mSelectionCursorPosition; ///< World position where the selection started.
-		EntitySystem::EntityHandle mHoveredEntity; ///< Entity the mouse is currently hovering over.
-		typedef vector<EntitySystem::EntityHandle> EntityList;
-		EntityList mSelectedEntities; ///< Currently selected entities.
-
 	private:
 
 		class PhysicsCallbacks;
