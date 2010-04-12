@@ -292,16 +292,26 @@ void Core::Game::ProcessPhysicsEvent( const PhysicsEvent& evt )
 
 void Core::Game::PauseAction( void )
 {
-	mActionState = AS_PAUSED;
+	if (mActionState == AS_RUNNING)
+	{
+		mActionState = AS_PAUSED;
+		ocInfo << "Action paused";
+	}
 }
 
 void Core::Game::ResumeAction( void )
 {
-	mActionState = AS_RUNNING;
+	if (mActionState == AS_PAUSED)
+	{
+		mActionState = AS_RUNNING;
+		ocInfo << "Action resumed";
+	}
 }
 
 void Core::Game::RestartAction( void )
 {
 	// first somebody has to implement scene saving
 	OC_ASSERT_MSG(false, "not implemented");
+
+	ocInfo << "Action restarted";
 }

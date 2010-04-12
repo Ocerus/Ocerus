@@ -67,6 +67,12 @@ void Editor::EditorMgr::Update(const float32 delta)
 	}
 	if (GetSelectedEntity() != selectedEntity && GetCurrentEntity() == selectedEntity) SetCurrentEntity(GetSelectedEntity());
 
+	// update the entities if necessary
+	if (!GlobalProperties::Get<Core::Game>("Game").IsActionRunning())
+	{
+		// synchronize properties before physics
+		gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::SYNC_PRE_PHYSICS, Reflection::PropertyFunctionParameters() << 0.0f));
+	}
 
 	// update the gui elements on the screen
 	mEditorGUI->Update(delta);
