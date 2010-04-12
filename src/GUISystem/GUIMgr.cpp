@@ -149,22 +149,22 @@ namespace GUISystem
 		OC_DASSERT(mCegui);
 
 		// ToggleConsole button is hardwired here.
-		if (ke.keyAction == InputSystem::KC_GRAVE) {
+		if (ke.keyCode == InputSystem::KC_GRAVE) {
 			mGUIConsole->ToggleConsole();
 			return true;
 		}
 
-		if (!mCegui->injectKeyDown(KeyMapperOIStoCEGUI(ke.keyAction)))
+		if (!mCegui->injectKeyDown(KeyMapperOIStoCEGUI(ke.keyCode)))
 		{
 			// If the key was not processed by the gui system, try to handle hotkeys.
-			if (ke.keyAction == InputSystem::KC_ESCAPE)
+			if (ke.keyCode == InputSystem::KC_ESCAPE)
 			{
 				gApp.Shutdown();
 				return true;
 			}
 
 			// Finally inject corresponding character.
-			return mCegui->injectChar(ke.keyCode);
+			return mCegui->injectChar(ke.charCode);
 		}
 
 		return false;
@@ -173,7 +173,7 @@ namespace GUISystem
 	bool GUIMgr::KeyReleased(const InputSystem::KeyInfo& ke)
 	{
 		OC_DASSERT(mCegui);
-		return mCegui->injectKeyUp(KeyMapperOIStoCEGUI(ke.keyAction));
+		return mCegui->injectKeyUp(KeyMapperOIStoCEGUI(ke.keyCode));
 	}
 
 	bool GUIMgr::MouseMoved(const InputSystem::MouseInfo& mi)

@@ -205,7 +205,7 @@ void Core::Game::Draw( const float32 passedDelta)
 
 bool Core::Game::KeyPressed( const KeyInfo& ke )
 {
-	if (ke.keyAction == KC_F5 && gInputMgr.IsKeyDown(KC_LCONTROL))
+	if (ke.keyCode == KC_F5 && gInputMgr.IsKeyDown(KC_LCONTROL))
 	{
 		if (gProfiler.IsRunning())
 		{
@@ -220,7 +220,7 @@ bool Core::Game::KeyPressed( const KeyInfo& ke )
 		return true;
 	}
 
-	if (ke.keyAction == KC_F9) {
+	if (ke.keyCode == KC_F9) {
 		if (IsActionRunning())
 		{
 			PauseAction();

@@ -116,9 +116,14 @@ namespace Editor
 		EntityList mSelectedEntities; ///< Currently selected entities.
 
 		// Tools.
+		enum eEditTool { ET_MOVE=0, ET_ROTATE, ET_ROTATE_Z, ET_SCALE };
+		eEditTool mEditTool; ///< Current tool.
 		bool mEditToolWorking; ///< If true the tool is currently doing something.
 		Vector2 mEditToolCursorPosition; ///< World position where the tool started.
 		Vector2 mEditToolRelativeBodyPosition; ///< Relative position to the body center.
+		float32 mEditToolBodyAngle; ///< Initial angle of the body.
+		Vector2 mEditToolBodyScale; ///< Initial body scale.
+
 
 		/// Draws the shape of the entity using the selected color.
 		bool DrawEntityPhysicalShape(const EntitySystem::EntityHandle entity, const GfxSystem::Color shapeColor, const float32 shapeWidth);

@@ -164,9 +164,9 @@ namespace InputSystem
 	struct KeyInfo
 	{
 		/// Enum value of the key.
-		eKeyCode keyAction;
+		eKeyCode keyCode;
 		/// Character of the key pressed.
-		uint32 keyCode;
+		uint32 charCode;
 	};
 
 	/// State of the mouse device at a specific point of time.

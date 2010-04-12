@@ -12,6 +12,8 @@
 using namespace Editor;
 
 const float32 SELECTION_MIN_DISTANCE = 0.2f; ///< Minimum distance of the cursor position for the selection to be considered as multi-selection. The distance is given in pixels!
+const float32 EDIT_TOOL_ANGLE_CHANGE_RATIO = 0.3f; ///< How fast the edit tool will change the angle.
+const float32 EDIT_TOOL_SCALE_CHANGE_RATIO = 0.1f; ///< How fast the edit tool will change the scale.
 
 
 EditorMgr::EditorMgr():
@@ -32,6 +34,7 @@ void EditorMgr::LoadEditor()
 	mMultiselectStarted = false;
 	mEditToolWorking = false;
 	mHoveredEntity.Invalidate();
+	mEditTool = ET_MOVE;
 
 	mEditorGUI->LoadGUI();
 	gInputMgr.AddInputListener(this);
@@ -191,7 +194,41 @@ void Editor::EditorMgr::PauseAction()
 
 bool Editor::EditorMgr::KeyPressed( const InputSystem::KeyInfo& ke )
 {
-	OC_UNUSED(ke);
+	if (ke.keyCode == InputSystem::KC_M)
+	{
+		mEditToolWorking = false;
+		mEditTool = ET_MOVE;
+		return true;
+	}
+	else if (ke.keyCode == InputSystem::KC_R)
+	{
+		mEditToolWorking = false;
+		mEditTool = ET_ROTATE;
+		return true;
+	}
+	else if (ke.keyCode == InputSystem::KC_Z)
+	{
+		mEditToolWorking = false;
+		mEditTool = ET_ROTATE_Z;
+		return true;
+	}
+	else if (ke.keyCode == InputSystem::KC_S)
+	{
+		mEditToolWorking = false;
+		mEditTool = ET_SCALE;
+		return true;
+	}
+
+	Vector2 worldCursorPos;
+	if (GetWorldCursorPos(worldCursorPos))
+	{
+		if (ke.keyCode == InputSystem::KC_LEFT)
+		{
+			///@TODO camera movement
+			return true;
+		}
+	}
+
 	return false;
 }
 
@@ -203,16 +240,30 @@ bool Editor::EditorMgr::KeyReleased( const InputSystem::KeyInfo& ke )
 
 bool Editor::EditorMgr::MouseMoved( const InputSystem::MouseInfo& mi )
 {
-	OC_UNUSED(mi);
-
 	if (mEditToolWorking)
 	{
-		///@TODO add other tools here
 		Vector2 worldCursorPos;
 		if (gGfxRenderer.ConvertScreenToWorldCoords(GfxSystem::Point(mi.x, mi.y), worldCursorPos, mEditorGUI->GetEditorViewport()->GetRenderTarget()))
 		{
 			OC_ASSERT(GetCurrentEntity());
-			GetCurrentEntity().GetProperty("Position").SetValue<Vector2>(worldCursorPos - mEditToolRelativeBodyPosition);
+			Vector2 delta = worldCursorPos - mEditToolCursorPosition;
+			delta.y = -delta.y; // so that the editing tool seems more intuitive
+			float32 scalarDelta = delta.x;
+			switch (mEditTool)
+			{
+			case ET_MOVE:
+				GetCurrentEntity().GetProperty("Position").SetValue<Vector2>(worldCursorPos - mEditToolRelativeBodyPosition);
+				break;
+			case ET_ROTATE:
+				GetCurrentEntity().GetProperty("Angle").SetValue<float32>(mEditToolBodyAngle + EDIT_TOOL_ANGLE_CHANGE_RATIO * scalarDelta);
+				break;
+			case ET_ROTATE_Z:
+				GetCurrentEntity().GetProperty("ZAngle").SetValue<float32>(mEditToolBodyAngle + EDIT_TOOL_ANGLE_CHANGE_RATIO * scalarDelta);
+				break;
+			case ET_SCALE:
+				GetCurrentEntity().GetProperty("Scale").SetValue<Vector2>(mEditToolBodyScale + EDIT_TOOL_SCALE_CHANGE_RATIO * delta);
+				break;
+			}
 			return true;
 		}				
 	}
@@ -247,9 +298,29 @@ bool Editor::EditorMgr::MouseButtonPressed( const InputSystem::MouseInfo& mi, co
 			{
 				// we've got an entity to edit, so let's init the right tool
 				mEditToolWorking = true;
-				///@TODO add other tools here
 				mEditToolCursorPosition = worldCursorPos;
-				mEditToolRelativeBodyPosition = worldCursorPos - GetCurrentEntity().GetProperty("Position").GetValue<Vector2>();
+				switch (mEditTool)
+				{
+				case ET_MOVE:
+					mEditToolRelativeBodyPosition = worldCursorPos - GetCurrentEntity().GetProperty("Position").GetValue<Vector2>();
+					break;
+				case ET_ROTATE:
+					mEditToolBodyAngle = GetCurrentEntity().GetProperty("Angle").GetValue<float32>();
+					break;
+				case ET_ROTATE_Z:
+					if (gEntityMgr.HasEntityComponentOfType(GetCurrentEntity(), EntitySystem::CT_Model))
+					{
+						mEditToolBodyAngle = GetCurrentEntity().GetProperty("ZAngle").GetValue<float32>();
+					}
+					else
+					{
+						mEditToolWorking = false;
+					}
+					break;
+				case ET_SCALE:
+					mEditToolBodyScale = GetCurrentEntity().GetProperty("Scale").GetValue<Vector2>();
+					break;
+				}
 			}
 		}
 	}

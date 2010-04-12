@@ -120,8 +120,8 @@ bool InputSystem::OISListener::mouseReleased( const OIS::MouseEvent &evt, OIS::M
 bool InputSystem::OISListener::keyPressed( const OIS::KeyEvent &evt )
 {
 	KeyInfo ki;
-	ki.keyAction = static_cast<eKeyCode>(evt.key);
-	ki.keyCode = evt.text;
+	ki.keyCode = static_cast<eKeyCode>(evt.key);
+	ki.charCode = evt.text;
 	for (InputMgr::ListenersList::const_iterator i=mMgr->mListeners.begin(); i!=mMgr->mListeners.end(); ++i)
 	{
 		if ((*i)->KeyPressed(ki)) break;
@@ -132,8 +132,8 @@ bool InputSystem::OISListener::keyPressed( const OIS::KeyEvent &evt )
 bool InputSystem::OISListener::keyReleased( const OIS::KeyEvent &evt )
 {
 	KeyInfo ki;
-	ki.keyAction = static_cast<eKeyCode>(evt.key);
-	ki.keyCode = evt.text;
+	ki.keyCode = static_cast<eKeyCode>(evt.key);
+	ki.charCode = evt.text;
 	for (InputMgr::ListenersList::const_iterator i=mMgr->mListeners.begin(); i!=mMgr->mListeners.end(); ++i)
 	{
 		if ((*i)->KeyReleased(ki)) break;
