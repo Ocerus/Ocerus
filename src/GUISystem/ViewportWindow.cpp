@@ -103,3 +103,8 @@ void GUISystem::ViewportWindow::DeleteCameraMover()
 	delete mCameraMover;
 	mCameraMover = 0;
 }
+
+EntitySystem::EntityHandle GUISystem::ViewportWindow::GetCamera() const
+{
+	return gGfxRenderer.GetRenderTargetCamera(mRenderTarget);
+}

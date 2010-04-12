@@ -14,6 +14,7 @@ using namespace Editor;
 const float32 SELECTION_MIN_DISTANCE = 0.2f; ///< Minimum distance of the cursor position for the selection to be considered as multi-selection. The distance is given in pixels!
 const float32 EDIT_TOOL_ANGLE_CHANGE_RATIO = 0.3f; ///< How fast the edit tool will change the angle.
 const float32 EDIT_TOOL_SCALE_CHANGE_RATIO = 0.1f; ///< How fast the edit tool will change the scale.
+const float32 CAMERA_MOVEMENT_SPEED = 0.2f; ///< How fast the camera moves by keys.
 
 
 EditorMgr::EditorMgr():
@@ -48,15 +49,50 @@ void Editor::EditorMgr::UnloadEditor()
 
 void Editor::EditorMgr::Update(const float32 delta)
 {
-	// pick entity the mouse is hovering over right now
+	// is the mouse above the window?
 	InputSystem::MouseState& mouse = gInputMgr.GetMouseState();
 	GfxSystem::RenderTargetID rt = mEditorGUI->GetEditorViewport()->GetRenderTarget();
 	Vector2 worldPosition;
-	if (gGfxRenderer.ConvertScreenToWorldCoords(GfxSystem::Point(mouse.x, mouse.y), worldPosition, rt))
+	bool mouseAboveWindow = gGfxRenderer.ConvertScreenToWorldCoords(GfxSystem::Point(mouse.x, mouse.y), worldPosition, rt);
+
+
+	// keys camera control
+	if (mouseAboveWindow)
+	{
+		EntitySystem::EntityHandle camera = mEditorGUI->GetEditorViewport()->GetCamera();
+		OC_ASSERT(camera);
+
+		float32 movementSpeed = CAMERA_MOVEMENT_SPEED / camera.GetProperty("Zoom").GetValue<float32>();
+		if (gInputMgr.IsKeyDown(InputSystem::KC_LEFT))
+		{
+			Vector2 cameraPos = camera.GetProperty("Position").GetValue<Vector2>();
+			camera.GetProperty("Position").SetValue<Vector2>(cameraPos + Vector2(-movementSpeed, 0));
+		}
+		if (gInputMgr.IsKeyDown(InputSystem::KC_RIGHT))
+		{
+			Vector2 cameraPos = camera.GetProperty("Position").GetValue<Vector2>();
+			camera.GetProperty("Position").SetValue<Vector2>(cameraPos + Vector2(movementSpeed, 0));
+		}
+		if (gInputMgr.IsKeyDown(InputSystem::KC_UP))
+		{
+			Vector2 cameraPos = camera.GetProperty("Position").GetValue<Vector2>();
+			camera.GetProperty("Position").SetValue<Vector2>(cameraPos + Vector2(0, -movementSpeed));
+		}
+		if (gInputMgr.IsKeyDown(InputSystem::KC_DOWN))
+		{
+			Vector2 cameraPos = camera.GetProperty("Position").GetValue<Vector2>();
+			camera.GetProperty("Position").SetValue<Vector2>(cameraPos + Vector2(0, movementSpeed));
+		}
+	}
+
+
+	// pick entity the mouse is hovering over right now
+	if (mouseAboveWindow)
 	{
 		EntityPicker picker(worldPosition);
 		mHoveredEntity = picker.PickSingleEntity();
 	}
+
 
 	// if some of the selected entities were destroyed, remove them from the selection
 	EntitySystem::EntityHandle selectedEntity = GetSelectedEntity();
@@ -76,6 +112,7 @@ void Editor::EditorMgr::Update(const float32 delta)
 		// synchronize properties before physics
 		gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::SYNC_PRE_PHYSICS, Reflection::PropertyFunctionParameters() << 0.0f));
 	}
+
 
 	// update the gui elements on the screen
 	mEditorGUI->Update(delta);
@@ -217,16 +254,6 @@ bool Editor::EditorMgr::KeyPressed( const InputSystem::KeyInfo& ke )
 		mEditToolWorking = false;
 		mEditTool = ET_SCALE;
 		return true;
-	}
-
-	Vector2 worldCursorPos;
-	if (GetWorldCursorPos(worldCursorPos))
-	{
-		if (ke.keyCode == InputSystem::KC_LEFT)
-		{
-			///@TODO camera movement
-			return true;
-		}
 	}
 
 	return false;

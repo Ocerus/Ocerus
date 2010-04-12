@@ -24,6 +24,9 @@ namespace GUISystem
 		/// Sets the camera of the viewport to newCamera.
 		void SetCamera(const EntitySystem::EntityHandle& newCamera);
 
+		/// Returns the current camera of the viewport.
+		EntitySystem::EntityHandle GetCamera() const;
+
 		/// Returns the render target associated with the window.
 		inline GfxSystem::RenderTargetID GetRenderTarget() const { return mRenderTarget; }
 
