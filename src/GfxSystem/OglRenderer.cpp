@@ -324,13 +324,14 @@ void OglRenderer::DrawLine(const Vector2* verts, const Color& color, const float
 }
 
 
-void OglRenderer::DrawPolygon(const Vector2* verts, const int32 n, const Color& color, const bool fill) const
+void OglRenderer::DrawPolygon(const Vector2* verts, const int32 n, const Color& color, const bool fill, const float32 outlineWidth) const
 {
 	OC_ASSERT(verts);
 
 	glDisable(GL_TEXTURE_2D);
 	glDisable(GL_CULL_FACE);
 	glColor4ub( color.r, color.g, color.b, color.a );
+	glLineWidth(outlineWidth);
 
 	if (fill) glBegin( GL_POLYGON );
 	else glBegin( GL_LINE_LOOP );

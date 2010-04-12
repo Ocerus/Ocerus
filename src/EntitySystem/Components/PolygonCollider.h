@@ -40,6 +40,9 @@ namespace EntityComponents
 		/// @todo Update the physics when the value changes.
 		void SetDensity(float32 val) { mDensity = val; }
 
+		/// Physical shape.
+		PhysicalShape* GetShape(void) const { return mShape; }
+
 	private:
 
 		PhysicalShape* mShape;

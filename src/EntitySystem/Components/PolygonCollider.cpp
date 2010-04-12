@@ -53,6 +53,7 @@ void EntityComponents::PolygonCollider::RegisterReflection( void )
 {
 	RegisterProperty<float32>("Density", &PolygonCollider::GetDensity, &PolygonCollider::SetDensity, PA_FULL_ACCESS, "");
 	RegisterProperty<Array<Vector2>*>("Polygon", &PolygonCollider::GetPolygon, &PolygonCollider::SetPolygon, PA_FULL_ACCESS, "");
+	RegisterProperty<PhysicalShape*>("PhysicalShape", &PolygonCollider::GetShape, 0, PA_NONE | PA_TRANSIENT, "");
 
 	// we need the transform to be able to have the position and angle ready while creating the body
 	AddComponentDependency(CT_Transform);

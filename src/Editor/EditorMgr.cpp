@@ -86,8 +86,11 @@ void Editor::EditorMgr::Draw(float32 delta)
 	gGfxRenderer.ClearCurrentRenderTarget(GfxSystem::Color(0, 0, 0));
 	gGfxRenderer.DrawEntities();
 
-	// draw the physical representation of all entities
-	GlobalProperties::Get<Physics>("Physics").DrawDebugData();
+	// draw the physical shape of representation of selected entities
+	for (EntityList::iterator it=mSelectedEntities.begin(); it!=mSelectedEntities.end(); ++it)
+	{
+		DrawEntityPhysicalShape(*it, GfxSystem::Color(255,0,0));
+	}
 
 	// draw the multi-selection stuff
 	if (mMultiselectStarted)
@@ -316,4 +319,33 @@ bool Editor::EditorMgr::GetWorldCursorPos(Vector2& worldCursorPos) const
 	InputSystem::MouseState& ms = gInputMgr.GetMouseState();
 	GfxSystem::RenderTargetID rt = mEditorGUI->GetEditorViewport()->GetRenderTarget();
 	return gGfxRenderer.ConvertScreenToWorldCoords(GfxSystem::Point(ms.x, ms.y), worldCursorPos, rt);
+}
+
+bool Editor::EditorMgr::DrawEntityPhysicalShape( const EntitySystem::EntityHandle entity, const GfxSystem::Color shapeColor )
+{
+	EntitySystem::ComponentIdList components;
+	gEntityMgr.GetEntityComponentsOfType(entity, EntitySystem::CT_PolygonCollider, components);
+	bool result = false;
+
+	for (EntitySystem::ComponentIdList::iterator it=components.begin(); it!=components.end(); ++it)
+	{
+		PhysicalShape* shape = gEntityMgr.GetEntityComponentProperty(entity, *it, "PhysicalShape").GetValue<PhysicalShape*>();
+		OC_ASSERT(shape);
+
+		XForm xf = shape->GetBody()->GetTransform();
+		b2PolygonShape* poly = (b2PolygonShape*)shape->GetShape();
+		int32 vertexCount = poly->m_vertexCount;
+		OC_ASSERT(vertexCount <= b2_maxPolygonVertices);
+		Vector2 vertices[b2_maxPolygonVertices];
+
+		for (int32 i = 0; i < vertexCount; ++i)
+		{
+			vertices[i] = MathUtils::Multiply(xf, poly->m_vertices[i]);
+		}
+
+		gGfxRenderer.DrawPolygon(vertices, vertexCount, shapeColor, false, 2.0f);
+		result = true;
+	}
+
+	return result;
 }

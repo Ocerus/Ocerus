@@ -101,7 +101,7 @@ namespace GfxSystem
 		virtual void DrawLine(const Vector2* verts, const Color& color, const float32 width = 1.0f) const = 0;
 
 		/// Draws a polygon. Verts must be an array of n Vector2s defining the polygon.
-		virtual void DrawPolygon(const Vector2* verts, const int32 n, const Color& color, const bool fill) const = 0;
+		virtual void DrawPolygon(const Vector2* verts, const int32 n, const Color& color, const bool fill, const float32 outlineWidth = 1.0f) const = 0;
 
 		/// Draws a circle.
 		virtual void DrawCircle(const Vector2& position, const float32 radius, const Color& color, const bool fill) const = 0;

@@ -120,6 +120,9 @@ namespace Editor
 		Vector2 mEditToolCursorPosition; ///< World position where the tool started.
 		Vector2 mEditToolRelativeBodyPosition; ///< Relative position to the body center.
 
+		/// Draws the shape of the entity using the selected color.
+		bool DrawEntityPhysicalShape(const EntitySystem::EntityHandle entity, const GfxSystem::Color shapeColor);
+
 	};
 
 	inline const EntitySystem::EntityHandle EditorMgr::GetCurrentEntity() const

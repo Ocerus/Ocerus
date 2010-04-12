@@ -27,6 +27,9 @@ namespace EntitySystem
 	/// A list of types of components.
 	typedef vector<eComponentType> ComponentTypeList;
 
+	/// A list of IDs of components.
+	typedef vector<ComponentID> ComponentIdList;
+
 	/// A list of entity handles.
 	typedef vector<EntityHandle> EntityList;
 
@@ -215,6 +218,9 @@ namespace EntitySystem
 
 		/// Fills the given list with types of components present in the given entity. Returns true if everything was ok.
 		bool GetEntityComponentTypes(const EntityHandle entity, ComponentTypeList& out);
+
+		/// Fills the given list with IDs of component of the given type in the entity. Returns true if everything was ok.
+		bool GetEntityComponentsOfType(const EntityHandle entity, const eComponentType desiredType, ComponentIdList& out);
 
 		/// Returns the number of components attached to the entity.
 		int32 GetNumberOfEntityComponents(const EntityHandle entity) const;

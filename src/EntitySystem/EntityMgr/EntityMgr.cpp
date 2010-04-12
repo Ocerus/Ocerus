@@ -749,6 +749,17 @@ ComponentID EntitySystem::EntityMgr::GetEntityComponent(const EntityHandle entit
 	return -1;
 }
 
+bool EntitySystem::EntityMgr::GetEntityComponentsOfType( const EntityHandle entity, const eComponentType desiredType, ComponentIdList& out )
+{
+	ComponentID id = 0;
+	for (EntityComponentsIterator it=mComponentMgr->GetEntityComponents(entity.GetID()); it.HasMore(); ++it, ++id)
+	{
+		if ((*it)->GetType() == desiredType) out.push_back(id);
+	}
+
+	return true;
+}
+
 void EntitySystem::EntityMgr::UpdatePrototypeCopy( const EntityHandle prototype )
 {
 	EntityMap::iterator entityIter = mEntities.find(prototype.GetID());
