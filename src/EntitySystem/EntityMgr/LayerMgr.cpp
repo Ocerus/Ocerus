@@ -3,7 +3,7 @@
 
 using namespace EntitySystem;
 
-LayerMgr::LayerMgr() : mLayers(), mDifference(0), mList()
+LayerMgr::LayerMgr() : mLayers(), mDifference(0), mActiveLayerID(0), mList()
 {
 	ocInfo << "*** LayerMgr init ***";
 	mLayers.push_back("Initial layer"); // TODO: load this string from resource
@@ -133,6 +133,9 @@ bool LayerMgr::DeleteLayer(LayerID id, bool destroyEntities)
 		else { SetLayerID(*it, 0); }
 	}
 
+	if (mActiveLayerID == id)
+		mActiveLayerID = 0;
+
 	return true;
 }
 
@@ -155,6 +158,8 @@ LayerID LayerMgr::MoveLayerBehind(LayerID id, LayerID behind)
 	
 	// correct the layer of entities in the moved layer and return a new layer ID
 	SetLayerOfEntities(newID, toMove);
+	if (mActiveLayerID == id)
+		mActiveLayerID = newID;
 	return newID;
 }
 
@@ -173,6 +178,8 @@ LayerID LayerMgr::MoveLayerTop(LayerID id)
 	LayerID newID = AddTopLayer(name);
 	// correct the layer of entities in the moved layer and return a new layer ID
 	SetLayerOfEntities(newID, toMove);
+	if (mActiveLayerID == id)
+		mActiveLayerID = newID;
 	return newID;
 }
 
@@ -244,6 +251,13 @@ void LayerMgr::MoveEntityDown(EntityHandle entity)
 	LayerID entityLayer = GetLayerID(entity);
 	if (entityLayer != GetBottomLayerID())
 		SetLayerID(entity, entityLayer - 1);
+}
+
+void LayerMgr::SetActiveLayer(LayerID layerID)
+{
+	if (!ExistsLayer(layerID))
+		layerID = 0;
+	mActiveLayerID = layerID;
 }
 
 inline void LayerMgr::RefreshList()

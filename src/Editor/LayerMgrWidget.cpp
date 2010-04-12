@@ -35,6 +35,10 @@ void Editor::LayerMgrWidget::Init()
 	btnEditEntity->subscribeEvent(CEGUI::PushButton::EventClicked,
 			CEGUI::SubscriberSlot(&Editor::LayerMgrWidget::OnButtonEditEntityClicked, this));
 
+	CEGUI::Window* btnSetActiveLayer = gCEGUIWM.getWindow(prefix + "/ButtonSetActiveLayer");
+	btnSetActiveLayer->subscribeEvent(CEGUI::PushButton::EventClicked,
+			CEGUI::SubscriberSlot(&Editor::LayerMgrWidget::OnButtonSetActiveLayerClicked, this));
+
 	mUpButton = gCEGUIWM.getWindow(prefix + "/ButtonUp");
 	mUpButton->subscribeEvent(CEGUI::PushButton::EventClicked,
 			CEGUI::SubscriberSlot(&Editor::LayerMgrWidget::OnButtonUpDownClicked, this));
@@ -54,12 +58,23 @@ void Editor::LayerMgrWidget::Update(float32 delta)
 	}
 }
 
-bool LayerMgrWidget::OnEditNewLayerKeyDown(const CEGUI::EventArgs& args)
+bool Editor::LayerMgrWidget::OnEditNewLayerKeyDown(const CEGUI::EventArgs& args)
 {
 	const CEGUI::KeyEventArgs& keyArgs = static_cast<const CEGUI::KeyEventArgs&>(args);
 	if (keyArgs.scancode == CEGUI::Key::Return)
 		return OnButtonAddLayerClicked(args);
 	return false;
+}
+
+bool Editor::LayerMgrWidget::OnButtonSetActiveLayerClicked(const CEGUI::EventArgs& args)
+{
+	OC_UNUSED(args);
+	CEGUI::TreeItem* currentItem = mTreeWindow->getFirstSelectedItem();
+	if (currentItem == 0 || currentItem->getUserData() != 0) return true;
+	EntitySystem::LayerID layerId = currentItem->getID();
+	gLayerMgr.SetActiveLayer(layerId);
+	UpdateTree();
+	return true;
 }
 
 bool Editor::LayerMgrWidget::OnButtonAddLayerClicked(const CEGUI::EventArgs& args)
@@ -132,7 +147,11 @@ void Editor::LayerMgrWidget::UpdateTree()
 
 	for (EntitySystem::LayerID layerID = gLayerMgr.GetTopLayerID(); layerID >= gLayerMgr.GetBottomLayerID(); --layerID)
 	{
-		CEGUI::TreeItem* layerItem = new CEGUI::TreeItem(gLayerMgr.GetLayerName(layerID));
+		string layerName = gLayerMgr.GetLayerName(layerID);
+		if (gLayerMgr.GetActiveLayer() == layerID)
+			layerName = "* " + layerName;
+
+		CEGUI::TreeItem* layerItem = new CEGUI::TreeItem(layerName);
 		layerItem->setSelectionBrushImage(IMAGES_FILE_NAME, TEXT_SELECTION_BRUSH_NAME);
 		layerItem->setID(layerID);
 		layerItem->setUserData(0);

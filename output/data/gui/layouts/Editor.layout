@@ -212,10 +212,17 @@
             <Window Type="Editor/Button" Name="EditorRoot/LayerMgr/ButtonAddLayer" >
                 <Property Name="Text" Value="OK" />
                 <Property Name="UnifiedAreaRect" Value="{{1,-76},{1,-25},{1,-52},{1,-1}}" />
+                <Property Name="Tooltip" Value="Add new layer." />
+            </Window>
+            <Window Type="Editor/Button" Name="EditorRoot/LayerMgr/ButtonSetActiveLayer" >
+                <Property Name="Text" Value="AC" />
+                <Property Name="UnifiedAreaRect" Value="{{1,-50},{1,-50},{1,-26},{1,-26}}" />
+                <Property Name="Tooltip" Value="Set selected layer as active." />
             </Window>
             <Window Type="Editor/Button" Name="EditorRoot/LayerMgr/ButtonEditEntity" >
                 <Property Name="Text" Value="ED" />
                 <Property Name="UnifiedAreaRect" Value="{{1,-50},{1,-25},{1,-26},{1,-1}}" />
+                <Property Name="Tooltip" Value="Edit selected entity." />
             </Window>
             <Window Type="Editor/StaticText" Name="EditorRoot/LayerMgr/LabelNewLayer" >
                 <Property Name="Text" Value="New layer:" />
@@ -228,10 +235,12 @@
             <Window Type="Editor/Button" Name="EditorRoot/LayerMgr/ButtonDown" >
                 <Property Name="UnifiedAreaRect" Value="{{1,-24},{1,-24},{1,0},{1,0}}" />
                 <Property Name="Text" Value="DW" />
+                <Property Name="Tooltip" Value="Move selected layer/entity down." />
             </Window>
             <Window Type="Editor/Button" Name="EditorRoot/LayerMgr/ButtonUp" >
                 <Property Name="UnifiedAreaRect" Value="{{1,-24},{1,-50},{1,0},{1,-26}}" />
                 <Property Name="Text" Value="UP" />
+                <Property Name="Tooltip" Value="Move selected layer/entity up." />
             </Window>
         </Window>
     </Window>

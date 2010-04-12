@@ -47,14 +47,14 @@ namespace EntitySystem
 		/// Returns the ID of the bottom layer.
 		LayerID GetBottomLayerID() const;
 
-		/// Inserts the layer behind the specific layer.
+		/// Inserts the layer behind the specified layer.
 		/// Use AddTopLayer to add the top layer instead.
 		/// @param behind The layer that the new layer is placed behind.
 		/// @param name A name of the new layer.
 		/// @return ID of the new layer, 0 in case of error.
 		LayerID InsertLayerBehind(LayerID behind, const string& name);
 
-		/// Moves the layer behind the specific layer.
+		/// Moves the layer behind the specified layer.
 		/// Use MoveLayerTop to move layer top.
 		/// @return A new ID of the moved layer, 0 in case of error.
 		LayerID MoveLayerBehind(LayerID id, LayerID behind);
@@ -86,10 +86,10 @@ namespace EntitySystem
 		/// Sets layer name with ID and returns if it is successful (it must be a unique name).
 		bool SetLayerName(LayerID id, const string& name);
 
-		/// Retrieves entities from a specific layer.
+		/// Retrieves entities from a specified layer.
 		void GetEntitiesFromLayer(LayerID id, EntityList& out);
 
-		/// Set the layer of specific entities.
+		/// Set the layer of specified entities.
 		bool SetLayerOfEntities(LayerID id, EntityList& entities);
 
 		/// Moves the specified entity to higher layer.
@@ -97,6 +97,13 @@ namespace EntitySystem
 
 		/// Moves the specified entity to lower layer.
 		void MoveEntityDown(EntityHandle entity);
+
+		/// Sets the active layer to the specified layer.
+		void SetActiveLayer(LayerID id);
+
+		/// Gets the active layer.
+		inline LayerID GetActiveLayer() const { return mActiveLayerID; }
+
 	private:
 
 		typedef deque<string> Layers;
@@ -106,6 +113,9 @@ namespace EntitySystem
 
 		/// Difference between index in mLayers and LayerID.
 		int32 mDifference;
+
+		/// Current layer
+		LayerID mActiveLayerID;
 
 		/// Cached list of entities.
 		EntityList mList;
@@ -123,7 +133,7 @@ namespace EntitySystem
 		/// Do nothing with entities in erased layer and do not refresh an entity list.
 		void EraseAndShift(LayerID id);
 
-		/// Inserts a new layer after specific layer with specific name and return the new ID.
+		/// Inserts a new layer after specified layer with specified name and return the new ID.
 		/// Do not refresh an entity list.
 		LayerID InsertAndShift(LayerID behind, const string& name);
 	};

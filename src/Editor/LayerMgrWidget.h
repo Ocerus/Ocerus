@@ -5,7 +5,7 @@
 #define _LAYERMGRWIDGET_H_
 
 #include "Base.h"
-
+#include "EntitySystem/EntityMgr/LayerMgr.h"
 
 namespace CEGUI
 {
@@ -32,6 +32,7 @@ namespace Editor
 		/// @name CEGUI Callbacks
 		//@{
 			bool OnEditNewLayerKeyDown(const CEGUI::EventArgs&);
+			bool OnButtonSetActiveLayerClicked(const CEGUI::EventArgs&);
 			bool OnButtonAddLayerClicked(const CEGUI::EventArgs&);
 			bool OnButtonUpDownClicked(const CEGUI::EventArgs&);
 			bool OnButtonEditEntityClicked(const CEGUI::EventArgs&);
@@ -39,7 +40,7 @@ namespace Editor
 
 	private:
 		void UpdateTree();
-		
+
 		CEGUI::Window* mLayerMgrWindow;
 		CEGUI::Window* mNewLayerEditbox;
 		CEGUI::Window* mUpButton;

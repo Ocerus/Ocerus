@@ -3,11 +3,11 @@
 #include "EditorGUI.h"
 #include "GUISystem/GUIMgr.h"
 #include "GUISystem/ViewportWindow.h"
+#include "EntitySystem/EntityMgr/LayerMgr.h"
 #include "Core/Game.h"
-#include <Box2D.h>
-
 #include "CEGUI.h"
 
+#include <Box2D.h>
 
 using namespace Editor;
 
@@ -138,6 +138,7 @@ void Editor::EditorMgr::CreateEntity()
 	desc.SetName("New Entity");
 	desc.AddComponent(EntitySystem::CT_Transform);
 	EntityHandle newEntity = gEntityMgr.CreateEntity(desc);
+	newEntity.GetProperty("Layer").SetValue(gLayerMgr.GetActiveLayer());
 	newEntity.FinishInit();
 }
 
