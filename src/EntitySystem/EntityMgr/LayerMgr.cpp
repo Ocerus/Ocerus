@@ -6,7 +6,7 @@ using namespace EntitySystem;
 LayerMgr::LayerMgr() : mLayers(), mDifference(0), mActiveLayerID(0), mList()
 {
 	ocInfo << "*** LayerMgr init ***";
-	mLayers.push_back("Initial layer"); // TODO: load this string from resource
+	PushBackLayer("Initial layer"); // TODO: load this string from resource
 }
 
 LayerMgr::~LayerMgr()
@@ -29,14 +29,14 @@ inline void SetLayerID(EntityHandle handle, LayerID id)
 LayerID LayerMgr::AddTopLayer(const string& name)
 {
 	if (ExistsLayerName(name)) { return 0; }
-	mLayers.push_back(name);
+	PushBackLayer(name);
 	return GetTopLayerID();
 }
 
 LayerID LayerMgr::AddBottomLayer(const string& name)
 {
 	if (ExistsLayerName(name)) { return 0; }
-	mLayers.push_front(name);
+	PushFrontLayer(name);
 	++mDifference;
 	return GetBottomLayerID();
 }
@@ -260,6 +260,23 @@ void LayerMgr::SetActiveLayer(LayerID layerID)
 	mActiveLayerID = layerID;
 }
 
+void LayerMgr::SetLayerVisible(LayerID id, bool isVisible)
+{
+	if (ExistsLayer(id))
+		mLayerVisibilities[id + mDifference] = isVisible;
+}
+
+void LayerMgr::ToggleLayerVisible(LayerID id)
+{
+	if (ExistsLayer(id))
+		mLayerVisibilities[id + mDifference] = !mLayerVisibilities[id + mDifference];
+}
+
+bool LayerMgr::IsLayerVisible(LayerID id) const
+{
+	return ExistsLayer(id) ? mLayerVisibilities[id + mDifference] : false;
+}
+
 inline void LayerMgr::RefreshList()
 {
 	gEntityMgr.GetEntitiesWithComponent(mList, CT_Transform);
@@ -277,4 +294,16 @@ void LayerMgr::ShiftEntities(EntitySystem::LayerID from, bool front)
 			SetLayerID(*it, id + front ? 1 : -1);
 		}
 	}
+}
+
+void LayerMgr::PushFrontLayer(const string& layerName)
+{
+	mLayers.push_front(layerName);
+	mLayerVisibilities.push_front(true);
+}
+
+void LayerMgr::PushBackLayer(const string& layerName)
+{
+	mLayers.push_back(layerName);
+	mLayerVisibilities.push_back(true);
 }

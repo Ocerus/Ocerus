@@ -209,6 +209,11 @@
                 <Property Name="UnifiedAreaRect" Value="{{0,0},{1,-26},{1,-78},{1,0}}" />
                 <Property Name="TextParsingEnabled" Value="False" />
             </Window>
+            <Window Type="Editor/Button" Name="EditorRoot/LayerMgr/ButtonToggleLayerVisibility" >
+                <Property Name="Text" Value="VI" />
+                <Property Name="UnifiedAreaRect" Value="{{1,-76},{1,-50},{1,-52},{1,-26}}" />
+                <Property Name="Tooltip" Value="Toggle the visibility of current layer." />
+            </Window>
             <Window Type="Editor/Button" Name="EditorRoot/LayerMgr/ButtonAddLayer" >
                 <Property Name="Text" Value="OK" />
                 <Property Name="UnifiedAreaRect" Value="{{1,-76},{1,-25},{1,-52},{1,-1}}" />

@@ -104,12 +104,25 @@ namespace EntitySystem
 		/// Gets the active layer.
 		inline LayerID GetActiveLayer() const { return mActiveLayerID; }
 
+		/// Returns whether the specified layer is visible.
+		bool IsLayerVisible(LayerID id) const;
+
+		/// Sets the visibility of the specified layer.
+		void SetLayerVisible(LayerID id, bool isVisible);
+
+		/// Toggle the visibility of the specified layer.
+		void ToggleLayerVisible(LayerID);
+
 	private:
 
 		typedef deque<string> Layers;
+		typedef deque<bool> LayerVisibilities;
 
 		/// Container of layers.
 		Layers mLayers;
+
+		/// Container of the layers' visibility flags
+		LayerVisibilities mLayerVisibilities;
 
 		/// Difference between index in mLayers and LayerID.
 		int32 mDifference;
@@ -136,6 +149,12 @@ namespace EntitySystem
 		/// Inserts a new layer after specified layer with specified name and return the new ID.
 		/// Do not refresh an entity list.
 		LayerID InsertAndShift(LayerID behind, const string& name);
+
+		/// Appends a new layer to the layer container.
+		void PushFrontLayer(const string& layerName);
+
+		/// Prepends a new layer to the layer container.
+		void PushBackLayer(const string& layerName);
 	};
 }
 

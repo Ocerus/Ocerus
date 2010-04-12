@@ -27,6 +27,10 @@ void Editor::LayerMgrWidget::Init()
 	mNewLayerEditbox->subscribeEvent(CEGUI::Editbox::EventKeyDown,
 			CEGUI::SubscriberSlot(&Editor::LayerMgrWidget::OnEditNewLayerKeyDown, this));
 
+	CEGUI::Window* btnToggleLayerVisibility = gCEGUIWM.getWindow(prefix + "/ButtonToggleLayerVisibility");
+	btnToggleLayerVisibility->subscribeEvent(CEGUI::PushButton::EventClicked,
+			CEGUI::SubscriberSlot(&Editor::LayerMgrWidget::OnButtonToggleLayerVisibilityClicked, this));
+
 	CEGUI::Window* btnAddLayer = gCEGUIWM.getWindow(prefix + "/ButtonAddLayer");
 	btnAddLayer->subscribeEvent(CEGUI::PushButton::EventClicked,
 			CEGUI::SubscriberSlot(&Editor::LayerMgrWidget::OnButtonAddLayerClicked, this));
@@ -126,6 +130,18 @@ bool Editor::LayerMgrWidget::OnButtonEditEntityClicked(const CEGUI::EventArgs&)
 	return true;
 }
 
+bool Editor::LayerMgrWidget::OnButtonToggleLayerVisibilityClicked(const CEGUI::EventArgs& args)
+{
+	OC_UNUSED(args);
+	CEGUI::TreeItem* currentItem = mTreeWindow->getFirstSelectedItem();
+	if (currentItem == 0 || currentItem->getUserData() != 0) return true;
+	EntitySystem::LayerID layerId = currentItem->getID();
+	gLayerMgr.ToggleLayerVisible(layerId);
+	UpdateTree();
+	return true;
+}
+
+
 void Editor::LayerMgrWidget::UpdateTree()
 {
 	// Save information about selected item
@@ -151,6 +167,8 @@ void Editor::LayerMgrWidget::UpdateTree()
 		if (gLayerMgr.GetActiveLayer() == layerID)
 			layerName = "* " + layerName;
 
+		layerName += (gLayerMgr.IsLayerVisible(layerID)) ? " (+)" : " (-)";
+
 		CEGUI::TreeItem* layerItem = new CEGUI::TreeItem(layerName);
 		layerItem->setSelectionBrushImage(IMAGES_FILE_NAME, TEXT_SELECTION_BRUSH_NAME);
 		layerItem->setID(layerID);
@@ -170,7 +188,6 @@ void Editor::LayerMgrWidget::UpdateTree()
 			entityItem->setUserData((void*)1);
 			entityItem->setID(it->GetID());
 			layerItem->addItem(entityItem);
-
 
 			if (!isLayerSelected && selectedEntityId == it->GetID())
 				selectedItem = entityItem;
