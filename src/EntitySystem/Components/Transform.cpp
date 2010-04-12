@@ -3,6 +3,8 @@
 #include <Box2D.h>
 #include "EntitySystem/EntityMgr/LayerMgr.h"
 
+const float32 MIN_SCALAR_SCALE = 0.1f;
+
 void EntityComponents::Transform::Create( void )
 {
 	mPosition.SetZero();
@@ -37,4 +39,14 @@ void EntityComponents::Transform::SetLayer(int32 value)
 	{
 		mDepth = value;
 	}
+}
+
+void EntityComponents::Transform::SetScale( Vector2 value )
+{
+	if (MathUtils::Abs(value.x) < MIN_SCALAR_SCALE || MathUtils::Abs(value.y) < MIN_SCALAR_SCALE)
+	{
+		ocWarning << "Too small scale of " << value;
+		return;
+	}
+	mScale = value;
 }

@@ -37,7 +37,7 @@ namespace EntityComponents
 		Vector2 GetScale(void) const { return mScale; }
 		
 		/// Scale of the entity with respect to the X and Y axes in the entity's space.
-		void SetScale(Vector2 value) { mScale = value; }
+		void SetScale(Vector2 value);
 		
 		/// Angle of the entity in radians.
 		float32 GetAngle(void) const { return mAngle; }
