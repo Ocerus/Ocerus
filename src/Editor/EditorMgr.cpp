@@ -87,9 +87,15 @@ void Editor::EditorMgr::Draw(float32 delta)
 	gGfxRenderer.DrawEntities();
 
 	// draw the physical shape of representation of selected entities
+	bool hoveredDrawn = false;
 	for (EntityList::iterator it=mSelectedEntities.begin(); it!=mSelectedEntities.end(); ++it)
 	{
-		DrawEntityPhysicalShape(*it, GfxSystem::Color(255,0,0));
+		if (*it == mHoveredEntity) hoveredDrawn = true;
+		DrawEntityPhysicalShape(*it, GfxSystem::Color(0,255,0,100), 2.0f);
+	}
+	if (!hoveredDrawn && mHoveredEntity.IsValid())
+	{
+		DrawEntityPhysicalShape(mHoveredEntity, GfxSystem::Color(200,200,200,150), 3.5f);
 	}
 
 	// draw the multi-selection stuff
@@ -321,7 +327,7 @@ bool Editor::EditorMgr::GetWorldCursorPos(Vector2& worldCursorPos) const
 	return gGfxRenderer.ConvertScreenToWorldCoords(GfxSystem::Point(ms.x, ms.y), worldCursorPos, rt);
 }
 
-bool Editor::EditorMgr::DrawEntityPhysicalShape( const EntitySystem::EntityHandle entity, const GfxSystem::Color shapeColor )
+bool Editor::EditorMgr::DrawEntityPhysicalShape( const EntitySystem::EntityHandle entity, const GfxSystem::Color shapeColor, const float32 shapeWidth )
 {
 	EntitySystem::ComponentIdList components;
 	gEntityMgr.GetEntityComponentsOfType(entity, EntitySystem::CT_PolygonCollider, components);
@@ -343,7 +349,7 @@ bool Editor::EditorMgr::DrawEntityPhysicalShape( const EntitySystem::EntityHandl
 			vertices[i] = MathUtils::Multiply(xf, poly->m_vertices[i]);
 		}
 
-		gGfxRenderer.DrawPolygon(vertices, vertexCount, shapeColor, false, 2.0f);
+		gGfxRenderer.DrawPolygon(vertices, vertexCount, shapeColor, false, shapeWidth);
 		result = true;
 	}
 
