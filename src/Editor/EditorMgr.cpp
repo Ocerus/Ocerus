@@ -33,9 +33,8 @@ EditorMgr::~EditorMgr()
 void EditorMgr::LoadEditor()
 {
 	mMultiselectStarted = false;
-	mEditToolWorking = false;
+	SetEditTool(ET_MOVE);
 	mHoveredEntity.Invalidate();
-	mEditTool = ET_MOVE;
 
 	mEditorGUI->LoadGUI();
 	gInputMgr.AddInputListener(this);
@@ -229,30 +228,37 @@ void Editor::EditorMgr::PauseAction()
 	GlobalProperties::Get<Core::Game>("Game").PauseAction();
 }
 
+void Editor::EditorMgr::RestartAction()
+{
+	GlobalProperties::Get<Core::Game>("Game").RestartAction();
+}
+
+void Editor::EditorMgr::SetEditTool(eEditTool newEditTool)
+{
+	mEditToolWorking = false;
+	mEditTool = newEditTool;
+}
+
 bool Editor::EditorMgr::KeyPressed( const InputSystem::KeyInfo& ke )
 {
 	if (ke.keyCode == InputSystem::KC_M)
 	{
-		mEditToolWorking = false;
-		mEditTool = ET_MOVE;
+		SetEditTool(ET_MOVE);
 		return true;
 	}
 	else if (ke.keyCode == InputSystem::KC_R)
 	{
-		mEditToolWorking = false;
-		mEditTool = ET_ROTATE;
+		SetEditTool(ET_ROTATE);
 		return true;
 	}
 	else if (ke.keyCode == InputSystem::KC_Z)
 	{
-		mEditToolWorking = false;
-		mEditTool = ET_ROTATE_Z;
+		SetEditTool(ET_ROTATE_Z);
 		return true;
 	}
 	else if (ke.keyCode == InputSystem::KC_S)
 	{
-		mEditToolWorking = false;
-		mEditTool = ET_SCALE;
+		SetEditTool(ET_SCALE);
 		return true;
 	}
 

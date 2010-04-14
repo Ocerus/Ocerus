@@ -183,6 +183,41 @@ bool Editor::EditorMenu::OnToolbarButtonClicked(const CEGUI::EventArgs& e)
 		return true;
 	}
 
+	/// ---- Restart action ----
+	if (buttonName == toolbarPrefix + "/RestartAction")
+	{
+		gEditorMgr.RestartAction();
+		return true;
+	}
+
+	/// ---- Edit tool move ----
+	if (buttonName == toolbarPrefix + "/EditToolMove")
+	{
+		gEditorMgr.SetEditTool(EditorMgr::ET_MOVE);
+		return true;
+	}
+
+	/// ---- Edit tool rotate ----
+	if (buttonName == toolbarPrefix + "/EditToolRotate")
+	{
+		gEditorMgr.SetEditTool(EditorMgr::ET_ROTATE);
+		return true;
+	}
+
+	/// ---- Edit tool rotate-z ----
+	if (buttonName == toolbarPrefix + "/EditToolRotateZ")
+	{
+		gEditorMgr.SetEditTool(EditorMgr::ET_ROTATE_Z);
+		return true;
+	}
+
+	/// ---- Edit tool scale ----
+	if (buttonName == toolbarPrefix + "/EditToolScale")
+	{
+		gEditorMgr.SetEditTool(EditorMgr::ET_SCALE);
+		return true;
+	}
+
 	ocWarning << "Toolbar button " << buttonName << " clicked, but no action defined.";
 	return true;
 }

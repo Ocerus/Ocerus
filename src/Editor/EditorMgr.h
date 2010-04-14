@@ -82,6 +82,9 @@ namespace Editor
 		friend class EditorGUI;
 		friend class EditorMenu;
 
+		/// The type of edit tool.
+		enum eEditTool { ET_MOVE=0, ET_ROTATE, ET_ROTATE_Z, ET_SCALE };
+
 		/// Creates a new entity.
 		void CreateEntity();
 
@@ -102,7 +105,13 @@ namespace Editor
 
 		/// Pauses action of the edited game until it is resumed again.
 		void PauseAction();
-		
+
+		/// Restarts the edited game action to the initial (saved) state.
+		void RestartAction();
+
+		/// Sets the current edit tool.
+		void SetEditTool(eEditTool newEditTool);
+
 	private:
 
 		EditorGUI* mEditorGUI;
@@ -116,7 +125,7 @@ namespace Editor
 		EntityList mSelectedEntities; ///< Currently selected entities.
 
 		// Tools.
-		enum eEditTool { ET_MOVE=0, ET_ROTATE, ET_ROTATE_Z, ET_SCALE };
+		
 		eEditTool mEditTool; ///< Current tool.
 		bool mEditToolWorking; ///< If true the tool is currently doing something.
 		Vector2 mEditToolCursorPosition; ///< World position where the tool started.
