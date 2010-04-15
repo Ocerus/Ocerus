@@ -4,6 +4,8 @@
 #include "GUISystem/CEGUITools.h"
 #include "Core/Application.h"
 
+#include "GUISystem/MessageBox.h"
+
 using namespace Editor;
 
 namespace Editor
@@ -87,7 +89,10 @@ bool Editor::EditorMenu::OnMenuItemClicked(const CEGUI::EventArgs& e)
 
 	if (itemName == menubarPrefix + "/File/Quit")
 	{
-		gApp.Shutdown();
+		GUISystem::MessageBox* messageBox = new GUISystem::MessageBox(GUISystem::MessageBox::MBT_YES_NO, MBT_QUIT);
+		messageBox->SetText("Do you really want to quit?");
+		messageBox->RegisterCallback(new GUISystem::MessageBox::Callback<Editor::EditorMenu>(this, &Editor::EditorMenu::OnMessageBoxClicked));
+		messageBox->Show();
 		return true;
 	}
 
@@ -221,6 +226,20 @@ bool Editor::EditorMenu::OnToolbarButtonClicked(const CEGUI::EventArgs& e)
 	ocWarning << "Toolbar button " << buttonName << " clicked, but no action defined.";
 	return true;
 }
+
+void Editor::EditorMenu::OnMessageBoxClicked(GUISystem::MessageBox::eMessageBoxButton button, int t)
+{
+	eMessageBoxTags tag = (eMessageBoxTags)t;
+	switch(tag)
+	{
+	case MBT_QUIT:
+		if (button == GUISystem::MessageBox::MBB_YES)
+			gApp.Shutdown();
+		return;
+	}
+	ocWarning << "MessageBox with tag " << tag << " clicked, but no action defined.";
+}
+
 
 void Editor::EditorMenu::InitComponentMenu()
 {

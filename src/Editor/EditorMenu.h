@@ -5,6 +5,7 @@
 #define _EDITOR_EDITORMENU_H_
 
 #include "Base.h"
+#include "GUISystem/MessageBox.h"
 
 namespace CEGUI
 {
@@ -32,7 +33,12 @@ namespace Editor
 			bool OnToolbarButtonClicked(const CEGUI::EventArgs&);
 		//@}
 
+		/// MessageBox callback
+		void OnMessageBoxClicked(GUISystem::MessageBox::eMessageBoxButton button, int tag);
+
 	private:
+		enum eMessageBoxTags { MBT_QUIT };
+
 		/// Creates menu items in AddComponent menu.
 		void InitComponentMenu();
 

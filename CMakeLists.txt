@@ -251,6 +251,7 @@ set(GUISystem_SRCS
 	src/GUISystem/GUIMgr.cpp
 	src/GUISystem/GUIConsole.cpp
 	src/GUISystem/CEGUITools.cpp
+	src/GUISystem/MessageBox.cpp
 	src/GUISystem/VerticalLayout.cpp
 	src/GUISystem/ViewportWindow.cpp
 )

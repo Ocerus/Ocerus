@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<GUILayout >
+    <Window Type="Editor/FrameWindow" Name="" >
+        <Property Name="Alpha" Value="0.9" />
+        <Property Name="AlwaysOnTop" Value="True" />
+        <Property Name="TitlebarFont" Value="DejaVuSans-10" />
+        <Property Name="SizingEnabled" Value="False" />
+        <Property Name="TitlebarEnabled" Value="False" />
+        <Property Name="UnifiedAreaRect" Value="{{0.5,-150},{0.5,-60},{0.5,150},{0.5,60}}" />
+        <Property Name="DragMovingEnabled" Value="False" />
+        <Property Name="CloseButtonEnabled" Value="False" />
+        <Window Type="Editor/StaticText" Name="/MessageText" >
+            <Property Name="Text" Value="Message Text." />
+<!--
+            <Property Name="HorzExtent" Value="88" />
+            <Property Name="VertExtent" Value="13.9688" />
+-->
+            <Property Name="FrameEnabled" Value="False" />
+            <Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{1,0},{1,-32}}" />
+            <Property Name="BackgroundEnabled" Value="False" />
+        </Window>
+        <Window Type="Editor/Button" Name="/ButtonOK" >
+            <Property Name="Text" Value="OK" />
+            <Property Name="UnifiedAreaRect" Value="{{0,0},{1,-24},{0,90},{1,0}}" />
+            <Property Name="Visible" Value="False" />
+        </Window>
+        <Window Type="Editor/Button" Name="/ButtonCancel" >
+            <Property Name="Text" Value="Cancel" />
+            <Property Name="UnifiedAreaRect" Value="{{0,0},{1,-24},{0,90},{1,0}}" />
+            <Property Name="Visible" Value="False" />
+        </Window>
+        <Window Type="Editor/Button" Name="/ButtonYes" >
+            <Property Name="Text" Value="Yes" />
+            <Property Name="UnifiedAreaRect" Value="{{0,0},{1,-24},{0,90},{1,0}}" />
+            <Property Name="Visible" Value="False" />
+        </Window>
+        <Window Type="Editor/Button" Name="/ButtonNo" >
+            <Property Name="Text" Value="No" />
+            <Property Name="UnifiedAreaRect" Value="{{0,0},{1,-24},{0,90},{1,0}}" />
+            <Property Name="Visible" Value="False" />
+        </Window>
+    </Window>
+</GUILayout>
