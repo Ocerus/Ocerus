@@ -1,4 +1,4 @@
-#include "Base.h"
+#include "Common.h"
 #include "ResourceWindow.h"
 
 #include "ResourceSystem/ResourceMgr.h"
@@ -28,7 +28,7 @@ void Editor::ResourceWindow::Init()
 	gGUIMgr.GetRootLayout()->addChildWindow(w);
 	CEGUI::ItemListbox* list = static_cast<CEGUI::ItemListbox*>(w->getChild(w->getName() + "/List"));
 	OC_ASSERT(list != 0);
-	for (uint i = 0; i < list->getContentPane()->getChildCount(); ++i)
+	for (uint32 i = 0; i < list->getContentPane()->getChildCount(); ++i)
 	{
 		CEGUI::Window* aa = list->getContentPane()->getChildAtIdx(i);
 		ocWarning << aa->getName();
@@ -48,7 +48,7 @@ void Editor::ResourceWindow::Init()
 	{
 		string path = (*it)->GetFileDir();
 
-		uint depth = 0;
+		uint32 depth = 0;
 		size_t searchFrom = 0;
 		size_t match = 0;		
 		do

@@ -4,7 +4,7 @@
 #ifndef EDITOR_RESOURCEWINDOW_H
 #define EDITOR_RESOURCEWINDOW_H
 
-#include "Common.h"
+#include "Base.h"
 
 namespace Editor {
 
