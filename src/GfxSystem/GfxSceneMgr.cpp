@@ -1,5 +1,7 @@
 #include "Common.h"
 #include "GfxSceneMgr.h"
+#include "EntitySystem/EntityMgr/LayerMgr.h"
+#include "EntitySystem/Components/Transform.h"
 
 using namespace GfxSystem;
 
@@ -53,7 +55,9 @@ void GfxSceneMgr::DrawVisibleSprites()
 	{
 		if (it->first->GetType() == CT_Sprite)
 		{
-			gGfxRenderer.DrawSprite(it->first, it->second);
+			EntityComponents::Transform* transform = (EntityComponents::Transform*)it->second;
+			if (gLayerMgr.IsLayerVisible(transform->GetLayer()))
+				gGfxRenderer.DrawSprite(it->first, it->second);
 		}
 	}
 }
@@ -64,7 +68,9 @@ void GfxSystem::GfxSceneMgr::DrawVisibleModels()
 	{
 		if (it->first->GetType() == CT_Model)
 		{
-			gGfxRenderer.DrawModel(it->first, it->second);
+			EntityComponents::Transform* transform = (EntityComponents::Transform*)it->second;
+			if (gLayerMgr.IsLayerVisible(transform->GetLayer()))
+				gGfxRenderer.DrawModel(it->first, it->second);
 		}
 	}
 }

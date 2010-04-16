@@ -181,7 +181,7 @@ TextureHandle OglRenderer::LoadTexture( const uint8* const buffer, const int32 b
 {
 	uint8* img;
 	int channels = 0;
-	img = SOIL_load_image_from_memory(buffer, buffer_length, width, height, &channels, force_channels);
+	img = SOIL_load_image_from_memory(buffer, buffer_length, (int*)width, (int*)height, &channels, force_channels);
 	if( NULL == img )
 	{
 		ocError << "SOIL error: " << SOIL_last_result();

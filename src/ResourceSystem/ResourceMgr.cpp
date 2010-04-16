@@ -194,7 +194,7 @@ bool ResourceMgr::AddResourceFileToGroup(const string& filepath, const StringKey
 	ResourceGroupMap::const_iterator groupIt = mResourceGroups.find(group);
 	if (mResourceGroups.find(group) != mResourceGroups.end() && groupIt->second->find(name) != groupIt->second->end())
 	{
-		ocWarning << "Resource '" << name << "' already exists";
+		// resource already exists
 		return true;
 	}
 
