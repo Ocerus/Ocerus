@@ -47,7 +47,7 @@ EntitySystem::EntityHandle EntitySystem::EntityPicker::PickSingleEntity( void )
 	physics->QueryAABB(&query, cursorAABB);
 
 	// find the shape with the lowest depth value
-	int32 lowestDepth = INT32_MAX;
+	int32 lowestDepth = numeric_limits<int32>::max();
 	EntityHandle lowestDepthEntity = EntityHandle::Null;
 	for (int32 i=0; i<query.count; ++i)
 	{

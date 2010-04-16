@@ -158,7 +158,7 @@ void EditorGUI::UpdateEntityEditorWindow()
 			mEntityEditorLayout = new GUISystem::VerticalLayout(entityEditorPane, entityEditorContentPane);
 
 		// Clear all the content of Entity Editor.
-		int childCount = entityEditorContentPane->getChildCount();
+		size_t childCount = entityEditorContentPane->getChildCount();
 		for (int i = (childCount - 1); i >= 0; --i)
 		{
 			gCEGUIWM.destroyWindow(entityEditorContentPane->getChildAtIdx(i));

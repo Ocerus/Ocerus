@@ -277,6 +277,7 @@ set(ResourceSystem_SRCS
 	src/ResourceSystem/ResourceMgr.cpp
 	src/ResourceSystem/XMLResource.cpp
 	src/ResourceSystem/Resource.cpp
+	src/ResourceSystem/ResourceTypes.cpp
 	src/ResourceSystem/XMLOutput.cpp
 )
 

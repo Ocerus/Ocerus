@@ -1,34 +1,37 @@
 /// @file
-/// Platform specific setting of basic (simple) data types.
+/// Platform specific setting of basic (primitive) data types.
 
 #ifndef BasicTypes_h__
 #define BasicTypes_h__
 
-#include <math.h>
-#include <limits.h>
+#include <cmath>
+#include <climits>
+#include <stddef.h>
 #include <boost/cstdint.hpp>
+#include <boost/limits.hpp>
 
-typedef signed char	int8;
-typedef signed short int16;
-typedef signed int int32;
-typedef unsigned char uint8;
-typedef unsigned short uint16;
-typedef unsigned int uint32;
-typedef float float32;
-typedef double float64;
+typedef boost::int8_t int8;
+typedef boost::int16_t int16;
+typedef boost::int32_t int32;
+typedef boost::int64_t int64;
+
+typedef boost::uint8_t uint8;
+typedef boost::uint16_t uint16;
+typedef boost::uint32_t uint32;
+typedef boost::uint64_t uint64;
+
+/// @name Floating point number types
+/// @deprecated These typedefs are deprecated as there is no such thing as float32 and float64. We should use float, double and long double instead.
+//@{
+	typedef float float32;
+	typedef double float64;
+//@}
+
 typedef uintptr_t uintptr;
-#define	FLOAT32_MAX	FLT_MAX
-#define	FLOAT32_MIN	FLT_MIN
-#define	FLOAT32_EPSILON	FLT_EPSILON
-#define INT32_MAX INT_MAX
-#define INT32_MIN INT_MIN
+typedef std::size_t size_t;
 
-#if defined(_MSC_VER) || defined(__BORLANDC__)
-typedef unsigned __int64 uint64;
-typedef signed __int64 int64;
-#else
-typedef unsigned long long int uint64;
-typedef signed long long int int64;
-#endif
+/// Template structure that holds numeric limits.
+template<typename T>
+struct numeric_limits: public std::numeric_limits<T> {};
 
 #endif // BasicTypes_h__

@@ -6,8 +6,8 @@ SUITE(MathUtils)
 {
 	TEST(PI)
 	{
-		CHECK_CLOSE(3.1415926535897932384626433832795f, MathUtils::PI, FLOAT32_EPSILON);
-		CHECK_CLOSE(1.5707963267948966192313216916398f, MathUtils::HALF_PI, FLOAT32_EPSILON);
+		CHECK_CLOSE(3.1415926535897932384626433832795f, MathUtils::PI, numeric_limits<float>::epsilon());
+		CHECK_CLOSE(1.5707963267948966192313216916398f, MathUtils::HALF_PI, numeric_limits<float>::epsilon());
 	}
 
 	TEST(AbsoluteValue)
@@ -16,12 +16,12 @@ SUITE(MathUtils)
 		CHECK_EQUAL(MathUtils::Abs(-11), 11);
 		CHECK_EQUAL(MathUtils::Abs(11.0f), 11.0f);
 		CHECK_EQUAL(MathUtils::Abs(-11.0f), 11.0f);
-		CHECK_EQUAL(MathUtils::Abs(FLOAT32_MAX), FLOAT32_MAX);
-		CHECK_EQUAL(MathUtils::Abs(FLOAT32_MIN), FLOAT32_MIN);
-		CHECK_EQUAL(MathUtils::Abs(-FLOAT32_MAX), FLOAT32_MAX);
-		CHECK_EQUAL(MathUtils::Abs(-FLOAT32_MIN), FLOAT32_MIN);
-		CHECK_EQUAL(MathUtils::Abs(FLOAT32_EPSILON), FLOAT32_EPSILON);
-		CHECK_EQUAL(MathUtils::Abs(-FLOAT32_EPSILON), FLOAT32_EPSILON);
+		CHECK_EQUAL(MathUtils::Abs(numeric_limits<float>::max()), numeric_limits<float>::max());
+		CHECK_EQUAL(MathUtils::Abs(numeric_limits<float>::min()), numeric_limits<float>::min());
+		CHECK_EQUAL(MathUtils::Abs(-numeric_limits<float>::max()), numeric_limits<float>::max());
+		CHECK_EQUAL(MathUtils::Abs(-numeric_limits<float>::min()), numeric_limits<float>::min());
+		CHECK_EQUAL(MathUtils::Abs(numeric_limits<float>::epsilon()), numeric_limits<float>::epsilon());
+		CHECK_EQUAL(MathUtils::Abs(-numeric_limits<float>::epsilon()), numeric_limits<float>::epsilon());
 	}
 
 	TEST(Minimum)
@@ -29,23 +29,23 @@ SUITE(MathUtils)
 		CHECK_EQUAL(MathUtils::Min(1, 10), 1);
 		CHECK_EQUAL(MathUtils::Min(-1, 10), -1);
 		CHECK_EQUAL(MathUtils::Min(1, -10), -10);
-		CHECK_EQUAL(MathUtils::Min(FLOAT32_MIN, FLOAT32_MAX), FLOAT32_MIN);
-		CHECK_EQUAL(MathUtils::Min(FLOAT32_MIN, -FLOAT32_MAX), -FLOAT32_MAX);
-		CHECK_EQUAL(MathUtils::Min(-FLOAT32_MIN, -FLOAT32_MAX), -FLOAT32_MAX);
+		CHECK_EQUAL(MathUtils::Min(numeric_limits<float>::min(), numeric_limits<float>::max()), numeric_limits<float>::min());
+		CHECK_EQUAL(MathUtils::Min(numeric_limits<float>::min(), -numeric_limits<float>::max()), -numeric_limits<float>::max());
+		CHECK_EQUAL(MathUtils::Min(-numeric_limits<float>::min(), -numeric_limits<float>::max()), -numeric_limits<float>::max());
 	}
 
 	TEST(Angle)
 	{
 		Vector2 v1(0,1);
 		Vector2 v2(1,0);
-		CHECK_CLOSE(MathUtils::HALF_PI, MathUtils::Angle(v1,v2), FLOAT32_EPSILON);
+		CHECK_CLOSE(MathUtils::HALF_PI, MathUtils::Angle(v1,v2), numeric_limits<float>::epsilon());
 	}
 
 	TEST(AngleDistance)
 	{
-		CHECK_CLOSE(0, MathUtils::AngleDistance(MathUtils::HALF_PI, MathUtils::HALF_PI), FLOAT32_EPSILON);
-		CHECK_CLOSE(MathUtils::HALF_PI, MathUtils::AngleDistance(MathUtils::PI, MathUtils::HALF_PI), FLOAT32_EPSILON);
-		CHECK_CLOSE(MathUtils::HALF_PI, MathUtils::AngleDistance(-MathUtils::PI, MathUtils::HALF_PI), FLOAT32_EPSILON);
+		CHECK_CLOSE(0, MathUtils::AngleDistance(MathUtils::HALF_PI, MathUtils::HALF_PI), numeric_limits<float>::epsilon());
+		CHECK_CLOSE(MathUtils::HALF_PI, MathUtils::AngleDistance(MathUtils::PI, MathUtils::HALF_PI), numeric_limits<float>::epsilon());
+		CHECK_CLOSE(MathUtils::HALF_PI, MathUtils::AngleDistance(-MathUtils::PI, MathUtils::HALF_PI), numeric_limits<float>::epsilon());
 		//not very nice precision but ok
 		CHECK_CLOSE(MathUtils::HALF_PI + 1.0f, MathUtils::AngleDistance(-10*MathUtils::PI, MathUtils::HALF_PI + 1.0f), 0.000001f);
 		CHECK_CLOSE(MathUtils::PI - 1.0f, MathUtils::AngleDistance(-20*MathUtils::PI, MathUtils::PI + 1.0f), 0.00001f);
