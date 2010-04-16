@@ -5,11 +5,11 @@
 #define _STRINGMGR_H_
 
 #include "Base.h"
-#include "Singleton.h"
 #include "TextData.h"
 
 /// Macro for easier use
-#define gStringMgr StringSystem::StringMgr::GetSingleton()
+#define gStringMgrSystem StringSystem::StringMgr::GetSystem()
+#define gStringMgrProject StringSystem::StringMgr::GetProject()
 
 /// String system manages all text data in the system.
 /// However, only the text data presented to the end user is managed by this system. For example, debug strings
@@ -19,13 +19,14 @@ namespace StringSystem
 	/// This class is a special type of resource manager, designed to work with strings (text resources).
 	///	@remarks Its main purpose is to store and index text data for further use. You should always load string
 	///	data via this class.
-	class StringMgr : public Singleton<StringMgr>
+	class StringMgr
 	{
 	public:
 
 		/// If the basepath parameter is provided, the manager will relate all files to this path.
-		/// Global root is in the ResourceMgr's basepath and this basepath is relative to it.
-		StringMgr(const string& basepath = "strings/");
+		/// Global root is in the ResourceMgr's basepath (according to the first parameter)
+		/// and this basepath is relative to it.
+		StringMgr(const ResourceSystem::eBasePathType basePathType, const string& basePath = "strings/");
 
 		~StringMgr(void);
 
@@ -51,6 +52,21 @@ namespace StringSystem
 		/// Returns a text data specified by a given search key.
 		/// Note that this may be quite slow if strings are long. Returning a ptr should be preffered.
 		const TextData GetTextData(const StringKey& key);
+		
+		/// Initializes the system and the project string managers.
+		static void Init(const string& systemBasePath = "strings/", const string& projectBasePath = "strings/");
+		
+		/// Returns whether the system and the project string managers are initialized.
+		static bool IsInited();
+		
+		/// Deinitializes the system and the project string managers.
+		static void Deinit(); 
+		
+		/// Returns the system manager.
+		static StringMgr& GetSystem();
+		
+		/// Returns the project manager.
+		static StringMgr& GetProject();
 
 	private:
 
@@ -65,6 +81,18 @@ namespace StringSystem
 
 		/// Basepath for string data. The root is in the ResourceMgr's basepath.
 		string mBasePath;
+		
+		/// Type of a base path which the ResourceMgr is called with.
+		ResourceSystem::eBasePathType mBasePathType;
+		
+		/// Returns string reprezentation of a type of this manager instance.
+		string GetNameOfManager();
+		
+		/// The system string manager.
+		static StringMgr* msSystem;
+		
+		/// The project string manager.
+		static StringMgr* msProject;
 
 	};
 }

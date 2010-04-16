@@ -83,6 +83,12 @@ namespace Reflection
 		/// A component can define that it depends on other components. This is then used to determine the order
 		/// of creation of components. It is ensured that all components this component depends on will be created first.
 		void AddComponentDependency(const EntitySystem::eComponentType dep);
+		
+		/// Returns whether the component is transient.
+		inline bool IsTransient(void) const { return mTransient; }
+		
+		/// Sets whether the component is transient.
+		inline void SetTransient(bool transient) { mTransient = transient; }
 
 		/// Returns true if the RTTI structure is of the type specified by CLID.
 		inline bool	IsTypeOf(ClassID CLID) const { return mCLID == CLID; }
@@ -117,6 +123,7 @@ namespace Reflection
 		ClassFactoryFunc mClassFactory;
 		PropertyMap mProperties;
 		ComponentDependencyList mComponentDependencies;
+		bool mTransient;
 
 	};
 }

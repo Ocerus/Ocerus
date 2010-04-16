@@ -721,6 +721,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\ResourceSystem\ResourceTypes.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\src\ResourceSystem\XMLOutput.cpp"
 					>
 				</File>

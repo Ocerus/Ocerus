@@ -52,7 +52,7 @@ void Application::Init()
 	ResourceSystem::ResourceMgr::CreateSingleton();
 	ResourceSystem::ResourceMgr::GetSingleton().Init("data/");
 
-	StringSystem::StringMgr::CreateSingleton();
+	StringSystem::StringMgr::Init();
 
 	GfxSystem::GfxWindow::CreateSingleton();
 	GfxSystem::GfxWindow::GetSingleton().Init(1024, 768, false, "Ocerus");
@@ -104,7 +104,7 @@ Application::~Application()
 	InputSystem::InputMgr::DestroySingleton();
 	GfxSystem::GfxRenderer::DestroySingleton();
 	GfxSystem::GfxWindow::DestroySingleton();
-	StringSystem::StringMgr::DestroySingleton();
+	StringSystem::StringMgr::Deinit();
 	ResourceSystem::ResourceMgr::DestroySingleton();
 	Utils::Hash::ClearHashMap();
 

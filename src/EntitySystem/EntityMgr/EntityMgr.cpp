@@ -11,10 +11,11 @@ namespace EntitySystem
 	/// This struct holds info about an instance of an entity in the system.
 	struct EntityInfo
 	{
-		EntityInfo(const string& name, const EntityHandle prototype):
+		EntityInfo(const string& name, const EntityHandle prototype, const bool transient):
 			mFullyInited(false),
 			mName(name),
-			mPrototype(prototype)
+			mPrototype(prototype),
+			mTransient(transient)
 		{
 
 		}
@@ -25,6 +26,8 @@ namespace EntitySystem
 		string mName;
 		/// Handle to the prototype entity (can be invalid).
 		EntityHandle mPrototype;
+		/// Whether the entity should not be saved.
+		bool mTransient;
 
 	private:
 		EntityInfo(const EntityInfo& rhs);
@@ -194,7 +197,7 @@ EntityHandle EntityMgr::CreateEntity(EntityDescription& desc)
 	}
 
 	// inits entity attributes
-	mEntities[entityHandle.GetID()] = new EntityInfo(desc.mName, EntityHandle(desc.mPrototype));
+	mEntities[entityHandle.GetID()] = new EntityInfo(desc.mName, EntityHandle(desc.mPrototype), desc.mTransient);
 	if (desc.mKind == EntityDescription::EK_PROTOTYPE) mPrototypes[entityHandle.GetID()] = new PrototypeInfo();
 
 	// link the entity to its prototype
@@ -213,6 +216,55 @@ EntityHandle EntityMgr::CreateEntity(EntityDescription& desc)
 	ocTrace << "Entity created: " << entityHandle;
 
 	return entityHandle;
+}
+
+EntityHandle EntityMgr::DuplicateEntity(const EntityHandle oldEntity, const string& newName)
+{
+  OC_ASSERT(mComponentMgr);
+  
+  if (!oldEntity.IsValid()) { return EntityHandle::Null; }
+  
+  // create the handle for the new entity
+	EntityHandle newEntity;
+	if (IsEntityPrototype(oldEntity)) newEntity = EntityHandle::CreateUniquePrototypeHandle();
+	else newEntity = EntityHandle::CreateUniqueHandle();
+	
+	// copy all components
+	ComponentTypeList cmpList;
+	if (!GetEntityComponentTypes(oldEntity, cmpList)) { return EntityHandle::Null; }
+	for (ComponentTypeList::const_iterator cmpIt = cmpList.begin(); cmpIt != cmpList.end(); ++cmpIt)
+	{
+	  mComponentMgr->CreateComponent(newEntity.GetID(), *cmpIt);
+	}
+	
+	// inits entity attributes
+	mEntities[newEntity.GetID()] = new EntityInfo(newName.empty() ? mEntities[oldEntity.GetID()]->mName
+	  : newName, mEntities[oldEntity.GetID()]->mPrototype, mEntities[oldEntity.GetID()]->mTransient);
+	if (IsEntityPrototype(oldEntity)) { mPrototypes[newEntity.GetID()] = new PrototypeInfo(); }
+	
+	// copy all property values
+	PropertyList oldPropertyList, newPropertyList;
+	if (!GetEntityProperties(oldEntity, oldPropertyList) || !GetEntityProperties(newEntity, newPropertyList))
+	{ 
+	  DestroyEntity(newEntity);
+	  return EntityHandle::Null;
+	}
+	for (PropertyList::iterator oldIt = oldPropertyList.begin(), newIt = newPropertyList.begin();
+	  oldIt != oldPropertyList.end(); ++oldIt, ++newIt)
+	{
+	  newIt->CopyFrom(*oldIt);
+	}
+	
+	// link the entity to its prototype
+	if (mEntities[newEntity.GetID()]->mPrototype.IsValid() && 
+	  mPrototypes.find(mEntities[newEntity.GetID()]->mPrototype.GetID()) != mPrototypes.end())
+	{
+		LinkEntityToPrototype(newEntity.GetID(), mEntities[newEntity.GetID()]->mPrototype);
+	}
+	
+	ocTrace << "Entity duplicated: " << newEntity;
+
+	return newEntity;
 }
 
 
@@ -322,6 +374,28 @@ bool EntitySystem::EntityMgr::IsEntityInited( const EntityHandle h ) const
 		return false;
 	}
 	return ei->second->mFullyInited;
+}
+
+bool EntitySystem::EntityMgr::IsEntityTransient(const EntityHandle& h) const
+{
+  EntityMap::const_iterator ei = mEntities.find(h.GetID());
+  if (ei == mEntities.end())
+	{
+		ocError << "Can't find entity " << h;
+		return false;
+	}
+	return ei->second->mTransient;
+}
+		
+void EntitySystem::EntityMgr::SetEntityTransient(const EntityHandle& h, const bool transient)
+{
+  EntityMap::const_iterator ei = mEntities.find(h.GetID());
+  if (ei == mEntities.end())
+	{
+		ocError << "Can't find entity " << h;
+		return;
+	}
+	ei->second->mTransient = transient;
 }
 
 bool EntitySystem::EntityMgr::GetEntityProperties( const EntityHandle entity, PropertyList& out, const PropertyAccessFlags flagMask ) const
@@ -539,6 +613,7 @@ void EntitySystem::EntityMgr::LoadEntityFromXML(ResourceSystem::XMLNodeIterator 
 	if (entIt.HasAttribute("Name"))	desc.SetName(entIt.GetAttribute<string>("Name"));
 	if (entIt.HasAttribute("ID")) desc.SetDesiredID(entIt.GetAttribute<EntityID>("ID"));
 	if (entIt.HasAttribute("Prototype")) desc.SetPrototype(entIt.GetAttribute<EntityID>("Prototype"));
+	if (entIt.HasAttribute("Transient")) desc.SetTransient(entIt.GetAttribute<bool>("Transient"));
 	if (isPrototype) desc.SetKind(EntityDescription::EK_PROTOTYPE);
 
 	// add component types
@@ -616,16 +691,18 @@ bool EntitySystem::EntityMgr::LoadEntitiesFromResource(ResourceSystem::ResourceP
 	return result;
 }
 
-bool EntitySystem::EntityMgr::SaveEntityToStorage(const EntitySystem::EntityID entityID, ResourceSystem::XMLOutput &storage, const bool isPrototype)
+bool EntitySystem::EntityMgr::SaveEntityToStorage(const EntitySystem::EntityID entityID, ResourceSystem::XMLOutput &storage, const bool isPrototype) const
 {
-	EntityInfo* info = mEntities[entityID];
+	const EntityInfo* info = mEntities.at(entityID);
 	if (!info) { return false; }
-	PrototypeInfo* protInfo = 0;
+	const PrototypeInfo* protInfo = 0;
 	if (isPrototype)
 	{
-		protInfo = mPrototypes[entityID];
+		protInfo = mPrototypes.at(entityID);
 		OC_ASSERT(protInfo);
 	}
+	
+	if (info->mTransient) { return true; }
 	
 	// write header of entity tag
 	storage.BeginElementStart("Entity");
@@ -638,7 +715,6 @@ bool EntitySystem::EntityMgr::SaveEntityToStorage(const EntitySystem::EntityID e
 	storage.BeginElementFinish();
 
 	// components saving
-	int32 compID = 0;
 	for (EntityComponentsIterator iter = mComponentMgr->GetEntityComponents(entityID); iter.HasMore(); ++iter)
 	{
 		Component* comp = (*iter);
@@ -648,7 +724,7 @@ bool EntitySystem::EntityMgr::SaveEntityToStorage(const EntitySystem::EntityID e
 
 		PropertyList propertyList;
 		comp->EnumProperties(comp, propertyList);
-		for (PropertyList::iterator it = propertyList.begin(); it != propertyList.end(); ++it)
+		if (!comp->IsTransient()) for (PropertyList::iterator it = propertyList.begin(); it != propertyList.end(); ++it)
 		{
 			if (((it->GetAccessFlags() & Reflection::PA_TRANSIENT) == Reflection::PA_TRANSIENT)
 				|| (isPrototype && (protInfo->mSharedProperties.find(it->GetKey())
@@ -672,7 +748,6 @@ bool EntitySystem::EntityMgr::SaveEntityToStorage(const EntitySystem::EntityID e
 		}
 
 		storage.EndElement();
-		++compID;
 	}
 	
 	storage.EndElement();
@@ -680,7 +755,7 @@ bool EntitySystem::EntityMgr::SaveEntityToStorage(const EntitySystem::EntityID e
 	return true;
 }
 
-bool EntitySystem::EntityMgr::SaveEntitiesToStorage(ResourceSystem::XMLOutput& storage, const bool isPrototype)
+bool EntitySystem::EntityMgr::SaveEntitiesToStorage(ResourceSystem::XMLOutput& storage, const bool isPrototype) const
 {
 	storage.BeginElement("Entities");
 	

@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../src;../src/Precompiled;../src/Utils;../src/Runner;../externalLibs/boost/inc;../externalLibs/hge/include;../externalLibs/ois/includes;../externalLibs/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib;&quot;../externalLibs/UnitTest++/src&quot;;../externalLibs/angelscript/include;../externalLibs/RTHProfiler/include"
+				AdditionalIncludeDirectories="../src;../src/Precompiled;../src/Utils;../src/Runner;../externalLibs/boost/inc;../externalLibs/hge/include;../externalLibs/ois/includes;../externalLibs/cegui/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib;&quot;../externalLibs/UnitTest++/src&quot;;../externalLibs/angelscript/include;../externalLibs/RTHProfiler/include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;USE_ASSERT"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="true"

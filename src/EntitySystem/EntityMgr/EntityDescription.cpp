@@ -20,6 +20,7 @@ void EntityDescription::Reset(void)
 	mKind = EK_ENTITY;
 	mPrototype = INVALID_ENTITY_ID;
 	mID = INVALID_ENTITY_ID;
+	mTransient = false;
 }
 
 void EntityDescription::AddComponent(const eComponentType type)

@@ -56,6 +56,10 @@ namespace EntitySystem
 
 		/// Creates new entity accordingly to its description and returns its handle.
 		EntityHandle CreateEntity(EntityDescription& desc);
+		
+		/// Duplicates the entity with a new name.
+		/// If a name is not specified, the old name is used.
+		EntityHandle DuplicateEntity(const EntityHandle oldEntity, const string& newName = "");
 
 		/// Destroys a specified entity if it exists.
 		void DestroyEntity(const EntityHandle entityToDestroy);
@@ -91,7 +95,7 @@ namespace EntitySystem
 		bool LoadEntitiesFromResource(ResourceSystem::ResourcePtr res, const bool isPrototype = false);
 
 		/// Saves all entities to XML stream.
-		bool SaveEntitiesToStorage(ResourceSystem::XMLOutput& storage, const bool isPrototype = false);
+		bool SaveEntitiesToStorage(ResourceSystem::XMLOutput& storage, const bool isPrototype = false) const;
 
 		//@}
 
@@ -107,6 +111,12 @@ namespace EntitySystem
 
 		/// Returns true if the entity was fully initialized.
 		bool IsEntityInited(const EntityHandle h) const;
+		
+		/// Returns whether the entity should not be saved.
+		bool IsEntityTransient(const EntityHandle& h) const;
+		
+		/// Sets whether the entity should not be saved.
+		void SetEntityTransient(const EntityHandle& h, const bool transient);
 
 		//@}
 
@@ -274,7 +284,7 @@ namespace EntitySystem
 		void LoadEntityPropertyFromXML(const EntityID entityID, const ComponentID componentID, PrototypeInfo* prototypeInfo, ResourceSystem::XMLNodeIterator& xmlPropertyIterator);
 
 		/// Save and entity to the XML file.
-		bool SaveEntityToStorage(const EntityID entityID, ResourceSystem::XMLOutput& storage, const bool isPrototype);
+		bool SaveEntityToStorage(const EntityID entityID, ResourceSystem::XMLOutput& storage, const bool isPrototype) const;
 	};
 }
 

@@ -9,33 +9,33 @@ SUITE(StringMgr)
 	TEST(Init)
 	{
 		::Test::InitResources();
-		StringMgr::CreateSingleton();
+		StringMgr::Init();
 
-		CHECK(StringMgr::SingletonExists());
+		CHECK(StringMgr::IsInited());
 	}
 	
 	TEST(LoadDefault)
 	{
-	  gStringMgr.LoadLanguagePack();
-	  CHECK_EQUAL(gStringMgr.GetTextData("default_string"), "Default");
-	  CHECK_EQUAL(gStringMgr.GetTextData("language_specific"), "Default");
-	  CHECK_EQUAL(gStringMgr.GetTextData("country_specific"), "Default");
+	  gStringMgrSystem.LoadLanguagePack();
+	  CHECK_EQUAL(gStringMgrSystem.GetTextData("default_string"), "Default");
+	  CHECK_EQUAL(gStringMgrSystem.GetTextData("language_specific"), "Default");
+	  CHECK_EQUAL(gStringMgrSystem.GetTextData("country_specific"), "Default");
 	}
 	
 	TEST(LoadLanguage)
 	{
-	  gStringMgr.LoadLanguagePack("cs");
-	  CHECK_EQUAL(gStringMgr.GetTextData("default_string"), "Default");
-	  CHECK_EQUAL(gStringMgr.GetTextData("language_specific"), "Language");
-	  CHECK_EQUAL(gStringMgr.GetTextData("country_specific"), "Language");
+	  gStringMgrSystem.LoadLanguagePack("cs");
+	  CHECK_EQUAL(gStringMgrSystem.GetTextData("default_string"), "Default");
+	  CHECK_EQUAL(gStringMgrSystem.GetTextData("language_specific"), "Language");
+	  CHECK_EQUAL(gStringMgrSystem.GetTextData("country_specific"), "Language");
 	}
 	
 	TEST(LoadCountry)
 	{
-	  gStringMgr.LoadLanguagePack("cs", "CZ");
-	  CHECK_EQUAL(gStringMgr.GetTextData("default_string"), "Default");
-	  CHECK_EQUAL(gStringMgr.GetTextData("language_specific"), "Language");
-	  CHECK_EQUAL(gStringMgr.GetTextData("country_specific"), "Country");
+	  gStringMgrSystem.LoadLanguagePack("cs", "CZ");
+	  CHECK_EQUAL(gStringMgrSystem.GetTextData("default_string"), "Default");
+	  CHECK_EQUAL(gStringMgrSystem.GetTextData("language_specific"), "Language");
+	  CHECK_EQUAL(gStringMgrSystem.GetTextData("country_specific"), "Country");
 	}
 	
 	

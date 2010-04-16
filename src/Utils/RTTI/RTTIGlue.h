@@ -77,6 +77,12 @@ namespace Reflection
 		{
 			T::GetClassRTTI()->AddComponentDependency(cmp);
 		}
+		
+		/// Returns whether the component is transient.
+		static inline bool IsTransient(void) { return mRTTI.IsTransient(); }
+		
+		/// Sets whether the component is transient.
+		static inline void SetTransient(bool transient) { mRTTI.SetTransient(transient); }
 
 		/// Returns the ID of this class.
 		static ClassID& GetClassID(void)

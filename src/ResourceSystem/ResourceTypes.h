@@ -30,6 +30,9 @@ namespace ResourceSystem
 		NUM_BASEPATHTYPES,
 		BPT_ABSOLUTE
 	};
+	
+	/// String name of types of a base path.
+  const char* GetBasePathTypeName(const eBasePathType basePathType);
 }
 
 

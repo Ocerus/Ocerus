@@ -193,7 +193,9 @@ void Editor::EditorMgr::CreateEntity()
 void Editor::EditorMgr::DuplicateEntity()
 {
 	if (!mCurrentEntity.Exists()) return;
-	/// @todo duplicate entity
+	EntityHandle newEntity = gEntityMgr.DuplicateEntity(mCurrentEntity);
+	newEntity.FinishInit();
+	SetCurrentEntity(newEntity);
 }
 
 void Editor::EditorMgr::DeleteEntity()

@@ -53,5 +53,5 @@ void Test::CleanSubsystems( void )
 	if (ResourceSystem::ResourceMgr::SingletonExists()) ResourceSystem::ResourceMgr::DestroySingleton();
 	if (EntitySystem::EntityMgr::SingletonExists()) EntitySystem::EntityMgr::DestroySingleton();
 	if (EntitySystem::LayerMgr::SingletonExists()) EntitySystem::LayerMgr::DestroySingleton();
-	if (StringSystem::StringMgr::SingletonExists()) StringSystem::StringMgr::DestroySingleton();
+	if (StringSystem::StringMgr::IsInited()) StringSystem::StringMgr::Deinit();
 }

@@ -85,6 +85,7 @@ void EditorGUI::LoadGUI()
 		EntitySystem::EntityDescription desc;
 		desc.SetName("GameCamera1");
 		desc.AddComponent(EntitySystem::CT_Camera);
+		desc.SetTransient(true);
 		EntitySystem::EntityHandle camera = gEntityMgr.CreateEntity(desc);
 		camera.FinishInit();
 
@@ -103,6 +104,7 @@ void EditorGUI::LoadGUI()
 		EntitySystem::EntityDescription desc;
 		desc.SetName("EditorCamera1");
 		desc.AddComponent(EntitySystem::CT_Camera);
+		desc.SetTransient(true);
 		EntitySystem::EntityHandle camera = gEntityMgr.CreateEntity(desc);
 		camera.FinishInit();
 

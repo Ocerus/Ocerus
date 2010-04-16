@@ -5,11 +5,12 @@
 #define TextData_h__
 
 #include "Base.h"
+#include "CEGUIString.h"
 
 namespace StringSystem
 {
 	/// Type of the data stored by the StringSystem.
-	typedef string TextData;
+	typedef CEGUI::String TextData;
 
 	/// Container used for storing the text data.
 	typedef map<StringKey, TextData> TextDataMap;

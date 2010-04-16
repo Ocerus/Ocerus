@@ -9,7 +9,8 @@ RTTI::RTTI(	uint8 dwStub, ClassID CLID, const char* szClassName, RTTI* pBaseClas
 	mCLID			( CLID				),
 	mBaseRTTI		( pBaseClassRTTI	),
 	mClassFactory( pFactory			),
-	mComponentDependencies(0)
+	mComponentDependencies(0),
+	mTransient(false)
 {
 	OC_UNUSED(dwStub);
 	OC_ASSERT( CLID != 0 );

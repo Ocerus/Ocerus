@@ -6,24 +6,31 @@
 
 using namespace StringSystem;
 
+StringMgr* StringMgr::msSystem = 0;
+StringMgr* StringMgr::msProject = 0;
 
-StringMgr::StringMgr(const string& basepath)
+StringMgr::StringMgr(const ResourceSystem::eBasePathType basePathType, const string& basePath)
 {
-	ocInfo << "*** StringMgr init ***";
-	mBasePath = basepath;
+	mBasePathType = basePathType;
+	mBasePath = basePath;
+	ocInfo << "*** " << GetNameOfManager() << " init ***";
 }
 
 StringMgr::~StringMgr(void)
 {
-	ocInfo << "*** StringMgr deinit ***";
 	UnloadData();
-	ocInfo << "*** StringMgr unloaded ***";
+	ocInfo << "*** " << GetNameOfManager() << " unloaded ***";
+}
+
+string StringMgr::GetNameOfManager()
+{
+  return string("StringMgr (") + ResourceSystem::GetBasePathTypeName(mBasePathType) + " - " + mBasePath + ")";
 }
 
 bool StringMgr::LoadLanguagePack(const string& lang, const string& country)
 {
 	bool result = true;
-	ocInfo << "StringMgr: Changing language to " << lang << "-" << country << ".";
+	ocInfo << GetNameOfManager() << ": Changing language to " << lang << "-" << country << ".";
 	UnloadData();
 	if (!lang.empty())
 	{
@@ -107,7 +114,7 @@ const TextData* StringMgr::GetTextDataPtr(const StringKey& key)
 {
 	const TextData* returnValue = &mTextDataMap[key];
 	if (*returnValue == "") {
-		ocError << "StringMgr: Index " << key << " doesn't exist. Return value set to empty TextData";
+		ocError << GetNameOfManager() << ": Index " << key << " doesn't exist. Return value set to empty TextData";
 	}
 	return returnValue;
 }
@@ -116,7 +123,40 @@ const TextData StringMgr::GetTextData(const StringKey& key)
 {
 	const TextData returnValue = mTextDataMap[key];
 	if (returnValue == "") {
-		ocError << "StringMgr: Index " << key << " doesn't exist. Return value set to empty TextData";
+		ocError << GetNameOfManager() << ": Index " << key << " doesn't exist. Return value set to empty TextData";
 	}
 	return returnValue;
+}
+
+void StringMgr::Init(const string& systemBasePath, const string& projectBasePath)
+{
+  OC_ASSERT(msSystem == 0 && msProject == 0);
+  msSystem = new StringMgr(ResourceSystem::BPT_SYSTEM, systemBasePath);
+  msProject = new StringMgr(ResourceSystem::BPT_PROJECT, projectBasePath);
+}
+
+bool StringMgr::IsInited()
+{
+  return msSystem != 0 && msProject != 0;
+}
+
+void StringMgr::Deinit()
+{
+  OC_ASSERT(msSystem != 0 && msProject != 0);
+  delete msSystem;
+  msSystem = 0;
+  delete msProject;
+  msProject = 0;
+}
+
+StringMgr& StringMgr::GetSystem()
+{
+  OC_ASSERT(msSystem != 0);
+  return *msSystem;
+}
+
+StringMgr& StringMgr::GetProject()
+{
+  OC_ASSERT(msProject != 0);
+  return *msProject;
 }
