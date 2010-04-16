@@ -26,6 +26,7 @@ namespace Editor
 	class AbstractValueEditor;
 	class LayerMgrWidget;
 	class EditorMenu;
+	class ResourceWindow;
 
 	/// The EditorGUI class manages the editor GUI.
 	class EditorGUI
@@ -73,6 +74,7 @@ namespace Editor
 		GUISystem::ViewportWindow* mEditorViewport;
 		LayerMgrWidget* mLayerMgrWidget;
 		EditorMenu* mEditorMenu;
+		ResourceWindow* mResourceWindow;
 	};
 }
 

@@ -201,6 +201,7 @@ set(Editor_SRCS
 	src/Editor/EditorMenu.cpp
 	src/Editor/EditorMgr.cpp
 	src/Editor/LayerMgrWidget.cpp
+	src/Editor/ResourceWindow.cpp
 	src/Editor/ValueEditors/AbstractValueEditor.cpp
 	src/Editor/ValueEditors/StringEditor.cpp
 	src/Editor/ValueEditors/PropertyEditorCreator.cpp

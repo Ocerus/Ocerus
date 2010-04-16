@@ -371,11 +371,25 @@ void ResourceMgr::GetResourceGroup(const StringKey& group, vector<ResourcePtr>& 
 	if (gi == mResourceGroups.end())
 		return; // empty vector
 	const ResourceMap& resmap = *gi->second;
+	output.reserve(resmap.size());
 	for (ResourceMap::const_iterator ri = resmap.begin(); ri != resmap.end(); ri++)
 	{
 		output.push_back(ri->second);
 	}
 	return;
+}
+
+void ResourceMgr::GetResources(vector<ResourcePtr>& output)
+{
+	for (ResourceGroupMap::const_iterator gi = mResourceGroups.begin(); gi != mResourceGroups.end(); ++gi)
+	{
+		const ResourceMap& resmap = *gi->second;
+		output.reserve(output.size() + resmap.size());
+		for (ResourceMap::const_iterator ri = resmap.begin(); ri != resmap.end(); ri++)
+		{
+			output.push_back(ri->second);
+		}
+	}
 }
 
 void ResourceSystem::ResourceMgr::DeleteResource( const StringKey& group, const StringKey& name )

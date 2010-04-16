@@ -93,6 +93,9 @@ namespace ResourceSystem
 		/// If the group can't be found, empty vector is returned.
 		void GetResourceGroup(const StringKey& group, vector<ResourcePtr>& output);
 
+		/// Retrieves all resources from the manager.
+		void GetResources(vector<ResourcePtr>& output);
+
 		/// Sets the memory limit the resource manager should try to keep.
 		/// The limit is given in bytes.
 		void SetMemoryLimit(const size_t newLimit);

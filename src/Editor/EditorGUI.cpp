@@ -4,6 +4,7 @@
 #include "Editor/EditorMgr.h"
 #include "Editor/EditorMenu.h"
 #include "Editor/LayerMgrWidget.h"
+#include "Editor/ResourceWindow.h"
 #include "Editor/ValueEditors/PropertyEditorCreator.h"
 
 #include "Core/Game.h"
@@ -32,7 +33,8 @@ EditorGUI::EditorGUI():
 	mEntityEditorLayout(0),
 	mGameViewport(0),
 	mEditorViewport(0),
-	mLayerMgrWidget(0)
+	mLayerMgrWidget(0),
+	mResourceWindow(0)
 {
 }
 
@@ -40,6 +42,7 @@ EditorGUI::~EditorGUI()
 {
 	delete mLayerMgrWidget;
 	delete mEditorMenu;
+	delete mResourceWindow;
 }
 
 void EditorGUI::LoadGUI()
@@ -108,6 +111,10 @@ void EditorGUI::LoadGUI()
 		mEditorViewport->SetCamera(camera);
 		mEditorViewport->SetMovableContent(true);
 	}
+
+	/// Initialize resource window
+	mResourceWindow = new ResourceWindow();
+	mResourceWindow->Init();
 }
 
 void EditorGUI::Update(float32 delta)

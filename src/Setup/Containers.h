@@ -223,6 +223,12 @@ namespace Containers
 
 	template<class _Ty1, class _Ty2>
 	inline pair<_Ty1, _Ty2> make_pair(_Ty1 _Val1, _Ty2 _Val2) { return std::make_pair<_Ty1, _Ty2>(_Val1, _Val2); }
+
+	template <class _RAIter>
+	inline void sort(_RAIter first, _RAIter last) { std::sort<_RAIter>(first, last); }
+
+	template <class _RAIter, class _Compare>
+	inline void sort(_RAIter first, _RAIter last, _Compare comp) { std::sort<_RAIter, _Compare>(first, last, comp); }
 }
 
 

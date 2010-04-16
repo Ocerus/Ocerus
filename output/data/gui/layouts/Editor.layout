@@ -224,25 +224,11 @@
             <Property Name="TitlebarFont" Value="DejaVuSans-10" />
             <Property Name="SizingEnabled" Value="False" />
             <Property Name="TitlebarEnabled" Value="True" />
-            <Property Name="UnifiedAreaRect" Value="{{0.8,0},{0,24},{1,0},{1,0}}" />
+            <Property Name="UnifiedAreaRect" Value="{{0.8,0},{0,24},{1,0},{0.5,24}}" />
             <Property Name="DragMovingEnabled" Value="False" />
             <Property Name="CloseButtonEnabled" Value="False" />
-            <Window Type="Editor/ScrollablePane" Name="EditorRoot/LayerMgr/Scrollable" >
-                <Property Name="ContentArea" Value="l:0 t:0 r:242 b:784" />
-                <Property Name="HorzStepSize" Value="0.1" />
-                <Property Name="VertStepSize" Value="0.1" />
-                <Property Name="HorzOverlapSize" Value="0.01" />
+            <Window Type="Editor/Tree" Name="EditorRoot/LayerMgr/Tree" >
                 <Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{1,0},{1,-54}}" />
-                <Property Name="VertOverlapSize" Value="0.01" />
-                <Property Name="HorzScrollPosition" Value="0" />
-                <Property Name="VertScrollPosition" Value="0" />
-                <AutoWindow NameSuffix="__auto_container__" >
-                    <Property Name="ContentArea" Value="l:0 t:0 r:242 b:784" />
-                    <Property Name="ChildExtentsArea" Value="l:0 t:0 r:242 b:784" />
-                    <Window Type="Editor/Tree" Name="EditorRoot/LayerMgr/Tree" >
-                        <Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{1,0},{1,0}}" />
-                    </Window>
-                </AutoWindow>
             </Window>
             <Window Type="Editor/Editbox" Name="EditorRoot/LayerMgr/EditNewLayer" >
                 <Property Name="MaxTextLength" Value="4294967295" />
@@ -270,13 +256,14 @@
                 <Property Name="Tooltip" Value="Edit selected entity." />
             </Window>
             <Window Type="Editor/StaticText" Name="EditorRoot/LayerMgr/LabelNewLayer" >
+                <Property Name="UnifiedAreaRect" Value="{{0,0},{1,-50},{1,-78},{1,-27}}" />
                 <Property Name="Text" Value="New layer:" />
                 <Property Name="HorzExtent" Value="64" />
                 <Property Name="VertExtent" Value="13.9688" />
                 <Property Name="FrameEnabled" Value="False" />
-                <Property Name="UnifiedAreaRect" Value="{{0,0},{1,-50},{1,-78},{1,-27}}" />
                 <Property Name="BackgroundEnabled" Value="False" />
             </Window>
+
             <Window Type="Editor/Button" Name="EditorRoot/LayerMgr/ButtonDown" >
                 <Property Name="UnifiedAreaRect" Value="{{1,-24},{1,-24},{1,0},{1,0}}" />
                 <Property Name="Text" Value="DW" />
