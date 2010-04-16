@@ -24,65 +24,95 @@ Editor::ResourceWindow::~ResourceWindow()
 void Editor::ResourceWindow::Init()
 {
 	CEGUI_EXCEPTION_BEGIN
-	CEGUI::Window* w = GUISystem::LoadWindowLayout("ResourceWindow.layout", "EditorRoot/ResourceWindow");
-	gGUIMgr.GetRootLayout()->addChildWindow(w);
-	CEGUI::ItemListbox* list = static_cast<CEGUI::ItemListbox*>(w->getChild(w->getName() + "/List"));
-	OC_ASSERT(list != 0);
-	for (size_t i = 0; i < list->getContentPane()->getChildCount(); ++i)
-	{
-		CEGUI::Window* aa = list->getContentPane()->getChildAtIdx(i);
-		ocWarning << aa->getName();
-		ocWarning << aa->getProperty("SelectionBrush");
-		aa->setProperty("SelectionBrush", "set:TaharezLook image:TextSelectionBrush");
-		CEGUI::ItemEntry* bb = static_cast<CEGUI::ItemEntry*>(aa);
-		bb->setSelected(true);
-	}
+	mWindow = GUISystem::LoadWindowLayout("ResourceWindow.layout", "EditorRoot/ResourceWindow");
+	gGUIMgr.GetRootLayout()->addChildWindow(mWindow);
+	mTree = static_cast<CEGUI::ItemListbox*>(mWindow->getChild(mWindow->getName() + "/List"));
+	CEGUI_EXCEPTION_END
+	OC_ASSERT(mWindow != 0);
+	OC_ASSERT(mTree != 0);
 
-	vector<ResourceSystem::ResourcePtr> resources;
-	gResourceMgr.GetResources(resources);
-	Containers::sort(resources.begin(), resources.end(), ResourceComparator);
+	BuildResourceTree();
+}
 
-	uint32 i = 0;
+void Editor::ResourceWindow::BuildResourceTree()
+{
+	mTree->resetList();
+	mResources.clear();
+	gResourceMgr.GetResources(mResources);
+	Containers::sort(mResources.begin(), mResources.end(), ResourceComparator);
+
+	uint32 dirItemID = 0;
 	vector<string> dirStack;
-	for (vector<ResourceSystem::ResourcePtr>::const_iterator it = resources.begin(); it != resources.end(); ++it)
+	for (vector<ResourceSystem::ResourcePtr>::const_iterator it = mResources.begin(); it != mResources.end(); ++it)
 	{
-		string path = (*it)->GetFileDir();
+		size_t resourceIndex = (size_t)(it - mResources.begin());
+		string resourcePath = (*it)->GetFileDir();
 
-		uint32 depth = 0;
-		size_t searchFrom = 0;
-		size_t match = 0;
+		uint32 pathDepth = 0;
+		size_t indexFrom = 0;
+		size_t indexTo = 0;
 		do
 		{
-			match = path.find('/', searchFrom);
-			if (match == string::npos)
-				match = path.size();
-			string dirName = path.substr(searchFrom, match - searchFrom);
-			if ((depth == dirStack.size()) || (dirName != dirStack[depth]))
+			indexTo = resourcePath.find('/', indexFrom);
+			if (indexTo == string::npos)
+				indexTo = resourcePath.size();
+			
+			string dirName = resourcePath.substr(indexFrom, indexTo - indexFrom);
+			if ((pathDepth == dirStack.size()) || (dirName != dirStack[pathDepth]))
 			{
-				if (depth == dirStack.size())
+				if (pathDepth == dirStack.size())
 				{
 					dirStack.push_back(dirName);
 				}
 				else
 				{
-					dirStack.resize(depth + 1);
-					dirStack[depth] = dirName;
+					dirStack.resize(pathDepth + 1);
+					dirStack[pathDepth] = dirName;
 				}
 
-				CEGUI::ItemEntry* dirItem = static_cast<CEGUI::ItemEntry*>(gCEGUIWM.createWindow("Editor/ListboxItem", list->getName() + "/DirItem" + StringConverter::ToString(i++)));
-				dirItem->setText(string(depth * 4, ' ') + dirName);
-				list->addChildWindow(dirItem);
+				CEGUI::ItemEntry* dirItem = static_cast<CEGUI::ItemEntry*>(gCEGUIWM.createWindow("Editor/ListboxItem", mTree->getName() + "/DirItem" + StringConverter::ToString(dirItemID++)));
+				dirItem->setText(string(pathDepth * 4, ' ') + dirName);
+				dirItem->setID(-1);
+				mTree->addChildWindow(dirItem);
 			}
-			
-			++depth;
-			searchFrom = match+1;
-		}
-		while (match != path.size());
 
-		CEGUI::ItemEntry* newItem = static_cast<CEGUI::ItemEntry*>(gCEGUIWM.createWindow("Editor/ListboxItem", list->getName() + "/Resource" + StringConverter::ToString(i++)));
-		newItem->setText(string(depth * 4, ' ') + (*it)->GetName());
-		list->addChildWindow(newItem);
+			++pathDepth;
+			indexFrom = indexTo + 1;
+		}
+		while (indexTo != resourcePath.size());
+
+
+		CEGUI::ItemEntry* newItem = static_cast<CEGUI::ItemEntry*>(gCEGUIWM.createWindow("Editor/ListboxItem", mTree->getName() + "/Resource" + StringConverter::ToString(resourceIndex)));
+		//newItem->setText(string(pathDepth * 4, ' ') + (*it)->GetName());
+		newItem->setID(resourceIndex);
+		
+		CEGUI::Window* dragContainer = static_cast<CEGUI::ItemEntry*>(gCEGUIWM.createWindow("DragContainer", mTree->getName() + "/DCResource" + StringConverter::ToString(resourceIndex)));
+		dragContainer->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
+		newItem->addChildWindow(dragContainer);
+
+		CEGUI::Window* newItemText = gCEGUIWM.createWindow("Editor/StaticText", mTree->getName() + "/ResourceText" + StringConverter::ToString(resourceIndex));
+		newItemText->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
+		newItemText->setText(string(pathDepth * 4, ' ') + (*it)->GetName());
+		newItemText->setProperty("FrameEnabled", "False");
+		newItemText->setProperty("BackgroundEnabled", "False");
+		newItemText->setMousePassThroughEnabled(true);
+
+		dragContainer->addChildWindow(newItemText);
+		dragContainer->subscribeEvent(CEGUI::Window::EventMouseButtonUp, CEGUI::Event::Subscriber(&Editor::ResourceWindow::OnDragContainerMouseButtonUp, this));
+
+		dragContainer->setWantsMultiClickEvents(false);
+
+		mTree->addChildWindow(newItem);
 	}
-	
-	CEGUI_EXCEPTION_END
+}
+
+bool Editor::ResourceWindow::OnDragContainerMouseButtonUp(const CEGUI::EventArgs& e)
+{
+	const CEGUI::MouseEventArgs& args = static_cast<const CEGUI::MouseEventArgs&>(e);
+	CEGUI::DragContainer* dragContainer = static_cast<CEGUI::DragContainer*>(args.window);
+	if (dragContainer->isBeingDragged()) return false;
+
+	CEGUI::ItemEntry* itemEntry = static_cast<CEGUI::ItemEntry*>(args.window->getParent());
+	itemEntry->setSelected(!itemEntry->isSelected());
+	return true;
 }
