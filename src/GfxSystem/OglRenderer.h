@@ -27,6 +27,8 @@ namespace GfxSystem
 
 		virtual void FinalizeRenderTargetImpl() const;
 
+		virtual void FlushGraphics() const;
+
 		virtual TextureHandle LoadTexture(const uint8* const buffer, const int32 buffer_length, const ePixelFormat force_channels, 
 			const uint32 reuse_texture_ID, int32* width, int32* height) const;
 
@@ -38,7 +40,7 @@ namespace GfxSystem
 
 		virtual void DrawTexturedMesh(const TexturedMesh& mesh) const;
 
-		virtual void DrawLine(const Vector2* verts, const Color& color, const float32 width = 1.0f) const;
+		virtual void DrawLine(const Vector2& a, const Vector2& b, const Color& color, const float32 width = 1.0f) const;
 
 		virtual void DrawPolygon(const Vector2* verts, const int32 n, const Color& color, const bool fill, const float32 outlineWidth = 1.0f ) const;
 

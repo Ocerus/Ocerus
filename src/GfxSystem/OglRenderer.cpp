@@ -156,6 +156,11 @@ void OglRenderer::FinalizeRenderTargetImpl() const
 	glClear(GL_DEPTH_BUFFER_BIT);
 }
 
+void GfxSystem::OglRenderer::FlushGraphics() const
+{
+	glClear(GL_DEPTH_BUFFER_BIT);
+}
+
 GfxSystem::TextureHandle GfxSystem::OglRenderer::CreateRenderTexture( const uint32 width, const uint32 height ) const
 {
 	TextureHandle result;
@@ -214,8 +219,8 @@ void OglRenderer::DrawTexturedQuad(const TexturedQuad& quad) const
 	glPushMatrix();
 
 	glBindTexture(GL_TEXTURE_2D, quad.texture);
-	glColor4f( 1.0f, 1.0f, 1.0f, 1.0f - quad.transparency );
-	glTranslatef( quad.position.x, quad.position.y, quad.z );
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f - quad.transparency);
+	glTranslatef(quad.position.x, quad.position.y, quad.z);
 	glRotatef(MathUtils::RadToDeg(quad.angle), 0, 0, 1);
 	glScalef(quad.scale.x, quad.scale.y, 1);
 
@@ -240,8 +245,8 @@ void GfxSystem::OglRenderer::DrawTexturedMesh( const TexturedMesh& mesh ) const
 
 	glColor4f( 1.0f, 1.0f, 1.0f, 1.0f - mesh.transparency );
 	glTranslatef( mesh.position.x, mesh.position.y, mesh.z );
-	glRotatef(MathUtils::RadToDeg(mesh.zAngle), 0, 1, 0);
 	glRotatef(MathUtils::RadToDeg(mesh.angle), 0, 0, 1);
+	glRotatef(MathUtils::RadToDeg(mesh.zAngle), 0, 1, 0);
 	glScalef(mesh.scale, mesh.scale, mesh.scale);
 
 	ModelOBJ* model = (ModelOBJ*)mesh.mesh;
@@ -303,10 +308,8 @@ void GfxSystem::OglRenderer::DrawTexturedMesh( const TexturedMesh& mesh ) const
 	glPopMatrix();
 }
 
-void OglRenderer::DrawLine(const Vector2* verts, const Color& color, const float32 width) const
+void OglRenderer::DrawLine(const Vector2& a, const Vector2& b, const Color& color, const float32 width) const
 {
-	OC_ASSERT(verts);
-
 	glDisable(GL_TEXTURE_2D);
 	
 	glColor4ub( color.r, color.g, color.b, color.a );
@@ -315,8 +318,8 @@ void OglRenderer::DrawLine(const Vector2* verts, const Color& color, const float
 
 	glBegin( GL_LINES );
 
-	glVertex3f( verts[0].x,  verts[0].y, 0 );
-	glVertex3f( verts[1].x,  verts[1].y, 0 );
+	glVertex3f( a.x,  a.y, 0 );
+	glVertex3f( b.x,  b.y, 0 );
 
 	glEnd();
 

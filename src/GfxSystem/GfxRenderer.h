@@ -54,6 +54,9 @@ namespace GfxSystem
 		/// Returns the current scene manager.
 		inline GfxSceneMgr* GetSceneManager() const { return mSceneMgr; }
 
+		/// Makes the subsequent calls to draw to be overlayed on top of the previously drawn graphics.
+		virtual void FlushGraphics() const = 0;
+
 
 	public:
 
@@ -98,7 +101,10 @@ namespace GfxSystem
 		void DrawEntity(const EntitySystem::EntityHandle entity) const;
 
 		/// Draws a line. Verts must be an array of 2 Vector2s.
-		virtual void DrawLine(const Vector2* verts, const Color& color, const float32 width = 1.0f) const = 0;
+		inline virtual void DrawLine(const Vector2* verts, const Color& color, const float32 width = 1.0f) const;
+
+		/// Draws a line.
+		virtual void DrawLine(const Vector2& a, const Vector2& b, const Color& color, const float32 width = 1.0f) const = 0;
 
 		/// Draws a polygon. Verts must be an array of n Vector2s defining the polygon.
 		virtual void DrawPolygon(const Vector2* verts, const int32 n, const Color& color, const bool fill, const float32 outlineWidth = 1.0f) const = 0;
@@ -222,6 +228,11 @@ void GfxSystem::GfxRenderer::FinalizeRenderTarget() const
 {
 	DrawGrid( mCurrentRenderTargetID );
 	FinalizeRenderTargetImpl();
+}
+
+void GfxSystem::GfxRenderer::DrawLine( const Vector2* verts, const Color& color, const float32 width ) const
+{
+	DrawLine(verts[0], verts[1], color, width);
 }
 
 #endif

@@ -125,6 +125,8 @@ void Editor::EditorMgr::Draw(float32 delta)
 	gGfxRenderer.ClearCurrentRenderTarget(GfxSystem::Color(0, 0, 0));
 	gGfxRenderer.DrawEntities();
 
+	gGfxRenderer.FlushGraphics();
+
 	// draw the physical shape of representation of selected entities
 	bool hoveredDrawn = false;
 	for (EntityList::iterator it=mSelectedEntities.begin(); it!=mSelectedEntities.end(); ++it)
@@ -296,8 +298,12 @@ bool Editor::EditorMgr::MouseMoved( const InputSystem::MouseInfo& mi )
 				GetCurrentEntity().GetProperty("ZAngle").SetValue<float32>(mEditToolBodyAngle + EDIT_TOOL_ANGLE_CHANGE_RATIO * scalarDelta);
 				break;
 			case ET_SCALE:
-				GetCurrentEntity().GetProperty("Scale").SetValue<Vector2>(mEditToolBodyScale + EDIT_TOOL_SCALE_CHANGE_RATIO * delta);
-				break;
+				{
+					delta *= EDIT_TOOL_SCALE_CHANGE_RATIO;
+					delta = MathUtils::Multiply(Matrix22(GetCurrentEntity().GetProperty("Angle").GetValue<float32>()), delta);
+					GetCurrentEntity().GetProperty("Scale").SetValue<Vector2>(mEditToolBodyScale + delta);
+					break;
+				}
 			}
 			return true;
 		}				
@@ -325,11 +331,14 @@ bool Editor::EditorMgr::MouseButtonPressed( const InputSystem::MouseInfo& mi, co
 		}
 		else
 		{
-			mSelectedEntities.clear();
-			if (mHoveredEntity.IsValid()) mSelectedEntities.push_back(mHoveredEntity);
+			if (mHoveredEntity.IsValid())
+			{
+				mSelectedEntities.clear();
+				mSelectedEntities.push_back(mHoveredEntity);
+			}
 			SetCurrentEntity(GetSelectedEntity());
 
-			if (GetCurrentEntity().IsValid())
+			if (mHoveredEntity.IsValid() && GetCurrentEntity().IsValid())
 			{
 				// we've got an entity to edit, so let's init the right tool
 				mEditToolWorking = true;
@@ -370,19 +379,18 @@ bool Editor::EditorMgr::MouseButtonReleased( const InputSystem::MouseInfo& mi, c
 
 	mEditToolWorking = false;
 
+	Vector2 worldCursorPos;
+	if (!GetWorldCursorPos(worldCursorPos))
+	{
+		// we're not in the corrent viewport
+		return false;
+	}
+
+	GfxSystem::RenderTargetID rt = mEditorGUI->GetEditorViewport()->GetRenderTarget();
+
 	if (mMultiselectStarted)
 	{
 		mMultiselectStarted = false;
-
-		Vector2 worldCursorPos;
-		if (!GetWorldCursorPos(worldCursorPos))
-		{
-			// we're not in the corrent viewport
-			return false;
-		}
-
-		GfxSystem::RenderTargetID rt = mEditorGUI->GetEditorViewport()->GetRenderTarget();
-
 		bool multiSelection = false;
 		float32 minDistance = SELECTION_MIN_DISTANCE / gGfxRenderer.GetRenderTargetCameraZoom(rt);
 		if ((worldCursorPos-mSelectionCursorPosition).LengthSquared() >= MathUtils::Sqr(minDistance))
@@ -421,6 +429,15 @@ bool Editor::EditorMgr::MouseButtonReleased( const InputSystem::MouseInfo& mi, c
 		}
 
 		return true;
+	}
+	else
+	{
+		if (!mHoveredEntity.IsValid())
+		{
+			// nothing is under the cursor
+			mSelectedEntities.clear();
+			SetCurrentEntity(GetSelectedEntity());
+		}
 	}
 
 	return false;

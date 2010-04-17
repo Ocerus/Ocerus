@@ -475,7 +475,7 @@ void GfxSystem::GfxRenderer::DrawGrid( const RenderTargetID renderTargetID ) con
 
 		if (line[0].y == 0)
 		{
-			DrawLine(line, grid.axisXColor, 2.0f);
+			DrawLine(line, grid.axisXColor, 1.0f);
 			majorHIndex += grid.minorsInMajor;
 		}
 		else
