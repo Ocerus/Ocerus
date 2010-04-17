@@ -76,7 +76,7 @@
 						Name="VCCustomBuildTool"
 						Description="Building whole documentation..."
 						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet Documentation.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet Documentation.tex&#x0D;&#x0A;"
-						AdditionalDependencies="Documentation.tex;EntitySystemContent.tex;InputSystemContent.tex;PlatformSetupContent.tex;ResourceSystemContent.tex;ScriptRegisterContent.tex;ScriptSystemContent.tex;UtilsContent.tex"
+						AdditionalDependencies="Documentation.tex;EntitySystemContent.tex;InputSystemContent.tex;PlatformSetupContent.tex;ResourceSystemContent.tex;ScriptRegisterContent.tex;ScriptSystemContent.tex;StringSystemContent.tex;UtilsContent.tex"
 						Outputs="Documentation.pdf"
 					/>
 				</FileConfiguration>
@@ -87,7 +87,7 @@
 						Name="VCCustomBuildTool"
 						Description="Building whole documentation..."
 						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet Documentation.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet Documentation.tex&#x0D;&#x0A;"
-						AdditionalDependencies="Documentation.tex;ScriptSystemContent.tex"
+						AdditionalDependencies="Documentation.tex;EntitySystemContent.tex;InputSystemContent.tex;PlatformSetupContent.tex;ResourceSystemContent.tex;ScriptRegisterContent.tex;ScriptSystemContent.tex;StringSystemContent.tex;UtilsContent.tex"
 						Outputs="Documentation.pdf"
 					/>
 				</FileConfiguration>
@@ -101,7 +101,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Building Entity System documentation..."
-						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet EntitySystem.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet EntitySystem.tex"
+						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet EntitySystem.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet EntitySystem.tex&#x0D;&#x0A;"
 						AdditionalDependencies="EntitySystem.tex;EntitySystemContent.tex"
 						Outputs="EntitySystem.pdf"
 					/>
@@ -112,7 +112,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Building Entity System documentation..."
-						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet EntitySystem.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet EntitySystem.tex"
+						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet EntitySystem.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet EntitySystem.tex&#x0D;&#x0A;"
 						AdditionalDependencies="EntitySystem.tex;EntitySystemContent.tex"
 						Outputs="EntitySystem.pdf"
 					/>
@@ -127,7 +127,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Building Input System documentation..."
-						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet InputSystem.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet InputSystem.tex"
+						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet InputSystem.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet InputSystem.tex&#x0D;&#x0A;"
 						AdditionalDependencies="InputSystem.tex;InputSystemContent.tex"
 						Outputs="InputSystem.pdf"
 					/>
@@ -138,7 +138,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Building Input System documentation..."
-						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet InputSystem.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet InputSystem.tex"
+						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet InputSystem.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet InputSystem.tex&#x0D;&#x0A;"
 						AdditionalDependencies="InputSystem.tex;InputSystemContent.tex"
 						Outputs="InputSystem.pdf"
 					/>
@@ -153,7 +153,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Building Platform Setup documentation..."
-						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet PlatformSetup.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet PlatformSetup.tex"
+						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet PlatformSetup.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet PlatformSetup.tex&#x0D;&#x0A;"
 						AdditionalDependencies="PlatformSetup.tex;PlatformSetupContent.tex"
 						Outputs="PlatformSetup.pdf"
 					/>
@@ -164,7 +164,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Building Platform Setup documentation..."
-						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet PlatformSetup.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet PlatformSetup.tex"
+						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet PlatformSetup.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet PlatformSetup.tex&#x0D;&#x0A;"
 						AdditionalDependencies="PlatformSetup.tex;PlatformSetupContent.tex"
 						Outputs="PlatformSetup.pdf"
 					/>
@@ -179,7 +179,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Building Resource System documentation..."
-						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet ResourceSystem.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet ResourceSystem.tex"
+						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet ResourceSystem.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet ResourceSystem.tex&#x0D;&#x0A;"
 						AdditionalDependencies="ResourceSystem.tex;ResourceSystemContent.tex"
 						Outputs="ResourceSystem.pdf"
 					/>
@@ -190,7 +190,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Building Resource System documentation..."
-						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet ResourceSystem.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet ResourceSystem.tex"
+						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet ResourceSystem.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet ResourceSystem.tex&#x0D;&#x0A;"
 						AdditionalDependencies="ResourceSystem.tex;ResourceSystemContent.tex"
 						Outputs="ResourceSystem.pdf"
 					/>
@@ -249,6 +249,32 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\StringSystem.tex"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Building String System documentation..."
+						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet StringSystem.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet StringSystem.tex"
+						AdditionalDependencies="StringSystem.tex;StringSystemContent.tex"
+						Outputs="StringSystem.pdf"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Building String System documentation..."
+						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet StringSystem.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet StringSystem.tex"
+						AdditionalDependencies="StringSystem.tex;StringSystemContent.tex"
+						Outputs="StringSystem.pdf"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath=".\Utils.tex"
 				>
 				<FileConfiguration
@@ -257,7 +283,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Building Utils documentation..."
-						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet Utils.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet Utils.tex"
+						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet Utils.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet Utils.tex&#x0D;&#x0A;"
 						AdditionalDependencies="UtilsSystem.tex;UtilsContent.tex"
 						Outputs="Utils.pdf"
 					/>
@@ -268,7 +294,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Building Utils documentation..."
-						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet Utils.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet Utils.tex"
+						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet Utils.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet Utils.tex&#x0D;&#x0A;"
 						AdditionalDependencies="UtilsSystem.tex;UtilsContent.tex"
 						Outputs="Utils.pdf"
 					/>
@@ -352,6 +378,18 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\StringSystemContent.tex"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool

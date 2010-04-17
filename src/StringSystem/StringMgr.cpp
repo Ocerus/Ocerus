@@ -8,6 +8,7 @@ using namespace StringSystem;
 
 StringMgr* StringMgr::msSystem = 0;
 StringMgr* StringMgr::msProject = 0;
+TextData StringMgr::NullTextData = TextData("");
 
 StringMgr::StringMgr(const ResourceSystem::eBasePathType basePathType, const string& basePath)
 {
@@ -67,7 +68,7 @@ bool StringMgr::LoadDataFromDir(const string& path, const string& includeRegexp,
 	{
 		TextResourcePtr tp = (TextResourcePtr)(*it);
 		const TextDataMap* dm = tp->GetTextDataMap();
-		mTextDataMap.insert(dm->begin(), dm->end());
+		mGroupTextDataMap[tp->GetGroupName()].insert(dm->begin(), dm->end());
 	}
 
 	gResourceMgr.DeleteGroup("strings");
@@ -96,7 +97,7 @@ bool StringMgr::LoadDataFromFile(const string& filepath, bool pathRelative)
 	{
 		TextResourcePtr tp = (TextResourcePtr)(*it);
 		const TextDataMap* dm = tp->GetTextDataMap();
-		mTextDataMap.insert(dm->begin(), dm->end());
+		mGroupTextDataMap[tp->GetGroupName()].insert(dm->begin(), dm->end());
 	}
 
 	gResourceMgr.DeleteGroup("strings");
@@ -105,27 +106,44 @@ bool StringMgr::LoadDataFromFile(const string& filepath, bool pathRelative)
 
 bool StringMgr::UnloadData(void)
 {
-	mTextDataMap.clear();
+	mGroupTextDataMap.clear();
 	return true;
 }
 
 
+const TextData* StringMgr::GetTextDataPtr(const StringKey& group, const StringKey& key)
+{
+	GroupTextDataMap::const_iterator gtIt = mGroupTextDataMap.find(group);
+	if (gtIt != mGroupTextDataMap.end())
+	{
+	  TextDataMap::const_iterator tIt = gtIt->second.find(key);
+	  if (tIt != gtIt->second.end())
+	  {
+	    return &(tIt->second);
+	  } else {
+	    ocError << GetNameOfManager() << ": Index " << key << (group.ToString().empty()?"":string(" in group ") + group.ToString())
+	      << " doesn't exist. Return value set to empty TextData.";
+	  }
+	} else {
+	  ocError << GetNameOfManager() << ": Group " << (group.ToString().empty()?"<default>":group.ToString())
+	      << " doesn't exist. Return value set to empty TextData.";
+	}
+	return &NullTextData;
+}
+
+const TextData StringMgr::GetTextData(const StringKey& group, const StringKey& key)
+{
+	return *GetTextDataPtr(group, key);
+}
+
 const TextData* StringMgr::GetTextDataPtr(const StringKey& key)
 {
-	const TextData* returnValue = &mTextDataMap[key];
-	if (*returnValue == "") {
-		ocError << GetNameOfManager() << ": Index " << key << " doesn't exist. Return value set to empty TextData";
-	}
-	return returnValue;
+  return GetTextDataPtr("", key);
 }
 
 const TextData StringMgr::GetTextData(const StringKey& key)
 {
-	const TextData returnValue = mTextDataMap[key];
-	if (returnValue == "") {
-		ocError << GetNameOfManager() << ": Index " << key << " doesn't exist. Return value set to empty TextData";
-	}
-	return returnValue;
+  return *GetTextDataPtr("", key);
 }
 
 void StringMgr::Init(const string& systemBasePath, const string& projectBasePath)

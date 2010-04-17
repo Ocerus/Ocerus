@@ -3,6 +3,8 @@
 
 using namespace StringSystem;
 
+const string TextResource::GroupNameKey = "group";
+
 ResourceSystem::ResourcePtr TextResource::CreateMe(void)
 {
 	return ResourceSystem::ResourcePtr(new TextResource());
@@ -18,6 +20,7 @@ size_t TextResource::LoadImpl()
 	InputStream& is = OpenInputStream(ISM_TEXT);
 	size_t dataSize = 0;
 	string line = "";
+	bool first = true;
 	while (is.good())
 	{
 	  std::getline(is, line);
@@ -27,9 +30,17 @@ size_t TextResource::LoadImpl()
 	    string::size_type pos = line.find_first_of('=');
 	    if (pos != string::npos && pos != 0)
 	    {
-	      mTextDataMap.insert(pair<StringKey, TextData>(line.substr(0, pos), line.substr(pos + 1)));
+	      string key = line.substr(0, pos);
+	      string value = line.substr(pos + 1);
+	      if (first && key == TextResource::GroupNameKey)
+	      {
+	        mGroupName = value;
+	      } else { 
+	        mTextDataMap.insert(pair<StringKey, TextData>(key, value));
+	      }
 	      dataSize += line.length();
 	    }
+	    first = false;
 	  }
 	}
 	CloseInputStream();

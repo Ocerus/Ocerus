@@ -46,10 +46,17 @@ namespace StringSystem
 		/// Unloads all data of the manager.
 		bool UnloadData(void);
 
-		/// Returns a pointer to a text data specified by a given search key.
+		/// Returns a pointer to a text data specified by a given search key and group.
+		const TextData* GetTextDataPtr(const StringKey& group, const StringKey& key);
+
+		/// Returns a text data specified by a given search key and group.
+		/// Note that this may be quite slow if strings are long. Returning a ptr should be preffered.
+		const TextData GetTextData(const StringKey& group, const StringKey& key);
+		
+		/// Returns a pointer to a text data specified by a given search key from a default group.
 		const TextData* GetTextDataPtr(const StringKey& key);
 
-		/// Returns a text data specified by a given search key.
+		/// Returns a text data specified by a given search key from a default group.
 		/// Note that this may be quite slow if strings are long. Returning a ptr should be preffered.
 		const TextData GetTextData(const StringKey& key);
 		
@@ -67,11 +74,14 @@ namespace StringSystem
 		
 		/// Returns the project manager.
 		static StringMgr& GetProject();
+		
+		/// Invalid text data returned when the key of the text data is not found.
+		static const TextData NullTextData;
 
 	private:
 
 		/// Container used to store the parsed data (the same type used is in TextRes!).
-		TextDataMap mTextDataMap;
+		GroupTextDataMap mGroupTextDataMap;
 
 		/// Current language of loaded texts.
 		string mLanguage;

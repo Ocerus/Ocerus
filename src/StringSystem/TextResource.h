@@ -34,9 +34,15 @@ namespace StringSystem
 
 		/// Returns the text data container used by this resource.
 		const TextDataMap* GetTextDataMap(void);
+		
+		/// Returns the name of group to which the text data belongs.
+		inline const string& GetGroupName(void) { return mGroupName; }
 
 		/// Returns the resource type associated with this class.
 		static ResourceSystem::eResourceType GetResourceType() { return ResourceSystem::RESTYPE_TEXTRESOURCE; }
+		
+		/// Text item with this key which is the first in the file contains the group name.
+		static const string GroupNameKey;
 
 	protected:
 
@@ -47,6 +53,9 @@ namespace StringSystem
 
 		/// Container used to store the parsed data.
 		TextDataMap mTextDataMap;
+		
+		/// Name of group to which the text data belongs.
+		string mGroupName;
 
 	};
 }

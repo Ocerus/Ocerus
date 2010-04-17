@@ -14,6 +14,9 @@ namespace StringSystem
 
 	/// Container used for storing the text data.
 	typedef map<StringKey, TextData> TextDataMap;
+	
+	/// Container used for storing the text data in various groups.
+	typedef map<StringKey, TextDataMap> GroupTextDataMap;
 }
 
 #endif // TextData_h__
