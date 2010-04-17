@@ -10,6 +10,7 @@ using namespace EntitySystem;
 void Script::Create(void)
 {
 	mNeedUpdate = true;
+	mIsUpdating = false;
 	mTimeOut = 1000;
 }
 
@@ -18,14 +19,48 @@ void Script::Destroy(void)
 
 }
 
+bool Script::ExecuteScriptFunction(int32 funcId)
+{
+  bool res = true;
+  // Return new context prepared to call function from module
+  AngelScript::asIScriptContext* ctx = gScriptMgr.PrepareContext(funcId);
+  if (ctx == 0) { return false; }
+  // Set parent entity handle as context user data
+  ctx->SetUserData(GetOwnerPtr());
+  // Execute script with time out
+  if (!gScriptMgr.ExecuteContext(ctx, mTimeOut)) { res = false; }
+  // Release context
+  ctx->Release();
+  return res;
+}
+
 void Script::UpdateMessageHandlers(void)
 {
+	mIsUpdating = true;
+	// Get a set of new and removed modules
+	set<string> newModules;
+	for (int32 i = 0; i < mModules.GetSize(); ++i) { newModules.insert(mModules[i]); }
+	set<string> removedModules;
+	for (set<string>::iterator it = mOldModules.begin(); it != mOldModules.end(); ++it)
+	{
+	  if (newModules.find(*it) == newModules.end()) { removedModules.insert(*it); }
+	}
+	
+	// Call OnDestroy() function on removed modules
+	multimap<EntitySystem::EntityMessage::eType, int32>::const_iterator destroyIt
+	  = mMessageHandlers.find(EntitySystem::EntityMessage::DESTROY);
+	for (; destroyIt != mMessageHandlers.end() && destroyIt->first == EntitySystem::EntityMessage::DESTROY; ++destroyIt)
+	{
+	  string moduleName = gScriptMgr.GetFunctionModuleName(destroyIt->second);
+	  if (removedModules.find(moduleName) != removedModules.end()) { ExecuteScriptFunction(destroyIt->second); }
+	}
+	
 	mMessageHandlers.clear();
 
 	// Variables for refreshing mStates, mTimes, mModuleToFuncID and mFuncIDToArrayIndex
 	Utils::Array<int32> newStates;
 	Utils::Array<uint64> newTimes;
-    map<string, int32> newModuleToFuncID;
+  map<string, int32> newModuleToFuncID;
 	map<int32, int32> newFuncIDToArrayIndex;
 
 	for (int32 i = 0; i < mModules.GetSize(); ++i) // For each module in mModules
@@ -73,18 +108,57 @@ void Script::UpdateMessageHandlers(void)
 	mTimes.CopyFrom(newTimes);
 	mModuleToFuncID = newModuleToFuncID;
 	mFuncIDToArrayIndex = newFuncIDToArrayIndex;
-
+	
+	// Get a set of added modules
+	set<string> addedModules;
+	for (int32 i = 0; i < mModules.GetSize(); ++i)
+	{ 
+	  if (mOldModules.find(mModules[i]) == mOldModules.end()) { addedModules.insert(mModules[i]); }
+	}
+	
+	// Call OnInit() and OnPostInit() functions on added modules if the entity is already fully initialized
+	if (GetOwner().IsInited())
+	{
+	  multimap<EntitySystem::EntityMessage::eType, int32>::const_iterator initIt
+	    = mMessageHandlers.find(EntitySystem::EntityMessage::INIT);
+	  for (; initIt != mMessageHandlers.end() && initIt->first == EntitySystem::EntityMessage::INIT; ++initIt)
+	  {
+	    string moduleName = gScriptMgr.GetFunctionModuleName(initIt->second);
+	    if (addedModules.find(moduleName) != addedModules.end()) { ExecuteScriptFunction(initIt->second); }
+	  }
+	  
+	  initIt = mMessageHandlers.find(EntitySystem::EntityMessage::POST_INIT);
+	  for (; initIt != mMessageHandlers.end() && initIt->first == EntitySystem::EntityMessage::POST_INIT; ++initIt)
+	  {
+	    string moduleName = gScriptMgr.GetFunctionModuleName(initIt->second);
+	    if (addedModules.find(moduleName) != addedModules.end()) { ExecuteScriptFunction(initIt->second); }
+	  }
+	}
+	
+	// Refresh a module history
+	mOldModules = newModules;
+	
 	mNeedUpdate = false;
+	mIsUpdating = false;
 }
 
 EntityMessage::eResult Script::HandleMessage(const EntityMessage& msg)
 {
+	// When the script component is being destroyed we must call OnDestroy() in all modules.
+	if (msg.type == EntityMessage::COMPONENT_DESTROYED && msg.parameters.GetParametersCount() == 1
+	  && (*msg.parameters.GetParameter(0).GetData<uint32>()) == (uint32)EntitySystem::CT_Script)
+	{
+	  mModules.Clear();
+	  if (!mIsUpdating) { UpdateMessageHandlers(); }
+	  return EntityMessage::RESULT_OK;
+	}
+	
 	// Updating message handlers if necessary
 	if (msg.type == EntityMessage::RESOURCE_UPDATE)
 	{
 		mNeedUpdate = true;
 		return EntityMessage::RESULT_OK;
-	} else if (mNeedUpdate) UpdateMessageHandlers();
+	} else if (mNeedUpdate && !mIsUpdating) { UpdateMessageHandlers(); }
 	
 	// Find all associated functions and execute it
 	multimap<EntitySystem::EntityMessage::eType, int32>::const_iterator it = mMessageHandlers.find(msg.type);

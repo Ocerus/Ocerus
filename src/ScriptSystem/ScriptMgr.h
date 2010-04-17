@@ -47,6 +47,16 @@ namespace ScriptSystem
 		/// @param funcDecl Declaration of function to be called in the script.
 		/// @return Number greater than or equal to zero that is function ID, number less than zero for not found
 		int32 GetFunctionID(const char* moduleName, const char* funcDecl);
+		
+		/// Get a module name where the script function of a specified ID occurs.
+		/// @param funcId Script function ID.
+		/// @return Module name of script function, 0 if function with the ID is not found.
+		const char* GetFunctionModuleName(int32 funcId);
+		
+		/// Get a function declaration of a script function with a specified ID.
+		/// @param funcId Script function ID.
+		/// @return Appropriate function declaration, 0 if function with the ID is not found.
+		const char* GetFunctionDeclaration(int32 funcId);
 
 		/// Returns new context prepared for passing the argument values.
 		///	@param funcId ID of function to prepare (can get from GetFunctionID)

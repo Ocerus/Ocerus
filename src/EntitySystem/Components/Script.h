@@ -62,8 +62,11 @@ namespace EntityComponents
 		Utils::Array<uint64> mTimes;
 		int32 mCurrentArrayIndex;
 		
-		/// Whether the UpdateMessageHandlers will be executed when next message in handled.
+		/// Whether the UpdateMessageHandlers() will be executed when next message in handled.
 		bool mNeedUpdate;
+		
+		/// Whether the UpdateMessageHandlers() is being executed.
+		bool mIsUpdating;
 
 		/// Stores appropriate handler to message.
 		multimap<EntitySystem::EntityMessage::eType, int32> mMessageHandlers;
@@ -73,9 +76,15 @@ namespace EntityComponents
 		
 		/// Map function ID of OnAction handlers to index of mStates and mTimes
 		map<int32, int32> mFuncIDToArrayIndex;
+		
+		/// Set of module names presented after the last call of UpdateMessageHandlers().
+		set<string> mOldModules; 
 
 		/// Find message handlers in modules (mModules) and store them to map (mMessageHandlers).
 		void UpdateMessageHandlers(void);
+		
+		/// Execute a script function without parameters.
+		bool ExecuteScriptFunction(int32 funcId);
 	};
 }
 

@@ -591,9 +591,9 @@ bool ScriptMgr::ExecuteContext(asIScriptContext* ctx, uint32 timeOut)
 	OC_ASSERT_MSG(ctx->GetState() == asEXECUTION_PREPARED, "Cannot execute unprepared context!");
 
 	int32 funcId = ctx->GetCurrentFunction();
-	const asIScriptFunction *function = mEngine->GetFunctionDescriptorById(funcId);
-	const char* funcDecl = function->GetDeclaration();
-	const char* moduleName = function->GetModuleName();
+	const char* moduleName = GetFunctionModuleName(funcId);
+	const char* funcDecl = GetFunctionDeclaration(funcId);
+	OC_ASSERT(moduleName && funcDecl);
 	int32 r;
 
 	ocDebug << "Executing script function '" << funcDecl << "' in module '" << moduleName << "'.";
@@ -702,6 +702,18 @@ int32 ScriptMgr::GetFunctionID(const char* moduleName, const char* funcDecl)
 
 	// Get function ID from declaration
 	return mod->GetFunctionIdByDecl(funcDecl);
+}
+
+const char* ScriptMgr::GetFunctionModuleName(int32 funcId)
+{
+  const asIScriptFunction *function = mEngine->GetFunctionDescriptorById(funcId);
+	return function ? function->GetModuleName() : 0;
+}
+
+const char* ScriptMgr::GetFunctionDeclaration(int32 funcId)
+{
+  const asIScriptFunction *function = mEngine->GetFunctionDescriptorById(funcId);
+	return function ? function->GetDeclaration() : 0;
 }
 
 void ScriptMgr::DefineWord( const char* word )

@@ -7,7 +7,7 @@ void OnInit()
   {
     Log("Module number " + (i+1) + " is '" + modules[i] +"'.");
   }
-  handle.RegisterDynamicProperty_int32("Counter", PA_SCRIPT_READ | PA_SCRIPT_WRITE, "comment");
+  handle.RegisterDynamicProperty_int32("Counter", PA_SCRIPT_READ | PA_SCRIPT_WRITE | PA_EDIT_READ | PA_EDIT_WRITE, "comment");
 }
 
 void OnPostInit()
@@ -38,17 +38,24 @@ void OnAction()
     case 0:
     {
       handle.Set_int32("Counter", 2);
-      //Log("First call of OnAction(). This function will be called every 10 seconds.");
+      Log("First call of OnAction(). This function will be called every 10 seconds.");
       SetAndSleep(1, 10000);
       break;
     }
     case 1:
     {
       int32 counter = handle.Get_int32("Counter");
-      //Log("Message no. " + counter + " from OnAction(). Wait 10 seconds for another.");
+      Log("Message no. " + counter + " from OnAction(). Wait 10 seconds for another.");
       handle.Set_int32("Counter", counter+1);
       SetAndSleep(1, 10000);
       break;
     }
   }
+}
+
+void OnDestroy()
+{
+  EntityHandle handle = GetCurrentEntityHandle();
+  handle.UnregisterDynamicProperty("Counter");
+  Log("Entity " + handle.GetID() + " is being destroyed."); 
 }

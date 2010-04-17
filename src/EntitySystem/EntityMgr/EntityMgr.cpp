@@ -1035,11 +1035,11 @@ void EntitySystem::EntityMgr::DestroyEntityComponent( const EntityHandle entity,
 
 	eComponentType cmpType = mComponentMgr->GetEntityComponent(entity.GetID(), componentToDestroy)->GetType();
 
+	PostMessage(entity, EntityMessage(EntityMessage::COMPONENT_DESTROYED, Reflection::PropertyFunctionParameters() << (uint32)cmpType));
+	
 	mComponentMgr->DestroyComponent(entity.GetID(), componentToDestroy);
 
 	ocInfo << "Destroyed component " << componentToDestroy << " of " << entity;
-
-	PostMessage(entity, EntityMessage(EntityMessage::COMPONENT_DESTROYED, Reflection::PropertyFunctionParameters() << (uint32)cmpType));
 }
 
 int32 EntitySystem::EntityMgr::GetNumberOfEntityComponents( const EntityHandle entity ) const
