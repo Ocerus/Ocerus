@@ -8,7 +8,7 @@ using namespace StringSystem;
 
 StringMgr* StringMgr::msSystem = 0;
 StringMgr* StringMgr::msProject = 0;
-TextData StringMgr::NullTextData = TextData("");
+const TextData StringMgr::NullTextData = TextData("");
 
 StringMgr::StringMgr(const ResourceSystem::eBasePathType basePathType, const string& basePath)
 {
