@@ -133,7 +133,7 @@ void OglRenderer::SetViewportImpl(const GfxViewport* viewport)
 	viewport->CalculateWorldBoundaries(topleftWorld, bottomrightWorld);
 	// just another hack to make the bloody OpenGL in SDL working right
 	if (!viewport->AttachedToTexture()) swap(bottomrightWorld.y, topleftWorld.y);
-	glOrtho(topleftWorld.x, bottomrightWorld.x, topleftWorld.y, bottomrightWorld.y, -10, 10);
+	glOrtho(topleftWorld.x, bottomrightWorld.x, topleftWorld.y, bottomrightWorld.y, -100.0f, 100.0f);
 
 	glMatrixMode(GL_MODELVIEW);
 }

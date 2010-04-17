@@ -317,7 +317,7 @@ bool Editor::EditorMgr::MouseButtonPressed( const InputSystem::MouseInfo& mi, co
 			return false;
 		}
 
-		if (gInputMgr.IsKeyDown(InputSystem::KC_RSHIFT) || gInputMgr.IsKeyDown(InputSystem::KC_RSHIFT))
+		if (gInputMgr.IsKeyDown(InputSystem::KC_LSHIFT) || gInputMgr.IsKeyDown(InputSystem::KC_RSHIFT))
 		{
 			mMultiselectStarted = true;
 			mSelectionCursorPosition = worldCursorPos;

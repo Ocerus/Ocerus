@@ -12,6 +12,9 @@ using namespace GfxSystem;
 /// Constant which binds pixel and world units together. And image of this size will be 1.0 units big in the world.
 const float32 GfxRenderer::PIXELS_PER_WORLD_UNIT = 50;
 
+/// Depth of each layer.
+const float32 LAYER_Z_SIZE = 5.0f;
+
 
 GfxSystem::GfxRenderer::GfxRenderer(): mCurrentRenderTargetID(InvalidRenderTargetID), mIsRendering(false), mSceneMgr(0)
 {
@@ -215,7 +218,7 @@ void GfxSystem::GfxRenderer::DrawSprite( const EntitySystem::Component* spriteCo
 	quad.position = transform->GetPosition();
 	quad.scale = transform->GetScale();
 	quad.angle = transform->GetAngle();
-	quad.z = (float32)transform->GetLayer();
+	quad.z = LAYER_Z_SIZE * (float32)transform->GetLayer();
 	quad.transparency = sprite->GetTransparency();
 	TexturePtr tex = ((TexturePtr)sprite->GetTexture());
 	quad.size.Set((float32)tex->GetWidth(), (float32)tex->GetHeight());
@@ -239,7 +242,7 @@ void GfxSystem::GfxRenderer::DrawModel( const EntitySystem::Component* modelComp
 	mesh.position = transform->GetPosition();
 	mesh.scale = MathUtils::Max(transform->GetScale().x, transform->GetScale().y);
 	mesh.angle = transform->GetAngle();
-	mesh.z = (float32)transform->GetLayer();
+	mesh.z = LAYER_Z_SIZE * (float32)transform->GetLayer();
 	mesh.zAngle = model->GetZAngle();
 	mesh.transparency = model->GetTransparency();
 	mesh.mesh = (((MeshPtr)model->GetMesh())->GetMesh());
