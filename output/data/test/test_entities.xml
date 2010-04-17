@@ -1,9 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <Entities>
+
   <Entity Name="Visual">
     <Component Type="Transform">
 	    <Position>0 0</Position>
+	    <Angle>0.0</Angle>
+	    <Scale>1.2 1.5</Scale>
+      <Layer>0</Layer>
+    </Component>
+    <Component Type="Sprite">
+      <Texture>Test/Logo_alpha.png</Texture>
+      <Transparency>0</Transparency>
+    </Component>
+    <Component Type="Model">
+      <Mesh>Test/cube.model</Mesh>
+      <Transparency>0</Transparency>
+      <ZAngle>0.6</ZAngle>
+    </Component>
+    <Component Type="DynamicBody">
+    </Component>
+    <Component Type="PolygonCollider">
+	    <Density>1.0</Density>
+      <Polygon>
+      	<Item>-3 -2</Item>
+      	<Item>3 -2</Item>
+      	<Item>3 2</Item>
+      	<Item>-3 2</Item>
+			</Polygon>
+    </Component>
+    <Component Type="Script">
+    	<ScriptModules>
+    		<Item>ConstantMover.as</Item>
+    	</ScriptModules>
+    </Component>
+  </Entity>
+
+  <Entity Name="Visual">
+    <Component Type="Transform">
+	    <Position>5 2</Position>
 	    <Angle>0.0</Angle>
 	    <Scale>1.2 1.5</Scale>
       <Layer>0</Layer>
