@@ -72,7 +72,7 @@ void Editor::ResourceWindow::BuildResourceTree()
 
 				CEGUI::ItemEntry* dirItem = static_cast<CEGUI::ItemEntry*>(gCEGUIWM.createWindow("Editor/ListboxItem", mTree->getName() + "/DirItem" + StringConverter::ToString(dirItemID++)));
 				dirItem->setText(string(pathDepth * 4, ' ') + dirName);
-				dirItem->setID(0); // TODO - here I must change it from -1 to have a successful build
+				dirItem->setID(string::npos);
 				mTree->addChildWindow(dirItem);
 			}
 
