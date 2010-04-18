@@ -1041,6 +1041,10 @@
 				Name="inc"
 				>
 				<File
+					RelativePath="..\src\GUISystem\CEGUIForwards.h"
+					>
+				</File>
+				<File
 					RelativePath="..\src\GUISystem\CEGUIResource.h"
 					>
 				</File>
@@ -1442,6 +1446,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\src\Editor\ValueEditors\ResourceEditor.h"
+						>
+					</File>
+					<File
 						RelativePath="..\src\Editor\ValueEditors\StringEditor.h"
 						>
 					</File>
@@ -1459,6 +1467,10 @@
 					</File>
 					<File
 						RelativePath="..\src\Editor\ValueEditors\PropertyEditorCreator.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\src\Editor\ValueEditors\ResourceEditor.cpp"
 						>
 					</File>
 					<File
