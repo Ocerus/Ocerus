@@ -10,6 +10,7 @@
 #include "StringEditor.h"
 #include "Vector2Editor.h"
 #include "ArrayEditor.h"
+#include "ResourceEditor.h"
 
 namespace Editor
 {
@@ -28,6 +29,8 @@ namespace Editor
 
 		case PT_VECTOR2:
 			return new Editor::Vector2Editor(new PropertyModel<Vector2>(property));
+		case PT_RESOURCE:
+			return new Editor::ResourceEditor(new PropertyModel<ResourceSystem::ResourcePtr>(property));
 		default:
 			return new Editor::StringEditor(new StringPropertyModel(property));
 		}		

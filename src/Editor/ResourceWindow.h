@@ -6,47 +6,43 @@
 
 #include "Base.h"
 #include "EditorMenu.h"
-
-namespace CEGUI
-{
-	class ItemListbox;
-	class Window;
-}
+#include "GUISystem/CEGUIForwards.h"
 
 namespace Editor
 {
 
-	///
+	/// The ResourceWindow class manages GUI widget for listing resources.
 	class ResourceWindow
 	{
 	public:
 
-		///
+		/// Constructs a ResourceWindow.
 		ResourceWindow();
 
-		///
+		/// Destroys the ResourceWindow.
 		~ResourceWindow();
 
-		///
+		/// Initializes the ResourceWindow.
 		void Init();
+
+		/// Returns the ResourcePtr to resource in ResourceWindow's cached list of resources on given index.
+		ResourceSystem::ResourcePtr GetResourceAtIndex(size_t index);
 
 		/// @name CEGUI Callbacks
 		//@{
 			bool OnDragContainerMouseButtonUp(const CEGUI::EventArgs&);
+			bool OnRefreshButtonClicked(const CEGUI::EventArgs&);
 		//@}
 
-		
 	private:
 
-		///
+		/// Refreshes cached list of resources and builds resource tree according to the refreshed list.
 		void BuildResourceTree();
 
 		/// Cached list of resources
 		vector<ResourceSystem::ResourcePtr> mResources;
 
-		/// ResourceWindow widget
 		CEGUI::Window* mWindow;
-
 		CEGUI::ItemListbox* mTree;
 	};
 }

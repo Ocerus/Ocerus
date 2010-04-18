@@ -6,7 +6,7 @@
 
 #include "Base.h"
 #include "Models/IValueEditorModel.h"
-
+#include "GUISystem/CEGUIForwards.h"
 namespace CEGUI
 {
 	class String;

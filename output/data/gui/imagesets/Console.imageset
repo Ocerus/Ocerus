@@ -1,5 +1,0 @@
-<?xml version="1.0" ?>
-
-<Imageset Name="Console" Imagefile="BSLogov2.png" NativeHorzRes="800" NativeVertRes="600">
-	<Image Name="Logo" XPos="0.0" YPos="0.0" Width="512" Height="256" />
-</Imageset>

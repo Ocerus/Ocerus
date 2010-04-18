@@ -207,6 +207,7 @@ set(Editor_SRCS
 	src/Editor/ValueEditors/PropertyEditorCreator.cpp
 	src/Editor/ValueEditors/Models/EntityAttributeModel.cpp
 	src/Editor/ValueEditors/Vector2Editor.cpp
+	src/Editor/ValueEditors/ResourceEditor.cpp
 )
 
 set(EntitySystem_SRCS

@@ -1,12 +1,11 @@
 #include "Common.h"
 #include "ResourceWindow.h"
-
 #include "ResourceSystem/ResourceMgr.h"
-
 #include "GUISystem/CEGUITools.h"
 
 using namespace Editor;
 
+/// Compares two resources according to their path and returns whether the first is greater than the second.
 bool ResourceComparator(const ResourceSystem::ResourcePtr& r1, const ResourceSystem::ResourcePtr& r2)
 {
 	return (r1->GetFilePath().compare(r2->GetFilePath()) > 0);
@@ -20,13 +19,14 @@ Editor::ResourceWindow::~ResourceWindow()
 {
 }
 
-
 void Editor::ResourceWindow::Init()
 {
 	CEGUI_EXCEPTION_BEGIN
 	mWindow = GUISystem::LoadWindowLayout("ResourceWindow.layout", "EditorRoot/ResourceWindow");
 	gGUIMgr.GetRootLayout()->addChildWindow(mWindow);
 	mTree = static_cast<CEGUI::ItemListbox*>(mWindow->getChild(mWindow->getName() + "/List"));
+	CEGUI::Window* refreshButton = mWindow->getChildRecursive(mWindow->getName() + "/Toolbar/Refresh");
+	refreshButton->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Editor::ResourceWindow::OnRefreshButtonClicked, this));
 	CEGUI_EXCEPTION_END
 	OC_ASSERT(mWindow != 0);
 	OC_ASSERT(mTree != 0);
@@ -34,8 +34,15 @@ void Editor::ResourceWindow::Init()
 	BuildResourceTree();
 }
 
+ResourceSystem::ResourcePtr ResourceWindow::GetResourceAtIndex(size_t index)
+{
+	if (index >= mResources.size()) return ResourceSystem::ResourcePtr();
+	return mResources.at(index);
+}
+
 void Editor::ResourceWindow::BuildResourceTree()
 {
+	///@todo Make ResourceMgr refresh resource directory. The functionality should be there but I don't know how Muhe meant to use it.
 	mTree->resetList();
 	mResources.clear();
 	gResourceMgr.GetResources(mResources);
@@ -72,7 +79,6 @@ void Editor::ResourceWindow::BuildResourceTree()
 
 				CEGUI::ItemEntry* dirItem = static_cast<CEGUI::ItemEntry*>(gCEGUIWM.createWindow("Editor/ListboxItem", mTree->getName() + "/DirItem" + StringConverter::ToString(dirItemID++)));
 				dirItem->setText(string(pathDepth * 4, ' ') + dirName);
-				dirItem->setID(string::npos);
 				mTree->addChildWindow(dirItem);
 			}
 
@@ -83,7 +89,6 @@ void Editor::ResourceWindow::BuildResourceTree()
 
 
 		CEGUI::ItemEntry* newItem = static_cast<CEGUI::ItemEntry*>(gCEGUIWM.createWindow("Editor/ListboxItem", mTree->getName() + "/Resource" + StringConverter::ToString(resourceIndex)));
-		//newItem->setText(string(pathDepth * 4, ' ') + (*it)->GetName());
 		newItem->setID(resourceIndex);
 		
 		CEGUI::Window* dragContainer = static_cast<CEGUI::ItemEntry*>(gCEGUIWM.createWindow("DragContainer", mTree->getName() + "/DCResource" + StringConverter::ToString(resourceIndex)));
@@ -100,7 +105,8 @@ void Editor::ResourceWindow::BuildResourceTree()
 		dragContainer->addChildWindow(newItemText);
 		dragContainer->subscribeEvent(CEGUI::Window::EventMouseButtonUp, CEGUI::Event::Subscriber(&Editor::ResourceWindow::OnDragContainerMouseButtonUp, this));
 
-		dragContainer->setWantsMultiClickEvents(false);
+		dragContainer->setID(resourceIndex);
+		dragContainer->setUserData(this);
 
 		mTree->addChildWindow(newItem);
 	}
@@ -114,5 +120,12 @@ bool Editor::ResourceWindow::OnDragContainerMouseButtonUp(const CEGUI::EventArgs
 
 	CEGUI::ItemEntry* itemEntry = static_cast<CEGUI::ItemEntry*>(args.window->getParent());
 	itemEntry->setSelected(!itemEntry->isSelected());
+	return true;
+}
+
+bool Editor::ResourceWindow::OnRefreshButtonClicked(const CEGUI::EventArgs& e)
+{
+	OC_UNUSED(e);
+	BuildResourceTree();
 	return true;
 }
