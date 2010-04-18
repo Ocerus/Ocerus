@@ -12,10 +12,10 @@ SUITE(MathUtils)
 
 	TEST(AbsoluteValue)
 	{
-		CHECK_EQUAL(MathUtils::Abs(11), 11);
-		CHECK_EQUAL(MathUtils::Abs(-11), 11);
-		CHECK_EQUAL(MathUtils::Abs(11.0f), 11.0f);
-		CHECK_EQUAL(MathUtils::Abs(-11.0f), 11.0f);
+		CHECK_EQUAL(MathUtils::Abs((int32)11), 11);
+		CHECK_EQUAL(MathUtils::Abs((int32)-11), 11);
+		CHECK_EQUAL(MathUtils::Abs((float32)11.0f), 11.0f);
+		CHECK_EQUAL(MathUtils::Abs((float32)-11.0f), 11.0f);
 		CHECK_EQUAL(MathUtils::Abs(numeric_limits<float>::max()), numeric_limits<float>::max());
 		CHECK_EQUAL(MathUtils::Abs(numeric_limits<float>::min()), numeric_limits<float>::min());
 		CHECK_EQUAL(MathUtils::Abs(-numeric_limits<float>::max()), numeric_limits<float>::max());
