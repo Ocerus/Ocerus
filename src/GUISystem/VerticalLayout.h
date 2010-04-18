@@ -6,11 +6,7 @@
 
 #include "Base.h"
 
-namespace CEGUI
-{
-	class Window;
-	class EventArgs;
-}
+#include "CEGUIForwards.h"
 
 namespace GUISystem
 {
@@ -68,10 +64,12 @@ namespace GUISystem
 		VerticalLayout& operator=(const VerticalLayout&);
 
 		typedef vector<CEGUI::Window*> WindowList;
+		typedef vector<void*> EventConnectionList;
 		
 		CEGUI::Window* mManagedWindow;
 		const CEGUI::Window* mContentPane;
 		WindowList mChildWindows;
+		EventConnectionList mEventConnections;
 		bool mResizeParent;
 		int mSpacing;
 		bool mLockedUpdates;

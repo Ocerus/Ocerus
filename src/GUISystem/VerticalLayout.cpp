@@ -21,13 +21,19 @@ GUISystem::VerticalLayout::VerticalLayout(CEGUI::Window* managedWindow, const CE
 
 GUISystem::VerticalLayout::~VerticalLayout()
 {
+	for (size_t i = 0; i < mEventConnections.size(); ++i)
+	{
+		CEGUI::Event::Connection* conn = (CEGUI::Event::Connection*)(mEventConnections.at(i));
+		(*conn)->disconnect();
+		delete conn;
+	}
 }
 
 void GUISystem::VerticalLayout::AddChildWindow(CEGUI::Window* window)
 {
 	mManagedWindow->addChildWindow(window);
-	window->subscribeEvent(CEGUI::Window::EventSized, CEGUI::Event::Subscriber(&GUISystem::VerticalLayout::OnChildWindowSized, this));
-	window->subscribeEvent(CEGUI::Window::EventDestructionStarted, CEGUI::Event::Subscriber(&GUISystem::VerticalLayout::OnChildWindowDestructionStarted, this));
+	mEventConnections.push_back(new CEGUI::Event::Connection(window->subscribeEvent(CEGUI::Window::EventSized, CEGUI::Event::Subscriber(&GUISystem::VerticalLayout::OnChildWindowSized, this))));
+	mEventConnections.push_back(new CEGUI::Event::Connection(window->subscribeEvent(CEGUI::Window::EventDestructionStarted, CEGUI::Event::Subscriber(&GUISystem::VerticalLayout::OnChildWindowDestructionStarted, this))));
 	mChildWindows.push_back(window);
 }
 
