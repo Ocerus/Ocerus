@@ -487,6 +487,27 @@ EntityHandle GetCurrentEntityHandle(void)
 	return EntityHandle::Null;
 }
 
+// Functions for register StringMgr to script
+
+const string GetTextData(const StringKey& group, const StringKey& key)
+{
+	return string(gStringMgrProject.GetTextData(group, key).c_str());
+}
+
+const string GetTextData(const StringKey& key)
+{
+	return string(gStringMgrProject.GetTextData(key).c_str());
+}
+
+void RegisterScriptStringMgr(asIScriptEngine* engine)
+{
+	int32 r;
+
+	// Register StringMgr methods as global functions
+	r = engine->RegisterGlobalFunction("const string GetTextData(const StringKey &in, const StringKey &in)", asFUNCTIONPR(GetTextData, (const StringKey&, const StringKey&), const string), asCALL_CDECL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterGlobalFunction("const string GetTextData(const StringKey &in)", asFUNCTIONPR(GetTextData, (const StringKey&), const string), asCALL_CDECL); OC_SCRIPT_ASSERT();
+}
+
 void ScriptMgr::ConfigureEngine(void)
 {
 	int32 r;
@@ -523,6 +544,9 @@ void ScriptMgr::ConfigureEngine(void)
 	// Register a call function on EntityHandle
 	r = mEngine->RegisterObjectMethod("EntityHandle", "void CallFunction(string &in, PropertyFunctionParameters &in)",
 		asFUNCTION(EntityHandleCallFunction), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+
+	// Register StringMgr methods
+	RegisterScriptStringMgr(mEngine);
 
 	// Register all additions in ScriptRegister.cpp to script
 	RegisterAllAdditions(mEngine);

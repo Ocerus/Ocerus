@@ -16,7 +16,9 @@ void Script::Create(void)
 
 void Script::Destroy(void)
 {
-
+	// When the script component or the entity is being destroyed we must call OnDestroy() in all modules.
+	mModules.Clear();
+	if (!mIsUpdating) { UpdateMessageHandlers(); }
 }
 
 bool Script::ExecuteScriptFunction(int32 funcId)
@@ -60,7 +62,7 @@ void Script::UpdateMessageHandlers(void)
 	// Variables for refreshing mStates, mTimes, mModuleToFuncID and mFuncIDToArrayIndex
 	Utils::Array<int32> newStates;
 	Utils::Array<uint64> newTimes;
-  map<string, int32> newModuleToFuncID;
+	map<string, int32> newModuleToFuncID;
 	map<int32, int32> newFuncIDToArrayIndex;
 
 	for (int32 i = 0; i < mModules.GetSize(); ++i) // For each module in mModules
@@ -144,14 +146,8 @@ void Script::UpdateMessageHandlers(void)
 
 EntityMessage::eResult Script::HandleMessage(const EntityMessage& msg)
 {
-	// When the script component is being destroyed we must call OnDestroy() in all modules.
-	if (msg.type == EntityMessage::COMPONENT_DESTROYED && msg.parameters.GetParametersCount() == 1
-	  && (*msg.parameters.GetParameter(0).GetData<uint32>()) == (uint32)EntitySystem::CT_Script)
-	{
-	  mModules.Clear();
-	  if (!mIsUpdating) { UpdateMessageHandlers(); }
-	  return EntityMessage::RESULT_OK;
-	}
+	// Destroying the entity or the component is handled in the method Destroy
+	if (msg.type == EntityMessage::DESTROY) { return EntityMessage::RESULT_OK; }
 	
 	// Updating message handlers if necessary
 	if (msg.type == EntityMessage::RESOURCE_UPDATE)
