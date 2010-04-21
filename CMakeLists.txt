@@ -10,6 +10,7 @@ option(PRECOMPILED_HEADERS "Use precompiled headers." OFF)
 option(BUILD_TESTS "Builds tests." ON)
 option(USE_DBGLIB "Uses DbgLib for debugging." ON)
 option(USE_LEAKDETECTOR "Uses DbgLib's leak detector." OFF)
+option(USE_PROFILER "Uses profiler." OFF)
 
 set(ocerus-engine_INCLUDE_DIRS)
 set(ocerus-engine_LIBRARIES)
@@ -93,6 +94,19 @@ if (USE_DBGLIB OR USE_LEAKDETECTOR)
     endif (USE_LEAKDETECTOR)
 
 endif (USE_DBGLIB OR USE_LEAKDETECTOR)
+
+if (USE_PROFILER)
+	ADD_SUBDIRECTORY(externalLibs/RTHProfiler)
+	set(RTHProfiler_INCLUDE_DIRS
+		${CMAKE_CURRENT_SOURCE_DIR}/externalLibs/RTHProfiler/include
+	)
+	set(RTHProfiler_LIBRARIES RTHProfiler)
+
+	list(APPEND ocerus-engine_INCLUDE_DIRS ${RTHProfiler_INCLUDE_DIRS})
+	list(APPEND ocerus-engine_LIBRARIES ${RTHProfiler_LIBRARIES})
+
+	list(APPEND ocerus-engine_SYMBOLS USE_PROFILER)
+endif (USE_PROFILER)
 
 ###############################################################################
 ###                             dependencies                                ###
