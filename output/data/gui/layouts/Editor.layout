@@ -187,18 +187,28 @@
                     </Window>
                     <Window Type="Editor/MenuItem" Name="EditorRoot/Menubar/Edit/DuplicateEntity" >
                         <Property Name="Text" Value="Duplicate Entity" />
-                        <Property Name="Tooltip" Value="Duplicates selected entity." />
+                        <Property Name="Tooltip" Value="Duplicates current entity." />
                         <Property Name="UnifiedAreaRect" Value="{{0,2},{0,44},{0,122},{0,63}}" />
+                    </Window>
+                    <Window Type="Editor/MenuItem" Name="EditorRoot/Menubar/Edit/DuplicateSelectedEntities" >
+                        <Property Name="Text" Value="Duplicate Selected Entities" />
+                        <Property Name="Tooltip" Value="Duplicates selected entities." />
+                        <Property Name="UnifiedAreaRect" Value="{{0,2},{0,65},{0,122},{0,84}}" />
                     </Window>
                     <Window Type="Editor/MenuItem" Name="EditorRoot/Menubar/Edit/DeleteEntity" >
                         <Property Name="Text" Value="Delete Entity" />
-                        <Property Name="Tooltip" Value="Deletes selected entity." />
-                        <Property Name="UnifiedAreaRect" Value="{{0,2},{0,65},{0,122},{0,84}}" />
+                        <Property Name="Tooltip" Value="Deletes current entity." />
+                        <Property Name="UnifiedAreaRect" Value="{{0,2},{0,86},{0,122},{0,105}}" />
+		    </Window>
+		    <Window Type="Editor/MenuItem" Name="EditorRoot/Menubar/Edit/DeleteSelectedEntities" >
+                        <Property Name="Text" Value="Delete Selected Entities" />
+                        <Property Name="Tooltip" Value="Deletes selected entities." />
+                        <Property Name="UnifiedAreaRect" Value="{{0,2},{0,107},{0,122},{0,126}}" />
                     </Window>
                     <Window Type="Editor/MenuItem" Name="EditorRoot/Menubar/Edit/CreatePrototype" >
                         <Property Name="Text" Value="Create Prototype" />
                         <Property Name="Tooltip" Value="Exports current entity to prototype." />
-                        <Property Name="UnifiedAreaRect" Value="{{0,2},{0,86},{0,122},{0,105}}" />
+                        <Property Name="UnifiedAreaRect" Value="{{0,2},{0,128},{0,122},{0,147}}" />
                     </Window>
                 </Window>
             </Window>

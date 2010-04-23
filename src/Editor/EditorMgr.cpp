@@ -207,6 +207,30 @@ void Editor::EditorMgr::DeleteEntity()
 	SetCurrentEntity(EntityHandle::Null);
 }
 
+void Editor::EditorMgr::DuplicateSelectedEntities()
+{
+	for (EntityList::iterator it = mSelectedEntities.begin(); it != mSelectedEntities.end(); ++it)
+	{
+		if (it->Exists())
+		{
+			gEntityMgr.DuplicateEntity(*it).FinishInit();
+		}
+	}
+}
+
+void Editor::EditorMgr::DeleteSelectedEntities()
+{
+	for (EntityList::iterator it = mSelectedEntities.begin(); it != mSelectedEntities.end(); ++it)
+	{
+		if (it->Exists())
+		{
+			if (GetCurrentEntity() == (*it)) { SetCurrentEntity(EntityHandle::Null); }
+			gEntityMgr.DestroyEntity(*it);
+		}
+	}
+	mSelectedEntities.clear();
+}
+
 void Editor::EditorMgr::AddComponent(EntitySystem::eComponentType componentType)
 {
 	if (!mCurrentEntity.IsValid()) return;

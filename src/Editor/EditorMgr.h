@@ -88,11 +88,17 @@ namespace Editor
 		/// Creates a new entity.
 		void CreateEntity();
 
-		/// Duplicates current entity.
+		/// Duplicates the current entity.
 		void DuplicateEntity();
 
-		/// Delete current entity.
+		/// Deletes the current entity.
 		void DeleteEntity();
+
+		/// Duplicates selected entities.
+		void DuplicateSelectedEntities();
+
+		/// Deletes selected entities.
+		void DeleteSelectedEntities();
 		
 		/// Adds a new component of componentType to current entity.
 		void AddComponent(EntitySystem::eComponentType componentType);

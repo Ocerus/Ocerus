@@ -151,10 +151,22 @@ bool Editor::EditorMenu::OnMenuItemClicked(const CEGUI::EventArgs& e)
 		gEditorMgr.DuplicateEntity();
 		return true;
 	}
+	
+	if (itemName == menubarPrefix + "/Edit/DuplicateSelectedEntities")
+	{
+		gEditorMgr.DuplicateSelectedEntities();
+		return true;
+	}
 
 	if (itemName == menubarPrefix + "/Edit/DeleteEntity")
 	{
 		gEditorMgr.DeleteEntity();
+		return true;
+	}
+
+	if (itemName == menubarPrefix + "/Edit/DeleteSelectedEntities")
+	{
+		gEditorMgr.DeleteSelectedEntities();
 		return true;
 	}
 
