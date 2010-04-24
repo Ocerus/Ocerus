@@ -135,9 +135,9 @@ namespace Editor
 		eEditTool mEditTool; ///< Current tool.
 		bool mEditToolWorking; ///< If true the tool is currently doing something.
 		Vector2 mEditToolCursorPosition; ///< World position where the tool started.
-		Vector2 mEditToolRelativeBodyPosition; ///< Relative position to the body center.
-		float32 mEditToolBodyAngle; ///< Initial angle of the body.
-		Vector2 mEditToolBodyScale; ///< Initial body scale.
+		vector<Vector2> mEditToolBodyPositions; ///< Initial positions of the bodies.
+		vector<float32> mEditToolBodyAngles; ///< Initial angle of the bodies.
+		vector<Vector2> mEditToolBodyScales; ///< Initial scale of the bodies.
 
 
 		/// Draws the shape of the entity using the selected color.

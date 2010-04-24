@@ -306,28 +306,37 @@ bool Editor::EditorMgr::MouseMoved( const InputSystem::MouseInfo& mi )
 		Vector2 worldCursorPos;
 		if (gGfxRenderer.ConvertScreenToWorldCoords(GfxSystem::Point(mi.x, mi.y), worldCursorPos, mEditorGUI->GetEditorViewport()->GetRenderTarget()))
 		{
-			OC_ASSERT(GetCurrentEntity());
 			Vector2 delta = worldCursorPos - mEditToolCursorPosition;
 			delta.y = -delta.y; // so that the editing tool seems more intuitive
 			float32 scalarDelta = delta.x;
 			switch (mEditTool)
 			{
 			case ET_MOVE:
-				GetCurrentEntity().GetProperty("Position").SetValue<Vector2>(worldCursorPos - mEditToolRelativeBodyPosition);
+				for (size_t i=0; i<mSelectedEntities.size(); ++i)
+				{
+					mSelectedEntities[i].GetProperty("Position").SetValue<Vector2>(mEditToolBodyPositions[i] + worldCursorPos - mEditToolCursorPosition);
+				}
 				break;
 			case ET_ROTATE:
-				GetCurrentEntity().GetProperty("Angle").SetValue<float32>(mEditToolBodyAngle + EDIT_TOOL_ANGLE_CHANGE_RATIO * scalarDelta);
+				for (size_t i=0; i<mSelectedEntities.size(); ++i)
+				{
+					mSelectedEntities[i].GetProperty("Angle").SetValue<float32>(mEditToolBodyAngles[i] + EDIT_TOOL_ANGLE_CHANGE_RATIO * scalarDelta);
+				}
 				break;
 			case ET_ROTATE_Z:
-				GetCurrentEntity().GetProperty("ZAngle").SetValue<float32>(mEditToolBodyAngle + EDIT_TOOL_ANGLE_CHANGE_RATIO * scalarDelta);
+				for (size_t i=0; i<mSelectedEntities.size(); ++i)
+				{
+					mSelectedEntities[i].GetProperty("ZAngle").SetValue<float32>(mEditToolBodyAngles[i] + EDIT_TOOL_ANGLE_CHANGE_RATIO * scalarDelta);
+				}
 				break;
 			case ET_SCALE:
+				delta *= EDIT_TOOL_SCALE_CHANGE_RATIO;
+				for (size_t i=0; i<mSelectedEntities.size(); ++i)
 				{
-					delta *= EDIT_TOOL_SCALE_CHANGE_RATIO;
-					delta = MathUtils::Multiply(Matrix22(GetCurrentEntity().GetProperty("Angle").GetValue<float32>()), delta);
-					GetCurrentEntity().GetProperty("Scale").SetValue<Vector2>(mEditToolBodyScale + delta);
-					break;
+					Vector2 transformedDelta = MathUtils::Multiply(Matrix22(mSelectedEntities[i].GetProperty("Angle").GetValue<float32>()), delta);
+					mSelectedEntities[i].GetProperty("Scale").SetValue<Vector2>(mEditToolBodyScales[i] + transformedDelta);
 				}
+				break;
 			}
 			return true;
 		}				
@@ -357,12 +366,18 @@ bool Editor::EditorMgr::MouseButtonPressed( const InputSystem::MouseInfo& mi, co
 		{
 			if (mHoveredEntity.IsValid())
 			{
-				mSelectedEntities.clear();
-				mSelectedEntities.push_back(mHoveredEntity);
+				if (find(mSelectedEntities.begin(), mSelectedEntities.end(), mHoveredEntity) == mSelectedEntities.end())
+				{
+					mSelectedEntities.clear();
+				}
+				if (mSelectedEntities.empty())
+				{
+					mSelectedEntities.push_back(mHoveredEntity);
+					SetCurrentEntity(GetSelectedEntity());
+				}
 			}
-			SetCurrentEntity(GetSelectedEntity());
 
-			if (mHoveredEntity.IsValid() && GetCurrentEntity().IsValid())
+			if (mHoveredEntity.IsValid() && !mSelectedEntities.empty())
 			{
 				// we've got an entity to edit, so let's init the right tool
 				mEditToolWorking = true;
@@ -370,23 +385,37 @@ bool Editor::EditorMgr::MouseButtonPressed( const InputSystem::MouseInfo& mi, co
 				switch (mEditTool)
 				{
 				case ET_MOVE:
-					mEditToolRelativeBodyPosition = worldCursorPos - GetCurrentEntity().GetProperty("Position").GetValue<Vector2>();
+					mEditToolBodyPositions.resize(mSelectedEntities.size());
+					for (size_t i=0; i<mSelectedEntities.size(); ++i)
+					{
+						mEditToolBodyPositions[i] = mSelectedEntities[i].GetProperty("Position").GetValue<Vector2>();
+					}
 					break;
 				case ET_ROTATE:
-					mEditToolBodyAngle = GetCurrentEntity().GetProperty("Angle").GetValue<float32>();
+					mEditToolBodyAngles.resize(mSelectedEntities.size());
+					for (size_t i=0; i<mSelectedEntities.size(); ++i)
+					{
+						mEditToolBodyAngles[i] = mSelectedEntities[i].GetProperty("Angle").GetValue<float32>();
+						}
 					break;
 				case ET_ROTATE_Z:
-					if (gEntityMgr.HasEntityComponentOfType(GetCurrentEntity(), EntitySystem::CT_Model))
+					mEditToolBodyAngles.resize(mSelectedEntities.size());
+					for (size_t i=0; i<mSelectedEntities.size(); ++i)
 					{
-						mEditToolBodyAngle = GetCurrentEntity().GetProperty("ZAngle").GetValue<float32>();
-					}
-					else
-					{
-						mEditToolWorking = false;
+						if (!gEntityMgr.HasEntityComponentOfType(mSelectedEntities[i], EntitySystem::CT_Model))
+						{
+							mEditToolWorking = false;
+							break;
+						}
+						mEditToolBodyAngles[i] = mSelectedEntities[i].GetProperty("ZAngle").GetValue<float32>();
 					}
 					break;
 				case ET_SCALE:
-					mEditToolBodyScale = GetCurrentEntity().GetProperty("Scale").GetValue<Vector2>();
+					mEditToolBodyScales.resize(mSelectedEntities.size());
+					for (size_t i=0; i<mSelectedEntities.size(); ++i)
+					{
+						mEditToolBodyScales[i] = mSelectedEntities[i].GetProperty("Scale").GetValue<Vector2>();
+					}
 					break;
 				}
 			}
@@ -429,7 +458,7 @@ bool Editor::EditorMgr::MouseButtonReleased( const InputSystem::MouseInfo& mi, c
 			mSelectedEntities.clear();
 			EntityPicker picker(mSelectionCursorPosition);
 			float32 cameraRotation = gGfxRenderer.GetRenderTargetCameraRotation(rt);
-			if (picker.PickMultipleEntities(worldCursorPos, cameraRotation, mSelectedEntities) == 1)
+			if (picker.PickMultipleEntities(worldCursorPos, cameraRotation, mSelectedEntities))
 			{
 				SetCurrentEntity(GetSelectedEntity());
 			}

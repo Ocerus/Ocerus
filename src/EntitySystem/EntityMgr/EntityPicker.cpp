@@ -115,6 +115,7 @@ uint32 EntitySystem::EntityPicker::PickMultipleEntities( const Vector2& worldCur
 	physics->QueryAABB(&query, aabb);
 
 	// fill the vector with results
+	out.clear();
 	for (int32 i=0; i<query.count; ++i)
 	{
 		PhysicalShape* shape = query.shapes[i];
