@@ -59,7 +59,6 @@ bool InputSystem::OISListener::mouseMoved( const OIS::MouseEvent &evt )
 {
 	if (evt.state.Z.rel != 0) {
 		// the wheel has moved; check if the mouse is still above the window; if not, ignore the event
-		//if (evt.state.X < 0)
 		if (evt.state.X.abs < 0 || evt.state.X.abs >= evt.state.width
 			|| evt.state.Y.abs < 0 || evt.state.Y.abs >= evt.state.height)
 		{

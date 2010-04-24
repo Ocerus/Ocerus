@@ -215,13 +215,13 @@
         </Window>
         <Window Type="Editor/Viewport" Name="EditorRoot/TopViewport" >
             <Property Name="TitlebarFont" Value="DejaVuSans-10" />
-            <Property Name="TitlebarEnabled" Value="True" />
+            <Property Name="TitlebarEnabled" Value="False" />
             <Property Name="UnifiedAreaRect" Value="{{0.25,0},{0,25},{0.8,0},{0.5,13}}" />
             <Property Name="DragMovingEnabled" Value="False" />
         </Window>
         <Window Type="Editor/Viewport" Name="EditorRoot/BottomViewport" >
             <Property Name="TitlebarFont" Value="DejaVuSans-10" />
-            <Property Name="TitlebarEnabled" Value="True" />
+            <Property Name="TitlebarEnabled" Value="False" />
             <Property Name="UnifiedAreaRect" Value="{{0.25,0},{0.5,12},{0.8,0},{1,0}}" />
             <Property Name="DragMovingEnabled" Value="False" />
         </Window>
