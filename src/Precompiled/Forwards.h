@@ -17,6 +17,8 @@ namespace Editor
 {
 	class EditorGUI;
 	class EditorMgr;
+	class EditorMenu;
+	class PopupMenu;
 }
 
 namespace EntitySystem
@@ -43,6 +45,8 @@ namespace GUISystem
 {
 	class GUIMgr;
 	class VerticalLayout;
+	class ResourceProvider;
+	class GUIConsole;
 }
 
 namespace InputSystem

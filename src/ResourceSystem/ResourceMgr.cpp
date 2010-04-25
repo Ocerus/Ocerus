@@ -461,6 +461,8 @@ void ResourceSystem::ResourceMgr::RefreshAllResources( void )
 
 void ResourceSystem::ResourceMgr::ChangeResourceType(ResourcePtr resPointer, eResourceType newType)
 {
+	ocInfo << "Changing type of resource " << resPointer << " to " << newType;
+
 	// searching throught the groups
 	for (ResourceGroupMap::iterator groupIter=mResourceGroups.begin(); groupIter!=mResourceGroups.end(); ++groupIter)
 	{

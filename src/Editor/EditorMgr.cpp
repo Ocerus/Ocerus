@@ -1,6 +1,7 @@
 #include "Common.h"
 #include "EditorMgr.h"
 #include "EditorGUI.h"
+#include "PopupMenu.h"
 #include "GUISystem/GUIMgr.h"
 #include "GUISystem/ViewportWindow.h"
 #include "EntitySystem/EntityMgr/LayerMgr.h"
@@ -32,6 +33,7 @@ EditorMgr::~EditorMgr()
 
 void EditorMgr::LoadEditor()
 {
+	mPopupClosingEnabled = false;
 	mMultiselectStarted = false;
 	SetEditTool(ET_MOVE);
 	mHoveredEntity.Invalidate();
@@ -530,4 +532,33 @@ bool Editor::EditorMgr::DrawEntityPhysicalShape( const EntitySystem::EntityHandl
 	}
 
 	return result;
+}
+
+void Editor::EditorMgr::RegisterPopupMenu( PopupMenu* menu )
+{
+	mPopupMenus.push_back(menu);
+}
+
+void Editor::EditorMgr::CloseAllPopupMenus()
+{
+	if (!mPopupClosingEnabled) return;
+
+	for (list<PopupMenu*>::iterator it=mPopupMenus.begin(); it!=mPopupMenus.end(); ++it)
+	{
+		(*it)->Close();
+	}
+
+	while (!mPopupMenus.empty())
+	{
+		delete mPopupMenus.front();
+	}
+}
+
+void Editor::EditorMgr::UnregisterPopupMenu( PopupMenu* menu )
+{
+	list<PopupMenu*>::iterator it = find(mPopupMenus.begin(), mPopupMenus.end(), menu);
+	if (it != mPopupMenus.end())
+	{
+		mPopupMenus.erase(it);
+	}
 }

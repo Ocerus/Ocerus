@@ -128,6 +128,9 @@ void Application::RunMainLoop()
 		// process input events
 		gInputMgr.CaptureInput();
 
+		// clean all events marked for destruction in the GUI system
+		gGUIMgr.ProcessDisconnectedEventList();
+
 		// make sure the resources are up to date
 		if (mDevelopMode) gResourceMgr.CheckForResourcesUpdates();
 

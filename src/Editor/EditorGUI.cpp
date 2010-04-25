@@ -73,12 +73,6 @@ void EditorGUI::LoadGUI()
 	mLayerMgrWidget = new LayerMgrWidget(gCEGUIWM.getWindow("EditorRoot/LayerMgr"));
 	mLayerMgrWidget->Init();
 
-	/// Initialize popup pseudomenu
-	{
-		CEGUI::Window* popupMenubar = gCEGUIWM.getWindow("EditorRoot/Popup");
-		popupMenubar->hide();
-	}
-
 	/// Initialize top viewport
 	{
 		/// Create game camera.

@@ -213,7 +213,30 @@
                 </Window>
             </Window>
         </Window>
-        <Window Type="Editor/Viewport" Name="EditorRoot/TopViewport" >
+        <Window Type="Editor/PopupMenu" Name="EditorRoot/Popup/Resource" >
+            <Property Name="AlwaysOnTop" Value="True" />
+		        <Property Name="Visible" Value="False" />
+            <Property Name="FadeInTime" Value="0" />
+            <Property Name="FadeOutTime" Value="0" />
+            <Property Name="ItemSpacing" Value="2" />
+            <Property Name="ClippedByParent" Value="False" />
+            <Property Name="AutoResizeEnabled" Value="True" />
+            <Window Type="Editor/MenuItem" Name="EditorRoot/Popup/Resource/ChangeType" >
+                <Property Name="Text" Value="Change Type" />
+                <Property Name="Tooltip" Value="Changes the type of the resource." />
+            </Window>
+      </Window>
+      <Window Type="Editor/PopupMenu" Name="EditorRoot/Popup/Resource/Types" >
+            <Property Name="AlwaysOnTop" Value="True" />
+		        <Property Name="Visible" Value="False" />
+            <Property Name="FadeInTime" Value="0" />
+            <Property Name="FadeOutTime" Value="0" />
+            <Property Name="ItemSpacing" Value="2" />
+            <Property Name="ClippedByParent" Value="False" />
+            <Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{0,100},{0,88.299}}" />
+            <Property Name="AutoResizeEnabled" Value="True" />
+      </Window>
+			<Window Type="Editor/Viewport" Name="EditorRoot/TopViewport" >
             <Property Name="TitlebarFont" Value="DejaVuSans-10" />
             <Property Name="TitlebarEnabled" Value="False" />
             <Property Name="UnifiedAreaRect" Value="{{0.25,0},{0,25},{0.8,0},{0.5,13}}" />
@@ -224,10 +247,6 @@
             <Property Name="TitlebarEnabled" Value="False" />
             <Property Name="UnifiedAreaRect" Value="{{0.25,0},{0.5,12},{0.8,0},{1,0}}" />
             <Property Name="DragMovingEnabled" Value="False" />
-        </Window>
-        <Window Type="Editor/Menubar" Name="EditorRoot/Popup" >
-            <Property Name="ItemSpacing" Value="10" />
-            <Property Name="UnifiedAreaRect" Value="{{0,0},{0,32},{0,64},{0,64}}" />
         </Window>
         <Window Type="Editor/FrameWindow" Name="EditorRoot/LayerMgr" >
             <Property Name="Text" Value="Layer Manager" />

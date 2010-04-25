@@ -10,6 +10,8 @@
 #include "InputSystem/InputMgr.h"
 #include "InputSystem/InputActions.h"
 
+#include "Editor/EditorMgr.h"
+
 #include "CEGUI.h"
 #include "RendererModules/OpenGL/CEGUIOpenGLRenderer.h"
 
@@ -106,6 +108,19 @@ namespace GUISystem
 		CEGUI::WindowManager::getSingleton().destroyAllWindows();
 	}
 
+	void GUIMgr::DisconnectEvent( const CEGUI::Event::Connection eventConnection )
+	{
+		mDeadEventConnections.push_back(eventConnection);
+	}
+
+	void GUIMgr::ProcessDisconnectedEventList()
+	{
+		for (list<CEGUI::Event::Connection>::iterator it=mDeadEventConnections.begin(); it!=mDeadEventConnections.end(); ++it)
+		{
+			(*it)->disconnect();
+		}
+		mDeadEventConnections.clear();
+	}
 
 	bool GUIMgr::LoadRootLayout(const string& filename)
 	{
@@ -188,14 +203,18 @@ namespace GUISystem
 	{
 		OC_UNUSED(mi);
 		OC_DASSERT(mCegui);
-		return mCegui->injectMouseButtonDown(ConvertMouseButtonEnum(btn));
+		bool result = mCegui->injectMouseButtonDown(ConvertMouseButtonEnum(btn));
+		return result;
 	}
 
 	bool GUIMgr::MouseButtonReleased(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn)
 	{
 		OC_UNUSED(mi);
 		OC_DASSERT(mCegui);
-		return mCegui->injectMouseButtonUp(ConvertMouseButtonEnum(btn));
+		gEditorMgr.EnablePopupClosing();
+		bool result = mCegui->injectMouseButtonUp(ConvertMouseButtonEnum(btn));
+		gEditorMgr.CloseAllPopupMenus();
+		return result;
 	}
 
 	void GUIMgr::ResolutionChanged(const uint32 width, const uint32 height)
@@ -395,3 +414,4 @@ bool GUIMgr::ConsoleCommandEvent(const CEGUI::EventArgs& e)
 		return true;
 	}
 }
+

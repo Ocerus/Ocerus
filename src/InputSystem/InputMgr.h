@@ -51,6 +51,9 @@ namespace InputSystem
 		/// Registers an event listener.
 		void AddInputListener(IInputListener* listener);
 
+		/// Registers an event listener which will receive the events before any other.
+		void AddInputListenerToFront(IInputListener* listener);
+
 		/// Unregisters an event listener.
 		void RemoveInputListener(IInputListener* listener);
 

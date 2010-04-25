@@ -1,5 +1,7 @@
 #include "Common.h"
 #include "ResourceWindow.h"
+#include "PopupMenu.h"
+#include "EditorMgr.h"
 #include "ResourceSystem/ResourceMgr.h"
 #include "GUISystem/CEGUITools.h"
 
@@ -119,7 +121,22 @@ bool Editor::ResourceWindow::OnDragContainerMouseButtonUp(const CEGUI::EventArgs
 	if (dragContainer->isBeingDragged()) return false;
 
 	CEGUI::ItemEntry* itemEntry = static_cast<CEGUI::ItemEntry*>(args.window->getParent());
-	itemEntry->setSelected(!itemEntry->isSelected());
+	itemEntry->setSelected(true);
+
+	if (args.button == CEGUI::RightButton)
+	{
+		ResourceSystem::ResourcePtr resource = GetResourceAtIndex(dragContainer->getID());
+		if (resource.get())
+		{
+			// the menu will self-destruct
+			PopupMenu* menu = new PopupMenu("EditorRoot/Popup/Resource", false);
+			menu->Init<ResourceSystem::ResourcePtr>(resource);
+			menu->Open(args.position.d_x, args.position.d_y);
+			gEditorMgr.RegisterPopupMenu(menu);
+		}
+		return true;
+	}
+
 	return true;
 }
 

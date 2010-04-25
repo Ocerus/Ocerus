@@ -77,8 +77,7 @@ bool Editor::ResourceEditor::OnEventDragDropItemDropped(const CEGUI::EventArgs& 
 	if (resourceWindow == 0) return true;
 
 	ResourceSystem::ResourcePtr resource = resourceWindow->GetResourceAtIndex(args.dragDropItem->getID());
-	if (resource.get())
-		mModel->SetValue(resource);
+	if (resource.get())	mModel->SetValue(resource);
 	Update();
 	return true;
 }

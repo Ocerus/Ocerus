@@ -56,6 +56,21 @@ namespace Editor
 		/// Sets a new value to a property of the selected entity.
 		void UpdateCurrentEntityProperty(const EntitySystem::ComponentID& componentId, const StringKey propertyKey, const string& newValue);
 
+		/// Adds a new popup menu to the list.
+		void RegisterPopupMenu(PopupMenu* menu);
+
+		/// Removes the popup menu from the list.
+		void UnregisterPopupMenu(PopupMenu* menu);
+
+		/// Disables closing of popup menus.
+		inline void DisablePopupClosing() { mPopupClosingEnabled = false; }
+
+		/// Enables closing of popup menus.
+		inline void EnablePopupClosing() { mPopupClosingEnabled = true; }
+
+		/// Closes all popup menus.
+		void CloseAllPopupMenus();
+
 	public:
 
    		/// @name Callbacks from InputSystem::IInputListener
@@ -121,6 +136,8 @@ namespace Editor
 	private:
 
 		EditorGUI* mEditorGUI;
+		list<PopupMenu*> mPopupMenus;
+		bool mPopupClosingEnabled;
 		EntitySystem::EntityHandle mCurrentEntity; ///< Currently edited entity in the components' window.
 
 		// Selections stuff.
@@ -131,7 +148,6 @@ namespace Editor
 		EntityList mSelectedEntities; ///< Currently selected entities.
 
 		// Tools.
-		
 		eEditTool mEditTool; ///< Current tool.
 		bool mEditToolWorking; ///< If true the tool is currently doing something.
 		Vector2 mEditToolCursorPosition; ///< World position where the tool started.

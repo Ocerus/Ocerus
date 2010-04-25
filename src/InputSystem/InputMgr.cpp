@@ -33,6 +33,12 @@ void InputSystem::InputMgr::AddInputListener( IInputListener* listener )
 	mListeners.push_back(listener);
 }
 
+void InputSystem::InputMgr::AddInputListenerToFront( IInputListener* listener )
+{
+	OC_ASSERT(listener);
+	mListeners.insert(mListeners.begin(), listener);
+}
+
 void InputSystem::InputMgr::RemoveInputListener( IInputListener* listener )
 {
 	OC_ASSERT(listener);
@@ -69,4 +75,3 @@ bool InputSystem::InputMgr::IsMouseButtonPressed( const eMouseButton btn ) const
 	MouseState& mouse = GetMouseState();
 	return (mouse.buttons & btn) != 0;
 }
-

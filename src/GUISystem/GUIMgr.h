@@ -5,6 +5,7 @@
 #include "Singleton.h"
 #include "InputSystem/IInputListener.h"
 #include "GfxSystem/IGfxWindowListener.h"
+#include <CEGUIEvent.h>
 
 #define gGUIMgr GUISystem::GUIMgr::GetSingleton()
 
@@ -20,9 +21,6 @@ namespace CEGUI
 
 namespace GUISystem
 {
-	class ResourceProvider;
-	class GUIConsole;
-
 	/**
 	 * The IConsoleListener interface defines an interface for listening to
 	 * commands from in-game console.
@@ -62,6 +60,12 @@ namespace GUISystem
 
 		/// Returns current root layout.
 		CEGUI::Window* GetRootLayout() const { return mCurrentRootLayout; }
+
+		/// Disconnects the event from its handler.
+		void DisconnectEvent(const CEGUI::Event::Connection eventConnection);
+
+		/// Makes sure to actually disconnect the events.
+		void ProcessDisconnectedEventList();
 
 		/// Renders the GUI.
 		void RenderGUI() const;
@@ -105,6 +109,8 @@ namespace GUISystem
 		CEGUI::System* mCegui;
 		CEGUI::Window* mWindowRoot;
 		CEGUI::Window* mCurrentRootLayout;
+
+		list<CEGUI::Event::Connection> mDeadEventConnections;
 
 		GUIConsole* mGUIConsole;
 

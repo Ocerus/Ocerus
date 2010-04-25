@@ -20,7 +20,6 @@ namespace Reflection
 	///	parameter T is the property value type. It holds its data in private attribute.
 	template <class T> class ValuedProperty : public TypedProperty<T>
 	{
-
 	public:
 
 		/// Constructor.

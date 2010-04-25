@@ -1,5 +1,5 @@
 /// @file
-/// Manages top menu in editor
+/// Manages top menu in editor.
 
 #ifndef _EDITOR_EDITORMENU_H_
 #define _EDITOR_EDITORMENU_H_

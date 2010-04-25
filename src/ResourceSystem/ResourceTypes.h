@@ -14,12 +14,26 @@ namespace ResourceSystem
 		RESTYPE_CEGUIRESOURCE, 
 		RESTYPE_TEXTRESOURCE, 
 		RESTYPE_XMLRESOURCE, 
-		RESTYPE_PARTICLERESOURCE,
 		RESTYPE_SCRIPTRESOURCE,
 		RESTYPE_UNKNOWN,
 		
 		NUM_RESTYPES, 
 		RESTYPE_AUTODETECT
+	};
+
+	/// Names of a resource types.
+	const char* const ResourceTypeNames[] = 
+	{
+		"Texture",
+		"Mesh",
+		"CEGUI",
+		"Text",
+		"XML",
+		"Script",
+		"Unknown",
+
+		"NumRestypes",
+		"Unknown"
 	};
 	
 	/// Types of path. Relative to some base path or the last one is the absolute path.
@@ -33,7 +47,11 @@ namespace ResourceSystem
 	};
 	
 	/// String name of types of a base path.
-  const char* GetBasePathTypeName(const eBasePathType basePathType);
+	const char* GetBasePathTypeName(const eBasePathType basePathType);
+
+	/// Returns a string representation of the given resource type.
+	string GetResourceTypeName(const eResourceType type);
+
 }
 
 

@@ -15,3 +15,8 @@ const char* ResourceSystem::GetBasePathTypeName(const eBasePathType basePathType
 {
 	return BasePathTypeName[basePathType];
 }
+
+string ResourceSystem::GetResourceTypeName( const eResourceType type )
+{
+	return ResourceTypeNames[type];
+}
