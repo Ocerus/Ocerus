@@ -461,7 +461,7 @@ void ResourceSystem::ResourceMgr::RefreshAllResources( void )
 
 void ResourceSystem::ResourceMgr::ChangeResourceType(ResourcePtr resPointer, eResourceType newType)
 {
-	ocInfo << "Changing type of resource " << resPointer << " to " << newType;
+	ocInfo << "Changing type of resource " << resPointer->GetName() << " to " << newType;
 
 	// searching throught the groups
 	for (ResourceGroupMap::iterator groupIter=mResourceGroups.begin(); groupIter!=mResourceGroups.end(); ++groupIter)
@@ -481,12 +481,13 @@ void ResourceSystem::ResourceMgr::ChangeResourceType(ResourcePtr resPointer, eRe
 				r->SetType(newType);
 				r->SetBasePathType(resPointer->GetBasePathType());
 
-				// adding new resource to manager
-				AddResourceToGroup(groupIter, r->GetName(), r);
-
 				// deleting old resource
 				resIter->second->Unload(true);
 				resMap->erase(resIter);
+
+				// adding new resource to manager
+				AddResourceToGroup(groupIter, r->GetName(), r);
+				return;
 			}
 		}
 	}
