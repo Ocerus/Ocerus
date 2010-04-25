@@ -96,6 +96,8 @@ namespace ResourceSystem
 		/// Retrieves all resources from the manager.
 		void GetResources(vector<ResourcePtr>& output);
 
+		void ChangeResourceType(ResourcePtr resPointer, eResourceType newType);
+
 		/// Sets the memory limit the resource manager should try to keep.
 		/// The limit is given in bytes.
 		void SetMemoryLimit(const size_t newLimit);
@@ -138,6 +140,9 @@ namespace ResourceSystem
 		size_t mMemoryUsage;
 		bool mEnforceMemoryLimit;
 
+		/// Adds a resource to a group given by iterator.
+		void AddResourceToGroup(const ResourceGroupMap::iterator& groupIt, const StringKey& name, const ResourcePtr res);
+		
 		/// Adds a resource to a group given a resource pointer.
 		void AddResourceToGroup(const StringKey& group, const StringKey& name, const ResourcePtr res);
 

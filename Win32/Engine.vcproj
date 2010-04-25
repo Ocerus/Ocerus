@@ -701,6 +701,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\ResourceSystem\UnknownResource.h"
+					>
+				</File>
+				<File
 					RelativePath="..\src\ResourceSystem\XMLOutput.h"
 					>
 				</File>

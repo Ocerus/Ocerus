@@ -11,6 +11,7 @@
 #include "StringSystem/TextResource.h"
 #include "ResourceSystem/XMLResource.h"
 #include "ScriptSystem/ScriptResource.h"
+#include "UnknownResource.h"
 
 #ifdef __WIN__
 #pragma warning(disable: 4996)
@@ -43,6 +44,7 @@ void ResourceSystem::ResourceMgr::Init( const string& basepath )
 	mResourceCreationMethods[RESTYPE_TEXTRESOURCE] = StringSystem::TextResource::CreateMe;
 	mResourceCreationMethods[RESTYPE_XMLRESOURCE] = XMLResource::CreateMe;
 	mResourceCreationMethods[RESTYPE_SCRIPTRESOURCE] = ScriptSystem::ScriptResource::CreateMe;
+	mResourceCreationMethods[RESTYPE_UNKNOWN] = ResourceSystem::UnknownResource::CreateMe;
 	mExtToTypeMap["png"] = RESTYPE_TEXTURE;
 	mExtToTypeMap["bmp"] = RESTYPE_TEXTURE;
 	mExtToTypeMap["jpg"] = RESTYPE_TEXTURE;
@@ -168,7 +170,7 @@ bool ResourceMgr::AddResourceFileToGroup(const string& filepath, const StringKey
 	else
 		boostPath = mBasePath[basePathType] + filepath;
 	
-	ocInfo << "Adding resource '" << filepath << "' to group '" << group << "'";
+	ocInfo << "Adding resource '" << boostPath << "' to group '" << group << "'";
 	if (!boost::filesystem::exists(boostPath))
 	{
 		ocError << "Resource located at '" << boostPath.string() << "' not found";
@@ -185,8 +187,7 @@ bool ResourceMgr::AddResourceFileToGroup(const string& filepath, const StringKey
 	// error
 	if (type == RESTYPE_AUTODETECT)
 	{
-		ocError << "Can't detect type of resource '" << filepath << "'";
-		return false;
+		type = RESTYPE_UNKNOWN;
 	}
 
 	string name = customName;
@@ -201,7 +202,7 @@ bool ResourceMgr::AddResourceFileToGroup(const string& filepath, const StringKey
 	ResourcePtr r = mResourceCreationMethods[type]();
 	r->SetState(Resource::STATE_INITIALIZED);
 	r->SetName(name);
-	r->SetFilepath(boostPath.string());
+	r->SetFilePath(boostPath.string());
 	r->SetType(type);
 	r->SetBasePathType(basePathType);
 
@@ -229,6 +230,11 @@ bool ResourceSystem::ResourceMgr::AddManualResourceToGroup( const StringKey& nam
 	return true;
 }
 
+void ResourceSystem::ResourceMgr::AddResourceToGroup( const ResourceGroupMap::iterator& groupIt, const StringKey& name, const ResourcePtr res )
+{
+	(*groupIt->second)[name] = res;
+}
+
 void ResourceSystem::ResourceMgr::AddResourceToGroup( const StringKey& group, const StringKey& name, const ResourcePtr res )
 {
 	ResourceGroupMap::iterator groupIt = mResourceGroups.find(group);
@@ -237,8 +243,9 @@ void ResourceSystem::ResourceMgr::AddResourceToGroup( const StringKey& group, co
 		mResourceGroups[group] = new ResourceMap();
 		groupIt = mResourceGroups.find(group);
 	}
-	(*groupIt->second)[name] = res;
+	AddResourceToGroup(groupIt, name, res);
 }
+
 void ResourceMgr::RefreshBasePathToGroup(const eBasePathType basePathType, const StringKey& group)
 {
 	OC_ASSERT(basePathType != BPT_ABSOLUTE);
@@ -450,6 +457,38 @@ void ResourceSystem::ResourceMgr::RefreshAllResources( void )
 			resIter->second->Refresh();
 		}
 	}
+}
+
+void ResourceSystem::ResourceMgr::ChangeResourceType(ResourcePtr resPointer, eResourceType newType)
+{
+	// searching throught the groups
+	for (ResourceGroupMap::iterator groupIter=mResourceGroups.begin(); groupIter!=mResourceGroups.end(); ++groupIter)
+	{
+		ResourceMap* resMap = groupIter->second;
+		OC_ASSERT(resMap);
+		// searching throught the resources in the group
+		for (ResourceMap::iterator resIter=resMap->begin(); resIter!=resMap->end(); ++resIter)
+		{
+			if (resIter->second == resPointer)
+			{
+				// creating a resource with the new type
+				ResourcePtr r = mResourceCreationMethods[newType]();
+				r->SetState(Resource::STATE_INITIALIZED);
+				r->SetName(resPointer->GetName());
+				r->SetFilePath(resPointer->GetFilePath());
+				r->SetType(newType);
+				r->SetBasePathType(resPointer->GetBasePathType());
+
+				// adding new resource to manager
+				AddResourceToGroup(groupIter, r->GetName(), r);
+
+				// deleting old resource
+				resIter->second->Unload(true);
+				resMap->erase(resIter);
+			}
+		}
+	}
+	ocError << "Can't find resource '" << resPointer->GetName() << "'!!!";
 }
 
 void ResourceSystem::ResourceMgr::CheckForResourcesUpdates( void )

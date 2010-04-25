@@ -132,7 +132,7 @@ namespace ResourceSystem
 
 		/// For internal use by the resource manager.
 		inline void SetName(const string& name) { mName = name; }
-		inline void SetFilepath(const string& filepath) { mFilePath = filepath; }
+		inline void SetFilePath(const string& filepath) { mFilePath = filepath; }
 		inline void SetManual(bool manual) { mIsManual = manual; }
 		inline void SetType(const eResourceType newType) { mType = newType; }
 		inline void SetBasePathType(const eBasePathType newBasePathType) { mBasePathType = newBasePathType; }

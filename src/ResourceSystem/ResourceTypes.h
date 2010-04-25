@@ -16,12 +16,13 @@ namespace ResourceSystem
 		RESTYPE_XMLRESOURCE, 
 		RESTYPE_PARTICLERESOURCE,
 		RESTYPE_SCRIPTRESOURCE,
+		RESTYPE_UNKNOWN,
 		
 		NUM_RESTYPES, 
-		RESTYPE_AUTODETECT 
+		RESTYPE_AUTODETECT
 	};
 	
-	/// Types of path. Relative to some base path or the last one is absolute path.
+	/// Types of path. Relative to some base path or the last one is the absolute path.
 	enum eBasePathType
 	{
 		BPT_SYSTEM = 0,
