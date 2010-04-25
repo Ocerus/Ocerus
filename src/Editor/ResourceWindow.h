@@ -25,6 +25,9 @@ namespace Editor
 		/// Initializes the ResourceWindow.
 		void Init();
 
+		/// Refreshes the tree.
+		inline void Refresh() { BuildResourceTree(); }
+
 		/// Returns the ResourcePtr to resource in ResourceWindow's cached list of resources on given index.
 		ResourceSystem::ResourcePtr GetResourceAtIndex(size_t index);
 

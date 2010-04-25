@@ -1,6 +1,8 @@
 #include "Common.h"
 #include "PopupMenu.h"
 #include "EditorMgr.h"
+#include "EditorGUI.h"
+#include "ResourceWindow.h"
 #include "GUISystem/CEGUITools.h"
 
 
@@ -27,6 +29,7 @@ bool Editor::PopupMenu::OnMenuItemMouseUp( const CEGUI::EventArgs& e )
 	{
 		ResourceSystem::eResourceType newType = (ResourceSystem::eResourceType)args.window->getID();
 		gResourceMgr.ChangeResourceType(GetData<ResourceSystem::ResourcePtr>(), newType);
+		gEditorMgr.GetEditorGui()->GetResourceWindow()->Refresh();
 		Close();
 		return true;
 	}

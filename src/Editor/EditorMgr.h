@@ -71,6 +71,9 @@ namespace Editor
 		/// Closes all popup menus.
 		void CloseAllPopupMenus();
 
+		/// Returns the gui object.
+		inline EditorGUI* GetEditorGui() const { return mEditorGUI; }
+
 	public:
 
    		/// @name Callbacks from InputSystem::IInputListener

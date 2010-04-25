@@ -54,6 +54,9 @@ namespace Editor
 		/// Returns the viewport of the editor window.
 		inline GUISystem::ViewportWindow* GetEditorViewport() const { return mEditorViewport; }
 
+		/// Returns the resource window.
+		inline ResourceWindow* GetResourceWindow() const { return mResourceWindow; }
+
 		/// @name CEGUI Callbacks
 		//@{
 			bool OnComponentRemoveClicked(const CEGUI::EventArgs&);
