@@ -144,6 +144,7 @@ namespace Editor
 		EntitySystem::EntityHandle mCurrentEntity; ///< Currently edited entity in the components' window.
 
 		// Selections stuff.
+		bool mMousePressedInSceneWindow; ///< True if the mouse button was pressed in the scene editor's window.
 		bool mMultiselectStarted; ///< True if the user started a multi-selection mode.
 		Vector2 mSelectionCursorPosition; ///< World position where the selection started.
 		EntitySystem::EntityHandle mHoveredEntity; ///< Entity the mouse is currently hovering over.

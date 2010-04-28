@@ -33,6 +33,7 @@ EditorMgr::~EditorMgr()
 
 void EditorMgr::LoadEditor()
 {
+	mMousePressedInSceneWindow = false;
 	mPopupClosingEnabled = false;
 	mMultiselectStarted = false;
 	SetEditTool(ET_MOVE);
@@ -358,6 +359,8 @@ bool Editor::EditorMgr::MouseButtonPressed( const InputSystem::MouseInfo& mi, co
 			return false;
 		}
 
+		mMousePressedInSceneWindow = true;
+		
 		if (gInputMgr.IsKeyDown(InputSystem::KC_LSHIFT) || gInputMgr.IsKeyDown(InputSystem::KC_RSHIFT))
 		{
 			mMultiselectStarted = true;
@@ -433,11 +436,19 @@ bool Editor::EditorMgr::MouseButtonReleased( const InputSystem::MouseInfo& mi, c
 	OC_UNUSED(btn);
 
 	mEditToolWorking = false;
+	bool mouseWasPressedInSceneWindow = mMousePressedInSceneWindow;
+	mMousePressedInSceneWindow = false;
 
 	Vector2 worldCursorPos;
 	if (!GetWorldCursorPos(worldCursorPos))
 	{
 		// we're not in the corrent viewport
+		return false;
+	}
+
+	if (!mouseWasPressedInSceneWindow)
+	{
+		// the mouse press started somewhere outside the window
 		return false;
 	}
 
