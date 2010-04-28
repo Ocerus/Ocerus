@@ -29,7 +29,7 @@ InputSystem::OISListener::OISListener(): mOIS(0), mMouse(0), mKeyboard(0)
 
 #ifdef __WIN__
 	// let the standard mouse cursor be
-	pl.insert(Containers::make_pair(string("w32_mouse"), string("DISCL_FOREGROUND" )));
+	pl.insert(Containers::make_pair(string("w32_mouse"), string("DISCL_BACKGROUND" )));
 	pl.insert(Containers::make_pair(string("w32_mouse"), string("DISCL_NONEXCLUSIVE")));
 #else
 	// let the standard mouse cursor be
