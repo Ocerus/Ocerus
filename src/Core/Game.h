@@ -69,6 +69,12 @@ namespace Core
 		/// Resumes the game action.
 		void ResumeAction(void);
 
+		/// Name of file to which the game state is temporarly saved.
+		static const char* ActionFile;
+		
+		/// Save the game state to which the restart action will rollback.
+		void SaveAction(void);
+		
 		/// Restarts the game action to the initial (saved) state.
 		void RestartAction(void);
 

@@ -202,6 +202,7 @@ bool ResourceMgr::AddResourceFileToGroup(const string& filepath, const StringKey
 	ResourcePtr r = mResourceCreationMethods[type]();
 	r->SetState(Resource::STATE_INITIALIZED);
 	r->SetName(name);
+	r->SetGroup(group);
 	r->SetFilePath(boostPath.string());
 	r->SetType(type);
 	r->SetBasePathType(basePathType);
@@ -221,6 +222,7 @@ bool ResourceSystem::ResourceMgr::AddManualResourceToGroup( const StringKey& nam
 	ResourcePtr r = mResourceCreationMethods[type]();
 	r->SetState(Resource::STATE_INITIALIZED);
 	r->SetName(name.ToString());
+	r->SetGroup(group);
 	r->SetManual(true);
 	r->SetBasePathType(BPT_ABSOLUTE);
 
@@ -477,6 +479,7 @@ void ResourceSystem::ResourceMgr::ChangeResourceType(ResourcePtr resPointer, eRe
 				ResourcePtr r = mResourceCreationMethods[newType]();
 				r->SetState(Resource::STATE_INITIALIZED);
 				r->SetName(resPointer->GetName());
+				r->SetGroup(resPointer->GetGroup());
 				r->SetFilePath(resPointer->GetFilePath());
 				r->SetType(newType);
 				r->SetBasePathType(resPointer->GetBasePathType());

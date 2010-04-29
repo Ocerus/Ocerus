@@ -38,6 +38,7 @@ void EditorMgr::LoadEditor()
 	mMultiselectStarted = false;
 	SetEditTool(ET_MOVE);
 	mHoveredEntity.Invalidate();
+	mInitialTime = true;
 
 	mEditorGUI->LoadGUI();
 	gInputMgr.AddInputListener(this);
@@ -251,7 +252,13 @@ void Editor::EditorMgr::RemoveComponent(const EntitySystem::ComponentID& compone
 
 void Editor::EditorMgr::ResumeAction()
 {
-	GlobalProperties::Get<Core::Game>("Game").ResumeAction();
+	Core::Game& game = GlobalProperties::Get<Core::Game>("Game");
+	if (mInitialTime)
+	{
+		game.SaveAction();
+		mInitialTime = false;
+	}
+	game.ResumeAction();
 }
 
 void Editor::EditorMgr::PauseAction()
@@ -261,7 +268,11 @@ void Editor::EditorMgr::PauseAction()
 
 void Editor::EditorMgr::RestartAction()
 {
-	GlobalProperties::Get<Core::Game>("Game").RestartAction();
+	if (!mInitialTime)
+	{
+		GlobalProperties::Get<Core::Game>("Game").RestartAction();
+		mInitialTime = true;
+	}
 }
 
 void Editor::EditorMgr::SetEditTool(eEditTool newEditTool)

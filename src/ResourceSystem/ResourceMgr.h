@@ -111,6 +111,9 @@ namespace ResourceSystem
 		/// Enables unloading of resources when they're over the memory limit.
 		inline void DisableMemoryLimitEnforcing(void) { mEnforceMemoryLimit = false; }
 
+		/// Gets base path of given type.
+		inline const string& GetBasePath(const eBasePathType pathType) const { return mBasePath[pathType]; }
+		
 		/// Sets new base path of given type.
 		inline void SetBasePath(const eBasePathType newPathType, const string& newPath) { mBasePath[newPathType] = newPath; }
 

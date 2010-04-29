@@ -38,6 +38,9 @@ namespace Utils
 		template<>
 		void WriteToXML(ResourceSystem::XMLOutput& output, const EntitySystem::EntityHandle& val);
 
+		template<>
+		void WriteToXML(ResourceSystem::XMLOutput& output, const ResourceSystem::ResourcePtr& val);
+
 		
 		/// Reads the value from XML and returns it.
 		template<typename T>
@@ -51,6 +54,9 @@ namespace Utils
 
 		template<>
 		EntitySystem::EntityHandle ReadFromXML(ResourceSystem::XMLNodeIterator& input);
+
+		template<>
+		ResourceSystem::ResourcePtr ReadFromXML(ResourceSystem::XMLNodeIterator& input);
 	}
 }
 

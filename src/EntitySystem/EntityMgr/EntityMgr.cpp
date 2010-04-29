@@ -691,7 +691,8 @@ bool EntitySystem::EntityMgr::LoadEntitiesFromResource(ResourceSystem::ResourceP
 	return result;
 }
 
-bool EntitySystem::EntityMgr::SaveEntityToStorage(const EntitySystem::EntityID entityID, ResourceSystem::XMLOutput &storage, const bool isPrototype) const
+bool EntitySystem::EntityMgr::SaveEntityToStorage(const EntitySystem::EntityID entityID, 
+	ResourceSystem::XMLOutput &storage, const bool isPrototype, const bool evenTransient) const
 {
 	const EntityInfo* info = mEntities.at(entityID);
 	if (!info) { return false; }
@@ -702,7 +703,7 @@ bool EntitySystem::EntityMgr::SaveEntityToStorage(const EntitySystem::EntityID e
 		OC_ASSERT(protInfo);
 	}
 	
-	if (info->mTransient) { return true; }
+	if (!evenTransient && info->mTransient) { return true; }
 	
 	// write header of entity tag
 	storage.BeginElementStart("Entity");
@@ -755,7 +756,8 @@ bool EntitySystem::EntityMgr::SaveEntityToStorage(const EntitySystem::EntityID e
 	return true;
 }
 
-bool EntitySystem::EntityMgr::SaveEntitiesToStorage(ResourceSystem::XMLOutput& storage, const bool isPrototype) const
+bool EntitySystem::EntityMgr::SaveEntitiesToStorage(ResourceSystem::XMLOutput& storage, const bool isPrototype,
+	const bool evenTransient) const
 {
 	storage.BeginElement("Entities");
 	
@@ -765,7 +767,7 @@ bool EntitySystem::EntityMgr::SaveEntitiesToStorage(ResourceSystem::XMLOutput& s
 		if ((isPrototype && mPrototypes.find(i->first) != mPrototypes.end())
 			|| (!isPrototype && mPrototypes.find(i->first) == mPrototypes.end()))
 		{
-			if (!SaveEntityToStorage(i->first, storage, isPrototype)) { res = false; };
+			if (!SaveEntityToStorage(i->first, storage, isPrototype, evenTransient)) { res = false; };
 		}
 		else { res = false; }
 	}

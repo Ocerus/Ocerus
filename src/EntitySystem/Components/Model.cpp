@@ -40,7 +40,7 @@ EntityMessage::eResult EntityComponents::Model::HandleMessage( const EntityMessa
 
 void EntityComponents::Model::RegisterReflection()
 {
-	RegisterProperty<ResourceSystem::ResourcePtr>("Mesh", &Model::GetMesh, &Model::SetMesh, PA_FULL_ACCESS | PA_TRANSIENT, "");
+	RegisterProperty<ResourceSystem::ResourcePtr>("Mesh", &Model::GetMesh, &Model::SetMesh, PA_FULL_ACCESS, "");
 	RegisterProperty<float32>("Transparency", &Model::GetTransparency, &Model::SetTransparency, PA_FULL_ACCESS, "");
 	RegisterProperty<float32>("ZAngle", &Model::GetZAngle, &Model::SetZAngle, PA_FULL_ACCESS, "");
 

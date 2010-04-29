@@ -18,6 +18,7 @@ using namespace InputSystem;
 const float PHYSICS_TIMESTEP = 0.016f;
 const int32 PHYSICS_VELOCITY_ITERATIONS = 6;
 const int32 PHYSICS_POSITION_ITERATIONS = 2;
+const char* Game::ActionFile = "ActionSave.xml";
 
 
 /// Callback receiver from physics.
@@ -93,7 +94,7 @@ void Core::Game::Init()
 	}
 
 	// basic init stuff
-	mActionState = AS_RUNNING;
+	mActionState = AS_PAUSED;
 	mTimer.Reset();
 
 	// init physics engine
@@ -295,7 +296,7 @@ void Core::Game::PauseAction( void )
 	if (mActionState == AS_RUNNING)
 	{
 		mActionState = AS_PAUSED;
-		ocInfo << "Action paused";
+		ocInfo << "Action paused.";
 	}
 }
 
@@ -304,14 +305,33 @@ void Core::Game::ResumeAction( void )
 	if (mActionState == AS_PAUSED)
 	{
 		mActionState = AS_RUNNING;
-		ocInfo << "Action resumed";
+		ocInfo << "Action resumed.";
+	}
+}
+
+void Core::Game::SaveAction( void )
+{
+	ResourceSystem::XMLOutput storage(gResourceMgr.GetBasePath(ResourceSystem::BPT_SYSTEM) + ActionFile);
+	if (gEntityMgr.SaveEntitiesToStorage(storage, false, true))
+	{
+		ocInfo << "Action saved.";
+	} else {
+		ocError << "Action cannot be saved!";
 	}
 }
 
 void Core::Game::RestartAction( void )
 {
-	// first somebody has to implement scene saving
-	OC_ASSERT_MSG(false, "not implemented");
-
-	ocInfo << "Action restarted";
+	PauseAction();
+	if (gResourceMgr.AddResourceFileToGroup(ActionFile, "Action",
+		ResourceSystem::RESTYPE_AUTODETECT, ResourceSystem::BPT_SYSTEM, ActionFile))
+	{
+		gResourceMgr.LoadResourcesInGroup("Action");
+		gEntityMgr.DestroyAllEntities();
+		gEntityMgr.LoadEntitiesFromResource(gResourceMgr.GetResource("Action", ActionFile));
+		gResourceMgr.DeleteGroup("Action");
+		ocInfo << "Action restarted.";
+	} else {
+		ocError << "Action cannot be restarted!";
+	}
 }

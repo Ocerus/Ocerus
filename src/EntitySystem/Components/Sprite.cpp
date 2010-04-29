@@ -38,7 +38,7 @@ EntityMessage::eResult EntityComponents::Sprite::HandleMessage( const EntityMess
 
 void EntityComponents::Sprite::RegisterReflection()
 {
-	RegisterProperty<ResourceSystem::ResourcePtr>("Texture", &Sprite::GetTexture, &Sprite::SetTexture, PA_FULL_ACCESS | PA_TRANSIENT, "");
+	RegisterProperty<ResourceSystem::ResourcePtr>("Texture", &Sprite::GetTexture, &Sprite::SetTexture, PA_FULL_ACCESS, "");
 	RegisterProperty<float32>("Transparency", &Sprite::GetTransparency, &Sprite::SetTransparency, PA_FULL_ACCESS, "");
 
 	// we need the transform to be able to have the position and angle ready while creating the sprite

@@ -21,6 +21,15 @@ void XMLConverter::WriteToXML(ResourceSystem::XMLOutput& output, const EntitySys
 }
 
 template<>
+void XMLConverter::WriteToXML(ResourceSystem::XMLOutput& output, const ResourceSystem::ResourcePtr& val)
+{
+	if (val)
+	{
+		output.WriteString(val->GetGroup().ToString() + '/' + val->GetName());
+	}
+}
+
+template<>
 Vector2 XMLConverter::ReadFromXML(ResourceSystem::XMLNodeIterator& input)
 {
 	Vector2 result;
@@ -35,4 +44,11 @@ EntitySystem::EntityHandle XMLConverter::ReadFromXML(ResourceSystem::XMLNodeIter
 {
 	EntitySystem::EntityID id = input.GetChildValue<EntitySystem::EntityID>();
 	return EntitySystem::EntityHandle(id);
+}
+
+template<>
+ResourceSystem::ResourcePtr XMLConverter::ReadFromXML(ResourceSystem::XMLNodeIterator& input)
+{
+	string groupAndName = input.GetChildValue<string>();
+	return gResourceMgr.GetResource(groupAndName.c_str());
 }

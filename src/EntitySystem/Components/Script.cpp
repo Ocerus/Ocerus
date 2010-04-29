@@ -203,5 +203,5 @@ void Script::RegisterReflection()
 	RegisterProperty<Array<uint64>*>("ScriptTimes", &Script::GetTimes, &Script::SetTimes, PA_INIT | PA_EDIT_READ | 
 		PA_EDIT_WRITE, "Times of execution of Action handlers");
 	RegisterProperty<int32>("ScriptCurrentArrayIndex", &Script::GetCurrentArrayIndex, 0, 
-		PA_INIT, "Current index of ScriptStates and ScriptTimes");
+		PA_INIT | PA_TRANSIENT, "Current index of ScriptStates and ScriptTimes");
 }

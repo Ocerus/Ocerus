@@ -7,6 +7,7 @@
 #include "Base.h"
 #include "ResourceTypes.h"
 #include "boost/filesystem/fstream.hpp"
+#include "Utils/StringKey.h"
 
 namespace ResourceSystem
 {
@@ -61,6 +62,9 @@ namespace ResourceSystem
 
 		/// Returns the string name of this resource. The name comes without the group the resource belongs to.
 		inline string GetName(void) const { return mName; }
+
+		/// Returns the first group of this resource.
+		inline StringKey GetGroup(void) const { return mGroup; }
 
 		/// Returns the path to the file this resource belongs to. An empty string is returned when no such exists.
 		inline string GetFilePath(void) const { return mFilePath; }
@@ -119,6 +123,7 @@ namespace ResourceSystem
 		friend class ResourceMgr;
 		string mFilePath;
 		string mName;
+		StringKey mGroup;
 		int64 mLastWriteTime;
 		uint64 mLastUsedTime;
 		bool mIsManual;
@@ -132,6 +137,7 @@ namespace ResourceSystem
 
 		/// For internal use by the resource manager.
 		inline void SetName(const string& name) { mName = name; }
+		inline void SetGroup(const StringKey& group) { mGroup = group; }
 		inline void SetFilePath(const string& filepath) { mFilePath = filepath; }
 		inline void SetManual(bool manual) { mIsManual = manual; }
 		inline void SetType(const eResourceType newType) { mType = newType; }

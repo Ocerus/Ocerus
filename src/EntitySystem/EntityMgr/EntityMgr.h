@@ -95,7 +95,7 @@ namespace EntitySystem
 		bool LoadEntitiesFromResource(ResourceSystem::ResourcePtr res, const bool isPrototype = false);
 
 		/// Saves all entities to XML stream.
-		bool SaveEntitiesToStorage(ResourceSystem::XMLOutput& storage, const bool isPrototype = false) const;
+		bool SaveEntitiesToStorage(ResourceSystem::XMLOutput& storage, const bool isPrototype = false, const bool evenTransient = false) const;
 
 		//@}
 
@@ -284,7 +284,7 @@ namespace EntitySystem
 		void LoadEntityPropertyFromXML(const EntityID entityID, const ComponentID componentID, PrototypeInfo* prototypeInfo, ResourceSystem::XMLNodeIterator& xmlPropertyIterator);
 
 		/// Save and entity to the XML file.
-		bool SaveEntityToStorage(const EntityID entityID, ResourceSystem::XMLOutput& storage, const bool isPrototype) const;
+		bool SaveEntityToStorage(const EntityID entityID, ResourceSystem::XMLOutput& storage, const bool isPrototype, const bool evenTransient) const;
 	};
 }
 

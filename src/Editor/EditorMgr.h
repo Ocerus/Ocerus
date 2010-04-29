@@ -158,6 +158,7 @@ namespace Editor
 		vector<Vector2> mEditToolBodyPositions; ///< Initial positions of the bodies.
 		vector<float32> mEditToolBodyAngles; ///< Initial angle of the bodies.
 		vector<Vector2> mEditToolBodyScales; ///< Initial scale of the bodies.
+		bool mInitialTime; ///< Whether the scene is in initial time.
 
 
 		/// Draws the shape of the entity using the selected color.
