@@ -9,6 +9,7 @@ SUITE(LayerMgr)
 	TEST(Init)
 	{
 		::Test::InitEntities();
+		StringSystem::StringMgr::Init();
 		LayerMgr::CreateSingleton();
 
 		CHECK(gLayerMgr.ExistsLayer(0));

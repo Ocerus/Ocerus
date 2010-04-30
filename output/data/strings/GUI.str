@@ -1,0 +1,75 @@
+﻿
+group=GUI
+
+# action toolbar
+resume_action_hint=Resumes action.
+pause_action_hint=Pauses action.
+restart_action_hint=Restarts action.
+edit_tool_move_hint=Switches to a move edit tool.
+edit_tool_rotate_hint=Switches to a rotate edit tool.
+edit_tool_rotate_z_hint=Switches to a rotate-z edit tool.
+edit_tool_scale_hint=Switches to a scale edit tool.
+
+# main menu
+file=File
+create_project=Create Project
+create_project_hint=Creates a new project.
+open_project=Open Project
+open_project_hint=Opens an existing project.
+deploy_project=Deploy Project
+deploy_project_hint=Deploys the project.
+quit=Quit
+quit_hint=Quits the application.
+scene=Scene
+new_scene=New Scene
+new_scene_hint=Creates a new scene.
+open_scene=Open Scene
+open_scene_hint=Opens an existing scene from XML.
+save_scene=Save Scene
+save_scene_hint=Saves the scene.
+edit=Edit
+new_entity=New Entity
+new_entity_hint=Creates a new entity.
+new_component=New Component
+new_component_hint=Creates a new component.
+duplicate_entity=Duplicate Entity
+duplicate_entity_hint=Duplicates the current entity.
+duplicate_selected_entities=Duplicate Selected Entities
+duplicate_selected_entities_hint=Duplicates selected entities.
+delete_entity=Delete Entity
+delete_entity_hint=Deletes the current entity.
+delete_selected_entities=Delete Selected Entities
+delete_selected_entities_hint=Deletes selected entities.
+create_prototype=Create Prototype
+create_prototype_hint=Exports the current entity to a prototype.
+
+# popup menu
+resource_change_type=Change Type
+resource_change_type_hint=Changes the type of the resource.
+
+# layer manager
+layer_manager=Layer Manager
+initial_layer=Initial layer
+toggle_layer_visibility_hint=Toggles the visibility of the current layer.
+add_new_layer_hint=Adds a new layer.
+set_active_layer_hint=Sets the selected layer as active.
+edit_entity_hint=Edits the selected entity.
+new_layer=New layer:
+button_down_hint=Moves the selected layer/entity down.
+button_up_hint=Moves the selected layer/entity up.
+
+# entity editor
+entity_editor=Entity Editor
+general_info=General Info
+remove_component_hint=Removes the component.
+remove_component_error_hint=This component cannot be removed.
+
+# resource editor
+resources=Resources
+refresh_resources_hint=Refreshes the list of resources.
+
+# message box
+ok=Ok
+cancel=Cancel
+yes=Yes
+no=No

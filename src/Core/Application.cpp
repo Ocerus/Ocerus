@@ -53,6 +53,8 @@ void Application::Init()
 	ResourceSystem::ResourceMgr::GetSingleton().Init("data/");
 
 	StringSystem::StringMgr::Init();
+  gStringMgrSystem.LoadLanguagePack(mGlobalConfig->GetString("Language", "", "Editor"),
+	  mGlobalConfig->GetString("Country", "", "Editor"));
 
 	GfxSystem::GfxWindow::CreateSingleton();
 	GfxSystem::GfxWindow::GetSingleton().Init(1024, 768, false, "Ocerus");

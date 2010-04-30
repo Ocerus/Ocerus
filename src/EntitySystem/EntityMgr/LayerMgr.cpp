@@ -6,7 +6,7 @@ using namespace EntitySystem;
 LayerMgr::LayerMgr() : mLayers(), mDifference(0), mActiveLayerID(0), mList()
 {
 	ocInfo << "*** LayerMgr init ***";
-	PushBackLayer("Initial layer"); // TODO: load this string from resource
+	PushBackLayer(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "initial_layer").c_str());
 }
 
 LayerMgr::~LayerMgr()

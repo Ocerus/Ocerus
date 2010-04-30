@@ -21,22 +21,22 @@
             <Property Name="BackgroundEnabled" Value="False" />
         </Window>
         <Window Type="Editor/Button" Name="/ButtonOK" >
-            <Property Name="Text" Value="OK" />
+            <Property Name="Text" Value="$ok$" />
             <Property Name="UnifiedAreaRect" Value="{{0,0},{1,-24},{0,90},{1,0}}" />
             <Property Name="Visible" Value="False" />
         </Window>
         <Window Type="Editor/Button" Name="/ButtonCancel" >
-            <Property Name="Text" Value="Cancel" />
+            <Property Name="Text" Value="$cancel$" />
             <Property Name="UnifiedAreaRect" Value="{{0,0},{1,-24},{0,90},{1,0}}" />
             <Property Name="Visible" Value="False" />
         </Window>
         <Window Type="Editor/Button" Name="/ButtonYes" >
-            <Property Name="Text" Value="Yes" />
+            <Property Name="Text" Value="$yes$" />
             <Property Name="UnifiedAreaRect" Value="{{0,0},{1,-24},{0,90},{1,0}}" />
             <Property Name="Visible" Value="False" />
         </Window>
         <Window Type="Editor/Button" Name="/ButtonNo" >
-            <Property Name="Text" Value="No" />
+            <Property Name="Text" Value="$no$" />
             <Property Name="UnifiedAreaRect" Value="{{0,0},{1,-24},{0,90},{1,0}}" />
             <Property Name="Visible" Value="False" />
         </Window>

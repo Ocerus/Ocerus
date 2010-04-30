@@ -1,3 +1,6 @@
+﻿
+# the name of the group to which the following texts belong
+group=Test
 # text that will be overwritten by language
 language_specific=Language
 # text that will be overwritten by country

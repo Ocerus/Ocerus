@@ -36,11 +36,11 @@ size_t TextResource::LoadImpl()
 	      {
 	        mGroupName = value;
 	      } else { 
-	        mTextDataMap.insert(pair<StringKey, TextData>(key, value));
+	        mTextDataMap.insert(pair<StringKey, TextData>(key, (const CEGUI::utf8*)value.c_str()));
 	      }
 	      dataSize += line.length();
+	      first = false;
 	    }
-	    first = false;
 	  }
 	}
 	CloseInputStream();

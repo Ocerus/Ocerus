@@ -25,6 +25,8 @@ namespace GUISystem
 	CEGUI::MouseButton ConvertMouseButtonEnum(const InputSystem::eMouseButton btn);
 	bool PropertyCallback(CEGUI::Window* window, CEGUI::String& propname, CEGUI::String& propvalue, void* userdata);
 	//@}
+	
+	const StringKey GUIMgr::GUIGroup = "GUI";
 
 	GUIMgr::GUIMgr():
 		mCegui(0),
@@ -392,6 +394,8 @@ bool GUIMgr::ConsoleCommandEvent(const CEGUI::EventArgs& e)
 		return CEGUI::LeftButton;
 	}
 
+	/// @todo Resolve duplicate of this constant in CEGUITools.cpp
+	
 	/**
 	 * The PropertyCallback function is a callback used to translate textual data
 	 * from window layout. This callback should be used when loading window layouts
@@ -401,17 +405,17 @@ bool GUIMgr::ConsoleCommandEvent(const CEGUI::EventArgs& e)
 	{
 		/// @todo Resolve duplicate of this function in CEGUITools.cpp
 		OC_UNUSED(userdata);
-		if (propname == "Text" &&
-			propvalue.size() > 2 &&
-			propvalue.at(0) == '$' &&
-			propvalue.at(propvalue.size() - 1) == '$')
-		{
-			/// @todo Use StringMgr to translate textual data in GUI.
-			CEGUI::String translatedText = "_" + propvalue.substr(1, propvalue.size() - 2);
-			window->setProperty(propname, translatedText);
-			return false;
-		}
-		return true;
+	  if ((propname == "Text" || propname == "Tooltip") &&
+		  propvalue.size() > 2 &&
+		  propvalue.at(0) == '$' &&
+		  propvalue.at(propvalue.size() - 1) == '$')
+	  {
+		  /// Use StringMgr to translate textual data in GUI.
+		  CEGUI::String translatedText = gStringMgrSystem.GetTextData(GUIMgr::GUIGroup, propvalue.substr(1, propvalue.size() - 2).c_str());
+		  window->setProperty(propname, translatedText);
+		  return false;
+	  }
+	  return true;
 	}
 }
 

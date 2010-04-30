@@ -3,7 +3,7 @@
 <GUILayout >
     <Window Type="Editor/FrameWindow" Name="" >
         <Property Name="Font" Value="DejaVuSans-10" />
-        <Property Name="Text" Value="Resources" />
+        <Property Name="Text" Value="$resources$" />
         <Property Name="TitlebarFont" Value="DejaVuSans-10" />
         <Property Name="SizingEnabled" Value="False" />
         <Property Name="TitlebarEnabled" Value="True" />
@@ -18,7 +18,7 @@
                 <Property Name="HoverImage" Value="set:EditorToolbar image:btnResumeActionHover"  />
                 <Property Name="PushedImage" Value="set:EditorToolbar image:btnResumeActionPushed" />
                 <Property Name="DisabledImage" Value="set:EditorToolbar image:btnResumeActionDisabled" />
-                <Property Name="Tooltip" Value="Refresh list of resources." />
+                <Property Name="Tooltip" Value="$refresh_resources_hint$" />
 			</Window>
 		</Window>
 		<Window Type="Editor/ItemListbox" Name="/List" >

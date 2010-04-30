@@ -91,6 +91,8 @@ namespace GUISystem
 		virtual void ResolutionChanged(const uint32 width, const uint32 height);
 
 		inline GUIConsole* GetConsole();
+		
+		static const StringKey GUIGroup;
 
 #if 0   //TODO
 		/// Static text related methods

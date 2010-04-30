@@ -2,8 +2,10 @@
 
 #include "GUIMgr.h"
 #include "CEGUITools.h"
+#include "StringSystem/StringMgr.h"
 
 using namespace GUISystem;
+
 
 /**
  * The PropertyCallback function is a callback used to translate textual data
@@ -13,13 +15,13 @@ using namespace GUISystem;
 bool PropertyCallback(CEGUI::Window* window, CEGUI::String& propname, CEGUI::String& propvalue, void* userdata)
 {
 	OC_UNUSED(userdata);
-	if (propname == "Text" &&
+	if ((propname == "Text" || propname == "Tooltip") &&
 		propvalue.size() > 2 &&
 		propvalue.at(0) == '$' &&
 		propvalue.at(propvalue.size() - 1) == '$')
 	{
-		/// @todo Use StringMgr to translate textual data in GUI.
-		CEGUI::String translatedText = "_" + propvalue.substr(1, propvalue.size() - 2);
+		/// Use StringMgr to translate textual data in GUI.
+		CEGUI::String translatedText = gStringMgrSystem.GetTextData(GUIMgr::GUIGroup, propvalue.substr(1, propvalue.size() - 2).c_str());
 		window->setProperty(propname, translatedText);
 		return false;
 	}

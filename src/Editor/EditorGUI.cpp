@@ -176,7 +176,7 @@ void EditorGUI::UpdateEntityEditorWindow()
 	{
 		const string namePrefix = ENTITY_EDITOR_NAME + "/ComponentGeneralInfo";
 		CEGUI::GroupBox* componentGroup = static_cast<CEGUI::GroupBox*>(gCEGUIWM.createWindow("Editor/GroupBox", namePrefix));
-		componentGroup->setText("General Info");
+		componentGroup->setText(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "general_info"));
 		mEntityEditorLayout->AddChildWindow(componentGroup);
 		GUISystem::VerticalLayout* layout = new GUISystem::VerticalLayout(componentGroup, componentGroup->getContentPane(), true);
 
@@ -216,13 +216,13 @@ void EditorGUI::UpdateEntityEditorWindow()
 
 		if (gEntityMgr.CanDestroyEntityComponent(currentEntity, componentID))
 		{
-			removeComponentButton->setTooltipText("Remove the component.");
+			removeComponentButton->setTooltipText(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "remove_component_hint"));
 			removeComponentButton->setUserString("ComponentID", StringConverter::ToString(componentID));
 			removeComponentButton->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Editor::EditorGUI::OnComponentRemoveClicked, this));
 		}
 		else
 		{
-			removeComponentButton->setTooltipText("This component cannot be removed.");
+			removeComponentButton->setTooltipText(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "remove_component_error_hint"));
 			removeComponentButton->setEnabled(false);
 		}
 

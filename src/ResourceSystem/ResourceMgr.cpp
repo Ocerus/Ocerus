@@ -138,10 +138,10 @@ bool ResourceMgr::AddResourceDirToGroup(const eBasePathType basePathType, const 
 	for (boost::filesystem::directory_iterator i(boostPath); i!=iend; ++i)
 	{
 		string filePath = i->path().string();
-		if (recursive && boost::filesystem::is_directory(i->status()))
+		if (boost::filesystem::is_directory(i->status()))
 		{
 			string dirStr = i->path().filename();
-			if (dirStr.compare(".svn")!=0)
+			if (recursive && dirStr.compare(".svn") != 0)
 			{
 				string dirRelativePath = filePath.substr(mBasePath[basePathType].length());
 				if (!AddResourceDirToGroup(basePathType, dirRelativePath, group, includeRegexp, excludeRegexp, type))
