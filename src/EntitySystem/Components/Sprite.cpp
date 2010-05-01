@@ -44,3 +44,9 @@ void EntityComponents::Sprite::RegisterReflection()
 	// we need the transform to be able to have the position and angle ready while creating the sprite
 	AddComponentDependency(CT_Transform);
 }
+
+void EntityComponents::Sprite::SetTexture(ResourceSystem::ResourcePtr value)
+{ 
+	if ((*value).GetType() == ResourceSystem::RESTYPE_TEXTURE)
+		mTextureHandle = value; 
+}

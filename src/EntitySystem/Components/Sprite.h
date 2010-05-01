@@ -31,7 +31,7 @@ namespace EntityComponents
 		ResourceSystem::ResourcePtr GetTexture(void) const { return mTextureHandle; }
 
 		/// Texture used for rendering the sprite.
-		void SetTexture(ResourceSystem::ResourcePtr value) { mTextureHandle = value; }
+		void SetTexture(ResourceSystem::ResourcePtr value);
 
 		/// Transparency from 0 to 1.
 		float32 GetTransparency(void) const { return mTransparency; }

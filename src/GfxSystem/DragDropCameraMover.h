@@ -64,7 +64,7 @@ namespace GfxSystem
 
 	private:
 
-		// Since the InputMgr gives wierd numbers for mouse wheel movement this constant
+		// Since the InputMgr gives wierd numbers for mouse wheel movement, this constant
 		// changes mZoomSensitivity so that it can be set with nice and comprehensible numbers.
 		// Actual value is stored in macro ZOOMMOD.
 		// Sigle wheel change = 120 so 1.0f/1200.0f means that zoom will change by 10%.

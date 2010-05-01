@@ -190,6 +190,7 @@ TextureHandle OglRenderer::LoadTexture( const uint8* const buffer, const int32 b
 	if( NULL == img )
 	{
 		ocError << "SOIL error: " << SOIL_last_result();
+		*width = *height = 0;
 		return 0;
 	}
 	if( (force_channels >= 1) && (force_channels <= 4) )
@@ -204,6 +205,7 @@ TextureHandle OglRenderer::LoadTexture( const uint8* const buffer, const int32 b
 	if( 0 == result )
 	{
 		ocError << "SOIL loading error: " << SOIL_last_result();
+		*width = *height = 0;
 	}
 	return result;
 }

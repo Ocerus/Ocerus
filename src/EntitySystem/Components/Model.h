@@ -31,7 +31,7 @@ namespace EntityComponents
 		ResourceSystem::ResourcePtr GetMesh(void) const { return mMeshHandle; }
 
 		/// Mesh used for rendering.
-		void SetMesh(ResourceSystem::ResourcePtr value) { mMeshHandle = value; }
+		void SetMesh(ResourceSystem::ResourcePtr value);
 
 		/// Transparency from 0 to 1.
 		float32 GetTransparency(void) const { return mTransparency; }

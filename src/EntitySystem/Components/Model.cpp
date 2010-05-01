@@ -47,3 +47,9 @@ void EntityComponents::Model::RegisterReflection()
 	// we need the transform to be able to have the position and angle ready while creating the Model
 	AddComponentDependency(CT_Transform);
 }
+
+void EntityComponents::Model::SetMesh(ResourceSystem::ResourcePtr value) 
+{ 
+	if ((*value).GetType() == ResourceSystem::RESTYPE_MESH)
+		mMeshHandle = value; 
+}
