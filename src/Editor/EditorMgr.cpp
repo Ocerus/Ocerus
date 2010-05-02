@@ -584,3 +584,9 @@ void Editor::EditorMgr::UnregisterPopupMenu( PopupMenu* menu )
 		mPopupMenus.erase(it);
 	}
 }
+
+const void Editor::EditorMgr::ClearSelection()
+{
+	mSelectedEntities.clear();
+	mHoveredEntity.Invalidate();
+}

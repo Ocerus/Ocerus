@@ -50,6 +50,9 @@ namespace Editor
 		/// If there are more selected entities only one of them is chosen.
 		inline const EntitySystem::EntityHandle GetSelectedEntity() const;
 
+		/// Clears all selected entities.
+		const void ClearSelection();
+
 		/// Sets a new name for the selected entity.
 		void UpdateCurrentEntityName(const string& newName);
 

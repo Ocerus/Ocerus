@@ -73,10 +73,17 @@ bool Editor::PrototypeWindow::OnDragContainerMouseButtonUp(const CEGUI::EventArg
 
 	CEGUI::ItemEntry* itemEntry = static_cast<CEGUI::ItemEntry*>(args.window->getParent());
 	itemEntry->setSelected(true);
+	mSelectedIndex = dragContainer->getID();
+	
+	EntitySystem::EntityHandle item = GetItemAtIndex(mSelectedIndex);
+	if (item.IsValid())
+	{
+		gEditorMgr.SetCurrentEntity(item);
+		gEditorMgr.ClearSelection();
+	}
 
 	if (args.button == CEGUI::RightButton)
 	{
-		EntitySystem::EntityHandle item = GetItemAtIndex(dragContainer->getID());
 		if (item.IsValid())
 		{
 			PopupMenu* menu = new PopupMenu("EditorRoot/Popup/Prototype", false);
@@ -102,6 +109,11 @@ bool Editor::PrototypeWindow::OnWindowMouseButtonUp(const CEGUI::EventArgs& e)
 		gEditorMgr.RegisterPopupMenu(menu);
 		return true;
 	}
+	else if (args.button == CEGUI::LeftButton)
+	{
+		if (gEditorMgr.GetCurrentEntity() == GetSelectedItem()) gEditorMgr.SetCurrentEntity(EntitySystem::EntityHandle::Null);
+		mTree->clearAllSelections();
+	}
 
 	return true;
 }
@@ -110,4 +122,10 @@ EntitySystem::EntityHandle Editor::PrototypeWindow::GetItemAtIndex( size_t index
 {
 	if (index >= mItems.size()) return EntitySystem::EntityHandle::Null;
 	return mItems.at(index);
+}
+
+EntitySystem::EntityHandle Editor::PrototypeWindow::GetSelectedItem()
+{
+	if (mTree->getSelectedCount() == 0) return EntitySystem::EntityHandle::Null;
+	else return mItems.at(mSelectedIndex);
 }

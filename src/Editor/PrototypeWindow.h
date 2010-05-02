@@ -27,6 +27,9 @@ namespace Editor
 		/// Refreshes the tree.
 		inline void Refresh() { RebuildTree(); }
 
+		/// Returns the currently selected item.
+		EntitySystem::EntityHandle GetSelectedItem();
+
 		/// Returns the item at the given position in the tree.
 		EntitySystem::EntityHandle GetItemAtIndex(size_t index);
 
@@ -43,6 +46,7 @@ namespace Editor
 
 		CEGUI::Window* mWindow;
 		CEGUI::ItemListbox* mTree;
+		size_t mSelectedIndex;
 		EntitySystem::EntityList mItems;
 	};
 }
