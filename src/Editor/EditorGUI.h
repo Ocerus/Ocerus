@@ -57,9 +57,12 @@ namespace Editor
 		/// Returns the resource window.
 		inline ResourceWindow* GetResourceWindow() const { return mResourceWindow; }
 
+		/// Returns the prototype window.
+		inline PrototypeWindow* GetPrototypeWindow() const { return mPrototypeWindow; }
+
 		/// @name CEGUI Callbacks
 		//@{
-			bool OnComponentRemoveClicked(const CEGUI::EventArgs&);
+		bool OnComponentRemoveClicked(const CEGUI::EventArgs&);
 		//@}
 
 	private:
@@ -78,6 +81,7 @@ namespace Editor
 		LayerMgrWidget* mLayerMgrWidget;
 		EditorMenu* mEditorMenu;
 		ResourceWindow* mResourceWindow;
+		PrototypeWindow* mPrototypeWindow;
 	};
 }
 

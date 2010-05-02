@@ -10,7 +10,7 @@
             <Property Name="TitlebarFont" Value="DejaVuSans-10" />
             <Property Name="SizingEnabled" Value="False" />
             <Property Name="TitlebarEnabled" Value="True" />
-            <Property Name="UnifiedAreaRect" Value="{{0,0},{0,24},{0.25,0},{1,0}}" />
+            <Property Name="UnifiedAreaRect" Value="{{0,0},{0,24},{0.2,0},{1,0}}" />
             <Property Name="DragMovingEnabled" Value="False" />
             <Property Name="CloseButtonEnabled" Value="False" />
             <Window Type="Editor/ScrollablePane" Name="EditorRoot/EntityEditor/Scrollable" >
@@ -213,39 +213,16 @@
                 </Window>
             </Window>
         </Window>
-        <Window Type="Editor/PopupMenu" Name="EditorRoot/Popup/Resource" >
-            <Property Name="AlwaysOnTop" Value="True" />
-		        <Property Name="Visible" Value="False" />
-            <Property Name="FadeInTime" Value="0" />
-            <Property Name="FadeOutTime" Value="0" />
-            <Property Name="ItemSpacing" Value="2" />
-            <Property Name="ClippedByParent" Value="False" />
-            <Property Name="AutoResizeEnabled" Value="True" />
-            <Window Type="Editor/MenuItem" Name="EditorRoot/Popup/Resource/ChangeType" >
-                <Property Name="Text" Value="$resource_change_type$" />
-                <Property Name="Tooltip" Value="$resource_change_type_hint$" />
-            </Window>
-      </Window>
-      <Window Type="Editor/PopupMenu" Name="EditorRoot/Popup/Resource/Types" >
-            <Property Name="AlwaysOnTop" Value="True" />
-		        <Property Name="Visible" Value="False" />
-            <Property Name="FadeInTime" Value="0" />
-            <Property Name="FadeOutTime" Value="0" />
-            <Property Name="ItemSpacing" Value="2" />
-            <Property Name="ClippedByParent" Value="False" />
-            <Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{0,100},{0,88.299}}" />
-            <Property Name="AutoResizeEnabled" Value="True" />
-      </Window>
 			<Window Type="Editor/Viewport" Name="EditorRoot/TopViewport" >
             <Property Name="TitlebarFont" Value="DejaVuSans-10" />
             <Property Name="TitlebarEnabled" Value="False" />
-            <Property Name="UnifiedAreaRect" Value="{{0.25,0},{0,25},{0.8,0},{0.5,13}}" />
+            <Property Name="UnifiedAreaRect" Value="{{0.3,0},{0,25},{0.85,0},{0.5,13}}" />
             <Property Name="DragMovingEnabled" Value="False" />
         </Window>
         <Window Type="Editor/Viewport" Name="EditorRoot/BottomViewport" >
             <Property Name="TitlebarFont" Value="DejaVuSans-10" />
             <Property Name="TitlebarEnabled" Value="False" />
-            <Property Name="UnifiedAreaRect" Value="{{0.25,0},{0.5,12},{0.8,0},{1,0}}" />
+            <Property Name="UnifiedAreaRect" Value="{{0.3,0},{0.5,12},{0.85,0},{1,0}}" />
             <Property Name="DragMovingEnabled" Value="False" />
         </Window>
         <Window Type="Editor/FrameWindow" Name="EditorRoot/LayerMgr" >
@@ -253,7 +230,7 @@
             <Property Name="TitlebarFont" Value="DejaVuSans-10" />
             <Property Name="SizingEnabled" Value="False" />
             <Property Name="TitlebarEnabled" Value="True" />
-            <Property Name="UnifiedAreaRect" Value="{{0.8,0},{0,24},{1,0},{0.5,24}}" />
+            <Property Name="UnifiedAreaRect" Value="{{0.85,0},{0,24},{1,0},{0.5,24}}" />
             <Property Name="DragMovingEnabled" Value="False" />
             <Property Name="CloseButtonEnabled" Value="False" />
             <Window Type="Editor/Tree" Name="EditorRoot/LayerMgr/Tree" >
@@ -304,5 +281,44 @@
                 <Property Name="Tooltip" Value="$button_up_hint$" />
             </Window>
         </Window>
+
+				<Window Type="Editor/PopupMenu" Name="EditorRoot/Popup/Resource" >
+		    		<Property Name="AlwaysOnTop" Value="True" />
+				    <Property Name="Visible" Value="False" />
+		        <Property Name="FadeInTime" Value="0" />
+		        <Property Name="FadeOutTime" Value="0" />
+		        <Property Name="ItemSpacing" Value="2" />
+		        <Property Name="ClippedByParent" Value="False" />
+		        <Property Name="AutoResizeEnabled" Value="True" />
+		        <Window Type="Editor/MenuItem" Name="EditorRoot/Popup/Resource/ChangeType" >
+		            <Property Name="Text" Value="$resource_change_type$" />
+		            <Property Name="Tooltip" Value="$resource_change_type_hint$" />
+						</Window>
+		    </Window>
+		    <Window Type="Editor/PopupMenu" Name="EditorRoot/Popup/Resource/Types" >
+		    		<Property Name="AlwaysOnTop" Value="True" />
+				    <Property Name="Visible" Value="False" />
+		        <Property Name="FadeInTime" Value="0" />
+		        <Property Name="FadeOutTime" Value="0" />
+		        <Property Name="ItemSpacing" Value="2" />
+		        <Property Name="ClippedByParent" Value="False" />
+		        <Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{0,100},{0,88.299}}" />
+		        <Property Name="AutoResizeEnabled" Value="True" />
+				</Window>
+
+				<Window Type="Editor/PopupMenu" Name="EditorRoot/Popup/Prototype" >
+		    		<Property Name="AlwaysOnTop" Value="True" />
+				    <Property Name="Visible" Value="False" />
+		        <Property Name="FadeInTime" Value="0" />
+		        <Property Name="FadeOutTime" Value="0" />
+		        <Property Name="ItemSpacing" Value="2" />
+		        <Property Name="ClippedByParent" Value="False" />
+		        <Property Name="AutoResizeEnabled" Value="True" />
+		        <Window Type="Editor/MenuItem" Name="EditorRoot/Popup/Prototype/AddPrototype" >
+		            <Property Name="Text" Value="$prototype_add$" />
+		            <Property Name="Tooltip" Value="$prototype_add_hint$" />
+						</Window>
+		    </Window>
+
     </Window>
 </GUILayout>

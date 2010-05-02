@@ -1403,6 +1403,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\Editor\PrototypeWindow.h"
+					>
+				</File>
+				<File
 					RelativePath="..\src\Editor\ResourceWindow.h"
 					>
 				</File>
@@ -1428,6 +1432,10 @@
 				</File>
 				<File
 					RelativePath="..\src\Editor\PopupMenu.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src\Editor\PrototypeWindow.cpp"
 					>
 				</File>
 				<File

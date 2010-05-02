@@ -28,6 +28,9 @@ namespace EntitySystem
 		/// Destructor.
 		~ComponentMgr(void);
 		
+		/// Tells the component manager that new was created.
+		void PrepareForEntity(const EntityID id);
+
 		/// Creates a component and attaches it to an entity.
 		ComponentID CreateComponent(const EntityID id, const eComponentType type);
 

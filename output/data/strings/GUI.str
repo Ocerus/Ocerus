@@ -1,4 +1,4 @@
-﻿
+
 group=GUI
 
 # action toolbar
@@ -43,9 +43,6 @@ delete_selected_entities_hint=Deletes selected entities.
 create_prototype=Create Prototype
 create_prototype_hint=Exports the current entity to a prototype.
 
-# popup menu
-resource_change_type=Change Type
-resource_change_type_hint=Changes the type of the resource.
 
 # layer manager
 layer_manager=Layer Manager
@@ -67,6 +64,13 @@ remove_component_error_hint=This component cannot be removed.
 # resource editor
 resources=Resources
 refresh_resources_hint=Refreshes the list of resources.
+resource_change_type=Change Type
+resource_change_type_hint=Changes the type of the resource.
+
+# prototype editor
+prototypes=Prototypes
+prototype_add=Add Prototype
+prototype_add_hint=Creates new empty prototype
 
 # message box
 ok=Ok

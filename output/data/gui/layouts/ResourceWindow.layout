@@ -7,7 +7,7 @@
         <Property Name="TitlebarFont" Value="DejaVuSans-10" />
         <Property Name="SizingEnabled" Value="False" />
         <Property Name="TitlebarEnabled" Value="True" />
-        <Property Name="UnifiedAreaRect" Value="{{0.8,0},{0.5,25},{1,0},{1,0}}" />
+        <Property Name="UnifiedAreaRect" Value="{{0.85,0},{0.5,25},{1,0},{1,0}}" />
         <Property Name="DragMovingEnabled" Value="False" />
         <Property Name="CloseButtonEnabled" Value="False" />
 		<Window Type="DefaultWindow" Name="/Toolbar">

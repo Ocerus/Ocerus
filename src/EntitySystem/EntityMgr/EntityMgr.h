@@ -155,6 +155,9 @@ namespace EntitySystem
 		/// Create a prototype from the entity. Returns the handle to the prototype or null if there was error.
 		EntityHandle ExportEntityToPrototype(const EntityHandle entity);
 
+		/// Retrieves handles of all entity prototypes.
+		void GetPrototypes(EntityList& out);
+
 		//@}
 
 

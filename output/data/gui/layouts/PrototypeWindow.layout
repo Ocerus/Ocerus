@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<GUILayout >
+    <Window Type="Editor/FrameWindow" Name="" >
+        <Property Name="Font" Value="DejaVuSans-10" />
+        <Property Name="Text" Value="$prototypes$" />
+        <Property Name="TitlebarFont" Value="DejaVuSans-10" />
+        <Property Name="SizingEnabled" Value="False" />
+        <Property Name="TitlebarEnabled" Value="True" />
+        <Property Name="UnifiedAreaRect" Value="{{0.2,0},{0.65,25},{0.30,0},{1,0}}" />
+        <Property Name="DragMovingEnabled" Value="False" />
+        <Property Name="CloseButtonEnabled" Value="False" />
+		<Window Type="Editor/ItemListbox" Name="/List" >
+            <Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{1,0},{1,0}}" />
+        </Window>
+   </Window>
+</GUILayout>

@@ -26,24 +26,24 @@ namespace Editor
 		void Init();
 
 		/// Refreshes the tree.
-		inline void Refresh() { BuildResourceTree(); }
+		inline void Refresh() { RebuildTree(); }
 
 		/// Returns the ResourcePtr to resource in ResourceWindow's cached list of resources on given index.
-		ResourceSystem::ResourcePtr GetResourceAtIndex(size_t index);
+		ResourceSystem::ResourcePtr GetItemAtIndex(size_t index);
 
 		/// @name CEGUI Callbacks
 		//@{
-			bool OnDragContainerMouseButtonUp(const CEGUI::EventArgs&);
-			bool OnRefreshButtonClicked(const CEGUI::EventArgs&);
+		bool OnDragContainerMouseButtonUp(const CEGUI::EventArgs&);
+		bool OnRefreshButtonClicked(const CEGUI::EventArgs&);
 		//@}
 
 	private:
 
 		/// Refreshes cached list of resources and builds resource tree according to the refreshed list.
-		void BuildResourceTree();
+		void RebuildTree();
 
 		/// Cached list of resources
-		vector<ResourceSystem::ResourcePtr> mResources;
+		vector<ResourceSystem::ResourcePtr> mItems;
 
 		CEGUI::Window* mWindow;
 		CEGUI::ItemListbox* mTree;

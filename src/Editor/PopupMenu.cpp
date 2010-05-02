@@ -3,6 +3,7 @@
 #include "EditorMgr.h"
 #include "EditorGUI.h"
 #include "ResourceWindow.h"
+#include "PrototypeWindow.h"
 #include "GUISystem/CEGUITools.h"
 
 
@@ -15,26 +16,36 @@ bool Editor::PopupMenu::OnMenuItemMouseUp( const CEGUI::EventArgs& e )
 	CEGUI::Window* menu = gCEGUIWM.getWindow(mName);
 	OC_ASSERT(menu);
 
-	if (itemCeguiName == mName + "/ChangeType")
+	bool handled = false;
+
+	if (itemCeguiName == "EditorRoot/Popup/Resource/ChangeType")
 	{
 		PopupMenu* resTypes = new PopupMenu(mName + "/Types", false);
 		CEGUI::UVector2 newPos = menu->getPosition() + CEGUI::UVector2(menu->getWidth(), menu->getHeight()) * CEGUI::UDim(0.0f, 0.5f);
 		resTypes->Init<ResourceSystem::ResourcePtr>(GetData<ResourceSystem::ResourcePtr>());
 		resTypes->Open(newPos.d_x.d_offset, newPos.d_y.d_offset);
 		gEditorMgr.RegisterPopupMenu(resTypes);
-		Close();
-		return true;
+		handled = true;
 	}
-	else if (itemCeguiName.substr(0, itemCeguiName.size()-1) == mName + "/Resource")
+	else if (itemCeguiName.substr(0, itemCeguiName.size()-1) == "EditorRoot/Popup/Resource/Types/Type")
 	{
 		ResourceSystem::eResourceType newType = (ResourceSystem::eResourceType)args.window->getID();
 		gResourceMgr.ChangeResourceType(GetData<ResourceSystem::ResourcePtr>(), newType);
 		gEditorMgr.GetEditorGui()->GetResourceWindow()->Refresh();
-		Close();
-		return true;
+		handled = true;
+	}
+	else if (itemCeguiName == "EditorRoot/Popup/Prototype/AddPrototype")
+	{
+		EntitySystem::EntityDescription desc;
+		desc.SetKind(EntitySystem::EntityDescription::EK_PROTOTYPE);
+		desc.SetName("New Prototype");
+		gEntityMgr.CreateEntity(desc);
+		gEditorMgr.GetEditorGui()->GetPrototypeWindow()->Refresh();
+		handled = true;
 	}
 
-	return false;
+	Close();
+	return handled;
 }
 
 Editor::PopupMenu::PopupMenu( const string& menuName, const bool selfDestruct ):
@@ -124,7 +135,7 @@ void Editor::PopupMenu::InitResourceTypes()
 	for (int resType=0; resType<ResourceSystem::NUM_RESTYPES; ++resType)
 	{
 		string resName = ResourceSystem::GetResourceTypeName((ResourceSystem::eResourceType)resType);
-		CEGUI::Window* menuItem = gCEGUIWM.createWindow("Editor/MenuItem", mName + "/Resource" + StringConverter::ToString(resType));
+		CEGUI::Window* menuItem = gCEGUIWM.createWindow("Editor/MenuItem", mName + "/Type" + StringConverter::ToString(resType));
 		menuItem->setText(resName);
 		menuItem->setID(resType);
 		menu->addChildWindow(menuItem);

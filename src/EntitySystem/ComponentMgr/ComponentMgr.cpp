@@ -35,11 +35,7 @@ ComponentID ComponentMgr::CreateComponent(const EntityID id, const eComponentTyp
 	OC_ASSERT(type < NUM_COMPONENT_TYPES && type >= 0);
 	Component* cmp = mComponentCreationMethod[type]();
 	EntityComponentsMap::const_iterator entIt = mEntityComponentsMap.find(id);
-	if (entIt == mEntityComponentsMap.end())
-	{
-		mEntityComponentsMap[id] = new ComponentsList();
-		entIt = mEntityComponentsMap.find(id);
-	}
+	OC_ASSERT(entIt != mEntityComponentsMap.end());
 	entIt->second->push_back(cmp);
 	cmp->SetOwner(EntityHandle(id));
 	cmp->_SetType(type);
@@ -119,4 +115,13 @@ int32 EntitySystem::ComponentMgr::GetNumberOfEntityComponents( const EntityID id
 
 	OC_DASSERT(iter->second);
 	return iter->second->size();
+}
+
+void EntitySystem::ComponentMgr::PrepareForEntity( const EntityID id )
+{
+	EntityComponentsMap::const_iterator entIt = mEntityComponentsMap.find(id);
+	if (entIt == mEntityComponentsMap.end())
+	{
+		mEntityComponentsMap[id] = new ComponentsList();
+	}
 }

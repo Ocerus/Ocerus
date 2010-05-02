@@ -5,6 +5,7 @@
 #include "Editor/EditorMenu.h"
 #include "Editor/LayerMgrWidget.h"
 #include "Editor/ResourceWindow.h"
+#include "Editor/PrototypeWindow.h"
 #include "Editor/ValueEditors/PropertyEditorCreator.h"
 
 #include "Core/Game.h"
@@ -43,6 +44,7 @@ EditorGUI::~EditorGUI()
 	delete mLayerMgrWidget;
 	delete mEditorMenu;
 	delete mResourceWindow;
+	delete mPrototypeWindow;
 }
 
 void EditorGUI::LoadGUI()
@@ -111,6 +113,10 @@ void EditorGUI::LoadGUI()
 	/// Initialize resource window
 	mResourceWindow = new ResourceWindow();
 	mResourceWindow->Init();
+
+	// init prototype window
+	mPrototypeWindow = new PrototypeWindow();
+	mPrototypeWindow->Init();
 }
 
 void EditorGUI::Update(float32 delta)

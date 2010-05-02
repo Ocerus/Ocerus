@@ -19,6 +19,8 @@ namespace Editor
 	class EditorMgr;
 	class EditorMenu;
 	class PopupMenu;
+	class ResourceWindow;
+	class PrototypeWindow;
 }
 
 namespace EntitySystem

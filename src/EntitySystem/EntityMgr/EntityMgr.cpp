@@ -140,7 +140,7 @@ EntityHandle EntityMgr::CreateEntity(EntityDescription& desc)
 
 	bool isPrototype = desc.mKind == EntityDescription::EK_PROTOTYPE || desc.mKind == EntityDescription::EK_PROTOTYPE_COPY;
 
-	if (desc.mComponents.size() == 0)
+	if (desc.mComponents.size() == 0 && desc.mKind != EntityDescription::EK_PROTOTYPE)
 	{
 		ocError << "Attempting to create an entity without components";
 		return EntityHandle::Null; // no components, so we can't create the entity
@@ -167,6 +167,8 @@ EntityHandle EntityMgr::CreateEntity(EntityDescription& desc)
 		if (isPrototype) entityHandle = EntityHandle::CreateUniquePrototypeHandle();
 		else entityHandle = EntityHandle::CreateUniqueHandle();
 	}
+
+	mComponentMgr->PrepareForEntity(entityHandle.GetID());
 
 	bool dependencyFailure = false;
 	set<eComponentType> createdComponentTypes;
@@ -1268,4 +1270,14 @@ bool EntitySystem::EntityMgr::IsEntityLinkedToPrototype( const EntityHandle enti
 	}
 
 	return false;
+}
+
+void EntitySystem::EntityMgr::GetPrototypes( EntityList& out )
+{
+	out.clear();
+
+	for (PrototypeMap::const_iterator i = mPrototypes.begin(); i != mPrototypes.end(); ++i)
+	{
+		out.push_back(EntityHandle(i->first));
+	}
 }

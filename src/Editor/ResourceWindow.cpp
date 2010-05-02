@@ -33,28 +33,27 @@ void Editor::ResourceWindow::Init()
 	OC_ASSERT(mWindow != 0);
 	OC_ASSERT(mTree != 0);
 
-	BuildResourceTree();
+	RebuildTree();
 }
 
-ResourceSystem::ResourcePtr ResourceWindow::GetResourceAtIndex(size_t index)
+ResourceSystem::ResourcePtr ResourceWindow::GetItemAtIndex(size_t index)
 {
-	if (index >= mResources.size()) return ResourceSystem::ResourcePtr();
-	return mResources.at(index);
+	if (index >= mItems.size()) return ResourceSystem::ResourcePtr();
+	return mItems.at(index);
 }
 
-void Editor::ResourceWindow::BuildResourceTree()
+void Editor::ResourceWindow::RebuildTree()
 {
-	///@todo Make ResourceMgr refresh resource directory. The functionality should be there but I don't know how Muhe meant to use it.
 	mTree->resetList();
-	mResources.clear();
-	gResourceMgr.GetResources(mResources);
-	Containers::sort(mResources.begin(), mResources.end(), ResourceComparator);
+	mItems.clear();
+	gResourceMgr.GetResources(mItems);
+	Containers::sort(mItems.begin(), mItems.end(), ResourceComparator);
 
 	uint32 dirItemID = 0;
 	vector<string> dirStack;
-	for (vector<ResourceSystem::ResourcePtr>::const_iterator it = mResources.begin(); it != mResources.end(); ++it)
+	for (vector<ResourceSystem::ResourcePtr>::const_iterator it = mItems.begin(); it != mItems.end(); ++it)
 	{
-		size_t resourceIndex = (size_t)(it - mResources.begin());
+		size_t resourceIndex = (size_t)(it - mItems.begin());
 		string resourcePath = (*it)->GetFileDir();
 
 		uint32 pathDepth = 0;
@@ -125,10 +124,9 @@ bool Editor::ResourceWindow::OnDragContainerMouseButtonUp(const CEGUI::EventArgs
 
 	if (args.button == CEGUI::RightButton)
 	{
-		ResourceSystem::ResourcePtr resource = GetResourceAtIndex(dragContainer->getID());
+		ResourceSystem::ResourcePtr resource = GetItemAtIndex(dragContainer->getID());
 		if (resource.get())
 		{
-			// the menu will self-destruct
 			PopupMenu* menu = new PopupMenu("EditorRoot/Popup/Resource", false);
 			menu->Init<ResourceSystem::ResourcePtr>(resource);
 			menu->Open(args.position.d_x, args.position.d_y);
@@ -143,6 +141,6 @@ bool Editor::ResourceWindow::OnDragContainerMouseButtonUp(const CEGUI::EventArgs
 bool Editor::ResourceWindow::OnRefreshButtonClicked(const CEGUI::EventArgs& e)
 {
 	OC_UNUSED(e);
-	BuildResourceTree();
+	RebuildTree();
 	return true;
 }
