@@ -53,6 +53,10 @@ namespace EntitySystem
 }
 
 
+/// File used for storing prototypes.
+const char* PROTOTYPES_DEFAULT_FILE = "Prototypes.xml";
+
+
 using namespace EntitySystem;
 
 EntityMgr::EntityMgr()
@@ -1281,8 +1285,6 @@ void EntitySystem::EntityMgr::GetPrototypes( EntityList& out )
 		out.push_back(EntityHandle(i->first));
 	}
 }
-
-const char* PROTOTYPES_DEFAULT_FILE = "Prototypes.xml";
 
 bool EntitySystem::EntityMgr::LoadPrototypes()
 {

@@ -114,8 +114,12 @@ void Editor::EditorMgr::Update(const float32 delta)
 	{
 		// synchronize properties before physics
 		gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::SYNC_PRE_PHYSICS, Reflection::PropertyFunctionParameters() << 0.0f));
+
+		// destroy entities marked for destruction
+		gEntityMgr.ProcessDestroyQueue();
 	}
 
+	if (!GetCurrentEntity().Exists()) SetCurrentEntity(EntitySystem::EntityHandle::Null);
 
 	// update the gui elements on the screen
 	mEditorGUI->Update(delta);

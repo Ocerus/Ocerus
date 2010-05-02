@@ -3,24 +3,24 @@
 <Entities>
   <Entity Name="GameCamera1" ID="1">
     <Component Type="Camera">
+      <Zoom>1</Zoom>
       <Position>0 0</Position>
       <Rotation>0</Rotation>
-      <Zoom>1</Zoom>
     </Component>
   </Entity>
   <Entity Name="EditorCamera1" ID="2">
     <Component Type="Camera">
+      <Zoom>1</Zoom>
       <Position>0 0</Position>
       <Rotation>0</Rotation>
-      <Zoom>1</Zoom>
     </Component>
   </Entity>
   <Entity Name="Visual" ID="3">
     <Component Type="Transform">
-      <Layer>0</Layer>
-      <Angle>0</Angle>
       <Scale>1.2 1.5</Scale>
+      <Angle>0</Angle>
       <Position>0 0</Position>
+      <Layer>0</Layer>
     </Component>
     <Component Type="Sprite">
       <Transparency>0</Transparency>
@@ -28,34 +28,34 @@
     </Component>
     <Component Type="Model">
       <Transparency>0</Transparency>
-      <Mesh>Test/cube.model</Mesh>
       <ZAngle>0.6</ZAngle>
+      <Mesh>Test/cube.model</Mesh>
     </Component>
     <Component Type="DynamicBody"></Component>
     <Component Type="PolygonCollider">
+      <Density>1</Density>
       <Polygon>
         <Item>-3 -2</Item>
         <Item>3 -2</Item>
         <Item>3 2</Item>
         <Item>-3 2</Item>
       </Polygon>
-      <Density>1</Density>
     </Component>
     <Component Type="Script">
+      <ScriptStates></ScriptStates>
+      <ScriptTimes></ScriptTimes>
+      <ScriptTimeOut>1000</ScriptTimeOut>
       <ScriptModules>
         <Item>ConstantMover.as</Item>
       </ScriptModules>
-      <ScriptStates></ScriptStates>
-      <ScriptTimeOut>1000</ScriptTimeOut>
-      <ScriptTimes></ScriptTimes>
     </Component>
   </Entity>
   <Entity Name="Visual" ID="4">
     <Component Type="Transform">
-      <Layer>0</Layer>
-      <Angle>0</Angle>
       <Scale>1.2 1.5</Scale>
+      <Angle>0</Angle>
       <Position>5 2</Position>
+      <Layer>0</Layer>
     </Component>
     <Component Type="Sprite">
       <Transparency>0</Transparency>
@@ -63,26 +63,26 @@
     </Component>
     <Component Type="Model">
       <Transparency>0</Transparency>
-      <Mesh>Test/cube.model</Mesh>
       <ZAngle>0.6</ZAngle>
+      <Mesh>Test/cube.model</Mesh>
     </Component>
     <Component Type="DynamicBody"></Component>
     <Component Type="PolygonCollider">
+      <Density>1</Density>
       <Polygon>
         <Item>-3 -2</Item>
         <Item>3 -2</Item>
         <Item>3 2</Item>
         <Item>-3 2</Item>
       </Polygon>
-      <Density>1</Density>
     </Component>
     <Component Type="Script">
+      <ScriptStates></ScriptStates>
+      <ScriptTimes></ScriptTimes>
+      <ScriptTimeOut>1000</ScriptTimeOut>
       <ScriptModules>
         <Item>ConstantMover.as</Item>
       </ScriptModules>
-      <ScriptStates></ScriptStates>
-      <ScriptTimeOut>1000</ScriptTimeOut>
-      <ScriptTimes></ScriptTimes>
     </Component>
   </Entity>
 </Entities>

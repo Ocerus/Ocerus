@@ -71,6 +71,8 @@ resource_change_type_hint=Changes the type of the resource.
 prototypes=Prototypes
 prototype_add=Add Prototype
 prototype_add_hint=Creates new empty prototype
+prototype_delete=Delete Prototype
+prototype_delete_hint=Deletes the prototype
 
 # message box
 ok=Ok

@@ -15,10 +15,12 @@ bool ResourceComparator(const ResourceSystem::ResourcePtr& r1, const ResourceSys
 
 Editor::ResourceWindow::ResourceWindow()
 {
+
 }
 
 Editor::ResourceWindow::~ResourceWindow()
 {
+
 }
 
 void Editor::ResourceWindow::Init()
@@ -127,7 +129,7 @@ bool Editor::ResourceWindow::OnDragContainerMouseButtonUp(const CEGUI::EventArgs
 		ResourceSystem::ResourcePtr resource = GetItemAtIndex(dragContainer->getID());
 		if (resource.get())
 		{
-			PopupMenu* menu = new PopupMenu("EditorRoot/Popup/Resource", false);
+			PopupMenu* menu = new PopupMenu("EditorRoot/Popup/Resource");
 			menu->Init<ResourceSystem::ResourcePtr>(resource);
 			menu->Open(args.position.d_x, args.position.d_y);
 			gEditorMgr.RegisterPopupMenu(menu);

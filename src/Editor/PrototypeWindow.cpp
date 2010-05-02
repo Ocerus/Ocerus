@@ -86,7 +86,7 @@ bool Editor::PrototypeWindow::OnDragContainerMouseButtonUp(const CEGUI::EventArg
 	{
 		if (item.IsValid())
 		{
-			PopupMenu* menu = new PopupMenu("EditorRoot/Popup/Prototype", false);
+			PopupMenu* menu = new PopupMenu("EditorRoot/Popup/Prototype");
 			menu->Init<EntitySystem::EntityHandle>(item);
 			menu->Open(args.position.d_x, args.position.d_y);
 			gEditorMgr.RegisterPopupMenu(menu);
@@ -103,7 +103,7 @@ bool Editor::PrototypeWindow::OnWindowMouseButtonUp(const CEGUI::EventArgs& e)
 
 	if (args.button == CEGUI::RightButton)
 	{
-		PopupMenu* menu = new PopupMenu("EditorRoot/Popup/Prototype", false);
+		PopupMenu* menu = new PopupMenu("EditorRoot/Popup/Prototype");
 		menu->Init<EntitySystem::EntityHandle>(EntitySystem::EntityHandle::Null);
 		menu->Open(args.position.d_x, args.position.d_y);
 		gEditorMgr.RegisterPopupMenu(menu);

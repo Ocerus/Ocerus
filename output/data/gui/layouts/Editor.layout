@@ -320,5 +320,23 @@
 						</Window>
 		    </Window>
 
+				<Window Type="Editor/PopupMenu" Name="EditorRoot/Popup/PrototypeAboveItem" >
+		    		<Property Name="AlwaysOnTop" Value="True" />
+				    <Property Name="Visible" Value="False" />
+		        <Property Name="FadeInTime" Value="0" />
+		        <Property Name="FadeOutTime" Value="0" />
+		        <Property Name="ItemSpacing" Value="2" />
+		        <Property Name="ClippedByParent" Value="False" />
+		        <Property Name="AutoResizeEnabled" Value="True" />
+		        <Window Type="Editor/MenuItem" Name="EditorRoot/Popup/PrototypeAboveItem/AddPrototype" >
+		            <Property Name="Text" Value="$prototype_add$" />
+		            <Property Name="Tooltip" Value="$prototype_add_hint$" />
+						</Window>
+		        <Window Type="Editor/MenuItem" Name="EditorRoot/Popup/PrototypeAboveItem/DeletePrototype" >
+		            <Property Name="Text" Value="$prototype_delete$" />
+		            <Property Name="Tooltip" Value="$prototype_delete_hint$" />
+						</Window>
+		    </Window>
+		    
     </Window>
 </GUILayout>

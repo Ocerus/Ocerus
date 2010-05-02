@@ -9,18 +9,21 @@
 
 bool Editor::PopupMenu::OnMenuItemMouseUp( const CEGUI::EventArgs& e )
 {
+	CEGUI::Window* menu = gCEGUIWM.getWindow(mName);
+	OC_ASSERT(menu);
+
+	if (!menu->isVisible()) return false;
+
 	gEditorMgr.DisablePopupClosing();
 
 	const CEGUI::WindowEventArgs& args = static_cast<const CEGUI::WindowEventArgs&>(e);
 	const CEGUI::String& itemCeguiName = args.window->getName();
-	CEGUI::Window* menu = gCEGUIWM.getWindow(mName);
-	OC_ASSERT(menu);
 
 	bool handled = false;
 
 	if (itemCeguiName == "EditorRoot/Popup/Resource/ChangeType")
 	{
-		PopupMenu* resTypes = new PopupMenu(mName + "/Types", false);
+		PopupMenu* resTypes = new PopupMenu(mName + "/Types");
 		CEGUI::UVector2 newPos = menu->getPosition() + CEGUI::UVector2(menu->getWidth(), menu->getHeight()) * CEGUI::UDim(0.0f, 0.5f);
 		resTypes->Init<ResourceSystem::ResourcePtr>(GetData<ResourceSystem::ResourcePtr>());
 		resTypes->Open(newPos.d_x.d_offset, newPos.d_y.d_offset);
@@ -34,15 +37,26 @@ bool Editor::PopupMenu::OnMenuItemMouseUp( const CEGUI::EventArgs& e )
 		gEditorMgr.GetEditorGui()->GetResourceWindow()->Refresh();
 		handled = true;
 	}
-	else if (itemCeguiName == "EditorRoot/Popup/Prototype/AddPrototype")
+	else if (mName.find("EditorRoot/Popup/Prototype") == 0)
 	{
-		EntitySystem::EntityDescription desc;
-		desc.SetKind(EntitySystem::EntityDescription::EK_PROTOTYPE);
-		desc.SetName("New Prototype");
-		gEntityMgr.CreateEntity(desc);
-		gEditorMgr.GetEditorGui()->GetPrototypeWindow()->Refresh();
-		gEntityMgr.SavePrototypes();
-		handled = true;
+		if (itemCeguiName == mName + "/AddPrototype")
+		{
+			EntitySystem::EntityDescription desc;
+			desc.SetKind(EntitySystem::EntityDescription::EK_PROTOTYPE);
+			desc.SetName("New Prototype");
+			gEntityMgr.CreateEntity(desc);
+			gEditorMgr.GetEditorGui()->GetPrototypeWindow()->Refresh();
+			gEntityMgr.SavePrototypes();
+			handled = true;
+		}
+		else if (itemCeguiName == mName + "/DeletePrototype")
+		{
+			gEntityMgr.DestroyEntity(GetData<EntitySystem::EntityHandle>());
+			gEntityMgr.ProcessDestroyQueue();
+			gEditorMgr.GetEditorGui()->GetPrototypeWindow()->Refresh();
+			gEntityMgr.SavePrototypes();
+			handled = true;
+		}
 	}
 
 	Close();
@@ -57,6 +71,12 @@ Editor::PopupMenu::PopupMenu( const string& menuName, const bool selfDestruct ):
 
 void Editor::PopupMenu::Init()
 {
+	if (mName == "EditorRoot/Popup/Prototype")
+	{
+		EntitySystem::EntityHandle prototype = GetData<EntitySystem::EntityHandle>();
+		if (prototype.IsValid()) mName = "EditorRoot/Popup/PrototypeAboveItem";
+	}
+
 	CEGUI::Window* menu = gCEGUIWM.getWindow(mName);
 	OC_ASSERT(menu);
 	mEventConnections.push_back(menu->subscribeEvent(CEGUI::Window::EventMouseButtonUp, CEGUI::Event::Subscriber(&PopupMenu::OnMenuMouseUp, this)));
@@ -108,9 +128,10 @@ void Editor::PopupMenu::Open( float32 x, float32 y )
 
 void Editor::PopupMenu::Close()
 {
-	ocInfo << "Popup " << mName << " closing";
 	CEGUI::Window* menu = gCEGUIWM.getWindow(mName);
 	OC_ASSERT(menu);
+	if (!menu->isVisible()) return;
+	ocInfo << "Popup " << mName << " closing";
 	menu->hide();
 
 	if (mSelfDestruct) delete this;
