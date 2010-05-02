@@ -26,11 +26,12 @@ void Core::LoadingScreen::DoLoading( eType type )
 
 
 		// additional resources common for all projects
-		gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_SYSTEM, "prototypes", "Prototypes");
 		gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_SYSTEM, ".", "Scripts", ".+\\.as");
 
-		gResourceMgr.LoadResourcesInGroup("Prototypes");
 		gResourceMgr.LoadResourcesInGroup("Scripts");
+
+		// prototypes
+		gEntityMgr.LoadPrototypes();
 
 		gGUIMgr.Init();
 

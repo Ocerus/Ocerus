@@ -1281,3 +1281,38 @@ void EntitySystem::EntityMgr::GetPrototypes( EntityList& out )
 		out.push_back(EntityHandle(i->first));
 	}
 }
+
+const char* PROTOTYPES_DEFAULT_FILE = "Prototypes.xml";
+
+bool EntitySystem::EntityMgr::LoadPrototypes()
+{
+	if (gResourceMgr.AddResourceFileToGroup(PROTOTYPES_DEFAULT_FILE, "Temp", ResourceSystem::RESTYPE_XMLRESOURCE, ResourceSystem::BPT_SYSTEM, PROTOTYPES_DEFAULT_FILE))
+	{
+		ResourceSystem::ResourcePtr res = gResourceMgr.GetResource("Temp", PROTOTYPES_DEFAULT_FILE);
+		res->Load();
+		gEntityMgr.LoadEntitiesFromResource(res, true);
+		gResourceMgr.DeleteGroup("Temp");
+		ocInfo << "Prototypes loaded from " << PROTOTYPES_DEFAULT_FILE;
+		return true;
+	}
+	else 
+	{
+		ocError << "Prototypes can't be loaded!";
+		return false;
+	}
+}
+
+bool EntitySystem::EntityMgr::SavePrototypes()
+{
+	ResourceSystem::XMLOutput storage(gResourceMgr.GetBasePath(ResourceSystem::BPT_SYSTEM) + PROTOTYPES_DEFAULT_FILE);
+	if (gEntityMgr.SaveEntitiesToStorage(storage, true, false))
+	{
+		ocInfo << "Prototypes saved into " << PROTOTYPES_DEFAULT_FILE;
+		return true;
+	}
+	else
+	{
+		ocError << "Prototypes can't be saved!";
+		return false;
+	}
+}

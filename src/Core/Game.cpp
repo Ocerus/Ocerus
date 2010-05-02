@@ -315,7 +315,9 @@ void Core::Game::SaveAction( void )
 	if (gEntityMgr.SaveEntitiesToStorage(storage, false, true))
 	{
 		ocInfo << "Action saved.";
-	} else {
+	}
+	else 
+	{
 		ocError << "Action cannot be saved!";
 	}
 }
@@ -331,7 +333,9 @@ void Core::Game::RestartAction( void )
 		gEntityMgr.LoadEntitiesFromResource(gResourceMgr.GetResource("Action", ActionFile));
 		gResourceMgr.DeleteGroup("Action");
 		ocInfo << "Action restarted.";
-	} else {
+	}
+	else
+	{
 		ocError << "Action cannot be restarted!";
 	}
 }

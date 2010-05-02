@@ -41,6 +41,7 @@ bool Editor::PopupMenu::OnMenuItemMouseUp( const CEGUI::EventArgs& e )
 		desc.SetName("New Prototype");
 		gEntityMgr.CreateEntity(desc);
 		gEditorMgr.GetEditorGui()->GetPrototypeWindow()->Refresh();
+		gEntityMgr.SavePrototypes();
 		handled = true;
 	}
 
