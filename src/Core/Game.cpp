@@ -6,6 +6,7 @@
 #include "StringConverter.h"
 #include "PhysicsDraw.h"
 #include "Editor/EditorMgr.h"
+#include "ResourceSystem/XMLResource.h"
 #include <Box2D.h>
 #include <Box2D/Dynamics/b2WorldCallbacks.h>
 
@@ -64,14 +65,14 @@ Core::Game::~Game()
 	GlobalProperties::SetPointer("Game", 0);
 }
 
-void Core::Game::SetRenderTarget( const GfxSystem::RenderTargetID renderTarget )
+void Core::Game::SetRenderTarget(const GfxSystem::RenderTargetID renderTarget)
 {
 	OC_ASSERT(mRenderTarget == GfxSystem::InvalidRenderTargetID);
 	mRenderTarget = renderTarget;
 	mCamera = gGfxRenderer.GetRenderTargetCamera(mRenderTarget);
 }
 
-void Core::Game::UpdateGameProperties( void )
+void Core::Game::UpdateGameProperties(void)
 {
 	PROFILE_FNC();
 
@@ -134,7 +135,7 @@ void Core::Game::Clean()
 	gInputMgr.RemoveInputListener(this);
 }
 
-void Core::Game::Update( const float32 delta )
+void Core::Game::Update(const float32 delta)
 {
 	PROFILE_FNC();
 
@@ -186,7 +187,7 @@ void Core::Game::Update( const float32 delta )
 	mPhysicsResidualDelta = physicsDelta;
 }
 
-void Core::Game::Draw( const float32 passedDelta)
+void Core::Game::Draw(const float32 passedDelta)
 {
 	PROFILE_FNC();	
 
@@ -204,7 +205,7 @@ void Core::Game::Draw( const float32 passedDelta)
 	gGfxRenderer.FinalizeRenderTarget();
 }
 
-bool Core::Game::KeyPressed( const KeyInfo& ke )
+bool Core::Game::KeyPressed(const KeyInfo& ke)
 {
 	if (ke.keyCode == KC_F5 && gInputMgr.IsKeyDown(KC_LCONTROL))
 	{
@@ -239,33 +240,33 @@ bool Core::Game::KeyPressed( const KeyInfo& ke )
 	return false;
 }
 
-bool Core::Game::KeyReleased( const KeyInfo& ke )
+bool Core::Game::KeyReleased(const KeyInfo& ke)
 {
 	OC_UNUSED(ke);
 	return false;
 }
 
-bool Core::Game::MouseMoved( const MouseInfo& mi )
+bool Core::Game::MouseMoved(const MouseInfo& mi)
 {
 	OC_UNUSED(mi);
 	return false;
 }
 
-bool Core::Game::MouseButtonPressed( const MouseInfo& mi, const eMouseButton btn )
+bool Core::Game::MouseButtonPressed(const MouseInfo& mi, const eMouseButton btn)
 {
 	OC_UNUSED(mi);
 	OC_UNUSED(btn);
 	return false;
 }
 
-bool Core::Game::MouseButtonReleased( const MouseInfo& mi, const eMouseButton btn )
+bool Core::Game::MouseButtonReleased(const MouseInfo& mi, const eMouseButton btn)
 {
 	OC_UNUSED(btn);
 	OC_UNUSED(mi);
 	return false;
 }
 
-bool Core::Game::PhysicsCallbacks::ShouldCollide( b2Fixture* fixtureA, b2Fixture* fixtureB )
+bool Core::Game::PhysicsCallbacks::ShouldCollide(b2Fixture* fixtureA, b2Fixture* fixtureB)
 {
 	if (!b2ContactFilter::ShouldCollide(fixtureA, fixtureB))
 		return false;
@@ -273,7 +274,7 @@ bool Core::Game::PhysicsCallbacks::ShouldCollide( b2Fixture* fixtureA, b2Fixture
 	return true;
 }
 
-void Core::Game::PhysicsCallbacks::BeginContact( b2Contact* contact )
+void Core::Game::PhysicsCallbacks::BeginContact(b2Contact* contact)
 {
 	PhysicsEvent* evt = new PhysicsEvent();
 	void* userData1 = contact->GetFixtureA()->GetUserData();
@@ -285,13 +286,13 @@ void Core::Game::PhysicsCallbacks::BeginContact( b2Contact* contact )
 	mParent->mPhysicsEvents.push_back(evt);
 }
 
-void Core::Game::ProcessPhysicsEvent( const PhysicsEvent& evt )
+void Core::Game::ProcessPhysicsEvent(const PhysicsEvent& evt)
 {
 	if (!evt.entity1.IsValid() || !evt.entity2.IsValid())
 		return;
 }
 
-void Core::Game::PauseAction( void )
+void Core::Game::PauseAction(void)
 {
 	if (mActionState == AS_RUNNING)
 	{
@@ -300,7 +301,7 @@ void Core::Game::PauseAction( void )
 	}
 }
 
-void Core::Game::ResumeAction( void )
+void Core::Game::ResumeAction(void)
 {
 	if (mActionState == AS_PAUSED)
 	{
@@ -309,10 +310,16 @@ void Core::Game::ResumeAction( void )
 	}
 }
 
-void Core::Game::SaveAction( void )
+void Core::Game::SaveAction(void)
 {
+	bool result = true;
 	ResourceSystem::XMLOutput storage(gResourceMgr.GetBasePath(ResourceSystem::BPT_SYSTEM) + ActionFile);
-	if (gEntityMgr.SaveEntitiesToStorage(storage, false, true))
+	storage.BeginElement("Action");
+	if (!SaveGameInfoToStorage(storage)) { result = false; }
+	if (!gEntityMgr.SaveEntitiesToStorage(storage, false, true)) { result = false; }
+	storage.EndElement();
+	
+	if (result)
 	{
 		ocInfo << "Action saved.";
 	}
@@ -322,20 +329,66 @@ void Core::Game::SaveAction( void )
 	}
 }
 
-void Core::Game::RestartAction( void )
+void Core::Game::RestartAction(void)
 {
+	bool result = true;
+
 	PauseAction();
 	if (gResourceMgr.AddResourceFileToGroup(ActionFile, "Action",
 		ResourceSystem::RESTYPE_AUTODETECT, ResourceSystem::BPT_SYSTEM, ActionFile))
 	{
 		gResourceMgr.LoadResourcesInGroup("Action");
 		gEntityMgr.DestroyAllEntities();
-		gEntityMgr.LoadEntitiesFromResource(gResourceMgr.GetResource("Action", ActionFile));
+		ResourceSystem::ResourcePtr resource = gResourceMgr.GetResource("Action", ActionFile);
+		if (!LoadGameInfoFromResource(resource)) { result = false; }
+		if (!gEntityMgr.LoadEntitiesFromResource(resource)) { result = false; }
 		gResourceMgr.DeleteGroup("Action");
-		ocInfo << "Action restarted.";
+	} else {
+		result = false;
 	}
-	else
+
+	if (result) { ocInfo << "Action restarted."; } else { ocError << "Action cannot be restarted!"; }
+}
+
+bool Core::Game::SaveGameInfoToStorage(ResourceSystem::XMLOutput& storage)
+{
+	storage.BeginElement("GameInfo");
+
+	storage.BeginElement("CurrentTime");
+	storage.WriteString(Utils::StringConverter::ToString(GetTimeMillis()));
+	storage.EndElement();
+
+	storage.EndElement();
+
+	return true;
+}
+
+bool Core::Game::LoadGameInfoFromResource(ResourceSystem::ResourcePtr res)
+{
+	if (res == 0)
 	{
-		ocError << "Action cannot be restarted!";
+		ocError << "XML: Can't load data; null resource pointer";
+		return false;
 	}
+	
+	ResourceSystem::XMLResourcePtr xml = res;
+
+	uint64 currentTime = 0;
+
+	for (ResourceSystem::XMLNodeIterator it = xml->IterateTopLevel(); it != xml->EndTopLevel(); ++it)
+	{
+		if ((*it).compare("GameInfo") != 0) { continue; }
+
+		for (ResourceSystem::XMLNodeIterator entIt = it.IterateChildren(); entIt != it.EndChildren(); ++entIt)
+		{
+			if ((*entIt).compare("CurrentTime") == 0)
+			{
+				currentTime = entIt.GetValue<uint64>();
+			}
+		}
+	}
+
+	mTimer.Reset(currentTime);
+
+	return true;
 }

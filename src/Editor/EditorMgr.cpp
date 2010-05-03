@@ -274,6 +274,8 @@ void Editor::EditorMgr::RestartAction()
 {
 	if (!mInitialTime)
 	{
+		SetCurrentEntity(EntityHandle::Null);
+		mSelectedEntities.clear();
 		GlobalProperties::Get<Core::Game>("Game").RestartAction();
 		mInitialTime = true;
 	}

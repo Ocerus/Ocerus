@@ -1,0 +1,60 @@
+\begin{description}
+  \item[Namespaces:] LogSystem
+  \item[Headers:] Logger.h, LogMacros.h, LogMgr.h, Profiler.h
+  \item[Source files:] Logger.cpp, LogMgr.cpp, Profiler.cpp
+  \item[Classes:] Logger, LogMgr, Profiler
+  \item[Libraries used:] RTHProfiler
+\end{description}
+
+\section{Purpose of the log system}
+
+The log system manages internal log messages that are used to provide information about application processes useful to debug the whole project. These messages can have various levels of a severity (from trace and debug messages to errors) and it is possible to set the minimal level of messages to show (i.e. only warning and errors). Another function of the log system is managing a real-time ingame profiling useful for a location of the most time critical parts of the project which can leads to effective optimization.
+
+In the following sections the process of logging messages will be described as well as using a profiler. In the last section there is a small glossary of used terms.
+
+\section{Logging messages}
+
+The main class responsible for logging messages is the \emph{LogSystem::LogMgr}. At the application start it is initialized with a name of the file to which the messages are also written. There is only one method which logs a message of a certain severity to the file and consoles if exist. This method should not be used directly but via the class \emph{LogSystem::Logger}.
+
+The lifetime of the \emph{Logger} should be only one code statement and it represents one message. In the constructor a level of the message and whether to generate a stack trace are specified. Then a sequence of the operator $<<$ is used to build the message from strings, numbers and other common types (any user type can be supported by specifying an own operator $<<$ overloading). At the end of the statement the destructor is automatically called (if the instance is not assigned to a variable) that called the \emph{LogMgr}'s method with the built message.
+
+For an even easier logging of messages log macros are defined for every supported level of severity, adding the information about the file and the line where it is logged from in case of error or warning message. Thanks to macros it is possible to define the minimum level of severity that should be logged at the compile time so the messages with a lower level are even not compiled to the final program which saves time and memory. In the table \ref{tab:log-macros} there are the macros associated with the levels of severity.
+
+\begin{table}[htbp]
+	\centering
+		\begin{tabular}{|l|l|l|l|}
+			\hline
+			Macro & Level & Stack trace & Additional info \\
+			\hline
+			ocError & error & yes & yes \\
+			ocWarning & warning & no & yes \\
+			ocInfo & information & no & no \\
+			ocDebug & debug & no & no \\
+			ocTrace & trace & no & no \\
+			\hline
+		\end{tabular}
+	\caption{Definitions of log macros from the most severe to the least ones}
+	\label{tab:log-macros}
+\end{table}
+
+If it is for example necessary to inform that the entity (of which the handle is available) is created the following statement should be written anywhere in the code: \verb/ocInfo << handle << " was created.";/. When the process passed this code and the minimum level of messages to log is lower than information level then for example the following message will be generated: \verb/13:05:18: Entity(25) was created./
+
+\section{Profiling functions}
+
+The profiling of a block of a code or a whole function is really easy. First the \verb/USE_PROFILER/ preprocessor directive must be globally defined, the class \emph{LogSystem::Profiler} must be initialized at the start of the application and its method \emph{Update} must be called in each application loop.
+
+Then anywhere in a code the \verb/PROFILE(name)/ macro can be typed where the parameter \verb/name/ is used for identification of the corresponding results (the abbreviation \verb/PROFILE_FNC()/ uses the current function name). From that line the profiler will start measuring time and it will stop at the end of the current block or function.
+
+Finally when the application runs a call of \emph{Profiler}'s method \emph{Start} (which can be invoked with a keyboard shortcut \emph{CTRL+F5}) activates a profiling and a call of its methods \emph{Stop} and \emph{DumpIntoConsole} (another press of \emph{CTRL+F5}) deactivates it and writes results to the text console. In addition it is possible to ask whether the profiler is activate via the method \emph{IsRunning}.
+
+\section{Glossary}
+This is a glossary of the most used terms in the previous sections:
+
+\begin{description}
+  \item[Log message] -- A text describing a specific action or an application state occurred at a certain time with a defined severity.
+  \item[Level of severity] -- An importance of a message to the application process.
+  \item[Stack trace] -- A list of functions that the current statement is called from right now.
+  \item[Logging] -- Tracking the code execution by writing log messages to a console and a file.
+  \item[Console] -- A window where log messages are immediately appears.
+  \item[Profiling] -- Measuring a real time of execution of a specific code.
+\end{description}

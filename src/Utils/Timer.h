@@ -27,6 +27,9 @@ namespace Utils
 		/// Resets the current time to zero.
 		void Reset(void);
 
+		/// Resets the current time to time.
+		void Reset(const uint64 time);
+
 		/// Pauses the timer until it is resumed or reset.
 		void Pause(void);
 
@@ -60,6 +63,7 @@ namespace Utils
 
 		int64 mPausedTimeMicro; // in microseconds
 		int64 mTotalPauseDelta;
+		uint64 mDeltaTime; // add to the current time when not start at zero 
 		bool mPaused;
 
 		const bool mManual;

@@ -36,7 +36,15 @@ void Timer::Reset()
 	mLastTime = 0;
 	mPausedTimeMicro = 0;
 	mTotalPauseDelta = 0;
+	mDeltaTime = 0;
 	mPaused = false;
+}
+
+void Timer::Reset(const uint64 time)
+{
+	Reset();
+	mDeltaTime = time;
+	mPausedTimeMicro = time;
 }
 
 uint64 Timer::GetMilliseconds()
@@ -48,7 +56,7 @@ uint64 Timer::GetMicroseconds()
 {
 	if (mManual)
 	{
-		return mLastTime - mTotalPauseDelta;
+		return mLastTime - mTotalPauseDelta + mDeltaTime;
 	}
 	else
 	{
@@ -86,7 +94,7 @@ uint64 Timer::GetMicroseconds()
         int64 curTime = GetMicrosecondsUnix();
         uint64 micro = (uint64) (curTime - mStartTime);
 #endif
-		return micro - mTotalPauseDelta;
+		return micro - mTotalPauseDelta + mDeltaTime;
 	}
 }
 

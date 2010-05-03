@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<Entities>
-  <Entity Name="New Prototype" ID="-477"></Entity>
-</Entities>
+<Prototypes>
+  <Entities>
+    <Entity Name="New Prototype" ID="-1"></Entity>
+  </Entities>
+</Prototypes>

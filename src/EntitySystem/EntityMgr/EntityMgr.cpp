@@ -71,6 +71,7 @@ EntityMgr::~EntityMgr()
 {
 	// test ulozeni entit
 	ResourceSystem::XMLOutput storage("TestSave.xml");
+	storage.BeginElement("Scene");
 	if (gEntityMgr.SaveEntitiesToStorage(storage))
 	{
 		ocInfo << "Test save successful.";
@@ -79,6 +80,7 @@ EntityMgr::~EntityMgr()
 	{
 		ocError << "Test save failed!";
 	}
+	storage.EndElement();
 	
 	DestroyAllEntities();
 	delete mComponentMgr;
@@ -681,16 +683,21 @@ bool EntitySystem::EntityMgr::LoadEntitiesFromResource(ResourceSystem::ResourceP
 
 	bool result = true;
 
-	for (ResourceSystem::XMLNodeIterator entIt = xml->IterateTopLevel(); entIt != xml->EndTopLevel(); ++entIt)
+	for (ResourceSystem::XMLNodeIterator it = xml->IterateTopLevel(); it != xml->EndTopLevel(); ++it)
 	{
-		if ((*entIt).compare("Entity") == 0)
+		if ((*it).compare("Entities") != 0) { continue; }
+
+		for (ResourceSystem::XMLNodeIterator entIt = it.IterateChildren(); entIt != it.EndChildren(); ++entIt)
 		{
-			LoadEntityFromXML(entIt, isPrototype);
-		}
-		else
-		{
-			ocError << "XML: Expected 'Entity', found '" << *entIt << "'";
-			result = false;
+			if ((*entIt).compare("Entity") == 0)
+			{
+				LoadEntityFromXML(entIt, isPrototype);
+			}
+			else
+			{
+				ocError << "XML: Expected 'Entity', found '" << *entIt << "'";
+				result = false;
+			}
 		}
 	}
 
@@ -767,19 +774,18 @@ bool EntitySystem::EntityMgr::SaveEntitiesToStorage(ResourceSystem::XMLOutput& s
 {
 	storage.BeginElement("Entities");
 	
-	bool res = true;
+	bool result = true;
 	for (EntityMap::const_iterator i = mEntities.begin(); i != mEntities.end(); ++i)
 	{
 		if ((isPrototype && mPrototypes.find(i->first) != mPrototypes.end())
 			|| (!isPrototype && mPrototypes.find(i->first) == mPrototypes.end()))
 		{
-			if (!SaveEntityToStorage(i->first, storage, isPrototype, evenTransient)) { res = false; };
+			if (!SaveEntityToStorage(i->first, storage, isPrototype, evenTransient)) { result = false; };
 		}
-		else { res = false; }
 	}
 	storage.EndElement();
 	
-	return res;
+	return result;
 }
 
 bool EntitySystem::EntityMgr::EntityExists( const EntityHandle h ) const
@@ -1307,14 +1313,10 @@ bool EntitySystem::EntityMgr::LoadPrototypes()
 bool EntitySystem::EntityMgr::SavePrototypes()
 {
 	ResourceSystem::XMLOutput storage(gResourceMgr.GetBasePath(ResourceSystem::BPT_SYSTEM) + PROTOTYPES_DEFAULT_FILE);
-	if (gEntityMgr.SaveEntitiesToStorage(storage, true, false))
-	{
-		ocInfo << "Prototypes saved into " << PROTOTYPES_DEFAULT_FILE;
-		return true;
-	}
-	else
-	{
-		ocError << "Prototypes can't be saved!";
-		return false;
-	}
+	storage.BeginElement("Prototypes");
+	bool result = gEntityMgr.SaveEntitiesToStorage(storage, true, false);
+	storage.EndElement();
+	if (result) { ocInfo << "Prototypes saved into " << PROTOTYPES_DEFAULT_FILE; }
+	else { ocError << "Prototypes can't be saved!"; }
+	return result;
 }

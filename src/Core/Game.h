@@ -78,8 +78,14 @@ namespace Core
 		/// Restarts the game action to the initial (saved) state.
 		void RestartAction(void);
 
-		/// Returns the current game action.
+		/// Returns the current game time.
 		inline uint64 GetTimeMillis(void) { return mTimer.GetMilliseconds(); }
+
+		/// Saves the information about the game to a XML stream.
+		bool SaveGameInfoToStorage(ResourceSystem::XMLOutput& storage);
+
+		/// Load the information about the game from a XML stream.
+		bool LoadGameInfoFromResource(ResourceSystem::ResourcePtr res);
 
 		//@}
 

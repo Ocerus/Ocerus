@@ -1,0 +1,47 @@
+\begin{description}
+  \item[Namespaces:] Core
+  \item[Headers:] Application.h, Config.h, Game.h, LoadingScreen.h%, PhysicsDraw.h
+  \item[Source files:] Application.cpp, Config.cpp, Game.cpp, LoadingScreen.cpp%, PhysicsDraw.cpp
+  \item[Classes:] Application, Config, Game, LoadingScreen%, PhysicsDraw
+  \item[Libraries used:] Box2D, RudeConfig
+\end{description}
+
+\section{Purpose of the core}
+
+The Core namespace is the main part of the whole system. It contains its entry point and other classes closely related to the application itself. Its main task is to initialize and configure other engine systems, invokes their update and draw methods in the main loop and in the end correctly finalize them.
+
+In the following sections the class representing the application as well as the classes corresponding to the application states (loading screen, game) and configuration will be introduced. In the last section there is a small glossary of used terms.
+
+\section{Application}
+
+When the program starts it creates an instance of the class \emph{Core::Application}, initializes it by calling its method \emph{Init} and calls the \emph{RunMainLoop} method which runs until the application is shutdown, then the instance is deleted and the program finishes.
+
+On the initialization of the application the configuration is read (see section \ref{sec:config}) and all engine systems are created and initialized as well as the loading screen and game classes. The state of application is changed to \emph{loading} and the main loop is running until the state is changed to \emph{shutdown}. At the main loop window messages are processed, performance statistic are updated and other engine systems including game class are loaded (in a \emph{loading} state) or updated and drawn (in a \emph{game} state).
+
+In the application class there are also methods for getting an average and last FPS statistic and methods for showing and hiding a debug console as well as writing message to it. There are also the variables indicating whether the current application instance includes the editor (in a game distribution the editor should be disabled) and whether the editor is currently turned on so the game is running only in a small window instead of a full screen mode.
+
+\section{Game}
+
+The \emph{Core::Game} class manages the most important stuff needed to run the game such as drawing a scene, updating physics and logic of entities, measuring time, handling a game action or resolving an user interaction. Of course it mostly delegates this work to other parts of the engine.
+
+Before the game initialization at the method \emph{Init} a valid render target must be set by method \emph{SetRenderTarget} to know where to draw the game content. This is done for example by the editor when the game is run from it. Then physics, time, an action etc. are initialized and in the \emph{Update} method called in the main loop they are updated.
+
+The drawing of a scene is invoked in the method \emph{Draw}. The render target is cleared, all entities in the current scene are drawn by a renderer and the rendering is finalized.
+
+There are several methods for handling a game action. The action can be paused, resumed and restarted to previously saved position. There is a global timer that measures game time (can be obtain by the method \emph{GetTimeMillis}) when the game is running which is used by other systems such as the script system.
+
+When the action is running physics and logic of entities are updated in the method \emph{Update} which means the corresponding messages are broadcast to all entities before and after the update of the physical engine.
+
+Since the class \emph{Core::Game} registers the input listener to itself there are callbacks where it is possible to react to keyboard and mouse events such as a key or mouse button press/release or a mouse move. The corresponding information such as a current mouse position is available through the callback parameters.
+
+\section{Loading screen}
+
+\section{Configuration}
+\label{sec:config}
+
+\section{Glossary}
+This is a glossary of the most used terms in the previous sections:
+
+\begin{description}
+  \item[FPS] -- a count of frames per second that are drawn indicates a performance of a game
+\end{description}

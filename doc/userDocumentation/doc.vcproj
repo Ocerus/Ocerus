@@ -67,6 +67,32 @@
 			Filter="*.tex"
 			>
 			<File
+				RelativePath=".\Core.tex"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Building Core documentation..."
+						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet Core.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet Core.tex"
+						AdditionalDependencies="Core.tex;CoreContent.tex"
+						Outputs="Core.pdf"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Building Core documentation..."
+						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet Core.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet Core.tex"
+						AdditionalDependencies="Core.tex;CoreContent.tex"
+						Outputs="Core.pdf"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath=".\Documentation.tex"
 				>
 				<FileConfiguration
@@ -76,7 +102,7 @@
 						Name="VCCustomBuildTool"
 						Description="Building whole documentation..."
 						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet Documentation.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet Documentation.tex&#x0D;&#x0A;"
-						AdditionalDependencies="Documentation.tex;EntitySystemContent.tex;InputSystemContent.tex;PlatformSetupContent.tex;ResourceSystemContent.tex;ScriptRegisterContent.tex;ScriptSystemContent.tex;StringSystemContent.tex;UtilsContent.tex"
+						AdditionalDependencies="Documentation.tex;CoreContent.tex;EntitySystemContent.tex;LogSystemContent.tex;InputSystemContent.tex;PlatformSetupContent.tex;ResourceSystemContent.tex;ScriptRegisterContent.tex;ScriptSystemContent.tex;StringSystemContent.tex;UtilsContent.tex"
 						Outputs="Documentation.pdf"
 					/>
 				</FileConfiguration>
@@ -87,7 +113,7 @@
 						Name="VCCustomBuildTool"
 						Description="Building whole documentation..."
 						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet Documentation.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet Documentation.tex&#x0D;&#x0A;"
-						AdditionalDependencies="Documentation.tex;EntitySystemContent.tex;InputSystemContent.tex;PlatformSetupContent.tex;ResourceSystemContent.tex;ScriptRegisterContent.tex;ScriptSystemContent.tex;StringSystemContent.tex;UtilsContent.tex"
+						AdditionalDependencies="Documentation.tex;CoreContent.tex;EntitySystemContent.tex;LogSystemContent.tex;InputSystemContent.tex;PlatformSetupContent.tex;ResourceSystemContent.tex;ScriptRegisterContent.tex;ScriptSystemContent.tex;StringSystemContent.tex;UtilsContent.tex"
 						Outputs="Documentation.pdf"
 					/>
 				</FileConfiguration>
@@ -141,6 +167,32 @@
 						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet InputSystem.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet InputSystem.tex&#x0D;&#x0A;"
 						AdditionalDependencies="InputSystem.tex;InputSystemContent.tex"
 						Outputs="InputSystem.pdf"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\LogSystem.tex"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Building Log System documentation..."
+						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet LogSystem.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet LogSystem.tex"
+						AdditionalDependencies="LogSystem.tex;LogSystemContent.tex"
+						Outputs="LogSystem.pdf"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Building Log System documentation..."
+						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet LogSystem.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet LogSystem.tex"
+						AdditionalDependencies="LogSystem.tex;LogSystemContent.tex"
+						Outputs="LogSystem.pdf"
 					/>
 				</FileConfiguration>
 			</File>
@@ -257,7 +309,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Building String System documentation..."
-						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet StringSystem.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet StringSystem.tex"
+						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet StringSystem.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet StringSystem.tex&#x0D;&#x0A;"
 						AdditionalDependencies="StringSystem.tex;StringSystemContent.tex"
 						Outputs="StringSystem.pdf"
 					/>
@@ -268,7 +320,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Building String System documentation..."
-						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet StringSystem.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet StringSystem.tex"
+						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet StringSystem.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet StringSystem.tex&#x0D;&#x0A;"
 						AdditionalDependencies="StringSystem.tex;StringSystemContent.tex"
 						Outputs="StringSystem.pdf"
 					/>
@@ -306,6 +358,18 @@
 			Filter="*Content.tex"
 			>
 			<File
+				RelativePath=".\CoreContent.tex"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath=".\EntitySystemContent.tex"
 				>
 				<FileConfiguration
@@ -322,6 +386,26 @@
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\LogSystemContent.tex"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
