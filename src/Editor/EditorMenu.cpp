@@ -215,14 +215,14 @@ bool Editor::EditorMenu::OnToolbarButtonClicked(const CEGUI::EventArgs& e)
 	}
 
 	/// ---- Edit tool rotate ----
-	if (buttonName == toolbarPrefix + "/EditToolRotate")
+	if (buttonName == toolbarPrefix + "/EditToolRotateZ")
 	{
 		gEditorMgr.SetEditTool(EditorMgr::ET_ROTATE);
 		return true;
 	}
 
 	/// ---- Edit tool rotate-z ----
-	if (buttonName == toolbarPrefix + "/EditToolRotateZ")
+	if (buttonName == toolbarPrefix + "/EditToolRotateY")
 	{
 		gEditorMgr.SetEditTool(EditorMgr::ET_ROTATE_Z);
 		return true;
@@ -296,9 +296,35 @@ void Editor::EditorMenu::ConfigureToolbar(CEGUI::Window* parent)
 	for(size_t childIdx = 0; childIdx < childCount; childIdx++)
 	{
 		CEGUI::Window* child = parent->getChildAtIdx(childIdx);
-		if (child->testClassName("PushButton"))
+		
+		if (child->testClassName("RadioButton"))
 		{
-			child->subscribeEvent(CEGUI::PushButton::EventClicked,
+			CEGUI::RadioButton * radioButton = static_cast<CEGUI::RadioButton*>(child);
+			const CEGUI::String& name = radioButton->getName();
+
+			// set radio button groups
+			if ((name == (toolbarPrefix + "/ResumeAction")) ||
+				(name == (toolbarPrefix + "/PauseAction")) ||
+				(name == (toolbarPrefix + "/RestartAction")) )
+			{
+				radioButton->setGroupID(0);
+			}
+			else if ((name == (toolbarPrefix + "/EditToolMove")) ||
+					 (name == (toolbarPrefix + "/EditToolRotateZ")) ||
+					 (name == (toolbarPrefix + "/EditToolRotateY")) ||
+					 (name == (toolbarPrefix + "/EditToolScale")) )
+			{
+				radioButton->setGroupID(1);
+			}
+
+			// initially selected radio buttons
+			if ((name == (toolbarPrefix + "/RestartAction")) ||
+				(name == (toolbarPrefix + "/EditToolMove")) )
+			{
+				radioButton->setSelected(true);
+			}
+
+			child->subscribeEvent(CEGUI::RadioButton::EventSelectStateChanged,
 					CEGUI::Event::Subscriber(&Editor::EditorMenu::OnToolbarButtonClicked, this));
 		}
 		ConfigureToolbar(child);

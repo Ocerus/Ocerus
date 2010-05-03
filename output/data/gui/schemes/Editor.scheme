@@ -11,6 +11,7 @@
 	<FalagardMapping WindowType="Editor/Checkbox"    TargetType="CEGUI/Checkbox"    Renderer="Falagard/ToggleButton" LookNFeel="TaharezLook/Checkbox" />
 	<FalagardMapping WindowType="Editor/ImageButton" TargetType="CEGUI/PushButton"  Renderer="Falagard/Button"       LookNFeel="TaharezLook/ImageButton" />
 	<FalagardMapping WindowType="Editor/RadioButton" TargetType="CEGUI/RadioButton" Renderer="Falagard/ToggleButton" LookNFeel="TaharezLook/RadioButton" />
+  <FalagardMapping WindowType="Editor/ToolbarRadioButton" TargetType="CEGUI/RadioButton" Renderer="Falagard/ToggleButton" LookNFeel="Editor/ToolbarRadioButton" />
 	<FalagardMapping WindowType="Editor/FrameWindow"  TargetType="CEGUI/FrameWindow" Renderer="Falagard/FrameWindow"  LookNFeel="TaharezLook/FrameWindow" />
 	<FalagardMapping WindowType="Editor/Titlebar"     TargetType="CEGUI/Titlebar"    Renderer="Falagard/Titlebar"     LookNFeel="TaharezLook/Titlebar" />
 	<FalagardMapping WindowType="Editor/SystemButton" TargetType="CEGUI/PushButton"  Renderer="Falagard/Button" LookNFeel="TaharezLook/Button" />

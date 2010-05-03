@@ -34,7 +34,7 @@
             <Window Type="DefaultWindow" Name="EditorRoot/Toolbar">
                 <Property Name="UnifiedAreaRect" Value="{{0.5,0},{0,4},{1,0},{0,20}}" />
 
-                <Window Type="Editor/ImageButton" Name="EditorRoot/Toolbar/ResumeAction">
+                <Window Type="Editor/ToolbarRadioButton" Name="EditorRoot/Toolbar/ResumeAction">
                     <Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{0,16},{1,0}}" />
                     <Property Name="NormalImage" Value="set:EditorToolbar image:btnResumeActionNormal" />
                     <Property Name="HoverImage" Value="set:EditorToolbar image:btnResumeActionHover"  />
@@ -42,7 +42,7 @@
                     <Property Name="DisabledImage" Value="set:EditorToolbar image:btnResumeActionDisabled" />
                     <Property Name="Tooltip" Value="$resume_action_hint$" />
                 </Window>
-                <Window Type="Editor/ImageButton" Name="EditorRoot/Toolbar/PauseAction">
+                <Window Type="Editor/ToolbarRadioButton" Name="EditorRoot/Toolbar/PauseAction">
                     <Property Name="UnifiedAreaRect" Value="{{0,20},{0,0},{0,36},{1,0}}" />
                     <Property Name="NormalImage" Value="set:EditorToolbar image:btnPauseActionNormal" />
                     <Property Name="HoverImage" Value="set:EditorToolbar image:btnPauseActionHover"  />
@@ -50,7 +50,7 @@
                     <Property Name="DisabledImage" Value="set:EditorToolbar image:btnPauseActionDisabled" />
                     <Property Name="Tooltip" Value="$pause_action_hint$" />
                 </Window>
-                <Window Type="Editor/ImageButton" Name="EditorRoot/Toolbar/RestartAction">
+                <Window Type="Editor/ToolbarRadioButton" Name="EditorRoot/Toolbar/RestartAction">
                     <Property Name="UnifiedAreaRect" Value="{{0,40},{0,0},{0,56},{1,0}}" />
                     <Property Name="NormalImage" Value="set:EditorToolbar image:btnRestartActionNormal" />
                     <Property Name="HoverImage" Value="set:EditorToolbar image:btnRestartActionHover"  />
@@ -58,7 +58,7 @@
                     <Property Name="DisabledImage" Value="set:EditorToolbar image:btnRestartActionDisabled" />
                     <Property Name="Tooltip" Value="$restart_action_hint$" />
                 </Window>
-                <Window Type="Editor/ImageButton" Name="EditorRoot/Toolbar/EditToolMove">
+                <Window Type="Editor/ToolbarRadioButton" Name="EditorRoot/Toolbar/EditToolMove">
                     <Property Name="UnifiedAreaRect" Value="{{0,60},{0,0},{0,76},{1,0}}" />
                     <Property Name="NormalImage" Value="set:EditorToolbar image:btnEditToolMoveNormal" />
                     <Property Name="HoverImage" Value="set:EditorToolbar image:btnEditToolMoveHover"  />
@@ -66,7 +66,7 @@
                     <Property Name="DisabledImage" Value="set:EditorToolbar image:btnEditToolMoveDisabled" />
                     <Property Name="Tooltip" Value="$edit_tool_move_hint$" />
                 </Window>
-                <Window Type="Editor/ImageButton" Name="EditorRoot/Toolbar/EditToolRotate">
+                <Window Type="Editor/ToolbarRadioButton" Name="EditorRoot/Toolbar/EditToolRotateZ">
                     <Property Name="UnifiedAreaRect" Value="{{0,80},{0,0},{0,96},{1,0}}" />
                     <Property Name="NormalImage" Value="set:EditorToolbar image:btnEditToolRotateNormal" />
                     <Property Name="HoverImage" Value="set:EditorToolbar image:btnEditToolRotateHover"  />
@@ -74,7 +74,7 @@
                     <Property Name="DisabledImage" Value="set:EditorToolbar image:btnEditToolRotateDisabled" />
                     <Property Name="Tooltip" Value="$edit_tool_rotate_hint$" />
                 </Window>
-                <Window Type="Editor/ImageButton" Name="EditorRoot/Toolbar/EditToolRotateZ">
+                <Window Type="Editor/ToolbarRadioButton" Name="EditorRoot/Toolbar/EditToolRotateY">
                     <Property Name="UnifiedAreaRect" Value="{{0,100},{0,0},{0,116},{1,0}}" />
                     <Property Name="NormalImage" Value="set:EditorToolbar image:btnEditToolRotateZNormal" />
                     <Property Name="HoverImage" Value="set:EditorToolbar image:btnEditToolRotateZHover"  />
@@ -82,7 +82,7 @@
                     <Property Name="DisabledImage" Value="set:EditorToolbar image:btnEditToolRotateZDisabled" />
                     <Property Name="Tooltip" Value="$edit_tool_rotate_z_hint$" />
                 </Window>
-                <Window Type="Editor/ImageButton" Name="EditorRoot/Toolbar/EditToolScale">
+                <Window Type="Editor/ToolbarRadioButton" Name="EditorRoot/Toolbar/EditToolScale">
                     <Property Name="UnifiedAreaRect" Value="{{0,120},{0,0},{0,136},{1,0}}" />
                     <Property Name="NormalImage" Value="set:EditorToolbar image:btnEditToolScaleNormal" />
                     <Property Name="HoverImage" Value="set:EditorToolbar image:btnEditToolScaleHover"  />
