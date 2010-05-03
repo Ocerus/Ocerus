@@ -46,7 +46,7 @@ namespace Editor
 
 		CEGUI::Window* mWindow;
 		CEGUI::ItemListbox* mTree;
-		size_t mSelectedIndex;
+		int32 mSelectedIndex;
 		EntitySystem::EntityList mItems;
 	};
 }

@@ -1,6 +1,7 @@
 #include "Common.h"
 #include "ResourceEditor.h"
 #include "Editor/ResourceWindow.h"
+#include "Editor/EditorMgr.h"
 #include "GUISystem/CEGUITools.h"
 
 using namespace Editor;
@@ -79,5 +80,8 @@ bool Editor::ResourceEditor::OnEventDragDropItemDropped(const CEGUI::EventArgs& 
 	ResourceSystem::ResourcePtr resource = resourceWindow->GetItemAtIndex(args.dragDropItem->getID());
 	if (resource.get())	mModel->SetValue(resource);
 	Update();
+
+	if (gEditorMgr.IsEditingPrototype()) gEntityMgr.SavePrototypes();
+
 	return true;
 }

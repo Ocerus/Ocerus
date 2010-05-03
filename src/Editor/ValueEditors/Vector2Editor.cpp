@@ -1,5 +1,6 @@
 #include "Common.h"
 #include "Vector2Editor.h"
+#include "Editor/EditorMgr.h"
 #include "GUISystem/CEGUITools.h"
 
 using namespace Editor;
@@ -134,6 +135,7 @@ bool Editor::Vector2Editor::OnEventKeyDown(const CEGUI::EventArgs& args)
 			this->Submit();
 			mEditbox1Widget->deactivate();
 			mEditbox2Widget->deactivate();
+			if (gEditorMgr.IsEditingPrototype()) gEntityMgr.SavePrototypes();
 			return true;
 		default:
 			break;

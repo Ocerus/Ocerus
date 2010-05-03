@@ -74,6 +74,12 @@ namespace Editor
 		/// Closes all popup menus.
 		void CloseAllPopupMenus();
 
+		/// True if the editor is editing a prototype.
+		bool IsEditingPrototype() const;
+
+		/// Refreshes the prototype window.
+		void RefreshPrototypeWindow();
+
 		/// Returns the gui object.
 		inline EditorGUI* GetEditorGui() const { return mEditorGUI; }
 
@@ -110,10 +116,10 @@ namespace Editor
 		void CreateEntity();
 
 		/// Duplicates the current entity.
-		void DuplicateEntity();
+		void DuplicateCurrentEntity();
 
 		/// Deletes the current entity.
-		void DeleteEntity();
+		void DeleteCurrentEntity();
 
 		/// Duplicates selected entities.
 		void DuplicateSelectedEntities();

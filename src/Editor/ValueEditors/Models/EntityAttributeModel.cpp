@@ -1,5 +1,6 @@
 #include "Common.h"
 #include "EntityAttributeModel.h"
+#include "Editor/EditorMgr.h"
 
 using namespace Editor;
 
@@ -60,7 +61,14 @@ void Editor::EntityAttributeModel::SetValue(const string& newValue)
 {
 	switch(mType)
 	{
-		case TYPE_NAME: return gEntityMgr.SetEntityName(mEntity, newValue);
+		case TYPE_NAME: 
+			gEntityMgr.SetEntityName(mEntity, newValue);
+			break;
 		default: OC_NOT_REACHED();
+	}
+
+	if (gEditorMgr.IsEditingPrototype())
+	{
+		gEditorMgr.RefreshPrototypeWindow();
 	}
 }

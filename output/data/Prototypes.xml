@@ -2,6 +2,8 @@
 
 <Prototypes>
   <Entities>
-    <Entity Name="New Prototype" ID="-1"></Entity>
+    <Entity Name="New Prototype" ID="-486">
+      <Component Type="Transform"></Component>
+    </Entity>
   </Entities>
 </Prototypes>

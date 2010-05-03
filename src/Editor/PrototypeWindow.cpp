@@ -16,6 +16,8 @@ Editor::PrototypeWindow::~PrototypeWindow()
 
 void Editor::PrototypeWindow::Init()
 {
+	mSelectedIndex = -1;
+
 	CEGUI_EXCEPTION_BEGIN
 	
 	mWindow = GUISystem::LoadWindowLayout("PrototypeWindow.layout", "EditorRoot/PrototypeWindow");
@@ -35,6 +37,7 @@ void Editor::PrototypeWindow::RebuildTree()
 {
 	mTree->resetList();
 
+	gEntityMgr.ProcessDestroyQueue();
 	gEntityMgr.GetPrototypes(mItems);
 
 	for (EntitySystem::EntityList::iterator it=mItems.begin(); it!=mItems.end(); ++it)
@@ -62,6 +65,8 @@ void Editor::PrototypeWindow::RebuildTree()
 		dragContainer->setUserData(this);
 
 		mTree->addChildWindow(newItem);
+
+		if (*it == gEditorMgr.GetCurrentEntity()) newItem->select();
 	}
 }
 
@@ -113,6 +118,7 @@ bool Editor::PrototypeWindow::OnWindowMouseButtonUp(const CEGUI::EventArgs& e)
 	{
 		if (gEditorMgr.GetCurrentEntity() == GetSelectedItem()) gEditorMgr.SetCurrentEntity(EntitySystem::EntityHandle::Null);
 		mTree->clearAllSelections();
+		mSelectedIndex = -1;
 	}
 
 	return true;

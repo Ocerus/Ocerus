@@ -1,5 +1,6 @@
 #include "Common.h"
 #include "PropertyEditorCreator.h"
+#include "Editor/EditorMgr.h"
 
 // Models
 #include "Models/EntityAttributeModel.h"

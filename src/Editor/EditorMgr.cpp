@@ -2,6 +2,7 @@
 #include "EditorMgr.h"
 #include "EditorGUI.h"
 #include "PopupMenu.h"
+#include "PrototypeWindow.h"
 #include "GUISystem/GUIMgr.h"
 #include "GUISystem/ViewportWindow.h"
 #include "EntitySystem/EntityMgr/LayerMgr.h"
@@ -200,7 +201,7 @@ void Editor::EditorMgr::CreateEntity()
 	newEntity.FinishInit();
 }
 
-void Editor::EditorMgr::DuplicateEntity()
+void Editor::EditorMgr::DuplicateCurrentEntity()
 {
 	if (!mCurrentEntity.Exists()) return;
 	EntityHandle newEntity = gEntityMgr.DuplicateEntity(mCurrentEntity);
@@ -208,10 +209,11 @@ void Editor::EditorMgr::DuplicateEntity()
 	SetCurrentEntity(newEntity);
 }
 
-void Editor::EditorMgr::DeleteEntity()
+void Editor::EditorMgr::DeleteCurrentEntity()
 {
 	if (!mCurrentEntity.Exists()) return;
 	gEntityMgr.DestroyEntity(mCurrentEntity);
+	gEntityMgr.ProcessDestroyQueue();
 	SetCurrentEntity(EntityHandle::Null);
 }
 
@@ -595,4 +597,16 @@ const void Editor::EditorMgr::ClearSelection()
 {
 	mSelectedEntities.clear();
 	mHoveredEntity.Invalidate();
+}
+
+bool Editor::EditorMgr::IsEditingPrototype() const
+{
+	OC_ASSERT(mEditorGUI);
+	return mEditorGUI->GetPrototypeWindow()->GetSelectedItem() == GetCurrentEntity();
+}
+
+void Editor::EditorMgr::RefreshPrototypeWindow()
+{
+	OC_ASSERT(mEditorGUI);
+	mEditorGUI->GetPrototypeWindow()->Refresh();
 }

@@ -228,48 +228,51 @@ EntityHandle EntityMgr::CreateEntity(EntityDescription& desc)
 
 EntityHandle EntityMgr::DuplicateEntity(const EntityHandle oldEntity, const string& newName)
 {
-  OC_ASSERT(mComponentMgr);
-  
-  if (!oldEntity.IsValid()) { return EntityHandle::Null; }
-  
-  // create the handle for the new entity
+	OC_ASSERT(mComponentMgr);
+
+	if (!oldEntity.IsValid()) { return EntityHandle::Null; }
+
+	// create the handle for the new entity
 	EntityHandle newEntity;
 	if (IsEntityPrototype(oldEntity)) newEntity = EntityHandle::CreateUniquePrototypeHandle();
 	else newEntity = EntityHandle::CreateUniqueHandle();
-	
+
+	// let the component manager know about the entity
+	mComponentMgr->PrepareForEntity(newEntity.GetID());
+
 	// copy all components
 	ComponentTypeList cmpList;
 	if (!GetEntityComponentTypes(oldEntity, cmpList)) { return EntityHandle::Null; }
 	for (ComponentTypeList::const_iterator cmpIt = cmpList.begin(); cmpIt != cmpList.end(); ++cmpIt)
 	{
-	  mComponentMgr->CreateComponent(newEntity.GetID(), *cmpIt);
+		mComponentMgr->CreateComponent(newEntity.GetID(), *cmpIt);
 	}
-	
+
 	// inits entity attributes
 	mEntities[newEntity.GetID()] = new EntityInfo(newName.empty() ? mEntities[oldEntity.GetID()]->mName
-	  : newName, mEntities[oldEntity.GetID()]->mPrototype, mEntities[oldEntity.GetID()]->mTransient);
+		: newName, mEntities[oldEntity.GetID()]->mPrototype, mEntities[oldEntity.GetID()]->mTransient);
 	if (IsEntityPrototype(oldEntity)) { mPrototypes[newEntity.GetID()] = new PrototypeInfo(); }
-	
+
 	// copy all property values
 	PropertyList oldPropertyList, newPropertyList;
 	if (!GetEntityProperties(oldEntity, oldPropertyList) || !GetEntityProperties(newEntity, newPropertyList))
 	{ 
-	  DestroyEntity(newEntity);
-	  return EntityHandle::Null;
+		DestroyEntity(newEntity);
+		return EntityHandle::Null;
 	}
 	for (PropertyList::iterator oldIt = oldPropertyList.begin(), newIt = newPropertyList.begin();
-	  oldIt != oldPropertyList.end(); ++oldIt, ++newIt)
+		oldIt != oldPropertyList.end(); ++oldIt, ++newIt)
 	{
-	  newIt->CopyFrom(*oldIt);
+		newIt->CopyFrom(*oldIt);
 	}
-	
+
 	// link the entity to its prototype
 	if (mEntities[newEntity.GetID()]->mPrototype.IsValid() && 
-	  mPrototypes.find(mEntities[newEntity.GetID()]->mPrototype.GetID()) != mPrototypes.end())
+		mPrototypes.find(mEntities[newEntity.GetID()]->mPrototype.GetID()) != mPrototypes.end())
 	{
 		LinkEntityToPrototype(newEntity.GetID(), mEntities[newEntity.GetID()]->mPrototype);
 	}
-	
+
 	ocTrace << "Entity duplicated: " << newEntity;
 
 	return newEntity;
