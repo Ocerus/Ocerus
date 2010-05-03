@@ -2,8 +2,13 @@
 
 <Prototypes>
   <Entities>
-    <Entity Name="New Prototype" ID="-486">
-      <Component Type="Transform"></Component>
+    <Entity Name="prototyp" ID="-487">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Angle>1.5</Angle>
+        <Scale>1 1</Scale>
+        <Position>0 0</Position>
+      </Component>
     </Entity>
   </Entities>
 </Prototypes>

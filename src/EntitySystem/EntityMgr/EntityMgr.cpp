@@ -743,9 +743,7 @@ bool EntitySystem::EntityMgr::SaveEntityToStorage(const EntitySystem::EntityID e
 		comp->EnumProperties(comp, propertyList);
 		if (!comp->IsTransient()) for (PropertyList::iterator it = propertyList.begin(); it != propertyList.end(); ++it)
 		{
-			if (((it->GetAccessFlags() & Reflection::PA_TRANSIENT) == Reflection::PA_TRANSIENT)
-				|| (isPrototype && (protInfo->mSharedProperties.find(it->GetKey())
-				== protInfo->mSharedProperties.end()))) { continue; }
+			if ((it->GetAccessFlags() & Reflection::PA_TRANSIENT) != 0) { continue; }
 			string propName = it->GetKey().ToString();
 			storage.BeginElementStart(propName);
 			if (it->IsValued()) // property is dynamic, so we must save a type
