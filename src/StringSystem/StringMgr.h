@@ -95,7 +95,7 @@ namespace StringSystem
 		/// Type of a base path which the ResourceMgr is called with.
 		ResourceSystem::eBasePathType mBasePathType;
 		
-		/// Returns string reprezentation of a type of this manager instance.
+		/// Returns string representation of a type of this manager instance.
 		string GetNameOfManager();
 		
 		/// The system string manager.
