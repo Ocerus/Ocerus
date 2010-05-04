@@ -593,7 +593,7 @@ void Editor::EditorMgr::UnregisterPopupMenu( PopupMenu* menu )
 	}
 }
 
-const void Editor::EditorMgr::ClearSelection()
+void Editor::EditorMgr::ClearSelection()
 {
 	mSelectedEntities.clear();
 	mHoveredEntity.Invalidate();
