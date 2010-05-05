@@ -1,6 +1,6 @@
 /// @file
 /// Application entry point.
-
+#include "Common.h"
 struct AfterExitHook { ~AfterExitHook(void); };
 AfterExitHook gAfterExitHook;
 

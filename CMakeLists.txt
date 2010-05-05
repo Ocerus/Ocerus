@@ -215,6 +215,9 @@ set(Editor_SRCS
 	src/Editor/EditorMenu.cpp
 	src/Editor/EditorMgr.cpp
 	src/Editor/LayerMgrWidget.cpp
+	src/Editor/PopupMenu.cpp
+	src/Editor/ProjectMgr.cpp
+	src/Editor/PrototypeWindow.cpp
 	src/Editor/ResourceWindow.cpp
 	src/Editor/ValueEditors/AbstractValueEditor.cpp
 	src/Editor/ValueEditors/StringEditor.cpp
@@ -270,6 +273,7 @@ set(GUISystem_SRCS
 	src/GUISystem/MessageBox.cpp
 	src/GUISystem/VerticalLayout.cpp
 	src/GUISystem/ViewportWindow.cpp
+	src/GUISystem/FolderSelector.cpp
 )
 
 set(InputSystem_SRCS

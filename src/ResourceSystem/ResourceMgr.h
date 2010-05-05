@@ -22,6 +22,8 @@ namespace ResourceSystem
 	{
 	public:
 
+		static ResourceTypeMap NullResourceTypeMap;
+
 		/// Default constructor.
 		ResourceMgr(void);
 
@@ -38,8 +40,9 @@ namespace ResourceSystem
 		/// The matching is not case sensitive!
 		/// @param basePathType Type of base path to which is the "path" parameter related.
 		/// @param resourceType Type of resources in the directory.
-		bool AddResourceDirToGroup(const eBasePathType basePathType, const string& path, const StringKey& group, const string& includeRegexp = ".*", 
-		  const string& excludeRegexp = "", eResourceType resourceType = RESTYPE_AUTODETECT, bool recursive = true);
+		bool AddResourceDirToGroup(const eBasePathType basePathType, const string& path, const StringKey& group,
+			const string& includeRegexp = ".*", const string& excludeRegexp = "", eResourceType resourceType =
+			RESTYPE_AUTODETECT, const ResourceTypeMap& resourceTypeMap = NullResourceTypeMap, bool recursive = true);
 
 		/// Assigns a resource to a group.
 		/// The resource type if autodetected if you don't specify it.
@@ -93,8 +96,8 @@ namespace ResourceSystem
 		/// If the group can't be found, empty vector is returned.
 		void GetResourceGroup(const StringKey& group, vector<ResourcePtr>& output);
 
-		/// Retrieves all resources from the manager.
-		void GetResources(vector<ResourcePtr>& output);
+		/// Retrieves all resources in given base path type.
+		void GetResources(vector<ResourcePtr>& output, eBasePathType basePathType);
 
 		void ChangeResourceType(ResourcePtr resPointer, eResourceType newType);
 

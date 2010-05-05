@@ -4,6 +4,8 @@
 #ifndef ResourceTypes_h__
 #define ResourceTypes_h__
 
+#include "Common.h"
+
 namespace ResourceSystem
 {
 	/// Custom type of a resource. Add your types here!
@@ -51,6 +53,14 @@ namespace ResourceSystem
 
 	/// Returns a string representation of the given resource type.
 	string GetResourceTypeName(const eResourceType type);
+
+	/// Returns the resource type that corresponds with specified string, or RESTYPE_UNKNOWN.
+	eResourceType GetResourceTypeFromString(const string&);
+
+	/// Specifies resource types for given resources in project. The string used as the key is resource
+	/// file path relative to the project root.
+	/// @todo We may want to rename this type (I'm out of inspiration now).
+	typedef map<string, eResourceType> ResourceTypeMap;
 
 }
 

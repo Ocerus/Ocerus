@@ -1,10 +1,13 @@
 #include "Common.h"
 #include "Editor/EditorMenu.h"
 #include "Editor/EditorMgr.h"
+#include "Editor/ProjectMgr.h"
 #include "GUISystem/CEGUITools.h"
 #include "Core/Application.h"
 
 #include "GUISystem/MessageBox.h"
+#include "GUISystem/FolderSelector.h"
+
 
 using namespace Editor;
 
@@ -81,6 +84,9 @@ bool Editor::EditorMenu::OnMenuItemClicked(const CEGUI::EventArgs& e)
 
 	if (itemName == menubarPrefix + "/File/OpenProject")
 	{
+		GUISystem::FolderSelector* folderSelector = new GUISystem::FolderSelector((int)FST_OPENPROJECT);
+		folderSelector->RegisterCallback(new GUISystem::FolderSelector::Callback<Editor::EditorMenu>(this, &Editor::EditorMenu::OnFolderSelected));
+		folderSelector->Show();
 		return true;
 	}
 
@@ -112,6 +118,17 @@ bool Editor::EditorMenu::OnMenuItemClicked(const CEGUI::EventArgs& e)
 	if (itemName == menubarPrefix + "/Scene/OpenScene")
 	{
 		return true;
+	}
+
+	/// Open scene
+	{
+		string pattern = menubarPrefix + "/Scene/OpenScene/Scene";
+		if (itemNameStr.substr(0, pattern.size()) == pattern)
+		{
+			uint sceneIndex = args.window->getID();
+			gEditorMgr.GetProjectMgr()->OpenSceneAtIndex(sceneIndex);
+			return true;
+		}
 	}
 
 	if (itemName == menubarPrefix + "/Scene/SaveScene")
@@ -265,6 +282,20 @@ void Editor::EditorMenu::OnMessageBoxClicked(GUISystem::MessageBox::eMessageBoxB
 	ocWarning << "MessageBox with tag " << tag << " clicked, but no action defined.";
 }
 
+void Editor::EditorMenu::OnFolderSelected(const string& path, bool canceled, int t)
+{
+	if (canceled) return;
+	eFolderSelectorTags tag = (eFolderSelectorTags)t;
+	switch(tag)
+	{
+	case FST_OPENPROJECT:
+		gEditorMgr.OpenProject(path);
+		return;
+	}
+	ocWarning << "Folder through FolderSelector with tag " << tag << " selected, but no action defined.";
+}
+
+
 
 void Editor::EditorMenu::InitComponentMenu()
 {
@@ -277,6 +308,28 @@ void Editor::EditorMenu::InitComponentMenu()
 		componentMenuItem->setText(componentName);
 		addComponentMenu->addChildWindow(componentMenuItem);
 	}
+}
+
+void EditorMenu::UpdateSceneMenu()
+{
+	ProjectMgr::Scenes scenes;
+	gEditorMgr.GetProjectMgr()->GetScenes(scenes);
+
+	CEGUI::Window* openSceneMenu = gCEGUIWM.getWindow(menubarPrefix + "/Scene/OpenScene/AutoPopup");
+	for (int i = openSceneMenu->getChildCount() - 1; i >= 0;)
+	{
+		gCEGUIWM.destroyWindow(openSceneMenu->getChildAtIdx(i));
+	}
+
+	for (ProjectMgr::Scenes::const_iterator it = scenes.begin(); it != scenes.end(); ++it)
+	{
+		CEGUI::Window* sceneMenuItem = gCEGUIWM.createWindow("Editor/MenuItem",
+				menubarPrefix + "/Scene/OpenScene/Scene" + it->first);
+		sceneMenuItem->setText(it->second + " (" + it->first + ")");
+		sceneMenuItem->setID(it - scenes.begin());
+		openSceneMenu->addChildWindow(sceneMenuItem);
+	}
+	ConfigureMenu(openSceneMenu);
 }
 
 void Editor::EditorMenu::ConfigureMenu(CEGUI::Window* parent)

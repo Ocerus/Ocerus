@@ -25,7 +25,7 @@ namespace Editor
 		/// Initializes the menu.
 		/// @param data The data the menu operates on.
 		template<typename T>
-		void Init(const T data);
+		void Init(const T& data);
 
 		/// Default destructor.
 		~PopupMenu();
@@ -68,7 +68,7 @@ void Editor::PopupMenu::Init( Reflection::AbstractProperty* data )
 }
 
 template<typename T>
-void Editor::PopupMenu::Init( const T data )
+void Editor::PopupMenu::Init( const T& data )
 {
 	mData = new Reflection::ValuedProperty<T>("PopupData", Reflection::PA_NONE, "");
 	mData->SetValue<T>(0, data);

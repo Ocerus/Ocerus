@@ -10,7 +10,8 @@ using namespace Editor;
 /// Compares two resources according to their path and returns whether the first is greater than the second.
 bool ResourceComparator(const ResourceSystem::ResourcePtr& r1, const ResourceSystem::ResourcePtr& r2)
 {
-	return (r1->GetFilePath().compare(r2->GetFilePath()) > 0);
+	int compareDirs = r1->GetFileDir().compare(r2->GetFileDir());
+	return compareDirs == 0 ? (r1->GetFilePath().compare(r2->GetFilePath()) > 0) : compareDirs;
 }
 
 Editor::ResourceWindow::ResourceWindow()
@@ -48,7 +49,7 @@ void Editor::ResourceWindow::RebuildTree()
 {
 	mTree->resetList();
 	mItems.clear();
-	gResourceMgr.GetResources(mItems);
+	gResourceMgr.GetResources(mItems, ResourceSystem::BPT_PROJECT);
 	Containers::sort(mItems.begin(), mItems.end(), ResourceComparator);
 
 	uint32 dirItemID = 0;
@@ -56,7 +57,7 @@ void Editor::ResourceWindow::RebuildTree()
 	for (vector<ResourceSystem::ResourcePtr>::const_iterator it = mItems.begin(); it != mItems.end(); ++it)
 	{
 		size_t resourceIndex = (size_t)(it - mItems.begin());
-		string resourcePath = (*it)->GetFileDir();
+		string resourcePath = (*it)->GetRelativeFileDir();
 
 		uint32 pathDepth = 0;
 		size_t indexFrom = 0;
@@ -68,6 +69,8 @@ void Editor::ResourceWindow::RebuildTree()
 				indexTo = resourcePath.size();
 			
 			string dirName = resourcePath.substr(indexFrom, indexTo - indexFrom);
+			if (dirName.empty()) continue;
+
 			if ((pathDepth == dirStack.size()) || (dirName != dirStack[pathDepth]))
 			{
 				if (pathDepth == dirStack.size())

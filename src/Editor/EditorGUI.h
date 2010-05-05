@@ -60,6 +60,8 @@ namespace Editor
 		/// Returns the prototype window.
 		inline PrototypeWindow* GetPrototypeWindow() const { return mPrototypeWindow; }
 
+		inline EditorMenu* GetEditorMenu() const { return mEditorMenu; }
+
 		/// @name CEGUI Callbacks
 		//@{
 		bool OnComponentRemoveClicked(const CEGUI::EventArgs&);

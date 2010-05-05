@@ -48,6 +48,9 @@ namespace Core
 		/// Saves boolean data to the specified key and (optional) section.
 		void SetBool(const string& key, const bool value, const string& section = "General" );
 
+		/// Returns vector of keys in given section.
+		void GetSectionKeys(const string& section, vector<string>& keys);
+
 		/// Removes the whole section from the config.
 		void RemoveSection(const string& section);
 

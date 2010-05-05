@@ -47,6 +47,6 @@ void EntityComponents::Sprite::RegisterReflection()
 
 void EntityComponents::Sprite::SetTexture(ResourceSystem::ResourcePtr value)
 { 
-	if ((*value).GetType() == ResourceSystem::RESTYPE_TEXTURE)
+	if (value && value->GetType() == ResourceSystem::RESTYPE_TEXTURE)
 		mTextureHandle = value; 
 }

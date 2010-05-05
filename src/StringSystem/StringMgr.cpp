@@ -55,7 +55,7 @@ bool StringMgr::LoadDataFromDir(const string& path, const string& includeRegexp,
 {
 	bool result = true;
 	result = gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_SYSTEM, mBasePath + path, "strings", includeRegexp, 
-	  excludeRegexp, ResourceSystem::RESTYPE_TEXTRESOURCE, recursive);
+	  excludeRegexp, ResourceSystem::RESTYPE_TEXTRESOURCE, ResourceSystem::ResourceMgr::NullResourceTypeMap, recursive);
 	gResourceMgr.LoadResourcesInGroup("strings");
 
 	//ocInfo << "StringMgr: Loading data from resource group ""strings""";

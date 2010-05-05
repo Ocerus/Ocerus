@@ -61,8 +61,8 @@ void Editor::ResourceEditor::Submit()
 void Editor::ResourceEditor::Update()
 {
 	OC_DASSERT(mEditboxWidget != 0);
-	mEditboxWidget->setText(mModel->IsValid() ? mModel->GetValue()->GetName() : "");
-	mEditorWidget->setTooltipText	(mModel->IsValid() ? mModel->GetValue()->GetFilePath() : "");
+	mEditboxWidget->setText((mModel->IsValid() && mModel->GetValue()) ? mModel->GetValue()->GetName() : "");
+	mEditorWidget->setTooltipText((mModel->IsValid() && mModel->GetValue()) ? mModel->GetValue()->GetFilePath() : "");
 }
 bool Editor::ResourceEditor::OnEventButtonRemovePressed(const CEGUI::EventArgs& args)
 {

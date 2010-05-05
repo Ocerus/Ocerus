@@ -36,8 +36,15 @@ namespace Editor
 		/// MessageBox callback
 		void OnMessageBoxClicked(GUISystem::MessageBox::eMessageBoxButton button, int tag);
 
+		/// FolderSelector callback
+		void OnFolderSelected(const string& path, bool canceled, int tag);
+
+		/// Updates the list of scenes in scene menu.
+		void UpdateSceneMenu();
+
 	private:
 		enum eMessageBoxTags { MBT_QUIT };
+		enum eFolderSelectorTags { FST_OPENPROJECT };
 
 		/// Creates menu items in AddComponent menu.
 		void InitComponentMenu();

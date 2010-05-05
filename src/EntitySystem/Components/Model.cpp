@@ -50,6 +50,6 @@ void EntityComponents::Model::RegisterReflection()
 
 void EntityComponents::Model::SetMesh(ResourceSystem::ResourcePtr value) 
 { 
-	if ((*value).GetType() == ResourceSystem::RESTYPE_MESH)
+	if (value && value->GetType() == ResourceSystem::RESTYPE_MESH)
 		mMeshHandle = value; 
 }

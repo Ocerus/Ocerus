@@ -20,6 +20,7 @@ namespace Editor
 	class EditorMenu;
 	class PopupMenu;
 	class ResourceWindow;
+	class ProjectMgr;
 	class PrototypeWindow;
 }
 

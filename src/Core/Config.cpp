@@ -1,6 +1,7 @@
 #include "Common.h"
 #include "Config.h"
 #include "rudeconfig/config.h"
+#include <boost-1_41/boost/concept_check.hpp>
 
 using namespace Core;
 
@@ -78,6 +79,16 @@ void Core::Config::SetBool( const string& key, const bool value, const string& s
 {
 	mRudeConfig->setSection(section.c_str());
 	mRudeConfig->setBoolValue(key.c_str(), value);
+}
+
+void Core::Config::GetSectionKeys(const string& section, vector< string >& keys)
+{
+	keys.clear();
+	mRudeConfig->setSection(section.c_str());
+	int dataCount = mRudeConfig->getNumDataMembers();
+	keys.reserve(dataCount);
+	for (int i = 0; i < dataCount; ++i)
+		keys.push_back(mRudeConfig->getDataNameAt(i));
 }
 
 void Core::Config::RemoveKey( const string& key, const string& section )

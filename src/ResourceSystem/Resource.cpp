@@ -208,3 +208,12 @@ string ResourceSystem::Resource::GetFileDir( void ) const
 	string result = filePath.branch_path().native_directory_string();
 	return result;
 }
+
+string ResourceSystem::Resource::GetRelativeFileDir( void ) const
+{
+	string fileDir = GetFileDir();
+	if (fileDir.at(fileDir.size() - 1) != '/')
+		fileDir.append("/");
+	const string& basePath = gResourceMgr.GetBasePath(mBasePathType);
+	return fileDir.size() >= basePath.size() ? fileDir.substr(basePath.size()) : fileDir;
+}

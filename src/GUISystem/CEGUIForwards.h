@@ -8,6 +8,7 @@ namespace CEGUI
 {
 	class Editbox;
 	class EventArgs;
+	class Listbox;
 	class String;
 	class PushButton;
 	class Window;

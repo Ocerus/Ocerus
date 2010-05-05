@@ -20,3 +20,13 @@ string ResourceSystem::GetResourceTypeName( const eResourceType type )
 {
 	return ResourceTypeNames[type];
 }
+
+ResourceSystem::eResourceType ResourceSystem::GetResourceTypeFromString(const string& resourceTypeString)
+{
+	for (int i = 0; i < NUM_RESTYPES; ++i)
+	{
+		if (resourceTypeString == ResourceTypeNames[i])
+			return (eResourceType)i;
+	}
+	return RESTYPE_UNKNOWN;
+}

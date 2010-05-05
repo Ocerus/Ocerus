@@ -83,6 +83,15 @@ namespace Editor
 		/// Returns the gui object.
 		inline EditorGUI* GetEditorGui() const { return mEditorGUI; }
 
+		/// Returns the ProjectMgr.
+		inline ProjectMgr* GetProjectMgr() const { return mProjectMgr; }
+
+		/// Refreshes the resource window.
+		void RefreshResourceWindow();
+
+		/// Updates the scenes in scene menu.
+		void UpdateSceneMenu();
+
 	public:
 
    		/// @name Callbacks from InputSystem::IInputListener
@@ -145,9 +154,13 @@ namespace Editor
 		/// Sets the current edit tool.
 		void SetEditTool(eEditTool newEditTool);
 
+		/// Opens the project specified with given path.
+		void OpenProject(const string& projectPath);
+
 	private:
 
 		EditorGUI* mEditorGUI;
+		ProjectMgr* mProjectMgr;
 		list<PopupMenu*> mPopupMenus;
 		bool mPopupClosingEnabled;
 		EntitySystem::EntityHandle mCurrentEntity; ///< Currently edited entity in the components' window.

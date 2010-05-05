@@ -2,6 +2,8 @@
 #include "EditorMgr.h"
 #include "EditorGUI.h"
 #include "PopupMenu.h"
+#include "ProjectMgr.h"
+#include "ResourceWindow.h"
 #include "PrototypeWindow.h"
 #include "GUISystem/GUIMgr.h"
 #include "GUISystem/ViewportWindow.h"
@@ -21,15 +23,18 @@ const float32 CAMERA_MOVEMENT_SPEED = 0.2f; ///< How fast the camera moves by ke
 
 EditorMgr::EditorMgr():
 	mEditorGUI(0),
+	mProjectMgr(0),
 	mCurrentEntity(EntityHandle::Null)
 {
 	ocInfo << "*** EditorMgr init ***";
 	mEditorGUI = new EditorGUI();
+	mProjectMgr = new ProjectMgr();
 }
 
 EditorMgr::~EditorMgr()
 {
 	delete mEditorGUI;
+	delete mProjectMgr;
 }
 
 void EditorMgr::LoadEditor()
@@ -288,6 +293,28 @@ void Editor::EditorMgr::SetEditTool(eEditTool newEditTool)
 	mEditToolWorking = false;
 	mEditTool = newEditTool;
 }
+
+void Editor::EditorMgr::RefreshResourceWindow()
+{
+	mEditorGUI->GetResourceWindow()->Refresh();
+}
+
+void Editor::EditorMgr::UpdateSceneMenu()
+{
+	mEditorGUI->GetEditorMenu()->UpdateSceneMenu();
+}
+
+void EditorMgr::OpenProject(const string& projectPath)
+{
+	if (!mProjectMgr->OpenProject(projectPath))
+	{
+		GUISystem::MessageBox* messageBox = new GUISystem::MessageBox(GUISystem::MessageBox::MBT_OK);
+		messageBox->SetText("Cannot open project in " + projectPath);
+		messageBox->Show();
+	}
+}
+
+
 
 bool Editor::EditorMgr::KeyPressed( const InputSystem::KeyInfo& ke )
 {

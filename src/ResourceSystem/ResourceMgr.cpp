@@ -19,6 +19,7 @@
 
 using namespace ResourceSystem;
 
+ResourceTypeMap ResourceMgr::NullResourceTypeMap;
 
 const uint64 RESOURCE_UPDATES_DELAY_MILLIS = 500;
 
@@ -86,8 +87,7 @@ void ResourceMgr::UnloadAllResources()
 	Resource::ResetLastUsedTime();
 }
 
-bool ResourceMgr::AddResourceDirToGroup(const eBasePathType basePathType, const string& path, const StringKey& group, const string& includeRegexp, 
-  const string& excludeRegexp, eResourceType type, bool recursive)
+bool ResourceMgr::AddResourceDirToGroup(const eBasePathType basePathType, const string& path, const StringKey& group, const string& includeRegexp, const string& excludeRegexp, eResourceType type, const ResourceTypeMap& resourceTypeMap, bool recursive)
 {
 	boost::filesystem::path boostPath;
 	if (basePathType == BPT_ABSOLUTE) 
@@ -138,13 +138,16 @@ bool ResourceMgr::AddResourceDirToGroup(const eBasePathType basePathType, const 
 	for (boost::filesystem::directory_iterator i(boostPath); i!=iend; ++i)
 	{
 		string filePath = i->path().string();
+		string relativePath = filePath.substr(mBasePath[basePathType].length());
+		ResourceTypeMap::const_iterator it = resourceTypeMap.find(relativePath);
+		eResourceType resourceType = (it != resourceTypeMap.end()) ? it->second : type;
+
 		if (boost::filesystem::is_directory(i->status()))
 		{
 			string dirStr = i->path().filename();
 			if (recursive && dirStr.compare(".svn") != 0)
 			{
-				string dirRelativePath = filePath.substr(mBasePath[basePathType].length());
-				if (!AddResourceDirToGroup(basePathType, dirRelativePath, group, includeRegexp, excludeRegexp, type))
+				if (!AddResourceDirToGroup(basePathType, relativePath, group, includeRegexp, excludeRegexp, resourceType, resourceTypeMap))
 				{
 					result = false;
 				}
@@ -152,7 +155,7 @@ bool ResourceMgr::AddResourceDirToGroup(const eBasePathType basePathType, const 
 		}
 		else if (regex_match(filePath, includeFilter) && (excludeFilter.empty() || !regex_match(filePath, excludeFilter)))
 		{
-			if (!AddResourceFileToGroup(filePath, group, type, BPT_ABSOLUTE))
+			if (!AddResourceFileToGroup(relativePath, group, resourceType, basePathType))
 			{
 				result = false;
 			}
@@ -388,7 +391,7 @@ void ResourceMgr::GetResourceGroup(const StringKey& group, vector<ResourcePtr>& 
 	return;
 }
 
-void ResourceMgr::GetResources(vector<ResourcePtr>& output)
+void ResourceMgr::GetResources(vector<ResourcePtr>& output, eBasePathType basePathType)
 {
 	for (ResourceGroupMap::const_iterator gi = mResourceGroups.begin(); gi != mResourceGroups.end(); ++gi)
 	{
@@ -396,7 +399,8 @@ void ResourceMgr::GetResources(vector<ResourcePtr>& output)
 		output.reserve(output.size() + resmap.size());
 		for (ResourceMap::const_iterator ri = resmap.begin(); ri != resmap.end(); ri++)
 		{
-			output.push_back(ri->second);
+			if (ri->second->GetBasePathType() == basePathType)
+				output.push_back(ri->second);
 		}
 	}
 }
@@ -463,7 +467,7 @@ void ResourceSystem::ResourceMgr::RefreshAllResources( void )
 
 void ResourceSystem::ResourceMgr::ChangeResourceType(ResourcePtr resPointer, eResourceType newType)
 {
-	ocInfo << "Changing type of resource " << resPointer->GetName() << " to " << newType;
+	ocInfo << "Changing type of resource " << resPointer->GetName() << " to " << GetResourceTypeName(newType);
 
 	// searching throught the groups
 	for (ResourceGroupMap::iterator groupIter=mResourceGroups.begin(); groupIter!=mResourceGroups.end(); ++groupIter)

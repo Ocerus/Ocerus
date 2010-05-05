@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<GUILayout >
+    <Window Type="DefaultWindow" Name="FolderSelector" >
+        <Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}" />
+        <Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{1,0},{1,0}}" />
+        <Window Type="Vanilla/FrameWindow" Name="FolderSelector/Frame" >
+            <Property Name="AlwaysOnTop" Value="True" />
+            <Property Name="Text" Value="Select Folder" />
+            <Property Name="TitlebarFont" Value="DejaVuSans-10" />
+            <Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}" />
+            <Property Name="TitlebarEnabled" Value="True" />
+            <Property Name="UnifiedAreaRect" Value="{{0.322461,0},{0.237659,0},{0.728711,0},{0.79682,0}}" />
+            <Property Name="SizingEnabled" Value="False" />
+            <Property Name="DragMovingEnabled" Value="False" />
+            <Property Name="CloseButtonEnabled" Value="False" />
+            <Window Type="Vanilla/Button" Name="FolderSelector/Frame/Ok" >
+                <Property Name="Text" Value="OK" />
+                <Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}" />
+                <Property Name="UnifiedAreaRect" Value="{{1,-64},{1,-28},{1,0},{1,0}}" />
+            </Window>
+            <Window Type="Vanilla/Button" Name="FolderSelector/Frame/Cancel" >
+                <Property Name="Font" Value="DejaVuSans-10" />
+                <Property Name="Text" Value="CANCEL" />
+                <Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}" />
+                <Property Name="UnifiedAreaRect" Value="{{1,-132},{1,-28},{1,-68},{1,0}}" />
+            </Window>
+            <Window Type="Vanilla/Editbox" Name="FolderSelector/Frame/Path" >
+                <Property Name="ReadOnly" Value="True" />
+                <Property Name="MaxTextLength" Value="1073741823" />
+                <Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}" />
+                <Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{1,0},{0,28}}" />
+            </Window>
+            <Window Type="Vanilla/Listbox" Name="FolderSelector/Frame/FolderList" >
+                <Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}" />
+                <Property Name="UnifiedAreaRect" Value="{{0,0},{0,32},{1,0},{1,-32}}" />
+            </Window>
+        </Window>
+    </Window>
+</GUILayout>

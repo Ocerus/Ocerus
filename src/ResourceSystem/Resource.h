@@ -72,6 +72,9 @@ namespace ResourceSystem
 		/// Returns the path to the directory containing the file.
 		string GetFileDir(void) const;
 
+		/// Returns the relative path to the directory containing the file. The path is relative to appropriate base prefix.
+		string GetRelativeFileDir(void) const;
+
 		/// Returns true if this resource was manually created and is not managed by the ResourceMgr.
 		inline bool IsManual(void) const { return mIsManual; }
 
