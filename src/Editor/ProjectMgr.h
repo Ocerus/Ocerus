@@ -57,7 +57,7 @@ namespace Editor
 
 		void OpenScene(const string& scene);
 
-		void OpenSceneAtIndex(uint index);
+		void OpenSceneAtIndex(uint32 index);
 
 	private:
 

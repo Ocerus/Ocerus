@@ -125,7 +125,7 @@ bool Editor::EditorMenu::OnMenuItemClicked(const CEGUI::EventArgs& e)
 		string pattern = menubarPrefix + "/Scene/OpenScene/Scene";
 		if (itemNameStr.substr(0, pattern.size()) == pattern)
 		{
-			uint sceneIndex = args.window->getID();
+			uint32 sceneIndex = args.window->getID();
 			gEditorMgr.GetProjectMgr()->OpenSceneAtIndex(sceneIndex);
 			return true;
 		}

@@ -11,7 +11,7 @@ using namespace Editor;
 bool ResourceComparator(const ResourceSystem::ResourcePtr& r1, const ResourceSystem::ResourcePtr& r2)
 {
 	int compareDirs = r1->GetFileDir().compare(r2->GetFileDir());
-	return compareDirs == 0 ? (r1->GetFilePath().compare(r2->GetFilePath()) > 0) : compareDirs;
+	return compareDirs == 0 ? (r1->GetFilePath().compare(r2->GetFilePath()) > 0) : (compareDirs != 0);
 }
 
 Editor::ResourceWindow::ResourceWindow()

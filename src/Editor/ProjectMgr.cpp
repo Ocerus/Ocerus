@@ -103,7 +103,7 @@ void ProjectMgr::OpenScene(const string& scene)
 	gEntityMgr.LoadEntitiesFromResource(gResourceMgr.GetResource("project", scene));
 }
 
-void ProjectMgr::OpenSceneAtIndex(uint index)
+void ProjectMgr::OpenSceneAtIndex(uint32 index)
 {
 	if (index >= mScenes.size()) return;
 	OpenScene(mScenes[index].first);

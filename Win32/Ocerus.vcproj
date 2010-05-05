@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../src;../src/Precompiled;../src/Utils;../externalLibs/boost/inc;../externalLibs/hge/include;../externalLibs/ois/includes;../externalLibs/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib;../externalLibs/angelscript/include;../externalLibs/angelscript/add_on/scriptstring;../externalLibs/DbgLib"
+				AdditionalIncludeDirectories="../src;../src/Precompiled;../src/Utils;../externalLibs/boost/inc;../externalLibs/hge/include;../externalLibs/ois/includes;../externalLibs/cegui/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib;../externalLibs/angelscript/include;../externalLibs/angelscript/add_on/scriptstring;../externalLibs/DbgLib"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;USE_ASSERT;USE_DBGLIB"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="true"
@@ -132,7 +132,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="2"
-				AdditionalIncludeDirectories="../src;../src/Precompiled;../src/Utils;../externalLibs/boost/inc;../externalLibs/hge/include;../externalLibs/ois/includes;../externalLibs/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib;../externalLibs/angelscript/include;../externalLibs/angelscript/add_on/scriptstring;../externalLibs/DbgLib"
+				AdditionalIncludeDirectories="../src;../src/Precompiled;../src/Utils;../externalLibs/boost/inc;../externalLibs/hge/include;../externalLibs/ois/includes;../externalLibs/cegui/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib;../externalLibs/angelscript/include;../externalLibs/angelscript/add_on/scriptstring;../externalLibs/DbgLib"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;USE_DBGLIB"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="false"
@@ -188,7 +188,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Copying binaries to the output directory..."
-				CommandLine="copy /V /Y /B &quot;$(TargetPath)&quot; &quot;../output&quot;&#x0D;&#x0A;copy /V /Y /B &quot;$(TargetDir)$(TargetName).pdb&quot; &quot;../output&quot;&#x0D;&#x0A;copy /V /Y /B &quot;$(TargetDir)libexpat.dll&quot; &quot;../output&quot;"
+				CommandLine="copy /V /Y /B &quot;$(TargetPath)&quot; &quot;../output&quot;&#x0D;&#x0A;copy /V /Y /B &quot;$(TargetDir)$(TargetName).pdb&quot; &quot;../output&quot;&#x0D;&#x0A;copy /V /Y /B &quot;$(TargetDir)libexpat.dll&quot; &quot;../output&quot;&#x0D;&#x0A;"
 				ExcludedFromBuild="false"
 			/>
 		</Configuration>
@@ -219,7 +219,7 @@
 				Optimization="2"
 				InlineFunctionExpansion="1"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories="../src;../src/Precompiled;../src/Utils;../externalLibs/boost/inc;../externalLibs/hge/include;../externalLibs/ois/includes;../externalLibs/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib;../externalLibs/angelscript/include;../externalLibs/angelscript/add_on/scriptstring;../externalLibs/DbgLib"
+				AdditionalIncludeDirectories="../src;../src/Precompiled;../src/Utils;../externalLibs/boost/inc;../externalLibs/hge/include;../externalLibs/ois/includes;../externalLibs/cegui/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib;../externalLibs/angelscript/include;../externalLibs/angelscript/add_on/scriptstring;../externalLibs/DbgLib"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;USE_ASSERT;USE_DBGLIB"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="true"

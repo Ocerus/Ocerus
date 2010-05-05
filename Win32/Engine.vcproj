@@ -1395,11 +1395,19 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\GUISystem\FolderSelector.h"
+					>
+				</File>
+				<File
 					RelativePath="..\src\Editor\LayerMgrWidget.h"
 					>
 				</File>
 				<File
 					RelativePath="..\src\Editor\PopupMenu.h"
+					>
+				</File>
+				<File
+					RelativePath="..\src\Editor\ProjectMgr.h"
 					>
 				</File>
 				<File
@@ -1427,11 +1435,19 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\GUISystem\FolderSelector.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\src\Editor\LayerMgrWidget.cpp"
 					>
 				</File>
 				<File
 					RelativePath="..\src\Editor\PopupMenu.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src\Editor\ProjectMgr.cpp"
 					>
 				</File>
 				<File

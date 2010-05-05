@@ -1,7 +1,7 @@
 #include "Common.h"
 #include "Config.h"
 #include "rudeconfig/config.h"
-#include <boost-1_41/boost/concept_check.hpp>
+#include <boost/concept_check.hpp>
 
 using namespace Core;
 
