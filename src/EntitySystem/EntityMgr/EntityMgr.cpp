@@ -634,7 +634,7 @@ void EntitySystem::EntityMgr::LoadEntityFromXML(ResourceSystem::XMLNodeIterator 
 	}
 
 	// create the entity
-	EntityHandle entity = gEntityMgr.CreateEntity(desc);
+	EntityHandle entity = CreateEntity(desc);
 	PrototypeInfo* prototypeInfo = 0;
 	if (isPrototype)
 	{
@@ -743,7 +743,8 @@ bool EntitySystem::EntityMgr::SaveEntityToStorage(const EntitySystem::EntityID e
 		comp->EnumProperties(comp, propertyList);
 		if (!comp->IsTransient()) for (PropertyList::iterator it = propertyList.begin(); it != propertyList.end(); ++it)
 		{
-			if ((it->GetAccessFlags() & Reflection::PA_TRANSIENT) != 0) { continue; }
+			bool protPropShared = protInfo && protInfo->mSharedProperties.find(it->GetKey()) != protInfo->mSharedProperties.end();
+			if ((it->GetAccessFlags() & Reflection::PA_TRANSIENT) != 0 || (isPrototype && !protPropShared)) { continue; }
 			string propName = it->GetKey().ToString();
 			storage.BeginElementStart(propName);
 			if (it->IsValued()) // property is dynamic, so we must save a type
@@ -966,7 +967,20 @@ bool EntitySystem::EntityMgr::IsEntityPrototype( const EntityHandle entity ) con
 EntitySystem::ComponentID EntitySystem::EntityMgr::AddComponentToEntity( const EntityHandle entity, const eComponentType componentType )
 {
 	OC_ASSERT(mComponentMgr);
-	return mComponentMgr->CreateComponent(entity.GetID(), componentType);
+	ComponentID cid = mComponentMgr->CreateComponent(entity.GetID(), componentType);
+
+	// if this is a prototype mark its properties as shared in the beginning
+	if (IsEntityPrototype(entity))
+	{
+		PropertyList propList;
+		GetEntityComponentProperties(entity, cid, propList);
+		for (PropertyList::iterator it=propList.begin(); it!=propList.end(); ++it)
+		{
+			SetPrototypePropertyShared(entity, it->GetName());
+		}
+	}
+
+	return cid;
 }
 
 bool EntitySystem::EntityMgr::IsPrototypePropertyShared( const EntityHandle prototype, const StringKey testedProperty ) const
@@ -1045,6 +1059,17 @@ void EntitySystem::EntityMgr::DestroyEntityComponent( const EntityHandle entity,
 				ocInfo << "Unlinking " << entity << " from prototype " << prototypeID << " because of component destruction";
 				UnlinkEntityFromPrototype(entity.GetID());
 			}
+		}
+	}
+
+	// if this was a prototype mark the properties as not shared
+	if (IsEntityPrototype(entity))
+	{
+		PropertyList propList;
+		GetEntityComponentProperties(entity, componentToDestroy, propList);
+		for (PropertyList::iterator it=propList.begin(); it!=propList.end(); ++it)
+		{
+			SetPrototypePropertyNonShared(entity, it->GetName());
 		}
 	}
 
@@ -1299,7 +1324,7 @@ bool EntitySystem::EntityMgr::LoadPrototypes()
 	{
 		ResourceSystem::ResourcePtr res = gResourceMgr.GetResource("Temp", PROTOTYPES_DEFAULT_FILE);
 		res->Load();
-		gEntityMgr.LoadEntitiesFromResource(res, true);
+		LoadEntitiesFromResource(res, true);
 		gResourceMgr.DeleteGroup("Temp");
 		ocInfo << "Prototypes loaded from " << PROTOTYPES_DEFAULT_FILE;
 		return true;
@@ -1315,7 +1340,7 @@ bool EntitySystem::EntityMgr::SavePrototypes()
 {
 	ResourceSystem::XMLOutput storage(gResourceMgr.GetBasePath(ResourceSystem::BPT_SYSTEM) + PROTOTYPES_DEFAULT_FILE);
 	storage.BeginElement("Prototypes");
-	bool result = gEntityMgr.SaveEntitiesToStorage(storage, true, false);
+	bool result = SaveEntitiesToStorage(storage, true, false);
 	storage.EndElement();
 	if (result) { ocInfo << "Prototypes saved into " << PROTOTYPES_DEFAULT_FILE; }
 	else { ocError << "Prototypes can't be saved!"; }

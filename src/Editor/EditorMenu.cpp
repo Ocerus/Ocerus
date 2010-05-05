@@ -69,8 +69,6 @@ bool Editor::EditorMenu::OnMenuItemClicked(const CEGUI::EventArgs& e)
 	const CEGUI::String& itemName = args.window->getName();
 	const string itemNameStr = itemName.c_str();
 
-	bool wasEditingPrototype = gEditorMgr.IsEditingPrototype();
-
 	/// ---- File menu ----
 	if (itemName == menubarPrefix + "/File")
 	{
@@ -161,7 +159,6 @@ bool Editor::EditorMenu::OnMenuItemClicked(const CEGUI::EventArgs& e)
 			OC_DASSERT(itemNameStr.size() > pattern.size());
 			int componentType = StringConverter::FromString<int>(itemNameStr.substr(pattern.size()));
 			gEditorMgr.AddComponent((EntitySystem::eComponentType)componentType);
-			if (gEditorMgr.IsEditingPrototype()) gEntityMgr.SavePrototypes();
 			return true;
 		}
 	}
@@ -169,11 +166,6 @@ bool Editor::EditorMenu::OnMenuItemClicked(const CEGUI::EventArgs& e)
 	if (itemName == menubarPrefix + "/Edit/DuplicateEntity")
 	{
 		gEditorMgr.DuplicateCurrentEntity();
-		if (wasEditingPrototype)
-		{
-			gEntityMgr.SavePrototypes();
-			gEditorMgr.RefreshPrototypeWindow();
-		}
 		return true;
 	}
 	
@@ -186,11 +178,6 @@ bool Editor::EditorMenu::OnMenuItemClicked(const CEGUI::EventArgs& e)
 	if (itemName == menubarPrefix + "/Edit/DeleteEntity")
 	{
 		gEditorMgr.DeleteCurrentEntity();
-		if (wasEditingPrototype)
-		{
-			gEntityMgr.SavePrototypes();
-			gEditorMgr.RefreshPrototypeWindow();
-		}
 		return true;
 	}
 

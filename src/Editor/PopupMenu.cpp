@@ -57,6 +57,11 @@ bool Editor::PopupMenu::OnMenuItemMouseUp( const CEGUI::EventArgs& e )
 			gEntityMgr.SavePrototypes();
 			handled = true;
 		}
+		else if (itemCeguiName == mName + "/InstantiatePrototype")
+		{
+			//TODO
+			handled = true;
+		}
 	}
 
 	Close();

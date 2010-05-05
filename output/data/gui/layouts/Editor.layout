@@ -337,6 +337,10 @@
 		        <Property Name="ItemSpacing" Value="2" />
 		        <Property Name="ClippedByParent" Value="False" />
 		        <Property Name="AutoResizeEnabled" Value="True" />
+		        <Window Type="Editor/MenuItem" Name="EditorRoot/Popup/PrototypeAboveItem/InstantiatePrototype" >
+		            <Property Name="Text" Value="$prototype_instantiate$" />
+		            <Property Name="Tooltip" Value="$prototype_instantiate_hint$" />
+						</Window>
 		        <Window Type="Editor/MenuItem" Name="EditorRoot/Popup/PrototypeAboveItem/AddPrototype" >
 		            <Property Name="Text" Value="$prototype_add$" />
 		            <Property Name="Tooltip" Value="$prototype_add_hint$" />

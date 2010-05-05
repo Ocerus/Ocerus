@@ -211,6 +211,11 @@ void Editor::EditorMgr::DuplicateCurrentEntity()
 	if (!mCurrentEntity.Exists()) return;
 	EntityHandle newEntity = gEntityMgr.DuplicateEntity(mCurrentEntity);
 	newEntity.FinishInit();
+	if (IsEditingPrototype())
+	{
+		gEntityMgr.SavePrototypes();
+		RefreshPrototypeWindow();
+	}
 	SetCurrentEntity(newEntity);
 }
 
@@ -219,6 +224,11 @@ void Editor::EditorMgr::DeleteCurrentEntity()
 	if (!mCurrentEntity.Exists()) return;
 	gEntityMgr.DestroyEntity(mCurrentEntity);
 	gEntityMgr.ProcessDestroyQueue();
+	if (IsEditingPrototype())
+	{
+		gEntityMgr.SavePrototypes();
+		RefreshPrototypeWindow();
+	}
 	SetCurrentEntity(EntityHandle::Null);
 }
 
@@ -251,6 +261,7 @@ void Editor::EditorMgr::AddComponent(EntitySystem::eComponentType componentType)
 	if (!mCurrentEntity.IsValid()) return;
 	gEntityMgr.AddComponentToEntity(mCurrentEntity, componentType);
 	mEditorGUI->UpdateEntityEditorWindow();
+	if (IsEditingPrototype()) gEntityMgr.SavePrototypes();
 }
 
 
@@ -259,6 +270,7 @@ void Editor::EditorMgr::RemoveComponent(const EntitySystem::ComponentID& compone
 	if (!mCurrentEntity.IsValid()) return;
 	gEntityMgr.DestroyEntityComponent(mCurrentEntity, componentId);
 	mEditorGUI->UpdateEntityEditorWindow();
+	if (IsEditingPrototype()) gEntityMgr.SavePrototypes();
 }
 
 void Editor::EditorMgr::ResumeAction()

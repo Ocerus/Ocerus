@@ -73,6 +73,8 @@ prototype_add=Add Prototype
 prototype_add_hint=Creates new empty prototype
 prototype_delete=Delete Prototype
 prototype_delete_hint=Deletes the prototype
+prototype_instantiate=Create Entity
+prototype_instantiate_hint=Instantiantes the prototype into new entity
 
 # message box
 ok=Ok
