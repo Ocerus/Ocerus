@@ -9,6 +9,10 @@
 #include <Windows.h>
 #endif
 
+#include "EntitySystem/EntityMgr/EntityHandle.h"
+#include "GfxSystem/GfxStructures.h"
+#include "Properties/PropertyHolder.h"
+
 #include <DbgLib/DbgLib.h>
 
 #endif
@@ -36,4 +40,30 @@ LogSystem::Logger::~Logger( void )
 	{
 		LogMgr::GetSingleton().LogMessage(messageString, mLogLevel);
 	}
+}
+
+Logger& LogSystem::Logger::operator<<(const EntitySystem::EntityHandle& value)
+{
+	*this << "Entity(" << value.GetID() << ")";
+	return *this;
+}
+
+Logger& LogSystem::Logger::operator<<(const GfxSystem::Color& value)
+{
+	*this << "Color(" << (uint32)value.r << ", " << (uint32)value.g << ", " << (uint32)value.b << ", " << (uint32)value.a << ")";
+	return *this;
+
+}
+
+Logger& LogSystem::Logger::operator<<(const Reflection::PropertyHolder& value)
+{
+	*this << "Property(" << value.GetKey().ToString() << ")";
+	return *this;
+
+}
+
+Logger& LogSystem::Logger::operator<<(const Utils::StringKey& value)
+{
+	*this << value.ToString();
+	return *this;
 }

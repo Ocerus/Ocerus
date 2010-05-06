@@ -73,7 +73,7 @@ bool ProjectMgr::OpenProject(const string& path)
 		basePath.append("/");
 
 	gResourceMgr.SetBasePath(ResourceSystem::BPT_PROJECT, basePath);
-	gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_PROJECT, "", "project", ".*", "", ResourceSystem::RESTYPE_AUTODETECT, mResourceTypeMap);
+	gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_PROJECT, "", "Project", ".*", "", ResourceSystem::RESTYPE_AUTODETECT, mResourceTypeMap);
 	gEditorMgr.RefreshResourceWindow();
 	gEditorMgr.UpdateSceneMenu();
 	return true;
@@ -89,7 +89,7 @@ void ProjectMgr::CloseProject()
 	mIsOpened = false;
 	mResourceTypeMap.clear();
 	mScenes.clear();
-	gResourceMgr.DeleteGroup("project");
+	gResourceMgr.DeleteGroup("Project");
 }
 
 void ProjectMgr::GetScenes(ProjectMgr::Scenes& scenes) const
@@ -100,7 +100,7 @@ void ProjectMgr::GetScenes(ProjectMgr::Scenes& scenes) const
 void ProjectMgr::OpenScene(const string& scene)
 {
 	mCurrentScene = scene;
-	gEntityMgr.LoadEntitiesFromResource(gResourceMgr.GetResource("project", scene));
+	gEntityMgr.LoadEntitiesFromResource(gResourceMgr.GetResource("Project", scene));
 }
 
 void ProjectMgr::OpenSceneAtIndex(uint32 index)

@@ -4,8 +4,9 @@
 #ifndef ResourcePointers_h__
 #define ResourcePointers_h__
 
-#include <SmartAssert.h>
-#include <ResourceSystem/Resource.h>
+#include "SmartAssert.h"
+#include "ResourceSystem/Resource.h"
+#include "LogSystem/LogMacros.h"
 #include <boost/shared_ptr.hpp>
 
 namespace ResourceSystem
@@ -25,12 +26,20 @@ namespace ResourceSystem
 		ResourcePtr(ResourceSystem::Resource* rhs): boost::shared_ptr<ResourceSystem::Resource>(rhs) {}
 
 		/// Converts the ResourcePtr to concrete (shared) resource pointer.
-		/// This method checks whether the conversion is valid.
+		/// This method checks whether the conversion is valid, and returns
+		/// null pointer in case of invalid conversion.
 		template <class T>
 		operator boost::shared_ptr<T>()
 		{
-			OC_ASSERT_MSG(get(), "Null resource pointer");
-			OC_ASSERT(T::GetResourceType() == (*this)->GetType());
+			if (!get())
+				return boost::shared_ptr<T>();
+			if (T::GetResourceType() != (*this)->GetType())
+			{
+				ocWarning << "Trying to convert resource '" << (*this)->GetName() << "' of type " <<
+					ResourceSystem::GetResourceTypeName((*this)->GetType()) << " to " <<
+					ResourceSystem::GetResourceTypeName(T::GetResourceType()) << ".";
+				return boost::shared_ptr<T>();
+			}
 			return boost::static_pointer_cast<T>(*this);
 		}
 	};

@@ -53,8 +53,8 @@ void Application::Init()
 	ResourceSystem::ResourceMgr::GetSingleton().Init("data/");
 
 	StringSystem::StringMgr::Init();
-  gStringMgrSystem.LoadLanguagePack(mGlobalConfig->GetString("Language", "", "Editor"),
-	  mGlobalConfig->GetString("Country", "", "Editor"));
+	gStringMgrSystem.LoadLanguagePack(mGlobalConfig->GetString("Language", "", "Editor"),
+		mGlobalConfig->GetString("Country", "", "Editor"));
 
 	GfxSystem::GfxWindow::CreateSingleton();
 	GfxSystem::GfxWindow::GetSingleton().Init(1024, 768, false, "Ocerus");
@@ -83,6 +83,9 @@ void Application::Init()
 
 	// FPS counter init
 	ResetStats();
+
+	// DEBUG
+	gEditorMgr.OpenProject("projects/test");
 }
 
 Application::~Application()

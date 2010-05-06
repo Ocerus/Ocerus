@@ -308,7 +308,9 @@ void Editor::EditorMgr::SetEditTool(eEditTool newEditTool)
 
 void Editor::EditorMgr::RefreshResourceWindow()
 {
-	mEditorGUI->GetResourceWindow()->Refresh();
+	ResourceWindow* resourceWindow = mEditorGUI->GetResourceWindow();
+	if (resourceWindow)
+		resourceWindow->Refresh();
 }
 
 void Editor::EditorMgr::UpdateSceneMenu()

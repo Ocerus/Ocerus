@@ -25,7 +25,7 @@ void XMLConverter::WriteToXML(ResourceSystem::XMLOutput& output, const ResourceS
 {
 	if (val)
 	{
-		output.WriteString(val->GetGroup().ToString() + '/' + val->GetName());
+		output.WriteString(val->GetName());
 	}
 }
 
@@ -49,6 +49,6 @@ EntitySystem::EntityHandle XMLConverter::ReadFromXML(ResourceSystem::XMLNodeIter
 template<>
 ResourceSystem::ResourcePtr XMLConverter::ReadFromXML(ResourceSystem::XMLNodeIterator& input)
 {
-	string groupAndName = input.GetChildValue<string>();
-	return gResourceMgr.GetResource(groupAndName.c_str());
+	string name = input.GetChildValue<string>();
+	return gResourceMgr.GetResource("Project", name);
 }

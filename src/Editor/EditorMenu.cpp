@@ -23,14 +23,17 @@ Editor::EditorMenu::EditorMenu()
 
 void Editor::EditorMenu::Init()
 {
+	CEGUI_EXCEPTION_BEGIN
 	CEGUI::Window* menubar = gCEGUIWM.getWindow(menubarPrefix);
 	InitComponentMenu();
 	ConfigureMenu(menubar);
+	UpdateSceneMenu();
 	menubar->subscribeEvent(CEGUI::Window::EventDeactivated,
 			CEGUI::Event::Subscriber(&Editor::EditorMenu::OnMouseLeavesMenuItem, this));
 
 	CEGUI::Window* toolbar = gCEGUIWM.getWindow(toolbarPrefix);
 	ConfigureToolbar(toolbar);
+	CEGUI_EXCEPTION_END_CRITICAL
 }
 
 bool Editor::EditorMenu::OnMouseEntersMenuItem(const CEGUI::EventArgs& )
@@ -286,6 +289,7 @@ void Editor::EditorMenu::OnFolderSelected(const string& path, bool canceled, int
 
 void Editor::EditorMenu::InitComponentMenu()
 {
+	CEGUI_EXCEPTION_BEGIN
 	CEGUI::Window* addComponentMenu = gCEGUIWM.getWindow(menubarPrefix + "/Edit/NewComponent/AutoPopup");
 	for (int i = 0; i < EntitySystem::NUM_COMPONENT_TYPES; ++i)
 	{
@@ -295,10 +299,12 @@ void Editor::EditorMenu::InitComponentMenu()
 		componentMenuItem->setText(componentName);
 		addComponentMenu->addChildWindow(componentMenuItem);
 	}
+	CEGUI_EXCEPTION_END
 }
 
 void EditorMenu::UpdateSceneMenu()
 {
+	CEGUI_EXCEPTION_BEGIN
 	ProjectMgr::Scenes scenes;
 	gEditorMgr.GetProjectMgr()->GetScenes(scenes);
 
@@ -317,6 +323,7 @@ void EditorMenu::UpdateSceneMenu()
 		openSceneMenu->addChildWindow(sceneMenuItem);
 	}
 	ConfigureMenu(openSceneMenu);
+	CEGUI_EXCEPTION_END
 }
 
 void Editor::EditorMenu::ConfigureMenu(CEGUI::Window* parent)

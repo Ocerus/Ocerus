@@ -92,6 +92,10 @@ namespace Editor
 		/// Updates the scenes in scene menu.
 		void UpdateSceneMenu();
 
+		/// Opens the project specified with given path.
+		void OpenProject(const string& projectPath);
+
+		
 	public:
 
    		/// @name Callbacks from InputSystem::IInputListener
@@ -153,9 +157,6 @@ namespace Editor
 
 		/// Sets the current edit tool.
 		void SetEditTool(eEditTool newEditTool);
-
-		/// Opens the project specified with given path.
-		void OpenProject(const string& projectPath);
 
 	private:
 

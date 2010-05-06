@@ -109,12 +109,6 @@ void Core::Game::Init()
 	// update globally accessible game related properties, like the physics engine
 	UpdateGameProperties();
 
-
-	// DEBUG
-	gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_SYSTEM, "test", "Test", ".+\\.(xml|model|png)");
-	gResourceMgr.LoadResourcesInGroup("Test");
-	gEntityMgr.LoadEntitiesFromResource(gResourceMgr.GetResource("Test", "test_entities.xml"));
-
 	gInputMgr.AddInputListener(this);
 	gApp.ResetStats();
 
@@ -365,7 +359,7 @@ bool Core::Game::SaveGameInfoToStorage(ResourceSystem::XMLOutput& storage)
 
 bool Core::Game::LoadGameInfoFromResource(ResourceSystem::ResourcePtr res)
 {
-	if (res == 0)
+	if (!res)
 	{
 		ocError << "XML: Can't load data; null resource pointer";
 		return false;

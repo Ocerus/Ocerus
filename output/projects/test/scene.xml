@@ -10,12 +10,12 @@
         <Layer>0</Layer>
       </Component>
       <Component Type="Sprite">
-        <Texture>project/textures/logo-alpha.png</Texture>
+        <Texture>logo-alpha.png</Texture>
         <Transparency>0</Transparency>
       </Component>
       <Component Type="Model">
         <ZAngle>0.6</ZAngle>
-        <Mesh>project/models/cube.model</Mesh>
+        <Mesh>cube.model</Mesh>
         <Transparency>0</Transparency>
       </Component>
       <Component Type="DynamicBody"></Component>
@@ -32,7 +32,7 @@
         <ScriptTimeOut>1000</ScriptTimeOut>
         <ScriptStates></ScriptStates>
         <ScriptModules>
-          <Item>project/scripts/ConstantMover.as</Item>
+          <Item>ConstantMover.as</Item>
         </ScriptModules>
         <ScriptTimes></ScriptTimes>
       </Component>
@@ -45,7 +45,7 @@
         <Layer>0</Layer>
       </Component>
       <Component Type="Sprite">
-        <Texture>project/textures/tux.png</Texture>
+        <Texture>tux.png</Texture>
         <Transparency>0</Transparency>
       </Component>
       <Component Type="DynamicBody"></Component>

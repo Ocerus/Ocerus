@@ -11,8 +11,8 @@ Ks 0.000000 0.000000 0.000000
 Ns 50.000000
 Tr 0.000000
 illum 1
-map_Kd bricks_color_map.jpg
-map_bump bricks_normal_map.jpg
+map_Kd crate.png
+map_bump crate.png
 
 # end of materials
 .

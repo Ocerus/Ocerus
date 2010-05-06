@@ -677,7 +677,7 @@ void EntitySystem::EntityMgr::LoadEntityFromXML(ResourceSystem::XMLNodeIterator 
 
 bool EntitySystem::EntityMgr::LoadEntitiesFromResource(ResourceSystem::ResourcePtr res, const bool isPrototype)
 {
-	if (res == 0)
+	if (!res)
 	{
 		ocError << "XML: Can't load data; null resource pointer";
 		return false;

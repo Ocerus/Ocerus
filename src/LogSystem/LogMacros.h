@@ -4,6 +4,7 @@
 #ifndef LogMacros_h__
 #define LogMacros_h__
 
+#include "Logger.h"
 
 /// Setting of the current logging level. Only logging above the level (included) will work.
 #define LOGGER_LEVEL 2

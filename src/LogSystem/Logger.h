@@ -5,9 +5,6 @@
 #define Logger_h__
 
 #include "Base.h"
-#include "EntitySystem/EntityMgr/EntityHandle.h"
-#include "GfxSystem/GfxStructures.h"
-#include "Properties/PropertyHolder.h"
 
 namespace LogSystem
 {
@@ -27,7 +24,7 @@ namespace LogSystem
 		/// Destructs the logger and actually writes the logged message into the output.
 		~Logger(void);
 
-		inline Logger& operator<<(const bool value)
+		inline Logger& operator<<(bool value)
 		{
 			*this << (value ? "true" : "false");
 			return *this;
@@ -39,29 +36,13 @@ namespace LogSystem
 			return *this;
 		}
 
-	    inline Logger& operator<<(const EntitySystem::EntityHandle& value)
-	    {
-	        *this << "Entity(" << value.GetID() << ")";
-		    return *this;
-	    }
+		Logger& operator<<(const EntitySystem::EntityHandle& value);
 
-		inline Logger& operator<<(const GfxSystem::Color& value)
-		{
-			*this << "Color(" << (uint32)value.r << ", " << (uint32)value.g << ", " << (uint32)value.b << ", " << (uint32)value.a << ")";
-			return *this;
-		}
+		Logger& operator<<(const GfxSystem::Color& value);
 
-		inline Logger& operator<<(const Reflection::PropertyHolder& value)
-		{
-			*this << "Property(" << value.GetKey().ToString() << ")";
-			return *this;
-		}
+		Logger& operator<<(const Reflection::PropertyHolder& value);
 
-	    inline Logger& operator<<(Utils::StringKey value)
-    	{
-		    *this << value.ToString();
-    		return *this;
-    	}
+		Logger& operator<<(const Utils::StringKey& value);
 
 		/// Templated writable operator << for easier logging.
 		template<typename T>
@@ -78,6 +59,5 @@ namespace LogSystem
 	};
 	
 }
-
 
 #endif // Logger_h__
