@@ -781,6 +781,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\GfxSystem\PhysicsDraw.h"
+					>
+				</File>
+				<File
 					RelativePath="..\src\GfxSystem\RenderTarget.h"
 					>
 				</File>
@@ -822,6 +826,10 @@
 				</File>
 				<File
 					RelativePath="..\src\GfxSystem\OglRenderer.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src\GfxSystem\PhysicsDraw.cpp"
 					>
 				</File>
 				<File
@@ -924,10 +932,6 @@
 					RelativePath="..\src\Core\LoadingScreen.h"
 					>
 				</File>
-				<File
-					RelativePath="..\src\Core\PhysicsDraw.h"
-					>
-				</File>
 			</Filter>
 			<Filter
 				Name="src"
@@ -954,10 +958,6 @@
 				</File>
 				<File
 					RelativePath="..\src\Core\LoadingScreen.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\src\Core\PhysicsDraw.cpp"
 					>
 				</File>
 			</Filter>

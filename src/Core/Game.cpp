@@ -4,7 +4,7 @@
 #include "Properties.h"
 #include "DataContainer.h"
 #include "StringConverter.h"
-#include "PhysicsDraw.h"
+#include "GfxSystem/PhysicsDraw.h"
 #include "Editor/EditorMgr.h"
 #include "ResourceSystem/XMLResource.h"
 #include <Box2D.h>
@@ -51,7 +51,7 @@ Core::Game::Game():
 	mPhysicsCallbacks(0)
 {
 	mPhysicsCallbacks = new PhysicsCallbacks(this);
-	mPhysicsDraw = new PhysicsDraw();
+	mPhysicsDraw = new GfxSystem::PhysicsDraw();
 
 	GlobalProperties::SetPointer("Game", this);
 }

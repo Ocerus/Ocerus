@@ -9,7 +9,6 @@ namespace Core
 {
 	class Config;
 	class Game;
-	class PhysicsDraw;
 	class LoadingScreen;
 }
 
@@ -42,6 +41,7 @@ namespace GfxSystem
 	class IGfxWindowListener;
 	class DragDropCameraMover;
 	struct Color;
+	class PhysicsDraw;
 }
 
 namespace GUISystem 

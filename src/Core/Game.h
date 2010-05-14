@@ -150,7 +150,7 @@ namespace Core
 		class PhysicsCallbacks;
 		friend class PhysicsCallbacks;
 		PhysicsCallbacks* mPhysicsCallbacks;
-		PhysicsDraw* mPhysicsDraw;
+		GfxSystem::PhysicsDraw* mPhysicsDraw;
 	};
 }
 

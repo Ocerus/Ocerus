@@ -7,7 +7,7 @@
 #include "Base.h"
 #include <Box2D/Dynamics/b2WorldCallbacks.h>
 
-namespace Core
+namespace GfxSystem
 {
 	/// Interface allowing us to easily render the physical representation of the scene.
 	class PhysicsDraw: public b2DebugDraw
