@@ -37,4 +37,5 @@ void EntitySystem::EntityDescription::CopyComponents( const EntityHandle source 
 	{
 		AddComponent(*it);
 	}
+	ocInfo << "Copied " << mComponents.size();
 }

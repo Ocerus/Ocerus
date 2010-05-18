@@ -135,7 +135,7 @@ bool Editor::Vector2Editor::OnEventKeyDown(const CEGUI::EventArgs& args)
 			this->Submit();
 			mEditbox1Widget->deactivate();
 			mEditbox2Widget->deactivate();
-			if (gEditorMgr.IsEditingPrototype()) gEntityMgr.SavePrototypes();
+			gEditorMgr.PropertyValueChanged();
 			return true;
 		default:
 			break;

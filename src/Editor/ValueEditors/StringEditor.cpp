@@ -88,7 +88,7 @@ bool Editor::StringEditor::OnEventKeyDown(const CEGUI::EventArgs& args)
 		case CEGUI::Key::NumpadEnter:
 			this->Submit();
 			mEditboxWidget->deactivate();
-			if (gEditorMgr.IsEditingPrototype()) gEntityMgr.SavePrototypes();
+			gEditorMgr.PropertyValueChanged();
 			return true;
 		default:
 			break;

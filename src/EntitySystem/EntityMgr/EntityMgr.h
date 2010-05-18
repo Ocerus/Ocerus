@@ -152,9 +152,6 @@ namespace EntitySystem
 		/// Marks the property as non shared among instances of the prototype.
 		void SetPrototypePropertyNonShared(const EntityHandle prototype, const StringKey propertyToMark);
 
-		/// Saves the current properties into the storage of shared properties of the prototype.
-		void UpdatePrototypeCopy(const EntityHandle prototype);
-
 		/// Propagates the current state of properties of the prototype to its instances.
 		void UpdatePrototypeInstances(const EntityHandle prototype);
 

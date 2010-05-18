@@ -651,3 +651,12 @@ void Editor::EditorMgr::RefreshPrototypeWindow()
 	OC_ASSERT(mEditorGUI);
 	mEditorGUI->GetPrototypeWindow()->Refresh();
 }
+
+void Editor::EditorMgr::PropertyValueChanged()
+{
+	if (gEditorMgr.IsEditingPrototype())
+	{
+		gEntityMgr.UpdatePrototypeInstances(GetCurrentEntity());
+		gEntityMgr.SavePrototypes();
+	}
+}

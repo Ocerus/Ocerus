@@ -117,6 +117,9 @@ namespace Editor
 		/// and fills the output parameter with the converted cursor position. Otherwise it returns false.
 		bool GetWorldCursorPos(Vector2& worldPos) const;
 
+		/// Called by the value editors when their value changes.
+		void PropertyValueChanged();
+
 	protected:
 
 		friend class EditorGUI;

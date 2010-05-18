@@ -418,7 +418,6 @@ void RegisterScriptEntityDescription(asIScriptEngine* engine)
 	r = engine->RegisterEnum("eEntityDescriptionKind"); OC_SCRIPT_ASSERT();
 	r = engine->RegisterEnumValue("eEntityDescriptionKind", "EK_ENTITY", EntitySystem::EntityDescription::EK_ENTITY); OC_SCRIPT_ASSERT();
 	r = engine->RegisterEnumValue("eEntityDescriptionKind", "EK_PROTOTYPE", EntitySystem::EntityDescription::EK_PROTOTYPE); OC_SCRIPT_ASSERT();
-	r = engine->RegisterEnumValue("eEntityDescriptionKind", "EK_PROTOTYPE_COPY", EntitySystem::EntityDescription::EK_PROTOTYPE_COPY); OC_SCRIPT_ASSERT();
 
 	// Register the object methods
 	r = engine->RegisterObjectMethod("EntityDescription", "void Reset()", asMETHOD(EntityDescription, Reset), asCALL_THISCALL); OC_SCRIPT_ASSERT();
@@ -460,7 +459,6 @@ void RegisterScriptEntityMgr(asIScriptEngine* engine)
 	r = engine->RegisterObjectMethod("EntityMgr", "bool IsPrototypePropertyShared(const EntityHandle, const StringKey) const", asMETHOD(EntityMgr, IsPrototypePropertyShared), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("EntityMgr", "void SetPrototypePropertyShared(const EntityHandle, const StringKey)", asMETHOD(EntityMgr, SetPrototypePropertyShared), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("EntityMgr", "void SetPrototypePropertyNonShared(const EntityHandle, const StringKey)", asMETHOD(EntityMgr, SetPrototypePropertyNonShared), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-	r = engine->RegisterObjectMethod("EntityMgr", "void UpdatePrototypeCopy(const EntityHandle)", asMETHOD(EntityMgr, UpdatePrototypeCopy), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("EntityMgr", "void UpdatePrototypeInstances(const EntityHandle)", asMETHOD(EntityMgr, UpdatePrototypeInstances), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("EntityMgr", "bool HasEntityProperty(const EntityHandle, const StringKey, const PropertyAccessFlags) const", asMETHOD(EntityMgr, HasEntityProperty), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("EntityMgr", "bool HasEntityComponentProperty(const EntityHandle, const ComponentID, const StringKey, const PropertyAccessFlags) const", asMETHOD(EntityMgr, HasEntityComponentProperty), asCALL_THISCALL); OC_SCRIPT_ASSERT();

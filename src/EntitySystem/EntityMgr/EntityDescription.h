@@ -16,7 +16,7 @@ namespace EntitySystem
 	public:
 
 		/// Kind of the entity.
-		enum eKind { EK_ENTITY, EK_PROTOTYPE, EK_PROTOTYPE_COPY };
+		enum eKind { EK_ENTITY, EK_PROTOTYPE };
 
 		/// Default constructor.
 		EntityDescription(void);

@@ -6,7 +6,7 @@
       <Component Type="Transform">
         <Layer>0</Layer>
         <Angle>0</Angle>
-        <Scale>1 1</Scale>
+        <Scale>0.1 1</Scale>
         <Position>0 0</Position>
       </Component>
       <Component Type="Sprite">

@@ -37,10 +37,8 @@ namespace EntitySystem
 	/// This struct holds info specific for prototype entities.
 	struct PrototypeInfo
 	{
-		PrototypeInfo(void): mCopy(INVALID_ENTITY_ID), mInstancesCount(0) {}
+		PrototypeInfo(void): mInstancesCount(0) {}
 
-		/// Copy of the prototype to hold old values of properties.
-		EntityID mCopy;
 		/// Number of instances of this prototype.
 		int32 mInstancesCount;
 		/// Set of properties marked as shared with instances of the prototype.
@@ -144,7 +142,7 @@ EntityHandle EntityMgr::CreateEntity(EntityDescription& desc)
 {
 	OC_ASSERT(mComponentMgr);
 
-	bool isPrototype = desc.mKind == EntityDescription::EK_PROTOTYPE || desc.mKind == EntityDescription::EK_PROTOTYPE_COPY;
+	bool isPrototype = desc.mKind == EntityDescription::EK_PROTOTYPE;
 
 	if (desc.mComponents.size() == 0 && desc.mKind != EntityDescription::EK_PROTOTYPE)
 	{
@@ -316,12 +314,6 @@ void EntityMgr::DestroyEntityImmediately( const EntityID entityToDestroy, const 
 	PrototypeMap::iterator protIt = mPrototypes.find(entityToDestroy);
 	if (protIt != mPrototypes.end())
 	{
-		if (protIt->second->mCopy != INVALID_ENTITY_ID)
-		{
-			if (erase) DestroyEntityImmediately(protIt->second->mCopy, erase);
-			else DestroyEntity(protIt->second->mCopy); // if we can't erase the entity from the map, it has to be deleted in the next round
-		}
-
 		delete protIt->second;
 		protIt->second = 0;
 
@@ -851,49 +843,6 @@ bool EntitySystem::EntityMgr::GetEntityComponentsOfType( const EntityHandle enti
 	return true;
 }
 
-void EntitySystem::EntityMgr::UpdatePrototypeCopy( const EntityHandle prototype )
-{
-	EntityMap::iterator entityIter = mEntities.find(prototype.GetID());
-	if (entityIter == mEntities.end())
-	{
-		ocError << "Can't update prototype copy; can't find entity " << prototype;
-		return;
-	}
-	PrototypeMap::iterator prototypeIter = mPrototypes.find(prototype.GetID());
-	if (prototypeIter == mPrototypes.end())
-	{
-		ocError << "Can't update prototype copy; entity " << prototype << " is not a prototype";
-		return;
-	}
-
-	PrototypeInfo* prototypeInfo = prototypeIter->second;
-
-	// recreate the copy from scratch
-	if (mEntities.find(prototypeInfo->mCopy) != mEntities.end())
-	{
-		DestroyEntityImmediately(prototypeInfo->mCopy, true);
-	}
-	EntityDescription desc;
-	desc.Reset();
-	desc.SetKind(EntityDescription::EK_PROTOTYPE_COPY);
-	for (EntityComponentsIterator it=mComponentMgr->GetEntityComponents(prototype.GetID()); it.HasMore(); ++it)
-	{
-		desc.AddComponent((*it)->GetType());
-	}
-	EntityHandle copyHandle = CreateEntity(desc);
-	prototypeInfo->mCopy = copyHandle.GetID();
-
-	// copy the properties
-	// only initable properties can be copied
-	PropertyList propList;
-	GetEntityProperties(prototype, propList, PA_INIT);
-	for (PropertyList::iterator it=propList.begin(); it!=propList.end(); ++it)
-	{
-		PropertyHolder copyProperty = GetEntityProperty(copyHandle, it->GetKey(), PA_INIT);
-		copyProperty.CopyFrom(*it);
-	}
-}
-
 void EntitySystem::EntityMgr::UpdatePrototypeInstances( const EntityHandle prototype )
 {
 	for (EntityMap::iterator it=mEntities.begin(); it!=mEntities.end(); ++it)
@@ -903,7 +852,6 @@ void EntitySystem::EntityMgr::UpdatePrototypeInstances( const EntityHandle proto
 			UpdatePrototypeInstance(prototype.GetID(), it->first, false);
 		}
 	}
-	UpdatePrototypeCopy(prototype);
 }
 
 void EntitySystem::EntityMgr::UpdatePrototypeInstance( const EntityID prototype, const EntityID instance, const bool forceOverwrite )
@@ -943,12 +891,11 @@ void EntitySystem::EntityMgr::UpdatePrototypeInstance( const EntityID prototype,
 
 			StringKey propertyKey = protPropIter->GetKey();
 			PropertyHolder instanceProperty = GetEntityComponentProperty(instance, currentComponent, propertyKey);
-			PropertyHolder copyProperty = GetEntityComponentProperty(prototypeInfo->mCopy, currentComponent, propertyKey);
 			PropertyHolder prototypeProperty = *protPropIter;
 
 			// if the property has different value from the prototype copy, then it means the property was specialized
 			// by the user and we should leave it alone
-			if (forceOverwrite || copyProperty.IsEqual(instanceProperty))
+			if (forceOverwrite)
 			{
 				instanceProperty.CopyFrom(prototypeProperty);
 			}
@@ -1097,7 +1044,6 @@ void EntitySystem::EntityMgr::LinkEntityToPrototype( const EntityHandle entity, 
 		return;
 	}
 
-	if (protIt->second->mInstancesCount == 0) UpdatePrototypeCopy(prototype.GetID());
 	protIt->second->mInstancesCount++;
 	UpdatePrototypeInstance(prototype.GetID(), entity.GetID(), true);
 }
