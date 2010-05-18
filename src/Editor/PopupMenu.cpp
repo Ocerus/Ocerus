@@ -59,7 +59,13 @@ bool Editor::PopupMenu::OnMenuItemMouseUp( const CEGUI::EventArgs& e )
 		}
 		else if (itemCeguiName == mName + "/InstantiatePrototype")
 		{
-			//TODO
+			EntitySystem::EntityDescription desc;
+			desc.SetName("New Entity");
+			desc.SetPrototype(GetData<EntitySystem::EntityHandle>());
+			desc.CopyComponents(GetData<EntitySystem::EntityHandle>());
+			EntitySystem::EntityHandle instance = gEntityMgr.CreateEntity(desc);
+			instance.FinishInit();
+			gEditorMgr.SetCurrentEntity(instance);
 			handled = true;
 		}
 	}

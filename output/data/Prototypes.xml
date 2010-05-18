@@ -2,12 +2,16 @@
 
 <Prototypes>
   <Entities>
-    <Entity Name="prototyp" ID="-487">
+    <Entity Name="prototyp1" ID="-488">
       <Component Type="Transform">
+        <Layer>0</Layer>
         <Angle>0</Angle>
         <Scale>1 1</Scale>
         <Position>0 0</Position>
-        <Layer>0</Layer>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>tux.png</Texture>
       </Component>
     </Entity>
   </Entities>

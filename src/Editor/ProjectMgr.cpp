@@ -34,6 +34,8 @@ bool ProjectMgr::CreateProject(const string& path)
 	mConfig = new Core::Config(configFile);
 	SetDefaultProjectInfo();
 	SaveProject();
+
+	ocInfo << "Created new project at " << path;
 	return true;
 }
 
@@ -76,6 +78,8 @@ bool ProjectMgr::OpenProject(const string& path)
 	gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_PROJECT, "", "Project", ".*", "", ResourceSystem::RESTYPE_AUTODETECT, mResourceTypeMap);
 	gEditorMgr.RefreshResourceWindow();
 	gEditorMgr.UpdateSceneMenu();
+
+	ocInfo << "Loaded project from " << path;
 	return true;
 }
 
@@ -90,6 +94,8 @@ void ProjectMgr::CloseProject()
 	mResourceTypeMap.clear();
 	mScenes.clear();
 	gResourceMgr.DeleteGroup("Project");
+
+	ocInfo << "Closed project";
 }
 
 void ProjectMgr::GetScenes(ProjectMgr::Scenes& scenes) const
@@ -134,5 +140,7 @@ void ProjectMgr::SaveProject()
 	}
 
 	mConfig->Save();
+
+	ocInfo << "Project was saved to " << mPath;
 }
 

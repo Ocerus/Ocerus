@@ -18,7 +18,10 @@ namespace EntitySystem
 		/// Kind of the entity.
 		enum eKind { EK_ENTITY, EK_PROTOTYPE, EK_PROTOTYPE_COPY };
 
+		/// Default constructor.
 		EntityDescription(void);
+
+		/// Default destructor.
 		~EntityDescription(void);
 
 		/// Clears everything.
@@ -45,6 +48,9 @@ namespace EntitySystem
 
 		/// Sets a desired ID for this entity. It doesn't have to be used by EntityMgr.
 		inline void SetDesiredID(const EntityID toSet) { mID = toSet; }
+
+		/// Copies component types from existing entity.
+		void CopyComponents(const EntityHandle source);
 
 	private:
 

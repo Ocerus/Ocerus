@@ -28,3 +28,13 @@ void EntityDescription::AddComponent(const eComponentType type)
 	OC_ASSERT_MSG(type != CT_INVALID, "Invalid component description type");
 	mComponents.push_back(type);
 }
+
+void EntitySystem::EntityDescription::CopyComponents( const EntityHandle source )
+{
+	ComponentTypeList componentTypes;
+	gEntityMgr.GetEntityComponentTypes(source, componentTypes);
+	for (ComponentTypeList::iterator it=componentTypes.begin(); it!=componentTypes.end(); ++it)
+	{
+		AddComponent(*it);
+	}
+}
