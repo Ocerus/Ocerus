@@ -1125,6 +1125,10 @@
 				Name="inc"
 				>
 				<File
+					RelativePath="..\src\StringSystem\FormatText.h"
+					>
+				</File>
+				<File
 					RelativePath="..\src\StringSystem\StringMgr.h"
 					>
 				</File>
@@ -1140,6 +1144,10 @@
 			<Filter
 				Name="src"
 				>
+				<File
+					RelativePath="..\src\StringSystem\FormatText.cpp"
+					>
+				</File>
 				<File
 					RelativePath="..\src\StringSystem\StringMgr.cpp"
 					>

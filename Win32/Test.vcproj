@@ -408,6 +408,10 @@
 			Name="StringSystem"
 			>
 			<File
+				RelativePath="..\src\StringSystem\test\TestFormatText.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\StringSystem\test\TestStringMgr.cpp"
 				>
 			</File>

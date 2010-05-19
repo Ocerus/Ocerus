@@ -22,6 +22,9 @@ namespace ResourceSystem
 		/// Closes all open elements and closes the file.
 		~XMLOutput(void);
 
+		/// Closes all open elements, closes the file and returns whether all operations were successful.
+		bool CloseAndReport(void);
+
 		/// Starts the begin element tag (writes <name ).
 		/// It is possible to add an attribute by AddAttribute method or
 		/// to finish the start element by BeginElementFinish method.

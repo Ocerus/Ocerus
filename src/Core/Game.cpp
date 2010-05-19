@@ -312,6 +312,7 @@ void Core::Game::SaveAction(void)
 	if (!SaveGameInfoToStorage(storage)) { result = false; }
 	if (!gEntityMgr.SaveEntitiesToStorage(storage, false, true)) { result = false; }
 	storage.EndElement();
+	result = result && storage.CloseAndReport();
 	
 	if (result)
 	{
@@ -328,11 +329,12 @@ void Core::Game::RestartAction(void)
 	bool result = true;
 
 	PauseAction();
-	if (gResourceMgr.AddResourceFileToGroup(ActionFile, "Action",
+	if (gEntityMgr.SavePrototypes() && gResourceMgr.AddResourceFileToGroup(ActionFile, "Action",
 		ResourceSystem::RESTYPE_AUTODETECT, ResourceSystem::BPT_SYSTEM, ActionFile))
 	{
 		gResourceMgr.LoadResourcesInGroup("Action");
 		gEntityMgr.DestroyAllEntities();
+		if (!gEntityMgr.LoadPrototypes()) { result = false; }
 		ResourceSystem::ResourcePtr resource = gResourceMgr.GetResource("Action", ActionFile);
 		if (!LoadGameInfoFromResource(resource)) { result = false; }
 		if (!gEntityMgr.LoadEntitiesFromResource(resource)) { result = false; }

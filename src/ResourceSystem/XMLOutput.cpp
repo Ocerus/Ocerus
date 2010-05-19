@@ -12,8 +12,17 @@ XMLOutput::XMLOutput(const string& fileName, const string& indentStr)
 
 XMLOutput::~XMLOutput()
 {
+	CloseAndReport();
+}
+
+bool XMLOutput::CloseAndReport()
+{
+	if (!mOutStream.is_open()) { return false; }
 	while (!mElementStack.empty()) { EndElement(); }
+	bool result = mOutStream.good();
+	mOutStream.clear();
 	mOutStream.close();
+	return result && mOutStream.good();
 }
 
 void XMLOutput::BeginElementStart(const string& name)

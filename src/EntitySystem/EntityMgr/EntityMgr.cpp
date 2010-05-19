@@ -1126,13 +1126,14 @@ Component* EntitySystem::EntityMgr::GetEntityComponentPtr( const EntityHandle en
 	return 0;
 }
 
-void EntitySystem::EntityMgr::GetEntitiesWithComponent(EntityList& out, const eComponentType componentType)
+void EntitySystem::EntityMgr::GetEntitiesWithComponent(EntityList& out, const eComponentType componentType, bool prototypes)
 {
 	out.clear();
 
 	for (EntityMap::const_iterator i = mEntities.begin(); i != mEntities.end(); ++i)
 	{
-		if (HasEntityComponentOfType(i->first, componentType))
+		if (HasEntityComponentOfType(i->first, componentType)
+			&& (prototypes == IsEntityPrototype(EntityHandle(i->first))))
 		{
 			out.push_back(EntityHandle(i->first));
 		}
@@ -1140,13 +1141,16 @@ void EntitySystem::EntityMgr::GetEntitiesWithComponent(EntityList& out, const eC
 }
 
 		
-void EntitySystem::EntityMgr::GetEntities(EntityList& out)
+void EntitySystem::EntityMgr::GetEntities(EntityList& out, bool prototypes)
 {
 	out.clear();
 
 	for (EntityMap::const_iterator i = mEntities.begin(); i != mEntities.end(); ++i)
 	{
-		out.push_back(EntityHandle(i->first));
+		if (prototypes == IsEntityPrototype(EntityHandle(i->first)))
+		{
+			out.push_back(EntityHandle(i->first));
+		}
 	}
 }
 
@@ -1288,6 +1292,7 @@ bool EntitySystem::EntityMgr::SavePrototypes()
 	storage.BeginElement("Prototypes");
 	bool result = SaveEntitiesToStorage(storage, true, false);
 	storage.EndElement();
+	result = result && storage.CloseAndReport();
 	if (result) { ocInfo << "Prototypes saved into " << PROTOTYPES_DEFAULT_FILE; }
 	else { ocError << "Prototypes can't be saved!"; }
 	return result;

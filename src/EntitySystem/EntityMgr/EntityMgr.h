@@ -80,10 +80,10 @@ namespace EntitySystem
 		void DestroyAllEntities(void);
 
 		/// Retrieves handles of entities that have a specific component.
-		void GetEntitiesWithComponent(EntityList& out, const eComponentType componentType);
+		void GetEntitiesWithComponent(EntityList& out, const eComponentType componentType, bool prototypes = false);
 
 		/// Retrieves handles of all entities.
-		void GetEntities(EntityList& out);
+		void GetEntities(EntityList& out, bool prototypes = false);
 
 		//@}
 
