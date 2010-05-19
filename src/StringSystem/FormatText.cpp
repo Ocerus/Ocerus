@@ -38,14 +38,14 @@ TextData::size_type FormatText::FindMinVariable(void)
 	return minPos;
 }
 
-FormatText& FormatText::operator<<(const TextData& param)
+FormatText& FormatText::operator<<(const TextData& newText)
 {
 	TextData::size_type replacePos = FindMinVariable();
 	if (replacePos != TextData::npos)
 	{
-		mTextData = mTextData.replace(replacePos, 2, param);
+		mTextData = mTextData.replace(replacePos, 2, newText);
 	} else {
-		mTextData += param;
+		mTextData += newText;
 	}
 
 	return *this;

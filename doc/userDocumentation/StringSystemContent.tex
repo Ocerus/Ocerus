@@ -1,8 +1,8 @@
 \begin{description}
   \item[Namespaces:] StringSystem
-  \item[Headers:] StringMgr.h, TextData.h, TextResource.h
-  \item[Source files:] StringMgr.cpp, TextResource.cpp
-  \item[Classes:] StringMgr, TextResource
+  \item[Headers:] FormatText.h, StringMgr.h, TextData.h, TextResource.h
+  \item[Source files:] FormatText.cpp, StringMgr.cpp, TextResource.cpp
+  \item[Classes:] FormatText, StringMgr, TextResource
   \item[Libraries used:] CEGUI
 \end{description}
 
@@ -10,12 +10,13 @@
 
 The string system manages all texts that are visible to an user except internal log messages. It supports a localization to various languages and their country-specific dialects and a switching among them on fly.
 
-In the following sections the required format of text files and the directory layout will be described as well as switching the languages and loading the desired localized text. In the last section there is a small glossary of used terms.
+In the following sections the required format of text files and the directory layout will be described as well as switching the languages and loading and formating the desired localized text. In the last section there is a small glossary of used terms.
 
 \section{Format of text files}
 
 One text file consists of lines of text items and comments. The pattern of a text item is \verb/key=Value/, where \verb/key/ is an ID that is used for indexing a text represented by \verb/Value/ from the application. The first text item in a file defines a group for the following text items if its \verb/key/ is \verb/group/, otherwise the group is set to the default one. An ID must be unique within a group, must not begin with the \verb/#/ character and contain the \verb/=/ character and the same ID in the same group should represented the same text in each language.
-% TODO: pattern for a variable text with %1, %2 etc.
+
+A \verb/Value/ part can contain \verb/%x/ character sequences where \verb/x/ is a number from 1 to 9. When a text with these sequences is loaded it is possible to replace them with another text in order according to the specific number. See the section \ref{sec:text-format} for more information.
 
 A comment is a text that begins with the \verb/#/ character and it is ignored by the application. Every text item and each comment must be on it's own line without any leading white characters. Here is an example of a correct text file:
 
@@ -26,6 +27,8 @@ group=ExampleGroup
 example_key=Example text.
 another_key=Another text.
 \end{verbatim}
+
+The encoding of text files must be ASCII or UTF8. It is possible to end lines in Windows (\verb/\r\n/) or UNIX (\verb/\n/) style.
 
 \section{Directory layout}
 \label{sec:dir-layout}
@@ -103,6 +106,26 @@ The first method that is necessary to call before using the others is the \emph{
 
 There are several methods in the class for getting the text data according to its group and ID which differs in returning a pointer to the data or the data itself and in specifying or omitting the group name (using the default one instead). If the text data of a specified group and ID does not exist, an empty string is returned and an error message is written to the log.
 
+\section{Using a variable text}
+\label{sec:text-format}
+
+If the loaded text data contains character sequences in a form of \verb/%x/ (\verb/x/ is a number from 1 to 9) it is possible to replace them with another text using the class \emph{StringSystem::TextFormat}. Just construct the instance of this class with the loaded text as a parameter, then use a sequence of \verb/<</ operators to replace all well formated character sequences and store it to another text data variable.
+
+The \verb/<</ operator finds the described character sequence with the minimum number and replaces it with the text provided as the parameter. If no such sequence is found then it inserts the provided text at the end of the loaded text. For example if the code
+
+\begin{verbatim}
+StringSystem::TextData loaded = "The %2, the %3 and the %1.";
+StringSystem::TextData result = StringSystem::TextFormat(loaded)
+    << "third" << "first" << "second";
+\end{verbatim}
+
+\noindent is called then in the \verb/result/ variable there will be the following text:
+
+\begin{verbatim}
+The first, the second and the third.
+\end{verbatim}
+
+
 \section{Glossary}
 This is a glossary of the most used terms in the previous sections:
 
@@ -112,4 +135,6 @@ This is a glossary of the most used terms in the previous sections:
   \item[Group] -- a set of text items that can be indexed from application, one file contains text items from one group, text items from one group can be contained in several files
   \item[Language code] -- two-character acronym representing a world language according to ISO 639-1 \cite{ISO-639-1}.
   \item[Country code] -- two-character acronym representing a country according to ISO 3166-1 alpha-2 \cite{ISO-3166-1}.
+  \item[ASCII] -- an encoding of text that uses only numbers, characters of English alphabet and a few symbols and non-printing control characters
+  \item[UTF8] -- a backward compatible ASCII encoding extension that is able to represented any character in the Unicode standard in 1 to 4 bytes
 \end{description}

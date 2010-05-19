@@ -9,7 +9,8 @@
 
 namespace StringSystem
 {
-	/// This class represents generic parameters passed to a function accessed through the properties system.
+	/// Helps to replace variable sequences in the text by another text.
+	/// Possible usage: FormatText(variableTextData) << firstVariable << secondVariable;
 	class FormatText
 	{
 	public:
@@ -22,19 +23,19 @@ namespace StringSystem
 		/// Assignment operator.
 		FormatText& operator=(const FormatText& rhs);
 
-		/// This method is provided for convenience and allows to create a PropertyFunctionParameters
-		/// object and fill it with parameters with following code:
-		///
-		/// FormatText(variableTextData) << firstVariable << secondVariable;
-		FormatText& operator<<(const TextData& param);
+		/// Replaces the variable sequence with a minimal number by the text in the parameter.
+		/// @param newText The text that replace the variable sequence. 
+		FormatText& operator<<(const TextData& newText);
 
+		/// Returns the edited text.
 		operator const TextData& (void) const;
 
 	private:
+		/// Finds a position of the variable sequence with a minimal number.
 		TextData::size_type FindMinVariable(void);
 
+		/// Text that is being edited.
 		TextData mTextData;
-		
 	};
 }
 

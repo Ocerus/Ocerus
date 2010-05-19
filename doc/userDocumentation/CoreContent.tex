@@ -1,8 +1,8 @@
 \begin{description}
   \item[Namespaces:] Core
-  \item[Headers:] Application.h, Config.h, Game.h, LoadingScreen.h%, PhysicsDraw.h
-  \item[Source files:] Application.cpp, Config.cpp, Game.cpp, LoadingScreen.cpp%, PhysicsDraw.cpp
-  \item[Classes:] Application, Config, Game, LoadingScreen%, PhysicsDraw
+  \item[Headers:] Application.h, Config.h, Game.h, LoadingScreen.h
+  \item[Source files:] Application.cpp, Config.cpp, Game.cpp, LoadingScreen.cpp
+  \item[Classes:] Application, Config, Game, LoadingScreen
   \item[Libraries used:] Box2D, RudeConfig
 \end{description}
 
@@ -16,7 +16,7 @@ In the following sections the class representing the application as well as the 
 
 When the program starts it creates an instance of the class \emph{Core::Application}, initializes it by calling its method \emph{Init} and calls the \emph{RunMainLoop} method which runs until the application is shutdown, then the instance is deleted and the program finishes.
 
-On the initialization of the application the configuration is read (see section \ref{sec:config}) and all engine systems are created and initialized as well as the loading screen and game classes. The state of application is changed to \emph{loading} and the main loop is running until the state is changed to \emph{shutdown}. At the main loop window messages are processed, performance statistic are updated and other engine systems including game class are loaded (in a \emph{loading} state) or updated and drawn (in a \emph{game} state).
+On the initialization of the application the configuration is read (see section \ref{sec:config}) and all engine systems are created and initialized as well as the loading screen and game classes. The state of application is changed to \emph{loading} and the main loop is running until the state is changed to \emph{shutdown}. At the main loop window messages are processed, performance statistic are updated and other engine systems including the game class are loaded (in a \emph{loading} state) or updated and drawn (in a \emph{game} state).
 
 In the application class there are also methods for getting an average and last FPS statistic and methods for showing and hiding a debug console as well as writing message to it. There are also the variables indicating whether the current application instance includes the editor (in a game distribution the editor should be disabled) and whether the editor is currently turned on so the game is running only in a small window instead of a full screen mode.
 
@@ -39,9 +39,19 @@ Since the class \emph{Core::Game} registers the input listener to itself there a
 \section{Configuration}
 \label{sec:config}
 
+The \emph{Core::Config} class allows storing a configuration data needed by various parts of the program. Supported data types are strings, integers and booleans and they are indexed by text keys and they can be grouped to named sections.
+
+This class is initialized by a name of the file where data are or will be stored. Although changes to a configuration are saved when the class is being destructed it is possible to force it and get the result of this action by the method \emph{Save}.
+
+There are several getter and setter methods for each data type that get or set data according to a key and a section name. A section parameter is optional, the section named \verb|General| is used as a default. The getter methods has also a default value parameter that is returned when a specific key and section do not exist in a configuration file. It is possible to get all keys in a specific section to a vector with the method \emph{GetSectionKeys} or remove one key (\emph{RemoveKey}) or a whole section (\emph{RemoveSection}).
+
 \section{Glossary}
 This is a glossary of the most used terms in the previous sections:
 
 \begin{description}
+  \item[Loading screen] -- a screen visible during a loading of the game indicating a loading progress
+  \item[Main loop] -- a code where an input from user is handled, an application logic is updated and a scene is drawn in a cycle until an application shut down
   \item[FPS] -- a count of frames per second that are drawn indicates a performance of a game
+  \item[Render target] -- a region in a application window where a game content is drawn to
+  \item[Configuration data] -- data that parametrizes the application running (i.e. a screen resolution, a game language etc.)
 \end{description}
