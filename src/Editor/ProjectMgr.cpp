@@ -76,6 +76,7 @@ bool ProjectMgr::OpenProject(const string& path)
 
 	gResourceMgr.SetBasePath(ResourceSystem::BPT_PROJECT, basePath);
 	gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_PROJECT, "", "Project", ".*", "", ResourceSystem::RESTYPE_AUTODETECT, mResourceTypeMap);
+	gEntityMgr.LoadPrototypes();
 	gEditorMgr.RefreshResourceWindow();
 	gEditorMgr.UpdateSceneMenu();
 

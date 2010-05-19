@@ -1270,7 +1270,7 @@ void EntitySystem::EntityMgr::GetPrototypes( EntityList& out )
 
 bool EntitySystem::EntityMgr::LoadPrototypes()
 {
-	if (gResourceMgr.AddResourceFileToGroup(PROTOTYPES_DEFAULT_FILE, "Temp", ResourceSystem::RESTYPE_XMLRESOURCE, ResourceSystem::BPT_SYSTEM, PROTOTYPES_DEFAULT_FILE))
+	if (gResourceMgr.AddResourceFileToGroup(PROTOTYPES_DEFAULT_FILE, "Temp", ResourceSystem::RESTYPE_XMLRESOURCE, ResourceSystem::BPT_PROJECT, PROTOTYPES_DEFAULT_FILE))
 	{
 		ResourceSystem::ResourcePtr res = gResourceMgr.GetResource("Temp", PROTOTYPES_DEFAULT_FILE);
 		res->Load();

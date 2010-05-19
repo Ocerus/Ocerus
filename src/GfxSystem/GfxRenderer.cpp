@@ -64,7 +64,7 @@ GfxSystem::RenderTargetID GfxSystem::GfxRenderer::AddRenderTarget( const GfxView
 {
 	OC_ASSERT(!mIsRendering);
 
-	if (!gEntityMgr.HasEntityComponentOfType(camera, EntityComponents::CT_Camera))
+	if (camera.IsValid() && !gEntityMgr.HasEntityComponentOfType(camera, EntityComponents::CT_Camera))
 	{
 		ocError << "Can't add render target with invalid camera";
 		return InvalidRenderTargetID;
@@ -90,11 +90,23 @@ bool GfxSystem::GfxRenderer::SetCurrentRenderTarget( const RenderTargetID toSet 
 
 	SetViewportImpl(&renderTarget->first);
 
-	// here we're sure these properties exist since we checked that the camera entity is really a camera
-	PropertyHolder position = gEntityMgr.GetEntityProperty(renderTarget->second, "Position" );
-	PropertyHolder zoom = gEntityMgr.GetEntityProperty(renderTarget->second, "Zoom" );
-	PropertyHolder rotation = gEntityMgr.GetEntityProperty(renderTarget->second, "Rotation" );
-	SetCameraImpl(position.GetValue<Vector2>(), zoom.GetValue<float32>(), rotation.GetValue<float32>());
+	// set up some default values if the supplied camera is not valid
+	Vector2 position(0, 0);
+	float32 zoom = 1;
+	float32 rotation = 0;
+
+	// try to get the values from the camera
+	if (renderTarget->second.IsValid())
+	{
+		PropertyHolder positionProp = gEntityMgr.GetEntityProperty(renderTarget->second, "Position" );
+		PropertyHolder zoomProp = gEntityMgr.GetEntityProperty(renderTarget->second, "Zoom" );
+		PropertyHolder rotationProp = gEntityMgr.GetEntityProperty(renderTarget->second, "Rotation" );
+		position = positionProp.GetValue<Vector2>();
+		zoom = zoomProp.GetValue<float32>();
+		rotation = rotationProp.GetValue<float32>();
+	}
+
+	SetCameraImpl(position, zoom, rotation);
 
 	return true;
 }

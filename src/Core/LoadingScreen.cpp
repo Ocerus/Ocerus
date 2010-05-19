@@ -1,18 +1,41 @@
 #include "Common.h"
 #include "LoadingScreen.h"
+#include "GfxSystem/Texture.h"
 
 using namespace Core;
 
+const float32 LOADING_ANIM_DELAY = 0.2f; // delay (seconds) between two frames of animation
+const float32 LOADING_ANIM_MIN_TIME = 0.5f; // minimum duration time of the animation being shown
 
-void Core::LoadingScreen::DoLoading( eType type )
+Core::LoadingScreen::LoadingScreen():
+	mAnimationTimer(false),
+	mAnimationEndTimer(false)
+{
+	GfxSystem::GfxViewport viewport(Vector2_Zero, Vector2(1, 1), false, false);
+	mRenderTarget = gGfxRenderer.AddRenderTarget(viewport, EntitySystem::EntityHandle::Null);
+}
+
+Core::LoadingScreen::~LoadingScreen()
+{
+	gGfxRenderer.RemoveRenderTarget(mRenderTarget);
+}
+
+void Core::LoadingScreen::DoLoading( eType type, const string& sceneName )
 {
 	mType = type;
+	Init();
 
 	// set up resource groups
 	switch (mType)
 	{
 	case TYPE_BASIC_RESOURCES:
+
+		// resources for the loading screen
+		gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_SYSTEM, "general", "Loading", ".+Loading.\\.png");
+		gResourceMgr.LoadResourcesInGroup("Loading");
+
 		break;
+
 	case TYPE_GENERAL_RESOURCES:
 
 		// basic resources needed by the program
@@ -24,19 +47,28 @@ void Core::LoadingScreen::DoLoading( eType type )
 		// load the basic resources into memory
 		gResourceMgr.LoadResourcesInGroup("General");
 
-
 		// additional resources common for all projects
 		gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_SYSTEM, ".", "Scripts", ".+\\.as");
 
+		// load them into memory
 		gResourceMgr.LoadResourcesInGroup("Scripts");
 
-		// prototypes
-		gEntityMgr.LoadPrototypes();
+		break;
 
-		gGUIMgr.Init();
-
+	case TYPE_SCENE:
+		OC_ASSERT_MSG(!sceneName.empty(), "Undefined scene name");
+		gEntityMgr.LoadEntitiesFromResource(gResourceMgr.GetResource("Project", sceneName));
 		break;
 	}
+
+
+	// enforce minimum anim time limit
+	while (mAnimationEndTimer.GetMilliseconds() < 0.1000f * LOADING_ANIM_MIN_TIME)
+	{
+		Draw();
+	}
+
+	Clean();
 }
 
 void Core::LoadingScreen::Init()
@@ -44,15 +76,15 @@ void Core::LoadingScreen::Init()
 	if (mType != TYPE_BASIC_RESOURCES)
 	{
 		gResourceMgr.SetLoadingListener(this);
-
-		// init loading screen gfx
-
+		mAnimationFrame = 0;
+		mAnimationTimer.Reset();
+		mAnimationEndTimer.Reset();
 	}
 }
 
-void Core::LoadingScreen::Deinit()
+void Core::LoadingScreen::Clean()
 {
-
+	gResourceMgr.SetLoadingListener(0);
 }
 
 void Core::LoadingScreen::Draw()
@@ -60,12 +92,28 @@ void Core::LoadingScreen::Draw()
 	if (mType == TYPE_BASIC_RESOURCES) // can't draw when we don't have the gui ready
 		return;
 
-	//TODO:Gfx
-	/*if (gGfxRenderer.BeginRendering())
+	if (gGfxRenderer.BeginRendering())
 	{
-		gGfxRenderer.ClearScreen(GfxSystem::Color(255,0,0));
+		gGfxRenderer.ClearScreen(GfxSystem::Color(30,30,30));
+		gGfxRenderer.SetCurrentRenderTarget(mRenderTarget);
+		if (mAnimationTimer.GetMilliseconds() >= 0.1000f * LOADING_ANIM_DELAY)
+		{
+			mAnimationFrame = (mAnimationFrame+1) % 8;
+			mAnimationTimer.Reset();
+		}
+		GfxSystem::TexturePtr texRes = gResourceMgr.GetResource("Loading", "Loading" + StringConverter::ToString(mAnimationFrame) + ".png");
+		if (texRes)
+		{
+			GfxSystem::TexturedQuad quad;
+			quad.position.x = 0.5f;
+			quad.position.y = 0.5f;
+			quad.texture = texRes->GetTexture();
+			quad.size.x = 200.0f;
+			quad.size.y = 200.0f;
+			gGfxRenderer.DrawTexturedQuad(quad);
+		}
 		gGfxRenderer.EndRendering();
-	}*/
+	}
 }
 
 void Core::LoadingScreen::ResourceGroupLoadStarted( const string& groupName, uint32 resourceCount )
@@ -83,13 +131,10 @@ void Core::LoadingScreen::ResourceLoadStarted( const ResourceSystem::ResourcePtr
 
 void Core::LoadingScreen::ResourceLoadEnded( void )
 {
-
 	Draw();
 }
 
 void Core::LoadingScreen::ResourceGroupLoadEnded( void )
 {
-
 	Draw();
 }
-

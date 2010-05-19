@@ -17,10 +17,10 @@ namespace Core
 	public:
 
 		/// Constructor.
-		LoadingScreen() {}
+		LoadingScreen();
 
 		/// Destructor.
-		virtual ~LoadingScreen() {}
+		virtual ~LoadingScreen();
 
 		/// Defines resource groups to be loaded.
 		enum eType 
@@ -28,11 +28,13 @@ namespace Core
 			/// Basic resources needed for displaying the default application state.
 			TYPE_BASIC_RESOURCES=0, 
 			/// Resources needed in most of the states of the application.
-			TYPE_GENERAL_RESOURCES 
+			TYPE_GENERAL_RESOURCES,
+			/// Resources needed in a scene.
+			TYPE_SCENE
 		};
 
-		/// Main entry point. Starts the resource loading.
-		void DoLoading(eType type);
+		/// Starts the resource loading.
+		void DoLoading(eType type, const string& scene = "");
 
 		/// Renders the current loading state.
 		void Draw();
@@ -48,9 +50,13 @@ namespace Core
 	private:
 
 		eType mType;
+		GfxSystem::RenderTargetID mRenderTarget;
+		Utils::Timer mAnimationTimer;
+		Utils::Timer mAnimationEndTimer;
+		int32 mAnimationFrame;
 
 		void Init();
-		void Deinit();
+		void Clean();
 	};
 }
 

@@ -127,6 +127,10 @@ void Application::RunMainLoop()
 		// process window events
 		MessagePump();
 
+		// make sure we have everything ok
+		OC_ASSERT(mGame);
+		OC_ASSERT(mLoadingScreen);
+
 		// update the profiler
 		gProfiler.Update();
 
@@ -149,6 +153,7 @@ void Application::RunMainLoop()
 			mLoadingScreen->DoLoading(LoadingScreen::TYPE_BASIC_RESOURCES);
 			mLoadingScreen->DoLoading(LoadingScreen::TYPE_GENERAL_RESOURCES);
 
+			gGUIMgr.Init();
 			gEditorMgr.LoadEditor();
 			mGame->Init();
 
