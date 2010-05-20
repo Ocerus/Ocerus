@@ -849,12 +849,12 @@ void EntitySystem::EntityMgr::UpdatePrototypeInstances( const EntityHandle proto
 	{
 		if (it->second->mPrototype == prototype)
 		{
-			UpdatePrototypeInstance(prototype.GetID(), it->first, false);
+			UpdatePrototypeInstance(prototype.GetID(), it->first);
 		}
 	}
 }
 
-void EntitySystem::EntityMgr::UpdatePrototypeInstance( const EntityID prototype, const EntityID instance, const bool forceOverwrite )
+void EntitySystem::EntityMgr::UpdatePrototypeInstance( const EntityID prototype, const EntityID instance )
 {
 	OC_ASSERT(mPrototypes.find(prototype) != mPrototypes.end());
 	PrototypeInfo* prototypeInfo = mPrototypes[prototype];
@@ -892,13 +892,7 @@ void EntitySystem::EntityMgr::UpdatePrototypeInstance( const EntityID prototype,
 			StringKey propertyKey = protPropIter->GetKey();
 			PropertyHolder instanceProperty = GetEntityComponentProperty(instance, currentComponent, propertyKey);
 			PropertyHolder prototypeProperty = *protPropIter;
-
-			// if the property has different value from the prototype copy, then it means the property was specialized
-			// by the user and we should leave it alone
-			if (forceOverwrite)
-			{
-				instanceProperty.CopyFrom(prototypeProperty);
-			}
+			instanceProperty.CopyFrom(prototypeProperty);
 		}
 	}
 }
@@ -1045,7 +1039,7 @@ void EntitySystem::EntityMgr::LinkEntityToPrototype( const EntityHandle entity, 
 	}
 
 	protIt->second->mInstancesCount++;
-	UpdatePrototypeInstance(prototype.GetID(), entity.GetID(), true);
+	UpdatePrototypeInstance(prototype.GetID(), entity.GetID());
 }
 
 void EntitySystem::EntityMgr::UnlinkEntityFromPrototype( const EntityHandle entity )
