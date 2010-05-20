@@ -36,6 +36,14 @@ Since the class \emph{Core::Game} registers the input listener to itself there a
 
 \section{Loading screen}
 
+The \emph{Core::LoadingScreen} class loads resource groups into the memory and displays information about the loading progress. It is connected to the resource manager that calls its listener methods when a resource or a whole resource group is going to be loaded or has been already loaded so it can update progress information.
+
+First it is necessary to create an instance of the \emph{Core::LoadingScreen} class. The only method of this class that should be called explicitly is the \emph{DoLoading} one. The first parameter represents the kind of data to be loaded. Basic resources containing necessary pictures for a loading screen must be loaded first, then general resources needed in most of the states of the application should be loaded. If the editor should be available its resources must be in the memory too. The last usage of this method is the loading of scenes where the second parameter (a name of a scene) must be filled.
+
+The \emph{DoLoading} method invokes the resource manager for loading corresponding resources and the manager calls callback methods informing about the state of loading. For each resource group the \emph{ResourceGroupLoadStarted} method is called first with the group name and a count of resources in the group. Then for each resource in the group the \emph{ResourceLoadStarted} method with a pointer to the resource class is called before the loading starts and the \emph{ResourceLoadEnded} method is called after the loading ends. Finally when a whole resource group is loaded the \emph{ResourceGroupLoadEnded} is called. Each of these methods calls the \emph{Draw} method that shows the loading progress to the user.
+
+In the present implementation the loading progress is shown as a ring divided to eight parts that one of them is drawn brighter than the others. Once a while the next part (in a clockwise order) is selected as a brighter one. Since this implementation shows only that something is loading but not the real progress it can be changed if it is necessary.
+
 \section{Configuration}
 \label{sec:config}
 
@@ -52,6 +60,7 @@ This is a glossary of the most used terms in the previous sections:
   \item[Loading screen] -- a screen visible during a loading of the game indicating a loading progress
   \item[Main loop] -- a code where an input from user is handled, an application logic is updated and a scene is drawn in a cycle until an application shut down
   \item[FPS] -- a count of frames per second that are drawn indicates a performance of a game
-  \item[Render target] -- a region in a application window where a game content is drawn to
+  \item[Render target] -- a region in an application window where a game content is drawn to
+  \item[Resource] -- any kind of data that an application needs for its running (i.e. pictures, scripts, texts etc.)
   \item[Configuration data] -- data that parametrizes the application running (i.e. a screen resolution, a game language etc.)
 \end{description}

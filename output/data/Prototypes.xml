@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Prototypes>
+  <Entities>
+    <Entity Name="prototyp1" ID="-488">
+      <Component Type="Transform">
+        <Angle>0</Angle>
+        <Layer>0</Layer>
+        <Position>0 0</Position>
+        <Scale>0.1 1</Scale>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>tux.png</Texture>
+      </Component>
+    </Entity>
+  </Entities>
+</Prototypes>
