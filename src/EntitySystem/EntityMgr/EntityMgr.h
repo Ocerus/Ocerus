@@ -137,6 +137,9 @@ namespace EntitySystem
 		/// Returns true if the entity is linked to a prototype.
 		bool IsEntityLinkedToPrototype(const EntityHandle entity) const;
 
+		/// Returns the prototype the entity is linked to.
+		EntityHandle GetEntityPrototype(const EntityHandle entity);
+
 		/// Assigns the given entity to the prototype.
 		void LinkEntityToPrototype(const EntityHandle entity, const EntityHandle prototype);
 

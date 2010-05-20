@@ -1297,3 +1297,15 @@ bool EntitySystem::EntityMgr::SavePrototypes()
 	else { ocError << "Prototypes can't be saved!"; }
 	return result;
 }
+
+EntitySystem::EntityHandle EntitySystem::EntityMgr::GetEntityPrototype( const EntityHandle entity )
+{
+	EntityMap::iterator entityInfoIter = mEntities.find(entity.GetID());
+	if (entityInfoIter == mEntities.end())
+	{
+		ocError << "Entity not found";
+		return EntityHandle::Null;
+	}
+	EntityInfo* entityInfo = entityInfoIter->second;
+	return entityInfo->mPrototype;
+}

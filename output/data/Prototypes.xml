@@ -4,10 +4,10 @@
   <Entities>
     <Entity Name="prototyp1" ID="-488">
       <Component Type="Transform">
-        <Angle>0</Angle>
         <Layer>0</Layer>
+        <Angle>0</Angle>
+        <Scale>0.9 1</Scale>
         <Position>0 0</Position>
-        <Scale>0.1 1</Scale>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
