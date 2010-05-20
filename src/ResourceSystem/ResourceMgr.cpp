@@ -308,19 +308,16 @@ void ResourceMgr::LoadResourcesInGroup(const StringKey& group)
 	}
 
 	const ResourceMap& resmap = *gi->second;
-	if (mListener)
-		mListener->ResourceGroupLoadStarted(group.ToString(), static_cast<uint32>(resmap.size()));
+	if (mListener) mListener->ResourceGroupLoadStarted(group.ToString(), static_cast<uint32>(resmap.size()));
 	for (ResourceMap::const_iterator ri = resmap.begin(); ri != resmap.end(); ++ri)
+	{
 		if (ri->second->GetState() == Resource::STATE_INITIALIZED)
 		{
-			if (mListener)
-				mListener->ResourceLoadStarted(ri->second);
+			// callbacks to the listener are handled in the Load() method
 			ri->second->Load();
-			if (mListener)
-				mListener->ResourceLoadEnded();
 		}
-	if (mListener)
-		mListener->ResourceGroupLoadEnded();
+	}
+	if (mListener) mListener->ResourceGroupLoadEnded();
 
 	ocInfo << "Resource group loaded '" << group << "'";
 }
@@ -515,6 +512,7 @@ void ResourceSystem::ResourceMgr::CheckForResourcesUpdates( void )
 
 void ResourceSystem::ResourceMgr::_NotifyResourceLoaded( const Resource* loadedResource )
 {
+	if (mListener) mListener->ResourceLoadEnded();
 	mMemoryUsage += loadedResource->GetSize();
 	CheckMemoryUsage(loadedResource);
 }
@@ -522,6 +520,11 @@ void ResourceSystem::ResourceMgr::_NotifyResourceLoaded( const Resource* loadedR
 void ResourceSystem::ResourceMgr::_NotifyResourceUnloaded( const Resource* unloadedResource )
 {
 	mMemoryUsage -= unloadedResource->GetSize();
+}
+
+void ResourceSystem::ResourceMgr::_NotifyResourceLoadingStarted( const Resource* loadingResource )
+{
+	if (mListener) mListener->ResourceLoadStarted(loadingResource);
 }
 
 void ResourceSystem::ResourceMgr::CheckMemoryUsage( const Resource* resourceToKeep )

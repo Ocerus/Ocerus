@@ -1,16 +1,18 @@
 #include "Common.h"
 #include "LoadingScreen.h"
 #include "GfxSystem/Texture.h"
+#include "Editor/EditorMgr.h"
 
 using namespace Core;
 
-const float32 LOADING_ANIM_DELAY = 0.2f; // delay (seconds) between two frames of animation
+const float32 LOADING_ANIM_DELAY = 0.1f; // delay (seconds) between two frames of animation
 const float32 LOADING_ANIM_MIN_TIME = 0.5f; // minimum duration time of the animation being shown
 
 Core::LoadingScreen::LoadingScreen():
 	mAnimationTimer(false),
 	mAnimationEndTimer(false)
 {
+	mAnimationFrame = 0;
 	GfxSystem::GfxViewport viewport(Vector2_Zero, Vector2(1, 1), false, false);
 	mRenderTarget = gGfxRenderer.AddRenderTarget(viewport, EntitySystem::EntityHandle::Null);
 }
@@ -53,6 +55,13 @@ void Core::LoadingScreen::DoLoading( eType type, const string& sceneName )
 		// load them into memory
 		gResourceMgr.LoadResourcesInGroup("Scripts");
 
+		// start up the GUI stuff
+		gGUIMgr.Init();
+
+		break;
+
+	case TYPE_EDITOR:
+		gEditorMgr.LoadEditor();
 		break;
 
 	case TYPE_SCENE:
@@ -63,7 +72,7 @@ void Core::LoadingScreen::DoLoading( eType type, const string& sceneName )
 
 
 	// enforce minimum anim time limit
-	while (mAnimationEndTimer.GetMilliseconds() < 0.1000f * LOADING_ANIM_MIN_TIME)
+	while (mAnimationEndTimer.GetMilliseconds() < 1000.0f * LOADING_ANIM_MIN_TIME)
 	{
 		Draw();
 	}
@@ -76,7 +85,6 @@ void Core::LoadingScreen::Init()
 	if (mType != TYPE_BASIC_RESOURCES)
 	{
 		gResourceMgr.SetLoadingListener(this);
-		mAnimationFrame = 0;
 		mAnimationTimer.Reset();
 		mAnimationEndTimer.Reset();
 	}
@@ -96,7 +104,7 @@ void Core::LoadingScreen::Draw()
 	{
 		gGfxRenderer.ClearScreen(GfxSystem::Color(30,30,30));
 		gGfxRenderer.SetCurrentRenderTarget(mRenderTarget);
-		if (mAnimationTimer.GetMilliseconds() >= 0.1000f * LOADING_ANIM_DELAY)
+		if (mAnimationTimer.GetMilliseconds() >= 1000.0f * LOADING_ANIM_DELAY)
 		{
 			mAnimationFrame = (mAnimationFrame+1) % 8;
 			mAnimationTimer.Reset();
@@ -123,7 +131,7 @@ void Core::LoadingScreen::ResourceGroupLoadStarted( const string& groupName, uin
 	Draw();
 }
 
-void Core::LoadingScreen::ResourceLoadStarted( const ResourceSystem::ResourcePtr& resource )
+void Core::LoadingScreen::ResourceLoadStarted( const ResourceSystem::Resource* resource )
 {
 	OC_UNUSED(resource);
 	Draw();

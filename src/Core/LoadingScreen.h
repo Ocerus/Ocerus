@@ -30,7 +30,9 @@ namespace Core
 			/// Resources needed in most of the states of the application.
 			TYPE_GENERAL_RESOURCES,
 			/// Resources needed in a scene.
-			TYPE_SCENE
+			TYPE_SCENE,
+			/// Resources for the editor.
+			TYPE_EDITOR
 		};
 
 		/// Starts the resource loading.
@@ -42,7 +44,7 @@ namespace Core
 		/// @name Callbacks from ResourceSystem::IResourceLoadingListener
 		//@{
 		virtual void ResourceGroupLoadStarted(const string& groupName, uint32 resourceCount);
-		virtual void ResourceLoadStarted(const ResourceSystem::ResourcePtr& resource);
+		virtual void ResourceLoadStarted(const ResourceSystem::Resource* resource);
 		virtual void ResourceLoadEnded(void);
 		virtual void ResourceGroupLoadEnded(void);
 		//@}

@@ -55,9 +55,13 @@ void Resource::CloseInputStream()
 bool Resource::Load()
 {
 	// wraps around LoadImpl and does some additional work
+
 	OC_ASSERT(GetState() == STATE_INITIALIZED);
-	if (mIsManual)
-		return false; // manual resources must be loaded by the user
+	if (mIsManual) return false; // manual resources must be loaded by the user
+
+	// make sure the resource mgr is synchronized
+	gResourceMgr._NotifyResourceLoadingStarted(this);
+
 	SetState(STATE_LOADING);
 	ocInfo << "Loading resource '" << mName << "'";
 	RefreshResourceInfo();

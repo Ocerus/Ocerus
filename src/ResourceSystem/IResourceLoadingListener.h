@@ -22,7 +22,7 @@ namespace ResourceSystem
 		virtual void ResourceGroupLoadStarted(const string& groupName, uint32 resourceCount) = 0;
 
 		/// Called when one single resource is being loaded.
-		virtual void ResourceLoadStarted(const ResourcePtr& resource) = 0;
+		virtual void ResourceLoadStarted(const Resource* resource) = 0;
 
 		/// Called when the resource which previously started loading is now loaded.
         virtual void ResourceLoadEnded(void) = 0;

@@ -152,9 +152,8 @@ void Application::RunMainLoop()
 		case AS_LOADING:
 			mLoadingScreen->DoLoading(LoadingScreen::TYPE_BASIC_RESOURCES);
 			mLoadingScreen->DoLoading(LoadingScreen::TYPE_GENERAL_RESOURCES);
+			mLoadingScreen->DoLoading(LoadingScreen::TYPE_EDITOR);
 
-			gGUIMgr.Init();
-			gEditorMgr.LoadEditor();
 			mGame->Init();
 
 			RequestStateChange(AS_GAME, true);

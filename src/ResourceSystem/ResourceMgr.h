@@ -128,6 +128,9 @@ namespace ResourceSystem
 		/// Callback from a resource after it was unloaded.
 		void _NotifyResourceUnloaded(const Resource* unloadedResource);
 
+		/// Callback from a resource before it was loaded.
+		void _NotifyResourceLoadingStarted(const Resource* loadingResource);
+
 	private:
 
 		typedef ResourcePtr (*ResourceCreationMethod)();
