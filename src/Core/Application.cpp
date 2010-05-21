@@ -154,6 +154,8 @@ void Application::RunMainLoop()
 			mGame->Init();
 
 			RequestStateChange(AS_GAME, true);
+
+			//DEBUG
 			gEditorMgr.OpenProject("projects/test");
 
 			break;

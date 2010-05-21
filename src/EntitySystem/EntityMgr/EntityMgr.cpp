@@ -1282,7 +1282,7 @@ bool EntitySystem::EntityMgr::LoadPrototypes()
 
 bool EntitySystem::EntityMgr::SavePrototypes()
 {
-	ResourceSystem::XMLOutput storage(gResourceMgr.GetBasePath(ResourceSystem::BPT_SYSTEM) + PROTOTYPES_DEFAULT_FILE);
+	ResourceSystem::XMLOutput storage(gResourceMgr.GetBasePath(ResourceSystem::BPT_PROJECT) + PROTOTYPES_DEFAULT_FILE);
 	storage.BeginElement("Prototypes");
 	bool result = SaveEntitiesToStorage(storage, true, false);
 	storage.EndElement();
