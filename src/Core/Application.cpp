@@ -83,9 +83,6 @@ void Application::Init()
 
 	// FPS counter init
 	ResetStats();
-
-	// DEBUG
-	gEditorMgr.OpenProject("projects/test");
 }
 
 Application::~Application()
@@ -157,6 +154,8 @@ void Application::RunMainLoop()
 			mGame->Init();
 
 			RequestStateChange(AS_GAME, true);
+			gEditorMgr.OpenProject("projects/test");
+
 			break;
 		case AS_GAME:
 			mGame->Update(delta);

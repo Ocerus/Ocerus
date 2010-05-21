@@ -77,14 +77,14 @@ namespace Editor
 		/// True if the editor is editing a prototype.
 		bool IsEditingPrototype() const;
 
-		/// Refreshes the prototype window.
-		void RefreshPrototypeWindow();
-
 		/// Returns the gui object.
 		inline EditorGUI* GetEditorGui() const { return mEditorGUI; }
 
 		/// Returns the ProjectMgr.
 		inline ProjectMgr* GetProjectMgr() const { return mProjectMgr; }
+
+		/// Refreshes the prototype window.
+		void RefreshPrototypeWindow();
 
 		/// Refreshes the resource window.
 		void RefreshResourceWindow();
