@@ -45,6 +45,9 @@ namespace GUISystem
 		/// Unregisters an input listener for this window.
 		void RemoveInputListener(InputSystem::IInputListener* listener);
 
+		/// Makes the window active for receiving input.
+		void Activate();
+
 		/// @name Overridden members from CEGUI::FrameWindow
 		//@{
 		virtual void initialiseComponents();
@@ -60,6 +63,7 @@ namespace GUISystem
 		virtual void onMouseMove(CEGUI::MouseEventArgs& e);
 		virtual void onMouseButtonDown(CEGUI::MouseEventArgs& e);
 		virtual void onMouseButtonUp(CEGUI::MouseEventArgs& e);
+		virtual void onMouseWheel(CEGUI::MouseEventArgs& e);
 		virtual void onKeyDown(CEGUI::KeyEventArgs& e);
 		virtual void onKeyUp(CEGUI::KeyEventArgs& e);
 		//@}

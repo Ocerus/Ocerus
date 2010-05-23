@@ -108,6 +108,7 @@ void EditorGUI::LoadGUI()
 		mEditorViewport = static_cast<GUISystem::ViewportWindow*>(gCEGUIWM.getWindow("EditorRoot/BottomViewport"));
 		mEditorViewport->SetCamera(camera);
 		mEditorViewport->SetMovableContent(true);
+		mEditorViewport->Activate();
 	}
 
 	// Initialize resource window

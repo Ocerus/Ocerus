@@ -25,7 +25,7 @@ void GUISystem::ViewportWindow::initialiseComponents()
 	CEGUI::FrameWindow::initialiseComponents();
 	setCloseButtonEnabled(false);
 	setFrameEnabled(true);
-	setMousePassThroughEnabled(true);
+	setMousePassThroughEnabled(false);
 }
 
 void GUISystem::ViewportWindow::SetCamera(const EntitySystem::EntityHandle& camera)
@@ -151,6 +151,11 @@ void GUISystem::ViewportWindow::onMouseButtonUp( CEGUI::MouseEventArgs& e )
 	}
 }
 
+void GUISystem::ViewportWindow::onMouseWheel( CEGUI::MouseEventArgs& e )
+{
+	onMouseMove(e);
+}
+
 void GUISystem::ViewportWindow::onKeyDown( CEGUI::KeyEventArgs& e )
 {
 	for (ListenersList::iterator it=mListeners.begin(); it!=mListeners.end(); ++it)
@@ -165,4 +170,9 @@ void GUISystem::ViewportWindow::onKeyUp( CEGUI::KeyEventArgs& e )
 	{
 		(*it)->KeyReleased(*gGUIMgr.GetCurrentInputEvent().keyInfo);
 	}
+}
+
+void GUISystem::ViewportWindow::Activate()
+{
+	activate();
 }

@@ -96,7 +96,7 @@ namespace GUISystem
 			/// Set defaults
 			mCegui->setDefaultFont("DejaVuSans-10");
 			mCegui->setDefaultMouseCursor("Vanilla-Images", "MouseArrow");
-			//mCegui->setMouseClickEventGenerationEnabled(false);
+			mCegui->setMouseClickEventGenerationEnabled(true);
 		}
 		CEGUI_EXCEPTION_END_CRITICAL
 
