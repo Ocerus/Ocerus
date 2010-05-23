@@ -13,7 +13,10 @@ namespace InputSystem
 	{
 	public:
 
+		/// Default constructor.
 		IInputListener(void) {}
+
+		/// Default destructor.
 		virtual ~IInputListener(void) {}
 
 		/// Called when a keyboard key is pressed.

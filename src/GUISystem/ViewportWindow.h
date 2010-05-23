@@ -4,8 +4,9 @@
 #ifndef _VIEWPORT_WINDOW_H_
 #define _VIEWPORT_WINDOW_H_
 
-#include "Common.h"
+#include "Base.h"
 #include <elements/CEGUIFrameWindow.h>
+#include <CEGUIInputEvent.h>
 
 namespace GUISystem
 {
@@ -38,6 +39,12 @@ namespace GUISystem
 		/// @see GfxSystem::DragDropCameraMover
 		inline bool GetMovableContent() const { return mIsMovableContent; }
 
+		/// Registeres an input listener for this window.
+		void AddInputListener(InputSystem::IInputListener* listener);
+
+		/// Unregisters an input listener for this window.
+		void RemoveInputListener(InputSystem::IInputListener* listener);
+
 		/// @name Overridden members from CEGUI::FrameWindow
 		//@{
 		virtual void initialiseComponents();
@@ -45,8 +52,18 @@ namespace GUISystem
 		//@}
 
 	protected:
+
+		///@name CEGUI events.
+		//@{
 		virtual void onSized(CEGUI::WindowEventArgs& e);
 		virtual void onMoved(CEGUI::WindowEventArgs& e);
+		virtual void onMouseMove(CEGUI::MouseEventArgs& e);
+		virtual void onMouseButtonDown(CEGUI::MouseEventArgs& e);
+		virtual void onMouseButtonUp(CEGUI::MouseEventArgs& e);
+		virtual void onKeyDown(CEGUI::KeyEventArgs& e);
+		virtual void onKeyUp(CEGUI::KeyEventArgs& e);
+		//@}
+
 
 		/// Updates viewport area.
 		void UpdateViewportArea();
@@ -61,9 +78,12 @@ namespace GUISystem
 		void DeleteCameraMover();
 
 	private:
+
 		GfxSystem::RenderTargetID mRenderTarget;
 		bool mIsMovableContent;
 		GfxSystem::DragDropCameraMover* mCameraMover;
+		typedef vector<InputSystem::IInputListener*> ListenersList;
+		ListenersList mListeners;
 	};
 }
 

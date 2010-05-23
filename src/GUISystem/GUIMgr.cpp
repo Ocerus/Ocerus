@@ -164,6 +164,7 @@ namespace GUISystem
 	bool GUIMgr::KeyPressed(const InputSystem::KeyInfo& ke)
 	{
 		OC_DASSERT(mCegui);
+		mCurrentInputEvent.keyInfo = &ke;
 
 		// ToggleConsole button is hardwired here.
 		if (ke.keyCode == InputSystem::KC_GRAVE) {
@@ -190,12 +191,14 @@ namespace GUISystem
 	bool GUIMgr::KeyReleased(const InputSystem::KeyInfo& ke)
 	{
 		OC_DASSERT(mCegui);
+		mCurrentInputEvent.keyInfo = &ke;
 		return mCegui->injectKeyUp(KeyMapperOIStoCEGUI(ke.keyCode));
 	}
 
 	bool GUIMgr::MouseMoved(const InputSystem::MouseInfo& mi)
 	{
 		OC_DASSERT(mCegui);
+		mCurrentInputEvent.mouseInfo = &mi;
 		bool wheelInjected = mCegui->injectMouseWheelChange(float(mi.wheelDelta));
 		bool positionInjected = mCegui->injectMousePosition(float(mi.x), float(mi.y));
 		return wheelInjected || positionInjected;
@@ -205,6 +208,8 @@ namespace GUISystem
 	{
 		OC_UNUSED(mi);
 		OC_DASSERT(mCegui);
+		mCurrentInputEvent.mouseInfo = &mi;
+		mCurrentInputEvent.mouseButton = btn;
 		bool result = mCegui->injectMouseButtonDown(ConvertMouseButtonEnum(btn));
 		return result;
 	}
@@ -213,6 +218,8 @@ namespace GUISystem
 	{
 		OC_UNUSED(mi);
 		OC_DASSERT(mCegui);
+		mCurrentInputEvent.mouseInfo = &mi;
+		mCurrentInputEvent.mouseButton = btn;
 		gEditorMgr.EnablePopupClosing();
 		bool result = mCegui->injectMouseButtonUp(ConvertMouseButtonEnum(btn));
 		gEditorMgr.CloseAllPopupMenus();

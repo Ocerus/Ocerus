@@ -21,23 +21,19 @@ namespace CEGUI
 
 namespace GUISystem
 {
-	/**
-	 * The IConsoleListener interface defines an interface for listening to
-	 * commands from in-game console.
-	 */
+	/// The IConsoleListener interface defines an interface for listening to
+	/// commands from in-game console.
 	class IConsoleListener {
 	public:
 		virtual void EventConsoleCommand(string command) = 0;
 	};
 
-	/**
-	 * The GUIMgr class manages the GUI.
-	 * ...
-	 * It MUST be created after InputMgr, because it registers for user input.
-	 */
+	/// The GUIMgr class manages the GUI.
+	/// It MUST be created after InputMgr, because it registers for user input.
 	class GUIMgr : public Singleton<GUIMgr>, public InputSystem::IInputListener, public GfxSystem::IGfxWindowListener
 	{
 	public:
+
 		/// Constructs a GUIMgr. Do not use this directly, use CreateSingleton() instead.
 		/// Also note that InputMgr must be initialized before construction of GUIMgr.
 		GUIMgr();
@@ -78,7 +74,7 @@ namespace GUISystem
 		CEGUI::Window* LoadWindowLayout(const string& filename, const string& name_prefix = "", const string& resourceGroup = "");
 
 		/// @name IInputListener interface methods
-		/// Those methods inject input into GUI system.
+		/// Those methods inject input into the GUI system.
 		//@{
 		virtual bool KeyPressed(const InputSystem::KeyInfo& ke);
 		virtual bool KeyReleased(const InputSystem::KeyInfo& ke);
@@ -86,6 +82,17 @@ namespace GUISystem
 		virtual bool MouseButtonPressed(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn);
 		virtual bool MouseButtonReleased(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn);
 		//@}
+
+		struct InputEventInfo
+		{
+			const InputSystem::KeyInfo* keyInfo;
+			const InputSystem::MouseInfo* mouseInfo;
+			InputSystem::eMouseButton mouseButton;
+		};
+
+		/// Returns the info about the event being currently processed. This is valid only while any of the event handlers
+		/// is still running.
+		inline InputEventInfo& GetCurrentInputEvent() { return mCurrentInputEvent; }
 
 		/// This method injects resolution change into GUI system. It is part of IGfxWindowListener interface.
 		virtual void ResolutionChanged(const uint32 width, const uint32 height);
@@ -113,6 +120,7 @@ namespace GUISystem
 		CEGUI::Window* mCurrentRootLayout;
 
 		list<CEGUI::Event::Connection> mDeadEventConnections;
+		InputEventInfo mCurrentInputEvent;
 
 		GUIConsole* mGUIConsole;
 

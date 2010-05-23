@@ -109,7 +109,7 @@ void Core::Game::Init()
 	// update globally accessible game related properties, like the physics engine
 	UpdateGameProperties();
 
-	gInputMgr.AddInputListener(this);
+	gApp.RegisterGameInputListener(this);
 	gApp.ResetStats();
 
 	ForceStateChange(GS_NORMAL);
@@ -118,6 +118,7 @@ void Core::Game::Init()
 
 void Core::Game::Clean()
 {	
+	gApp.UnregisterGameInputListener(this);
 	ForceStateChange(GS_CLEANING);
 
 	if (mPhysics) delete mPhysics;
@@ -126,7 +127,6 @@ void Core::Game::Clean()
 		delete *i;
 	}
 	mPhysicsEvents.clear();
-	gInputMgr.RemoveInputListener(this);
 }
 
 void Core::Game::Update(const float32 delta)

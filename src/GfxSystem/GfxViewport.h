@@ -69,7 +69,6 @@ namespace GfxSystem
 		Vector2 mSize;
 		TextureHandle mTexture;
 		bool mRelativeScale;
-
 		bool mGridEnabled;
 		GridInfo mGridInfo;
 	};

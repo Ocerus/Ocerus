@@ -56,7 +56,7 @@ void EditorGUI::LoadGUI()
 
 	CEGUI_EXCEPTION_END
 	
-	/// @todo This code is quite ugly and will be changed
+	// @todo This code is quite ugly and will be changed
 	if (!gGUIMgr.LoadRootLayout("Editor.layout"))
 	{
 		ocError << "Can't load editor";
@@ -67,17 +67,17 @@ void EditorGUI::LoadGUI()
 	mComponentGroupHeight = 28;
 	gCEGUIWM.getWindow("EditorRoot")->setMousePassThroughEnabled(true);
 
-	/// Initialize EditorMenu
+	// Initialize EditorMenu
 	mEditorMenu = new EditorMenu();
 	mEditorMenu->Init();
 
-	/// Initialize LayerMgrWidget
+	// Initialize LayerMgrWidget
 	mLayerMgrWidget = new LayerMgrWidget(gCEGUIWM.getWindow("EditorRoot/LayerMgr"));
 	mLayerMgrWidget->Init();
 
-	/// Initialize top viewport
+	// Initialize top viewport
 	{
-		/// Create game camera.
+		// Create game camera.
 		EntitySystem::EntityDescription desc;
 		desc.SetName("GameCamera1");
 		desc.AddComponent(EntitySystem::CT_Camera);
@@ -85,18 +85,18 @@ void EditorGUI::LoadGUI()
 		EntitySystem::EntityHandle camera = gEntityMgr.CreateEntity(desc);
 		camera.FinishInit();
 
-		/// Assign game camera to top viewport.
+		// Assign game camera to top viewport.
 		mGameViewport = static_cast<GUISystem::ViewportWindow*>(gCEGUIWM.getWindow("EditorRoot/TopViewport"));
 		mGameViewport->SetCamera(camera);
 		mGameViewport->SetMovableContent(false);
 
-		/// Pass render target from viewport to Game instance.
+		// Pass render target from viewport to Game instance.
 		GlobalProperties::Get<Core::Game>("Game").SetRenderTarget(mGameViewport->GetRenderTarget());
 	}
 
-	/// Initialize bottom viewport
+	// Initialize bottom viewport
 	{
-		/// Create editor camera.
+		// Create editor camera.
 		EntitySystem::EntityDescription desc;
 		desc.SetName("EditorCamera1");
 		desc.AddComponent(EntitySystem::CT_Camera);
@@ -104,13 +104,13 @@ void EditorGUI::LoadGUI()
 		EntitySystem::EntityHandle camera = gEntityMgr.CreateEntity(desc);
 		camera.FinishInit();
 
-		/// Assign game camera to bottom viewport.
+		// Assign game camera to bottom viewport.
 		mEditorViewport = static_cast<GUISystem::ViewportWindow*>(gCEGUIWM.getWindow("EditorRoot/BottomViewport"));
 		mEditorViewport->SetCamera(camera);
 		mEditorViewport->SetMovableContent(true);
 	}
 
-	/// Initialize resource window
+	// Initialize resource window
 	mResourceWindow = new ResourceWindow();
 	mResourceWindow->Init();
 

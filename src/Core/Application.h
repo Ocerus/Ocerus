@@ -76,6 +76,12 @@ namespace Core
 		/// Hides the debug console.
 		void HideConsole(void);
 
+		/// Registers the game state for receiving the input.
+		void RegisterGameInputListener(InputSystem::IInputListener* listener);
+
+		/// Unregisters the game state for receiving the input.
+		void UnregisterGameInputListener(InputSystem::IInputListener* listener);
+
 	private:
 
 		/// Application states.

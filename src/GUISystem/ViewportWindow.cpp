@@ -93,13 +93,13 @@ void GUISystem::ViewportWindow::CreateCameraMover()
 {
 	OC_DASSERT(mCameraMover == 0);
 	mCameraMover = new GfxSystem::DragDropCameraMover(mRenderTarget);
-	gInputMgr.AddInputListener(mCameraMover);
+	AddInputListener(mCameraMover);
 }
 
 void GUISystem::ViewportWindow::DeleteCameraMover()
 {
 	OC_DASSERT(mCameraMover != 0);
-	gInputMgr.RemoveInputListener(mCameraMover);
+	RemoveInputListener(mCameraMover);
 	delete mCameraMover;
 	mCameraMover = 0;
 }
@@ -107,4 +107,62 @@ void GUISystem::ViewportWindow::DeleteCameraMover()
 EntitySystem::EntityHandle GUISystem::ViewportWindow::GetCamera() const
 {
 	return gGfxRenderer.GetRenderTargetCamera(mRenderTarget);
+}
+
+void GUISystem::ViewportWindow::AddInputListener( InputSystem::IInputListener* listener )
+{
+	ListenersList::iterator it = find(mListeners.begin(), mListeners.end(), listener);
+	if (it == mListeners.end())
+	{
+		mListeners.push_back(listener);
+	}
+}
+
+void GUISystem::ViewportWindow::RemoveInputListener( InputSystem::IInputListener* listener )
+{
+	ListenersList::iterator it = find(mListeners.begin(), mListeners.end(), listener);
+	if (it != mListeners.end())
+	{
+		mListeners.erase(it);
+	}
+}
+
+void GUISystem::ViewportWindow::onMouseMove( CEGUI::MouseEventArgs& e )
+{
+	for (ListenersList::iterator it=mListeners.begin(); it!=mListeners.end(); ++it)
+	{
+		(*it)->MouseMoved(*gGUIMgr.GetCurrentInputEvent().mouseInfo);
+	}
+}
+
+void GUISystem::ViewportWindow::onMouseButtonDown( CEGUI::MouseEventArgs& e )
+{
+	for (ListenersList::iterator it=mListeners.begin(); it!=mListeners.end(); ++it)
+	{
+		(*it)->MouseButtonPressed(*gGUIMgr.GetCurrentInputEvent().mouseInfo, gGUIMgr.GetCurrentInputEvent().mouseButton);
+	}
+}
+
+void GUISystem::ViewportWindow::onMouseButtonUp( CEGUI::MouseEventArgs& e )
+{
+	for (ListenersList::iterator it=mListeners.begin(); it!=mListeners.end(); ++it)
+	{
+		(*it)->MouseButtonReleased(*gGUIMgr.GetCurrentInputEvent().mouseInfo, gGUIMgr.GetCurrentInputEvent().mouseButton);
+	}
+}
+
+void GUISystem::ViewportWindow::onKeyDown( CEGUI::KeyEventArgs& e )
+{
+	for (ListenersList::iterator it=mListeners.begin(); it!=mListeners.end(); ++it)
+	{
+		(*it)->KeyPressed(*gGUIMgr.GetCurrentInputEvent().keyInfo);
+	}
+}
+
+void GUISystem::ViewportWindow::onKeyUp( CEGUI::KeyEventArgs& e )
+{
+	for (ListenersList::iterator it=mListeners.begin(); it!=mListeners.end(); ++it)
+	{
+		(*it)->KeyReleased(*gGUIMgr.GetCurrentInputEvent().keyInfo);
+	}
 }

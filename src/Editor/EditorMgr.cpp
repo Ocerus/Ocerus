@@ -47,12 +47,12 @@ void EditorMgr::LoadEditor()
 	mIsInitialTime = true;
 
 	mEditorGUI->LoadGUI();
-	gInputMgr.AddInputListener(this);
+	mEditorGUI->GetEditorViewport()->AddInputListener(this);
 }
 
 void Editor::EditorMgr::UnloadEditor()
 {
-	gInputMgr.RemoveInputListener(this);
+	if (mEditorGUI) mEditorGUI->GetEditorViewport()->RemoveInputListener(this);
 	gGUIMgr.UnloadRootLayout();
 }
 

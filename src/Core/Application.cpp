@@ -6,8 +6,10 @@
 #include "LogSystem/LogMgr.h"
 #include "GfxSystem/OglRenderer.h"
 #include "GfxSystem/GfxWindow.h"
+#include "GUISystem/ViewportWindow.h"
 #include "ScriptSystem/ScriptResource.h"
 #include "Editor/EditorMgr.h"
+#include "Editor/EditorGUI.h"
 #include "EntitySystem/EntityMgr/LayerMgr.h"
 
 
@@ -90,6 +92,7 @@ Application::~Application()
 	HideConsole();
 
 	delete mLoadingScreen;
+	delete mGame;
 
 	EntitySystem::LayerMgr::DestroySingleton();
 	Editor::EditorMgr::DestroySingleton();
@@ -102,7 +105,6 @@ Application::~Application()
 
 	EntitySystem::EntityMgr::DestroySingleton();
 	ScriptSystem::ScriptMgr::DestroySingleton();
-	delete mGame;
 	InputSystem::InputMgr::DestroySingleton();
 	GfxSystem::GfxRenderer::DestroySingleton();
 	GfxSystem::GfxWindow::DestroySingleton();
@@ -263,6 +265,19 @@ void Application::MessagePump( void )
 		{
 			RequestStateChange(AS_SHUTDOWN, true);
 		}
+	}
+}
+
+void Core::Application::RegisterGameInputListener( InputSystem::IInputListener* listener )
+{
+	gEditorMgr.GetEditorGui()->GetGameViewport()->AddInputListener(listener);
+}
+
+void Core::Application::UnregisterGameInputListener( InputSystem::IInputListener* listener )
+{
+	if (gEditorMgr.GetEditorGui())
+	{
+		gEditorMgr.GetEditorGui()->GetGameViewport()->RemoveInputListener(listener);
 	}
 }
 
