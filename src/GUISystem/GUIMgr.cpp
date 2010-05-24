@@ -156,9 +156,6 @@ namespace GUISystem
 	{
 		OC_DASSERT(mCegui);
 		mCegui->injectTimePulse(delta);
-		/// @note: For some reason we injected mouse position here, instead of in
-		///        MouseMoved(). Delete this comment after you are sure that everything
-		///        is working well.
 	}
 
 	bool GUIMgr::KeyPressed(const InputSystem::KeyInfo& ke)

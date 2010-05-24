@@ -129,6 +129,8 @@ void GUISystem::ViewportWindow::RemoveInputListener( InputSystem::IInputListener
 
 void GUISystem::ViewportWindow::onMouseMove( CEGUI::MouseEventArgs& e )
 {
+	CEGUI::FrameWindow::onMouseMove(e);
+
 	for (ListenersList::iterator it=mListeners.begin(); it!=mListeners.end(); ++it)
 	{
 		(*it)->MouseMoved(*gGUIMgr.GetCurrentInputEvent().mouseInfo);
@@ -137,6 +139,8 @@ void GUISystem::ViewportWindow::onMouseMove( CEGUI::MouseEventArgs& e )
 
 void GUISystem::ViewportWindow::onMouseButtonDown( CEGUI::MouseEventArgs& e )
 {
+	CEGUI::FrameWindow::onMouseButtonDown(e);
+
 	for (ListenersList::iterator it=mListeners.begin(); it!=mListeners.end(); ++it)
 	{
 		(*it)->MouseButtonPressed(*gGUIMgr.GetCurrentInputEvent().mouseInfo, gGUIMgr.GetCurrentInputEvent().mouseButton);
@@ -145,6 +149,8 @@ void GUISystem::ViewportWindow::onMouseButtonDown( CEGUI::MouseEventArgs& e )
 
 void GUISystem::ViewportWindow::onMouseButtonUp( CEGUI::MouseEventArgs& e )
 {
+	CEGUI::FrameWindow::onMouseButtonUp(e);
+
 	for (ListenersList::iterator it=mListeners.begin(); it!=mListeners.end(); ++it)
 	{
 		(*it)->MouseButtonReleased(*gGUIMgr.GetCurrentInputEvent().mouseInfo, gGUIMgr.GetCurrentInputEvent().mouseButton);
@@ -153,11 +159,15 @@ void GUISystem::ViewportWindow::onMouseButtonUp( CEGUI::MouseEventArgs& e )
 
 void GUISystem::ViewportWindow::onMouseWheel( CEGUI::MouseEventArgs& e )
 {
+	CEGUI::FrameWindow::onMouseWheel(e);
+
 	onMouseMove(e);
 }
 
 void GUISystem::ViewportWindow::onKeyDown( CEGUI::KeyEventArgs& e )
 {
+	CEGUI::FrameWindow::onKeyDown(e);
+
 	for (ListenersList::iterator it=mListeners.begin(); it!=mListeners.end(); ++it)
 	{
 		(*it)->KeyPressed(*gGUIMgr.GetCurrentInputEvent().keyInfo);
@@ -166,6 +176,8 @@ void GUISystem::ViewportWindow::onKeyDown( CEGUI::KeyEventArgs& e )
 
 void GUISystem::ViewportWindow::onKeyUp( CEGUI::KeyEventArgs& e )
 {
+	CEGUI::FrameWindow::onKeyUp(e);
+
 	for (ListenersList::iterator it=mListeners.begin(); it!=mListeners.end(); ++it)
 	{
 		(*it)->KeyReleased(*gGUIMgr.GetCurrentInputEvent().keyInfo);

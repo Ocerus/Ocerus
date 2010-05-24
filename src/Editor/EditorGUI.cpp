@@ -122,6 +122,11 @@ void EditorGUI::LoadGUI()
 
 void EditorGUI::Update(float32 delta)
 {
+	CEGUI::Window* activeWindow = CEGUI::System::getSingleton().getGUISheet();
+	if (!activeWindow) mEditorViewport->Activate();
+	else if (!activeWindow->getActiveChild()) mEditorViewport->Activate();
+	else if (activeWindow->getActiveChild()->getType().compare("Editor/Editbox") != 0) mEditorViewport->Activate();
+
 	mPropertyUpdateTimer += delta;
 	if (mPropertyUpdateTimer > 0.3)
 	{
