@@ -123,9 +123,17 @@ void EditorGUI::LoadGUI()
 void EditorGUI::Update(float32 delta)
 {
 	CEGUI::Window* activeWindow = CEGUI::System::getSingleton().getGUISheet();
-	if (!activeWindow) mEditorViewport->Activate();
-	else if (!activeWindow->getActiveChild()) mEditorViewport->Activate();
-	else if (activeWindow->getActiveChild()->getType().compare("Editor/Editbox") != 0) mEditorViewport->Activate();
+	if (!activeWindow || !activeWindow->getActiveChild())
+	{
+		mEditorViewport->Activate();
+	}
+	else
+	{
+		bool isEditbox = activeWindow->getActiveChild()->getType().compare("Editor/Editbox") == 0;
+		bool isMenuItem = activeWindow->getActiveChild()->getType().compare("Editor/MenuItem") == 0;
+		bool isPopupMenu = activeWindow->getActiveChild()->getType().compare("Editor/PopupMenu") == 0;
+		if (!isEditbox && !isMenuItem && !isPopupMenu) mEditorViewport->Activate();
+	}
 
 	mPropertyUpdateTimer += delta;
 	if (mPropertyUpdateTimer > 0.3)
