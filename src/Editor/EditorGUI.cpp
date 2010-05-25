@@ -132,7 +132,8 @@ void EditorGUI::Update(float32 delta)
 		bool isEditbox = activeWindow->getActiveChild()->getType().compare("Editor/Editbox") == 0;
 		bool isMenuItem = activeWindow->getActiveChild()->getType().compare("Editor/MenuItem") == 0;
 		bool isPopupMenu = activeWindow->getActiveChild()->getType().compare("Editor/PopupMenu") == 0;
-		if (!isEditbox && !isMenuItem && !isPopupMenu) mEditorViewport->Activate();
+		bool isButton = activeWindow->getActiveChild()->getType().compare("Editor/Button") == 0;
+		if (!isEditbox && !isMenuItem && !isPopupMenu && !isButton) mEditorViewport->Activate();
 	}
 
 	mPropertyUpdateTimer += delta;

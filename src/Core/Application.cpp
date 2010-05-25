@@ -91,6 +91,8 @@ Application::~Application()
 {
 	HideConsole();
 
+	gEntityMgr.DestroyAllEntities();
+
 	delete mLoadingScreen;
 	delete mGame;
 

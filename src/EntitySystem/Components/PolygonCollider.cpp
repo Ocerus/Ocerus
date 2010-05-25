@@ -119,7 +119,7 @@ void EntityComponents::PolygonCollider::DestroyShape( void )
 		GlobalProperties::Get<Physics>("Physics").DestroyBody(mSensorBody);
 		mSensorBody = 0;
 	}
-	else
+	else if (GetOwner().HasProperty("PhysicalBody"))
 	{
 		// remove the shape from the body
 		PhysicalBody* body = GetOwner().GetProperty("PhysicalBody").GetValue<PhysicalBody*>();

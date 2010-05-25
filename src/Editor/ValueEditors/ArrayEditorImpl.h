@@ -176,7 +176,7 @@ namespace Editor
 		if (mArray.size() != mElementEditors.size())
 		{
 			mLayout->LockUpdates();
-			for (uint32 i = mArray.size(); i < mElementEditors.size(); ++i)
+			while (mArray.size() < mElementEditors.size())
 			{
 				delete mElementEditors.back();
 				mElementEditors.pop_back();
