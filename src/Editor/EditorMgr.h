@@ -159,7 +159,10 @@ namespace Editor
 		void RestartAction();
 
 		/// Sets the current edit tool.
-		void SetEditTool(eEditTool newEditTool);
+		void SetCurrentEditTool(eEditTool newEditTool);
+
+		/// Switches the edit tool to new one. It also changes the current pressed tool button.
+		void SwitchEditTool(eEditTool newEditTool);
 
 	private:
 

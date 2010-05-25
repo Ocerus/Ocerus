@@ -11,6 +11,7 @@ namespace CEGUI
 {
 	class EventArgs;
 	class Window;
+	class RadioButton;
 }
 
 namespace Editor
@@ -42,9 +43,16 @@ namespace Editor
 		/// Updates the list of scenes in scene menu.
 		void UpdateSceneMenu();
 
+		/// Switches the currently selected tool button.
+		void SwitchToolButton(uint32 selectedButtonIndex);
+
 	private:
+
 		enum eMessageBoxTags { MBT_QUIT };
 		enum eFolderSelectorTags { FST_OPENPROJECT };
+
+		typedef vector<CEGUI::RadioButton*> RadioButtonList;
+		RadioButtonList mToolButtons;
 
 		/// Creates menu items in AddComponent menu.
 		void InitComponentMenu();

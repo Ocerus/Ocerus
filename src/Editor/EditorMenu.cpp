@@ -230,28 +230,28 @@ bool Editor::EditorMenu::OnToolbarButtonClicked(const CEGUI::EventArgs& e)
 	/// ---- Edit tool move ----
 	if (buttonName == toolbarPrefix + "/EditToolMove")
 	{
-		gEditorMgr.SetEditTool(EditorMgr::ET_MOVE);
+		gEditorMgr.SetCurrentEditTool(EditorMgr::ET_MOVE);
 		return true;
 	}
 
 	/// ---- Edit tool rotate ----
 	if (buttonName == toolbarPrefix + "/EditToolRotateZ")
 	{
-		gEditorMgr.SetEditTool(EditorMgr::ET_ROTATE);
+		gEditorMgr.SetCurrentEditTool(EditorMgr::ET_ROTATE);
 		return true;
 	}
 
 	/// ---- Edit tool rotate-z ----
 	if (buttonName == toolbarPrefix + "/EditToolRotateY")
 	{
-		gEditorMgr.SetEditTool(EditorMgr::ET_ROTATE_Z);
+		gEditorMgr.SetCurrentEditTool(EditorMgr::ET_ROTATE_Z);
 		return true;
 	}
 
 	/// ---- Edit tool scale ----
 	if (buttonName == toolbarPrefix + "/EditToolScale")
 	{
-		gEditorMgr.SetEditTool(EditorMgr::ET_SCALE);
+		gEditorMgr.SetCurrentEditTool(EditorMgr::ET_SCALE);
 		return true;
 	}
 
@@ -337,9 +337,6 @@ void Editor::EditorMenu::ConfigureMenu(CEGUI::Window* parent)
 			parent->getChildAtIdx(childIdx)->subscribeEvent(CEGUI::MenuItem::EventMouseEnters,
 					CEGUI::Event::Subscriber(&Editor::EditorMenu::OnMouseEntersMenuItem, this));
 
-			//parent->getChildAtIdx(childIdx)->subscribeEvent(CEGUI::MenuItem::EventMouseLeaves,
-					//CEGUI::Event::Subscriber(&Editor::EditorMenu::OnMouseLeavesMenuItem, this));
-
 			if(parent->getChildAtIdx(childIdx)->testClassName("MenuItem"))
 			{
 				parent->getChildAtIdx(childIdx)->subscribeEvent(CEGUI::MenuItem::EventClicked,
@@ -359,7 +356,7 @@ void Editor::EditorMenu::ConfigureToolbar(CEGUI::Window* parent)
 		
 		if (child->testClassName("RadioButton"))
 		{
-			CEGUI::RadioButton * radioButton = static_cast<CEGUI::RadioButton*>(child);
+			CEGUI::RadioButton* radioButton = static_cast<CEGUI::RadioButton*>(child);
 			const CEGUI::String& name = radioButton->getName();
 
 			// set radio button groups
@@ -375,6 +372,7 @@ void Editor::EditorMenu::ConfigureToolbar(CEGUI::Window* parent)
 					 (name == (toolbarPrefix + "/EditToolScale")) )
 			{
 				radioButton->setGroupID(1);
+				mToolButtons.push_back(radioButton);
 			}
 
 			// initially selected radio buttons
@@ -389,4 +387,10 @@ void Editor::EditorMenu::ConfigureToolbar(CEGUI::Window* parent)
 		}
 		ConfigureToolbar(child);
 	}
+}
+
+void Editor::EditorMenu::SwitchToolButton( uint32 selectedButtonIndex )
+{
+	OC_ASSERT_MSG(selectedButtonIndex < mToolButtons.size(), "Invalid tool button index");
+	mToolButtons[selectedButtonIndex]->setSelected(true);
 }

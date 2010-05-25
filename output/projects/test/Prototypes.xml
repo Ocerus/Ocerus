@@ -13,6 +13,10 @@
         <Transparency>0</Transparency>
         <Texture>tux.png</Texture>
       </Component>
+      <Component Type="PolygonCollider">
+        <Density>1</Density>
+        <Polygon></Polygon>
+      </Component>
     </Entity>
   </Entities>
 </Prototypes>

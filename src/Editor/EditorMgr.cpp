@@ -42,7 +42,7 @@ void EditorMgr::LoadEditor()
 	mMousePressedInSceneWindow = false;
 	mPopupClosingEnabled = false;
 	mMultiselectStarted = false;
-	SetEditTool(ET_MOVE);
+	SetCurrentEditTool(ET_MOVE);
 	mHoveredEntity.Invalidate();
 	mIsInitialTime = true;
 
@@ -300,17 +300,21 @@ void Editor::EditorMgr::RestartAction()
 	}
 }
 
-void Editor::EditorMgr::SetEditTool(eEditTool newEditTool)
+void Editor::EditorMgr::SetCurrentEditTool(eEditTool newEditTool)
 {
 	mEditToolWorking = false;
 	mEditTool = newEditTool;
 }
 
+void Editor::EditorMgr::SwitchEditTool( eEditTool newEditTool )
+{
+	mEditorGUI->GetEditorMenu()->SwitchToolButton((uint32)newEditTool);
+}
+
 void Editor::EditorMgr::RefreshResourceWindow()
 {
 	ResourceWindow* resourceWindow = mEditorGUI->GetResourceWindow();
-	if (resourceWindow)
-		resourceWindow->Refresh();
+	if (resourceWindow) resourceWindow->Refresh();
 }
 
 void Editor::EditorMgr::UpdateSceneMenu()
@@ -332,24 +336,24 @@ void EditorMgr::OpenProject(const string& projectPath)
 
 bool Editor::EditorMgr::KeyPressed( const InputSystem::KeyInfo& ke )
 {
-	if (ke.keyCode == InputSystem::KC_M)
+	if (ke.keyCode == InputSystem::KC_Q)
 	{
-		SetEditTool(ET_MOVE);
+		SwitchEditTool(ET_MOVE);
+		return true;
+	}
+	else if (ke.keyCode == InputSystem::KC_W)
+	{
+		SwitchEditTool(ET_ROTATE);
+		return true;
+	}
+	else if (ke.keyCode == InputSystem::KC_E)
+	{
+		SwitchEditTool(ET_ROTATE_Z);
 		return true;
 	}
 	else if (ke.keyCode == InputSystem::KC_R)
 	{
-		SetEditTool(ET_ROTATE);
-		return true;
-	}
-	else if (ke.keyCode == InputSystem::KC_Z)
-	{
-		SetEditTool(ET_ROTATE_Z);
-		return true;
-	}
-	else if (ke.keyCode == InputSystem::KC_S)
-	{
-		SetEditTool(ET_SCALE);
+		SwitchEditTool(ET_SCALE);
 		return true;
 	}
 
