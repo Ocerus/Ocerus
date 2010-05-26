@@ -917,7 +917,10 @@ EntitySystem::ComponentID EntitySystem::EntityMgr::AddComponentToEntity( const E
 		GetEntityComponentProperties(entity, cid, propList);
 		for (PropertyList::iterator it=propList.begin(); it!=propList.end(); ++it)
 		{
-			SetPrototypePropertyShared(entity, it->GetName());
+			if ((it->GetAccessFlags() & Reflection::PA_INIT) != 0)
+			{
+				SetPrototypePropertyShared(entity, it->GetName());
+			}
 		}
 	}
 
@@ -948,7 +951,7 @@ void EntitySystem::EntityMgr::SetPrototypePropertyShared( const EntityHandle pro
 	PropertyHolder prop = GetEntityProperty(prototype.GetID(), propertyToMark);
 	if (!(prop.GetAccessFlags() & Reflection::PA_INIT))
 	{
-		ocError << "Only properties marked as initable (PA_INIT) can be marked as shared";
+		ocError << "Property " << propertyToMark << " must be initable (PA_INIT) to be marked as shared";
 		return;
 	}
 
