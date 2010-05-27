@@ -130,6 +130,7 @@ namespace Editor
 	{
 		OC_UNUSED(arg);
 		Submit();
+		gEditorMgr.PropertyValueChanged();
 		return true;
 	}
 

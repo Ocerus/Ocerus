@@ -499,6 +499,7 @@ bool Editor::EditorMgr::MouseButtonReleased( const InputSystem::MouseInfo& mi, c
 	OC_UNUSED(mi);
 	OC_UNUSED(btn);
 
+	bool editToolWasWorking = mEditToolWorking;
 	mEditToolWorking = false;
 	bool mouseWasPressedInSceneWindow = mMousePressedInSceneWindow;
 	mMousePressedInSceneWindow = false;
@@ -513,6 +514,12 @@ bool Editor::EditorMgr::MouseButtonReleased( const InputSystem::MouseInfo& mi, c
 	if (!mouseWasPressedInSceneWindow)
 	{
 		// the mouse press started somewhere outside the window
+		return false;
+	}
+
+	if (editToolWasWorking)
+	{
+		// the edit tool was working, so we don't want any entity to be selected or the selection to be canceled
 		return false;
 	}
 

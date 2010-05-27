@@ -4,18 +4,22 @@
   <Entities>
     <Entity Name="prototyp1" ID="-488">
       <Component Type="Transform">
-        <Angle>0</Angle>
-        <Position>0 0</Position>
         <Layer>0</Layer>
+        <Angle>0</Angle>
         <Scale>0.7 1</Scale>
+        <Position>0 0</Position>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
         <Texture>tux.png</Texture>
       </Component>
       <Component Type="PolygonCollider">
+        <Polygon>
+          <Item>0 0</Item>
+          <Item>10 0</Item>
+          <Item>10 10</Item>
+        </Polygon>
         <Density>1</Density>
-        <Polygon></Polygon>
       </Component>
     </Entity>
   </Entities>
