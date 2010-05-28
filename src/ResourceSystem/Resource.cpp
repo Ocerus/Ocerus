@@ -63,7 +63,7 @@ bool Resource::Load()
 	gResourceMgr._NotifyResourceLoadingStarted(this);
 
 	SetState(STATE_LOADING);
-	ocInfo << "Loading resource '" << mName << "'";
+	ocTrace << "Loading resource '" << mName << "'";
 	RefreshResourceInfo();
 	mSizeInBytes = LoadImpl();
 	bool loadSuccessful = mSizeInBytes != 0;
@@ -96,7 +96,7 @@ bool Resource::Unload(bool allowManual)
 		return false; // we can't unload manual resources as we won't be able to reload them later
 	}
 	SetState(STATE_UNLOADING);
-	ocInfo << "Unloading resource '" << mName << "'";
+	ocTrace << "Unloading resource '" << mName << "'";
 	bool result = UnloadImpl();
 	SetState(STATE_INITIALIZED);
 	if (!result)

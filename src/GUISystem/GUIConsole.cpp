@@ -42,10 +42,10 @@ void GUIConsole::Deinit()
 
 void GUIConsole::AppendLogMessage(const string& logMessage, int32 logLevel)
 {
-	OC_UNUSED(logMessage);
+	if (!mConsoleMessagesWidget) return;
 	if (logLevel >= mCurrentLogLevelTreshold)
 	{
-
+		mConsoleMessagesWidget->addItem(new CEGUI::ListboxTextItem(logMessage, 0, 0, true));
 	}
 }
 

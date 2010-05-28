@@ -34,8 +34,7 @@ namespace GUISystem
 		mCurrentRootLayout(0),
 		mGUIConsole(0),
 		mRenderer(0),
-		mResourceProvider(0),
-		mConsoleIsLoaded(false)
+		mResourceProvider(0)
 	{
 		ocInfo << "*** GUIMgr init ***";
 
@@ -196,7 +195,7 @@ namespace GUISystem
 	{
 		OC_DASSERT(mCegui);
 		mCurrentInputEvent.mouseInfo = &mi;
-		bool wheelInjected = mCegui->injectMouseWheelChange(float(mi.wheelDelta));
+		bool wheelInjected = mCegui->injectMouseWheelChange(float(mi.wheelDelta) / 100.0f);
 		bool positionInjected = mCegui->injectMousePosition(float(mi.x), float(mi.y));
 		return wheelInjected || positionInjected;
 	}

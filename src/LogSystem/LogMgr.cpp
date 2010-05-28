@@ -50,14 +50,22 @@ void LogSystem::LogMgr::LogMessage(const string& msg, int32 loggingLevel)
 
 	ss << msg << std::endl;
 
-	string str = ss.str();
+	// the final message
+	string finalString = ss.str();
 
+	// append the message to the OS console
 	if (Core::Application::SingletonExists())
-		gApp.WriteToConsole(str);
+	{
+		gApp.WriteToConsole(finalString);
+	}
 
+	// append the message to the internal GUI console
 	if (GUISystem::GUIMgr::SingletonExists() && gGUIMgr.GetConsole())
-		gGUIMgr.GetConsole()->AppendLogMessage(str, loggingLevel);
+	{
+		gGUIMgr.GetConsole()->AppendLogMessage(finalString, loggingLevel);
+	}
 
-	(*mOutStream) << str;
+	// append the message to the log file
+	(*mOutStream) << finalString;
 	mOutStream->flush();
 }

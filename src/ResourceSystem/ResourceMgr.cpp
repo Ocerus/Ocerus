@@ -173,7 +173,7 @@ bool ResourceMgr::AddResourceFileToGroup(const string& filepath, const StringKey
 	else
 		boostPath = mBasePath[basePathType] + filepath;
 	
-	ocInfo << "Adding resource '" << boostPath << "' to group '" << group << "'";
+	ocTrace << "Adding resource '" << boostPath << "' to group '" << group << "'";
 	if (!boost::filesystem::exists(boostPath))
 	{
 		ocError << "Resource located at '" << boostPath.string() << "' not found";
@@ -218,7 +218,7 @@ bool ResourceMgr::AddResourceFileToGroup(const string& filepath, const StringKey
 
 bool ResourceSystem::ResourceMgr::AddManualResourceToGroup( const StringKey& name, const StringKey& group, eResourceType type )
 {
-    ocInfo << "Manually adding resource '" << name << "' to group '" << group << "'";
+    ocTrace << "Manually adding resource '" << name << "' to group '" << group << "'";
 
 	OC_ASSERT_MSG(type != RESTYPE_AUTODETECT, "Must specify resource type when creating it manually");
 
@@ -297,7 +297,7 @@ void ResourceMgr::RefreshPathToGroup(const string& path, const StringKey& group)
 
 void ResourceMgr::LoadResourcesInGroup(const StringKey& group)
 {
-	ocInfo << "Loading resource group '" << group << "'";
+	ocTrace << "Loading resource group '" << group << "'";
 
 	ResourceGroupMap::const_iterator gi = mResourceGroups.find(group);
 
@@ -319,12 +319,12 @@ void ResourceMgr::LoadResourcesInGroup(const StringKey& group)
 	}
 	if (mListener) mListener->ResourceGroupLoadEnded();
 
-	ocInfo << "Resource group loaded '" << group << "'";
+	ocTrace << "Resource group loaded '" << group << "'";
 }
 
 void ResourceMgr::UnloadResourcesInGroup(const StringKey& group, bool allowManual)
 {
-	ocInfo << "Unloading resource group '" << group << "'";
+	ocTrace << "Unloading resource group '" << group << "'";
 
 	ResourceGroupMap::const_iterator gi = mResourceGroups.find(group);
 
@@ -339,7 +339,7 @@ void ResourceMgr::UnloadResourcesInGroup(const StringKey& group, bool allowManua
 		if (ri->second->GetState() >= Resource::STATE_LOADING)
 			ri->second->Unload(allowManual);
 
-	ocInfo << "Resource group '" << group << "' unloaded";
+	ocTrace << "Resource group '" << group << "' unloaded";
 }
 
 void ResourceMgr::DeleteGroup(const StringKey& group)
@@ -404,7 +404,7 @@ void ResourceMgr::GetResources(vector<ResourcePtr>& output, eBasePathType basePa
 
 void ResourceSystem::ResourceMgr::DeleteResource( const StringKey& group, const StringKey& name )
 {
-	ocInfo << "Deleting resource '" << name << "' in group '" << group << "'";
+	ocTrace << "Deleting resource '" << name << "' in group '" << group << "'";
 
 	ResourceGroupMap::iterator gi = mResourceGroups.find(group);
 

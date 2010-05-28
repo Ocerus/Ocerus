@@ -142,10 +142,6 @@ namespace GUISystem
 		typedef vector<IConsoleListener*> ConsoleListeners;
 		ConsoleListeners mConsoleListeners;
 
-		bool mConsoleIsLoaded;
-
-
-		//map<string, StaticElement*> mCreatedStaticElements;
 	};
 
 	inline GUIConsole* GUIMgr::GetConsole()
