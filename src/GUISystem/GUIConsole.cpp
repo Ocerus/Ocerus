@@ -45,19 +45,37 @@ void GUIConsole::AppendLogMessage(const string& logMessage, int32 logLevel)
 	if (!mConsoleMessagesWidget) return;
 	if (logLevel >= mCurrentLogLevelTreshold)
 	{
-		mConsoleMessagesWidget->addItem(new CEGUI::ListboxTextItem(logMessage, 0, 0, true));
+		AppendMessage(logMessage);
 	}
 }
 
 void GUIConsole::AppendScriptMessage(const string& message)
 {
-	OC_UNUSED(message);
+	AppendMessage(message);
+}
+
+void GUISystem::GUIConsole::AppendMessage( const string& message )
+{
+	CEGUI::Scrollbar* scrollbar = mConsoleMessagesWidget->getVertScrollbar();
+	OC_ASSERT(scrollbar);
+	bool scrolledDown = scrollbar->getScrollPosition() == scrollbar->getDocumentSize() - scrollbar->getPageSize();
+	mConsoleMessagesWidget->addItem(new CEGUI::ListboxTextItem(message, 0, 0, true));
+	if (scrolledDown)
+	{
+		scrollbar->setScrollPosition(scrollbar->getDocumentSize());
+	}
 }
 
 void GUIConsole::ToggleConsole()
 {
 	if (!mIsInited)
 		return;
+
+	if (!mConsoleWidget->isVisible())
+	{
+		// fix the scrollbar
+		mConsoleMessagesWidget->getVertScrollbar()->setScrollPosition(mConsoleMessagesWidget->getVertScrollbar()->getDocumentSize());
+	}
 
 	mConsoleWidget->setVisible(!mConsoleWidget->isVisible());
 	mConsolePromptWidget->activate();

@@ -31,6 +31,9 @@ namespace GUISystem
 		/// This method is used to write to console. It should be used by scripts, that were called from the console.
 		void AppendScriptMessage(const string& message);
 
+		/// This method is used to write to console.
+		void AppendMessage(const string& message);
+
 		/// Sets new log treshold.
 		inline void SetLogLevelTreshold(int32 newLogLevelTreshold);
 
