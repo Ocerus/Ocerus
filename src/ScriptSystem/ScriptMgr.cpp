@@ -6,18 +6,29 @@
 #include "Core/Game.h"
 #include "AddOn/scriptbuilder.h"
 #include "AddOn/scriptstring.h"
+#include "GUISystem/GUIConsole.h"
 
 using namespace ScriptSystem;
 using namespace EntitySystem;
 using namespace AngelScript;
+
 
 void MessageCallback(const asSMessageInfo* msg, void* param)
 {
 	OC_UNUSED(param);
 	const char* messageType[] = {"ERROR", "WARNING", "INFO"};
 
-	ocInfo << msg->section << "(" << msg->row << ", " << msg->col << ") : "
-		<< messageType[msg->type] << ": " << msg->message;
+	if (gScriptMgr.IsExecutedFromConsole())
+	{
+		stringstream ss;
+		ss << "SCRIPT: " << msg->message;
+		gGUIMgr.GetConsole()->AppendScriptMessage(ss.str());
+	}
+	else
+	{
+		ocInfo << msg->section << "(" << msg->row << ", " << msg->col << ") : "
+			<< messageType[msg->type] << ": " << msg->message;
+	}
 }
 
 void LineCallback(asIScriptContext* ctx, uint64* deadline)
@@ -72,6 +83,7 @@ ScriptMgr::ScriptMgr(const string& basepath)
 {
 	ocInfo << "*** ScriptMgr init ***";
 
+	mExecFromConsole = false;
 	mBasePath = basepath;
 
 	// Create the script engine
@@ -612,6 +624,9 @@ bool ScriptMgr::ExecuteContext(asIScriptContext* ctx, uint32 timeOut)
 	OC_ASSERT_MSG(ctx, "Cannot execute null context!");
 	OC_ASSERT_MSG(ctx->GetState() == asEXECUTION_PREPARED, "Cannot execute unprepared context!");
 
+	// we never execute whole context from the console
+	mExecFromConsole = false;
+
 	int32 funcId = ctx->GetCurrentFunction();
 	const char* moduleName = GetFunctionModuleName(funcId);
 	const char* funcDecl = GetFunctionDeclaration(funcId);
@@ -657,6 +672,9 @@ bool ScriptMgr::ExecuteContext(asIScriptContext* ctx, uint32 timeOut)
 
 bool ScriptMgr::ExecuteString(const char* script, const char* moduleName)
 {
+	// here we assume the single string is executed only from the GUI console
+	mExecFromConsole = true;
+
 	// Get the module by name
 	asIScriptModule* mod = GetModule(moduleName);
 	if (mod == 0)
@@ -664,6 +682,8 @@ bool ScriptMgr::ExecuteString(const char* script, const char* moduleName)
 		ocError << "Script module '" << moduleName << "' not found!";
 		return false;
 	}
+
+	bool result;
 
 	// Execute the script string and get result
 	switch(mEngine->ExecuteString(moduleName, script))
@@ -674,13 +694,19 @@ bool ScriptMgr::ExecuteString(const char* script, const char* moduleName)
 		case asEXECUTION_ABORTED:
 		case asEXECUTION_SUSPENDED:
 		case asEXECUTION_EXCEPTION:
-			return false;
+			result = false;
+			break;
 		case asEXECUTION_FINISHED:
-			return true;
+			result = true;
+			break;
 		default:
 			OC_NOT_REACHED();
-			return false;
+			result = false;
 	}
+
+	mExecFromConsole = false;
+
+	return result;
 }
 
 asIScriptModule* ScriptMgr::GetModule(const char* fileName)

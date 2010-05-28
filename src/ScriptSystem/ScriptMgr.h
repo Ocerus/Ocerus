@@ -103,7 +103,11 @@ namespace ScriptSystem
 		/// Returns the current time the script manager is using.
 		uint64 GetTime() const;
 
+		/// Returns true if the command/script is executed from the GUI console.
+		inline bool IsExecutedFromConsole() const { return mExecFromConsole; }
+
 	private:
+
 		/// Pointer to script engine.
 		AngelScript::asIScriptEngine* mEngine;
 
@@ -115,6 +119,9 @@ namespace ScriptSystem
 
 		/// Depencency of loaded modules to resources
 		map<string, ScriptResourcePtrs> mModules;
+
+		/// True if the engine is executing commands directly from the GUI console.
+		bool mExecFromConsole;
 
 		/// Configure the script engine with all the functions and variables that the script should be able to use.
 		void ConfigureEngine(void);
