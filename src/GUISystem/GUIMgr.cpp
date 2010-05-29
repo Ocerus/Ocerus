@@ -300,6 +300,8 @@ bool GUIMgr::ConsoleCommandEvent(const CEGUI::EventArgs& e)
 			result = CEGUI::WindowManager::getSingleton().loadWindowLayout(filename, name_prefix, resourceGroup, PropertyCallback);
 		}
 		CEGUI_EXCEPTION_END
+		if (result) ocInfo << "GUI Window " << filename << " loaded";
+		else ocWarning << "Couldn't load GUI Window " << filename;
 		return result;
 	}
 

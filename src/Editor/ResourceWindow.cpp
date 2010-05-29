@@ -28,6 +28,7 @@ void Editor::ResourceWindow::Init()
 {
 	CEGUI_EXCEPTION_BEGIN
 	mWindow = GUISystem::LoadWindowLayout("ResourceWindow.layout", "EditorRoot/ResourceWindow");
+	OC_ASSERT(mWindow);
 	gGUIMgr.GetRootLayout()->addChildWindow(mWindow);
 	mTree = static_cast<CEGUI::ItemListbox*>(mWindow->getChild(mWindow->getName() + "/List"));
 	CEGUI::Window* refreshButton = mWindow->getChildRecursive(mWindow->getName() + "/Toolbar/Refresh");

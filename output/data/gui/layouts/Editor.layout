@@ -24,7 +24,6 @@
                 <Property Name="VertScrollPosition" Value="0" />
                 <AutoWindow NameSuffix="__auto_container__" >
                     <Property Name="ContentArea" Value="l:0 t:0 r:0 b:0" />
-                    <Property Name="ChildExtentsArea" Value="l:0 t:0 r:0 b:0" />
                 </AutoWindow>
             </Window>
         </Window>
@@ -39,7 +38,6 @@
                     <Property Name="NormalImage" Value="set:EditorToolbar image:btnResumeActionNormal" />
                     <Property Name="HoverImage" Value="set:EditorToolbar image:btnResumeActionHover"  />
                     <Property Name="PushedImage" Value="set:EditorToolbar image:btnResumeActionPushed" />
-                    <Property Name="DisabledImage" Value="set:EditorToolbar image:btnResumeActionDisabled" />
                     <Property Name="Tooltip" Value="$resume_action_hint$" />
                 </Window>
                 <Window Type="Editor/ToolbarRadioButton" Name="EditorRoot/Toolbar/PauseAction">
@@ -47,7 +45,6 @@
                     <Property Name="NormalImage" Value="set:EditorToolbar image:btnPauseActionNormal" />
                     <Property Name="HoverImage" Value="set:EditorToolbar image:btnPauseActionHover"  />
                     <Property Name="PushedImage" Value="set:EditorToolbar image:btnPauseActionPushed" />
-                    <Property Name="DisabledImage" Value="set:EditorToolbar image:btnPauseActionDisabled" />
                     <Property Name="Tooltip" Value="$pause_action_hint$" />
                 </Window>
                 <Window Type="Editor/ToolbarRadioButton" Name="EditorRoot/Toolbar/RestartAction">
@@ -55,7 +52,6 @@
                     <Property Name="NormalImage" Value="set:EditorToolbar image:btnRestartActionNormal" />
                     <Property Name="HoverImage" Value="set:EditorToolbar image:btnRestartActionHover"  />
                     <Property Name="PushedImage" Value="set:EditorToolbar image:btnRestartActionPushed" />
-                    <Property Name="DisabledImage" Value="set:EditorToolbar image:btnRestartActionDisabled" />
                     <Property Name="Tooltip" Value="$restart_action_hint$" />
                 </Window>
                 <Window Type="Editor/ToolbarRadioButton" Name="EditorRoot/Toolbar/EditToolMove">
@@ -63,7 +59,6 @@
                     <Property Name="NormalImage" Value="set:EditorToolbar image:btnEditToolMoveNormal" />
                     <Property Name="HoverImage" Value="set:EditorToolbar image:btnEditToolMoveHover"  />
                     <Property Name="PushedImage" Value="set:EditorToolbar image:btnEditToolMovePushed" />
-                    <Property Name="DisabledImage" Value="set:EditorToolbar image:btnEditToolMoveDisabled" />
                     <Property Name="Tooltip" Value="$edit_tool_move_hint$" />
                 </Window>
                 <Window Type="Editor/ToolbarRadioButton" Name="EditorRoot/Toolbar/EditToolRotateZ">
@@ -71,7 +66,6 @@
                     <Property Name="NormalImage" Value="set:EditorToolbar image:btnEditToolRotateNormal" />
                     <Property Name="HoverImage" Value="set:EditorToolbar image:btnEditToolRotateHover"  />
                     <Property Name="PushedImage" Value="set:EditorToolbar image:btnEditToolRotatePushed" />
-                    <Property Name="DisabledImage" Value="set:EditorToolbar image:btnEditToolRotateDisabled" />
                     <Property Name="Tooltip" Value="$edit_tool_rotate_hint$" />
                 </Window>
                 <Window Type="Editor/ToolbarRadioButton" Name="EditorRoot/Toolbar/EditToolRotateY">
@@ -79,7 +73,6 @@
                     <Property Name="NormalImage" Value="set:EditorToolbar image:btnEditToolRotateZNormal" />
                     <Property Name="HoverImage" Value="set:EditorToolbar image:btnEditToolRotateZHover"  />
                     <Property Name="PushedImage" Value="set:EditorToolbar image:btnEditToolRotateZPushed" />
-                    <Property Name="DisabledImage" Value="set:EditorToolbar image:btnEditToolRotateZDisabled" />
                     <Property Name="Tooltip" Value="$edit_tool_rotate_z_hint$" />
                 </Window>
                 <Window Type="Editor/ToolbarRadioButton" Name="EditorRoot/Toolbar/EditToolScale">
@@ -87,7 +80,6 @@
                     <Property Name="NormalImage" Value="set:EditorToolbar image:btnEditToolScaleNormal" />
                     <Property Name="HoverImage" Value="set:EditorToolbar image:btnEditToolScaleHover"  />
                     <Property Name="PushedImage" Value="set:EditorToolbar image:btnEditToolScalePushed" />
-                    <Property Name="DisabledImage" Value="set:EditorToolbar image:btnEditToolScaleDisabled" />
                     <Property Name="Tooltip" Value="$edit_tool_scale_hint$" />
                 </Window>
             </Window>

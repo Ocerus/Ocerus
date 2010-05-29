@@ -4721,11 +4721,12 @@
 ***********************************************************************************************************/
 -->
 <WidgetLook name="TaharezLook/Tree">
-        <Property name="SelectionBrushImage" value="set:TaharezLook image:GenericBrush" />
+		<!-- Not supported in Falagard -->
+        <!--<Property name="SelectionBrushImage" value="set:TaharezLook image:GenericBrush" />
         <Property name="NormalTextColour" value="FF000000" />
         <Property name="SelectedTextColour" value="FFFFFFFF" />
         <Property name="ActiveSelectionColour" value="FF607FFF" />
-        <Property name="InactiveSelectionColour" value="FF808080" />
+        <Property name="InactiveSelectionColour" value="FF808080" />-->
         <NamedArea name="ItemRenderingArea">
             <Area>
                 <Dim type="LeftEdge" ><ImageDim imageset="TaharezLook" image="WindowLeftEdge" dimension="Width" /></Dim>
