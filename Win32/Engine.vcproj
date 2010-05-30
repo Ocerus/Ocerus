@@ -234,6 +234,79 @@
 				ExcludedFromBuild="true"
 			/>
 		</Configuration>
+		<Configuration
+			Name="Deploy_Develop|Win32"
+			OutputDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="4"
+			CharacterSet="0"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="2"
+				InlineFunctionExpansion="1"
+				WholeProgramOptimization="false"
+				AdditionalIncludeDirectories="../src;../src/Precompiled;../src/Utils;../externalLibs/SDL/inc;../externalLibs/boost/inc;../externalLibs/ois/includes;../externalLibs/cegui/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib;../externalLibs/angelscript/include;../externalLibs/RTHProfiler/include;../externalLibs/SOIL/src;../externalLibs/DbgLib"
+				PreprocessorDefinitions="DEPLOY;WIN32;NDEBUG;_WINDOWS;USE_ASSERT;USE_PROFILER;USE_DBGLIB"
+				GeneratePreprocessedFile="0"
+				MinimalRebuild="true"
+				ExceptionHandling="1"
+				BasicRuntimeChecks="0"
+				RuntimeLibrary="2"
+				RuntimeTypeInfo="false"
+				UsePrecompiledHeader="2"
+				PrecompiledHeaderThrough="Common.h"
+				PrecompiledHeaderFile="$(IntDir)\Common.pch"
+				WarningLevel="4"
+				WarnAsError="true"
+				Detect64BitPortabilityProblems="false"
+				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLibrarianTool"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				CommandLine="copy /V /Y /B ..\externalLibs\cegui\bin\vs9\Release\*.dll &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /V /Y /B ..\externalLibs\expat\bin\Develop\*.dll &quot;$(OutDir)&quot;&#x0D;&#x0A;"
+				ExcludedFromBuild="true"
+			/>
+		</Configuration>
 	</Configurations>
 	<References>
 	</References>
@@ -368,6 +441,14 @@
 						</FileConfiguration>
 						<FileConfiguration
 							Name="Develop|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								UsePrecompiledHeader="1"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="Deploy_Develop|Win32"
 							>
 							<Tool
 								Name="VCCLCompilerTool"
@@ -886,6 +967,14 @@
 								CompileAs="2"
 							/>
 						</FileConfiguration>
+						<FileConfiguration
+							Name="Deploy_Develop|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
 					</File>
 				</Filter>
 			</Filter>
@@ -932,6 +1021,10 @@
 					RelativePath="..\src\Core\LoadingScreen.h"
 					>
 				</File>
+				<File
+					RelativePath="..\src\Core\Project.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="src"
@@ -958,6 +1051,10 @@
 				</File>
 				<File
 					RelativePath="..\src\Core\LoadingScreen.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src\Core\Project.cpp"
 					>
 				</File>
 			</Filter>
@@ -1198,6 +1295,16 @@
 						ShowIncludes="false"
 					/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="Deploy_Develop|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="1"
+						PrecompiledHeaderFile="$(IntDir)\Common.pch"
+						ShowIncludes="false"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\src\Precompiled\Common.h"
@@ -1415,10 +1522,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\src\Editor\ProjectMgr.h"
-					>
-				</File>
-				<File
 					RelativePath="..\src\Editor\PrototypeWindow.h"
 					>
 				</File>
@@ -1452,10 +1555,6 @@
 				</File>
 				<File
 					RelativePath="..\src\Editor\PopupMenu.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\src\Editor\ProjectMgr.cpp"
 					>
 				</File>
 				<File

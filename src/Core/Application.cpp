@@ -3,6 +3,7 @@
 #include "LoadingScreen.h"
 #include "Game.h"
 #include "Config.h"
+#include "Project.h"
 #include "LogSystem/LogMgr.h"
 #include "GfxSystem/OglRenderer.h"
 #include "GfxSystem/GfxWindow.h"
@@ -21,9 +22,17 @@ Application::Application():
 	StateMachine<eAppState>(AS_INITING),
 	mDevelopMode(true),
 	mEditMode(true),
+	mGameProject(0),
 	mFrameSmoothingTime(0.5f),
 	mConsoleHandle(0)
 {
+	#ifdef DEPLOY
+	mDevelopMode = false;
+	mEditMode = false;
+	#else
+	mDevelopMode = true;
+	mEditMode = true;
+	#endif
 }
 
 void Application::Init()
@@ -48,7 +57,7 @@ void Application::Init()
 	mConsoleHeight = mGlobalConfig->GetInt32("ConsoleH", 768, "Windows");
 
 	// debug window
-	ShowConsole();
+	if (mDevelopMode) ShowConsole();
 
 	// create singletons
 	ResourceSystem::ResourceMgr::CreateSingleton();
@@ -93,6 +102,7 @@ Application::~Application()
 
 	gEntityMgr.DestroyAllEntities();
 
+	if (mGameProject) delete mGameProject;
 	delete mLoadingScreen;
 	delete mGame;
 
@@ -153,14 +163,22 @@ void Application::RunMainLoop()
 		case AS_LOADING:
 			mLoadingScreen->DoLoading(LoadingScreen::TYPE_BASIC_RESOURCES);
 			mLoadingScreen->DoLoading(LoadingScreen::TYPE_GENERAL_RESOURCES);
-			mLoadingScreen->DoLoading(LoadingScreen::TYPE_EDITOR);
+
+			if (mDevelopMode)
+			{
+				mLoadingScreen->DoLoading(LoadingScreen::TYPE_EDITOR);
+				//DEBUG
+				gEditorMgr.OpenProject("projects/test");
+			}
+			else
+			{
+				if (!mGameProject) mGameProject = new Project();
+				//DEBUG
+				mGameProject->OpenProject("projects/test", false);
+			}
 
 			mGame->Init();
-
 			RequestStateChange(AS_GAME, true);
-
-			//DEBUG
-			gEditorMgr.OpenProject("projects/test");
 
 			break;
 		case AS_GAME:

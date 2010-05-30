@@ -1,9 +1,9 @@
 #include "Common.h"
 #include "Editor/EditorMenu.h"
 #include "Editor/EditorMgr.h"
-#include "Editor/ProjectMgr.h"
 #include "GUISystem/CEGUITools.h"
 #include "Core/Application.h"
+#include "Core/Project.h"
 
 #include "GUISystem/MessageBox.h"
 #include "GUISystem/FolderSelector.h"
@@ -127,7 +127,7 @@ bool Editor::EditorMenu::OnMenuItemClicked(const CEGUI::EventArgs& e)
 		if (itemNameStr.substr(0, pattern.size()) == pattern)
 		{
 			uint32 sceneIndex = args.window->getID();
-			gEditorMgr.GetProjectMgr()->OpenSceneAtIndex(sceneIndex);
+			gEditorMgr.GetCurrentProject()->OpenSceneAtIndex(sceneIndex);
 			return true;
 		}
 	}
@@ -305,8 +305,8 @@ void Editor::EditorMenu::InitComponentMenu()
 void EditorMenu::UpdateSceneMenu()
 {
 	CEGUI_EXCEPTION_BEGIN
-	ProjectMgr::Scenes scenes;
-	gEditorMgr.GetProjectMgr()->GetScenes(scenes);
+	Core::Project::Scenes scenes;
+	gEditorMgr.GetCurrentProject()->GetScenes(scenes);
 
 	CEGUI::Window* openSceneMenu = gCEGUIWM.getWindow(menubarPrefix + "/Scene/OpenScene/AutoPopup");
 	for (int i = openSceneMenu->getChildCount() - 1; i >= 0;)
@@ -314,7 +314,7 @@ void EditorMenu::UpdateSceneMenu()
 		gCEGUIWM.destroyWindow(openSceneMenu->getChildAtIdx(i));
 	}
 
-	for (ProjectMgr::Scenes::const_iterator it = scenes.begin(); it != scenes.end(); ++it)
+	for (Core::Project::Scenes::const_iterator it = scenes.begin(); it != scenes.end(); ++it)
 	{
 		CEGUI::Window* sceneMenuItem = gCEGUIWM.createWindow("Editor/MenuItem",
 				menubarPrefix + "/Scene/OpenScene/Scene" + it->first);

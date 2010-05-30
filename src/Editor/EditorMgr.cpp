@@ -2,12 +2,12 @@
 #include "EditorMgr.h"
 #include "EditorGUI.h"
 #include "PopupMenu.h"
-#include "ProjectMgr.h"
 #include "ResourceWindow.h"
 #include "PrototypeWindow.h"
 #include "GUISystem/GUIMgr.h"
 #include "GUISystem/ViewportWindow.h"
 #include "EntitySystem/EntityMgr/LayerMgr.h"
+#include "Core/Project.h"
 #include "Core/Game.h"
 #include "CEGUI.h"
 
@@ -23,22 +23,22 @@ const float32 CAMERA_MOVEMENT_SPEED = 0.2f; ///< How fast the camera moves by ke
 
 EditorMgr::EditorMgr():
 	mEditorGUI(0),
-	mProjectMgr(0),
+	mCurrentProject(0),
 	mCurrentEntity(EntityHandle::Null)
 {
 	ocInfo << "*** EditorMgr init ***";
-	mEditorGUI = new EditorGUI();
-	mProjectMgr = new ProjectMgr();
 }
 
 EditorMgr::~EditorMgr()
 {
-	delete mEditorGUI;
-	delete mProjectMgr;
+
 }
 
 void EditorMgr::LoadEditor()
 {
+	mEditorGUI = new EditorGUI();
+	mCurrentProject = new Core::Project();
+
 	mMousePressedInSceneWindow = false;
 	mPopupClosingEnabled = false;
 	mMultiselectStarted = false;
@@ -54,6 +54,11 @@ void Editor::EditorMgr::UnloadEditor()
 {
 	if (mEditorGUI) mEditorGUI->GetEditorViewport()->RemoveInputListener(this);
 	gGUIMgr.UnloadRootLayout();
+
+	delete mEditorGUI;
+	mEditorGUI = 0;
+	delete mCurrentProject;
+	mCurrentProject = 0;
 }
 
 void Editor::EditorMgr::Update(const float32 delta)
@@ -324,7 +329,7 @@ void Editor::EditorMgr::UpdateSceneMenu()
 
 void EditorMgr::OpenProject(const string& projectPath)
 {
-	if (!mProjectMgr->OpenProject(projectPath))
+	if (!mCurrentProject->OpenProject(projectPath, true))
 	{
 		GUISystem::MessageBox* messageBox = new GUISystem::MessageBox(GUISystem::MessageBox::MBT_OK);
 		messageBox->SetText("Cannot open project in " + projectPath);

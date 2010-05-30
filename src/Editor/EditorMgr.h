@@ -81,7 +81,7 @@ namespace Editor
 		inline EditorGUI* GetEditorGui() const { return mEditorGUI; }
 
 		/// Returns the ProjectMgr.
-		inline ProjectMgr* GetProjectMgr() const { return mProjectMgr; }
+		inline Core::Project* GetCurrentProject() const { return mCurrentProject; }
 
 		/// Refreshes the prototype window.
 		void RefreshPrototypeWindow();
@@ -167,7 +167,7 @@ namespace Editor
 	private:
 
 		EditorGUI* mEditorGUI;
-		ProjectMgr* mProjectMgr;
+		Core::Project* mCurrentProject;
 		list<PopupMenu*> mPopupMenus;
 		bool mPopupClosingEnabled;
 		EntitySystem::EntityHandle mCurrentEntity; ///< Currently edited entity in the components' window.

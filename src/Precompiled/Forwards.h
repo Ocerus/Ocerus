@@ -10,6 +10,7 @@ namespace Core
 	class Config;
 	class Game;
 	class LoadingScreen;
+	class Project;
 }
 
 namespace Editor
@@ -19,7 +20,6 @@ namespace Editor
 	class EditorMenu;
 	class PopupMenu;
 	class ResourceWindow;
-	class ProjectMgr;
 	class PrototypeWindow;
 }
 

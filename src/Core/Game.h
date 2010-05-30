@@ -144,7 +144,6 @@ namespace Core
 		PhysicsEventList mPhysicsEvents;
 		void ProcessPhysicsEvent(const PhysicsEvent& evt);
 
-
 	private:
 
 		class PhysicsCallbacks;
