@@ -35,8 +35,11 @@ Application::Application():
 	#endif
 }
 
-void Application::Init()
+void Application::Init(const string& startupProjectName)
 {
+	// set up basic data
+	mStartupProjectName = startupProjectName;
+
 	// create basic singletons
 	LogSystem::LogMgr::CreateSingleton();
 	LogSystem::LogMgr::GetSingleton().Init("CoreLog.txt");
@@ -60,6 +63,7 @@ void Application::Init()
 	if (mDevelopMode) ShowConsole();
 
 	// create singletons
+
 	ResourceSystem::ResourceMgr::CreateSingleton();
 	ResourceSystem::ResourceMgr::GetSingleton().Init("data/");
 
@@ -173,12 +177,17 @@ void Application::RunMainLoop()
 			else
 			{
 				if (!mGameProject) mGameProject = new Project();
-				#define SYMBOL_TO_STRING(X) #X
-				const char* gameProjectName = SYMBOL_TO_STRING(DEPLOY);
-				mGameProject->OpenProject(gameProjectName, false);
+				OC_ASSERT_MSG(!mStartupProjectName.empty(), "Startup project must be defined when deploying the game!");
+				mGameProject->OpenProject(mStartupProjectName, false);
 			}
 
 			mGame->Init();
+
+			if (!mDevelopMode)
+			{
+				mGameProject->OpenDefaultScene();
+			}
+
 			RequestStateChange(AS_GAME, true);
 
 			break;

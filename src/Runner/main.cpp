@@ -1,9 +1,8 @@
 /// @file
 /// Application entry point.
 #include "Common.h"
-struct AfterExitHook { ~AfterExitHook(void); };
-AfterExitHook gAfterExitHook;
 
+#include "StartupProject.h"
 #include "../Setup/Settings.h"
 #include "../Core/Application.h"
 #include "../LogSystem/LogMgr.h"
@@ -96,7 +95,7 @@ int main(int argc, char* argv[])
 	{
 		// run the application itself
 		Core::Application* app = new Core::Application();
-		app->Init();
+		app->Init(Core::DEFAULT_PROJECT_NAME);
 		app->RunMainLoop();
 		delete app;
 	}
@@ -123,12 +122,17 @@ int main(int argc, char* argv[])
 }
 
 
-/// Callback function called after all static and global variables were destroyed.
-AfterExitHook::~AfterExitHook()
+struct AfterExitHook
 {
-	#if defined(USE_DBGLIB) && defined(USE_LEAKDETECTOR)
-		gLeakDetector->Disable();
-		gLeakDetector->ReportLeaks();
-		// the instance should be automatically deallocated by DbgLib
-	#endif
-}
+	/// Callback function called after all static and global variables were destroyed.
+	~AfterExitHook()
+	{
+		#if defined(USE_DBGLIB) && defined(USE_LEAKDETECTOR)
+			gLeakDetector->Disable();
+			gLeakDetector->ReportLeaks();
+			// the instance should be automatically deallocated by DbgLib
+		#endif
+	}
+};
+
+AfterExitHook gAfterExitHook;

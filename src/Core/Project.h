@@ -13,8 +13,8 @@ namespace Core
 	{
 	public:
 
-		/// The list of scenes.
-		typedef vector<pair<string, string> > Scenes;
+		/// The list of scenes. The pair contains the scene name + its description.
+		typedef vector< pair<string, string> > Scenes;
 
 		struct ProjectInfo
 		{
@@ -53,11 +53,17 @@ namespace Core
 
 		void GetScenes(Scenes& scenes) const;
 
+		/// Returns the default scene to be run when the game loads.
+		string GetDefaultSceneName() const;
+
 		inline string GetCurrentScene() const { return mCurrentScene; }
 
 		void OpenScene(const string& scene);
 
 		void OpenSceneAtIndex(uint32 index);
+
+		/// Loads the default scene of the project.
+		void OpenDefaultScene();
 
 	private:
 

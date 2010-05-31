@@ -46,8 +46,9 @@ namespace Core
 		/// Cleans up everything.
 		virtual ~Application(void);
 
-		/// Inits the application (creates singletons, ...)
-		void Init(void);
+		/// Inits the application (creates singletons, ...).
+		///@param startupProjectName This is valid only when the app is builded in the deploy mode.
+		void Init(const string& startupProjectName = "");
 
 		/// Main loop of the whole project.
 		void RunMainLoop(void);
@@ -92,6 +93,7 @@ namespace Core
 		bool mDevelopMode; ///< if true the editor support is turned on
 		bool mEditMode; ///< if true the editor is currently turned on and the game is running only in a small window
 		Project* mGameProject; ///< Project used for the game itself.
+		string mStartupProjectName; ///< Name of the project to be started after the app launches.
 		
 		/// Represents global settings of the application.
 		Config* mGlobalConfig;

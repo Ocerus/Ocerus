@@ -118,7 +118,11 @@ void Project::OpenScene(const string& scene)
 
 void Project::OpenSceneAtIndex(uint32 index)
 {
-	if (index >= mScenes.size()) return;
+	if (index >= mScenes.size())
+	{
+		ocError << "Invalid scene at " << index;
+		return;
+	}
 	OpenScene(mScenes[index].first);
 }
 
@@ -151,3 +155,14 @@ void Project::SaveProject()
 	ocInfo << "Project was saved to " << mPath;
 }
 
+
+string Core::Project::GetDefaultSceneName() const
+{
+	OC_ASSERT(mScenes.size() > 0);
+	return mScenes.front().first;
+}
+
+void Core::Project::OpenDefaultScene()
+{
+	OpenSceneAtIndex(0);
+}
