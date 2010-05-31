@@ -104,7 +104,7 @@ void EditorGUI::LoadGUI()
 		EntitySystem::EntityHandle camera = gEntityMgr.CreateEntity(desc);
 		camera.FinishInit();
 
-		// Assign game camera to bottom viewport.
+		// Assign editor camera to bottom viewport.
 		mEditorViewport = static_cast<GUISystem::ViewportWindow*>(gCEGUIWM.getWindow("EditorRoot/BottomViewport"));
 		mEditorViewport->SetCamera(camera);
 		mEditorViewport->SetMovableContent(true);

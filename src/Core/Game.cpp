@@ -87,12 +87,7 @@ void Core::Game::Init()
 	ocInfo << "Game init";
 	ForceStateChange(GS_INITING);
 
-	// security check
-	if (!gGfxRenderer.IsRenderTargetValid(mRenderTarget))
-	{
-		ocError << "Invalid render target for game";
-		return;
-	}
+	if (!gGfxRenderer.IsRenderTargetValid(mRenderTarget)) CreateDefaultRenderTarget();
 
 	// basic init stuff
 	mActionState = AS_PAUSED;
@@ -114,6 +109,21 @@ void Core::Game::Init()
 
 	ForceStateChange(GS_NORMAL);
 	ocInfo << "Game inited";
+}
+
+void Core::Game::CreateDefaultRenderTarget()
+{
+	// Create game camera.
+	EntitySystem::EntityDescription desc;
+	desc.SetName("GameCamera1");
+	desc.AddComponent(EntitySystem::CT_Camera);
+	desc.SetTransient(true); // don't save this entity
+	EntitySystem::EntityHandle camera = gEntityMgr.CreateEntity(desc);
+	camera.FinishInit();
+
+	// Create viewport.
+	OC_ASSERT(mRenderTarget == GfxSystem::InvalidRenderTargetID);
+	mRenderTarget = gGfxRenderer.AddRenderTarget(GfxSystem::GfxViewport(Vector2(0, 0), Vector2(1, 1), false, true), camera);
 }
 
 void Core::Game::Clean()

@@ -122,6 +122,12 @@ namespace Core
 
 	private:
 
+		/// Initializes the game viewport for full-window rendering.
+		void CreateDefaultRenderTarget();
+
+
+	private:
+
 		// Game control.
 		void UpdateGameProperties(void); ///< Updates globally accessible properties related to game.
 		eActionState mActionState; ///< Is the game running or what?

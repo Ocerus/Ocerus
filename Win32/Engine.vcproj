@@ -236,8 +236,8 @@
 		</Configuration>
 		<Configuration
 			Name="Deploy_Develop|Win32"
-			OutputDirectory="$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			OutputDirectory="bin\$(ConfigurationName)"
+			IntermediateDirectory="bin\$(ConfigurationName)_Engine"
 			ConfigurationType="4"
 			CharacterSet="0"
 			>
@@ -262,7 +262,7 @@
 				InlineFunctionExpansion="1"
 				WholeProgramOptimization="false"
 				AdditionalIncludeDirectories="../src;../src/Precompiled;../src/Utils;../externalLibs/SDL/inc;../externalLibs/boost/inc;../externalLibs/ois/includes;../externalLibs/cegui/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib;../externalLibs/angelscript/include;../externalLibs/RTHProfiler/include;../externalLibs/SOIL/src;../externalLibs/DbgLib"
-				PreprocessorDefinitions="DEPLOY;WIN32;NDEBUG;_WINDOWS;USE_ASSERT;USE_PROFILER;USE_DBGLIB"
+				PreprocessorDefinitions="DEPLOY=projects/test;WIN32;NDEBUG;_WINDOWS;USE_ASSERT;USE_PROFILER;USE_DBGLIB"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="true"
 				ExceptionHandling="1"

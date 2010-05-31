@@ -73,8 +73,8 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{685FB3A5-4080-4FA7-8C69-AF6406E38DA6}.Debug|Win32.ActiveCfg = Debug|Win32
 		{685FB3A5-4080-4FA7-8C69-AF6406E38DA6}.Debug|Win32.Build.0 = Debug|Win32
-		{685FB3A5-4080-4FA7-8C69-AF6406E38DA6}.Deploy|Win32.ActiveCfg = Develop|Win32
-		{685FB3A5-4080-4FA7-8C69-AF6406E38DA6}.Deploy|Win32.Build.0 = Develop|Win32
+		{685FB3A5-4080-4FA7-8C69-AF6406E38DA6}.Deploy|Win32.ActiveCfg = Deploy_Develop|Win32
+		{685FB3A5-4080-4FA7-8C69-AF6406E38DA6}.Deploy|Win32.Build.0 = Deploy_Develop|Win32
 		{685FB3A5-4080-4FA7-8C69-AF6406E38DA6}.Develop|Win32.ActiveCfg = Develop|Win32
 		{685FB3A5-4080-4FA7-8C69-AF6406E38DA6}.Develop|Win32.Build.0 = Develop|Win32
 		{685FB3A5-4080-4FA7-8C69-AF6406E38DA6}.Release|Win32.ActiveCfg = Release|Win32
@@ -129,8 +129,8 @@ Global
 		{685FB3A5-4080-4FA7-8C69-AF6406E38DA5}.Release|Win32.Build.0 = Release|Win32
 		{685FB3A5-4080-4FA7-8C69-AF6406E38DA7}.Debug|Win32.ActiveCfg = Debug|Win32
 		{685FB3A5-4080-4FA7-8C69-AF6406E38DA7}.Debug|Win32.Build.0 = Debug|Win32
-		{685FB3A5-4080-4FA7-8C69-AF6406E38DA7}.Deploy|Win32.ActiveCfg = Develop|Win32
-		{685FB3A5-4080-4FA7-8C69-AF6406E38DA7}.Deploy|Win32.Build.0 = Develop|Win32
+		{685FB3A5-4080-4FA7-8C69-AF6406E38DA7}.Deploy|Win32.ActiveCfg = Deploy_Develop|Win32
+		{685FB3A5-4080-4FA7-8C69-AF6406E38DA7}.Deploy|Win32.Build.0 = Deploy_Develop|Win32
 		{685FB3A5-4080-4FA7-8C69-AF6406E38DA7}.Develop|Win32.ActiveCfg = Develop|Win32
 		{685FB3A5-4080-4FA7-8C69-AF6406E38DA7}.Develop|Win32.Build.0 = Develop|Win32
 		{685FB3A5-4080-4FA7-8C69-AF6406E38DA7}.Release|Win32.ActiveCfg = Release|Win32

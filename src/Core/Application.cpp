@@ -173,8 +173,9 @@ void Application::RunMainLoop()
 			else
 			{
 				if (!mGameProject) mGameProject = new Project();
-				//DEBUG
-				mGameProject->OpenProject("projects/test", false);
+				#define SYMBOL_TO_STRING(X) #X
+				const char* gameProjectName = SYMBOL_TO_STRING(DEPLOY);
+				mGameProject->OpenProject(gameProjectName, false);
 			}
 
 			mGame->Init();
@@ -184,7 +185,10 @@ void Application::RunMainLoop()
 		case AS_GAME:
 			mGame->Update(delta);
 			gGUIMgr.Update(delta);
-			gEditorMgr.Update(delta);
+			if (mEditMode)
+			{
+				gEditorMgr.Update(delta);
+			}
 			break;
 		default:
 			break;
@@ -197,7 +201,10 @@ void Application::RunMainLoop()
 			{
 			case AS_GAME:
 				mGame->Draw(delta);
-				gEditorMgr.Draw(delta);
+				if (mEditMode)
+				{
+					gEditorMgr.Draw(delta);
+				}
 				gGUIMgr.RenderGUI();
 				break;
 			default:
@@ -290,14 +297,28 @@ void Application::MessagePump( void )
 
 void Core::Application::RegisterGameInputListener( InputSystem::IInputListener* listener )
 {
-	gEditorMgr.GetEditorGui()->GetGameViewport()->AddInputListener(listener);
+	if (mDevelopMode)
+	{
+		gEditorMgr.GetEditorGui()->GetGameViewport()->AddInputListener(listener);
+	}
+	else
+	{
+		gInputMgr.AddInputListener(listener);
+	}
 }
 
 void Core::Application::UnregisterGameInputListener( InputSystem::IInputListener* listener )
 {
-	if (gEditorMgr.GetEditorGui())
+	if (mDevelopMode)
 	{
-		gEditorMgr.GetEditorGui()->GetGameViewport()->RemoveInputListener(listener);
+		if (gEditorMgr.GetEditorGui())
+		{
+			gEditorMgr.GetEditorGui()->GetGameViewport()->RemoveInputListener(listener);
+		}
+	}
+	else
+	{
+		gInputMgr.RemoveInputListener(listener);
 	}
 }
 

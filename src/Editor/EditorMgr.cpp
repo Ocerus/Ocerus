@@ -63,6 +63,8 @@ void Editor::EditorMgr::UnloadEditor()
 
 void Editor::EditorMgr::Update(const float32 delta)
 {
+	OC_ASSERT(mEditorGUI);
+
 	// is the mouse above the window?
 	InputSystem::MouseState& mouse = gInputMgr.GetMouseState();
 	GfxSystem::RenderTargetID rt = mEditorGUI->GetEditorViewport()->GetRenderTarget();
