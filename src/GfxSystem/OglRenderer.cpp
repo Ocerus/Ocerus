@@ -248,7 +248,7 @@ void GfxSystem::OglRenderer::DrawTexturedMesh( const TexturedMesh& mesh ) const
 	glColor4f( 1.0f, 1.0f, 1.0f, 1.0f - mesh.transparency );
 	glTranslatef( mesh.position.x, mesh.position.y, mesh.z );
 	glRotatef(MathUtils::RadToDeg(mesh.angle), 0, 0, 1);
-	glRotatef(MathUtils::RadToDeg(mesh.zAngle), 0, 1, 0);
+	glRotatef(MathUtils::RadToDeg(mesh.yAngle), 0, 1, 0);
 	glScalef(mesh.scale, mesh.scale, mesh.scale);
 
 	ModelOBJ* model = (ModelOBJ*)mesh.mesh;

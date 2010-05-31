@@ -6,7 +6,7 @@
 void EntityComponents::Model::Create( void )
 {
 	mTransparency = 0.0f;
-	mZAngle = 0.0f;
+	mYAngle = 0.0f;
 }
 
 void EntityComponents::Model::Destroy( void )
@@ -42,7 +42,7 @@ void EntityComponents::Model::RegisterReflection()
 {
 	RegisterProperty<ResourceSystem::ResourcePtr>("Mesh", &Model::GetMesh, &Model::SetMesh, PA_FULL_ACCESS, "");
 	RegisterProperty<float32>("Transparency", &Model::GetTransparency, &Model::SetTransparency, PA_FULL_ACCESS, "");
-	RegisterProperty<float32>("ZAngle", &Model::GetZAngle, &Model::SetZAngle, PA_FULL_ACCESS, "");
+	RegisterProperty<float32>("YAngle", &Model::GetYAngle, &Model::SetYAngle, PA_FULL_ACCESS, "");
 
 	// we need the transform to be able to have the position and angle ready while creating the Model
 	AddComponentDependency(CT_Transform);

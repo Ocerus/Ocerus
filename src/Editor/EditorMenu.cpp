@@ -241,10 +241,10 @@ bool Editor::EditorMenu::OnToolbarButtonClicked(const CEGUI::EventArgs& e)
 		return true;
 	}
 
-	/// ---- Edit tool rotate-z ----
+	/// ---- Edit tool rotate-y ----
 	if (buttonName == toolbarPrefix + "/EditToolRotateY")
 	{
-		gEditorMgr.SetCurrentEditTool(EditorMgr::ET_ROTATE_Z);
+		gEditorMgr.SetCurrentEditTool(EditorMgr::ET_ROTATE_Y);
 		return true;
 	}
 

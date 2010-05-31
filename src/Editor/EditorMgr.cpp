@@ -337,26 +337,24 @@ void EditorMgr::OpenProject(const string& projectPath)
 	}
 }
 
-
-
 bool Editor::EditorMgr::KeyPressed( const InputSystem::KeyInfo& ke )
 {
-	if (ke.keyCode == InputSystem::KC_Q)
+	if (ke.keyCode == KS_TOOL_MOVE)
 	{
 		SwitchEditTool(ET_MOVE);
 		return true;
 	}
-	else if (ke.keyCode == InputSystem::KC_W)
+	else if (ke.keyCode == KS_TOOL_ROTATE)
 	{
 		SwitchEditTool(ET_ROTATE);
 		return true;
 	}
-	else if (ke.keyCode == InputSystem::KC_E)
+	else if (ke.keyCode == KS_TOOL_ROTATE_Y)
 	{
-		SwitchEditTool(ET_ROTATE_Z);
+		SwitchEditTool(ET_ROTATE_Y);
 		return true;
 	}
-	else if (ke.keyCode == InputSystem::KC_R)
+	else if (ke.keyCode == KS_TOOL_SCALE)
 	{
 		SwitchEditTool(ET_SCALE);
 		return true;
@@ -395,10 +393,10 @@ bool Editor::EditorMgr::MouseMoved( const InputSystem::MouseInfo& mi )
 					mSelectedEntities[i].GetProperty("Angle").SetValue<float32>(mEditToolBodyAngles[i] + EDIT_TOOL_ANGLE_CHANGE_RATIO * scalarDelta);
 				}
 				break;
-			case ET_ROTATE_Z:
+			case ET_ROTATE_Y:
 				for (size_t i=0; i<mSelectedEntities.size(); ++i)
 				{
-					mSelectedEntities[i].GetProperty("ZAngle").SetValue<float32>(mEditToolBodyAngles[i] + EDIT_TOOL_ANGLE_CHANGE_RATIO * scalarDelta);
+					mSelectedEntities[i].GetProperty("YAngle").SetValue<float32>(mEditToolBodyAngles[i] + EDIT_TOOL_ANGLE_CHANGE_RATIO * scalarDelta);
 				}
 				break;
 			case ET_SCALE:
@@ -472,7 +470,7 @@ bool Editor::EditorMgr::MouseButtonPressed( const InputSystem::MouseInfo& mi, co
 						mEditToolBodyAngles[i] = mSelectedEntities[i].GetProperty("Angle").GetValue<float32>();
 						}
 					break;
-				case ET_ROTATE_Z:
+				case ET_ROTATE_Y:
 					mEditToolBodyAngles.resize(mSelectedEntities.size());
 					for (size_t i=0; i<mSelectedEntities.size(); ++i)
 					{
@@ -481,7 +479,7 @@ bool Editor::EditorMgr::MouseButtonPressed( const InputSystem::MouseInfo& mi, co
 							mEditToolWorking = false;
 							break;
 						}
-						mEditToolBodyAngles[i] = mSelectedEntities[i].GetProperty("ZAngle").GetValue<float32>();
+						mEditToolBodyAngles[i] = mSelectedEntities[i].GetProperty("YAngle").GetValue<float32>();
 					}
 					break;
 				case ET_SCALE:

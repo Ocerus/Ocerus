@@ -94,13 +94,13 @@ namespace GfxSystem
 	struct TexturedMesh
 	{
 		TexturedMesh(): position(Vector2_Zero), scale(1.0f), angle(0), z(0), 
-			zAngle(0), mesh(0), transparency(0) {}
+			yAngle(0), mesh(0), transparency(0) {}
 
 		Vector2 position;
 		float32 scale;
 		float32 angle;
 		float32 z;
-		float32 zAngle;
+		float32 yAngle;
 		MeshHandle mesh;
 		float32 transparency;
 	};

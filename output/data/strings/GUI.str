@@ -7,7 +7,7 @@ pause_action_hint=Pauses action.
 restart_action_hint=Restarts action.
 edit_tool_move_hint=Switches to a move edit tool.
 edit_tool_rotate_hint=Switches to a rotate edit tool.
-edit_tool_rotate_z_hint=Switches to a rotate-z edit tool.
+edit_tool_rotate_y_hint=Switches to a rotate-y edit tool.
 edit_tool_scale_hint=Switches to a scale edit tool.
 
 # main menu

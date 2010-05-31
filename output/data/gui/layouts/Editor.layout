@@ -73,7 +73,7 @@
                     <Property Name="NormalImage" Value="set:EditorToolbar image:btnEditToolRotateZNormal" />
                     <Property Name="HoverImage" Value="set:EditorToolbar image:btnEditToolRotateZHover"  />
                     <Property Name="PushedImage" Value="set:EditorToolbar image:btnEditToolRotateZPushed" />
-                    <Property Name="Tooltip" Value="$edit_tool_rotate_z_hint$" />
+                    <Property Name="Tooltip" Value="$edit_tool_rotate_y_hint$" />
                 </Window>
                 <Window Type="Editor/ToolbarRadioButton" Name="EditorRoot/Toolbar/EditToolScale">
                     <Property Name="UnifiedAreaRect" Value="{{0,120},{0,0},{0,136},{1,0}}" />

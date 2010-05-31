@@ -39,17 +39,17 @@ namespace EntityComponents
 		/// Transparency from 0 to 1.
 		void SetTransparency(float32 value) { mTransparency = value; }
 
-		/// Angle along the Z axis.
-		float32 GetZAngle(void) const { return mZAngle; }
+		/// Angle along the Y axis.
+		float32 GetYAngle(void) const { return mYAngle; }
 
-		/// Angle along the Z axis.
-		void SetZAngle(float32 value) { mZAngle = value; }
+		/// Angle along the Y axis.
+		void SetYAngle(float32 value) { mYAngle = value; }
 
 	private:
 
 		ResourceSystem::ResourcePtr mMeshHandle;
 		float32 mTransparency;
-		float32 mZAngle;
+		float32 mYAngle;
 	};
 }
 

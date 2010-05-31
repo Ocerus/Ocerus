@@ -126,7 +126,16 @@ namespace Editor
 		friend class EditorMenu;
 
 		/// The type of edit tool.
-		enum eEditTool { ET_MOVE=0, ET_ROTATE, ET_ROTATE_Z, ET_SCALE };
+		enum eEditTool { ET_MOVE=0, ET_ROTATE, ET_ROTATE_Y, ET_SCALE };
+
+		enum eKeyShortcut 
+		{
+			KS_TOOL_MOVE		= InputSystem::KC_Q,
+			KS_TOOL_ROTATE		= InputSystem::KC_W,
+			KS_TOOL_ROTATE_Y	= InputSystem::KC_E,
+			KS_TOOL_SCALE		= InputSystem::KC_R
+
+		};
 
 		/// Creates a new entity.
 		void CreateEntity();

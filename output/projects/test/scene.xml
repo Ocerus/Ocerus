@@ -14,7 +14,7 @@
         <Transparency>0</Transparency>
       </Component>
       <Component Type="Model">
-        <ZAngle>0.6</ZAngle>
+        <YAngle>0.6</YAngle>
         <Mesh>cube.model</Mesh>
         <Transparency>0</Transparency>
       </Component>

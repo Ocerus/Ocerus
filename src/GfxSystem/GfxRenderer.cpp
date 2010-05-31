@@ -255,7 +255,7 @@ void GfxSystem::GfxRenderer::DrawModel( const EntitySystem::Component* modelComp
 	mesh.scale = MathUtils::Max(transform->GetScale().x, transform->GetScale().y);
 	mesh.angle = transform->GetAngle();
 	mesh.z = LAYER_Z_SIZE * (float32)transform->GetLayer();
-	mesh.zAngle = model->GetZAngle();
+	mesh.yAngle = model->GetYAngle();
 	mesh.transparency = model->GetTransparency();
 	mesh.mesh = (((MeshPtr)model->GetMesh())->GetMesh());
 
