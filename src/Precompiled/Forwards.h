@@ -85,6 +85,7 @@ namespace ScriptSystem
 namespace StringSystem
 {
 	class StringMgr;
+	class FormatText;
 }
 
 namespace Utils

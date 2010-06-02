@@ -35,10 +35,10 @@ namespace Editor
 		//@}
 
 		/// MessageBox callback
-		void OnMessageBoxClicked(GUISystem::MessageBox::eMessageBoxButton button, int tag);
+		void OnMessageBoxClicked(GUISystem::MessageBox::eMessageBoxButton button, int32 tag);
 
 		/// FolderSelector callback
-		void OnFolderSelected(const string& path, bool canceled, int tag);
+		void OnFolderSelected(const string& path, bool canceled, int32 tag);
 
 		/// Updates the list of scenes in scene menu.
 		void UpdateSceneMenu();

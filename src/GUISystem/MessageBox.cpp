@@ -5,7 +5,7 @@
 
 using namespace GUISystem;
 
-MessageBox::MessageBox(MessageBox::eMessageBoxType type, int tag): mType(type), mTag(tag), mCallback(0), mMessageBox(0)
+MessageBox::MessageBox(MessageBox::eMessageBoxType type, int32 tag): mType(type), mTag(tag), mCallback(0), mMessageBox(0)
 {
 	CEGUI::String windowName;
 	int i = 0;
@@ -43,6 +43,11 @@ MessageBox::MessageBox(MessageBox::eMessageBoxType type, int tag): mType(type), 
 	case MBT_YES_NO:
 		buttons.push_back(MBB_YES);
 		buttons.push_back(MBB_NO);
+		break;
+	case MBT_YES_NO_CANCEL:
+		buttons.push_back(MBB_YES);
+		buttons.push_back(MBB_NO);
+		buttons.push_back(MBB_CANCEL);
 		break;
 	default:
 		OC_NOT_REACHED();
@@ -117,5 +122,14 @@ bool MessageBox::OnButtonClicked(const CEGUI::EventArgs& e)
 	}
 	delete this;
 	return true;
+}
+
+void ShowMessageBox(const CEGUI::String& text, MessageBox::eMessageBoxType type,
+	MessageBox::CallbackBase* callback, int32 tag)
+{
+	MessageBox* messageBox = new MessageBox(type, tag);
+	messageBox->SetText(text);
+	messageBox->RegisterCallback(callback);
+	messageBox->Show();
 }
 

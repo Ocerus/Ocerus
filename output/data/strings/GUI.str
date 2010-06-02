@@ -16,10 +16,12 @@ create_project=Create Project
 create_project_hint=Creates a new project.
 open_project=Open Project
 open_project_hint=Opens an existing project.
+open_project_error=Cannot open project in "%1".
 deploy_project=Deploy Project
 deploy_project_hint=Deploys the project.
 quit=Quit
 quit_hint=Quits the application.
+quit_message_text=Do you really want to quit?
 scene=Scene
 new_scene=New Scene
 new_scene_hint=Creates a new scene.
@@ -81,3 +83,6 @@ ok=Ok
 cancel=Cancel
 yes=Yes
 no=No
+
+# folder selector
+select_folder=Select Folder

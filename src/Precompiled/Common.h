@@ -51,6 +51,7 @@
 #include "ScriptSystem/ScriptMgr.h"
 
 #include "StringSystem/StringMgr.h"
+#include "StringSystem/FormatText.h"
 
 
 

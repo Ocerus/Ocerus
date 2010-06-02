@@ -334,7 +334,8 @@ void EditorMgr::OpenProject(const string& projectPath)
 	if (!mCurrentProject->OpenProject(projectPath, true))
 	{
 		GUISystem::MessageBox* messageBox = new GUISystem::MessageBox(GUISystem::MessageBox::MBT_OK);
-		messageBox->SetText("Cannot open project in " + projectPath);
+		messageBox->SetText(StringSystem::FormatText(gStringMgrSystem.GetTextData
+			(GUISystem::GUIMgr::GUIGroup, "open_project_error")) << projectPath);
 		messageBox->Show();
 	}
 }

@@ -760,66 +760,6 @@
 			</Filter>
 		</Filter>
 		<Filter
-			Name="ResourceSystem"
-			>
-			<Filter
-				Name="inc"
-				>
-				<File
-					RelativePath="..\src\ResourceSystem\IResourceLoadingListener.h"
-					>
-				</File>
-				<File
-					RelativePath="..\src\ResourceSystem\Resource.h"
-					>
-				</File>
-				<File
-					RelativePath="..\src\ResourceSystem\ResourceMgr.h"
-					>
-				</File>
-				<File
-					RelativePath="..\src\ResourceSystem\ResourceTypes.h"
-					>
-				</File>
-				<File
-					RelativePath="..\src\ResourceSystem\UnknownResource.h"
-					>
-				</File>
-				<File
-					RelativePath="..\src\ResourceSystem\XMLOutput.h"
-					>
-				</File>
-				<File
-					RelativePath="..\src\ResourceSystem\XMLResource.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="src"
-				>
-				<File
-					RelativePath="..\src\ResourceSystem\Resource.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\src\ResourceSystem\ResourceMgr.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\src\ResourceSystem\ResourceTypes.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\src\ResourceSystem\XMLOutput.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\src\ResourceSystem\XMLResource.cpp"
-					>
-				</File>
-			</Filter>
-		</Filter>
-		<Filter
 			Name="GfxSystem"
 			>
 			<Filter
@@ -1133,6 +1073,66 @@
 					RelativePath="..\src\LogSystem\Profiler.cpp"
 					>
 				</File>
+			</Filter>
+			<Filter
+				Name="ResourceSystem"
+				>
+				<Filter
+					Name="inc"
+					>
+					<File
+						RelativePath="..\src\ResourceSystem\IResourceLoadingListener.h"
+						>
+					</File>
+					<File
+						RelativePath="..\src\ResourceSystem\Resource.h"
+						>
+					</File>
+					<File
+						RelativePath="..\src\ResourceSystem\ResourceMgr.h"
+						>
+					</File>
+					<File
+						RelativePath="..\src\ResourceSystem\ResourceTypes.h"
+						>
+					</File>
+					<File
+						RelativePath="..\src\ResourceSystem\UnknownResource.h"
+						>
+					</File>
+					<File
+						RelativePath="..\src\ResourceSystem\XMLOutput.h"
+						>
+					</File>
+					<File
+						RelativePath="..\src\ResourceSystem\XMLResource.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="src"
+					>
+					<File
+						RelativePath="..\src\ResourceSystem\Resource.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\src\ResourceSystem\ResourceMgr.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\src\ResourceSystem\ResourceTypes.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\src\ResourceSystem\XMLOutput.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\src\ResourceSystem\XMLResource.cpp"
+						>
+					</File>
+				</Filter>
 			</Filter>
 		</Filter>
 		<Filter

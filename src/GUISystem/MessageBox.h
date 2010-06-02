@@ -26,7 +26,8 @@ namespace GUISystem
 		{
 			MBT_OK,             ///< Displays message and OK button.
 			MBT_OK_CANCEL,      ///< Displays message, OK and Cancel button.
-			MBT_YES_NO          ///< Displays message, Yes and No button.
+			MBT_YES_NO,         ///< Displays message, Yes and No button.
+			MBT_YES_NO_CANCEL	///< Displays message, Yes, No and Cancel button.
 		};
 
 		/// The type of button in message box.
@@ -48,7 +49,7 @@ namespace GUISystem
 			/// Executes the callback.
 			/// @param clickedButton The clicked button.
 			/// @param tag The tag of the MessageBox.
-			virtual void execute(eMessageBoxButton clickedButton, int tag) = 0;
+			virtual void execute(eMessageBoxButton clickedButton, int32 tag) = 0;
 		};
 
 		/// A callback wrapper that wraps a method of an arbitrary class.
@@ -57,7 +58,7 @@ namespace GUISystem
 		{
 		public:
 			/// The type of callback method.
-			typedef void (Class::*Method)(eMessageBoxButton, int);
+			typedef void (Class::*Method)(eMessageBoxButton, int32);
 
 			/// Constructs a callback to specified method on specified instance.
 			Callback(Class* instance, Method method): mInstance(instance), mMethod(method) {}
@@ -65,7 +66,7 @@ namespace GUISystem
 			/// Executes the callback.
 			/// @param clickedButton The clicked button.
 			/// @param tag The tag of the MessageBox.
-			virtual void execute(eMessageBoxButton clickedButton, int tag)
+			virtual void execute(eMessageBoxButton clickedButton, int32 tag)
 			{
 				(mInstance->*mMethod)(clickedButton, tag);
 			}
@@ -78,7 +79,7 @@ namespace GUISystem
 		/// Constructs a MessageBox.
 		/// @param type The type of the message box.
 		/// @param tag The tag of the message box. This value is purely for client code usage and is passed to callback.
-		MessageBox(eMessageBoxType type, int tag = 0);
+		MessageBox(eMessageBoxType type, int32 tag = 0);
 
 		/// Destroys the MessageBox.
 		~MessageBox();
@@ -109,11 +110,19 @@ namespace GUISystem
 		CEGUI::Window* GetButton(eMessageBoxButton button);
 
 		eMessageBoxType mType;
-		int mTag;
+		int32 mTag;
 		CallbackBase* mCallback;
 		CEGUI::Window* mMessageBox;
 		Buttons mButtons;
 	};
+
+	/// Creates and shows a message box with specified parameters.
+	/// @param text The displayed text.
+	/// @param type The message box type (which button are visible).
+	/// @param callback The function or method which will be called after the user clicks on some button.
+	/// @param tag The ID which will be sent as a parameter to the callback method.
+	void ShowMessageBox(const CEGUI::String& text, MessageBox::eMessageBoxType type = MessageBox::MBT_OK,
+		MessageBox::CallbackBase* callback = 0, int32 tag = 0);
 }
 
 #endif // __GUISYSTEM_MESSAGEBOX_H__

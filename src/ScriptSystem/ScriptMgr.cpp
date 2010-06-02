@@ -21,12 +21,12 @@ void MessageCallback(const asSMessageInfo* msg, void* param)
 	if (gScriptMgr.IsExecutedFromConsole())
 	{
 		stringstream ss;
-		ss << "SCRIPT: " << msg->message;
+		ss << "Script: " << msg->message;
 		gGUIMgr.GetConsole()->AppendScriptMessage(ss.str());
 	}
 	else
 	{
-		ocInfo << msg->section << "(" << msg->row << ", " << msg->col << ") : "
+		ocInfo << "Script: " << msg->section << "(" << msg->row << ", " << msg->col << ") : "
 			<< messageType[msg->type] << ": " << msg->message;
 	}
 }
@@ -74,9 +74,18 @@ int ScriptMgr::IncludeCallback(const char* fileName, const char* from, AngelScri
 	return r;
 }
 
-void ScriptLog(string& msg)
+void ScriptPrintln(string& msg)
 {
-	ocInfo << "script: " << msg;
+	if (gScriptMgr.IsExecutedFromConsole())
+	{
+		stringstream ss;
+		ss << "Script:" << msg;
+		gGUIMgr.GetConsole()->AppendScriptMessage(ss.str());
+	}
+	else
+	{
+		ocInfo << "Script: " << msg;
+	}
 }
 
 ScriptMgr::ScriptMgr(const string& basepath)
@@ -529,8 +538,8 @@ void ScriptMgr::ConfigureEngine(void)
 	// Register the script string type
 	RegisterStdString(mEngine);
 
-	// Register log function
-	r = mEngine->RegisterGlobalFunction("void Log(string &in)", asFUNCTION(ScriptLog), asCALL_CDECL); OC_SCRIPT_ASSERT();
+	// Register println function
+	r = mEngine->RegisterGlobalFunction("void Println(string &in)", asFUNCTION(ScriptPrintln), asCALL_CDECL); OC_SCRIPT_ASSERT();
 
 	// Register StringKey class and it's methods
 	RegisterScriptStringKey(mEngine);

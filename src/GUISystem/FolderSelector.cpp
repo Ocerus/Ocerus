@@ -5,7 +5,7 @@
 using namespace GUISystem;
 
 
-GUISystem::FolderSelector::FolderSelector(int tag):
+GUISystem::FolderSelector::FolderSelector(int32 tag):
 	mWindow(0), mButtonOK(0), mButtonCancel(0), mPathBox(0), mFolderList(0), mTag(tag), mCallback(0)
 {
 }

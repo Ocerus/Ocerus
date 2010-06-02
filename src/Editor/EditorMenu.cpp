@@ -99,7 +99,7 @@ bool Editor::EditorMenu::OnMenuItemClicked(const CEGUI::EventArgs& e)
 	if (itemName == menubarPrefix + "/File/Quit")
 	{
 		GUISystem::MessageBox* messageBox = new GUISystem::MessageBox(GUISystem::MessageBox::MBT_YES_NO, MBT_QUIT);
-		messageBox->SetText("Do you really want to quit?");
+		messageBox->SetText(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "quit_message_text"));
 		messageBox->RegisterCallback(new GUISystem::MessageBox::Callback<Editor::EditorMenu>(this, &Editor::EditorMenu::OnMessageBoxClicked));
 		messageBox->Show();
 		return true;
@@ -259,7 +259,7 @@ bool Editor::EditorMenu::OnToolbarButtonClicked(const CEGUI::EventArgs& e)
 	return true;
 }
 
-void Editor::EditorMenu::OnMessageBoxClicked(GUISystem::MessageBox::eMessageBoxButton button, int t)
+void Editor::EditorMenu::OnMessageBoxClicked(GUISystem::MessageBox::eMessageBoxButton button, int32 t)
 {
 	eMessageBoxTags tag = (eMessageBoxTags)t;
 	switch(tag)
@@ -272,7 +272,7 @@ void Editor::EditorMenu::OnMessageBoxClicked(GUISystem::MessageBox::eMessageBoxB
 	ocWarning << "MessageBox with tag " << tag << " clicked, but no action defined.";
 }
 
-void Editor::EditorMenu::OnFolderSelected(const string& path, bool canceled, int t)
+void Editor::EditorMenu::OnFolderSelected(const string& path, bool canceled, int32 t)
 {
 	if (canceled) return;
 	eFolderSelectorTags tag = (eFolderSelectorTags)t;
@@ -291,7 +291,7 @@ void Editor::EditorMenu::InitComponentMenu()
 {
 	CEGUI_EXCEPTION_BEGIN
 	CEGUI::Window* addComponentMenu = gCEGUIWM.getWindow(menubarPrefix + "/Edit/NewComponent/AutoPopup");
-	for (int i = 0; i < EntitySystem::NUM_COMPONENT_TYPES; ++i)
+	for (int32 i = 0; i < EntitySystem::NUM_COMPONENT_TYPES; ++i)
 	{
 		const string& componentName = EntitySystem::GetComponentTypeName((EntitySystem::eComponentType)i);
 		CEGUI::Window* componentMenuItem = gCEGUIWM.createWindow("Editor/MenuItem",
@@ -309,7 +309,7 @@ void EditorMenu::UpdateSceneMenu()
 	gEditorMgr.GetCurrentProject()->GetScenes(scenes);
 
 	CEGUI::Window* openSceneMenu = gCEGUIWM.getWindow(menubarPrefix + "/Scene/OpenScene/AutoPopup");
-	for (int i = openSceneMenu->getChildCount() - 1; i >= 0;)
+	for (int32 i = openSceneMenu->getChildCount() - 1; i >= 0;)
 	{
 		gCEGUIWM.destroyWindow(openSceneMenu->getChildAtIdx(i));
 	}

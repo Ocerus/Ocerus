@@ -18,7 +18,7 @@ namespace GUISystem {
 			/// @param path The full path that was selected through the folder selector.
 			/// @param canceled Whether the folder selector was canceled.
 			/// @param tag The tag of the FolderSelector.
-			virtual void execute(const string& path, bool canceled, int tag) = 0;
+			virtual void execute(const string& path, bool canceled, int32 tag) = 0;
 		};
 
 		/// A callback wrapper that wraps a method of an arbitrary class.
@@ -27,7 +27,7 @@ namespace GUISystem {
 		{
 		public:
 			/// The type of callback method.
-			typedef void (Class::*Method)(const string&, bool, int);
+			typedef void (Class::*Method)(const string&, bool, int32);
 
 			/// Constructs a callback to specified method on specified instance.
 			Callback(Class* instance, Method method): mInstance(instance), mMethod(method) {}
@@ -36,7 +36,7 @@ namespace GUISystem {
 			/// @param path The full path that was selected through the folder selector.
 			/// @param canceled Whether the folder selector was canceled.
 			/// @param tag The tag of the FolderSelector.
-			virtual void execute(const string& path, bool canceled, int tag)
+			virtual void execute(const string& path, bool canceled, int32 tag)
 			{
 				(mInstance->*mMethod)(path, canceled, tag);
 			}
@@ -47,7 +47,7 @@ namespace GUISystem {
 		};
 
 		///
-		FolderSelector(int tag = 0);
+		FolderSelector(int32 tag = 0);
 
 		///
 		~FolderSelector();

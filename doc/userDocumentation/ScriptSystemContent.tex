@@ -98,7 +98,7 @@ For managing entities the \emph{EntityMgr} class is registered as no-handle obje
 
 Beside the classes from the entity system mentioned in the section \ref{sub:script-entity}, other base classes and functions are registered to the script engine. For storing a text data there are two classes registered as a value type. The first one is a standard C++ \emph{string} class registered with a most of its method, the second one is a class \emph{StringKey} which is an integer representation of text for faster comparing and assignment and which can be construct from \emph{string} and which can be cast to \emph{string} by the \emph{ToString} method.
 
-The only registered global function is the \verb/void Log(string& message)/ function which prints the string in the parameter to the log so it is useful for debugging scripts. For a complete reference of registered classes, global functions etc. see ScriptRegister.pdf.
+The only global function is the \verb/void Println(string& message)/ function which prints the string in the parameter to the log or the console so it is useful for debugging scripts. For a complete reference of registered classes, global functions etc. see ScriptRegister.pdf.
 
 \section{Using and extending the script system}
 
