@@ -4,6 +4,7 @@
 #include "PopupMenu.h"
 #include "ResourceWindow.h"
 #include "PrototypeWindow.h"
+#include "HierarchyWindow.h"
 #include "GUISystem/GUIMgr.h"
 #include "GUISystem/ViewportWindow.h"
 #include "EntitySystem/EntityMgr/LayerMgr.h"
@@ -676,4 +677,11 @@ void Editor::EditorMgr::PropertyValueChanged()
 		gEntityMgr.UpdatePrototypeInstances(GetCurrentEntity());
 		gEntityMgr.SavePrototypes();
 	}
+}
+
+void Editor::EditorMgr::LoadHierarchyWindow( ResourceSystem::XMLNodeIterator& xml )
+{
+	OC_ASSERT(mEditorGUI);
+	OC_ASSERT(mEditorGUI->GetHierarchyWindow());
+	mEditorGUI->GetHierarchyWindow()->LoadHierarchy(xml);
 }

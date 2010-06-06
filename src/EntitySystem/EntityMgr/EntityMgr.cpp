@@ -5,6 +5,7 @@
 #include "../ComponentMgr/Component.h"
 #include "../../ResourceSystem/XMLResource.h"
 #include "../../GfxSystem/GfxSceneMgr.h"
+#include "Editor/EditorMgr.h"
 
 namespace EntitySystem
 {
@@ -678,22 +679,36 @@ bool EntitySystem::EntityMgr::LoadEntitiesFromResource(ResourceSystem::ResourceP
 
 	bool result = true;
 
-	for (ResourceSystem::XMLNodeIterator it = xml->IterateTopLevel(); it != xml->EndTopLevel(); ++it)
+	ResourceSystem::XMLNodeIterator toplevelIter = xml->IterateTopLevel();
+	
+	if (toplevelIter == xml->EndTopLevel() || (*toplevelIter).compare("Entities") != 0)
 	{
-		if ((*it).compare("Entities") != 0) { continue; }
+		ocError << "XML: Expected 'Entities'";
+		return false;
+	}
 
-		for (ResourceSystem::XMLNodeIterator entIt = it.IterateChildren(); entIt != it.EndChildren(); ++entIt)
+	for (ResourceSystem::XMLNodeIterator entIt = toplevelIter.IterateChildren(); entIt != toplevelIter.EndChildren(); ++entIt)
+	{
+		if ((*entIt).compare("Entity") == 0)
 		{
-			if ((*entIt).compare("Entity") == 0)
-			{
-				LoadEntityFromXML(entIt, isPrototype);
-			}
-			else
-			{
-				ocError << "XML: Expected 'Entity', found '" << *entIt << "'";
-				result = false;
-			}
+			LoadEntityFromXML(entIt, isPrototype);
 		}
+		else
+		{
+			ocError << "XML: Expected 'Entity', found '" << *entIt << "'";
+			result = false;
+		}
+	}
+
+	if (!isPrototype && GlobalProperties::Get<bool>("DevelopMode"))
+	{
+		++toplevelIter;
+		if (toplevelIter == xml->EndTopLevel() || (*toplevelIter).compare("Hierarchy") != 0)
+		{
+			ocError << "XML: Expected 'Hierarchy' after 'Entities'";
+			return false;
+		}
+		gEditorMgr.LoadHierarchyWindow(toplevelIter);
 	}
 
 	return result;

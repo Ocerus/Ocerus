@@ -1472,26 +1472,6 @@
 			</Filter>
 		</Filter>
 		<Filter
-			Name="SceneSystem"
-			>
-			<Filter
-				Name="inc"
-				>
-				<File
-					RelativePath="..\src\SceneSystem\SceneMgr.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="src"
-				>
-				<File
-					RelativePath="..\src\SceneSystem\SceneMgr.cpp"
-					>
-				</File>
-			</Filter>
-		</Filter>
-		<Filter
 			Name="Editor"
 			>
 			<Filter
@@ -1511,6 +1491,10 @@
 				</File>
 				<File
 					RelativePath="..\src\GUISystem\FolderSelector.h"
+					>
+				</File>
+				<File
+					RelativePath="..\src\Editor\HierarchyWindow.h"
 					>
 				</File>
 				<File
@@ -1547,6 +1531,10 @@
 				</File>
 				<File
 					RelativePath="..\src\GUISystem\FolderSelector.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src\Editor\HierarchyWindow.cpp"
 					>
 				</File>
 				<File

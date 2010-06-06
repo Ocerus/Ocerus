@@ -78,6 +78,11 @@ prototype_delete_hint=Deletes the prototype
 prototype_instantiate=Create Entity
 prototype_instantiate_hint=Instantiantes the prototype into new entity
 
+# hierarchy editor
+hierarchy=Hierarchy
+hierarchy_add=Add Entity
+hierarchy_add_hint=Creates new entity in the world.
+
 # message box
 ok=Ok
 cancel=Cancel

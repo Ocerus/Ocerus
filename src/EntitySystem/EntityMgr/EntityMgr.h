@@ -287,7 +287,7 @@ namespace EntitySystem
 		void UpdatePrototypeInstance(const EntityID prototype, const EntityID instance);
 
 		/// Load an entity from the XML file given a node iterator to its node.
-		void LoadEntityFromXML(ResourceSystem::XMLNodeIterator &entIt, const bool isPrototype);
+		void LoadEntityFromXML(ResourceSystem::XMLNodeIterator& entIt, const bool isPrototype);
 
 		/// Load a property for the given entity from a XML file.
 		void LoadEntityPropertyFromXML(const EntityID entityID, const ComponentID componentID, PrototypeInfo* prototypeInfo, ResourceSystem::XMLNodeIterator& xmlPropertyIterator);

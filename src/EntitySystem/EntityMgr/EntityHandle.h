@@ -96,6 +96,9 @@ namespace EntitySystem
 		/// Returns the internal ID of this entity.
 		inline EntityID GetID(void) const;
 
+		/// Returns the name of this entity.
+		string GetName(void) const;
+
 		/// Invalid handle representing no entity in the system.
 		static const EntityHandle Null;
 
@@ -127,6 +130,5 @@ namespace EntitySystem
 		OC_DASSERT_MSG(IsValid(), "Invalid entity handle");
 		return mEntityID;
 	}
-
 }
 #endif

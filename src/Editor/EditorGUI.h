@@ -5,29 +5,11 @@
 #define _EDITORGUI_H_
 
 #include "Base.h"
+#include "GUISystem/CEGUIForwards.h"
 #include "EntitySystem/ComponentMgr/ComponentID.h"
-
-/// Forwarded classes from CEGUI
-namespace CEGUI
-{
-	class String;
-	class Window;
-	class EventArgs;
-}
-
-namespace GUISystem
-{
-	class VerticalLayout;
-	class ViewportWindow;
-}
 
 namespace Editor
 {
-	class AbstractValueEditor;
-	class LayerMgrWidget;
-	class EditorMenu;
-	class ResourceWindow;
-
 	/// The EditorGUI class manages the editor GUI.
 	class EditorGUI
 	{
@@ -63,6 +45,9 @@ namespace Editor
 		/// Returns the prototype window.
 		inline PrototypeWindow* GetPrototypeWindow() const { return mPrototypeWindow; }
 
+		/// Returns the hierarchy window.
+		inline HierarchyWindow* GetHierarchyWindow() const { return mHierarchyWindow; }
+
 		inline EditorMenu* GetEditorMenu() const { return mEditorMenu; }
 
 		/// @name CEGUI Callbacks
@@ -87,6 +72,7 @@ namespace Editor
 		EditorMenu* mEditorMenu;
 		ResourceWindow* mResourceWindow;
 		PrototypeWindow* mPrototypeWindow;
+		HierarchyWindow* mHierarchyWindow;
 	};
 }
 

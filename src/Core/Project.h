@@ -51,6 +51,9 @@ namespace Core
 		/// Sets the project info according to specified variable.
 		inline void SetProjectInfo(const ProjectInfo& newProjectInfo) { mInfo = newProjectInfo; }
 
+		/// Returns the number of scenes.
+		uint32 GetScenesCount() const;
+
 		void GetScenes(Scenes& scenes) const;
 
 		/// Returns the default scene to be run when the game loads.

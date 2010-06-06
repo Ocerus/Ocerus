@@ -4,6 +4,7 @@
 #include "EditorGUI.h"
 #include "ResourceWindow.h"
 #include "PrototypeWindow.h"
+#include "HierarchyWindow.h"
 #include "GUISystem/CEGUITools.h"
 
 
@@ -69,6 +70,19 @@ bool Editor::PopupMenu::OnMenuItemMouseUp( const CEGUI::EventArgs& e )
 			handled = true;
 		}
 	}
+	else if (mName.find("EditorRoot/Popup/Entity") == 0)
+	{
+		if (itemCeguiName == mName + "/AddEntity")
+		{
+			EntitySystem::EntityDescription desc;
+			desc.SetName("New Entity");
+			desc.AddComponent(EntitySystem::CT_Transform);
+			EntitySystem::EntityHandle entity = gEntityMgr.CreateEntity(desc);
+			entity.FinishInit();
+			gEditorMgr.GetEditorGui()->GetHierarchyWindow()->Refresh();
+			handled = true;
+		}
+	}
 
 	Close();
 	return handled;
@@ -82,12 +96,6 @@ Editor::PopupMenu::PopupMenu( const string& menuName, const bool selfDestruct ):
 
 void Editor::PopupMenu::Init()
 {
-	if (mName == "EditorRoot/Popup/Prototype")
-	{
-		EntitySystem::EntityHandle prototype = GetData<EntitySystem::EntityHandle>();
-		if (prototype.IsValid()) mName = "EditorRoot/Popup/PrototypeAboveItem";
-	}
-
 	CEGUI::Window* menu = gCEGUIWM.getWindow(mName);
 	OC_ASSERT(menu);
 	mEventConnections.push_back(menu->subscribeEvent(CEGUI::Window::EventMouseButtonUp, CEGUI::Event::Subscriber(&PopupMenu::OnMenuMouseUp, this)));

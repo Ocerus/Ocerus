@@ -87,6 +87,9 @@ bool Project::OpenProject(const string& path, bool editorSupport)
 	}
 
 	ocInfo << "Loaded project from " << path;
+
+	OpenDefaultScene();
+
 	return true;
 }
 
@@ -164,5 +167,15 @@ string Core::Project::GetDefaultSceneName() const
 
 void Core::Project::OpenDefaultScene()
 {
+	if (GetScenesCount() == 0)
+	{
+		ocWarning << "No default scene to open";
+		return;
+	}
 	OpenSceneAtIndex(0);
+}
+
+uint32 Core::Project::GetScenesCount() const
+{
+	return mScenes.size();
 }

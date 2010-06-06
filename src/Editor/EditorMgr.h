@@ -77,6 +77,9 @@ namespace Editor
 		/// True if the editor is editing a prototype.
 		bool IsEditingPrototype() const;
 
+		/// Loads the hierarchy window from an XML input.
+		void LoadHierarchyWindow(ResourceSystem::XMLNodeIterator& xml);
+
 		/// Returns the gui object.
 		inline EditorGUI* GetEditorGui() const { return mEditorGUI; }
 

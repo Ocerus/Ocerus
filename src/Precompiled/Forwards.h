@@ -21,6 +21,9 @@ namespace Editor
 	class PopupMenu;
 	class ResourceWindow;
 	class PrototypeWindow;
+	class HierarchyWindow;
+	class AbstractValueEditor;
+	class LayerMgrWidget;
 }
 
 namespace EntitySystem
@@ -50,6 +53,7 @@ namespace GUISystem
 	class VerticalLayout;
 	class ResourceProvider;
 	class GUIConsole;
+	class ViewportWindow;
 }
 
 namespace InputSystem

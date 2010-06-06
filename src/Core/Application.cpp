@@ -165,12 +165,15 @@ void Application::RunMainLoop()
 		switch (GetState())
 		{
 		case AS_LOADING:
+
 			mLoadingScreen->DoLoading(LoadingScreen::TYPE_BASIC_RESOURCES);
 			mLoadingScreen->DoLoading(LoadingScreen::TYPE_GENERAL_RESOURCES);
+			if (mDevelopMode) mLoadingScreen->DoLoading(LoadingScreen::TYPE_EDITOR);
+
+			mGame->Init();
 
 			if (mDevelopMode)
 			{
-				mLoadingScreen->DoLoading(LoadingScreen::TYPE_EDITOR);
 				//DEBUG
 				gEditorMgr.OpenProject("projects/test");
 			}
@@ -179,13 +182,6 @@ void Application::RunMainLoop()
 				if (!mGameProject) mGameProject = new Project();
 				OC_ASSERT_MSG(!mStartupProjectName.empty(), "Startup project must be defined when deploying the game!");
 				mGameProject->OpenProject(mStartupProjectName, false);
-			}
-
-			mGame->Init();
-
-			if (!mDevelopMode)
-			{
-				mGameProject->OpenDefaultScene();
 			}
 
 			RequestStateChange(AS_GAME, true);
