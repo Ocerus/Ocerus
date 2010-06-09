@@ -24,18 +24,66 @@
 \author{Lukas Hermann, Ondrej Mocny, Tomas Svoboda}
 \maketitle
 
+\pagestyle{plain} %Now display headings: headings / fancy / ...
+
 \tableofcontents %Table of contents
 \cleardoublepage %The first chapter should start on an odd page.
 
-\pagestyle{plain} %Now display headings: headings / fancy / ...
-
 \chapter{Introduction}
+
+This document serves as both user and design documentation to the project Ocerus. In this opening chapter the purpose of this project will be revealed, the structure of this document and the recommended way of reading it will be presented and finally the project architecture will be described.
 
 \section{Purpose of this project}
 
+The project Ocerus implements a multiplatform game engine and editor for creating simple 2.5D games. The main focus is on editing tools integrated to the engine so every change is immediately visible in the game context and can be tested in a real time. The engine takes care of rendering and physical representation of game entities, easy customization of their behavior by scripts, managing necessary resources and input devices and it provides an easy connection among them for building the whole game. It is easily expandable of new parts from which game entities are built, possible communication among them, data and methods accessible from scripts etc. that is supported by logging, debugging and profiling tools.
+
 \section{How to read this documentation}
 
+Since this product is intended to be used by game developers rather than end users and since it is necessary to understand some design solutions for developing more complex games with this product the user and design documentation are merged into one document. This section should help users of this product with an orientation in this document and tell them where the information they need is written.
+
+The first section that should be read before starting a development of a new project is definitely the section \ref{sec:editor-using} which describes the basic work with the GUI of the editor -- how to create a new project, add a new scene, create entities and manipulate with them etc. For a change of a default entity behavior it is necessary to understand the associated script language syntax (\ref{sec:script-language}) and its functions and methods (\ref{sub:script-entity} and \ref{sub:script-registered}). If some behavior cannot be added by scripts or it would be inefficient new components from which entities are built can be added, which is described in section \ref{sec:entity-extending}.
+
+For adding a game menu or any text to the game the section \ref{sec:gui-creating} about a creating a GUI should be read. For a multilanguage support all texts in the game should not be hardcoded but the string system described in the chapter \ref{chap:string} should be used. If some configuration is needed see the section \ref{sec:config}. When a new native code is added it can be useful to log some information (\ref{sec:logging}), to profile it (\ref{sec:profiling}), to use some helper classes (\ref{chap:utils}) and to access it from scripts (\ref{sub:script-registering}).
+
 \section{Project architecture}
+
+The project Ocerus is logically divided into several relatively independent systems which cooperates with each other. Every system maintains its part of the application such as graphics, resources, scripts etc. and provides it to other ones. In the picture \ref{fig:system-connection} the relations among all systems are displayed with a brief description of what the systems provides to each other.
+
+\begin{figure}[htbp]
+	\centering
+		\includegraphics[width=1\textwidth]{SystemConnection.pdf}
+	\caption{Dependencies among the systems}
+	\label{fig:system-connection}
+\end{figure}
+
+This project is not coded from the basics but it uses several libraries to allow developers to focus on implementing important improvements for end users and on higher design solutions rather than low level programming of for example the graphic or script engine. All used libraries support many platforms, have free licenses and have been heavily tested in lot of other projects. All of them are used directly by one to three project systems except the library for a unit testing. The library dependence of all systems is displayed in the picture \ref{fig:library-dependence}.
+
+\begin{figure}[htbp]
+	\centering
+		\includegraphics[width=1\textwidth]{LibraryDependence.pdf}
+	\caption{Library dependencies of the project systems}
+	\label{fig:library-dependence}
+\end{figure}
+
+In this list a brief description of all used libraries is mentioned:
+
+\begin{itemize}
+  \item AngelScript -- a script engine with an own language
+  \item Boost -- a package of helper data structures and algorithms
+  \item Box2D -- a library providing 2D real-time physics
+  \item CEGUI -- a graphic user interface engine
+  \item DbgLib -- tools for a real-time debugging and crash dumps
+  \item Expat -- a XML parser
+  \item OIS -- a library for managing events from input devices
+  \item OpenGL -- an API for 2D and 3D graphics
+  \item RTHProfiler -- an interactive real-time profiling of code
+  \item RudeConfig -- a library for managing configure files
+  \item SDL -- a tool for an easier graphic rendering
+  \item SOIL -- a library for loading textures of various formats
+  \item UnitTest++ -- a framework for a unit testing
+\end{itemize}
+
+In the following chapters each of the project systems will be described from both user and design view. At the beginning of each chapter there is a section about a purpose of the described system and at the end of most chapters there is a small glossary of terms used in the chapter.
 
 \chapter{Core}
 
@@ -74,6 +122,7 @@
 \input{ScriptSystemContent.tex}
 
 \chapter{String system}
+\label{chap:string}
 
 \input{StringSystemContent.tex}
 
@@ -82,6 +131,7 @@
 \input{PlatformSetupContent.tex}
 
 \chapter{Utils}
+\label{chap:utils}
 
 \input{UtilsContent.tex}
 

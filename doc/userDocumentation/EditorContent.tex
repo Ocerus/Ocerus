@@ -1,5 +1,5 @@
 \begin{description}
-  \item[Namespaces:] Editor
+  \item[Namespaces:] Editor, GUISystem
   \item[Headers:] EditorGUI.h, EditorMenu.h, EditorMgr.h, FolderSelector.h, LayerMgrWidget.h, PopupMenu.h, PrototypeWindow.h, ResourceWindow\-.h and editors of properties
   \item[Source files:] EditorGUI.cpp, EditorMenu.cpp, EditorMgr.cpp, FolderSelector.cpp, LayerMgrWidget.cpp, PopupMenu.cpp, PrototypeWindow\-.cpp, ResourceWindow.cpp and editors of properties
   \item[Classes:] EditorGUI, EditorMenu, EditorMgr, FolderSelector, LayerMgrWidget, PopupMenu, PrototypeWindow, ResourceWindow
@@ -13,6 +13,7 @@ The editor is used for an easy creation of a new game based on this engine. It p
 In the following sections the usage of the editor to make a new game as well as the classes providing the editor will be described. In the last section there is a small glossary of used terms.
 
 \section{Using the editor}
+\label{sec:editor-using}
 
 \subsection{Managing projects}
 
@@ -45,6 +46,10 @@ For example the \emph{Editor::StringEditor} class derives directly from the \emp
 There are another examples of value editors and its models in the code that can help with a creation of further ones such as editors for arrays, resources etc.
 
 \subsection{Used layouts}
+
+There are several layouts implemented for the editor that can be used as examples of a creation of an own layout. The \emph{GUISystem::FolderSelector} class represents the layout for selecting a folder and has methods for showing/hiding it, registering callback for the Ok/Cancel pushing and getting the current and selected folder. The \emph{Editor::PopupMenu} class manages all popup menus in the editor and has methods for opening/closing it, for initializing it and for handling all menu choices.
+
+There are three layout classes for editor components. All of them have initialization and update methods and callbacks for significant events. All of them loads their look from an external XML file and introduces the reactions on events and loading data from the application. The \emph{Editor::LayerMgrWid\-get} manages the layers the entities are put to, the \emph{Editor::PrototypeWindow} manages the prototypes of entities and the \emph{Editor::ResourceWindow} manages the resources that the entities can use.
 
 \section{Glossary}
 This is a glossary of the most used terms in the previous sections:

@@ -34,11 +34,11 @@ All entities are managed by the \emph{EntitySystem::EntityMgr} class that stores
 
 \subsection{Entity picker}
 
-Entity picker is a mechanism to select one or more entities based on their location. If the picker is used to select a single entity all it needs is a position in the world coordinates. The query then returns the found entity or none. This feature can be used to select the entity the mouse cursor is currently hovering over. The cursor position must be translated into the world coordinates via the rendering subsystem and its viewports. If the picker is used to select more entities a query rectangle (along with its angle) must be defined. This feature can be used to implement a multiselect using the mouse or gamepad.
-
+The entity picker is a mechanism to select one or more entities based on their location. If the picker is used to select a single entity all it needs is a position in the world coordinates. The query then returns the found entity or none. This feature can be used to select the entity the mouse cursor is currently hovering over. The cursor position must be translated into the world coordinates via the rendering subsystem and its viewports. If the picker is used to select more entities a query rectangle (along with its angle) must be defined. This feature can be used to implement a multiselection using the mouse or gamepad.
 
 
 \section{Extending the entity system}
+\label{sec:entity-extending}
 
 The entity system will be probably the first system to extend when creating a new game. It is necessary to create new components with their specific properties and behavior from which new entities can be created in the game editor or from scripts. It is also possible to create new message types that can be sent to entities when it is needed to inform about new different events.
 
@@ -73,5 +73,5 @@ This is a glossary of the most used terms in the previous sections:
   \item[Component] -- a class which has registered functions and properties, that can be read and written via their getters and setters, and which can handle received messages
   \item[Entity] -- a compound of one or more components, that provide specific functionalities, represented by an unique ID, it is possible to post a message to it
   \item[Prototype] -- changes of shared property values of this entity are propagated to the linked entities
-  \item[Entity picker] -- a mechanism to select one or more entities.
+  \item[Entity picker] -- a mechanism to select one or more entities
 \end{description}

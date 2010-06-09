@@ -13,6 +13,7 @@ The log system manages internal log messages that are used to provide informatio
 In the following sections the process of logging messages will be described as well as using a profiler. In the last section there is a small glossary of used terms.
 
 \section{Logging messages}
+\label{sec:logging}
 
 The main class responsible for logging messages is the \emph{LogSystem::LogMgr}. At the application start it is initialized with a name of the file to which the messages are also written. There is only one method which logs a message of a certain severity to the file and consoles if exist. This method should not be used directly but via the class \emph{LogSystem::Logger}.
 
@@ -40,6 +41,7 @@ For an even easier logging of messages log macros are defined for every supporte
 If it is for example necessary to inform that the entity (of which the handle is available) is created the following statement should be written anywhere in the code: \verb/ocInfo << handle << " was created.";/. When the process passed this code and the minimum level of messages to log is lower than information level then for example the following message will be generated: \verb/13:05:18: Entity(25) was created./
 
 \section{Profiling functions}
+\label{sec:profiling}
 
 The profiling of a block of a code or a whole function is really easy. First the \verb/USE_PROFILER/ preprocessor directive must be globally defined, the class \emph{LogSystem::Profiler} must be initialized at the start of the application and its method \emph{Update} must be called in each application loop.
 
@@ -51,10 +53,10 @@ Finally when the application runs a call of \emph{Profiler}'s method \emph{Start
 This is a glossary of the most used terms in the previous sections:
 
 \begin{description}
-  \item[Log message] -- A text describing a specific action or an application state occurred at a certain time with a defined severity.
-  \item[Level of severity] -- An importance of a message to the application process.
-  \item[Stack trace] -- A list of functions that the current statement is called from right now.
-  \item[Logging] -- Tracking the code execution by writing log messages to a console and a file.
-  \item[Console] -- A window where log messages immediately appears.
-  \item[Profiling] -- Measuring a real time of execution of a specific code.
+  \item[Log message] -- a text describing a specific action or an application state occurred at a certain time with a defined severity
+  \item[Level of severity] -- an importance of a message to the application process
+  \item[Stack trace] -- a list of functions that the current statement is called from right now
+  \item[Logging] -- tracking the code execution by writing log messages to a console and a file
+  \item[Console] -- a window where log messages immediately appears
+  \item[Profiling] -- measuring a real time of execution of a specific code
 \end{description}

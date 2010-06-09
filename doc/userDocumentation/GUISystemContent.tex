@@ -22,9 +22,9 @@ The main class of GUI system is the \emph{GUISystem::GUIMgr} which is a connecto
 
 For loading a root layout from a file the method \emph{GUIMgr::LoadRootLayout} is provided with only one parameter specifying a name of a file where a layout is defined. This method calls the \emph{GUIMgr::LoadWindowLayout} which is a common method for loading a window layout from a file that also provides a translation of all texts via the string manager. There are also methods for unloading and getting the current root layout. For more information about layout see section \ref{sec:gui-layouts}.
 
-%TODO: DisconnectEvent, ProcessDisconnectedEventList
+Sometimes it is needed to disconnect a callback function from an event such as a mouse click on a button. Since the CEGUI library crashes when an event is disconnected in its callback the \emph{GUIMgr::DisconnectEvent} method is introduced which adds the event to the list of events that should be disconnected and the real disconnection will process after calling the method \emph{GUIMgr::ProcessDisconnectedEventList} in the application main loop.
 
-There are two methods that are called in an application main loop. First the \emph{GUIMgr::Update} updates time of GUI system, then the \emph{GUIMgr::Render\-GUI} draws the whole GUI. There are several input callback methods that converts an OIS library representation of keyboard and mouse events to a CEGUI one and forwards them to the CEGUI library. It is possible to get the currently processing input event by the \emph{GUIMgr::GetCurrentInputEvent} method. There is also a callback method for a resolution change that forwards this information to the CEGUI library too.
+There are two more methods called in the application main loop. First the \emph{GUIMgr::Update} updates time of GUI system, then the \emph{GUIMgr::Render\-GUI} draws the whole GUI. There are several input callback methods that converts an OIS library representation of keyboard and mouse events to a CEGUI one and forwards them to the CEGUI library. It is possible to get the currently processing input event by the \emph{GUIMgr::GetCurrentInputEvent} method. There is also a callback method for a resolution change that forwards this information to the CEGUI library too.
 
 \subsection{GUI resources}
 \label{sec:gui-resources}
@@ -63,9 +63,11 @@ The \emph{GUISystem::GUIConsole} class manages the console accessible both in th
 This is a glossary of the most used terms in the previous sections:
 
 \begin{description}
-  \item[GUI] -- A graphic user interface
-  \item[GUI element] -- An element from which the whole GUI is created such as label, edit box, list etc.
-  \item[Layout] -- A composition of GUI elements including definition of their properties and behavior
-  \item[Viewport] -- A GUI element where a scene can be rendered by the graphic system
-  \item[GUI console] -- A window where log and script messages immediately appears and which allows an input of script commands.
+  \item[GUI] -- a graphic user interface
+  \item[GUI element] -- an element from which the whole GUI is created such as label, edit box, list etc.
+  \item[Layout] -- a composition of GUI elements including definition of their properties and behavior
+  \item[Viewport] -- a GUI element where a scene can be rendered by the graphic system
+  \item[GUI console] -- a window where log and script messages immediately appears and which allows an input of script commands
+  \item[GUI event] -- a significant situation made by the user input such as a mouse click or a keyboard press
+  \item[Callback] -- a function or method that is called as a reaction to a GUI event
 \end{description}
