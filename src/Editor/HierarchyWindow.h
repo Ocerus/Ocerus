@@ -36,6 +36,9 @@ namespace Editor
 		/// Removes an entity from the hierarchy.
 		void RemoveEntityFromHierarchy(const EntitySystem::EntityHandle toRemove);
 
+		/// Runs a check on the consistency of the hierarchy tree. Returns true if it's ok.
+		bool CheckHierarchy();
+
 	public:
 
 		/// @name CEGUI Callbacks
@@ -46,7 +49,14 @@ namespace Editor
 
 	private:
 
-		typedef hash_map<unsigned int, EntitySystem::EntityHandle> EntityMap;
+		/// Data item stored in the cached item list.
+		struct HierarchyInfo
+		{
+			uint32 depth;
+			EntitySystem::EntityHandle entity;
+		};
+
+		typedef hash_map<unsigned int, HierarchyInfo> EntityMap;
 		typedef tree<EntitySystem::EntityHandle> HierarchyTree;
 
 		/// Creates the tree based on the saved hierarchy.
@@ -56,13 +66,17 @@ namespace Editor
 		void BuildSubtree(const HierarchyTree::iterator_base& parentIter, uint32 depth);
 
 		/// Adds an item to the tree at the given position.
-		CEGUI::ItemEntry* AddTreeItem(uint32 index, const string& text, const EntitySystem::EntityHandle data);
+		CEGUI::ItemEntry* AddTreeItem(uint32 index, const string& textName, uint32 depth, const EntitySystem::EntityHandle data);
 
 		/// Adds an item to the tree after the last item.
-		CEGUI::ItemEntry* AppendTreeItem(const string& text, const EntitySystem::EntityHandle data);
+		CEGUI::ItemEntry* AppendTreeItem(const string& text, uint32 depth, const EntitySystem::EntityHandle data);
 
 		/// Removes an item from the tree at the given position.
 		void RemoveTreeItem(uint32 index);
+
+		/// Locates an item in the tree and returns its position. Returns -1 if not found. The depth of the item is returned
+		/// in the second parameter.
+		int32 FindTreeItem(const EntitySystem::EntityHandle data, uint32& depth);
 
 		CEGUI::Window* mWindow;
 		CEGUI::ItemListbox* mTree;

@@ -60,7 +60,7 @@ bool Editor::EditorMenu::OnMouseLeavesMenuItem(const CEGUI::EventArgs& e)
 			}
 			break;
 		}
-			menubar = menubar->getParent();
+		menubar = menubar->getParent();
 	}
 	return true;
 }
@@ -192,6 +192,7 @@ bool Editor::EditorMenu::OnMenuItemClicked(const CEGUI::EventArgs& e)
 
 	if (itemName == menubarPrefix + "/Edit/CreatePrototype")
 	{
+		gEditorMgr.CreatePrototypeFromCurrentEntity();
 		return true;
 	}
 

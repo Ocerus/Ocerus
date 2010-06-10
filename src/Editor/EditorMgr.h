@@ -127,6 +127,7 @@ namespace Editor
 
 		friend class EditorGUI;
 		friend class EditorMenu;
+		friend class PopupMenu;
 
 		/// The type of edit tool.
 		enum eEditTool { ET_MOVE=0, ET_ROTATE, ET_ROTATE_Y, ET_SCALE };
@@ -148,6 +149,9 @@ namespace Editor
 
 		/// Deletes the current entity.
 		void DeleteCurrentEntity();
+
+		/// Creates a prototype from the current entity and links it to the prototype.
+		void CreatePrototypeFromCurrentEntity();
 
 		/// Duplicates selected entities.
 		void DuplicateSelectedEntities();

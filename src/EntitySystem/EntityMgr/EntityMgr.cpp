@@ -6,6 +6,8 @@
 #include "../../ResourceSystem/XMLResource.h"
 #include "../../GfxSystem/GfxSceneMgr.h"
 #include "Editor/EditorMgr.h"
+#include "Editor/EditorGUI.h"
+#include "Editor/HierarchyWindow.h"
 
 namespace EntitySystem
 {
@@ -222,6 +224,11 @@ EntityHandle EntityMgr::CreateEntity(EntityDescription& desc)
 
 	ocTrace << "Entity created: " << entityHandle;
 
+	if (GlobalProperties::Get<bool>("DevelopMode"))
+	{
+		gEditorMgr.GetEditorGui()->GetHierarchyWindow()->AddEntityToHierarchy(EntityHandle::Null, entityHandle);
+	}
+
 	return entityHandle;
 }
 
@@ -274,12 +281,21 @@ EntityHandle EntityMgr::DuplicateEntity(const EntityHandle oldEntity, const stri
 
 	ocTrace << "Entity duplicated: " << newEntity;
 
+	if (GlobalProperties::Get<bool>("DevelopMode"))
+	{
+		gEditorMgr.GetEditorGui()->GetHierarchyWindow()->AddEntityToHierarchy(EntityHandle::Null, newEntity);
+	}
+
 	return newEntity;
 }
 
 
 void EntityMgr::DestroyEntity(const EntityHandle entityToDestroy)
 {
+	if (GlobalProperties::Get<bool>("DevelopMode"))
+	{
+		gEditorMgr.GetEditorGui()->GetHierarchyWindow()->RemoveEntityFromHierarchy(entityToDestroy);
+	}
 	mEntityDestroyQueue.push_back(entityToDestroy.GetID());
 }
 
@@ -1320,4 +1336,18 @@ EntitySystem::EntityHandle EntitySystem::EntityMgr::GetEntityPrototype( const En
 	}
 	EntityInfo* entityInfo = entityInfoIter->second;
 	return entityInfo->mPrototype;
+}
+
+size_t EntitySystem::EntityMgr::GetNumberOfNonTransientEntities() const
+{
+	size_t result = 0;
+	for (EntityMap::const_iterator i = mEntities.begin(); i != mEntities.end(); ++i)
+	{
+		if (!i->second->mTransient && !IsEntityPrototype(EntityHandle(i->first)))
+		{
+			++result;
+		}
+	}
+
+	return result;
 }

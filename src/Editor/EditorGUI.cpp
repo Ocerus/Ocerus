@@ -78,6 +78,18 @@ void EditorGUI::LoadGUI()
 	mLayerMgrWidget = new LayerMgrWidget(gCEGUIWM.getWindow("EditorRoot/LayerMgr"));
 	mLayerMgrWidget->Init();
 
+	// Initialize resource window
+	mResourceWindow = new ResourceWindow();
+	mResourceWindow->Init();
+
+	// init prototype window
+	mPrototypeWindow = new PrototypeWindow();
+	mPrototypeWindow->Init();
+
+	// init hierarchy window
+	mHierarchyWindow = new HierarchyWindow();
+	mHierarchyWindow->Init();
+
 	// Initialize top viewport
 	{
 		// Create game camera.
@@ -113,18 +125,6 @@ void EditorGUI::LoadGUI()
 		mEditorViewport->SetMovableContent(true);
 		mEditorViewport->Activate();
 	}
-
-	// Initialize resource window
-	mResourceWindow = new ResourceWindow();
-	mResourceWindow->Init();
-
-	// init prototype window
-	mPrototypeWindow = new PrototypeWindow();
-	mPrototypeWindow->Init();
-
-	// init hierarchy window
-	mHierarchyWindow = new HierarchyWindow();
-	mHierarchyWindow->Init();
 }
 
 void EditorGUI::Update(float32 delta)

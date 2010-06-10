@@ -85,6 +85,9 @@ namespace EntitySystem
 		/// Retrieves handles of all entities.
 		void GetEntities(EntityList& out, bool prototypes = false);
 
+		/// Returns the number of non-trasient non-prototype entities.
+		size_t GetNumberOfNonTransientEntities() const;
+
 		//@}
 
 

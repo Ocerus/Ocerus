@@ -369,6 +369,18 @@
 		            <Property Name="Text" Value="$hierarchy_add$" />
 		            <Property Name="Tooltip" Value="$hierarchy_add_hint$" />
 						</Window>
+		        <Window Type="Editor/MenuItem" Name="EditorRoot/Popup/EntityAboveItem/DuplicateEntity" >
+		            <Property Name="Text" Value="$hierarchy_duplicate$" />
+		            <Property Name="Tooltip" Value="$hierarchy_duplicate_hint$" />
+						</Window>
+		        <Window Type="Editor/MenuItem" Name="EditorRoot/Popup/EntityAboveItem/DeleteEntity" >
+		            <Property Name="Text" Value="$hierarchy_delete$" />
+		            <Property Name="Tooltip" Value="$hierarchy_delete_hint$" />
+						</Window>
+		        <Window Type="Editor/MenuItem" Name="EditorRoot/Popup/EntityAboveItem/CreatePrototype" >
+		            <Property Name="Text" Value="$hierarchy_prototype$" />
+		            <Property Name="Tooltip" Value="$hierarchy_prototype_hint$" />
+						</Window>
 		    </Window>
 
 		    

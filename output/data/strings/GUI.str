@@ -82,6 +82,13 @@ prototype_instantiate_hint=Instantiantes the prototype into new entity
 hierarchy=Hierarchy
 hierarchy_add=Add Entity
 hierarchy_add_hint=Creates new entity in the world.
+hierarchy_duplicate=Duplicate Entity
+hierarchy_duplicate_hint=Duplicates the selected entity.
+hierarchy_delete=Delete Entity
+hierarchy_delete_hint=Deletes the selected entity.
+hierarchy_prototype=Create Prototype
+hierarchy_prototype_hint=Creates a prototype based on the selected entity.
+
 
 # message box
 ok=Ok

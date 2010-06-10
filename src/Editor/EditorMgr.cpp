@@ -240,6 +240,11 @@ void Editor::EditorMgr::DeleteCurrentEntity()
 	SetCurrentEntity(EntityHandle::Null);
 }
 
+void Editor::EditorMgr::CreatePrototypeFromCurrentEntity()
+{
+	OC_FAIL("Not implemented");
+}
+
 void Editor::EditorMgr::DuplicateSelectedEntities()
 {
 	for (EntityList::iterator it = mSelectedEntities.begin(); it != mSelectedEntities.end(); ++it)

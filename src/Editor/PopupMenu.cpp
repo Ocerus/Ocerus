@@ -74,12 +74,22 @@ bool Editor::PopupMenu::OnMenuItemMouseUp( const CEGUI::EventArgs& e )
 	{
 		if (itemCeguiName == mName + "/AddEntity")
 		{
-			EntitySystem::EntityDescription desc;
-			desc.SetName("New Entity");
-			desc.AddComponent(EntitySystem::CT_Transform);
-			EntitySystem::EntityHandle entity = gEntityMgr.CreateEntity(desc);
-			entity.FinishInit();
-			gEditorMgr.GetEditorGui()->GetHierarchyWindow()->Refresh();
+			gEditorMgr.CreateEntity();
+			handled = true;
+		}
+		else if (itemCeguiName == mName + "/DuplicateEntity")
+		{
+			gEditorMgr.DuplicateCurrentEntity();
+			handled = true;
+		}
+		else if (itemCeguiName == mName + "/DeleteEntity")
+		{
+			gEditorMgr.DeleteCurrentEntity();
+			handled = true;
+		}
+		else if (itemCeguiName == mName + "/CreatePrototype")
+		{
+			gEditorMgr.CreatePrototypeFromCurrentEntity();
 			handled = true;
 		}
 	}

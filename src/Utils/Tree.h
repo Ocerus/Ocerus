@@ -667,7 +667,7 @@ typename tree<T, tree_node_allocator>::pre_order_iterator tree<T, tree_node_allo
 template <class T, class tree_node_allocator>
 typename tree<T, tree_node_allocator>::pre_order_iterator tree<T, tree_node_allocator>::end() const
 {
-	return pre_order_iterator(feet);
+	return pre_order_iterator();
 }
 
 template <class T, class tree_node_allocator>
