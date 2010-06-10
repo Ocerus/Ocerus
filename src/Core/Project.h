@@ -68,6 +68,12 @@ namespace Core
 		/// Loads the default scene of the project.
 		void OpenDefaultScene();
 
+		/// Saves the current scene if any.
+		void SaveCurrentScene();
+
+		/// Returns true if there is a scene opened.
+		bool IsSceneOpened();
+
 	private:
 
 		/// Sets the project info of the opened project to default values.

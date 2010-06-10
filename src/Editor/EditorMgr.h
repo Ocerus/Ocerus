@@ -80,6 +80,9 @@ namespace Editor
 		/// Loads the hierarchy window from an XML input.
 		void LoadHierarchyWindow(ResourceSystem::XMLNodeIterator& xml);
 
+		/// Save the hierarchy into the XML output.
+		void SaveHierarchyWindow(ResourceSystem::XMLOutput& storage);
+
 		/// Returns the gui object.
 		inline EditorGUI* GetEditorGui() const { return mEditorGUI; }
 

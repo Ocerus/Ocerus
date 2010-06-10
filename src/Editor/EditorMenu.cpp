@@ -134,7 +134,11 @@ bool Editor::EditorMenu::OnMenuItemClicked(const CEGUI::EventArgs& e)
 
 	if (itemName == menubarPrefix + "/Scene/SaveScene")
 	{
-		return true;
+		if (gEditorMgr.GetCurrentProject()->IsSceneOpened())
+		{
+			gEditorMgr.GetCurrentProject()->SaveCurrentScene();
+		}
+		return true;			
 	}
 
 	/// ---- Edit menu ----

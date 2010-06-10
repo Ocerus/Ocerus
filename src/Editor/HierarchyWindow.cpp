@@ -3,6 +3,7 @@
 #include "PopupMenu.h"
 #include "GUISystem/CEGUITools.h"
 #include "Editor/EditorMgr.h"
+#include "ResourceSystem/XMLResource.h"
 
 using namespace Editor;
 using namespace EntitySystem;
@@ -181,20 +182,60 @@ void Editor::HierarchyWindow::LoadHierarchy( ResourceSystem::XMLNodeIterator& xm
 {
 	mHierarchy.clear();
 
-	EntitySystem::EntityList entities;
-	gEntityMgr.GetEntities(entities);
-	//uint32 depth = 0;
-	HierarchyTree::iterator lastIter = mHierarchy.begin();
-	for (EntitySystem::EntityList::iterator it=entities.begin(); it!=entities.end(); ++it)
-	{
-		if (gEntityMgr.IsEntityTransient(*it)) continue;
+	LoadSubtree(xml, mHierarchy.begin());
 
-		lastIter = mHierarchy.append_child(lastIter, *it);
+/*
+	set<EntitySystem::EntityHandle> loadedEntities;
+	for (HierarchyTree::iterator it=mHierarchy.begin(); it!=mHierarchy.end(); ++it)
+	{
+		loadedEntities.insert(*it);
 	}
 
+	EntitySystem::EntityList entities;
+	gEntityMgr.GetEntities(entities);
+	for (EntitySystem::EntityList::iterator it=entities.begin(); it!=entities.end(); ++it)
+	{
+		if (loadedEntities.find(*it) != loadedEntities.end()) continue;
+		if (gEntityMgr.IsEntityTransient(*it)) continue;
+
+		mHierarchy.append_child(mHierarchy.begin(), *it);
+	}
+*/
 	RebuildTree();
 
 	ocInfo << "Hierarchy loaded";
+}
+
+void Editor::HierarchyWindow::LoadSubtree( ResourceSystem::XMLNodeIterator& xml, const HierarchyTree::iterator_base& parent )
+{
+	for (ResourceSystem::XMLNodeIterator iter=xml.IterateChildren(); iter!=xml.EndChildren(); ++iter)
+	{
+		if ((*iter).compare("Entity") != 0) continue;
+		if (!iter.HasAttribute("ID"))
+		{
+			ocError << "Missing attribute 'ID' in the hierarchy tree description";	
+			continue;
+		}
+		HierarchyTree::iterator childIter = mHierarchy.append_child(parent, EntitySystem::EntityHandle(iter.GetAttribute<EntitySystem::EntityID>("ID")));
+		LoadSubtree(iter, childIter);
+	}
+}
+
+void Editor::HierarchyWindow::SaveHierarchy( ResourceSystem::XMLOutput& storage )
+{
+	SaveSubtree(storage, mHierarchy.begin());
+}
+
+void Editor::HierarchyWindow::SaveSubtree( ResourceSystem::XMLOutput& storage, const HierarchyTree::iterator_base& parent )
+{
+	for (HierarchyTree::sibling_iterator iter=mHierarchy.begin(parent); iter!=mHierarchy.end(parent); ++iter)
+	{
+		storage.BeginElementStart("Entity");
+		storage.AddAttribute("ID", StringConverter::ToString(iter->GetID()));
+		storage.BeginElementFinish();
+		SaveSubtree(storage, iter);
+		storage.EndElement();
+	}
 }
 
 bool Editor::HierarchyWindow::OnDragContainerMouseButtonUp( const CEGUI::EventArgs& e )

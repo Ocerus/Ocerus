@@ -29,6 +29,9 @@ namespace Editor
 		/// Loads the hierarchy from an XML input.
 		void LoadHierarchy(ResourceSystem::XMLNodeIterator& xml);
 
+		/// Saves the hierarchy to an XML output.
+		void SaveHierarchy(ResourceSystem::XMLOutput& storage);
+
 		/// Adds a new entity to the hierarchy as a parent of the given entity. If the parent is null the new entity is added
 		/// to the root.
 		void AddEntityToHierarchy(const EntitySystem::EntityHandle parent, const EntitySystem::EntityHandle toAdd);
@@ -58,6 +61,12 @@ namespace Editor
 
 		typedef hash_map<unsigned int, HierarchyInfo> EntityMap;
 		typedef tree<EntitySystem::EntityHandle> HierarchyTree;
+
+		/// Saves the hierarchy recursively.
+		void SaveSubtree(ResourceSystem::XMLOutput& storage, const HierarchyTree::iterator_base& parent);
+
+		/// Loads the hierarchy recursively.
+		void LoadSubtree(ResourceSystem::XMLNodeIterator& xml, const HierarchyTree::iterator_base& parent);
 
 		/// Creates the tree based on the saved hierarchy.
 		void RebuildTree();

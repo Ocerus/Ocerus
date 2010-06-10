@@ -690,3 +690,10 @@ void Editor::EditorMgr::LoadHierarchyWindow( ResourceSystem::XMLNodeIterator& xm
 	OC_ASSERT(mEditorGUI->GetHierarchyWindow());
 	mEditorGUI->GetHierarchyWindow()->LoadHierarchy(xml);
 }
+
+void Editor::EditorMgr::SaveHierarchyWindow( ResourceSystem::XMLOutput& storage )
+{
+	OC_ASSERT(mEditorGUI);
+	OC_ASSERT(mEditorGUI->GetHierarchyWindow());
+	mEditorGUI->GetHierarchyWindow()->SaveHierarchy(storage);
+}

@@ -148,6 +148,11 @@ string EntitySystem::EntityHandle::GetName( void ) const
 	return gEntityMgr.GetEntityName(*this);
 }
 
+bool EntitySystem::EntityHandle::operator<( const EntityHandle& rhs ) const
+{
+	return mEntityID < rhs.mEntityID;
+}
+
 EntityMessage::eResult EntityHandle::PostMessage(const EntityMessage& msg)
 {
 	OC_DASSERT(IsValid());

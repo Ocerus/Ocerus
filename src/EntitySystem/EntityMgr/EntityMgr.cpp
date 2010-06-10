@@ -3,8 +3,8 @@
 #include "EntityDescription.h"
 #include "../ComponentMgr/ComponentMgr.h"
 #include "../ComponentMgr/Component.h"
-#include "../../ResourceSystem/XMLResource.h"
-#include "../../GfxSystem/GfxSceneMgr.h"
+#include "ResourceSystem/XMLResource.h"
+#include "GfxSystem/GfxSceneMgr.h"
 #include "Editor/EditorMgr.h"
 #include "Editor/EditorGUI.h"
 #include "Editor/HierarchyWindow.h"
@@ -70,19 +70,6 @@ EntityMgr::EntityMgr()
 
 EntityMgr::~EntityMgr()
 {
-	// test ulozeni entit
-	ResourceSystem::XMLOutput storage("TestSave.xml");
-	storage.BeginElement("Scene");
-	if (gEntityMgr.SaveEntitiesToStorage(storage))
-	{
-		ocInfo << "Test save successful.";
-	}
-	else
-	{
-		ocError << "Test save failed!";
-	}
-	storage.EndElement();
-	
 	DestroyAllEntities();
 	delete mComponentMgr;
 }
@@ -808,8 +795,17 @@ bool EntitySystem::EntityMgr::SaveEntitiesToStorage(ResourceSystem::XMLOutput& s
 			if (!SaveEntityToStorage(i->first, storage, isPrototype, evenTransient)) { result = false; };
 		}
 	}
+
 	storage.EndElement();
-	
+
+
+	storage.BeginElement("Hierarchy");
+
+	gEditorMgr.SaveHierarchyWindow(storage);
+
+	storage.EndElement();
+
+
 	return result;
 }
 

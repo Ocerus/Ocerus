@@ -100,6 +100,7 @@ void Project::CloseProject()
 
 	SaveProject();
 	mPath = "";
+	mCurrentScene = "";
 	mIsOpened = false;
 	mResourceTypeMap.clear();
 	mScenes.clear();
@@ -117,6 +118,8 @@ void Project::OpenScene(const string& scene)
 {
 	mCurrentScene = scene;
 	gEntityMgr.LoadEntitiesFromResource(gResourceMgr.GetResource("Project", scene));
+
+	ocInfo << "Scene " << scene << " loaded";
 }
 
 void Project::OpenSceneAtIndex(uint32 index)
@@ -167,15 +170,44 @@ string Core::Project::GetDefaultSceneName() const
 
 void Core::Project::OpenDefaultScene()
 {
+	mCurrentScene = "";
+
 	if (GetScenesCount() == 0)
 	{
 		ocWarning << "No default scene to open";
 		return;
 	}
+
 	OpenSceneAtIndex(0);
 }
 
 uint32 Core::Project::GetScenesCount() const
 {
 	return mScenes.size();
+}
+
+void Core::Project::SaveCurrentScene()
+{
+	if (mCurrentScene.empty())
+	{
+		ocError << "No scene is opened";
+		return;
+	}
+
+	ResourceSystem::ResourcePtr sceneResource = gResourceMgr.GetResource("Project", mCurrentScene);
+	ResourceSystem::XMLOutput storage(sceneResource->GetFilePath());
+	storage.BeginElement("Scene");
+	if (!gEntityMgr.SaveEntitiesToStorage(storage))
+	{
+		ocError << "Unable to save entities";
+	}
+	storage.EndElement();
+	storage.CloseAndReport();
+
+	ocInfo << "Scene " << mCurrentScene << " saved";
+}
+
+bool Core::Project::IsSceneOpened()
+{
+	return !mCurrentScene.empty();
 }

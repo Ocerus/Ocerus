@@ -2,66 +2,88 @@
 
 <Scene>
   <Entities>
-    <Entity Name="Visual">
+    <Entity Name="Visual" ID="3">
       <Component Type="Transform">
         <Position>0 0</Position>
+        <Layer>0</Layer>
         <Scale>1.2 1.5</Scale>
         <Angle>0</Angle>
-        <Layer>0</Layer>
       </Component>
       <Component Type="Sprite">
-        <Texture>logo-alpha.png</Texture>
         <Transparency>0</Transparency>
+        <Texture>logo-alpha.png</Texture>
       </Component>
       <Component Type="Model">
-        <YAngle>0.6</YAngle>
         <Mesh>cube.model</Mesh>
         <Transparency>0</Transparency>
+        <YAngle>0.6</YAngle>
       </Component>
       <Component Type="DynamicBody"></Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-3 -2</Item>
           <Item>3 -2</Item>
           <Item>3 2</Item>
           <Item>-3 2</Item>
         </Polygon>
+        <Density>1</Density>
       </Component>
       <Component Type="Script">
-        <ScriptTimeOut>1000</ScriptTimeOut>
-        <ScriptStates></ScriptStates>
         <ScriptModules>
           <Item>ConstantMover.as</Item>
         </ScriptModules>
+        <ScriptStates></ScriptStates>
         <ScriptTimes></ScriptTimes>
+        <ScriptTimeOut>1000</ScriptTimeOut>
       </Component>
     </Entity>
-    <Entity Name="Tux">
+    <Entity Name="Tux" ID="4">
       <Component Type="Transform">
         <Position>5 2</Position>
+        <Layer>0</Layer>
         <Scale>1.2 1.5</Scale>
         <Angle>0</Angle>
-        <Layer>0</Layer>
       </Component>
       <Component Type="Sprite">
-        <Texture>tux.png</Texture>
         <Transparency>0</Transparency>
+        <Texture>tux.png</Texture>
       </Component>
       <Component Type="DynamicBody"></Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-3 -2</Item>
           <Item>3 -2</Item>
           <Item>3 2</Item>
           <Item>-3 2</Item>
         </Polygon>
+        <Density>1</Density>
+      </Component>
+    </Entity>
+    <Entity Name="New Entity" ID="5" Prototype="-488">
+      <Component Type="Transform">
+        <Position>0 0</Position>
+        <Layer>0</Layer>
+        <Scale>0.7 1</Scale>
+        <Angle>0</Angle>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>tux.png</Texture>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Polygon>
+          <Item>0 0</Item>
+          <Item>10 0</Item>
+          <Item>10 10</Item>
+        </Polygon>
+        <Density>1</Density>
       </Component>
     </Entity>
   </Entities>
-  
   <Hierarchy>
-  
+    <Entity ID="3">
+      <Entity ID="4"></Entity>
+    </Entity>
+    <Entity ID="5"></Entity>
   </Hierarchy>
 </Scene>
