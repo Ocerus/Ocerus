@@ -184,7 +184,7 @@ void Editor::HierarchyWindow::LoadHierarchy( ResourceSystem::XMLNodeIterator& xm
 
 	LoadSubtree(xml, mHierarchy.begin());
 
-/*
+
 	set<EntitySystem::EntityHandle> loadedEntities;
 	for (HierarchyTree::iterator it=mHierarchy.begin(); it!=mHierarchy.end(); ++it)
 	{
@@ -193,14 +193,20 @@ void Editor::HierarchyWindow::LoadHierarchy( ResourceSystem::XMLNodeIterator& xm
 
 	EntitySystem::EntityList entities;
 	gEntityMgr.GetEntities(entities);
+	bool reportWarning = true;
 	for (EntitySystem::EntityList::iterator it=entities.begin(); it!=entities.end(); ++it)
 	{
 		if (loadedEntities.find(*it) != loadedEntities.end()) continue;
 		if (gEntityMgr.IsEntityTransient(*it)) continue;
 
+		if (reportWarning)
+		{
+			ocWarning << "Not all entities existed in the hierarchy. Loading the rest automatically.";
+			reportWarning = false;
+		}
 		mHierarchy.append_child(mHierarchy.begin(), *it);
 	}
-*/
+
 	RebuildTree();
 
 	ocInfo << "Hierarchy loaded";
