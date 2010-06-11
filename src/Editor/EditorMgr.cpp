@@ -348,25 +348,33 @@ void EditorMgr::OpenProject(const string& projectPath)
 
 bool Editor::EditorMgr::KeyPressed( const InputSystem::KeyInfo& ke )
 {
-	if (ke.keyCode == KS_TOOL_MOVE)
+
+	KeyShortcuts::eKeyShortcut shortcut;
+	shortcut = mShortcuts.GetPressedShortcut(ke.keyCode);
+
+	switch (shortcut)
 	{
+	case KeyShortcuts::KS_TOOL_MOVE:
 		SwitchEditTool(ET_MOVE);
 		return true;
-	}
-	else if (ke.keyCode == KS_TOOL_ROTATE)
-	{
+
+	case KeyShortcuts::KS_TOOL_ROTATE:
 		SwitchEditTool(ET_ROTATE);
 		return true;
-	}
-	else if (ke.keyCode == KS_TOOL_ROTATE_Y)
-	{
+
+	case KeyShortcuts::KS_TOOL_ROTATE_Y:
 		SwitchEditTool(ET_ROTATE_Y);
 		return true;
-	}
-	else if (ke.keyCode == KS_TOOL_SCALE)
-	{
+
+	case KeyShortcuts::KS_TOOL_SCALE:
 		SwitchEditTool(ET_SCALE);
 		return true;
+
+	case KeyShortcuts::KS_UKNOWN:
+		return false;
+
+	default:
+		OC_NOT_REACHED();
 	}
 
 	return false;

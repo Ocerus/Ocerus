@@ -1498,6 +1498,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\Editor\KeyShortcuts.h"
+					>
+				</File>
+				<File
 					RelativePath="..\src\Editor\LayerMgrWidget.h"
 					>
 				</File>
@@ -1535,6 +1539,10 @@
 				</File>
 				<File
 					RelativePath="..\src\Editor\HierarchyWindow.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src\Editor\KeyShortcuts.cpp"
 					>
 				</File>
 				<File

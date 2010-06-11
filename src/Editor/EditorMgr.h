@@ -6,6 +6,7 @@
 
 #include "Base.h"
 #include "Singleton.h"
+#include "KeyShortcuts.h"
 #include "InputSystem/IInputListener.h"
 #include "EntitySystem/ComponentMgr/ComponentID.h"
 #include "EntitySystem/ComponentMgr/ComponentEnums.h"
@@ -135,15 +136,6 @@ namespace Editor
 		/// The type of edit tool.
 		enum eEditTool { ET_MOVE=0, ET_ROTATE, ET_ROTATE_Y, ET_SCALE };
 
-		enum eKeyShortcut 
-		{
-			KS_TOOL_MOVE		= InputSystem::KC_Q,
-			KS_TOOL_ROTATE		= InputSystem::KC_W,
-			KS_TOOL_ROTATE_Y	= InputSystem::KC_E,
-			KS_TOOL_SCALE		= InputSystem::KC_R
-
-		};
-
 		/// Creates a new entity.
 		void CreateEntity();
 
@@ -212,6 +204,9 @@ namespace Editor
 		/// Draws the shape of the entity using the selected color.
 		bool DrawEntityPhysicalShape(const EntitySystem::EntityHandle entity, const GfxSystem::Color shapeColor, const float32 shapeWidth);
 
+		//Shortcuts
+		KeyShortcuts mShortcuts;
+	
 	};
 
 	inline const EntitySystem::EntityHandle EditorMgr::GetCurrentEntity() const
