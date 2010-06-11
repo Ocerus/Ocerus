@@ -77,6 +77,7 @@ CEGUI::ItemEntry* Editor::HierarchyWindow::AddTreeItem( uint32 index, const stri
 	newItemText->setMousePassThroughEnabled(true);
 
 	dragContainer->addChildWindow(newItemText);
+	dragContainer->subscribeEvent(CEGUI::Window::EventMouseButtonDown, CEGUI::Event::Subscriber(&Editor::HierarchyWindow::OnDragContainerMouseButtonDown, this));
 	dragContainer->subscribeEvent(CEGUI::Window::EventMouseButtonUp, CEGUI::Event::Subscriber(&Editor::HierarchyWindow::OnDragContainerMouseButtonUp, this));
 	dragContainer->setID(itemID);
 	dragContainer->setUserData(this);
@@ -242,6 +243,22 @@ void Editor::HierarchyWindow::SaveSubtree( ResourceSystem::XMLOutput& storage, c
 		SaveSubtree(storage, iter);
 		storage.EndElement();
 	}
+}
+
+bool Editor::HierarchyWindow::OnDragContainerMouseButtonDown( const CEGUI::EventArgs& e )
+{
+	const CEGUI::MouseEventArgs& args = static_cast<const CEGUI::MouseEventArgs&>(e);
+	CEGUI::DragContainer* dragContainer = static_cast<CEGUI::DragContainer*>(args.window);
+	if (dragContainer->isBeingDragged()) return false;
+
+	CEGUI::ItemEntry* itemEntry = static_cast<CEGUI::ItemEntry*>(args.window->getParent());
+	itemEntry->setSelected(true);
+	EntityMap::iterator entityIter = mItems.find(itemEntry->getID());
+	OC_ASSERT(entityIter != mItems.end());
+	EntitySystem::EntityHandle entity = entityIter->second.entity;
+	gEditorMgr.SetCurrentEntity(entity);
+
+	return true;
 }
 
 bool Editor::HierarchyWindow::OnDragContainerMouseButtonUp( const CEGUI::EventArgs& e )

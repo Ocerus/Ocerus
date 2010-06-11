@@ -110,6 +110,7 @@ void Editor::ResourceWindow::RebuildTree()
 		newItemText->setMousePassThroughEnabled(true);
 
 		dragContainer->addChildWindow(newItemText);
+		dragContainer->subscribeEvent(CEGUI::Window::EventMouseButtonDown, CEGUI::Event::Subscriber(&Editor::ResourceWindow::OnDragContainerMouseButtonDown, this));
 		dragContainer->subscribeEvent(CEGUI::Window::EventMouseButtonUp, CEGUI::Event::Subscriber(&Editor::ResourceWindow::OnDragContainerMouseButtonUp, this));
 
 		dragContainer->setID(resourceIndex);
@@ -117,6 +118,18 @@ void Editor::ResourceWindow::RebuildTree()
 
 		mTree->addChildWindow(newItem);
 	}
+}
+
+bool Editor::ResourceWindow::OnDragContainerMouseButtonDown(const CEGUI::EventArgs& e)
+{
+	const CEGUI::MouseEventArgs& args = static_cast<const CEGUI::MouseEventArgs&>(e);
+	CEGUI::DragContainer* dragContainer = static_cast<CEGUI::DragContainer*>(args.window);
+	if (dragContainer->isBeingDragged()) return false;
+
+	CEGUI::ItemEntry* itemEntry = static_cast<CEGUI::ItemEntry*>(args.window->getParent());
+	itemEntry->setSelected(true);
+
+	return true;
 }
 
 bool Editor::ResourceWindow::OnDragContainerMouseButtonUp(const CEGUI::EventArgs& e)
