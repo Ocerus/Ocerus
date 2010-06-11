@@ -39,6 +39,9 @@ namespace Editor
 		/// Removes an entity from the hierarchy.
 		void RemoveEntityFromHierarchy(const EntitySystem::EntityHandle toRemove);
 
+		/// Sets the currently selected item.
+		void SetSelectedEntity(const EntitySystem::EntityHandle entity);
+
 		/// Runs a check on the consistency of the hierarchy tree. Returns true if it's ok.
 		bool CheckHierarchy();
 
@@ -49,6 +52,7 @@ namespace Editor
 		bool OnDragContainerMouseButtonDown(const CEGUI::EventArgs&);
 		bool OnDragContainerMouseButtonUp(const CEGUI::EventArgs&);
 		bool OnWindowMouseButtonUp(const CEGUI::EventArgs&);
+		bool OnEventDragDropItemDropped(const CEGUI::EventArgs&);
 		//@}
 
 	private:
