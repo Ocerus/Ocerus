@@ -79,9 +79,6 @@ namespace GfxSystem
 		/// Adds a textured quad to the queue for rendering.
 		void QueueTexturedQuad(const TexturedQuad spr);
 
-		/// Draws all quads from the queue.
-		void ProcessTexturedQuads();
-
 		/// Draws all visible entities.
 		void DrawEntities();
 
@@ -178,10 +175,6 @@ namespace GfxSystem
 		virtual void SetCameraImpl(const Vector2& position, const float32 zoom, const float32 rotation) const = 0;
 
 	private:
-
-		// Vector with sprites to be rendered.
-		typedef vector<TexturedQuad> QuadVector;
-		QuadVector mQuads;
 
 		// Render targets.
 		typedef vector<RenderTarget*> RenderTargetsVector;

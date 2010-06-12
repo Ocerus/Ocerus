@@ -126,25 +126,6 @@ bool GfxSystem::GfxRenderer::RemoveRenderTarget( const RenderTargetID toRemove )
 	return true;
 }
 
-void GfxRenderer::QueueTexturedQuad(const TexturedQuad spr)
-{
-	mQuads.push_back(spr);
-}
-
-void GfxRenderer::ProcessTexturedQuads()
-{
-	OC_ASSERT(mIsRendering);
-
-	QuadVector::const_iterator it;
-	for(it = mQuads.begin(); it != mQuads.end(); ++it)
-	{
-		//TODO: setridit podle textur
-		DrawTexturedQuad(*it);
-	}
-
-	mQuads.clear();
-}
-
 bool GfxSystem::GfxRenderer::ConvertScreenToWorldCoords( const Point& screenCoords, Vector2& worldCoords, const RenderTargetID renderTargetID ) const
 {
 	// we have a predefined render target
