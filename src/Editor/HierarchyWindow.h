@@ -32,15 +32,21 @@ namespace Editor
 		/// Saves the hierarchy to an XML output.
 		void SaveHierarchy(ResourceSystem::XMLOutput& storage);
 
+		/// Adds a new entity to the hierarchy as a parent of the current parent (see SetCurrentParent()).
+		void AddEntityToHierarchy(const EntitySystem::EntityHandle toAdd);
+
 		/// Adds a new entity to the hierarchy as a parent of the given entity. If the parent is null the new entity is added
 		/// to the root.
-		void AddEntityToHierarchy(const EntitySystem::EntityHandle parent, const EntitySystem::EntityHandle toAdd);
+		void AddEntityToHierarchy(const EntitySystem::EntityHandle toAdd, const EntitySystem::EntityHandle parent);
 
 		/// Removes an entity from the hierarchy.
 		void RemoveEntityFromHierarchy(const EntitySystem::EntityHandle toRemove);
 
 		/// Sets the currently selected item.
 		void SetSelectedEntity(const EntitySystem::EntityHandle entity);
+
+		/// Sets the current parent in the hierarchy. Entities added in the near future will be parented by this entity.
+		void SetCurrentParent(const EntitySystem::EntityHandle val) { mCurrentParent = val; }
 
 		/// Runs a check on the consistency of the hierarchy tree. Returns true if it's ok.
 		bool CheckHierarchy();
@@ -98,6 +104,7 @@ namespace Editor
 		int32 mSelectedIndex;
 		EntityMap mItems;
 		HierarchyTree mHierarchy;
+		EntitySystem::EntityHandle mCurrentParent;
 	};
 }
 

@@ -74,7 +74,9 @@ bool Editor::PopupMenu::OnMenuItemMouseUp( const CEGUI::EventArgs& e )
 	{
 		if (itemCeguiName == mName + "/AddEntity")
 		{
+			gEditorMgr.GetEditorGui()->GetHierarchyWindow()->SetCurrentParent(GetData<EntitySystem::EntityHandle>());
 			gEditorMgr.CreateEntity();
+			gEditorMgr.GetEditorGui()->GetHierarchyWindow()->SetCurrentParent(EntitySystem::EntityHandle::Null);
 			handled = true;
 		}
 		else if (itemCeguiName == mName + "/DuplicateEntity")
@@ -115,25 +117,11 @@ void Editor::PopupMenu::Init()
 		InitResourceTypes();
 	}
 
-	size_t childCount = menu->getChildCount();
-	for(size_t childIdx = 0; childIdx < childCount; childIdx++)
-	{
-		if (menu->getChildAtIdx(childIdx)->testClassName("MenuItem"))
-		{
-			mEventConnections.push_back(menu->getChildAtIdx(childIdx)->subscribeEvent(CEGUI::MenuItem::EventMouseButtonUp, CEGUI::Event::Subscriber(&PopupMenu::OnMenuItemMouseUp, this)));
-		}
-	}
-
 	mInited = true;
 }
 
 Editor::PopupMenu::~PopupMenu()
 {
-	for (list<CEGUI::Event::Connection>::iterator it=mEventConnections.begin(); it!=mEventConnections.end(); ++it)
-	{
-		gGUIMgr.DisconnectEvent(*it);
-	}
-	
 	gEditorMgr.UnregisterPopupMenu(this);
 
 	if (mData) delete mData;
@@ -148,6 +136,16 @@ void Editor::PopupMenu::Open( float32 x, float32 y )
 	ocInfo << "Popup " << mName << " opening";
 	CEGUI::Window* menu = gCEGUIWM.getWindow(mName);
 	OC_ASSERT(menu);
+
+	size_t childCount = menu->getChildCount();
+	for(size_t childIdx = 0; childIdx < childCount; childIdx++)
+	{
+		if (menu->getChildAtIdx(childIdx)->testClassName("MenuItem"))
+		{
+			mEventConnections.push_back(menu->getChildAtIdx(childIdx)->subscribeEvent(CEGUI::MenuItem::EventMouseButtonUp, CEGUI::Event::Subscriber(&PopupMenu::OnMenuItemMouseUp, this)));
+		}
+	}
+
 	x -= 0.5f * menu->getWidth().d_offset;
 	y -= 0.5f * menu->getHeight().d_offset;
 	menu->setPosition(CEGUI::UVector2(CEGUI::UDim(0, x), CEGUI::UDim(0, y)));
@@ -162,6 +160,11 @@ void Editor::PopupMenu::Close()
 	if (!menu->isVisible()) return;
 	ocInfo << "Popup " << mName << " closing";
 	menu->hide();
+
+	for (list<CEGUI::Event::Connection>::iterator it=mEventConnections.begin(); it!=mEventConnections.end(); ++it)
+	{
+		gGUIMgr.DisconnectEvent(*it);
+	}
 
 	if (mSelfDestruct) delete this;
 }

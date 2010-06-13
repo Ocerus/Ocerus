@@ -213,7 +213,7 @@ EntityHandle EntityMgr::CreateEntity(EntityDescription& desc)
 
 	if (GlobalProperties::Get<bool>("DevelopMode"))
 	{
-		gEditorMgr.GetEditorGui()->GetHierarchyWindow()->AddEntityToHierarchy(EntityHandle::Null, entityHandle);
+		gEditorMgr.GetEditorGui()->GetHierarchyWindow()->AddEntityToHierarchy(entityHandle);
 	}
 
 	return entityHandle;

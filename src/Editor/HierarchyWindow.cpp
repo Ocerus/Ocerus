@@ -8,7 +8,7 @@
 using namespace Editor;
 using namespace EntitySystem;
 
-Editor::HierarchyWindow::HierarchyWindow(): mWindow(0), mTree(0)
+Editor::HierarchyWindow::HierarchyWindow(): mWindow(0), mTree(0), mCurrentParent(EntitySystem::EntityHandle::Null)
 {
 
 }
@@ -80,7 +80,6 @@ CEGUI::ItemEntry* Editor::HierarchyWindow::AddTreeItem( uint32 index, const stri
 	dragContainer->addChildWindow(newItemText);
 	dragContainer->subscribeEvent(CEGUI::Window::EventMouseButtonDown, CEGUI::Event::Subscriber(&Editor::HierarchyWindow::OnDragContainerMouseButtonDown, this));
 	dragContainer->subscribeEvent(CEGUI::Window::EventMouseButtonUp, CEGUI::Event::Subscriber(&Editor::HierarchyWindow::OnDragContainerMouseButtonUp, this));
-	dragContainer->subscribeEvent(CEGUI::Window::EventMouseButtonUp, CEGUI::Event::Subscriber(&Editor::HierarchyWindow::OnDragContainerMouseButtonUp, this));
 	dragContainer->subscribeEvent(CEGUI::Window::EventDragDropItemDropped, CEGUI::Event::Subscriber(&Editor::HierarchyWindow::OnTreeItemDragDropItemDropped, this));
 	dragContainer->setID(itemID);
 	dragContainer->setUserData(this);
@@ -132,7 +131,7 @@ int32 Editor::HierarchyWindow::FindTreeItem( const EntitySystem::EntityHandle da
 	return -1;
 }
 
-void Editor::HierarchyWindow::AddEntityToHierarchy( const EntitySystem::EntityHandle parent, const EntitySystem::EntityHandle toAdd )
+void Editor::HierarchyWindow::AddEntityToHierarchy( const EntitySystem::EntityHandle toAdd, const EntitySystem::EntityHandle parent )
 {
 	if (gEntityMgr.IsEntityTransient(toAdd) || gEntityMgr.IsEntityPrototype(toAdd)) return;
 
@@ -147,7 +146,12 @@ void Editor::HierarchyWindow::AddEntityToHierarchy( const EntitySystem::EntityHa
 	uint32 parentDepth;
 	int32 parentIndex = FindTreeItem(parent, parentDepth);
 	if (parentIndex == -1) AppendTreeItem(toAdd.GetName(), 0, toAdd);
-	else AddTreeItem(parentIndex, toAdd.GetName(), parentDepth+1, toAdd);
+	else AddTreeItem(parentIndex+1, toAdd.GetName(), parentDepth+1, toAdd);
+}
+
+void Editor::HierarchyWindow::AddEntityToHierarchy( const EntitySystem::EntityHandle toAdd )
+{
+	AddEntityToHierarchy(toAdd, mCurrentParent);
 }
 
 void Editor::HierarchyWindow::RemoveEntityFromHierarchy( const EntitySystem::EntityHandle toRemove )
@@ -343,7 +347,7 @@ bool Editor::HierarchyWindow::OnTreeItemDragDropItemDropped(const CEGUI::EventAr
 
 		HierarchyTree::sibling_iterator sourceIter2 = sourceIter;
 		++sourceIter2;
-		if (!mHierarchy.is_in_subtree(targetIter, sourceIter, sourceIter2))
+		if (mHierarchy.parent(sourceIter) != targetIter && !mHierarchy.is_in_subtree(targetIter, sourceIter, sourceIter2))
 		{
 			mHierarchy.reparent(targetIter, sourceIter, sourceIter2);
 			RebuildTree();
