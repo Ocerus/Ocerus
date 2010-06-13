@@ -33,6 +33,7 @@ void Editor::HierarchyWindow::Init()
 	OC_ASSERT(mTree != 0);
 
 	mTree->subscribeEvent(CEGUI::Window::EventMouseButtonUp, CEGUI::Event::Subscriber(&Editor::HierarchyWindow::OnWindowMouseButtonUp, this));
+	mTree->subscribeEvent(CEGUI::Window::EventDragDropItemDropped, CEGUI::Event::Subscriber(&Editor::HierarchyWindow::OnTreeDragDropItemDropped, this));
 
 	CEGUI_EXCEPTION_END
 }
@@ -80,7 +81,7 @@ CEGUI::ItemEntry* Editor::HierarchyWindow::AddTreeItem( uint32 index, const stri
 	dragContainer->subscribeEvent(CEGUI::Window::EventMouseButtonDown, CEGUI::Event::Subscriber(&Editor::HierarchyWindow::OnDragContainerMouseButtonDown, this));
 	dragContainer->subscribeEvent(CEGUI::Window::EventMouseButtonUp, CEGUI::Event::Subscriber(&Editor::HierarchyWindow::OnDragContainerMouseButtonUp, this));
 	dragContainer->subscribeEvent(CEGUI::Window::EventMouseButtonUp, CEGUI::Event::Subscriber(&Editor::HierarchyWindow::OnDragContainerMouseButtonUp, this));
-	dragContainer->subscribeEvent(CEGUI::Window::EventDragDropItemDropped, CEGUI::Event::Subscriber(&Editor::HierarchyWindow::OnEventDragDropItemDropped, this));
+	dragContainer->subscribeEvent(CEGUI::Window::EventDragDropItemDropped, CEGUI::Event::Subscriber(&Editor::HierarchyWindow::OnTreeItemDragDropItemDropped, this));
 	dragContainer->setID(itemID);
 	dragContainer->setUserData(this);
 
@@ -327,7 +328,7 @@ bool Editor::HierarchyWindow::CheckHierarchy()
 	return true;
 }
 
-bool Editor::HierarchyWindow::OnEventDragDropItemDropped(const CEGUI::EventArgs& e)
+bool Editor::HierarchyWindow::OnTreeItemDragDropItemDropped(const CEGUI::EventArgs& e)
 {
 	const CEGUI::DragDropEventArgs& args = static_cast<const CEGUI::DragDropEventArgs&>(e);
 	
@@ -337,8 +338,34 @@ bool Editor::HierarchyWindow::OnEventDragDropItemDropped(const CEGUI::EventArgs&
 	if (sourceEntity != targetEntity)
 	{
 		HierarchyTree::sibling_iterator sourceIter = std::find(mHierarchy.begin(), mHierarchy.end(), sourceEntity);
-		HierarchyTree::iterator targetIter = std::find(mHierarchy.begin(), mHierarchy.end(), targetEntity);
+		HierarchyTree::sibling_iterator targetIter = std::find(mHierarchy.begin(), mHierarchy.end(), targetEntity);
 		OC_ASSERT_MSG(sourceIter != mHierarchy.end() && targetIter != mHierarchy.end(), "Invalid drag'n'drop entities");
+
+		HierarchyTree::sibling_iterator sourceIter2 = sourceIter;
+		++sourceIter2;
+		if (!mHierarchy.is_in_subtree(targetIter, sourceIter, sourceIter2))
+		{
+			mHierarchy.reparent(targetIter, sourceIter, sourceIter2);
+			RebuildTree();
+			SetSelectedEntity(sourceEntity);
+		}
+	}
+
+	return true;
+}
+
+bool Editor::HierarchyWindow::OnTreeDragDropItemDropped(const CEGUI::EventArgs& e)
+{
+	const CEGUI::DragDropEventArgs& args = static_cast<const CEGUI::DragDropEventArgs&>(e);
+
+	EntitySystem::EntityHandle sourceEntity = mItems[args.dragDropItem->getID()].entity;
+
+	HierarchyTree::sibling_iterator sourceIter = std::find(mHierarchy.begin(), mHierarchy.end(), sourceEntity);
+	HierarchyTree::iterator targetIter = mHierarchy.begin();
+	OC_ASSERT_MSG(sourceIter != mHierarchy.end() && targetIter != mHierarchy.end(), "Invalid drag'n'drop entities");
+
+	if (mHierarchy.parent(sourceIter) != targetIter)
+	{
 		HierarchyTree::sibling_iterator sourceIter2 = sourceIter;
 		++sourceIter2;
 		mHierarchy.reparent(targetIter, sourceIter, sourceIter2);

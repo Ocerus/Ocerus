@@ -52,7 +52,8 @@ namespace Editor
 		bool OnDragContainerMouseButtonDown(const CEGUI::EventArgs&);
 		bool OnDragContainerMouseButtonUp(const CEGUI::EventArgs&);
 		bool OnWindowMouseButtonUp(const CEGUI::EventArgs&);
-		bool OnEventDragDropItemDropped(const CEGUI::EventArgs&);
+		bool OnTreeItemDragDropItemDropped(const CEGUI::EventArgs&);
+		bool OnTreeDragDropItemDropped(const CEGUI::EventArgs&);
 		//@}
 
 	private:
