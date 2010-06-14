@@ -289,6 +289,12 @@ namespace EntitySystem
 		/// Propagates the current state of properties of the prototype to the specified instances.
 		void UpdatePrototypeInstance(const EntityID prototype, const EntityID instance);
 
+		/// Marks all (appliable) properties of the prototype component as shared.
+		void MarkPrototypePropertiesShared(const EntityHandle entity, ComponentID cid);
+
+		/// Returns true if the property can be marked at shared when the prototype is created.
+		bool IsPrototypePropertyAppliableToBeShared(const PropertyHolder prop) const;
+
 		/// Load an entity from the XML file given a node iterator to its node.
 		void LoadEntityFromXML(ResourceSystem::XMLNodeIterator& entIt, const bool isPrototype);
 

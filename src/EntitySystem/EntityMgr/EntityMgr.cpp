@@ -223,11 +223,13 @@ EntityHandle EntityMgr::DuplicateEntity(const EntityHandle oldEntity, const stri
 {
 	OC_ASSERT(mComponentMgr);
 
-	if (!oldEntity.IsValid()) { return EntityHandle::Null; }
+	if (!oldEntity.IsValid()) return EntityHandle::Null;
+
+	bool isPrototype = IsEntityPrototype(oldEntity);
 
 	// create the handle for the new entity
 	EntityHandle newEntity;
-	if (IsEntityPrototype(oldEntity)) newEntity = EntityHandle::CreateUniquePrototypeHandle();
+	if (isPrototype) newEntity = EntityHandle::CreateUniquePrototypeHandle();
 	else newEntity = EntityHandle::CreateUniqueHandle();
 
 	// let the component manager know about the entity
@@ -244,12 +246,13 @@ EntityHandle EntityMgr::DuplicateEntity(const EntityHandle oldEntity, const stri
 	// inits entity attributes
 	mEntities[newEntity.GetID()] = new EntityInfo(newName.empty() ? mEntities[oldEntity.GetID()]->mName
 		: newName, mEntities[oldEntity.GetID()]->mPrototype, mEntities[oldEntity.GetID()]->mTransient);
-	if (IsEntityPrototype(oldEntity)) { mPrototypes[newEntity.GetID()] = new PrototypeInfo(); }
+	if (isPrototype) mPrototypes[newEntity.GetID()] = new PrototypeInfo();
 
 	// copy all property values
 	PropertyList oldPropertyList, newPropertyList;
 	if (!GetEntityProperties(oldEntity, oldPropertyList) || !GetEntityProperties(newEntity, newPropertyList))
 	{ 
+		ocError << "Can't get properties of duplicated entity";
 		DestroyEntity(newEntity);
 		return EntityHandle::Null;
 	}
@@ -257,6 +260,10 @@ EntityHandle EntityMgr::DuplicateEntity(const EntityHandle oldEntity, const stri
 		oldIt != oldPropertyList.end(); ++oldIt, ++newIt)
 	{
 		newIt->CopyFrom(*oldIt);
+		if (isPrototype && IsPrototypePropertyShared(oldEntity, oldIt->GetName()))
+		{
+			SetPrototypePropertyShared(newEntity, newIt->GetName());
+		}
 	}
 
 	// link the entity to its prototype
@@ -798,13 +805,12 @@ bool EntitySystem::EntityMgr::SaveEntitiesToStorage(ResourceSystem::XMLOutput& s
 
 	storage.EndElement();
 
-
-	storage.BeginElement("Hierarchy");
-
-	gEditorMgr.SaveHierarchyWindow(storage);
-
-	storage.EndElement();
-
+	if (!isPrototype)
+	{
+		storage.BeginElement("Hierarchy");
+		gEditorMgr.SaveHierarchyWindow(storage);
+		storage.EndElement();
+	}
 
 	return result;
 }
@@ -937,18 +943,9 @@ EntitySystem::ComponentID EntitySystem::EntityMgr::AddComponentToEntity( const E
 	OC_ASSERT(mComponentMgr);
 	ComponentID cid = mComponentMgr->CreateComponent(entity.GetID(), componentType);
 
-	// if this is a prototype mark its properties as shared in the beginning
 	if (IsEntityPrototype(entity))
 	{
-		PropertyList propList;
-		GetEntityComponentProperties(entity, cid, propList);
-		for (PropertyList::iterator it=propList.begin(); it!=propList.end(); ++it)
-		{
-			if ((it->GetAccessFlags() & Reflection::PA_INIT) != 0)
-			{
-				SetPrototypePropertyShared(entity, it->GetName());
-			}
-		}
+		MarkPrototypePropertiesShared(entity, cid);
 	}
 
 	return cid;
@@ -1223,6 +1220,10 @@ EntitySystem::EntityHandle EntitySystem::EntityMgr::ExportEntityToPrototype( con
 		for (; propItOld != propsOld.end(); ++propItOld, ++propItNew)
 		{
 			propItNew->CopyFrom(*propItOld);
+			if (IsPrototypePropertyAppliableToBeShared(*propItNew))
+			{
+				SetPrototypePropertyShared(prototype, propItNew->GetName());
+			}
 		}
 	}
 
@@ -1346,4 +1347,22 @@ size_t EntitySystem::EntityMgr::GetNumberOfNonTransientEntities() const
 	}
 
 	return result;
+}
+
+void EntitySystem::EntityMgr::MarkPrototypePropertiesShared( const EntityHandle entity, ComponentID cid )
+{
+	PropertyList propList;
+	GetEntityComponentProperties(entity, cid, propList);
+	for (PropertyList::iterator it=propList.begin(); it!=propList.end(); ++it)
+	{
+		if (IsPrototypePropertyAppliableToBeShared(*it))
+		{
+			SetPrototypePropertyShared(entity, it->GetName());
+		}
+	}
+}
+
+bool EntitySystem::EntityMgr::IsPrototypePropertyAppliableToBeShared( const PropertyHolder prop ) const
+{
+	return (prop.GetAccessFlags() & Reflection::PA_INIT) != 0;
 }

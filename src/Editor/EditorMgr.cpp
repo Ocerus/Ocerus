@@ -242,7 +242,10 @@ void Editor::EditorMgr::DeleteCurrentEntity()
 
 void Editor::EditorMgr::CreatePrototypeFromCurrentEntity()
 {
-	OC_FAIL("Not implemented");
+	if (!mCurrentEntity.Exists()) return;
+	SetCurrentEntity(gEntityMgr.ExportEntityToPrototype(mCurrentEntity));
+	gEntityMgr.SavePrototypes();
+	RefreshPrototypeWindow();
 }
 
 void Editor::EditorMgr::DuplicateSelectedEntities()
