@@ -270,7 +270,7 @@ EntityHandle EntityMgr::DuplicateEntity(const EntityHandle oldEntity, const stri
 
 	if (GlobalProperties::Get<bool>("DevelopMode"))
 	{
-		gEditorMgr.GetEditorGui()->GetHierarchyWindow()->AddEntityToHierarchy(EntityHandle::Null, newEntity);
+		gEditorMgr.GetEditorGui()->GetHierarchyWindow()->AddEntityToHierarchy(newEntity);
 	}
 
 	return newEntity;

@@ -391,3 +391,15 @@ void Editor::HierarchyWindow::SetSelectedEntity( const EntitySystem::EntityHandl
 	}
 	mTree->selectRange(index, index);
 }
+
+EntitySystem::EntityHandle Editor::HierarchyWindow::GetParent( const EntitySystem::EntityHandle entity ) const
+{
+	HierarchyTree::iterator entityIter = std::find(mHierarchy.begin(), mHierarchy.end(), entity);
+	if (entityIter == mHierarchy.end())
+	{
+		ocError << entity << " is not in the hierarchy";
+		return EntitySystem::EntityHandle::Null;
+	}
+	HierarchyTree::iterator parentIter = mHierarchy.parent(entityIter);
+	return *parentIter;
+}

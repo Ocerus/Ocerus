@@ -45,6 +45,9 @@ namespace Editor
 		/// Sets the currently selected item.
 		void SetSelectedEntity(const EntitySystem::EntityHandle entity);
 
+		/// Returns the hierarchy parent of the given entity. Returns null if no such exists.
+		EntitySystem::EntityHandle GetParent(const EntitySystem::EntityHandle entity) const;
+
 		/// Sets the current parent in the hierarchy. Entities added in the near future will be parented by this entity.
 		void SetCurrentParent(const EntitySystem::EntityHandle val) { mCurrentParent = val; }
 

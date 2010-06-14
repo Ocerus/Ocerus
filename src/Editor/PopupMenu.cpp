@@ -81,7 +81,10 @@ bool Editor::PopupMenu::OnMenuItemMouseUp( const CEGUI::EventArgs& e )
 		}
 		else if (itemCeguiName == mName + "/DuplicateEntity")
 		{
+			EntitySystem::EntityHandle parent = gEditorMgr.GetEditorGui()->GetHierarchyWindow()->GetParent(GetData<EntitySystem::EntityHandle>());
+			gEditorMgr.GetEditorGui()->GetHierarchyWindow()->SetCurrentParent(parent);
 			gEditorMgr.DuplicateCurrentEntity();
+			gEditorMgr.GetEditorGui()->GetHierarchyWindow()->SetCurrentParent(EntitySystem::EntityHandle::Null);
 			handled = true;
 		}
 		else if (itemCeguiName == mName + "/DeleteEntity")
