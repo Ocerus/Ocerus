@@ -186,6 +186,14 @@ void Editor::EditorMgr::SetCurrentEntity(const EntitySystem::EntityHandle newCur
 {
 	if (mCurrentEntity == newCurrentEntity) return;
 	mCurrentEntity = newCurrentEntity;
+
+	OC_ASSERT(mEditorGUI);
+	OC_ASSERT(mEditorGUI->GetPrototypeWindow());
+	OC_ASSERT(mEditorGUI->GetHierarchyWindow());
+
+	mEditorGUI->GetPrototypeWindow()->SetSelectedEntity(mCurrentEntity);
+	mEditorGUI->GetHierarchyWindow()->SetSelectedEntity(mCurrentEntity);
+
 	mEditorGUI->UpdateEntityEditorWindow();
 }
 

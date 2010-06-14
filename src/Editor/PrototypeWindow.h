@@ -33,6 +33,9 @@ namespace Editor
 		/// Returns the item at the given position in the tree.
 		EntitySystem::EntityHandle GetItemAtIndex(size_t index);
 
+		/// Sets the currently selected entity prototype.
+		void SetSelectedEntity(const EntitySystem::EntityHandle entity);
+
 		/// @name CEGUI Callbacks
 		//@{
 		bool OnDragContainerMouseButtonUp(const CEGUI::EventArgs&);

@@ -116,9 +116,10 @@ bool Editor::PrototypeWindow::OnWindowMouseButtonUp(const CEGUI::EventArgs& e)
 	}
 	else if (args.button == CEGUI::LeftButton)
 	{
-		if (gEditorMgr.GetCurrentEntity() == GetSelectedItem()) gEditorMgr.SetCurrentEntity(EntitySystem::EntityHandle::Null);
-		mTree->clearAllSelections();
-		mSelectedIndex = -1;
+		if (mSelectedIndex != -1)
+		{
+			gEditorMgr.SetCurrentEntity(EntitySystem::EntityHandle::Null);
+		}
 	}
 
 	return true;
@@ -134,4 +135,21 @@ EntitySystem::EntityHandle Editor::PrototypeWindow::GetSelectedItem()
 {
 	if (mTree->getSelectedCount() == 0) return EntitySystem::EntityHandle::Null;
 	else return mItems.at(mSelectedIndex);
+}
+
+void Editor::PrototypeWindow::SetSelectedEntity( const EntitySystem::EntityHandle entity )
+{
+	int32 index = 0;
+	for (EntitySystem::EntityList::iterator it=mItems.begin(); it!=mItems.end(); ++it, ++index)
+	{
+		if (*it == entity)
+		{
+			mSelectedIndex = index;
+			mTree->selectRange(mSelectedIndex, mSelectedIndex);
+			return;
+		}
+	}
+
+	mSelectedIndex = -1;
+	mTree->clearAllSelections();
 }

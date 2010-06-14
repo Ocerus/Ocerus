@@ -275,7 +275,6 @@ bool Editor::HierarchyWindow::OnDragContainerMouseButtonUp( const CEGUI::EventAr
 	if (dragContainer->isBeingDragged()) return false;
 
 	CEGUI::ItemEntry* itemEntry = static_cast<CEGUI::ItemEntry*>(args.window->getParent());
-	itemEntry->setSelected(true);
 	EntityMap::iterator entityIter = mItems.find(itemEntry->getID());
 	OC_ASSERT(entityIter != mItems.end());
 	EntitySystem::EntityHandle entity = entityIter->second.entity;
@@ -299,6 +298,12 @@ bool Editor::HierarchyWindow::OnDragContainerMouseButtonUp( const CEGUI::EventAr
 bool Editor::HierarchyWindow::OnWindowMouseButtonUp( const CEGUI::EventArgs& e )
 {
 	const CEGUI::MouseEventArgs& args = static_cast<const CEGUI::MouseEventArgs&>(e);
+
+	if (mTree->getSelectedCount() > 0)
+	{
+		gEditorMgr.SetCurrentEntity(EntitySystem::EntityHandle::Null);
+		gEditorMgr.ClearSelection();
+	}
 
 	if (args.button == CEGUI::RightButton)
 	{
@@ -384,12 +389,12 @@ void Editor::HierarchyWindow::SetSelectedEntity( const EntitySystem::EntityHandl
 {
 	uint32 depth;
 	int32 index = FindTreeItem(entity, depth);
-	if (index == -1)
+	mTree->clearAllSelections();
+	if (index != -1)
 	{
-		ocError << "Attempting to select entity not in the hierarchy";
-		return;
+		mTree->selectRange(index, index);
+		gEditorMgr.SelectEntity(entity);
 	}
-	mTree->selectRange(index, index);
 }
 
 EntitySystem::EntityHandle Editor::HierarchyWindow::GetParent( const EntitySystem::EntityHandle entity ) const
