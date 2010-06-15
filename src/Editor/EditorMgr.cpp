@@ -306,11 +306,16 @@ void Editor::EditorMgr::ResumeAction()
 		mIsInitialTime = false;
 	}
 	game.ResumeAction();
+	ocInfo << "Game action resumed";
 }
 
 void Editor::EditorMgr::PauseAction()
 {
-	GlobalProperties::Get<Core::Game>("Game").PauseAction();
+	if (GlobalProperties::Get<Core::Game>("Game").IsActionRunning())
+	{
+		GlobalProperties::Get<Core::Game>("Game").PauseAction();
+		ocInfo << "Game action paused";
+	}
 }
 
 void Editor::EditorMgr::RestartAction()
@@ -321,6 +326,7 @@ void Editor::EditorMgr::RestartAction()
 		mSelectedEntities.clear();
 		GlobalProperties::Get<Core::Game>("Game").RestartAction();
 		mIsInitialTime = true;
+		ocInfo << "Game action restarted";
 	}
 }
 
@@ -330,9 +336,14 @@ void Editor::EditorMgr::SetCurrentEditTool(eEditTool newEditTool)
 	mEditTool = newEditTool;
 }
 
-void Editor::EditorMgr::SwitchEditTool( eEditTool newEditTool )
+void Editor::EditorMgr::SwitchEditTool( eEditTool newTool )
 {
-	mEditorGUI->GetEditorMenu()->SwitchToolButton((uint32)newEditTool);
+	mEditorGUI->GetEditorMenu()->SwitchToolButton((uint32)newTool);
+}
+
+void Editor::EditorMgr::SwitchActionTool( eActionTool newTool )
+{
+	mEditorGUI->GetEditorMenu()->SwitchActionButton((uint32)newTool);
 }
 
 void Editor::EditorMgr::RefreshResourceWindow()
@@ -715,4 +726,9 @@ void Editor::EditorMgr::SaveHierarchyWindow( ResourceSystem::XMLOutput& storage 
 	OC_ASSERT(mEditorGUI);
 	OC_ASSERT(mEditorGUI->GetHierarchyWindow());
 	mEditorGUI->GetHierarchyWindow()->SaveHierarchy(storage);
+}
+
+bool Editor::EditorMgr::IsLockedToGame() const
+{
+	return GlobalProperties::Get<Core::Game>("Game").IsActionRunning();
 }

@@ -211,31 +211,30 @@ void Core::Game::Draw(const float32 passedDelta)
 
 bool Core::Game::KeyPressed(const KeyInfo& ke)
 {
-	if (ke.keyCode == KC_F5 && gInputMgr.IsKeyDown(KC_LCONTROL))
+	if (!IsActionRunning()) return false;
+
+	ocInfo << "key pressed";
+
+	if (GlobalProperties::Get<bool>("DevelopMode"))
 	{
-		if (gProfiler.IsRunning())
+		if (ke.keyCode == KC_F5 && gInputMgr.IsKeyDown(KC_LCONTROL))
 		{
-			gProfiler.Stop();
-			gProfiler.DumpIntoConsole();
-		}
-		else
-		{
-			gProfiler.Start();
+			if (gProfiler.IsRunning())
+			{
+				gProfiler.Stop();
+				gProfiler.DumpIntoConsole();
+			}
+			else
+			{
+				gProfiler.Start();
+			}
+	
+			return true;
 		}
 
-		return true;
-	}
-
-	if (ke.keyCode == KC_F9) {
-		if (IsActionRunning())
+		if (ke.keyCode == KC_F9 && IsActionRunning())
 		{
-			PauseAction();
-			ocInfo << "Game action paused";
-		}
-		else
-		{
-			ResumeAction();
-			ocInfo << "Game action resumed";
+			gEditorMgr.SwitchActionTool(Editor::EditorMgr::AT_PAUSE);
 		}
 
 		return true;
@@ -246,18 +245,24 @@ bool Core::Game::KeyPressed(const KeyInfo& ke)
 
 bool Core::Game::KeyReleased(const KeyInfo& ke)
 {
+	if (!IsActionRunning()) return false;
+
 	OC_UNUSED(ke);
 	return false;
 }
 
 bool Core::Game::MouseMoved(const MouseInfo& mi)
 {
+	if (!IsActionRunning()) return false;
+
 	OC_UNUSED(mi);
 	return false;
 }
 
 bool Core::Game::MouseButtonPressed(const MouseInfo& mi, const eMouseButton btn)
 {
+	if (!IsActionRunning()) return false;
+
 	OC_UNUSED(mi);
 	OC_UNUSED(btn);
 	return false;
@@ -265,6 +270,8 @@ bool Core::Game::MouseButtonPressed(const MouseInfo& mi, const eMouseButton btn)
 
 bool Core::Game::MouseButtonReleased(const MouseInfo& mi, const eMouseButton btn)
 {
+	if (!IsActionRunning()) return false;
+
 	OC_UNUSED(btn);
 	OC_UNUSED(mi);
 	return false;
@@ -301,7 +308,6 @@ void Core::Game::PauseAction(void)
 	if (mActionState == AS_RUNNING)
 	{
 		mActionState = AS_PAUSED;
-		ocInfo << "Action paused.";
 	}
 }
 
@@ -310,7 +316,6 @@ void Core::Game::ResumeAction(void)
 	if (mActionState == AS_PAUSED)
 	{
 		mActionState = AS_RUNNING;
-		ocInfo << "Action resumed.";
 	}
 }
 
@@ -319,14 +324,14 @@ void Core::Game::SaveAction(void)
 	bool result = true;
 	ResourceSystem::XMLOutput storage(gResourceMgr.GetBasePath(ResourceSystem::BPT_SYSTEM) + ActionFile);
 	storage.BeginElement("Action");
-	if (!SaveGameInfoToStorage(storage)) { result = false; }
-	if (!gEntityMgr.SaveEntitiesToStorage(storage, false, true)) { result = false; }
+	if (!gEntityMgr.SaveEntitiesToStorage(storage, false, true)) result = false;
+	if (!SaveGameInfoToStorage(storage)) result = false;
 	storage.EndElement();
 	result = result && storage.CloseAndReport();
 	
 	if (result)
 	{
-		ocInfo << "Action saved.";
+		ocInfo << "Action saved in " << ActionFile;
 	}
 	else 
 	{
@@ -339,8 +344,10 @@ void Core::Game::RestartAction(void)
 	bool result = true;
 
 	PauseAction();
-	if (gEntityMgr.SavePrototypes() && gResourceMgr.AddResourceFileToGroup(ActionFile, "Action",
-		ResourceSystem::RESTYPE_AUTODETECT, ResourceSystem::BPT_SYSTEM, ActionFile))
+
+	if (!gEntityMgr.SavePrototypes()) result = false;
+	
+	if (gResourceMgr.AddResourceFileToGroup(ActionFile, "Action", ResourceSystem::RESTYPE_AUTODETECT, ResourceSystem::BPT_SYSTEM, ActionFile))
 	{
 		gResourceMgr.LoadResourcesInGroup("Action");
 		gEntityMgr.DestroyAllEntities();
@@ -349,11 +356,14 @@ void Core::Game::RestartAction(void)
 		if (!LoadGameInfoFromResource(resource)) { result = false; }
 		if (!gEntityMgr.LoadEntitiesFromResource(resource)) { result = false; }
 		gResourceMgr.DeleteGroup("Action");
-	} else {
+	}
+	else
+	{
 		result = false;
 	}
 
-	if (result) { ocInfo << "Action restarted."; } else { ocError << "Action cannot be restarted!"; }
+	if (result) ocInfo << "Action restarted from " << ActionFile;
+	else ocError << "Action cannot be restarted!";
 }
 
 bool Core::Game::SaveGameInfoToStorage(ResourceSystem::XMLOutput& storage)
@@ -378,7 +388,6 @@ bool Core::Game::LoadGameInfoFromResource(ResourceSystem::ResourcePtr res)
 	}
 	
 	ResourceSystem::XMLResourcePtr xml = res;
-
 	uint64 currentTime = 0;
 
 	for (ResourceSystem::XMLNodeIterator it = xml->IterateTopLevel(); it != xml->EndTopLevel(); ++it)

@@ -31,7 +31,7 @@ namespace Editor
 			bool OnMouseEntersMenuItem(const CEGUI::EventArgs&);
 			bool OnMouseLeavesMenuItem(const CEGUI::EventArgs&);
 			bool OnMenuItemClicked(const CEGUI::EventArgs&);
-			bool OnToolbarButtonClicked(const CEGUI::EventArgs&);
+			bool OnToolbarButtonStateChanged(const CEGUI::EventArgs&);
 		//@}
 
 		/// MessageBox callback
@@ -46,6 +46,9 @@ namespace Editor
 		/// Switches the currently selected tool button.
 		void SwitchToolButton(uint32 selectedButtonIndex);
 
+		/// Switches the currently selected action button.
+		void SwitchActionButton(uint32 selectedButtonIndex);
+
 	private:
 
 		enum eMessageBoxTags { MBT_QUIT };
@@ -53,6 +56,7 @@ namespace Editor
 
 		typedef vector<CEGUI::RadioButton*> RadioButtonList;
 		RadioButtonList mToolButtons;
+		RadioButtonList mActionButtons;
 
 		/// Creates menu items in AddComponent menu.
 		void InitComponentMenu();

@@ -105,6 +105,30 @@ namespace Editor
 		/// Opens the project specified with given path.
 		void OpenProject(const string& projectPath);
 
+		/// Resumes action of the edited game.
+		void ResumeAction();
+
+		/// Pauses action of the edited game until it is resumed again.
+		void PauseAction();
+
+		/// Restarts the edited game action to the initial (saved) state.
+		void RestartAction();
+
+		/// Returns true if the input is locked to the game window.
+		bool IsLockedToGame() const;
+
+		/// The type of edit tool.
+		enum eEditTool { ET_MOVE=0, ET_ROTATE, ET_ROTATE_Y, ET_SCALE };
+
+		/// The type of the action tool.
+		enum eActionTool { AT_RUN=0, AT_PAUSE, AT_RESTART };
+
+		/// Switches the edit tool to the new one. It also changes the currently pressed button.
+		void SwitchEditTool(eEditTool newTool);
+
+		/// Switches the action tool to the new one. It also changes the currently pressed button.
+		void SwitchActionTool(eActionTool newTool);
+
 		
 	public:
 
@@ -130,14 +154,12 @@ namespace Editor
 		/// Called by the value editors when their value changes.
 		void PropertyValueChanged();
 
+
 	protected:
 
 		friend class EditorGUI;
 		friend class EditorMenu;
 		friend class PopupMenu;
-
-		/// The type of edit tool.
-		enum eEditTool { ET_MOVE=0, ET_ROTATE, ET_ROTATE_Y, ET_SCALE };
 
 		/// Creates a new entity.
 		void CreateEntity();
@@ -163,20 +185,8 @@ namespace Editor
 		/// Removes the component with given componentId from current entity.
 		void RemoveComponent(const EntitySystem::ComponentID& componentId);
 
-		/// Resumes action of the edited game.
-		void ResumeAction();
-
-		/// Pauses action of the edited game until it is resumed again.
-		void PauseAction();
-
-		/// Restarts the edited game action to the initial (saved) state.
-		void RestartAction();
-
 		/// Sets the current edit tool.
 		void SetCurrentEditTool(eEditTool newEditTool);
-
-		/// Switches the edit tool to new one. It also changes the current pressed tool button.
-		void SwitchEditTool(eEditTool newEditTool);
 
 	private:
 

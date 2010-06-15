@@ -131,18 +131,25 @@ void EditorGUI::Update(float32 delta)
 {
 	if (!gInputMgr.IsMouseButtonPressed(InputSystem::MBTN_LEFT) && !gInputMgr.IsMouseButtonPressed(InputSystem::MBTN_RIGHT))
 	{
-		CEGUI::Window* activeWindow = CEGUI::System::getSingleton().getGUISheet();
-		if (!activeWindow || !activeWindow->getActiveChild())
+		if (gEditorMgr.IsLockedToGame())
 		{
-			mEditorViewport->Activate();
+			mGameViewport->Activate();
 		}
 		else
 		{
-			bool isEditbox = activeWindow->getActiveChild()->getType().compare("Editor/Editbox") == 0;
-			bool isMenuItem = activeWindow->getActiveChild()->getType().compare("Editor/MenuItem") == 0;
-			bool isPopupMenu = activeWindow->getActiveChild()->getType().compare("Editor/PopupMenu") == 0;
-			bool isButton = activeWindow->getActiveChild()->getType().compare("Editor/Button") == 0;
-			if (!isEditbox && !isMenuItem && !isPopupMenu && !isButton) mEditorViewport->Activate();
+			CEGUI::Window* activeWindow = CEGUI::System::getSingleton().getGUISheet();
+			if (!activeWindow || !activeWindow->getActiveChild())
+			{
+				mEditorViewport->Activate();
+			}
+			else
+			{
+				bool isEditbox = activeWindow->getActiveChild()->getType().compare("Editor/Editbox") == 0;
+				bool isMenuItem = activeWindow->getActiveChild()->getType().compare("Editor/MenuItem") == 0;
+				bool isPopupMenu = activeWindow->getActiveChild()->getType().compare("Editor/PopupMenu") == 0;
+				bool isButton = activeWindow->getActiveChild()->getType().compare("Editor/Button") == 0;
+				if (!isEditbox && !isMenuItem && !isPopupMenu && !isButton) mEditorViewport->Activate();
+			}
 		}
 	}
 

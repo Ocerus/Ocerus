@@ -693,7 +693,7 @@ bool EntitySystem::EntityMgr::LoadEntitiesFromResource(ResourceSystem::ResourceP
 	
 	if (toplevelIter == xml->EndTopLevel() || (*toplevelIter).compare("Entities") != 0)
 	{
-		ocError << "XML: Expected 'Entities'";
+		ocError << "XML: Expected 'Entities', found " << *toplevelIter;
 		return false;
 	}
 
@@ -742,6 +742,7 @@ bool EntitySystem::EntityMgr::SaveEntityToStorage(const EntitySystem::EntityID e
 	storage.BeginElementStart("Entity");
 	storage.AddAttribute("Name", info->mName);
 	storage.AddAttribute("ID", Utils::StringConverter::ToString(entityID));
+	storage.AddAttribute("Transient", Utils::StringConverter::ToString(info->mTransient));
 	if (!isPrototype && info->mPrototype.IsValid())
 	{ 
 		storage.AddAttribute("Prototype", Utils::StringConverter::ToString(info->mPrototype.GetID()));

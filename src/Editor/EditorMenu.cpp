@@ -4,6 +4,7 @@
 #include "GUISystem/CEGUITools.h"
 #include "Core/Application.h"
 #include "Core/Project.h"
+#include "Core/Game.h"
 
 #include "GUISystem/MessageBox.h"
 #include "GUISystem/FolderSelector.h"
@@ -204,10 +205,13 @@ bool Editor::EditorMenu::OnMenuItemClicked(const CEGUI::EventArgs& e)
 	return true;
 }
 
-bool Editor::EditorMenu::OnToolbarButtonClicked(const CEGUI::EventArgs& e)
+bool Editor::EditorMenu::OnToolbarButtonStateChanged(const CEGUI::EventArgs& e)
 {
 	const CEGUI::WindowEventArgs& args = static_cast<const CEGUI::WindowEventArgs&>(e);
 	const CEGUI::String& buttonName = args.window->getName();
+	CEGUI::RadioButton* button = static_cast<CEGUI::RadioButton*>(args.window);
+
+	if (!button->isSelected()) return false;
 
 	ocDebug << "Toolbar button " << buttonName << " clicked.";
 
@@ -221,6 +225,12 @@ bool Editor::EditorMenu::OnToolbarButtonClicked(const CEGUI::EventArgs& e)
 	/// ---- Pause action ----
 	if (buttonName == toolbarPrefix + "/PauseAction")
 	{
+		if (!GlobalProperties::Get<Core::Game>("Game").IsActionRunning())
+		{
+			gEditorMgr.SwitchActionTool(Editor::EditorMgr::AT_RESTART);
+			return true;
+		}
+
 		gEditorMgr.PauseAction();
 		return true;
 	}
@@ -370,6 +380,7 @@ void Editor::EditorMenu::ConfigureToolbar(CEGUI::Window* parent)
 				(name == (toolbarPrefix + "/RestartAction")) )
 			{
 				radioButton->setGroupID(0);
+				mActionButtons.push_back(radioButton);
 			}
 			else if ((name == (toolbarPrefix + "/EditToolMove")) ||
 					 (name == (toolbarPrefix + "/EditToolRotateZ")) ||
@@ -388,7 +399,7 @@ void Editor::EditorMenu::ConfigureToolbar(CEGUI::Window* parent)
 			}
 
 			child->subscribeEvent(CEGUI::RadioButton::EventSelectStateChanged,
-					CEGUI::Event::Subscriber(&Editor::EditorMenu::OnToolbarButtonClicked, this));
+					CEGUI::Event::Subscriber(&Editor::EditorMenu::OnToolbarButtonStateChanged, this));
 		}
 		ConfigureToolbar(child);
 	}
@@ -398,4 +409,10 @@ void Editor::EditorMenu::SwitchToolButton( uint32 selectedButtonIndex )
 {
 	OC_ASSERT_MSG(selectedButtonIndex < mToolButtons.size(), "Invalid tool button index");
 	mToolButtons[selectedButtonIndex]->setSelected(true);
+}
+
+void Editor::EditorMenu::SwitchActionButton( uint32 selectedButtonIndex )
+{
+	OC_ASSERT_MSG(selectedButtonIndex < mActionButtons.size(), "Invalid tool button index");
+	mActionButtons[selectedButtonIndex]->setSelected(true);
 }
