@@ -136,13 +136,21 @@ public:
 	inline map(): parentType() {}
 };
 
-
-
 template<typename _Key, typename _Ty>
 struct pooled_multimap: public pooled_map<_Key, _Ty>
 {
-	typedef std::multimap< _Key, _Ty, std::less<_Key>, Memory::StlPoolAllocator<typename pooled_map<_Key, _Ty>::value_type, typename pooled_map<_Key, _Ty>::allocable> > type;
+	typedef std::multimap< _Key, _Ty, std::less<_Key>, StlPoolAllocator<typename pooled_map<_Key, _Ty>::value_type, typename pooled_map<_Key, _Ty>::allocable> > type;
 };
+
+
+#ifdef __UNIX__
+
+template<typename Key, typename Value>
+class multimap: public std::multimap<Key, Value>
+{
+};
+
+#else
 
 template<typename Key, typename Value>
 class multimap: public pooled_multimap<Key, Value>::type
@@ -151,6 +159,8 @@ public:
 	typedef typename pooled_multimap<Key, Value>::type parentType;
 	inline multimap(): parentType() {}
 };
+
+#endif
 
 // We are switching to boost::unordered_map which should be better than MSVC's hash_map.
 // Moreover, we do not need to split code for different platforms.

@@ -206,17 +206,18 @@ set(Core_SRCS
 	src/Core/Application.cpp
 	src/Core/Config.cpp
 	src/Core/Game.cpp
+	src/Core/Project.cpp
 	src/Core/LoadingScreen.cpp
-	src/Core/PhysicsDraw.cpp
 )
 
 set(Editor_SRCS
 	src/Editor/EditorGUI.cpp
 	src/Editor/EditorMenu.cpp
 	src/Editor/EditorMgr.cpp
+	src/Editor/HierarchyWindow.cpp
+	src/Editor/KeyShortcuts.cpp
 	src/Editor/LayerMgrWidget.cpp
 	src/Editor/PopupMenu.cpp
-	src/Editor/ProjectMgr.cpp
 	src/Editor/PrototypeWindow.cpp
 	src/Editor/ResourceWindow.cpp
 	src/Editor/ValueEditors/AbstractValueEditor.cpp
@@ -254,6 +255,7 @@ set(GfxSystem_SRCS
 	src/GfxSystem/GfxStructures.cpp
 	src/GfxSystem/GfxViewport.cpp
 	src/GfxSystem/GfxWindow.cpp
+	src/GfxSystem/PhysicsDraw.cpp
 	src/GfxSystem/Mesh.cpp
 	src/GfxSystem/OglRenderer.cpp
 	src/GfxSystem/Texture.cpp
@@ -261,7 +263,7 @@ set(GfxSystem_SRCS
 )
 
 set(SceneSystem_SRCS
-	src/SceneSystem/SceneMgr.cpp
+
 )
 
 set(GUISystem_SRCS
@@ -313,7 +315,7 @@ set(Setup_SRCS
 )
 
 set(StringSystem_SRCS
-#    src/StringSystem/TextData.cpp
+    src/StringSystem/FormatText.cpp
 	src/StringSystem/TextResource.cpp
 	src/StringSystem/StringMgr.cpp
 )
@@ -338,12 +340,15 @@ set(Utils_SRCS
 
 include_directories(${ocerus-engine_INCLUDE_DIRS})
 
-#set(CMAKE_CXX_FLAGS "-O3 -Wall")
-set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g -Wall -Wextra -pedantic -Wno-variadic-macros -Wno-long-long -DUSE_ASSERT -D_DEBUG")
+set(CMAKE_CXX_FLAGS "-Wall -std=c++0x")
 
 foreach(SYMBOL ${ocerus-engine_SYMBOLS})
-    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D${SYMBOL}")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D${SYMBOL}")
 endforeach(SYMBOL)
+
+set(CMAKE_CXX_FLAGS_RELEASE "-O2")
+#set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g -Wextra -pedantic -Wno-variadic-macros -Wno-long-long -DUSE_ASSERT -D_DEBUG")
+set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g -Wextra -pedantic -DUSE_ASSERT -D_DEBUG")
 
 add_library(ocerus-engine STATIC
     ${Core_SRCS}
@@ -365,8 +370,7 @@ add_library(ocerus-engine STATIC
 if (PRECOMPILED_HEADERS)
     include("PCHSupport_26")
     add_precompiled_header(ocerus-engine ${CMAKE_CURRENT_SOURCE_DIR}/src/Precompiled/Common.h)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpch-preprocess -fpch-deps")
-    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fpch-preprocess -fpch-deps")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpch-preprocess -fpch-deps -Winvalid-pch")
 endif (PRECOMPILED_HEADERS)
 
 
