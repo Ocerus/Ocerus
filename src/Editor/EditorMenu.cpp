@@ -137,7 +137,7 @@ bool Editor::EditorMenu::OnMenuItemClicked(const CEGUI::EventArgs& e)
 	{
 		if (gEditorMgr.GetCurrentProject()->IsSceneOpened())
 		{
-			gEditorMgr.GetCurrentProject()->SaveCurrentScene();
+			gEditorMgr.GetCurrentProject()->SaveOpenedScene();
 		}
 		return true;			
 	}
@@ -320,8 +320,8 @@ void Editor::EditorMenu::InitComponentMenu()
 void EditorMenu::UpdateSceneMenu()
 {
 	CEGUI_EXCEPTION_BEGIN
-	Core::Project::Scenes scenes;
-	gEditorMgr.GetCurrentProject()->GetScenes(scenes);
+	Core::SceneInfoList scenes;
+	gEditorMgr.GetCurrentProject()->GetSceneList(scenes);
 
 	CEGUI::Window* openSceneMenu = gCEGUIWM.getWindow(menubarPrefix + "/Scene/OpenScene/AutoPopup");
 	for (int32 i = openSceneMenu->getChildCount() - 1; i >= 0;)
@@ -329,11 +329,11 @@ void EditorMenu::UpdateSceneMenu()
 		gCEGUIWM.destroyWindow(openSceneMenu->getChildAtIdx(i));
 	}
 
-	for (Core::Project::Scenes::const_iterator it = scenes.begin(); it != scenes.end(); ++it)
+	for (Core::SceneInfoList::const_iterator it = scenes.begin(); it != scenes.end(); ++it)
 	{
 		CEGUI::Window* sceneMenuItem = gCEGUIWM.createWindow("Editor/MenuItem",
-				menubarPrefix + "/Scene/OpenScene/Scene" + it->first);
-		sceneMenuItem->setText(it->second + " (" + it->first + ")");
+				menubarPrefix + "/Scene/OpenScene/Scene" + it->filename);
+		sceneMenuItem->setText(it->name + " (" + it->filename + ")");
 		sceneMenuItem->setID(it - scenes.begin());
 		openSceneMenu->addChildWindow(sceneMenuItem);
 	}

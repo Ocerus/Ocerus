@@ -4,14 +4,14 @@
 
 using namespace Core;
 
-Project::Project(): mIsOpened(false), mConfig(0)
+Project::Project(bool editorSupport): mProjectConfig(0), mSceneIndex(-1), mEditorSupport(editorSupport)
 {
 }
 
 Project::~Project()
 {
 	CloseProject();
-	delete mConfig;
+	delete mProjectConfig;
 }
 
 bool Project::CreateProject(const string& path)
@@ -30,17 +30,15 @@ bool Project::CreateProject(const string& path)
 	}
 
 	CloseProject();
-	mPath = path;
-	mIsOpened = true;
-	mConfig = new Core::Config(configFile);
+	mProjectPath = path;
+	mProjectConfig = new Core::Config(configFile);
 	SetDefaultProjectInfo();
-	SaveProject();
-
-	ocInfo << "Created new project at " << path;
+	SaveProjectConfig();
+	ocInfo << "New project at " << path << " created.";
 	return true;
 }
 
-bool Project::OpenProject(const string& path, bool editorSupport)
+bool Project::OpenProject(const string& path)
 {
 	string configFile = path + "/project.ini";
 	if (!boost::filesystem::is_directory(path) || !boost::filesystem::exists(configFile))
@@ -50,35 +48,20 @@ bool Project::OpenProject(const string& path, bool editorSupport)
 	}
 
 	CloseProject();
-	mPath = path;
-	mIsOpened = true;
-	mConfig = new Core::Config(configFile);
-
-	// Load resource types
-	vector<string> resourceNames;
-	mConfig->GetSectionKeys("resource-types", resourceNames);
-	for (vector<string>::const_iterator it = resourceNames.begin(); it != resourceNames.end(); ++it)
-	{
-		mResourceTypeMap[*it] = ResourceSystem::GetResourceTypeFromString(mConfig->GetString(*it, "", "resource-types"));
-	}
-
-	// Load scenes
-	vector<string> sceneFiles;
-	mConfig->GetSectionKeys("scenes", sceneFiles);
-	for (vector<string>::const_iterator it = sceneFiles.begin(); it != sceneFiles.end(); ++it)
-	{
-		mScenes.push_back(Containers::make_pair(*it, mConfig->GetString(*it, "", "scenes")));
-	}
+	mProjectPath = path;
+	mProjectConfig = new Core::Config(configFile);
+	LoadProjectConfig();
 
 	// Make sure basePath is terminated with slash.
 	string basePath = path;
 	if (!basePath.empty() && basePath.at(basePath.size() - 1) != '/')
 		basePath.append("/");
 
+	// Add project resources.
 	gResourceMgr.SetBasePath(ResourceSystem::BPT_PROJECT, basePath);
 	gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_PROJECT, "", "Project", ".*", "", ResourceSystem::RESTYPE_AUTODETECT, mResourceTypeMap);
 
-	if (editorSupport)
+	if (mEditorSupport)
 	{
 		gEntityMgr.LoadPrototypes();
 		gEditorMgr.RefreshPrototypeWindow();
@@ -86,7 +69,7 @@ bool Project::OpenProject(const string& path, bool editorSupport)
 		gEditorMgr.UpdateSceneMenu();
 	}
 
-	ocInfo << "Loaded project from " << path;
+	ocInfo << "Project " << path << " loaded.";
 
 	OpenDefaultScene();
 
@@ -98,116 +81,230 @@ void Project::CloseProject()
 	if (!IsProjectOpened())
 		return;
 
-	SaveProject();
-	mPath = "";
-	mCurrentScene = "";
-	mIsOpened = false;
+	CloseOpenedScene();
+	SaveProjectConfig();
+	delete mProjectConfig;
+	mProjectConfig = 0;
+	mProjectPath = "";
 	mResourceTypeMap.clear();
-	mScenes.clear();
+	mSceneList.clear();
 	gResourceMgr.DeleteGroup("Project");
 
-	ocInfo << "Closed project";
-}
-
-void Project::GetScenes(Project::Scenes& scenes) const
-{
-	scenes = mScenes;
-}
-
-void Project::OpenScene(const string& scene)
-{
-	mCurrentScene = scene;
-	gEntityMgr.LoadEntitiesFromResource(gResourceMgr.GetResource("Project", scene));
-
-	ocInfo << "Scene " << scene << " loaded";
-}
-
-void Project::OpenSceneAtIndex(uint32 index)
-{
-	if (index >= mScenes.size())
+	if (mEditorSupport)
 	{
-		ocError << "Invalid scene at " << index;
-		return;
+		gEditorMgr.UpdateSceneMenu();
 	}
-	OpenScene(mScenes[index].first);
+
+	ocInfo << "Project closed.";
 }
 
+bool Project::IsProjectOpened() const
+{
+	return !mProjectPath.empty();
+}
+
+string Project::GetOpenedProjectPath() const
+{
+	return mProjectPath;
+}
+
+void Project::GetOpenedProjectInfo(ProjectInfo& projectInfo) const
+{
+	projectInfo = mProjectInfo;
+}
+
+void Project::SetOpenedProjectInfo(const Core::ProjectInfo& newProjectInfo)
+{
+	mProjectInfo = newProjectInfo;
+}
 
 void Project::SetDefaultProjectInfo()
 {
-	mInfo.name = "Untitled";
-	mInfo.author = "";
-	mInfo.version = "1.0";
+	mProjectInfo.name = "Untitled";
+	mProjectInfo.author = "";
+	mProjectInfo.version = "1.0";
 }
 
-void Project::SaveProject()
+void Core::Project::LoadProjectConfig()
 {
-	OC_ASSERT(mConfig);
-	mConfig->SetString("name", mInfo.name);
-	mConfig->SetString("author", mInfo.author);
-	mConfig->SetString("version", mInfo.version);
+	OC_DASSERT(mProjectConfig != 0);
+	OC_DASSERT(mSceneIndex == -1);
+
+	// Load project info
+	mProjectInfo.name = mProjectConfig->GetString("name");
+	mProjectInfo.author = mProjectConfig->GetString("author");
+	mProjectInfo.version = mProjectConfig->GetString("version");
+
+	// Load resource types
+	mResourceTypeMap.clear();
+	vector<string> resourceNames;
+	mProjectConfig->GetSectionKeys("resource-types", resourceNames);
+	for (vector<string>::const_iterator it = resourceNames.begin(); it != resourceNames.end(); ++it)
+	{
+		mResourceTypeMap[*it] = ResourceSystem::GetResourceTypeFromString(mProjectConfig->GetString(*it, "", "resource-types"));
+	}
+
+	// Load scene list
+	mSceneList.clear();
+	vector<string> sceneFiles;
+	mProjectConfig->GetSectionKeys("scenes", sceneFiles);
+	for (vector<string>::const_iterator it = sceneFiles.begin(); it != sceneFiles.end(); ++it)
+	{
+		SceneInfo sceneInfo;
+		sceneInfo.filename = *it;
+		sceneInfo.name = mProjectConfig->GetString(*it, "", "scenes");
+		mSceneList.push_back(sceneInfo);
+	}
+}
+
+void Core::Project::SaveProjectConfig()
+{
+	OC_ASSERT(mProjectConfig != 0);
+
+	// Save project info
+	mProjectConfig->SetString("name", mProjectInfo.name);
+	mProjectConfig->SetString("author", mProjectInfo.author);
+	mProjectConfig->SetString("version", mProjectInfo.version);
+
+	// Save resource types
 	for (ResourceSystem::ResourceTypeMap::const_iterator it = mResourceTypeMap.begin(); it != mResourceTypeMap.end(); ++it)
 	{
-		mConfig->SetString(it->first, ResourceSystem::GetResourceTypeName(it->second), "resource-types");
+		mProjectConfig->SetString(it->first, ResourceSystem::GetResourceTypeName(it->second), "resource-types");
 	}
 
-	for (Scenes::const_iterator it = mScenes.begin(); it != mScenes.end(); ++it)
+	// Save scene list
+	for (SceneInfoList::const_iterator it = mSceneList.begin(); it != mSceneList.end(); ++it)
 	{
-		mConfig->SetString(it->first, it->second, "scenes");
+		mProjectConfig->SetString(it->filename, it->name, "scenes");
 	}
 
-	mConfig->Save();
-
-	ocInfo << "Project was saved to " << mPath;
+	mProjectConfig->Save();
+	ocInfo << "Project " << mProjectPath << " saved.";
 }
 
 
-string Core::Project::GetDefaultSceneName() const
-{
-	OC_ASSERT(mScenes.size() > 0);
-	return mScenes.front().first;
-}
 
-void Core::Project::OpenDefaultScene()
-{
-	mCurrentScene = "";
 
-	if (GetScenesCount() == 0)
+bool Project::CreateScene(const string& sceneFilename, const string& sceneName)
+{
+	if (!IsProjectOpened() || IsSceneOpened()) return false;
+
+	const string& filename = mProjectPath + "/" + sceneFilename;
+	if (boost::filesystem::exists(filename))
 	{
-		ocWarning << "No default scene to open";
-		return;
+		ocWarning << "Cannot create scene '" << filename << "'. Already exists.";
+		return false;
 	}
 
-	OpenSceneAtIndex(0);
-}
-
-uint32 Core::Project::GetScenesCount() const
-{
-	return mScenes.size();
-}
-
-void Core::Project::SaveCurrentScene()
-{
-	if (mCurrentScene.empty())
+	// Create empty scene file.
 	{
-		ocError << "No scene is opened";
-		return;
+		ResourceSystem::XMLOutput xmlOutput(filename);
+		xmlOutput.BeginElement("Scene");
+		xmlOutput.EndElement();
 	}
 
-	ResourceSystem::ResourcePtr sceneResource = gResourceMgr.GetResource("Project", mCurrentScene);
-	ResourceSystem::XMLOutput storage(sceneResource->GetFilePath());
-	storage.BeginElement("Scene");
-	if (!gEntityMgr.SaveEntitiesToStorage(storage))
+	SceneInfo sceneInfo;
+	sceneInfo.name = sceneName;
+	sceneInfo.filename = sceneFilename;
+	mSceneList.push_back(sceneInfo);
+	mSceneIndex = mSceneList.size();
+
+	if (mEditorSupport)
 	{
-		ocError << "Unable to save entities";
+		gEditorMgr.UpdateSceneMenu();
 	}
-	storage.EndElement();
-	storage.CloseAndReport();
 
-	ocInfo << "Scene " << mCurrentScene << " saved";
+	return true;
 }
 
-bool Core::Project::IsSceneOpened()
+bool Project::OpenScene(const string& sceneFilename)
 {
-	return !mCurrentScene.empty();
+	if (IsSceneOpened()) return false;
+	int sceneIndex = -1;
+	for (SceneInfoList::const_iterator it = mSceneList.begin(); it != mSceneList.end(); ++it)
+	{
+		if (it->filename == sceneFilename)
+		{
+			sceneIndex = it - mSceneList.begin();
+			break;
+		}
+	}
+	return OpenSceneAtIndex(sceneIndex);
+	
 }
+
+bool Project::OpenSceneAtIndex(int sceneIndex)
+{
+	if (IsSceneOpened()) return false;
+	if (sceneIndex < 0 || sceneIndex >= (int)mSceneList.size())
+		return false;
+	CloseOpenedScene();
+	mSceneIndex = sceneIndex;
+	const string& sceneFilename = mSceneList[sceneIndex].filename;
+	gEntityMgr.LoadEntitiesFromResource(gResourceMgr.GetResource("Project", sceneFilename));
+	ocInfo << "Scene " << sceneFilename << " loaded.";
+	return true;
+}
+
+bool Project::OpenDefaultScene()
+{
+	if (GetSceneCount() == 0)
+	{
+		ocWarning << "No default scene to open.";
+		return false;
+	}
+	return OpenSceneAtIndex(0);
+}
+
+bool Project::SaveOpenedScene()
+{
+	if (mSceneIndex == -1) return false;
+	OC_DASSERT(mSceneIndex >= 0 && mSceneIndex < (int)mSceneList.size());
+	
+	ResourceSystem::ResourcePtr sceneResource = gResourceMgr.GetResource("Project", mSceneList[mSceneIndex].filename);
+	ResourceSystem::XMLOutput xmlOutput(sceneResource->GetFilePath());
+	xmlOutput.BeginElement("Scene");
+	if (!gEntityMgr.SaveEntitiesToStorage(xmlOutput))
+	{
+		ocError << "Unable to write entities to scene file.";
+	}
+	xmlOutput.EndElement();
+	if (xmlOutput.CloseAndReport())
+	{
+		ocInfo << "Scene " << mSceneList[mSceneIndex].filename << " saved.";
+		return true;
+	}
+	else
+	{
+		ocError << "Unable to save scene " << mSceneList[mSceneIndex].filename << ".";
+		return false;
+	}
+}
+
+void Project::CloseOpenedScene()
+{
+	gEntityMgr.DestroyAllEntities(false);
+	mSceneIndex = -1;
+}
+
+void Project::GetSceneList(SceneInfoList& scenes) const
+{
+	scenes = mSceneList;
+}
+
+size_t Project::GetSceneCount() const
+{
+	return mSceneList.size();
+}
+
+string Project::GetOpenedSceneName() const
+{
+	OC_ASSERT(mSceneIndex >= 0 && mSceneIndex < (int)mSceneList.size());
+	return mSceneList[mSceneIndex].name;
+}
+
+bool Core::Project::IsSceneOpened() const
+{
+	return mSceneIndex != -1;
+}
+

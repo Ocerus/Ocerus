@@ -5,6 +5,11 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
 
 cmake_minimum_required(VERSION 2.6.2)
 
+
+include(UseDoxygen)
+
+set(DOXYFILE_IN "${CMAKE_SOURCE_DIR}/cmake/modules/Doxyfile.in")
+
 option(CMAKE_BUILD_TYPE debug)
 option(PRECOMPILED_HEADERS "Use precompiled headers." OFF)
 option(BUILD_TESTS "Builds tests." ON)

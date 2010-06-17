@@ -59,6 +59,7 @@ void LogSystem::Profiler::DumpIntoConsole( void )
 
 void LogSystem::Profiler::Start( bool resetData )
 {
+	OC_UNUSED(resetData);
 #ifdef USE_PROFILER
 	ocInfo << "Profiling started";
 	if (resetData) RTHProfiler::CProfileManager::Reset();

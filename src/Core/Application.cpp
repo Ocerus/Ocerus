@@ -179,9 +179,9 @@ void Application::RunMainLoop()
 			}
 			else
 			{
-				if (!mGameProject) mGameProject = new Project();
+				if (!mGameProject) mGameProject = new Project(false);
 				OC_ASSERT_MSG(!mStartupProjectName.empty(), "Startup project must be defined when deploying the game!");
-				mGameProject->OpenProject(mStartupProjectName, false);
+				mGameProject->OpenProject(mStartupProjectName);
 			}
 
 			RequestStateChange(AS_GAME, true);

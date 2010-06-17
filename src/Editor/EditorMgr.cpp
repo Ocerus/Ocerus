@@ -41,7 +41,7 @@ EditorMgr::~EditorMgr()
 void EditorMgr::LoadEditor()
 {
 	mEditorGUI = new EditorGUI();
-	mCurrentProject = new Core::Project();
+	mCurrentProject = new Core::Project(true);
 
 	mMousePressedInSceneWindow = false;
 	mPopupClosingEnabled = false;
@@ -374,7 +374,7 @@ void Editor::EditorMgr::UpdateSceneMenu()
 
 void EditorMgr::OpenProject(const string& projectPath)
 {
-	if (!mCurrentProject->OpenProject(projectPath, true))
+	if (!mCurrentProject->OpenProject(projectPath))
 	{
 		GUISystem::MessageBox* messageBox = new GUISystem::MessageBox(GUISystem::MessageBox::MBT_OK);
 		messageBox->SetText(StringSystem::FormatText(gStringMgrSystem.GetTextData

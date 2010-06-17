@@ -8,89 +8,123 @@
 
 namespace Core
 {
+	/// The SceneInfo structure holds information about a scene.
+	struct SceneInfo
+	{
+		string name;       ///< Name of the scene
+		string filename;   ///< Name of the XML file with scene (name of resource)
+	};
 
+	/// The list of scenes.
+	typedef vector<SceneInfo> SceneInfoList;
+
+	/// The ProjectInfo structure holds information about a project.
+	struct ProjectInfo
+	{
+		string name;      ///< Name of the project
+		string version;   ///< Version of the project
+		string author;    ///< Author of the project
+	};
+
+	/// The Project class manages projects and its scenes.
 	class Project
 	{
 	public:
 
-		/// The list of scenes. The pair contains the scene name + its description.
-		typedef vector< pair<string, string> > Scenes;
-
-		struct ProjectInfo
-		{
-			string name;
-			string version;
-			string author;
-		};
-
 		/// Constructs a project manager.
-		Project();
+		/// @param editorSupport Whether editor support is enabled.
+		Project(bool editorSupport);
 
 		/// Destroys the project.
 		~Project();
 
-		/// Creates a new project that will be saved in the specified path and opens it.
-		/// Returns true if new project was created.
-		bool CreateProject(const string& path);
+		/// @name Project-related methods
+		//@{
 
-		/// Opens a project in the specified path.
-		bool OpenProject(const string& path, bool editorSupport);
+			/// Creates a new project that will be saved in the specified path and opens it.
+			/// @return Returns true if new project was created.
+			bool CreateProject(const string& path);
 
-		/// Closes the currently opened project.
-		void CloseProject();
+			/// Opens a project in the specified path.
+			bool OpenProject(const string& path);
 
-		/// Returns whether there is an opened project.
-		inline bool IsProjectOpened() { return mIsOpened; }
+			/// Saves project configuration file and closes the currently opened project.
+			void CloseProject();
 
-		/// Returns the path of the opened project. Returns empty string if there is not an opened project.
-		inline string GetOpenedProjectPath() { return mPath; }
+			/// Returns whether there is an opened project.
+			bool IsProjectOpened() const;
 
-		/// Stores the project info into specified variable.
-		inline void GetProjectInfo(ProjectInfo& projectInfo) { projectInfo = mInfo; }
+			/// Returns the path of the opened project. Returns empty string if there is not an opened project.
+			string GetOpenedProjectPath() const;
 
-		/// Sets the project info according to specified variable.
-		inline void SetProjectInfo(const ProjectInfo& newProjectInfo) { mInfo = newProjectInfo; }
+			/// Stores the project info into specified variable.
+			void GetOpenedProjectInfo(ProjectInfo& projectInfo) const;
 
-		/// Returns the number of scenes.
-		uint32 GetScenesCount() const;
+			/// Sets the project info according to specified variable.
+			void SetOpenedProjectInfo(const ProjectInfo& newProjectInfo);
+		
+		//@}
+		
+		/// @name Scene-related methods
+		//@{
 
-		void GetScenes(Scenes& scenes) const;
+			///
+			bool CreateScene(const string& sceneFilename, const string& sceneName);
 
-		/// Returns the default scene to be run when the game loads.
-		string GetDefaultSceneName() const;
+			/// Opens the scene with given filename.
+			/// @return False, if scene is not found, or another scene is already opened; otherwise returns True.
+			bool OpenScene(const string& scene);
 
-		inline string GetCurrentScene() const { return mCurrentScene; }
+			/// Opens the scene at given index in SceneList.
+			/// @return False, if scene is not found, or another scene is already opened; otherwise returns True.
+			bool OpenSceneAtIndex(int index);
 
-		void OpenScene(const string& scene);
+			/// Opens the default scene of the project.
+			/// @return False, if scene is not found, or another scene is already opened; otherwise returns True.
+			bool OpenDefaultScene();
 
-		void OpenSceneAtIndex(uint32 index);
+			/// Saves the opened scene.
+			/// @return True, if scene was successfully saved.
+			bool SaveOpenedScene();
 
-		/// Loads the default scene of the project.
-		void OpenDefaultScene();
+			/// Closes the opened scene.
+			void CloseOpenedScene();
 
-		/// Saves the current scene if any.
-		void SaveCurrentScene();
+			/// Returns true if a scene is opened.
+			bool IsSceneOpened() const;
 
-		/// Returns true if there is a scene opened.
-		bool IsSceneOpened();
+			/// Returns the list of scenes.
+			void GetSceneList(SceneInfoList& scenes) const;
+
+			/// Returns the number of scenes.
+			size_t GetSceneCount() const;
+
+			/// Returns name of the opened scene, or empty string if no scene is opened.
+			string GetOpenedSceneName() const;
+
+		//@}
 
 	private:
 
 		/// Sets the project info of the opened project to default values.
 		void SetDefaultProjectInfo();
 
+		/// Loads the configuration file of opened project.
+		void LoadProjectConfig();
+		
 		/// Saves the configuration file of opened project.
-		void SaveProject();
+		void SaveProjectConfig();
 
-		bool mIsOpened;
-		string mPath;
-		ProjectInfo mInfo;
-		Core::Config* mConfig;
+		string mProjectPath;
+		ProjectInfo mProjectInfo;
+		Core::Config* mProjectConfig;
 		ResourceSystem::ResourceTypeMap mResourceTypeMap;
-		Scenes mScenes;
-		string mCurrentScene;
-	};
 
+		SceneInfoList mSceneList;
+		int mSceneIndex;
+		
+		bool mEditorSupport;
+	};
 }
 
 #endif // __EDITOR_PROJECTMGR_H__

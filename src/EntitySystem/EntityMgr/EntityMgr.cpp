@@ -308,15 +308,23 @@ void EntitySystem::EntityMgr::ProcessDestroyQueue( void )
 	mEntityDestroyQueue.clear();
 }
 
-void EntityMgr::DestroyAllEntities()
+void EntityMgr::DestroyAllEntities(bool deleteTransients)
 {
 	OC_ASSERT(mComponentMgr);
-	for (EntityMap::const_iterator i = mEntities.begin(); i!=mEntities.end(); ++i)
+	EntityMap::const_iterator it = mEntities.begin();
+	while (it != mEntities.end())
 	{
-		DestroyEntityImmediately(i->first, false);
+		if (!deleteTransients && it->second->mTransient)
+		{
+			++it;
+		}
+		else
+		{
+			DestroyEntityImmediately(it->first, false);
+			it = mEntities.erase(it);
+		}	
 	}
 	mEntityDestroyQueue.clear(); // new entities could be marked for removal during deleting another entities
-	mEntities.clear();
 	mPrototypes.clear();
 }
 
