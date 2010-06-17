@@ -37,7 +37,7 @@ namespace ScriptSystem
 
 		/// If the basepath parameter is provided, the manager will relate all files to this path.
 		/// Global root is in the ResourceMgr's basepath and this basepath is relative to it.
-		ScriptMgr(const string& basepath = "scripts/");
+		ScriptMgr();
 
 		/// Destructor.
 		~ScriptMgr(void);
@@ -110,9 +110,6 @@ namespace ScriptSystem
 
 		/// Pointer to script engine.
 		AngelScript::asIScriptEngine* mEngine;
-
-		/// Basepath for script data. The root is in the ResourceMgr's basepath.
-		string mBasePath;
 
 		/// Object that helps building scripts.
 		AngelScript::CScriptBuilder* mScriptBuilder;

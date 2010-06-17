@@ -162,3 +162,9 @@ PhysicalBody* StringConverter::FromString(const string& str)
 	ocError << "Converting string '" << str << "' to PhysicalBody* is not valid conversion.";
 	return 0;
 }
+
+template<>
+InputSystem::eKeyCode StringConverter::FromString( const string& str )
+{
+	return (InputSystem::eKeyCode) FromString<uint32>(str);
+}

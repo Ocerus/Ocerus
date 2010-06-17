@@ -23,6 +23,7 @@ PROPERTY_TYPE(PT_STRING, string, string(), "string", Object, SHALLOW)
 PROPERTY_TYPE(PT_STRING_KEY, Utils::StringKey, Utils::StringKey::Null, "StringKey", Object, SHALLOW)
 PROPERTY_TYPE(PT_ENTITYHANDLE, EntitySystem::EntityHandle, EntitySystem::EntityHandle::Null, "EntityHandle", Object, SHALLOW)
 PROPERTY_TYPE(PT_COLOR, GfxSystem::Color, GfxSystem::Color::Null, "Color", Object, SHALLOW)
+PROPERTY_TYPE(PT_KEYCODE, InputSystem::eKeyCode, InputSystem::KC_UNASSIGNED, "eKeyCode", DWord, SHALLOW)
 #ifndef SCRIPT_ONLY
 PROPERTY_TYPE(PT_RESOURCE, ResourceSystem::ResourcePtr, 0, "ResourcePtr", Object, SHALLOW)
 PROPERTY_TYPE(PT_FUNCTION_PARAMETER, PropertyFunctionParameters, PropertyFunctionParameters::Null, "PropertyFunctionParameters", Object, SHALLOW)

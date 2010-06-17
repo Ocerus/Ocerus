@@ -213,8 +213,6 @@ bool Core::Game::KeyPressed(const KeyInfo& ke)
 {
 	if (!IsActionRunning()) return false;
 
-	ocInfo << "key pressed";
-
 	if (GlobalProperties::Get<bool>("DevelopMode"))
 	{
 		if (ke.keyCode == KC_F5 && gInputMgr.IsKeyDown(KC_LCONTROL))
@@ -235,20 +233,22 @@ bool Core::Game::KeyPressed(const KeyInfo& ke)
 		if (ke.keyCode == KC_F9 && IsActionRunning())
 		{
 			gEditorMgr.SwitchActionTool(Editor::EditorMgr::AT_PAUSE);
+			return true;
 		}
-
-		return true;
 	}
 
-	return false;
+	gEntityMgr.BroadcastMessage(EntityMessage::KEY_PRESSED, PropertyFunctionParameters() << ke.keyCode << ke.charCode);
+
+	return true;
 }
 
 bool Core::Game::KeyReleased(const KeyInfo& ke)
 {
 	if (!IsActionRunning()) return false;
 
-	OC_UNUSED(ke);
-	return false;
+	gEntityMgr.BroadcastMessage(EntityMessage::KEY_RELEASED, PropertyFunctionParameters() << ke.keyCode << ke.charCode);
+
+	return true;
 }
 
 bool Core::Game::MouseMoved(const MouseInfo& mi)

@@ -42,20 +42,7 @@ int ScriptMgr::IncludeCallback(const char* fileName, const char* from, AngelScri
 	OC_UNUSED(from);
 	OC_UNUSED(userParam);
 	// Try to get existing script resource
-	ResourceSystem::ResourcePtr resPtr = gResourceMgr.GetResource("Scripts", fileName);
-	if (!resPtr)
-	{
-		ocError << "Failed to load script file " << fileName << ".";
-		return -1;
-	}
-	ScriptResourcePtr sp = resPtr;
-	if (!sp)
-	{
-		// Load script resource from file
-		gResourceMgr.AddResourceFileToGroup(gScriptMgr.mBasePath + fileName, "Scripts",
-			ResourceSystem::RESTYPE_SCRIPTRESOURCE, ResourceSystem::BPT_ABSOLUTE);
-		sp = (ScriptResourcePtr)(gResourceMgr.GetResource("Scripts", fileName));
-	}
+	ScriptResourcePtr sp = gResourceMgr.GetResource("Project", fileName);
 	if (!sp)
 	{
 		ocError << "Failed to load script file " << fileName << ".";
@@ -88,12 +75,11 @@ void ScriptPrintln(string& msg)
 	}
 }
 
-ScriptMgr::ScriptMgr(const string& basepath)
+ScriptMgr::ScriptMgr()
 {
 	ocInfo << "*** ScriptMgr init ***";
 
 	mExecFromConsole = false;
-	mBasePath = basepath;
 
 	// Create the script engine
 	mEngine = asCreateScriptEngine(ANGELSCRIPT_VERSION);
@@ -535,6 +521,9 @@ void ScriptMgr::ConfigureEngine(void)
 	r = mEngine->RegisterTypedef("float32", "float"); OC_SCRIPT_ASSERT();
 	r = mEngine->RegisterTypedef("float64", "double"); OC_SCRIPT_ASSERT();
 
+	// Register enums
+	r = mEngine->RegisterTypedef("eKeyCode", "uint32"); OC_SCRIPT_ASSERT();
+
 	// Register the script string type
 	RegisterStdString(mEngine);
 
@@ -740,9 +729,11 @@ asIScriptModule* ScriptMgr::GetModule(const char* fileName)
 	r = mScriptBuilder->BuildModule();
 	if (r < 0)
 	{
-		ocInfo << "Failed to build module '" << fileName << "'!";
+		ocError << "Failed to build module '" << fileName << "'!";
 		return 0;
 	}
+
+	ocInfo << "Loaded script module " << fileName;
 
 	return mEngine->GetModule(fileName, asGM_ONLY_IF_EXISTS);
 }
@@ -835,7 +826,14 @@ bool ScriptMgr::SetFunctionArgument(AngelScript::asIScriptContext* ctx, const ui
 		OC_ASSERT_MSG(false, "Unknown or unsupported property type");
 	}
 
-	if (errorCode != 0) {
+	if (errorCode == -12)
+	{
+		ocError << "Can't set script function argument: invalid size of the argument";
+		return false;
+	}
+
+	if (errorCode != 0)
+	{
 		ocError << "Can't set script function argument: error code = " << errorCode;
 		return false;
 	}

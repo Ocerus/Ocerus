@@ -6,3 +6,13 @@ void OnUpdateLogic(float32 delta)
 	pos.x = pos.x + 0.5;
 	handle.Set_Vector2("Position", pos);*/
 }
+
+void OnKeyPressed(eKeyCode key, uint32 char)
+{
+	Println("key pressed");
+}
+
+void OnKeyReleased(eKeyCode key, uint32 char)
+{
+	Println("key released");
+}

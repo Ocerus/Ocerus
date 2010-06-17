@@ -33,6 +33,10 @@ ENTITY_MESSAGE_TYPE(RESOURCE_UPDATE, "void OnResourceUpdate()", NO_PARAMS)
 ENTITY_MESSAGE_TYPE(COMPONENT_DESTROYED, "void OnComponentDeleted(uint32)", Params(PT_UINT32))
 /// Sent in every game loop.
 ENTITY_MESSAGE_TYPE(CHECK_ACTION, "void OnAction()", NO_PARAMS)
+/// Sent when the user presses a key.
+ENTITY_MESSAGE_TYPE(KEY_PRESSED, "void OnKeyPressed(eKeyCode, uint32)", Params(PT_KEYCODE, PT_UINT32))
+/// Sent when the user releases a key.
+ENTITY_MESSAGE_TYPE(KEY_RELEASED, "void OnKeyReleased(eKeyCode, uint32)", Params(PT_KEYCODE, PT_UINT32))
 
 
 #undef Params

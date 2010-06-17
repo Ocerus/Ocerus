@@ -86,7 +86,7 @@ namespace ResourceSystem
 		void SetLoadingListener(IResourceLoadingListener* listener);
 
 		/// Retrieves a resource from the manager. If the resource can't be found, null ResourcePtr is returned.
-		/// @param groupSlashName Full name of the resource including group name/resource's filename
+		/// @param groupSlashName Full name of the resource including group name/resource's filename.
 		ResourcePtr GetResource(const char* groupSlashName);
 
 		/// Retrieves a resource from the manager. If the resource can't be found, null ResourcePtr is returned.
@@ -99,6 +99,7 @@ namespace ResourceSystem
 		/// Retrieves all resources in given base path type.
 		void GetResources(vector<ResourcePtr>& output, eBasePathType basePathType);
 
+		/// Changes the type of the resource to a new one.
 		void ChangeResourceType(ResourcePtr resPointer, eResourceType newType);
 
 		/// Sets the memory limit the resource manager should try to keep.

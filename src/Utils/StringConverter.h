@@ -113,6 +113,9 @@ namespace Utils
 		template<>
 		PhysicalBody* FromString(const string& str);
 
+		template<>
+		InputSystem::eKeyCode FromString(const string& str);
+
 	}
 }
 

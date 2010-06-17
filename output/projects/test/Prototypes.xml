@@ -5,13 +5,13 @@
     <Entity Name="prototyp1" ID="-488" Transient="false">
       <Component Type="Transform">
         <Scale>0.7 1</Scale>
-        <Angle>0</Angle>
         <Position>0 0</Position>
         <Layer>0</Layer>
+        <Angle>0</Angle>
       </Component>
       <Component Type="Sprite">
-        <Transparency>0</Transparency>
         <Texture>tux.png</Texture>
+        <Transparency>0</Transparency>
       </Component>
       <Component Type="PolygonCollider">
         <Density>1</Density>
