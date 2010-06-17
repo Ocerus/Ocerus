@@ -6,7 +6,6 @@
 
 #include "Base.h"
 #include "Singleton.h"
-#include "KeyShortcuts.h"
 #include "InputSystem/IInputListener.h"
 #include "EntitySystem/ComponentMgr/ComponentID.h"
 #include "EntitySystem/ComponentMgr/ComponentEnums.h"
@@ -129,6 +128,9 @@ namespace Editor
 		/// Switches the action tool to the new one. It also changes the currently pressed button.
 		void SwitchActionTool(eActionTool newTool);
 
+		/// Handles key shortcuts related to the editor. Returns true if the key was handled, false otherwise.
+		bool HandleShortcuts(InputSystem::eKeyCode keyCode);
+
 		
 	public:
 
@@ -218,7 +220,7 @@ namespace Editor
 		bool DrawEntityPhysicalShape(const EntitySystem::EntityHandle entity, const GfxSystem::Color shapeColor, const float32 shapeWidth);
 
 		//Shortcuts
-		KeyShortcuts mShortcuts;
+		KeyShortcuts* mShortcuts;
 	
 	};
 

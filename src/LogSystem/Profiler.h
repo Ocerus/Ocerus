@@ -29,10 +29,14 @@ namespace LogSystem
 		~Profiler(void) {}
 	
 		/// Starts or resumes profiling of code performance.
-		void Start(void);
+		///@param resetData If true the data will be cleared before starting the profiler again.
+		void Start(bool resetData);
 
 		/// Stops the profiling of code so that no data are aggregated until started again.
 		void Stop(void);
+
+		/// Resets the profiling data.
+		void Reset(void);
 
 		/// Updates the profiler. To be called once per frame.
 		void Update(void);

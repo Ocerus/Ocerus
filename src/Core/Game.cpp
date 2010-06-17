@@ -215,26 +215,7 @@ bool Core::Game::KeyPressed(const KeyInfo& ke)
 
 	if (GlobalProperties::Get<bool>("DevelopMode"))
 	{
-		if (ke.keyCode == KC_F5 && gInputMgr.IsKeyDown(KC_LCONTROL))
-		{
-			if (gProfiler.IsRunning())
-			{
-				gProfiler.Stop();
-				gProfiler.DumpIntoConsole();
-			}
-			else
-			{
-				gProfiler.Start();
-			}
-	
-			return true;
-		}
-
-		if (ke.keyCode == KC_F9 && IsActionRunning())
-		{
-			gEditorMgr.SwitchActionTool(Editor::EditorMgr::AT_PAUSE);
-			return true;
-		}
+		if (gEditorMgr.HandleShortcuts(ke.keyCode)) return true;
 	}
 
 	gEntityMgr.BroadcastMessage(EntityMessage::KEY_PRESSED, PropertyFunctionParameters() << ke.keyCode << ke.charCode);

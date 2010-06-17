@@ -24,6 +24,7 @@ namespace Editor
 	class HierarchyWindow;
 	class AbstractValueEditor;
 	class LayerMgrWidget;
+	class KeyShortcuts;
 }
 
 namespace EntitySystem

@@ -57,10 +57,11 @@ void LogSystem::Profiler::DumpIntoConsole( void )
 #endif
 }
 
-void LogSystem::Profiler::Start( void )
+void LogSystem::Profiler::Start( bool resetData )
 {
 #ifdef USE_PROFILER
 	ocInfo << "Profiling started";
+	if (resetData) RTHProfiler::CProfileManager::Reset();
 	RTHProfiler::CProfileManager::Resume();
 #endif
 }
@@ -86,5 +87,12 @@ bool LogSystem::Profiler::IsRunning( void )
 	return RTHProfiler::CProfileManager::Is_Enabled();
 #else
 	return false;
+#endif
+}
+
+void LogSystem::Profiler::Reset( void )
+{
+#ifdef USE_PROFILER
+	RTHProfiler::CProfileManager::Reset();
 #endif
 }

@@ -2,6 +2,7 @@
 #include "EditorMgr.h"
 #include "EditorGUI.h"
 #include "PopupMenu.h"
+#include "KeyShortcuts.h"
 #include "ResourceWindow.h"
 #include "PrototypeWindow.h"
 #include "HierarchyWindow.h"
@@ -25,14 +26,16 @@ const float32 CAMERA_MOVEMENT_SPEED = 0.2f; ///< How fast the camera moves by ke
 EditorMgr::EditorMgr():
 	mEditorGUI(0),
 	mCurrentProject(0),
-	mCurrentEntity(EntityHandle::Null)
+	mCurrentEntity(EntityHandle::Null),
+	mShortcuts(0)
 {
 	ocInfo << "*** EditorMgr init ***";
+	mShortcuts = new KeyShortcuts();
 }
 
 EditorMgr::~EditorMgr()
 {
-
+	delete mShortcuts;
 }
 
 void EditorMgr::LoadEditor()
@@ -74,7 +77,7 @@ void Editor::EditorMgr::Update(const float32 delta)
 
 
 	// keys camera control
-	if (mouseAboveWindow)
+	if (mouseAboveWindow && !IsLockedToGame())
 	{
 		EntitySystem::EntityHandle camera = mEditorGUI->GetEditorViewport()->GetCamera();
 		OC_ASSERT(camera);
@@ -313,6 +316,12 @@ void Editor::EditorMgr::PauseAction()
 {
 	if (GlobalProperties::Get<Core::Game>("Game").IsActionRunning())
 	{
+		if (gProfiler.IsRunning())
+		{
+			gProfiler.Stop();
+			gProfiler.DumpIntoConsole();
+		}
+
 		GlobalProperties::Get<Core::Game>("Game").PauseAction();
 		ocInfo << "Game action paused";
 	}
@@ -322,6 +331,12 @@ void Editor::EditorMgr::RestartAction()
 {
 	if (!mIsInitialTime)
 	{
+		if (gProfiler.IsRunning())
+		{
+			gProfiler.Stop();
+			gProfiler.DumpIntoConsole();
+		}
+
 		SetCurrentEntity(EntityHandle::Null);
 		mSelectedEntities.clear();
 		GlobalProperties::Get<Core::Game>("Game").RestartAction();
@@ -370,41 +385,15 @@ void EditorMgr::OpenProject(const string& projectPath)
 
 bool Editor::EditorMgr::KeyPressed( const InputSystem::KeyInfo& ke )
 {
-
-	KeyShortcuts::eKeyShortcut shortcut;
-	shortcut = mShortcuts.GetPressedShortcut(ke.keyCode);
-
-	switch (shortcut)
-	{
-	case KeyShortcuts::KS_TOOL_MOVE:
-		SwitchEditTool(ET_MOVE);
-		return true;
-
-	case KeyShortcuts::KS_TOOL_ROTATE:
-		SwitchEditTool(ET_ROTATE);
-		return true;
-
-	case KeyShortcuts::KS_TOOL_ROTATE_Y:
-		SwitchEditTool(ET_ROTATE_Y);
-		return true;
-
-	case KeyShortcuts::KS_TOOL_SCALE:
-		SwitchEditTool(ET_SCALE);
-		return true;
-
-	case KeyShortcuts::KS_UKNOWN:
-		return false;
-
-	default:
-		OC_NOT_REACHED();
-	}
-
-	return false;
+	return HandleShortcuts(ke.keyCode);
 }
 
 bool Editor::EditorMgr::KeyReleased( const InputSystem::KeyInfo& ke )
 {
 	OC_UNUSED(ke);
+
+	if (IsLockedToGame()) return false;
+
 	return false;
 }
 
@@ -731,4 +720,61 @@ void Editor::EditorMgr::SaveHierarchyWindow( ResourceSystem::XMLOutput& storage 
 bool Editor::EditorMgr::IsLockedToGame() const
 {
 	return GlobalProperties::Get<Core::Game>("Game").IsActionRunning();
+}
+
+bool Editor::EditorMgr::HandleShortcuts( InputSystem::eKeyCode keyCode )
+{
+	mShortcuts->KeyPressed(keyCode);
+
+	if (mShortcuts->IsShortcutActive(KeyShortcuts::KS_START_ACTION) && !IsLockedToGame())
+	{
+		SwitchActionTool(AT_RUN);
+		return true;
+	}
+	if (mShortcuts->IsShortcutActive(KeyShortcuts::KS_RESTART_ACTION) && IsLockedToGame())
+	{
+		SwitchActionTool(AT_RESTART);
+		return true;
+	}
+	if (mShortcuts->IsShortcutActive(KeyShortcuts::KS_PROFILER) && IsLockedToGame())
+	{
+		if (gProfiler.IsRunning())
+		{
+			gProfiler.Stop();
+			gProfiler.DumpIntoConsole();
+		}
+		else
+		{
+			gProfiler.Start(false);
+		}
+
+		return true;
+	}
+
+
+	if (IsLockedToGame()) return false;
+
+
+	if (mShortcuts->IsShortcutActive(KeyShortcuts::KS_TOOL_MOVE))
+	{
+		SwitchEditTool(ET_MOVE);
+		return true;
+	}
+	if (mShortcuts->IsShortcutActive(KeyShortcuts::KS_TOOL_ROTATE))
+	{
+		SwitchEditTool(ET_ROTATE);
+		return true;
+	}
+	if (mShortcuts->IsShortcutActive(KeyShortcuts::KS_TOOL_ROTATE_Y))
+	{
+		SwitchEditTool(ET_ROTATE_Y);
+		return true;
+	}
+	if (mShortcuts->IsShortcutActive(KeyShortcuts::KS_TOOL_SCALE))
+	{
+		SwitchEditTool(ET_SCALE);
+		return true;
+	}
+
+	return false;
 }
