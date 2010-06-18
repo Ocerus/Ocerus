@@ -57,7 +57,9 @@ void GfxSceneMgr::DrawVisibleSprites()
 		{
 			EntityComponents::Transform* transform = (EntityComponents::Transform*)it->second;
 			if (gLayerMgr.IsLayerVisible(transform->GetLayer()))
+			{
 				gGfxRenderer.DrawSprite(it->first, it->second);
+			}
 		}
 	}
 }
@@ -70,7 +72,9 @@ void GfxSystem::GfxSceneMgr::DrawVisibleModels()
 		{
 			EntityComponents::Transform* transform = (EntityComponents::Transform*)it->second;
 			if (gLayerMgr.IsLayerVisible(transform->GetLayer()))
+			{
 				gGfxRenderer.DrawModel(it->first, it->second);
+			}
 		}
 	}
 }

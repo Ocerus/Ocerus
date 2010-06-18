@@ -81,7 +81,7 @@ bool Editor::ResourceEditor::OnEventDragDropItemDropped(const CEGUI::EventArgs& 
 	if (resource.get())	mModel->SetValue(resource);
 	Update();
 
-	if (gEditorMgr.IsEditingPrototype()) gEntityMgr.SavePrototypes();
+	gEditorMgr.PropertyValueChanged();
 
 	return true;
 }

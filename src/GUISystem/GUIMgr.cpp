@@ -170,14 +170,6 @@ namespace GUISystem
 
 		if (!mCegui->injectKeyDown(KeyMapperOIStoCEGUI(ke.keyCode)))
 		{
-			// If the key was not processed by the gui system, try to handle hotkeys.
-			if (ke.keyCode == InputSystem::KC_ESCAPE)
-			{
-				gApp.Shutdown();
-				return true;
-			}
-
-			// Finally inject corresponding character.
 			return mCegui->injectChar(ke.charCode);
 		}
 

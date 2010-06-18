@@ -26,6 +26,9 @@ namespace Editor
 		/// Refreshes the tree.
 		inline void Refresh() { RebuildTree(); }
 
+		/// Refreshes only a single entity in the tree.
+		void RefreshEntity(const EntitySystem::EntityHandle entity);
+
 		/// Loads the hierarchy from an XML input.
 		void LoadHierarchy(ResourceSystem::XMLNodeIterator& xml);
 

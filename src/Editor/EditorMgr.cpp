@@ -627,7 +627,7 @@ bool Editor::EditorMgr::DrawEntityPhysicalShape( const EntitySystem::EntityHandl
 	for (EntitySystem::ComponentIdList::iterator it=components.begin(); it!=components.end(); ++it)
 	{
 		PhysicalShape* shape = gEntityMgr.GetEntityComponentProperty(entity, *it, "PhysicalShape").GetValue<PhysicalShape*>();
-		OC_ASSERT(shape);
+		if (!shape) continue;
 
 		XForm xf = shape->GetBody()->GetTransform();
 		b2PolygonShape* poly = (b2PolygonShape*)shape->GetShape();

@@ -90,23 +90,6 @@ void EditorGUI::LoadGUI()
 	mHierarchyWindow = new HierarchyWindow();
 	mHierarchyWindow->Init();
 
-	// Initialize bottom viewport
-	{
-		// Create editor camera.
-		EntitySystem::EntityDescription desc;
-		desc.SetName("EditorCamera1");
-		desc.AddComponent(EntitySystem::CT_Camera);
-		desc.SetTransient(true);
-		EntitySystem::EntityHandle camera = gEntityMgr.CreateEntity(desc);
-		camera.FinishInit();
-
-		// Assign editor camera to bottom viewport.
-		mEditorViewport = static_cast<GUISystem::ViewportWindow*>(gCEGUIWM.getWindow("EditorRoot/BottomViewport"));
-		mEditorViewport->SetCamera(camera);
-		mEditorViewport->SetMovableContent(true);
-		mEditorViewport->Activate();
-	}
-
 	// Initialize top viewport
 	{
 		// Create game camera.
@@ -124,6 +107,23 @@ void EditorGUI::LoadGUI()
 
 		// Pass render target from viewport to Game instance.
 		GlobalProperties::Get<Core::Game>("Game").SetRenderTarget(mGameViewport->GetRenderTarget());
+	}
+
+	// Initialize bottom viewport
+	{
+		// Create editor camera.
+		EntitySystem::EntityDescription desc;
+		desc.SetName("EditorCamera1");
+		desc.AddComponent(EntitySystem::CT_Camera);
+		desc.SetTransient(true);
+		EntitySystem::EntityHandle camera = gEntityMgr.CreateEntity(desc);
+		camera.FinishInit();
+
+		// Assign editor camera to bottom viewport.
+		mEditorViewport = static_cast<GUISystem::ViewportWindow*>(gCEGUIWM.getWindow("EditorRoot/BottomViewport"));
+		mEditorViewport->SetCamera(camera);
+		mEditorViewport->SetMovableContent(true);
+		mEditorViewport->Activate();
 	}
 }
 

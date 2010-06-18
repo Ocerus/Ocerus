@@ -22,16 +22,19 @@ EntityMessage::eResult EntityComponents::Model::HandleMessage( const EntityMessa
 		{
 			if (!mMeshHandle)
 			{
-				ocWarning << "Initing model with null value";
+				ocError << "Initing model with null value";
 				///@TODO add null model
 				//mMeshHandle = gResourceMgr.GetResource("General", "NullTexture");
-				return EntityMessage::RESULT_ERROR;
+				OC_ASSERT(mMeshHandle);
 			}
 
-			Component* transform = gEntityMgr.GetEntityComponentPtr(GetOwner(), CT_Transform);
-			gGfxRenderer.GetSceneManager()->AddModel(this, transform);
+			if (!gEntityMgr.IsEntityPrototype(GetOwner()))
+			{
+				Component* transform = gEntityMgr.GetEntityComponentPtr(GetOwner(), CT_Transform);
+				gGfxRenderer.GetSceneManager()->AddModel(this, transform);
+			}
 
-			return EntityMessage::RESULT_OK;
+			return EntityMessage::RESULT_ERROR;
 		}
 	default:
 		return EntityMessage::RESULT_IGNORED;
@@ -51,5 +54,7 @@ void EntityComponents::Model::RegisterReflection()
 void EntityComponents::Model::SetMesh(ResourceSystem::ResourcePtr value) 
 { 
 	if (value && value->GetType() == ResourceSystem::RESTYPE_MESH)
+	{
 		mMeshHandle = value; 
+	}
 }

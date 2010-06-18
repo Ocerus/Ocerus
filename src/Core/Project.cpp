@@ -283,7 +283,7 @@ bool Project::SaveOpenedScene()
 
 void Project::CloseOpenedScene()
 {
-	gEntityMgr.DestroyAllEntities(false);
+	gEntityMgr.DestroyAllEntities(false, false);
 	mSceneIndex = -1;
 }
 

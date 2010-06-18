@@ -61,7 +61,7 @@ bool Editor::PopupMenu::OnMenuItemMouseUp( const CEGUI::EventArgs& e )
 		else if (itemCeguiName == mName + "/InstantiatePrototype")
 		{
 			EntitySystem::EntityDescription desc;
-			desc.SetName("New Entity");
+			desc.SetName(GetData<EntitySystem::EntityHandle>().GetName());
 			desc.SetPrototype(GetData<EntitySystem::EntityHandle>());
 			desc.CopyComponents(GetData<EntitySystem::EntityHandle>());
 			EntitySystem::EntityHandle instance = gEntityMgr.CreateEntity(desc);

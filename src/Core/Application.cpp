@@ -68,8 +68,7 @@ void Application::Init(const string& startupProjectName)
 	ResourceSystem::ResourceMgr::GetSingleton().Init("data/");
 
 	StringSystem::StringMgr::Init();
-	gStringMgrSystem.LoadLanguagePack(mGlobalConfig->GetString("Language", "", "Editor"),
-		mGlobalConfig->GetString("Country", "", "Editor"));
+	gStringMgrSystem.LoadLanguagePack(mGlobalConfig->GetString("Language", "", "Editor"), mGlobalConfig->GetString("Country", "", "Editor"));
 
 	GfxSystem::GfxWindow::CreateSingleton();
 	GfxSystem::GfxWindow::GetSingleton().Init(1024, 768, false, "Ocerus");
@@ -104,7 +103,7 @@ Application::~Application()
 {
 	HideConsole();
 
-	gEntityMgr.DestroyAllEntities();
+	gEntityMgr.DestroyAllEntities(true, true);
 
 	if (mGameProject) delete mGameProject;
 	delete mLoadingScreen;
@@ -175,7 +174,7 @@ void Application::RunMainLoop()
 			if (mDevelopMode)
 			{
 				//DEBUG
-				gEditorMgr.OpenProject("projects/test");
+				gEditorMgr.OpenProject("projects/cube");
 			}
 			else
 			{

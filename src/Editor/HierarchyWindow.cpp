@@ -8,6 +8,8 @@
 using namespace Editor;
 using namespace EntitySystem;
 
+const uint32 TREE_LEVEL_CHAR_SIZE = 4;
+
 Editor::HierarchyWindow::HierarchyWindow(): mWindow(0), mTree(0), mCurrentParent(EntitySystem::EntityHandle::Null)
 {
 
@@ -72,7 +74,7 @@ CEGUI::ItemEntry* Editor::HierarchyWindow::AddTreeItem( uint32 index, const stri
 
 	CEGUI::Window* newItemText = gCEGUIWM.createWindow("Editor/StaticText", mTree->getName() + "/ItemText" + StringConverter::ToString(itemID));
 	newItemText->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
-	newItemText->setText(string(depth*4, ' ') + textName);
+	newItemText->setText(string(depth*TREE_LEVEL_CHAR_SIZE, ' ') + textName);
 	newItemText->setProperty("FrameEnabled", "False");
 	newItemText->setProperty("BackgroundEnabled", "False");
 	newItemText->setMousePassThroughEnabled(true);
@@ -407,4 +409,17 @@ EntitySystem::EntityHandle Editor::HierarchyWindow::GetParent( const EntitySyste
 	}
 	HierarchyTree::iterator parentIter = mHierarchy.parent(entityIter);
 	return *parentIter;
+}
+
+void Editor::HierarchyWindow::RefreshEntity( const EntitySystem::EntityHandle entity )
+{
+	uint32 depth;
+	int32 index = FindTreeItem(entity, depth);
+	if (index == -1) return;
+
+	CEGUI::ItemEntry* item = mTree->getItemFromIndex(index);
+	OC_ASSERT(item);
+	CEGUI::Window* itemText = item->getChildAtIdx(0)->getChildAtIdx(0);
+	OC_ASSERT(itemText);
+	itemText->setText(string(depth*TREE_LEVEL_CHAR_SIZE, ' ') + entity.GetName());
 }

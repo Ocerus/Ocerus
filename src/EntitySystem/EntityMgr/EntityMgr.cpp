@@ -70,7 +70,7 @@ EntityMgr::EntityMgr()
 
 EntityMgr::~EntityMgr()
 {
-	DestroyAllEntities();
+	DestroyAllEntities(true, true);
 	delete mComponentMgr;
 }
 
@@ -308,21 +308,26 @@ void EntitySystem::EntityMgr::ProcessDestroyQueue( void )
 	mEntityDestroyQueue.clear();
 }
 
-void EntityMgr::DestroyAllEntities(bool deleteTransients)
+void EntityMgr::DestroyAllEntities(bool includingPrototypes, bool deleteTransients)
 {
 	OC_ASSERT(mComponentMgr);
 	EntityMap::const_iterator it = mEntities.begin();
 	while (it != mEntities.end())
 	{
+		if (!includingPrototypes && EntityHandle::IsPrototypeID(it->first))
+		{
+			++it;
+			continue;
+		}
+
 		if (!deleteTransients && it->second->mTransient)
 		{
 			++it;
+			continue;
 		}
-		else
-		{
-			DestroyEntityImmediately(it->first, false);
-			it = mEntities.erase(it);
-		}	
+
+		DestroyEntityImmediately(it->first, false);
+		it = mEntities.erase(it);
 	}
 	mEntityDestroyQueue.clear(); // new entities could be marked for removal during deleting another entities
 	mPrototypes.clear();
@@ -646,6 +651,8 @@ void EntitySystem::EntityMgr::LoadEntityFromXML(ResourceSystem::XMLNodeIterator 
 
 	// create the entity
 	EntityHandle entity = CreateEntity(desc);
+	if (!entity) return;
+
 	PrototypeInfo* prototypeInfo = 0;
 	if (isPrototype)
 	{
@@ -951,6 +958,8 @@ EntitySystem::ComponentID EntitySystem::EntityMgr::AddComponentToEntity( const E
 {
 	OC_ASSERT(mComponentMgr);
 	ComponentID cid = mComponentMgr->CreateComponent(entity.GetID(), componentType);
+	mComponentMgr->GetEntityComponent(entity.GetID(), cid)->HandleMessage(EntityMessage(EntityMessage::INIT));
+	mComponentMgr->GetEntityComponent(entity.GetID(), cid)->HandleMessage(EntityMessage(EntityMessage::POST_INIT));
 
 	if (IsEntityPrototype(entity))
 	{

@@ -77,8 +77,9 @@ namespace EntitySystem
 		void ProcessDestroyQueue(void);
 
 		/// Destroys all entities in the manager.
+		/// @param includingPrototypes If true even the prototypes are deleted.
 		/// @param deleteTransients If true, deletes also transient entities.
-		void DestroyAllEntities(bool deleteTransients = true);
+		void DestroyAllEntities(bool includingPrototypes, bool deleteTransients);
 
 		/// Retrieves handles of entities that have a specific component.
 		void GetEntitiesWithComponent(EntityList& out, const eComponentType componentType, bool prototypes = false);

@@ -24,10 +24,14 @@ EntityMessage::eResult EntityComponents::Sprite::HandleMessage( const EntityMess
 			{
 				ocWarning << "Initing sprite with null texture";
 				mTextureHandle = gResourceMgr.GetResource("General", "NullTexture");
+				OC_ASSERT(mTextureHandle);
 			}
 
-			Component* transform = gEntityMgr.GetEntityComponentPtr(GetOwner(), CT_Transform);
-			gGfxRenderer.GetSceneManager()->AddSprite(this, transform);
+			if (!gEntityMgr.IsEntityPrototype(GetOwner()))
+			{
+				Component* transform = gEntityMgr.GetEntityComponentPtr(GetOwner(), CT_Transform);
+				gGfxRenderer.GetSceneManager()->AddSprite(this, transform);
+			}
 				
 			return EntityMessage::RESULT_OK;
 		}
@@ -48,5 +52,7 @@ void EntityComponents::Sprite::RegisterReflection()
 void EntityComponents::Sprite::SetTexture(ResourceSystem::ResourcePtr value)
 { 
 	if (value && value->GetType() == ResourceSystem::RESTYPE_TEXTURE)
-		mTextureHandle = value; 
+	{
+		mTextureHandle = value;
+	}
 }

@@ -176,7 +176,7 @@ bool ResourceMgr::AddResourceFileToGroup(const string& filepath, const StringKey
 	ocTrace << "Adding resource '" << boostPath << "' to group '" << group << "'";
 	if (!boost::filesystem::exists(boostPath))
 	{
-		ocError << "Resource located at '" << boostPath.string() << "' not found";
+		ocWarning << "Resource located at '" << boostPath.string() << "' not found";
 		return false;
 	}
 

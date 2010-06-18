@@ -1,6 +1,8 @@
 #include "Common.h"
 #include "EntityAttributeModel.h"
 #include "Editor/EditorMgr.h"
+#include "Editor/EditorGUI.h"
+#include "Editor/HierarchyWindow.h"
 
 using namespace Editor;
 
@@ -71,4 +73,6 @@ void Editor::EntityAttributeModel::SetValue(const string& newValue)
 	{
 		gEditorMgr.RefreshPrototypeWindow();
 	}
+
+	gEditorMgr.GetEditorGui()->GetHierarchyWindow()->RefreshEntity(mEntity);
 }

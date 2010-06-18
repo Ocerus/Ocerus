@@ -70,6 +70,7 @@ void Core::Game::SetRenderTarget(const GfxSystem::RenderTargetID renderTarget)
 	OC_ASSERT(mRenderTarget == GfxSystem::InvalidRenderTargetID);
 	mRenderTarget = renderTarget;
 	mCamera = gGfxRenderer.GetRenderTargetCamera(mRenderTarget);
+	gGfxRenderer.GetRenderTargetViewport(mRenderTarget)->SetGridEnabled(false);
 }
 
 void Core::Game::UpdateGameProperties(void)
@@ -94,7 +95,7 @@ void Core::Game::Init()
 	mTimer.Reset();
 
 	// init physics engine
-	mPhysics = new b2World(b2Vec2(0.0f, 0.0f), false);
+	mPhysics = new b2World(b2Vec2(0.0f, 10.0f), false);
 	mPhysics->SetContactFilter(mPhysicsCallbacks);
 	mPhysics->SetContactListener(mPhysicsCallbacks);
 	mPhysics->SetDebugDraw(mPhysicsDraw);
@@ -331,7 +332,7 @@ void Core::Game::RestartAction(void)
 	if (gResourceMgr.AddResourceFileToGroup(ActionFile, "Action", ResourceSystem::RESTYPE_AUTODETECT, ResourceSystem::BPT_SYSTEM, ActionFile))
 	{
 		gResourceMgr.LoadResourcesInGroup("Action");
-		gEntityMgr.DestroyAllEntities();
+		gEntityMgr.DestroyAllEntities(true, true);
 		if (!gEntityMgr.LoadPrototypes()) { result = false; }
 		ResourceSystem::ResourcePtr resource = gResourceMgr.GetResource("Action", ActionFile);
 		if (!LoadGameInfoFromResource(resource)) { result = false; }
