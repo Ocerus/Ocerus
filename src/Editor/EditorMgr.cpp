@@ -22,7 +22,6 @@ const float32 EDIT_TOOL_ANGLE_CHANGE_RATIO = 0.3f; ///< How fast the edit tool w
 const float32 EDIT_TOOL_SCALE_CHANGE_RATIO = 0.1f; ///< How fast the edit tool will change the scale.
 const float32 CAMERA_MOVEMENT_SPEED = 0.2f; ///< How fast the camera moves by keys.
 
-
 EditorMgr::EditorMgr():
 	mEditorGUI(0),
 	mCurrentProject(0),
@@ -336,13 +335,20 @@ void Editor::EditorMgr::RestartAction()
 			gProfiler.Stop();
 			gProfiler.DumpIntoConsole();
 		}
-
-		SetCurrentEntity(EntityHandle::Null);
-		mSelectedEntities.clear();
+		
 		GlobalProperties::Get<Core::Game>("Game").RestartAction();
 		mIsInitialTime = true;
+		if (!GetCurrentEntity().Exists()) { SetCurrentEntity(EntityHandle::Null); }
+		else { mEditorGUI->UpdateEntityEditorWindow(); }
 		ocInfo << "Game action restarted";
 	}
+}
+
+void Editor::EditorMgr::Reset()
+{
+	SetCurrentEntity(EntityHandle::Null);
+	ClearSelection();
+	mIsInitialTime = true;
 }
 
 void Editor::EditorMgr::SetCurrentEditTool(eEditTool newEditTool)

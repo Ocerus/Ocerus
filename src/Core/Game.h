@@ -39,6 +39,12 @@ namespace Core
 		/// @name Game control
 		//@{
 
+		/// Name of the entity with the game camera.
+		static const string GameCameraName;
+
+		/// Refresh the game camera;
+		void RefreshCamera();
+		
 		/// Sets the target where the game will be rendered to.
 		void SetRenderTarget(const GfxSystem::RenderTargetID renderTarget);
 
@@ -118,13 +124,6 @@ namespace Core
 		virtual bool MouseButtonReleased(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn);
 
 		//@}
-
-
-	private:
-
-		/// Initializes the game viewport for full-window rendering.
-		void CreateDefaultRenderTarget();
-
 
 	private:
 

@@ -33,6 +33,12 @@ namespace Editor
 		/// Updates the entity editor.
 		void UpdateEntityEditorWindow();
 
+		/// Name of the entity with the editor camera.
+		static const string EditorCameraName;
+		
+		/// Assigns game and editor cameras to corresponding entities, creates new ones if do not exist.
+		void RefreshCameras();
+
 		/// Returns the viewport of the editor window.
 		inline GUISystem::ViewportWindow* GetEditorViewport() const { return mEditorViewport; }
 

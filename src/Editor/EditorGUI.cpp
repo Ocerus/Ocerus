@@ -23,6 +23,7 @@
 namespace Editor
 {
 	const string ENTITY_EDITOR_NAME = "EditorRoot/EntityEditor/Scrollable";
+	const string EditorGUI::EditorCameraName = "EditorCamera";
 }
 
 
@@ -91,40 +92,44 @@ void EditorGUI::LoadGUI()
 	mHierarchyWindow->Init();
 
 	// Initialize top viewport
-	{
-		// Create game camera.
-		EntitySystem::EntityDescription desc;
-		desc.SetName("GameCamera1");
-		desc.AddComponent(EntitySystem::CT_Camera);
-		desc.SetTransient(true);
-		EntitySystem::EntityHandle camera = gEntityMgr.CreateEntity(desc);
-		camera.FinishInit();
-
-		// Assign game camera to top viewport.
-		mGameViewport = static_cast<GUISystem::ViewportWindow*>(gCEGUIWM.getWindow("EditorRoot/TopViewport"));
-		mGameViewport->SetCamera(camera);
-		mGameViewport->SetMovableContent(false);
-
-		// Pass render target from viewport to Game instance.
-		GlobalProperties::Get<Core::Game>("Game").SetRenderTarget(mGameViewport->GetRenderTarget());
-	}
+	mGameViewport = static_cast<GUISystem::ViewportWindow*>(gCEGUIWM.getWindow("EditorRoot/TopViewport"));
+	mGameViewport->SetMovableContent(false);
 
 	// Initialize bottom viewport
-	{
-		// Create editor camera.
-		EntitySystem::EntityDescription desc;
-		desc.SetName("EditorCamera1");
-		desc.AddComponent(EntitySystem::CT_Camera);
-		desc.SetTransient(true);
-		EntitySystem::EntityHandle camera = gEntityMgr.CreateEntity(desc);
-		camera.FinishInit();
+	mEditorViewport = static_cast<GUISystem::ViewportWindow*>(gCEGUIWM.getWindow("EditorRoot/BottomViewport"));
+	mEditorViewport->SetMovableContent(true);
 
-		// Assign editor camera to bottom viewport.
-		mEditorViewport = static_cast<GUISystem::ViewportWindow*>(gCEGUIWM.getWindow("EditorRoot/BottomViewport"));
-		mEditorViewport->SetCamera(camera);
-		mEditorViewport->SetMovableContent(true);
-		mEditorViewport->Activate();
+	// Create cameras
+	RefreshCameras();
+}
+
+void EditorGUI::RefreshCameras()
+{
+	EntitySystem::EntityHandle gameCamera = gEntityMgr.FindFirstEntity(Core::Game::GameCameraName);
+	if (!gameCamera.Exists())
+	{
+		// Create the game camera.
+		EntitySystem::EntityDescription desc;
+		desc.SetName(Core::Game::GameCameraName);
+		desc.AddComponent(EntitySystem::CT_Camera);
+		gameCamera = gEntityMgr.CreateEntity(desc);
+		gameCamera.FinishInit();
 	}
+	mGameViewport->SetCamera(gameCamera);
+	GlobalProperties::Get<Core::Game>("Game").SetRenderTarget(mGameViewport->GetRenderTarget());
+
+	EntitySystem::EntityHandle editorCamera = gEntityMgr.FindFirstEntity(EditorCameraName);
+	if (!editorCamera.Exists())
+	{
+		// Create the editor camera.
+		EntitySystem::EntityDescription desc;
+		desc.SetName(EditorCameraName);
+		desc.AddComponent(EntitySystem::CT_Camera);
+		editorCamera = gEntityMgr.CreateEntity(desc);
+		editorCamera.FinishInit();
+	}
+	mEditorViewport->SetCamera(editorCamera);
+	mEditorViewport->Activate();
 }
 
 void EditorGUI::Update(float32 delta)
@@ -206,7 +211,7 @@ void EditorGUI::UpdateEntityEditorWindow()
 	mPropertyEditors.clear();
 
 	// There is no entity to be selected.
-	if (!currentEntity.IsValid()) return;
+	if (!currentEntity.Exists()) return;
 
 	mEntityEditorLayout->LockUpdates();
 

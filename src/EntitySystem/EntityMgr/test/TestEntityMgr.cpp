@@ -55,7 +55,7 @@ SUITE(EntityMgr)
 		gEntityMgr.GetEntities(entities);
 		CHECK_EQUAL((size_t)1, entities.size());
 
-		gEntityMgr.DestroyAllEntities();
+		gEntityMgr.DestroyAllEntities(true, true);
 		gEntityMgr.GetEntities(entities);
 		CHECK_EQUAL((size_t)0, entities.size());
 

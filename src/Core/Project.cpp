@@ -1,6 +1,9 @@
 #include "Common.h"
 #include "Project.h"
 #include "Editor/EditorMgr.h"
+#include "Editor/EditorGUI.h"
+#include "Core/Game.h"
+#include "Core/Application.h"
 
 using namespace Core;
 
@@ -235,13 +238,17 @@ bool Project::OpenScene(const string& sceneFilename)
 
 bool Project::OpenSceneAtIndex(int sceneIndex)
 {
-	if (IsSceneOpened()) return false;
+	//if (IsSceneOpened()) return false;
 	if (sceneIndex < 0 || sceneIndex >= (int)mSceneList.size())
 		return false;
 	CloseOpenedScene();
 	mSceneIndex = sceneIndex;
 	const string& sceneFilename = mSceneList[sceneIndex].filename;
+
 	gEntityMgr.LoadEntitiesFromResource(gResourceMgr.GetResource("Project", sceneFilename));
+	if (gApp.IsEditMode()) { gEditorMgr.GetEditorGui()->RefreshCameras(); }
+	else { GlobalProperties::Get<Core::Game>("Game").RefreshCamera(); }
+	
 	ocInfo << "Scene " << sceneFilename << " loaded.";
 	return true;
 }
@@ -283,7 +290,7 @@ bool Project::SaveOpenedScene()
 
 void Project::CloseOpenedScene()
 {
-	gEntityMgr.DestroyAllEntities(false, false);
+	gEntityMgr.DestroyAllEntities(false, true);
 	mSceneIndex = -1;
 }
 

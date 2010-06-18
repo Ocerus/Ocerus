@@ -20,6 +20,7 @@ const float PHYSICS_TIMESTEP = 0.016f;
 const int32 PHYSICS_VELOCITY_ITERATIONS = 6;
 const int32 PHYSICS_POSITION_ITERATIONS = 2;
 const char* Game::ActionFile = "ActionSave.xml";
+const string Game::GameCameraName = "GameCamera";
 
 
 /// Callback receiver from physics.
@@ -65,9 +66,28 @@ Core::Game::~Game()
 	GlobalProperties::SetPointer("Game", 0);
 }
 
+void Core::Game::RefreshCamera()
+{
+	EntitySystem::EntityHandle mCamera = gEntityMgr.FindFirstEntity(GameCameraName);
+	if (!mCamera.Exists())
+	{
+		// Create the game camera.
+		EntitySystem::EntityDescription desc;
+		desc.SetName(GameCameraName);
+		desc.AddComponent(EntitySystem::CT_Camera);
+		mCamera = gEntityMgr.CreateEntity(desc);
+		mCamera.FinishInit();
+	}
+
+	if (mRenderTarget != GfxSystem::InvalidRenderTargetID)
+	{
+		gGfxRenderer.RemoveRenderTarget(mRenderTarget);
+	}
+	mRenderTarget = gGfxRenderer.AddRenderTarget(GfxSystem::GfxViewport(Vector2(0, 0), Vector2(1, 1), false, true), mCamera);
+}
+
 void Core::Game::SetRenderTarget(const GfxSystem::RenderTargetID renderTarget)
 {
-	OC_ASSERT(mRenderTarget == GfxSystem::InvalidRenderTargetID);
 	mRenderTarget = renderTarget;
 	mCamera = gGfxRenderer.GetRenderTargetCamera(mRenderTarget);
 	gGfxRenderer.GetRenderTargetViewport(mRenderTarget)->SetGridEnabled(false);
@@ -88,7 +108,7 @@ void Core::Game::Init()
 	ocInfo << "Game init";
 	ForceStateChange(GS_INITING);
 
-	if (!gGfxRenderer.IsRenderTargetValid(mRenderTarget)) CreateDefaultRenderTarget();
+	if (!gGfxRenderer.IsRenderTargetValid(mRenderTarget)) { RefreshCamera(); }
 
 	// basic init stuff
 	mActionState = AS_PAUSED;
@@ -110,21 +130,6 @@ void Core::Game::Init()
 
 	ForceStateChange(GS_NORMAL);
 	ocInfo << "Game inited";
-}
-
-void Core::Game::CreateDefaultRenderTarget()
-{
-	// Create game camera.
-	EntitySystem::EntityDescription desc;
-	desc.SetName("GameCamera1");
-	desc.AddComponent(EntitySystem::CT_Camera);
-	desc.SetTransient(true); // don't save this entity
-	EntitySystem::EntityHandle camera = gEntityMgr.CreateEntity(desc);
-	camera.FinishInit();
-
-	// Create viewport.
-	OC_ASSERT(mRenderTarget == GfxSystem::InvalidRenderTargetID);
-	mRenderTarget = gGfxRenderer.AddRenderTarget(GfxSystem::GfxViewport(Vector2(0, 0), Vector2(1, 1), false, true), camera);
 }
 
 void Core::Game::Clean()
@@ -326,14 +331,11 @@ void Core::Game::RestartAction(void)
 	bool result = true;
 
 	PauseAction();
-
-	if (!gEntityMgr.SavePrototypes()) result = false;
 	
 	if (gResourceMgr.AddResourceFileToGroup(ActionFile, "Action", ResourceSystem::RESTYPE_AUTODETECT, ResourceSystem::BPT_SYSTEM, ActionFile))
 	{
 		gResourceMgr.LoadResourcesInGroup("Action");
-		gEntityMgr.DestroyAllEntities(true, true);
-		if (!gEntityMgr.LoadPrototypes()) { result = false; }
+		gEntityMgr.DestroyAllEntities(false, true);
 		ResourceSystem::ResourcePtr resource = gResourceMgr.GetResource("Action", ActionFile);
 		if (!LoadGameInfoFromResource(resource)) { result = false; }
 		if (!gEntityMgr.LoadEntitiesFromResource(resource)) { result = false; }

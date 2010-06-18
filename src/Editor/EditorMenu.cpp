@@ -128,6 +128,7 @@ bool Editor::EditorMenu::OnMenuItemClicked(const CEGUI::EventArgs& e)
 		if (itemNameStr.substr(0, pattern.size()) == pattern)
 		{
 			uint32 sceneIndex = args.window->getID();
+			gEditorMgr.Reset();
 			gEditorMgr.GetCurrentProject()->OpenSceneAtIndex(sceneIndex);
 			return true;
 		}
@@ -294,6 +295,7 @@ void Editor::EditorMenu::OnFolderSelected(const string& path, bool canceled, int
 	switch(tag)
 	{
 	case FST_OPENPROJECT:
+		gEditorMgr.Reset();
 		gEditorMgr.OpenProject(path);
 		return;
 	}

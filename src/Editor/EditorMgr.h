@@ -39,6 +39,9 @@ namespace Editor
 		/// Draws the editor viewports.
 		void Draw(float32 delta);
 
+		/// Clear selections and sets initial time.
+		void Reset();
+
 		/// Returns currently edited entity. If no entity is edited,
 		/// invalid EntityHandler is returned.
 		inline const EntitySystem::EntityHandle GetCurrentEntity() const;

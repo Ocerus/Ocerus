@@ -83,6 +83,12 @@ namespace Core
 		/// Unregisters the game state for receiving the input.
 		void UnregisterGameInputListener(InputSystem::IInputListener* listener);
 
+		/// Returns whether the editor support is turned on.
+		bool IsDevelopMode() const { return mDevelopMode; }
+
+		/// Returns whether the editor is currently turned on and the game is running only in a small window.
+		bool IsEditMode() const { return mEditMode; }
+
 	private:
 
 		/// Application states.
@@ -90,8 +96,8 @@ namespace Core
 		Game* mGame;
 
 		/// Application settings.
-		bool mDevelopMode; ///< if true the editor support is turned on
-		bool mEditMode; ///< if true the editor is currently turned on and the game is running only in a small window
+		bool mDevelopMode; ///< if true the editor support is turned on.
+		bool mEditMode; ///< if true the editor is currently turned on and the game is running only in a small window.
 		Project* mGameProject; ///< Project used for the game itself.
 		string mStartupProjectName; ///< Name of the project to be started after the app launches.
 		
