@@ -330,7 +330,10 @@ void EntityMgr::DestroyAllEntities(bool includingPrototypes, bool deleteTransien
 		it = mEntities.erase(it);
 	}
 	mEntityDestroyQueue.clear(); // new entities could be marked for removal during deleting another entities
-	if (includingPrototypes) { mPrototypes.clear(); }
+	if (includingPrototypes)
+	{
+		mPrototypes.clear();
+	}
 }
 
 void EntityMgr::DestroyEntityImmediately( const EntityID entityToDestroy, const bool erase )
