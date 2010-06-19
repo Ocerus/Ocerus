@@ -8,6 +8,7 @@
 #include "Models/ArrayElementModel.h"
 #include "StringEditor.h"
 #include "Vector2Editor.h"
+#include "ResourceEditor.h"
 #include "GUISystem/VerticalLayout.h"
 #include "Properties/PropertyEnums.h"
 
@@ -28,6 +29,11 @@ namespace Editor
 		return new Editor::Vector2Editor(new ArrayElementModel<Vector2>(parentEditor, index));
 	}
 	
+	template<>
+	AbstractValueEditor* CreateArrayElementEditor<ResourceSystem::ResourcePtr>(ArrayEditor<ResourceSystem::ResourcePtr>* parentEditor, uint32 index)
+	{
+		return new Editor::ResourceEditor(new ArrayElementModel<ResourceSystem::ResourcePtr>(parentEditor, index));
+	}
 	
 	template<class ElementType>
 	CEGUI::Window* ArrayEditor<ElementType>::CreateWidget(const CEGUI::String& namePrefix)

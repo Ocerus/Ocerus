@@ -27,10 +27,11 @@ namespace EntityComponents
 		static void RegisterReflection(void);
 
 		/// Names of the script modules that are searched for script message handlers.
-		Utils::Array<string>* GetModules(void) const { return const_cast<Utils::Array<string>*>(&mModules); }
+		Utils::Array<ResourceSystem::ResourcePtr>* GetModules(void) const 
+		  { return const_cast<Utils::Array<ResourceSystem::ResourcePtr>*>(&mModules); }
 
 		/// Names of the script modules that are searched for script message handlers.
-		void SetModules(Utils::Array<string>* modules) { mModules.CopyFrom(*modules); mNeedUpdate = true; }
+		void SetModules(Utils::Array<ResourceSystem::ResourcePtr>* modules);
 
 		/// Maximum time of execution the scripts in ms (0 means infinity).
 		uint32 GetTimeOut(void) const { return mTimeOut; }
@@ -56,7 +57,7 @@ namespace EntityComponents
 		
 
 	private:
-		Utils::Array<string> mModules;
+		Utils::Array<ResourceSystem::ResourcePtr> mModules;
 		uint32 mTimeOut;
 		Utils::Array<int32> mStates;
 		Utils::Array<uint64> mTimes;

@@ -2,6 +2,7 @@
 #include "Script.h"
 #include <angelscript.h>
 #include "Core/Game.h"
+#include "ScriptSystem/ScriptResource.h"
 
 using namespace EntityComponents;
 using namespace EntitySystem;
@@ -41,7 +42,7 @@ void Script::UpdateMessageHandlers(void)
 	mIsUpdating = true;
 	// Get a set of new and removed modules
 	set<string> newModules;
-	for (int32 i = 0; i < mModules.GetSize(); ++i) { newModules.insert(mModules[i]); }
+	for (int32 i = 0; i < mModules.GetSize(); ++i) { newModules.insert(mModules[i]->GetName()); }
 	set<string> removedModules;
 	for (set<string>::iterator it = mOldModules.begin(); it != mOldModules.end(); ++it)
 	{
@@ -70,7 +71,7 @@ void Script::UpdateMessageHandlers(void)
 		for (int32 type = 0; type < EntityMessage::NUM_TYPES; ++type) // For each type of message
 		{
 			// Get function ID from module name and function declaration
-			int32 funcId = gScriptMgr.GetFunctionID(mModules[i].c_str(),
+			int32 funcId = gScriptMgr.GetFunctionID(mModules[i]->GetName().c_str(),
 				EntityMessage::GetHandlerDeclaration(EntityMessage::eType(type)));
 			if (funcId >= 0) // Function is found
 			{
@@ -82,7 +83,7 @@ void Script::UpdateMessageHandlers(void)
 				{
 					// Find index of member of mStates and mTimes which holds data for function in module
 					int32 copyFromIndex = -1;
-					map<string, int32>::iterator mfit = mModuleToFuncID.find(mModules[i]);
+					map<string, int32>::iterator mfit = mModuleToFuncID.find(mModules[i]->GetName());
 					if (mfit != mModuleToFuncID.end())
 					{
 						map<int32, int32>::iterator fait = mFuncIDToArrayIndex.find(mfit->second);
@@ -93,7 +94,7 @@ void Script::UpdateMessageHandlers(void)
 					}
 					// Create new data for found function and map module to function ID and function ID to array index
 					int32 newIndex = newStates.GetSize();
-					newModuleToFuncID[mModules[i]] = funcId;
+					newModuleToFuncID[mModules[i]->GetName()] = funcId;
 					newFuncIDToArrayIndex[funcId] = newIndex;
 					newStates.Resize(newIndex + 1);
 					newTimes.Resize(newIndex + 1);
@@ -115,7 +116,7 @@ void Script::UpdateMessageHandlers(void)
 	set<string> addedModules;
 	for (int32 i = 0; i < mModules.GetSize(); ++i)
 	{ 
-	  if (mOldModules.find(mModules[i]) == mOldModules.end()) { addedModules.insert(mModules[i]); }
+	  if (mOldModules.find(mModules[i]->GetName()) == mOldModules.end()) { addedModules.insert(mModules[i]->GetName()); }
 	}
 	
 	// Call OnInit() and OnPostInit() functions on added modules if the entity is already fully initialized
@@ -194,14 +195,31 @@ EntityMessage::eResult Script::HandleMessage(const EntityMessage& msg)
 
 void Script::RegisterReflection()
 {
-	RegisterProperty<Array<string>*>("ScriptModules", &Script::GetModules, &Script::SetModules, PA_INIT | PA_EDIT_READ | 
-		PA_EDIT_WRITE | PA_SCRIPT_READ, "Names of the script modules that are searched for script message handlers.");
+	RegisterProperty<Array<ResourceSystem::ResourcePtr>*>("ScriptModules", &Script::GetModules, &Script::SetModules, PA_INIT | PA_EDIT_READ | 
+		PA_EDIT_WRITE | PA_SCRIPT_READ, "Script modules that are searched for script message handlers.");
 	RegisterProperty<uint32>("ScriptTimeOut", &Script::GetTimeOut, &Script::SetTimeOut, 
 		PA_INIT | PA_EDIT_READ | PA_EDIT_WRITE | PA_SCRIPT_READ, "Maximum time of execution the scripts in ms (0 means infinity).");
-	RegisterProperty<Array<int32>*>("ScriptStates", &Script::GetStates, &Script::SetStates, PA_INIT | PA_EDIT_READ | 
-		PA_EDIT_WRITE, "States of Action handlers");
-	RegisterProperty<Array<uint64>*>("ScriptTimes", &Script::GetTimes, &Script::SetTimes, PA_INIT | PA_EDIT_READ | 
-		PA_EDIT_WRITE, "Times of execution of Action handlers");
+	RegisterProperty<Array<int32>*>("ScriptStates", &Script::GetStates, &Script::SetStates, PA_INIT,
+	  "States of Action handlers");
+	RegisterProperty<Array<uint64>*>("ScriptTimes", &Script::GetTimes, &Script::SetTimes, PA_INIT,
+		"Times of execution of Action handlers");
 	RegisterProperty<int32>("ScriptCurrentArrayIndex", &Script::GetCurrentArrayIndex, 0, 
 		PA_INIT | PA_TRANSIENT, "Current index of ScriptStates and ScriptTimes");
+}
+
+void Script::SetModules(Utils::Array<ResourceSystem::ResourcePtr>* modules)
+{
+  for (int i = modules->GetSize() - 1; i >= 0; --i)
+  {
+    if (!(ScriptSystem::ScriptResourcePtr)((*modules)[i]))
+    {
+      for (int j = i; j < modules->GetSize() - 1; ++j)
+      {
+        (*modules)[j] = (*modules)[j + 1];
+      }
+      modules->Resize(modules->GetSize() - 1);
+    }
+  }
+
+  mModules.CopyFrom(*modules); mNeedUpdate = true;
 }

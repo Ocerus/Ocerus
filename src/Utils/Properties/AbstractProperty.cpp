@@ -119,6 +119,10 @@ void Reflection::AbstractProperty::ReadValueXML(RTTIBaseClass* owner, ResourceSy
 	case PT_RESOURCE:
 		SetValue<ResourceSystem::ResourcePtr>(owner, Utils::XMLConverter::ReadFromXML<ResourceSystem::ResourcePtr>(input));
 		break;
+		
+	case PT_RESOURCE_ARRAY:
+		ReadArrayValueXML<ResourceSystem::ResourcePtr>(this, owner, input);
+		break;
 
 	default:
 		ocError << "Parsing property of type '" << PropertyTypes::GetStringName(GetType()) << "' from XML is not implemented.";

@@ -566,24 +566,6 @@ EntitySystem::EntityHandle EntitySystem::EntityMgr::FindFirstEntity( const strin
 	return EntityHandle::Null;
 }
 
-template<typename T>
-void LoadEntityPropertyArrayFromXML( PropertyHolder prop, ResourceSystem::XMLResourcePtr xml, ResourceSystem::XMLNodeIterator& xmlPropertyIterator )
-{
-	vector<T> vertices;
-	for (ResourceSystem::XMLNodeIterator vertIt=xml->IterateChildren(xmlPropertyIterator); vertIt!=xml->EndChildren(xmlPropertyIterator); ++vertIt)
-	{
-		if ((*vertIt).compare("Item") == 0) vertices.push_back(vertIt.GetChildValue<T>());
-		else ocError << "XML:Entity: Expected 'Item', found '" << *vertIt << "'";
-	}
-
-	Array<T> vertArray(vertices.size());
-	for (uint32 i=0; i<vertices.size(); ++i)
-	{
-		vertArray[i] = vertices[i];
-	}
-	prop.SetValue<Array<T>*>(&vertArray);
-}
-
 void EntitySystem::EntityMgr::LoadEntityPropertyFromXML(const EntityID entityID, const ComponentID componentID, 
 	PrototypeInfo* prototypeInfo, ResourceSystem::XMLNodeIterator& xmlPropertyIterator)
 {
