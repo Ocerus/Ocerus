@@ -1241,7 +1241,10 @@ EntitySystem::EntityHandle EntitySystem::EntityMgr::ExportEntityToPrototype( con
 			}
 		}
 	}
-
+	
+	// link entity to prototype
+	mEntities[entity.GetID()]->mPrototype = prototype;
+	LinkEntityToPrototype(entity, prototype);
 
 	ocInfo << "Created prototype " << prototype << " from " << entity;
 

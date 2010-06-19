@@ -253,9 +253,10 @@ void Editor::EditorMgr::DeleteCurrentEntity()
 void Editor::EditorMgr::CreatePrototypeFromCurrentEntity()
 {
 	if (!mCurrentEntity.Exists()) return;
-	SetCurrentEntity(gEntityMgr.ExportEntityToPrototype(mCurrentEntity));
+	EntitySystem::EntityHandle prototype = gEntityMgr.ExportEntityToPrototype(mCurrentEntity);
 	gEntityMgr.SavePrototypes();
 	RefreshPrototypeWindow();
+	SetCurrentEntity(prototype);
 }
 
 void Editor::EditorMgr::DuplicateSelectedEntities()

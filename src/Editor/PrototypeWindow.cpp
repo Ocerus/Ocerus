@@ -62,6 +62,7 @@ void Editor::PrototypeWindow::RebuildTree()
 		dragContainer->subscribeEvent(CEGUI::Window::EventMouseButtonUp, CEGUI::Event::Subscriber(&Editor::PrototypeWindow::OnDragContainerMouseButtonUp, this));
 
 		dragContainer->setID(itemIndex);
+		dragContainer->setUserString("DragDataType", "Prototype");
 		dragContainer->setUserData(this);
 
 		mTree->addChildWindow(newItem);
