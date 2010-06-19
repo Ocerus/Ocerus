@@ -161,6 +161,7 @@ bool Editor::ResourceWindow::OnDragContainerMouseButtonUp(const CEGUI::EventArgs
 bool Editor::ResourceWindow::OnRefreshButtonClicked(const CEGUI::EventArgs& e)
 {
 	OC_UNUSED(e);
+	gResourceMgr.RefreshBasePathToGroup(ResourceSystem::BPT_PROJECT, "Project");
 	RebuildTree();
 	return true;
 }

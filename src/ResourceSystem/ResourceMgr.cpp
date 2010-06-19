@@ -257,10 +257,10 @@ void ResourceMgr::RefreshBasePathToGroup(const eBasePathType basePathType, const
 
 	ocInfo << "Refreshing dir '" << mBasePath[basePathType] << "' to group '" << group << "'";
 
-	RefreshPathToGroup(mBasePath[basePathType], group);
+	RefreshPathToGroup(mBasePath[basePathType], basePathType, group);
 }
 
-void ResourceMgr::RefreshPathToGroup(const string& path, const StringKey& group)
+void ResourceMgr::RefreshPathToGroup(const string& path, const eBasePathType basePathType, const StringKey& group)
 {
 	boost::filesystem::path boostPath = path;
 
@@ -280,17 +280,18 @@ void ResourceMgr::RefreshPathToGroup(const string& path, const StringKey& group)
 	for (boost::filesystem::directory_iterator i(boostPath); i!=iend; ++i)
 	{
 		string filePath = i->path().string();
+		string relativePath = filePath.substr(mBasePath[basePathType].length());
 		if (boost::filesystem::is_directory(i->status()))
 		{
 			string dirStr = i->path().filename();
 			if (dirStr.compare(".svn")!=0)
 			{
-				RefreshPathToGroup(filePath, group);
+				RefreshPathToGroup(filePath, basePathType, group);
 			}
 		}
 		else
 		{
-			AddResourceFileToGroup(filePath, group, RESTYPE_AUTODETECT, BPT_ABSOLUTE);
+			AddResourceFileToGroup(relativePath, group, RESTYPE_AUTODETECT, basePathType);
 		}
 	}
 }

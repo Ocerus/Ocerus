@@ -157,7 +157,7 @@ namespace ResourceSystem
 		void AddResourceToGroup(const StringKey& group, const StringKey& name, const ResourcePtr res);
 
 		/// Refreshes given path, resources are added to given group.
-		void RefreshPathToGroup(const string& path, const StringKey& group);
+		void RefreshPathToGroup(const string& path, const eBasePathType basePathType, const StringKey& group);
 
 		/// Checks if the memory usage is within limits. If not, some of the resources will be freed.
 		/// @param resourceToKeep This resource (if valid) will be preserved at any case.

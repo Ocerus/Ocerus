@@ -9,7 +9,7 @@
 namespace Editor
 {
 
-	/// The ResourceWindow class manages GUI widget for listing resources.
+	/// The KeyShortcut class manages key shortcuts.
 	class KeyShortcuts
 	{
 	public:
@@ -37,6 +37,7 @@ namespace Editor
 
 	private:
 
+		/// Modifying keys flags
 		enum ModKeys
 		{
 			MK_NOMOD =	0,
@@ -45,6 +46,7 @@ namespace Editor
 			MK_SHIFT =	(1 << 2)
 		};
 
+		/// Holds info about modifying keys and assigned shortcut
 		struct Shortcut
 		{
 			Shortcut(KeyShortcut _shortcutEnum, uint8 _modKeyFlags):
@@ -54,6 +56,7 @@ namespace Editor
 			uint8 modKeyFlags;
 		};
 
+		/// Maps pressed key to shortcut
 		typedef multimap<InputSystem::eKeyCode, Shortcut> ShortcutMap;
 
 		ShortcutMap mShortcuts;
