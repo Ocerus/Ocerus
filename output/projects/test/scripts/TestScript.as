@@ -2,11 +2,6 @@ void OnInit()
 {
   EntityHandle handle = GetCurrentEntityHandle();
   Println("Initializing entity " + handle.GetID() + "...");
-  const array_string modules = handle.Get_const_array_string("ScriptModules");
-  for (int32 i = 0; i<modules.GetSize(); ++i)
-  {
-    Println("Module number " + (i+1) + " is '" + modules[i] +"'.");
-  }
   handle.RegisterDynamicProperty_int32("Counter", PA_SCRIPT_READ | PA_SCRIPT_WRITE | PA_EDIT_READ | PA_EDIT_WRITE, "comment");
 }
 
