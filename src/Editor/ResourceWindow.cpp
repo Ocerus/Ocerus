@@ -114,6 +114,7 @@ void Editor::ResourceWindow::RebuildTree()
 		dragContainer->subscribeEvent(CEGUI::Window::EventMouseButtonUp, CEGUI::Event::Subscriber(&Editor::ResourceWindow::OnDragContainerMouseButtonUp, this));
 
 		dragContainer->setID(resourceIndex);
+		dragContainer->setUserString("DragDataType", "Resource");
 		dragContainer->setUserData(this);
 
 		mTree->addChildWindow(newItem);

@@ -84,6 +84,7 @@ CEGUI::ItemEntry* Editor::HierarchyWindow::AddTreeItem( uint32 index, const stri
 	dragContainer->subscribeEvent(CEGUI::Window::EventMouseButtonUp, CEGUI::Event::Subscriber(&Editor::HierarchyWindow::OnDragContainerMouseButtonUp, this));
 	dragContainer->subscribeEvent(CEGUI::Window::EventDragDropItemDropped, CEGUI::Event::Subscriber(&Editor::HierarchyWindow::OnTreeItemDragDropItemDropped, this));
 	dragContainer->setID(itemID);
+	dragContainer->setUserString("DragDataType", "Hierarchy");
 	dragContainer->setUserData(this);
 
 
@@ -343,6 +344,8 @@ bool Editor::HierarchyWindow::OnTreeItemDragDropItemDropped(const CEGUI::EventAr
 {
 	const CEGUI::DragDropEventArgs& args = static_cast<const CEGUI::DragDropEventArgs&>(e);
 	
+	if (args.dragDropItem->getUserString("DragDataType") != "Hierarchy") { return false; }
+	
 	EntitySystem::EntityHandle sourceEntity = mItems[args.dragDropItem->getID()].entity;
 	EntitySystem::EntityHandle targetEntity = mItems[args.window->getID()].entity;
 
@@ -369,6 +372,8 @@ bool Editor::HierarchyWindow::OnTreeDragDropItemDropped(const CEGUI::EventArgs& 
 {
 	const CEGUI::DragDropEventArgs& args = static_cast<const CEGUI::DragDropEventArgs&>(e);
 
+	if (args.dragDropItem->getUserString("DragDataType") != "Hierarchy") { return false; }
+	
 	EntitySystem::EntityHandle sourceEntity = mItems[args.dragDropItem->getID()].entity;
 
 	HierarchyTree::sibling_iterator sourceIter = std::find(mHierarchy.begin(), mHierarchy.end(), sourceEntity);
