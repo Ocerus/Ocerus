@@ -125,3 +125,14 @@ void EntitySystem::ComponentMgr::PrepareForEntity( const EntityID id )
 		mEntityComponentsMap[id] = new ComponentsList();
 	}
 }
+
+void EntitySystem::ComponentMgr::EnumComponentDependencies(const eComponentType type, Reflection::ComponentDependencyList& out) const
+{
+	switch (type)
+	{
+	  #define COMPONENT_TYPE(cls) case CT_##cls : cls::GetClassRTTI()->EnumComponentDependencies(out); break;
+	  #include "../Components/_ComponentTypes.h"
+	  #undef COMPONENT_TYPE
+	  default: break;
+	}
+}

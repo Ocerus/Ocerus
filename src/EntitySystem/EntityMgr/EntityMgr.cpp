@@ -960,16 +960,28 @@ bool EntitySystem::EntityMgr::IsEntityPrototype( const EntityHandle entity ) con
 EntitySystem::ComponentID EntitySystem::EntityMgr::AddComponentToEntity( const EntityHandle entity, const eComponentType componentType )
 {
 	OC_ASSERT(mComponentMgr);
-	ComponentID cid = mComponentMgr->CreateComponent(entity.GetID(), componentType);
-	mComponentMgr->GetEntityComponent(entity.GetID(), cid)->HandleMessage(EntityMessage(EntityMessage::INIT));
-	mComponentMgr->GetEntityComponent(entity.GetID(), cid)->HandleMessage(EntityMessage(EntityMessage::POST_INIT));
+	
+	// Add all dependencies first
+	ComponentDependencyList depList;
+	mComponentMgr->EnumComponentDependencies(componentType, depList);
+	for (ComponentDependencyList::iterator depIt = depList.begin(); depIt != depList.end(); ++depIt)
+	{
+	  if (!HasEntityComponentOfType(entity, *depIt)) { AddComponentToEntity(entity, *depIt); }
+	}
+	
+	// Then create and inititialize component
+	ComponentID cmpID = mComponentMgr->CreateComponent(entity.GetID(), componentType);
+	Component* cmp = mComponentMgr->GetEntityComponent(entity.GetID(), cmpID);
+	
+	cmp->HandleMessage(EntityMessage(EntityMessage::INIT));
+	cmp->HandleMessage(EntityMessage(EntityMessage::POST_INIT));
 
 	if (IsEntityPrototype(entity))
 	{
-		MarkPrototypePropertiesShared(entity, cid);
+		MarkPrototypePropertiesShared(entity, cmpID);
 	}
 
-	return cid;
+	return cmpID;
 }
 
 bool EntitySystem::EntityMgr::IsPrototypePropertyShared( const EntityHandle prototype, const StringKey testedProperty ) const

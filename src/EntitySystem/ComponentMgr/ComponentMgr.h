@@ -48,6 +48,9 @@ namespace EntitySystem
 
 		/// Returns the number of components of an entity.
 		int32 GetNumberOfEntityComponents(const EntityID id) const;
+		
+		/// Enums all component dependencies of the certain component type.
+		void EnumComponentDependencies(const eComponentType type, Reflection::ComponentDependencyList& out) const;
 
 	private:
 
