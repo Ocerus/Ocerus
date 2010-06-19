@@ -257,6 +257,7 @@ void Editor::EditorMgr::CreatePrototypeFromCurrentEntity()
 	gEntityMgr.SavePrototypes();
 	RefreshPrototypeWindow();
 	SetCurrentEntity(prototype);
+	ClearSelection();
 }
 
 void Editor::EditorMgr::DuplicateSelectedEntities()
