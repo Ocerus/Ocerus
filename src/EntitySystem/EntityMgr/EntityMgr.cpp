@@ -219,6 +219,25 @@ EntityHandle EntityMgr::CreateEntity(EntityDescription& desc)
 	return entityHandle;
 }
 
+EntityHandle EntityMgr::InstantiatePrototype(const EntityHandle prototype, const string& newName)
+{
+  if (!IsEntityPrototype(prototype))
+  {
+    ocError << "Can't instantiate non-prototype entity";
+    return EntityHandle::Null;
+  }
+  
+  EntityDescription desc;
+	desc.SetName(newName.empty() ? prototype.GetName() : newName);
+	desc.SetPrototype(prototype);
+	desc.CopyComponents(prototype);
+	
+	EntityHandle instance = CreateEntity(desc);
+	instance.FinishInit();
+	
+	return instance;
+}
+
 EntityHandle EntityMgr::DuplicateEntity(const EntityHandle oldEntity, const string& newName)
 {
 	OC_ASSERT(mComponentMgr);

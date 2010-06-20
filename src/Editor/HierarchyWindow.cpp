@@ -1,6 +1,7 @@
 #include "Common.h"
 #include "HierarchyWindow.h"
 #include "PopupMenu.h"
+#include "PrototypeWindow.h"
 #include "GUISystem/CEGUITools.h"
 #include "Editor/EditorMgr.h"
 #include "ResourceSystem/XMLResource.h"
@@ -344,27 +345,38 @@ bool Editor::HierarchyWindow::OnTreeItemDragDropItemDropped(const CEGUI::EventAr
 {
 	const CEGUI::DragDropEventArgs& args = static_cast<const CEGUI::DragDropEventArgs&>(e);
 	
-	if (args.dragDropItem->getUserString("DragDataType") != "Hierarchy") { return false; }
-	
-	EntitySystem::EntityHandle sourceEntity = mItems[args.dragDropItem->getID()].entity;
 	EntitySystem::EntityHandle targetEntity = mItems[args.window->getID()].entity;
-
-	if (sourceEntity != targetEntity)
+	
+	if (args.dragDropItem->getUserString("DragDataType") == "Hierarchy")
 	{
-		HierarchyTree::sibling_iterator sourceIter = std::find(mHierarchy.begin(), mHierarchy.end(), sourceEntity);
-		HierarchyTree::sibling_iterator targetIter = std::find(mHierarchy.begin(), mHierarchy.end(), targetEntity);
-		OC_ASSERT_MSG(sourceIter != mHierarchy.end() && targetIter != mHierarchy.end(), "Invalid drag'n'drop entities");
+	  EntitySystem::EntityHandle sourceEntity = mItems[args.dragDropItem->getID()].entity;
 
-		HierarchyTree::sibling_iterator sourceIter2 = sourceIter;
-		++sourceIter2;
-		if (mHierarchy.parent(sourceIter) != targetIter && !mHierarchy.is_in_subtree(targetIter, sourceIter, sourceIter2))
-		{
-			mHierarchy.reparent(targetIter, sourceIter, sourceIter2);
-			RebuildTree();
-			SetSelectedEntity(sourceEntity);
-		}
-	}
+	  if (sourceEntity != targetEntity)
+	  {
+		  HierarchyTree::sibling_iterator sourceIter = std::find(mHierarchy.begin(), mHierarchy.end(), sourceEntity);
+		  HierarchyTree::sibling_iterator targetIter = std::find(mHierarchy.begin(), mHierarchy.end(), targetEntity);
+		  OC_ASSERT_MSG(sourceIter != mHierarchy.end() && targetIter != mHierarchy.end(), "Invalid drag'n'drop entities");
 
+		  HierarchyTree::sibling_iterator sourceIter2 = sourceIter;
+		  ++sourceIter2;
+		  if (mHierarchy.parent(sourceIter) != targetIter && !mHierarchy.is_in_subtree(targetIter, sourceIter, sourceIter2))
+		  {
+			  mHierarchy.reparent(targetIter, sourceIter, sourceIter2);
+			  RebuildTree();
+			  SetSelectedEntity(sourceEntity);
+		  }
+	  }
+	} else if (args.dragDropItem->getUserString("DragDataType") == "Prototype") {
+	  PrototypeWindow* prototypeWindow = static_cast<PrototypeWindow*>(args.dragDropItem->getUserData());
+	  if (prototypeWindow == 0) { return true; }
+	  EntitySystem::EntityHandle sourcePrototype = prototypeWindow->GetItemAtIndex(args.dragDropItem->getID());
+	
+	  mCurrentParent = targetEntity;
+	  EntitySystem::EntityHandle newEntity = gEntityMgr.InstantiatePrototype(sourcePrototype);
+	  if (!newEntity.IsValid()) { return true; }
+	  gEditorMgr.SetCurrentEntity(newEntity);
+	} else { return false; }
+	
 	return true;
 }
 
@@ -372,22 +384,32 @@ bool Editor::HierarchyWindow::OnTreeDragDropItemDropped(const CEGUI::EventArgs& 
 {
 	const CEGUI::DragDropEventArgs& args = static_cast<const CEGUI::DragDropEventArgs&>(e);
 
-	if (args.dragDropItem->getUserString("DragDataType") != "Hierarchy") { return false; }
-	
-	EntitySystem::EntityHandle sourceEntity = mItems[args.dragDropItem->getID()].entity;
-
-	HierarchyTree::sibling_iterator sourceIter = std::find(mHierarchy.begin(), mHierarchy.end(), sourceEntity);
-	HierarchyTree::iterator targetIter = mHierarchy.begin();
-	OC_ASSERT_MSG(sourceIter != mHierarchy.end() && targetIter != mHierarchy.end(), "Invalid drag'n'drop entities");
-
-	if (mHierarchy.parent(sourceIter) != targetIter)
+	if (args.dragDropItem->getUserString("DragDataType") == "Hierarchy")
 	{
-		HierarchyTree::sibling_iterator sourceIter2 = sourceIter;
-		++sourceIter2;
-		mHierarchy.reparent(targetIter, sourceIter, sourceIter2);
-		RebuildTree();
-		SetSelectedEntity(sourceEntity);
-	}
+    EntitySystem::EntityHandle sourceEntity = mItems[args.dragDropItem->getID()].entity;
+
+    HierarchyTree::sibling_iterator sourceIter = std::find(mHierarchy.begin(), mHierarchy.end(), sourceEntity);
+    HierarchyTree::iterator targetIter = mHierarchy.begin();
+    OC_ASSERT_MSG(sourceIter != mHierarchy.end() && targetIter != mHierarchy.end(), "Invalid drag'n'drop entities");
+
+    if (mHierarchy.parent(sourceIter) != targetIter)
+    {
+	    HierarchyTree::sibling_iterator sourceIter2 = sourceIter;
+	    ++sourceIter2;
+	    mHierarchy.reparent(targetIter, sourceIter, sourceIter2);
+	    RebuildTree();
+	    SetSelectedEntity(sourceEntity);
+    }
+  } else if (args.dragDropItem->getUserString("DragDataType") == "Prototype") {
+	  PrototypeWindow* prototypeWindow = static_cast<PrototypeWindow*>(args.dragDropItem->getUserData());
+	  if (prototypeWindow == 0) { return true; }
+	  EntitySystem::EntityHandle sourcePrototype = prototypeWindow->GetItemAtIndex(args.dragDropItem->getID());
+	
+	  mCurrentParent.Invalidate();
+	  EntitySystem::EntityHandle newEntity = gEntityMgr.InstantiatePrototype(sourcePrototype);
+	  if (!newEntity.IsValid()) { return true; }
+	  gEditorMgr.SetCurrentEntity(newEntity);
+	} else { return false; }
 
 	return true;
 }

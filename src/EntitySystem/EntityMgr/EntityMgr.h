@@ -57,6 +57,9 @@ namespace EntitySystem
 		/// Creates new entity accordingly to its description and returns its handle.
 		EntityHandle CreateEntity(EntityDescription& desc);
 		
+		/// Creates new entity from prototype.
+		EntityHandle InstantiatePrototype(const EntityHandle prototype, const string& newName = "");
+		
 		/// Duplicates the entity with a new name.
 		/// If a name is not specified, the old name is used.
 		EntityHandle DuplicateEntity(const EntityHandle oldEntity, const string& newName = "");
