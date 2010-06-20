@@ -168,10 +168,18 @@ bool ResourceMgr::AddResourceDirToGroup(const eBasePathType basePathType, const 
 bool ResourceMgr::AddResourceFileToGroup(const string& filepath, const StringKey& group, eResourceType type, const eBasePathType basePathType, const string& customName)
 {
 	boost::filesystem::path boostPath;
+	
 	if (basePathType == BPT_ABSOLUTE)
 		boostPath = filepath;
 	else
 		boostPath = mBasePath[basePathType] + filepath;
+
+	string dirStr = boostPath.filename();
+	if (dirStr.compare("Thumbs.db") == 0)
+	{
+		ocInfo << "Resource '" << boostPath << "' ignored";
+		return true;
+	}
 	
 	ocTrace << "Adding resource '" << boostPath << "' to group '" << group << "'";
 	if (!boost::filesystem::exists(boostPath))
