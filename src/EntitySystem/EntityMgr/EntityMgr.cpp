@@ -462,7 +462,7 @@ bool EntitySystem::EntityMgr::GetEntityProperties( const EntityHandle entity, Pr
 PropertyHolder EntitySystem::EntityMgr::GetEntityProperty( const EntityHandle entity, const StringKey key, const PropertyAccessFlags flagMask /*= 0xff*/ ) const
 {
 	OC_DASSERT(mComponentMgr);
-	if (!entity.IsValid())
+	if (!entity.Exists())
 	{
 		ocError << "Invalid entity";
 		return PropertyHolder();
@@ -497,6 +497,12 @@ PropertyHolder EntitySystem::EntityMgr::GetEntityProperty( const EntityHandle en
 
 Reflection::PropertyHolder EntitySystem::EntityMgr::GetEntityComponentProperty( const EntityHandle entity, const ComponentID component, const StringKey propertyKey, const PropertyAccessFlags flagMask /*= PA_FULL_ACCESS*/ ) const
 {
+	if (!entity.Exists())
+	{
+		ocError << "Invalid entity";
+		return PropertyHolder();
+	}
+	
 	if (component >= mComponentMgr->GetNumberOfEntityComponents(entity.GetID()))
 	{
 		ocError << "Invalid component ID: " << component;
@@ -532,6 +538,11 @@ Reflection::PropertyHolder EntitySystem::EntityMgr::GetEntityComponentProperty( 
 bool EntitySystem::EntityMgr::HasEntityProperty( const EntityHandle entity, const StringKey key, const PropertyAccessFlags flagMask /*= PA_FULL_ACCESS*/ ) const
 {
 	OC_DASSERT(mComponentMgr);
+	if (!entity.Exists())
+	{
+		return false;
+	}
+	
 	for (EntityComponentsIterator it=mComponentMgr->GetEntityComponents(entity.GetID()); it.HasMore(); ++it)
 	{
 		AbstractProperty* prop = (*it)->GetPropertyPointer(key, flagMask);
@@ -1153,6 +1164,11 @@ bool EntitySystem::EntityMgr::HasEntityComponentProperty( const EntityHandle ent
 {
 	OC_DASSERT(mComponentMgr);
 
+	if (!entity.Exists())
+	{
+		return false;
+	}
+	
 	if (componentID >= mComponentMgr->GetNumberOfEntityComponents(entity.GetID()))
 	{
 		ocError << "Invalid component ID: " << componentID;

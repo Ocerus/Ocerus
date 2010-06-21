@@ -45,7 +45,7 @@ int ScriptMgr::IncludeCallback(const char* fileName, const char* from, AngelScri
 	ScriptResourcePtr sp = gResourceMgr.GetResource("Project", fileName);
 	if (!sp)
 	{
-		ocError << "Failed to load script file " << fileName << ".";
+		ocInfo << "Failed to load script file " << fileName << ".";
 		return -1;
 	}
 
@@ -57,11 +57,17 @@ int ScriptMgr::IncludeCallback(const char* fileName, const char* from, AngelScri
 	sp->GetDependentModules().insert(string(builder->GetModuleName()));
 	gScriptMgr.mModules[string(builder->GetModuleName())].push_back(sp);
 
-	if (r < 0) ocError << "Failed to add script file " << fileName << " due to dependecy on unloadable file(s).";
+	if (r < 0) ocInfo << "Failed to add script file " << fileName << " due to dependecy on unloadable file(s).";
 	return r;
 }
 
-void ScriptPrintln(string& msg)
+template<typename T>
+void ScriptPrintln(const T& msg)
+{
+  ScriptPrintln(Utils::StringConverter::ToString<T>(msg));
+}
+
+void ScriptPrintln(const string& msg)
 {
 	if (gScriptMgr.IsExecutedFromConsole())
 	{
@@ -111,11 +117,36 @@ ScriptMgr::~ScriptMgr(void)
 template<typename T>
 T EntityHandleGetValue(EntitySystem::EntityHandle& handle, const string& propName)
 {
-	Reflection::PropertyHolder ph = gEntityMgr.GetEntityProperty(handle, StringKey(propName), Reflection::PA_SCRIPT_READ);
-	if (ph.IsValid()) return ph.GetValue<T>();
+	if (handle.Exists())
+	{
+	  Reflection::PropertyHolder ph;
+	  if (gEntityMgr.HasEntityProperty(handle, StringKey(propName), Reflection::PA_SCRIPT_READ))
+	  {
+	    ph = gEntityMgr.GetEntityProperty(handle, StringKey(propName), Reflection::PA_SCRIPT_READ);
+	  }
+	  if (ph.IsValid())
+	  {
+	    if (ph.GetType() == Reflection::PropertyTypes::GetTypeID<T>())
+	    {
+	      return ph.GetValue<T>();
+	    }
+	    else
+	    {
+	      asGetActiveContext()->SetException(("Can't convert property '" + propName + "' from '" + 
+	        Reflection::PropertyTypes::GetStringName(ph.GetType()) + "' to '" +
+	        Reflection::PropertyTypes::GetStringName(Reflection::PropertyTypes::GetTypeID<T>()) + "'").c_str());
+	      return Reflection::PropertyTypes::GetDefaultValue<T>();
+	    }
+	  }
+	  else
+	  {
+		  asGetActiveContext()->SetException(("Property '" + propName + "' does not exist or you don't have access rights!").c_str());
+		  return Reflection::PropertyTypes::GetDefaultValue<T>();
+	  }
+	}
 	else
 	{
-		asGetActiveContext()->SetException(("Property '" + propName + "' does not exist or you don't have access rights!").c_str());
+		asGetActiveContext()->SetException("Invalid entity handle!");
 		return Reflection::PropertyTypes::GetDefaultValue<T>();
 	}
 }
@@ -124,22 +155,68 @@ T EntityHandleGetValue(EntitySystem::EntityHandle& handle, const string& propNam
 template<typename T>
 void EntityHandleSetValue(EntitySystem::EntityHandle& handle, const string& propName, const T& value)
 {
-	Reflection::PropertyHolder ph = gEntityMgr.GetEntityProperty(handle, StringKey(propName), Reflection::PA_SCRIPT_WRITE);
-	if (ph.IsValid()) ph.SetValue<T>(value);
+	if (handle.Exists())
+	{
+	  Reflection::PropertyHolder ph;
+	  if (gEntityMgr.HasEntityProperty(handle, StringKey(propName), Reflection::PA_SCRIPT_WRITE))
+	  {
+	    ph = gEntityMgr.GetEntityProperty(handle, StringKey(propName), Reflection::PA_SCRIPT_WRITE);
+	  }
+	  if (ph.IsValid())
+	  {
+	    if (ph.GetType() == Reflection::PropertyTypes::GetTypeID<T>())
+	    {
+	      ph.SetValue<T>(value);
+	    }
+	    else
+	    {
+	      asGetActiveContext()->SetException(("Can't convert property '" + propName + "' from '" + 
+	        Reflection::PropertyTypes::GetStringName(ph.GetType()) + "' to '" +
+	        Reflection::PropertyTypes::GetStringName(Reflection::PropertyTypes::GetTypeID<T>()) + "'").c_str());
+	    }
+	  }
+	  else
+	  {
+		  asGetActiveContext()->SetException(("Property '" + propName + "' does not exist or you don't have access rights!").c_str());
+	  }
+	}
 	else
 	{
-		asGetActiveContext()->SetException(("Property '" + propName + "' does not exist or you don't have access rights!").c_str());
+		asGetActiveContext()->SetException("Invalid entity handle!");
 	}
 }
 
 // Function called from scripts that finds property (propName) of entity handle (handle) and call it as function with parameters (value).
 void EntityHandleCallFunction(EntitySystem::EntityHandle& handle, string& propName, Reflection::PropertyFunctionParameters& value)
 {
-	Reflection::PropertyHolder ph = gEntityMgr.GetEntityProperty(handle, StringKey(propName), Reflection::PA_SCRIPT_WRITE);
-	if (ph.IsValid()) ph.SetValue<PropertyFunctionParameters>(value);
+	if (handle.Exists())
+	{
+	  Reflection::PropertyHolder ph;
+	  if (gEntityMgr.HasEntityProperty(handle, StringKey(propName), Reflection::PA_SCRIPT_WRITE))
+	  {
+	    ph = gEntityMgr.GetEntityProperty(handle, StringKey(propName), Reflection::PA_SCRIPT_WRITE);
+	  }
+	  if (ph.IsValid())
+	  {
+	    if (ph.GetType() == Reflection::PropertyTypes::GetTypeID<PropertyFunctionParameters>())
+	    {
+	      ph.SetValue<PropertyFunctionParameters>(value);
+	    }
+	    else
+	    {
+	      asGetActiveContext()->SetException(("Can't convert property '" + propName + "' from '" + 
+	        Reflection::PropertyTypes::GetStringName(ph.GetType()) + "' to '" +
+	        Reflection::PropertyTypes::GetStringName(Reflection::PropertyTypes::GetTypeID<PropertyFunctionParameters>()) + "'").c_str());
+	    }
+	  }
+	  else
+	  {
+		  asGetActiveContext()->SetException(("Function '" + propName + "' does not exist or you don't have access rights!").c_str());
+	  }
+	}
 	else
 	{
-		asGetActiveContext()->SetException(("Function '" + propName + "' does not exist or you don't have access rights!").c_str());
+		asGetActiveContext()->SetException("Invalid entity handle!");
 	}
 }
 
@@ -527,9 +604,6 @@ void ScriptMgr::ConfigureEngine(void)
 	// Register the script string type
 	RegisterStdString(mEngine);
 
-	// Register println function
-	r = mEngine->RegisterGlobalFunction("void Println(string &in)", asFUNCTION(ScriptPrintln), asCALL_CDECL); OC_SCRIPT_ASSERT();
-
 	// Register StringKey class and it's methods
 	RegisterScriptStringKey(mEngine);
 
@@ -562,6 +636,8 @@ void ScriptMgr::ConfigureEngine(void)
 	// Register getters, setters and array for supported types of properties
 
     #define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter, cloning) \
+	/* Register println function */ \
+	r = mEngine->RegisterGlobalFunction((string("void Println(const ") + typeName + " &in)").c_str(), asFUNCTIONPR(ScriptPrintln, (const typeClass&), void), asCALL_CDECL); OC_SCRIPT_ASSERT(); \
 	/* Register getter and setter */ \
 	r = mEngine->RegisterObjectMethod("EntityHandle", (string(typeName) + " Get_" + typeName + "(const string &in)").c_str(), \
 		asFUNCTIONPR(EntityHandleGetValue, (EntitySystem::EntityHandle&, const string&), typeClass), \
@@ -646,19 +722,19 @@ bool ScriptMgr::ExecuteContext(asIScriptContext* ctx, uint32 timeOut)
 	switch (ctx->Execute())
 	{
 	case asEXECUTION_ABORTED:  // Script was aborted due to time out.
-		ocError << "Execution of script function '" << funcDecl << "' in module '" << moduleName
+		ocInfo << "Script: Execution of script function '" << funcDecl << "' in module '" << moduleName
 			<< "' was aborted due to time out.";
 		return false;
 	case asEXECUTION_SUSPENDED: // Script was suspended by itself. Caller can continue the script.
-		ocDebug << "Execution of script function '" << funcDecl << "' in module '" << moduleName
+		ocDebug << "Script: Execution of script function '" << funcDecl << "' in module '" << moduleName
 			<< "' was suspended.";
 		return true;
 	case asEXECUTION_FINISHED: // Script was completed successfully
-		ocDebug << "Execution of script function '" << funcDecl << "' in module '" << moduleName
+		ocDebug << "Script: Execution of script function '" << funcDecl << "' in module '" << moduleName
 			<< "' completed successfully.";
 		return true;
 	case asEXECUTION_EXCEPTION: // Exception occured in the script
-		ocError << "Exception '" << ctx->GetExceptionString() << "' at line " <<
+		ocInfo << "Script: Exception '" << ctx->GetExceptionString() << "' at line " <<
 			ctx->GetExceptionLineNumber() << " in function '" << funcDecl <<
 			"' in module '" << moduleName << "'!";
 		return false;
@@ -677,7 +753,7 @@ bool ScriptMgr::ExecuteString(const char* script, const char* moduleName)
 	asIScriptModule* mod = GetModule(moduleName);
 	if (mod == 0)
 	{
-		ocError << "Script module '" << moduleName << "' not found!";
+		ocInfo << "Script: Script module '" << moduleName << "' not found!";
 		return false;
 	}
 
@@ -729,7 +805,7 @@ asIScriptModule* ScriptMgr::GetModule(const char* fileName)
 	r = mScriptBuilder->BuildModule();
 	if (r < 0)
 	{
-		ocError << "Failed to build module '" << fileName << "'!";
+		ocInfo << "Script: Failed to build module '" << fileName << "'!";
 		return 0;
 	}
 
@@ -744,7 +820,7 @@ int32 ScriptMgr::GetFunctionID(const char* moduleName, const char* funcDecl)
 	asIScriptModule* mod = GetModule(moduleName);
 	if (mod == 0)
 	{
-		ocInfo << "Script module '" << moduleName << "' not found!";
+		ocInfo << "Script: Script module '" << moduleName << "' not found!";
 		return -1;
 	}
 

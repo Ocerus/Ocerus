@@ -158,7 +158,8 @@ EntityMessage::eResult Script::HandleMessage(const EntityMessage& msg)
 	} else if (mNeedUpdate && !mIsUpdating) { UpdateMessageHandlers(); }
 	
 	// Find all associated functions and execute it
-	multimap<EntitySystem::EntityMessage::eType, int32>::const_iterator it = mMessageHandlers.find(msg.type);
+	vector<int32> errorFuncIds;
+	multimap<EntitySystem::EntityMessage::eType, int32>::iterator it = mMessageHandlers.find(msg.type);
 	if (it == mMessageHandlers.end()) return EntityMessage::RESULT_IGNORED;
 	EntityMessage::eResult res = EntityMessage::RESULT_OK;
 	for (; it != mMessageHandlers.end() && it->first == msg.type; ++it)
@@ -186,10 +187,28 @@ EntityMessage::eResult Script::HandleMessage(const EntityMessage& msg)
 		}
 
 		// Execute script with time out
-		if (!gScriptMgr.ExecuteContext(ctx, mTimeOut)) { res = EntityMessage::RESULT_ERROR; }
+		if (!gScriptMgr.ExecuteContext(ctx, mTimeOut))
+		{ 
+		  res = EntityMessage::RESULT_ERROR;
+		  errorFuncIds.push_back(funcId);
+		}
 		// Release context
 		ctx->Release();
 	}
+	
+	// Delete all functions with errors. They will added in the next reload.
+	for (vector<int32>::const_iterator errorIt = errorFuncIds.begin(); errorIt != errorFuncIds.end(); ++errorIt)
+	{
+	  for (it = mMessageHandlers.find(msg.type); it != mMessageHandlers.end() && it->first == msg.type; ++it)
+	  {
+	    if (it->second == *errorIt)
+	    {
+	      mMessageHandlers.erase(it);
+	      break;
+	    }
+	  } 
+	}
+	
 	return res;
 }
 
