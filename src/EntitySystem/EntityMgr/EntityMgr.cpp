@@ -580,11 +580,14 @@ bool EntitySystem::EntityMgr::UnregisterDynamicPropertyOfEntityComponent(const E
 EntitySystem::EntityHandle EntitySystem::EntityMgr::FindFirstEntity( const string& name )
 {
 	for(EntityMap::const_iterator i=mEntities.begin(); i!=mEntities.end(); ++i)
-		if (i->second->mName.compare(name) == 0)
+	{
+		if (!EntityHandle::IsPrototypeID(i->first) && i->second->mName.compare(name) == 0)
+		{
 			return i->first;
+		}
+	}
 	return EntityHandle::Null;
 }
-
 void EntitySystem::EntityMgr::LoadEntityPropertyFromXML(const EntityID entityID, const ComponentID componentID, 
 	PrototypeInfo* prototypeInfo, ResourceSystem::XMLNodeIterator& xmlPropertyIterator)
 {

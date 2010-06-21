@@ -2,72 +2,54 @@
 
 <Prototypes>
   <Entities>
-    <Entity Name="Player" ID="-498" Transient="false">
-      <Component Type="Transform"></Component>
-      <Component Type="DynamicBody"></Component>
-      <Component Type="PolygonCollider">
-        <Density>1</Density>
-        <Polygon>
-          <Item>-0.5 -0.5</Item>
-          <Item>0.5 -0.5</Item>
-          <Item>0.5 0.5</Item>
-          <Item>-0.5 0.5</Item>
-        </Polygon>
-      </Component>
-      <Component Type="Model">
-        <YAngle>0</YAngle>
-        <Transparency>0</Transparency>
-        <Mesh>cube.model</Mesh>
-      </Component>
-    </Entity>
     <Entity Name="LandFiller" ID="-497" Transient="false">
       <Component Type="Transform"></Component>
       <Component Type="Sprite">
-        <Texture>tile2.png</Texture>
         <Transparency>0</Transparency>
+        <Texture>tile2.png</Texture>
       </Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.5 -0.5</Item>
           <Item>0.5 -0.5</Item>
           <Item>0.5 0.5</Item>
           <Item>-0.5 0.5</Item>
         </Polygon>
+        <Density>1</Density>
       </Component>
     </Entity>
     <Entity Name="Land2" ID="-496" Transient="false">
       <Component Type="Transform"></Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.83 -0.15</Item>
           <Item>0.83 -0.5</Item>
           <Item>0.83 0.5</Item>
           <Item>-0.83 0.5</Item>
         </Polygon>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
-        <Texture>tile1.png</Texture>
         <Transparency>0</Transparency>
+        <Texture>tile1.png</Texture>
       </Component>
     </Entity>
     <Entity Name="Land1" ID="-495" Transient="false">
       <Component Type="Transform"></Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
           <Item>0.85 0.6</Item>
           <Item>-0.85 0.6</Item>
         </Polygon>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
-        <Texture>tile0.png</Texture>
         <Transparency>0</Transparency>
+        <Texture>tile0.png</Texture>
       </Component>
     </Entity>
   </Entities>

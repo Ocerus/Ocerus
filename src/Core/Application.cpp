@@ -174,7 +174,7 @@ void Application::RunMainLoop()
 			if (mDevelopMode)
 			{
 				//DEBUG
-				gEditorMgr.OpenProject("projects/test");
+				gEditorMgr.OpenProject("projects/cube");
 			}
 			else
 			{
