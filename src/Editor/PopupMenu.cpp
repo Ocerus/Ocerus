@@ -73,6 +73,10 @@ bool Editor::PopupMenu::OnMenuItemMouseUp( const CEGUI::EventArgs& e )
 			gEditorMgr.GetEditorGui()->GetHierarchyWindow()->SetCurrentParent(EntitySystem::EntityHandle::Null);
 			handled = true;
 		}
+		else if (itemCeguiName == mName + "/NewComponent")
+		{
+		  return true;
+		}
 		else if (itemCeguiName == mName + "/DuplicateEntity")
 		{
 			EntitySystem::EntityHandle parent = gEditorMgr.GetEditorGui()->GetHierarchyWindow()->GetParent(GetData<EntitySystem::EntityHandle>());
@@ -91,6 +95,18 @@ bool Editor::PopupMenu::OnMenuItemMouseUp( const CEGUI::EventArgs& e )
 			gEditorMgr.CreatePrototypeFromCurrentEntity();
 			handled = true;
 		}
+		
+		/// New component
+	  {
+		  string pattern = mName + "/NewComponent/Component";
+		  if (itemCeguiName.substr(0, pattern.size()) == pattern)
+		  {
+			  OC_DASSERT(itemCeguiName.size() > pattern.size());
+			  int componentType = StringConverter::FromString<int>(string(itemCeguiName.substr(pattern.size()).c_str()));
+			  gEditorMgr.AddComponent((EntitySystem::eComponentType)componentType);
+			  handled = true;
+		  }
+	  }
 	}
 
 	Close();
@@ -112,6 +128,8 @@ void Editor::PopupMenu::Init()
 	if (mName == "EditorRoot/Popup/Resource/Types")
 	{
 		InitResourceTypes();
+	} else if (mName == "EditorRoot/Popup/EntityAboveItem") {
+	  InitComponentTypes();
 	}
 
 	mInited = true;
@@ -134,14 +152,7 @@ void Editor::PopupMenu::Open( float32 x, float32 y )
 	CEGUI::Window* menu = gCEGUIWM.getWindow(mName);
 	OC_ASSERT(menu);
 
-	size_t childCount = menu->getChildCount();
-	for(size_t childIdx = 0; childIdx < childCount; childIdx++)
-	{
-		if (menu->getChildAtIdx(childIdx)->testClassName("MenuItem"))
-		{
-			mEventConnections.push_back(menu->getChildAtIdx(childIdx)->subscribeEvent(CEGUI::MenuItem::EventMouseButtonUp, CEGUI::Event::Subscriber(&PopupMenu::OnMenuItemMouseUp, this)));
-		}
-	}
+	ConfigureMenu(menu);
 
 	x -= 0.5f * menu->getWidth().d_offset;
 	y -= 0.5f * menu->getHeight().d_offset;
@@ -150,12 +161,28 @@ void Editor::PopupMenu::Open( float32 x, float32 y )
 	menu->activate();
 }
 
+void Editor::PopupMenu::ConfigureMenu(CEGUI::Window* parent)
+{
+  size_t childCount = parent->getChildCount();
+	for(size_t childIdx = 0; childIdx < childCount; childIdx++)
+	{
+		CEGUI::Window* child = parent->getChildAtIdx(childIdx);
+		if (child->testClassName("MenuItem"))
+		{
+			mEventConnections.push_back(child->subscribeEvent(CEGUI::MenuItem::EventMouseButtonUp, 
+			  CEGUI::Event::Subscriber(&PopupMenu::OnMenuItemMouseUp, this)));
+		}
+		ConfigureMenu(child);
+	}
+}
+
 void Editor::PopupMenu::Close()
 {
 	CEGUI::Window* menu = gCEGUIWM.getWindow(mName);
 	OC_ASSERT(menu);
 	if (!menu->isVisible()) return;
 	ocInfo << "Popup " << mName << " closing";
+	
 	menu->hide();
 
 	for (list<CEGUI::Event::Connection>::iterator it=mEventConnections.begin(); it!=mEventConnections.end(); ++it)
@@ -194,4 +221,27 @@ void Editor::PopupMenu::InitResourceTypes()
 
 	ResourceSystem::eResourceType myType = GetData<ResourceSystem::ResourcePtr>()->GetType();
 	menu->getChildAtIdx(myType)->appendText(" *");
+}
+
+void Editor::PopupMenu::InitComponentTypes()
+{
+  CEGUI_EXCEPTION_BEGIN
+	CEGUI::Window* addComponentMenu = gCEGUIWM.getWindow("EditorRoot/Popup/EntityAboveItem/NewComponent/AutoPopup");
+	OC_ASSERT(addComponentMenu);
+	
+	size_t childCount = addComponentMenu->getChildCount();
+	for (int i = (childCount - 1); i >= 0; --i)
+	{
+		gCEGUIWM.destroyWindow(addComponentMenu->getChildAtIdx(i));
+	}
+	
+	for (int32 i = 0; i < EntitySystem::NUM_COMPONENT_TYPES; ++i)
+	{
+		const string& componentName = EntitySystem::GetComponentTypeName((EntitySystem::eComponentType)i);
+		CEGUI::Window* componentMenuItem = gCEGUIWM.createWindow("Editor/MenuItem",
+				"EditorRoot/Popup/EntityAboveItem/NewComponent/Component" + StringConverter::ToString(i));
+		componentMenuItem->setText(componentName);
+		addComponentMenu->addChildWindow(componentMenuItem);
+	}
+	CEGUI_EXCEPTION_END
 }

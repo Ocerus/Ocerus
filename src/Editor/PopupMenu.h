@@ -50,6 +50,8 @@ namespace Editor
 
 		void Init();
 		void InitResourceTypes();
+		void InitComponentTypes();
+		void ConfigureMenu(CEGUI::Window* parent);
 
 		bool OnMenuMouseUp(const CEGUI::EventArgs&);
 		bool OnMenuItemMouseUp(const CEGUI::EventArgs&);
