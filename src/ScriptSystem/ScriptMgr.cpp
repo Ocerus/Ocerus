@@ -62,6 +62,8 @@ int ScriptMgr::IncludeCallback(const char* fileName, const char* from, AngelScri
 	return r;
 }
 
+// Printing all types from script
+
 template<typename T>
 void ScriptPrintln(const T& msg)
 {
@@ -80,6 +82,32 @@ void ScriptPrintln(const string& msg)
 	{
 		ocInfo << "Script: " << msg;
 	}
+}
+
+template<typename T>
+string& AssignToString(const T& value, string& self)
+{
+  self = Utils::StringConverter::ToString<T>(value);
+  return self;
+}
+
+template<typename T>
+string& AddAssignToString(const T& value, string& self)
+{
+  self += Utils::StringConverter::ToString<T>(value);
+  return self;
+}
+
+template<typename T>
+string AddStringType(string& self, const T& value)
+{
+  return self + Utils::StringConverter::ToString<T>(value);
+}
+
+template<typename T>
+string AddTypeString(const T& value, string& self)
+{
+  return Utils::StringConverter::ToString<T>(value) + self;
 }
 
 ScriptMgr::ScriptMgr()
@@ -739,6 +767,14 @@ void ScriptMgr::ConfigureEngine(void)
     #define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter, cloning) \
 	/* Register println function */ \
 	r = mEngine->RegisterGlobalFunction((string("void Println(const ") + typeName + " &in)").c_str(), asFUNCTIONPR(ScriptPrintln, (const typeClass&), void), asCALL_CDECL); OC_SCRIPT_ASSERT(); \
+	/* Register convert to string operators */ \
+	if (typeID != PT_STRING) \
+	{\
+	  r = mEngine->RegisterObjectMethod("string", (string("string &opAssign(const ") + typeName + " &in)").c_str(), asFUNCTIONPR(AssignToString, (const typeClass&, string&), string&), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT(); \
+	  r = mEngine->RegisterObjectMethod("string", (string("string &opAddAssign(const ") + typeName + " &in)").c_str(), asFUNCTIONPR(AddAssignToString, (const typeClass&, string&), string&), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT(); \
+	  r = mEngine->RegisterObjectMethod("string", (string("string opAdd(const ") + typeName + " &in) const").c_str(), asFUNCTIONPR(AddStringType, (string&, const typeClass&), string), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT(); \
+	  r = mEngine->RegisterObjectMethod("string", (string("string opAdd_r(const ") + typeName + " &in) const").c_str(), asFUNCTIONPR(AddTypeString, (const typeClass&, string&), string), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT(); \
+	}\
 	/* Register getter and setter */ \
 	r = mEngine->RegisterObjectMethod("EntityHandle", (string(typeName) + " Get_" + typeName + "(const string &in)").c_str(), \
 		asFUNCTIONPR(EntityHandleGetValue, (EntitySystem::EntityHandle&, const string&), typeClass), \
