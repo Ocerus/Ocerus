@@ -26,6 +26,12 @@ namespace EntitySystem
 
 		/// Destructor.
 		virtual ~LayerMgr();
+		
+		/// Loads layers from an XML input.
+		void LoadLayers(ResourceSystem::XMLNodeIterator& xml);
+
+		/// Saves layers to an XML output.
+		void SaveLayers(ResourceSystem::XMLOutput& storage);
 
 		/// Adds the layer top.
 		/// @return ID of the new layer, 0 in case of error.

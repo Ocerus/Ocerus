@@ -9,7 +9,7 @@ namespace EntitySystem
 {
 		template <class T>
 		bool EntityHandle::RegisterDynamicPropertyOfComponent(const ComponentID component, 
-			const StringKey propertyKey, const PropertyAccessFlags accessFlags, const string& comment)
+			const StringKey propertyKey, const PropertyAccessFlags accessFlags, const string& comment) const
         {
 			return gEntityMgr.RegisterDynamicPropertyOfEntityComponent<T>(*this, component, propertyKey, accessFlags, comment);
 		}

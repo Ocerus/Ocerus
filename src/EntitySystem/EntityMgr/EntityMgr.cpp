@@ -1,6 +1,7 @@
 #include "Common.h"
 #include "EntityMgr.h"
 #include "EntityDescription.h"
+#include "LayerMgr.h"
 #include "../ComponentMgr/ComponentMgr.h"
 #include "../ComponentMgr/Component.h"
 #include "ResourceSystem/XMLResource.h"
@@ -752,6 +753,14 @@ bool EntitySystem::EntityMgr::LoadEntitiesFromResource(ResourceSystem::ResourceP
 			return false;
 		}
 		gEditorMgr.LoadHierarchyWindow(toplevelIter);
+		
+		++toplevelIter;
+		if (toplevelIter == xml->EndTopLevel() || (*toplevelIter).compare("Layers") != 0)
+		{
+			ocError << "XML: Expected 'Layers' after 'Hierarchy'";
+			return false;
+		}
+		gLayerMgr.LoadLayers(toplevelIter);
 	}
 
 	return result;
@@ -844,6 +853,8 @@ bool EntitySystem::EntityMgr::SaveEntitiesToStorage(ResourceSystem::XMLOutput& s
 		storage.BeginElement("Hierarchy");
 		gEditorMgr.SaveHierarchyWindow(storage);
 		storage.EndElement();
+		
+		gLayerMgr.SaveLayers(storage);
 	}
 
 	return result;

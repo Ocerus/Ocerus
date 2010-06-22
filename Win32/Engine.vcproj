@@ -481,6 +481,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\src\EntitySystem\EntityMgr\EntityHandleInlines.h"
+						>
+					</File>
+					<File
 						RelativePath="..\src\EntitySystem\EntityMgr\EntityMessage.h"
 						>
 					</File>

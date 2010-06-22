@@ -1,5 +1,6 @@
 #include "Common.h"
 #include "LayerMgr.h"
+#include "ResourceSystem/XMLResource.h"
 
 using namespace EntitySystem;
 
@@ -12,6 +13,53 @@ LayerMgr::LayerMgr() : mLayers(), mDifference(0), mActiveLayerID(0), mList()
 LayerMgr::~LayerMgr()
 {
 
+}
+
+void LayerMgr::LoadLayers(ResourceSystem::XMLNodeIterator& xml)
+{
+  mLayers.clear();
+  mLayerVisibilities.clear();
+  
+  mDifference = xml.GetAttribute<int32>("Difference");
+  mActiveLayerID = xml.GetAttribute<LayerID>("ActiveLayer");
+  
+  for (ResourceSystem::XMLNodeIterator iter = xml.IterateChildren(); iter != xml.EndChildren(); ++iter)
+	{
+		if ((*iter).compare("Layer") != 0) continue;
+		mLayerVisibilities.push_back(iter.HasAttribute("Visible") ? iter.GetAttribute<bool>("Visible") : true);
+		mLayers.push_back(iter.GetChildValue<string>());
+	}
+  
+  if (mLayers.empty())
+  { 
+    mLayerVisibilities.clear();
+    mDifference = 0;
+    mActiveLayerID = 0;
+    PushBackLayer(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "initial_layer").c_str());
+  }
+  
+  RefreshList();
+}
+
+void LayerMgr::SaveLayers(ResourceSystem::XMLOutput& storage)
+{
+  storage.BeginElementStart("Layers");
+  storage.AddAttribute("Difference", StringConverter::ToString(mDifference));
+  storage.AddAttribute("ActiveLayer", StringConverter::ToString(mActiveLayerID));
+  storage.BeginElementFinish();
+  
+  Layers::const_iterator lit = mLayers.begin();
+  LayerVisibilities::const_iterator lvit = mLayerVisibilities.begin();
+  for (; lit != mLayers.end(); ++lit, ++lvit)
+	{
+		storage.BeginElementStart("Layer");
+		storage.AddAttribute("Visible", StringConverter::ToString(*lvit));
+		storage.BeginElementFinish();
+		storage.WriteString(*lit);
+		storage.EndElement();
+	}
+	
+	storage.EndElement();
 }
 
 inline LayerID GetLayerID(EntityHandle handle)
@@ -83,6 +131,7 @@ bool LayerMgr::SetLayerName(LayerID id, const string& name)
 LayerID LayerMgr::InsertAndShift(LayerID behind, const string& name)
 {
 	mLayers.insert(mLayers.begin() + (behind + mDifference), name);
+	mLayerVisibilities.insert(mLayerVisibilities.begin() + (behind + mDifference), true);
 	if (behind <= 0)
 	{ 
 		++mDifference;
@@ -100,6 +149,7 @@ void LayerMgr::EraseAndShift(LayerID id)
 {
 	OC_ASSERT(id != 0);
 	mLayers.erase(mLayers.begin() + (id + mDifference));
+	mLayerVisibilities.erase(mLayerVisibilities.begin() + (id + mDifference));
 	if (id < 0)
 	{ 
 		--mDifference;
