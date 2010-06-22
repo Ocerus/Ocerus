@@ -1018,6 +1018,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\InputSystem\KeyCodes.h"
+					>
+				</File>
+				<File
 					RelativePath="..\src\InputSystem\OISListener.h"
 					>
 				</File>
@@ -1025,6 +1029,10 @@
 			<Filter
 				Name="src"
 				>
+				<File
+					RelativePath="..\src\InputSystem\InputAction.cpp"
+					>
+				</File>
 				<File
 					RelativePath="..\src\InputSystem\InputMgr.cpp"
 					>

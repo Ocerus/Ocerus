@@ -10,6 +10,7 @@
 
 using namespace ScriptSystem;
 using namespace EntitySystem;
+using namespace InputSystem;
 using namespace AngelScript;
 
 
@@ -557,6 +558,103 @@ void RegisterScriptEntityMgr(asIScriptEngine* engine)
 	r = engine->RegisterGlobalFunction("EntityMgr& GetEntityMgr()", asFUNCTION(GetEntityMgr), asCALL_CDECL); OC_SCRIPT_ASSERT();
 }
 
+// Functions for register InputMgr to script
+
+InputMgr& GetInputMgr()
+{
+	return gInputMgr;
+}
+
+inline static int32 MouseStateGetX(const MouseState& self)
+{
+	return self.x;
+}
+
+inline static void MouseStateSetX(MouseState& self, int32 value)
+{
+	self.x = value;
+}
+
+inline static int32 MouseStateGetY(const MouseState& self)
+{
+	return self.y;
+}
+
+inline static void MouseStateSetY(MouseState& self, int32 value)
+{
+	self.y = value;
+}
+
+inline static int32 MouseStateGetWheel(const MouseState& self)
+{
+	return self.wheel;
+}
+
+inline static void MouseStateSetWheel(MouseState& self, int32 value)
+{
+	self.wheel = value;
+}
+
+inline static uint8 MouseStateGetButtons(const MouseState& self)
+{
+	return self.buttons;
+}
+
+inline static void MouseStateSetButtons(MouseState& self, uint8 value)
+{
+	self.buttons = value;
+}
+
+void RegisterScriptInputMgr(asIScriptEngine* engine)
+{
+	int32 r;
+	// Register the type
+	r = engine->RegisterObjectType("InputMgr", 0, asOBJ_REF | asOBJ_NOHANDLE); OC_SCRIPT_ASSERT();
+	
+	// Register enum eKeyCode
+	r = engine->RegisterEnum("eKeyCode"); OC_SCRIPT_ASSERT();
+	for (uint8 code = 0; code < InputSystem::NUM_KEY_CODE; ++code)
+	{
+		const char* keyString = GetKeyCodeString(code);
+		if (keyString != 0)
+		{
+		  r = engine->RegisterEnumValue("eKeyCode", keyString, code); OC_SCRIPT_ASSERT();
+		}
+	}
+	
+	// Register struct MouseState
+	r = engine->RegisterObjectType("MouseState", sizeof(MouseState), asOBJ_VALUE | asOBJ_POD); OC_SCRIPT_ASSERT();
+	//r = engine->RegisterObjectProperty("MouseState", "int32 x", offsetof(MouseState, x)); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("MouseState", "int32 get_x() const", asFUNCTION(MouseStateGetX), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("MouseState", "void set_x(int32)", asFUNCTION(MouseStateSetX), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+	//r = engine->RegisterObjectProperty("MouseState", "int32 y", offsetof(MouseState, y)); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("MouseState", "int32 get_y() const", asFUNCTION(MouseStateGetY), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("MouseState", "void set_y(int32)", asFUNCTION(MouseStateSetY), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+	//r = engine->RegisterObjectProperty("MouseState", "int32 wheel", offsetof(MouseState, wheel)); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("MouseState", "int32 get_wheel() const", asFUNCTION(MouseStateGetWheel), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("MouseState", "void set_wheel(int32)", asFUNCTION(MouseStateSetWheel), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+	//r = engine->RegisterObjectProperty("MouseState", "uint8 buttons", offsetof(MouseState, buttons)); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("MouseState", "uint8 get_buttons() const", asFUNCTION(MouseStateGetButtons), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("MouseState", "void set_buttons(uint8)", asFUNCTION(MouseStateSetButtons), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+	
+	
+	// Register enum eMouseButton
+	r = engine->RegisterEnum("eMouseButton"); OC_SCRIPT_ASSERT();
+	r = engine->RegisterEnumValue("eMouseButton", "MBTN_LEFT", InputSystem::MBTN_LEFT); OC_SCRIPT_ASSERT();
+	r = engine->RegisterEnumValue("eMouseButton", "MBTN_RIGHT", InputSystem::MBTN_RIGHT); OC_SCRIPT_ASSERT();
+	r = engine->RegisterEnumValue("eMouseButton", "MBTN_MIDDLE", InputSystem::MBTN_MIDDLE); OC_SCRIPT_ASSERT();
+	r = engine->RegisterEnumValue("eMouseButton", "MBTN_UNKNOWN", InputSystem::MBTN_UNKNOWN); OC_SCRIPT_ASSERT();
+	
+	// Register the object methods
+	r = engine->RegisterObjectMethod("InputMgr", "void CaptureInput()", asMETHOD(InputMgr, CaptureInput), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("InputMgr", "bool IsKeyDown(const eKeyCode) const", asMETHOD(InputMgr, IsKeyDown), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("InputMgr", "bool IsMouseButtonPressed(const eMouseButton) const", asMETHOD(InputMgr, IsMouseButtonPressed), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("InputMgr", "MouseState& GetMouseState() const", asMETHOD(InputMgr, GetMouseState), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	
+	// Register function that returns it
+	r = engine->RegisterGlobalFunction("InputMgr& GetInputMgr()", asFUNCTION(GetInputMgr), asCALL_CDECL); OC_SCRIPT_ASSERT();
+}
+
 // Get handle of entity which ran the script
 EntityHandle GetCurrentEntityHandle(void)
 {
@@ -599,7 +697,7 @@ void ScriptMgr::ConfigureEngine(void)
 	r = mEngine->RegisterTypedef("float64", "double"); OC_SCRIPT_ASSERT();
 
 	// Register enums
-	r = mEngine->RegisterTypedef("eKeyCode", "uint32"); OC_SCRIPT_ASSERT();
+	// r = mEngine->RegisterTypedef("eKeyCode", "uint32"); OC_SCRIPT_ASSERT();
 
 	// Register the script string type
 	RegisterStdString(mEngine);
@@ -618,6 +716,9 @@ void ScriptMgr::ConfigureEngine(void)
 
 	// Register EntityMgr class and it's methods
 	RegisterScriptEntityMgr(mEngine);
+	
+	// Register InputMgr class and it's methods
+	RegisterScriptInputMgr(mEngine);
 
 	// Register a function for getting current owner entity handle
 	r = mEngine->RegisterGlobalFunction("EntityHandle GetCurrentEntityHandle()",
