@@ -284,6 +284,7 @@ set(GUISystem_SRCS
 )
 
 set(InputSystem_SRCS
+	src/InputSystem/InputAction.cpp
 	src/InputSystem/InputMgr.cpp
 	src/InputSystem/OISListener.cpp
 )

@@ -38,6 +38,12 @@ namespace GUISystem
 		/// Deinitializes GUI.
 		void Deinit();
 
+		/// Initializes the in-game console. The GUI sheet must be set before calling InitConsole.
+		void InitConsole();
+
+		/// Deinitializes the in-game console.
+		void DeinitConsole();
+
 		/// Loads the system scheme file.
 		void LoadSystemScheme(const string& filename);
 		

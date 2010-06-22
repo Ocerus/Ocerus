@@ -105,14 +105,22 @@ namespace GUISystem
 			mCegui->setMouseClickEventGenerationEnabled(true);
 		}
 		CEGUI_EXCEPTION_END_CRITICAL
-
-		mGUIConsole->Init();
 	}
 
 	void GUIMgr::Deinit()
 	{
-		mGUIConsole->Deinit();
+		DeinitConsole();
 		CEGUI::WindowManager::getSingleton().destroyAllWindows();
+	}
+
+	void GUIMgr::InitConsole()
+	{
+		mGUIConsole->Init();
+	}
+
+	void GUIMgr::DeinitConsole()
+	{
+		mGUIConsole->Deinit();
 	}
 
 	void GUIMgr::LoadSystemScheme(const string& filename)

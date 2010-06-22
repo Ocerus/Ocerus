@@ -22,6 +22,7 @@ void GUIConsole::Init()
 	OC_DASSERT(mConsoleWidget == 0);
 	OC_DASSERT(mConsolePromptWidget == 0);
 	OC_DASSERT(mConsoleMessagesWidget == 0);
+	OC_DASSERT(gGUIMgr.GetGUISheet() != 0);
 	CEGUI_EXCEPTION_BEGIN
 	mConsoleWidget = gGUIMgr.LoadSystemLayout("Console.layout");
 	gGUIMgr.GetGUISheet()->addChildWindow(mConsoleWidget);
@@ -34,6 +35,9 @@ void GUIConsole::Init()
 
 void GUIConsole::Deinit()
 {
+	if (!mIsInited)
+		return;
+
 	CEGUI_EXCEPTION_BEGIN
 	gCEGUIWM.destroyWindow(mConsoleWidget);
 	mConsoleWidget = mConsolePromptWidget = mConsoleMessagesWidget = 0;

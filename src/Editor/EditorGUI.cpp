@@ -65,6 +65,7 @@ void EditorGUI::LoadGUI()
 		ocError << "Can't load editor.";
 		return;
 	}
+	gGUIMgr.InitConsole();
 	CEGUI::System::getSingleton().setDefaultTooltip("Editor/Tooltip");
 	mPropertyItemHeight = (int32)gCEGUIWM.getWindow("EditorRoot")->getFont(true)->getLineSpacing(1.1f) + 10;
 	mComponentGroupHeight = 28;
