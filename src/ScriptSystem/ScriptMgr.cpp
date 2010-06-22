@@ -744,6 +744,42 @@ bool ScriptMgr::ExecuteContext(asIScriptContext* ctx, uint32 timeOut)
 	}
 }
 
+int ExecuteStringEngine(asIScriptEngine *engine, const char *code, asIScriptModule *mod, asIScriptContext *ctx)
+{
+  // Wrap the code in a function so that it can be compiled and executed
+	string funcCode = "void ExecuteString() {\n";
+	funcCode += code;
+	funcCode += "\n;}";
+	
+	// If no module was provided, get a dummy from the engine
+	asIScriptModule *execMod = mod ? mod : engine->GetModule("ExecuteString", asGM_ALWAYS_CREATE);
+	
+	// Compile the function that can be executed
+	asIScriptFunction *func = 0;
+	int r = execMod->CompileFunction("ExecuteString", funcCode.c_str(), -1, 0, &func);
+	if( r < 0 )
+		return r;
+
+	// If no context was provided, request a new one from the engine
+	asIScriptContext *execCtx = ctx ? ctx : engine->CreateContext();
+	r = execCtx->Prepare(func->GetId());
+	if( r < 0 )
+	{
+		func->Release();
+		if( !ctx ) execCtx->Release();
+		return r;
+	}
+
+	// Execute the function
+	r = execCtx->Execute();
+	
+	// Clean up
+	func->Release();
+	if( !ctx ) execCtx->Release();
+
+	return r;
+}
+
 bool ScriptMgr::ExecuteString(const char* script, const char* moduleName)
 {
 	// here we assume the single string is executed only from the GUI console
@@ -760,7 +796,7 @@ bool ScriptMgr::ExecuteString(const char* script, const char* moduleName)
 	bool result;
 
 	// Execute the script string and get result
-	switch(mEngine->ExecuteString(moduleName, script))
+	switch(ExecuteStringEngine(mEngine, script, mod, 0))
 	{
 		case asERROR: // failed to build
 		case asINVALID_CONFIGURATION:
