@@ -85,9 +85,9 @@
     <Entity Name="LandFiller" ID="7" Transient="false" Prototype="-497">
       <Component Type="Transform">
         <Layer>0</Layer>
-        <Angle>0</Angle>
-        <Scale>1 1</Scale>
-        <Position>0.955213 2.50013</Position>
+        <Angle>1.57189</Angle>
+        <Scale>12.3942 3.73595</Scale>
+        <Position>-0.452191 -4.76979</Position>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -95,10 +95,10 @@
       </Component>
       <Component Type="PolygonCollider">
         <Polygon>
-          <Item>-0.5 -0.5</Item>
-          <Item>0.5 -0.5</Item>
-          <Item>0.5 0.5</Item>
-          <Item>-0.5 0.5</Item>
+          <Item>-0.35 -0.2</Item>
+          <Item>0.35 -0.2</Item>
+          <Item>0.35 0.2</Item>
+          <Item>-0.35 0.2</Item>
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>0</Friction>
@@ -252,9 +252,9 @@
     <Entity Name="LandFiller" ID="14" Transient="false" Prototype="-497">
       <Component Type="Transform">
         <Layer>0</Layer>
-        <Angle>0</Angle>
-        <Scale>1.32976 1.04927</Scale>
-        <Position>3.50214 2.40138</Position>
+        <Angle>1.58123</Angle>
+        <Scale>6.13599 6.88526</Scale>
+        <Position>7.00251 0.657741</Position>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -262,10 +262,10 @@
       </Component>
       <Component Type="PolygonCollider">
         <Polygon>
-          <Item>-0.5 -0.5</Item>
-          <Item>0.5 -0.5</Item>
-          <Item>0.5 0.5</Item>
-          <Item>-0.5 0.5</Item>
+          <Item>-0.35 -0.2</Item>
+          <Item>0.35 -0.2</Item>
+          <Item>0.35 0.2</Item>
+          <Item>-0.35 0.2</Item>
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>0</Friction>
@@ -276,7 +276,7 @@
       <Component Type="Transform">
         <Layer>0</Layer>
         <Angle>-1.54379</Angle>
-        <Scale>2.08321 0.781777</Scale>
+        <Scale>2.3632 0.840784</Scale>
         <Position>15.3179 -3.60616</Position>
       </Component>
       <Component Type="StaticBody"></Component>
@@ -387,9 +387,9 @@
     <Entity Name="Player" ID="20" Transient="false">
       <Component Type="Transform">
         <Layer>0</Layer>
-        <Angle>1.36507</Angle>
+        <Angle>16.7151</Angle>
         <Scale>1 1</Scale>
-        <Position>4.3084 -1.78561</Position>
+        <Position>4.44007 -2.75456</Position>
       </Component>
       <Component Type="DynamicBody">
         <AngularDamping>20</AngularDamping>
@@ -424,14 +424,207 @@
       <Component Type="Camera">
         <Rotation>0</Rotation>
         <Zoom>1</Zoom>
-        <Position>4.3084 -1.78561</Position>
+        <Position>12.0177 0.929973</Position>
       </Component>
     </Entity>
     <Entity Name="EditorCamera" ID="22" Transient="false">
       <Component Type="Camera">
         <Rotation>0</Rotation>
-        <Zoom>0.620921</Zoom>
-        <Position>4.5087 -1.97801</Position>
+        <Zoom>0.287689</Zoom>
+        <Position>9.0576 -1.05884</Position>
+      </Component>
+    </Entity>
+    <Entity Name="LandFiller" ID="23" Transient="false" Prototype="-497">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Angle>0.00442854</Angle>
+        <Scale>9.0443 9.45566</Scale>
+        <Position>2.21983 1.02858</Position>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>tile2.png</Texture>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Polygon>
+          <Item>-0.35 -0.2</Item>
+          <Item>0.35 -0.2</Item>
+          <Item>0.35 0.2</Item>
+          <Item>-0.35 0.2</Item>
+        </Polygon>
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
+        <Density>1</Density>
+      </Component>
+    </Entity>
+    <Entity Name="LandFiller" ID="24" Transient="false" Prototype="-497">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Angle>1.57149</Angle>
+        <Scale>1.96835 2.22892</Scale>
+        <Position>8.77325 2.28978</Position>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>tile2.png</Texture>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Polygon>
+          <Item>-0.35 -0.2</Item>
+          <Item>0.35 -0.2</Item>
+          <Item>0.35 0.2</Item>
+          <Item>-0.35 0.2</Item>
+        </Polygon>
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
+        <Density>1</Density>
+      </Component>
+    </Entity>
+    <Entity Name="LandFiller" ID="25" Transient="false" Prototype="-497">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Angle>0</Angle>
+        <Scale>40 5</Scale>
+        <Position>13.8209 3.47562</Position>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>tile2.png</Texture>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Polygon>
+          <Item>-0.35 -0.2</Item>
+          <Item>0.35 -0.2</Item>
+          <Item>0.35 0.2</Item>
+          <Item>-0.35 0.2</Item>
+        </Polygon>
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
+        <Density>1</Density>
+      </Component>
+    </Entity>
+    <Entity Name="LandFiller" ID="26" Transient="false" Prototype="-497">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Angle>0.704897</Angle>
+        <Scale>2.31028 8.87487</Scale>
+        <Position>14.8151 0.967936</Position>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>tile2.png</Texture>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Polygon>
+          <Item>-0.35 -0.2</Item>
+          <Item>0.35 -0.2</Item>
+          <Item>0.35 0.2</Item>
+          <Item>-0.35 0.2</Item>
+        </Polygon>
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
+        <Density>1</Density>
+      </Component>
+    </Entity>
+    <Entity Name="LandFiller" ID="27" Transient="false" Prototype="-497">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Angle>1.57149</Angle>
+        <Scale>1.68909 19.5095</Scale>
+        <Position>13.0867 2.39844</Position>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>tile2.png</Texture>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Polygon>
+          <Item>-0.35 -0.2</Item>
+          <Item>0.35 -0.2</Item>
+          <Item>0.35 0.2</Item>
+          <Item>-0.35 0.2</Item>
+        </Polygon>
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
+        <Density>1</Density>
+      </Component>
+    </Entity>
+    <Entity Name="Land1" ID="28" Transient="false" Prototype="-495">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Angle>1.56195</Angle>
+        <Scale>4.34553 0.721529</Scale>
+        <Position>0.0616469 -5.72361</Position>
+      </Component>
+      <Component Type="StaticBody"></Component>
+      <Component Type="PolygonCollider">
+        <Polygon>
+          <Item>-0.85 -0.55</Item>
+          <Item>0.85 -0.6</Item>
+          <Item>0.85 0.6</Item>
+          <Item>-0.85 0.6</Item>
+        </Polygon>
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
+        <Density>1</Density>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>tile0.png</Texture>
+      </Component>
+    </Entity>
+    <Entity Name="LandFiller" ID="29" Transient="false" Prototype="-497">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Angle>-0.00372776</Angle>
+        <Scale>2.24239 19.219</Scale>
+        <Position>16.2174 -1.74916</Position>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>tile2.png</Texture>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Polygon>
+          <Item>-0.35 -0.2</Item>
+          <Item>0.35 -0.2</Item>
+          <Item>0.35 0.2</Item>
+          <Item>-0.35 0.2</Item>
+        </Polygon>
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
+        <Density>1</Density>
+      </Component>
+    </Entity>
+    <Entity Name="Background1" ID="30" Transient="false" Prototype="-497">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Angle>0</Angle>
+        <Scale>1.59255 1.44736</Scale>
+        <Position>26.4915 -4.36248</Position>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>bg1.png</Texture>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Polygon>
+          <Item>-0.35 -0.2</Item>
+          <Item>0.35 -0.2</Item>
+          <Item>0.35 0.2</Item>
+          <Item>-0.35 0.2</Item>
+        </Polygon>
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
+        <Density>1</Density>
+      </Component>
+    </Entity>
+    <Entity Name="Background" ID="31" Transient="false">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Angle>0</Angle>
+        <Scale>1 1</Scale>
+        <Position>0 0</Position>
       </Component>
     </Entity>
   </Entities>
@@ -439,7 +632,6 @@
     <Entity ID="4">
       <Entity ID="5"></Entity>
       <Entity ID="6"></Entity>
-      <Entity ID="7"></Entity>
       <Entity ID="8"></Entity>
       <Entity ID="9"></Entity>
       <Entity ID="10"></Entity>
@@ -452,10 +644,20 @@
       <Entity ID="3"></Entity>
       <Entity ID="17"></Entity>
       <Entity ID="18"></Entity>
+      <Entity ID="7"></Entity>
+      <Entity ID="23"></Entity>
+      <Entity ID="24"></Entity>
+      <Entity ID="25"></Entity>
+      <Entity ID="26"></Entity>
+      <Entity ID="27"></Entity>
+      <Entity ID="28"></Entity>
+      <Entity ID="29"></Entity>
+      <Entity ID="30"></Entity>
     </Entity>
     <Entity ID="20"></Entity>
     <Entity ID="19"></Entity>
     <Entity ID="21"></Entity>
     <Entity ID="22"></Entity>
+    <Entity ID="31"></Entity>
   </Hierarchy>
 </Scene>

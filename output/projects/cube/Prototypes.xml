@@ -10,10 +10,10 @@
       </Component>
       <Component Type="PolygonCollider">
         <Polygon>
-          <Item>-0.5 -0.5</Item>
-          <Item>0.5 -0.5</Item>
-          <Item>0.5 0.5</Item>
-          <Item>-0.5 0.5</Item>
+          <Item>-0.35 -0.2</Item>
+          <Item>0.35 -0.2</Item>
+          <Item>0.35 0.2</Item>
+          <Item>-0.35 0.2</Item>
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>0</Friction>
