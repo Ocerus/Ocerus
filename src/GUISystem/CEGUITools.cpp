@@ -6,39 +6,6 @@
 
 using namespace GUISystem;
 
-
-/**
- * The PropertyCallback function is a callback used to translate textual data
- * from window layout. This callback should be used when loading window layouts
- * in CEGUI::WindowManager::loadWindowLayout.
- */
-bool PropertyCallback(CEGUI::Window* window, CEGUI::String& propname, CEGUI::String& propvalue, void* userdata)
-{
-	OC_UNUSED(userdata);
-	if ((propname == "Text" || propname == "Tooltip") &&
-		propvalue.size() > 2 &&
-		propvalue.at(0) == '$' &&
-		propvalue.at(propvalue.size() - 1) == '$')
-	{
-		/// Use StringMgr to translate textual data in GUI.
-		CEGUI::String translatedText = gStringMgrSystem.GetTextData(GUIMgr::GUIGroup, propvalue.substr(1, propvalue.size() - 2).c_str());
-		window->setProperty(propname, translatedText);
-		return false;
-	}
-	return true;
-}
-
-CEGUI::Window* GUISystem::LoadWindowLayout(const CEGUI::String& filename, const CEGUI::String& name_prefix, const CEGUI::String& resourceGroup)
-{
-	CEGUI::Window* result = 0;
-	CEGUI_EXCEPTION_BEGIN
-	{
-		result = CEGUI::WindowManager::getSingleton().loadWindowLayout(filename, name_prefix, resourceGroup, PropertyCallback);
-	}
-	CEGUI_EXCEPTION_END;
-	return result;
-}
-
 /// Based on code from http://www.cegui.org.uk/wiki/index.php/MenuAndPopup
 void GUISystem::ShowPopup(CEGUI::PopupMenu* popupMenu, const CEGUI::MouseEventArgs& me)
 {

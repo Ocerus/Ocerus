@@ -15,7 +15,7 @@ MessageBox::MessageBox(MessageBox::eMessageBoxType type, int32 tag): mType(type)
 		windowName = "MessageBox" + StringConverter::ToString(i);
 	}
 	while (gCEGUIWM.isWindowPresent(windowName));
-	mMessageBox = LoadWindowLayout("MessageBox.layout", windowName);
+	mMessageBox = gGUIMgr.LoadSystemLayout("MessageBox.layout", windowName);
 	mMessageBox->setModalState(true);
 
 	CEGUI::Window* btnOK = mMessageBox->getChild(mMessageBox->getName() + "/ButtonOK");
@@ -70,7 +70,7 @@ void MessageBox::SetText(const CEGUI::String& text)
 
 void MessageBox::Show()
 {	
-	gGUIMgr.GetRootLayout()->addChildWindow(mMessageBox);
+	gGUIMgr.GetGUISheet()->addChildWindow(mMessageBox);
 }
 
 void MessageBox::RegisterCallback(MessageBox::CallbackBase* callback)

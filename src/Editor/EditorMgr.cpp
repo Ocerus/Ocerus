@@ -56,7 +56,7 @@ void EditorMgr::LoadEditor()
 void Editor::EditorMgr::UnloadEditor()
 {
 	if (mEditorGUI) mEditorGUI->GetEditorViewport()->RemoveInputListener(this);
-	gGUIMgr.UnloadRootLayout();
+	gGUIMgr.DestroyWindow(gGUIMgr.GetGUISheet());
 
 	delete mEditorGUI;
 	mEditorGUI = 0;

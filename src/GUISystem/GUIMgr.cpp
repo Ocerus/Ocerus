@@ -21,16 +21,23 @@ namespace GUISystem
 {
 	/// @name Prototypes for utility functions
 	//@{
-	CEGUI::uint KeyMapperOIStoCEGUI(InputSystem::eKeyCode key);
-	CEGUI::MouseButton ConvertMouseButtonEnum(const InputSystem::eMouseButton btn);
-	bool PropertyCallback(CEGUI::Window* window, CEGUI::String& propname, CEGUI::String& propvalue, void* userdata);
+		/// Converts OIS key codes to CEGUI equivalents.
+		CEGUI::uint KeyMapperOIStoCEGUI(InputSystem::eKeyCode key);
+
+		/// Convert OIS mouse button enum to CEGUI equivalent.
+		CEGUI::MouseButton ConvertMouseButtonEnum(const InputSystem::eMouseButton btn);
+
+		/// The callback function that is called on every property loaded from a system layout file.
+		bool SystemLayoutPropertyCallback(CEGUI::Window* window, CEGUI::String& propname, CEGUI::String& propvalue, void* userdata);
+
+		/// The callback function that is called on every property loaded from a project layout file.
+		bool ProjectLayoutPropertyCallback(CEGUI::Window* window, CEGUI::String& propname, CEGUI::String& propvalue, void* userdata);
 	//@}
 	
 	const StringKey GUIMgr::GUIGroup = "GUI";
 
 	GUIMgr::GUIMgr():
 		mCegui(0),
-		mWindowRoot(0),
 		mCurrentRootLayout(0),
 		mGUIConsole(0),
 		mRenderer(0),
@@ -45,12 +52,11 @@ namespace GUISystem
 		gInputMgr.AddInputListener(this);
 		gGfxWindow.AddScreenListener(this);
 
-		CEGUI::Imageset::setDefaultResourceGroup("imagesets");
-		CEGUI::Font::setDefaultResourceGroup("fonts");
-		CEGUI::Scheme::setDefaultResourceGroup("schemes");
-		CEGUI::WidgetLookManager::setDefaultResourceGroup("looknfeels");
-		CEGUI::WindowManager::setDefaultResourceGroup("layouts");
-
+		CEGUI::Imageset::setDefaultResourceGroup("gui-imagesets");
+		CEGUI::Font::setDefaultResourceGroup("gui-fonts");
+		CEGUI::Scheme::setDefaultResourceGroup("gui-schemes");
+		CEGUI::WidgetLookManager::setDefaultResourceGroup("gui-looknfeels");
+		CEGUI::WindowManager::setDefaultResourceGroup("gui-layouts");
 		mGUIConsole = new GUIConsole();
 	}
 
@@ -69,30 +75,31 @@ namespace GUISystem
 
 	void GUIMgr::Init()
 	{
-		/// Register CEGUI resources.
-		gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_SYSTEM, "gui/schemes", "schemes", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
-		gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_SYSTEM, "gui/imagesets", "imagesets", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
-		gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_SYSTEM, "gui/fonts", "fonts", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
-		gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_SYSTEM, "gui/layouts", "layouts", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
-		gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_SYSTEM, "gui/looknfeel", "looknfeels", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
+		/// Register CEGUI system resources.
+		gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_SYSTEM, "gui/schemes", "gui-schemes", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
+		gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_SYSTEM, "gui/imagesets", "gui-imagesets", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
+		gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_SYSTEM, "gui/fonts", "gui-fonts", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
+		gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_SYSTEM, "gui/layouts", "gui-layouts", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
+		gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_SYSTEM, "gui/looknfeel", "gui-looknfeels", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
 
 		CEGUI_EXCEPTION_BEGIN
 		{
-			/// Register custom Window subclasses to the CEGUI
+			// Register custom Window subclasses to the CEGUI
 			CEGUI::WindowFactoryManager::addFactory<CEGUI::TplWindowFactory<ViewportWindow> >();
-			
 
 			///@todo Improve GUI scheme loading. For example Editor.scheme does not need to be loaded unless in editor mode.
 			CEGUI::SchemeManager::getSingleton().create("VanillaSkin.scheme");
 			CEGUI::SchemeManager::getSingleton().create("TaharezLook.scheme");
 			CEGUI::SchemeManager::getSingleton().create("Editor.scheme");
 
-			/// Create and set root widget
+/*
+			// Create and set root widget
 			mWindowRoot = CEGUI::WindowManager::getSingleton().createWindow("DefaultWindow", "root");
 			mCegui->setGUISheet(mWindowRoot);
 			mWindowRoot->setMousePassThroughEnabled(true);
+*/
 
-			/// Set defaults
+			// Set defaults
 			mCegui->setDefaultFont("DejaVuSans-10");
 			mCegui->setDefaultMouseCursor("Vanilla-Images", "MouseArrow");
 			mCegui->setMouseClickEventGenerationEnabled(true);
@@ -105,9 +112,85 @@ namespace GUISystem
 	void GUIMgr::Deinit()
 	{
 		mGUIConsole->Deinit();
-
 		CEGUI::WindowManager::getSingleton().destroyAllWindows();
 	}
+
+	void GUIMgr::LoadSystemScheme(const string& filename)
+	{
+		OC_DASSERT(mCegui);
+		CEGUI::SchemeManager::getSingleton().create(filename);
+	}
+
+	void GUIMgr::LoadProjectScheme(const string& filename)
+	{
+		OC_DASSERT(mCegui);
+		/// @todo resource groups
+		CEGUI::SchemeManager::getSingleton().create(filename, "project");
+	}
+
+	CEGUI::Window* GUIMgr::LoadSystemLayout(const CEGUI::String& filename, const CEGUI::String& namePrefix)
+	{
+		OC_DASSERT(mCegui);
+		CEGUI::Window* resultLayout = 0;
+		CEGUI_EXCEPTION_BEGIN
+		{
+			resultLayout = CEGUI::WindowManager::getSingleton().loadWindowLayout(filename, namePrefix, "", SystemLayoutPropertyCallback);
+		}
+		CEGUI_EXCEPTION_END
+
+		if (resultLayout)
+			ocInfo << "System GUI layout " << filename << " loaded.";
+		else
+			ocWarning << "Cannot load system GUI layout " << filename << ".";
+
+		return resultLayout;
+	}
+
+	CEGUI::Window* GUIMgr::LoadProjectLayout(const CEGUI::String& filename, const CEGUI::String& namePrefix)
+	{
+		OC_DASSERT(mCegui);
+		CEGUI::Window* resultLayout = 0;
+		CEGUI_EXCEPTION_BEGIN
+		{
+			resultLayout = CEGUI::WindowManager::getSingleton().loadWindowLayout(filename, namePrefix, "", ProjectLayoutPropertyCallback);
+		}
+		CEGUI_EXCEPTION_END
+
+		if (resultLayout)
+			ocInfo << "Project GUI layout " << filename << " loaded.";
+		else
+			ocWarning << "Cannot load project GUI layout " << filename << ".";
+
+		return resultLayout;
+	}
+	
+	bool GUIMgr::SetGUISheet(CEGUI::Window* sheet)
+	{
+		OC_DASSERT(mCegui);
+		if (sheet)
+		{
+			mCegui->setGUISheet(sheet);
+			sheet->setMousePassThroughEnabled(true);
+			ocInfo << "GUI sheet set to " << sheet->getName() << ".";
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	CEGUI::Window* GUIMgr::GetGUISheet() const
+	{
+		OC_DASSERT(mCegui);
+		return mCegui->getGUISheet();
+	}
+
+	void GUIMgr::DestroyWindow(CEGUI::Window* window)
+	{
+		CEGUI::WindowManager::getSingleton().destroyWindow(window);
+	}
+
 
 	void GUIMgr::DisconnectEvent( const CEGUI::Event::Connection eventConnection )
 	{
@@ -121,28 +204,6 @@ namespace GUISystem
 			(*it)->disconnect();
 		}
 		mDeadEventConnections.clear();
-	}
-
-	bool GUIMgr::LoadRootLayout(const string& filename)
-	{
-		OC_DASSERT(mCegui);
-		UnloadRootLayout();
-		CEGUI::Window* newLayout = LoadWindowLayout(filename);
-		if (!newLayout) return false;
-		mCurrentRootLayout = newLayout;
-		mWindowRoot->addChildWindow(mCurrentRootLayout);
-		return true;
-	}
-
-	void GUIMgr::UnloadRootLayout()
-	{
-		OC_DASSERT(mCegui);
-		if (mCurrentRootLayout != 0)
-		{
-			mWindowRoot->removeChildWindow(mCurrentRootLayout);
-			CEGUI::WindowManager::getSingleton().destroyWindow(mCurrentRootLayout);
-			mCurrentRootLayout = 0;
-		}
 	}
 
 	void GUIMgr::RenderGUI() const
@@ -220,140 +281,6 @@ namespace GUISystem
 		return mCegui->notifyDisplaySizeChanged(CEGUI::Size((float32)width, (float32)height));
 	}
 
-/*
-	void GUIMgr::AddConsoleMessage(string message, const GfxSystem::Color& color)
-	{
-		if (!mConsoleIsLoaded)
-		{
-			ocWarning << "AddConsoleMessage: " << message;
-			return;
-		}
-
-		CEGUI::ListboxTextItem* new_item = new CEGUI::ListboxTextItem(message);
-		new_item->setTextColours(CEGUI::colour( color.GetARGB() ) );
-
-		mConsoleMessages->addItem(new_item);
-		mConsoleMessages->ensureItemIsVisible(new_item);
-
-		uint32 item_count;
-		while ((item_count = mConsoleMessages->getItemCount()) > 50)
-			mConsoleMessages->removeItem(mConsoleMessages->getListboxItemFromIndex(item_count - 1));
-
-		vector<IConsoleListener*>::iterator iter = mConsoleListeners.begin();
-		while (iter != mConsoleListeners.end())
-		{
-			(*iter)->EventConsoleCommand(message);
-			++iter;
-		}
-	}
-
-	void GUIMgr::WriteLogMessageToConsole(const string& msg, int32 loggingLevel)
-	{
-		if (!mConsoleIsLoaded) return;
-		AddConsoleMessage(msg);
-	}
-*/
-#if 0
-	bool GUIMgr::QuitEvent(const CEGUI::EventArgs& e) {
-		gApp.RequestStateChange(Core::AS_SHUTDOWN);
-		return true;
-	}
-#endif
-
-
-#if 0
-bool GUIMgr::ConsoleCommandEvent(const CEGUI::EventArgs& e)
-	{
-		OC_DASSERT(mConsoleIsLoaded);
-		string message(mConsolePrompt->getText().c_str());
-
-
-		if ( message.length() >= 9 ) {
-			string prefix = message.substr(0, 7);
-			string args = message.substr(8);
-			if (prefix == "addtext")
-				AddStaticText( 0.0f, 0.0f, "test text", args, GfxSystem::Color( 255, 0, 0),
-					ANCHOR_BOTTOM | ANCHOR_RIGHT,
-					ANCHOR_BOTTOM | ANCHOR_RIGHT );
-		}
-		//AddLastCommand(message);
-		AddConsoleMessage(message);
-		mConsolePrompt->setText("");
-		return true;
-	}
-	#endif
-
-
-	CEGUI::Window* GUIMgr::LoadWindowLayout(const string& filename, const string& name_prefix, const string& resourceGroup)
-	{
-		CEGUI::Window* result = 0;
-		CEGUI_EXCEPTION_BEGIN
-		{
-			result = CEGUI::WindowManager::getSingleton().loadWindowLayout(filename, name_prefix, resourceGroup, PropertyCallback);
-		}
-		CEGUI_EXCEPTION_END
-		if (result) ocInfo << "GUI Window " << filename << " loaded";
-		else ocWarning << "Couldn't load GUI Window " << filename;
-		return result;
-	}
-
-#if 0
-	void GUIMgr::AddLastCommand(string command)
-	{
-		if (mLastCommands.size() == 25)
-			mLastCommands.pop_back();
-		mLastCommands.push_front( command );
-		mCurrentLastSelected = mLastCommands.begin();
-	}
-
-	void GUIMgr::LoadLastCommand() {
-		if (mLastCommands.size() == 0)
-			return;
-		if (mCurrentLastSelected == mLastCommands.end()) {
-			mCurrentLastSelected = mLastCommands.begin();
-		}
-
-		CEGUI::Editbox* editbox = (CEGUI::Editbox*)CEGUI::WindowManager::getSingleton().getWindow("ConsoleRoot/ConsolePrompt");
-
-		editbox->setText(*mCurrentLastSelected);
-	}
-
-	Vector2 GUIMgr::GetTextSize( const string & text, const string & fontid ) {
-		CEGUI::Font* font;
-		if (fontid != "")
-			font = CEGUI::FontManager::getSingleton().getFont(fontid);
-		else
-			font = CEGUI::System::getSingleton().getDefaultFont();
-		return Vector2(font->getTextExtent(text)/gGfxWindow.GetResolutionWidth(),
-			font->getFontHeight()/gGfxWindow.GetResolutionHeight());
-	}
-
-
-
-
-	void GUIMgr::AddStaticText( float32 x, float32 y, const string & id, const string & text,
-			const GfxSystem::Color color/* = GfxSystem::Color(255,255,255)*/,
-			uint8 text_anchor/* = ANCHOR_LEFT | ANCHOR_TOP*/,
-			uint8 screen_anchor/* = ANCHOR_LEFT | ANCHOR_TOP*/,
-			const string & fontid )
-	{
-		map<string, StaticElement*>::iterator iter = mCreatedStaticElements.find( id );
-		if (iter == mCreatedStaticElements.end()) {
-			StaticText* ptr = new StaticText( x, y, id, text, color, text_anchor, screen_anchor, fontid );
-			mCreatedStaticElements.insert( Containers::make_pair( id, (StaticElement*)ptr ) );
-		} else {
-			StaticText* static_text = (StaticText*)iter->second;
-			static_text->SetStaticText( x, y, text, color, text_anchor, screen_anchor, fontid );
-		}
-	}
-
-	StaticText* GUIMgr::GetStaticText( const string & id ) {
-		map<string, StaticElement*>::iterator iter = mCreatedStaticElements.find( id );
-		return (StaticText*)(iter->second);
-	}
-
-#endif
-
 	CEGUI::uint KeyMapperOIStoCEGUI(InputSystem::eKeyCode key)
 	{
 		switch (key) {
@@ -391,28 +318,36 @@ bool GUIMgr::ConsoleCommandEvent(const CEGUI::EventArgs& e)
 		return CEGUI::LeftButton;
 	}
 
-	/// @todo Resolve duplicate of this constant in CEGUITools.cpp
-	
-	/**
-	 * The PropertyCallback function is a callback used to translate textual data
-	 * from window layout. This callback should be used when loading window layouts
-	 * in CEGUI::WindowManager::loadWindowLayout.
-	 */
-	bool PropertyCallback(CEGUI::Window* window, CEGUI::String& propname, CEGUI::String& propvalue, void* userdata)
+	bool SystemLayoutPropertyCallback(CEGUI::Window* window, CEGUI::String& propname, CEGUI::String& propvalue, void* userdata)
 	{
-		/// @todo Resolve duplicate of this function in CEGUITools.cpp
 		OC_UNUSED(userdata);
-	  if ((propname == "Text" || propname == "Tooltip") &&
-		  propvalue.size() > 2 &&
-		  propvalue.at(0) == '$' &&
-		  propvalue.at(propvalue.size() - 1) == '$')
-	  {
-		  /// Use StringMgr to translate textual data in GUI.
-		  CEGUI::String translatedText = gStringMgrSystem.GetTextData(GUIMgr::GUIGroup, propvalue.substr(1, propvalue.size() - 2).c_str());
-		  window->setProperty(propname, translatedText);
-		  return false;
-	  }
-	  return true;
+		if ((propname == "Text" || propname == "Tooltip") &&
+			propvalue.size() > 2 &&
+			propvalue.at(0) == '$' &&
+			propvalue.at(propvalue.size() - 1) == '$')
+		{
+			/// Use StringMgr to translate textual data in GUI.
+			CEGUI::String translatedText = gStringMgrSystem.GetTextData(GUIMgr::GUIGroup, propvalue.substr(1, propvalue.size() - 2).c_str());
+			window->setProperty(propname, translatedText);
+			return false;
+		}
+		return true;
+	}
+
+	bool ProjectLayoutPropertyCallback(CEGUI::Window* window, CEGUI::String& propname, CEGUI::String& propvalue, void* userdata)
+	{
+		OC_UNUSED(userdata);
+		if ((propname == "Text" || propname == "Tooltip") &&
+			propvalue.size() > 2 &&
+			propvalue.at(0) == '$' &&
+			propvalue.at(propvalue.size() - 1) == '$')
+		{
+			/// Use StringMgr to translate textual data in GUI.
+			CEGUI::String translatedText = gStringMgrProject.GetTextData(GUIMgr::GUIGroup, propvalue.substr(1, propvalue.size() - 2).c_str());
+			window->setProperty(propname, translatedText);
+			return false;
+		}
+		return true;
 	}
 }
 

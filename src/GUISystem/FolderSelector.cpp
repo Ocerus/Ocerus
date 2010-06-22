@@ -18,9 +18,9 @@ GUISystem::FolderSelector::~FolderSelector()
 
 void GUISystem::FolderSelector::Show()
 {
-	CEGUI::Window* root = gGUIMgr.GetRootLayout();
+	CEGUI::Window* root = gGUIMgr.GetGUISheet();
 
-	mWindow = LoadWindowLayout("FolderSelector.layout", root->getName() + "/");
+	mWindow = gGUIMgr.LoadSystemLayout("FolderSelector.layout", root->getName() + "/");
 	root->addChildWindow(mWindow);
 
 	mButtonOK = mWindow->getChildRecursive(root->getName() + "/FolderSelector/Frame/Ok");

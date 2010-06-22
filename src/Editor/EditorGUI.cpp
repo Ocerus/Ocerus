@@ -60,10 +60,9 @@ void EditorGUI::LoadGUI()
 
 	CEGUI_EXCEPTION_END
 	
-	// @todo This code is quite ugly and will be changed
-	if (!gGUIMgr.LoadRootLayout("Editor.layout"))
+	if (!gGUIMgr.SetGUISheet(gGUIMgr.LoadSystemLayout("Editor.layout")))
 	{
-		ocError << "Can't load editor";
+		ocError << "Can't load editor.";
 		return;
 	}
 	CEGUI::System::getSingleton().setDefaultTooltip("Editor/Tooltip");

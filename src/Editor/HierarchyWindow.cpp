@@ -29,9 +29,9 @@ void Editor::HierarchyWindow::Init()
 
 	CEGUI_EXCEPTION_BEGIN
 
-	mWindow = GUISystem::LoadWindowLayout("HierarchyWindow.layout", "EditorRoot/HierarchyWindow");
+	mWindow = gGUIMgr.LoadSystemLayout("HierarchyWindow.layout", "EditorRoot/HierarchyWindow");
 	OC_ASSERT(mWindow != 0);
-	gGUIMgr.GetRootLayout()->addChildWindow(mWindow);
+	gGUIMgr.GetGUISheet()->addChildWindow(mWindow);
 	mTree = static_cast<CEGUI::ItemListbox*>(mWindow->getChild(mWindow->getName() + "/List"));
 	OC_ASSERT(mTree != 0);
 

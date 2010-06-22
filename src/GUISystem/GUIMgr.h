@@ -21,21 +21,12 @@ namespace CEGUI
 
 namespace GUISystem
 {
-	/// The IConsoleListener interface defines an interface for listening to
-	/// commands from in-game console.
-	class IConsoleListener {
-	public:
-		virtual void EventConsoleCommand(string command) = 0;
-	};
-
-	/// The GUIMgr class manages the GUI.
-	/// It MUST be created after InputMgr, because it registers for user input.
+	/// The GUIMgr class manages the GUI. The manager depends on InputMgr.
 	class GUIMgr : public Singleton<GUIMgr>, public InputSystem::IInputListener, public GfxSystem::IGfxWindowListener
 	{
 	public:
 
-		/// Constructs a GUIMgr. Do not use this directly, use CreateSingleton() instead.
-		/// Also note that InputMgr must be initialized before construction of GUIMgr.
+		/// Constructs a GUIMgr.
 		GUIMgr();
 
 		/// Destroys the GUIMgr.
@@ -47,20 +38,37 @@ namespace GUISystem
 		/// Deinitializes GUI.
 		void Deinit();
 
-		/// Loads GUI layout from filename and sets it as root layout of the window.
-		/// Automatically unloads previously loaded root layout.
-		bool LoadRootLayout(const string& filename);
+		/// Loads the system scheme file.
+		void LoadSystemScheme(const string& filename);
+		
+		/// Loads the project scheme file.
+		void LoadProjectScheme(const string& filename);
+        
+		/// Loads the system layout file and returns it.
+		/// @param filename The layout filename.
+		/// @param namePrefix Widget names in layout file are prefixed with given prefix.
+		CEGUI::Window* LoadSystemLayout(const CEGUI::String& filename, const CEGUI::String& namePrefix = "");
 
-		/// Unloads loaded root layout or does nothing, if no root layout is loaded.
-		void UnloadRootLayout();
+		/// Loads the project layout file and returns it.
+		/// @param filename The layout filename.
+		/// @param namePrefix Widget names in layout file are prefixed with given prefix.
+		CEGUI::Window* LoadProjectLayout(const CEGUI::String& filename, const CEGUI::String& namePrefix = "");
 
-		/// Returns current root layout.
-		CEGUI::Window* GetRootLayout() const { return mCurrentRootLayout; }
+		/// Sets the active GUI sheet (root) window.
+		bool SetGUISheet(CEGUI::Window* sheet);
 
+		/// Returns a pointer to the active GUI sheet (root) window. Returns 0 if no GUI sheet is set.
+		CEGUI::Window* GetGUISheet() const;
+
+		/// Destroys the specified window object.
+		void DestroyWindow(CEGUI::Window* window);
+		
 		/// Disconnects the event from its handler.
+		/// @todo revision
 		void DisconnectEvent(const CEGUI::Event::Connection eventConnection);
 
 		/// Makes sure to actually disconnect the events.
+		/// @todo revision
 		void ProcessDisconnectedEventList();
 
 		/// Renders the GUI.
@@ -69,18 +77,14 @@ namespace GUISystem
 		/// Injects given amount of time into GUI system.
 		virtual void Update(float32 delta);
 
-		/// Loads the GUI layout from file and returns pointer to Window.
-		/// @see CEGUI::WindowManager::loadWindowLayout
-		CEGUI::Window* LoadWindowLayout(const string& filename, const string& name_prefix = "", const string& resourceGroup = "");
-
 		/// @name IInputListener interface methods
 		/// Those methods inject input into the GUI system.
 		//@{
-		virtual bool KeyPressed(const InputSystem::KeyInfo& ke);
-		virtual bool KeyReleased(const InputSystem::KeyInfo& ke);
-		virtual bool MouseMoved(const InputSystem::MouseInfo& mi);
-		virtual bool MouseButtonPressed(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn);
-		virtual bool MouseButtonReleased(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn);
+			virtual bool KeyPressed(const InputSystem::KeyInfo& ke);
+			virtual bool KeyReleased(const InputSystem::KeyInfo& ke);
+			virtual bool MouseMoved(const InputSystem::MouseInfo& mi);
+			virtual bool MouseButtonPressed(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn);
+			virtual bool MouseButtonReleased(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn);
 		//@}
 
 		struct InputEventInfo
@@ -97,26 +101,13 @@ namespace GUISystem
 		/// This method injects resolution change into GUI system. It is part of IGfxWindowListener interface.
 		virtual void ResolutionChanged(const uint32 width, const uint32 height);
 
-		inline GUIConsole* GetConsole();
+		inline GUIConsole* GetConsole() { return mGUIConsole; }
 		
 		static const StringKey GUIGroup;
 
-#if 0   //TODO
-		/// Static text related methods
-		//@{
-		void AddStaticText( float32 x, float32 y, const string & id, const string & text,
-			const GfxSystem::Color color/*TODO:Gfx = GfxSystem::Color(255,255,255)*/,
-			uint8 text_anchor = ANCHOR_LEFT | ANCHOR_TOP,
-			uint8 screen_anchor = ANCHOR_LEFT | ANCHOR_TOP,
-			const string & fontid = "");
-		Vector2 GetTextSize( const string & text, const string & fontid = "" );
-		StaticText* GetStaticText( const string & id );
-		//@}
-#endif
 
 	private:
 		CEGUI::System* mCegui;
-		CEGUI::Window* mWindowRoot;
 		CEGUI::Window* mCurrentRootLayout;
 
 		list<CEGUI::Event::Connection> mDeadEventConnections;
@@ -128,25 +119,6 @@ namespace GUISystem
 		ResourceProvider* mResourceProvider;
 
 
-#if 0   //TODO
-		/// @name Commands memory
-		//@{
-		void AddLastCommand(string command);
-		void LoadLastCommand();
-		deque<string>::const_iterator mCurrentLastSelected;
-		deque<string> mLastCommands;
-		//@}
-#endif
-
-		/// Collection of ConsoleListeners.
-		typedef vector<IConsoleListener*> ConsoleListeners;
-		ConsoleListeners mConsoleListeners;
-
 	};
-
-	inline GUIConsole* GUIMgr::GetConsole()
-	{
-		return mGUIConsole;
-	}
 }
 #endif
