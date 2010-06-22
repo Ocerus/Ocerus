@@ -45,6 +45,12 @@ namespace EntityComponents
 		/// Friction of the material.
 		void SetFriction(float32 val);
 
+		/// Restitution of the material.
+		float32 GetRestitution(void) const;
+
+		/// Restitution of the material.
+		void SetRestitution(float32 val);
+
 		/// Physical shape.
 		PhysicalShape* GetShape(void) const { return mShape; }
 
@@ -56,6 +62,7 @@ namespace EntityComponents
 		Vector2 mPolygonScale;
 		mutable float32 mDensity;
 		mutable float32 mFriction;
+		mutable float32 mRestitution;
 
 
 		/// Creates the shape from scratch. If any previous shape existed it gets deleted.

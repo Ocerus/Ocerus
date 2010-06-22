@@ -15,7 +15,8 @@
           <Item>0.5 0.5</Item>
           <Item>-0.5 0.5</Item>
         </Polygon>
-        <Friction>1</Friction>
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
         <Density>1</Density>
       </Component>
     </Entity>
@@ -29,6 +30,7 @@
           <Item>0.83 0.5</Item>
           <Item>-0.83 0.5</Item>
         </Polygon>
+        <Restitution>0</Restitution>
         <Friction>1</Friction>
         <Density>1</Density>
       </Component>
@@ -47,6 +49,7 @@
           <Item>0.85 0.6</Item>
           <Item>-0.85 0.6</Item>
         </Polygon>
+        <Restitution>0</Restitution>
         <Friction>1</Friction>
         <Density>1</Density>
       </Component>

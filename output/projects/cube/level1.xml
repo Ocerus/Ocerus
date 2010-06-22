@@ -17,6 +17,7 @@
           <Item>0.83 0.5</Item>
           <Item>-0.83 0.5</Item>
         </Polygon>
+        <Restitution>0</Restitution>
         <Friction>1</Friction>
         <Density>1</Density>
       </Component>
@@ -48,6 +49,7 @@
           <Item>0.85 0.6</Item>
           <Item>-0.85 0.6</Item>
         </Polygon>
+        <Restitution>0</Restitution>
         <Friction>1</Friction>
         <Density>1</Density>
       </Component>
@@ -71,6 +73,7 @@
           <Item>0.83 0.5</Item>
           <Item>-0.83 0.5</Item>
         </Polygon>
+        <Restitution>0</Restitution>
         <Friction>1</Friction>
         <Density>1</Density>
       </Component>
@@ -97,7 +100,8 @@
           <Item>0.5 0.5</Item>
           <Item>-0.5 0.5</Item>
         </Polygon>
-        <Friction>1</Friction>
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
         <Density>1</Density>
       </Component>
     </Entity>
@@ -116,6 +120,7 @@
           <Item>0.83 0.5</Item>
           <Item>-0.83 0.5</Item>
         </Polygon>
+        <Restitution>0</Restitution>
         <Friction>1</Friction>
         <Density>1</Density>
       </Component>
@@ -139,6 +144,7 @@
           <Item>0.83 0.5</Item>
           <Item>-0.83 0.5</Item>
         </Polygon>
+        <Restitution>0</Restitution>
         <Friction>1</Friction>
         <Density>1</Density>
       </Component>
@@ -162,6 +168,7 @@
           <Item>0.85 0.6</Item>
           <Item>-0.85 0.6</Item>
         </Polygon>
+        <Restitution>0</Restitution>
         <Friction>1</Friction>
         <Density>1</Density>
       </Component>
@@ -185,6 +192,7 @@
           <Item>0.83 0.5</Item>
           <Item>-0.83 0.5</Item>
         </Polygon>
+        <Restitution>0</Restitution>
         <Friction>1</Friction>
         <Density>1</Density>
       </Component>
@@ -208,6 +216,7 @@
           <Item>0.85 0.6</Item>
           <Item>-0.85 0.6</Item>
         </Polygon>
+        <Restitution>0</Restitution>
         <Friction>1</Friction>
         <Density>1</Density>
       </Component>
@@ -231,6 +240,7 @@
           <Item>0.83 0.5</Item>
           <Item>-0.83 0.5</Item>
         </Polygon>
+        <Restitution>0</Restitution>
         <Friction>1</Friction>
         <Density>1</Density>
       </Component>
@@ -257,7 +267,8 @@
           <Item>0.5 0.5</Item>
           <Item>-0.5 0.5</Item>
         </Polygon>
-        <Friction>1</Friction>
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
         <Density>1</Density>
       </Component>
     </Entity>
@@ -276,6 +287,7 @@
           <Item>0.85 0.6</Item>
           <Item>-0.85 0.6</Item>
         </Polygon>
+        <Restitution>0</Restitution>
         <Friction>1</Friction>
         <Density>1</Density>
       </Component>
@@ -299,6 +311,7 @@
           <Item>0.83 0.5</Item>
           <Item>-0.83 0.5</Item>
         </Polygon>
+        <Restitution>0</Restitution>
         <Friction>1</Friction>
         <Density>1</Density>
       </Component>
@@ -322,6 +335,7 @@
           <Item>0.83 0.5</Item>
           <Item>-0.83 0.5</Item>
         </Polygon>
+        <Restitution>0</Restitution>
         <Friction>1</Friction>
         <Density>1</Density>
       </Component>
@@ -345,6 +359,7 @@
           <Item>0.85 0.6</Item>
           <Item>-0.85 0.6</Item>
         </Polygon>
+        <Restitution>0</Restitution>
         <Friction>1</Friction>
         <Density>1</Density>
       </Component>
@@ -374,10 +389,10 @@
         <Layer>0</Layer>
         <Angle>0</Angle>
         <Scale>1 1</Scale>
-        <Position>3.18322 -2.74078</Position>
+        <Position>3.15101 -2.90183</Position>
       </Component>
       <Component Type="DynamicBody">
-        <AngularDamping>5</AngularDamping>
+        <AngularDamping>20</AngularDamping>
         <LinearDamping>0.1</LinearDamping>
       </Component>
       <Component Type="PolygonCollider">
@@ -387,7 +402,8 @@
           <Item>0.5 0.5</Item>
           <Item>-0.5 0.5</Item>
         </Polygon>
-        <Friction>0.2</Friction>
+        <Restitution>0</Restitution>
+        <Friction>10</Friction>
         <Density>1</Density>
       </Component>
       <Component Type="Model">
@@ -414,8 +430,8 @@
     <Entity Name="EditorCamera" ID="22" Transient="false">
       <Component Type="Camera">
         <Rotation>0</Rotation>
-        <Zoom>1</Zoom>
-        <Position>0 0</Position>
+        <Zoom>0.620921</Zoom>
+        <Position>4.5087 -1.97801</Position>
       </Component>
     </Entity>
   </Entities>

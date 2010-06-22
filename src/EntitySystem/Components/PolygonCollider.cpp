@@ -8,6 +8,7 @@ void EntityComponents::PolygonCollider::Create( void )
 	mDensity = 1;
 	mSensorBody = 0;
 	mFriction = 0.5f;
+	mRestitution = 0.5f;
 }
 
 void EntityComponents::PolygonCollider::Destroy( void )
@@ -54,6 +55,7 @@ void EntityComponents::PolygonCollider::RegisterReflection( void )
 {
 	RegisterProperty<float32>("Density", &PolygonCollider::GetDensity, &PolygonCollider::SetDensity, PA_FULL_ACCESS, "");
 	RegisterProperty<float32>("Friction", &PolygonCollider::GetFriction, &PolygonCollider::SetFriction, PA_FULL_ACCESS, "");
+	RegisterProperty<float32>("Restitution", &PolygonCollider::GetRestitution, &PolygonCollider::SetRestitution, PA_FULL_ACCESS, "");
 	RegisterProperty<Array<Vector2>*>("Polygon", &PolygonCollider::GetPolygon, &PolygonCollider::SetPolygon, PA_FULL_ACCESS, "");
 	RegisterProperty<PhysicalShape*>("PhysicalShape", &PolygonCollider::GetShape, 0, PA_NONE | PA_TRANSIENT, "");
 
@@ -84,6 +86,8 @@ void EntityComponents::PolygonCollider::RecreateShape( void )
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &shapeDef;
 	fixtureDef.density = mDensity;
+	fixtureDef.friction = mFriction;
+	fixtureDef.restitution = mRestitution;
 	fixtureDef.userData = GetOwnerPtr();
 
 	// find a parent body
@@ -162,4 +166,16 @@ void EntityComponents::PolygonCollider::SetFriction( float32 val )
 {
 	mFriction = val;
 	if (mShape) mShape->SetFriction(mFriction);
+}
+
+float32 EntityComponents::PolygonCollider::GetRestitution( void ) const
+{
+	if (mShape) mRestitution = mShape->GetRestitution();
+	return mRestitution;
+}
+
+void EntityComponents::PolygonCollider::SetRestitution( float32 val )
+{
+	mRestitution = val;
+	if (mShape) mShape->SetRestitution(mRestitution);
 }
