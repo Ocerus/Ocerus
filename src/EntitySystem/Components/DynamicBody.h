@@ -34,9 +34,27 @@ namespace EntityComponents
 		/// Applies force to the body.
 		void ApplyForce(PropertyFunctionParameters params);
 
+		/// Applies torque to the body.
+		void ApplyTorque(PropertyFunctionParameters params);
+
+		/// Returns the angular damping.
+		float32 GetAngularDamping() const;
+
+		/// Sets the angular damping.
+		void SetAngularDamping(float32 val);
+
+		/// Returns the linear damping.
+		float32 GetLinearDamping() const;
+
+		/// Sets the linear damping.
+		void SetLinearDamping(float32 val);
+
+
 	private:
 
 		PhysicalBody* mBody;
+		mutable float32 mAngularDamping;
+		mutable float32 mLinearDamping;
 
 		void CreateBody(void);
 

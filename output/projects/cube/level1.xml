@@ -361,7 +361,10 @@
         <Scale>1 1</Scale>
         <Position>3.18322 -2.74078</Position>
       </Component>
-      <Component Type="DynamicBody"></Component>
+      <Component Type="DynamicBody">
+        <AngularDamping>5</AngularDamping>
+        <LinearDamping>0.1</LinearDamping>
+      </Component>
       <Component Type="PolygonCollider">
         <Polygon>
           <Item>-0.5 -0.5</Item>
@@ -372,9 +375,9 @@
         <Density>1</Density>
       </Component>
       <Component Type="Model">
+        <YAngle>0</YAngle>
         <Transparency>0</Transparency>
         <Mesh>cube.model</Mesh>
-        <YAngle>0</YAngle>
       </Component>
       <Component Type="Script">
         <ScriptTimes></ScriptTimes>
@@ -387,16 +390,16 @@
     </Entity>
     <Entity Name="GameCamera" ID="21" Transient="false">
       <Component Type="Camera">
-        <Position>0 0</Position>
         <Rotation>0</Rotation>
         <Zoom>1</Zoom>
+        <Position>0 0</Position>
       </Component>
     </Entity>
     <Entity Name="EditorCamera" ID="22" Transient="false">
       <Component Type="Camera">
-        <Position>0 0</Position>
         <Rotation>0</Rotation>
         <Zoom>1</Zoom>
+        <Position>0 0</Position>
       </Component>
     </Entity>
   </Entities>
