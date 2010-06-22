@@ -95,6 +95,9 @@ void Project::CloseProject()
 
 	if (mEditorSupport)
 	{
+		gEntityMgr.DestroyAllEntities(true, false);
+		gEditorMgr.RefreshPrototypeWindow();
+		gEditorMgr.RefreshResourceWindow();
 		gEditorMgr.UpdateSceneMenu();
 	}
 
@@ -291,6 +294,7 @@ bool Project::SaveOpenedScene()
 void Project::CloseOpenedScene()
 {
 	gEntityMgr.DestroyAllEntities(false, true);
+	gEditorMgr.GetEditorGui()->DisableViewports();
 	mSceneIndex = -1;
 }
 

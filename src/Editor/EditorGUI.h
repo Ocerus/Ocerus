@@ -35,7 +35,10 @@ namespace Editor
 
 		/// Name of the entity with the editor camera.
 		static const string EditorCameraName;
-		
+
+		/// Disables viewports.
+		void DisableViewports();
+
 		/// Assigns game and editor cameras to corresponding entities, creates new ones if do not exist.
 		void RefreshCameras();
 

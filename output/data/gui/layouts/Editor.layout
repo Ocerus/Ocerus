@@ -105,9 +105,14 @@
                         <Property Name="Tooltip" Value="$open_project_hint$" />
                         <Property Name="UnifiedAreaRect" Value="{{0,2},{0,23},{0,96},{0,42}}" />
                     </Window>
-                    <Window Type="Editor/MenuItem" Name="EditorRoot/Menubar/File/ExportGame" >
+                    <Window Type="Editor/MenuItem" Name="EditorRoot/Menubar/File/DeployProject" >
                         <Property Name="Text" Value="$deploy_project$" />
                         <Property Name="Tooltip" Value="$deploy_project_hint$" />
+                        <Property Name="UnifiedAreaRect" Value="{{0,2},{0,44},{0,96},{0,63}}" />
+                    </Window>
+                    <Window Type="Editor/MenuItem" Name="EditorRoot/Menubar/File/CloseProject" >
+                        <Property Name="Text" Value="$close_project$" />
+                        <Property Name="Tooltip" Value="$close_project_hint$" />
                         <Property Name="UnifiedAreaRect" Value="{{0,2},{0,44},{0,96},{0,63}}" />
                     </Window>
                     <Window Type="Editor/MenuItem" Name="EditorRoot/Menubar/File/Quit" >
@@ -151,6 +156,11 @@
                     <Window Type="Editor/MenuItem" Name="EditorRoot/Menubar/Scene/SaveScene" >
                         <Property Name="Text" Value="$save_scene$" />
                         <Property Name="Tooltip" Value="$save_scene_hint$" />
+                        <Property Name="UnifiedAreaRect" Value="{{0,2},{0,44},{0,82},{0,63}}" />
+                    </Window>
+                    <Window Type="Editor/MenuItem" Name="EditorRoot/Menubar/Scene/CloseScene" >
+                        <Property Name="Text" Value="$close_scene$" />
+                        <Property Name="Tooltip" Value="$close_scene_hint$" />
                         <Property Name="UnifiedAreaRect" Value="{{0,2},{0,44},{0,82},{0,63}}" />
                     </Window>
                 </Window>

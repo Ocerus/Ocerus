@@ -204,10 +204,14 @@ void Application::RunMainLoop()
 			switch (GetState())
 			{
 			case AS_GAME:
-				mGame->Draw(delta);
+				
 				if (mEditMode)
 				{
 					gEditorMgr.Draw(delta);
+				}
+				else
+				{
+					mGame->Draw(delta);
 				}
 				gGUIMgr.RenderGUI();
 				break;

@@ -68,74 +68,76 @@ void Editor::EditorMgr::Update(const float32 delta)
 {
 	OC_ASSERT(mEditorGUI);
 
-	// is the mouse above the window?
-	InputSystem::MouseState& mouse = gInputMgr.GetMouseState();
-	GfxSystem::RenderTargetID rt = mEditorGUI->GetEditorViewport()->GetRenderTarget();
-	Vector2 worldPosition;
-	bool mouseAboveWindow = gGfxRenderer.ConvertScreenToWorldCoords(GfxSystem::Point(mouse.x, mouse.y), worldPosition, rt);
-
-
-	// keys camera control
-	if (mouseAboveWindow && !IsLockedToGame())
+	if (mEditorGUI->GetEditorViewport()->isVisible())
 	{
-		EntitySystem::EntityHandle camera = mEditorGUI->GetEditorViewport()->GetCamera();
-		OC_ASSERT(camera);
+		// is the mouse above the window?
+		InputSystem::MouseState& mouse = gInputMgr.GetMouseState();
+		GfxSystem::RenderTargetID rt = mEditorGUI->GetEditorViewport()->GetRenderTarget();
+		Vector2 worldPosition;
+		bool mouseAboveWindow = gGfxRenderer.ConvertScreenToWorldCoords(GfxSystem::Point(mouse.x, mouse.y), worldPosition, rt);
 
-		float32 movementSpeed = CAMERA_MOVEMENT_SPEED / camera.GetProperty("Zoom").GetValue<float32>();
-		if (gInputMgr.IsKeyDown(InputSystem::KC_LEFT))
+
+		// keys camera control
+		if (mouseAboveWindow && !IsLockedToGame())
 		{
-			Vector2 cameraPos = camera.GetProperty("Position").GetValue<Vector2>();
-			camera.GetProperty("Position").SetValue<Vector2>(cameraPos + Vector2(-movementSpeed, 0));
+			EntitySystem::EntityHandle camera = mEditorGUI->GetEditorViewport()->GetCamera();
+			OC_ASSERT(camera.IsValid());
+			float32 movementSpeed = CAMERA_MOVEMENT_SPEED / camera.GetProperty("Zoom").GetValue<float32>();
+			if (gInputMgr.IsKeyDown(InputSystem::KC_LEFT))
+			{
+				Vector2 cameraPos = camera.GetProperty("Position").GetValue<Vector2>();
+				camera.GetProperty("Position").SetValue<Vector2>(cameraPos + Vector2(-movementSpeed, 0));
+			}
+			if (gInputMgr.IsKeyDown(InputSystem::KC_RIGHT))
+			{
+				Vector2 cameraPos = camera.GetProperty("Position").GetValue<Vector2>();
+				camera.GetProperty("Position").SetValue<Vector2>(cameraPos + Vector2(movementSpeed, 0));
+			}
+			if (gInputMgr.IsKeyDown(InputSystem::KC_UP))
+			{
+				Vector2 cameraPos = camera.GetProperty("Position").GetValue<Vector2>();
+				camera.GetProperty("Position").SetValue<Vector2>(cameraPos + Vector2(0, -movementSpeed));
+			}
+			if (gInputMgr.IsKeyDown(InputSystem::KC_DOWN))
+			{
+				Vector2 cameraPos = camera.GetProperty("Position").GetValue<Vector2>();
+				camera.GetProperty("Position").SetValue<Vector2>(cameraPos + Vector2(0, movementSpeed));
+			}
 		}
-		if (gInputMgr.IsKeyDown(InputSystem::KC_RIGHT))
+
+
+		// pick entity the mouse is hovering over right now
+		if (mouseAboveWindow)
 		{
-			Vector2 cameraPos = camera.GetProperty("Position").GetValue<Vector2>();
-			camera.GetProperty("Position").SetValue<Vector2>(cameraPos + Vector2(movementSpeed, 0));
+			EntityPicker picker(worldPosition);
+			mHoveredEntity = picker.PickSingleEntity();
 		}
-		if (gInputMgr.IsKeyDown(InputSystem::KC_UP))
+
+
+		// if some of the selected entities were destroyed, remove them from the selection
+		EntitySystem::EntityHandle selectedEntity = GetSelectedEntity();
+		if (!mHoveredEntity.Exists()) mHoveredEntity.Invalidate();
+		for (EntityList::iterator it=mSelectedEntities.begin(); it!=mSelectedEntities.end();)
 		{
-			Vector2 cameraPos = camera.GetProperty("Position").GetValue<Vector2>();
-			camera.GetProperty("Position").SetValue<Vector2>(cameraPos + Vector2(0, -movementSpeed));
+			if (!it->Exists())
+				it = mSelectedEntities.erase(it);
+			else
+				++it;
 		}
-		if (gInputMgr.IsKeyDown(InputSystem::KC_DOWN))
+		if (GetSelectedEntity() != selectedEntity && GetCurrentEntity() == selectedEntity) SetCurrentEntity(GetSelectedEntity());
+
+		// update the entities if necessary
+		if (!GlobalProperties::Get<Core::Game>("Game").IsActionRunning())
 		{
-			Vector2 cameraPos = camera.GetProperty("Position").GetValue<Vector2>();
-			camera.GetProperty("Position").SetValue<Vector2>(cameraPos + Vector2(0, movementSpeed));
+			// synchronize properties before physics
+			gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::SYNC_PRE_PHYSICS, Reflection::PropertyFunctionParameters() << 0.0f));
+
+			// destroy entities marked for destruction
+			gEntityMgr.ProcessDestroyQueue();
 		}
+
+		if (!GetCurrentEntity().Exists()) SetCurrentEntity(EntitySystem::EntityHandle::Null);
 	}
-
-
-	// pick entity the mouse is hovering over right now
-	if (mouseAboveWindow)
-	{
-		EntityPicker picker(worldPosition);
-		mHoveredEntity = picker.PickSingleEntity();
-	}
-
-
-	// if some of the selected entities were destroyed, remove them from the selection
-	EntitySystem::EntityHandle selectedEntity = GetSelectedEntity();
-	if (!mHoveredEntity.Exists()) mHoveredEntity.Invalidate();
-	for (EntityList::iterator it=mSelectedEntities.begin(); it!=mSelectedEntities.end();)
-	{
-		if (!it->Exists())
-			it = mSelectedEntities.erase(it);
-		else
-			++it;
-	}
-	if (GetSelectedEntity() != selectedEntity && GetCurrentEntity() == selectedEntity) SetCurrentEntity(GetSelectedEntity());
-
-	// update the entities if necessary
-	if (!GlobalProperties::Get<Core::Game>("Game").IsActionRunning())
-	{
-		// synchronize properties before physics
-		gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::SYNC_PRE_PHYSICS, Reflection::PropertyFunctionParameters() << 0.0f));
-
-		// destroy entities marked for destruction
-		gEntityMgr.ProcessDestroyQueue();
-	}
-
-	if (!GetCurrentEntity().Exists()) SetCurrentEntity(EntitySystem::EntityHandle::Null);
 
 	// update the gui elements on the screen
 	mEditorGUI->Update(delta);
@@ -143,44 +145,51 @@ void Editor::EditorMgr::Update(const float32 delta)
 
 void Editor::EditorMgr::Draw(float32 delta)
 {
-	// Render editor viewport (the game viewport is rendered by the Game object)
-	GfxSystem::RenderTargetID rt = mEditorGUI->GetEditorViewport()->GetRenderTarget();
-	gGfxRenderer.SetCurrentRenderTarget(rt);
-	gGfxRenderer.ClearCurrentRenderTarget(GfxSystem::Color(0, 0, 0));
-	gGfxRenderer.DrawEntities();
-
-	gGfxRenderer.FlushGraphics();
-
-	// draw the physical shape of representation of selected entities
-	bool hoveredDrawn = false;
-	for (EntityList::iterator it=mSelectedEntities.begin(); it!=mSelectedEntities.end(); ++it)
+	// Render game viewport (if visible)
+	if (mEditorGUI->GetGameViewport()->isVisible())
+		GlobalProperties::Get<Core::Game>("Game").Draw(delta);
+	/// @todo We should have member to game, because accessing game through GlobalProperties can be slow.
+	
+	// Render editor viewport (if visible)
+	if (mEditorGUI->GetEditorViewport()->isVisible())
 	{
-		if (*it == mHoveredEntity) hoveredDrawn = true;
-		DrawEntityPhysicalShape(*it, GfxSystem::Color(0,255,0,100), 2.0f);
-	}
-	if (!hoveredDrawn && mHoveredEntity.IsValid())
-	{
-		DrawEntityPhysicalShape(mHoveredEntity, GfxSystem::Color(200,200,200,150), 3.5f);
-	}
+		GfxSystem::RenderTargetID rt = mEditorGUI->GetEditorViewport()->GetRenderTarget();
+		gGfxRenderer.SetCurrentRenderTarget(rt);
+		gGfxRenderer.ClearCurrentRenderTarget(GfxSystem::Color(0, 0, 0));
+		gGfxRenderer.DrawEntities();
 
-	// draw the multi-selection stuff
-	if (mMultiselectStarted)
-	{
-		InputSystem::MouseState& mouse = gInputMgr.GetMouseState();
-		Vector2 worldCursorPos;
-		if (gGfxRenderer.ConvertScreenToWorldCoords(GfxSystem::Point(mouse.x, mouse.y), worldCursorPos, rt))
+		gGfxRenderer.FlushGraphics();
+
+		// draw the physical shape of representation of selected entities
+		bool hoveredDrawn = false;
+		for (EntityList::iterator it=mSelectedEntities.begin(); it!=mSelectedEntities.end(); ++it)
 		{
-			float32 minDistance = SELECTION_MIN_DISTANCE / gGfxRenderer.GetRenderTargetCameraZoom(rt);
-			if ((worldCursorPos-mSelectionCursorPosition).LengthSquared() >= MathUtils::Sqr(minDistance))
+			if (*it == mHoveredEntity) hoveredDrawn = true;
+			DrawEntityPhysicalShape(*it, GfxSystem::Color(0,255,0,100), 2.0f);
+		}
+		if (!hoveredDrawn && mHoveredEntity.IsValid())
+		{
+			DrawEntityPhysicalShape(mHoveredEntity, GfxSystem::Color(200,200,200,150), 3.5f);
+		}
+
+		// draw the multi-selection stuff
+		if (mMultiselectStarted)
+		{
+			InputSystem::MouseState& mouse = gInputMgr.GetMouseState();
+			Vector2 worldCursorPos;
+			if (gGfxRenderer.ConvertScreenToWorldCoords(GfxSystem::Point(mouse.x, mouse.y), worldCursorPos, rt))
 			{
-				float32 rotation = gGfxRenderer.GetRenderTargetCameraRotation(rt);
-				gGfxRenderer.DrawRect(mSelectionCursorPosition, worldCursorPos, rotation, GfxSystem::Color(255,255,0,150), false);
+				float32 minDistance = SELECTION_MIN_DISTANCE / gGfxRenderer.GetRenderTargetCameraZoom(rt);
+				if ((worldCursorPos-mSelectionCursorPosition).LengthSquared() >= MathUtils::Sqr(minDistance))
+				{
+					float32 rotation = gGfxRenderer.GetRenderTargetCameraRotation(rt);
+					gGfxRenderer.DrawRect(mSelectionCursorPosition, worldCursorPos, rotation, GfxSystem::Color(255,255,0,150), false);
+				}
 			}
 		}
+
+		gGfxRenderer.FinalizeRenderTarget();
 	}
-
-	gGfxRenderer.FinalizeRenderTarget();
-
 	mEditorGUI->Draw(delta);
 }
 
@@ -380,6 +389,17 @@ void Editor::EditorMgr::UpdateSceneMenu()
 	mEditorGUI->GetEditorMenu()->UpdateSceneMenu();
 }
 
+void EditorMgr::CreateProject(const string& projectPath)
+{
+	if (!mCurrentProject->CreateProject(projectPath))
+	{
+		GUISystem::MessageBox* messageBox = new GUISystem::MessageBox(GUISystem::MessageBox::MBT_OK);
+		messageBox->SetText(StringSystem::FormatText(gStringMgrSystem.GetTextData
+			(GUISystem::GUIMgr::GUIGroup, "create_project_error")) << projectPath);
+		messageBox->Show();
+	}
+}
+
 void EditorMgr::OpenProject(const string& projectPath)
 {
 	if (!mCurrentProject->OpenProject(projectPath))
@@ -390,6 +410,12 @@ void EditorMgr::OpenProject(const string& projectPath)
 		messageBox->Show();
 	}
 }
+
+void EditorMgr::CloseProject()
+{
+	mCurrentProject->CloseProject();
+}
+
 
 bool Editor::EditorMgr::KeyPressed( const InputSystem::KeyInfo& ke )
 {

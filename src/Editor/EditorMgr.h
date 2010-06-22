@@ -104,8 +104,14 @@ namespace Editor
 		/// Updates the scenes in scene menu.
 		void UpdateSceneMenu();
 
+		/// Creates a new project in specified path.
+		void CreateProject(const string& projectPath);
+		
 		/// Opens the project specified with given path.
 		void OpenProject(const string& projectPath);
+
+		/// Closes the opened project.
+		void CloseProject();
 
 		/// Resumes action of the edited game.
 		void ResumeAction();

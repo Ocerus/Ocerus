@@ -10,7 +10,7 @@ using namespace GUISystem;
 const CEGUI::String GUISystem::ViewportWindow::WidgetTypeName("Ocerus/Viewport");
 
 GUISystem::ViewportWindow::ViewportWindow(const CEGUI::String& type, const CEGUI::String& name):
-		CEGUI::FrameWindow(type, name), mRenderTarget(GfxSystem::InvalidRenderTargetID),
+		CEGUI::FrameWindow(type, name), mIsEnabled(true), mRenderTarget(GfxSystem::InvalidRenderTargetID),
 		mIsMovableContent(0), mCameraMover(0)
 {
 }
@@ -28,8 +28,20 @@ void GUISystem::ViewportWindow::initialiseComponents()
 	setMousePassThroughEnabled(false);
 }
 
+void ViewportWindow::Disable()
+{
+	setVisible(false);
+	if (mRenderTarget != GfxSystem::InvalidRenderTargetID)
+	{
+		gGfxRenderer.RemoveRenderTarget(mRenderTarget);
+	}
+	mRenderTarget = GfxSystem::InvalidRenderTargetID;
+}
+
+
 void GUISystem::ViewportWindow::SetCamera(const EntitySystem::EntityHandle& camera)
 {
+	setVisible(true);
 	if (mRenderTarget != GfxSystem::InvalidRenderTargetID)
 	{
 		gGfxRenderer.RemoveRenderTarget(mRenderTarget);
@@ -106,7 +118,10 @@ void GUISystem::ViewportWindow::DeleteCameraMover()
 
 EntitySystem::EntityHandle GUISystem::ViewportWindow::GetCamera() const
 {
-	return gGfxRenderer.GetRenderTargetCamera(mRenderTarget);
+	if (mRenderTarget == GfxSystem::InvalidRenderTargetID)
+		return EntitySystem::EntityHandle::Null;
+	else
+		return gGfxRenderer.GetRenderTargetCamera(mRenderTarget);
 }
 
 void GUISystem::ViewportWindow::AddInputListener( InputSystem::IInputListener* listener )

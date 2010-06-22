@@ -167,6 +167,9 @@ bool GfxSystem::GfxRenderer::ConvertScreenToWorldCoords( const Point& screenCoor
 	if (topleft.x <= screenCoords.x && screenCoords.x <= bottomright.x && topleft.y <= screenCoords.y && screenCoords.y <= bottomright.y)
 	{
 		const EntitySystem::EntityHandle& camera = renderTarget.second;
+		if (!camera.IsValid())
+			return false;
+
 		Vector2 topleftWorld, bottomrightWorld;
 		viewport.CalculateWorldBoundaries(topleftWorld, bottomrightWorld);
 

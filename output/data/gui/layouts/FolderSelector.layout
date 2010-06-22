@@ -4,7 +4,7 @@
     <Window Type="DefaultWindow" Name="FolderSelector" >
         <Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}" />
         <Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{1,0},{1,0}}" />
-        <Window Type="Vanilla/FrameWindow" Name="FolderSelector/Frame" >
+        <Window Type="Editor/FrameWindow" Name="FolderSelector/Frame" >
             <Property Name="AlwaysOnTop" Value="True" />
             <Property Name="Text" Value="$select_folder$" />
             <Property Name="TitlebarFont" Value="DejaVuSans-10" />
@@ -14,26 +14,36 @@
             <Property Name="SizingEnabled" Value="False" />
             <Property Name="DragMovingEnabled" Value="False" />
             <Property Name="CloseButtonEnabled" Value="False" />
-            <Window Type="Vanilla/Button" Name="FolderSelector/Frame/Ok" >
+            <Window Type="Editor/Button" Name="FolderSelector/Frame/Ok" >
                 <Property Name="Text" Value="$ok$" />
                 <Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}" />
                 <Property Name="UnifiedAreaRect" Value="{{1,-64},{1,-28},{1,0},{1,0}}" />
             </Window>
-            <Window Type="Vanilla/Button" Name="FolderSelector/Frame/Cancel" >
+            <Window Type="Editor/Button" Name="FolderSelector/Frame/Cancel" >
                 <Property Name="Font" Value="DejaVuSans-10" />
                 <Property Name="Text" Value="$cancel$" />
                 <Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}" />
                 <Property Name="UnifiedAreaRect" Value="{{1,-132},{1,-28},{1,-68},{1,0}}" />
             </Window>
-            <Window Type="Vanilla/Editbox" Name="FolderSelector/Frame/Path" >
+            <Window Type="Editor/Editbox" Name="FolderSelector/Frame/Path" >
                 <Property Name="ReadOnly" Value="True" />
                 <Property Name="MaxTextLength" Value="1073741823" />
                 <Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}" />
-                <Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{1,0},{0,28}}" />
+                <Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{1,0},{0,24}}" />
             </Window>
-            <Window Type="Vanilla/Listbox" Name="FolderSelector/Frame/FolderList" >
+            <Window Type="Editor/Listbox" Name="FolderSelector/Frame/FolderList" >
                 <Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}" />
-                <Property Name="UnifiedAreaRect" Value="{{0,0},{0,32},{1,0},{1,-32}}" />
+                <Property Name="UnifiedAreaRect" Value="{{0,0},{0,28},{1,0},{1,-60}}" />
+            </Window>
+            <Window Type="Editor/StaticText" Name="FolderSelector/Frame/EditboxLabel" >
+                <Property Name="Text" Value="Name:" />
+                <Property Name="FrameEnabled" Value="False" />
+                <Property Name="UnifiedAreaRect" Value="{{0,0},{1,-56},{0,90},{1,-32}}" />
+                <Property Name="BackgroundEnabled" Value="False" />
+            </Window>
+            <Window Type="Editor/Editbox" Name="FolderSelector/Frame/Editbox" >
+                <Property Name="UnifiedAreaRect" Value="{{0,90},{1,-56},{1,0},{1,-32}}" />
+                <Property Name="BackgroundEnabled" Value="False" />
             </Window>
         </Window>
     </Window>

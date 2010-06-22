@@ -464,7 +464,7 @@ PropertyHolder EntitySystem::EntityMgr::GetEntityProperty( const EntityHandle en
 	OC_DASSERT(mComponentMgr);
 	if (!entity.Exists())
 	{
-		ocError << "Invalid entity";
+		ocError << "Invalid entity (ID = " << entity.GetID() << ").";
 		return PropertyHolder();
 	}
 	for (EntityComponentsIterator it=mComponentMgr->GetEntityComponents(entity.GetID()); it.HasMore(); ++it)

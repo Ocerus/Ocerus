@@ -18,7 +18,7 @@ namespace GUISystem {
 			/// @param path The full path that was selected through the folder selector.
 			/// @param canceled Whether the folder selector was canceled.
 			/// @param tag The tag of the FolderSelector.
-			virtual void execute(const string& path, bool canceled, int32 tag) = 0;
+			virtual void execute(const string& path, const string& editboxValue, bool canceled, int32 tag) = 0;
 		};
 
 		/// A callback wrapper that wraps a method of an arbitrary class.
@@ -27,7 +27,7 @@ namespace GUISystem {
 		{
 		public:
 			/// The type of callback method.
-			typedef void (Class::*Method)(const string&, bool, int32);
+			typedef void (Class::*Method)(const string&, const string&, bool, int32);
 
 			/// Constructs a callback to specified method on specified instance.
 			Callback(Class* instance, Method method): mInstance(instance), mMethod(method) {}
@@ -36,9 +36,9 @@ namespace GUISystem {
 			/// @param path The full path that was selected through the folder selector.
 			/// @param canceled Whether the folder selector was canceled.
 			/// @param tag The tag of the FolderSelector.
-			virtual void execute(const string& path, bool canceled, int32 tag)
+			virtual void execute(const string& path, const string& editboxValue, bool canceled, int32 tag)
 			{
-				(mInstance->*mMethod)(path, canceled, tag);
+				(mInstance->*mMethod)(path, editboxValue, canceled, tag);
 			}
 
 		private:
@@ -46,17 +46,21 @@ namespace GUISystem {
 			Method mMethod;
 		};
 
-		///
+		/// Constructs a FolderSelector instance.
 		FolderSelector(int32 tag = 0);
 
-		///
+		/// Destroys the FolderSelector instance.
 		~FolderSelector();
 
 		/// Shows the folder selector in the specified window.
-		void Show();
+		/// @param showEditbox Whether the folder selector should contain an editbox.
+		void Show(const CEGUI::String& windowTitle, bool showEditbox = false, const CEGUI::String& editboxLabel = "");
 
 		/// Hides the folder selector.
 		void Hide();
+
+		/// Returns the value of the extra input box.
+		string GetExitboxValue() const;
 
 		/// Registers a callback function that will be called when user clicks a button. Only the last registered function
 		/// will be called.
@@ -82,6 +86,7 @@ namespace GUISystem {
 		CEGUI::Window* mButtonCancel;
 		CEGUI::Window* mPathBox;
 		CEGUI::Listbox* mFolderList;
+		CEGUI::Window* mEditbox;
 
 		int mTag;
 		CallbackBase* mCallback;

@@ -81,6 +81,9 @@ bool Editor::EditorMenu::OnMenuItemClicked(const CEGUI::EventArgs& e)
 
 	if (itemName == menubarPrefix + "/File/CreateProject")
 	{
+		GUISystem::FolderSelector* folderSelector = new GUISystem::FolderSelector((int)FST_CREATEPROJECT);
+		folderSelector->RegisterCallback(new GUISystem::FolderSelector::Callback<Editor::EditorMenu>(this, &Editor::EditorMenu::OnFolderSelected));
+		folderSelector->Show("Create project", true, "Project folder:"); ///@todo translate
 		return true;
 	}
 
@@ -88,12 +91,18 @@ bool Editor::EditorMenu::OnMenuItemClicked(const CEGUI::EventArgs& e)
 	{
 		GUISystem::FolderSelector* folderSelector = new GUISystem::FolderSelector((int)FST_OPENPROJECT);
 		folderSelector->RegisterCallback(new GUISystem::FolderSelector::Callback<Editor::EditorMenu>(this, &Editor::EditorMenu::OnFolderSelected));
-		folderSelector->Show();
+		folderSelector->Show("Open project"); ///@todo translate
 		return true;
 	}
 
-	if (itemName == menubarPrefix + "/File/ExportGame")
+	if (itemName == menubarPrefix + "/File/DeployProject")
 	{
+		return true;
+	}
+
+	if (itemName == menubarPrefix + "/File/CloseProject")
+	{
+		gEditorMgr.CloseProject();
 		return true;
 	}
 
@@ -139,6 +148,15 @@ bool Editor::EditorMenu::OnMenuItemClicked(const CEGUI::EventArgs& e)
 		if (gEditorMgr.GetCurrentProject()->IsSceneOpened())
 		{
 			gEditorMgr.GetCurrentProject()->SaveOpenedScene();
+		}
+		return true;			
+	}
+
+	if (itemName == menubarPrefix + "/Scene/CloseScene")
+	{
+		if (gEditorMgr.GetCurrentProject()->IsSceneOpened())
+		{
+			gEditorMgr.GetCurrentProject()->CloseOpenedScene();
 		}
 		return true;			
 	}
@@ -288,12 +306,16 @@ void Editor::EditorMenu::OnMessageBoxClicked(GUISystem::MessageBox::eMessageBoxB
 	ocWarning << "MessageBox with tag " << tag << " clicked, but no action defined.";
 }
 
-void Editor::EditorMenu::OnFolderSelected(const string& path, bool canceled, int32 t)
+void Editor::EditorMenu::OnFolderSelected(const string& path, const string& editboxValue, bool canceled, int32 t)
 {
 	if (canceled) return;
 	eFolderSelectorTags tag = (eFolderSelectorTags)t;
 	switch(tag)
 	{
+	case FST_CREATEPROJECT:
+		gEditorMgr.Reset();
+		gEditorMgr.CreateProject(path + '/' + editboxValue);
+		return;
 	case FST_OPENPROJECT:
 		gEditorMgr.Reset();
 		gEditorMgr.OpenProject(path);
@@ -326,7 +348,8 @@ void EditorMenu::UpdateSceneMenu()
 	gEditorMgr.GetCurrentProject()->GetSceneList(scenes);
 
 	CEGUI::Window* openSceneMenu = gCEGUIWM.getWindow(menubarPrefix + "/Scene/OpenScene/AutoPopup");
-	for (int32 i = openSceneMenu->getChildCount() - 1; i >= 0;)
+	
+	for (int32 i = openSceneMenu->getChildCount() - 1; i >= 0; --i)
 	{
 		gCEGUIWM.destroyWindow(openSceneMenu->getChildAtIdx(i));
 	}

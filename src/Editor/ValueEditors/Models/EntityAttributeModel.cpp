@@ -34,7 +34,7 @@ string Editor::EntityAttributeModel::GetTooltip() const
 
 bool Editor::EntityAttributeModel::IsValid() const
 {
-	return mEntity.IsValid();
+	return mEntity.IsValid() && mEntity.Exists();
 }
 
 bool Editor::EntityAttributeModel::IsReadOnly() const

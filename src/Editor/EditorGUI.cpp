@@ -100,7 +100,14 @@ void EditorGUI::LoadGUI()
 	mEditorViewport->SetMovableContent(true);
 
 	// Create cameras
-	RefreshCameras();
+	//RefreshCameras();
+	DisableViewports();
+}
+
+void EditorGUI::DisableViewports()
+{
+	mGameViewport->Disable();
+	mEditorViewport->Disable();
 }
 
 void EditorGUI::RefreshCameras()
@@ -157,12 +164,19 @@ void EditorGUI::Update(float32 delta)
 	}
 
 	mPropertyUpdateTimer += delta;
-	if (mPropertyUpdateTimer > 0.3)
+	if (mPropertyUpdateTimer > 0.3 && gEditorMgr.GetCurrentEntity().IsValid())
 	{
-		mPropertyUpdateTimer = 0;
-		for (PropertyEditors::const_iterator it = mPropertyEditors.begin(); it != mPropertyEditors.end(); ++it)
+		if (!gEditorMgr.GetCurrentEntity().Exists())
 		{
-			(*it)->Update();
+			UpdateEntityEditorWindow();
+		}
+		else
+		{
+			mPropertyUpdateTimer = 0;
+			for (PropertyEditors::const_iterator it = mPropertyEditors.begin(); it != mPropertyEditors.end(); ++it)
+			{
+				(*it)->Update();
+			}
 		}
 	}
 	mLayerMgrWidget->Update(delta);

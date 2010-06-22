@@ -22,6 +22,9 @@ namespace GUISystem
 		/// Destroys the ViewportWindow object.
 		virtual ~ViewportWindow();
 
+		/// Disables the viewport. You can enable it again by setting a camera.
+		void Disable();
+
 		/// Sets the camera of the viewport to newCamera.
 		void SetCamera(const EntitySystem::EntityHandle& newCamera);
 
@@ -82,7 +85,7 @@ namespace GUISystem
 		void DeleteCameraMover();
 
 	private:
-
+		bool mIsEnabled;
 		GfxSystem::RenderTargetID mRenderTarget;
 		bool mIsMovableContent;
 		GfxSystem::DragDropCameraMover* mCameraMover;

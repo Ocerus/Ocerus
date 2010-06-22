@@ -38,7 +38,7 @@ namespace Editor
 		void OnMessageBoxClicked(GUISystem::MessageBox::eMessageBoxButton button, int32 tag);
 
 		/// FolderSelector callback
-		void OnFolderSelected(const string& path, bool canceled, int32 tag);
+		void OnFolderSelected(const string& path, const string& editboxValue, bool canceled, int32 t);
 
 		/// Updates the list of scenes in scene menu.
 		void UpdateSceneMenu();
@@ -52,7 +52,7 @@ namespace Editor
 	private:
 
 		enum eMessageBoxTags { MBT_QUIT };
-		enum eFolderSelectorTags { FST_OPENPROJECT };
+		enum eFolderSelectorTags { FST_CREATEPROJECT, FST_OPENPROJECT };
 
 		typedef vector<CEGUI::RadioButton*> RadioButtonList;
 		RadioButtonList mToolButtons;
