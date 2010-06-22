@@ -22,9 +22,9 @@ EntityMessage::eResult EntityComponents::Model::HandleMessage( const EntityMessa
 		{
 			if (!mMeshHandle)
 			{
-				ocError << "Initing model with null value";
+				ocWarning << "Initing model with null value";
 				///@TODO add null model
-				//mMeshHandle = gResourceMgr.GetResource("General", "NullTexture");
+				mMeshHandle = gResourceMgr.GetResource("General", "NullModel");
 				OC_ASSERT(mMeshHandle);
 			}
 

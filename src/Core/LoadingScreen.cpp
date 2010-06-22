@@ -42,9 +42,14 @@ void Core::LoadingScreen::DoLoading( eType type, const string& sceneName )
 
 		// basic resources needed by the program
 		gResourceMgr.AddResourceFileToGroup("general/NullTexture.png", "General", ResourceSystem::RESTYPE_TEXTURE, ResourceSystem::BPT_SYSTEM, "NullTexture");
+		gResourceMgr.AddResourceFileToGroup("general/NullModel.model", "General", ResourceSystem::RESTYPE_MESH, ResourceSystem::BPT_SYSTEM, "NullModel");
 
 		// make sure we have the necessary resources
-		if (!gResourceMgr.GetResource("General", "NullTexture")) OC_FAIL("Some essential resources are missing!");
+		if (!gResourceMgr.GetResource("General", "NullTexture") ||
+			!gResourceMgr.GetResource("General", "NullModel")) 
+		{
+			OC_FAIL("Some essential resources are missing!");
+		}
 
 		// load the basic resources into memory
 		gResourceMgr.LoadResourcesInGroup("General");
