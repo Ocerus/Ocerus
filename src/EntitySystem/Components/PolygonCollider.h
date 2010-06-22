@@ -34,11 +34,16 @@ namespace EntityComponents
 		void SetPolygon(Array<Vector2>* val);
 
 		/// Density of the shape's material.
-		float32 GetDensity(void) const { return mDensity; }
+		float32 GetDensity(void) const;
 
 		/// Density of the shape's material.
-		/// @todo Update the physics when the value changes.
-		void SetDensity(float32 val) { mDensity = val; }
+		void SetDensity(float32 val);
+
+		/// Friction of the material.
+		float32 GetFriction(void) const;
+		
+		/// Friction of the material.
+		void SetFriction(float32 val);
 
 		/// Physical shape.
 		PhysicalShape* GetShape(void) const { return mShape; }
@@ -49,7 +54,9 @@ namespace EntityComponents
 		PhysicalBody* mSensorBody;
 		Array<Vector2> mPolygon;
 		Vector2 mPolygonScale;
-		float32 mDensity;
+		mutable float32 mDensity;
+		mutable float32 mFriction;
+
 
 		/// Creates the shape from scratch. If any previous shape existed it gets deleted.
 		void RecreateShape(void);

@@ -249,7 +249,7 @@
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="../externalLibs/boost/lib;../externalLibs/SDL/lib;../externalLibs/cegui/dependencies/lib"
 				IgnoreAllDefaultLibraries="false"
-				IgnoreDefaultLibraryNames="libci.lib;libcmt.lib"
+				IgnoreDefaultLibraryNames="libci.lib;libcmt.lib;libcmtd.lib"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(TargetDir)$(TargetName).pdb"
 				GenerateMapFile="false"
@@ -377,7 +377,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Copying binaries to the output directory..."
-				CommandLine="copy /V /Y /B &quot;$(TargetPath)&quot; &quot;../output&quot;&#x0D;&#x0A;copy /V /Y /B &quot;$(TargetDir)$(TargetName).pdb&quot; &quot;../output&quot;&#x0D;&#x0A;copy /V /Y /B &quot;$(SolutionDir)bin\Develop\libexpat.dll&quot; &quot;../output&quot;"
+				CommandLine="copy /V /Y /B &quot;$(TargetPath)&quot; &quot;../output&quot;&#x0D;&#x0A;copy /V /Y /B &quot;$(TargetDir)$(TargetName).pdb&quot; &quot;../output&quot;&#x0D;&#x0A;copy /V /Y /B &quot;$(SolutionDir)bin\Develop\libexpat.dll&quot; &quot;../output&quot;&#x0D;&#x0A;"
 				ExcludedFromBuild="false"
 			/>
 		</Configuration>

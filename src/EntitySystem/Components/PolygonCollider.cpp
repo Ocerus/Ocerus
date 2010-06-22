@@ -7,6 +7,7 @@ void EntityComponents::PolygonCollider::Create( void )
 	mShape = 0;
 	mDensity = 1;
 	mSensorBody = 0;
+	mFriction = 0.5f;
 }
 
 void EntityComponents::PolygonCollider::Destroy( void )
@@ -52,6 +53,7 @@ EntityMessage::eResult EntityComponents::PolygonCollider::HandleMessage( const E
 void EntityComponents::PolygonCollider::RegisterReflection( void )
 {
 	RegisterProperty<float32>("Density", &PolygonCollider::GetDensity, &PolygonCollider::SetDensity, PA_FULL_ACCESS, "");
+	RegisterProperty<float32>("Friction", &PolygonCollider::GetFriction, &PolygonCollider::SetFriction, PA_FULL_ACCESS, "");
 	RegisterProperty<Array<Vector2>*>("Polygon", &PolygonCollider::GetPolygon, &PolygonCollider::SetPolygon, PA_FULL_ACCESS, "");
 	RegisterProperty<PhysicalShape*>("PhysicalShape", &PolygonCollider::GetShape, 0, PA_NONE | PA_TRANSIENT, "");
 
@@ -136,4 +138,28 @@ void EntityComponents::PolygonCollider::SetPolygon( Array<Vector2>* val )
 	if (val->GetSize() < 3) return;
 	mPolygon.CopyFrom(*val);
 	if (GetOwner().IsInited()) RecreateShape();
+}
+
+float32 EntityComponents::PolygonCollider::GetDensity( void ) const
+{
+	if (mShape) mDensity = mShape->GetDensity();
+	return mDensity;
+}
+
+void EntityComponents::PolygonCollider::SetDensity( float32 val )
+{
+	mDensity = val;
+	if (mShape) mShape->SetDensity(mDensity);
+}
+
+float32 EntityComponents::PolygonCollider::GetFriction( void ) const
+{
+	if (mShape) mFriction = mShape->GetFriction();
+	return mFriction;
+}
+
+void EntityComponents::PolygonCollider::SetFriction( float32 val )
+{
+	mFriction = val;
+	if (mShape) mShape->SetFriction(mFriction);
 }

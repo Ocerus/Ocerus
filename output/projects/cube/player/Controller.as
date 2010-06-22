@@ -11,7 +11,7 @@ void OnUpdateLogic(float32 delta)
 	float32 torque = 0;
 	if (rightPressed) torque = 1;
 	if (leftPressed) torque = -1;
-	torque *= 10;
+	torque *= 30;
 	this.CallFunction("ApplyTorque", PropertyFunctionParameters() << torque);
 }
 

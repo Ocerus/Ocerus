@@ -2,14 +2,11 @@
 #include "DynamicBody.h"
 #include <Box2D.h>
 
-const float32 DEFAULT_LINEAR_DAMPING = 0.1f;
-const float32 DEFAULT_ANGULAR_DAMPING = 0.5f;
-
 void EntityComponents::DynamicBody::Create( void )
 {
 	mBody = 0;
-	mAngularDamping = DEFAULT_ANGULAR_DAMPING;
-	mLinearDamping = DEFAULT_LINEAR_DAMPING;
+	mAngularDamping = 0.5f;
+	mLinearDamping = 0.1f;
 }
 
 void EntityComponents::DynamicBody::Destroy( void )
