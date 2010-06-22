@@ -387,9 +387,9 @@
     <Entity Name="Player" ID="20" Transient="false">
       <Component Type="Transform">
         <Layer>0</Layer>
-        <Angle>0</Angle>
+        <Angle>1.36507</Angle>
         <Scale>1 1</Scale>
-        <Position>3.15101 -2.90183</Position>
+        <Position>4.3084 -1.78561</Position>
       </Component>
       <Component Type="DynamicBody">
         <AngularDamping>20</AngularDamping>
@@ -424,7 +424,7 @@
       <Component Type="Camera">
         <Rotation>0</Rotation>
         <Zoom>1</Zoom>
-        <Position>0 0</Position>
+        <Position>4.3084 -1.78561</Position>
       </Component>
     </Entity>
     <Entity Name="EditorCamera" ID="22" Transient="false">
