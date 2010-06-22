@@ -1,7 +1,5 @@
 void OnUpdateLogic(float32 delta)
 {
-	EntityHandle this = GetCurrentEntityHandle();
-	
 	// rotate the cube
 	float32 torque = 0;
 	if (GetInputMgr().IsKeyDown(KC_RIGHT)) torque = 1;

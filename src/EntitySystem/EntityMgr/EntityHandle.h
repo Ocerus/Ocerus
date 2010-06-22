@@ -59,19 +59,22 @@ namespace EntitySystem
 		inline void Invalidate(void) { mEntityID = INVALID_ENTITY_ID; }
 
 		/// Finishes the initialization of this entity. Must be called once only!
-		void FinishInit(void);
+		void FinishInit(void) const;
 
 		/// True if the entity is already initialized.
 		bool IsInited(void) const;
 
 		/// Retrieves properties of this entity. A filter related to properties' flags can be specified.
-		bool GetProperties(PropertyList& out, const PropertyAccessFlags mask = PA_FULL_ACCESS);
+		bool GetProperties(PropertyList& out, const PropertyAccessFlags mask = PA_FULL_ACCESS) const;
 
 		/// Retrieves a function of this entity. A filter related to the function's flags can be specified.
 		PropertyHolder GetFunction(const StringKey key, const PropertyAccessFlags mask = PA_FULL_ACCESS) const;
 
 		/// Returns true if the entity has the given property.
 		bool HasProperty(const StringKey key, const PropertyAccessFlags mask = PA_FULL_ACCESS) const;
+		
+		/// Returns true if the component of the entity has the given property.
+		bool HasComponentProperty(const ComponentID componentID, const StringKey key, const PropertyAccessFlags mask = PA_FULL_ACCESS) const;
 
 		/// Retrieves a property of this entity. A filter related to properties' flags can be specified.
 		PropertyHolder GetProperty(const StringKey key, const PropertyAccessFlags mask = PA_FULL_ACCESS) const;
@@ -82,19 +85,19 @@ namespace EntitySystem
 		/// Register a dynamic property to a component of this entity.
 		template <class T>
 		bool RegisterDynamicPropertyOfComponent(const ComponentID component, 
-			const StringKey propertyKey, const PropertyAccessFlags accessFlags, const string& comment);
+			const StringKey propertyKey, const PropertyAccessFlags accessFlags, const string& comment) const;
 
         /// Unregister a dynamic property of a component of this entity.
-		bool UnregisterDynamicPropertyOfComponent(const ComponentID component, const StringKey propertyKey);
+		bool UnregisterDynamicPropertyOfComponent(const ComponentID component, const StringKey propertyKey) const;
 
 		/// Sends a message to this entity.
-		EntityMessage::eResult PostMessage(const EntityMessage& msg);
+		EntityMessage::eResult PostMessage(const EntityMessage& msg) const;
 
 		/// Sends a message to this entity.
-		inline EntityMessage::eResult PostMessage(const EntityMessage::eType type) {  return PostMessage(EntityMessage(type, Reflection::PropertyFunctionParameters())); }
+		inline EntityMessage::eResult PostMessage(const EntityMessage::eType type) const {  return PostMessage(EntityMessage(type, Reflection::PropertyFunctionParameters())); }
 
 		/// Sends a message to this entity.
-		inline EntityMessage::eResult PostMessage(const EntityMessage::eType type, Reflection::PropertyFunctionParameters data) {  return PostMessage(EntityMessage(type, data)); }
+		inline EntityMessage::eResult PostMessage(const EntityMessage::eType type, Reflection::PropertyFunctionParameters data) const {  return PostMessage(EntityMessage(type, data)); }
 
 		/// Returns the internal ID of this entity.
 		inline EntityID GetID(void) const;

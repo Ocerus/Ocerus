@@ -91,7 +91,7 @@ bool EntitySystem::EntityHandle::operator!=( const EntityHandle& rhs ) const
 	return mEntityID != rhs.mEntityID;
 }
 
-void EntitySystem::EntityHandle::FinishInit( void )
+void EntitySystem::EntityHandle::FinishInit( void ) const
 {
 	// avoid ignored message by using EntityMgr directly for posting messages
 	gEntityMgr.PostMessage(*this, EntityMessage(EntityMessage::INIT));
@@ -103,7 +103,7 @@ bool EntitySystem::EntityHandle::IsInited( void ) const
 	return gEntityMgr.IsEntityInited(*this);
 }
 
-bool EntitySystem::EntityHandle::GetProperties( PropertyList& out, const PropertyAccessFlags mask )
+bool EntitySystem::EntityHandle::GetProperties( PropertyList& out, const PropertyAccessFlags mask ) const
 {
 	return gEntityMgr.GetEntityProperties(*this, out, mask);
 }
@@ -113,9 +113,14 @@ PropertyHolder EntitySystem::EntityHandle::GetFunction( const StringKey key, con
 	return gEntityMgr.GetEntityProperty(*this, key, mask);
 }
 
-bool EntitySystem::EntityHandle::HasProperty( const StringKey key, const PropertyAccessFlags mask /*= PA_FULL_ACCESS*/ ) const
+bool EntitySystem::EntityHandle::HasProperty( const StringKey key, const PropertyAccessFlags mask ) const
 {
 	return gEntityMgr.HasEntityProperty(*this, key, mask);
+}
+
+bool EntitySystem::EntityHandle::HasComponentProperty(const ComponentID componentID, const StringKey key, const PropertyAccessFlags mask ) const
+{
+  return gEntityMgr.HasEntityComponentProperty(*this, componentID, key, mask);
 }
 
 PropertyHolder EntitySystem::EntityHandle::GetProperty( const StringKey key, const PropertyAccessFlags mask ) const
@@ -123,12 +128,12 @@ PropertyHolder EntitySystem::EntityHandle::GetProperty( const StringKey key, con
 	return gEntityMgr.GetEntityProperty(*this, key, mask);
 }
 
-Reflection::PropertyHolder EntitySystem::EntityHandle::GetComponentProperty( const ComponentID componentID, const StringKey key, const PropertyAccessFlags mask /*= PA_FULL_ACCESS*/ ) const
+Reflection::PropertyHolder EntitySystem::EntityHandle::GetComponentProperty( const ComponentID componentID, const StringKey key, const PropertyAccessFlags mask ) const
 {
 	return gEntityMgr.GetEntityComponentProperty(*this, componentID, key, mask);
 }
 
-bool EntitySystem::EntityHandle::UnregisterDynamicPropertyOfComponent(const ComponentID component, const StringKey propertyKey)
+bool EntitySystem::EntityHandle::UnregisterDynamicPropertyOfComponent(const ComponentID component, const StringKey propertyKey) const
 {
 	return gEntityMgr.UnregisterDynamicPropertyOfEntityComponent(*this, component, propertyKey);
 }
@@ -153,7 +158,7 @@ bool EntitySystem::EntityHandle::operator<( const EntityHandle& rhs ) const
 	return mEntityID < rhs.mEntityID;
 }
 
-EntityMessage::eResult EntityHandle::PostMessage(const EntityMessage& msg)
+EntityMessage::eResult EntityHandle::PostMessage(const EntityMessage& msg) const
 {
 	OC_DASSERT(IsValid());
 	EntityMessage::eResult result = gEntityMgr.PostMessage(*this, msg);

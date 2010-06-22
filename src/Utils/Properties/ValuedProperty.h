@@ -27,6 +27,7 @@ namespace Reflection
 		TypedProperty<T> (name, accessFlags)
 		{
 			AbstractProperty::SetComment(comment);
+			mData = PropertyTypes::GetDefaultValue<T>();
 		}
 
 		/// Returns true if the property can be read.

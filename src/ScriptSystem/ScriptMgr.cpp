@@ -301,11 +301,36 @@ private:
 template<typename U>
 ScriptArray<U> EntityHandleGetArrayValue(EntitySystem::EntityHandle& handle, string& propName)
 {
-	Reflection::PropertyHolder ph = gEntityMgr.GetEntityProperty(handle, StringKey(propName), Reflection::PA_SCRIPT_WRITE);
-	if (ph.IsValid()) return ScriptArray<U>(ph.GetValue<Array<U>*>());
+	if (handle.Exists())
+	{
+	  Reflection::PropertyHolder ph;
+	  if (gEntityMgr.HasEntityProperty(handle, StringKey(propName), Reflection::PA_SCRIPT_WRITE))
+	  {
+	    ph = gEntityMgr.GetEntityProperty(handle, StringKey(propName), Reflection::PA_SCRIPT_WRITE);
+	  }
+	  if (ph.IsValid())
+	  {
+	    if (ph.GetType() == Reflection::PropertyTypes::GetTypeID<Array<U>*>())
+	    {
+	      return ScriptArray<U>(ph.GetValue<Array<U>*>());
+	    }
+	    else
+	    {
+	      asGetActiveContext()->SetException(("Can't convert property '" + propName + "' from '" + 
+	        Reflection::PropertyTypes::GetStringName(ph.GetType()) + "' to '" +
+	        Reflection::PropertyTypes::GetStringName(Reflection::PropertyTypes::GetTypeID<Array<U>*>()) + "'").c_str());
+	      return ScriptArray<U>(0);
+	    }
+	  }
+	  else
+	  {
+		  asGetActiveContext()->SetException(("Property '" + propName + "' does not exist or you don't have access rights!").c_str());
+		  return ScriptArray<U>(0);
+	  }
+	}
 	else
 	{
-		asGetActiveContext()->SetException(("Property '" + propName + "' does not exist or you don't have access rights!").c_str());
+		asGetActiveContext()->SetException("Invalid entity handle!");
 		return ScriptArray<U>(0);
 	}
 }
@@ -314,11 +339,36 @@ ScriptArray<U> EntityHandleGetArrayValue(EntitySystem::EntityHandle& handle, str
 template<typename U>
 const ScriptArray<U> EntityHandleGetConstArrayValue(EntitySystem::EntityHandle& handle, string& propName)
 {
-	Reflection::PropertyHolder ph = gEntityMgr.GetEntityProperty(handle, StringKey(propName), Reflection::PA_SCRIPT_READ);
-	if (ph.IsValid()) return ScriptArray<U>(ph.GetValue<Array<U>*>());
+	if (handle.Exists())
+	{
+	  Reflection::PropertyHolder ph;
+	  if (gEntityMgr.HasEntityProperty(handle, StringKey(propName), Reflection::PA_SCRIPT_READ))
+	  {
+	    ph = gEntityMgr.GetEntityProperty(handle, StringKey(propName), Reflection::PA_SCRIPT_READ);
+	  }
+	  if (ph.IsValid())
+	  {
+	    if (ph.GetType() == Reflection::PropertyTypes::GetTypeID<Array<U>*>())
+	    {
+	      return ScriptArray<U>(ph.GetValue<Array<U>*>());
+	    }
+	    else
+	    {
+	      asGetActiveContext()->SetException(("Can't convert property '" + propName + "' from '" + 
+	        Reflection::PropertyTypes::GetStringName(ph.GetType()) + "' to '" +
+	        Reflection::PropertyTypes::GetStringName(Reflection::PropertyTypes::GetTypeID<Array<U>*>()) + "'").c_str());
+	      return ScriptArray<U>(0);
+	    }
+	  }
+	  else
+	  {
+		  asGetActiveContext()->SetException(("Property '" + propName + "' does not exist or you don't have access rights!").c_str());
+		  return ScriptArray<U>(0);
+	  }
+	}
 	else
 	{
-		asGetActiveContext()->SetException(("Property '" + propName + "' does not exist or you don't have access rights!").c_str());
+		asGetActiveContext()->SetException("Invalid entity handle!");
 		return ScriptArray<U>(0);
 	}
 }
@@ -431,17 +481,23 @@ static void EntityHandleDestructor(EntityHandle* self)
 }
 
 template <class T>
-bool RegisterDynamicProperty(EntityHandle& self,
+bool RegisterDynamicProperty(const EntityHandle& self,
 	const string& propertyName, const PropertyAccessFlags accessFlags, const string& comment)
 {
 	ComponentID id = gEntityMgr.GetEntityComponent(self, CT_Script);
-	return self.RegisterDynamicPropertyOfComponent<T>(id, StringKey(propertyName), accessFlags, comment);
+	if (!self.HasComponentProperty(id, StringKey(propertyName), accessFlags))
+	{
+	  return self.RegisterDynamicPropertyOfComponent<T>(id, StringKey(propertyName), accessFlags, comment);
+	} else return false;
 }
 
-bool UnregisterDynamicProperty(EntityHandle& self, const string& propertyName)
+bool UnregisterDynamicProperty(const EntityHandle& self, const string& propertyName)
 {
 	ComponentID id = gEntityMgr.GetEntityComponent(self, CT_Script);
-	return self.UnregisterDynamicPropertyOfComponent(id, StringKey(propertyName));
+	if (self.HasComponentProperty(id, StringKey(propertyName)))
+	{
+	  return self.UnregisterDynamicPropertyOfComponent(id, StringKey(propertyName));
+	} else return false;
 }
 
 void RegisterScriptEntityHandle(asIScriptEngine* engine)
@@ -489,11 +545,11 @@ void RegisterScriptEntityHandle(asIScriptEngine* engine)
 	r = engine->RegisterObjectMethod("EntityHandle", "bool IsValid() const", asMETHOD(EntityHandle, IsValid), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("EntityHandle", "bool Exists() const", asMETHOD(EntityHandle, Exists), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("EntityHandle", "EntityID GetID() const", asMETHOD(EntityHandle, GetID), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-	r = engine->RegisterObjectMethod("EntityHandle", "eEntityMessageResult PostMessage(const eEntityMessageType)",
-		asMETHODPR(EntityHandle, PostMessage, (const EntityMessage::eType), EntityMessage::eResult), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-	r = engine->RegisterObjectMethod("EntityHandle", "eEntityMessageResult PostMessage(const eEntityMessageType, PropertyFunctionParameters)",
-		asMETHODPR(EntityHandle, PostMessage, (const EntityMessage::eType, Reflection::PropertyFunctionParameters), EntityMessage::eResult), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-	r = engine->RegisterObjectMethod("EntityHandle", "bool UnregisterDynamicProperty(const string &in)",
+	r = engine->RegisterObjectMethod("EntityHandle", "eEntityMessageResult PostMessage(const eEntityMessageType) const",
+		asMETHODPR(EntityHandle, PostMessage, (const EntityMessage::eType) const, EntityMessage::eResult), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("EntityHandle", "eEntityMessageResult PostMessage(const eEntityMessageType, PropertyFunctionParameters) const",
+		asMETHODPR(EntityHandle, PostMessage, (const EntityMessage::eType, Reflection::PropertyFunctionParameters) const, EntityMessage::eResult), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("EntityHandle", "bool UnregisterDynamicProperty(const string &in) const",
 		asFUNCTION(UnregisterDynamicProperty), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
 
 }
@@ -749,11 +805,11 @@ void ScriptMgr::ConfigureEngine(void)
 	RegisterScriptInputMgr(mEngine);
 
 	// Register a function for getting current owner entity handle
-	r = mEngine->RegisterGlobalFunction("EntityHandle GetCurrentEntityHandle()",
+	r = mEngine->RegisterGlobalFunction("EntityHandle get_this()",
 		asFUNCTION(GetCurrentEntityHandle), asCALL_CDECL); OC_SCRIPT_ASSERT();
 
 	// Register a call function on EntityHandle
-	r = mEngine->RegisterObjectMethod("EntityHandle", "void CallFunction(string &in, PropertyFunctionParameters &in)",
+	r = mEngine->RegisterObjectMethod("EntityHandle", "void CallFunction(string &in, PropertyFunctionParameters &in) const",
 		asFUNCTION(EntityHandleCallFunction), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
 
 	// Register StringMgr methods
@@ -776,10 +832,10 @@ void ScriptMgr::ConfigureEngine(void)
 	  r = mEngine->RegisterObjectMethod("string", (string("string opAdd_r(const ") + typeName + " &in) const").c_str(), asFUNCTIONPR(AddTypeString, (const typeClass&, string&), string), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT(); \
 	}\
 	/* Register getter and setter */ \
-	r = mEngine->RegisterObjectMethod("EntityHandle", (string(typeName) + " Get_" + typeName + "(const string &in)").c_str(), \
+	r = mEngine->RegisterObjectMethod("EntityHandle", (string(typeName) + " Get_" + typeName + "(const string &in) const").c_str(), \
 		asFUNCTIONPR(EntityHandleGetValue, (EntitySystem::EntityHandle&, const string&), typeClass), \
 		asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT(); \
-	r = mEngine->RegisterObjectMethod("EntityHandle", (string("void Set_") + typeName + "(const string &in, const " + typeName + "&in)").c_str(), \
+	r = mEngine->RegisterObjectMethod("EntityHandle", (string("void Set_") + typeName + "(const string &in, const " + typeName + "&in) const").c_str(), \
 		asFUNCTIONPR(EntityHandleSetValue, (EntitySystem::EntityHandle&, const string&, const typeClass&), void), \
 		asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT(); \
 	/* Register the array type */ \
@@ -793,14 +849,14 @@ void ScriptMgr::ConfigureEngine(void)
 	r = mEngine->RegisterObjectBehaviour((string("array_") + typeName).c_str(), asBEHAVE_INDEX, (string(typeName) + " &f(int32)").c_str(), asMETHODPR(ScriptArray<typeClass>, operator[], (int32), typeClass&), asCALL_THISCALL); OC_SCRIPT_ASSERT(); \
 	r = mEngine->RegisterObjectBehaviour((string("array_") + typeName).c_str(), asBEHAVE_INDEX, (string(typeName) + " f(int32) const").c_str(), asMETHODPR(ScriptArray<typeClass>, operator[], (int32) const, typeClass), asCALL_THISCALL); OC_SCRIPT_ASSERT(); \
 	/* Register array const and non-const getter */ \
-	r = mEngine->RegisterObjectMethod("EntityHandle", (string("array_") + typeName + " Get_array_" + typeName + "(string &in)").c_str(), \
+	r = mEngine->RegisterObjectMethod("EntityHandle", (string("array_") + typeName + " Get_array_" + typeName + "(string &in) const").c_str(), \
 		asFUNCTIONPR(EntityHandleGetArrayValue, (EntitySystem::EntityHandle&, string&), ScriptArray<typeClass>), \
 		asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT(); \
-	r = mEngine->RegisterObjectMethod("EntityHandle", (string("const array_") + typeName + " Get_const_array_" + typeName + "(string &in)").c_str(), \
+	r = mEngine->RegisterObjectMethod("EntityHandle", (string("const array_") + typeName + " Get_const_array_" + typeName + "(string &in) const").c_str(), \
 		asFUNCTIONPR(EntityHandleGetConstArrayValue, (EntitySystem::EntityHandle&, string&), const ScriptArray<typeClass>), \
 		asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT(); \
 	/* Register method for registering dynamic properties */ \
-	r = mEngine->RegisterObjectMethod("EntityHandle", (string("bool RegisterDynamicProperty_") + typeName + "(const string &in, const PropertyAccessFlags, const string &in)").c_str(), \
+	r = mEngine->RegisterObjectMethod("EntityHandle", (string("bool RegisterDynamicProperty_") + typeName + "(const string &in, const PropertyAccessFlags, const string &in) const").c_str(), \
 		asFUNCTION(RegisterDynamicProperty<typeClass>), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT(); \
 	/* Register operator<< method for PropertyFunctionParameters */ \
 	r = mEngine->RegisterObjectMethod("PropertyFunctionParameters", (string("PropertyFunctionParameters opShl(const ") + typeName + " &in) const").c_str(), \
@@ -993,7 +1049,7 @@ int32 ScriptMgr::GetFunctionID(const char* moduleName, const char* funcDecl)
 	asIScriptModule* mod = GetModule(moduleName);
 	if (mod == 0)
 	{
-		ocInfo << "Script: Script module '" << moduleName << "' not found!";
+		// ocInfo << "Script: Script module '" << moduleName << "' not found!";
 		return -1;
 	}
 
