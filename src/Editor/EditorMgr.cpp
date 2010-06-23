@@ -12,6 +12,8 @@
 #include "Core/Project.h"
 #include "Core/Game.h"
 #include "CEGUI.h"
+#include "GUISystem/MessageBox.h"
+#include "GUISystem/FolderSelector.h"
 
 #include <Box2D.h>
 
@@ -20,7 +22,7 @@ using namespace Editor;
 const float32 SELECTION_MIN_DISTANCE = 0.2f; ///< Minimum distance of the cursor position for the selection to be considered as multi-selection. The distance is given in pixels!
 const float32 EDIT_TOOL_ANGLE_CHANGE_RATIO = 0.3f; ///< How fast the edit tool will change the angle.
 const float32 EDIT_TOOL_SCALE_CHANGE_RATIO = 0.1f; ///< How fast the edit tool will change the scale.
-const float32 CAMERA_MOVEMENT_SPEED = 0.2f; ///< How fast the camera moves by keys.
+const float32 CAMERA_MOVEMENT_SPEED = 10.0f; ///< How fast the camera moves by keys.
 
 EditorMgr::EditorMgr():
 	mEditorGUI(0),
@@ -80,29 +82,7 @@ void Editor::EditorMgr::Update(const float32 delta)
 		// keys camera control
 		if (mouseAboveWindow && !IsLockedToGame())
 		{
-			EntitySystem::EntityHandle camera = mEditorGUI->GetEditorViewport()->GetCamera();
-			OC_ASSERT(camera.IsValid());
-			float32 movementSpeed = CAMERA_MOVEMENT_SPEED / camera.GetProperty("Zoom").GetValue<float32>();
-			if (gInputMgr.IsKeyDown(InputSystem::KC_LEFT))
-			{
-				Vector2 cameraPos = camera.GetProperty("Position").GetValue<Vector2>();
-				camera.GetProperty("Position").SetValue<Vector2>(cameraPos + Vector2(-movementSpeed, 0));
-			}
-			if (gInputMgr.IsKeyDown(InputSystem::KC_RIGHT))
-			{
-				Vector2 cameraPos = camera.GetProperty("Position").GetValue<Vector2>();
-				camera.GetProperty("Position").SetValue<Vector2>(cameraPos + Vector2(movementSpeed, 0));
-			}
-			if (gInputMgr.IsKeyDown(InputSystem::KC_UP))
-			{
-				Vector2 cameraPos = camera.GetProperty("Position").GetValue<Vector2>();
-				camera.GetProperty("Position").SetValue<Vector2>(cameraPos + Vector2(0, -movementSpeed));
-			}
-			if (gInputMgr.IsKeyDown(InputSystem::KC_DOWN))
-			{
-				Vector2 cameraPos = camera.GetProperty("Position").GetValue<Vector2>();
-				camera.GetProperty("Position").SetValue<Vector2>(cameraPos + Vector2(0, movementSpeed));
-			}
+			HandleHeldShortcuts(delta);
 		}
 
 
@@ -389,6 +369,13 @@ void Editor::EditorMgr::UpdateSceneMenu()
 	mEditorGUI->GetEditorMenu()->UpdateSceneMenu();
 }
 
+void EditorMgr::ShowCreateProjectDialog()
+{
+	GUISystem::FolderSelector* folderSelector = new GUISystem::FolderSelector((int)EditorMenu::FST_CREATEPROJECT);
+	folderSelector->RegisterCallback(new GUISystem::FolderSelector::Callback<Editor::EditorMenu>(mEditorGUI->GetEditorMenu(), &Editor::EditorMenu::OnFolderSelected));
+	folderSelector->Show("Create project", true, "Project folder:"); ///@todo translate
+}
+
 void EditorMgr::CreateProject(const string& projectPath)
 {
 	if (!mCurrentProject->CreateProject(projectPath))
@@ -398,6 +385,13 @@ void EditorMgr::CreateProject(const string& projectPath)
 			(GUISystem::GUIMgr::GUIGroup, "create_project_error")) << projectPath);
 		messageBox->Show();
 	}
+}
+
+void EditorMgr::ShowOpenProjectDialog()
+{
+	GUISystem::FolderSelector* folderSelector = new GUISystem::FolderSelector((int)EditorMenu::FST_OPENPROJECT);
+	folderSelector->RegisterCallback(new GUISystem::FolderSelector::Callback<Editor::EditorMenu>(mEditorGUI->GetEditorMenu(), &Editor::EditorMenu::OnFolderSelected));
+	folderSelector->Show("Open project"); ///@todo translate
 }
 
 void EditorMgr::OpenProject(const string& projectPath)
@@ -416,6 +410,21 @@ void EditorMgr::CloseProject()
 	mCurrentProject->CloseProject();
 }
 
+void EditorMgr::SaveOpenedScene()
+{
+	if (mCurrentProject->IsSceneOpened() && !IsLockedToGame())
+	{
+		mCurrentProject->SaveOpenedScene();
+	}
+}
+
+void EditorMgr::ShowQuitDialog()
+{
+	GUISystem::MessageBox* messageBox = new GUISystem::MessageBox(GUISystem::MessageBox::MBT_YES_NO, EditorMenu::MBT_QUIT);
+	messageBox->SetText(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "quit_message_text"));
+	messageBox->RegisterCallback(new GUISystem::MessageBox::Callback<Editor::EditorMenu>(mEditorGUI->GetEditorMenu(), &Editor::EditorMenu::OnMessageBoxClicked));
+	messageBox->Show();
+}
 
 bool Editor::EditorMgr::KeyPressed( const InputSystem::KeyInfo& ke )
 {
@@ -770,6 +779,17 @@ bool Editor::EditorMgr::HandleShortcuts( InputSystem::eKeyCode keyCode )
 		SwitchActionTool(AT_RESTART);
 		return true;
 	}
+	
+	if (mShortcuts->IsShortcutActive(KeyShortcuts::KS_PLAY_PAUSE) && IsLockedToGame())
+	{
+		SwitchActionTool(AT_PAUSE);
+		return true;
+	}
+	if (mShortcuts->IsShortcutActive(KeyShortcuts::KS_PLAY_PAUSE) && !IsLockedToGame())
+	{
+		SwitchActionTool(AT_RUN);
+		return true;
+	}
 	if (mShortcuts->IsShortcutActive(KeyShortcuts::KS_PROFILER) && IsLockedToGame())
 	{
 		if (gProfiler.IsRunning())
@@ -810,5 +830,63 @@ bool Editor::EditorMgr::HandleShortcuts( InputSystem::eKeyCode keyCode )
 		return true;
 	}
 
+	if (mShortcuts->IsShortcutActive(KeyShortcuts::KS_CREATE_PROJ))
+	{
+		ShowCreateProjectDialog();
+	}
+	if (mShortcuts->IsShortcutActive(KeyShortcuts::KS_OPEN_PROJ))
+	{
+		ShowOpenProjectDialog();
+	}
+	
+	if (mShortcuts->IsShortcutActive(KeyShortcuts::KS_SAVE_SCENE))
+	{
+		SaveOpenedScene();
+	}
+
+	if (mShortcuts->IsShortcutActive(KeyShortcuts::KS_DUPLICATE))
+	{
+		DuplicateCurrentEntity();
+	}
+	if (mShortcuts->IsShortcutActive(KeyShortcuts::KS_DELETE))
+	{
+		DeleteCurrentEntity();
+	}
+
+	if (mShortcuts->IsShortcutActive(KeyShortcuts::KS_QUIT))
+	{
+		ShowQuitDialog();
+	}
+
 	return false;
+}
+
+void Editor::EditorMgr::HandleHeldShortcuts( float32 delta )
+{
+	mShortcuts->ShortcutsHeld();
+	
+	EntitySystem::EntityHandle camera = mEditorGUI->GetEditorViewport()->GetCamera();
+	OC_ASSERT(camera.IsValid());
+	float32 movementSpeed = delta * CAMERA_MOVEMENT_SPEED / camera.GetProperty("Zoom").GetValue<float32>();
+	if (mShortcuts->IsShortcutActive(KeyShortcuts::KS_CAM_LEFT))
+	{
+		Vector2 cameraPos = camera.GetProperty("Position").GetValue<Vector2>();
+		camera.GetProperty("Position").SetValue<Vector2>(cameraPos + Vector2(-movementSpeed, 0));
+	}
+	if (mShortcuts->IsShortcutActive(KeyShortcuts::KS_CAM_RIGHT))
+	{
+		Vector2 cameraPos = camera.GetProperty("Position").GetValue<Vector2>();
+		camera.GetProperty("Position").SetValue<Vector2>(cameraPos + Vector2(movementSpeed, 0));
+	}
+	if (mShortcuts->IsShortcutActive(KeyShortcuts::KS_CAM_UP))
+	{
+		Vector2 cameraPos = camera.GetProperty("Position").GetValue<Vector2>();
+		camera.GetProperty("Position").SetValue<Vector2>(cameraPos + Vector2(0, -movementSpeed));
+	}
+	if (mShortcuts->IsShortcutActive(KeyShortcuts::KS_CAM_DOWN))
+	{
+		Vector2 cameraPos = camera.GetProperty("Position").GetValue<Vector2>();
+		camera.GetProperty("Position").SetValue<Vector2>(cameraPos + Vector2(0, movementSpeed));
+	}
+	
 }

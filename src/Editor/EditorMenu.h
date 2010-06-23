@@ -49,10 +49,10 @@ namespace Editor
 		/// Switches the currently selected action button.
 		void SwitchActionButton(uint32 selectedButtonIndex);
 
-	private:
-
 		enum eMessageBoxTags { MBT_QUIT };
 		enum eFolderSelectorTags { FST_CREATEPROJECT, FST_OPENPROJECT };
+
+	private:
 
 		typedef vector<CEGUI::RadioButton*> RadioButtonList;
 		RadioButtonList mToolButtons;

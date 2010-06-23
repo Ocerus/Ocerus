@@ -104,14 +104,26 @@ namespace Editor
 		/// Updates the scenes in scene menu.
 		void UpdateSceneMenu();
 
+		/// Shows dialog for "Create new project"
+		void ShowCreateProjectDialog();
+
 		/// Creates a new project in specified path.
 		void CreateProject(const string& projectPath);
+		
+		/// Shows dialog for "Open project".
+		void ShowOpenProjectDialog();
 		
 		/// Opens the project specified with given path.
 		void OpenProject(const string& projectPath);
 
 		/// Closes the opened project.
 		void CloseProject();
+
+		/// Saves opened scene.
+		void SaveOpenedScene();
+
+		/// Shows dialog for "Quit".
+		void ShowQuitDialog();
 
 		/// Resumes action of the edited game.
 		void ResumeAction();
@@ -198,6 +210,9 @@ namespace Editor
 
 		/// Sets the current edit tool.
 		void SetCurrentEditTool(eEditTool newEditTool);
+
+		/// Handles held key shortcuts (i.e. for camera movement)
+		void HandleHeldShortcuts( float32 delta );
 
 	private:
 

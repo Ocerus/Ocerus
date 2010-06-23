@@ -81,17 +81,13 @@ bool Editor::EditorMenu::OnMenuItemClicked(const CEGUI::EventArgs& e)
 
 	if (itemName == menubarPrefix + "/File/CreateProject")
 	{
-		GUISystem::FolderSelector* folderSelector = new GUISystem::FolderSelector((int)FST_CREATEPROJECT);
-		folderSelector->RegisterCallback(new GUISystem::FolderSelector::Callback<Editor::EditorMenu>(this, &Editor::EditorMenu::OnFolderSelected));
-		folderSelector->Show("Create project", true, "Project folder:"); ///@todo translate
+		gEditorMgr.ShowCreateProjectDialog();
 		return true;
 	}
 
 	if (itemName == menubarPrefix + "/File/OpenProject")
 	{
-		GUISystem::FolderSelector* folderSelector = new GUISystem::FolderSelector((int)FST_OPENPROJECT);
-		folderSelector->RegisterCallback(new GUISystem::FolderSelector::Callback<Editor::EditorMenu>(this, &Editor::EditorMenu::OnFolderSelected));
-		folderSelector->Show("Open project"); ///@todo translate
+		gEditorMgr.ShowOpenProjectDialog();
 		return true;
 	}
 
@@ -108,10 +104,7 @@ bool Editor::EditorMenu::OnMenuItemClicked(const CEGUI::EventArgs& e)
 
 	if (itemName == menubarPrefix + "/File/Quit")
 	{
-		GUISystem::MessageBox* messageBox = new GUISystem::MessageBox(GUISystem::MessageBox::MBT_YES_NO, MBT_QUIT);
-		messageBox->SetText(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "quit_message_text"));
-		messageBox->RegisterCallback(new GUISystem::MessageBox::Callback<Editor::EditorMenu>(this, &Editor::EditorMenu::OnMessageBoxClicked));
-		messageBox->Show();
+		gEditorMgr.ShowQuitDialog();
 		return true;
 	}
 
@@ -145,10 +138,7 @@ bool Editor::EditorMenu::OnMenuItemClicked(const CEGUI::EventArgs& e)
 
 	if (itemName == menubarPrefix + "/Scene/SaveScene")
 	{
-		if (gEditorMgr.GetCurrentProject()->IsSceneOpened() && !GlobalProperties::Get<Core::Game>("Game").IsActionRunning())
-		{
-			gEditorMgr.GetCurrentProject()->SaveOpenedScene();
-		}
+		gEditorMgr.SaveOpenedScene();
 		return true;			
 	}
 
