@@ -31,10 +31,15 @@ namespace EntityComponents
 		/// Physical body in the physics engine.
 		void SetBody(PhysicalBody* val) { mBody = val; }
 
-		/// Applies force to the body.
-		void ApplyForce(PropertyFunctionParameters params);
+		/// Applies a force defined in the local coordinates. First parameter is the force and the second (optional)
+		/// is the application point (local coordinates).
+		void ApplyForceLocalCoords(PropertyFunctionParameters params);
 
-		/// Applies torque to the body.
+		/// Applies a force defined in the world coordinates. First parameter is the force and the second (optional)
+		/// is the application point (world coordinates).
+		void ApplyForceWorldCoords(PropertyFunctionParameters params);
+
+		/// Applies a torque to the body.
 		void ApplyTorque(PropertyFunctionParameters params);
 
 		/// Returns the angular damping.
@@ -48,6 +53,12 @@ namespace EntityComponents
 
 		/// Sets the linear damping.
 		void SetLinearDamping(float32 val);
+
+		/// Linear velocity of the body.
+		Vector2 GetLinearVelocity() const;
+
+		/// Angular velocity of the body.
+		float32 GetAngularVelocity() const;
 
 
 	private:

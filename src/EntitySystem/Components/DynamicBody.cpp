@@ -42,10 +42,14 @@ EntityMessage::eResult EntityComponents::DynamicBody::HandleMessage( const Entit
 void EntityComponents::DynamicBody::RegisterReflection( void )
 {
 	RegisterProperty<PhysicalBody*>("PhysicalBody", &DynamicBody::GetBody, &DynamicBody::SetBody, PA_NONE | PA_TRANSIENT, "");
-	RegisterFunction("ApplyForce", &DynamicBody::ApplyForce, PA_SCRIPT_WRITE, "");
+	RegisterFunction("ApplyForce", &DynamicBody::ApplyForceWorldCoords, PA_SCRIPT_WRITE, "");
+	RegisterFunction("ApplyForceWorldCoords", &DynamicBody::ApplyForceWorldCoords, PA_SCRIPT_WRITE, "");
+	RegisterFunction("ApplyForceLocalCoords", &DynamicBody::ApplyForceLocalCoords, PA_SCRIPT_WRITE, "");
 	RegisterFunction("ApplyTorque", &DynamicBody::ApplyTorque, PA_SCRIPT_WRITE, "");
 	RegisterProperty<float32>("LinearDamping", &DynamicBody::GetLinearDamping, &DynamicBody::SetLinearDamping, PA_FULL_ACCESS, "");
 	RegisterProperty<float32>("AngularDamping", &DynamicBody::GetAngularDamping, &DynamicBody::SetAngularDamping, PA_FULL_ACCESS, "");
+	RegisterProperty<Vector2>("LinearVelocity", &DynamicBody::GetLinearVelocity, 0, PA_EDIT_READ | PA_SCRIPT_READ, "");
+	RegisterProperty<float32>("AngularVelocity", &DynamicBody::GetAngularVelocity, 0, PA_EDIT_READ | PA_SCRIPT_READ, "");
 
 	// we need the transform to be able to have the position and angle ready while creating the body
 	AddComponentDependency(CT_Transform);
@@ -64,12 +68,24 @@ void EntityComponents::DynamicBody::CreateBody( void )
 	mBody = GlobalProperties::Get<Physics>("Physics").CreateBody(&bodyDef);
 }
 
-void EntityComponents::DynamicBody::ApplyForce( PropertyFunctionParameters params )
+void EntityComponents::DynamicBody::ApplyForceLocalCoords( PropertyFunctionParameters params )
 {
 	OC_ASSERT(mBody);
 	OC_ASSERT(params.GetParametersCount() >= 1);
 	Vector2 force = *params.GetParameter(0).GetData<Vector2>();
 	Vector2 point = Vector2_Zero;
+	if (params.GetParametersCount() >= 2) point = *params.GetParameter(1).GetData<Vector2>();
+	force = mBody->GetLocalVector(force);
+	point = mBody->GetLocalPoint(point);
+	mBody->ApplyForce(force, point);
+}
+
+void EntityComponents::DynamicBody::ApplyForceWorldCoords( PropertyFunctionParameters params )
+{
+	OC_ASSERT(mBody);
+	OC_ASSERT(params.GetParametersCount() >= 1);
+	Vector2 force = *params.GetParameter(0).GetData<Vector2>();
+	Vector2 point = mBody->GetWorldCenter();
 	if (params.GetParametersCount() >= 2) point = *params.GetParameter(1).GetData<Vector2>();
 	mBody->ApplyForce(force, point);
 }
@@ -103,4 +119,16 @@ void EntityComponents::DynamicBody::SetLinearDamping( float32 val )
 {
 	mLinearDamping = val;
 	if (mBody) mBody->SetLinearDamping(mLinearDamping);
+}
+
+Vector2 EntityComponents::DynamicBody::GetLinearVelocity() const
+{
+	if (mBody) return mBody->GetLinearVelocity();
+	else return Vector2_Zero;
+}
+
+float32 EntityComponents::DynamicBody::GetAngularVelocity() const
+{
+	if (mBody) return mBody->GetAngularVelocity();
+	else return 0.0f;
 }

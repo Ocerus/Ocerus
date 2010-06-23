@@ -418,11 +418,11 @@
         <Layer>0</Layer>
         <Angle>0.366988</Angle>
         <Scale>1 1</Scale>
-        <Position>1.20179 -2.47569</Position>
+        <Position>1.2851 -2.45479</Position>
       </Component>
       <Component Type="DynamicBody">
-        <AngularDamping>20</AngularDamping>
         <LinearDamping>0.1</LinearDamping>
+        <AngularDamping>20</AngularDamping>
       </Component>
       <Component Type="PolygonCollider">
         <Density>1</Density>
@@ -459,8 +459,8 @@
     <Entity Name="EditorCamera" ID="22" Transient="false">
       <Component Type="Camera">
         <Rotation>0</Rotation>
-        <Zoom>1.10342</Zoom>
-        <Position>4.20313 -4.266</Position>
+        <Zoom>0.514754</Zoom>
+        <Position>4.08005 -3.76464</Position>
       </Component>
     </Entity>
     <Entity Name="LandFiller" ID="23" Transient="false" Prototype="-497">
@@ -829,7 +829,7 @@
         <Layer>0</Layer>
         <Angle>1.68858</Angle>
         <Scale>1.60062 0.9214</Scale>
-        <Position>28.1771 -4.39978</Position>
+        <Position>28.1441 -4.41626</Position>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
@@ -997,7 +997,7 @@
         <Layer>0</Layer>
         <Angle>-1.52428</Angle>
         <Scale>1.27179 0.915254</Scale>
-        <Position>30.3555 -5.52021</Position>
+        <Position>30.3885 -5.50373</Position>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
@@ -1322,30 +1322,6 @@
         <Friction>0</Friction>
       </Component>
     </Entity>
-    <Entity Name="Land1" ID="60" Transient="false" Prototype="-495">
-      <Component Type="Transform">
-        <Layer>0</Layer>
-        <Angle>0</Angle>
-        <Scale>4.01868 1.08086</Scale>
-        <Position>16.0778 -15.2138</Position>
-      </Component>
-      <Component Type="StaticBody"></Component>
-      <Component Type="PolygonCollider">
-        <Density>1</Density>
-        <Polygon>
-          <Item>-0.85 -0.55</Item>
-          <Item>0.85 -0.6</Item>
-          <Item>0.85 0.6</Item>
-          <Item>-0.85 0.6</Item>
-        </Polygon>
-        <Restitution>0</Restitution>
-        <Friction>1</Friction>
-      </Component>
-      <Component Type="Sprite">
-        <Transparency>0</Transparency>
-        <Texture>tile0.png</Texture>
-      </Component>
-    </Entity>
     <Entity Name="Objects" ID="61" Transient="false">
       <Component Type="Transform">
         <Layer>0</Layer>
@@ -1362,8 +1338,8 @@
         <Position>27.0683 -7.56439</Position>
       </Component>
       <Component Type="DynamicBody">
-        <AngularDamping>0.5</AngularDamping>
         <LinearDamping>0.1</LinearDamping>
+        <AngularDamping>0.5</AngularDamping>
       </Component>
       <Component Type="PolygonCollider">
         <Density>1</Density>
@@ -1392,8 +1368,8 @@
         <Position>19.499 -6.27078</Position>
       </Component>
       <Component Type="DynamicBody">
-        <AngularDamping>0.5</AngularDamping>
         <LinearDamping>0.1</LinearDamping>
+        <AngularDamping>0.5</AngularDamping>
       </Component>
       <Component Type="PolygonCollider">
         <Density>1</Density>
@@ -1422,8 +1398,8 @@
         <Position>18.3608 -6.55248</Position>
       </Component>
       <Component Type="DynamicBody">
-        <AngularDamping>0.5</AngularDamping>
         <LinearDamping>0.1</LinearDamping>
+        <AngularDamping>0.5</AngularDamping>
       </Component>
       <Component Type="PolygonCollider">
         <Density>1</Density>
@@ -1452,8 +1428,8 @@
         <Position>27.3199 -8.49206</Position>
       </Component>
       <Component Type="DynamicBody">
-        <AngularDamping>0.5</AngularDamping>
         <LinearDamping>0.1</LinearDamping>
+        <AngularDamping>0.5</AngularDamping>
       </Component>
       <Component Type="PolygonCollider">
         <Density>1</Density>
@@ -1482,8 +1458,8 @@
         <Position>27.6866 -9.18684</Position>
       </Component>
       <Component Type="DynamicBody">
-        <AngularDamping>0.5</AngularDamping>
         <LinearDamping>0.1</LinearDamping>
+        <AngularDamping>0.5</AngularDamping>
       </Component>
       <Component Type="PolygonCollider">
         <Density>1</Density>
@@ -1512,8 +1488,8 @@
         <Position>17.3098 -6.50499</Position>
       </Component>
       <Component Type="DynamicBody">
-        <AngularDamping>0.5</AngularDamping>
         <LinearDamping>0.1</LinearDamping>
+        <AngularDamping>0.5</AngularDamping>
       </Component>
       <Component Type="PolygonCollider">
         <Density>1</Density>
@@ -1542,8 +1518,8 @@
         <Position>17.5774 -7.40505</Position>
       </Component>
       <Component Type="DynamicBody">
-        <AngularDamping>0.5</AngularDamping>
         <LinearDamping>0.1</LinearDamping>
+        <AngularDamping>0.5</AngularDamping>
       </Component>
       <Component Type="PolygonCollider">
         <Density>1</Density>
@@ -1572,8 +1548,8 @@
         <Position>14.9745 -5.0211</Position>
       </Component>
       <Component Type="DynamicBody">
-        <AngularDamping>0.5</AngularDamping>
         <LinearDamping>0.1</LinearDamping>
+        <AngularDamping>0.5</AngularDamping>
       </Component>
       <Component Type="PolygonCollider">
         <Density>1</Density>
@@ -1602,8 +1578,8 @@
         <Position>6.97124 -3.26962</Position>
       </Component>
       <Component Type="DynamicBody">
-        <AngularDamping>0.5</AngularDamping>
         <LinearDamping>0.1</LinearDamping>
+        <AngularDamping>0.5</AngularDamping>
       </Component>
       <Component Type="PolygonCollider">
         <Density>1</Density>
@@ -1632,8 +1608,8 @@
         <Position>18.8423 -7.42938</Position>
       </Component>
       <Component Type="DynamicBody">
-        <AngularDamping>0.5</AngularDamping>
         <LinearDamping>0.1</LinearDamping>
+        <AngularDamping>0.5</AngularDamping>
       </Component>
       <Component Type="PolygonCollider">
         <Density>1</Density>
@@ -1662,8 +1638,8 @@
         <Position>18.3315 -8.45107</Position>
       </Component>
       <Component Type="DynamicBody">
-        <AngularDamping>0.5</AngularDamping>
         <LinearDamping>0.1</LinearDamping>
+        <AngularDamping>0.5</AngularDamping>
       </Component>
       <Component Type="PolygonCollider">
         <Density>1</Density>
@@ -1692,8 +1668,8 @@
         <Position>16.58 -6.38336</Position>
       </Component>
       <Component Type="DynamicBody">
-        <AngularDamping>0.5</AngularDamping>
         <LinearDamping>0.1</LinearDamping>
+        <AngularDamping>0.5</AngularDamping>
       </Component>
       <Component Type="PolygonCollider">
         <Density>1</Density>
@@ -1722,8 +1698,8 @@
         <Position>15.6061 -5.26926</Position>
       </Component>
       <Component Type="DynamicBody">
-        <AngularDamping>0.5</AngularDamping>
         <LinearDamping>0.1</LinearDamping>
+        <AngularDamping>0.5</AngularDamping>
       </Component>
       <Component Type="PolygonCollider">
         <Density>1</Density>
@@ -1752,8 +1728,8 @@
         <Position>14.9015 -4.07238</Position>
       </Component>
       <Component Type="DynamicBody">
-        <AngularDamping>0.5</AngularDamping>
         <LinearDamping>0.1</LinearDamping>
+        <AngularDamping>0.5</AngularDamping>
       </Component>
       <Component Type="PolygonCollider">
         <Density>1</Density>
@@ -1782,8 +1758,8 @@
         <Position>16.7016 -6.94286</Position>
       </Component>
       <Component Type="DynamicBody">
-        <AngularDamping>0.5</AngularDamping>
         <LinearDamping>0.1</LinearDamping>
+        <AngularDamping>0.5</AngularDamping>
       </Component>
       <Component Type="PolygonCollider">
         <Density>1</Density>
@@ -1812,8 +1788,8 @@
         <Position>15.534 -5.72655</Position>
       </Component>
       <Component Type="DynamicBody">
-        <AngularDamping>0.5</AngularDamping>
         <LinearDamping>0.1</LinearDamping>
+        <AngularDamping>0.5</AngularDamping>
       </Component>
       <Component Type="PolygonCollider">
         <Density>1</Density>
@@ -1842,8 +1818,8 @@
         <Position>6.73477 -4.49152</Position>
       </Component>
       <Component Type="DynamicBody">
-        <AngularDamping>0.5</AngularDamping>
         <LinearDamping>0.1</LinearDamping>
+        <AngularDamping>0.5</AngularDamping>
       </Component>
       <Component Type="PolygonCollider">
         <Density>1</Density>
@@ -1872,8 +1848,8 @@
         <Position>27.0752 0.306205</Position>
       </Component>
       <Component Type="DynamicBody">
-        <AngularDamping>0.5</AngularDamping>
         <LinearDamping>0.1</LinearDamping>
+        <AngularDamping>0.5</AngularDamping>
       </Component>
       <Component Type="PolygonCollider">
         <Density>1</Density>
@@ -1902,8 +1878,8 @@
         <Position>27.0149 -1.34234</Position>
       </Component>
       <Component Type="DynamicBody">
-        <AngularDamping>0.5</AngularDamping>
         <LinearDamping>0.1</LinearDamping>
+        <AngularDamping>0.5</AngularDamping>
       </Component>
       <Component Type="PolygonCollider">
         <Density>1</Density>
@@ -1932,8 +1908,8 @@
         <Position>16.1178 -5.94549</Position>
       </Component>
       <Component Type="DynamicBody">
-        <AngularDamping>0.5</AngularDamping>
         <LinearDamping>0.1</LinearDamping>
+        <AngularDamping>0.5</AngularDamping>
       </Component>
       <Component Type="PolygonCollider">
         <Density>1</Density>
@@ -2008,7 +1984,6 @@
       <Entity ID="57"></Entity>
       <Entity ID="58"></Entity>
       <Entity ID="59"></Entity>
-      <Entity ID="60"></Entity>
     </Entity>
     <Entity ID="20"></Entity>
     <Entity ID="19"></Entity>

@@ -193,6 +193,8 @@ void Editor::HierarchyWindow::RemoveEntityFromHierarchy( const EntitySystem::Ent
 
 void Editor::HierarchyWindow::LoadHierarchy( ResourceSystem::XMLNodeIterator& xml )
 {
+	ocInfo << "Loading hierarchy";
+
 	mHierarchy.clear();
 
 	LoadSubtree(xml, mHierarchy.begin());

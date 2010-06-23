@@ -804,26 +804,32 @@ bool EntitySystem::EntityMgr::SaveEntityToStorage(const EntitySystem::EntityID e
 
 		PropertyList propertyList;
 		comp->EnumProperties(comp, propertyList);
-		if (!comp->IsTransient()) for (PropertyList::iterator it = propertyList.begin(); it != propertyList.end(); ++it)
+		if (!comp->IsTransient())
 		{
-			bool protPropShared = protInfo && protInfo->mSharedProperties.find(it->GetKey()) != protInfo->mSharedProperties.end();
-			if ((it->GetAccessFlags() & Reflection::PA_TRANSIENT) != 0 || (isPrototype && !protPropShared)) { continue; }
-			string propName = it->GetKey().ToString();
-			storage.BeginElementStart(propName);
-			if (it->IsValued()) // property is dynamic, so we must save a type
-			{ 
-				storage.AddAttribute("Type", string(Reflection::PropertyTypes::GetStringName(it->GetType())));
-				if (it->GetAccessFlags() != Reflection::PA_FULL_ACCESS)
+			for (PropertyList::iterator it = propertyList.begin(); it != propertyList.end(); ++it)
+			{
+				if ((it->GetAccessFlags() & Reflection::PA_TRANSIENT) != 0) continue; // transient
+				if ((it->GetAccessFlags() & Reflection::PA_INIT) == 0) continue; // not initable, so we wouldn't be able to load that
+				bool protPropShared = protInfo && protInfo->mSharedProperties.find(it->GetKey()) != protInfo->mSharedProperties.end();
+				if (isPrototype && !protPropShared) continue; // not shared among prototype instances
+
+				string propName = it->GetKey().ToString();
+				storage.BeginElementStart(propName);
+				if (it->IsValued()) // property is dynamic, so we must save a type
+				{ 
+					storage.AddAttribute("Type", string(Reflection::PropertyTypes::GetStringName(it->GetType())));
+					if (it->GetAccessFlags() != Reflection::PA_FULL_ACCESS)
 					{ storage.AddAttribute("Access", Utils::StringConverter::ToString<uint16>(it->GetAccessFlags())); }
-				if (it->GetComment() != "")
+					if (it->GetComment() != "")
 					{ storage.AddAttribute("Comment", it->GetComment()); }
+				}
+				storage.BeginElementFinish();
+
+				// write property value
+				it->WriteValueXML(storage);
+
+				storage.EndElement();
 			}
-			storage.BeginElementFinish();
-
-			// write property value
-			it->WriteValueXML(storage);
-
-			storage.EndElement();
 		}
 
 		storage.EndElement();
