@@ -428,6 +428,8 @@ public:
 	/// Determine whether node at position is in the subtrees with root in the range.
 	bool     is_in_subtree(const iterator_base& position, const iterator_base& begin,
 		const iterator_base& end) const;
+	/// Determine whether node at position is in the subtrees with root in the range.
+	bool     is_in_subtree(const iterator_base& position, const iterator_base& begin) const;
 	/// Determine whether the iterator is an 'end' iterator and thus not actually pointing to a node.
 	bool     is_valid(const iterator_base&) const;
 
@@ -1860,6 +1862,34 @@ bool tree<T, tree_node_allocator>::is_in_subtree(const iterator_base& it, const 
 		if(tmp==it) return true;
 		++tmp;
 	}
+	return false;
+}
+
+template <class T, class tree_node_allocator>
+bool tree<T, tree_node_allocator>::is_in_subtree(const iterator_base& it, const iterator_base& subtreeRoot) const
+{
+	pre_order_iterator tmp=subtreeRoot;
+	
+	// find the end
+	sibling_iterator siblingEnd=subtreeRoot;
+	sibling_iterator lastEnd=siblingEnd;
+	++siblingEnd;
+	while(!siblingEnd.node)
+	{
+		lastEnd=parent(lastEnd);
+		if (!lastEnd.node) break;
+		siblingEnd=lastEnd;
+		++siblingEnd;
+	}	
+
+	pre_order_iterator end=this->end();
+	if (siblingEnd.node) end=siblingEnd;
+
+	while(tmp!=end) {
+		if(tmp==it) return true;
+		++tmp;
+	}
+
 	return false;
 }
 

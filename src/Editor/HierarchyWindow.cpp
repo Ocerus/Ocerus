@@ -357,10 +357,11 @@ bool Editor::HierarchyWindow::OnTreeItemDragDropItemDropped(const CEGUI::EventAr
 		  HierarchyTree::sibling_iterator targetIter = std::find(mHierarchy.begin(), mHierarchy.end(), targetEntity);
 		  OC_ASSERT_MSG(sourceIter != mHierarchy.end() && targetIter != mHierarchy.end(), "Invalid drag'n'drop entities");
 
-		  HierarchyTree::sibling_iterator sourceIter2 = sourceIter;
-		  ++sourceIter2;
-		  if (mHierarchy.parent(sourceIter) != targetIter && !mHierarchy.is_in_subtree(targetIter, sourceIter, sourceIter2))
+		  if (mHierarchy.parent(sourceIter) != targetIter && !mHierarchy.is_in_subtree(targetIter, sourceIter))
 		  {
+			  // the sibling iterator is here because reparent works with sibling iterators
+			  HierarchyTree::sibling_iterator sourceIter2 = sourceIter;
+			  ++sourceIter2;
 			  mHierarchy.reparent(targetIter, sourceIter, sourceIter2);
 			  RebuildTree();
 			  SetSelectedEntity(sourceEntity);
