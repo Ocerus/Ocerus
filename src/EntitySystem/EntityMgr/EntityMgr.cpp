@@ -725,6 +725,17 @@ bool EntitySystem::EntityMgr::LoadEntitiesFromResource(ResourceSystem::ResourceP
 
 	ResourceSystem::XMLNodeIterator toplevelIter = xml->IterateTopLevel();
 	
+	if (!isPrototype)
+	{
+		if (toplevelIter == xml->EndTopLevel() || (*toplevelIter).compare("Layers") != 0)
+		{
+			ocError << "XML: Expected 'Layers', found " << *toplevelIter;
+			return false;
+		}
+		gLayerMgr.LoadLayers(toplevelIter);
+		++toplevelIter;
+	}
+
 	if (toplevelIter == xml->EndTopLevel() || (*toplevelIter).compare("Entities") != 0)
 	{
 		ocError << "XML: Expected 'Entities', found " << *toplevelIter;
@@ -753,14 +764,6 @@ bool EntitySystem::EntityMgr::LoadEntitiesFromResource(ResourceSystem::ResourceP
 			return false;
 		}
 		gEditorMgr.LoadHierarchyWindow(toplevelIter);
-		
-		++toplevelIter;
-		if (toplevelIter == xml->EndTopLevel() || (*toplevelIter).compare("Layers") != 0)
-		{
-			ocError << "XML: Expected 'Layers' after 'Hierarchy'";
-			return false;
-		}
-		gLayerMgr.LoadLayers(toplevelIter);
 	}
 
 	return result;
@@ -834,8 +837,15 @@ bool EntitySystem::EntityMgr::SaveEntityToStorage(const EntitySystem::EntityID e
 bool EntitySystem::EntityMgr::SaveEntitiesToStorage(ResourceSystem::XMLOutput& storage, const bool isPrototype,
 	const bool evenTransient) const
 {
+	// layers
+	if (!isPrototype)
+	{
+		gLayerMgr.SaveLayers(storage);
+	}
+
+	// entities
 	storage.BeginElement("Entities");
-	
+
 	bool result = true;
 	for (EntityMap::const_iterator i = mEntities.begin(); i != mEntities.end(); ++i)
 	{
@@ -848,13 +858,10 @@ bool EntitySystem::EntityMgr::SaveEntitiesToStorage(ResourceSystem::XMLOutput& s
 
 	storage.EndElement();
 
-	if (!isPrototype)
+	// hierarchy
+	if (!isPrototype && GlobalProperties::Get<bool>("DevelopMode"))
 	{
-		storage.BeginElement("Hierarchy");
 		gEditorMgr.SaveHierarchyWindow(storage);
-		storage.EndElement();
-		
-		gLayerMgr.SaveLayers(storage);
 	}
 
 	return result;

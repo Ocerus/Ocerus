@@ -17,40 +17,40 @@ LayerMgr::~LayerMgr()
 
 void LayerMgr::LoadLayers(ResourceSystem::XMLNodeIterator& xml)
 {
-  mLayers.clear();
-  mLayerVisibilities.clear();
-  
-  mDifference = xml.GetAttribute<int32>("Difference");
-  mActiveLayerID = xml.GetAttribute<LayerID>("ActiveLayer");
-  
-  for (ResourceSystem::XMLNodeIterator iter = xml.IterateChildren(); iter != xml.EndChildren(); ++iter)
+	mLayers.clear();
+	mLayerVisibilities.clear();
+
+	mDifference = xml.GetAttribute<int32>("Difference");
+	mActiveLayerID = xml.GetAttribute<LayerID>("ActiveLayer");
+
+	for (ResourceSystem::XMLNodeIterator iter = xml.IterateChildren(); iter != xml.EndChildren(); ++iter)
 	{
 		if ((*iter).compare("Layer") != 0) continue;
 		mLayerVisibilities.push_back(iter.HasAttribute("Visible") ? iter.GetAttribute<bool>("Visible") : true);
 		mLayers.push_back(iter.GetChildValue<string>());
 	}
-  
-  if (mLayers.empty())
-  { 
-    mLayerVisibilities.clear();
-    mDifference = 0;
-    mActiveLayerID = 0;
-    PushBackLayer(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "initial_layer").c_str());
-  }
-  
-  RefreshList();
+
+	if (mLayers.empty())
+	{ 
+		mLayerVisibilities.clear();
+		mDifference = 0;
+		mActiveLayerID = 0;
+		PushBackLayer(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "initial_layer").c_str());
+	}
+
+	RefreshList();
 }
 
 void LayerMgr::SaveLayers(ResourceSystem::XMLOutput& storage)
 {
-  storage.BeginElementStart("Layers");
-  storage.AddAttribute("Difference", StringConverter::ToString(mDifference));
-  storage.AddAttribute("ActiveLayer", StringConverter::ToString(mActiveLayerID));
-  storage.BeginElementFinish();
-  
-  Layers::const_iterator lit = mLayers.begin();
-  LayerVisibilities::const_iterator lvit = mLayerVisibilities.begin();
-  for (; lit != mLayers.end(); ++lit, ++lvit)
+	storage.BeginElementStart("Layers");
+	storage.AddAttribute("Difference", StringConverter::ToString(mDifference));
+	storage.AddAttribute("ActiveLayer", StringConverter::ToString(mActiveLayerID));
+	storage.BeginElementFinish();
+
+	Layers::const_iterator lit = mLayers.begin();
+	LayerVisibilities::const_iterator lvit = mLayerVisibilities.begin();
+	for (; lit != mLayers.end(); ++lit, ++lvit)
 	{
 		storage.BeginElementStart("Layer");
 		storage.AddAttribute("Visible", StringConverter::ToString(*lvit));
@@ -58,7 +58,7 @@ void LayerMgr::SaveLayers(ResourceSystem::XMLOutput& storage)
 		storage.WriteString(*lit);
 		storage.EndElement();
 	}
-	
+
 	storage.EndElement();
 }
 
@@ -172,10 +172,10 @@ bool LayerMgr::DeleteLayer(LayerID id, bool destroyEntities)
 	// remember entities in the layer to delete
 	EntityList toDelete;
 	GetEntitiesFromLayer(id, toDelete);
-	
+
 	// delete the layer and shift the others
 	EraseAndShift(id);
-	
+
 	// delete or move entites in the layer
 	for (EntityList::iterator it = toDelete.begin(); it != toDelete.end(); ++it)
 	{
@@ -197,7 +197,7 @@ LayerID LayerMgr::MoveLayerBehind(LayerID id, LayerID behind)
 	EntityList toMove;
 	GetEntitiesFromLayer(id, toMove);
 	string name = mLayers.at(id + mDifference);
-	
+
 	// delete the layer and shift the others
 	EraseAndShift(id);
 
@@ -205,7 +205,7 @@ LayerID LayerMgr::MoveLayerBehind(LayerID id, LayerID behind)
 	if (id < 0 && behind < 0 && id > behind) { ++behind; }
 	else if (id > 0 && behind > 0 && id < behind) { --behind; }
 	LayerID newID = InsertAndShift(behind, name);	
-	
+
 	// correct the layer of entities in the moved layer and return a new layer ID
 	SetLayerOfEntities(newID, toMove);
 	if (mActiveLayerID == id)
@@ -220,7 +220,7 @@ LayerID LayerMgr::MoveLayerTop(LayerID id)
 	EntityList toMove;
 	GetEntitiesFromLayer(id, toMove);
 	string name = mLayers.at(id + mDifference);
-	
+
 	// delete the layer and shift the others
 	EraseAndShift(id);
 

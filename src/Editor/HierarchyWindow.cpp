@@ -4,6 +4,7 @@
 #include "PrototypeWindow.h"
 #include "GUISystem/CEGUITools.h"
 #include "Editor/EditorMgr.h"
+#include "Editor/EditorGUI.h"
 #include "ResourceSystem/XMLResource.h"
 
 using namespace Editor;
@@ -241,7 +242,9 @@ void Editor::HierarchyWindow::LoadSubtree( ResourceSystem::XMLNodeIterator& xml,
 
 void Editor::HierarchyWindow::SaveHierarchy( ResourceSystem::XMLOutput& storage )
 {
+	storage.BeginElement("Hierarchy");
 	SaveSubtree(storage, mHierarchy.begin());
+	storage.EndElement();
 }
 
 void Editor::HierarchyWindow::SaveSubtree( ResourceSystem::XMLOutput& storage, const HierarchyTree::iterator_base& parent )
@@ -367,16 +370,31 @@ bool Editor::HierarchyWindow::OnTreeItemDragDropItemDropped(const CEGUI::EventAr
 			  SetSelectedEntity(sourceEntity);
 		  }
 	  }
-	} else if (args.dragDropItem->getUserString("DragDataType") == "Prototype") {
-	  PrototypeWindow* prototypeWindow = static_cast<PrototypeWindow*>(args.dragDropItem->getUserData());
-	  if (prototypeWindow == 0) { return true; }
-	  EntitySystem::EntityHandle sourcePrototype = prototypeWindow->GetItemAtIndex(args.dragDropItem->getID());
-	
-	  mCurrentParent = targetEntity;
-	  EntitySystem::EntityHandle newEntity = gEntityMgr.InstantiatePrototype(sourcePrototype);
-	  if (!newEntity.IsValid()) { return true; }
-	  gEditorMgr.SetCurrentEntity(newEntity);
-	} else { return false; }
+	} 
+	else if (args.dragDropItem->getUserString("DragDataType") == "Prototype")
+	{
+		PrototypeWindow* prototypeWindow = static_cast<PrototypeWindow*>(args.dragDropItem->getUserData());
+		if (prototypeWindow == 0) return true;
+		EntitySystem::EntityHandle sourcePrototype = prototypeWindow->GetItemAtIndex(args.dragDropItem->getID());
+
+		// instantiate
+		mCurrentParent = targetEntity;
+		EntitySystem::EntityHandle newEntity = gEntityMgr.InstantiatePrototype(sourcePrototype);
+		if (!newEntity.IsValid()) return true;
+
+		// move the new entity to the middle of the editor window
+		EntitySystem::EntityHandle editorCamera = gEntityMgr.FindFirstEntity(EditorGUI::EditorCameraName);
+		if (editorCamera.IsValid() && newEntity.HasProperty("Position"))
+		{
+			newEntity.GetProperty("Position").SetValue(editorCamera.GetProperty("Position").GetValue<Vector2>());
+		}
+
+		gEditorMgr.SetCurrentEntity(newEntity);
+	} 
+	else
+	{
+		return false;
+	}
 	
 	return true;
 }

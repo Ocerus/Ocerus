@@ -33,9 +33,6 @@ namespace Editor
 		/// Updates the entity editor.
 		void UpdateEntityEditorWindow();
 
-		/// Name of the entity with the editor camera.
-		static const string EditorCameraName;
-
 		/// Disables viewports.
 		void DisableViewports();
 
@@ -63,6 +60,11 @@ namespace Editor
 		//@{
 		bool OnComponentRemoveClicked(const CEGUI::EventArgs&);
 		//@}
+
+	public:
+
+		/// Name of the entity with the editor camera.
+		static const string EditorCameraName;
 
 	private:
 		/// Recursively subscribes every menu item to the mouse enters/leaves/clicked events

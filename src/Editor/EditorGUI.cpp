@@ -100,7 +100,6 @@ void EditorGUI::LoadGUI()
 	mEditorViewport->SetMovableContent(true);
 
 	// Create cameras
-	//RefreshCameras();
 	DisableViewports();
 }
 

@@ -1755,7 +1755,7 @@ unsigned int tree<T, tree_node_allocator>::number_of_children(const iterator_bas
 	//      ++ret;
 	//      pos=pos->next_sibling;
 	//      }
-	while((pos=pos->next_sibling))
+	while((pos=pos->next_sibling) != 0)
 		++ret;
 	return ret;
 }

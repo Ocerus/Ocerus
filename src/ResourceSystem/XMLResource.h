@@ -122,10 +122,10 @@ namespace ResourceSystem
 		template<typename T>
 		T GetChildValue(const XMLNodeIterator iter)
 		{
-			XMLDataMap::sibling_iterator child = mDataMap.begin(iter);
-			if (child == mDataMap.end(iter))
-				return StringConverter::FromString<T>("");
-			return StringConverter::FromString<T>(*child);
+			// we need to skip all the attributes here
+			XMLDataMap::sibling_iterator child = mDataMap.child(iter, mDataMap.number_of_children(iter) - 1);
+			if (child == mDataMap.end(iter)) return StringConverter::FromString<T>("");
+			else return StringConverter::FromString<T>(*child);
 		}
 
 		/// Returns the resource type associated with this class.

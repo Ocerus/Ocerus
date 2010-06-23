@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <Scene>
+  <Layers Difference="2" ActiveLayer="0">
+    <Layer Visible="true">BG</Layer>
+    <Layer Visible="true">Behind MG</Layer>
+    <Layer Visible="true">MG</Layer>
+  </Layers>
   <Entities>
     <Entity Name="Land2" ID="3" Transient="false" Prototype="-496">
       <Component Type="Transform">
@@ -84,7 +89,7 @@
     </Entity>
     <Entity Name="LandFiller" ID="7" Transient="false" Prototype="-497">
       <Component Type="Transform">
-        <Layer>0</Layer>
+        <Layer>-1</Layer>
         <Angle>1.57189</Angle>
         <Scale>12.3942 3.73595</Scale>
         <Position>-0.452191 -4.76979</Position>
@@ -251,7 +256,7 @@
     </Entity>
     <Entity Name="LandFiller" ID="14" Transient="false" Prototype="-497">
       <Component Type="Transform">
-        <Layer>0</Layer>
+        <Layer>-1</Layer>
         <Angle>1.58123</Angle>
         <Scale>6.13599 6.88526</Scale>
         <Position>7.00251 0.657741</Position>
@@ -430,13 +435,13 @@
     <Entity Name="EditorCamera" ID="22" Transient="false">
       <Component Type="Camera">
         <Rotation>0</Rotation>
-        <Zoom>0.616686</Zoom>
-        <Position>14.6948 -2.23743</Position>
+        <Zoom>0.509658</Zoom>
+        <Position>8.04493 -3.73731</Position>
       </Component>
     </Entity>
     <Entity Name="LandFiller" ID="23" Transient="false" Prototype="-497">
       <Component Type="Transform">
-        <Layer>0</Layer>
+        <Layer>-1</Layer>
         <Angle>0.00442854</Angle>
         <Scale>9.0443 9.45566</Scale>
         <Position>2.21983 1.02858</Position>
@@ -459,7 +464,7 @@
     </Entity>
     <Entity Name="LandFiller" ID="24" Transient="false" Prototype="-497">
       <Component Type="Transform">
-        <Layer>0</Layer>
+        <Layer>-1</Layer>
         <Angle>1.57149</Angle>
         <Scale>1.96835 2.22892</Scale>
         <Position>8.77325 2.28978</Position>
@@ -482,7 +487,7 @@
     </Entity>
     <Entity Name="LandFiller" ID="25" Transient="false" Prototype="-497">
       <Component Type="Transform">
-        <Layer>0</Layer>
+        <Layer>-1</Layer>
         <Angle>0</Angle>
         <Scale>40 5</Scale>
         <Position>13.8209 3.47562</Position>
@@ -505,7 +510,7 @@
     </Entity>
     <Entity Name="LandFiller" ID="26" Transient="false" Prototype="-497">
       <Component Type="Transform">
-        <Layer>0</Layer>
+        <Layer>-1</Layer>
         <Angle>0.704897</Angle>
         <Scale>2.31028 8.87487</Scale>
         <Position>14.8151 0.967936</Position>
@@ -528,7 +533,7 @@
     </Entity>
     <Entity Name="LandFiller" ID="27" Transient="false" Prototype="-497">
       <Component Type="Transform">
-        <Layer>0</Layer>
+        <Layer>-1</Layer>
         <Angle>1.57149</Angle>
         <Scale>1.68909 19.5095</Scale>
         <Position>13.0867 2.39844</Position>
@@ -575,7 +580,7 @@
     </Entity>
     <Entity Name="LandFiller" ID="29" Transient="false" Prototype="-497">
       <Component Type="Transform">
-        <Layer>0</Layer>
+        <Layer>-1</Layer>
         <Angle>0.205455</Angle>
         <Scale>3.47833 19.0727</Scale>
         <Position>16.601 -1.55074</Position>
@@ -598,10 +603,10 @@
     </Entity>
     <Entity Name="Background1" ID="30" Transient="false" Prototype="-497">
       <Component Type="Transform">
-        <Layer>0</Layer>
+        <Layer>-2</Layer>
         <Angle>0</Angle>
         <Scale>1.59255 1.44736</Scale>
-        <Position>26.4915 -4.36248</Position>
+        <Position>25.1573 -4.24475</Position>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -652,15 +657,13 @@
       <Entity ID="27"></Entity>
       <Entity ID="28"></Entity>
       <Entity ID="29"></Entity>
-      <Entity ID="30"></Entity>
     </Entity>
     <Entity ID="20"></Entity>
     <Entity ID="19"></Entity>
     <Entity ID="21"></Entity>
     <Entity ID="22"></Entity>
-    <Entity ID="31"></Entity>
+    <Entity ID="31">
+      <Entity ID="30"></Entity>
+    </Entity>
   </Hierarchy>
-  <Layers Difference="0" ActiveLayer="0">
-    <Layer Visible="true">Visible</Layer>
-  </Layers>
 </Scene>
