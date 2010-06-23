@@ -10,9 +10,9 @@
     <Entity Name="Land1" ID="2" Transient="false" Prototype="-495">
       <Component Type="Transform">
         <Layer>0</Layer>
-        <Angle>-0.659349</Angle>
+        <Angle>-0.556364</Angle>
         <Scale>0.505897 0.834272</Scale>
-        <Position>16.6385 -5.41435</Position>
+        <Position>16.6042 -5.36858</Position>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
@@ -416,9 +416,9 @@
     <Entity Name="Player" ID="20" Transient="false">
       <Component Type="Transform">
         <Layer>0</Layer>
-        <Angle>0.00968716</Angle>
+        <Angle>0.366988</Angle>
         <Scale>1 1</Scale>
-        <Position>22.0368 -8.22989</Position>
+        <Position>1.20179 -2.47569</Position>
       </Component>
       <Component Type="DynamicBody">
         <AngularDamping>20</AngularDamping>
@@ -459,8 +459,8 @@
     <Entity Name="EditorCamera" ID="22" Transient="false">
       <Component Type="Camera">
         <Rotation>0</Rotation>
-        <Zoom>0.597536</Zoom>
-        <Position>23.121 -3.27125</Position>
+        <Zoom>1.10342</Zoom>
+        <Position>4.20313 -4.266</Position>
       </Component>
     </Entity>
     <Entity Name="LandFiller" ID="23" Transient="false" Prototype="-497">
@@ -1281,7 +1281,7 @@
         <Layer>-1</Layer>
         <Angle>0</Angle>
         <Scale>4.00766 55.1516</Scale>
-        <Position>31.9756 -8.93314</Position>
+        <Position>31.9674 -8.88396</Position>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -1320,6 +1320,638 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>0</Friction>
+      </Component>
+    </Entity>
+    <Entity Name="Land1" ID="60" Transient="false" Prototype="-495">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Angle>0</Angle>
+        <Scale>4.01868 1.08086</Scale>
+        <Position>16.0778 -15.2138</Position>
+      </Component>
+      <Component Type="StaticBody"></Component>
+      <Component Type="PolygonCollider">
+        <Density>1</Density>
+        <Polygon>
+          <Item>-0.85 -0.55</Item>
+          <Item>0.85 -0.6</Item>
+          <Item>0.85 0.6</Item>
+          <Item>-0.85 0.6</Item>
+        </Polygon>
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>tile0.png</Texture>
+      </Component>
+    </Entity>
+    <Entity Name="Objects" ID="61" Transient="false">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Angle>0</Angle>
+        <Scale>1 1</Scale>
+        <Position>0 0</Position>
+      </Component>
+    </Entity>
+    <Entity Name="Stone1" ID="62" Transient="false" Prototype="-499">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Angle>-0.195755</Angle>
+        <Scale>1 1</Scale>
+        <Position>27.0683 -7.56439</Position>
+      </Component>
+      <Component Type="DynamicBody">
+        <AngularDamping>0.5</AngularDamping>
+        <LinearDamping>0.1</LinearDamping>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Density>1</Density>
+        <Polygon>
+          <Item>-0.65 -0.2</Item>
+          <Item>-0.25 -0.5</Item>
+          <Item>0.65 -0.3</Item>
+          <Item>0.65 0.05</Item>
+          <Item>0.4 0.5</Item>
+          <Item>-0.2 0.5</Item>
+          <Item>-0.65 0.3</Item>
+        </Polygon>
+        <Restitution>0</Restitution>
+        <Friction>10</Friction>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>stone1.png</Texture>
+      </Component>
+    </Entity>
+    <Entity Name="Stone2" ID="63" Transient="false" Prototype="-500">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Angle>0.00968716</Angle>
+        <Scale>1.4221 1.37453</Scale>
+        <Position>19.499 -6.27078</Position>
+      </Component>
+      <Component Type="DynamicBody">
+        <AngularDamping>0.5</AngularDamping>
+        <LinearDamping>0.1</LinearDamping>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Density>1</Density>
+        <Polygon>
+          <Item>-0.1 -0.21</Item>
+          <Item>0.25 -0.12</Item>
+          <Item>0.27 -0</Item>
+          <Item>0.16 0.2</Item>
+          <Item>-0.09 0.2</Item>
+          <Item>-0.26 0.11</Item>
+          <Item>-0.26 -0.08</Item>
+        </Polygon>
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>stone2.png</Texture>
+      </Component>
+    </Entity>
+    <Entity Name="Stone1" ID="64" Transient="false" Prototype="-499">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Angle>0.00968716</Angle>
+        <Scale>1 1</Scale>
+        <Position>18.3608 -6.55248</Position>
+      </Component>
+      <Component Type="DynamicBody">
+        <AngularDamping>0.5</AngularDamping>
+        <LinearDamping>0.1</LinearDamping>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Density>1</Density>
+        <Polygon>
+          <Item>-0.65 -0.2</Item>
+          <Item>-0.25 -0.5</Item>
+          <Item>0.65 -0.3</Item>
+          <Item>0.65 0.05</Item>
+          <Item>0.4 0.5</Item>
+          <Item>-0.2 0.5</Item>
+          <Item>-0.65 0.3</Item>
+        </Polygon>
+        <Restitution>0</Restitution>
+        <Friction>10</Friction>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>stone1.png</Texture>
+      </Component>
+    </Entity>
+    <Entity Name="Stone1" ID="65" Transient="false" Prototype="-499">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Angle>-3.3639</Angle>
+        <Scale>1 1</Scale>
+        <Position>27.3199 -8.49206</Position>
+      </Component>
+      <Component Type="DynamicBody">
+        <AngularDamping>0.5</AngularDamping>
+        <LinearDamping>0.1</LinearDamping>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Density>1</Density>
+        <Polygon>
+          <Item>-0.65 -0.2</Item>
+          <Item>-0.25 -0.5</Item>
+          <Item>0.65 -0.3</Item>
+          <Item>0.65 0.05</Item>
+          <Item>0.4 0.5</Item>
+          <Item>-0.2 0.5</Item>
+          <Item>-0.65 0.3</Item>
+        </Polygon>
+        <Restitution>0</Restitution>
+        <Friction>10</Friction>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>stone1.png</Texture>
+      </Component>
+    </Entity>
+    <Entity Name="Stone2" ID="66" Transient="false" Prototype="-500">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Angle>3.13802</Angle>
+        <Scale>1 1</Scale>
+        <Position>27.6866 -9.18684</Position>
+      </Component>
+      <Component Type="DynamicBody">
+        <AngularDamping>0.5</AngularDamping>
+        <LinearDamping>0.1</LinearDamping>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Density>1</Density>
+        <Polygon>
+          <Item>-0.1 -0.21</Item>
+          <Item>0.25 -0.12</Item>
+          <Item>0.27 -0</Item>
+          <Item>0.16 0.2</Item>
+          <Item>-0.09 0.2</Item>
+          <Item>-0.26 0.11</Item>
+          <Item>-0.26 -0.08</Item>
+        </Polygon>
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>stone2.png</Texture>
+      </Component>
+    </Entity>
+    <Entity Name="Stone2" ID="67" Transient="false" Prototype="-500">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Angle>0</Angle>
+        <Scale>1 1</Scale>
+        <Position>17.3098 -6.50499</Position>
+      </Component>
+      <Component Type="DynamicBody">
+        <AngularDamping>0.5</AngularDamping>
+        <LinearDamping>0.1</LinearDamping>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Density>1</Density>
+        <Polygon>
+          <Item>-0.1 -0.21</Item>
+          <Item>0.25 -0.12</Item>
+          <Item>0.27 -0</Item>
+          <Item>0.16 0.2</Item>
+          <Item>-0.09 0.2</Item>
+          <Item>-0.26 0.11</Item>
+          <Item>-0.26 -0.08</Item>
+        </Polygon>
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>stone2.png</Texture>
+      </Component>
+    </Entity>
+    <Entity Name="Stone1" ID="68" Transient="false" Prototype="-499">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Angle>2.10907</Angle>
+        <Scale>1 1</Scale>
+        <Position>17.5774 -7.40505</Position>
+      </Component>
+      <Component Type="DynamicBody">
+        <AngularDamping>0.5</AngularDamping>
+        <LinearDamping>0.1</LinearDamping>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Density>1</Density>
+        <Polygon>
+          <Item>-0.65 -0.2</Item>
+          <Item>-0.25 -0.5</Item>
+          <Item>0.65 -0.3</Item>
+          <Item>0.65 0.05</Item>
+          <Item>0.4 0.5</Item>
+          <Item>-0.2 0.5</Item>
+          <Item>-0.65 0.3</Item>
+        </Polygon>
+        <Restitution>0</Restitution>
+        <Friction>10</Friction>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>stone1.png</Texture>
+      </Component>
+    </Entity>
+    <Entity Name="Stone1" ID="70" Transient="false" Prototype="-499">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Angle>0</Angle>
+        <Scale>0.740515 0.565383</Scale>
+        <Position>14.9745 -5.0211</Position>
+      </Component>
+      <Component Type="DynamicBody">
+        <AngularDamping>0.5</AngularDamping>
+        <LinearDamping>0.1</LinearDamping>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Density>1</Density>
+        <Polygon>
+          <Item>-0.65 -0.2</Item>
+          <Item>-0.25 -0.5</Item>
+          <Item>0.65 -0.3</Item>
+          <Item>0.65 0.05</Item>
+          <Item>0.4 0.5</Item>
+          <Item>-0.2 0.5</Item>
+          <Item>-0.65 0.3</Item>
+        </Polygon>
+        <Restitution>0</Restitution>
+        <Friction>10</Friction>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>stone1.png</Texture>
+      </Component>
+    </Entity>
+    <Entity Name="Stone1" ID="71" Transient="false" Prototype="-499">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Angle>-1.70039</Angle>
+        <Scale>1.36489 0.829717</Scale>
+        <Position>6.97124 -3.26962</Position>
+      </Component>
+      <Component Type="DynamicBody">
+        <AngularDamping>0.5</AngularDamping>
+        <LinearDamping>0.1</LinearDamping>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Density>1</Density>
+        <Polygon>
+          <Item>-0.65 -0.2</Item>
+          <Item>-0.25 -0.5</Item>
+          <Item>0.65 -0.3</Item>
+          <Item>0.65 0.05</Item>
+          <Item>0.4 0.5</Item>
+          <Item>-0.2 0.5</Item>
+          <Item>-0.65 0.3</Item>
+        </Polygon>
+        <Restitution>0</Restitution>
+        <Friction>10</Friction>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>stone1.png</Texture>
+      </Component>
+    </Entity>
+    <Entity Name="Stone1" ID="72" Transient="false" Prototype="-499">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Angle>3.13806</Angle>
+        <Scale>1 1</Scale>
+        <Position>18.8423 -7.42938</Position>
+      </Component>
+      <Component Type="DynamicBody">
+        <AngularDamping>0.5</AngularDamping>
+        <LinearDamping>0.1</LinearDamping>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Density>1</Density>
+        <Polygon>
+          <Item>-0.65 -0.2</Item>
+          <Item>-0.25 -0.5</Item>
+          <Item>0.65 -0.3</Item>
+          <Item>0.65 0.05</Item>
+          <Item>0.4 0.5</Item>
+          <Item>-0.2 0.5</Item>
+          <Item>-0.65 0.3</Item>
+        </Polygon>
+        <Restitution>0</Restitution>
+        <Friction>10</Friction>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>stone1.png</Texture>
+      </Component>
+    </Entity>
+    <Entity Name="Stone1" ID="73" Transient="false" Prototype="-499">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Angle>0</Angle>
+        <Scale>1 1</Scale>
+        <Position>18.3315 -8.45107</Position>
+      </Component>
+      <Component Type="DynamicBody">
+        <AngularDamping>0.5</AngularDamping>
+        <LinearDamping>0.1</LinearDamping>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Density>1</Density>
+        <Polygon>
+          <Item>-0.65 -0.2</Item>
+          <Item>-0.25 -0.5</Item>
+          <Item>0.65 -0.3</Item>
+          <Item>0.65 0.05</Item>
+          <Item>0.4 0.5</Item>
+          <Item>-0.2 0.5</Item>
+          <Item>-0.65 0.3</Item>
+        </Polygon>
+        <Restitution>0</Restitution>
+        <Friction>10</Friction>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>stone1.png</Texture>
+      </Component>
+    </Entity>
+    <Entity Name="Stone2" ID="74" Transient="false" Prototype="-500">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Angle>0</Angle>
+        <Scale>1.19461 1.15569</Scale>
+        <Position>16.58 -6.38336</Position>
+      </Component>
+      <Component Type="DynamicBody">
+        <AngularDamping>0.5</AngularDamping>
+        <LinearDamping>0.1</LinearDamping>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Density>1</Density>
+        <Polygon>
+          <Item>-0.1 -0.21</Item>
+          <Item>0.25 -0.12</Item>
+          <Item>0.27 -0</Item>
+          <Item>0.16 0.2</Item>
+          <Item>-0.09 0.2</Item>
+          <Item>-0.26 0.11</Item>
+          <Item>-0.26 -0.08</Item>
+        </Polygon>
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>stone2.png</Texture>
+      </Component>
+    </Entity>
+    <Entity Name="Stone2" ID="75" Transient="false" Prototype="-500">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Angle>0</Angle>
+        <Scale>0.870944 1.53888</Scale>
+        <Position>15.6061 -5.26926</Position>
+      </Component>
+      <Component Type="DynamicBody">
+        <AngularDamping>0.5</AngularDamping>
+        <LinearDamping>0.1</LinearDamping>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Density>1</Density>
+        <Polygon>
+          <Item>-0.1 -0.21</Item>
+          <Item>0.25 -0.12</Item>
+          <Item>0.27 -0</Item>
+          <Item>0.16 0.2</Item>
+          <Item>-0.09 0.2</Item>
+          <Item>-0.26 0.11</Item>
+          <Item>-0.26 -0.08</Item>
+        </Polygon>
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>stone2.png</Texture>
+      </Component>
+    </Entity>
+    <Entity Name="Stone2" ID="76" Transient="false" Prototype="-500">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Angle>0</Angle>
+        <Scale>1.46706 1.52788</Scale>
+        <Position>14.9015 -4.07238</Position>
+      </Component>
+      <Component Type="DynamicBody">
+        <AngularDamping>0.5</AngularDamping>
+        <LinearDamping>0.1</LinearDamping>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Density>1</Density>
+        <Polygon>
+          <Item>-0.1 -0.21</Item>
+          <Item>0.25 -0.12</Item>
+          <Item>0.27 -0</Item>
+          <Item>0.16 0.2</Item>
+          <Item>-0.09 0.2</Item>
+          <Item>-0.26 0.11</Item>
+          <Item>-0.26 -0.08</Item>
+        </Polygon>
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>stone2.png</Texture>
+      </Component>
+    </Entity>
+    <Entity Name="Stone2" ID="77" Transient="false" Prototype="-500">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Angle>-0.525443</Angle>
+        <Scale>1 1</Scale>
+        <Position>16.7016 -6.94286</Position>
+      </Component>
+      <Component Type="DynamicBody">
+        <AngularDamping>0.5</AngularDamping>
+        <LinearDamping>0.1</LinearDamping>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Density>1</Density>
+        <Polygon>
+          <Item>-0.1 -0.21</Item>
+          <Item>0.25 -0.12</Item>
+          <Item>0.27 -0</Item>
+          <Item>0.16 0.2</Item>
+          <Item>-0.09 0.2</Item>
+          <Item>-0.26 0.11</Item>
+          <Item>-0.26 -0.08</Item>
+        </Polygon>
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>stone2.png</Texture>
+      </Component>
+    </Entity>
+    <Entity Name="Stone2" ID="78" Transient="false" Prototype="-500">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Angle>0</Angle>
+        <Scale>1 1</Scale>
+        <Position>15.534 -5.72655</Position>
+      </Component>
+      <Component Type="DynamicBody">
+        <AngularDamping>0.5</AngularDamping>
+        <LinearDamping>0.1</LinearDamping>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Density>1</Density>
+        <Polygon>
+          <Item>-0.1 -0.21</Item>
+          <Item>0.25 -0.12</Item>
+          <Item>0.27 -0</Item>
+          <Item>0.16 0.2</Item>
+          <Item>-0.09 0.2</Item>
+          <Item>-0.26 0.11</Item>
+          <Item>-0.26 -0.08</Item>
+        </Polygon>
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>stone2.png</Texture>
+      </Component>
+    </Entity>
+    <Entity Name="Stone2" ID="79" Transient="false" Prototype="-500">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Angle>0</Angle>
+        <Scale>1 1</Scale>
+        <Position>6.73477 -4.49152</Position>
+      </Component>
+      <Component Type="DynamicBody">
+        <AngularDamping>0.5</AngularDamping>
+        <LinearDamping>0.1</LinearDamping>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Density>1</Density>
+        <Polygon>
+          <Item>-0.1 -0.21</Item>
+          <Item>0.25 -0.12</Item>
+          <Item>0.27 -0</Item>
+          <Item>0.16 0.2</Item>
+          <Item>-0.09 0.2</Item>
+          <Item>-0.26 0.11</Item>
+          <Item>-0.26 -0.08</Item>
+        </Polygon>
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>stone2.png</Texture>
+      </Component>
+    </Entity>
+    <Entity Name="Stone1" ID="80" Transient="false" Prototype="-499">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Angle>-1.49575</Angle>
+        <Scale>1.0743 0.972008</Scale>
+        <Position>27.0752 0.306205</Position>
+      </Component>
+      <Component Type="DynamicBody">
+        <AngularDamping>0.5</AngularDamping>
+        <LinearDamping>0.1</LinearDamping>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Density>1</Density>
+        <Polygon>
+          <Item>-0.65 -0.2</Item>
+          <Item>-0.25 -0.5</Item>
+          <Item>0.65 -0.3</Item>
+          <Item>0.65 0.05</Item>
+          <Item>0.4 0.5</Item>
+          <Item>-0.2 0.5</Item>
+          <Item>-0.65 0.3</Item>
+        </Polygon>
+        <Restitution>0</Restitution>
+        <Friction>10</Friction>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>stone1.png</Texture>
+      </Component>
+    </Entity>
+    <Entity Name="Stone1" ID="81" Transient="false" Prototype="-499">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Angle>-1.52591</Angle>
+        <Scale>1.27716 1.01245</Scale>
+        <Position>27.0149 -1.34234</Position>
+      </Component>
+      <Component Type="DynamicBody">
+        <AngularDamping>0.5</AngularDamping>
+        <LinearDamping>0.1</LinearDamping>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Density>1</Density>
+        <Polygon>
+          <Item>-0.65 -0.2</Item>
+          <Item>-0.25 -0.5</Item>
+          <Item>0.65 -0.3</Item>
+          <Item>0.65 0.05</Item>
+          <Item>0.4 0.5</Item>
+          <Item>-0.2 0.5</Item>
+          <Item>-0.65 0.3</Item>
+        </Polygon>
+        <Restitution>0</Restitution>
+        <Friction>10</Friction>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>stone1.png</Texture>
+      </Component>
+    </Entity>
+    <Entity Name="Stone2" ID="82" Transient="false" Prototype="-500">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Angle>0</Angle>
+        <Scale>0.94405 1.50598</Scale>
+        <Position>16.1178 -5.94549</Position>
+      </Component>
+      <Component Type="DynamicBody">
+        <AngularDamping>0.5</AngularDamping>
+        <LinearDamping>0.1</LinearDamping>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Density>1</Density>
+        <Polygon>
+          <Item>-0.1 -0.21</Item>
+          <Item>0.25 -0.12</Item>
+          <Item>0.27 -0</Item>
+          <Item>0.16 0.2</Item>
+          <Item>-0.09 0.2</Item>
+          <Item>-0.26 0.11</Item>
+          <Item>-0.26 -0.08</Item>
+        </Polygon>
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>stone2.png</Texture>
       </Component>
     </Entity>
   </Entities>
@@ -1376,6 +2008,7 @@
       <Entity ID="57"></Entity>
       <Entity ID="58"></Entity>
       <Entity ID="59"></Entity>
+      <Entity ID="60"></Entity>
     </Entity>
     <Entity ID="20"></Entity>
     <Entity ID="19"></Entity>
@@ -1383,6 +2016,28 @@
     <Entity ID="22"></Entity>
     <Entity ID="31">
       <Entity ID="30"></Entity>
+    </Entity>
+    <Entity ID="61">
+      <Entity ID="63"></Entity>
+      <Entity ID="64"></Entity>
+      <Entity ID="62"></Entity>
+      <Entity ID="65"></Entity>
+      <Entity ID="66"></Entity>
+      <Entity ID="67"></Entity>
+      <Entity ID="68"></Entity>
+      <Entity ID="70"></Entity>
+      <Entity ID="71"></Entity>
+      <Entity ID="72"></Entity>
+      <Entity ID="73"></Entity>
+      <Entity ID="74"></Entity>
+      <Entity ID="75"></Entity>
+      <Entity ID="76"></Entity>
+      <Entity ID="77"></Entity>
+      <Entity ID="78"></Entity>
+      <Entity ID="79"></Entity>
+      <Entity ID="80"></Entity>
+      <Entity ID="81"></Entity>
+      <Entity ID="82"></Entity>
     </Entity>
   </Hierarchy>
 </Scene>
