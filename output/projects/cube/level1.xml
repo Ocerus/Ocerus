@@ -447,6 +447,7 @@
         <ScriptModules>
           <Item>Controller.as</Item>
         </ScriptModules>
+        <IsLight Type="bool">true</IsLight>
       </Component>
     </Entity>
     <Entity Name="GameCamera" ID="21" Transient="false">

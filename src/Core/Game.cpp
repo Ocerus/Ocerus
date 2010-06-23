@@ -210,6 +210,11 @@ void Core::Game::Draw(const float32 passedDelta)
 	gGfxRenderer.SetCurrentRenderTarget(mRenderTarget);
 	gGfxRenderer.ClearCurrentRenderTarget(GfxSystem::Color(0, 0, 0));
 	
+	if (IsActionRunning())
+	{
+		gEntityMgr.BroadcastMessage(EntityMessage(EntityMessage::DRAW, Reflection::PropertyFunctionParameters() << delta));
+	}
+
 	gGfxRenderer.DrawEntities();
 
 	gGfxRenderer.FinalizeRenderTarget();

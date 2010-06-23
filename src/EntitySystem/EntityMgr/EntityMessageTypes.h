@@ -12,7 +12,7 @@ ENTITY_MESSAGE_TYPE(POST_INIT, "void OnPostInit()", NO_PARAMS)
 /// Sent shortly before the entity is destroyed.
 ENTITY_MESSAGE_TYPE(DESTROY, "void OnDestroy()", NO_PARAMS)
 /// Sent when the entity is to be redrawn.
-ENTITY_MESSAGE_TYPE(DRAW, "void OnDraw()", NO_PARAMS)
+ENTITY_MESSAGE_TYPE(DRAW, "void OnDraw(float32)", Params(PT_FLOAT32))
 /// Sent when the underlay under the entity is to be redrawn.
 ENTITY_MESSAGE_TYPE(DRAW_UNDERLAY, "void OnDrawUnderlay()", NO_PARAMS)
 /// Sent when the overlay above the entity is to be redrawn.

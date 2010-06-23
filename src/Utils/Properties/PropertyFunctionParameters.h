@@ -107,6 +107,7 @@ namespace Reflection
 		{
 			if (index >= mParameters->size())
 			{
+				ocError << "Out of parameter bounds";
 				return PropertyFunctionParameter();
 			}
 			return mParameters->at(index);
