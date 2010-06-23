@@ -51,7 +51,6 @@ namespace Editor
 		/// Sets the flags at the shortcuts belonging to the given key code.
 		void KeyPressed(InputSystem::eKeyCode keyCode);
 
-		/// Returns true if a shortcut is currently activ.
 		/// Sets the flags at the held shortcuts belonging to the given key code.
 		void ShortcutsHeld();
 
