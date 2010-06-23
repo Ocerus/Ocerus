@@ -28,20 +28,17 @@ void OnKeyPressed(eKeyCode key, uint32 char)
 void SwitchState()
 {
   this.Set_bool("IsLight", !this.Get_bool("IsLight"));
-  Println(this.Get_bool("IsLight"));
 }
 
 void OnDraw(float32 delta)
 {
-	Println("Drawing");
-  
   // animate according to the state
   const float32 angleAnimSpeed = 10.0f;
   const float32 PI = 3.14f;
-  float32 angle = this.Get_float("YAngle");
+  float32 angle = this.Get_float32("YAngle");
   if (this.Get_bool("IsLight") && angle > 0.0) angle -= angleAnimSpeed * delta;
   if (!this.Get_bool("IsLight") && angle < 0.5*PI) angle += angleAnimSpeed * delta;
   if (angle < 0.0) angle = 0.0;
   if (angle > 0.5f*PI) angle = 0.5f*PI;
-  this.Set_float("YAngle", angle);
+  this.Set_float32("YAngle", angle);
 }
