@@ -142,8 +142,12 @@ namespace Core
 		struct PhysicsEvent: ClassAllocation<PhysicsEvent, ALLOCATION_POOLED>
 		{
 			// Note that here shouldn't be any pointer to a shape cos it can be destroyed during ProcessPhysicsEvent.
+			enum eType { COLLISION_STARTED, COLLISION_ENDED };
+			eType type;
 			EntitySystem::EntityHandle entity1;
 			EntitySystem::EntityHandle entity2;
+			Vector2 normal; ///< From entity1 to entity2. World coordinates.
+			Vector2 contactPoint; ///< World coordinates.
 		};
 		typedef vector<PhysicsEvent*> PhysicsEventList;
 		PhysicsEventList mPhysicsEvents;

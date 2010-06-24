@@ -38,6 +38,8 @@ public:
 
 	virtual void BeginContact(b2Contact* contact);
 
+	virtual void EndContact(b2Contact* contact);
+
 private:
 	Core::Game* mParent;
 };
@@ -280,12 +282,47 @@ bool Core::Game::PhysicsCallbacks::ShouldCollide(b2Fixture* fixtureA, b2Fixture*
 void Core::Game::PhysicsCallbacks::BeginContact(b2Contact* contact)
 {
 	PhysicsEvent* evt = new PhysicsEvent();
+
+	evt->type = PhysicsEvent::COLLISION_STARTED;
+
 	void* userData1 = contact->GetFixtureA()->GetUserData();
 	void* userData2 = contact->GetFixtureB()->GetUserData();
 	if (userData1) evt->entity1 = *(EntityHandle*)userData1;
 	else evt->entity1.Invalidate();
 	if (userData2) evt->entity2 = *(EntityHandle*)userData2;
 	else evt->entity2.Invalidate();
+
+	b2WorldManifold worldManifold;
+	contact->GetWorldManifold(&worldManifold);
+	
+	evt->normal = worldManifold.normal;
+
+	int32 pointCount = contact->GetManifold()->pointCount;
+	Vector2 worldPoint = Vector2_Zero;
+	for (int32 i=0; i<pointCount; ++i)
+	{
+		worldPoint += worldManifold.points[i];
+	}
+	worldPoint.x = worldPoint.x / pointCount;
+	worldPoint.y = worldPoint.y / pointCount;
+	evt->contactPoint = worldPoint;
+
+	mParent->mPhysicsEvents.push_back(evt);
+}
+
+void Core::Game::PhysicsCallbacks::EndContact(b2Contact* contact)
+{
+	PhysicsEvent* evt = new PhysicsEvent();
+
+	evt->type = PhysicsEvent::COLLISION_ENDED;
+
+	void* userData1 = contact->GetFixtureA()->GetUserData();
+	void* userData2 = contact->GetFixtureB()->GetUserData();
+	if (userData1) evt->entity1 = *(EntityHandle*)userData1;
+	else evt->entity1.Invalidate();
+	if (userData2) evt->entity2 = *(EntityHandle*)userData2;
+	else evt->entity2.Invalidate();
+
 	mParent->mPhysicsEvents.push_back(evt);
 }
 
@@ -293,6 +330,21 @@ void Core::Game::ProcessPhysicsEvent(const PhysicsEvent& evt)
 {
 	if (!evt.entity1.IsValid() || !evt.entity2.IsValid())
 		return;
+
+	if (evt.type == PhysicsEvent::COLLISION_STARTED)
+	{
+		gEntityMgr.PostMessage(evt.entity1, EntityMessage(EntityMessage::COLLISION_STARTED, PropertyFunctionParameters() << evt.entity2 << evt.normal << evt.contactPoint));
+		gEntityMgr.PostMessage(evt.entity2, EntityMessage(EntityMessage::COLLISION_STARTED, PropertyFunctionParameters() << evt.entity1 << evt.normal << evt.contactPoint));
+	}
+	else if (evt.type == PhysicsEvent::COLLISION_ENDED)
+	{
+		gEntityMgr.PostMessage(evt.entity1, EntityMessage(EntityMessage::COLLISION_ENDED, PropertyFunctionParameters() << evt.entity2));
+		gEntityMgr.PostMessage(evt.entity2, EntityMessage(EntityMessage::COLLISION_ENDED, PropertyFunctionParameters() << evt.entity1));
+	}
+	else
+	{
+		ocError << "Unknown physics event";
+	}
 }
 
 void Core::Game::PauseAction(void)

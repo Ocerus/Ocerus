@@ -13,10 +13,6 @@ ENTITY_MESSAGE_TYPE(POST_INIT, "void OnPostInit()", NO_PARAMS)
 ENTITY_MESSAGE_TYPE(DESTROY, "void OnDestroy()", NO_PARAMS)
 /// Sent when the entity is to be redrawn.
 ENTITY_MESSAGE_TYPE(DRAW, "void OnDraw(float32)", Params(PT_FLOAT32))
-/// Sent when the underlay under the entity is to be redrawn.
-ENTITY_MESSAGE_TYPE(DRAW_UNDERLAY, "void OnDrawUnderlay()", NO_PARAMS)
-/// Sent when the overlay above the entity is to be redrawn.
-ENTITY_MESSAGE_TYPE(DRAW_OVERLAY, "void OnDrawOverlay()", NO_PARAMS)
 /// Sent when the selected entity is to be redrawn.
 ENTITY_MESSAGE_TYPE(DRAW_SELECTED, "void OnDrawSelected()", NO_PARAMS)
 /// Sent when the logic of the entity is to be updated.
@@ -37,6 +33,10 @@ ENTITY_MESSAGE_TYPE(CHECK_ACTION, "void OnAction()", NO_PARAMS)
 ENTITY_MESSAGE_TYPE(KEY_PRESSED, "void OnKeyPressed(eKeyCode, uint32)", Params(PT_KEYCODE, PT_UINT32))
 /// Sent when the user releases a key.
 ENTITY_MESSAGE_TYPE(KEY_RELEASED, "void OnKeyReleased(eKeyCode, uint32)", Params(PT_KEYCODE, PT_UINT32))
+/// Sent after two entities collide.
+ENTITY_MESSAGE_TYPE(COLLISION_STARTED, "void OnCollisionStarted(EntityHandle, Vector2, Vector2)", Params(PT_ENTITYHANDLE, PT_VECTOR2, PT_VECTOR2))
+/// Sent after two entities stop to collide.
+ENTITY_MESSAGE_TYPE(COLLISION_ENDED, "void OnCollisionEnded(EntityHandle)", Params(PT_ENTITYHANDLE))
 
 
 #undef Params

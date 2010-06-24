@@ -30,6 +30,16 @@ void SwitchState()
   this.Set_bool("IsLight", !this.Get_bool("IsLight"));
 }
 
+void OnCollisionStarted(EntityHandle other, Vector2 normal, Vector2 contactPoint)
+{
+
+}
+
+void OnCollisionEnded(EntityHandle other)
+{
+
+}
+
 void OnDraw(float32 delta)
 {
   // animate according to the state
