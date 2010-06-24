@@ -28,7 +28,7 @@ size_t Texture::LoadImpl()
 	int32 width, height;
 	mHandle = gGfxRenderer.LoadTexture((const unsigned char*)dc.GetData(),
 										dc.GetSize(),
-										PF_AUTO, 0,			//pixel format, reuse texture handle (0 = create new)
+										PF_RGBA, 0,			//pixel format, reuse texture handle (0 = create new)
 										&width, &height);
 
 	mWidth = width;

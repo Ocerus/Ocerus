@@ -30,7 +30,7 @@ SOIL (Simple OpenGL Image Library) is a tiny C library used for uploading textur
 
 Loading textures is implemented in the class \emph{Texture}. It inherits from  \emph{Resource} class, see \emph{ResourceSystem}. 
 
-Since SOIL depends on the OpenGL, derived class \emph{OglTexture} is introduced. It is the same concept as with the \emph{GfxRenderer/OglRender}.
+Since SOIL depends on the OpenGL, class \emph{Texture} uses methods from \emph{GfxRenderer} or more precisely \emph{OglRender}.
  
 \section{Process of rendering the entities}
 Each entity, upon its initialization, registers its graphic representing components in the \emph{GfxSceneMgr}. Upon the request from the game loop in the \emph{Core}, the \emph{GfxSceneMgr} draws all registered components, using methods from the  \emph{GfxRenderer}. It is also necessary to set up the rendering target within the \emph{GfxRenderer}. This is usually done by the \emph{GUISystem}.

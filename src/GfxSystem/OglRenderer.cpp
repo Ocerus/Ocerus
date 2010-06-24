@@ -220,6 +220,14 @@ void OglRenderer::DrawTexturedQuad(const TexturedQuad& quad) const
 {	
 	glPushMatrix();
 
+	// Set texture wraping
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+	// Disables texture filtering (filtering could cause artifacts at the edge between parts where Alpha=0 and Alpha=1)
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
 	glBindTexture(GL_TEXTURE_2D, quad.texture);
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f - quad.transparency);
 	glTranslatef(quad.position.x, quad.position.y, quad.z);
