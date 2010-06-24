@@ -22,9 +22,8 @@ namespace Utils
 		template<typename T>
 		inline T Max(const T num1, const T num2) { return b2Max(num1, num2); }
 
-		inline void Swap(float32& num1, float32& num2) { b2Swap(num1, num2); }
-
-		inline void Swap(Vector2& num1, Vector2& num2) { b2Swap(num1, num2); }
+		template<typename T>
+		inline void Swap(T& num1, T& num2) { b2Swap(num1, num2); }
 
 		inline int32 Round(const float32 num) { return static_cast<int32>(floorf(num<0?(num-0.5f):(num+0.5f))); }
 

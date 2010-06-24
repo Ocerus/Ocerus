@@ -2,6 +2,8 @@
 #include "ScriptRegister.h"
 #include "ScriptMgr.h"
 #include "../Core/Application.h"
+#include "Utils/MathUtils.h"
+#include "Utils/MathConsts.h"
 #include <angelscript.h>
 
 using namespace ScriptSystem;
@@ -217,6 +219,73 @@ void RegisterScriptColor(asIScriptEngine* engine)
 	r = engine->RegisterObjectMethod("Color", "uint32 GetARGB() const", asMETHOD(GfxSystem::Color, GetARGB), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 }
 
+// Register math functions and constants
+
+using namespace MathUtils;
+
+float32 GetPi()
+{
+	return PI;
+}
+
+float32 ScriptComputePolygonArea(asIScriptArray *poly)
+{
+	int32 length = poly->GetElementCount();
+	if (length > 0)
+	{
+		Vector2* v = new Vector2[length];
+		for (int32 i = 0; i < length; ++i)
+		{
+			v[i] = *(Vector2*)poly->GetElementPointer(i);
+		}
+		float32 result = ComputePolygonArea(v, length);
+		delete[] v;
+		return result;
+	}
+	else return 0.0;
+}
+
+void RegisterMathUtils(asIScriptEngine* engine)
+{
+	int32 r;
+	r = engine->RegisterGlobalFunction("float32 get_PI()", asFUNCTION(GetPi), asCALL_CDECL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterGlobalFunction("float32 Random(const float32, const float32)", asFUNCTION(Random), asCALL_CDECL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterGlobalFunction("float32 Abs(const float32)", asFUNCTIONPR(Abs, (const float32), float32), asCALL_CDECL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterGlobalFunction("int32 Abs(const int32)", asFUNCTIONPR(Abs, (const int32), int32), asCALL_CDECL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterGlobalFunction("float32 Min(const float32, const float32)", asFUNCTIONPR(Min, (const float32, const float32), float32), asCALL_CDECL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterGlobalFunction("int32 Min(const int32, const int32)", asFUNCTIONPR(Min, (const int32, const int32), int32), asCALL_CDECL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterGlobalFunction("Vector2 Min(const Vector2, const Vector2)", asFUNCTIONPR(Min, (const Vector2, const Vector2), Vector2), asCALL_CDECL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterGlobalFunction("float32 Max(const float32, const float32)", asFUNCTIONPR(Max, (const float32, const float32), float32), asCALL_CDECL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterGlobalFunction("int32 Max(const int32, const int32)", asFUNCTIONPR(Max, (const int32, const int32), int32), asCALL_CDECL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterGlobalFunction("Vector2 Max(const Vector2, const Vector2)", asFUNCTIONPR(Max, (const Vector2, const Vector2), Vector2), asCALL_CDECL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterGlobalFunction("int32 Round(const float32)", asFUNCTIONPR(Round, (const float32), int32), asCALL_CDECL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterGlobalFunction("int64 Round(const float64)", asFUNCTIONPR(Round, (const float64), int64), asCALL_CDECL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterGlobalFunction("int32 Floor(const float32)", asFUNCTION(Floor), asCALL_CDECL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterGlobalFunction("int32 Ceiling(const float32)", asFUNCTION(Ceiling), asCALL_CDECL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterGlobalFunction("float32 Sqr(const float32)", asFUNCTION(Sqr), asCALL_CDECL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterGlobalFunction("float32 Sqrt(const float32)", asFUNCTION(Sqrt), asCALL_CDECL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterGlobalFunction("float32 Distance(const Vector2 &in, const Vector2 &in)", asFUNCTION(Distance), asCALL_CDECL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterGlobalFunction("float32 DistanceSquared(const Vector2 &in, const Vector2 &in)", asFUNCTION(DistanceSquared), asCALL_CDECL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterGlobalFunction("float32 AngleDistance(const float32, const float32)", asFUNCTION(AngleDistance), asCALL_CDECL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterGlobalFunction("float32 Sin(const float32)", asFUNCTION(Sin), asCALL_CDECL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterGlobalFunction("float32 Cos(const float32)", asFUNCTION(Cos), asCALL_CDECL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterGlobalFunction("float32 Tan(const float32)", asFUNCTION(Tan), asCALL_CDECL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterGlobalFunction("float32 ArcTan(const float32)", asFUNCTION(ArcTan), asCALL_CDECL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterGlobalFunction("float32 ArcSin(const float32)", asFUNCTION(ArcSin), asCALL_CDECL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterGlobalFunction("float32 Dot(const Vector2 &in, const Vector2 &in)", asFUNCTION(Dot), asCALL_CDECL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterGlobalFunction("float32 Cross(const Vector2 &in, const Vector2 &in)", asFUNCTION(Cross), asCALL_CDECL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterGlobalFunction("float32 Clamp(const float32, const float32, const float32)", asFUNCTION(Clamp), asCALL_CDECL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterGlobalFunction("float32 ClampAngle(const float32)", asFUNCTION(ClampAngle), asCALL_CDECL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterGlobalFunction("bool IsAngleInRange(const float32, const float32, const float32)", asFUNCTION(IsAngleInRange), asCALL_CDECL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterGlobalFunction("float32 Wrap(const float32, const float32, const float32)", asFUNCTION(Wrap), asCALL_CDECL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterGlobalFunction("float32 WrapAngle(const float32)", asFUNCTION(WrapAngle), asCALL_CDECL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterGlobalFunction("float32 Angle(const Vector2 &in, const Vector2 &in)", asFUNCTIONPR(Angle, (const Vector2&, const Vector2 &in), float32), asCALL_CDECL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterGlobalFunction("float32 RadToDeg(const float32)", asFUNCTION(RadToDeg), asCALL_CDECL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterGlobalFunction("Vector2 VectorFromAngle(const float32, const float32)", asFUNCTIONPR(VectorFromAngle, (const float32, const float32), Vector2), asCALL_CDECL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterGlobalFunction("bool IsPowerOfTwo(const uint32)", asFUNCTION(IsPowerOfTwo), asCALL_CDECL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterGlobalFunction("float32 ComputePolygonArea(Vector2[] &in)", asFUNCTION(ScriptComputePolygonArea), asCALL_CDECL); OC_SCRIPT_ASSERT();
+}
+
 // Get state of current OnAction handler
 int32 ScriptGetCurrentState(void)
 {
@@ -282,6 +351,9 @@ void ScriptSystem::RegisterAllAdditions(AngelScript::asIScriptEngine* engine)
 
 	// Register Color struct and it's methods
 	RegisterScriptColor(engine);
+
+	// Register math functions and constants
+	RegisterMathUtils(engine);
 
 	int32 r;
 	// Register functions for OnAction state and time of execution support
