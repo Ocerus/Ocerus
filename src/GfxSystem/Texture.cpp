@@ -30,15 +30,40 @@ size_t Texture::LoadImpl()
 										dc.GetSize(),
 										PF_RGBA, 0,			//pixel format, reuse texture handle (0 = create new)
 										&width, &height);
-
-	mWidth = width;
-	mHeight = height;
-
+	
 	// we don't need the data buffer anymore
 	size_t dataSize = dc.GetSize();
 	dc.Release();
 
-	if (!mHandle) return 0;
+	// if loading texture fails, load NullTexture instead
+	if (!mHandle)
+	{
+		ocWarning << "Texture '" << GetName() << "' cannot be loaded. Loading NullTexture instead!";
+
+		ResourceSystem::ResourcePtr nullTexHandle = gResourceMgr.GetResource("General", "NullTexture");
+		string filePath = nullTexHandle->GetFilePath();
+		GetRawInputData(filePath, dc);
+
+		mHandle = gGfxRenderer.LoadTexture((const unsigned char*)dc.GetData(),
+											dc.GetSize(),
+											PF_RGBA, 0,			//pixel format, reuse texture handle (0 = create new)
+											&width, &height);
+
+		// we don't need the data buffer anymore
+		dataSize = dc.GetSize();
+		dc.Release();
+	}
+
+	if (!mHandle)
+	{
+		ocError << "Cannot load NullTexture!";
+		mWidth = 0;
+		mHeight = 0;
+		return 0;
+	}
+	
+	mWidth = width;
+	mHeight = height;
 
 	return dataSize;
 }

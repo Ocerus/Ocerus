@@ -29,12 +29,12 @@ ResourceMgr::ResourceMgr( void ):
 
 }
 
-void ResourceSystem::ResourceMgr::Init( const string& basepath )
+void ResourceSystem::ResourceMgr::Init( const string& systemPath )
 {
-	mBasePath[BPT_SYSTEM] = basepath;
+	mBasePath[BPT_SYSTEM] = systemPath;
 
 	ocInfo << "*** ResourceMgr init ***";
-	ocInfo << "Base directory = " << basepath;
+	ocInfo << "System directory = " << systemPath;
 
 	mResourceCreationMethods[NUM_RESTYPES-1] = 0; // safety reasons
 

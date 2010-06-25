@@ -32,7 +32,9 @@ namespace ResourceSystem
 			/// The resource is loading to the memory.
 			STATE_LOADING,
 			/// The resource is fully loaded and ready to use.
-			STATE_LOADED
+			STATE_LOADED,
+			/// The resource failed to load.
+			STATE_FAILED
 		};
 
 		/// No need to override.
@@ -108,11 +110,19 @@ namespace ResourceSystem
 		///	the stream after you're done.
 		InputStream& OpenInputStream(eInputStreamMode = ISM_BINARY );
 
+		/// Opens input stream from where raw data can be read.
+		/// Valid only from within LoadImpl! Don't forget to close
+		///	the stream after you're done.
+		InputStream& OpenInputStream(const string filePath, eInputStreamMode = ISM_BINARY );
+
 		/// Closes the stream opened by OpenInputStream.
 		void CloseInputStream(void);
 
 		/// Returns raw data read from the input stream. The data is stored inside the outData container.
 		void GetRawInputData(DataContainer& outData);
+
+		/// Returns raw data read from the input stream from the filePath. The data is stored inside the outData container.
+		void GetRawInputData(const string filePath, DataContainer& outData);
 
 		/// Call this whenever you need to make sure the data is loaded.
 		void EnsureLoaded(void);

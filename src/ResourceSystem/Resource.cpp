@@ -35,10 +35,15 @@ Resource::~Resource()
 
 InputStream& Resource::OpenInputStream(eInputStreamMode mode)
 {
+	return OpenInputStream(mFilePath, mode);
+}
+
+InputStream& Resource::OpenInputStream(const string filePath, eInputStreamMode mode)
+{
 	OC_ASSERT(mState != STATE_UNINITIALIZED);
-	OC_ASSERT_MSG(boost::filesystem::exists(mFilePath), "Resource file not found.");
+	OC_ASSERT_MSG(boost::filesystem::exists(filePath), "Resource file not found.");
 	OC_ASSERT_MSG(!mInputFileStream, "Resource was not closed before reused");
-	mInputFileStream = new boost::filesystem::ifstream(mFilePath, InputStreamMode(mode));
+	mInputFileStream = new boost::filesystem::ifstream(filePath, InputStreamMode(mode));
 	OC_ASSERT(mInputFileStream);
 	return *mInputFileStream;
 }
@@ -76,7 +81,7 @@ bool Resource::Load()
 	}
 	else
 	{
-		SetState(STATE_INITIALIZED);
+		SetState(STATE_FAILED);
 		ocError << "Resource '" << mName << "' coult NOT be loaded";
 	}
 	return loadSuccessful;
@@ -113,6 +118,10 @@ bool Resource::Unload(bool allowManual)
 
 void ResourceSystem::Resource::EnsureLoaded( void )
 {
+	// if loading failed, no need to try it again
+	if (mState == STATE_FAILED)
+		return;
+
 	// mark this resource as being used
 	if (mLastUsedTime != sLastUsedTime)
 	{
@@ -136,6 +145,11 @@ void ResourceSystem::Resource::EnsureLoaded( void )
 
 void ResourceSystem::Resource::GetRawInputData( DataContainer& outData )
 {
+	GetRawInputData(mFilePath, outData);
+}
+
+void ResourceSystem::Resource::GetRawInputData( const string filePath, DataContainer& outData )
+{
 	// The data is read in small chunks and the resulting buffer is then composed by merging the chunks together.
 
 	outData.Release();
@@ -143,7 +157,7 @@ void ResourceSystem::Resource::GetRawInputData( DataContainer& outData )
 	const uint32 tmpMaxSize = 2048; // size of one tmp buffer
 	uint32 tmpLastSize = 0; // size of the last tmp buffer in the vector
 	uint32 bufferSize = 0; // resulting size
-	InputStream& is = OpenInputStream(ISM_BINARY);
+	InputStream& is = OpenInputStream(filePath, ISM_BINARY);
 	while (is.good())
 	{
 		uint8* tmpBuf = new uint8[tmpMaxSize];

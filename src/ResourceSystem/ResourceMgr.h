@@ -31,8 +31,8 @@ namespace ResourceSystem
 		~ResourceMgr(void);
 
 		/// All resource types must be registered inside this ctor, so don't forget to add new types there!
-		/// @param basepath Path to directory where all resources can be found if readed from disk.
-		void Init(const string& basepath);
+		/// @param systemPath Path to System directory where all System resources can be found if readed from disk.
+		void Init(const string& systemPath);
 
 		/// Assings resources in a directory to a group. In this case the resource types will be autodetected.
 		/// The regular expression use the syntax as defined here:
