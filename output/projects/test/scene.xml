@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <Scene>
+  <Layers Difference="0" ActiveLayer="0">
+    <Layer Visible="true">Initial layer</Layer>
+  </Layers>
   <Entities>
     <Entity Name="Visual" ID="3">
       <Component Type="Transform">

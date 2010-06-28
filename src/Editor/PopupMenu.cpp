@@ -66,7 +66,17 @@ bool Editor::PopupMenu::OnMenuItemMouseUp( const CEGUI::EventArgs& e )
 	}
 	else if (mName.find("EditorRoot/Popup/Entity") == 0)
 	{
-		if (itemCeguiName == mName + "/AddEntity")
+		if (itemCeguiName == mName + "/MoveUp")
+		{
+		  gEditorMgr.GetEditorGui()->GetHierarchyWindow()->MoveUp();
+		  handled = true;
+		}
+		else if (itemCeguiName == mName + "/MoveDown")
+		{
+		  gEditorMgr.GetEditorGui()->GetHierarchyWindow()->MoveDown();
+		  handled = true;
+		}
+		else if (itemCeguiName == mName + "/AddEntity")
 		{
 			gEditorMgr.GetEditorGui()->GetHierarchyWindow()->SetCurrentParent(GetData<EntitySystem::EntityHandle>());
 			gEditorMgr.CreateEntity();

@@ -480,3 +480,35 @@ void Editor::HierarchyWindow::RefreshEntity( const EntitySystem::EntityHandle en
 	OC_ASSERT(itemText);
 	itemText->setText(string(depth*TREE_LEVEL_CHAR_SIZE, ' ') + entity.GetName());
 }
+
+void Editor::HierarchyWindow::MoveUp()
+{
+  EntitySystem::EntityHandle entity = gEditorMgr.GetCurrentEntity();
+  if (!entity.Exists()) return;
+  
+  HierarchyTree::iterator entityIter = std::find(mHierarchy.begin(), mHierarchy.end(), entity);
+  if (entityIter == mHierarchy.end()) return;
+  
+  HierarchyTree::iterator sibling = mHierarchy.previous_sibling(entityIter);
+  if (sibling == mHierarchy.end()) return;
+  
+  mHierarchy.move_before(sibling, entityIter);
+  RebuildTree();
+	SetSelectedEntity(entity);
+}
+
+void Editor::HierarchyWindow::MoveDown()
+{
+  EntitySystem::EntityHandle entity = gEditorMgr.GetCurrentEntity();
+  if (!entity.Exists()) return;
+  
+  HierarchyTree::iterator entityIter = std::find(mHierarchy.begin(), mHierarchy.end(), entity);
+  if (entityIter == mHierarchy.end()) return;
+  
+  HierarchyTree::iterator sibling = mHierarchy.next_sibling(entityIter);
+  if (sibling == mHierarchy.end()) return;
+  
+  mHierarchy.move_after(sibling, entityIter);
+  RebuildTree();
+	SetSelectedEntity(entity);
+}

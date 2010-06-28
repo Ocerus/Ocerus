@@ -56,6 +56,12 @@ namespace Editor
 
 		/// Runs a check on the consistency of the hierarchy tree. Returns true if it's ok.
 		bool CheckHierarchy();
+		
+		/// Moves the selected entity up.
+		void MoveUp();
+		
+		/// Moves the selected entity down.
+		void MoveDown();
 
 	public:
 

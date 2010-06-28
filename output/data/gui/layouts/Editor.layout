@@ -374,7 +374,15 @@
 		        <Property Name="FadeOutTime" Value="0" />
 		        <Property Name="ItemSpacing" Value="2" />
 		        <Property Name="ClippedByParent" Value="False" />
-		        <Property Name="AutoResizeEnabled" Value="True" />
+                        <Property Name="AutoResizeEnabled" Value="True" />
+                        <Window Type="Editor/MenuItem" Name="EditorRoot/Popup/EntityAboveItem/MoveUp" >
+		            <Property Name="Text" Value="$hierarchy_moveup$" />
+		            <Property Name="Tooltip" Value="$hierarchy_moveup_hint$" />
+                          </Window>
+                        <Window Type="Editor/MenuItem" Name="EditorRoot/Popup/EntityAboveItem/MoveDown" >
+		            <Property Name="Text" Value="$hierarchy_movedown$" />
+		            <Property Name="Tooltip" Value="$hierarchy_movedown_hint$" />
+                          </Window>
 		        <Window Type="Editor/MenuItem" Name="EditorRoot/Popup/EntityAboveItem/AddEntity" >
 		            <Property Name="Text" Value="$hierarchy_add$" />
 		            <Property Name="Tooltip" Value="$hierarchy_add_hint$" />

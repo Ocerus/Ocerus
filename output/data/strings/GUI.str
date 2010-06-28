@@ -85,6 +85,10 @@ prototype_instantiate_hint=Instantiantes the prototype into new entity
 
 # hierarchy editor
 hierarchy=Hierarchy
+hierarchy_moveup=Move up
+hierarchy_moveup_hint=Moves the selected entity up in the hierarchy.
+hierarchy_movedown=Move down
+hierarchy_movedown_hint=Moves the selected entity down in the hierarchy.
 hierarchy_add=Add Entity
 hierarchy_add_hint=Creates new entity in the world.
 hierarchy_duplicate=Duplicate Entity
