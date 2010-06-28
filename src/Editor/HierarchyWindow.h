@@ -104,6 +104,9 @@ namespace Editor
 		/// Locates an item in the tree and returns its position. Returns -1 if not found. The depth of the item is returned
 		/// in the second parameter.
 		int32 FindTreeItem(const EntitySystem::EntityHandle data, uint32& depth);
+		
+		/// Instantiate an prototype with a specified parent.
+		void InstantiatePrototype(const EntitySystem::EntityHandle prototype, const EntitySystem::EntityHandle parent);
 
 		CEGUI::Window* mWindow;
 		CEGUI::ItemListbox* mTree;

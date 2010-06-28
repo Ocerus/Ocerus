@@ -5,6 +5,7 @@
 #include "GUISystem/CEGUITools.h"
 #include "Editor/EditorMgr.h"
 #include "Editor/EditorGUI.h"
+#include "EntitySystem/EntityMgr/LayerMgr.h"
 #include "ResourceSystem/XMLResource.h"
 
 using namespace Editor;
@@ -346,6 +347,29 @@ bool Editor::HierarchyWindow::CheckHierarchy()
 	return true;
 }
 
+void Editor::HierarchyWindow::InstantiatePrototype(const EntitySystem::EntityHandle prototype, const EntitySystem::EntityHandle parent)
+{
+  // instantiate
+	mCurrentParent = parent;
+	EntitySystem::EntityHandle newEntity = gEntityMgr.InstantiatePrototype(prototype);
+	if (!newEntity.IsValid()) return;
+
+	// move the new entity to the middle of the editor window
+	EntitySystem::EntityHandle editorCamera = gEntityMgr.FindFirstEntity(EditorGUI::EditorCameraName);
+	if (editorCamera.IsValid() && newEntity.HasProperty("Position"))
+	{
+		newEntity.GetProperty("Position").SetValue(editorCamera.GetProperty("Position").GetValue<Vector2>());
+	}
+	
+	// move the new entity to the active layer
+	if (newEntity.HasProperty("Layer"))
+	{
+	  newEntity.GetProperty("Layer").SetValue(gLayerMgr.GetActiveLayer());
+	}
+
+	gEditorMgr.SetCurrentEntity(newEntity);
+}
+
 bool Editor::HierarchyWindow::OnTreeItemDragDropItemDropped(const CEGUI::EventArgs& e)
 {
 	const CEGUI::DragDropEventArgs& args = static_cast<const CEGUI::DragDropEventArgs&>(e);
@@ -379,19 +403,7 @@ bool Editor::HierarchyWindow::OnTreeItemDragDropItemDropped(const CEGUI::EventAr
 		if (prototypeWindow == 0) return true;
 		EntitySystem::EntityHandle sourcePrototype = prototypeWindow->GetItemAtIndex(args.dragDropItem->getID());
 
-		// instantiate
-		mCurrentParent = targetEntity;
-		EntitySystem::EntityHandle newEntity = gEntityMgr.InstantiatePrototype(sourcePrototype);
-		if (!newEntity.IsValid()) return true;
-
-		// move the new entity to the middle of the editor window
-		EntitySystem::EntityHandle editorCamera = gEntityMgr.FindFirstEntity(EditorGUI::EditorCameraName);
-		if (editorCamera.IsValid() && newEntity.HasProperty("Position"))
-		{
-			newEntity.GetProperty("Position").SetValue(editorCamera.GetProperty("Position").GetValue<Vector2>());
-		}
-
-		gEditorMgr.SetCurrentEntity(newEntity);
+		InstantiatePrototype(sourcePrototype, targetEntity);
 	} 
 	else
 	{
@@ -426,10 +438,7 @@ bool Editor::HierarchyWindow::OnTreeDragDropItemDropped(const CEGUI::EventArgs& 
 	  if (prototypeWindow == 0) { return true; }
 	  EntitySystem::EntityHandle sourcePrototype = prototypeWindow->GetItemAtIndex(args.dragDropItem->getID());
 	
-	  mCurrentParent.Invalidate();
-	  EntitySystem::EntityHandle newEntity = gEntityMgr.InstantiatePrototype(sourcePrototype);
-	  if (!newEntity.IsValid()) { return true; }
-	  gEditorMgr.SetCurrentEntity(newEntity);
+	  InstantiatePrototype(sourcePrototype, EntitySystem::EntityHandle::Null);
 	} else { return false; }
 
 	return true;
