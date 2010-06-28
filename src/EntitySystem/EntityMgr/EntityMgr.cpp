@@ -147,8 +147,8 @@ EntityHandle EntityMgr::CreateEntity(EntityDescription& desc)
 	}
 	if (desc.mPrototype != INVALID_ENTITY_ID && mEntities.find(desc.mPrototype)==mEntities.end())
 	{
-		ocError << "Can't create an entity: it's prototype can't be found";
-		return EntityHandle::Null;
+		ocWarning << "Prototype of the entity can't be found. Continuing without it.";
+		desc.mPrototype = INVALID_ENTITY_ID;
 	}
 
 	// create the handle for the new entity
