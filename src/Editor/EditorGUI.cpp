@@ -257,6 +257,12 @@ void EditorGUI::UpdateEntityEditorWindow()
 
 		PropertyList propertyList;
 		gEntityMgr.GetEntityComponentProperties(currentEntity, componentID, propertyList, Reflection::PA_EDIT_READ);
+		
+		set<PropertyHolder> sortedPropertyList;
+		for (PropertyList::iterator it = propertyList.begin(); it != propertyList.end(); ++it)
+		{
+		  sortedPropertyList.insert(*it);
+		}
 
 		CEGUI::GroupBox* componentGroup = static_cast<CEGUI::GroupBox*>(gCEGUIWM.createWindow("Editor/GroupBox", namePrefix));
 		componentGroup->setText(componentName);
@@ -284,7 +290,7 @@ void EditorGUI::UpdateEntityEditorWindow()
 
 		GUISystem::VerticalLayout* layout = new GUISystem::VerticalLayout(componentGroup, componentGroup->getContentPane(), true);
 		
-		for (PropertyList::iterator it = propertyList.begin(); it != propertyList.end(); ++it)
+		for (set<PropertyHolder>::iterator it = sortedPropertyList.begin(); it != sortedPropertyList.end(); ++it)
 		{
 			AbstractValueEditor* editor = CreatePropertyEditor(*it);
 			mPropertyEditors.push_back(editor);
