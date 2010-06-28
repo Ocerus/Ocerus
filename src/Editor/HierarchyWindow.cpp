@@ -2,6 +2,7 @@
 #include "HierarchyWindow.h"
 #include "PopupMenu.h"
 #include "PrototypeWindow.h"
+#include "Core/Game.h"
 #include "GUISystem/CEGUITools.h"
 #include "Editor/EditorMgr.h"
 #include "Editor/EditorGUI.h"
@@ -139,7 +140,8 @@ int32 Editor::HierarchyWindow::FindTreeItem( const EntitySystem::EntityHandle da
 
 void Editor::HierarchyWindow::AddEntityToHierarchy( const EntitySystem::EntityHandle toAdd, const EntitySystem::EntityHandle parent )
 {
-	if (gEntityMgr.IsEntityTransient(toAdd) || gEntityMgr.IsEntityPrototype(toAdd)) return;
+	if (gEntityMgr.IsEntityTransient(toAdd) || gEntityMgr.IsEntityPrototype(toAdd)
+	  || toAdd.GetName() == Core::Game::GameCameraName || toAdd.GetName() == Editor::EditorGUI::EditorCameraName) return;
 
 	HierarchyTree::iterator parentIter = mHierarchy.begin();
 	if (parent.IsValid()) parentIter = std::find(mHierarchy.begin(), mHierarchy.end(), parent);
@@ -214,6 +216,7 @@ void Editor::HierarchyWindow::LoadHierarchy( ResourceSystem::XMLNodeIterator& xm
 	{
 		if (loadedEntities.find(*it) != loadedEntities.end()) continue;
 		if (gEntityMgr.IsEntityTransient(*it)) continue;
+		if (it->GetName() == Core::Game::GameCameraName || it->GetName() == Editor::EditorGUI::EditorCameraName) continue;
 
 		if (reportWarning)
 		{

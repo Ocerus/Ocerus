@@ -4,6 +4,7 @@
 #include "LayerMgr.h"
 #include "../ComponentMgr/ComponentMgr.h"
 #include "../ComponentMgr/Component.h"
+#include "Core/Game.h"
 #include "ResourceSystem/XMLResource.h"
 #include "GfxSystem/GfxSceneMgr.h"
 #include "Editor/EditorMgr.h"
@@ -410,6 +411,7 @@ void EntitySystem::EntityMgr::SetEntityName(const EntityHandle& h, const string&
 		ocError << "Can't find entity " << h;
 		return;
 	}
+	if (entityName == Core::Game::GameCameraName || entityName == Editor::EditorGUI::EditorCameraName) return;
 	ei->second->mName = entityName;
 }
 
