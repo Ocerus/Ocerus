@@ -241,10 +241,9 @@ bool Project::OpenScene(const string& sceneFilename)
 
 bool Project::OpenSceneAtIndex(int sceneIndex)
 {
-	//if (IsSceneOpened()) return false;
+	if (IsSceneOpened()) return false;
 	if (sceneIndex < 0 || sceneIndex >= (int)mSceneList.size())
 		return false;
-	CloseOpenedScene();
 	mSceneIndex = sceneIndex;
 	const string& sceneFilename = mSceneList[sceneIndex].filename;
 

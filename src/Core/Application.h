@@ -88,6 +88,9 @@ namespace Core
 
 		/// Returns whether the editor is currently turned on and the game is running only in a small window.
 		bool IsEditMode() const { return mEditMode; }
+		
+		/// Returns project used for the game itself.
+		Project* GetGameProject() { return mGameProject; }
 
 	private:
 

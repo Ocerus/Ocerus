@@ -3,7 +3,9 @@
 #include "ScriptResource.h"
 #include "ScriptRegister.h"
 #include <angelscript.h>
+#include "Core/Application.h"
 #include "Core/Game.h"
+#include "Core/Project.h"
 #include "AddOn/scriptbuilder.h"
 #include "AddOn/scriptstring.h"
 #include "GUISystem/GUIConsole.h"
@@ -12,6 +14,7 @@ using namespace ScriptSystem;
 using namespace EntitySystem;
 using namespace InputSystem;
 using namespace AngelScript;
+using namespace Core;
 
 
 void MessageCallback(const asSMessageInfo* msg, void* param)
@@ -639,7 +642,7 @@ void RegisterScriptEntityMgr(asIScriptEngine* engine)
 	r = engine->RegisterObjectMethod("EntityMgr", "void DestroyEntityComponent(const EntityHandle, const ComponentID)", asMETHOD(EntityMgr, DestroyEntityComponent), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 
 	// Register function that returns it
-	r = engine->RegisterGlobalFunction("EntityMgr& GetEntityMgr()", asFUNCTION(GetEntityMgr), asCALL_CDECL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterGlobalFunction("EntityMgr& get_entityMgr()", asFUNCTION(GetEntityMgr), asCALL_CDECL); OC_SCRIPT_ASSERT();
 }
 
 // Functions for register InputMgr to script
@@ -736,7 +739,42 @@ void RegisterScriptInputMgr(asIScriptEngine* engine)
 	r = engine->RegisterObjectMethod("InputMgr", "MouseState& GetMouseState() const", asMETHOD(InputMgr, GetMouseState), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	
 	// Register function that returns it
-	r = engine->RegisterGlobalFunction("InputMgr& GetInputMgr()", asFUNCTION(GetInputMgr), asCALL_CDECL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterGlobalFunction("InputMgr& get_inputMgr()", asFUNCTION(GetInputMgr), asCALL_CDECL); OC_SCRIPT_ASSERT();
+}
+
+// Functions for register Project to script
+
+string ProjectGetSceneName(int32 index, const Project* self)
+{
+  SceneInfoList list;
+  self->GetSceneList(list);
+  if (index >= 0 && index < (int32)list.size()) return list[index].name;
+  else return "";
+}
+
+Project& GetProject()
+{
+  return *gApp.GetGameProject();
+}
+
+void RegisterScriptProject(asIScriptEngine* engine)
+{
+	int32 r;
+	// Register the type
+	r = engine->RegisterObjectType("Project", 0, asOBJ_REF | asOBJ_NOHANDLE); OC_SCRIPT_ASSERT();
+	
+	// Register the object methods
+	r = engine->RegisterObjectMethod("Project", "bool OpenScene(const string &in)", asMETHOD(Project, OpenScene), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Project", "bool OpenSceneAtIndex(int32)", asMETHOD(Project, OpenSceneAtIndex), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Project", "bool OpenDefaultScene()", asMETHOD(Project, OpenDefaultScene), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Project", "void CloseOpenedScene()", asMETHOD(Project, CloseOpenedScene), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Project", "bool IsSceneOpened() const", asMETHOD(Project, IsSceneOpened), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Project", "uint32 GetSceneCount() const", asMETHOD(Project, GetSceneCount), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Project", "string GetOpenedSceneName() const", asMETHOD(Project, GetOpenedSceneName), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Project", "string GetSceneName(int32) const", asFUNCTION(ProjectGetSceneName), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+	
+	// Register function that returns it
+	r = engine->RegisterGlobalFunction("Project& get_project()", asFUNCTION(GetProject), asCALL_CDECL); OC_SCRIPT_ASSERT();
 }
 
 // Get handle of entity which ran the script
