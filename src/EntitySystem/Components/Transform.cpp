@@ -43,7 +43,7 @@ void EntityComponents::Transform::SetLayer(int32 value)
 
 void EntityComponents::Transform::SetScale( Vector2 value )
 {
-	if (MathUtils::Abs(value.x) < MIN_SCALAR_SCALE || MathUtils::Abs(value.y) < MIN_SCALAR_SCALE)
+	if (value.x < MIN_SCALAR_SCALE || value.y < MIN_SCALAR_SCALE)
 	{
 		ocWarning << "Too small scale of " << value;
 		return;
