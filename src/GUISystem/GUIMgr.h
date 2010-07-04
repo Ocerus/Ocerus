@@ -123,6 +123,7 @@ namespace GUISystem
 
 		CEGUI::OpenGLRenderer* mRenderer;
 		ResourceProvider* mResourceProvider;
+		ScriptProvider* mScriptProvider;
 
 
 	};

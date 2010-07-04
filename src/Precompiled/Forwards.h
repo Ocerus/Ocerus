@@ -55,6 +55,7 @@ namespace GUISystem
 	class ResourceProvider;
 	class GUIConsole;
 	class ViewportWindow;
+	class ScriptProvider;
 }
 
 namespace InputSystem

@@ -2,6 +2,7 @@
 
 #include "GUIMgr.h"
 #include "ResourceProvider.h"
+#include "ScriptProvider.h"
 #include "GUIConsole.h"
 #include "CEGUITools.h"
 
@@ -47,7 +48,8 @@ namespace GUISystem
 
 		mRenderer = &CEGUI::OpenGLRenderer::create();
 		mResourceProvider = new ResourceProvider();
-		mCegui = &CEGUI::System::create(*mRenderer, mResourceProvider);
+		mScriptProvider = new ScriptProvider();
+		mCegui = &CEGUI::System::create(*mRenderer, mResourceProvider, 0, 0, mScriptProvider);
 
 		gInputMgr.AddInputListener(this);
 		gGfxWindow.AddScreenListener(this);
@@ -71,6 +73,7 @@ namespace GUISystem
 		CEGUI::System::destroy();
 		CEGUI::OpenGLRenderer::destroy(*mRenderer);
 		delete mResourceProvider;
+		delete mScriptProvider;
 	}
 
 	void GUIMgr::Init()

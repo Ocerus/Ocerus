@@ -1122,6 +1122,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\GUISystem\ScriptProvider.h"
+					>
+				</File>
+				<File
 					RelativePath="..\src\GUISystem\VerticalLayout.h"
 					>
 				</File>
@@ -1155,6 +1159,10 @@
 				</File>
 				<File
 					RelativePath="..\src\GUISystem\ResourceProvider.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src\GUISystem\ScriptProvider.cpp"
 					>
 				</File>
 				<File
