@@ -9,6 +9,7 @@
 #include "AddOn/scriptbuilder.h"
 #include "AddOn/scriptstring.h"
 #include "GUISystem/GUIConsole.h"
+#include "GUISystem/CEGUITools.h"
 
 using namespace ScriptSystem;
 using namespace EntitySystem;
@@ -777,6 +778,228 @@ void RegisterScriptProject(asIScriptEngine* engine)
 	r = engine->RegisterGlobalFunction("Project& get_project()", asFUNCTION(GetProject), asCALL_CDECL); OC_SCRIPT_ASSERT();
 }
 
+// Functions for register Window to script
+
+// Reference casting behaviour
+template<class A, class B>
+B* NullRefCast(A* a)
+{
+  // If the handle already is a null handle, then just return the null handle
+  if (!a) return 0;
+
+  // Now try to dynamically cast the pointer to the wanted type
+  B* b = static_cast<B*>(a);
+  
+  return b;
+}
+
+template<class T>
+void NullAddRef(T* self)
+{
+  // Do nothing
+}
+
+template<class T>
+void NullRelease(T* self)
+{
+  // Do nothing
+}
+
+string WindowGetName(const CEGUI::Window* self)
+{
+  return string(self->getName().c_str());
+}
+
+string WindowGetType(const CEGUI::Window* self)
+{
+  return string(self->getType().c_str());
+}
+
+bool WindowIsDisabled(const CEGUI::Window* self)
+{
+  return self->isDisabled();
+}
+
+bool WindowIsVisible(const CEGUI::Window* self)
+{
+  return self->isVisible();
+}
+
+string WindowGetText(const CEGUI::Window* self)
+{
+  return string(self->getText().c_str());
+}
+
+string WindowGetTooltipText(const CEGUI::Window* self)
+{
+  return string(self->getTooltipText().c_str());
+}
+
+void WindowSetText(string text, CEGUI::Window* self)
+{
+  self->setText(text);
+}
+
+void WindowSetTooltipText(string text, CEGUI::Window* self)
+{
+  self->setTooltipText(text);
+}
+
+template<class T>
+void RegisterScriptWindowMembers(asIScriptEngine *engine, const char *type)
+{
+  int32 r;
+  
+  // Register the object behaviour
+  r = engine->RegisterObjectBehaviour(type, asBEHAVE_ADDREF, "void f()", asFUNCTIONPR(NullAddRef, (T*), void), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+  r = engine->RegisterObjectBehaviour(type, asBEHAVE_RELEASE, "void f()", asFUNCTIONPR(NullRelease, (T*), void), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+  
+  // Register the object methods
+  r = engine->RegisterObjectMethod(type, "string GetName() const", asFUNCTION(WindowGetName), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+  r = engine->RegisterObjectMethod(type, "string GetType() const", asFUNCTION(WindowGetType), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+  r = engine->RegisterObjectMethod(type, "bool IsDisabled() const", asFUNCTION(WindowIsDisabled), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+  r = engine->RegisterObjectMethod(type, "bool IsDisabled(bool) const", asMETHOD(T, isDisabled), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+  r = engine->RegisterObjectMethod(type, "bool IsVisible() const", asFUNCTION(WindowIsVisible), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+  r = engine->RegisterObjectMethod(type, "bool IsVisible(bool) const", asMETHOD(T, isVisible), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+  r = engine->RegisterObjectMethod(type, "bool IsActive() const", asMETHOD(T, isActive), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+  r = engine->RegisterObjectMethod(type, "string GetText() const", asFUNCTION(WindowGetText), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+  r = engine->RegisterObjectMethod(type, "bool InheritsAlpha() const", asMETHOD(T, inheritsAlpha), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+  r = engine->RegisterObjectMethod(type, "float32 GetAlpha() const", asMETHOD(T, getAlpha), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+  r = engine->RegisterObjectMethod(type, "float32 GetEffectiveAlpha() const", asMETHOD(T, getEffectiveAlpha), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+  r = engine->RegisterObjectMethod(type, "Window@ GetParent() const", asMETHOD(T, getParent), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+  r = engine->RegisterObjectMethod(type, "string GetTooltipText() const", asFUNCTION(WindowGetTooltipText), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+  r = engine->RegisterObjectMethod(type, "bool InheritsTooltipText() const", asMETHOD(T, inheritsTooltipText), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+  r = engine->RegisterObjectMethod(type, "void SetEnabled(bool)", asMETHOD(T, setEnabled), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+  r = engine->RegisterObjectMethod(type, "void SetVisible(bool)", asMETHOD(T, setVisible), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+  r = engine->RegisterObjectMethod(type, "void Activate()", asMETHOD(T, activate), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+  r = engine->RegisterObjectMethod(type, "void Deactivate()", asMETHOD(T, deactivate), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+  r = engine->RegisterObjectMethod(type, "void SetText(string)", asFUNCTION(WindowSetText), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+  r = engine->RegisterObjectMethod(type, "void SetAlpha(float32)", asMETHOD(T, setAlpha), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+  r = engine->RegisterObjectMethod(type, "void SetInheritsAlpha(bool)", asMETHOD(T, setInheritsAlpha), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+  r = engine->RegisterObjectMethod(type, "void SetTooltipText(string)", asFUNCTION(WindowSetTooltipText), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+  r = engine->RegisterObjectMethod(type, "void SetInheritsTooltipText(bool)", asMETHOD(T, setInheritsTooltipText), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+}
+
+template<class T>
+void RegisterScriptButtonBaseMembers(asIScriptEngine *engine, const char *type)
+{
+  RegisterScriptWindowMembers<T>(engine, type);
+  
+  int32 r;
+  r = engine->RegisterObjectBehaviour("Window", asBEHAVE_REF_CAST, (string(type) + "@ f()").c_str(), asFUNCTION((NullRefCast<CEGUI::Window, T>)), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+  r = engine->RegisterObjectBehaviour(type, asBEHAVE_IMPLICIT_REF_CAST, "Window@ f()", asFUNCTION((NullRefCast<T, CEGUI::Window>)), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+  
+  r = engine->RegisterObjectMethod(type, "bool IsHovering() const", asMETHOD(T, isHovering), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+  r = engine->RegisterObjectMethod(type, "bool IsPushed() const", asMETHOD(T, isPushed), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+}
+
+template<class T>
+void RegisterScriptCheckboxMembers(asIScriptEngine *engine, const char *type)
+{
+  RegisterScriptButtonBaseMembers<T>(engine, type);
+  
+  int32 r;
+  r = engine->RegisterObjectBehaviour("ButtonBase", asBEHAVE_REF_CAST, (string(type) + "@ f()").c_str(), asFUNCTION((NullRefCast<CEGUI::ButtonBase, T>)), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+  r = engine->RegisterObjectBehaviour(type, asBEHAVE_IMPLICIT_REF_CAST, "ButtonBase@ f()", asFUNCTION((NullRefCast<T, CEGUI::ButtonBase>)), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+  
+  r = engine->RegisterObjectMethod(type, "bool IsSelected() const", asMETHOD(T, isSelected), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+  r = engine->RegisterObjectMethod(type, "void SetSelected(bool)", asMETHOD(T, setSelected), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+}
+
+template<class T>
+void RegisterScriptPushButtonMembers(asIScriptEngine *engine, const char *type)
+{
+  RegisterScriptButtonBaseMembers<T>(engine, type);
+  
+  int32 r;
+  r = engine->RegisterObjectBehaviour("ButtonBase", asBEHAVE_REF_CAST, (string(type) + "@ f()").c_str(), asFUNCTION((NullRefCast<CEGUI::ButtonBase, T>)), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+  r = engine->RegisterObjectBehaviour(type, asBEHAVE_IMPLICIT_REF_CAST, "ButtonBase@ f()", asFUNCTION((NullRefCast<T, CEGUI::ButtonBase>)), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+}
+
+template<class T>
+void RegisterScriptRadioButtonMembers(asIScriptEngine *engine, const char *type)
+{
+  RegisterScriptButtonBaseMembers<T>(engine, type);
+  
+  int32 r;
+  r = engine->RegisterObjectBehaviour("ButtonBase", asBEHAVE_REF_CAST, (string(type) + "@ f()").c_str(), asFUNCTION((NullRefCast<CEGUI::ButtonBase, T>)), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+  r = engine->RegisterObjectBehaviour(type, asBEHAVE_IMPLICIT_REF_CAST, "ButtonBase@ f()", asFUNCTION((NullRefCast<T, CEGUI::ButtonBase>)), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+  
+  r = engine->RegisterObjectMethod(type, "bool IsSelected() const", asMETHOD(T, isSelected), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+  r = engine->RegisterObjectMethod(type, "void SetSelected(bool)", asMETHOD(T, setSelected), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+  r = engine->RegisterObjectMethod(type, "uint32 GetGroupID() const", asMETHOD(T, getGroupID), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+  r = engine->RegisterObjectMethod(type, "void SetGroupID(uint32)", asMETHOD(T, setGroupID), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+}
+
+string EditboxGetValidationString(const CEGUI::Editbox* self)
+{
+  return string(self->getValidationString().c_str());
+}
+
+void EditboxSetValidationString(string text, CEGUI::Editbox* self)
+{
+  self->setValidationString(text);
+}
+
+template<class T>
+void RegisterScriptEditboxMembers(asIScriptEngine *engine, const char *type)
+{
+  RegisterScriptWindowMembers<T>(engine, type);
+  
+  int32 r;
+  r = engine->RegisterObjectBehaviour("Window", asBEHAVE_REF_CAST, (string(type) + "@ f()").c_str(), asFUNCTION((NullRefCast<CEGUI::Window, T>)), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+  r = engine->RegisterObjectBehaviour(type, asBEHAVE_IMPLICIT_REF_CAST, "Window@ f()", asFUNCTION((NullRefCast<T, CEGUI::Window>)), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+  
+  r = engine->RegisterObjectMethod(type, "bool HasInputFocus() const", asMETHOD(T, hasInputFocus), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+  r = engine->RegisterObjectMethod(type, "bool IsReadOnly() const", asMETHOD(T, isReadOnly), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+  r = engine->RegisterObjectMethod(type, "bool IsTextMasked() const", asMETHOD(T, isTextMasked), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+  r = engine->RegisterObjectMethod(type, "bool IsTextValid() const", asMETHOD(T, isTextValid), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+  r = engine->RegisterObjectMethod(type, "string GetValidationString() const", asFUNCTION(EditboxGetValidationString), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+  r = engine->RegisterObjectMethod(type, "uint32 GetMaskCodePoint() const", asMETHOD(T, getMaskCodePoint), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+  r = engine->RegisterObjectMethod(type, "uint32 GetMaxTextLength() const", asMETHOD(T, getMaxTextLength), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+  r = engine->RegisterObjectMethod(type, "void SetReadOnly(bool)", asMETHOD(T, setReadOnly), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+  r = engine->RegisterObjectMethod(type, "void SetTextMasked(bool)", asMETHOD(T, setTextMasked), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+  r = engine->RegisterObjectMethod(type, "void SetValidationString(string)", asFUNCTION(EditboxSetValidationString), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();  
+  r = engine->RegisterObjectMethod(type, "void SetMaskCodePoint(uint32)", asMETHOD(T, setMaskCodePoint), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+  r = engine->RegisterObjectMethod(type, "void SetMaxTextLength(uint32)", asMETHOD(T, setMaxTextLength), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+}
+
+CEGUI::Window* GetWindow(string name)
+{
+  return gCEGUIWM.isWindowPresent(name) ? gCEGUIWM.getWindow(name) : 0;
+}
+
+void RegisterScriptWindows(asIScriptEngine* engine)
+{
+  int32 r;
+	
+	// Register the Window class
+	r = engine->RegisterObjectType("Window", 0, asOBJ_REF); OC_SCRIPT_ASSERT();
+	RegisterScriptWindowMembers<CEGUI::Window>(engine, "Window");
+	
+	// Register the ButtonBase class
+	r = engine->RegisterObjectType("ButtonBase", 0, asOBJ_REF); OC_SCRIPT_ASSERT();
+	RegisterScriptButtonBaseMembers<CEGUI::ButtonBase>(engine, "ButtonBase");
+	
+	// Register the Checkbox class
+	r = engine->RegisterObjectType("Checkbox", 0, asOBJ_REF); OC_SCRIPT_ASSERT();
+	RegisterScriptCheckboxMembers<CEGUI::Checkbox>(engine, "Checkbox");
+	
+	// Register the PushButton class
+	r = engine->RegisterObjectType("PushButton", 0, asOBJ_REF); OC_SCRIPT_ASSERT();
+	RegisterScriptPushButtonMembers<CEGUI::PushButton>(engine, "PushButton");
+	
+	// Register the RadioButton class
+	r = engine->RegisterObjectType("RadioButton", 0, asOBJ_REF); OC_SCRIPT_ASSERT();
+	RegisterScriptRadioButtonMembers<CEGUI::RadioButton>(engine, "RadioButton");
+	
+	// Register the Editbox class
+	r = engine->RegisterObjectType("Editbox", 0, asOBJ_REF); OC_SCRIPT_ASSERT();
+	RegisterScriptEditboxMembers<CEGUI::Editbox>(engine, "Editbox");
+	
+	r = engine->RegisterGlobalFunction("Window@ GetWindow(string)", asFUNCTION(GetWindow), asCALL_CDECL); OC_SCRIPT_ASSERT();
+}
+
 // Get handle of entity which ran the script
 EntityHandle GetCurrentEntityHandle(void)
 {
@@ -814,6 +1037,9 @@ void ScriptMgr::ConfigureEngine(void)
 {
 	int32 r;
 
+	// The first character in the single quoted string will be interpreted as a single uint32 value instead of a string literal
+	r = mEngine->SetEngineProperty(asEP_USE_CHARACTER_LITERALS, 1); OC_SCRIPT_ASSERT();
+	
 	// Register typedefs for real numbers
 	r = mEngine->RegisterTypedef("float32", "float"); OC_SCRIPT_ASSERT();
 	r = mEngine->RegisterTypedef("float64", "double"); OC_SCRIPT_ASSERT();
@@ -852,6 +1078,12 @@ void ScriptMgr::ConfigureEngine(void)
 
 	// Register StringMgr methods
 	RegisterScriptStringMgr(mEngine);
+	
+	// Register Project methods
+	RegisterScriptProject(mEngine);
+	
+	// Register CEGUI components
+	RegisterScriptWindows(mEngine);
 
 	// Register all additions in ScriptRegister.cpp to script
 	RegisterAllAdditions(mEngine);
