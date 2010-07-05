@@ -239,7 +239,7 @@ LayerID LayerMgr::MoveLayerUp(LayerID id)
 	LayerID higherLayerId = id + 1;
 	if (id != 0)
 	{
-		return higherLayerId == GetTopLayerID() ? MoveLayerTop(id) : MoveLayerBehind(id, higherLayerId + 1);
+		return (higherLayerId == GetTopLayerID()) ? MoveLayerTop(id) : MoveLayerBehind(id, higherLayerId + 1);
 	}
 	else
 	{
@@ -341,7 +341,7 @@ void LayerMgr::ShiftEntities(EntitySystem::LayerID from, bool front)
 		LayerID id = GetLayerID(*it);
 		if ((foreground && id >= from) || (!foreground && id <= from))
 		{ 
-			SetLayerID(*it, id + front ? 1 : -1);
+			SetLayerID(*it, id + (front ? 1 : -1));
 		}
 	}
 }
