@@ -1,12 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <Scene>
-  <Layers Difference="2" ActiveLayer="0">
+  <Layers Difference="2" ActiveLayer="1">
     <Layer Visible="true">BG</Layer>
     <Layer Visible="true">Behind MG</Layer>
     <Layer Visible="true">MG</Layer>
+    <Layer Visible="true">FG</Layer>
   </Layers>
   <Entities>
+    <Entity Name="LevelExit" ID="1" Tag="1" Transient="false">
+      <Component Type="Transform">
+        <Layer>1</Layer>
+        <Angle>0</Angle>
+        <Scale>0.25 0.25</Scale>
+        <Position>4.2267 -2.41095</Position>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Polygon>
+          <Item>-1 -1</Item>
+          <Item>1 -1</Item>
+          <Item>1 1</Item>
+          <Item>-1 1</Item>
+        </Polygon>
+        <Restitution>0.5</Restitution>
+        <Friction>0.5</Friction>
+        <Density>1</Density>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>finish.png</Texture>
+      </Component>
+    </Entity>
     <Entity Name="Land1" ID="2" Tag="0" Transient="false" Prototype="-495">
       <Component Type="Transform">
         <Layer>0</Layer>
@@ -459,9 +483,9 @@
     </Entity>
     <Entity Name="EditorCamera" ID="22" Tag="0" Transient="false">
       <Component Type="Camera">
-        <Position>7.85604 -2.45133</Position>
+        <Position>3.10299 -3.24338</Position>
         <Rotation>0</Rotation>
-        <Zoom>0.622852</Zoom>
+        <Zoom>1.19182</Zoom>
       </Component>
     </Entity>
     <Entity Name="LandFiller" ID="23" Tag="0" Transient="false" Prototype="-497">
@@ -1935,6 +1959,7 @@
   <Hierarchy>
     <Entity ID="20"></Entity>
     <Entity ID="19"></Entity>
+    <Entity ID="1"></Entity>
     <Entity ID="31">
       <Entity ID="30"></Entity>
     </Entity>

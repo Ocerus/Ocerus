@@ -32,7 +32,11 @@ void SwitchState()
 
 void OnCollisionStarted(EntityHandle other, Vector2 normal, Vector2 contactPoint)
 {
-
+	if (other.GetTag() == 1)
+	{
+		Println("FINISH");
+		gEntityMgr.DestroyEntity(this);
+	}
 }
 
 void OnCollisionEnded(EntityHandle other)
@@ -42,7 +46,7 @@ void OnCollisionEnded(EntityHandle other)
 
 void OnDraw(float32 delta)
 {
-  // animate according to the state
+  // animate accordingly to the state
   const float32 angleAnimSpeed = 10.0f;
   const float32 PI = 3.14f;
   float32 angle = this.Get_float32("YAngle");

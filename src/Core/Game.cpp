@@ -334,7 +334,7 @@ void Core::Game::PhysicsCallbacks::EndContact(b2Contact* contact)
 
 void Core::Game::ProcessPhysicsEvent(const PhysicsEvent& evt)
 {
-	if (!evt.entity1.IsValid() || !evt.entity2.IsValid())
+	if (!evt.entity1.IsValid() || !evt.entity2.IsValid() || !evt.entity1.Exists() || !evt.entity2.Exists())
 		return;
 
 	if (evt.type == PhysicsEvent::COLLISION_STARTED)

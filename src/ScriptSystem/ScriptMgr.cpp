@@ -646,7 +646,7 @@ void RegisterScriptEntityMgr(asIScriptEngine* engine)
 	r = engine->RegisterObjectMethod("EntityMgr", "void DestroyEntityComponent(const EntityHandle, const ComponentID)", asMETHOD(EntityMgr, DestroyEntityComponent), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 
 	// Register function that returns it
-	r = engine->RegisterGlobalFunction("EntityMgr& get_entityMgr()", asFUNCTION(GetEntityMgr), asCALL_CDECL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterGlobalFunction("EntityMgr& get_gEntityMgr()", asFUNCTION(GetEntityMgr), asCALL_CDECL); OC_SCRIPT_ASSERT();
 }
 
 // Functions for register InputMgr to script
