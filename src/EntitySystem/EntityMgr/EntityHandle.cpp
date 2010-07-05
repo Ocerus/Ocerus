@@ -158,6 +158,16 @@ bool EntitySystem::EntityHandle::operator<( const EntityHandle& rhs ) const
 	return mEntityID < rhs.mEntityID;
 }
 
+uint16 EntitySystem::EntityHandle::GetTag( void ) const
+{
+	return gEntityMgr.GetEntityTag(*this);
+}
+
+void EntitySystem::EntityHandle::SetTag( uint16 tag )
+{
+	gEntityMgr.SetEntityTag(*this, tag);
+}
+
 EntityMessage::eResult EntityHandle::PostMessage(const EntityMessage& msg) const
 {
 	OC_DASSERT(IsValid());

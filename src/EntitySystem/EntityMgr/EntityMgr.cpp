@@ -17,22 +17,25 @@ namespace EntitySystem
 	struct EntityInfo
 	{
 		EntityInfo(const string& name, const EntityHandle prototype, const bool transient):
-			mFullyInited(false),
 			mName(name),
 			mPrototype(prototype),
-			mTransient(transient)
+			mTransient(transient),
+			mFullyInited(false),
+			mTag(0)
 		{
 
 		}
 
-		/// True if this entity was fully inited in the system by the user.
-		bool mFullyInited;
 		/// Human readable user ID.
 		string mName;
 		/// Handle to the prototype entity (can be invalid).
 		EntityHandle mPrototype;
 		/// Whether the entity should not be saved.
 		bool mTransient;
+		/// True if this entity was fully inited in the system by the user.
+		bool mFullyInited;
+		/// User defined tag.
+		EntityTag mTag;
 
 	private:
 		EntityInfo(const EntityInfo& rhs);
@@ -411,11 +414,35 @@ void EntitySystem::EntityMgr::SetEntityName(const EntityHandle& h, const string&
 		ocError << "Can't find entity " << h;
 		return;
 	}
-	if (entityName == Core::Game::GameCameraName || entityName == Editor::EditorGUI::EditorCameraName) return;
+	if (entityName == Core::Game::GameCameraName || entityName == Editor::EditorGUI::EditorCameraName)
+	{
+		ocWarning << "Attempting to set a name taken by default cameras";
+		return;
+	}
 	ei->second->mName = entityName;
 }
 
+EntityTag EntitySystem::EntityMgr::GetEntityTag( const EntityHandle& h ) const
+{
+	EntityMap::const_iterator ei = mEntities.find(h.GetID());
+	if (ei == mEntities.end())
+	{
+		ocError << "Can't find entity " << h;
+		return 0;
+	}
+	return ei->second->mTag;
+}
 
+void EntitySystem::EntityMgr::SetEntityTag( const EntityHandle& h, const EntityTag tag )
+{
+	EntityMap::const_iterator ei = mEntities.find(h.GetID());
+	if (ei == mEntities.end())
+	{
+		ocError << "Can't find entity " << h;
+		return;
+	}
+	ei->second->mTag = tag;
+}
 
 bool EntitySystem::EntityMgr::IsEntityInited( const EntityHandle h ) const
 {
@@ -674,6 +701,10 @@ void EntitySystem::EntityMgr::LoadEntityFromXML(ResourceSystem::XMLNodeIterator 
 	EntityHandle entity = CreateEntity(desc);
 	if (!entity) return;
 
+	// setup the tag
+	if (entIt.HasAttribute("Tag")) SetEntityTag(entity, entIt.GetAttribute<EntityTag>("Tag"));
+
+	// get the prototype stuff if available
 	PrototypeInfo* prototypeInfo = 0;
 	if (isPrototype)
 	{
@@ -789,6 +820,7 @@ bool EntitySystem::EntityMgr::SaveEntityToStorage(const EntitySystem::EntityID e
 	storage.BeginElementStart("Entity");
 	storage.AddAttribute("Name", info->mName);
 	storage.AddAttribute("ID", Utils::StringConverter::ToString(entityID));
+	storage.AddAttribute("Tag", Utils::StringConverter::ToString(info->mTag));
 	storage.AddAttribute("Transient", Utils::StringConverter::ToString(info->mTransient));
 	if (!isPrototype && info->mPrototype.IsValid())
 	{ 
@@ -961,6 +993,9 @@ void EntitySystem::EntityMgr::UpdatePrototypeInstance( const EntityID prototype,
 		ocError << "Cannot propagate prototype " << prototype << " to instance " << instance << "; not enough components in instance";
 		return;
 	}
+
+	// propagate some of the entity attributes of the prototype
+	SetEntityTag(instance, GetEntityTag(prototype));
 
 	// iterate through components of the prototype
 	ComponentID currentComponent = 0;

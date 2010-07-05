@@ -16,6 +16,7 @@ string Editor::EntityAttributeModel::GetName() const
 	{
 		case TYPE_ID: return "Id";
 		case TYPE_NAME: return "Name";
+		case TYPE_TAG: return "Tag";
 		default: OC_NOT_REACHED();
 	}
 	return "";
@@ -27,6 +28,7 @@ string Editor::EntityAttributeModel::GetTooltip() const
 	{
 		case TYPE_ID: return "ID of the entity.";
 		case TYPE_NAME: return "Name of the entity.";
+		case TYPE_TAG: return "User tag of the entity.";
 		default: OC_NOT_REACHED();
 	}
 	return "";
@@ -43,6 +45,7 @@ bool Editor::EntityAttributeModel::IsReadOnly() const
 	{
 		case TYPE_ID: return true;
 		case TYPE_NAME: return false;
+		case TYPE_TAG: return false;
 		default: OC_NOT_REACHED();
 	}
 	return false;
@@ -54,6 +57,7 @@ string Editor::EntityAttributeModel::GetValue() const
 	{
 		case TYPE_ID: return StringConverter::ToString(mEntity.GetID());
 		case TYPE_NAME: return gEntityMgr.GetEntityName(mEntity);
+		case TYPE_TAG: return StringConverter::ToString(gEntityMgr.GetEntityTag(mEntity));
 		default: OC_NOT_REACHED();
 	}
 	return "";
@@ -65,6 +69,10 @@ void Editor::EntityAttributeModel::SetValue(const string& newValue)
 	{
 		case TYPE_NAME: 
 			gEntityMgr.SetEntityName(mEntity, newValue);
+			break;
+		case TYPE_TAG:
+			gEntityMgr.SetEntityTag(mEntity, StringConverter::FromString<EntitySystem::EntityTag>(newValue));
+			gEditorMgr.PropertyValueChanged(); // to propagate the value from prototypes
 			break;
 		default: OC_NOT_REACHED();
 	}

@@ -244,6 +244,11 @@ void EditorGUI::UpdateEntityEditorWindow()
 			mPropertyEditors.push_back(editor);
 			layout->AddChildWindow(editor->CreateWidget(namePrefix + "/EntityNameEditor"));
 		}
+		{
+			AbstractValueEditor* editor = CreateEntityTagEditor(currentEntity);
+			mPropertyEditors.push_back(editor);
+			layout->AddChildWindow(editor->CreateWidget(namePrefix + "/EntityTagEditor"));
+		}
 
 		layout->UpdateLayout();
 	}

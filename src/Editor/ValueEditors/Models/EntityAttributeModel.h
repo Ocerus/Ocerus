@@ -19,7 +19,8 @@ namespace Editor
 		enum eAttributeType
 		{
 			TYPE_ID,
-			TYPE_NAME
+			TYPE_NAME,
+			TYPE_TAG
 		};
 
 		/// Constructs a model for given entity and type of attribute.

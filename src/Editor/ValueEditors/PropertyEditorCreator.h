@@ -15,8 +15,11 @@ namespace Editor
 	/// Creates an editor for EntityID.
 	AbstractValueEditor* CreateEntityIDEditor(const EntitySystem::EntityHandle&);
 
-	/// Creates an editor for EntityName.
+	/// Creates an editor for the name of the entity.
 	AbstractValueEditor* CreateEntityNameEditor(const EntitySystem::EntityHandle&);
+
+	/// Creates an editor for the user tag of the entity.
+	AbstractValueEditor* CreateEntityTagEditor(const EntitySystem::EntityHandle&);
 }
 
 #endif // _PROPERTYEDITORCREATOR_H_

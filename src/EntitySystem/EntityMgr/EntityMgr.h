@@ -132,6 +132,12 @@ namespace EntitySystem
 		/// Sets whether the entity should not be saved.
 		void SetEntityTransient(const EntityHandle& h, const bool transient);
 
+		/// User defined tag assigned to the entity.
+		EntityTag GetEntityTag(const EntityHandle& h) const;
+
+		/// User defined tag assigned to the entity.
+		void SetEntityTag(const EntityHandle& h, const EntityTag tag);
+
 		//@}
 
 

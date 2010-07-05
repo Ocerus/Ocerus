@@ -14,6 +14,9 @@ namespace EntitySystem
 	/// Entity identifier. Positive IDs determine actual entities while negative IDs determine entity prototypes.
 	typedef int32 EntityID;
 
+	/// User defined tag assigned to entities.
+	typedef uint16 EntityTag;
+
 	/// Invalid ID for an entity.
 	const EntityID INVALID_ENTITY_ID = 0;
 
@@ -104,6 +107,12 @@ namespace EntitySystem
 
 		/// Returns the name of this entity.
 		string GetName(void) const;
+
+		/// Returns the user tag of this entity.
+		EntityTag GetTag(void) const;
+
+		/// Sets the user tag of this entity.
+		void SetTag(EntityTag tag);
 
 		/// Invalid handle representing no entity in the system.
 		static const EntityHandle Null;
