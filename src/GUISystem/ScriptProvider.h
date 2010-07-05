@@ -6,19 +6,24 @@
 
 namespace GUISystem
 {
+  /// Implements the callback of GUI events as a calling script function.
   class ScriptCallback
   {
   public:
+    /// Constructor of the script callback class.
+    /// @param functionName Name of the script function to call.  
+    ScriptCallback(const string& functionName) : mFunctionName(functionName) {}
     
-    ScriptCallback(const string& name) : mName(name) {}
-    
+    /// This method is called as a callback to a GUI event.
     bool operator()(const CEGUI::EventArgs& args) const;
    
   private:
-    std::string mName;
+    /// Name of the script function to call.
+    std::string mFunctionName;
 
   };
   
+  /// Implements scripting in the CEGUI library.
   class ScriptProvider: public CEGUI::ScriptModule
   {
   public:
