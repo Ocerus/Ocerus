@@ -236,7 +236,6 @@ bool Project::OpenScene(const string& sceneFilename)
 		}
 	}
 	return OpenSceneAtIndex(sceneIndex);
-	
 }
 
 bool Project::OpenSceneAtIndex(int sceneIndex)
@@ -248,8 +247,9 @@ bool Project::OpenSceneAtIndex(int sceneIndex)
 	const string& sceneFilename = mSceneList[sceneIndex].filename;
 
 	gEntityMgr.LoadEntitiesFromResource(gResourceMgr.GetResource("Project", sceneFilename));
-	if (gApp.IsEditMode()) { gEditorMgr.GetEditorGui()->RefreshCameras(); }
-	else { GlobalProperties::Get<Core::Game>("Game").RefreshCamera(); }
+	GlobalProperties::Get<Core::Game>("Game").Init();
+	if (gApp.IsEditMode()) gEditorMgr.GetEditorGui()->RefreshCameras();
+	else GlobalProperties::Get<Core::Game>("Game").CreateDefaultRenderTarget();
 	
 	ocInfo << "Scene " << sceneFilename << " loaded.";
 	return true;

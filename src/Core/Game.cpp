@@ -46,7 +46,7 @@ private:
 
 
 Core::Game::Game():
-	StateMachine<eGameState>(GS_INITING),
+	StateMachine<eGameState>(GS_NOT_INITED),
 	mTimer(true),
 	mRenderTarget(GfxSystem::InvalidRenderTargetID),
 	mCamera(EntitySystem::EntityHandle::Null),
@@ -55,20 +55,26 @@ Core::Game::Game():
 {
 	mPhysicsCallbacks = new PhysicsCallbacks(this);
 	mPhysicsDraw = new GfxSystem::PhysicsDraw();
+	mPhysics = new b2World(b2Vec2(0.0f, 0.0f), true);
 
-	GlobalProperties::SetPointer("Game", this);
+	UpdateGameProperties();
 }
 
 Core::Game::~Game()
 {
 	Clean();
+
+	OC_ASSERT_MSG(mPhysics->GetBodyCount() == 0, "There are physical bodies left");
+	OC_ASSERT_MSG(mPhysics->GetJointCount() == 0, "There are physical joints left");
+
+	delete mPhysics;
 	delete mPhysicsCallbacks;
 	delete mPhysicsDraw;
 
 	GlobalProperties::SetPointer("Game", 0);
 }
 
-void Core::Game::RefreshCamera()
+void Core::Game::CreateDefaultRenderTarget()
 {
 	EntitySystem::EntityHandle mCamera = gEntityMgr.FindFirstEntity(GameCameraName);
 	if (!mCamera.Exists())
@@ -81,11 +87,8 @@ void Core::Game::RefreshCamera()
 		mCamera.FinishInit();
 	}
 
-	if (mRenderTarget != GfxSystem::InvalidRenderTargetID)
-	{
-		gGfxRenderer.RemoveRenderTarget(mRenderTarget);
-	}
-	mRenderTarget = gGfxRenderer.AddRenderTarget(GfxSystem::GfxViewport(Vector2(0, 0), Vector2(1, 1), false, true), mCamera);
+	OC_ASSERT(mRenderTarget == GfxSystem::InvalidRenderTargetID);
+	mRenderTarget = gGfxRenderer.AddRenderTarget(GfxSystem::GfxViewport(Vector2(0, 0), Vector2(1.0f, 1.0f), false, true), mCamera);
 }
 
 void Core::Game::SetRenderTarget(const GfxSystem::RenderTargetID renderTarget)
@@ -107,17 +110,18 @@ void Core::Game::UpdateGameProperties(void)
 
 void Core::Game::Init()
 {
+	if (GetState() != GS_NOT_INITED) Clean();
+
 	ocInfo << "Game init";
 	ForceStateChange(GS_INITING);
-
-	if (!gGfxRenderer.IsRenderTargetValid(mRenderTarget)) { RefreshCamera(); }
 
 	// basic init stuff
 	mActionState = AS_PAUSED;
 	mTimer.Reset();
 
 	// init physics engine
-	mPhysics = new b2World(b2Vec2(0.0f, 10.0f), false);
+	OC_ASSERT(mPhysics);
+	mPhysics->SetGravity(Vector2(0.0f, 10.0f));
 	mPhysics->SetContactFilter(mPhysicsCallbacks);
 	mPhysics->SetContactListener(mPhysicsCallbacks);
 	mPhysics->SetDebugDraw(mPhysicsDraw);
@@ -139,12 +143,14 @@ void Core::Game::Clean()
 	gApp.UnregisterGameInputListener(this);
 	ForceStateChange(GS_CLEANING);
 
-	if (mPhysics) delete mPhysics;
 	for (PhysicsEventList::const_iterator i=mPhysicsEvents.begin(); i!=mPhysicsEvents.end(); ++i)
 	{
 		delete *i;
 	}
 	mPhysicsEvents.clear();
+	
+	ForceStateChange(GS_NOT_INITED);
+	ocInfo << "Game cleaned";
 }
 
 void Core::Game::Update(const float32 delta)

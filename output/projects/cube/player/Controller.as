@@ -47,8 +47,8 @@ void OnDraw(float32 delta)
   const float32 PI = 3.14f;
   float32 angle = this.Get_float32("YAngle");
   if (this.Get_bool("IsLight") && angle > 0.0) angle -= angleAnimSpeed * delta;
-  if (!this.Get_bool("IsLight") && angle < 0.5*PI) angle += angleAnimSpeed * delta;
+  if (!this.Get_bool("IsLight") && angle < PI) angle += angleAnimSpeed * delta;
   if (angle < 0.0) angle = 0.0;
-  if (angle > 0.5f*PI) angle = 0.5f*PI;
+  if (angle > PI) angle = PI;
   this.Set_float32("YAngle", angle);
 }

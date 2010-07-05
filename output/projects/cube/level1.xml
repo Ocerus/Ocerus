@@ -16,7 +16,6 @@
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
@@ -25,6 +24,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>1</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -40,7 +40,6 @@
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.83 -0.15</Item>
           <Item>0.83 -0.5</Item>
@@ -49,6 +48,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>1</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -72,7 +72,6 @@
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
@@ -81,6 +80,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>1</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -96,7 +96,6 @@
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.83 -0.15</Item>
           <Item>0.83 -0.5</Item>
@@ -105,6 +104,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>1</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -123,7 +123,6 @@
         <Texture>tile2.png</Texture>
       </Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
@@ -132,6 +131,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>0</Friction>
+        <Density>1</Density>
       </Component>
     </Entity>
     <Entity Name="Land2" ID="8" Transient="false" Prototype="-496">
@@ -143,7 +143,6 @@
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.83 -0.15</Item>
           <Item>0.83 -0.5</Item>
@@ -152,6 +151,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>1</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -167,7 +167,6 @@
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.83 -0.15</Item>
           <Item>0.83 -0.5</Item>
@@ -176,6 +175,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>1</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -191,7 +191,6 @@
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
@@ -200,6 +199,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>1</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -215,7 +215,6 @@
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.83 -0.15</Item>
           <Item>0.83 -0.5</Item>
@@ -224,6 +223,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>1</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -239,7 +239,6 @@
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
@@ -248,6 +247,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>1</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -263,7 +263,6 @@
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.83 -0.15</Item>
           <Item>0.83 -0.5</Item>
@@ -272,6 +271,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>1</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -290,7 +290,6 @@
         <Texture>tile2.png</Texture>
       </Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
@@ -299,6 +298,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>0</Friction>
+        <Density>1</Density>
       </Component>
     </Entity>
     <Entity Name="Land1" ID="15" Transient="false" Prototype="-495">
@@ -310,7 +310,6 @@
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
@@ -319,6 +318,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>1</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -334,7 +334,6 @@
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.83 -0.15</Item>
           <Item>0.83 -0.5</Item>
@@ -343,6 +342,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>1</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -358,7 +358,6 @@
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.83 -0.15</Item>
           <Item>0.83 -0.5</Item>
@@ -367,6 +366,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>1</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -382,7 +382,6 @@
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
@@ -391,6 +390,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>1</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -405,12 +405,12 @@
         <Position>0 0</Position>
       </Component>
       <Component Type="Script">
-        <ScriptTimes></ScriptTimes>
-        <ScriptStates></ScriptStates>
-        <ScriptTimeOut>1000</ScriptTimeOut>
         <ScriptModules>
           <Item>Director.as</Item>
         </ScriptModules>
+        <ScriptTimes></ScriptTimes>
+        <ScriptStates></ScriptStates>
+        <ScriptTimeOut>1000</ScriptTimeOut>
       </Component>
     </Entity>
     <Entity Name="Player" ID="20" Transient="false">
@@ -425,7 +425,6 @@
         <AngularDamping>20</AngularDamping>
       </Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.5 -0.5</Item>
           <Item>0.5 -0.5</Item>
@@ -434,6 +433,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>10</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Model">
         <YAngle>0</YAngle>
@@ -441,27 +441,27 @@
         <Mesh>cube.model</Mesh>
       </Component>
       <Component Type="Script">
-        <ScriptTimes></ScriptTimes>
-        <ScriptStates></ScriptStates>
-        <ScriptTimeOut>1000</ScriptTimeOut>
         <ScriptModules>
           <Item>Controller.as</Item>
         </ScriptModules>
+        <ScriptTimes></ScriptTimes>
+        <ScriptStates></ScriptStates>
+        <ScriptTimeOut>1000</ScriptTimeOut>
         <IsLight Type="bool">true</IsLight>
       </Component>
     </Entity>
     <Entity Name="GameCamera" ID="21" Transient="false">
       <Component Type="Camera">
+        <Position>12.0177 0.929973</Position>
         <Rotation>0</Rotation>
         <Zoom>1</Zoom>
-        <Position>12.0177 0.929973</Position>
       </Component>
     </Entity>
     <Entity Name="EditorCamera" ID="22" Transient="false">
       <Component Type="Camera">
+        <Position>7.85604 -2.45133</Position>
         <Rotation>0</Rotation>
-        <Zoom>0.514754</Zoom>
-        <Position>4.08005 -3.76464</Position>
+        <Zoom>0.622852</Zoom>
       </Component>
     </Entity>
     <Entity Name="LandFiller" ID="23" Transient="false" Prototype="-497">
@@ -476,7 +476,6 @@
         <Texture>tile2.png</Texture>
       </Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
@@ -485,6 +484,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>0</Friction>
+        <Density>1</Density>
       </Component>
     </Entity>
     <Entity Name="LandFiller" ID="24" Transient="false" Prototype="-497">
@@ -499,7 +499,6 @@
         <Texture>tile2.png</Texture>
       </Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
@@ -508,6 +507,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>0</Friction>
+        <Density>1</Density>
       </Component>
     </Entity>
     <Entity Name="LandFiller" ID="25" Transient="false" Prototype="-497">
@@ -522,7 +522,6 @@
         <Texture>tile2.png</Texture>
       </Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
@@ -531,6 +530,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>0</Friction>
+        <Density>1</Density>
       </Component>
     </Entity>
     <Entity Name="LandFiller" ID="26" Transient="false" Prototype="-497">
@@ -545,7 +545,6 @@
         <Texture>tile2.png</Texture>
       </Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
@@ -554,6 +553,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>0</Friction>
+        <Density>1</Density>
       </Component>
     </Entity>
     <Entity Name="LandFiller" ID="27" Transient="false" Prototype="-497">
@@ -568,7 +568,6 @@
         <Texture>tile2.png</Texture>
       </Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
@@ -577,6 +576,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>0</Friction>
+        <Density>1</Density>
       </Component>
     </Entity>
     <Entity Name="Land1" ID="28" Transient="false" Prototype="-495">
@@ -588,7 +588,6 @@
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
@@ -597,6 +596,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>1</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -615,7 +615,6 @@
         <Texture>tile2.png</Texture>
       </Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
@@ -624,6 +623,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>0</Friction>
+        <Density>1</Density>
       </Component>
     </Entity>
     <Entity Name="Background1" ID="30" Transient="false" Prototype="-497">
@@ -638,7 +638,6 @@
         <Texture>bg1.png</Texture>
       </Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
@@ -647,6 +646,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>0</Friction>
+        <Density>1</Density>
       </Component>
     </Entity>
     <Entity Name="Background" ID="31" Transient="false">
@@ -666,7 +666,6 @@
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.83 -0.15</Item>
           <Item>0.83 -0.5</Item>
@@ -675,6 +674,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>1</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -690,7 +690,6 @@
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
@@ -699,6 +698,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>1</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -714,7 +714,6 @@
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
@@ -723,6 +722,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>1</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -738,7 +738,6 @@
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
@@ -747,6 +746,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>1</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -762,7 +762,6 @@
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.83 -0.15</Item>
           <Item>0.83 -0.5</Item>
@@ -771,6 +770,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>1</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -786,7 +786,6 @@
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
@@ -795,6 +794,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>1</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -810,7 +810,6 @@
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
@@ -819,6 +818,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>1</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -834,7 +834,6 @@
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.83 -0.15</Item>
           <Item>0.83 -0.5</Item>
@@ -843,6 +842,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>1</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -858,7 +858,6 @@
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
@@ -867,6 +866,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>1</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -882,7 +882,6 @@
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.83 -0.15</Item>
           <Item>0.83 -0.5</Item>
@@ -891,6 +890,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>1</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -906,7 +906,6 @@
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
@@ -915,6 +914,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>1</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -930,7 +930,6 @@
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.83 -0.15</Item>
           <Item>0.83 -0.5</Item>
@@ -939,6 +938,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>1</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -954,7 +954,6 @@
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
@@ -963,6 +962,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>1</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -978,7 +978,6 @@
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.83 -0.15</Item>
           <Item>0.83 -0.5</Item>
@@ -987,6 +986,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>1</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -1002,7 +1002,6 @@
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
@@ -1011,6 +1010,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>1</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -1026,7 +1026,6 @@
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.83 -0.15</Item>
           <Item>0.83 -0.5</Item>
@@ -1035,6 +1034,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>1</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -1050,7 +1050,6 @@
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
@@ -1059,6 +1058,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>1</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -1074,7 +1074,6 @@
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
@@ -1083,6 +1082,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>1</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -1098,7 +1098,6 @@
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
@@ -1107,6 +1106,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>1</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -1122,7 +1122,6 @@
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.83 -0.15</Item>
           <Item>0.83 -0.5</Item>
@@ -1131,6 +1130,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>1</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -1146,7 +1146,6 @@
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.83 -0.15</Item>
           <Item>0.83 -0.5</Item>
@@ -1155,6 +1154,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>1</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -1170,7 +1170,6 @@
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
@@ -1179,6 +1178,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>1</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -1197,7 +1197,6 @@
         <Texture>tile2.png</Texture>
       </Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
@@ -1206,6 +1205,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>0</Friction>
+        <Density>1</Density>
       </Component>
     </Entity>
     <Entity Name="LandFiller" ID="55" Transient="false" Prototype="-497">
@@ -1220,7 +1220,6 @@
         <Texture>tile2.png</Texture>
       </Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
@@ -1229,6 +1228,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>0</Friction>
+        <Density>1</Density>
       </Component>
     </Entity>
     <Entity Name="LandFiller" ID="56" Transient="false" Prototype="-497">
@@ -1243,7 +1243,6 @@
         <Texture>tile2.png</Texture>
       </Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
@@ -1252,6 +1251,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>0</Friction>
+        <Density>1</Density>
       </Component>
     </Entity>
     <Entity Name="LandFiller" ID="57" Transient="false" Prototype="-497">
@@ -1266,7 +1266,6 @@
         <Texture>tile2.png</Texture>
       </Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
@@ -1275,6 +1274,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>0</Friction>
+        <Density>1</Density>
       </Component>
     </Entity>
     <Entity Name="LandFiller" ID="58" Transient="false" Prototype="-497">
@@ -1289,7 +1289,6 @@
         <Texture>tile2.png</Texture>
       </Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
@@ -1298,6 +1297,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>0</Friction>
+        <Density>1</Density>
       </Component>
     </Entity>
     <Entity Name="LandFiller" ID="59" Transient="false" Prototype="-497">
@@ -1312,7 +1312,6 @@
         <Texture>tile2.png</Texture>
       </Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
@@ -1321,6 +1320,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>0</Friction>
+        <Density>1</Density>
       </Component>
     </Entity>
     <Entity Name="Objects" ID="61" Transient="false">
@@ -1343,7 +1343,6 @@
         <AngularDamping>0.5</AngularDamping>
       </Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.65 -0.2</Item>
           <Item>-0.25 -0.5</Item>
@@ -1355,6 +1354,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>10</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -1373,7 +1373,6 @@
         <AngularDamping>0.5</AngularDamping>
       </Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.1 -0.21</Item>
           <Item>0.25 -0.12</Item>
@@ -1385,6 +1384,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>1</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -1403,7 +1403,6 @@
         <AngularDamping>0.5</AngularDamping>
       </Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.65 -0.2</Item>
           <Item>-0.25 -0.5</Item>
@@ -1415,6 +1414,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>10</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -1433,7 +1433,6 @@
         <AngularDamping>0.5</AngularDamping>
       </Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.65 -0.2</Item>
           <Item>-0.25 -0.5</Item>
@@ -1445,6 +1444,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>10</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -1463,7 +1463,6 @@
         <AngularDamping>0.5</AngularDamping>
       </Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.1 -0.21</Item>
           <Item>0.25 -0.12</Item>
@@ -1475,6 +1474,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>1</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -1493,7 +1493,6 @@
         <AngularDamping>0.5</AngularDamping>
       </Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.1 -0.21</Item>
           <Item>0.25 -0.12</Item>
@@ -1505,6 +1504,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>1</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -1523,7 +1523,6 @@
         <AngularDamping>0.5</AngularDamping>
       </Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.65 -0.2</Item>
           <Item>-0.25 -0.5</Item>
@@ -1535,6 +1534,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>10</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -1553,7 +1553,6 @@
         <AngularDamping>0.5</AngularDamping>
       </Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.65 -0.2</Item>
           <Item>-0.25 -0.5</Item>
@@ -1565,6 +1564,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>10</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -1583,7 +1583,6 @@
         <AngularDamping>0.5</AngularDamping>
       </Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.65 -0.2</Item>
           <Item>-0.25 -0.5</Item>
@@ -1595,6 +1594,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>10</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -1613,7 +1613,6 @@
         <AngularDamping>0.5</AngularDamping>
       </Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.65 -0.2</Item>
           <Item>-0.25 -0.5</Item>
@@ -1625,6 +1624,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>10</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -1643,7 +1643,6 @@
         <AngularDamping>0.5</AngularDamping>
       </Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.65 -0.2</Item>
           <Item>-0.25 -0.5</Item>
@@ -1655,6 +1654,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>10</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -1673,7 +1673,6 @@
         <AngularDamping>0.5</AngularDamping>
       </Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.1 -0.21</Item>
           <Item>0.25 -0.12</Item>
@@ -1685,6 +1684,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>1</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -1703,7 +1703,6 @@
         <AngularDamping>0.5</AngularDamping>
       </Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.1 -0.21</Item>
           <Item>0.25 -0.12</Item>
@@ -1715,6 +1714,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>1</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -1733,7 +1733,6 @@
         <AngularDamping>0.5</AngularDamping>
       </Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.1 -0.21</Item>
           <Item>0.25 -0.12</Item>
@@ -1745,6 +1744,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>1</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -1763,7 +1763,6 @@
         <AngularDamping>0.5</AngularDamping>
       </Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.1 -0.21</Item>
           <Item>0.25 -0.12</Item>
@@ -1775,6 +1774,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>1</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -1793,7 +1793,6 @@
         <AngularDamping>0.5</AngularDamping>
       </Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.1 -0.21</Item>
           <Item>0.25 -0.12</Item>
@@ -1805,6 +1804,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>1</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -1823,7 +1823,6 @@
         <AngularDamping>0.5</AngularDamping>
       </Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.1 -0.21</Item>
           <Item>0.25 -0.12</Item>
@@ -1835,6 +1834,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>1</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -1853,7 +1853,6 @@
         <AngularDamping>0.5</AngularDamping>
       </Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.65 -0.2</Item>
           <Item>-0.25 -0.5</Item>
@@ -1865,6 +1864,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>10</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -1883,7 +1883,6 @@
         <AngularDamping>0.5</AngularDamping>
       </Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.65 -0.2</Item>
           <Item>-0.25 -0.5</Item>
@@ -1895,6 +1894,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>10</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -1913,7 +1913,6 @@
         <AngularDamping>0.5</AngularDamping>
       </Component>
       <Component Type="PolygonCollider">
-        <Density>1</Density>
         <Polygon>
           <Item>-0.1 -0.21</Item>
           <Item>0.25 -0.12</Item>
@@ -1925,6 +1924,7 @@
         </Polygon>
         <Restitution>0</Restitution>
         <Friction>1</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -1933,6 +1933,33 @@
     </Entity>
   </Entities>
   <Hierarchy>
+    <Entity ID="20"></Entity>
+    <Entity ID="19"></Entity>
+    <Entity ID="31">
+      <Entity ID="30"></Entity>
+    </Entity>
+    <Entity ID="61">
+      <Entity ID="63"></Entity>
+      <Entity ID="64"></Entity>
+      <Entity ID="62"></Entity>
+      <Entity ID="65"></Entity>
+      <Entity ID="66"></Entity>
+      <Entity ID="67"></Entity>
+      <Entity ID="68"></Entity>
+      <Entity ID="70"></Entity>
+      <Entity ID="71"></Entity>
+      <Entity ID="72"></Entity>
+      <Entity ID="73"></Entity>
+      <Entity ID="74"></Entity>
+      <Entity ID="75"></Entity>
+      <Entity ID="76"></Entity>
+      <Entity ID="77"></Entity>
+      <Entity ID="78"></Entity>
+      <Entity ID="79"></Entity>
+      <Entity ID="80"></Entity>
+      <Entity ID="81"></Entity>
+      <Entity ID="82"></Entity>
+    </Entity>
     <Entity ID="4">
       <Entity ID="5"></Entity>
       <Entity ID="6"></Entity>
@@ -1985,33 +2012,6 @@
       <Entity ID="57"></Entity>
       <Entity ID="58"></Entity>
       <Entity ID="59"></Entity>
-    </Entity>
-    <Entity ID="20"></Entity>
-    <Entity ID="19"></Entity>
-    <Entity ID="31">
-      <Entity ID="30"></Entity>
-    </Entity>
-    <Entity ID="61">
-      <Entity ID="63"></Entity>
-      <Entity ID="64"></Entity>
-      <Entity ID="62"></Entity>
-      <Entity ID="65"></Entity>
-      <Entity ID="66"></Entity>
-      <Entity ID="67"></Entity>
-      <Entity ID="68"></Entity>
-      <Entity ID="70"></Entity>
-      <Entity ID="71"></Entity>
-      <Entity ID="72"></Entity>
-      <Entity ID="73"></Entity>
-      <Entity ID="74"></Entity>
-      <Entity ID="75"></Entity>
-      <Entity ID="76"></Entity>
-      <Entity ID="77"></Entity>
-      <Entity ID="78"></Entity>
-      <Entity ID="79"></Entity>
-      <Entity ID="80"></Entity>
-      <Entity ID="81"></Entity>
-      <Entity ID="82"></Entity>
     </Entity>
   </Hierarchy>
 </Scene>

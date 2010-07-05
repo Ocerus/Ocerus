@@ -13,8 +13,10 @@ namespace Core
 	/// Inner states of the game state.
 	enum eGameState 
 	{ 
+		/// The game is not loaded.
+		GS_NOT_INITED=0,
 		/// The game is loading.
-		GS_INITING=0,
+		GS_INITING,
 		/// The game is cleaning its resources.
 		GS_CLEANING,
 		/// Standard state of a running game.
@@ -43,7 +45,7 @@ namespace Core
 		static const string GameCameraName;
 
 		/// Refresh the game camera;
-		void RefreshCamera();
+		void CreateDefaultRenderTarget();
 		
 		/// Sets the target where the game will be rendered to.
 		void SetRenderTarget(const GfxSystem::RenderTargetID renderTarget);
