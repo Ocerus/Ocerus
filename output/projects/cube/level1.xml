@@ -13,7 +13,7 @@
         <Layer>1</Layer>
         <Angle>0</Angle>
         <Scale>0.25 0.25</Scale>
-        <Position>4.2267 -2.41095</Position>
+        <Position>21.6972 -1.28078</Position>
       </Component>
       <Component Type="PolygonCollider">
         <Polygon>
@@ -483,9 +483,9 @@
     </Entity>
     <Entity Name="EditorCamera" ID="22" Tag="0" Transient="false">
       <Component Type="Camera">
-        <Position>3.10299 -3.24338</Position>
+        <Position>3.91385 -0.894035</Position>
         <Rotation>0</Rotation>
-        <Zoom>1.19182</Zoom>
+        <Zoom>0.684011</Zoom>
       </Component>
     </Entity>
     <Entity Name="LandFiller" ID="23" Tag="0" Transient="false" Prototype="-497">

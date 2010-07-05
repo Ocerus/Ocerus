@@ -35,7 +35,7 @@ size_t Mesh::LoadImpl()
 		// create textures for the meshes
 		for (int i=0; i<mModel->getNumberOfMaterials(); ++i)
 		{
-			const ModelOBJ::Material* objMaterial = &mModel->getMaterial(0);
+			const ModelOBJ::Material* objMaterial = &mModel->getMaterial(i);
 			if (!objMaterial->colorMapFilename.empty())
 			{
 				gResourceMgr.AddResourceFileToGroup(GetFileDir() + "/" + objMaterial->colorMapFilename, "MeshTextures", ResourceSystem::RESTYPE_TEXTURE, ResourceSystem::BPT_ABSOLUTE);

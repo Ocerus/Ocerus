@@ -153,7 +153,12 @@ float32 EntityComponents::PolygonCollider::GetDensity( void ) const
 void EntityComponents::PolygonCollider::SetDensity( float32 val )
 {
 	mDensity = val;
-	if (mShape) mShape->SetDensity(mDensity);
+	if (mShape)
+	{
+		mShape->SetDensity(mDensity);
+		PhysicalBody* body = mShape->GetBody();
+		if (body) body->ResetMassData();
+	}
 }
 
 float32 EntityComponents::PolygonCollider::GetFriction( void ) const
