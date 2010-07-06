@@ -682,7 +682,8 @@ void EntitySystem::EntityMgr::LoadEntityFromXML(ResourceSystem::XMLNodeIterator 
 	desc.Reset();
 	if (entIt.HasAttribute("Name"))	desc.SetName(entIt.GetAttribute<string>("Name"));
 	if (entIt.HasAttribute("ID")) desc.SetDesiredID(entIt.GetAttribute<EntityID>("ID"));
-	if (entIt.HasAttribute("Prototype")) desc.SetPrototype(entIt.GetAttribute<EntityID>("Prototype"));
+	// note that the prototypes are taken into account only in the develop mode
+	if (GlobalProperties::Get<bool>("DevelopMode") && entIt.HasAttribute("Prototype")) desc.SetPrototype(entIt.GetAttribute<EntityID>("Prototype"));
 	if (entIt.HasAttribute("Transient")) desc.SetTransient(entIt.GetAttribute<bool>("Transient"));
 	if (isPrototype) desc.SetKind(EntityDescription::EK_PROTOTYPE);
 

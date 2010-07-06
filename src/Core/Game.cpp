@@ -76,6 +76,8 @@ Core::Game::~Game()
 
 void Core::Game::CreateDefaultRenderTarget()
 {
+	ocInfo << "Creating default render target for game";
+
 	EntitySystem::EntityHandle mCamera = gEntityMgr.FindFirstEntity(GameCameraName);
 	if (!mCamera.Exists())
 	{
@@ -89,6 +91,7 @@ void Core::Game::CreateDefaultRenderTarget()
 
 	OC_ASSERT(mRenderTarget == GfxSystem::InvalidRenderTargetID);
 	mRenderTarget = gGfxRenderer.AddRenderTarget(GfxSystem::GfxViewport(Vector2(0, 0), Vector2(1.0f, 1.0f), false, true), mCamera);
+	gGfxRenderer.GetRenderTargetViewport(mRenderTarget)->SetGridEnabled(false);
 }
 
 void Core::Game::SetRenderTarget(const GfxSystem::RenderTargetID renderTarget)

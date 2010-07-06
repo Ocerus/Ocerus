@@ -12,6 +12,7 @@ Core::LoadingScreen::LoadingScreen():
 	mAnimationTimer(false),
 	mAnimationEndTimer(false)
 {
+	ocInfo << "Creating loading screen";
 	mAnimationFrame = 0;
 	GfxSystem::GfxViewport viewport(Vector2_Zero, Vector2(1, 1), false, false);
 	mRenderTarget = gGfxRenderer.AddRenderTarget(viewport, EntitySystem::EntityHandle::Null);

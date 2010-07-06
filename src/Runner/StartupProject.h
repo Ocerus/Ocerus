@@ -4,5 +4,5 @@
 namespace Core
 {
 	/// Default project to be loaded when the game starts.
-	const char* DEFAULT_PROJECT_NAME = "projects/test";
+	const char* DEFAULT_PROJECT_NAME = "projects/cube";
 }

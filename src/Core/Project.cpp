@@ -293,7 +293,10 @@ bool Project::SaveOpenedScene()
 void Project::CloseOpenedScene()
 {
 	gEntityMgr.DestroyAllEntities(false, true);
-	gEditorMgr.GetEditorGui()->DisableViewports();
+	if (mEditorSupport)
+	{
+		gEditorMgr.GetEditorGui()->DisableViewports();
+	}
 	mSceneIndex = -1;
 }
 

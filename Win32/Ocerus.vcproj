@@ -343,7 +343,7 @@
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="../externalLibs/boost/lib;../externalLibs/SDL/lib;../externalLibs/cegui/dependencies/lib"
 				IgnoreAllDefaultLibraries="false"
-				IgnoreDefaultLibraryNames="libci.lib;libcmt.lib"
+				IgnoreDefaultLibraryNames="libci.lib;libcmt.lib;libcmtd.lib"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(TargetDir)$(TargetName).pdb"
 				GenerateMapFile="false"

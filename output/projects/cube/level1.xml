@@ -38,9 +38,9 @@
         <ScriptTimes></ScriptTimes>
         <ScriptStates></ScriptStates>
         <ScriptTimeOut>1000</ScriptTimeOut>
+        <YOffsetPeriod Type="float32">0.25</YOffsetPeriod>
         <YOffsetAmplitude Type="float32">0.15</YOffsetAmplitude>
         <YOffsetTime Type="float32">0</YOffsetTime>
-        <YOffsetPeriod Type="float32">0.25</YOffsetPeriod>
       </Component>
     </Entity>
     <Entity Name="Land1" ID="2" Tag="0" Transient="false" Prototype="-495">
@@ -144,7 +144,7 @@
       <Component Type="Transform">
         <Layer>-1</Layer>
         <Angle>1.57189</Angle>
-        <Scale>20.9484 3.69654</Scale>
+        <Scale>25.1803 3.69577</Scale>
         <Position>-0.495717 -8.38243</Position>
       </Component>
       <Component Type="Sprite">
@@ -478,11 +478,11 @@
         <ScriptTimes></ScriptTimes>
         <ScriptStates></ScriptStates>
         <ScriptTimeOut>1000</ScriptTimeOut>
-        <LastLandPosition Type="Vector2">0 0</LastLandPosition>
-        <LastLandCollisionCooldown Type="float32">0</LastLandCollisionCooldown>
-        <JumpCooldown Type="float32">0</JumpCooldown>
-        <ExplosionCooldown Type="float32">0</ExplosionCooldown>
         <IsLight Type="bool">true</IsLight>
+        <ExplosionCooldown Type="float32">0</ExplosionCooldown>
+        <LastLandPosition Type="Vector2">0 0</LastLandPosition>
+        <JumpCooldown Type="float32">0</JumpCooldown>
+        <LastLandCollisionCooldown Type="float32">0</LastLandCollisionCooldown>
       </Component>
     </Entity>
     <Entity Name="GameCamera" ID="21" Tag="0" Transient="false">
@@ -494,9 +494,9 @@
     </Entity>
     <Entity Name="EditorCamera" ID="22" Tag="0" Transient="false">
       <Component Type="Camera">
-        <Position>6.48551 -4.33592</Position>
+        <Position>7.15615 -8.19562</Position>
         <Rotation>0</Rotation>
-        <Zoom>0.493016</Zoom>
+        <Zoom>0.501267</Zoom>
       </Component>
     </Entity>
     <Entity Name="LandFiller" ID="23" Tag="0" Transient="false" Prototype="-497">
@@ -2473,8 +2473,8 @@
       <Component Type="Transform">
         <Layer>-1</Layer>
         <Angle>-1.1548</Angle>
-        <Scale>7.21182 7.45995</Scale>
-        <Position>0.949927 -13.9635</Position>
+        <Scale>10.0773 8.35357</Scale>
+        <Position>0.949927 -14.3806</Position>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -2522,8 +2522,8 @@
         <ScriptTimes></ScriptTimes>
         <ScriptStates></ScriptStates>
         <ScriptTimeOut>1000</ScriptTimeOut>
-        <YOffsetAmplitude Type="float32">0.1</YOffsetAmplitude>
         <YOffsetPeriod Type="float32">0.1</YOffsetPeriod>
+        <YOffsetAmplitude Type="float32">0.1</YOffsetAmplitude>
       </Component>
     </Entity>
     <Entity Name="Land1" ID="105" Tag="0" Transient="false" Prototype="-495">
@@ -2666,6 +2666,29 @@
         <Density>1</Density>
       </Component>
     </Entity>
+    <Entity Name="Background2" ID="111" Tag="0" Transient="false" Prototype="-502">
+      <Component Type="Transform">
+        <Layer>-2</Layer>
+        <Angle>3.14246</Angle>
+        <Scale>1.58487 2.78501</Scale>
+        <Position>8.77764 -18.1691</Position>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>bg2.png</Texture>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Polygon>
+          <Item>-0.35 -0.2</Item>
+          <Item>0.35 -0.2</Item>
+          <Item>0.35 0.2</Item>
+          <Item>-0.35 0.2</Item>
+        </Polygon>
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
+        <Density>1</Density>
+      </Component>
+    </Entity>
   </Entities>
   <Hierarchy>
     <Entity ID="20"></Entity>
@@ -2675,6 +2698,7 @@
       <Entity ID="30"></Entity>
       <Entity ID="100"></Entity>
       <Entity ID="101"></Entity>
+      <Entity ID="111"></Entity>
     </Entity>
     <Entity ID="61">
       <Entity ID="63"></Entity>
