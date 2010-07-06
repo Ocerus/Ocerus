@@ -144,7 +144,7 @@ namespace Core
 		struct PhysicsEvent: ClassAllocation<PhysicsEvent, ALLOCATION_POOLED>
 		{
 			// Note that here shouldn't be any pointer to a shape cos it can be destroyed during ProcessPhysicsEvent.
-			enum eType { COLLISION_STARTED, COLLISION_ENDED };
+			enum eType { COLLISION_STARTED, COLLISION_ENDED, COLLISION_PRESOLVED };
 			eType type;
 			EntitySystem::EntityHandle entity1;
 			EntitySystem::EntityHandle entity2;

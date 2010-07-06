@@ -17,6 +17,9 @@ namespace EntitySystem
 		/// If the minimum and maximum layer is defined only entities in these layers are picked.
 		EntityPicker(const Vector2& worldCursorPos, const int32 minLayer = numeric_limits<int32>::min(), const int32 maxLayer = numeric_limits<int32>::max());
 
+		/// Default destructor.
+		~EntityPicker();
+
 		/// Runs the picking query. The result is returned directly.
 		EntityHandle PickSingleEntity(void);
 

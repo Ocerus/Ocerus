@@ -2,6 +2,52 @@
 
 <Prototypes>
   <Entities>
+    <Entity Name="Background2" ID="-502" Tag="0" Transient="false">
+      <Component Type="Transform">
+        <Layer>-2</Layer>
+        <Angle>0</Angle>
+        <Scale>1.59255 1.44736</Scale>
+        <Position>9.24383 -11.2538</Position>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>bg2.png</Texture>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Polygon>
+          <Item>-0.35 -0.2</Item>
+          <Item>0.35 -0.2</Item>
+          <Item>0.35 0.2</Item>
+          <Item>-0.35 0.2</Item>
+        </Polygon>
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
+        <Density>1</Density>
+      </Component>
+    </Entity>
+    <Entity Name="Background1" ID="-501" Tag="0" Transient="false">
+      <Component Type="Transform">
+        <Layer>-2</Layer>
+        <Angle>0</Angle>
+        <Scale>1.59255 1.44736</Scale>
+        <Position>9.36262 -3.53264</Position>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>bg1.png</Texture>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Polygon>
+          <Item>-0.35 -0.2</Item>
+          <Item>0.35 -0.2</Item>
+          <Item>0.35 0.2</Item>
+          <Item>-0.35 0.2</Item>
+        </Polygon>
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
+        <Density>1</Density>
+      </Component>
+    </Entity>
     <Entity Name="Stone2" ID="-500" Tag="0" Transient="false">
       <Component Type="Transform"></Component>
       <Component Type="DynamicBody">

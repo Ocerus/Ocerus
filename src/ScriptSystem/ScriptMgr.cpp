@@ -562,6 +562,57 @@ void RegisterScriptEntityHandle(asIScriptEngine* engine)
 
 }
 
+static void EntityPickerDefaultConstructor(EntityPicker* self)
+{
+	asSMessageInfo errorMessage;
+	errorMessage.col = 0;
+	errorMessage.row = 0;
+	errorMessage.section = "Engine";
+	errorMessage.type = (asEMsgType)0;
+	errorMessage.message = "EntityPicker doesn't support default constructor";
+	MessageCallback(&errorMessage, 0);
+	new(self) EntityPicker(Vector2_Zero);
+}
+
+static void EntityPickerConstructor(const Vector2& worldCursorPos, const int32 minLayer, const int32 maxLayer, EntityPicker* self)
+{
+	new(self) EntityPicker(worldCursorPos, minLayer, maxLayer);
+}
+
+static void EntityPickerDestructor(EntityPicker* self)
+{
+	self->~EntityPicker();
+}
+
+ScriptArray<EntitySystem::EntityHandle> EntityPickerPickMultipleEntities(EntitySystem::EntityPicker& handle, const Vector2& worldCursorPos, const float32 rotation)
+{
+	vector<EntitySystem::EntityHandle> pickedEntities;
+	handle.PickMultipleEntities(worldCursorPos, rotation, pickedEntities);
+	///@TODO when will this be deleted?
+	Array<EntitySystem::EntityHandle>* entities = new Array<EntitySystem::EntityHandle>(pickedEntities.size());
+	for (uint32 i=0; i<pickedEntities.size(); ++i)
+	{
+		(*entities)[i] = pickedEntities[i];
+	}
+	return ScriptArray<EntitySystem::EntityHandle>(entities);
+}
+
+void RegisterScriptEntityPicker(asIScriptEngine* engine)
+{
+	int32 r;
+	// Register the type
+	r = engine->RegisterObjectType("EntityPicker", sizeof(EntityPicker), asOBJ_VALUE | asOBJ_APP_CLASS_CDA); OC_SCRIPT_ASSERT();
+
+	// Register the constructors and destructor
+	r = engine->RegisterObjectBehaviour("EntityPicker", asBEHAVE_CONSTRUCT, "void f()", asFUNCTION(EntityPickerDefaultConstructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectBehaviour("EntityPicker", asBEHAVE_CONSTRUCT, "void f(const Vector2& in, const int32, const int32)", asFUNCTION(EntityPickerConstructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectBehaviour("EntityPicker", asBEHAVE_DESTRUCT, "void f()", asFUNCTION(EntityPickerDestructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+
+	// Register the object methods
+	r = engine->RegisterObjectMethod("EntityPicker", "EntityHandle PickSingleEntity()", asMETHOD(EntityPicker, PickSingleEntity), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("EntityPicker", "array_EntityHandle PickMultipleEntities(const Vector2& in, const float32)", asFUNCTIONPR(EntityPickerPickMultipleEntities, (EntitySystem::EntityPicker&, const Vector2&, const float32 rotation), ScriptArray<EntitySystem::EntityHandle>), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+}
+
 // Functions for register EntityDescription to script
 
 static void EntityDescriptionDefaultConstructor(EntityDescription* self)
@@ -1046,6 +1097,7 @@ void ScriptMgr::ConfigureEngine(void)
 	r = mEngine->RegisterTypedef("float64", "double"); OC_SCRIPT_ASSERT();
 
 	// Register enums
+	///@TODO why is this removed?
 	// r = mEngine->RegisterTypedef("eKeyCode", "uint32"); OC_SCRIPT_ASSERT();
 
 	// Register the script string type
@@ -1088,6 +1140,7 @@ void ScriptMgr::ConfigureEngine(void)
 
 	// Register all additions in ScriptRegister.cpp to script
 	RegisterAllAdditions(mEngine);
+
 
 	// Register getters, setters and array for supported types of properties
 
@@ -1140,6 +1193,10 @@ void ScriptMgr::ConfigureEngine(void)
 	#include "../Utils/Properties/PropertyTypes.h"
 	#undef SCRIPT_ONLY
 	#undef PROPERTY_TYPE
+
+
+	// Register EntityPicker class and it's methods
+	RegisterScriptEntityPicker(mEngine);
 }
 
 asIScriptContext* ScriptMgr::PrepareContext(int32 funcId)

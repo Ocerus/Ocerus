@@ -34,6 +34,11 @@ EntitySystem::EntityPicker::EntityPicker( const Vector2& worldCursorPos, const i
 
 }
 
+EntitySystem::EntityPicker::~EntityPicker()
+{
+
+}
+
 EntitySystem::EntityHandle EntitySystem::EntityPicker::PickSingleEntity( void )
 {
 	b2AABB cursorAABB;

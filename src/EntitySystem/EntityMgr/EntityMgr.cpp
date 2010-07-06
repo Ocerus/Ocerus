@@ -139,11 +139,6 @@ EntityHandle EntityMgr::CreateEntity(EntityDescription& desc)
 
 	bool isPrototype = desc.mKind == EntityDescription::EK_PROTOTYPE;
 
-	if (desc.mComponents.size() == 0 && desc.mKind != EntityDescription::EK_PROTOTYPE)
-	{
-		ocError << "Attempting to create an entity without components";
-		return EntityHandle::Null; // no components, so we can't create the entity
-	}
 	if (isPrototype && desc.mPrototype != INVALID_ENTITY_ID)
 	{
 		ocError << "Can't create an entity prototype which is an instance of another prototype; invalidating the prototype link...";

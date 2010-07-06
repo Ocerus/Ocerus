@@ -42,6 +42,13 @@ namespace EntityComponents
 		/// Applies a torque to the body.
 		void ApplyTorque(PropertyFunctionParameters params);
 
+		/// Applies an impulse defined in the world coordinates. First parameter is the impulse and the second (optional)
+		/// is the application point (world coordinates).
+		void ApplyLinearImpulseWorldCoords(PropertyFunctionParameters params);
+
+		/// Applies an angular impulse. First parameter is the impulse (float).
+		void ApplyAngularImpulseWorldCoords(PropertyFunctionParameters params);
+
 		/// Returns the angular damping.
 		float32 GetAngularDamping() const;
 
@@ -60,12 +67,19 @@ namespace EntityComponents
 		/// Angular velocity of the body.
 		float32 GetAngularVelocity() const;
 
+		/// List of contacts (world coordinates) attached to the body.
+		Array<Vector2>* GetContacts() const;
+
+		/// Number of currently active contacts attached to the body.
+		uint32 GetContactsCount() const;
+
 
 	private:
 
 		PhysicalBody* mBody;
 		mutable float32 mAngularDamping;
 		mutable float32 mLinearDamping;
+		mutable Array<Vector2> mContactsCache;
 
 		void CreateBody(void);
 

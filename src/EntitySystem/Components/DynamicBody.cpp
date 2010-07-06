@@ -46,10 +46,16 @@ void EntityComponents::DynamicBody::RegisterReflection( void )
 	RegisterFunction("ApplyForceWorldCoords", &DynamicBody::ApplyForceWorldCoords, PA_SCRIPT_WRITE, "");
 	RegisterFunction("ApplyForceLocalCoords", &DynamicBody::ApplyForceLocalCoords, PA_SCRIPT_WRITE, "");
 	RegisterFunction("ApplyTorque", &DynamicBody::ApplyTorque, PA_SCRIPT_WRITE, "");
+	RegisterFunction("ApplyLinearImpulse", &DynamicBody::ApplyLinearImpulseWorldCoords, PA_SCRIPT_WRITE, "");
+	RegisterFunction("ApplyLinearImpulseWorldCoords", &DynamicBody::ApplyLinearImpulseWorldCoords, PA_SCRIPT_WRITE, "");
+	RegisterFunction("ApplyAngularImpulse", &DynamicBody::ApplyAngularImpulseWorldCoords, PA_SCRIPT_WRITE, "");
+	RegisterFunction("ApplyAngularImpulseWorldCoords", &DynamicBody::ApplyAngularImpulseWorldCoords, PA_SCRIPT_WRITE, "");
 	RegisterProperty<float32>("LinearDamping", &DynamicBody::GetLinearDamping, &DynamicBody::SetLinearDamping, PA_FULL_ACCESS, "");
 	RegisterProperty<float32>("AngularDamping", &DynamicBody::GetAngularDamping, &DynamicBody::SetAngularDamping, PA_FULL_ACCESS, "");
 	RegisterProperty<Vector2>("LinearVelocity", &DynamicBody::GetLinearVelocity, 0, PA_EDIT_READ | PA_SCRIPT_READ, "");
 	RegisterProperty<float32>("AngularVelocity", &DynamicBody::GetAngularVelocity, 0, PA_EDIT_READ | PA_SCRIPT_READ, "");
+	RegisterProperty<Array<Vector2>*>("Contacts", &DynamicBody::GetContacts, 0, PA_SCRIPT_READ, "Read-only list of contact points attached to the body (world coords).");
+	RegisterProperty<uint32>("ContactsCount", &DynamicBody::GetContactsCount, 0, PA_SCRIPT_READ, "Number of contact points attached to the body.");
 
 	// we need the transform to be able to have the position and angle ready while creating the body
 	AddComponentDependency(CT_Transform);
@@ -97,6 +103,24 @@ void EntityComponents::DynamicBody::ApplyTorque( PropertyFunctionParameters para
 	mBody->ApplyTorque(*params.GetParameter(0).GetData<float32>());
 }
 
+void EntityComponents::DynamicBody::ApplyLinearImpulseWorldCoords( PropertyFunctionParameters params )
+{
+	OC_ASSERT(mBody);
+	OC_ASSERT(params.GetParametersCount() >= 1);
+	Vector2 impulse = *params.GetParameter(0).GetData<Vector2>();
+	Vector2 point = mBody->GetWorldCenter();
+	if (params.GetParametersCount() >= 2) point = *params.GetParameter(1).GetData<Vector2>();
+	mBody->ApplyLinearImpulse(impulse, point);
+}
+
+void EntityComponents::DynamicBody::ApplyAngularImpulseWorldCoords( PropertyFunctionParameters params )
+{
+	OC_ASSERT(mBody);
+	OC_ASSERT(params.GetParametersCount() == 1);
+	float32 impulse = *params.GetParameter(0).GetData<float32>();
+	mBody->ApplyAngularImpulse(impulse);
+}
+
 float32 EntityComponents::DynamicBody::GetAngularDamping() const
 {
 	if (mBody) mAngularDamping = mBody->GetAngularDamping();
@@ -131,4 +155,61 @@ float32 EntityComponents::DynamicBody::GetAngularVelocity() const
 {
 	if (mBody) return mBody->GetAngularVelocity();
 	else return 0.0f;
+}
+
+Array<Vector2>* EntityComponents::DynamicBody::GetContacts() const
+{
+	if (mBody)
+	{
+		b2ContactEdge* contactList = mBody->GetContactList();
+		int32 contactsCount = 0;
+		while (contactList)
+		{
+			if (contactList->contact->IsTouching() && contactList->contact->GetManifold()->pointCount > 0) ++contactsCount;
+			contactList = contactList->next;
+		}
+		mContactsCache.Resize(contactsCount);
+
+		int i = 0;
+		for (contactList=mBody->GetContactList(); contactList; contactList=contactList->next)
+		{
+			if (!contactList->contact->IsTouching() || contactList->contact->GetManifold()->pointCount == 0) continue;
+
+			b2WorldManifold worldManifold;
+			contactList->contact->GetWorldManifold(&worldManifold);
+			Vector2 worldPoint = Vector2_Zero;
+			int32 pointCount = contactList->contact->GetManifold()->pointCount;
+			for (int j=0; j<pointCount; ++j) worldPoint += worldManifold.points[j];
+			worldPoint.x /= pointCount;
+			worldPoint.y /= pointCount;
+			mContactsCache[i] = worldPoint;
+
+			++i;
+		}
+
+		return &mContactsCache;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+uint32 EntityComponents::DynamicBody::GetContactsCount() const
+{
+	if (mBody)
+	{
+		b2ContactEdge* contactList = mBody->GetContactList();
+		int32 contactsCount = 0;
+		while (contactList)
+		{
+			if (contactList->contact->IsTouching() && contactList->contact->GetManifold()->pointCount > 0) ++contactsCount;
+			contactList = contactList->next;
+		}
+		return contactsCount;
+	}
+	else
+	{
+		return 0;
+	}
 }
