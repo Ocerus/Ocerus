@@ -38,9 +38,9 @@
         <ScriptTimes></ScriptTimes>
         <ScriptStates></ScriptStates>
         <ScriptTimeOut>1000</ScriptTimeOut>
+        <YOffsetAmplitude Type="float32">0.15</YOffsetAmplitude>
         <YOffsetTime Type="float32">0</YOffsetTime>
         <YOffsetPeriod Type="float32">0.25</YOffsetPeriod>
-        <YOffsetAmplitude Type="float32">0.15</YOffsetAmplitude>
       </Component>
     </Entity>
     <Entity Name="Land1" ID="2" Tag="0" Transient="false" Prototype="-495">
@@ -436,10 +436,12 @@
       <Component Type="Script">
         <ScriptModules>
           <Item>Director.as</Item>
+          <Item>LevelProperties.as</Item>
         </ScriptModules>
         <ScriptTimes></ScriptTimes>
         <ScriptStates></ScriptStates>
         <ScriptTimeOut>1000</ScriptTimeOut>
+        <Score Type="uint32">0</Score>
       </Component>
     </Entity>
     <Entity Name="Player" ID="20" Tag="0" Transient="false">
@@ -476,11 +478,11 @@
         <ScriptTimes></ScriptTimes>
         <ScriptStates></ScriptStates>
         <ScriptTimeOut>1000</ScriptTimeOut>
-        <IsLight Type="bool">true</IsLight>
         <LastLandPosition Type="Vector2">0 0</LastLandPosition>
-        <ExplosionCooldown Type="float32">0</ExplosionCooldown>
-        <JumpCooldown Type="float32">0</JumpCooldown>
         <LastLandCollisionCooldown Type="float32">0</LastLandCollisionCooldown>
+        <JumpCooldown Type="float32">0</JumpCooldown>
+        <ExplosionCooldown Type="float32">0</ExplosionCooldown>
+        <IsLight Type="bool">true</IsLight>
       </Component>
     </Entity>
     <Entity Name="GameCamera" ID="21" Tag="0" Transient="false">
@@ -492,9 +494,9 @@
     </Entity>
     <Entity Name="EditorCamera" ID="22" Tag="0" Transient="false">
       <Component Type="Camera">
-        <Position>16.1651 -2.31639</Position>
+        <Position>6.48551 -4.33592</Position>
         <Rotation>0</Rotation>
-        <Zoom>0.410848</Zoom>
+        <Zoom>0.493016</Zoom>
       </Component>
     </Entity>
     <Entity Name="LandFiller" ID="23" Tag="0" Transient="false" Prototype="-497">
@@ -2356,8 +2358,8 @@
       <Component Type="Transform">
         <Layer>-1</Layer>
         <Angle>-0.0512962</Angle>
-        <Scale>20.0777 29.3241</Scale>
-        <Position>23.5844 -16.3154</Position>
+        <Scale>1.27677 19.7969</Scale>
+        <Position>15.8154 -17.1329</Position>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -2490,6 +2492,180 @@
         <Density>1</Density>
       </Component>
     </Entity>
+    <Entity Name="Collectables" ID="103" Tag="0" Transient="false"></Entity>
+    <Entity Name="Coin1" ID="104" Tag="2" Transient="false" Prototype="-503">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Angle>0</Angle>
+        <Scale>1.5 1.5</Scale>
+        <Position>3.41012 -2.28825</Position>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Polygon>
+          <Item>-0.1 -0.1</Item>
+          <Item>0.1 -0.1</Item>
+          <Item>0.1 0.1</Item>
+          <Item>-0.1 0.1</Item>
+        </Polygon>
+        <Restitution>0.5</Restitution>
+        <Friction>0.5</Friction>
+        <Density>1</Density>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>coin.png</Texture>
+      </Component>
+      <Component Type="Script">
+        <ScriptModules>
+          <Item>UpDownWaver.as</Item>
+        </ScriptModules>
+        <ScriptTimes></ScriptTimes>
+        <ScriptStates></ScriptStates>
+        <ScriptTimeOut>1000</ScriptTimeOut>
+        <YOffsetAmplitude Type="float32">0.1</YOffsetAmplitude>
+        <YOffsetPeriod Type="float32">0.1</YOffsetPeriod>
+      </Component>
+    </Entity>
+    <Entity Name="Land1" ID="105" Tag="0" Transient="false" Prototype="-495">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Angle>-4.50907</Angle>
+        <Scale>3.35257 1.15002</Scale>
+        <Position>3.48381 -16.6166</Position>
+      </Component>
+      <Component Type="StaticBody"></Component>
+      <Component Type="PolygonCollider">
+        <Polygon>
+          <Item>-0.85 -0.55</Item>
+          <Item>0.85 -0.6</Item>
+          <Item>0.85 0.6</Item>
+          <Item>-0.85 0.6</Item>
+        </Polygon>
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
+        <Density>1</Density>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>tile0.png</Texture>
+      </Component>
+    </Entity>
+    <Entity Name="Land1" ID="106" Tag="0" Transient="false" Prototype="-495">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Angle>-1.55875</Angle>
+        <Scale>3.31753 0.928365</Scale>
+        <Position>15.0161 -18.1428</Position>
+      </Component>
+      <Component Type="StaticBody"></Component>
+      <Component Type="PolygonCollider">
+        <Polygon>
+          <Item>-0.85 -0.55</Item>
+          <Item>0.85 -0.6</Item>
+          <Item>0.85 0.6</Item>
+          <Item>-0.85 0.6</Item>
+        </Polygon>
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
+        <Density>1</Density>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>tile0.png</Texture>
+      </Component>
+    </Entity>
+    <Entity Name="LandFiller" ID="107" Tag="0" Transient="false" Prototype="-497">
+      <Component Type="Transform">
+        <Layer>-1</Layer>
+        <Angle>-0.0512962</Angle>
+        <Scale>20.5215 28.1522</Scale>
+        <Position>23.76 -16.1398</Position>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>tile2.png</Texture>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Polygon>
+          <Item>-0.35 -0.2</Item>
+          <Item>0.35 -0.2</Item>
+          <Item>0.35 0.2</Item>
+          <Item>-0.35 0.2</Item>
+        </Polygon>
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
+        <Density>1</Density>
+      </Component>
+    </Entity>
+    <Entity Name="LandFiller" ID="108" Tag="0" Transient="false" Prototype="-497">
+      <Component Type="Transform">
+        <Layer>-1</Layer>
+        <Angle>1.57189</Angle>
+        <Scale>39.7088 59.5274</Scale>
+        <Position>44.1302 -11.0123</Position>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>tile2.png</Texture>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Polygon>
+          <Item>-0.35 -0.2</Item>
+          <Item>0.35 -0.2</Item>
+          <Item>0.35 0.2</Item>
+          <Item>-0.35 0.2</Item>
+        </Polygon>
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
+        <Density>1</Density>
+      </Component>
+    </Entity>
+    <Entity Name="LandFiller" ID="109" Tag="0" Transient="false" Prototype="-497">
+      <Component Type="Transform">
+        <Layer>-1</Layer>
+        <Angle>1.57189</Angle>
+        <Scale>35.3866 46.0828</Scale>
+        <Position>-10.3497 -8.70612</Position>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>tile2.png</Texture>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Polygon>
+          <Item>-0.35 -0.2</Item>
+          <Item>0.35 -0.2</Item>
+          <Item>0.35 0.2</Item>
+          <Item>-0.35 0.2</Item>
+        </Polygon>
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
+        <Density>1</Density>
+      </Component>
+    </Entity>
+    <Entity Name="LandFiller" ID="110" Tag="0" Transient="false" Prototype="-497">
+      <Component Type="Transform">
+        <Layer>-1</Layer>
+        <Angle>1.57189</Angle>
+        <Scale>35.2782 178.765</Scale>
+        <Position>16.9634 16.4879</Position>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>tile2.png</Texture>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Polygon>
+          <Item>-0.35 -0.2</Item>
+          <Item>0.35 -0.2</Item>
+          <Item>0.35 0.2</Item>
+          <Item>-0.35 0.2</Item>
+        </Polygon>
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
+        <Density>1</Density>
+      </Component>
+    </Entity>
   </Entities>
   <Hierarchy>
     <Entity ID="20"></Entity>
@@ -2524,6 +2700,9 @@
       <Entity ID="69"></Entity>
       <Entity ID="83"></Entity>
       <Entity ID="84"></Entity>
+    </Entity>
+    <Entity ID="103">
+      <Entity ID="104"></Entity>
     </Entity>
     <Entity ID="4">
       <Entity ID="5"></Entity>
@@ -2594,6 +2773,12 @@
       <Entity ID="98"></Entity>
       <Entity ID="99"></Entity>
       <Entity ID="102"></Entity>
+      <Entity ID="105"></Entity>
+      <Entity ID="106"></Entity>
+      <Entity ID="107"></Entity>
+      <Entity ID="108"></Entity>
+      <Entity ID="109"></Entity>
+      <Entity ID="110"></Entity>
     </Entity>
   </Hierarchy>
 </Scene>

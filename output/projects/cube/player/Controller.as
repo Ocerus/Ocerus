@@ -124,9 +124,17 @@ void OnCollisionStarted(EntityHandle other, Vector2 normal, Vector2 contactPoint
 {
 	if (other.GetTag() == 1)
 	{
+	  // finish sign
 		Println("FINISH");
 		gEntityMgr.DestroyEntity(this);
 	}
+	else if (other.GetTag() == 2)
+	{
+		// coin
+		EntityHandle director = gEntityMgr.FindFirstEntity("Director");
+		director.Set_uint32("Score", director.Get_uint32("Score") + 10);
+		gEntityMgr.DestroyEntity(other);
+	}	
 }
 
 void OnCollisionEnded(EntityHandle other)

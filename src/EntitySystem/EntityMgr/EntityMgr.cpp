@@ -1312,14 +1312,16 @@ EntitySystem::EntityHandle EntitySystem::EntityMgr::ExportEntityToPrototype( con
 		(*cmpItOld)->EnumProperties(*cmpItOld, propsOld, PA_FULL_ACCESS);
 		(*cmpItNew)->EnumProperties(*cmpItNew, propsNew, PA_FULL_ACCESS);
 
-		// duplicate dynamic properties
-		for (PropertyList::iterator itOld=propsOld.begin(); itOld!=propsOld.end(); ++itOld)
+		// remove dynamic properties from the lists
+		for (PropertyList::iterator it=propsOld.begin(); it!=propsOld.end(); )
 		{
-			PropertyList::iterator it = find(propsNew.begin(), propsNew.end(), *itOld);
-			if (it == propsNew.end())
-			{
-				propsNew.insert(propsNew.end(), *itOld);
-			}
+			if (it->IsValued()) it = propsOld.erase(it);
+			else ++it;
+		}
+		for (PropertyList::iterator it=propsNew.begin(); it!=propsNew.end(); )
+		{
+			if (it->IsValued()) it = propsNew.erase(it);
+			else ++it;
 		}
 
 		// copy data

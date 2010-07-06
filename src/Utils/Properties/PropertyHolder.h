@@ -32,17 +32,17 @@ namespace Reflection
 			return *this;
 		}
 
-    /// Comparsion operator.
-    bool operator==(const PropertyHolder& rhs) const
-    {
-      return rhs.mProperty == mProperty;
-    }
-    
-    /// Less operator for sorted list of properties.
-    bool operator<(const PropertyHolder& rhs) const
-    {
-      return mProperty->GetKey().ToString() < rhs.mProperty->GetKey().ToString();
-    }
+		/// Comparsion operator.
+		bool operator==(const PropertyHolder& rhs) const
+		{
+			return rhs.mProperty == mProperty;
+		}
+
+		/// Less operator for sorted list of properties.
+		bool operator<(const PropertyHolder& rhs) const
+		{
+			return mProperty->GetKey().ToString() < rhs.mProperty->GetKey().ToString();
+		}
 
 		/// Returns the access flags to this property.
 		inline PropertyAccessFlags GetAccessFlags(void) const
@@ -127,7 +127,7 @@ namespace Reflection
 			}
 			mProperty->SetValueFromString(mOwner, str);
 		}
-		
+
 		/// Parses the typed valued of this property from the XML input.
 		inline void ReadValueXML(ResourceSystem::XMLNodeIterator& input)
 		{

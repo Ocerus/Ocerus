@@ -2,9 +2,40 @@
 
 <Prototypes>
   <Entities>
+    <Entity Name="Coin1" ID="-503" Tag="2" Transient="false">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Angle>0</Angle>
+        <Scale>1.5 1.5</Scale>
+        <Position>3.41012 -2.28825</Position>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Polygon>
+          <Item>-0.1 -0.1</Item>
+          <Item>0.1 -0.1</Item>
+          <Item>0.1 0.1</Item>
+          <Item>-0.1 0.1</Item>
+        </Polygon>
+        <Restitution>0.5</Restitution>
+        <Friction>0.5</Friction>
+        <Density>1</Density>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>coin.png</Texture>
+      </Component>
+      <Component Type="Script">
+        <ScriptModules>
+          <Item>UpDownWaver.as</Item>
+        </ScriptModules>
+        <ScriptTimes></ScriptTimes>
+        <ScriptStates></ScriptStates>
+        <ScriptTimeOut>1000</ScriptTimeOut>
+      </Component>
+    </Entity>
     <Entity Name="Background2" ID="-502" Tag="0" Transient="false">
       <Component Type="Transform">
-        <Layer>-2</Layer>
+        <Layer>0</Layer>
         <Angle>0</Angle>
         <Scale>1.59255 1.44736</Scale>
         <Position>9.24383 -11.2538</Position>
@@ -27,7 +58,7 @@
     </Entity>
     <Entity Name="Background1" ID="-501" Tag="0" Transient="false">
       <Component Type="Transform">
-        <Layer>-2</Layer>
+        <Layer>0</Layer>
         <Angle>0</Angle>
         <Scale>1.59255 1.44736</Scale>
         <Position>9.36262 -3.53264</Position>
