@@ -31,6 +31,17 @@
         <Transparency>0</Transparency>
         <Texture>finish.png</Texture>
       </Component>
+      <Component Type="Script">
+        <ScriptModules>
+          <Item>UpDownWaver.as</Item>
+        </ScriptModules>
+        <ScriptTimes></ScriptTimes>
+        <ScriptStates></ScriptStates>
+        <ScriptTimeOut>1000</ScriptTimeOut>
+        <YOffsetTime Type="float32">0</YOffsetTime>
+        <YOffsetPeriod Type="float32">0.25</YOffsetPeriod>
+        <YOffsetAmplitude Type="float32">0.15</YOffsetAmplitude>
+      </Component>
     </Entity>
     <Entity Name="Land1" ID="2" Tag="0" Transient="false" Prototype="-495">
       <Component Type="Transform">
@@ -465,9 +476,11 @@
         <ScriptTimes></ScriptTimes>
         <ScriptStates></ScriptStates>
         <ScriptTimeOut>1000</ScriptTimeOut>
+        <IsLight Type="bool">true</IsLight>
+        <LastLandPosition Type="Vector2">0 0</LastLandPosition>
         <ExplosionCooldown Type="float32">0</ExplosionCooldown>
         <JumpCooldown Type="float32">0</JumpCooldown>
-        <IsLight Type="bool">true</IsLight>
+        <LastLandCollisionCooldown Type="float32">0</LastLandCollisionCooldown>
       </Component>
     </Entity>
     <Entity Name="GameCamera" ID="21" Tag="0" Transient="false">
@@ -479,7 +492,7 @@
     </Entity>
     <Entity Name="EditorCamera" ID="22" Tag="0" Transient="false">
       <Component Type="Camera">
-        <Position>11.4432 -3.14395</Position>
+        <Position>16.1651 -2.31639</Position>
         <Rotation>0</Rotation>
         <Zoom>0.410848</Zoom>
       </Component>

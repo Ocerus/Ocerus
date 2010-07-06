@@ -1,5 +1,8 @@
 const float32 EXPLOSION_COOLDOWN = 1.0f;
 const float32 JUMP_COOLDOWN = 2.0f;
+const float32 EXPLOSION_RATIO = 20.0f;
+const float32 JUMP_RATIO = 0.8f;
+const float32 JUMP_MAX_DELAY = 0.2f;
 
 void OnPostInit()
 {
@@ -66,7 +69,7 @@ void OnUpdateLogic(float32 delta)
 	const array_Vector2 contacts = this.Get_const_array_Vector2("Contacts");
 	if (contacts.GetSize() > 0)
 	{
-		this.Set_float32("LastLandCollisionCooldown", 0.2f);
+		this.Set_float32("LastLandCollisionCooldown", JUMP_MAX_DELAY);
 		Vector2 groundPos = Vector2(0,0);
 		for (int i=0; i<contacts.GetSize(); ++i) groundPos += contacts[i];
 		groundPos *= 1.0f / contacts.GetSize();
@@ -94,7 +97,7 @@ void OnKeyPressed(eKeyCode key, uint32 char)
 			
 			Vector2 dir = this.Get_Vector2("Position") - this.Get_Vector2("LastLandPosition");
 			dir.Normalize();
-			this.CallFunction("ApplyLinearImpulse", PropertyFunctionParameters() << 0.8f * dir);
+			this.CallFunction("ApplyLinearImpulse", PropertyFunctionParameters() << JUMP_RATIO * dir);
 		}
 		else
 		{
@@ -110,7 +113,7 @@ void OnKeyPressed(eKeyCode key, uint32 char)
 				Vector2 hisPos = entities[i].Get_Vector2("Position");
 				Vector2 delta = hisPos - myPos;
 				float32 length = MathUtils::Sqrt(delta.Normalize());
-				Vector2 impulse = 10.0f * length * delta;
+				Vector2 impulse = EXPLOSION_RATIO * length * delta;
 				entities[i].CallFunction("ApplyLinearImpulse", PropertyFunctionParameters() << impulse);
 			}
 		}
