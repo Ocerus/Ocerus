@@ -68,10 +68,11 @@ namespace Core
 		/// @name Scene-related methods
 		//@{
 
-			///
+			/// Creates the scene with a given file name and scene name.
+			/// @return False, if scene cannot be created, or another scene is already opened; otherwise returns True.
 			bool CreateScene(const string& sceneFilename, const string& sceneName);
 
-			/// Opens the scene with given filename.
+			/// Opens the scene with given file name.
 			/// @return False, if scene is not found, or another scene is already opened; otherwise returns True.
 			bool OpenScene(const string& scene);
 

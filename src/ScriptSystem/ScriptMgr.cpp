@@ -543,6 +543,7 @@ void RegisterScriptEntityHandle(asIScriptEngine* engine)
 
 	// Register typedef EntityID and PropertyAccessFlags
 	r = engine->RegisterTypedef("EntityID", "int32");
+	r = engine->RegisterTypedef("EntityTag", "uint16");
 	r = engine->RegisterTypedef("PropertyAccessFlags", "uint8");
 
 	// Register the object methods
@@ -550,8 +551,8 @@ void RegisterScriptEntityHandle(asIScriptEngine* engine)
 	r = engine->RegisterObjectMethod("EntityHandle", "bool Exists() const", asMETHOD(EntityHandle, Exists), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("EntityHandle", "EntityID GetID() const", asMETHOD(EntityHandle, GetID), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("EntityHandle", "string GetName() const", asMETHOD(EntityHandle, GetName), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-	r = engine->RegisterObjectMethod("EntityHandle", "uint16 GetTag() const", asMETHOD(EntityHandle, GetTag), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-	r = engine->RegisterObjectMethod("EntityHandle", "void GetID(const uint16)", asMETHODPR(EntityHandle, SetTag, (const EntitySystem::EntityTag), void), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("EntityHandle", "EntityTag GetTag() const", asMETHOD(EntityHandle, GetTag), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("EntityHandle", "void SetTag(EntityTag)", asMETHOD(EntityHandle, SetTag), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("EntityHandle", "eEntityMessageResult PostMessage(const eEntityMessageType) const",
 		asMETHODPR(EntityHandle, PostMessage, (const EntityMessage::eType) const, EntityMessage::eResult), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("EntityHandle", "eEntityMessageResult PostMessage(const eEntityMessageType, PropertyFunctionParameters) const",
@@ -625,9 +626,12 @@ void RegisterScriptEntityMgr(asIScriptEngine* engine)
 
 	// Register the object methods
 	r = engine->RegisterObjectMethod("EntityMgr", "EntityHandle CreateEntity(EntityDescription &in)", asMETHOD(EntityMgr, CreateEntity), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("EntityMgr", "EntityHandle InstantiatePrototype(const EntityHandle, const string &in)", asMETHOD(EntityMgr, InstantiatePrototype), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("EntityMgr", "EntityHandle DuplicateEntity(const EntityHandle, const string &in)", asMETHOD(EntityMgr, DuplicateEntity), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("EntityMgr", "void DestroyEntity(const EntityHandle)", asMETHOD(EntityMgr, DestroyEntity), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("EntityMgr", "bool EntityExists(const EntityHandle) const", asMETHOD(EntityMgr, EntityExists), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("EntityMgr", "EntityHandle FindFirstEntity(const string &in)", asMETHOD(EntityMgr, FindFirstEntity), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("EntityMgr", "EntityHandle GetEntity(EntityID) const", asMETHOD(EntityMgr, GetEntity), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("EntityMgr", "bool IsEntityInited(const EntityHandle) const", asMETHOD(EntityMgr, IsEntityInited), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("EntityMgr", "bool IsEntityPrototype(const EntityHandle) const", asMETHOD(EntityMgr, IsEntityPrototype), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("EntityMgr", "void LinkEntityToPrototype(const EntityHandle, const EntityHandle)", asMETHOD(EntityMgr, LinkEntityToPrototype), asCALL_THISCALL); OC_SCRIPT_ASSERT();
@@ -743,7 +747,7 @@ void RegisterScriptInputMgr(asIScriptEngine* engine)
 	r = engine->RegisterObjectMethod("InputMgr", "MouseState& GetMouseState() const", asMETHOD(InputMgr, GetMouseState), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	
 	// Register function that returns it
-	r = engine->RegisterGlobalFunction("InputMgr& get_inputMgr()", asFUNCTION(GetInputMgr), asCALL_CDECL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterGlobalFunction("InputMgr& get_gInputMgr()", asFUNCTION(GetInputMgr), asCALL_CDECL); OC_SCRIPT_ASSERT();
 }
 
 // Functions for register Project to script
@@ -778,7 +782,7 @@ void RegisterScriptProject(asIScriptEngine* engine)
 	r = engine->RegisterObjectMethod("Project", "string GetSceneName(int32) const", asFUNCTION(ProjectGetSceneName), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
 	
 	// Register function that returns it
-	r = engine->RegisterGlobalFunction("Project& get_project()", asFUNCTION(GetProject), asCALL_CDECL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterGlobalFunction("Project& get_gProject()", asFUNCTION(GetProject), asCALL_CDECL); OC_SCRIPT_ASSERT();
 }
 
 // Functions for register Window to script
@@ -1087,7 +1091,7 @@ void ScriptMgr::ConfigureEngine(void)
 
 	// Register getters, setters and array for supported types of properties
 
-    #define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter, cloning) \
+   #define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter, cloning) \
 	/* Register println function */ \
 	r = mEngine->RegisterGlobalFunction((string("void Println(const ") + typeName + " &in)").c_str(), asFUNCTIONPR(ScriptPrintln, (const typeClass&), void), asCALL_CDECL); OC_SCRIPT_ASSERT(); \
 	/* Register convert to string operators */ \

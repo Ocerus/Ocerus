@@ -7,8 +7,8 @@ void OnUpdateLogic(float32 delta)
 {
 	// rotate the cube
 	float32 torque = 0;
-	if (inputMgr.IsKeyDown(KC_RIGHT)) torque = 1;
-	if (inputMgr.IsKeyDown(KC_LEFT)) torque = -1;
+	if (gInputMgr.IsKeyDown(KC_RIGHT)) torque = 1;
+	if (gInputMgr.IsKeyDown(KC_LEFT)) torque = -1;
 	
 	if (this.Get_bool("IsLight")) torque *= 70;
 	else torque *= 150;
@@ -16,8 +16,8 @@ void OnUpdateLogic(float32 delta)
 	
 	// apply some additional linear force
 	Vector2 force = Vector2(0, 0);
-	if (inputMgr.IsKeyDown(KC_RIGHT)) force = Vector2(1, 0);
-	if (inputMgr.IsKeyDown(KC_LEFT)) force = Vector2(-1, 0);
+	if (gInputMgr.IsKeyDown(KC_RIGHT)) force = Vector2(1, 0);
+	if (gInputMgr.IsKeyDown(KC_LEFT)) force = Vector2(-1, 0);
 	
 	if (this.Get_bool("IsLight")) force *= 10;
 	else force *= 20;
