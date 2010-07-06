@@ -287,9 +287,6 @@ bool Core::Game::PhysicsCallbacks::ShouldCollide(b2Fixture* fixtureA, b2Fixture*
 
 void Core::Game::PhysicsCallbacks::BeginContact(b2Contact* contact)
 {
-	int32 pointCount = contact->GetManifold()->pointCount;
-	if (pointCount == 0) return;
-
 	PhysicsEvent* evt = new PhysicsEvent();
 
 	evt->type = PhysicsEvent::COLLISION_STARTED;
@@ -307,12 +304,16 @@ void Core::Game::PhysicsCallbacks::BeginContact(b2Contact* contact)
 	evt->normal = worldManifold.normal;
 
 	Vector2 worldPoint = Vector2_Zero;
+	int32 pointCount = contact->GetManifold()->pointCount;
 	for (int32 i=0; i<pointCount; ++i)
 	{
 		worldPoint += worldManifold.points[i];
 	}
-	worldPoint.x = worldPoint.x / pointCount;
-	worldPoint.y = worldPoint.y / pointCount;
+	if (pointCount > 0)
+	{
+		worldPoint.x = worldPoint.x / pointCount;
+		worldPoint.y = worldPoint.y / pointCount;
+	}
 	evt->contactPoint = worldPoint;
 
 	mParent->mPhysicsEvents.push_back(evt);

@@ -119,23 +119,16 @@ void OnKeyPressed(eKeyCode key, uint32 char)
 
 void OnCollisionStarted(EntityHandle other, Vector2 normal, Vector2 contactPoint)
 {
-	//Println(other.GetTag());
 	if (other.GetTag() == 1)
 	{
 		Println("FINISH");
 		gEntityMgr.DestroyEntity(this);
 	}
-	
-	if (other.Get_int32("Layer") == 0 || other.Get_int32("Layer") == 1)
-	{
-	}
 }
 
 void OnCollisionEnded(EntityHandle other)
 {
-	if (other.Get_int32("Layer") == 0 || other.Get_int32("Layer") == 1)
-	{
-	}
+
 }
 
 void OnDraw(float32 delta)
