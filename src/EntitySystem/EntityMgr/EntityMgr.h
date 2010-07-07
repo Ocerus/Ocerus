@@ -58,7 +58,7 @@ namespace EntitySystem
 		EntityHandle CreateEntity(EntityDescription& desc);
 		
 		/// Creates new entity from prototype.
-		EntityHandle InstantiatePrototype(const EntityHandle prototype, const string& newName = "");
+		EntityHandle InstantiatePrototype(const EntityHandle prototype, const Vector2& position = Vector2_Zero, const string& newName = "");
 		
 		/// Duplicates the entity with a new name.
 		/// If a name is not specified, the old name is used.
@@ -153,6 +153,9 @@ namespace EntitySystem
 
 		/// Returns the prototype the entity is linked to.
 		EntityHandle GetEntityPrototype(const EntityHandle entity);
+
+		/// Returns EntityHandle to the first prototype of the specified name.
+		EntityHandle FindFirstPrototype(const string& name);
 
 		/// Assigns the given entity to the prototype.
 		void LinkEntityToPrototype(const EntityHandle entity, const EntityHandle prototype);

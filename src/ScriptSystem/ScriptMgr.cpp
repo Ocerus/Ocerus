@@ -677,11 +677,12 @@ void RegisterScriptEntityMgr(asIScriptEngine* engine)
 
 	// Register the object methods
 	r = engine->RegisterObjectMethod("EntityMgr", "EntityHandle CreateEntity(EntityDescription &in)", asMETHOD(EntityMgr, CreateEntity), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-	r = engine->RegisterObjectMethod("EntityMgr", "EntityHandle InstantiatePrototype(const EntityHandle, const string &in)", asMETHOD(EntityMgr, InstantiatePrototype), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("EntityMgr", "EntityHandle InstantiatePrototype(const EntityHandle, const Vector2 &in, const string &in)", asMETHOD(EntityMgr, InstantiatePrototype), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("EntityMgr", "EntityHandle DuplicateEntity(const EntityHandle, const string &in)", asMETHOD(EntityMgr, DuplicateEntity), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("EntityMgr", "void DestroyEntity(const EntityHandle)", asMETHOD(EntityMgr, DestroyEntity), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("EntityMgr", "bool EntityExists(const EntityHandle) const", asMETHOD(EntityMgr, EntityExists), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("EntityMgr", "EntityHandle FindFirstEntity(const string &in)", asMETHOD(EntityMgr, FindFirstEntity), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("EntityMgr", "EntityHandle FindFirstPrototype(const string &in)", asMETHOD(EntityMgr, FindFirstPrototype), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("EntityMgr", "EntityHandle GetEntity(EntityID) const", asMETHOD(EntityMgr, GetEntity), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("EntityMgr", "bool IsEntityInited(const EntityHandle) const", asMETHOD(EntityMgr, IsEntityInited), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("EntityMgr", "bool IsEntityPrototype(const EntityHandle) const", asMETHOD(EntityMgr, IsEntityPrototype), asCALL_THISCALL); OC_SCRIPT_ASSERT();
@@ -1115,9 +1116,6 @@ void ScriptMgr::ConfigureEngine(void)
 	// Register EntityDescription class and it's methods
 	RegisterScriptEntityDescription(mEngine);
 
-	// Register EntityMgr class and it's methods
-	RegisterScriptEntityMgr(mEngine);
-	
 	// Register InputMgr class and it's methods
 	RegisterScriptInputMgr(mEngine);
 
@@ -1140,6 +1138,9 @@ void ScriptMgr::ConfigureEngine(void)
 
 	// Register all additions in ScriptRegister.cpp to script
 	RegisterAllAdditions(mEngine);
+
+	// Register EntityMgr class and it's methods
+	RegisterScriptEntityMgr(mEngine);
 
 
 	// Register getters, setters and array for supported types of properties

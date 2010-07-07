@@ -39,8 +39,8 @@
         <ScriptStates></ScriptStates>
         <ScriptTimeOut>1000</ScriptTimeOut>
         <YOffsetPeriod Type="float32">0.25</YOffsetPeriod>
-        <YOffsetAmplitude Type="float32">0.15</YOffsetAmplitude>
         <YOffsetTime Type="float32">0</YOffsetTime>
+        <YOffsetAmplitude Type="float32">0.15</YOffsetAmplitude>
       </Component>
     </Entity>
     <Entity Name="Land1" ID="2" Tag="0" Transient="false" Prototype="-495">
@@ -479,10 +479,10 @@
         <ScriptStates></ScriptStates>
         <ScriptTimeOut>1000</ScriptTimeOut>
         <IsLight Type="bool">true</IsLight>
-        <ExplosionCooldown Type="float32">0</ExplosionCooldown>
         <LastLandPosition Type="Vector2">0 0</LastLandPosition>
-        <JumpCooldown Type="float32">0</JumpCooldown>
         <LastLandCollisionCooldown Type="float32">0</LastLandCollisionCooldown>
+        <JumpCooldown Type="float32">0</JumpCooldown>
+        <ExplosionCooldown Type="float32">0</ExplosionCooldown>
       </Component>
     </Entity>
     <Entity Name="GameCamera" ID="21" Tag="0" Transient="false">
@@ -494,9 +494,9 @@
     </Entity>
     <Entity Name="EditorCamera" ID="22" Tag="0" Transient="false">
       <Component Type="Camera">
-        <Position>7.15615 -8.19562</Position>
+        <Position>11.9002 -3.89224</Position>
         <Rotation>0</Rotation>
-        <Zoom>0.501267</Zoom>
+        <Zoom>0.586731</Zoom>
       </Component>
     </Entity>
     <Entity Name="LandFiller" ID="23" Tag="0" Transient="false" Prototype="-497">
@@ -2498,7 +2498,7 @@
         <Layer>0</Layer>
         <Angle>0</Angle>
         <Scale>1.5 1.5</Scale>
-        <Position>3.41012 -2.28825</Position>
+        <Position>7.19879 -5.54088</Position>
       </Component>
       <Component Type="PolygonCollider">
         <Polygon>
@@ -2648,7 +2648,7 @@
         <Layer>-1</Layer>
         <Angle>1.57189</Angle>
         <Scale>35.2782 178.765</Scale>
-        <Position>16.9634 16.4879</Position>
+        <Position>14.7833 16.4606</Position>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -2689,6 +2689,402 @@
         <Density>1</Density>
       </Component>
     </Entity>
+    <Entity Name="Coin1" ID="112" Tag="2" Transient="false" Prototype="-503">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Angle>0</Angle>
+        <Scale>1.5 1.5</Scale>
+        <Position>9.18503 -7.32248</Position>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Polygon>
+          <Item>-0.1 -0.1</Item>
+          <Item>0.1 -0.1</Item>
+          <Item>0.1 0.1</Item>
+          <Item>-0.1 0.1</Item>
+        </Polygon>
+        <Restitution>0.5</Restitution>
+        <Friction>0.5</Friction>
+        <Density>1</Density>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>coin.png</Texture>
+      </Component>
+      <Component Type="Script">
+        <ScriptModules>
+          <Item>UpDownWaver.as</Item>
+        </ScriptModules>
+        <ScriptTimes></ScriptTimes>
+        <ScriptStates></ScriptStates>
+        <ScriptTimeOut>1000</ScriptTimeOut>
+        <YOffsetPeriod Type="float32">0.1</YOffsetPeriod>
+        <YOffsetAmplitude Type="float32">0.1</YOffsetAmplitude>
+      </Component>
+    </Entity>
+    <Entity Name="Coin1" ID="113" Tag="2" Transient="false" Prototype="-503">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Angle>0</Angle>
+        <Scale>1.5 1.5</Scale>
+        <Position>10.6702 1.21915</Position>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Polygon>
+          <Item>-0.1 -0.1</Item>
+          <Item>0.1 -0.1</Item>
+          <Item>0.1 0.1</Item>
+          <Item>-0.1 0.1</Item>
+        </Polygon>
+        <Restitution>0.5</Restitution>
+        <Friction>0.5</Friction>
+        <Density>1</Density>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>coin.png</Texture>
+      </Component>
+      <Component Type="Script">
+        <ScriptModules>
+          <Item>UpDownWaver.as</Item>
+        </ScriptModules>
+        <ScriptTimes></ScriptTimes>
+        <ScriptStates></ScriptStates>
+        <ScriptTimeOut>1000</ScriptTimeOut>
+        <YOffsetPeriod Type="float32">0.1</YOffsetPeriod>
+        <YOffsetAmplitude Type="float32">0.1</YOffsetAmplitude>
+      </Component>
+    </Entity>
+    <Entity Name="Coin1" ID="114" Tag="2" Transient="false" Prototype="-503">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Angle>0</Angle>
+        <Scale>1.5 1.5</Scale>
+        <Position>11.6021 1.2072</Position>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Polygon>
+          <Item>-0.1 -0.1</Item>
+          <Item>0.1 -0.1</Item>
+          <Item>0.1 0.1</Item>
+          <Item>-0.1 0.1</Item>
+        </Polygon>
+        <Restitution>0.5</Restitution>
+        <Friction>0.5</Friction>
+        <Density>1</Density>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>coin.png</Texture>
+      </Component>
+      <Component Type="Script">
+        <ScriptModules>
+          <Item>UpDownWaver.as</Item>
+        </ScriptModules>
+        <ScriptTimes></ScriptTimes>
+        <ScriptStates></ScriptStates>
+        <ScriptTimeOut>1000</ScriptTimeOut>
+        <YOffsetPeriod Type="float32">0.1</YOffsetPeriod>
+        <YOffsetAmplitude Type="float32">0.1</YOffsetAmplitude>
+      </Component>
+    </Entity>
+    <Entity Name="Coin1" ID="115" Tag="2" Transient="false" Prototype="-503">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Angle>0</Angle>
+        <Scale>1.5 1.5</Scale>
+        <Position>16.7928 -8.16224</Position>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Polygon>
+          <Item>-0.1 -0.1</Item>
+          <Item>0.1 -0.1</Item>
+          <Item>0.1 0.1</Item>
+          <Item>-0.1 0.1</Item>
+        </Polygon>
+        <Restitution>0.5</Restitution>
+        <Friction>0.5</Friction>
+        <Density>1</Density>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>coin.png</Texture>
+      </Component>
+      <Component Type="Script">
+        <ScriptModules>
+          <Item>UpDownWaver.as</Item>
+        </ScriptModules>
+        <ScriptTimes></ScriptTimes>
+        <ScriptStates></ScriptStates>
+        <ScriptTimeOut>1000</ScriptTimeOut>
+        <YOffsetPeriod Type="float32">0.1</YOffsetPeriod>
+        <YOffsetAmplitude Type="float32">0.1</YOffsetAmplitude>
+      </Component>
+    </Entity>
+    <Entity Name="Coin1" ID="116" Tag="2" Transient="false" Prototype="-503">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Angle>0</Angle>
+        <Scale>1.5 1.5</Scale>
+        <Position>22.7032 -9.56476</Position>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Polygon>
+          <Item>-0.1 -0.1</Item>
+          <Item>0.1 -0.1</Item>
+          <Item>0.1 0.1</Item>
+          <Item>-0.1 0.1</Item>
+        </Polygon>
+        <Restitution>0.5</Restitution>
+        <Friction>0.5</Friction>
+        <Density>1</Density>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>coin.png</Texture>
+      </Component>
+      <Component Type="Script">
+        <ScriptModules>
+          <Item>UpDownWaver.as</Item>
+        </ScriptModules>
+        <ScriptTimes></ScriptTimes>
+        <ScriptStates></ScriptStates>
+        <ScriptTimeOut>1000</ScriptTimeOut>
+        <YOffsetPeriod Type="float32">0.1</YOffsetPeriod>
+        <YOffsetAmplitude Type="float32">0.1</YOffsetAmplitude>
+      </Component>
+    </Entity>
+    <Entity Name="Coin1" ID="117" Tag="2" Transient="false" Prototype="-503">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Angle>0</Angle>
+        <Scale>1.5 1.5</Scale>
+        <Position>11.5413 -8.26899</Position>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Polygon>
+          <Item>-0.1 -0.1</Item>
+          <Item>0.1 -0.1</Item>
+          <Item>0.1 0.1</Item>
+          <Item>-0.1 0.1</Item>
+        </Polygon>
+        <Restitution>0.5</Restitution>
+        <Friction>0.5</Friction>
+        <Density>1</Density>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>coin.png</Texture>
+      </Component>
+      <Component Type="Script">
+        <ScriptModules>
+          <Item>UpDownWaver.as</Item>
+        </ScriptModules>
+        <ScriptTimes></ScriptTimes>
+        <ScriptStates></ScriptStates>
+        <ScriptTimeOut>1000</ScriptTimeOut>
+        <YOffsetPeriod Type="float32">0.1</YOffsetPeriod>
+        <YOffsetAmplitude Type="float32">0.1</YOffsetAmplitude>
+      </Component>
+    </Entity>
+    <Entity Name="Coin1" ID="118" Tag="2" Transient="false" Prototype="-503">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Angle>0</Angle>
+        <Scale>1.5 1.5</Scale>
+        <Position>14.3724 -8.81023</Position>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Polygon>
+          <Item>-0.1 -0.1</Item>
+          <Item>0.1 -0.1</Item>
+          <Item>0.1 0.1</Item>
+          <Item>-0.1 0.1</Item>
+        </Polygon>
+        <Restitution>0.5</Restitution>
+        <Friction>0.5</Friction>
+        <Density>1</Density>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>coin.png</Texture>
+      </Component>
+      <Component Type="Script">
+        <ScriptModules>
+          <Item>UpDownWaver.as</Item>
+        </ScriptModules>
+        <ScriptTimes></ScriptTimes>
+        <ScriptStates></ScriptStates>
+        <ScriptTimeOut>1000</ScriptTimeOut>
+        <YOffsetPeriod Type="float32">0.1</YOffsetPeriod>
+        <YOffsetAmplitude Type="float32">0.1</YOffsetAmplitude>
+      </Component>
+    </Entity>
+    <Entity Name="Coin1" ID="119" Tag="2" Transient="false" Prototype="-503">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Angle>0</Angle>
+        <Scale>1.5 1.5</Scale>
+        <Position>24.9619 -1.65903</Position>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Polygon>
+          <Item>-0.1 -0.1</Item>
+          <Item>0.1 -0.1</Item>
+          <Item>0.1 0.1</Item>
+          <Item>-0.1 0.1</Item>
+        </Polygon>
+        <Restitution>0.5</Restitution>
+        <Friction>0.5</Friction>
+        <Density>1</Density>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>coin.png</Texture>
+      </Component>
+      <Component Type="Script">
+        <ScriptModules>
+          <Item>UpDownWaver.as</Item>
+        </ScriptModules>
+        <ScriptTimes></ScriptTimes>
+        <ScriptStates></ScriptStates>
+        <ScriptTimeOut>1000</ScriptTimeOut>
+        <YOffsetPeriod Type="float32">0.1</YOffsetPeriod>
+        <YOffsetAmplitude Type="float32">0.1</YOffsetAmplitude>
+      </Component>
+    </Entity>
+    <Entity Name="Coin1" ID="120" Tag="2" Transient="false" Prototype="-503">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Angle>0</Angle>
+        <Scale>1.5 1.5</Scale>
+        <Position>9.67201 1.2306</Position>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Polygon>
+          <Item>-0.1 -0.1</Item>
+          <Item>0.1 -0.1</Item>
+          <Item>0.1 0.1</Item>
+          <Item>-0.1 0.1</Item>
+        </Polygon>
+        <Restitution>0.5</Restitution>
+        <Friction>0.5</Friction>
+        <Density>1</Density>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>coin.png</Texture>
+      </Component>
+      <Component Type="Script">
+        <ScriptModules>
+          <Item>UpDownWaver.as</Item>
+        </ScriptModules>
+        <ScriptTimes></ScriptTimes>
+        <ScriptStates></ScriptStates>
+        <ScriptTimeOut>1000</ScriptTimeOut>
+        <YOffsetPeriod Type="float32">0.1</YOffsetPeriod>
+        <YOffsetAmplitude Type="float32">0.1</YOffsetAmplitude>
+      </Component>
+    </Entity>
+    <Entity Name="Coin1" ID="121" Tag="2" Transient="false" Prototype="-503">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Angle>0</Angle>
+        <Scale>1.5 1.5</Scale>
+        <Position>23.9308 -9.58592</Position>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Polygon>
+          <Item>-0.1 -0.1</Item>
+          <Item>0.1 -0.1</Item>
+          <Item>0.1 0.1</Item>
+          <Item>-0.1 0.1</Item>
+        </Polygon>
+        <Restitution>0.5</Restitution>
+        <Friction>0.5</Friction>
+        <Density>1</Density>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>coin.png</Texture>
+      </Component>
+      <Component Type="Script">
+        <ScriptModules>
+          <Item>UpDownWaver.as</Item>
+        </ScriptModules>
+        <ScriptTimes></ScriptTimes>
+        <ScriptStates></ScriptStates>
+        <ScriptTimeOut>1000</ScriptTimeOut>
+        <YOffsetPeriod Type="float32">0.1</YOffsetPeriod>
+        <YOffsetAmplitude Type="float32">0.1</YOffsetAmplitude>
+      </Component>
+    </Entity>
+    <Entity Name="Coin1" ID="122" Tag="2" Transient="false" Prototype="-503">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Angle>0</Angle>
+        <Scale>1.5 1.5</Scale>
+        <Position>29.2645 -9.64942</Position>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Polygon>
+          <Item>-0.1 -0.1</Item>
+          <Item>0.1 -0.1</Item>
+          <Item>0.1 0.1</Item>
+          <Item>-0.1 0.1</Item>
+        </Polygon>
+        <Restitution>0.5</Restitution>
+        <Friction>0.5</Friction>
+        <Density>1</Density>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>coin.png</Texture>
+      </Component>
+      <Component Type="Script">
+        <ScriptModules>
+          <Item>UpDownWaver.as</Item>
+        </ScriptModules>
+        <ScriptTimes></ScriptTimes>
+        <ScriptStates></ScriptStates>
+        <ScriptTimeOut>1000</ScriptTimeOut>
+        <YOffsetPeriod Type="float32">0.1</YOffsetPeriod>
+        <YOffsetAmplitude Type="float32">0.1</YOffsetAmplitude>
+      </Component>
+    </Entity>
+    <Entity Name="Coin1" ID="123" Tag="2" Transient="false" Prototype="-503">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Angle>0</Angle>
+        <Scale>1.5 1.5</Scale>
+        <Position>23.9375 -1.60781</Position>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Polygon>
+          <Item>-0.1 -0.1</Item>
+          <Item>0.1 -0.1</Item>
+          <Item>0.1 0.1</Item>
+          <Item>-0.1 0.1</Item>
+        </Polygon>
+        <Restitution>0.5</Restitution>
+        <Friction>0.5</Friction>
+        <Density>1</Density>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>coin.png</Texture>
+      </Component>
+      <Component Type="Script">
+        <ScriptModules>
+          <Item>UpDownWaver.as</Item>
+        </ScriptModules>
+        <ScriptTimes></ScriptTimes>
+        <ScriptStates></ScriptStates>
+        <ScriptTimeOut>1000</ScriptTimeOut>
+        <YOffsetPeriod Type="float32">0.1</YOffsetPeriod>
+        <YOffsetAmplitude Type="float32">0.1</YOffsetAmplitude>
+      </Component>
+    </Entity>
   </Entities>
   <Hierarchy>
     <Entity ID="20"></Entity>
@@ -2727,6 +3123,18 @@
     </Entity>
     <Entity ID="103">
       <Entity ID="104"></Entity>
+      <Entity ID="112"></Entity>
+      <Entity ID="117"></Entity>
+      <Entity ID="118"></Entity>
+      <Entity ID="119"></Entity>
+      <Entity ID="120"></Entity>
+      <Entity ID="113"></Entity>
+      <Entity ID="114"></Entity>
+      <Entity ID="115"></Entity>
+      <Entity ID="116"></Entity>
+      <Entity ID="121"></Entity>
+      <Entity ID="122"></Entity>
+      <Entity ID="123"></Entity>
     </Entity>
     <Entity ID="4">
       <Entity ID="5"></Entity>

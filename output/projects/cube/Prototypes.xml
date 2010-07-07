@@ -2,12 +2,30 @@
 
 <Prototypes>
   <Entities>
+    <Entity Name="Score10" ID="-504" Tag="0" Transient="false">
+      <Component Type="Transform">
+        <Layer>2</Layer>
+        <Angle>0</Angle>
+        <Scale>1 1</Scale>
+        <Position>0 0</Position>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0</Transparency>
+        <Texture>score_10.png</Texture>
+      </Component>
+      <Component Type="Script">
+        <ScriptModules>
+          <Item>ScoreFader.as</Item>
+        </ScriptModules>
+        <ScriptTimes></ScriptTimes>
+        <ScriptStates></ScriptStates>
+        <ScriptTimeOut>1000</ScriptTimeOut>
+      </Component>
+    </Entity>
     <Entity Name="Coin1" ID="-503" Tag="2" Transient="false">
       <Component Type="Transform">
         <Layer>0</Layer>
-        <Angle>0</Angle>
         <Scale>1.5 1.5</Scale>
-        <Position>3.41012 -2.28825</Position>
       </Component>
       <Component Type="PolygonCollider">
         <Polygon>

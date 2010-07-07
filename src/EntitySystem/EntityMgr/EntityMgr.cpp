@@ -219,22 +219,27 @@ EntityHandle EntityMgr::CreateEntity(EntityDescription& desc)
 	return entityHandle;
 }
 
-EntityHandle EntityMgr::InstantiatePrototype(const EntityHandle prototype, const string& newName)
+EntityHandle EntityMgr::InstantiatePrototype(const EntityHandle prototype, const Vector2& position, const string& newName)
 {
-  if (!IsEntityPrototype(prototype))
-  {
-    ocError << "Can't instantiate non-prototype entity";
-    return EntityHandle::Null;
-  }
-  
-  EntityDescription desc;
+	if (!IsEntityPrototype(prototype))
+	{
+		ocError << "Can't instantiate non-prototype entity";
+		return EntityHandle::Null;
+	}
+
+	EntityDescription desc;
 	desc.SetName(newName.empty() ? prototype.GetName() : newName);
 	desc.SetPrototype(prototype);
 	desc.CopyComponents(prototype);
-	
+
 	EntityHandle instance = CreateEntity(desc);
 	instance.FinishInit();
-	
+
+	if (position.LengthSquared() != 0 && instance.HasProperty("Position"))
+	{
+		instance.GetProperty("Position").SetValue(position);
+	}
+
 	return instance;
 }
 
@@ -267,14 +272,30 @@ EntityHandle EntityMgr::DuplicateEntity(const EntityHandle oldEntity, const stri
 		: newName, mEntities[oldEntity.GetID()]->mPrototype, mEntities[oldEntity.GetID()]->mTransient);
 	if (isPrototype) mPrototypes[newEntity.GetID()] = new PrototypeInfo();
 
-	// copy all property values
+	// add dynamic properties
+	int32 cmpCount = GetNumberOfEntityComponents(oldEntity);
+	for (ComponentID cid=0; cid<cmpCount; ++cid)
+	{
+		PropertyList props;
+		GetEntityComponentProperties(oldEntity, cid, props);
+		for (PropertyList::iterator it=props.begin(); it!=props.end(); ++it)
+		{
+			if (!it->IsValued()) continue;
+			RegisterDynamicPropertyOfEntityComponent(it->GetType(), newEntity, cid, it->GetKey(), it->GetAccessFlags(), it->GetComment());
+		}
+	}
+
+	// get properties
 	PropertyList oldPropertyList, newPropertyList;
 	if (!GetEntityProperties(oldEntity, oldPropertyList) || !GetEntityProperties(newEntity, newPropertyList))
 	{ 
-		ocError << "Can't get properties of duplicated entity";
+		ocError << "Can't get properties to duplicate";
 		DestroyEntity(newEntity);
 		return EntityHandle::Null;
 	}
+
+	// copy all property values
+	OC_ASSERT(oldPropertyList.size() == newPropertyList.size());
 	for (PropertyList::iterator oldIt = oldPropertyList.begin(), newIt = newPropertyList.begin();
 		oldIt != oldPropertyList.end(); ++oldIt, ++newIt)
 	{
@@ -624,6 +645,19 @@ EntitySystem::EntityHandle EntitySystem::EntityMgr::FindFirstEntity( const strin
 	}
 	return EntityHandle::Null;
 }
+
+EntitySystem::EntityHandle EntitySystem::EntityMgr::FindFirstPrototype( const string& name )
+{
+	for(EntityMap::const_iterator i=mEntities.begin(); i!=mEntities.end(); ++i)
+	{
+		if (EntityHandle::IsPrototypeID(i->first) && i->second->mName.compare(name) == 0)
+		{
+			return i->first;
+		}
+	}
+	return EntityHandle::Null;
+}
+
 void EntitySystem::EntityMgr::LoadEntityPropertyFromXML(const EntityID entityID, const ComponentID componentID, 
 	PrototypeInfo* prototypeInfo, ResourceSystem::XMLNodeIterator& xmlPropertyIterator)
 {

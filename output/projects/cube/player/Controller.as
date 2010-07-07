@@ -1,8 +1,13 @@
+#include "Spawner.as"
+
 const float32 EXPLOSION_COOLDOWN = 1.0f;
 const float32 JUMP_COOLDOWN = 2.0f;
 const float32 EXPLOSION_RATIO = 20.0f;
 const float32 JUMP_RATIO = 0.8f;
 const float32 JUMP_MAX_DELAY = 0.2f;
+
+const uint32 STATE_NORMAL = 0;
+const uint32 STATE_EXITING = 1;
 
 void OnPostInit()
 {
@@ -11,21 +16,34 @@ void OnPostInit()
   this.RegisterDynamicProperty_float32("JumpCooldown", PA_FULL_ACCESS, "");
   this.RegisterDynamicProperty_Vector2("LastLandPosition", PA_FULL_ACCESS, "");
   this.RegisterDynamicProperty_float32("LastLandCollisionCooldown", PA_FULL_ACCESS, "");
+  this.RegisterDynamicProperty_uint32("State", PA_FULL_ACCESS, "");
   
   this.Set_float32("ExplosionCooldown", 0);
   this.Set_float32("JumpCooldown", 0);
   this.Set_float32("LastLandCollisionCooldown", 0.0f);
+  this.Set_uint32("State", 0.0f);
   
   bool isLight = true;
-  SetState(isLight);
+  SetMode(isLight);
+  SetPlayerState(STATE_NORMAL);
 }
 
-void SwitchState()
+void SetPlayerState(uint32 state)
 {
-  SetState(!this.Get_bool("IsLight"));
+	this.Set_uint32("State", state);
 }
 
-void SetState(bool willBeLight)
+uint32 GetPlayerState()
+{
+	return this.Get_uint32("State");
+}
+
+void SwitchMode()
+{
+  SetMode(!this.Get_bool("IsLight"));
+}
+
+void SetMode(bool willBeLight)
 {
   this.Set_bool("IsLight", willBeLight);
   
@@ -43,6 +61,8 @@ void SetState(bool willBeLight)
 
 void OnUpdateLogic(float32 delta)
 {
+	if (GetPlayerState() != STATE_NORMAL) return;
+
 	// rotate the cube
 	float32 torque = 0;
 	if (gInputMgr.IsKeyDown(KC_RIGHT)) torque = 1;
@@ -83,9 +103,11 @@ void OnUpdateLogic(float32 delta)
 
 void OnKeyPressed(eKeyCode key, uint32 char)
 {
+	if (GetPlayerState() != STATE_NORMAL) return;
+
 	if (key == KC_DOWN)
 	{
-		SwitchState();
+		SwitchMode();
 	}
 		
 	if (key == KC_UP)
@@ -122,11 +144,12 @@ void OnKeyPressed(eKeyCode key, uint32 char)
 
 void OnCollisionStarted(EntityHandle other, Vector2 normal, Vector2 contactPoint)
 {
+	if (GetPlayerState() != STATE_NORMAL) return;
+
 	if (other.GetTag() == 1)
 	{
 	  // finish sign
-		Println("FINISH");
-		gEntityMgr.DestroyEntity(this);
+	  SetPlayerState(STATE_EXITING);
 	}
 	else if (other.GetTag() == 2)
 	{
@@ -134,23 +157,41 @@ void OnCollisionStarted(EntityHandle other, Vector2 normal, Vector2 contactPoint
 		EntityHandle director = gEntityMgr.FindFirstEntity("Director");
 		director.Set_uint32("Score", director.Get_uint32("Score") + 10);
 		gEntityMgr.DestroyEntity(other);
+		
+		SpawnScore10(other.Get_Vector2("Position"));
 	}	
 }
 
 void OnCollisionEnded(EntityHandle other)
 {
-
+	if (GetPlayerState() != STATE_NORMAL) return;
 }
 
 void OnDraw(float32 delta)
 {
-  // animate accordingly to the state
-  const float32 angleAnimSpeed = 15.0f;
-  const float32 PI = 3.14f;
-  float32 angle = this.Get_float32("YAngle");
-  if (this.Get_bool("IsLight") && angle > 0.0) angle -= angleAnimSpeed * delta;
-  if (!this.Get_bool("IsLight") && angle < PI) angle += angleAnimSpeed * delta;
-  if (angle < 0.0) angle = 0.0;
-  if (angle > PI) angle = PI;
-  this.Set_float32("YAngle", angle);
+	if (GetPlayerState() == STATE_EXITING)
+	{
+		if (this.Get_Vector2("Scale").Length() < 0.1f)
+		{
+			Println("FINISH");
+			gEntityMgr.DestroyEntity(this);
+		}
+		else
+		{
+			this.Set_float32("Angle", this.Get_float32("Angle") + 0.4f);
+			this.Set_Vector2("Scale", 0.9f * this.Get_Vector2("Scale"));
+		}		
+	}
+	else
+	{
+  	// animate accordingly to the state
+  	const float32 angleAnimSpeed = 15.0f;
+  	const float32 PI = 3.14f;
+  	float32 angle = this.Get_float32("YAngle");
+  	if (this.Get_bool("IsLight") && angle > 0.0) angle -= angleAnimSpeed * delta;
+  	if (!this.Get_bool("IsLight") && angle < PI) angle += angleAnimSpeed * delta;
+  	if (angle < 0.0) angle = 0.0;
+  	if (angle > PI) angle = PI;
+  	this.Set_float32("YAngle", angle);
+  }
 }

@@ -3,7 +3,7 @@
 #include <Box2D.h>
 #include "EntitySystem/EntityMgr/LayerMgr.h"
 
-const float32 MIN_SCALAR_SCALE = 0.1f;
+const float32 MIN_SCALAR_SCALE = 0.01f;
 
 void EntityComponents::Transform::Create( void )
 {
