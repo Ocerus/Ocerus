@@ -21,7 +21,7 @@ using namespace Editor;
 
 const float32 SELECTION_MIN_DISTANCE = 0.2f; ///< Minimum distance of the cursor position for the selection to be considered as multi-selection. The distance is given in pixels!
 const float32 EDIT_TOOL_ANGLE_CHANGE_RATIO = 0.3f; ///< How fast the edit tool will change the angle.
-const float32 EDIT_TOOL_SCALE_CHANGE_RATIO = 0.1f; ///< How fast the edit tool will change the scale.
+const float32 EDIT_TOOL_SCALE_CHANGE_RATIO = 2.0f; ///< How fast the edit tool will change the scale.
 const float32 CAMERA_MOVEMENT_SPEED = 10.0f; ///< How fast the camera moves by keys.
 
 EditorMgr::EditorMgr():
@@ -478,7 +478,6 @@ bool Editor::EditorMgr::MouseMoved( const InputSystem::MouseInfo& mi )
 				}
 				break;
 			case ET_SCALE:
-
 				if (delta.x < 0)
 					delta.x *= -delta.x;
 				else
@@ -489,11 +488,12 @@ bool Editor::EditorMgr::MouseMoved( const InputSystem::MouseInfo& mi )
 				else
 					delta.y *= delta.y;
 
+
 				delta *= EDIT_TOOL_SCALE_CHANGE_RATIO;
 				for (size_t i=0; i<mSelectedEntities.size(); ++i)
 				{
 					Vector2 transformedDelta = MathUtils::Multiply(Matrix22(mSelectedEntities[i].GetProperty("Angle").GetValue<float32>()), delta);
-					mSelectedEntities[i].GetProperty("Scale").SetValue<Vector2>(mEditToolBodyScales[i] + delta);
+					mSelectedEntities[i].GetProperty("Scale").SetValue<Vector2>(mEditToolBodyScales[i] + transformedDelta);
 				}
 				break;
 			}
