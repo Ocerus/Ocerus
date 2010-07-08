@@ -78,7 +78,7 @@ This class represents one unique entity in the entity system. This class is regi
   \item void Set\_T(string \&in, T) -- sets a value of an entity property of a specific name and type T from PropertyTypes.h
   \item array\_T Get\_array\_T(string \&in) -- gets a non-constant value of an entity property of a specific name and type of array\_T
   \item const array\_T Get\_const\_array\_T(string \&in) -- gets a constant value of an entity property of a specific name and type of array\_T
-  \item bool RegisterDynamicProperty\_T(const string &in, const PropertyAccessFlags, const string &in) -- registers an entity dynamic property of a specific name, access and comment
+  \item bool RegisterDynamicProperty\_T(const string \&in, const PropertyAccessFlags, const string \&in) -- registers an entity dynamic property of a specific name, access and comment
   \item bool UnregisterDynamicProperty(const string \&in) const -- unregisters an entity dynamic property of a specific name
 \end{titled-itemize}
 
@@ -182,7 +182,7 @@ This class is the base class for all GUI elements. It is registered as a basic r
   \item bool IsVisible() const -- returns true if the window is currently visible (does not inherit state from ancestor windows)
   \item bool IsVisible(bool) const -- returns true if the window is currently visible (specify whether to inherit state from ancestor windows)
   \item bool IsActive() const -- returns true if this is the active window (may receive user inputs)
-  \item const CEGUIString& GetText() const -- returns the current text for the window
+  \item const CEGUIString\& GetText() const -- returns the current text for the window
   \item bool InheritsAlpha() const -- returns true if the window inherits alpha from its parent(s)
   \item float32 GetAlpha() const -- returns the current alpha value set for this window (between 0.0 and 1.0)
   \item float32 GetEffectiveAlpha() const -- returns the effective alpha value that will be used when rendering this
@@ -280,11 +280,11 @@ This class representes the editbox GUI element. It is registered as a basic refe
 \begin{titled-itemize}{Type \{ values \} -- comment}
   \item eEntityMessageType \{ \ldots \} -- this is user-defined, the types are got from EntityMessageTypes.h
   \item eEntityMessageResult \{ RESULT\_IGNORED, RESULT\_OK, RE\-SULT\-\_\-ER\-ROR \} -- result receives after sending out a message to entities (message is ignored, processed well or an error occured)
-  \item eEntityDescriptionKind \{ EK\_ENTITY, EK\_PROTOTYPE} -- kind of an entity (an ordinary entity, a prototype)
+  \item eEntityDescriptionKind \{ EK\_ENTITY, EK\_PROTOTYPE \} -- kind of an entity (an ordinary entity, a prototype)
   \item eComponentType \{ \ldots \} -- this is user-defined, the types are got from \_ComponentTypes.h 
   \item ePropertyAccess \{ PA\_EDIT\_READ = 1$<<$1, PA\_EDIT\_WRITE = 1$<<$2, PA\_SCRIPT\_READ = 1$<<$3, PA\_SCRIPT\_WRITE = 1$<<$4, PA\_INIT = 1$<<$5, PA\_FULL\_ACCESS = 0xff \} -- restrictions of access which can be granted to a property (the property can be read/written from editor/scripts/during the component initialization or full access is granted)
   \item eKeyCode \{ \ldots \} -- this is defined in KeyCodes.h
-  \item eMouseButton \{ MBTN_LEFT, MBTN_RIGHT, MBTN_MIDDLE, MBTN_UNKNOWN \} -- all possible buttons of the mouse device
+  \item eMouseButton \{ MBTN\_LEFT, MBTN\_RIGHT, MBTN\_MIDDLE, \\MBTN\_UNKNOWN \} -- all possible buttons of the mouse device
 \end{titled-itemize}
 
 \subsection{Typedefs}
