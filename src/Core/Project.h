@@ -102,6 +102,12 @@ namespace Core
 
 			/// Returns name of the opened scene, or empty string if no scene is opened.
 			string GetOpenedSceneName() const;
+			
+			/// Closes the opened scene in the next game loop.
+			void SetNeedCloseOpenedScene() { mNeedCloseOpenedScene = true ; }
+			
+			/// Updates project.
+			void Update();
 
 		//@}
 
@@ -125,6 +131,7 @@ namespace Core
 		int mSceneIndex;
 		
 		bool mEditorSupport;
+		bool mNeedCloseOpenedScene;
 	};
 }
 

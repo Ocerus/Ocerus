@@ -33,6 +33,7 @@ EditorGUI::EditorGUI():
 	mPropertyItemHeight(0),
 	mComponentGroupHeight(0),
 	mPropertyUpdateTimer(0),
+	mNeedEntityEditorUpdate(false),
 	mEntityEditorLayout(0),
 	mGameViewport(0),
 	mEditorViewport(0),
@@ -165,7 +166,7 @@ void EditorGUI::Update(float32 delta)
 	mPropertyUpdateTimer += delta;
 	if (mPropertyUpdateTimer > 0.3 && gEditorMgr.GetCurrentEntity().IsValid())
 	{
-		if (!gEditorMgr.GetCurrentEntity().Exists())
+		if (!gEditorMgr.GetCurrentEntity().Exists() || mNeedEntityEditorUpdate)
 		{
 			UpdateEntityEditorWindow();
 		}
@@ -191,6 +192,7 @@ void EditorGUI::UpdateEntityEditorWindow()
 {
 	PROFILE_FNC();
 
+	mNeedEntityEditorUpdate = false;
 	EntitySystem::EntityHandle currentEntity = gEditorMgr.GetCurrentEntity();
 
 	CEGUI::ScrollablePane* entityEditorPane = static_cast<CEGUI::ScrollablePane*>(gCEGUIWM.getWindow(ENTITY_EDITOR_NAME));

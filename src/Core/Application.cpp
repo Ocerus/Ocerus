@@ -175,6 +175,7 @@ void Application::RunMainLoop()
 			{
 				//DEBUG
 				gEditorMgr.OpenProject("projects/cube");
+				mGameProject = gEditorMgr.GetCurrentProject();
 			}
 			else
 			{
@@ -188,6 +189,7 @@ void Application::RunMainLoop()
 
 			break;
 		case AS_GAME:
+      mGameProject->Update();
 			mGame->Update(delta);
 			gGUIMgr.Update(delta);
 			if (mEditMode)

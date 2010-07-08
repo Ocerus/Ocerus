@@ -10,6 +10,8 @@
 #include "AddOn/scriptstring.h"
 #include "GUISystem/GUIConsole.h"
 #include "GUISystem/CEGUITools.h"
+#include "Editor/EditorMgr.h"
+#include "Editor/EditorGUI.h"
 
 using namespace ScriptSystem;
 using namespace EntitySystem;
@@ -491,6 +493,7 @@ bool RegisterDynamicProperty(const EntityHandle& self,
 	ComponentID id = gEntityMgr.GetEntityComponent(self, CT_Script);
 	if (!self.HasComponentProperty(id, StringKey(propertyName), accessFlags))
 	{
+	  if (gApp.IsEditMode()) gEditorMgr.GetEditorGui()->NeedUpdateEntityEditorWindow();
 	  return self.RegisterDynamicPropertyOfComponent<T>(id, StringKey(propertyName), accessFlags, comment);
 	} else return false;
 }
@@ -500,6 +503,7 @@ bool UnregisterDynamicProperty(const EntityHandle& self, const string& propertyN
 	ComponentID id = gEntityMgr.GetEntityComponent(self, CT_Script);
 	if (self.HasComponentProperty(id, StringKey(propertyName)))
 	{
+	  if (gApp.IsEditMode()) gEditorMgr.GetEditorGui()->NeedUpdateEntityEditorWindow();
 	  return self.UnregisterDynamicPropertyOfComponent(id, StringKey(propertyName));
 	} else return false;
 }
@@ -827,7 +831,7 @@ void RegisterScriptProject(asIScriptEngine* engine)
 	r = engine->RegisterObjectMethod("Project", "bool OpenScene(const string &in)", asMETHOD(Project, OpenScene), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("Project", "bool OpenSceneAtIndex(int32)", asMETHOD(Project, OpenSceneAtIndex), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("Project", "bool OpenDefaultScene()", asMETHOD(Project, OpenDefaultScene), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-	r = engine->RegisterObjectMethod("Project", "void CloseOpenedScene()", asMETHOD(Project, CloseOpenedScene), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Project", "void CloseOpenedScene()", asMETHOD(Project, SetNeedCloseOpenedScene), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("Project", "bool IsSceneOpened() const", asMETHOD(Project, IsSceneOpened), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("Project", "uint32 GetSceneCount() const", asMETHOD(Project, GetSceneCount), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("Project", "string GetOpenedSceneName() const", asMETHOD(Project, GetOpenedSceneName), asCALL_THISCALL); OC_SCRIPT_ASSERT();

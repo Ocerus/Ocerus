@@ -7,7 +7,8 @@
 
 using namespace Core;
 
-Project::Project(bool editorSupport): mProjectConfig(0), mSceneIndex(-1), mEditorSupport(editorSupport)
+Project::Project(bool editorSupport): mProjectConfig(0), mSceneIndex(-1), mEditorSupport(editorSupport),
+  mNeedCloseOpenedScene(false)
 {
 }
 
@@ -321,3 +322,16 @@ bool Core::Project::IsSceneOpened() const
 	return mSceneIndex != -1;
 }
 
+void Core::Project::Update()
+{
+  if (mNeedCloseOpenedScene)
+	{
+	  if (gApp.IsEditMode())
+	  { 
+	    gEditorMgr.RestartAction();
+	    gEditorMgr.SwitchActionTool(Editor::EditorMgr::AT_RESTART);
+	  }
+    else CloseOpenedScene();
+    mNeedCloseOpenedScene = false;
+	}
+}

@@ -32,6 +32,9 @@ namespace Editor
 		
 		/// Updates the entity editor.
 		void UpdateEntityEditorWindow();
+		
+		/// Updates the entity editor in the following call of Update.
+		void NeedUpdateEntityEditorWindow() { mNeedEntityEditorUpdate = true; }
 
 		/// Disables viewports.
 		void DisableViewports();
@@ -73,6 +76,7 @@ namespace Editor
 		int32 mPropertyItemHeight;
 		int32 mComponentGroupHeight;
 		float32 mPropertyUpdateTimer;
+		bool mNeedEntityEditorUpdate;
 
 		typedef vector<AbstractValueEditor*> PropertyEditors;
 		PropertyEditors mPropertyEditors;
