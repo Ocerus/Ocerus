@@ -49,6 +49,8 @@
         <ScriptTimes></ScriptTimes>
         <ScriptStates></ScriptStates>
         <ScriptTimeOut>1000</ScriptTimeOut>
+        <YOffsetAmplitude>0.1</YOffsetAmplitude>
+        <YOffsetPeriod>0.1</YOffsetPeriod>
       </Component>
     </Entity>
     <Entity Name="Background2" ID="-502" Tag="0" Transient="false">
