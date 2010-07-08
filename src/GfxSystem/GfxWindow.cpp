@@ -119,6 +119,16 @@ void GfxWindow::ChangeResolution(int32 x, int32 y)
 	mScreen = SDL_SetVideoMode( mResx, mResy, 0, flags );
 }
 
+void GfxWindow::SwitchFullscreen()
+{
+	mFullscreen = !mFullscreen;
+	// @todo: hardcoded
+	if (mFullscreen)
+		ChangeResolution(1280, 1024);
+	else
+		ChangeResolution(1024, 768);
+}
+
 WindowHandle GfxWindow::_GetWindowHandle() const
 {
 	SDL_SysWMinfo info;

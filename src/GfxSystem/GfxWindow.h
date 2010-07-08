@@ -45,6 +45,9 @@ namespace GfxSystem
 		/// Changes window resolution, recreates drawing context, invokes ScreenListeners.
 		void ChangeResolution(int32 x, int32 y);
 
+		/// Switches fullscreen on and off.
+		void SwitchFullscreen();
+
 		/// Returns the window width resolution.
 		inline int32 GetResolutionWidth() const { return mResx; }
 

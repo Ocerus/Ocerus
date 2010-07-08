@@ -599,7 +599,7 @@ bool Editor::EditorMgr::MouseButtonReleased( const InputSystem::MouseInfo& mi, c
 	Vector2 worldCursorPos;
 	if (!GetWorldCursorPos(worldCursorPos))
 	{
-		// we're not in the corrent viewport
+		// we're not in the current viewport
 		return false;
 	}
 
@@ -874,6 +874,11 @@ bool Editor::EditorMgr::HandleShortcuts( InputSystem::eKeyCode keyCode )
 	if (mShortcuts->IsShortcutActive(KeyShortcuts::KS_QUIT))
 	{
 		ShowQuitDialog();
+	}
+
+	if (mShortcuts->IsShortcutActive(KeyShortcuts::KS_FULLSCREEN))
+	{
+		gGfxWindow.SwitchFullscreen();
 	}
 
 	return false;

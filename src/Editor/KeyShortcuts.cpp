@@ -40,6 +40,9 @@ KeyShortcuts::KeyShortcuts()
 	// Quit
 	mShortcuts.insert(ShortcutPair(InputSystem::KC_ESCAPE, Shortcut(KS_QUIT, MK_NOMOD)));
 
+	// Fullscreen
+	mShortcuts.insert(ShortcutPair(InputSystem::KC_RETURN, Shortcut(KS_FULLSCREEN, MK_ALT)));
+
 	// held shortcuts
 
 	// camera movement

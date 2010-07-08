@@ -210,7 +210,6 @@ TextureHandle OglRenderer::LoadTexture( const uint8* const buffer, const int32 b
 	return result;
 }
 
-
 void OglRenderer::DeleteTexture(const TextureHandle& handle) const
 {
 	glDeleteTextures(1, &handle);
