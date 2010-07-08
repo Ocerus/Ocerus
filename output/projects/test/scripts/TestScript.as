@@ -1,13 +1,13 @@
 void OnInit()
 {
   Println("Initializing entity " + this.GetID() + "...");
-  this.RegisterDynamicProperty_int32("Counter", PA_SCRIPT_READ | PA_SCRIPT_WRITE | PA_EDIT_READ | PA_EDIT_WRITE, "comment");
+  this.RegisterDynamicProperty_int32("Counter", PA_INIT | PA_SCRIPT_READ | PA_SCRIPT_WRITE | PA_EDIT_READ | PA_EDIT_WRITE, "comment");
 }
 
 void OnPostInit()
 {
   Println("Entity " + this.GetID() + " was inicialized.");
-  if (this.Exists()) this.PostMessage(DRAW);
+  if (this.Exists()) this.PostMessage(DRAW, PropertyFunctionParameters() << float32(10.0));
 }
 
 void OnUpdateLogic(float32 delta)
@@ -15,7 +15,7 @@ void OnUpdateLogic(float32 delta)
   //Println("Update logic: " + delta);
 }
 
-void OnDraw()
+void OnDraw(float32 delta)
 {
   Println("Drawing entity " + this.GetID() + "...");
   uint32 timeOut = this.Get_uint32("ScriptTimeOut");

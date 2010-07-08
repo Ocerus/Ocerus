@@ -4,3 +4,8 @@ void OnPostInit()
   
   this.Set_uint32("Score", 0);
 }
+
+void OnDestroy()
+{
+  this.UnregisterDynamicProperty("Score");
+}

@@ -87,7 +87,9 @@ EntityMessage::eResult EntityMgr::PostMessage(EntityID targetEntity, const Entit
 		ocError << "Can't post message: Can't find entity with ID '" << targetEntity << "'";
 		return EntityMessage::RESULT_ERROR;
 	}
-	if (EntityHandle::IsPrototypeID(targetEntity))
+	if (EntityHandle::IsPrototypeID(targetEntity) && msg.type != EntityMessage::INIT 
+	  && msg.type != EntityMessage::POST_INIT && msg.type != EntityMessage::DESTROY 
+	  && msg.type != EntityMessage::RESOURCE_UPDATE)
 	{
 		// the prototype nor its copy can't receive any messages
 		return EntityMessage::RESULT_IGNORED;
@@ -234,6 +236,7 @@ EntityHandle EntityMgr::InstantiatePrototype(const EntityHandle prototype, const
 
 	EntityHandle instance = CreateEntity(desc);
 	instance.FinishInit();
+	UpdatePrototypeInstance(prototype.GetID(), instance.GetID());
 
 	if (position.LengthSquared() != 0 && instance.HasProperty("Position"))
 	{
@@ -1048,9 +1051,12 @@ void EntitySystem::EntityMgr::UpdatePrototypeInstance( const EntityID prototype,
 				continue;
 
 			StringKey propertyKey = protPropIter->GetKey();
-			PropertyHolder instanceProperty = GetEntityComponentProperty(instance, currentComponent, propertyKey);
-			PropertyHolder prototypeProperty = *protPropIter;
-			instanceProperty.CopyFrom(prototypeProperty);
+			if (HasEntityComponentProperty(instance, currentComponent, propertyKey))
+			{
+			  PropertyHolder instanceProperty = GetEntityComponentProperty(instance, currentComponent, propertyKey);
+			  PropertyHolder prototypeProperty = *protPropIter;
+			  instanceProperty.CopyFrom(prototypeProperty);
+			}
 		}
 	}
 }
@@ -1334,6 +1340,7 @@ EntitySystem::EntityHandle EntitySystem::EntityMgr::ExportEntityToPrototype( con
 		desc.AddComponent(*it);
 	}
 	EntityHandle prototype = CreateEntity(desc);
+	SetEntityTag(prototype, GetEntityTag(entity));
 
 	// copy properties
 	OC_ASSERT(mComponentMgr->GetNumberOfEntityComponents(entity.GetID()) == mComponentMgr->GetNumberOfEntityComponents(prototype.GetID()));
@@ -1369,6 +1376,41 @@ EntitySystem::EntityHandle EntitySystem::EntityMgr::ExportEntityToPrototype( con
 			if (IsPrototypePropertyAppliableToBeShared(*propItNew))
 			{
 				SetPrototypePropertyShared(prototype, propItNew->GetName());
+			}
+		}
+	}
+	
+	// finish initialization of prototype, this can generate some dynamic properties
+	prototype.FinishInit();
+	
+	// copy dynamic properties
+	cmpItOld = mComponentMgr->GetEntityComponents(entity.GetID());
+	cmpItNew = mComponentMgr->GetEntityComponents(prototype.GetID());
+
+	for (; cmpItOld.HasMore(); ++cmpItOld, ++cmpItNew)
+	{
+		PropertyList propsNew;
+		//(*cmpItOld)->EnumProperties(*cmpItOld, propsOld, PA_FULL_ACCESS);
+		(*cmpItNew)->EnumProperties(*cmpItNew, propsNew, PA_FULL_ACCESS);
+		
+		// remove static properties from the lists
+		for (PropertyList::iterator it=propsNew.begin(); it!=propsNew.end(); )
+		{
+			if (!it->IsValued()) it = propsNew.erase(it);
+			else ++it;
+		}
+		
+		PropertyList::iterator propItNew = propsNew.begin();
+		for (; propItNew != propsNew.end(); ++propItNew)
+		{
+			PropertyHolder propOld = (*cmpItOld)->GetProperty(propItNew->GetName());
+			if (propOld.IsValid())
+			{
+			  propItNew->CopyFrom(propOld);
+			  if (IsPrototypePropertyAppliableToBeShared(*propItNew))
+			  {
+				  SetPrototypePropertyShared(prototype, propItNew->GetName());
+			  }
 			}
 		}
 	}

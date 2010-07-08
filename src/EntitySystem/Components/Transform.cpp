@@ -35,7 +35,7 @@ void EntityComponents::Transform::RegisterReflection()
 
 void EntityComponents::Transform::SetLayer(int32 value)
 {
-	if (gLayerMgr.ExistsLayer(value))
+	if (gLayerMgr.ExistsLayer(value) || gEntityMgr.IsEntityPrototype(GetOwner()))
 	{
 		mDepth = value;
 	}
@@ -45,7 +45,6 @@ void EntityComponents::Transform::SetScale( Vector2 value )
 {
 	if (value.x < MIN_SCALAR_SCALE || value.y < MIN_SCALAR_SCALE)
 	{
-		//ocWarning << "Too small scale of " << value;
 		return;
 	}
 	mScale = value;

@@ -10,6 +10,14 @@ void OnPostInit()
   this.Set_float32("YOffsetTime", 0);
 }
 
+void OnDestroy()
+{
+  this.UnregisterDynamicProperty("YOffsetAmplitude");
+  this.UnregisterDynamicProperty("YOffsetPeriod");
+  this.UnregisterDynamicProperty("YOffsetPivotPosition");
+  this.UnregisterDynamicProperty("YOffsetTime");
+}
+
 void OnUpdateLogic(float32 delta)
 {
 	this.Set_float32("YOffsetTime", this.Get_float32("YOffsetTime") + delta);

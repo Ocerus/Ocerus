@@ -241,4 +241,5 @@ void Script::SetModules(Utils::Array<ResourceSystem::ResourcePtr>* modules)
   }
 
   mModules.CopyFrom(*modules); mNeedUpdate = true;
+  if (!mIsUpdating) UpdateMessageHandlers();
 }

@@ -12,3 +12,9 @@ void OnDraw(float32 delta)
 		this.Set_Vector2("Position", this.Get_Vector2("Position") + Vector2(0, -this.Get_float32("FadeMovementSpeed")));
 	}
 }
+
+void OnDestroy()
+{
+  this.UnregisterDynamicProperty("FadeAlphaSpeed");
+  this.UnregisterDynamicProperty("FadeMovementSpeed");
+}
