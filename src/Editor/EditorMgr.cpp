@@ -89,7 +89,7 @@ void Editor::EditorMgr::Update(const float32 delta)
 		// pick entity the mouse is hovering over right now
 		if (mouseAboveWindow)
 		{
-			EntityPicker picker(worldPosition);
+			EntityPicker picker(worldPosition, gLayerMgr.GetActiveLayer(), gLayerMgr.GetActiveLayer());
 			mHoveredEntity = picker.PickSingleEntity();
 		}
 
@@ -632,7 +632,7 @@ bool Editor::EditorMgr::MouseButtonReleased( const InputSystem::MouseInfo& mi, c
 		{
 			// selection of multiple entities in a rectangle
 			mSelectedEntities.clear();
-			EntityPicker picker(mSelectionCursorPosition);
+			EntityPicker picker(mSelectionCursorPosition, gLayerMgr.GetActiveLayer(), gLayerMgr.GetActiveLayer());
 			float32 cameraRotation = gGfxRenderer.GetRenderTargetCameraRotation(rt);
 			if (picker.PickMultipleEntities(worldCursorPos, cameraRotation, mSelectedEntities))
 			{
