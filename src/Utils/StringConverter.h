@@ -51,6 +51,9 @@ namespace Utils
 		string ToString(const Vector2& val);
 
 		template<>
+		string ToString(const GfxSystem::Point& val);
+
+		template<>
 		string ToString(const GfxSystem::Color& val);
 
 		template<>
@@ -91,6 +94,9 @@ namespace Utils
 
 		template<>
 		Vector2 FromString(const string& str);
+		
+		template<>
+		GfxSystem::Point FromString(const string& str);
 
 		template<>
 		GfxSystem::Color FromString(const string& str);

@@ -38,11 +38,60 @@ namespace EntityComponents
 
 		/// Transparency from 0 to 1.
 		void SetTransparency(float32 value) { mTransparency = value; }
+		
+		/// Frame size in pixels.
+		GfxSystem::Point GetFrameSize(void) const { return mFrameSize; }
+
+		/// Frame size in pixels.
+		void SetFrameSize(GfxSystem::Point value) { mFrameSize = value; }
+		
+		/// Skipped pixels between frames in texture.
+		GfxSystem::Point GetSkipSpace(void) const { return mSkipSpace; }
+
+		/// Skipped pixels between frames in texture.
+		void SetSkipSpace(GfxSystem::Point value) { mSkipSpace = value; }
+		
+		/// Number of frames.
+		int32 GetFrameCount(void) const { return mFrameCount; }
+
+		/// Number of frames.
+		void SetFrameCount(int32 value) { mFrameCount = value; }
+		
+		/// Index of drawn frame.
+		int32 GetFrameIndex(void) const { return mFrameIndex; }
+
+		/// Index of drawn frame.
+		void SetFrameIndex(int32 value) { mFrameIndex = value; }
+		
+		/// Duration of one animation cycle.
+		float32 GetAnimDuration(void) const { return mAnimDuration; }
+
+		/// Duration of one animation cycle.
+		void SetAnimDuration(float32 value) { mAnimDuration = value; }
+		
+		/// Duration of one animation cycle.
+		float32 GetAnimTime(void) const { return mAnimTime; }
+
+		/// Duration of one animation cycle.
+		void SetAnimTime(float32 value) { mAnimTime = value; }
+		
+		/// True if animation repeats.
+		bool GetAnimRepeats(void) const { return mAnimRepeats; }
+
+		/// True if animation repeats.
+		void SetAnimRepeats(bool value) { mAnimRepeats = value; }
 
 	private:
 
 		ResourceSystem::ResourcePtr mTextureHandle;
 		float32 mTransparency;
+		GfxSystem::Point mFrameSize;
+		GfxSystem::Point mSkipSpace;
+		int32 mFrameCount;
+		int32 mFrameIndex;
+		float32 mAnimDuration;
+		float32 mAnimTime;
+		bool mAnimRepeats;
 	};
 }
 

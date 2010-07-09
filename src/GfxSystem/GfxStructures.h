@@ -34,6 +34,29 @@ namespace GfxSystem
 		Point(void): x(0), y(0) {}
 
 		int32 x, y;
+
+		inline void Set(const int32 _x, const int32 _y)
+		{
+			x = _x;
+			y = _y;
+		}
+		inline bool IsZero()
+		{
+			return x==0 && y==0;
+		}
+
+		inline bool operator==(const Point& p)
+		{
+			return x==p.x && y==p.y;
+		}
+
+		inline void operator-()
+		{
+			x = -x;
+			y = -y;
+		}
+
+		static Point Point_Zero;
 	};
 
 	/// Integer rectangle in the screen or any pixel oriented buffer.
@@ -74,15 +97,18 @@ namespace GfxSystem
 	/// Quad with a texture attached to it.
 	struct TexturedQuad
 	{
-		TexturedQuad(): position(Vector2_Zero), size(Vector2_Zero), scale(1.0f, 1.0f), angle(0), z(0), texture(0), transparency(0) {}
+		TexturedQuad(): position(Vector2_Zero), size(Vector2_Zero), frameSize(Vector2(1,1)),
+			texOffset(Vector2_Zero), scale(1.0f, 1.0f), angle(0), z(0), texture(0), transparency(0) {}
 
-		TexturedQuad(const Vector2& _position, const Vector2& _size, const Vector2& _scale, const float32 _angle,
-			const float32 _z, const uint32 _texture, const float32 _transparency ):
-			position(_position), size(_size), scale(_scale), angle(_angle), z(_z),
-			texture(_texture), transparency(_transparency) {}
+		TexturedQuad(const Vector2& _position, const Vector2& _size, const Vector2& _frameSize, const Vector2& _offset,
+			const Vector2& _scale, const float32 _angle, const float32 _z, const uint32 _texture, const float32 _transparency ):
+			position(_position), size(_size), frameSize(_frameSize), texOffset(_offset), scale(_scale),
+			angle(_angle), z(_z), texture(_texture), transparency(_transparency) {}
 
 		Vector2 position;
 		Vector2 size;
+		Vector2 frameSize;		//< (0,1) relative to texure size
+		Vector2 texOffset;		//< (0,1) relative to texure size
 		Vector2 scale;
 		float32 angle;
 		float32 z;

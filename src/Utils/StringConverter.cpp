@@ -13,6 +13,14 @@ string StringConverter::ToString(const Vector2& val)
 }
 
 template<>
+string StringConverter::ToString(const GfxSystem::Point& val)
+{
+	std::ostringstream out;
+	out << "(" << val.x << ", " <<  val.y << ")";
+	return out.str();
+}
+
+template<>
 string StringConverter::ToString(const GfxSystem::Color& val)
 {
 	std::ostringstream out;
@@ -74,6 +82,29 @@ Vector2 StringConverter::FromString(const string& str)
 
 	if ((iss >> result.y).fail())
 		return Vector2_Zero;
+
+	if (iss.peek() == ')')
+		iss >> c;
+	return result;
+}
+
+template<>
+GfxSystem::Point StringConverter::FromString(const string& str)
+{
+	GfxSystem::Point result;
+	char c;
+	std::istringstream iss(str);
+	if (iss.peek() == '(')
+		iss >> c;
+
+	if ((iss >> result.x).fail())
+		return GfxSystem::Point::Point_Zero;
+
+	if (iss.peek() == ',')
+		iss >> c;
+
+	if ((iss >> result.y).fail())
+		return GfxSystem::Point::Point_Zero;
 
 	if (iss.peek() == ')')
 		iss >> c;

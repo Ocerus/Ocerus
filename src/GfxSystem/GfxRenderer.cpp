@@ -216,8 +216,28 @@ void GfxSystem::GfxRenderer::DrawSprite( const EntitySystem::Component* spriteCo
 	quad.z = LAYER_Z_SIZE * (float32)transform->GetLayer();
 	quad.transparency = sprite->GetTransparency();
 	TexturePtr tex = ((TexturePtr)sprite->GetTexture());
-	quad.size.Set((float32)tex->GetWidth(), (float32)tex->GetHeight());
 	quad.texture = tex->GetTexture();
+
+	if (!sprite->GetFrameSize().IsZero())
+	{
+		quad.size.Set((float32)sprite->GetFrameSize().x, (float32)sprite->GetFrameSize().y);
+		quad.frameSize.x = (float32)sprite->GetFrameSize().x / tex->GetWidth();
+		quad.frameSize.y = (float32)sprite->GetFrameSize().y / tex->GetHeight();
+
+		GfxSystem::Point offset;
+		offset.x = sprite->GetFrameIndex() * (sprite->GetFrameSize().x + sprite->GetSkipSpace().x);
+		offset.y = (offset.x / tex->GetWidth()) * (sprite->GetFrameSize().y  + sprite->GetSkipSpace().y);
+		offset.x = offset.x % tex->GetWidth();
+
+		quad.texOffset.x = (float32)offset.x / tex->GetWidth();
+		quad.texOffset.y = (float32)offset.y / tex->GetWidth();
+	}
+	else
+	{
+		quad.size.Set((float32)tex->GetWidth(), (float32)tex->GetHeight());
+		quad.frameSize.Set(1,1);
+		quad.texOffset.Set(0,0);
+	}
 
 	DrawTexturedQuad(quad);
 }

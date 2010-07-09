@@ -106,6 +106,104 @@ void RegisterScriptVector2(asIScriptEngine* engine)
 	r = engine->RegisterObjectMethod("Vector2", "float32 Dot(const Vector2 &in) const", asFUNCTION(MathUtils::Dot), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
 }
 
+
+// Functions for register Point to script
+
+static void PointDefaultConstructor(GfxSystem::Point* self)
+{
+	new(self) GfxSystem::Point();
+}
+
+static void PointCopyConstructor(const GfxSystem::Point& other, GfxSystem::Point* self)
+{
+	new(self) GfxSystem::Point(other.x, other.y);
+}
+
+static void PointInitConstructor(int32 x, int32 y, GfxSystem::Point* self)
+{
+	new(self) GfxSystem::Point(x,y);
+}
+
+static void PointDestructor(GfxSystem::Point* self)
+{
+	OC_UNUSED(self);
+	//
+}
+
+static GfxSystem::Point& PointAssignOperator(const GfxSystem::Point& other, GfxSystem::Point* self)
+{
+	self->x = other.x;
+	self->y = other.y;
+	return *self;
+}
+
+inline static int32 PointGetX(const GfxSystem::Point& self)
+{
+	return self.x;
+}
+
+inline static void PointSetX(GfxSystem::Point& self, int32 value)
+{
+	self.x = value;
+}
+
+inline static int32 PointGetY(const GfxSystem::Point& self)
+{
+	return self.y;
+}
+
+inline static void PointSetY(GfxSystem::Point& self, int32 value)
+{
+	self.y = value;
+}
+
+void RegisterScriptPoint(asIScriptEngine* engine)
+{
+	int32 r;
+	// Register the type
+	r = engine->RegisterObjectType("Point", sizeof(GfxSystem::Point), asOBJ_VALUE | asOBJ_APP_CLASS_C); OC_SCRIPT_ASSERT();
+
+	// Register the object properties getters and setters
+	//r = engine->RegisterObjectProperty("Point", "int32 x", offsetof(Point, x)); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Point", "int32 get_x() const", asFUNCTION(PointGetX), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Point", "void set_x(int32)", asFUNCTION(PointSetX), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+	//r = engine->RegisterObjectProperty("Point", "int32 y", offsetof(Point, y)); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Point", "int32 get_y() const", asFUNCTION(PointGetY), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Point", "void set_y(int32)", asFUNCTION(PointSetY), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+
+	// Register the constructors and destructor
+	r = engine->RegisterObjectBehaviour("Point", asBEHAVE_CONSTRUCT,  "void f()", asFUNCTION(PointDefaultConstructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectBehaviour("Point", asBEHAVE_CONSTRUCT,  "void f(const Point &in)", asFUNCTION(PointCopyConstructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectBehaviour("Point", asBEHAVE_CONSTRUCT,  "void f(int32, int32)",  asFUNCTION(PointInitConstructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectBehaviour("Point", asBEHAVE_DESTRUCT,   "void f()",  asFUNCTION(PointDestructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+
+	// Register the operator overloads
+	r = engine->RegisterObjectMethod("Point", "Point& opAssign(const Point &in)", asFUNCTION(PointAssignOperator), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+	//r = engine->RegisterObjectMethod("Point", "Point &opAddAssign(const Point &in)", asMETHODPR(Point, operator+=, (const Point &), Point&), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	//r = engine->RegisterObjectMethod("Point", "Point &opSubAssign(const Point &in)", asMETHODPR(Point, operator-=, (const Point &), Point&), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	//r = engine->RegisterObjectMethod("Point", "Point &opMulAssign(int32)", asMETHODPR(Point, operator*=, (int32), Point&), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	//r = engine->RegisterObjectMethod("Point", "void opAddAssign(const Point &in)", asMETHODPR(GfxSystem::Point, operator+=, (const GfxSystem::Point &), void), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	//r = engine->RegisterObjectMethod("Point", "void opSubAssign(const Point &in)", asMETHODPR(GfxSystem::Point, operator-=, (const GfxSystem::Point &), void), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	//r = engine->RegisterObjectMethod("Point", "void opMulAssign(int32)", asMETHODPR(GfxSystem::Point, operator*=, (int32), void), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	//r = engine->RegisterObjectMethod("Point", "Point &opDivAssign(int32)", asMETHODPR(Point, operator/=, (int32), Point&), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Point", "Point opNeg() const", asMETHOD(GfxSystem::Point, operator-), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	//r = engine->RegisterObjectMethod("Point", "bool opEquals(const Point &in) const", asFUNCTIONPR(operator==, (const GfxSystem::Point&, const GfxSystem::Point&), bool), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+	//r = engine->RegisterObjectMethod("Point", "Point opAdd(const Point &in) const", asFUNCTIONPR(operator+, (const GfxSystem::Point&, const GfxSystem::Point&), GfxSystem::Point), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+	//r = engine->RegisterObjectMethod("Point", "Point opSub(const Point &in) const", asFUNCTIONPR(operator-, (const GfxSystem::Point&, const GfxSystem::Point&), GfxSystem::Point), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+	//r = engine->RegisterObjectMethod("Point", "Point opMul(int32) const", asFUNCTIONPR(operator*, (const Point&, int32), Point), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+	//r = engine->RegisterObjectMethod("Point", "Point opMul_r(int32) const", asFUNCTIONPR(operator*, (int32, const GfxSystem::Point&), GfxSystem::Point), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+	//r = engine->RegisterObjectMethod("Point", "Point opDiv(int32) const", asFUNCTIONPR(operator/, (const Point&, int32), Point), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+
+	// Register the object methods
+	//r = engine->RegisterObjectMethod("Point", "int32 Length() const", asMETHOD(Point, Length), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	//r = engine->RegisterObjectMethod("Point", "int32 LengthSquared() const", asMETHOD(Point, LengthSquared), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Point", "void Set(int32, int32)", asMETHODPR(GfxSystem::Point, Set, (int32, int32), void), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	//r = engine->RegisterObjectMethod("Point", "void SetZero()", asMETHOD(Point, SetZero), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	//r = engine->RegisterObjectMethod("Point", "int32 Normalize()", asMETHOD(Point, Normalize), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	//r = engine->RegisterObjectMethod("Point", "bool IsValid() const", asMETHOD(Point, IsValid), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	//r = engine->RegisterObjectMethod("Point", "int32 Dot(const Point &in) const", asFUNCTION(MathUtils::Dot), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+}
+
 // Functions for register Color to script
 
 static void ColorDefaultConstructor(GfxSystem::Color* self)
@@ -348,6 +446,9 @@ void ScriptSystem::RegisterAllAdditions(AngelScript::asIScriptEngine* engine)
 {
 	// Register Vector2 class and it's methods
 	RegisterScriptVector2(engine);
+
+	// Register Point struct and it's methods
+	RegisterScriptPoint(engine);
 
 	// Register Color struct and it's methods
 	RegisterScriptColor(engine);

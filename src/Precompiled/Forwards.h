@@ -44,6 +44,7 @@ namespace GfxSystem
 	class GfxSceneMgr;
 	class IGfxWindowListener;
 	class DragDropCameraMover;
+	struct Point;
 	struct Color;
 	class PhysicsDraw;
 }
