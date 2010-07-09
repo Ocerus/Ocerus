@@ -12,5 +12,6 @@
 #include "StaticBody.h"
 #include "DynamicBody.h"
 #include "PolygonCollider.h"
+#include "GUILayout.h"
 
 #endif // _ComponentHeaders_h__

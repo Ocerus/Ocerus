@@ -9,7 +9,28 @@ bool ScriptCallback::operator()(const CEGUI::EventArgs &args) const
 {
   const CEGUI::WindowEventArgs* argument = static_cast<const CEGUI::WindowEventArgs*>(&args);
   
-  int32 funcId = gScriptMgr.GetFunctionID("GuiCallback.as", (string("void ")
+  CEGUI::Window* rootWindow = argument ? argument->window : 0;
+  while (rootWindow != 0 && rootWindow->isUserStringDefined("RootWindow")) rootWindow = rootWindow->getParent();
+  
+  string module = "GuiCallback.as";
+  if (rootWindow)
+  {
+    EntityHandle* handle = (EntityHandle*)rootWindow->getUserData();
+    if (handle != 0 && handle->Exists())
+    {
+      EntitySystem::ComponentID cmpId = gEntityMgr.GetEntityComponent(*handle, EntitySystem::CT_GUILayout);
+      if (cmpId != -1)
+      {
+        ResourceSystem::ResourcePtr resource = handle->GetComponentProperty(cmpId, "Callback").GetValue<ResourceSystem::ResourcePtr>();
+        if (resource)
+        {
+          module = resource->GetName();
+        }
+      }
+    }
+  }
+  
+  int32 funcId = gScriptMgr.GetFunctionID(module.c_str(), (string("void ")
     + mFunctionName + "(Window@)").c_str());
   if (funcId < 0) return false;
   

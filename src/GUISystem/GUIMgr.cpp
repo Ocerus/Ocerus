@@ -163,7 +163,7 @@ namespace GUISystem
 		CEGUI::Window* resultLayout = 0;
 		CEGUI_EXCEPTION_BEGIN
 		{
-			resultLayout = CEGUI::WindowManager::getSingleton().loadWindowLayout(filename, namePrefix, "", ProjectLayoutPropertyCallback);
+			resultLayout = CEGUI::WindowManager::getSingleton().loadWindowLayout(filename, namePrefix, "Project", ProjectLayoutPropertyCallback);
 		}
 		CEGUI_EXCEPTION_END
 

@@ -104,8 +104,8 @@
     <Entity Name="Stone2" ID="-500" Tag="0" Transient="false">
       <Component Type="Transform"></Component>
       <Component Type="DynamicBody">
-        <AngularDamping>0.5</AngularDamping>
         <LinearDamping>0.1</LinearDamping>
+        <AngularDamping>0.5</AngularDamping>
       </Component>
       <Component Type="PolygonCollider">
         <Friction>1</Friction>
@@ -129,8 +129,8 @@
     <Entity Name="Stone1" ID="-499" Tag="0" Transient="false">
       <Component Type="Transform"></Component>
       <Component Type="DynamicBody">
-        <AngularDamping>0.5</AngularDamping>
         <LinearDamping>0.1</LinearDamping>
+        <AngularDamping>0.5</AngularDamping>
       </Component>
       <Component Type="PolygonCollider">
         <Friction>10</Friction>
@@ -205,6 +205,13 @@
       <Component Type="Sprite">
         <Transparency>0</Transparency>
         <Texture>tile0.png</Texture>
+      </Component>
+    </Entity>
+    <Entity Name="LevelLayout" ID="-16" Tag="0" Transient="false">
+      <Component Type="GUILayout">
+        <Layout>Level.layout</Layout>
+        <Callback>Level.as</Callback>
+        <Visible>true</Visible>
       </Component>
     </Entity>
   </Entities>

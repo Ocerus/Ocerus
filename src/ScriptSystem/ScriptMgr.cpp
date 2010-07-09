@@ -409,6 +409,11 @@ static void StringKeyDestructor(StringKey* self)
 	self->~StringKey();
 }
 
+StringKey StringToStringKey(const string* self)
+{
+  return StringKey(*self);
+}
+
 void RegisterScriptStringKey(asIScriptEngine* engine)
 {
 	int32 r;
@@ -420,6 +425,7 @@ void RegisterScriptStringKey(asIScriptEngine* engine)
 	r = engine->RegisterObjectBehaviour("StringKey", asBEHAVE_CONSTRUCT, "void f(const StringKey &in)", asFUNCTION(StringKeyCopyConstructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectBehaviour("StringKey", asBEHAVE_CONSTRUCT, "void f(const string &in)", asFUNCTION(StringKeyInitConstructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectBehaviour("StringKey", asBEHAVE_DESTRUCT, "void f()", asFUNCTION(StringKeyDestructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectBehaviour("string", asBEHAVE_IMPLICIT_VALUE_CAST, "StringKey f() const", asFUNCTION(StringToStringKey), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
 
 	// Register the operator overloads
 	r = engine->RegisterObjectMethod("StringKey", "bool opEquals(const StringKey &in) const", asMETHOD(StringKey, operator==), asCALL_THISCALL); OC_SCRIPT_ASSERT();
@@ -828,12 +834,10 @@ void RegisterScriptProject(asIScriptEngine* engine)
 	r = engine->RegisterObjectType("Project", 0, asOBJ_REF | asOBJ_NOHANDLE); OC_SCRIPT_ASSERT();
 	
 	// Register the object methods
-	r = engine->RegisterObjectMethod("Project", "bool OpenScene(const string &in)", asMETHOD(Project, OpenScene), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-	r = engine->RegisterObjectMethod("Project", "bool OpenSceneAtIndex(int32)", asMETHOD(Project, OpenSceneAtIndex), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-	r = engine->RegisterObjectMethod("Project", "bool OpenDefaultScene()", asMETHOD(Project, OpenDefaultScene), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-	r = engine->RegisterObjectMethod("Project", "void CloseOpenedScene()", asMETHOD(Project, SetNeedCloseOpenedScene), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-	r = engine->RegisterObjectMethod("Project", "bool IsSceneOpened() const", asMETHOD(Project, IsSceneOpened), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Project", "bool OpenScene(const string &in)", asMETHOD(Project, RequestOpenScene), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Project", "bool OpenSceneAtIndex(int32)", asMETHOD(Project, RequestOpenSceneAtIndex), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("Project", "uint32 GetSceneCount() const", asMETHOD(Project, GetSceneCount), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Project", "int32 GetSceneIndex(const string &in) const", asMETHOD(Project, GetSceneIndex), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("Project", "string GetOpenedSceneName() const", asMETHOD(Project, GetOpenedSceneName), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("Project", "string GetSceneName(int32) const", asFUNCTION(ProjectGetSceneName), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
 	

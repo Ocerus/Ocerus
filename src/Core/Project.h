@@ -72,13 +72,13 @@ namespace Core
 			/// @return False, if scene cannot be created, or another scene is already opened; otherwise returns True.
 			bool CreateScene(const string& sceneFilename, const string& sceneName);
 
-			/// Opens the scene with given file name.
-			/// @return False, if scene is not found, or another scene is already opened; otherwise returns True.
-			bool OpenScene(const string& scene);
-
 			/// Opens the scene at given index in SceneList.
 			/// @return False, if scene is not found, or another scene is already opened; otherwise returns True.
-			bool OpenSceneAtIndex(int index);
+			bool OpenSceneAtIndex(int32 index);
+			
+			/// Opens the scene with a given file name.
+			/// @return False, if scene is not found, or another scene is already opened; otherwise returns True.
+			bool OpenScene(const string& scene) { return OpenSceneAtIndex(GetSceneIndex(scene)); }
 
 			/// Opens the default scene of the project.
 			/// @return False, if scene is not found, or another scene is already opened; otherwise returns True.
@@ -96,6 +96,10 @@ namespace Core
 
 			/// Returns the list of scenes.
 			void GetSceneList(SceneInfoList& scenes) const;
+			
+			/// Gets the index of the scene with a specific name.
+			/// @return Index of the scene or -1 if no such a scene exist.
+			int32 GetSceneIndex(const string& scene) const;
 
 			/// Returns the number of scenes.
 			size_t GetSceneCount() const;
@@ -103,8 +107,11 @@ namespace Core
 			/// Returns name of the opened scene, or empty string if no scene is opened.
 			string GetOpenedSceneName() const;
 			
-			/// Closes the opened scene in the next game loop.
-			void SetNeedCloseOpenedScene() { mNeedCloseOpenedScene = true ; }
+			/// Opens the scene at given index in SceneList in the next game loop.
+			bool RequestOpenSceneAtIndex(int32 index);
+			
+			/// Opens the scene with a given file name in the next game loop.
+			bool RequestOpenScene(const string& scene) { return RequestOpenSceneAtIndex(GetSceneIndex(scene)); }
 			
 			/// Updates project.
 			void Update();
@@ -128,10 +135,10 @@ namespace Core
 		ResourceSystem::ResourceTypeMap mResourceTypeMap;
 
 		SceneInfoList mSceneList;
-		int mSceneIndex;
+		int32 mSceneIndex;
+		int32 mRequestSceneIndex;
 		
 		bool mEditorSupport;
-		bool mNeedCloseOpenedScene;
 	};
 }
 

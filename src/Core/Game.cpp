@@ -9,6 +9,7 @@
 #include "ResourceSystem/XMLResource.h"
 #include <Box2D.h>
 #include <Box2D/Dynamics/b2WorldCallbacks.h>
+#include "GUISystem/CEGUITools.h"
 
 #include "GfxSystem/Mesh.h"
 
@@ -50,6 +51,7 @@ Core::Game::Game():
 	mTimer(true),
 	mRenderTarget(GfxSystem::InvalidRenderTargetID),
 	mCamera(EntitySystem::EntityHandle::Null),
+	mRootWindow(0),
 	mPhysics(0),
 	mPhysicsCallbacks(0)
 {
@@ -70,6 +72,7 @@ Core::Game::~Game()
 	delete mPhysics;
 	delete mPhysicsCallbacks;
 	delete mPhysicsDraw;
+	if (mRootWindow && mRootWindow->getName() == "GameRoot") gCEGUIWM.destroyWindow(mRootWindow);
 
 	GlobalProperties::SetPointer("Game", 0);
 }
@@ -89,9 +92,26 @@ void Core::Game::CreateDefaultRenderTarget()
 		mCamera.FinishInit();
 	}
 
-	OC_ASSERT(mRenderTarget == GfxSystem::InvalidRenderTargetID);
+	if (mRenderTarget != GfxSystem::InvalidRenderTargetID)
+	{
+	  gGfxRenderer.RemoveRenderTarget(mRenderTarget);
+	}
 	mRenderTarget = gGfxRenderer.AddRenderTarget(GfxSystem::GfxViewport(Vector2(0, 0), Vector2(1.0f, 1.0f), false, true), mCamera);
 	gGfxRenderer.GetRenderTargetViewport(mRenderTarget)->SetGridEnabled(false);
+}
+
+void Core::Game::CreateDefaultRootWindow()
+{
+  if (mRootWindow && mRootWindow->getName() == "GameRoot") return;
+  mRootWindow = gCEGUIWM.createWindow("DefaultWindow", "GameRoot");
+	mRootWindow->setProperty("UnifiedAreaRect", "{{0,0},{0,0},{1,0},{1,0}}");
+	gGUIMgr.SetGUISheet(mRootWindow);
+}
+
+void Core::Game::SetRootWindow(CEGUI::Window* window)
+{ 
+  if (mRootWindow && mRootWindow->getName() == "GameRoot") gCEGUIWM.destroyWindow(mRootWindow);
+  mRootWindow = window;
 }
 
 void Core::Game::SetRenderTarget(const GfxSystem::RenderTargetID renderTarget)

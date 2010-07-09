@@ -21,7 +21,7 @@ EntityMessage::eResult EntityComponents::PolygonCollider::HandleMessage( const E
 	switch (msg.type)
 	{
 	case EntityMessage::POST_INIT: // we have to wait until the physical bodies are inited, that's why we're using POST_INIT
-		RecreateShape();
+		if (!gEntityMgr.IsEntityPrototype(GetOwner())) RecreateShape();
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::SYNC_PRE_PHYSICS:
 		if (mPolygon.GetSize() != 0 && !(mPolygonScale == GetOwner().GetProperty("Scale").GetValue<Vector2>()))
@@ -41,7 +41,7 @@ EntityMessage::eResult EntityComponents::PolygonCollider::HandleMessage( const E
 			{
 				// the body with the shape was already deleted
 				mShape = 0;
-				RecreateShape();
+				if (!gEntityMgr.IsEntityPrototype(GetOwner())) RecreateShape();
 			}
 			break;
 		}

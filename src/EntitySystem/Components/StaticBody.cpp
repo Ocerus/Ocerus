@@ -22,7 +22,7 @@ EntityMessage::eResult EntityComponents::StaticBody::HandleMessage( const Entity
 	switch (msg.type)
 	{
 	case EntityMessage::INIT:
-		CreateBody();
+		if (!gEntityMgr.IsEntityPrototype(GetOwner())) CreateBody();
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::SYNC_PRE_PHYSICS:	
 		mBody->SetTransform(GetOwner().GetProperty("Position").GetValue<Vector2>(), 

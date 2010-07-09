@@ -158,10 +158,8 @@ This class represents the current project. It is registered as a no-handle refer
 \begin{titled-itemize}{Operators and methods}
   \item bool OpenScene(const string \&in) -- opens the scene with given filename
   \item bool OpenSceneAtIndex(int32) -- opens the scene at the given index in the scene list
-  \item bool OpenDefaultScene() -- opens the default scene of the project
-  \item void CloseOpenedScene() -- closes the opened scene
-  \item bool IsSceneOpened() const -- returns true if a scene is opened
   \item uint32 GetSceneCount() const -- returns the number of scenes
+  \item int32 GetSceneIndex(const string \&in) const -- returns the index of the scene with a specific name, -1 if does not exist
   \item string GetOpenedSceneName() const -- returns name of the opened scene, or empty string if no scene is opened
   \item string GetSceneName(int32) const -- returns name of the scene at the given index in the scene list
 \end{titled-itemize}

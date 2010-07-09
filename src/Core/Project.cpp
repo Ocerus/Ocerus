@@ -4,11 +4,11 @@
 #include "Editor/EditorGUI.h"
 #include "Core/Game.h"
 #include "Core/Application.h"
+#include "GUISystem/ViewportWindow.h"
 
 using namespace Core;
 
-Project::Project(bool editorSupport): mProjectConfig(0), mSceneIndex(-1), mEditorSupport(editorSupport),
-  mNeedCloseOpenedScene(false)
+Project::Project(bool editorSupport): mProjectConfig(0), mSceneIndex(-1), mRequestSceneIndex(-1), mEditorSupport(editorSupport)
 {
 }
 
@@ -64,10 +64,11 @@ bool Project::OpenProject(const string& path)
 	// Add project resources.
 	gResourceMgr.SetBasePath(ResourceSystem::BPT_PROJECT, basePath);
 	gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_PROJECT, "", "Project", ".*", "", ResourceSystem::RESTYPE_AUTODETECT, mResourceTypeMap);
+	gStringMgrProject.LoadLanguagePack();
 
+	gEntityMgr.LoadPrototypes();
 	if (mEditorSupport)
 	{
-		gEntityMgr.LoadPrototypes();
 		gEditorMgr.RefreshPrototypeWindow();
 		gEditorMgr.RefreshResourceWindow();
 		gEditorMgr.UpdateSceneMenu();
@@ -224,33 +225,31 @@ bool Project::CreateScene(const string& sceneFilename, const string& sceneName)
 	return true;
 }
 
-bool Project::OpenScene(const string& sceneFilename)
+bool Project::OpenSceneAtIndex(int32 sceneIndex)
 {
 	if (IsSceneOpened()) return false;
-	int sceneIndex = -1;
-	for (SceneInfoList::const_iterator it = mSceneList.begin(); it != mSceneList.end(); ++it)
-	{
-		if (it->filename == sceneFilename)
-		{
-			sceneIndex = it - mSceneList.begin();
-			break;
-		}
-	}
-	return OpenSceneAtIndex(sceneIndex);
-}
-
-bool Project::OpenSceneAtIndex(int sceneIndex)
-{
-	if (IsSceneOpened()) return false;
-	if (sceneIndex < 0 || sceneIndex >= (int)mSceneList.size())
+	if (sceneIndex < 0 || sceneIndex >= (int32)mSceneList.size())
 		return false;
 	mSceneIndex = sceneIndex;
 	const string& sceneFilename = mSceneList[sceneIndex].filename;
 
+	Core::Game& game = GlobalProperties::Get<Core::Game>("Game");
+	
+	// Set the in-game GUI root window
+	if (gApp.IsEditMode()) game.SetRootWindow(gEditorMgr.GetEditorGui()->GetGameViewport());
+	else game.CreateDefaultRootWindow();
+	
+	// Load the scene entities and init the game
 	gEntityMgr.LoadEntitiesFromResource(gResourceMgr.GetResource("Project", sceneFilename));
-	GlobalProperties::Get<Core::Game>("Game").Init();
+	game.Init();
+	
+	// Set the viewport cameras and run the action in non-edit mode
 	if (gApp.IsEditMode()) gEditorMgr.GetEditorGui()->RefreshCameras();
-	else GlobalProperties::Get<Core::Game>("Game").CreateDefaultRenderTarget();
+	else
+	{
+	  game.CreateDefaultRenderTarget();
+	  game.ResumeAction();
+	}
 	
 	ocInfo << "Scene " << sceneFilename << " loaded.";
 	return true;
@@ -269,7 +268,7 @@ bool Project::OpenDefaultScene()
 bool Project::SaveOpenedScene()
 {
 	if (mSceneIndex == -1) return false;
-	OC_DASSERT(mSceneIndex >= 0 && mSceneIndex < (int)mSceneList.size());
+	OC_DASSERT(mSceneIndex >= 0 && mSceneIndex < (int32)mSceneList.size());
 	
 	ResourceSystem::ResourcePtr sceneResource = gResourceMgr.GetResource("Project", mSceneList[mSceneIndex].filename);
 	ResourceSystem::XMLOutput xmlOutput(sceneResource->GetFilePath());
@@ -306,6 +305,20 @@ void Project::GetSceneList(SceneInfoList& scenes) const
 	scenes = mSceneList;
 }
 
+int32 Project::GetSceneIndex(const string& scene) const
+{
+  int32 sceneIndex = -1;
+	for (SceneInfoList::const_iterator it = mSceneList.begin(); it != mSceneList.end(); ++it)
+	{
+		if (it->filename == scene)
+		{
+			sceneIndex = it - mSceneList.begin();
+			break;
+		}
+	}
+	return sceneIndex;
+}
+
 size_t Project::GetSceneCount() const
 {
 	return mSceneList.size();
@@ -313,7 +326,7 @@ size_t Project::GetSceneCount() const
 
 string Project::GetOpenedSceneName() const
 {
-	OC_ASSERT(mSceneIndex >= 0 && mSceneIndex < (int)mSceneList.size());
+	OC_ASSERT(mSceneIndex >= 0 && mSceneIndex < (int32)mSceneList.size());
 	return mSceneList[mSceneIndex].name;
 }
 
@@ -322,16 +335,27 @@ bool Core::Project::IsSceneOpened() const
 	return mSceneIndex != -1;
 }
 
+bool Project::RequestOpenSceneAtIndex(int32 index)
+{
+  if (index < 0 || index >= (int32)mSceneList.size()) return false;
+  mRequestSceneIndex = index;
+  return true;
+}
+
 void Core::Project::Update()
 {
-  if (mNeedCloseOpenedScene)
+  if (mRequestSceneIndex >= 0)
 	{
 	  if (gApp.IsEditMode())
 	  { 
 	    gEditorMgr.RestartAction();
 	    gEditorMgr.SwitchActionTool(Editor::EditorMgr::AT_RESTART);
 	  }
-    else CloseOpenedScene();
-    mNeedCloseOpenedScene = false;
+    else
+    {
+      CloseOpenedScene();
+      OpenSceneAtIndex(mRequestSceneIndex);
+    }
+    mRequestSceneIndex = -1;
 	}
 }

@@ -49,6 +49,15 @@ namespace Core
 		
 		/// Sets the target where the game will be rendered to.
 		void SetRenderTarget(const GfxSystem::RenderTargetID renderTarget);
+		
+		/// Gets the root window for in-game GUI elements.
+		CEGUI::Window* GetRootWindow() { return mRootWindow; }
+		
+		/// Sets the root window for in-game GUI elements.
+		void SetRootWindow(CEGUI::Window* window);
+		
+		/// Create the default root window.
+		void CreateDefaultRootWindow();
 
 		/// Prepares game data structures and loads all necessary resources.
 		void Init(void);
@@ -135,6 +144,7 @@ namespace Core
 		Utils::Timer mTimer; ///< Timer for game action related things.
 		GfxSystem::RenderTargetID mRenderTarget; ///< Where the game is to be rendered?
 		EntitySystem::EntityHandle mCamera; ///< Camera used for rendering.
+		CEGUI::Window* mRootWindow;  ///< Root window for in-game GUI elements.
 
 
 		// Physics.

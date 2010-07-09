@@ -54,7 +54,7 @@ bool StringMgr::LoadDataFromDir(const string& path, const string& includeRegexp,
   bool recursive)
 {
 	bool result = true;
-	result = gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_SYSTEM, mBasePath + path, "strings", includeRegexp, 
+	result = gResourceMgr.AddResourceDirToGroup(mBasePathType, mBasePath + path, "strings", includeRegexp, 
 	  excludeRegexp, ResourceSystem::RESTYPE_TEXTRESOURCE, ResourceSystem::ResourceMgr::NullResourceTypeMap, recursive);
 	gResourceMgr.LoadResourcesInGroup("strings");
 
