@@ -11,7 +11,7 @@ void EntityComponents::Model::Create( void )
 
 void EntityComponents::Model::Destroy( void )
 {
-	gGfxRenderer.GetSceneManager()->RemoveModel(this);
+	gGfxRenderer.GetSceneManager()->RemoveDrawable(this);
 }
 
 EntityMessage::eResult EntityComponents::Model::HandleMessage( const EntityMessage& msg )
@@ -30,7 +30,7 @@ EntityMessage::eResult EntityComponents::Model::HandleMessage( const EntityMessa
 			if (!gEntityMgr.IsEntityPrototype(GetOwner()))
 			{
 				Component* transform = gEntityMgr.GetEntityComponentPtr(GetOwner(), CT_Transform);
-				gGfxRenderer.GetSceneManager()->AddModel(this, transform);
+				gGfxRenderer.GetSceneManager()->AddDrawable(this, transform);
 			}
 
 			return EntityMessage::RESULT_ERROR;

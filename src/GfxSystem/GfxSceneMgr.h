@@ -21,23 +21,14 @@ namespace GfxSystem
 		/// Default destructor.
 		virtual ~GfxSceneMgr(void);
 		
-		/// Adds a sprite to the manager.
-		void AddSprite(const EntitySystem::Component* sprite, const EntitySystem::Component* transform);
+		/// Adds a drawable component to the manager.
+		void AddDrawable(const EntitySystem::Component* sprite, const EntitySystem::Component* transform);
 
-		/// Removes a sprite from the manager.
-		void RemoveSprite(const EntitySystem::Component* sprite);
+		/// Removes a drawable component from the manager.
+		void RemoveDrawable(const EntitySystem::Component* sprite);
 		
-		/// Adds a 3d model to the manager.
-		void AddModel(const EntitySystem::Component* model, const EntitySystem::Component* transform);
-
-		/// Removes a model from the manager.
-		void RemoveModel(const EntitySystem::Component* model);
-
-		/// Renders all sprites.
-		void DrawVisibleSprites();
-
-		/// Renders all 3d models.
-		void DrawVisibleModels();
+		/// Renders all visible drawable components.
+		void DrawVisibleDrawables();
 
 	private:	
 		typedef pair<const EntitySystem::Component*, const EntitySystem::Component*> DrawablePair;

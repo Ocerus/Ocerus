@@ -195,8 +195,7 @@ void GfxSystem::GfxRenderer::DrawEntities()
 {
 	OC_ASSERT(mIsRendering);
 
-	mSceneMgr->DrawVisibleSprites();
-	mSceneMgr->DrawVisibleModels();
+	mSceneMgr->DrawVisibleDrawables();
 }
 
 void GfxSystem::GfxRenderer::DrawSprite( const EntitySystem::Component* spriteComponent, const EntitySystem::Component* transformComponent ) const

@@ -15,21 +15,16 @@ GfxSceneMgr::~GfxSceneMgr()
 
 }
 
-void GfxSceneMgr::AddSprite(const EntitySystem::Component* sprite, const EntitySystem::Component* transform)
+void GfxSceneMgr::AddDrawable(const EntitySystem::Component* drawable, const EntitySystem::Component* transform)
 {
-	mDrawables.push_back(DrawablePair(sprite, transform));
+	mDrawables.push_back(DrawablePair(drawable, transform));
 }
 
-void GfxSystem::GfxSceneMgr::AddModel( const EntitySystem::Component* model, const EntitySystem::Component* transform )
-{
-	mDrawables.push_back(DrawablePair(model, transform));
-}
-
-void GfxSceneMgr::RemoveSprite(const EntitySystem::Component* sprite)
+void GfxSceneMgr::RemoveDrawable(const EntitySystem::Component* drawable)
 {
 	for (DrawableVector::iterator it=mDrawables.begin(); it!=mDrawables.end(); ++it)
 	{
-		if (it->first == sprite)
+		if (it->first == drawable)
 		{
 			mDrawables.erase(it);
 			break;
@@ -37,44 +32,26 @@ void GfxSceneMgr::RemoveSprite(const EntitySystem::Component* sprite)
 	}
 }
 
-void GfxSystem::GfxSceneMgr::RemoveModel( const EntitySystem::Component* model )
+void GfxSceneMgr::DrawVisibleDrawables()
 {
-	for (DrawableVector::iterator it=mDrawables.begin(); it!=mDrawables.end(); ++it)
+	for(DrawableVector::iterator it = mDrawables.begin(); it != mDrawables.end(); ++it)
 	{
-		if (it->first == model)
+		EntityComponents::Transform* transform = (EntityComponents::Transform*)it->second;
+		if (!gLayerMgr.IsLayerVisible(transform->GetLayer()))
+			continue;
+		const EntitySystem::Component* drawable = it->first; 
+		EntitySystem::eComponentType type = drawable->GetType();
+
+		switch (type)
 		{
-			mDrawables.erase(it);
+		case CT_Sprite:
+			gGfxRenderer.DrawSprite(drawable, transform);
+			break;
+			
+		case CT_Model:
+			gGfxRenderer.DrawModel(drawable, transform);
 			break;
 		}
-	}
-}
 
-void GfxSceneMgr::DrawVisibleSprites()
-{
-	for(DrawableVector::iterator it = mDrawables.begin(); it != mDrawables.end(); ++it)
-	{
-		if (it->first->GetType() == CT_Sprite)
-		{
-			EntityComponents::Transform* transform = (EntityComponents::Transform*)it->second;
-			if (gLayerMgr.IsLayerVisible(transform->GetLayer()))
-			{
-				gGfxRenderer.DrawSprite(it->first, it->second);
-			}
-		}
-	}
-}
-
-void GfxSystem::GfxSceneMgr::DrawVisibleModels()
-{
-	for(DrawableVector::iterator it = mDrawables.begin(); it != mDrawables.end(); ++it)
-	{
-		if (it->first->GetType() == CT_Model)
-		{
-			EntityComponents::Transform* transform = (EntityComponents::Transform*)it->second;
-			if (gLayerMgr.IsLayerVisible(transform->GetLayer()))
-			{
-				gGfxRenderer.DrawModel(it->first, it->second);
-			}
-		}
 	}
 }

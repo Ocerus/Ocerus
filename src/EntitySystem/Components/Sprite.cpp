@@ -11,7 +11,7 @@ void EntityComponents::Sprite::Create( void )
 
 void EntityComponents::Sprite::Destroy( void )
 {
-	gGfxRenderer.GetSceneManager()->RemoveSprite(this);
+	gGfxRenderer.GetSceneManager()->RemoveDrawable(this);
 }
 
 EntityMessage::eResult EntityComponents::Sprite::HandleMessage( const EntityMessage& msg )
@@ -30,7 +30,7 @@ EntityMessage::eResult EntityComponents::Sprite::HandleMessage( const EntityMess
 			if (!gEntityMgr.IsEntityPrototype(GetOwner()))
 			{
 				Component* transform = gEntityMgr.GetEntityComponentPtr(GetOwner(), CT_Transform);
-				gGfxRenderer.GetSceneManager()->AddSprite(this, transform);
+				gGfxRenderer.GetSceneManager()->AddDrawable(this, transform);
 			}
 				
 			return EntityMessage::RESULT_OK;
