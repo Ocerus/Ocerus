@@ -3,6 +3,9 @@
 const float32 EXPLOSION_COOLDOWN = 1.0f;
 const float32 JUMP_COOLDOWN = 2.0f;
 const float32 EXPLOSION_RATIO = 20.0f;
+const float32 EXPLOSION_PULL_RADIUS = 1.0f;
+const float32 EXPLOSION_DESTROY_RADIUS = 1.5f;
+const uint32 EXPLOSION_DESTROY_COUNT = 1;
 const float32 JUMP_RATIO = 0.8f;
 const float32 JUMP_MAX_DELAY = 0.2f;
 
@@ -140,17 +143,30 @@ void OnKeyPressed(eKeyCode key, uint32 char)
 			this.Set_float32("ExplosionCooldown", EXPLOSION_COOLDOWN);
 			
 			Vector2 myPos = this.Get_Vector2("Position");
-			float32 radius = 1.0f;
-			EntityPicker picker(myPos - Vector2(radius, radius), 1, 1);
-			array_EntityHandle entities = picker.PickMultipleEntities(myPos + Vector2(radius, radius), 0);
+			EntityPicker picker(myPos - Vector2(EXPLOSION_PULL_RADIUS, EXPLOSION_PULL_RADIUS), 1, 1);
+			array_EntityHandle entities = picker.PickMultipleEntities(myPos + Vector2(EXPLOSION_PULL_RADIUS, EXPLOSION_PULL_RADIUS), 0);
+			uint32 destroyedCount = 0;
 			for (int i=0; i<entities.GetSize(); ++i)
 			{
+				if (entities[i] == this) continue;
+				
 				Vector2 hisPos = entities[i].Get_Vector2("Position");
 				Vector2 delta = hisPos - myPos;
-				float32 length = MathUtils::Sqrt(delta.Normalize());
-				Vector2 impulse = EXPLOSION_RATIO * length * delta;
-				entities[i].CallFunction("ApplyLinearImpulse", PropertyFunctionParameters() << impulse);
+				float32 length = delta.Normalize();
+				if (destroyedCount < EXPLOSION_DESTROY_COUNT && length <= EXPLOSION_DESTROY_RADIUS) 
+				{
+					SpawnExplosion(hisPos);
+					gEntityMgr.DestroyEntity(entities[i]);
+					destroyedCount++;
+				}
+				else
+				{
+					Vector2 impulse = EXPLOSION_RATIO * MathUtils::Sqrt(length) * delta;
+					entities[i].CallFunction("ApplyLinearImpulse", PropertyFunctionParameters() << impulse);
+				}
 			}
+			
+			SpawnExplosionDust(this.Get_Vector2("Position"));
 		}
 	}
 }

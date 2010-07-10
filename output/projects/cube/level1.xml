@@ -45,8 +45,8 @@
         <ScriptTimes></ScriptTimes>
         <ScriptStates></ScriptStates>
         <ScriptTimeOut>1000</ScriptTimeOut>
-        <YOffsetTime Type="float32">0</YOffsetTime>
         <YOffsetPeriod Type="float32">0.25</YOffsetPeriod>
+        <YOffsetTime Type="float32">0</YOffsetTime>
         <YOffsetAmplitude Type="float32">0.15</YOffsetAmplitude>
       </Component>
     </Entity>
@@ -597,11 +597,11 @@
         <ScriptTimes></ScriptTimes>
         <ScriptStates></ScriptStates>
         <ScriptTimeOut>1000</ScriptTimeOut>
+        <JumpCooldown Type="float32">0</JumpCooldown>
+        <ExplosionCooldown Type="float32">0</ExplosionCooldown>
+        <IsLight Type="bool">true</IsLight>
         <LastLandCollisionCooldown Type="float32">0</LastLandCollisionCooldown>
         <State Type="uint32">0</State>
-        <JumpCooldown Type="float32">0</JumpCooldown>
-        <IsLight Type="bool">true</IsLight>
-        <ExplosionCooldown Type="float32">0</ExplosionCooldown>
         <LastLandPosition Type="Vector2">0 0</LastLandPosition>
       </Component>
     </Entity>
