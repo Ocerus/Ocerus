@@ -144,9 +144,10 @@ void OnKeyPressed(eKeyCode key, uint32 char)
 			
 			Vector2 myPos = this.Get_Vector2("Position");
 			EntityPicker picker(myPos - Vector2(EXPLOSION_PULL_RADIUS, EXPLOSION_PULL_RADIUS), 1, 1);
-			array_EntityHandle entities = picker.PickMultipleEntities(myPos + Vector2(EXPLOSION_PULL_RADIUS, EXPLOSION_PULL_RADIUS), 0);
+			EntityHandle[] entities;
+			picker.PickMultipleEntities(entities, myPos + Vector2(EXPLOSION_PULL_RADIUS, EXPLOSION_PULL_RADIUS), 0);
 			uint32 destroyedCount = 0;
-			for (int i=0; i<entities.GetSize(); ++i)
+			for (int i=0; i< int(entities.length()); ++i)
 			{
 				if (entities[i] == this) continue;
 				

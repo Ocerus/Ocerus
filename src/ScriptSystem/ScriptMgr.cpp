@@ -19,7 +19,6 @@ using namespace InputSystem;
 using namespace AngelScript;
 using namespace Core;
 
-
 void MessageCallback(const asSMessageInfo* msg, void* param)
 {
 	OC_UNUSED(param);
@@ -594,17 +593,16 @@ static void EntityPickerDestructor(EntityPicker* self)
 	self->~EntityPicker();
 }
 
-ScriptArray<EntitySystem::EntityHandle> EntityPickerPickMultipleEntities(EntitySystem::EntityPicker& handle, const Vector2& worldCursorPos, const float32 rotation)
+void EntityPickerPickMultipleEntities(EntitySystem::EntityPicker& handle, asIScriptArray* entities, const Vector2& worldCursorPos, const float32 rotation)
 {
 	vector<EntitySystem::EntityHandle> pickedEntities;
 	handle.PickMultipleEntities(worldCursorPos, rotation, pickedEntities);
-	///@TODO when will this be deleted?
-	Array<EntitySystem::EntityHandle>* entities = new Array<EntitySystem::EntityHandle>(pickedEntities.size());
-	for (uint32 i=0; i<pickedEntities.size(); ++i)
+	OC_ASSERT(entities);
+	entities->Resize(pickedEntities.size());
+	for (uint32 i = 0; i < pickedEntities.size(); ++i)
 	{
-		(*entities)[i] = pickedEntities[i];
+		*(EntitySystem::EntityHandle*)entities->GetElementPointer(i) = pickedEntities[i];
 	}
-	return ScriptArray<EntitySystem::EntityHandle>(entities);
 }
 
 void RegisterScriptEntityPicker(asIScriptEngine* engine)
@@ -620,7 +618,7 @@ void RegisterScriptEntityPicker(asIScriptEngine* engine)
 
 	// Register the object methods
 	r = engine->RegisterObjectMethod("EntityPicker", "EntityHandle PickSingleEntity()", asMETHOD(EntityPicker, PickSingleEntity), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-	r = engine->RegisterObjectMethod("EntityPicker", "array_EntityHandle PickMultipleEntities(const Vector2& in, const float32)", asFUNCTIONPR(EntityPickerPickMultipleEntities, (EntitySystem::EntityPicker&, const Vector2&, const float32 rotation), ScriptArray<EntitySystem::EntityHandle>), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("EntityPicker", "void PickMultipleEntities(EntityHandle[]& out, const Vector2& in, const float32)", asFUNCTIONPR(EntityPickerPickMultipleEntities, (EntitySystem::EntityPicker&, asIScriptArray*, const Vector2&, const float32 rotation), void), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
 }
 
 // Functions for register EntityDescription to script
@@ -997,7 +995,7 @@ void RegisterScriptEditboxMembers(asIScriptEngine *engine, const char *type)
   r = engine->RegisterObjectMethod(type, "void SetMaxTextLength(uint32)", asMETHOD(T, setMaxTextLength), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 }
 
-CEGUI::Window* GetWindow(string name)
+CEGUI::Window* ScriptGetWindow(string name)
 {
   return gCEGUIWM.isWindowPresent(name) ? gCEGUIWM.getWindow(name) : 0;
 }
@@ -1058,7 +1056,7 @@ void RegisterScriptWindows(asIScriptEngine* engine)
 	r = engine->RegisterObjectType("Editbox", 0, asOBJ_REF); OC_SCRIPT_ASSERT();
 	RegisterScriptEditboxMembers<CEGUI::Editbox>(engine, "Editbox");
 	
-	r = engine->RegisterGlobalFunction("Window@ GetWindow(string)", asFUNCTION(GetWindow), asCALL_CDECL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterGlobalFunction("Window@ GetWindow(string)", asFUNCTION(ScriptGetWindow), asCALL_CDECL); OC_SCRIPT_ASSERT();
 }
 
 // Get handle of entity which ran the script
