@@ -2,6 +2,33 @@
 
 <Prototypes>
   <Entities>
+    <Entity Name="JumpSmoke" ID="-506" Tag="0" Transient="false">
+      <Component Type="Transform">
+        <Layer>2</Layer>
+        <Angle>0</Angle>
+        <Scale>0.4 0.25</Scale>
+        <Position>2 -3</Position>
+      </Component>
+      <Component Type="Sprite">
+        <Transparency>0.5</Transparency>
+        <AnimRepeats>false</AnimRepeats>
+        <AnimTime>0</AnimTime>
+        <Texture>dust.png</Texture>
+        <AnimDuration>0.4</AnimDuration>
+        <FrameIndex>0</FrameIndex>
+        <FrameCount>11</FrameCount>
+        <SkipSpace>(1, 0)</SkipSpace>
+        <FrameSize>(120, 120)</FrameSize>
+      </Component>
+      <Component Type="Script">
+        <ScriptModules>
+          <Item>DustFader.as</Item>
+        </ScriptModules>
+        <ScriptTimes></ScriptTimes>
+        <ScriptStates></ScriptStates>
+        <ScriptTimeOut>1000</ScriptTimeOut>
+      </Component>
+    </Entity>
     <Entity Name="Score10" ID="-504" Tag="0" Transient="false">
       <Component Type="Transform">
         <Layer>2</Layer>
@@ -51,8 +78,8 @@
         <ScriptTimes></ScriptTimes>
         <ScriptStates></ScriptStates>
         <ScriptTimeOut>1000</ScriptTimeOut>
-        <YOffsetPeriod Type="float32">0.1</YOffsetPeriod>
         <YOffsetAmplitude Type="float32">0.1</YOffsetAmplitude>
+        <YOffsetPeriod Type="float32">0.1</YOffsetPeriod>
       </Component>
     </Entity>
     <Entity Name="Background2" ID="-502" Tag="0" Transient="false">

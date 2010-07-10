@@ -598,11 +598,11 @@
         <ScriptStates></ScriptStates>
         <ScriptTimeOut>1000</ScriptTimeOut>
         <LastLandCollisionCooldown Type="float32">0</LastLandCollisionCooldown>
-        <JumpCooldown Type="float32">0</JumpCooldown>
-        <LastLandPosition Type="Vector2">0 0</LastLandPosition>
-        <ExplosionCooldown Type="float32">0</ExplosionCooldown>
-        <IsLight Type="bool">true</IsLight>
         <State Type="uint32">0</State>
+        <JumpCooldown Type="float32">0</JumpCooldown>
+        <IsLight Type="bool">true</IsLight>
+        <ExplosionCooldown Type="float32">0</ExplosionCooldown>
+        <LastLandPosition Type="Vector2">0 0</LastLandPosition>
       </Component>
     </Entity>
     <Entity Name="GameCamera" ID="21" Tag="0" Transient="false">
@@ -614,9 +614,9 @@
     </Entity>
     <Entity Name="EditorCamera" ID="22" Tag="0" Transient="false">
       <Component Type="Camera">
-        <Position>0.259291 -0.883426</Position>
+        <Position>3.04628 -4.45816</Position>
         <Rotation>0</Rotation>
-        <Zoom>1.0925</Zoom>
+        <Zoom>0.820811</Zoom>
       </Component>
     </Entity>
     <Entity Name="LandFiller" ID="23" Tag="0" Transient="false" Prototype="-497">
@@ -3898,25 +3898,6 @@
         <Layout>Level.layout</Layout>
       </Component>
     </Entity>
-    <Entity Name="JumpSmoke" ID="125" Tag="0" Transient="false">
-      <Component Type="Transform">
-        <Layer>2</Layer>
-        <Angle>0</Angle>
-        <Scale>1 1</Scale>
-        <Position>2 -3</Position>
-      </Component>
-      <Component Type="Sprite">
-        <Transparency>0</Transparency>
-        <AnimRepeats>false</AnimRepeats>
-        <AnimTime>0</AnimTime>
-        <Texture>dust.png</Texture>
-        <AnimDuration>0</AnimDuration>
-        <FrameIndex>0</FrameIndex>
-        <FrameCount>0</FrameCount>
-        <SkipSpace>(1, 0)</SkipSpace>
-        <FrameSize>(120, 120)</FrameSize>
-      </Component>
-    </Entity>
   </Entities>
   <Hierarchy>
     <Entity ID="20"></Entity>
@@ -3954,7 +3935,6 @@
       <Entity ID="83"></Entity>
       <Entity ID="84"></Entity>
     </Entity>
-    <Entity ID="125"></Entity>
     <Entity ID="103">
       <Entity ID="104"></Entity>
       <Entity ID="112"></Entity>
