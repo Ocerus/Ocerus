@@ -130,7 +130,9 @@ void OnKeyPressed(eKeyCode key, uint32 char)
 			Vector2 dir = this.Get_Vector2("Position") - this.Get_Vector2("LastLandPosition");
 			dir.Normalize();
 			this.CallFunction("ApplyLinearImpulse", PropertyFunctionParameters() << JUMP_RATIO * dir);
-			SpawnJumpDust(this.Get_Vector2("LastLandPosition"));
+			
+			Vector2 dustPos = 0.5f * (this.Get_Vector2("Position") + this.Get_Vector2("LastLandPosition"));
+			SpawnJumpDust(dustPos);
 		}
 		else
 		{

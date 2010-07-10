@@ -78,8 +78,8 @@ void EntityComponents::Sprite::RegisterReflection()
 	
 	RegisterProperty<GfxSystem::Point>("FrameSize", &Sprite::GetFrameSize, &Sprite::SetFrameSize, PA_FULL_ACCESS, "");
 	RegisterProperty<GfxSystem::Point>("SkipSpace", &Sprite::GetSkipSpace, &Sprite::SetSkipSpace, PA_FULL_ACCESS, "");
-	RegisterProperty<int32>("FrameCount", &Sprite::GetFrameCount, &Sprite::SetFrameCount, PA_FULL_ACCESS, "");
-	RegisterProperty<int32>("FrameIndex", &Sprite::GetFrameIndex, &Sprite::SetFrameIndex, PA_FULL_ACCESS, "");
+	RegisterProperty<uint32>("FrameCount", &Sprite::GetFrameCount, &Sprite::SetFrameCount, PA_FULL_ACCESS, "");
+	RegisterProperty<uint32>("FrameIndex", &Sprite::GetFrameIndex, &Sprite::SetFrameIndex, PA_FULL_ACCESS, "");
 	RegisterProperty<float32>("AnimDuration", &Sprite::GetAnimDuration, &Sprite::SetAnimDuration, PA_FULL_ACCESS, "");
 	RegisterProperty<float32>("AnimTime", &Sprite::GetAnimTime, &Sprite::SetAnimTime, PA_FULL_ACCESS, "");
 	RegisterProperty<bool>("AnimRepeats", &Sprite::GetAnimRepeats, &Sprite::SetAnimRepeats, PA_FULL_ACCESS, "");

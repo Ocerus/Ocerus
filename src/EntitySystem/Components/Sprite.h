@@ -52,16 +52,16 @@ namespace EntityComponents
 		void SetSkipSpace(GfxSystem::Point value) { mSkipSpace = value; }
 		
 		/// Number of frames.
-		int32 GetFrameCount(void) const { return mFrameCount; }
+		uint32 GetFrameCount(void) const { return mFrameCount; }
 
 		/// Number of frames.
-		void SetFrameCount(int32 value) { mFrameCount = value; }
+		void SetFrameCount(uint32 value) { mFrameCount = value; }
 		
 		/// Index of drawn frame.
-		int32 GetFrameIndex(void) const { return mFrameIndex; }
+		uint32 GetFrameIndex(void) const { return mFrameIndex; }
 
 		/// Index of drawn frame.
-		void SetFrameIndex(int32 value) { mFrameIndex = value; }
+		void SetFrameIndex(uint32 value) { mFrameIndex = value; }
 		
 		/// Duration of one animation cycle.
 		float32 GetAnimDuration(void) const { return mAnimDuration; }

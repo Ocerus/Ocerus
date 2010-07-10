@@ -2,15 +2,15 @@
 
 <Prototypes>
   <Entities>
-    <Entity Name="JumpSmoke" ID="-506" Tag="0" Transient="false">
+    <Entity Name="JumpDust" ID="-506" Tag="0" Transient="false">
       <Component Type="Transform">
         <Layer>2</Layer>
         <Angle>0</Angle>
-        <Scale>0.4 0.25</Scale>
+        <Scale>0.5 0.35</Scale>
         <Position>2 -3</Position>
       </Component>
       <Component Type="Sprite">
-        <Transparency>0.5</Transparency>
+        <Transparency>0.1</Transparency>
         <AnimRepeats>false</AnimRepeats>
         <AnimTime>0</AnimTime>
         <Texture>dust.png</Texture>
@@ -47,6 +47,8 @@
         <ScriptTimes></ScriptTimes>
         <ScriptStates></ScriptStates>
         <ScriptTimeOut>1000</ScriptTimeOut>
+        <FadeAlphaSpeed Type="float32">2</FadeAlphaSpeed>
+        <FadeMovementSpeed Type="float32">0.1</FadeMovementSpeed>
       </Component>
     </Entity>
     <Entity Name="Coin1" ID="-503" Tag="2" Transient="false">
@@ -78,8 +80,8 @@
         <ScriptTimes></ScriptTimes>
         <ScriptStates></ScriptStates>
         <ScriptTimeOut>1000</ScriptTimeOut>
-        <YOffsetAmplitude Type="float32">0.1</YOffsetAmplitude>
         <YOffsetPeriod Type="float32">0.1</YOffsetPeriod>
+        <YOffsetAmplitude Type="float32">0.1</YOffsetAmplitude>
       </Component>
     </Entity>
     <Entity Name="Background2" ID="-502" Tag="0" Transient="false">
