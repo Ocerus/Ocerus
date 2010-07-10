@@ -54,8 +54,8 @@ void Script::UpdateMessageHandlers(void)
 	  = mMessageHandlers.find(EntitySystem::EntityMessage::DESTROY);
 	for (; destroyIt != mMessageHandlers.end() && destroyIt->first == EntitySystem::EntityMessage::DESTROY; ++destroyIt)
 	{
-	  string moduleName = gScriptMgr.GetFunctionModuleName(destroyIt->second);
-	  if (removedModules.find(moduleName) != removedModules.end()) { ExecuteScriptFunction(destroyIt->second); }
+	  const char* moduleName = gScriptMgr.GetFunctionModuleName(destroyIt->second);
+	  if (moduleName != 0 && removedModules.find(moduleName) != removedModules.end()) { ExecuteScriptFunction(destroyIt->second); }
 	}
 	
 	mMessageHandlers.clear();
@@ -126,15 +126,15 @@ void Script::UpdateMessageHandlers(void)
 	    = mMessageHandlers.find(EntitySystem::EntityMessage::INIT);
 	  for (; initIt != mMessageHandlers.end() && initIt->first == EntitySystem::EntityMessage::INIT; ++initIt)
 	  {
-	    string moduleName = gScriptMgr.GetFunctionModuleName(initIt->second);
-	    if (addedModules.find(moduleName) != addedModules.end()) { ExecuteScriptFunction(initIt->second); }
+	    const char* moduleName = gScriptMgr.GetFunctionModuleName(initIt->second);
+	    if (moduleName != 0 && addedModules.find(moduleName) != addedModules.end()) { ExecuteScriptFunction(initIt->second); }
 	  }
 	  
 	  initIt = mMessageHandlers.find(EntitySystem::EntityMessage::POST_INIT);
 	  for (; initIt != mMessageHandlers.end() && initIt->first == EntitySystem::EntityMessage::POST_INIT; ++initIt)
 	  {
-	    string moduleName = gScriptMgr.GetFunctionModuleName(initIt->second);
-	    if (addedModules.find(moduleName) != addedModules.end()) { ExecuteScriptFunction(initIt->second); }
+	    const char* moduleName = gScriptMgr.GetFunctionModuleName(initIt->second);
+	    if (moduleName != 0 && addedModules.find(moduleName) != addedModules.end()) { ExecuteScriptFunction(initIt->second); }
 	  }
 	}
 	
