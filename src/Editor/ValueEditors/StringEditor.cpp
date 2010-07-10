@@ -5,12 +5,12 @@
 
 using namespace Editor;
 
-Editor::StringEditor::~StringEditor()
+StringEditor::~StringEditor()
 {
 	delete mModel;
 }
 
-CEGUI::Window* Editor::StringEditor::CreateWidget(const CEGUI::String& namePrefix)
+CEGUI::Window* StringEditor::CreateWidget(const CEGUI::String& namePrefix)
 {
 	PROFILE_FNC();
 
@@ -40,42 +40,42 @@ CEGUI::Window* Editor::StringEditor::CreateWidget(const CEGUI::String& namePrefi
 	{
 		CEGUI::Window* removeButton = CreateRemoveElementButtonWidget(namePrefix + "/RemoveButton");
 		removeButton->setPosition(CEGUI::UVector2(dimRight + CEGUI::UDim(0, 2), CEGUI::UDim(0, 0)));
-		removeButton->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Editor::StringEditor::OnEventButtonRemovePressed, this));
+		removeButton->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&StringEditor::OnEventButtonRemovePressed, this));
 
 		mEditorWidget->addChildWindow(removeButton);
 	}
 	
 	/// Subscribe to editbox events
-	mEditboxWidget->subscribeEvent(CEGUI::Editbox::EventActivated, CEGUI::Event::Subscriber(&Editor::StringEditor::OnEventActivated, this));
-	mEditboxWidget->subscribeEvent(CEGUI::Editbox::EventDeactivated, CEGUI::Event::Subscriber(&Editor::StringEditor::OnEventDeactivated, this));
-	mEditboxWidget->subscribeEvent(CEGUI::Editbox::EventKeyDown, CEGUI::Event::Subscriber(&Editor::StringEditor::OnEventKeyDown, this));
+	mEditboxWidget->subscribeEvent(CEGUI::Editbox::EventActivated, CEGUI::Event::Subscriber(&StringEditor::OnEventActivated, this));
+	mEditboxWidget->subscribeEvent(CEGUI::Editbox::EventDeactivated, CEGUI::Event::Subscriber(&StringEditor::OnEventDeactivated, this));
+	mEditboxWidget->subscribeEvent(CEGUI::Editbox::EventKeyDown, CEGUI::Event::Subscriber(&StringEditor::OnEventKeyDown, this));
 
 	/// Update editor and return main widget
 	Update();
 	return mEditorWidget;
 }
 
-void Editor::StringEditor::Submit()
+void StringEditor::Submit()
 {
 	OC_DASSERT(mEditboxWidget != 0);
 	string newValue = mEditboxWidget->getText().c_str();
 	mModel->SetValue(newValue);
 }
 
-void Editor::StringEditor::Update()
+void StringEditor::Update()
 {
 	OC_DASSERT(mEditboxWidget != 0);
 	if (UpdatesLocked()) return;
 	mEditboxWidget->setText(mModel->IsValid() ? this->mModel->GetValue() : "");
 }
-bool Editor::StringEditor::OnEventButtonRemovePressed(const CEGUI::EventArgs& args)
+bool StringEditor::OnEventButtonRemovePressed(const CEGUI::EventArgs& args)
 {
 	OC_UNUSED(args);
 	mModel->Remove();
 	return true;
 }
 
-bool Editor::StringEditor::OnEventKeyDown(const CEGUI::EventArgs& args)
+bool StringEditor::OnEventKeyDown(const CEGUI::EventArgs& args)
 {
 	OC_DASSERT(mEditboxWidget != 0);
 	const CEGUI::KeyEventArgs& keyArgs = static_cast<const CEGUI::KeyEventArgs&>(args);

@@ -1549,6 +1549,14 @@
 						>
 					</File>
 					<File
+						RelativePath="..\src\Editor\ValueEditors\BoolEditor.h"
+						>
+					</File>
+					<File
+						RelativePath="..\src\Editor\ValueEditors\PointEditor.h"
+						>
+					</File>
+					<File
 						RelativePath="..\src\Editor\ValueEditors\PropertyEditorCreator.h"
 						>
 					</File>
@@ -1558,6 +1566,10 @@
 					</File>
 					<File
 						RelativePath="..\src\Editor\ValueEditors\StringEditor.h"
+						>
+					</File>
+					<File
+						RelativePath="..\src\Editor\ValueEditors\TwoDimEditor.h"
 						>
 					</File>
 					<File
@@ -1573,6 +1585,14 @@
 						>
 					</File>
 					<File
+						RelativePath="..\src\Editor\ValueEditors\BoolEditor.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\src\Editor\ValueEditors\PointEditor.cpp"
+						>
+					</File>
+					<File
 						RelativePath="..\src\Editor\ValueEditors\PropertyEditorCreator.cpp"
 						>
 					</File>
@@ -1582,6 +1602,10 @@
 					</File>
 					<File
 						RelativePath="..\src\Editor\ValueEditors\StringEditor.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\src\Editor\ValueEditors\TwoDimEditor.cpp"
 						>
 					</File>
 					<File

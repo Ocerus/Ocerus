@@ -7,7 +7,9 @@
 #include "ArrayEditor.h"
 #include "Models/ArrayElementModel.h"
 #include "StringEditor.h"
+#include "BoolEditor.h"
 #include "Vector2Editor.h"
+#include "PointEditor.h"
 #include "ResourceEditor.h"
 #include "GUISystem/VerticalLayout.h"
 #include "Properties/PropertyEnums.h"
@@ -24,9 +26,21 @@ namespace Editor
 	}
 
 	template<>
+	AbstractValueEditor* CreateArrayElementEditor<bool>(ArrayEditor<bool>* parentEditor, uint32 index)
+	{
+		return new Editor::BoolEditor(new ArrayElementModel<bool>(parentEditor, index));
+	}
+	
+	template<>
 	AbstractValueEditor* CreateArrayElementEditor<Vector2>(ArrayEditor<Vector2>* parentEditor, uint32 index)
 	{
 		return new Editor::Vector2Editor(new ArrayElementModel<Vector2>(parentEditor, index));
+	}
+	
+	template<>
+	AbstractValueEditor* CreateArrayElementEditor<GfxSystem::Point>(ArrayEditor<GfxSystem::Point>* parentEditor, uint32 index)
+	{
+		return new Editor::PointEditor(new ArrayElementModel<GfxSystem::Point>(parentEditor, index));
 	}
 	
 	template<>

@@ -9,7 +9,9 @@
 // Editors
 #include "AbstractValueEditor.h"
 #include "StringEditor.h"
+#include "BoolEditor.h"
 #include "Vector2Editor.h"
+#include "PointEditor.h"
 #include "ArrayEditor.h"
 #include "ResourceEditor.h"
 
@@ -28,8 +30,12 @@ namespace Editor
 		#include "Utils/Properties/PropertyTypes.h"
 		#undef PROPERTY_TYPE
 
+		case PT_BOOL:
+		  return new Editor::BoolEditor(new PropertyModel<bool>(property));
 		case PT_VECTOR2:
 			return new Editor::Vector2Editor(new PropertyModel<Vector2>(property));
+		case PT_POINT:
+			return new Editor::PointEditor(new PropertyModel<GfxSystem::Point>(property));
 		case PT_RESOURCE:
 			return new Editor::ResourceEditor(new PropertyModel<ResourceSystem::ResourcePtr>(property));
 		default:
