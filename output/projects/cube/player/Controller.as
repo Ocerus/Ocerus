@@ -183,8 +183,7 @@ void OnDraw(float32 delta)
 	{
 		if (this.Get_Vector2("Scale").Length() < 0.1f)
 		{
-			Println("FINISH");
-			gProject.CloseOpenedScene();
+			ExitLevel();
 		}
 		else
 		{
@@ -204,4 +203,9 @@ void OnDraw(float32 delta)
   	if (angle > PI) angle = PI;
   	this.Set_float32("YAngle", angle);
   }
+}
+
+void ExitLevel()
+{
+	gProject.OpenSceneAtIndex(gProject.GetSceneIndex(gProject.GetOpenedSceneName()) + 1);
 }
