@@ -496,21 +496,15 @@ bool RegisterDynamicProperty(const EntityHandle& self,
 	const string& propertyName, const PropertyAccessFlags accessFlags, const string& comment)
 {
 	ComponentID id = gEntityMgr.GetEntityComponent(self, CT_Script);
-	if (!self.HasComponentProperty(id, StringKey(propertyName), accessFlags))
-	{
-	  if (gApp.IsEditMode()) gEditorMgr.GetEditorGui()->NeedUpdateEntityEditorWindow();
-	  return self.RegisterDynamicPropertyOfComponent<T>(id, StringKey(propertyName), accessFlags, comment);
-	} else return false;
+	if (id == -1) return false;
+  return self.RegisterDynamicPropertyOfComponent<T>(id, StringKey(propertyName), accessFlags, comment);
 }
 
 bool UnregisterDynamicProperty(const EntityHandle& self, const string& propertyName)
 {
 	ComponentID id = gEntityMgr.GetEntityComponent(self, CT_Script);
-	if (self.HasComponentProperty(id, StringKey(propertyName)))
-	{
-	  if (gApp.IsEditMode()) gEditorMgr.GetEditorGui()->NeedUpdateEntityEditorWindow();
-	  return self.UnregisterDynamicPropertyOfComponent(id, StringKey(propertyName));
-	} else return false;
+	if (id == -1) return false;
+	return self.UnregisterDynamicPropertyOfComponent(id, StringKey(propertyName));
 }
 
 void RegisterScriptEntityHandle(asIScriptEngine* engine)

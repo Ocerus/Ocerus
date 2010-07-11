@@ -25,13 +25,11 @@ namespace Reflection
 		/// Constructor.
 		RTTIGlue(void)
 		{
-			mDynamicProperties = 0;
 		}
 
 		/// Destructor.
 		~RTTIGlue(void)
 		{
-			if (mDynamicProperties) delete mDynamicProperties;
 		}
 
 		/// Default factory function. Creates an instance of T.
@@ -116,37 +114,9 @@ namespace Reflection
 			if (mDynamicProperties) mDynamicProperties->EnumProperties(owner, out, flagMask);
 		}
 
-		/// Registers a dynamic property. Takes in the property name, its getter and setter functions, and the property
-		///	type as a template parameter.
-		template <class PropertyTypes>
-		bool RegisterDynamicProperty(StringKey name, const PropertyAccessFlags accessFlags,
-			const string& comment)
-		{
-			if (!mDynamicProperties) mDynamicProperties = new PropertyMap();
-			ValuedProperty<PropertyTypes>* pProperty = new ValuedProperty<PropertyTypes>(name, accessFlags, comment);
-			if (mDynamicProperties->AddProperty(pProperty))
-			{
-				PropertySystem::GetProperties()->push_back(pProperty);
-				return true;
-			}
-			else
-			{
-				delete pProperty;
-				return false;
-			}
-		}
-
-		/// Unregisters a dynamic property of a certain name.
-		inline bool UnregisterDynamicProperty(const StringKey name)
-		{
-			if (!mDynamicProperties) return false;  
-			return mDynamicProperties->DeleteProperty(name);
-		}
-
 	protected :
 
 		static RTTI	mRTTI;
-		PropertyMap* mDynamicProperties;
 
 	};
 

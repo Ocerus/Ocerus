@@ -31,16 +31,6 @@ void OnPostInit()
   SetPlayerState(STATE_NORMAL);
 }
 
-void OnDestroy()
-{
-  this.UnregisterDynamicProperty("IsLight");
-  this.UnregisterDynamicProperty("ExplosionCooldown");
-  this.UnregisterDynamicProperty("JumpCooldown");
-  this.UnregisterDynamicProperty("LastLandPosition");
-  this.UnregisterDynamicProperty("LastLandCollisionCooldown");
-  this.UnregisterDynamicProperty("State");
-}
-
 void SetPlayerState(uint32 state)
 {
 	this.Set_uint32("State", state);

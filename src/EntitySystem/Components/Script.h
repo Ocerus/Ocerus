@@ -39,22 +39,23 @@ namespace EntityComponents
 		/// Maximum time of execution the scripts in ms (0 means infinity).
 		void SetTimeOut(const uint32 timeOut) { mTimeOut = timeOut; }
 
-		/// States of OnAction handlers
+		/// States of OnAction handlers.
 		Utils::Array<int32>* GetStates(void) const { return const_cast<Utils::Array<int32>*>(&mStates); }
 
-		/// States of OnAction handlers
+		/// States of OnAction handlers.
 		void SetStates(Utils::Array<int32>* states) { mStates.CopyFrom(*states); }
 
-		/// Times of execution of OnAction handlers
+		/// Times of execution of OnAction handlers.
 		Utils::Array<uint64>* GetTimes(void) const { return const_cast<Utils::Array<uint64>*>(&mTimes); }
 
-		/// Times of execution of OnAction handlers
+		/// Times of execution of OnAction handlers.
 		void SetTimes(Utils::Array<uint64>* times) { mTimes.CopyFrom(*times); }
 
-		/// Current index of mStates and mTimes
+		/// Current index of mStates and mTimes.
 		int32 GetCurrentArrayIndex(void) const { return mCurrentArrayIndex; }
 
-		
+		/// This is called when the dynamic property was registered/unregistered.
+		virtual void DynamicPropertyChanged(const StringKey propertyName, bool reg, bool success);
 
 	private:
 		Utils::Array<ResourceSystem::ResourcePtr> mModules;
@@ -72,14 +73,17 @@ namespace EntityComponents
 		/// Stores appropriate handler to message.
 		multimap<EntitySystem::EntityMessage::eType, int32> mMessageHandlers;
 		
-		/// Map module name to function ID of OnAction handlers
+		/// Map module name to function ID of OnAction handlers.
 		map<string, int32> mModuleToFuncID;
 		
-		/// Map function ID of OnAction handlers to index of mStates and mTimes
+		/// Map function ID of OnAction handlers to index of mStates and mTimes.
 		map<int32, int32> mFuncIDToArrayIndex;
 		
 		/// Set of module names presented after the last call of UpdateMessageHandlers().
-		set<string> mOldModules; 
+		set<string> mOldModules;
+		
+		/// Map module name to dynamic properties registered in the module.
+		map<string, set<StringKey> > mModuleDynamicProperties;
 
 		/// Find message handlers in modules (mModules) and store them to map (mMessageHandlers).
 		void UpdateMessageHandlers(void);

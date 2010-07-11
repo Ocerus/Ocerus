@@ -2,7 +2,10 @@
 #include "Script.h"
 #include <angelscript.h>
 #include "Core/Game.h"
+#include "Core/Application.h"
 #include "ScriptSystem/ScriptResource.h"
+#include "Editor/EditorMgr.h"
+#include "Editor/EditorGUI.h"
 
 using namespace EntityComponents;
 using namespace EntitySystem;
@@ -56,6 +59,17 @@ void Script::UpdateMessageHandlers(void)
 	{
 	  const char* moduleName = gScriptMgr.GetFunctionModuleName(destroyIt->second);
 	  if (moduleName != 0 && removedModules.find(moduleName) != removedModules.end()) { ExecuteScriptFunction(destroyIt->second); }
+	}
+	
+	// Unregister dynamic properties which were registered by removed modules
+	for (set<string>::iterator it = removedModules.begin(); it != removedModules.end(); ++it)
+	{
+	  set<StringKey> props = mModuleDynamicProperties[*it];
+	  for (set<StringKey>::iterator propIt = props.begin(); propIt != props.end(); ++propIt)
+	  {
+	    UnregisterDynamicProperty(*propIt);
+	  }
+	  mModuleDynamicProperties.erase(*it);
 	}
 	
 	mMessageHandlers.clear();
@@ -242,4 +256,34 @@ void Script::SetModules(Utils::Array<ResourceSystem::ResourcePtr>* modules)
 
   mModules.CopyFrom(*modules); mNeedUpdate = true;
   if (!mIsUpdating) UpdateMessageHandlers();
+}
+
+void Script::DynamicPropertyChanged(const StringKey propertyName, bool reg, bool success)
+{
+  if (success && gApp.IsEditMode()) gEditorMgr.GetEditorGui()->NeedUpdateEntityEditorWindow();
+	
+	// (Un)link the dynamic property to the module where it is registered so it will be automatically destroyed with the module
+	AngelScript::asIScriptContext* ctx = AngelScript::asGetActiveContext();
+	if (ctx)
+	{
+	  int32 funcId = ctx->GetCurrentFunction();
+	  if (funcId >= 0)
+    {
+      const char* moduleName = gScriptMgr.GetFunctionModuleName(funcId);
+      if (moduleName)
+      {
+        // When the property is already registred from another module, do not link it to this module
+        if (reg && !success)
+        {
+          for (map<string, set<StringKey> >::iterator it = mModuleDynamicProperties.begin();
+            it != mModuleDynamicProperties.end(); ++it)
+	        {
+	          if (it->second.find(propertyName) != it->second.end()) return;
+	        }
+        }
+        if (reg) mModuleDynamicProperties[moduleName].insert(propertyName);
+        else mModuleDynamicProperties[moduleName].erase(propertyName);
+      }
+    }
+  }
 }

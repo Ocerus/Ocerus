@@ -45,14 +45,6 @@ bool PropertyMap::AddProperty( AbstractProperty* prop )
 	OC_ASSERT(prop);
 	if (HasProperty(prop->GetKey()))
 	{
-		if (LogSystem::LogMgr::SingletonExists())
-		{
-			ocError << "Property can't be registered; it already exists: " << prop->GetName();
-		}
-		else
-		{
-			OC_ASSERT_MSG(false, "Property can't be registered; it already exists");
-		}
 		return false;
 	}
 
