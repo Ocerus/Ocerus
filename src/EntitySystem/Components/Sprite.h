@@ -43,19 +43,19 @@ namespace EntityComponents
 		GfxSystem::Point GetFrameSize(void) const { return mFrameSize; }
 
 		/// Frame size in pixels.
-		void SetFrameSize(GfxSystem::Point value) { mFrameSize = value; }
+		void SetFrameSize(GfxSystem::Point value);
 		
 		/// Skipped pixels between frames in texture.
 		GfxSystem::Point GetSkipSpace(void) const { return mSkipSpace; }
 
 		/// Skipped pixels between frames in texture.
-		void SetSkipSpace(GfxSystem::Point value) { mSkipSpace = value; }
+		void SetSkipSpace(GfxSystem::Point value);
 		
 		/// Number of frames.
 		uint32 GetFrameCount(void) const { return mFrameCount; }
 
 		/// Number of frames.
-		void SetFrameCount(uint32 value) { mFrameCount = value; }
+		void SetFrameCount(uint32 value) { mFrameCount = MathUtils::Max<int32>(1,value); }
 		
 		/// Index of drawn frame.
 		uint32 GetFrameIndex(void) const { return mFrameIndex; }
@@ -82,6 +82,8 @@ namespace EntityComponents
 		void SetAnimRepeats(bool value) { mAnimRepeats = value; }
 
 	private:
+		/// Recalculates frame count based on texture size and FrameSize.
+		void RefreshFrameCount();
 
 		ResourceSystem::ResourcePtr mTextureHandle;
 		float32 mTransparency;

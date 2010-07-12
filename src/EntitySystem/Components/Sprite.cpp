@@ -9,7 +9,7 @@ void EntityComponents::Sprite::Create( void )
 	mTransparency = 0.0f;
 	mFrameSize = GfxSystem::Point::Point_Zero;
 	mSkipSpace = GfxSystem::Point::Point_Zero;
-	mFrameCount = 0;
+	mFrameCount = 1;
 	mFrameIndex = 0;
 	mAnimDuration = 0;
 	mAnimTime = 0;
@@ -93,5 +93,34 @@ void EntityComponents::Sprite::SetTexture(ResourceSystem::ResourcePtr value)
 	if (value && value->GetType() == ResourceSystem::RESTYPE_TEXTURE)
 	{
 		mTextureHandle = value;
+	}
+}
+
+void EntityComponents::Sprite::SetFrameSize(GfxSystem::Point value)
+{
+	mFrameSize.x = MathUtils::Max<int32>(0,value.x);
+	mFrameSize.y = MathUtils::Max<int32>(0,value.y);
+
+	RefreshFrameCount();
+}
+
+void EntityComponents::Sprite::SetSkipSpace(GfxSystem::Point value)
+{
+	mSkipSpace.x = MathUtils::Max<int32>(0,value.x);
+	mSkipSpace.y = MathUtils::Max<int32>(0,value.y);
+
+	RefreshFrameCount();
+}
+
+void EntityComponents::Sprite::RefreshFrameCount()
+{ 
+	int32 w = ((GfxSystem::TexturePtr)mTextureHandle)->GetWidth();
+	int32 h = ((GfxSystem::TexturePtr)mTextureHandle)->GetHeight();
+
+	mFrameCount = 1;
+	if (((mFrameSize.x + mSkipSpace.x) != 0) && ((mFrameSize.y + mSkipSpace.y) != 0))
+	{
+		int32 inRow = w / (mFrameSize.x + mSkipSpace.x);
+		mFrameCount = inRow * h / (mFrameSize.y + mSkipSpace.x);
 	}
 }

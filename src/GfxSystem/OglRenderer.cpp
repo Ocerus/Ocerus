@@ -238,11 +238,6 @@ void OglRenderer::DrawTexturedQuad(const TexturedQuad& quad) const
 
 	glBegin( GL_QUADS );
 
-	/*glTexCoord2f(0.0f, 1.0f); glVertex3f( -x,  y, 0 );
-	glTexCoord2f(0.0f, 0.0f); glVertex3f( -x, -y, 0 );
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(  x, -y, 0 );
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(  x,  y, 0 );*/
-
 	glTexCoord2f(quad.texOffset.x, quad.texOffset.y + quad.frameSize.y); 
 	glVertex3f(-x, y, 0);
 	glTexCoord2f(quad.texOffset.x, quad.texOffset.y);
