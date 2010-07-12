@@ -38,6 +38,9 @@ namespace InputSystem
 
 		/// Processes OIS events.
 		void CaptureInput(void);
+		
+		/// Releases all keys and buttons.
+		void ReleaseAll(void);
 
 		/// True if the specified key is down.
 		bool IsKeyDown(const eKeyCode k) const;
@@ -58,6 +61,8 @@ namespace InputSystem
 		OIS::Keyboard* mKeyboard;
 
 		eMouseButton OisToMbtn(OIS::MouseButtonID id);
+
+		void RecreateDevices();
 	};
 }
 

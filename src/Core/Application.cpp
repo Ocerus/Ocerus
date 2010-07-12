@@ -302,6 +302,10 @@ void Application::MessagePump( void )
 		{
 			RequestStateChange(AS_SHUTDOWN, true);
 		}
+		else if (event == GfxSystem::WE_LOST_FOCUS)
+		{
+			gInputMgr.ReleaseAll();
+		}
 	}
 }
 

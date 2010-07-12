@@ -75,3 +75,9 @@ bool InputSystem::InputMgr::IsMouseButtonPressed( const eMouseButton btn ) const
 	MouseState& mouse = GetMouseState();
 	return (mouse.buttons & btn) != 0;
 }
+
+void InputSystem::InputMgr::ReleaseAll( void )
+{
+	OC_ASSERT(mOISListener);
+	mOISListener->ReleaseAll();
+}

@@ -35,6 +35,9 @@ namespace InputSystem
 		/// Updates the state of the manager and processes all events.
 		void CaptureInput(void);
 
+		/// Releases all keys and buttons.
+		void ReleaseAll(void);
+
 		/// Returns true if a specified key is down.
 		bool IsKeyDown(const eKeyCode k) const;
 

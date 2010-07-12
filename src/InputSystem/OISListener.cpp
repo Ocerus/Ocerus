@@ -41,12 +41,8 @@ InputSystem::OISListener::OISListener(): mOIS(0), mMouse(0), mKeyboard(0)
 
 	mOIS = OIS::InputManager::createInputSystem(pl);
 	ocInfo << "OIS created";
-	mKeyboard = static_cast<OIS::Keyboard*>(mOIS->createInputObject(OIS::OISKeyboard, true));
-	ocInfo << "OIS keyboard inited";
-	mMouse = static_cast<OIS::Mouse*>(mOIS->createInputObject(OIS::OISMouse, true));
-	ocInfo << "OIS mouse inited";
-	mKeyboard->setEventCallback(this);
-	mMouse->setEventCallback(this);
+
+	RecreateDevices();
 }
 
 InputSystem::OISListener::~OISListener()
@@ -202,4 +198,25 @@ void InputSystem::OISListener::GetMouseState( InputSystem::MouseState& state ) c
 		state.buttons |= MBTN_RIGHT;
 	if (oisstate.buttonDown(OIS::MB_Middle))
 		state.buttons |= MBTN_MIDDLE;
+}
+
+void InputSystem::OISListener::ReleaseAll( void )
+{
+	RecreateDevices();
+}
+
+void InputSystem::OISListener::RecreateDevices()
+{
+	OC_ASSERT(mOIS);
+
+	if (mKeyboard) mOIS->destroyInputObject(mKeyboard);
+	if (mMouse) mOIS->destroyInputObject(mMouse);
+
+	mKeyboard = static_cast<OIS::Keyboard*>(mOIS->createInputObject(OIS::OISKeyboard, true));
+	mKeyboard->setEventCallback(this);
+
+	mMouse = static_cast<OIS::Mouse*>(mOIS->createInputObject(OIS::OISMouse, true));
+	mMouse->setEventCallback(this);
+
+	ocInfo << "OIS keyboar & mouse recreated";
 }

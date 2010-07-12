@@ -92,6 +92,13 @@ bool GfxWindow::PopEvent(eWindowEvent &result)
 		case SDL_VIDEORESIZE:
 			result = WE_RESIZE;
 			ChangeResolution(event.resize.w, event.resize.h);
+			return true;
+		case SDL_ACTIVEEVENT:
+			if (event.active.gain == 0 && (event.active.state == SDL_APPINPUTFOCUS || event.active.state == SDL_APPACTIVE))
+			{
+				result = WE_LOST_FOCUS;
+				return true;
+			}
 			break;
 		default:
 			break;

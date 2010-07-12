@@ -19,8 +19,9 @@ namespace GfxSystem
 {
 	/// Event that happen to the window while the app is running.
 	enum eWindowEvent {
-		WE_QUIT,		///< User tries to close the window (map to SDL_QUIT)
-		WE_RESIZE		///< User tries to resize the window (map to SDL_VIDEORESIZE)
+		WE_QUIT, ///< User tries to close the window (map to SDL_QUIT).
+		WE_RESIZE, ///< User tries to resize the window (map to SDL_VIDEORESIZE).
+		WE_LOST_FOCUS ///< The application has lost the focus.
 	};
 
 	/// Handle to the platform specific window.
