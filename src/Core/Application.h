@@ -89,6 +89,9 @@ namespace Core
 		/// Returns whether the editor is currently turned on and the game is running only in a small window.
 		bool IsEditMode() const { return mEditMode; }
 		
+		/// Returns true if the application has currently focus.
+		bool HasFocus(void) const { return mHasFocus; }
+
 		/// Returns project used for the game itself.
 		Project* GetGameProject() { return mGameProject; }
 
@@ -103,7 +106,8 @@ namespace Core
 		bool mEditMode; ///< if true the editor is currently turned on and the game is running only in a small window.
 		Project* mGameProject; ///< Project used for the game itself.
 		string mStartupProjectName; ///< Name of the project to be started after the app launches.
-		
+		bool mHasFocus;
+
 		/// Represents global settings of the application.
 		Config* mGlobalConfig;
 

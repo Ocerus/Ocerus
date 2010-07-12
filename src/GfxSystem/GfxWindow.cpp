@@ -94,9 +94,10 @@ bool GfxWindow::PopEvent(eWindowEvent &result)
 			ChangeResolution(event.resize.w, event.resize.h);
 			return true;
 		case SDL_ACTIVEEVENT:
-			if (event.active.gain == 0 && (event.active.state == SDL_APPINPUTFOCUS || event.active.state == SDL_APPACTIVE))
+			if ((event.active.state & SDL_APPINPUTFOCUS) != 0 || (event.active.state & SDL_APPACTIVE) != 0)
 			{
-				result = WE_LOST_FOCUS;
+				if (event.active.gain == 0) result = WE_LOST_FOCUS;
+				else result = WE_GAINED_FOCUS;
 				return true;
 			}
 			break;

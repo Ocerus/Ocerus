@@ -1,7 +1,8 @@
 #include "Common.h"
 #include "InputMgr.h"
 #include "OISListener.h"
-#include "../GfxSystem/GfxWindow.h"
+#include "GfxSystem/GfxWindow.h"
+#include "Core/Application.h"
 #include "StringConverter.h"
 #include "IInputListener.h"
 #include <OISInputManager.h>
@@ -11,8 +12,6 @@
 #endif
 
 using namespace InputSystem;
-
-
 
 
 InputSystem::OISListener::OISListener(): mOIS(0), mMouse(0), mKeyboard(0)
@@ -27,17 +26,13 @@ InputSystem::OISListener::OISListener(): mOIS(0), mMouse(0), mKeyboard(0)
 	GfxSystem::WindowHandle hWnd = GfxSystem::GfxWindow::GetSingleton()._GetWindowHandle();
 	pl.insert(OIS::ParamList::value_type("WINDOW", StringConverter::ToString(hWnd)));
 
-#ifdef __WIN__
 	// let the standard mouse cursor be
 	pl.insert(Containers::make_pair(string("w32_mouse"), string("DISCL_BACKGROUND" )));
 	pl.insert(Containers::make_pair(string("w32_mouse"), string("DISCL_NONEXCLUSIVE")));
-#else
-	// let the standard mouse cursor be
 	pl.insert(Containers::make_pair(string("x11_mouse_grab"), string("false" )));
 	pl.insert(Containers::make_pair(string("x11_mouse_hide"), string("true")));
 	pl.insert(Containers::make_pair(string("x11_keyboard_grab"), string("false")));
 	pl.insert(Containers::make_pair(string("XAutoRepeatOn"), string("true")));
-#endif
 
 	mOIS = OIS::InputManager::createInputSystem(pl);
 	ocInfo << "OIS created";
@@ -55,7 +50,7 @@ bool InputSystem::OISListener::mouseMoved( const OIS::MouseEvent &evt )
 {
 	if (evt.state.Z.rel != 0) {
 		// the wheel has moved; check if the mouse is still above the window; if not, ignore the event
-		if (evt.state.X.abs < 0 || evt.state.X.abs >= evt.state.width
+		if (!gApp.HasFocus() || evt.state.X.abs < 0 || evt.state.X.abs >= evt.state.width
 			|| evt.state.Y.abs < 0 || evt.state.Y.abs >= evt.state.height)
 		{
 			return true;
@@ -209,14 +204,29 @@ void InputSystem::OISListener::RecreateDevices()
 {
 	OC_ASSERT(mOIS);
 
+	int mouseWidth = 0;
+	int mouseHeight = 0;
+
 	if (mKeyboard) mOIS->destroyInputObject(mKeyboard);
-	if (mMouse) mOIS->destroyInputObject(mMouse);
+	if (mMouse)
+	{
+		const OIS::MouseState &ms = mMouse->getMouseState();
+		mouseWidth = ms.width;
+		mouseHeight = ms.height;
+		mOIS->destroyInputObject(mMouse);
+	}
 
 	mKeyboard = static_cast<OIS::Keyboard*>(mOIS->createInputObject(OIS::OISKeyboard, true));
 	mKeyboard->setEventCallback(this);
 
 	mMouse = static_cast<OIS::Mouse*>(mOIS->createInputObject(OIS::OISMouse, true));
 	mMouse->setEventCallback(this);
+	if (mouseWidth != 0 && mouseHeight != 0)
+	{
+		const OIS::MouseState &ms = mMouse->getMouseState();
+		ms.width = mouseWidth;
+		ms.height = mouseHeight;
+	}
 
 	ocInfo << "OIS keyboar & mouse recreated";
 }

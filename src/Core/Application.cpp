@@ -23,6 +23,7 @@ Application::Application():
 	mDevelopMode(true),
 	mEditMode(true),
 	mGameProject(0),
+	mHasFocus(true),
 	mFrameSmoothingTime(0.5f),
 	mConsoleHandle(0)
 {
@@ -304,7 +305,12 @@ void Application::MessagePump( void )
 		}
 		else if (event == GfxSystem::WE_LOST_FOCUS)
 		{
+			mHasFocus = false;
 			gInputMgr.ReleaseAll();
+		}
+		else if (event == GfxSystem::WE_GAINED_FOCUS)
+		{
+			mHasFocus = true;
 		}
 	}
 }

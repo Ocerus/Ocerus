@@ -21,7 +21,8 @@ namespace GfxSystem
 	enum eWindowEvent {
 		WE_QUIT, ///< User tries to close the window (map to SDL_QUIT).
 		WE_RESIZE, ///< User tries to resize the window (map to SDL_VIDEORESIZE).
-		WE_LOST_FOCUS ///< The application has lost the focus.
+		WE_LOST_FOCUS, ///< The application has lost the focus.
+		WE_GAINED_FOCUS ///< The application has gained the focus.
 	};
 
 	/// Handle to the platform specific window.
