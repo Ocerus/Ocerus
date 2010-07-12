@@ -146,9 +146,9 @@ EntityHandle EntityMgr::CreateEntity(EntityDescription& desc)
 		ocError << "Can't create an entity prototype which is an instance of another prototype; invalidating the prototype link...";
 		desc.mPrototype = INVALID_ENTITY_ID;
 	}
-	if (desc.mPrototype != INVALID_ENTITY_ID && mEntities.find(desc.mPrototype)==mEntities.end())
+	if (desc.mPrototype != INVALID_ENTITY_ID && mEntities.find(desc.mPrototype) == mEntities.end())
 	{
-		ocWarning << "Prototype of the entity can't be found. Continuing without it.";
+		ocInfo << "Prototype of the entity " << desc.mName << " can't be found. Continuing without it.";
 		desc.mPrototype = INVALID_ENTITY_ID;
 	}
 
