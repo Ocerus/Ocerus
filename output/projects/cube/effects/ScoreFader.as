@@ -11,4 +11,8 @@ void OnDraw(float32 delta)
 		this.Set_float32("Transparency", MathUtils::Min(1.0f, this.Get_float32("Transparency") + delta * this.Get_float32("FadeAlphaSpeed")));
 		this.Set_Vector2("Position", this.Get_Vector2("Position") + Vector2(0, -this.Get_float32("FadeMovementSpeed")));
 	}
+	else
+	{
+		gEntityMgr.DestroyEntity(this);
+	}
 }
