@@ -50,6 +50,7 @@ void EntityComponents::DynamicBody::RegisterReflection( void )
 	RegisterFunction("ApplyLinearImpulseWorldCoords", &DynamicBody::ApplyLinearImpulseWorldCoords, PA_SCRIPT_WRITE, "");
 	RegisterFunction("ApplyAngularImpulse", &DynamicBody::ApplyAngularImpulseWorldCoords, PA_SCRIPT_WRITE, "");
 	RegisterFunction("ApplyAngularImpulseWorldCoords", &DynamicBody::ApplyAngularImpulseWorldCoords, PA_SCRIPT_WRITE, "");
+	RegisterFunction("ZeroVelocity", &DynamicBody::ZeroVelocity, PA_SCRIPT_WRITE, "");
 	RegisterProperty<float32>("LinearDamping", &DynamicBody::GetLinearDamping, &DynamicBody::SetLinearDamping, PA_FULL_ACCESS, "");
 	RegisterProperty<float32>("AngularDamping", &DynamicBody::GetAngularDamping, &DynamicBody::SetAngularDamping, PA_FULL_ACCESS, "");
 	RegisterProperty<Vector2>("LinearVelocity", &DynamicBody::GetLinearVelocity, 0, PA_EDIT_READ | PA_SCRIPT_READ, "");
@@ -211,5 +212,14 @@ uint32 EntityComponents::DynamicBody::GetContactsCount() const
 	else
 	{
 		return 0;
+	}
+}
+
+void EntityComponents::DynamicBody::ZeroVelocity( PropertyFunctionParameters params )
+{
+	if (mBody)
+	{
+		mBody->SetLinearVelocity(Vector2_Zero);
+		mBody->SetAngularVelocity(0);
 	}
 }

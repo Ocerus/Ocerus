@@ -49,6 +49,9 @@ namespace EntityComponents
 		/// Applies an angular impulse. First parameter is the impulse (float).
 		void ApplyAngularImpulseWorldCoords(PropertyFunctionParameters params);
 
+		/// Zeroes out all velocities of the body.
+		void ZeroVelocity(PropertyFunctionParameters params);
+
 		/// Returns the angular damping.
 		float32 GetAngularDamping() const;
 

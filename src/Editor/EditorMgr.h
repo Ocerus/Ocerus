@@ -243,6 +243,9 @@ namespace Editor
 		/// Draws the shape of the entity using the selected color.
 		bool DrawEntityPhysicalShape(const EntitySystem::EntityHandle entity, const GfxSystem::Color shapeColor, const float32 shapeWidth);
 
+		/// Processes the currently selected edit tool.
+		void ProcessCurrentEditTool(const GfxSystem::Point& screenCursorPos);
+
 		//Shortcuts
 		KeyShortcuts* mShortcuts;
 	
