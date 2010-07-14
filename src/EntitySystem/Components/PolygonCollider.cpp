@@ -139,7 +139,33 @@ void EntityComponents::PolygonCollider::DestroyShape( void )
 
 void EntityComponents::PolygonCollider::SetPolygon( Array<Vector2>* val )
 {
-	if (val->GetSize() < 3) return;
+	int32 count = val->GetSize();
+
+	if (count < 3) return;
+
+	//----------- Test for preventing Box2D assert ----------//
+	float32 area = 0;
+	Vector2* vs = val->GetRawArrayPtr();
+
+	for (int32 i = 0; i < count; ++i)
+	{
+		// Triangle vertices.
+		Vector2 p1(0,0);
+		Vector2 p2 = vs[i];
+		Vector2 p3 = i + 1 < count ? vs[i+1] : vs[0];
+
+		Vector2 e1 = p2 - p1;
+		Vector2 e2 = p3 - p1;
+
+		float32 D = MathUtils::Cross(e1, e2);
+
+		area += 0.5f * D;;
+	}
+
+	if (area <= FLT_EPSILON)
+		return;
+	//-------------------------------------------------------//
+
 	mPolygon.CopyFrom(*val);
 	if (GetOwner().IsInited()) RecreateShape();
 }
