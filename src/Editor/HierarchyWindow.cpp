@@ -153,7 +153,7 @@ void Editor::HierarchyWindow::AddEntityToHierarchy( const EntitySystem::EntityHa
 	mHierarchy.append_child(parentIter, toAdd);
 	uint32 parentDepth;
 	int32 parentIndex = FindTreeItem(parent, parentDepth);
-	if (parentIndex == -1) AppendTreeItem(toAdd.GetName(), 0, toAdd);
+	if (parentIndex == -1) AddTreeItem(0, toAdd.GetName(), 0, toAdd);
 	else AddTreeItem(parentIndex+1, toAdd.GetName(), parentDepth+1, toAdd);
 }
 
