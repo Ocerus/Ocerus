@@ -116,7 +116,7 @@ void GfxWindow::ChangeResolution(int32 x, int32 y)
 	set<IGfxWindowListener*>::iterator it;
 	for(it = mGfxWindowListeners.begin(); it != mGfxWindowListeners.end(); ++it)
 	{
-		(*it)->ResolutionChanged(mResx, mResy);
+		(*it)->ResolutionChanging(mResx, mResy);
 	}
 	
 	// recreate drawing context
@@ -125,6 +125,14 @@ void GfxWindow::ChangeResolution(int32 x, int32 y)
 		flags |= SDL_FULLSCREEN;
 	
 	mScreen = SDL_SetVideoMode( mResx, mResy, 0, flags );
+	gGfxRenderer.Init();
+	gResourceMgr.RefreshAllResources();
+
+	for(it = mGfxWindowListeners.begin(); it != mGfxWindowListeners.end(); ++it)
+	{
+		(*it)->ResolutionChanged(mResx, mResy);
+	}
+	gInputMgr.ReleaseAll();
 }
 
 void GfxWindow::SwitchFullscreen()
@@ -135,6 +143,7 @@ void GfxWindow::SwitchFullscreen()
 		ChangeResolution(1280, 1024);
 	else
 		ChangeResolution(1024, 768);
+
 }
 
 WindowHandle GfxWindow::_GetWindowHandle() const

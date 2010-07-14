@@ -58,6 +58,9 @@ namespace GfxSystem
 
 		/// Returns the window resolution.
 		inline Point GetResolution() const { return Point(mResx, mResy); }
+		
+		/// Returns true if the window is in fullscreen mode.
+		inline bool GetFullscreen() const { return mFullscreen; }
 
 		/// Gets windows handle. Windows OS only.
 		WindowHandle _GetWindowHandle() const;

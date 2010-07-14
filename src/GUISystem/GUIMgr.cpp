@@ -286,9 +286,22 @@ namespace GUISystem
 		return result;
 	}
 
+	void GUIMgr::ResolutionChanging(const uint32 width, const uint32 height)
+	{
+		OC_DASSERT(mCegui);
+
+		mRenderer->grabTextures();
+
+		return;
+	}
+
 	void GUIMgr::ResolutionChanged(const uint32 width, const uint32 height)
 	{
 		OC_DASSERT(mCegui);
+
+        mRenderer->restoreTextures();
+        //mRenderer->setDisplaySize(CEGUI::Size((float32)width, (float32)height));
+
 		return mCegui->notifyDisplaySizeChanged(CEGUI::Size((float32)width, (float32)height));
 	}
 

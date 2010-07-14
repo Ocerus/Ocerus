@@ -104,7 +104,10 @@ namespace GUISystem
 		/// is still running.
 		inline InputEventInfo& GetCurrentInputEvent() { return mCurrentInputEvent; }
 
-		/// This method injects resolution change into GUI system. It is part of IGfxWindowListener interface.
+		/// This method injects resolution change into GUI system. It is part of IGfxWindowListener interface. Called before window resolution is changed.
+		virtual void ResolutionChanging(const uint32 width, const uint32 height);
+
+		/// This method injects resolution change into GUI system. It is part of IGfxWindowListener interface. Called after window resolution is changed.
 		virtual void ResolutionChanged(const uint32 width, const uint32 height);
 
 		inline GUIConsole* GetConsole() { return mGUIConsole; }

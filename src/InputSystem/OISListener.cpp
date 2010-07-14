@@ -219,7 +219,7 @@ void InputSystem::OISListener::RecreateDevices()
 	mKeyboard = static_cast<OIS::Keyboard*>(mOIS->createInputObject(OIS::OISKeyboard, true));
 	mKeyboard->setEventCallback(this);
 
-	mMouse = static_cast<OIS::Mouse*>(mOIS->createInputObject(OIS::OISMouse, true));
+	mMouse = static_cast<OIS::Mouse*>(mOIS->createInputObject(OIS::OISMouse, true, "", gGfxWindow.GetFullscreen()));
 	mMouse->setEventCallback(this);
 	if (mouseWidth != 0 && mouseHeight != 0)
 	{
