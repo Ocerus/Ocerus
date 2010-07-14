@@ -445,60 +445,58 @@ bool Editor::EditorMgr::MouseMoved( const InputSystem::MouseInfo& mi )
 	if (mEditToolWorking)
 	{
 		Vector2 worldCursorPos;
-		if (gGfxRenderer.ConvertScreenToWorldCoords(GfxSystem::Point(mi.x, mi.y), worldCursorPos, mEditorGUI->GetEditorViewport()->GetRenderTarget()))
+		gGfxRenderer.ConvertScreenToWorldCoords(GfxSystem::Point(mi.x, mi.y), worldCursorPos, mEditorGUI->GetEditorViewport()->GetRenderTarget());
+		Vector2 delta = worldCursorPos - mEditToolCursorPosition;
+		delta.y = -delta.y; // so that the editing tool seems more intuitive
+		float32 scalarDelta = delta.x * delta.x / 2;
+
+		if (scalarDelta > 8)
+			scalarDelta = MathUtils::Abs(delta.x) * 2;
+
+		if (delta.x < 0)
+			scalarDelta *= -1;
+
+		switch (mEditTool)
 		{
-			Vector2 delta = worldCursorPos - mEditToolCursorPosition;
-			delta.y = -delta.y; // so that the editing tool seems more intuitive
-			float32 scalarDelta = delta.x * delta.x / 2;
-
-			if (scalarDelta > 8)
-				scalarDelta = MathUtils::Abs(delta.x) * 2;
-				
-			if (delta.x < 0)
-				scalarDelta *= -1;
-
-			switch (mEditTool)
+		case ET_MOVE:
+			for (size_t i=0; i<mSelectedEntities.size(); ++i)
 			{
-			case ET_MOVE:
-				for (size_t i=0; i<mSelectedEntities.size(); ++i)
-				{
-					mSelectedEntities[i].GetProperty("Position").SetValue<Vector2>(mEditToolBodyPositions[i] + worldCursorPos - mEditToolCursorPosition);
-				}
-				break;
-			case ET_ROTATE:
-				for (size_t i=0; i<mSelectedEntities.size(); ++i)
-				{
-					mSelectedEntities[i].GetProperty("Angle").SetValue<float32>(mEditToolBodyAngles[i] + EDIT_TOOL_ANGLE_CHANGE_RATIO * scalarDelta);
-				}
-				break;
-			case ET_ROTATE_Y:
-				for (size_t i=0; i<mSelectedEntities.size(); ++i)
-				{
-					mSelectedEntities[i].GetProperty("YAngle").SetValue<float32>(mEditToolBodyAngles[i] + EDIT_TOOL_ANGLE_CHANGE_RATIO * scalarDelta);
-				}
-				break;
-			case ET_SCALE:
-				if (delta.x < 0)
-					delta.x *= -delta.x;
-				else
-					delta.x *= delta.x;
-
-				if (delta.y < 0)
-					delta.y *= -delta.y;
-				else
-					delta.y *= delta.y;
-
-
-				delta *= EDIT_TOOL_SCALE_CHANGE_RATIO;
-				for (size_t i=0; i<mSelectedEntities.size(); ++i)
-				{
-					Vector2 transformedDelta = MathUtils::Multiply(Matrix22(mSelectedEntities[i].GetProperty("Angle").GetValue<float32>()), delta);
-					mSelectedEntities[i].GetProperty("Scale").SetValue<Vector2>(mEditToolBodyScales[i] + transformedDelta);
-				}
-				break;
+				mSelectedEntities[i].GetProperty("Position").SetValue<Vector2>(mEditToolBodyPositions[i] + worldCursorPos - mEditToolCursorPosition);
 			}
-			return true;
-		}				
+			break;
+		case ET_ROTATE:
+			for (size_t i=0; i<mSelectedEntities.size(); ++i)
+			{
+				mSelectedEntities[i].GetProperty("Angle").SetValue<float32>(mEditToolBodyAngles[i] + EDIT_TOOL_ANGLE_CHANGE_RATIO * scalarDelta);
+			}
+			break;
+		case ET_ROTATE_Y:
+			for (size_t i=0; i<mSelectedEntities.size(); ++i)
+			{
+				mSelectedEntities[i].GetProperty("YAngle").SetValue<float32>(mEditToolBodyAngles[i] + EDIT_TOOL_ANGLE_CHANGE_RATIO * scalarDelta);
+			}
+			break;
+		case ET_SCALE:
+			if (delta.x < 0)
+				delta.x *= -delta.x;
+			else
+				delta.x *= delta.x;
+
+			if (delta.y < 0)
+				delta.y *= -delta.y;
+			else
+				delta.y *= delta.y;
+
+
+			delta *= EDIT_TOOL_SCALE_CHANGE_RATIO;
+			for (size_t i=0; i<mSelectedEntities.size(); ++i)
+			{
+				Vector2 transformedDelta = MathUtils::Multiply(Matrix22(mSelectedEntities[i].GetProperty("Angle").GetValue<float32>()), delta);
+				mSelectedEntities[i].GetProperty("Scale").SetValue<Vector2>(mEditToolBodyScales[i] + transformedDelta);
+			}
+			break;
+		}
+		return true;
 	}
 
 	return false;
@@ -506,6 +504,9 @@ bool Editor::EditorMgr::MouseMoved( const InputSystem::MouseInfo& mi )
 
 bool Editor::EditorMgr::MouseButtonPressed( const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn )
 {
+	OC_ASSERT(mEditorGUI);
+	mEditorGUI->GetEditorViewport()->captureInput();
+
 	if (btn == InputSystem::MBTN_LEFT)
 	{
 		Vector2 worldCursorPos;
@@ -590,6 +591,9 @@ bool Editor::EditorMgr::MouseButtonReleased( const InputSystem::MouseInfo& mi, c
 {
 	OC_UNUSED(mi);
 	OC_UNUSED(btn);
+
+	OC_ASSERT(mEditorGUI);
+	mEditorGUI->GetEditorViewport()->releaseInput();
 
 	bool editToolWasWorking = mEditToolWorking;
 	mEditToolWorking = false;

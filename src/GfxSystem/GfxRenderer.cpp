@@ -159,36 +159,36 @@ bool GfxSystem::GfxRenderer::ConvertScreenToWorldCoords( const Point& screenCoor
 
 bool GfxSystem::GfxRenderer::ConvertScreenToWorldCoords( const Point& screenCoords, Vector2& worldCoords, const RenderTarget& renderTarget ) const
 {
+	worldCoords.SetZero();
+
 	const GfxViewport& viewport = renderTarget.first;
-	
+
 	Point topleft, bottomright;
 	viewport.CalculateScreenBoundaries(topleft, bottomright);
 
-	if (topleft.x <= screenCoords.x && screenCoords.x <= bottomright.x && topleft.y <= screenCoords.y && screenCoords.y <= bottomright.y)
+	const EntitySystem::EntityHandle& camera = renderTarget.second;
+	if (!camera.IsValid())
 	{
-		const EntitySystem::EntityHandle& camera = renderTarget.second;
-		if (!camera.IsValid())
-			return false;
-
-		Vector2 topleftWorld, bottomrightWorld;
-		viewport.CalculateWorldBoundaries(topleftWorld, bottomrightWorld);
-
-		// inverse viewport transform
-		Vector2 viewportCenter = 0.5f * Vector2((float32)(topleft.x + bottomright.x), (float32)(topleft.y + bottomright.y));
-		worldCoords = Vector2((float32)screenCoords.x, (float32)screenCoords.y) - viewportCenter;
-
-		// inverse projection transform
-		worldCoords.x = worldCoords.x * (bottomrightWorld.x-topleftWorld.x) / (bottomright.x-topleft.x);
-		worldCoords.y = worldCoords.y * (bottomrightWorld.y-topleftWorld.y) / (bottomright.y-topleft.y);
-
-		// inverse camera transform
-
-		worldCoords = GetInverseCameraTranform(camera, worldCoords);
-
-		return true;
+		ocError << "Invalid camera";
+		return false;
 	}
 
-	return false;
+	Vector2 topleftWorld, bottomrightWorld;
+	viewport.CalculateWorldBoundaries(topleftWorld, bottomrightWorld);
+
+	// inverse viewport transform
+	Vector2 viewportCenter = 0.5f * Vector2((float32)(topleft.x + bottomright.x), (float32)(topleft.y + bottomright.y));
+	worldCoords = Vector2((float32)screenCoords.x, (float32)screenCoords.y) - viewportCenter;
+
+	// inverse projection transform
+	worldCoords.x = worldCoords.x * (bottomrightWorld.x-topleftWorld.x) / (bottomright.x-topleft.x);
+	worldCoords.y = worldCoords.y * (bottomrightWorld.y-topleftWorld.y) / (bottomright.y-topleft.y);
+
+	// inverse camera transform
+
+	worldCoords = GetInverseCameraTranform(camera, worldCoords);
+
+	return (topleft.x <= screenCoords.x && screenCoords.x <= bottomright.x && topleft.y <= screenCoords.y && screenCoords.y <= bottomright.y);
 }
 
 void GfxSystem::GfxRenderer::DrawEntities()

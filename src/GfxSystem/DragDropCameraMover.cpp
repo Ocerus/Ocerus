@@ -88,11 +88,7 @@ bool GfxSystem::DragDropCameraMover::MouseMoved( const MouseInfo& mi )
 	}
 
 	Vector2 worldCursorPos;
-	if (!gGfxRenderer.ConvertScreenToWorldCoords(GfxSystem::Point(mi.x, mi.y), worldCursorPos, mRenderTarget))
-	{
-		// we're not in the current viewport
-		return false;
-	}
+	gGfxRenderer.ConvertScreenToWorldCoords(GfxSystem::Point(mi.x, mi.y), worldCursorPos, mRenderTarget);
 
 	Vector2 camPos = gGfxRenderer.GetRenderTargetCameraPosition(mRenderTarget);
 
