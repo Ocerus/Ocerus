@@ -505,6 +505,7 @@ bool Editor::EditorMgr::MouseMoved( const InputSystem::MouseInfo& mi )
 bool Editor::EditorMgr::MouseButtonPressed( const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn )
 {
 	OC_ASSERT(mEditorGUI);
+	mEditorGUI->GetEditorViewport()->activate();
 	mEditorGUI->GetEditorViewport()->captureInput();
 
 	if (btn == InputSystem::MBTN_LEFT)

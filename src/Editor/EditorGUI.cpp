@@ -157,7 +157,7 @@ void EditorGUI::Update(float32 delta)
 			bool isButton = activeWindow->getActiveChild()->getType().compare("Editor/Button") == 0;
 			if (!isEditbox && !isMenuItem && !isPopupMenu && !isButton)
 			{
-				if (gEditorMgr.IsLockedToGame()) mGameViewport->Activate();
+				if (gEditorMgr.IsLockedToGame() && !mEditorViewport->isCapturedByThis()) mGameViewport->Activate();
 				else mEditorViewport->Activate();
 			}
 		}
