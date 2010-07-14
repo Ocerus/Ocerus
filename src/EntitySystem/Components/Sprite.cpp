@@ -114,6 +114,8 @@ void EntityComponents::Sprite::SetSkipSpace(GfxSystem::Point value)
 
 void EntityComponents::Sprite::RefreshFrameCount()
 { 
+	if (!mTextureHandle) return;
+
 	int32 w = ((GfxSystem::TexturePtr)mTextureHandle)->GetWidth();
 	int32 h = ((GfxSystem::TexturePtr)mTextureHandle)->GetHeight();
 

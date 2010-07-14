@@ -140,7 +140,8 @@ namespace Core
 
 		// Game control.
 		void UpdateGameProperties(void); ///< Updates globally accessible properties related to game.
-		eActionState mActionState; ///< Is the game running or what?
+		eActionState mActionState; ///< Is the game running?
+		bool mActionRestarted; ///< True if the action was restarted before it was run again.
 		Utils::Timer mTimer; ///< Timer for game action related things.
 		GfxSystem::RenderTargetID mRenderTarget; ///< Where the game is to be rendered?
 		EntitySystem::EntityHandle mCamera; ///< Camera used for rendering.

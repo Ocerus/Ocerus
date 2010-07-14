@@ -1,17 +1,18 @@
 #include "Common.h"
 #include "Game.h"
-#include "Application.h"
 #include "Properties.h"
 #include "DataContainer.h"
 #include "StringConverter.h"
-#include "GfxSystem/PhysicsDraw.h"
+#include "Core/Application.h"
 #include "Editor/EditorMgr.h"
+#include "Editor/EditorGUI.h"
 #include "ResourceSystem/XMLResource.h"
+#include "GUISystem/CEGUITools.h"
+#include "GfxSystem/PhysicsDraw.h"
+#include "GfxSystem/Mesh.h"
+
 #include <Box2D.h>
 #include <Box2D/Dynamics/b2WorldCallbacks.h>
-#include "GUISystem/CEGUITools.h"
-
-#include "GfxSystem/Mesh.h"
 
 using namespace Core;
 using namespace EntitySystem;
@@ -48,6 +49,7 @@ private:
 
 Core::Game::Game():
 	StateMachine<eGameState>(GS_NOT_INITED),
+	mActionRestarted(true),
 	mTimer(true),
 	mRenderTarget(GfxSystem::InvalidRenderTargetID),
 	mCamera(EntitySystem::EntityHandle::Null),
@@ -237,6 +239,15 @@ void Core::Game::Draw(const float32 passedDelta)
 	float32 delta = passedDelta;
 	if (!IsActionRunning()) delta = 0.0f;
 
+	if (gApp.IsDevelopMode() && !IsActionRunning() && mActionRestarted)
+	{
+		// sync the game camera with the editor camera
+		EntityHandle gameCamera = gEntityMgr.FindFirstEntity(GameCameraName);
+		EntityHandle editorCamera = gEntityMgr.FindFirstEntity(Editor::EditorGUI::EditorCameraName);
+		gameCamera.GetProperty("Zoom").SetValue(editorCamera.GetProperty("Zoom").GetValue<float32>());
+		gameCamera.GetProperty("Rotation").SetValue(editorCamera.GetProperty("Rotation").GetValue<float32>());
+		gameCamera.GetProperty("Position").SetValue(editorCamera.GetProperty("Position").GetValue<Vector2>());
+	}
 	
 	gGfxRenderer.SetCurrentRenderTarget(mRenderTarget);
 	gGfxRenderer.ClearCurrentRenderTarget(GfxSystem::Color(0, 0, 0));
@@ -389,6 +400,7 @@ void Core::Game::PauseAction(void)
 
 void Core::Game::ResumeAction(void)
 {
+	mActionRestarted = false;
 	if (mActionState == AS_PAUSED)
 	{
 		mActionState = AS_RUNNING;
@@ -417,6 +429,7 @@ void Core::Game::SaveAction(void)
 
 void Core::Game::RestartAction(void)
 {
+	mActionRestarted = true;
 	bool result = true;
 
 	PauseAction();
