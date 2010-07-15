@@ -188,8 +188,7 @@ void ResourceSystem::Resource::Refresh( void )
 		int64 currentWriteTime = 0;
 		try { currentWriteTime = boost::filesystem::last_write_time(mFilePath); }
 		catch (boost::exception&) { ocWarning << "Resource file " << mFilePath << " went missing after the resource was loaded"; }
-		//TODO
-		//if (currentWriteTime > mLastWriteTime)
+		if (currentWriteTime > mLastWriteTime)
 		{
 			ocInfo << "Refreshing resource " << mName << " from " << mFilePath;
 			Reload();

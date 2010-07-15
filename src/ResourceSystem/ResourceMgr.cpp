@@ -471,6 +471,21 @@ void ResourceSystem::ResourceMgr::RefreshAllResources( void )
 	}
 }
 
+void ResourceSystem::ResourceMgr::RefreshAllTextures( void )
+{
+	for (ResourceGroupMap::iterator groupIter=mResourceGroups.begin(); groupIter!=mResourceGroups.end(); ++groupIter)
+	{
+		ResourceMap* resMap = groupIter->second;
+		OC_ASSERT(resMap);
+		for (ResourceMap::iterator resIter=resMap->begin(); resIter!=resMap->end(); ++resIter)
+		{
+			ResourcePtr res = resIter->second;
+			if ((res->GetType() == RESTYPE_TEXTURE) && (res->GetState() == Resource::STATE_LOADED))
+				resIter->second->Reload();
+		}
+	}
+}
+
 void ResourceSystem::ResourceMgr::ChangeResourceType(ResourcePtr resPointer, eResourceType newType)
 {
 	ocInfo << "Changing type of resource " << resPointer->GetName() << " to " << GetResourceTypeName(newType);
@@ -509,15 +524,14 @@ void ResourceSystem::ResourceMgr::ChangeResourceType(ResourcePtr resPointer, eRe
 
 void ResourceSystem::ResourceMgr::CheckForResourcesUpdates( void )
 {
-	// TODO
-	/*PROFILE_FNC();
+	PROFILE_FNC();
 
 	uint64 currentTime = mResourceUpdatesTimer.GetMilliseconds();
 	if (currentTime - mLastUpdateTime >= RESOURCE_UPDATES_DELAY_MILLIS)
 	{
 		mLastUpdateTime = currentTime;
 		RefreshAllResources();
-	}*/
+	}
 }
 
 void ResourceSystem::ResourceMgr::_NotifyResourceLoaded( const Resource* loadedResource )

@@ -78,6 +78,9 @@ namespace ResourceSystem
 		/// Makes sure all loaded resources are up to date.
 		void RefreshAllResources(void);
 
+		/// Reloads all textures. Needed when recreating drawing context.
+		void RefreshAllTextures( void );
+
 		/// Performs a periodic test on resources to determine if they're up to date. The function is non-blocking.
 		/// The function is meant to be called each frame.
 		void CheckForResourcesUpdates(void);

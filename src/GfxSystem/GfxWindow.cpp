@@ -126,7 +126,7 @@ void GfxWindow::ChangeResolution(int32 x, int32 y)
 	
 	mScreen = SDL_SetVideoMode( mResx, mResy, 0, flags );
 	gGfxRenderer.Init();
-	gResourceMgr.RefreshAllResources();
+	gResourceMgr.RefreshAllTextures();
 
 	for(it = mGfxWindowListeners.begin(); it != mGfxWindowListeners.end(); ++it)
 	{
