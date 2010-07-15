@@ -68,6 +68,7 @@ void GUISystem::GUIConsole::AppendMessage( const string& message )
 	{
 		scrollbar->setScrollPosition(scrollbar->getDocumentSize());
 	}
+	mConsoleMessagesWidget->getHorzScrollbar()->hide();
 }
 
 void GUIConsole::ToggleConsole()
