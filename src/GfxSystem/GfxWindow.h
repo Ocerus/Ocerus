@@ -36,7 +36,7 @@ namespace GfxSystem
 	public:
 
 		/// Constructs the window.
-		void Init(const int32 resx, const int32 resy, const bool fullscreen, const string title);
+		void Init(const int32 x, const int32 y, const int32 windowWidth, const int32 windowHeight, const int32 resx, const int32 resy, const bool fullscreen, const string title);
 
 		/// Destroys the window.
 		~GfxWindow();
@@ -51,14 +51,32 @@ namespace GfxSystem
 		void SwitchFullscreen();
 
 		/// Returns the window width resolution.
-		inline int32 GetResolutionWidth() const { return mResx; }
+		inline int32 GetFullscreenResolutionWidth() const { return mFullscreenResolutionWidth; }
 
 		/// Returns the window height resolution.
-		inline int32 GetResolutionHeight() const { return mResy; }
+		inline int32 GetFullscreenResolutionHeight() const { return mFullscreenResolutionHeight; }
 
 		/// Returns the window resolution.
-		inline Point GetResolution() const { return Point(mResx, mResy); }
+		inline Point GetFullscreenResolution() const { return Point(mFullscreenResolutionWidth, mFullscreenResolutionHeight); }
+
+		/// Returns the window X position.
+		inline int32 GetWindowX() const { return mWindowX; }
 		
+		/// Returns the window Y position.
+		inline int32 GetWindowY() const { return mWindowY; }
+
+		/// Returns the window width.
+		inline int32 GetWindowWidth() const { return mWindowWidth; }
+
+		/// Returns the window height.
+		inline int32 GetWindowHeight() const { return mWindowHeight; }
+
+		/// Returns the currently active resolution width.
+		inline int32 GetCurrentResolutionWidth() const;
+
+		/// Returns the currently active resolution height.
+		inline int32 GetCurrentResolutionHeight() const;
+
 		/// Returns true if the window is in fullscreen mode.
 		inline bool GetFullscreen() const { return mFullscreen; }
 
@@ -74,12 +92,33 @@ namespace GfxSystem
 	private:
 
 		SDL_Surface* mScreen;
-		int32 mResx, mResy;
+		int32 mWindowX;
+		int32 mWindowY;
+		int32 mWindowWidth;
+		int32 mWindowHeight;
+		int32 mFullscreenResolutionWidth;
+		int32 mFullscreenResolutionHeight;
 		bool mFullscreen;
 
 		set<IGfxWindowListener*> mGfxWindowListeners;
 
 	};
+
+	
+	//---------------
+	// Implementation
+
+	int32 GfxSystem::GfxWindow::GetCurrentResolutionWidth() const
+	{
+		if (mFullscreen) return mFullscreenResolutionWidth;
+		else return mWindowWidth;
+	}
+
+	int32 GfxSystem::GfxWindow::GetCurrentResolutionHeight() const
+	{
+		if (mFullscreen) return mFullscreenResolutionHeight;
+		else return mWindowHeight;
+	}
 }
 
 #endif

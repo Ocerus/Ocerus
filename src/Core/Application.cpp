@@ -72,7 +72,14 @@ void Application::Init(const string& startupProjectName)
 	gStringMgrSystem.LoadLanguagePack(mGlobalConfig->GetString("Language", "", "Editor"), mGlobalConfig->GetString("Country", "", "Editor"));
 
 	GfxSystem::GfxWindow::CreateSingleton();
-	GfxSystem::GfxWindow::GetSingleton().Init(1024, 768, false, "Ocerus");
+	int32 windowX = mGlobalConfig->GetInt32("WindowX", 0, "Windows");
+	int32 windowY = mGlobalConfig->GetInt32("WindowY", 0, "Windows");
+	int32 windowWidth = mGlobalConfig->GetInt32("WindowWidth", 1024, "Windows");
+	int32 windowHeight = mGlobalConfig->GetInt32("WindowHeight", 768, "Windows");
+	int32 resX = mGlobalConfig->GetInt32("FullscreenResolutionWidth", 1280, "Windows");
+	int32 resY = mGlobalConfig->GetInt32("FullscreenResolutionHeight", 1024, "Windows");
+	bool fullscreen = mGlobalConfig->GetBool("Fullscreen", false, "Windows");
+	GfxSystem::GfxWindow::GetSingleton().Init(windowX, windowY, windowWidth, windowHeight, resX, resY, fullscreen, "Ocerus");
 
 	GfxSystem::GfxRenderer::CreateSingleton<GfxSystem::OglRenderer>();
 	GfxSystem::GfxRenderer::GetSingleton().Init();
@@ -120,12 +127,26 @@ Application::~Application()
 	ResourceSystem::ResourceMgr::GetSingleton().UnloadAllResources();
 
 	EntitySystem::EntityMgr::DestroySingleton();
+
 	ScriptSystem::ScriptMgr::DestroySingleton();
+
 	InputSystem::InputMgr::DestroySingleton();
+
 	GfxSystem::GfxRenderer::DestroySingleton();
+
+	mGlobalConfig->SetInt32("WindowX", gGfxWindow.GetWindowX(), "Windows");
+	mGlobalConfig->SetInt32("WindowY", gGfxWindow.GetWindowY(), "Windows");
+	mGlobalConfig->SetInt32("WindowWidth", gGfxWindow.GetWindowWidth(), "Windows");
+	mGlobalConfig->SetInt32("WindowHeight", gGfxWindow.GetWindowHeight(), "Windows");
+	mGlobalConfig->SetInt32("FullscreenResolutionWidth", gGfxWindow.GetFullscreenResolutionWidth(), "Windows");
+	mGlobalConfig->SetInt32("FullscreenResolutionHeight", gGfxWindow.GetFullscreenResolutionHeight(), "Windows");
+	mGlobalConfig->SetBool("Fullscreen", gGfxWindow.GetFullscreen(), "Windows");
 	GfxSystem::GfxWindow::DestroySingleton();
+
 	StringSystem::StringMgr::Deinit();
+
 	ResourceSystem::ResourceMgr::DestroySingleton();
+
 	Utils::Hash::ClearHashMap();
 
 	// must come last

@@ -12,7 +12,7 @@ InputSystem::InputMgr::InputMgr( void )
 	mOISListener = new OISListener();
 
 	gGfxWindow.AddScreenListener(this);
-	ResolutionChanged(gGfxWindow.GetResolutionWidth(), gGfxWindow.GetResolutionHeight());
+	ResolutionChanged(gGfxWindow.GetCurrentResolutionWidth(), gGfxWindow.GetCurrentResolutionHeight());
 }
 
 InputSystem::InputMgr::~InputMgr( void )

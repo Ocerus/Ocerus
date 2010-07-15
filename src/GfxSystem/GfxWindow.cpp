@@ -14,17 +14,24 @@ using namespace GfxSystem;
 #endif
 
 
-void GfxWindow::Init(const int32 resx, const int32 resy, const bool fullscreen, const string title)
+void GfxWindow::Init(const int32 x, const int32 y, const int32 windowWidth, const int32 windowHeight, const int32 resx, const int32 resy, const bool fullscreen, const string title)
 {
 	ocInfo << "*** GfxWindow Init ***";
+
+	mWindowX = x;
+	mWindowY = y;
+	mWindowWidth = windowWidth;
+	mWindowHeight = windowHeight;
+	mFullscreenResolutionWidth = resx;
+	mFullscreenResolutionHeight = resy;
+	mFullscreen = fullscreen;
+
 	// Initializes the video subsystem
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
 		ocError << "Unable to init SDL: " << SDL_GetError();
 		return;
 	}
-
-	mFullscreen = fullscreen;
 
 	int32 flags = SDL_OPENGL | SDL_RESIZABLE;
 	if (mFullscreen) flags |= SDL_FULLSCREEN;
@@ -34,16 +41,14 @@ void GfxWindow::Init(const int32 resx, const int32 resy, const bool fullscreen, 
 
 	// Create drawing context
 	SDL_WM_SetCaption( title.c_str(), NULL );
-	mScreen = SDL_SetVideoMode( resx, resy, 0, flags );
+	SDL_putenv((string("SDL_VIDEO_WINDOW_POS") + StringConverter::ToString(mWindowX) + string(", ") + StringConverter::ToString(mWindowY)).c_str());
+	if (mFullscreen) mScreen = SDL_SetVideoMode( mFullscreenResolutionWidth, mFullscreenResolutionHeight, 0, flags );
+	else mScreen = SDL_SetVideoMode( mWindowWidth, mWindowHeight, 0, flags );
 
 	if (mScreen != NULL) 
 	{
 		ocInfo << "SDL created drawing context for OpenGL. The video surface bits per pixel is "
 			   << (int32)mScreen->format->BitsPerPixel;
-		ocInfo << "Resolution: " << resx << "x" << resy;
-		mResx = resx;
-		mResy = resy;
-		mFullscreen = fullscreen;
 		SDL_ShowCursor(0);
 	}
 	else
@@ -108,29 +113,36 @@ bool GfxWindow::PopEvent(eWindowEvent &result)
 	return false;
 }
 
-void GfxWindow::ChangeResolution(int32 x, int32 y)
+void GfxWindow::ChangeResolution(int32 resWidth, int32 resHeight)
 {
-	mResx = x;
-	mResy = y;
+	if (mFullscreen)
+	{
+		mFullscreenResolutionWidth = resWidth;
+		mFullscreenResolutionHeight = resHeight;
+	}
+	else
+	{
+		mWindowWidth = resWidth;
+		mWindowHeight = resHeight;
+	}
 
 	set<IGfxWindowListener*>::iterator it;
 	for(it = mGfxWindowListeners.begin(); it != mGfxWindowListeners.end(); ++it)
 	{
-		(*it)->ResolutionChanging(mResx, mResy);
+		(*it)->ResolutionChanging(resWidth, resHeight);
 	}
 	
 	// recreate drawing context
 	int32 flags = SDL_OPENGL | SDL_RESIZABLE;
-	if (mFullscreen)
-		flags |= SDL_FULLSCREEN;
+	if (mFullscreen) flags |= SDL_FULLSCREEN;
 	
-	mScreen = SDL_SetVideoMode( mResx, mResy, 0, flags );
+	mScreen = SDL_SetVideoMode( resWidth, resHeight, 0, flags );
 	gGfxRenderer.Init();
 	gResourceMgr.RefreshAllTextures();
 
 	for(it = mGfxWindowListeners.begin(); it != mGfxWindowListeners.end(); ++it)
 	{
-		(*it)->ResolutionChanged(mResx, mResy);
+		(*it)->ResolutionChanged(resWidth, resHeight);
 	}
 	gInputMgr.ReleaseAll();
 }
@@ -138,11 +150,8 @@ void GfxWindow::ChangeResolution(int32 x, int32 y)
 void GfxWindow::SwitchFullscreen()
 {
 	mFullscreen = !mFullscreen;
-	// @todo: hardcoded
-	if (mFullscreen)
-		ChangeResolution(1280, 1024);
-	else
-		ChangeResolution(1024, 768);
+	if (mFullscreen) ChangeResolution(mFullscreenResolutionWidth, mFullscreenResolutionHeight);
+	else ChangeResolution(mWindowWidth, mWindowHeight);
 
 }
 
