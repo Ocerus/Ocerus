@@ -594,7 +594,7 @@ bool Editor::EditorMgr::MouseButtonReleased( const InputSystem::MouseInfo& mi, c
 			float32 cameraRotation = gGfxRenderer.GetRenderTargetCameraRotation(rt);
 			if (picker.PickMultipleEntities(worldCursorPos, cameraRotation, mSelectedEntities))
 			{
-				SetCurrentEntity(GetSelectedEntity());
+				if (!IsEntitySelected(GetCurrentEntity())) SetCurrentEntity(GetSelectedEntity());
 			}
 			else
 			{
@@ -928,5 +928,19 @@ void Editor::EditorMgr::ProcessCurrentEditTool(const GfxSystem::Point& screenCur
 			mSelectedEntities[i].GetProperty("Scale").SetValue<Vector2>(mEditToolBodyScales[i] + transformedDelta);
 		}
 		break;
+	}
+}
+
+bool Editor::EditorMgr::IsEntitySelected( const EntitySystem::EntityHandle entity ) const
+{
+	return std::find(mSelectedEntities.begin(), mSelectedEntities.end(), entity) != mSelectedEntities.end();
+}
+
+void Editor::EditorMgr::SelectEntity( const EntitySystem::EntityHandle entity )
+{
+	if (!IsEntitySelected(entity))
+	{
+		mSelectedEntities.clear();
+		mSelectedEntities.push_back(entity);
 	}
 }

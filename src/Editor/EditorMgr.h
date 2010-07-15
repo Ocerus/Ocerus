@@ -54,7 +54,10 @@ namespace Editor
 		inline const EntitySystem::EntityHandle GetSelectedEntity() const;
 
 		/// Selects an entity in the editor window.
-		inline void SelectEntity(const EntitySystem::EntityHandle entity);
+		void SelectEntity(const EntitySystem::EntityHandle entity);
+
+		/// Returns true if the entity is in the current selection.
+		bool IsEntitySelected(const EntitySystem::EntityHandle entity) const;
 
 		/// Clears all selected entities.
 		void ClearSelection();
@@ -260,12 +263,6 @@ namespace Editor
 	{
 		if (mSelectedEntities.size() == 0) return EntitySystem::EntityHandle::Null;
 		else return mSelectedEntities[0];
-	}
-
-	void Editor::EditorMgr::SelectEntity( const EntitySystem::EntityHandle entity )
-	{
-		mSelectedEntities.clear();
-		mSelectedEntities.push_back(entity);
 	}
 }
 
