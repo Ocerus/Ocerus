@@ -41,20 +41,20 @@ EntityMessage::eResult EntityComponents::DynamicBody::HandleMessage( const Entit
 
 void EntityComponents::DynamicBody::RegisterReflection( void )
 {
-	RegisterProperty<PhysicalBody*>("PhysicalBody", &DynamicBody::GetBody, &DynamicBody::SetBody, PA_NONE | PA_TRANSIENT, "");
-	RegisterFunction("ApplyForce", &DynamicBody::ApplyForceWorldCoords, PA_SCRIPT_WRITE, "");
-	RegisterFunction("ApplyForceWorldCoords", &DynamicBody::ApplyForceWorldCoords, PA_SCRIPT_WRITE, "");
-	RegisterFunction("ApplyForceLocalCoords", &DynamicBody::ApplyForceLocalCoords, PA_SCRIPT_WRITE, "");
-	RegisterFunction("ApplyTorque", &DynamicBody::ApplyTorque, PA_SCRIPT_WRITE, "");
-	RegisterFunction("ApplyLinearImpulse", &DynamicBody::ApplyLinearImpulseWorldCoords, PA_SCRIPT_WRITE, "");
-	RegisterFunction("ApplyLinearImpulseWorldCoords", &DynamicBody::ApplyLinearImpulseWorldCoords, PA_SCRIPT_WRITE, "");
-	RegisterFunction("ApplyAngularImpulse", &DynamicBody::ApplyAngularImpulseWorldCoords, PA_SCRIPT_WRITE, "");
-	RegisterFunction("ApplyAngularImpulseWorldCoords", &DynamicBody::ApplyAngularImpulseWorldCoords, PA_SCRIPT_WRITE, "");
-	RegisterFunction("ZeroVelocity", &DynamicBody::ZeroVelocity, PA_SCRIPT_WRITE, "");
-	RegisterProperty<float32>("LinearDamping", &DynamicBody::GetLinearDamping, &DynamicBody::SetLinearDamping, PA_FULL_ACCESS, "");
-	RegisterProperty<float32>("AngularDamping", &DynamicBody::GetAngularDamping, &DynamicBody::SetAngularDamping, PA_FULL_ACCESS, "");
-	RegisterProperty<Vector2>("LinearVelocity", &DynamicBody::GetLinearVelocity, 0, PA_EDIT_READ | PA_SCRIPT_READ, "");
-	RegisterProperty<float32>("AngularVelocity", &DynamicBody::GetAngularVelocity, 0, PA_EDIT_READ | PA_SCRIPT_READ, "");
+	RegisterProperty<PhysicalBody*>("PhysicalBody", &DynamicBody::GetBody, &DynamicBody::SetBody, PA_NONE | PA_TRANSIENT, "Pointer to the physics object.");
+	RegisterFunction("ApplyForce", &DynamicBody::ApplyForceWorldCoords, PA_SCRIPT_WRITE, "Applies force to the object in the world coords.");
+	RegisterFunction("ApplyForceWorldCoords", &DynamicBody::ApplyForceWorldCoords, PA_SCRIPT_WRITE, "Applies force to the object in the world coords.");
+	RegisterFunction("ApplyForceLocalCoords", &DynamicBody::ApplyForceLocalCoords, PA_SCRIPT_WRITE, "Applies force to the object in the local coords.");
+	RegisterFunction("ApplyTorque", &DynamicBody::ApplyTorque, PA_SCRIPT_WRITE, "Applies torque to the object.");
+	RegisterFunction("ApplyLinearImpulse", &DynamicBody::ApplyLinearImpulseWorldCoords, PA_SCRIPT_WRITE, "Applies force impulse to the object in the world coords.");
+	RegisterFunction("ApplyLinearImpulseWorldCoords", &DynamicBody::ApplyLinearImpulseWorldCoords, PA_SCRIPT_WRITE, "Applies force impulse to the object in the world coords.");
+	RegisterFunction("ApplyAngularImpulse", &DynamicBody::ApplyAngularImpulseWorldCoords, PA_SCRIPT_WRITE, "Applies angular impulse to the object in the world coords.");
+	RegisterFunction("ApplyAngularImpulseWorldCoords", &DynamicBody::ApplyAngularImpulseWorldCoords, PA_SCRIPT_WRITE, "Applies angular impulse to the object in the world coords.");
+	RegisterFunction("ZeroVelocity", &DynamicBody::ZeroVelocity, PA_SCRIPT_WRITE, "Zeroes out all velocities of the body.");
+	RegisterProperty<float32>("LinearDamping", &DynamicBody::GetLinearDamping, &DynamicBody::SetLinearDamping, PA_FULL_ACCESS, "How much is the body going to slow down in the linear motion.");
+	RegisterProperty<float32>("AngularDamping", &DynamicBody::GetAngularDamping, &DynamicBody::SetAngularDamping, PA_FULL_ACCESS, "How much is the body going to slow down in the angular motion.");
+	RegisterProperty<Vector2>("LinearVelocity", &DynamicBody::GetLinearVelocity, 0, PA_EDIT_READ | PA_SCRIPT_READ, "Current velocity of the linear motion.");
+	RegisterProperty<float32>("AngularVelocity", &DynamicBody::GetAngularVelocity, 0, PA_EDIT_READ | PA_SCRIPT_READ, "Current velocity of the angular motion.");
 	RegisterProperty<Array<Vector2>*>("Contacts", &DynamicBody::GetContacts, 0, PA_SCRIPT_READ, "Read-only list of contact points attached to the body (world coords).");
 	RegisterProperty<uint32>("ContactsCount", &DynamicBody::GetContactsCount, 0, PA_SCRIPT_READ, "Number of contact points attached to the body.");
 

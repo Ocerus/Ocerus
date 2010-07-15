@@ -73,16 +73,15 @@ EntityMessage::eResult EntityComponents::Sprite::HandleMessage( const EntityMess
 
 void EntityComponents::Sprite::RegisterReflection()
 {
-	RegisterProperty<ResourceSystem::ResourcePtr>("Texture", &Sprite::GetTexture, &Sprite::SetTexture, PA_FULL_ACCESS, "");
-	RegisterProperty<float32>("Transparency", &Sprite::GetTransparency, &Sprite::SetTransparency, PA_FULL_ACCESS, "");
-	
-	RegisterProperty<GfxSystem::Point>("FrameSize", &Sprite::GetFrameSize, &Sprite::SetFrameSize, PA_FULL_ACCESS, "");
-	RegisterProperty<GfxSystem::Point>("SkipSpace", &Sprite::GetSkipSpace, &Sprite::SetSkipSpace, PA_FULL_ACCESS, "");
-	RegisterProperty<uint32>("FrameCount", &Sprite::GetFrameCount, &Sprite::SetFrameCount, PA_FULL_ACCESS, "");
-	RegisterProperty<uint32>("FrameIndex", &Sprite::GetFrameIndex, &Sprite::SetFrameIndex, PA_FULL_ACCESS, "");
-	RegisterProperty<float32>("AnimDuration", &Sprite::GetAnimDuration, &Sprite::SetAnimDuration, PA_FULL_ACCESS, "");
-	RegisterProperty<float32>("AnimTime", &Sprite::GetAnimTime, &Sprite::SetAnimTime, PA_FULL_ACCESS, "");
-	RegisterProperty<bool>("AnimRepeats", &Sprite::GetAnimRepeats, &Sprite::SetAnimRepeats, PA_FULL_ACCESS, "");
+	RegisterProperty<ResourceSystem::ResourcePtr>("Texture", &Sprite::GetTexture, &Sprite::SetTexture, PA_FULL_ACCESS, "Resource holding the texture data.");
+	RegisterProperty<float32>("Transparency", &Sprite::GetTransparency, &Sprite::SetTransparency, PA_FULL_ACCESS, "How transparent the model is. 0 is fully opaque while 1 is fully transparent.");
+	RegisterProperty<GfxSystem::Point>("FrameSize", &Sprite::GetFrameSize, &Sprite::SetFrameSize, PA_FULL_ACCESS, "How big is a single frame of the animation. Ignored if null.");
+	RegisterProperty<GfxSystem::Point>("SkipSpace", &Sprite::GetSkipSpace, &Sprite::SetSkipSpace, PA_FULL_ACCESS, "How much space is between subsequent frames of the animation.");
+	RegisterProperty<uint32>("FrameCount", &Sprite::GetFrameCount, &Sprite::SetFrameCount, PA_FULL_ACCESS, "Number of frames of the animation. Determined automatically if null.");
+	RegisterProperty<uint32>("FrameIndex", &Sprite::GetFrameIndex, &Sprite::SetFrameIndex, PA_FULL_ACCESS, "Current frame of the animation.");
+	RegisterProperty<float32>("AnimDuration", &Sprite::GetAnimDuration, &Sprite::SetAnimDuration, PA_FULL_ACCESS, "Total duration of the animation in seconds.");
+	RegisterProperty<float32>("AnimTime", &Sprite::GetAnimTime, &Sprite::SetAnimTime, PA_FULL_ACCESS, "Current time of the running animation.");
+	RegisterProperty<bool>("AnimRepeats", &Sprite::GetAnimRepeats, &Sprite::SetAnimRepeats, PA_FULL_ACCESS, "Whether or not the animation repeats after it finishes.");
 
 	// we need the transform to be able to have the position and angle ready while creating the sprite
 	AddComponentDependency(CT_Transform);

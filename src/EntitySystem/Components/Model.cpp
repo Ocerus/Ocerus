@@ -42,9 +42,9 @@ EntityMessage::eResult EntityComponents::Model::HandleMessage( const EntityMessa
 
 void EntityComponents::Model::RegisterReflection()
 {
-	RegisterProperty<ResourceSystem::ResourcePtr>("Mesh", &Model::GetMesh, &Model::SetMesh, PA_FULL_ACCESS, "");
-	RegisterProperty<float32>("Transparency", &Model::GetTransparency, &Model::SetTransparency, PA_FULL_ACCESS, "");
-	RegisterProperty<float32>("YAngle", &Model::GetYAngle, &Model::SetYAngle, PA_FULL_ACCESS, "");
+	RegisterProperty<ResourceSystem::ResourcePtr>("Mesh", &Model::GetMesh, &Model::SetMesh, PA_FULL_ACCESS, "Resource from which the model is grabbed.");
+	RegisterProperty<float32>("Transparency", &Model::GetTransparency, &Model::SetTransparency, PA_FULL_ACCESS, "How transparent the model is. 0 is fully opaque while 1 is fully transparent.");
+	RegisterProperty<float32>("YAngle", &Model::GetYAngle, &Model::SetYAngle, PA_FULL_ACCESS, "Rotation along the Y axis in radians.");
 
 	// we need the transform to be able to have the position and angle ready while creating the Model
 	AddComponentDependency(CT_Transform);

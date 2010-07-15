@@ -27,10 +27,10 @@ EntityMessage::eResult EntityComponents::Transform::HandleMessage( const EntityM
 
 void EntityComponents::Transform::RegisterReflection()
 {
-	RegisterProperty<Vector2>("Position", &Transform::GetPosition, &Transform::SetPosition, PA_FULL_ACCESS, "");
-	RegisterProperty<Vector2>("Scale", &Transform::GetScale, &Transform::SetScale, PA_FULL_ACCESS, "");
-	RegisterProperty<float32>("Angle", &Transform::GetAngle, &Transform::SetAngle, PA_FULL_ACCESS, "");
-	RegisterProperty<int32>("Layer", &Transform::GetLayer, &Transform::SetLayer, PA_FULL_ACCESS, "");
+	RegisterProperty<Vector2>("Position", &Transform::GetPosition, &Transform::SetPosition, PA_FULL_ACCESS, "Center position in the world.");
+	RegisterProperty<Vector2>("Scale", &Transform::GetScale, &Transform::SetScale, PA_FULL_ACCESS, "How big the object is relatively to its default size. The components correspond to the X and Y axis respectively.");
+	RegisterProperty<float32>("Angle", &Transform::GetAngle, &Transform::SetAngle, PA_FULL_ACCESS, "Rotation along the Z axis in radians.");
+	RegisterProperty<int32>("Layer", &Transform::GetLayer, &Transform::SetLayer, PA_FULL_ACCESS, "What layer the object reside in.");
 }
 
 void EntityComponents::Transform::SetLayer(int32 value)

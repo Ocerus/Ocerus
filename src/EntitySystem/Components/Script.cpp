@@ -232,10 +232,10 @@ void Script::RegisterReflection()
 		PA_EDIT_WRITE | PA_SCRIPT_READ, "Script modules that are searched for script message handlers.");
 	RegisterProperty<uint32>("ScriptTimeOut", &Script::GetTimeOut, &Script::SetTimeOut, 
 		PA_INIT | PA_EDIT_READ | PA_EDIT_WRITE | PA_SCRIPT_READ, "Maximum time of execution the scripts in ms (0 means infinity).");
-	RegisterProperty<Array<int32>*>("ScriptStates", &Script::GetStates, &Script::SetStates, PA_INIT,
-	  "States of Action handlers");
-	RegisterProperty<Array<uint64>*>("ScriptTimes", &Script::GetTimes, &Script::SetTimes, PA_INIT,
-		"Times of execution of Action handlers");
+	RegisterProperty<Array<int32>*>("ScriptStates", &Script::GetStates, &Script::SetStates,
+		PA_INIT, "States of the action handlers.");
+	RegisterProperty<Array<uint64>*>("ScriptTimes", &Script::GetTimes, &Script::SetTimes,
+		PA_INIT, "Times of the execution of the action handlers");
 	RegisterProperty<int32>("ScriptCurrentArrayIndex", &Script::GetCurrentArrayIndex, 0, 
 		PA_INIT | PA_TRANSIENT, "Current index of ScriptStates and ScriptTimes");
 }

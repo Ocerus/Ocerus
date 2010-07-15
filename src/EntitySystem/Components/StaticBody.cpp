@@ -35,7 +35,7 @@ EntityMessage::eResult EntityComponents::StaticBody::HandleMessage( const Entity
 
 void EntityComponents::StaticBody::RegisterReflection( void )
 {
-	RegisterProperty<PhysicalBody*>("PhysicalBody", &StaticBody::GetBody, &StaticBody::SetBody, PA_NONE | PA_TRANSIENT, "");
+	RegisterProperty<PhysicalBody*>("PhysicalBody", &StaticBody::GetBody, &StaticBody::SetBody, PA_NONE | PA_TRANSIENT, "Pointer to the physics object.");
 
 	// we need the transform to be able to have the position and angle ready while creating the body
 	AddComponentDependency(CT_Transform);

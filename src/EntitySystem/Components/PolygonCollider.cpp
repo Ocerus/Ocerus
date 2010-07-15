@@ -53,11 +53,11 @@ EntityMessage::eResult EntityComponents::PolygonCollider::HandleMessage( const E
 
 void EntityComponents::PolygonCollider::RegisterReflection( void )
 {
-	RegisterProperty<float32>("Density", &PolygonCollider::GetDensity, &PolygonCollider::SetDensity, PA_FULL_ACCESS, "");
-	RegisterProperty<float32>("Friction", &PolygonCollider::GetFriction, &PolygonCollider::SetFriction, PA_FULL_ACCESS, "");
-	RegisterProperty<float32>("Restitution", &PolygonCollider::GetRestitution, &PolygonCollider::SetRestitution, PA_FULL_ACCESS, "");
-	RegisterProperty<Array<Vector2>*>("Polygon", &PolygonCollider::GetPolygon, &PolygonCollider::SetPolygon, PA_FULL_ACCESS, "");
-	RegisterProperty<PhysicalShape*>("PhysicalShape", &PolygonCollider::GetShape, 0, PA_NONE | PA_TRANSIENT, "");
+	RegisterProperty<float32>("Density", &PolygonCollider::GetDensity, &PolygonCollider::SetDensity, PA_FULL_ACCESS, "How heavy the material is relatively to the standard one.");
+	RegisterProperty<float32>("Friction", &PolygonCollider::GetFriction, &PolygonCollider::SetFriction, PA_FULL_ACCESS, "How much will the object slow down while touching other objects. Range from 0 to 1.");
+	RegisterProperty<float32>("Restitution", &PolygonCollider::GetRestitution, &PolygonCollider::SetRestitution, PA_FULL_ACCESS, "How much till the object bounce after colliding with other objects. Range from 0 to 1.");
+	RegisterProperty<Array<Vector2>*>("Polygon", &PolygonCollider::GetPolygon, &PolygonCollider::SetPolygon, PA_FULL_ACCESS, "Polygon shape of the collider.");
+	RegisterProperty<PhysicalShape*>("PhysicalShape", &PolygonCollider::GetShape, 0, PA_NONE | PA_TRANSIENT, "Pointer to the physics object.");
 
 	// we need the transform to be able to have the position and angle ready while creating the body
 	AddComponentDependency(CT_Transform);
