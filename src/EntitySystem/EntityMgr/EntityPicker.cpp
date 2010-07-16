@@ -4,6 +4,17 @@
 
 using namespace EntitySystem;
 
+class ShapeComparator
+{
+public:
+	bool operator()(const PhysicalShape* shape1, const PhysicalShape* shape2)
+	{
+		EntityHandle entity1 = *(EntityHandle*)shape1->GetUserData();
+		EntityHandle entity2 = *(EntityHandle*)shape2->GetUserData();
+		return entity1 < entity2;
+	}
+};
+
 class QueryCallback: public b2QueryCallback
 {
 public:
@@ -17,6 +28,11 @@ public:
 		if (count >= MAX_QUERY_SHAPES) return false;
 		shapes[count++] = shape;
 		return true;
+	}
+
+	void Sort()
+	{
+		Containers::sort(shapes, shapes + count, ShapeComparator());
 	}
 
 	static const int32 MAX_QUERY_SHAPES = 128;
@@ -52,6 +68,7 @@ EntitySystem::EntityHandle EntitySystem::EntityPicker::PickSingleEntity( void )
 	physics->QueryAABB(&query, cursorAABB);
 
 	// find the shape with the lowest depth value
+	query.Sort();
 	int32 lowestDepth = numeric_limits<int32>::max();
 	EntityHandle lowestDepthEntity = EntityHandle::Null;
 	for (int32 i=0; i<query.count; ++i)
