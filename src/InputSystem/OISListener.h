@@ -63,6 +63,8 @@ namespace InputSystem
 		eMouseButton OisToMbtn(OIS::MouseButtonID id);
 
 		void RecreateDevices();
+
+		void FixKeyInfo(KeyInfo& keyInfo);
 	};
 }
 

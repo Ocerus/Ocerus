@@ -112,6 +112,7 @@ bool InputSystem::OISListener::keyPressed( const OIS::KeyEvent &evt )
 	KeyInfo ki;
 	ki.keyCode = static_cast<eKeyCode>(evt.key);
 	ki.charCode = evt.text;
+	FixKeyInfo(ki);
 	for (InputMgr::ListenersList::const_iterator i=mMgr->mListeners.begin(); i!=mMgr->mListeners.end(); ++i)
 	{
 		if ((*i)->KeyPressed(ki)) break;
@@ -124,6 +125,7 @@ bool InputSystem::OISListener::keyReleased( const OIS::KeyEvent &evt )
 	KeyInfo ki;
 	ki.keyCode = static_cast<eKeyCode>(evt.key);
 	ki.charCode = evt.text;
+	FixKeyInfo(ki);
 	for (InputMgr::ListenersList::const_iterator i=mMgr->mListeners.begin(); i!=mMgr->mListeners.end(); ++i)
 	{
 		if ((*i)->KeyReleased(ki)) break;
@@ -229,4 +231,47 @@ void InputSystem::OISListener::RecreateDevices()
 	}
 
 	ocInfo << "OIS keyboar & mouse recreated";
+}
+
+void InputSystem::OISListener::FixKeyInfo( KeyInfo& keyInfo )
+{
+	switch (keyInfo.keyCode)
+	{
+	case KC_NUMPAD0:
+		keyInfo.charCode = '0';
+		break;
+	case KC_NUMPAD1:
+		keyInfo.charCode = '1';
+		break;
+	case KC_NUMPAD2:
+		keyInfo.charCode = '2';
+		break;
+	case KC_NUMPAD3:
+		keyInfo.charCode = '3';
+		break;
+	case KC_NUMPAD4:
+		keyInfo.charCode = '4';
+		break;
+	case KC_NUMPAD5:
+		keyInfo.charCode = '5';
+		break;
+	case KC_NUMPAD6:
+		keyInfo.charCode = '6';
+		break;
+	case KC_NUMPAD7:
+		keyInfo.charCode = '7';
+		break;
+	case KC_NUMPAD8:
+		keyInfo.charCode = '8';
+		break;
+	case KC_NUMPAD9:
+		keyInfo.charCode = '9';
+		break;
+	case KC_DECIMAL:
+		keyInfo.charCode = '.';
+		break;
+	case KC_DIVIDE:
+		keyInfo.charCode = '/';
+		break;
+	}
 }
