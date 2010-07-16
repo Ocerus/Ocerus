@@ -41,7 +41,8 @@ void GfxWindow::Init(const int32 x, const int32 y, const int32 windowWidth, cons
 
 	// Create drawing context
 	SDL_WM_SetCaption( title.c_str(), NULL );
-	SDL_putenv((string("SDL_VIDEO_WINDOW_POS") + StringConverter::ToString(mWindowX) + string(", ") + StringConverter::ToString(mWindowY)).c_str());
+	string windowPosEnvVar = string("SDL_VIDEO_WINDOW_POS=") + StringConverter::ToString(mWindowX) + string(", ") + StringConverter::ToString(mWindowY);
+	SDL_putenv(windowPosEnvVar.c_str()); // this is the way how to position the window in SDL
 	if (mFullscreen) mScreen = SDL_SetVideoMode( mFullscreenResolutionWidth, mFullscreenResolutionHeight, 0, flags );
 	else mScreen = SDL_SetVideoMode( mWindowWidth, mWindowHeight, 0, flags );
 
@@ -49,6 +50,7 @@ void GfxWindow::Init(const int32 x, const int32 y, const int32 windowWidth, cons
 	{
 		ocInfo << "SDL created drawing context for OpenGL. The video surface bits per pixel is "
 			   << (int32)mScreen->format->BitsPerPixel;
+		UpdateWindowPosition();
 		SDL_ShowCursor(0);
 	}
 	else
@@ -173,6 +175,53 @@ WindowHandle GfxWindow::_GetWindowHandle() const
     WindowHandle handle = info.info.x11.window;
     OC_ASSERT(handle);
     return handle;
+#endif
+
+}
+
+void GfxSystem::GfxWindow::RefreshWindowPosition()
+{
+	SDL_SysWMinfo windowInfo;
+	SDL_VERSION(&windowInfo.version);
+	if (!SDL_GetWMInfo(&windowInfo))
+	{
+		ocError << "Can't retreive window info";
+		return;
+	}
+
+#ifdef __WIN__
+	RECT windowRect;
+	GetWindowRect(windowInfo.window, &windowRect);
+	mWindowX = windowRect.left;
+	mWindowY = windowRect.top;
+#else
+	windowInfo.info.x11.lock_func();
+	Display* display = windowInfo.info.x11.display;
+	XSync(display, false);
+	Window window;
+	XWindowAttributes windowAttributes;
+	XGetWindowAttributes(display, window, &windowAttributes);
+	Window dummy;
+	XTranslateCoordinates(display, window, attributes.root, 0, 0, &mWindowX, &mWindowY, &dummy);
+	windowInfo.info.x11.unlock_func();
+#endif
+
+}
+
+void GfxSystem::GfxWindow::UpdateWindowPosition()
+{
+	SDL_SysWMinfo windowInfo;
+	SDL_VERSION(&windowInfo.version);
+	if (!SDL_GetWMInfo(&windowInfo))
+	{
+		ocError << "Can't retreive window info";
+		return;
+	}
+
+#ifdef __WIN__
+	SetWindowPos(windowInfo.window, 0, mWindowX, mWindowY, 0, 0, SWP_NOSIZE);
+#else
+	OC_FAIL("X11 set window position not implemented");
 #endif
 
 }

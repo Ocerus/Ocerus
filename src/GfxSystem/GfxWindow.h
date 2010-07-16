@@ -60,10 +60,10 @@ namespace GfxSystem
 		inline Point GetFullscreenResolution() const { return Point(mFullscreenResolutionWidth, mFullscreenResolutionHeight); }
 
 		/// Returns the window X position.
-		inline int32 GetWindowX() const { return mWindowX; }
+		inline int32 GetWindowX() { RefreshWindowPosition(); return mWindowX; }
 		
 		/// Returns the window Y position.
-		inline int32 GetWindowY() const { return mWindowY; }
+		inline int32 GetWindowY() { RefreshWindowPosition(); return mWindowY; }
 
 		/// Returns the window width.
 		inline int32 GetWindowWidth() const { return mWindowWidth; }
@@ -102,6 +102,8 @@ namespace GfxSystem
 
 		set<IGfxWindowListener*> mGfxWindowListeners;
 
+		void UpdateWindowPosition();
+		void RefreshWindowPosition();
 	};
 
 	

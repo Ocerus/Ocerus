@@ -72,8 +72,8 @@ void Application::Init(const string& startupProjectName)
 	gStringMgrSystem.LoadLanguagePack(mGlobalConfig->GetString("Language", "", "Editor"), mGlobalConfig->GetString("Country", "", "Editor"));
 
 	GfxSystem::GfxWindow::CreateSingleton();
-	int32 windowX = mGlobalConfig->GetInt32("WindowX", 0, "Windows");
-	int32 windowY = mGlobalConfig->GetInt32("WindowY", 0, "Windows");
+	int32 windowX = mGlobalConfig->GetInt32("WindowX", 50, "Windows"); // start at 50 to give some offset to the window
+	int32 windowY = mGlobalConfig->GetInt32("WindowY", 50, "Windows");
 	int32 windowWidth = mGlobalConfig->GetInt32("WindowWidth", 1024, "Windows");
 	int32 windowHeight = mGlobalConfig->GetInt32("WindowHeight", 768, "Windows");
 	int32 resX = mGlobalConfig->GetInt32("FullscreenResolutionWidth", 1280, "Windows");
