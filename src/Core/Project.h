@@ -80,8 +80,11 @@ namespace Core
 			bool OpenSceneAtIndex(int32 index);
 			
 			/// Opens the scene with a given file name.
-			/// @return False, if scene is not found, or another scene is already opened; otherwise returns True.
+			/// @return False, if scene is not found, otherwise returns true.
 			bool OpenScene(const string& scene) { return OpenSceneAtIndex(GetSceneIndex(scene)); }
+
+			/// Opens the scene from a given resource.
+			void OpenScene(const ResourceSystem::ResourcePtr resource);
 
 			/// Opens the default scene of the project.
 			/// @return False, if scene is not found, or another scene is already opened; otherwise returns True.
@@ -96,6 +99,9 @@ namespace Core
 
 			/// Returns true if a scene is opened.
 			bool IsSceneOpened() const;
+
+			/// Returns true if the given resource contains a scene.
+			bool IsResourceScene(const ResourceSystem::ResourcePtr resource) const;
 
 			/// Returns the list of scenes.
 			void GetSceneList(SceneInfoList& scenes) const;

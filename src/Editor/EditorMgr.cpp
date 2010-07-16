@@ -330,6 +330,8 @@ void Editor::EditorMgr::RestartAction()
 			gProfiler.Stop();
 			gProfiler.DumpIntoConsole();
 		}
+
+		if (!GetCurrentProject()->IsSceneOpened()) return;
 		
 		GlobalProperties::Get<Core::Game>("Game").RestartAction();
 		mIsInitialTime = true;

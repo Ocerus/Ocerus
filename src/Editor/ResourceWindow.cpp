@@ -4,6 +4,7 @@
 #include "EditorMgr.h"
 #include "ResourceSystem/ResourceMgr.h"
 #include "GUISystem/CEGUITools.h"
+#include "Core/Project.h"
 
 using namespace Editor;
 
@@ -112,6 +113,7 @@ void Editor::ResourceWindow::RebuildTree()
 		dragContainer->addChildWindow(newItemText);
 		dragContainer->subscribeEvent(CEGUI::Window::EventMouseButtonDown, CEGUI::Event::Subscriber(&Editor::ResourceWindow::OnDragContainerMouseButtonDown, this));
 		dragContainer->subscribeEvent(CEGUI::Window::EventMouseButtonUp, CEGUI::Event::Subscriber(&Editor::ResourceWindow::OnDragContainerMouseButtonUp, this));
+		dragContainer->subscribeEvent(CEGUI::Window::EventMouseDoubleClick, CEGUI::Event::Subscriber(&Editor::ResourceWindow::OnDragContainerMouseDoubleClick, this));
 
 		dragContainer->setID(resourceIndex);
 		dragContainer->setUserString("DragDataType", "Resource");
@@ -147,10 +149,37 @@ bool Editor::ResourceWindow::OnDragContainerMouseButtonUp(const CEGUI::EventArgs
 		ResourceSystem::ResourcePtr resource = GetItemAtIndex(dragContainer->getID());
 		if (resource.get())
 		{
-			PopupMenu* menu = new PopupMenu("EditorRoot/Popup/Resource");
+			PopupMenu* menu;
+			if (gEditorMgr.GetCurrentProject()->IsResourceScene(resource))
+			{
+				menu = new PopupMenu("EditorRoot/Popup/ResourceWithScene");
+			}
+			else
+			{
+				menu = new PopupMenu("EditorRoot/Popup/Resource");
+			}
 			menu->Init<ResourceSystem::ResourcePtr>(resource);
 			menu->Open(args.position.d_x, args.position.d_y);
 			gEditorMgr.RegisterPopupMenu(menu);
+		}
+		return true;
+	}
+
+	return true;
+}
+
+bool Editor::ResourceWindow::OnDragContainerMouseDoubleClick(const CEGUI::EventArgs& e)
+{
+	const CEGUI::MouseEventArgs& args = static_cast<const CEGUI::MouseEventArgs&>(e);
+	CEGUI::DragContainer* dragContainer = static_cast<CEGUI::DragContainer*>(args.window);
+	if (dragContainer->isBeingDragged()) return false;
+
+	if (args.button == CEGUI::LeftButton)
+	{
+		ResourceSystem::ResourcePtr resource = GetItemAtIndex(dragContainer->getID());
+		if (resource.get() && gEditorMgr.GetCurrentProject()->IsResourceScene(resource))
+		{
+			gEditorMgr.GetCurrentProject()->OpenScene(resource);
 		}
 		return true;
 	}

@@ -196,9 +196,6 @@ void Core::Project::SaveProjectConfig()
 	ocInfo << "Project " << mProjectPath << " saved.";
 }
 
-
-
-
 bool Project::CreateScene(const string& sceneFilename, const string& sceneName)
 {
 	if (!IsProjectOpened() || IsSceneOpened()) return false;
@@ -236,19 +233,29 @@ bool Project::OpenSceneAtIndex(int32 sceneIndex)
 {
 	if (sceneIndex < 0 || sceneIndex >= (int32)mSceneList.size()) return false;
 	if (IsSceneOpened()) CloseOpenedScene();
-	mSceneIndex = sceneIndex;
-	const string& sceneFilename = mSceneList[sceneIndex].filename;
+
+	OpenScene(gResourceMgr.GetResource("Project", mSceneList[sceneIndex].filename));
+
+	return true;
+}
+
+void Core::Project::OpenScene( const ResourceSystem::ResourcePtr resource )
+{
+	if (IsSceneOpened()) CloseOpenedScene();
+
+	mSceneIndex = GetSceneIndex(resource->GetName());
+	OC_ASSERT_MSG(mSceneIndex != -1, "Wrong scene resource");
 
 	Core::Game& game = GlobalProperties::Get<Core::Game>("Game");
-	
+
 	// Set the in-game GUI root window
 	if (gApp.IsEditMode()) game.SetRootWindow(gEditorMgr.GetEditorGui()->GetGameViewport());
 	else game.CreateDefaultRootWindow();
-	
-	// Load the scene entities and init the game
-	gEntityMgr.LoadEntitiesFromResource(gResourceMgr.GetResource("Project", sceneFilename));
+
+	gEntityMgr.LoadEntitiesFromResource(resource);
+
 	game.Init();
-	
+
 	// Set the viewport cameras and run the action in non-edit mode
 	if (gApp.IsEditMode())
 	{
@@ -256,14 +263,13 @@ bool Project::OpenSceneAtIndex(int32 sceneIndex)
 	}
 	else
 	{
-	  game.CreateDefaultRenderTarget();
-	  game.ResumeAction();
+		game.CreateDefaultRenderTarget();
+		game.ResumeAction();
 	}
 
-	if (mEditorSupport) gGfxWindow.SetWindowCaption(mProjectInfo.name + " (" + mSceneList[sceneIndex].filename + ")");
-	
-	ocInfo << "Scene " << sceneFilename << " loaded.";
-	return true;
+	if (mEditorSupport) gGfxWindow.SetWindowCaption(mProjectInfo.name + " (" + resource->GetName() + ")");
+
+	ocInfo << "Scene " << resource->GetName() << " loaded.";
 }
 
 bool Project::OpenDefaultScene()
@@ -303,13 +309,14 @@ bool Project::SaveOpenedScene()
 
 void Project::CloseOpenedScene()
 {
+	mSceneIndex = -1;
+	gGfxWindow.SetWindowCaption(mProjectInfo.name);
 	gEntityMgr.DestroyAllEntities(false, true);
 	if (mEditorSupport)
 	{
 		gEditorMgr.GetEditorGui()->DisableViewports();
+		gEditorMgr.SwitchActionTool(Editor::EditorMgr::AT_RESTART);
 	}
-	mSceneIndex = -1;
-	gGfxWindow.SetWindowCaption(mProjectInfo.name);
 }
 
 void Project::GetSceneList(SceneInfoList& scenes) const
@@ -370,4 +377,9 @@ void Core::Project::Update()
 		}
 		mRequestSceneIndex = -1;
 	}
+}
+
+bool Core::Project::IsResourceScene( const ResourceSystem::ResourcePtr resource ) const
+{
+	return GetSceneIndex(resource->GetName()) != -1;
 }

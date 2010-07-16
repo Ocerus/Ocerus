@@ -35,6 +35,7 @@ namespace Editor
 		//@{
 		bool OnDragContainerMouseButtonDown(const CEGUI::EventArgs&);
 		bool OnDragContainerMouseButtonUp(const CEGUI::EventArgs&);
+		bool OnDragContainerMouseDoubleClick(const CEGUI::EventArgs&);
 		bool OnRefreshButtonClicked(const CEGUI::EventArgs&);
 		//@}
 
