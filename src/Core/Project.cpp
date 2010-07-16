@@ -8,6 +8,9 @@
 
 using namespace Core;
 
+const char* Project::PROJECT_FILE_NAME = "project.ini";
+
+
 Project::Project(bool editorSupport): mProjectConfig(0), mSceneIndex(-1), mRequestSceneIndex(-1), mEditorSupport(editorSupport)
 {
 }
@@ -20,7 +23,7 @@ Project::~Project()
 
 bool Project::CreateProject(const string& path)
 {
-	string configFile = path + "/project.ini";
+	string configFile = path + "/" + PROJECT_FILE_NAME;
 	if (!boost::filesystem::is_directory(path) && !boost::filesystem::create_directory(path))
 	{
 		ocWarning << "Cannot create project directory " << path << ".";
@@ -45,7 +48,7 @@ bool Project::CreateProject(const string& path)
 
 bool Project::OpenProject(const string& path)
 {
-	string configFile = path + "/project.ini";
+	string configFile = path + "/" + PROJECT_FILE_NAME;
 	if (!boost::filesystem::is_directory(path) || !boost::filesystem::exists(configFile))
 	{
 		ocWarning << "Cannot open project " << path << ".";
@@ -163,7 +166,7 @@ void Core::Project::LoadProjectConfig()
 	{
 		SceneInfo sceneInfo;
 		sceneInfo.filename = *it;
-		sceneInfo.name = mProjectConfig->GetString(*it, "", "scenes");
+		sceneInfo.name = sceneInfo.filename;
 		mSceneList.push_back(sceneInfo);
 	}
 }
@@ -186,7 +189,7 @@ void Core::Project::SaveProjectConfig()
 	// Save scene list
 	for (SceneInfoList::const_iterator it = mSceneList.begin(); it != mSceneList.end(); ++it)
 	{
-		mProjectConfig->SetString(it->filename, it->name, "scenes");
+		mProjectConfig->SetString(it->filename, "", "scenes");
 	}
 
 	mProjectConfig->Save();
@@ -223,7 +226,7 @@ bool Project::CreateScene(const string& sceneFilename, const string& sceneName)
 	if (mEditorSupport)
 	{
 		gEditorMgr.UpdateSceneMenu();
-		gGfxWindow.SetWindowCaption(mProjectInfo.name + " (" + sceneName + ")");
+		gGfxWindow.SetWindowCaption(mProjectInfo.name + " (" + sceneFilename + ")");
 	}
 
 	return true;
@@ -231,8 +234,8 @@ bool Project::CreateScene(const string& sceneFilename, const string& sceneName)
 
 bool Project::OpenSceneAtIndex(int32 sceneIndex)
 {
-	if (IsSceneOpened()) return false;
 	if (sceneIndex < 0 || sceneIndex >= (int32)mSceneList.size()) return false;
+	if (IsSceneOpened()) CloseOpenedScene();
 	mSceneIndex = sceneIndex;
 	const string& sceneFilename = mSceneList[sceneIndex].filename;
 
@@ -257,7 +260,7 @@ bool Project::OpenSceneAtIndex(int32 sceneIndex)
 	  game.ResumeAction();
 	}
 
-	if (mEditorSupport) gGfxWindow.SetWindowCaption(mProjectInfo.name + " (" + mSceneList[sceneIndex].name + ")");
+	if (mEditorSupport) gGfxWindow.SetWindowCaption(mProjectInfo.name + " (" + mSceneList[sceneIndex].filename + ")");
 	
 	ocInfo << "Scene " << sceneFilename << " loaded.";
 	return true;

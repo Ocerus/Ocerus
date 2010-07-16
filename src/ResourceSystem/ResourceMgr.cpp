@@ -11,6 +11,7 @@
 #include "StringSystem/TextResource.h"
 #include "ResourceSystem/XMLResource.h"
 #include "ScriptSystem/ScriptResource.h"
+#include "Core/Project.h"
 #include "UnknownResource.h"
 
 #ifdef __WIN__
@@ -155,9 +156,12 @@ bool ResourceMgr::AddResourceDirToGroup(const eBasePathType basePathType, const 
 		}
 		else if (regex_match(filePath, includeFilter) && (excludeFilter.empty() || !regex_match(filePath, excludeFilter)))
 		{
-			if (!AddResourceFileToGroup(relativePath, group, resourceType, basePathType))
+			if (i->path().filename().compare(Core::Project::PROJECT_FILE_NAME) != 0)
 			{
-				result = false;
+				if (!AddResourceFileToGroup(relativePath, group, resourceType, basePathType))
+				{
+					result = false;
+				}
 			}
 		}
 	}
@@ -292,12 +296,12 @@ void ResourceMgr::RefreshPathToGroup(const string& path, const eBasePathType bas
 		if (boost::filesystem::is_directory(i->status()))
 		{
 			string dirStr = i->path().filename();
-			if (dirStr.compare(".svn")!=0)
+			if (dirStr.compare(".svn") != 0)
 			{
 				RefreshPathToGroup(filePath, basePathType, group);
 			}
 		}
-		else
+		else if (i->path().filename().compare(Core::Project::PROJECT_FILE_NAME) != 0)
 		{
 			AddResourceFileToGroup(relativePath, group, RESTYPE_AUTODETECT, basePathType);
 		}

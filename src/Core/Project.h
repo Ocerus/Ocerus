@@ -31,6 +31,9 @@ namespace Core
 	{
 	public:
 
+		/// Project file name.
+		static const char* PROJECT_FILE_NAME;
+
 		/// Constructs a project manager.
 		/// @param editorSupport Whether editor support is enabled.
 		Project(bool editorSupport);
