@@ -44,6 +44,9 @@ namespace GfxSystem
 		/// If there is known event in queue, returns it. Otherwise empties the queue and return false.
 		bool PopEvent(eWindowEvent& result);
 
+		/// Sets new caption to the window.
+		void SetWindowCaption(const string& caption);
+
 		/// Changes window resolution, recreates drawing context, invokes ScreenListeners.
 		void ChangeResolution(int32 x, int32 y);
 

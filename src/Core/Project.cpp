@@ -38,6 +38,7 @@ bool Project::CreateProject(const string& path)
 	mProjectConfig = new Core::Config(configFile);
 	SetDefaultProjectInfo();
 	SaveProjectConfig();
+	gGfxWindow.SetWindowCaption(mProjectInfo.name);
 	ocInfo << "New project at " << path << " created.";
 	return true;
 }
@@ -58,8 +59,7 @@ bool Project::OpenProject(const string& path)
 
 	// Make sure basePath is terminated with slash.
 	string basePath = path;
-	if (!basePath.empty() && basePath.at(basePath.size() - 1) != '/')
-		basePath.append("/");
+	if (!basePath.empty() && basePath.at(basePath.size() - 1) != '/') basePath.append("/");
 
 	// Add project resources.
 	gResourceMgr.SetBasePath(ResourceSystem::BPT_PROJECT, basePath);
@@ -73,6 +73,8 @@ bool Project::OpenProject(const string& path)
 		gEditorMgr.RefreshResourceWindow();
 		gEditorMgr.UpdateSceneMenu();
 	}
+
+	gGfxWindow.SetWindowCaption(mProjectInfo.name);
 
 	ocInfo << "Project " << path << " loaded.";
 
@@ -101,6 +103,7 @@ void Project::CloseProject()
 		gEditorMgr.RefreshPrototypeWindow();
 		gEditorMgr.RefreshResourceWindow();
 		gEditorMgr.UpdateSceneMenu();
+		gGfxWindow.SetWindowCaption("");
 	}
 
 	ocInfo << "Project closed.";
@@ -215,11 +218,12 @@ bool Project::CreateScene(const string& sceneFilename, const string& sceneName)
 	sceneInfo.name = sceneName;
 	sceneInfo.filename = sceneFilename;
 	mSceneList.push_back(sceneInfo);
-	mSceneIndex = mSceneList.size();
+	mSceneIndex = mSceneList.size() - 1;
 
 	if (mEditorSupport)
 	{
 		gEditorMgr.UpdateSceneMenu();
+		gGfxWindow.SetWindowCaption(mProjectInfo.name + " (" + sceneName + ")");
 	}
 
 	return true;
@@ -228,8 +232,7 @@ bool Project::CreateScene(const string& sceneFilename, const string& sceneName)
 bool Project::OpenSceneAtIndex(int32 sceneIndex)
 {
 	if (IsSceneOpened()) return false;
-	if (sceneIndex < 0 || sceneIndex >= (int32)mSceneList.size())
-		return false;
+	if (sceneIndex < 0 || sceneIndex >= (int32)mSceneList.size()) return false;
 	mSceneIndex = sceneIndex;
 	const string& sceneFilename = mSceneList[sceneIndex].filename;
 
@@ -244,12 +247,17 @@ bool Project::OpenSceneAtIndex(int32 sceneIndex)
 	game.Init();
 	
 	// Set the viewport cameras and run the action in non-edit mode
-	if (gApp.IsEditMode()) gEditorMgr.GetEditorGui()->RefreshCameras();
+	if (gApp.IsEditMode())
+	{
+		gEditorMgr.GetEditorGui()->RefreshCameras();
+	}
 	else
 	{
 	  game.CreateDefaultRenderTarget();
 	  game.ResumeAction();
 	}
+
+	if (mEditorSupport) gGfxWindow.SetWindowCaption(mProjectInfo.name + " (" + mSceneList[sceneIndex].name + ")");
 	
 	ocInfo << "Scene " << sceneFilename << " loaded.";
 	return true;
@@ -298,6 +306,7 @@ void Project::CloseOpenedScene()
 		gEditorMgr.GetEditorGui()->DisableViewports();
 	}
 	mSceneIndex = -1;
+	gGfxWindow.SetWindowCaption(mProjectInfo.name);
 }
 
 void Project::GetSceneList(SceneInfoList& scenes) const
@@ -344,18 +353,18 @@ bool Project::RequestOpenSceneAtIndex(int32 index)
 
 void Core::Project::Update()
 {
-  if (mRequestSceneIndex >= 0)
+	if (mRequestSceneIndex >= 0)
 	{
-	  if (gApp.IsEditMode())
-	  { 
-	    gEditorMgr.RestartAction();
-	    gEditorMgr.SwitchActionTool(Editor::EditorMgr::AT_RESTART);
-	  }
-    else
-    {
-      CloseOpenedScene();
-      OpenSceneAtIndex(mRequestSceneIndex);
-    }
-    mRequestSceneIndex = -1;
+		if (gApp.IsEditMode())
+		{ 
+			gEditorMgr.RestartAction();
+			gEditorMgr.SwitchActionTool(Editor::EditorMgr::AT_RESTART);
+		}
+		else
+		{
+			CloseOpenedScene();
+			OpenSceneAtIndex(mRequestSceneIndex);
+		}
+		mRequestSceneIndex = -1;
 	}
 }

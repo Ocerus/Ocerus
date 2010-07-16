@@ -79,7 +79,7 @@ void Application::Init(const string& startupProjectName)
 	int32 resX = mGlobalConfig->GetInt32("FullscreenResolutionWidth", 1280, "Windows");
 	int32 resY = mGlobalConfig->GetInt32("FullscreenResolutionHeight", 1024, "Windows");
 	bool fullscreen = mGlobalConfig->GetBool("Fullscreen", false, "Windows");
-	GfxSystem::GfxWindow::GetSingleton().Init(windowX, windowY, windowWidth, windowHeight, resX, resY, fullscreen, "Ocerus");
+	GfxSystem::GfxWindow::GetSingleton().Init(windowX, windowY, windowWidth, windowHeight, resX, resY, fullscreen, "Loading...");
 
 	GfxSystem::GfxRenderer::CreateSingleton<GfxSystem::OglRenderer>();
 	GfxSystem::GfxRenderer::GetSingleton().Init();

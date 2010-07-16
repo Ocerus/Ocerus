@@ -40,7 +40,7 @@ void GfxWindow::Init(const int32 x, const int32 y, const int32 windowWidth, cons
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
 	// Create drawing context
-	SDL_WM_SetCaption( title.c_str(), NULL );
+	SetWindowCaption(title);
 	string windowPosEnvVar = string("SDL_VIDEO_WINDOW_POS=") + StringConverter::ToString(mWindowX) + string(", ") + StringConverter::ToString(mWindowY);
 	SDL_putenv(windowPosEnvVar.c_str()); // this is the way how to position the window in SDL
 	if (mFullscreen) mScreen = SDL_SetVideoMode( mFullscreenResolutionWidth, mFullscreenResolutionHeight, 0, flags );
@@ -224,4 +224,10 @@ void GfxSystem::GfxWindow::UpdateWindowPosition()
 	OC_FAIL("X11 set window position not implemented");
 #endif
 
+}
+
+void GfxSystem::GfxWindow::SetWindowCaption( const string& caption )
+{
+	if (GlobalProperties::Get<bool>("DevelopMode"))	SDL_WM_SetCaption(("Ocerus - " + caption).c_str(), NULL);
+	else SDL_WM_SetCaption(caption.c_str(), NULL);
 }
