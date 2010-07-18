@@ -95,7 +95,7 @@ void ContinueClick(Window@ window)
 
 The GUI layout component serves as a connection of one GUI layout file and one script module with functions that serves as callbacks to events of GUI elements described in the layout. Beside of these two properties there is a property \verb/Visible/ indicating whether the layout should be visible and active.
 
-It loads the layout on its initialization to the GUI system and it calls a script function with the declaration \verb/void OnUpdateLogic(float32)/ in the specified module every time it receives the \emph{UPDATE_LOGIC} message where it is possible to update all information displayed by GUI elements (use the global function \verb/Window@ GetWindow(string)/ with the name specified in the layout file to get the reference to the window).
+It loads the layout on its initialization to the GUI system and it calls a script function with the declaration \verb/void OnUpdateLogic(float32)/ in the specified module every time it receives the \emph{UPDATE\_LOGIC} message where it is possible to update all information displayed by GUI elements (use the global function \verb/Window@ GetWindow(string)/ with the name specified in the layout file to get the reference to the window).
 
 To show the GUI layout just add this component to any entity in the scene (or create a new one) and set the \verb/Visible/ property to true. The GUI elements are displayed over all entities and are not affected by cameras nor layers.
 
