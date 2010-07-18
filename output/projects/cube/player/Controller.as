@@ -5,7 +5,7 @@ const float32 JUMP_COOLDOWN = 2.0f;
 const float32 EXPLOSION_RATIO = 20.0f;
 const float32 EXPLOSION_PULL_RADIUS = 1.0f;
 const float32 EXPLOSION_DESTROY_RADIUS = 1.5f;
-const uint32 EXPLOSION_DESTROY_COUNT = 1;
+const uint32 EXPLOSION_DESTROY_COUNT = 5;
 const float32 JUMP_RATIO = 0.8f;
 const float32 JUMP_MAX_DELAY = 0.2f;
 
@@ -147,6 +147,18 @@ void OnKeyPressed(eKeyCode key, uint32 char)
 				if (destroyedCount < EXPLOSION_DESTROY_COUNT && length <= EXPLOSION_DESTROY_RADIUS) 
 				{
 					SpawnExplosion(hisPos);
+					
+					//MUHE: Pokud vybuchne velkej kamen, tak vytvori 3 maly
+					Vector2 hisScale = entities[i].Get_Vector2("Scale");
+					Vector2 impulse =  EXPLOSION_RATIO / 10.0f * MathUtils::Sqrt(length) * delta;
+					if (hisScale.x * hisScale.y > 1)
+					{
+						SpawnSmallStone(hisPos + Vector2(0.4f, 1.0f), Vector2(0.7f,0.5f), impulse + Vector2(0.5f,0.5f));
+						SpawnSmallStone(hisPos + Vector2(-0.4f, 1.0f), Vector2(0.5f,0.6f), impulse + Vector2(-0.5f,0.5f));
+						SpawnSmallStone(hisPos + Vector2(-0.0f, -1.0f), Vector2(0.8f,0.7f), impulse + Vector2(0.0f,-0.5f));
+					}
+					//-----------------------------------------------------
+					
 					gEntityMgr.DestroyEntity(entities[i]);
 					destroyedCount++;
 				}
