@@ -16,6 +16,8 @@
 
 #include "GUISystem/GUIMgr.h"
 #include "GUISystem/CEGUITools.h"
+#include "GUISystem/ItemListboxProperties.h"
+
 #include "GUISystem/VerticalLayout.h"
 #include "GUISystem/ViewportWindow.h"
 
@@ -25,6 +27,8 @@ namespace Editor
 	const string ENTITY_EDITOR_NAME = "EditorRoot/EntityEditor/Scrollable";
 	const string EditorGUI::EditorCameraName = "EditorCamera";
 }
+
+GUISystem::ItemListboxWantsMouseWheel gEditorMouseWheelProperty;
 
 
 using namespace Editor;
@@ -71,6 +75,7 @@ void EditorGUI::LoadGUI()
 	mPropertyItemHeight = (int32)gCEGUIWM.getWindow("EditorRoot")->getFont(true)->getLineSpacing(1.1f) + 10;
 	mComponentGroupHeight = 28;
 	gCEGUIWM.getWindow("EditorRoot")->setMousePassThroughEnabled(true);
+	gCEGUIWM.getWindow(ENTITY_EDITOR_NAME)->addProperty(&gEditorMouseWheelProperty);
 
 	// Initialize EditorMenu
 	mEditorMenu = new EditorMenu();

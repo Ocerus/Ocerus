@@ -4,9 +4,12 @@
 #include "EditorMgr.h"
 #include "ResourceSystem/ResourceMgr.h"
 #include "GUISystem/CEGUITools.h"
+#include "GUISystem/ItemListboxProperties.h"
 #include "Core/Project.h"
 
 using namespace Editor;
+
+GUISystem::ItemListboxWantsMouseWheel gResourceMouseWheelProperty;
 
 /// Compares two resources according to their path and returns whether the first is greater than the second.
 bool ResourceComparator(const ResourceSystem::ResourcePtr& r1, const ResourceSystem::ResourcePtr& r2)
@@ -28,13 +31,19 @@ Editor::ResourceWindow::~ResourceWindow()
 void Editor::ResourceWindow::Init()
 {
 	CEGUI_EXCEPTION_BEGIN
+
 	mWindow = gGUIMgr.LoadSystemLayout("ResourceWindow.layout", "EditorRoot/ResourceWindow");
 	OC_ASSERT(mWindow);
 	gGUIMgr.GetGUISheet()->addChildWindow(mWindow);
+
 	mTree = static_cast<CEGUI::ItemListbox*>(mWindow->getChild(mWindow->getName() + "/List"));
+	mTree->addProperty(&gResourceMouseWheelProperty);
+
 	CEGUI::Window* refreshButton = mWindow->getChildRecursive(mWindow->getName() + "/Toolbar/Refresh");
 	refreshButton->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Editor::ResourceWindow::OnRefreshButtonClicked, this));
+
 	CEGUI_EXCEPTION_END
+
 	OC_ASSERT(mWindow != 0);
 	OC_ASSERT(mTree != 0);
 

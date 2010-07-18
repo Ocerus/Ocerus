@@ -95,13 +95,6 @@ namespace GUISystem
 			CEGUI::SchemeManager::getSingleton().create("TaharezLook.scheme");
 			CEGUI::SchemeManager::getSingleton().create("Editor.scheme");
 
-/*
-			// Create and set root widget
-			mWindowRoot = CEGUI::WindowManager::getSingleton().createWindow("DefaultWindow", "root");
-			mCegui->setGUISheet(mWindowRoot);
-			mWindowRoot->setMousePassThroughEnabled(true);
-*/
-
 			// Set defaults
 			mCegui->setDefaultFont("DejaVuSans-10");
 			mCegui->setDefaultMouseCursor("Vanilla-Images", "MouseArrow");
@@ -149,10 +142,8 @@ namespace GUISystem
 		}
 		CEGUI_EXCEPTION_END
 
-		if (resultLayout)
-			ocInfo << "System GUI layout " << filename << " loaded.";
-		else
-			ocWarning << "Cannot load system GUI layout " << filename << ".";
+		if (resultLayout) ocInfo << "System GUI layout " << filename << " loaded.";
+		else ocWarning << "Cannot load system GUI layout " << filename << ".";
 
 		return resultLayout;
 	}
@@ -167,10 +158,8 @@ namespace GUISystem
 		}
 		CEGUI_EXCEPTION_END
 
-		if (resultLayout)
-			ocInfo << "Project GUI layout " << filename << " loaded.";
-		else
-			ocWarning << "Cannot load project GUI layout " << filename << ".";
+		if (resultLayout) ocInfo << "Project GUI layout " << filename << " loaded.";
+		else ocWarning << "Cannot load project GUI layout " << filename << ".";
 
 		return resultLayout;
 	}
@@ -259,8 +248,50 @@ namespace GUISystem
 	{
 		OC_DASSERT(mCegui);
 		mCurrentInputEvent.mouseInfo = &mi;
-		bool wheelInjected = mCegui->injectMouseWheelChange(float(mi.wheelDelta) / 100.0f);
+
+		bool wheelInjected = false;
+		if (mi.wheelDelta != 0)
+		{
+			CEGUI::Window* wheelTarget = CEGUI::System::getSingleton().getWindowContainingMouse();
+
+			// save the currently active window
+			CEGUI::Window* root = CEGUI::System::getSingleton().getGUISheet();
+			CEGUI::Window* prevActive = root->getActiveChild();
+
+			// find the first window wanting the mouse wheel
+			while(wheelTarget)
+			{
+				if( wheelTarget->isPropertyPresent("WantsMouseWheel") 
+					&& wheelTarget->getProperty("WantsMouseWheel") == "True"
+					&& wheelTarget->isVisible()
+					&& !wheelTarget->isDisabled())
+				{   
+					break;
+				}
+
+				wheelTarget = wheelTarget->getParent();                    
+			}
+
+			// capture input for the wheel target for a while so that its child windows don't receive onWheelChange instead
+			if (wheelTarget)
+			{
+				wheelTarget->activate();
+				wheelTarget->captureInput();
+			}
+
+			// inject
+			wheelInjected = mCegui->injectMouseWheelChange(float(mi.wheelDelta) / 75.0f);
+
+			// restore previously active window
+			if (wheelTarget)
+			{
+				wheelTarget->releaseInput();
+				if (prevActive) prevActive->activate();
+			}
+		}
+
 		bool positionInjected = mCegui->injectMousePosition(float(mi.x), float(mi.y));
+
 		return wheelInjected || positionInjected;
 	}
 

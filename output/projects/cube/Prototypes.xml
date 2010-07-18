@@ -5,20 +5,20 @@
     <Entity Name="Explosion" ID="-508" Tag="0" Transient="false">
       <Component Type="Transform">
         <Layer>0</Layer>
-        <Angle>0</Angle>
         <Scale>0.8 0.8</Scale>
         <Position>3.04628 -4.45816</Position>
+        <Angle>0</Angle>
       </Component>
       <Component Type="Sprite">
-        <Transparency>0</Transparency>
-        <AnimRepeats>false</AnimRepeats>
         <AnimTime>0</AnimTime>
-        <Texture>dust.png</Texture>
-        <AnimDuration>1</AnimDuration>
-        <FrameIndex>0</FrameIndex>
-        <FrameCount>11</FrameCount>
+        <AnimRepeats>false</AnimRepeats>
+        <Transparency>0</Transparency>
+        <FrameCount>10</FrameCount>
         <SkipSpace>(1, 0)</SkipSpace>
         <FrameSize>(120, 120)</FrameSize>
+        <FrameIndex>0</FrameIndex>
+        <Texture>dust.png</Texture>
+        <AnimDuration>1</AnimDuration>
       </Component>
       <Component Type="Script">
         <ScriptModules>
@@ -32,20 +32,20 @@
     <Entity Name="ExplosionDust" ID="-507" Tag="0" Transient="false">
       <Component Type="Transform">
         <Layer>2</Layer>
-        <Angle>0</Angle>
         <Scale>2.5 2.5</Scale>
         <Position>3.04628 -4.45816</Position>
+        <Angle>0</Angle>
       </Component>
       <Component Type="Sprite">
-        <Transparency>0.6</Transparency>
-        <AnimRepeats>false</AnimRepeats>
         <AnimTime>0</AnimTime>
-        <Texture>dust.png</Texture>
-        <AnimDuration>0.3</AnimDuration>
-        <FrameIndex>0</FrameIndex>
-        <FrameCount>11</FrameCount>
+        <AnimRepeats>false</AnimRepeats>
+        <Transparency>0.6</Transparency>
+        <FrameCount>10</FrameCount>
         <SkipSpace>(1, 0)</SkipSpace>
         <FrameSize>(120, 120)</FrameSize>
+        <FrameIndex>0</FrameIndex>
+        <Texture>dust.png</Texture>
+        <AnimDuration>0.3</AnimDuration>
       </Component>
       <Component Type="Script">
         <ScriptModules>
@@ -59,20 +59,20 @@
     <Entity Name="JumpDust" ID="-506" Tag="0" Transient="false">
       <Component Type="Transform">
         <Layer>2</Layer>
-        <Angle>0</Angle>
         <Scale>0.5 0.35</Scale>
         <Position>2 -3</Position>
+        <Angle>0</Angle>
       </Component>
       <Component Type="Sprite">
-        <Transparency>0.1</Transparency>
-        <AnimRepeats>false</AnimRepeats>
         <AnimTime>0</AnimTime>
-        <Texture>dust.png</Texture>
-        <AnimDuration>0.4</AnimDuration>
-        <FrameIndex>0</FrameIndex>
-        <FrameCount>11</FrameCount>
+        <AnimRepeats>false</AnimRepeats>
+        <Transparency>0.1</Transparency>
+        <FrameCount>10</FrameCount>
         <SkipSpace>(1, 0)</SkipSpace>
         <FrameSize>(120, 120)</FrameSize>
+        <FrameIndex>0</FrameIndex>
+        <Texture>dust.png</Texture>
+        <AnimDuration>0.4</AnimDuration>
       </Component>
       <Component Type="Script">
         <ScriptModules>
@@ -86,9 +86,9 @@
     <Entity Name="Score10" ID="-504" Tag="0" Transient="false">
       <Component Type="Transform">
         <Layer>2</Layer>
-        <Angle>0</Angle>
         <Scale>1 1</Scale>
         <Position>0 0</Position>
+        <Angle>0</Angle>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -108,20 +108,20 @@
     <Entity Name="Coin1" ID="-503" Tag="2" Transient="false">
       <Component Type="Transform">
         <Layer>0</Layer>
-        <Angle>0</Angle>
         <Scale>1.5 1.5</Scale>
         <Position>7.19879 -5.54088</Position>
+        <Angle>0</Angle>
       </Component>
       <Component Type="PolygonCollider">
-        <Friction>0.5</Friction>
-        <Density>1</Density>
+        <Restitution>0.5</Restitution>
         <Polygon>
           <Item>-0.1 -0.1</Item>
           <Item>0.1 -0.1</Item>
           <Item>0.1 0.1</Item>
           <Item>-0.1 0.1</Item>
         </Polygon>
-        <Restitution>0.5</Restitution>
+        <Friction>0.5</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -134,54 +134,54 @@
         <ScriptTimes></ScriptTimes>
         <ScriptStates></ScriptStates>
         <ScriptTimeOut>1000</ScriptTimeOut>
-        <YOffsetAmplitude Type="float32">0.1</YOffsetAmplitude>
         <YOffsetPeriod Type="float32">0.1</YOffsetPeriod>
+        <YOffsetAmplitude Type="float32">0.1</YOffsetAmplitude>
       </Component>
     </Entity>
     <Entity Name="Background2" ID="-502" Tag="0" Transient="false">
       <Component Type="Transform">
         <Layer>0</Layer>
-        <Angle>0</Angle>
         <Scale>1.59255 1.44736</Scale>
         <Position>9.24383 -11.2538</Position>
+        <Angle>0</Angle>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
         <Texture>bg2.png</Texture>
       </Component>
       <Component Type="PolygonCollider">
-        <Friction>0</Friction>
-        <Density>1</Density>
+        <Restitution>0</Restitution>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
           <Item>0.35 0.2</Item>
           <Item>-0.35 0.2</Item>
         </Polygon>
-        <Restitution>0</Restitution>
+        <Friction>0</Friction>
+        <Density>1</Density>
       </Component>
     </Entity>
     <Entity Name="Background1" ID="-501" Tag="0" Transient="false">
       <Component Type="Transform">
         <Layer>0</Layer>
-        <Angle>0</Angle>
         <Scale>1.59255 1.44736</Scale>
         <Position>9.36262 -3.53264</Position>
+        <Angle>0</Angle>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
         <Texture>bg1.png</Texture>
       </Component>
       <Component Type="PolygonCollider">
-        <Friction>0</Friction>
-        <Density>1</Density>
+        <Restitution>0</Restitution>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
           <Item>0.35 0.2</Item>
           <Item>-0.35 0.2</Item>
         </Polygon>
-        <Restitution>0</Restitution>
+        <Friction>0</Friction>
+        <Density>1</Density>
       </Component>
     </Entity>
     <Entity Name="Stone2" ID="-500" Tag="0" Transient="false">
@@ -191,8 +191,7 @@
         <LinearDamping>0.1</LinearDamping>
       </Component>
       <Component Type="PolygonCollider">
-        <Friction>1</Friction>
-        <Density>1</Density>
+        <Restitution>0</Restitution>
         <Polygon>
           <Item>-0.1 -0.21</Item>
           <Item>0.25 -0.12</Item>
@@ -202,7 +201,8 @@
           <Item>-0.26 0.11</Item>
           <Item>-0.26 -0.08</Item>
         </Polygon>
-        <Restitution>0</Restitution>
+        <Friction>1</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -216,8 +216,7 @@
         <LinearDamping>0.1</LinearDamping>
       </Component>
       <Component Type="PolygonCollider">
-        <Friction>10</Friction>
-        <Density>1</Density>
+        <Restitution>0</Restitution>
         <Polygon>
           <Item>-0.65 -0.2</Item>
           <Item>-0.25 -0.5</Item>
@@ -227,7 +226,8 @@
           <Item>-0.2 0.5</Item>
           <Item>-0.65 0.3</Item>
         </Polygon>
-        <Restitution>0</Restitution>
+        <Friction>10</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -241,30 +241,30 @@
         <Texture>tile2.png</Texture>
       </Component>
       <Component Type="PolygonCollider">
-        <Friction>0</Friction>
-        <Density>1</Density>
+        <Restitution>0</Restitution>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
           <Item>0.35 0.2</Item>
           <Item>-0.35 0.2</Item>
         </Polygon>
-        <Restitution>0</Restitution>
+        <Friction>0</Friction>
+        <Density>1</Density>
       </Component>
     </Entity>
     <Entity Name="Land2" ID="-496" Tag="0" Transient="false">
       <Component Type="Transform"></Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
-        <Friction>1</Friction>
-        <Density>1</Density>
+        <Restitution>0</Restitution>
         <Polygon>
           <Item>-0.83 -0.15</Item>
           <Item>0.83 -0.5</Item>
           <Item>0.83 0.5</Item>
           <Item>-0.83 0.5</Item>
         </Polygon>
-        <Restitution>0</Restitution>
+        <Friction>1</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -275,15 +275,15 @@
       <Component Type="Transform"></Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
-        <Friction>1</Friction>
-        <Density>1</Density>
+        <Restitution>0</Restitution>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
           <Item>0.85 0.6</Item>
           <Item>-0.85 0.6</Item>
         </Polygon>
-        <Restitution>0</Restitution>
+        <Friction>1</Friction>
+        <Density>1</Density>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -292,9 +292,9 @@
     </Entity>
     <Entity Name="LevelLayout" ID="-16" Tag="0" Transient="false">
       <Component Type="GUILayout">
-        <Callback>Level.as</Callback>
-        <Visible>true</Visible>
         <Layout>Level.layout</Layout>
+        <Visible>true</Visible>
+        <Callback>Level.as</Callback>
       </Component>
     </Entity>
   </Entities>
