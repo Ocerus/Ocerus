@@ -145,7 +145,7 @@ void Editor::PopupMenu::Init()
 	{
 		InitResourceTypes();
 	}
-	else if (mName == "EditorRoot/Popup/EntityAboveItem")
+	else if (mName == "EditorRoot/Popup/EntityAboveItem" || mName == "EditorRoot/Popup/EntityInScene")
 	{
 		InitComponentTypes();
 	}
@@ -243,21 +243,20 @@ void Editor::PopupMenu::InitResourceTypes()
 
 void Editor::PopupMenu::InitComponentTypes()
 {
-  CEGUI_EXCEPTION_BEGIN
-	CEGUI::Window* addComponentMenu = gCEGUIWM.getWindow("EditorRoot/Popup/EntityAboveItem/NewComponent/AutoPopup");
+	CEGUI_EXCEPTION_BEGIN
+	CEGUI::Window* addComponentMenu = gCEGUIWM.getWindow(mName + "/NewComponent/AutoPopup");
 	OC_ASSERT(addComponentMenu);
-	
+
 	size_t childCount = addComponentMenu->getChildCount();
 	for (int i = (childCount - 1); i >= 0; --i)
 	{
 		gCEGUIWM.destroyWindow(addComponentMenu->getChildAtIdx(i));
 	}
-	
+
 	for (int32 i = 0; i < EntitySystem::NUM_COMPONENT_TYPES; ++i)
 	{
 		const string& componentName = EntitySystem::GetComponentTypeName((EntitySystem::eComponentType)i);
-		CEGUI::Window* componentMenuItem = gCEGUIWM.createWindow("Editor/MenuItem",
-				"EditorRoot/Popup/EntityAboveItem/NewComponent/Component" + StringConverter::ToString(i));
+		CEGUI::Window* componentMenuItem = gCEGUIWM.createWindow("Editor/MenuItem", mName + "/NewComponent/Component" + StringConverter::ToString(i));
 		componentMenuItem->setText(componentName);
 		addComponentMenu->addChildWindow(componentMenuItem);
 	}

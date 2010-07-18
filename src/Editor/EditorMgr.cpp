@@ -463,79 +463,76 @@ bool Editor::EditorMgr::MouseButtonPressed( const InputSystem::MouseInfo& mi, co
 	mEditorGUI->GetEditorViewport()->activate();
 	mEditorGUI->GetEditorViewport()->captureInput();
 
-	if (btn == InputSystem::MBTN_LEFT)
+	Vector2 worldCursorPos;
+	if (!gGfxRenderer.ConvertScreenToWorldCoords(GfxSystem::Point(mi.x, mi.y), worldCursorPos, mEditorGUI->GetEditorViewport()->GetRenderTarget()))
 	{
-		Vector2 worldCursorPos;
-		if (!gGfxRenderer.ConvertScreenToWorldCoords(GfxSystem::Point(mi.x, mi.y), worldCursorPos, mEditorGUI->GetEditorViewport()->GetRenderTarget()))
-		{
-			// the cursor is out of the window
-			return false;
-		}
+		// the cursor is out of the window
+		return false;
+	}
 
-		mMousePressedInSceneWindow = true;
-		
-		if (gInputMgr.IsKeyDown(InputSystem::KC_LSHIFT) || gInputMgr.IsKeyDown(InputSystem::KC_RSHIFT))
+	mMousePressedInSceneWindow = true;
+
+	if (btn == InputSystem::MBTN_LEFT && (gInputMgr.IsKeyDown(InputSystem::KC_LSHIFT) || gInputMgr.IsKeyDown(InputSystem::KC_RSHIFT)))
+	{
+		mMultiselectStarted = true;
+		mSelectionCursorPosition = worldCursorPos;
+		return true;
+	}
+	else
+	{
+		if ((btn == InputSystem::MBTN_LEFT || btn == InputSystem::MBTN_RIGHT) && mHoveredEntity.IsValid())
 		{
-			mMultiselectStarted = true;
-			mSelectionCursorPosition = worldCursorPos;
-			return true;
-		}
-		else
-		{
-			if (mHoveredEntity.IsValid())
+			if (find(mSelectedEntities.begin(), mSelectedEntities.end(), mHoveredEntity) == mSelectedEntities.end())
 			{
-				if (find(mSelectedEntities.begin(), mSelectedEntities.end(), mHoveredEntity) == mSelectedEntities.end())
-				{
-					mSelectedEntities.clear();
-				}
-				if (mSelectedEntities.empty())
-				{
-					mSelectedEntities.push_back(mHoveredEntity);
-					SetCurrentEntity(GetSelectedEntity());
-				}
+				mSelectedEntities.clear();
 			}
-
-			if (mHoveredEntity.IsValid() && !mSelectedEntities.empty())
+			if (mSelectedEntities.empty())
 			{
-				// we've got an entity to edit, so let's init the right tool
-				mEditToolWorking = true;
-				mEditToolCursorPosition = worldCursorPos;
-				switch (mEditTool)
+				mSelectedEntities.push_back(mHoveredEntity);
+				SetCurrentEntity(GetSelectedEntity());
+			}
+		}
+
+		if (btn == InputSystem::MBTN_LEFT && mHoveredEntity.IsValid() && !mSelectedEntities.empty())
+		{
+			// we've got an entity to edit, so let's init the right tool
+			mEditToolWorking = true;
+			mEditToolCursorPosition = worldCursorPos;
+			switch (mEditTool)
+			{
+			case ET_MOVE:
+				mEditToolBodyPositions.resize(mSelectedEntities.size());
+				for (size_t i=0; i<mSelectedEntities.size(); ++i)
 				{
-				case ET_MOVE:
-					mEditToolBodyPositions.resize(mSelectedEntities.size());
-					for (size_t i=0; i<mSelectedEntities.size(); ++i)
-					{
-						mEditToolBodyPositions[i] = mSelectedEntities[i].GetProperty("Position").GetValue<Vector2>();
-					}
-					break;
-				case ET_ROTATE:
-					mEditToolBodyAngles.resize(mSelectedEntities.size());
-					for (size_t i=0; i<mSelectedEntities.size(); ++i)
-					{
-						mEditToolBodyAngles[i] = mSelectedEntities[i].GetProperty("Angle").GetValue<float32>();
-						}
-					break;
-				case ET_ROTATE_Y:
-					mEditToolBodyAngles.resize(mSelectedEntities.size());
-					for (size_t i=0; i<mSelectedEntities.size(); ++i)
-					{
-						if (!gEntityMgr.HasEntityComponentOfType(mSelectedEntities[i], EntitySystem::CT_Model))
-						{
-							mEditToolWorking = false;
-							break;
-						}
-						mEditToolBodyAngles[i] = mSelectedEntities[i].GetProperty("YAngle").GetValue<float32>();
-					}
-					break;
-				case ET_SCALE:
-					mEditToolBodyScales.resize(mSelectedEntities.size());
-					for (size_t i=0; i<mSelectedEntities.size(); ++i)
-					{
-						mEditToolBodyScales[i] = mSelectedEntities[i].GetProperty("Scale").GetValue<Vector2>();
-					}
-					break;
+					mEditToolBodyPositions[i] = mSelectedEntities[i].GetProperty("Position").GetValue<Vector2>();
 				}
+				break;
+			case ET_ROTATE:
+				mEditToolBodyAngles.resize(mSelectedEntities.size());
+				for (size_t i=0; i<mSelectedEntities.size(); ++i)
+				{
+					mEditToolBodyAngles[i] = mSelectedEntities[i].GetProperty("Angle").GetValue<float32>();
+				}
+				break;
+			case ET_ROTATE_Y:
+				mEditToolBodyAngles.resize(mSelectedEntities.size());
+				for (size_t i=0; i<mSelectedEntities.size(); ++i)
+				{
+					if (!gEntityMgr.HasEntityComponentOfType(mSelectedEntities[i], EntitySystem::CT_Model))
+					{
+						mEditToolWorking = false;
+						break;
+					}
+					mEditToolBodyAngles[i] = mSelectedEntities[i].GetProperty("YAngle").GetValue<float32>();
+				}
+				break;
+			case ET_SCALE:
+				mEditToolBodyScales.resize(mSelectedEntities.size());
+				for (size_t i=0; i<mSelectedEntities.size(); ++i)
+				{
+					mEditToolBodyScales[i] = mSelectedEntities[i].GetProperty("Scale").GetValue<Vector2>();
+				}
+				break;
 			}
 		}
 	}
@@ -575,6 +572,17 @@ bool Editor::EditorMgr::MouseButtonReleased( const InputSystem::MouseInfo& mi, c
 		return false;
 	}
 
+	if (btn == InputSystem::MBTN_RIGHT && mHoveredEntity.IsValid())
+	{
+		// open the context menu
+		PopupMenu* menu = new PopupMenu("EditorRoot/Popup/EntityInScene");
+		menu->Init<EntitySystem::EntityHandle>(mHoveredEntity);
+		menu->Open((float32)mi.x, (float32)mi.y);
+		gEditorMgr.RegisterPopupMenu(menu);
+		return true;
+	}
+
+	// now select the entity the mouse is at
 	GfxSystem::RenderTargetID rt = mEditorGUI->GetEditorViewport()->GetRenderTarget();
 
 	if (mMultiselectStarted)
