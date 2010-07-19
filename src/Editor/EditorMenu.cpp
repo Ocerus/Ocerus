@@ -230,7 +230,7 @@ bool Editor::EditorMenu::OnMenuItemClicked(const CEGUI::EventArgs& e)
 
 	if (itemName == menubarPrefix + "/Help/About")
 	{
-		GUISystem::ShowMessageBox("ahoj\nblabla\nno nazdar");
+		GUISystem::ShowMessageBox(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "about_message_text"));
 		return true;
 	}
 

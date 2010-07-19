@@ -42,7 +42,15 @@ size_t TextResource::LoadImpl()
 				if (first && key == TextResource::GroupNameKey)
 				{
 					mGroupName = value;
-				} else {
+				} 
+				else
+				{
+					size_t newlinePos = value.find("\\n");
+					while (newlinePos != -1)
+					{
+						value.replace(newlinePos, 2, "\n");
+						newlinePos = value.find("\\n");
+					}
 					mTextDataMap.insert(pair<StringKey, TextData>(key, (const CEGUI::utf8*)value.c_str()));
 				}
 				dataSize += line.length();

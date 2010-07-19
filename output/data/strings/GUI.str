@@ -56,6 +56,7 @@ shortcuts=Shorcuts
 shortcuts_hint=Displays a list of shortcuts of the editor.
 about=About
 about_hint=Displays the info about the application.
+about_message_text=Ocerus\na game developmnet environment\nhttp://ocerus.hardwire.cz
 
 # layer manager
 layer_manager=Layer Manager
