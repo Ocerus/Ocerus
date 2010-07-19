@@ -20,6 +20,7 @@ namespace Editor
 	class LayerMgrWidget
 	{
 	public:
+
 		/// Constructs the LayerMgrWidget that will manage specified Layer Manager Window.
 		LayerMgrWidget(CEGUI::Window* layerMgrWindow);
 
@@ -31,16 +32,15 @@ namespace Editor
 		
 		/// @name CEGUI Callbacks
 		//@{
-			bool OnEditNewLayerKeyDown(const CEGUI::EventArgs&);
-			bool OnButtonSetActiveLayerClicked(const CEGUI::EventArgs&);
-			bool OnButtonAddLayerClicked(const CEGUI::EventArgs&);
-			bool OnButtonUpDownClicked(const CEGUI::EventArgs&);
-			bool OnButtonEditEntityClicked(const CEGUI::EventArgs&);
-			bool OnButtonToggleLayerVisibilityClicked(const CEGUI::EventArgs&);
+		bool OnEditNewLayerKeyDown(const CEGUI::EventArgs&);
+		bool OnButtonSetActiveLayerClicked(const CEGUI::EventArgs&);
+		bool OnButtonAddLayerClicked(const CEGUI::EventArgs&);
+		bool OnButtonUpDownClicked(const CEGUI::EventArgs&);
+		bool OnButtonEditEntityClicked(const CEGUI::EventArgs&);
+		bool OnButtonToggleLayerVisibilityClicked(const CEGUI::EventArgs&);
 		//@}
 
 	private:
-		void UpdateTree();
 
 		CEGUI::Window* mLayerMgrWindow;
 		CEGUI::Window* mNewLayerEditbox;
@@ -48,6 +48,8 @@ namespace Editor
 		CEGUI::Window* mDownButton;
 		CEGUI::Tree* mTreeWindow;
 		float32 mUpdateTimer;
+
+		void UpdateTree();
 	};
 }
 

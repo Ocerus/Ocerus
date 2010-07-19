@@ -26,6 +26,9 @@ namespace Editor
 		/// Refreshes the tree.
 		inline void Refresh() { RebuildTree(); }
 
+		/// Clears the tree.
+		void Clear();
+
 		/// Refreshes only a single entity in the tree.
 		void RefreshEntity(const EntitySystem::EntityHandle entity);
 

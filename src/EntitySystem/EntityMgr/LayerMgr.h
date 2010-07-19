@@ -26,6 +26,9 @@ namespace EntitySystem
 
 		/// Destructor.
 		virtual ~LayerMgr();
+
+		/// Clears all data.
+		void Clear();
 		
 		/// Loads layers from an XML input.
 		void LoadLayers(ResourceSystem::XMLNodeIterator& xml);

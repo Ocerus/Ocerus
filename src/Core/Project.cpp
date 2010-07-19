@@ -2,9 +2,11 @@
 #include "Project.h"
 #include "Editor/EditorMgr.h"
 #include "Editor/EditorGUI.h"
+#include "Editor/HierarchyWindow.h"
 #include "Core/Game.h"
 #include "Core/Application.h"
 #include "GUISystem/ViewportWindow.h"
+#include "EntitySystem/EntityMgr/LayerMgr.h"
 
 using namespace Core;
 
@@ -309,12 +311,16 @@ bool Project::SaveOpenedScene()
 
 void Project::CloseOpenedScene()
 {
+	if (!IsSceneOpened()) return;
+
 	mSceneIndex = -1;
 	gGfxWindow.SetWindowCaption(mProjectInfo.name);
 	gEntityMgr.DestroyAllEntities(false, true);
 	if (mEditorSupport)
 	{
 		gEditorMgr.GetEditorGui()->DisableViewports();
+		gEditorMgr.GetHierarchyWindow()->Clear();
+		gLayerMgr.Clear();
 		gEditorMgr.SwitchActionTool(Editor::EditorMgr::AT_RESTART);
 	}
 }

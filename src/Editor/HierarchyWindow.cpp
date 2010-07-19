@@ -530,3 +530,10 @@ void Editor::HierarchyWindow::MoveDown()
   RebuildTree();
 	SetSelectedEntity(entity);
 }
+
+void Editor::HierarchyWindow::Clear()
+{
+	mHierarchy.clear();
+	mTree->resetList();
+	mItems.clear();
+}

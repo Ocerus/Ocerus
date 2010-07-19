@@ -161,14 +161,15 @@ void LayerMgr::EraseAndShift(LayerID id)
 
 LayerID LayerMgr::InsertLayerBehind(LayerID behind, const string& name)
 {
-	if (!ExistsLayer(behind) || ExistsLayerName(name)) { return 0; }
+	if (!ExistsLayer(behind) || ExistsLayerName(name)) return 0;
 	RefreshList();
 	return InsertAndShift(behind, name);
 }
 
 bool LayerMgr::DeleteLayer(LayerID id, bool destroyEntities)
 {
-	if (id == 0 || !ExistsLayer(id)) { return false; }
+	if (id == 0 || !ExistsLayer(id)) return false;
+
 	// remember entities in the layer to delete
 	EntityList toDelete;
 	GetEntitiesFromLayer(id, toDelete);
@@ -179,19 +180,18 @@ bool LayerMgr::DeleteLayer(LayerID id, bool destroyEntities)
 	// delete or move entites in the layer
 	for (EntityList::iterator it = toDelete.begin(); it != toDelete.end(); ++it)
 	{
-		if (destroyEntities) { gEntityMgr.DestroyEntity(*it); }
-		else { SetLayerID(*it, 0); }
+		if (destroyEntities) gEntityMgr.DestroyEntity(*it);
+		else SetLayerID(*it, 0);
 	}
 
-	if (mActiveLayerID == id)
-		mActiveLayerID = 0;
+	if (mActiveLayerID == id) mActiveLayerID = 0;
 
 	return true;
 }
 
 LayerID LayerMgr::MoveLayerBehind(LayerID id, LayerID behind)
 {
-	if (id == 0 || id == behind || !ExistsLayer(id) || !ExistsLayer(behind)) { return 0; }	
+	if (id == 0 || id == behind || !ExistsLayer(id) || !ExistsLayer(behind)) return 0;
 
 	// remember entites in the layer to move and layer name
 	EntityList toMove;
@@ -202,20 +202,21 @@ LayerID LayerMgr::MoveLayerBehind(LayerID id, LayerID behind)
 	EraseAndShift(id);
 
 	// correct the insertion place due to deletion, insert a new layer to layers, shift entities in other layers
-	if (id < 0 && behind < 0 && id > behind) { ++behind; }
-	else if (id > 0 && behind > 0 && id < behind) { --behind; }
+	if (id < 0 && behind < 0 && id > behind) ++behind;
+	else if (id > 0 && behind > 0 && id < behind) --behind;
 	LayerID newID = InsertAndShift(behind, name);	
 
 	// correct the layer of entities in the moved layer and return a new layer ID
 	SetLayerOfEntities(newID, toMove);
-	if (mActiveLayerID == id)
-		mActiveLayerID = newID;
+	if (mActiveLayerID == id) mActiveLayerID = newID;
+
 	return newID;
 }
 
 LayerID LayerMgr::MoveLayerTop(LayerID id)
 {
-	if (id == 0 || id == GetTopLayerID() || !ExistsLayer(id)) { return 0; }	
+	if (id == 0 || id == GetTopLayerID() || !ExistsLayer(id)) return 0;
+
 	// remember entites in the layer to move and layer name
 	EntityList toMove;
 	GetEntitiesFromLayer(id, toMove);
@@ -226,10 +227,11 @@ LayerID LayerMgr::MoveLayerTop(LayerID id)
 
 	// add top layer
 	LayerID newID = AddTopLayer(name);
+
 	// correct the layer of entities in the moved layer and return a new layer ID
 	SetLayerOfEntities(newID, toMove);
-	if (mActiveLayerID == id)
-		mActiveLayerID = newID;
+	if (mActiveLayerID == id) mActiveLayerID = newID;
+
 	return newID;
 }
 
@@ -356,4 +358,11 @@ void LayerMgr::PushBackLayer(const string& layerName)
 {
 	mLayers.push_back(layerName);
 	mLayerVisibilities.push_back(true);
+}
+
+void LayerMgr::Clear()
+{
+	mLayers.clear();
+	mLayerVisibilities.clear();
+	mList.clear();
 }
