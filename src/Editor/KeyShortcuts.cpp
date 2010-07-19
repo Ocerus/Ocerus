@@ -25,12 +25,10 @@ KeyShortcuts::KeyShortcuts()
 	
 	// profiler
 	mShortcuts.insert(ShortcutPair(InputSystem::KC_F5, Shortcut(KS_PROFILER, MK_CTRL)));
-
-	// project shortcuts
-	mShortcuts.insert(ShortcutPair(InputSystem::KC_N, Shortcut(KS_CREATE_PROJ, MK_CTRL)));
-	mShortcuts.insert(ShortcutPair(InputSystem::KC_O, Shortcut(KS_OPEN_PROJ, MK_CTRL)));
+	mShortcuts.insert(ShortcutPair(InputSystem::KC_O, Shortcut(KS_OPEN_PROJECT, MK_CTRL)));
 
 	// scene shortcuts
+	mShortcuts.insert(ShortcutPair(InputSystem::KC_N, Shortcut(KS_CREATE_SCENE, MK_CTRL)));
 	mShortcuts.insert(ShortcutPair(InputSystem::KC_S, Shortcut(KS_SAVE_SCENE, MK_CTRL)));
 
 	// entity shortcuts
@@ -43,7 +41,8 @@ KeyShortcuts::KeyShortcuts()
 	// Fullscreen
 	mShortcuts.insert(ShortcutPair(InputSystem::KC_RETURN, Shortcut(KS_FULLSCREEN, MK_ALT)));
 
-	// held shortcuts
+
+	// shortcuts which need to be held down to make effect
 
 	// camera movement
 	mHeldShortcuts.insert(ShortcutPair(InputSystem::KC_LEFT, Shortcut(KS_CAM_LEFT, MK_NOMOD)));

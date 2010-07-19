@@ -29,8 +29,7 @@ void Editor::EditorMenu::Init()
 	InitComponentMenu();
 	ConfigureMenu(menubar);
 	UpdateSceneMenu();
-	menubar->subscribeEvent(CEGUI::Window::EventDeactivated,
-			CEGUI::Event::Subscriber(&Editor::EditorMenu::OnMouseLeavesMenuItem, this));
+	menubar->subscribeEvent(CEGUI::Window::EventDeactivated, CEGUI::Event::Subscriber(&Editor::EditorMenu::OnMouseLeavesMenuItem, this));
 
 	CEGUI::Window* toolbar = gCEGUIWM.getWindow(toolbarPrefix);
 	ConfigureToolbar(toolbar);
@@ -116,6 +115,7 @@ bool Editor::EditorMenu::OnMenuItemClicked(const CEGUI::EventArgs& e)
 
 	if (itemName == menubarPrefix + "/Scene/NewScene")
 	{
+		gEditorMgr.CreateScene();
 		return true;
 	}
 

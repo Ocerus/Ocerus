@@ -407,6 +407,7 @@ void Core::Application::HideConsole( void )
 	}
 
 	// destroy the window
+	ShowWindow((HWND)mConsoleHandle, SW_HIDE);
 	FreeConsole();
 }
 
@@ -416,17 +417,26 @@ void Core::Application::WriteToConsole( const string& str )
 	WriteConsole(GetStdHandle(STD_OUTPUT_HANDLE), str.c_str(), str.length(), &writtenChars, NULL);
 }
 
+DWORD WINAPI OpenPDF_thread(LPVOID lpParam)
+{
+	system(((string*)lpParam)->c_str());
+	return 0;
+}
+
 void Core::Application::OpenPDF( const string& filePath )
 {
-	string adjustedPath = filePath;
+	static string adjustedPath;
+	
+	adjustedPath = filePath;
 	size_t slashPos = adjustedPath.find('/');
 	while (slashPos != string::npos)
 	{
 		adjustedPath.replace(slashPos, 1, "\\");
 		slashPos = adjustedPath.find('/');
 	}
-	ocInfo << adjustedPath;
-	system(adjustedPath.c_str());
+	ocInfo << "Opening " << adjustedPath;
+
+	CreateThread(NULL, 0, OpenPDF_thread, &adjustedPath, 0, NULL);
 }
 
 #else
@@ -452,6 +462,7 @@ void Core::Application::WriteToConsole( const string& message )
 
 void Core::Application::OpenPDF( const string& filePath )
 {
+	ocInfo << "Opening " << filePath;
 	system(filePath.c_str());
 }
 

@@ -424,6 +424,11 @@ void EditorMgr::SaveOpenedScene()
 	}
 }
 
+void EditorMgr::CreateScene()
+{
+	OC_FAIL("not implemented");
+}
+
 void EditorMgr::ShowQuitDialog()
 {
 	GUISystem::MessageBox* messageBox = new GUISystem::MessageBox(GUISystem::MessageBox::MBT_YES_NO, EditorMenu::MBT_QUIT);
@@ -815,21 +820,18 @@ bool Editor::EditorMgr::HandleShortcuts( InputSystem::eKeyCode keyCode )
 		SwitchEditTool(ET_SCALE);
 		return true;
 	}
-
-	if (mShortcuts->IsShortcutActive(KeyShortcuts::KS_CREATE_PROJ))
+	if (mShortcuts->IsShortcutActive(KeyShortcuts::KS_CREATE_SCENE))
 	{
-		ShowCreateProjectDialog();
+		CreateScene();
 	}
-	if (mShortcuts->IsShortcutActive(KeyShortcuts::KS_OPEN_PROJ))
+	if (mShortcuts->IsShortcutActive(KeyShortcuts::KS_OPEN_PROJECT))
 	{
 		ShowOpenProjectDialog();
-	}
-	
+	}	
 	if (mShortcuts->IsShortcutActive(KeyShortcuts::KS_SAVE_SCENE))
 	{
 		SaveOpenedScene();
 	}
-
 	if (mShortcuts->IsShortcutActive(KeyShortcuts::KS_DUPLICATE))
 	{
 		DuplicateCurrentEntity();
@@ -838,12 +840,10 @@ bool Editor::EditorMgr::HandleShortcuts( InputSystem::eKeyCode keyCode )
 	{
 		DeleteCurrentEntity();
 	}
-
 	if (mShortcuts->IsShortcutActive(KeyShortcuts::KS_QUIT))
 	{
 		ShowQuitDialog();
 	}
-
 	if (mShortcuts->IsShortcutActive(KeyShortcuts::KS_FULLSCREEN))
 	{
 		gGfxWindow.SwitchFullscreen();

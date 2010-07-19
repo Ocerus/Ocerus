@@ -31,10 +31,9 @@ namespace Editor
 		static const KeyShortcut KS_CAM_UP = 1<<11;
 		static const KeyShortcut KS_CAM_DOWN = 1<<12;
 
-		static const KeyShortcut KS_CREATE_PROJ = 1<<13;
-		static const KeyShortcut KS_OPEN_PROJ = 1<<14;
-		static const KeyShortcut KS_SAVE_PROJ = 1<<15;
+		static const KeyShortcut KS_OPEN_PROJECT = 1<<14;
 
+		static const KeyShortcut KS_CREATE_SCENE = 1<<13;
 		static const KeyShortcut KS_SAVE_SCENE = 1<<16;
 
 		static const KeyShortcut KS_DUPLICATE = 1<<17;

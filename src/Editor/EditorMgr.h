@@ -125,6 +125,9 @@ namespace Editor
 		/// Saves opened scene.
 		void SaveOpenedScene();
 
+		/// Creates new scene.
+		void CreateScene();
+
 		/// Shows dialog for "Quit".
 		void ShowQuitDialog();
 
