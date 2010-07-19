@@ -99,11 +99,12 @@ void EditorGUI::LoadGUI()
 
 	// Initialize top viewport
 	mGameViewport = static_cast<GUISystem::ViewportWindow*>(gCEGUIWM.getWindow("EditorRoot/TopViewport"));
-	mGameViewport->SetMovableContent(false);
+	mGameViewport->SetDragAndDropCamera(false);
 
 	// Initialize bottom viewport
 	mEditorViewport = static_cast<GUISystem::ViewportWindow*>(gCEGUIWM.getWindow("EditorRoot/BottomViewport"));
-	mEditorViewport->SetMovableContent(true);
+	mEditorViewport->SetDragAndDropCamera(true);
+	mEditorViewport->subscribeEvent(CEGUI::Window::EventDragDropItemDropped, CEGUI::Event::Subscriber(&EditorGUI::OnEditorViewportItemDropped, this));
 
 	// Create cameras
 	DisableViewports();
@@ -329,5 +330,31 @@ bool Editor::EditorGUI::OnComponentRemoveClicked(const CEGUI::EventArgs& e)
 	const CEGUI::String& componentIDString = args.window->getUserString("ComponentID");
 	EntitySystem::ComponentID componentID = StringConverter::FromString<EntitySystem::ComponentID>(componentIDString.c_str());
 	gEditorMgr.RemoveComponent(componentID);
+	return true;
+}
+
+bool Editor::EditorGUI::OnEditorViewportItemDropped( const CEGUI::EventArgs& e)
+{
+	const CEGUI::DragDropEventArgs& args = static_cast<const CEGUI::DragDropEventArgs&>(e);
+	
+	if (args.dragDropItem->getUserString("DragDataType") == "Prototype")
+	{
+		PrototypeWindow* prototypeWindow = static_cast<PrototypeWindow*>(args.dragDropItem->getUserData());
+		if (prototypeWindow == 0) return true;
+		EntitySystem::EntityHandle sourcePrototype = prototypeWindow->GetItemAtIndex(args.dragDropItem->getID());
+
+		EntitySystem::EntityHandle entity = mHierarchyWindow->InstantiatePrototype(sourcePrototype, EntitySystem::EntityHandle::Null);
+		
+		// move the new entity to the cursor
+		if (entity.HasProperty("Position"))
+		{
+			InputSystem::MouseState& ms = gInputMgr.GetMouseState();
+			Vector2 worldCursorPos;
+			gGfxRenderer.ConvertScreenToWorldCoords(GfxSystem::Point(ms.x, ms.y), worldCursorPos, GetEditorViewport()->GetRenderTarget());
+			entity.GetProperty("Position").SetValue(worldCursorPos);
+		}
+
+	} 
+
 	return true;
 }

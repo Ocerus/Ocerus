@@ -54,6 +54,9 @@ namespace Editor
 		/// Sets the current parent in the hierarchy. Entities added in the near future will be parented by this entity.
 		void SetCurrentParent(const EntitySystem::EntityHandle val) { mCurrentParent = val; }
 
+		/// Instantiate an prototype with a specified parent.
+		EntitySystem::EntityHandle InstantiatePrototype(const EntitySystem::EntityHandle prototype, const EntitySystem::EntityHandle parent);
+
 		/// Runs a check on the consistency of the hierarchy tree. Returns true if it's ok.
 		bool CheckHierarchy();
 		
@@ -117,9 +120,6 @@ namespace Editor
 		/// in the second parameter.
 		int32 FindTreeItem(const EntitySystem::EntityHandle data, uint32& depth);
 		
-		/// Instantiate an prototype with a specified parent.
-		void InstantiatePrototype(const EntitySystem::EntityHandle prototype, const EntitySystem::EntityHandle parent);
-
 		CEGUI::Window* mWindow;
 		CEGUI::ItemListbox* mTree;
 		int32 mSelectedIndex;

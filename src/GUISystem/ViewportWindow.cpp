@@ -57,7 +57,7 @@ void GUISystem::ViewportWindow::SetCamera(const EntitySystem::EntityHandle& came
 	}
 }
 
-void GUISystem::ViewportWindow::SetMovableContent(bool isMovableContent)
+void GUISystem::ViewportWindow::SetDragAndDropCamera(bool isMovableContent)
 {
 	bool valueChanged = (isMovableContent != mIsMovableContent);
 	mIsMovableContent = isMovableContent;

@@ -357,12 +357,12 @@ bool Editor::HierarchyWindow::CheckHierarchy()
 	return true;
 }
 
-void Editor::HierarchyWindow::InstantiatePrototype(const EntitySystem::EntityHandle prototype, const EntitySystem::EntityHandle parent)
+EntitySystem::EntityHandle Editor::HierarchyWindow::InstantiatePrototype(const EntitySystem::EntityHandle prototype, const EntitySystem::EntityHandle parent)
 {
-  // instantiate
+	// instantiate
 	mCurrentParent = parent;
 	EntitySystem::EntityHandle newEntity = gEntityMgr.InstantiatePrototype(prototype);
-	if (!newEntity.IsValid()) return;
+	if (!newEntity.IsValid()) return newEntity;
 
 	// move the new entity to the middle of the editor window
 	EntitySystem::EntityHandle editorCamera = gEntityMgr.FindFirstEntity(EditorGUI::EditorCameraName);
@@ -378,6 +378,8 @@ void Editor::HierarchyWindow::InstantiatePrototype(const EntitySystem::EntityHan
 	}
 
 	gEditorMgr.SetCurrentEntity(newEntity);
+
+	return newEntity;
 }
 
 bool Editor::HierarchyWindow::OnTreeItemDragDropItemDropped(const CEGUI::EventArgs& e)
@@ -429,27 +431,33 @@ bool Editor::HierarchyWindow::OnTreeDragDropItemDropped(const CEGUI::EventArgs& 
 
 	if (args.dragDropItem->getUserString("DragDataType") == "Hierarchy")
 	{
-    EntitySystem::EntityHandle sourceEntity = mItems[args.dragDropItem->getID()].entity;
+		EntitySystem::EntityHandle sourceEntity = mItems[args.dragDropItem->getID()].entity;
 
-    HierarchyTree::sibling_iterator sourceIter = std::find(mHierarchy.begin(), mHierarchy.end(), sourceEntity);
-    HierarchyTree::iterator targetIter = mHierarchy.begin();
-    OC_ASSERT_MSG(sourceIter != mHierarchy.end() && targetIter != mHierarchy.end(), "Invalid drag'n'drop entities");
+		HierarchyTree::sibling_iterator sourceIter = std::find(mHierarchy.begin(), mHierarchy.end(), sourceEntity);
+		HierarchyTree::iterator targetIter = mHierarchy.begin();
+		OC_ASSERT_MSG(sourceIter != mHierarchy.end() && targetIter != mHierarchy.end(), "Invalid drag'n'drop entities");
 
-    if (mHierarchy.parent(sourceIter) != targetIter)
-    {
-	    HierarchyTree::sibling_iterator sourceIter2 = sourceIter;
-	    ++sourceIter2;
-	    mHierarchy.reparent(targetIter, sourceIter, sourceIter2);
-	    RebuildTree();
-	    SetSelectedEntity(sourceEntity);
-    }
-  } else if (args.dragDropItem->getUserString("DragDataType") == "Prototype") {
-	  PrototypeWindow* prototypeWindow = static_cast<PrototypeWindow*>(args.dragDropItem->getUserData());
-	  if (prototypeWindow == 0) { return true; }
-	  EntitySystem::EntityHandle sourcePrototype = prototypeWindow->GetItemAtIndex(args.dragDropItem->getID());
-	
-	  InstantiatePrototype(sourcePrototype, EntitySystem::EntityHandle::Null);
-	} else { return false; }
+		if (mHierarchy.parent(sourceIter) != targetIter)
+		{
+			HierarchyTree::sibling_iterator sourceIter2 = sourceIter;
+			++sourceIter2;
+			mHierarchy.reparent(targetIter, sourceIter, sourceIter2);
+			RebuildTree();
+			SetSelectedEntity(sourceEntity);
+		}
+	} 
+	else if (args.dragDropItem->getUserString("DragDataType") == "Prototype")
+	{
+		PrototypeWindow* prototypeWindow = static_cast<PrototypeWindow*>(args.dragDropItem->getUserData());
+		if (prototypeWindow == 0) { return true; }
+		EntitySystem::EntityHandle sourcePrototype = prototypeWindow->GetItemAtIndex(args.dragDropItem->getID());
+
+		InstantiatePrototype(sourcePrototype, EntitySystem::EntityHandle::Null);
+	} 
+	else 
+	{ 
+		return false; 
+	}
 
 	return true;
 }

@@ -69,6 +69,9 @@ namespace Editor
 		/// Name of the entity with the editor camera.
 		static const string EditorCameraName;
 
+		/// Callback from CEGUI.
+		bool OnEditorViewportItemDropped(const CEGUI::EventArgs&);
+
 	private:
 		/// Recursively subscribes every menu item to the mouse enters/leaves/clicked events
 		void ConfigureMenu(CEGUI::Window* parent, bool isMenubar);

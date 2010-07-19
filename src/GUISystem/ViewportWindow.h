@@ -36,7 +36,7 @@ namespace GUISystem
 
 		/// Sets whether the content can be panned, zoomed, etc.
 		/// @see GfxSystem::DragDropCameraMover
-		void SetMovableContent(bool isMovableContent);
+		void SetDragAndDropCamera(bool enable);
 		
 		/// Returns whether the content can be panned, zoomed, etc.
 		/// @see GfxSystem::DragDropCameraMover
