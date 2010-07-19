@@ -17,7 +17,7 @@ const uint32 TREE_LEVEL_CHAR_SIZE = 4;
 
 GUISystem::ItemListboxWantsMouseWheel gHierarchyMouseWheelProperty;
 
-Editor::HierarchyWindow::HierarchyWindow(): mWindow(0), mTree(0), mCurrentParent(EntitySystem::EntityHandle::Null)
+Editor::HierarchyWindow::HierarchyWindow(): mWindow(0), mTree(0), mCurrentParent(EntitySystem::EntityHandle::Null), mDontAddEntities(false)
 {
 
 }
@@ -145,6 +145,8 @@ int32 Editor::HierarchyWindow::FindTreeItem( const EntitySystem::EntityHandle da
 
 void Editor::HierarchyWindow::AddEntityToHierarchy( const EntitySystem::EntityHandle toAdd, const EntitySystem::EntityHandle parent )
 {
+	if (mDontAddEntities) return; // the entity will be added to the hierarchy later on
+
 	if (gEntityMgr.IsEntityTransient(toAdd) || gEntityMgr.IsEntityPrototype(toAdd)
 	  || toAdd.GetName() == Core::Game::GameCameraName || toAdd.GetName() == Editor::EditorGUI::EditorCameraName) return;
 

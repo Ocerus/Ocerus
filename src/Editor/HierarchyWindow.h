@@ -63,6 +63,12 @@ namespace Editor
 		/// Moves the selected entity down.
 		void MoveDown();
 
+		/// Enables adding of entities to the hierarchy.
+		inline void EnableAddEntities() { mDontAddEntities = false; }
+
+		/// Disables adding of entities to the hierarchy.
+		inline void DisableAddEntities() { mDontAddEntities = true; }
+
 	public:
 
 		/// @name CEGUI Callbacks
@@ -120,6 +126,7 @@ namespace Editor
 		EntityMap mItems;
 		HierarchyTree mHierarchy;
 		EntitySystem::EntityHandle mCurrentParent;
+		bool mDontAddEntities;
 	};
 }
 

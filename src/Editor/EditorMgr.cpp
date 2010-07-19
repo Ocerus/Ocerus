@@ -737,20 +737,6 @@ void Editor::EditorMgr::PropertyValueChanged()
 	}
 }
 
-void Editor::EditorMgr::LoadHierarchyWindow( ResourceSystem::XMLNodeIterator& xml )
-{
-	OC_ASSERT(mEditorGUI);
-	OC_ASSERT(mEditorGUI->GetHierarchyWindow());
-	mEditorGUI->GetHierarchyWindow()->LoadHierarchy(xml);
-}
-
-void Editor::EditorMgr::SaveHierarchyWindow( ResourceSystem::XMLOutput& storage )
-{
-	OC_ASSERT(mEditorGUI);
-	OC_ASSERT(mEditorGUI->GetHierarchyWindow());
-	mEditorGUI->GetHierarchyWindow()->SaveHierarchy(storage);
-}
-
 bool Editor::EditorMgr::IsLockedToGame() const
 {
 	return GlobalProperties::Get<Core::Game>("Game").IsActionRunning();
@@ -953,4 +939,9 @@ void Editor::EditorMgr::SelectEntity( const EntitySystem::EntityHandle entity )
 		mSelectedEntities.clear();
 		mSelectedEntities.push_back(entity);
 	}
+}
+
+HierarchyWindow* Editor::EditorMgr::GetHierarchyWindow() const
+{
+	return mEditorGUI->GetHierarchyWindow();
 }

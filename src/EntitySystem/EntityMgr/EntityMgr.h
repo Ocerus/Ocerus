@@ -100,10 +100,10 @@ namespace EntitySystem
 		//@{
 		
 		/// Loads all entities from a XML resource.
-		bool LoadEntitiesFromResource(ResourceSystem::ResourcePtr res, const bool isPrototype = false);
+		bool LoadEntitiesFromResource(ResourceSystem::ResourcePtr res, const bool loadPrototypes = false);
 
 		/// Saves all entities to a XML stream.
-		bool SaveEntitiesToStorage(ResourceSystem::XMLOutput& storage, const bool isPrototype = false, const bool evenTransient = false) const;
+		bool SaveEntitiesToStorage(ResourceSystem::XMLOutput& storage, const bool savePrototypes = false, const bool evenTransient = false) const;
 
 		/// Loads all prototypes from the default file.
 		bool LoadPrototypes();

@@ -778,7 +778,7 @@ void EntitySystem::EntityMgr::LoadEntityFromXML(ResourceSystem::XMLNodeIterator 
 	ocInfo << "Entity loaded from XML: " << entity;
 }
 
-bool EntitySystem::EntityMgr::LoadEntitiesFromResource(ResourceSystem::ResourcePtr res, const bool isPrototype)
+bool EntitySystem::EntityMgr::LoadEntitiesFromResource(ResourceSystem::ResourcePtr res, const bool loadPrototypes)
 {
 	if (!res)
 	{
@@ -791,7 +791,7 @@ bool EntitySystem::EntityMgr::LoadEntitiesFromResource(ResourceSystem::ResourceP
 
 	ResourceSystem::XMLNodeIterator toplevelIter = xml->IterateTopLevel();
 	
-	if (!isPrototype)
+	if (!loadPrototypes)
 	{
 		if (toplevelIter == xml->EndTopLevel() || (*toplevelIter).compare("Layers") != 0)
 		{
@@ -808,11 +808,16 @@ bool EntitySystem::EntityMgr::LoadEntitiesFromResource(ResourceSystem::ResourceP
 		return false;
 	}
 
+	if (GlobalProperties::Get<bool>("DevelopMode"))
+	{
+		gEditorMgr.GetHierarchyWindow()->DisableAddEntities();
+	}
+
 	for (ResourceSystem::XMLNodeIterator entIt = toplevelIter.IterateChildren(); entIt != toplevelIter.EndChildren(); ++entIt)
 	{
 		if ((*entIt).compare("Entity") == 0)
 		{
-			LoadEntityFromXML(entIt, isPrototype);
+			LoadEntityFromXML(entIt, loadPrototypes);
 		}
 		else
 		{
@@ -821,7 +826,12 @@ bool EntitySystem::EntityMgr::LoadEntitiesFromResource(ResourceSystem::ResourceP
 		}
 	}
 
-	if (!isPrototype && GlobalProperties::Get<bool>("DevelopMode"))
+	if (GlobalProperties::Get<bool>("DevelopMode"))
+	{
+		gEditorMgr.GetHierarchyWindow()->EnableAddEntities();
+	}
+
+	if (!loadPrototypes && GlobalProperties::Get<bool>("DevelopMode"))
 	{
 		++toplevelIter;
 		if (toplevelIter == xml->EndTopLevel() || (*toplevelIter).compare("Hierarchy") != 0)
@@ -829,7 +839,7 @@ bool EntitySystem::EntityMgr::LoadEntitiesFromResource(ResourceSystem::ResourceP
 			ocError << "XML: Expected 'Hierarchy' after 'Entities'";
 			return false;
 		}
-		gEditorMgr.LoadHierarchyWindow(toplevelIter);
+		gEditorMgr.GetHierarchyWindow()->LoadHierarchy(toplevelIter);
 	}
 
 	return result;
@@ -907,11 +917,11 @@ bool EntitySystem::EntityMgr::SaveEntityToStorage(const EntitySystem::EntityID e
 	return true;
 }
 
-bool EntitySystem::EntityMgr::SaveEntitiesToStorage(ResourceSystem::XMLOutput& storage, const bool isPrototype,
+bool EntitySystem::EntityMgr::SaveEntitiesToStorage(ResourceSystem::XMLOutput& storage, const bool savePrototypes,
 	const bool evenTransient) const
 {
 	// layers
-	if (!isPrototype)
+	if (!savePrototypes)
 	{
 		gLayerMgr.SaveLayers(storage);
 	}
@@ -922,19 +932,19 @@ bool EntitySystem::EntityMgr::SaveEntitiesToStorage(ResourceSystem::XMLOutput& s
 	bool result = true;
 	for (EntityMap::const_iterator i = mEntities.begin(); i != mEntities.end(); ++i)
 	{
-		if ((isPrototype && mPrototypes.find(i->first) != mPrototypes.end())
-			|| (!isPrototype && mPrototypes.find(i->first) == mPrototypes.end()))
+		if ((savePrototypes && mPrototypes.find(i->first) != mPrototypes.end())
+			|| (!savePrototypes && mPrototypes.find(i->first) == mPrototypes.end()))
 		{
-			if (!SaveEntityToStorage(i->first, storage, isPrototype, evenTransient)) { result = false; };
+			if (!SaveEntityToStorage(i->first, storage, savePrototypes, evenTransient)) { result = false; };
 		}
 	}
 
 	storage.EndElement();
 
 	// hierarchy
-	if (!isPrototype && GlobalProperties::Get<bool>("DevelopMode"))
+	if (!savePrototypes && GlobalProperties::Get<bool>("DevelopMode"))
 	{
-		gEditorMgr.SaveHierarchyWindow(storage);
+		gEditorMgr.GetHierarchyWindow()->SaveHierarchy(storage);
 	}
 
 	return result;
