@@ -49,7 +49,13 @@ delete_selected_entities=Delete Selected Entities
 delete_selected_entities_hint=Deletes selected entities.
 create_prototype=Create Prototype
 create_prototype_hint=Exports the current entity to a prototype.
-
+help=Help
+user_documentation=User Documentation
+user_documentation_hint=Opens the user documentation document.
+shortcuts=Shorcuts
+shortcuts_hint=Displays a list of shortcuts of the editor.
+about=About
+about_hint=Displays the info about the application.
 
 # layer manager
 layer_manager=Layer Manager

@@ -5,7 +5,10 @@
 
 using namespace GUISystem;
 
-MessageBox::MessageBox(MessageBox::eMessageBoxType type, int32 tag): mType(type), mTag(tag), mCallback(0), mMessageBox(0)
+const float32 INNER_FRAME_OFFSET = 20.0f;
+const float32 BUTTON_MARGIN = 10.0f;
+
+MessageBox::MessageBox(MessageBox::eMessageBoxType type, int32 tag): mType(type), mTag(tag), mCallback(0), mMessageBox(0), mMinWidth(0)
 {
 	CEGUI::String windowName;
 	int i = 0;
@@ -65,7 +68,19 @@ MessageBox::~MessageBox()
 void MessageBox::SetText(const CEGUI::String& text)
 {
 	CEGUI::Window* messageText = mMessageBox->getChild(mMessageBox->getName() + "/MessageText");
+	const float32 offset = 10;
+	float32 buttonHeight = mMessageBox->getChild(mMessageBox->getName() + "/ButtonOK")->getPixelSize().d_height;
 	messageText->setText(text);
+	float32 textWidth = StringConverter::FromString<float32>(messageText->getProperty("HorzExtent").c_str());
+	float32 textHeight = StringConverter::FromString<float32>(messageText->getProperty("VertExtent").c_str());
+
+	messageText->setArea(CEGUI::UDim(0,offset), CEGUI::UDim(0,0), CEGUI::UDim(1, -2.0f*offset), CEGUI::UDim(1, -buttonHeight-offset));
+	mMessageBox->setWidth(CEGUI::UDim(0, textWidth + 2.0f*offset + INNER_FRAME_OFFSET));
+	mMessageBox->setHeight(CEGUI::UDim(0, textHeight + buttonHeight + offset + INNER_FRAME_OFFSET));
+	mMessageBox->setXPosition(CEGUI::UDim(0.5f, -0.5f*mMessageBox->getPixelSize().d_width));
+	mMessageBox->setYPosition(CEGUI::UDim(0.5f, -0.5f*mMessageBox->getPixelSize().d_height));
+
+	EnsureWindowIsWideEnough();
 }
 
 void MessageBox::Show()
@@ -81,8 +96,6 @@ void MessageBox::RegisterCallback(MessageBox::CallbackBase* callback)
 
 void MessageBox::SetButtons(const MessageBoxButtons& buttons)
 {
-	float32 step = 1 / (float32)(buttons.size() + 1);
-	float32 left = step;
 	float32 sumWidth = 0;
 	for (MessageBoxButtons::const_iterator it = buttons.begin(); it != buttons.end(); ++it)
 	{
@@ -90,18 +103,27 @@ void MessageBox::SetButtons(const MessageBoxButtons& buttons)
 		OC_DASSERT(button != 0);
 		float32 width = button->getWidth().d_offset;
 		sumWidth += width;
+	}
 
-		button->setPosition(CEGUI::UVector2(CEGUI::UDim(left, -width / 2), button->getPosition().d_y));
+	float32 totalWidth = sumWidth + BUTTON_MARGIN * (buttons.size() - 1);
+
+	float32 left = 0;
+	for (MessageBoxButtons::const_iterator it = buttons.begin(); it != buttons.end(); ++it)
+	{
+		CEGUI::Window* button = GetButton(*it);
+		OC_DASSERT(button != 0);
+		float32 width = button->getWidth().d_offset;
+
+		button->setPosition(CEGUI::UVector2(CEGUI::UDim(0.5f, -0.5f * totalWidth + left), button->getPosition().d_y));
 		button->setWidth(CEGUI::UDim(0, width));
 		button->setVisible(true);
 		button->setID((CEGUI::uint)*it);
-		button->subscribeEvent(CEGUI::PushButton::EventClicked,
-				CEGUI::Event::Subscriber(&GUISystem::MessageBox::OnButtonClicked, this));
-
+		button->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&GUISystem::MessageBox::OnButtonClicked, this));
 		
-		left += step;
+		left += width + BUTTON_MARGIN;
 	}
-	///@todo Make window wider if needed
+
+	mMinWidth = totalWidth + 2.0f * BUTTON_MARGIN;
 }
 
 CEGUI::Window* MessageBox::GetButton(eMessageBoxButton button)
@@ -124,8 +146,7 @@ bool MessageBox::OnButtonClicked(const CEGUI::EventArgs& e)
 	return true;
 }
 
-void ShowMessageBox(const CEGUI::String& text, MessageBox::eMessageBoxType type,
-	MessageBox::CallbackBase* callback, int32 tag)
+void GUISystem::ShowMessageBox(const CEGUI::String& text, MessageBox::eMessageBoxType type, MessageBox::CallbackBase* callback, int32 tag)
 {
 	MessageBox* messageBox = new MessageBox(type, tag);
 	messageBox->SetText(text);
@@ -133,3 +154,10 @@ void ShowMessageBox(const CEGUI::String& text, MessageBox::eMessageBoxType type,
 	messageBox->Show();
 }
 
+void GUISystem::MessageBox::EnsureWindowIsWideEnough()
+{
+	if (mMinWidth > mMessageBox->getPixelSize().d_width)
+	{
+		mMessageBox->setWidth(CEGUI::UDim(0, mMinWidth + INNER_FRAME_OFFSET));
+	}
+}

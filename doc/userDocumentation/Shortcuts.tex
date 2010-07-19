@@ -1,0 +1,49 @@
+\documentclass[a4paper, 12pt]{report}
+
+\usepackage[USenglish]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[ansinew]{inputenc}
+\usepackage{lmodern} %Type1-font for non-english texts and characters
+\usepackage{graphicx}
+
+\newenvironment{titled-itemize}[1]
+{
+\vspace{5mm}
+\noindent\textbf{#1}
+\begin{itemize}
+}
+{
+\end{itemize}
+}
+
+\begin{document}
+
+\pagestyle{empty} %No headings for the first pages.
+
+\title{Editor Shorcuts}
+\author{Ondrej Mocny}
+%\maketitle
+
+\pagestyle{plain} %Now display headings: headings / fancy / ...
+
+The following is a list of shortcuts used by the editor.
+
+\begin{itemize}
+  \item AngelScript -- a script engine with an own language
+  \item Boost -- a package of helper data structures and algorithms
+  \item Box2D -- a library providing 2D real-time physics
+  \item CEGUI -- a graphic user interface engine
+  \item DbgLib -- tools for a real-time debugging and crash dumps
+  \item Expat -- a XML parser
+  \item OIS -- a library for managing events from input devices
+  \item OpenGL -- an API for 2D and 3D graphics
+  \item RTHProfiler -- an interactive real-time profiling of code
+  \item RudeConfig -- a library for managing configure files
+  \item SDL -- a tool for an easier graphic rendering
+  \item SOIL -- a library for loading textures of various formats
+  \item UnitTest++ -- a framework for a unit testing
+\end{itemize}
+
+
+\end{document}
+

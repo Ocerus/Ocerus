@@ -95,6 +95,9 @@ namespace Core
 		/// Returns project used for the game itself.
 		Project* GetGameProject() { return mGameProject; }
 
+		/// Opens a PDF document.
+		void OpenPDF(const string& filePath);
+
 	private:
 
 		/// Application states.

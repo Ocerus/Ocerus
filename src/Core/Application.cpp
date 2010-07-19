@@ -416,6 +416,19 @@ void Core::Application::WriteToConsole( const string& str )
 	WriteConsole(GetStdHandle(STD_OUTPUT_HANDLE), str.c_str(), str.length(), &writtenChars, NULL);
 }
 
+void Core::Application::OpenPDF( const string& filePath )
+{
+	string adjustedPath = filePath;
+	size_t slashPos = adjustedPath.find('/');
+	while (slashPos != string::npos)
+	{
+		adjustedPath.replace(slashPos, 1, "\\");
+		slashPos = adjustedPath.find('/');
+	}
+	ocInfo << adjustedPath;
+	system(adjustedPath.c_str());
+}
+
 #else
 
 //------------
@@ -435,6 +448,11 @@ void Core::Application::HideConsole( void )
 void Core::Application::WriteToConsole( const string& message )
 {
     std::cerr << message;
+}
+
+void Core::Application::OpenPDF( const string& filePath )
+{
+	system(filePath.c_str());
 }
 
 #endif

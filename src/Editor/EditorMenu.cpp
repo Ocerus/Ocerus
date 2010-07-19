@@ -168,7 +168,7 @@ bool Editor::EditorMenu::OnMenuItemClicked(const CEGUI::EventArgs& e)
 		return true;
 	}
 
-	/// New component
+	// New component
 	{
 		string pattern = menubarPrefix + "/Edit/NewComponent/Component";
 		if (itemNameStr.substr(0, pattern.size()) == pattern)
@@ -209,6 +209,31 @@ bool Editor::EditorMenu::OnMenuItemClicked(const CEGUI::EventArgs& e)
 		gEditorMgr.CreatePrototypeFromCurrentEntity();
 		return true;
 	}
+
+	/// ---- Help ----
+	if (itemName == menubarPrefix + "/Help")
+	{
+		return true;
+	}
+
+	if (itemName == menubarPrefix + "/Help/UserDocumentation")
+	{
+		gApp.OpenPDF("data/docs/Documentation.pdf");
+		return true;
+	}
+
+	if (itemName == menubarPrefix + "/Help/Shortcuts")
+	{
+		gApp.OpenPDF("data/docs/Shortcuts.pdf");
+		return true;
+	}
+
+	if (itemName == menubarPrefix + "/Help/About")
+	{
+		GUISystem::ShowMessageBox("ahoj\nblabla\nno nazdar");
+		return true;
+	}
+
 
 	ocWarning << "MenuItem " << itemName << " clicked, but no action defined.";
 	return true;

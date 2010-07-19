@@ -14,13 +14,12 @@ namespace CEGUI
 
 namespace GUISystem
 {
-	/**
-	 * The MessageBox class provides a modal dialog for informing the user or for asking the user a question
-	 * and receiving the answer.
-	 */
+	/// The MessageBox class provides a modal dialog for informing the user or for asking the user a question
+	/// and receiving the answer.
 	class MessageBox
 	{
 	public:
+
 		/// The type of message box.
 		enum eMessageBoxType
 		{
@@ -100,6 +99,7 @@ namespace GUISystem
 		//@}
 
 	private:
+
 		/// The list of pairs that map button type to its widget.
 		typedef vector< pair<eMessageBoxButton, CEGUI::Window*> > Buttons;
 
@@ -109,11 +109,15 @@ namespace GUISystem
 		/// Returns the button widget for specified button type.
 		CEGUI::Window* GetButton(eMessageBoxButton button);
 
+		/// Makes sure the window is wide enough.
+		void EnsureWindowIsWideEnough();
+
 		eMessageBoxType mType;
 		int32 mTag;
 		CallbackBase* mCallback;
 		CEGUI::Window* mMessageBox;
 		Buttons mButtons;
+		float32 mMinWidth;
 	};
 
 	/// Creates and shows a message box with specified parameters.
