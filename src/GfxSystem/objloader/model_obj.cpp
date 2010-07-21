@@ -171,7 +171,7 @@ bool ModelOBJ::import(const char *pszFilename, bool rebuildNormals)
     // Extract the directory the OBJ file is in from the file name.
     // This directory path will be used to load the OBJ's associated MTL file.
 
-    m_directoryPath.clear();
+//    m_directoryPath.clear();
 
     std::string filename = pszFilename;
     std::string::size_type offset = filename.find_last_of('\\');
@@ -190,9 +190,17 @@ bool ModelOBJ::import(const char *pszFilename, bool rebuildNormals)
 
     // Import the OBJ file.
 
-    importGeometryFirstPass(pFile);
+    if (!importGeometryFirstPass(pFile))
+	{
+		fclose(pFile);
+		return false;
+	}
     rewind(pFile);
-    importGeometrySecondPass(pFile);
+    if (!importGeometrySecondPass(pFile))
+	{
+		fclose(pFile);
+		return false;
+	}
     fclose(pFile);
 
     // Perform post import tasks.
@@ -304,7 +312,7 @@ void ModelOBJ::scale(float scaleFactor, float offset[3])
     }
 }
 
-void ModelOBJ::addTrianglePos(int index, int material, int v0, int v1, int v2)
+bool ModelOBJ::addTrianglePos(int index, int material, int v0, int v1, int v2)
 {
     Vertex vertex =
     {
@@ -314,6 +322,18 @@ void ModelOBJ::addTrianglePos(int index, int material, int v0, int v1, int v2)
         {},
         {}
     };
+
+	if ((index * 3 + 2) >= (int)m_indexBuffer.size())
+		return false;
+	
+	int vsize = (int)m_vertexCoords.size();
+	if ((v0 * 3 + 2) >= vsize ||
+		(v1 * 3 + 2) >= vsize ||
+		(v2 * 3 + 2) >= vsize)
+		return false;
+
+	if (index >= (int)m_attributeBuffer.size())
+		return false;
 
     m_attributeBuffer[index] = material;
 
@@ -331,9 +351,11 @@ void ModelOBJ::addTrianglePos(int index, int material, int v0, int v1, int v2)
     vertex.position[1] = m_vertexCoords[v2 * 3 + 1];
     vertex.position[2] = m_vertexCoords[v2 * 3 + 2];
     m_indexBuffer[index * 3 + 2] = addVertex(v2, &vertex);
+
+	return true;
 }
 
-void ModelOBJ::addTrianglePosNormal(int index, int material, int v0, int v1,
+bool ModelOBJ::addTrianglePosNormal(int index, int material, int v0, int v1,
                                     int v2, int vn0, int vn1, int vn2)
 {
     Vertex vertex =
@@ -345,6 +367,24 @@ void ModelOBJ::addTrianglePosNormal(int index, int material, int v0, int v1,
 		{}
     };
 
+	if ((index * 3 + 2) >= (int)m_indexBuffer.size())
+		return false;
+	
+	int vsize = (int)m_vertexCoords.size();
+	if ((v0 * 3 + 2) >= vsize ||
+		(v1 * 3 + 2) >= vsize ||
+		(v2 * 3 + 2) >= vsize)
+		return false;
+
+	int nsize = (int)m_normals.size();
+	if ((vn0 * 3 + 2) >= nsize ||
+		(vn1 * 3 + 2) >= nsize ||
+		(vn2 * 3 + 2) >= nsize)
+		return false;
+
+	if (index >= (int)m_attributeBuffer.size())
+		return false;
+
     m_attributeBuffer[index] = material;
 
     vertex.position[0] = m_vertexCoords[v0 * 3];
@@ -353,6 +393,7 @@ void ModelOBJ::addTrianglePosNormal(int index, int material, int v0, int v1,
     vertex.normal[0] = m_normals[vn0 * 3];
     vertex.normal[1] = m_normals[vn0 * 3 + 1];
     vertex.normal[2] = m_normals[vn0 * 3 + 2];
+
     m_indexBuffer[index * 3] = addVertex(v0, &vertex);
 
     vertex.position[0] = m_vertexCoords[v1 * 3];
@@ -370,9 +411,11 @@ void ModelOBJ::addTrianglePosNormal(int index, int material, int v0, int v1,
     vertex.normal[1] = m_normals[vn2 * 3 + 1];
     vertex.normal[2] = m_normals[vn2 * 3 + 2];
     m_indexBuffer[index * 3 + 2] = addVertex(v2, &vertex);
+
+	return true;
 }
 
-void ModelOBJ::addTrianglePosTexCoord(int index, int material, int v0, int v1,
+bool ModelOBJ::addTrianglePosTexCoord(int index, int material, int v0, int v1,
                                       int v2, int vt0, int vt1, int vt2)
 {
     Vertex vertex =
@@ -384,6 +427,24 @@ void ModelOBJ::addTrianglePosTexCoord(int index, int material, int v0, int v1,
 		{}
     };
 
+	if ((index * 3 + 2) >= (int)m_indexBuffer.size())
+		return false;
+	
+	int vsize = (int)m_vertexCoords.size();
+	if ((v0 * 3 + 2) >= vsize ||
+		(v1 * 3 + 2) >= vsize ||
+		(v2 * 3 + 2) >= vsize)
+		return false;
+
+	int tsize = (int)m_textureCoords.size();
+	if ((vt0 * 2 + 1) >= tsize ||
+		(vt1 * 2 + 1) >= tsize ||
+		(vt2 * 2 + 1) >= tsize)
+		return false;
+	
+	if (index >= (int)m_attributeBuffer.size())
+		return false;
+
     m_attributeBuffer[index] = material;
 
     vertex.position[0] = m_vertexCoords[v0 * 3];
@@ -406,9 +467,11 @@ void ModelOBJ::addTrianglePosTexCoord(int index, int material, int v0, int v1,
     vertex.texCoord[0] = m_textureCoords[vt2 * 2];
     vertex.texCoord[1] = m_textureCoords[vt2 * 2 + 1];
     m_indexBuffer[index * 3 + 2] = addVertex(v2, &vertex);
+
+	return true;
 }
 
-void ModelOBJ::addTrianglePosTexCoordNormal(int index, int material, int v0,
+bool ModelOBJ::addTrianglePosTexCoordNormal(int index, int material, int v0,
                                             int v1, int v2, int vt0, int vt1,
                                             int vt2, int vn0, int vn1, int vn2)
 {
@@ -420,8 +483,33 @@ void ModelOBJ::addTrianglePosTexCoordNormal(int index, int material, int v0,
 		{ 0.0f, 0.0f, 0.0f },
 		{}
     };
+	
+	if ((index * 3 + 2) >= (int)m_indexBuffer.size())
+		return false;
+	
+	int vsize = (int)m_vertexCoords.size();
+	if ((v0 * 3 + 2) >= vsize ||
+		(v1 * 3 + 2) >= vsize ||
+		(v2 * 3 + 2) >= vsize)
+		return false;
 
-    m_attributeBuffer[index] = material;
+	
+	int tsize = (int)m_textureCoords.size();
+	if ((vt0 * 2 + 1) >= tsize ||
+		(vt1 * 2 + 1) >= tsize ||
+		(vt2 * 2 + 1) >= tsize)
+		return false;
+
+	int nsize = (int)m_normals.size();
+	if ((vn0 * 3 + 2) >= nsize ||
+		(vn1 * 3 + 2) >= nsize ||
+		(vn2 * 3 + 2) >= nsize)
+		return false;
+
+	if (index >= (int)m_attributeBuffer.size())
+		return false;
+
+	m_attributeBuffer[index] = material;
 
     vertex.position[0] = m_vertexCoords[v0 * 3];
     vertex.position[1] = m_vertexCoords[v0 * 3 + 1];
@@ -452,6 +540,8 @@ void ModelOBJ::addTrianglePosTexCoordNormal(int index, int material, int v0,
     vertex.normal[1] = m_normals[vn2 * 3 + 1];
     vertex.normal[2] = m_normals[vn2 * 3 + 2];
     m_indexBuffer[index * 3 + 2] = addVertex(v2, &vertex);
+
+	return true;
 }
 
 int ModelOBJ::addVertex(int hash, const Vertex *pVertex)
@@ -796,7 +886,7 @@ void ModelOBJ::generateTangents()
     m_hasTangents = true;
 }
 
-void ModelOBJ::importGeometryFirstPass(FILE *pFile)
+bool ModelOBJ::importGeometryFirstPass(FILE *pFile)
 {
     m_hasTextureCoords = false;
     m_hasNormals = false;
@@ -817,6 +907,9 @@ void ModelOBJ::importGeometryFirstPass(FILE *pFile)
         switch (buffer[0])
         {
         case 'f':   // v, v//vn, v/vt, v/vt/vn.
+			if (strcmp(buffer, "f") != 0)
+					return false;
+
             fscanf(pFile, "%s", buffer);
 
             if (strstr(buffer, "//")) // v//vn
@@ -859,6 +952,8 @@ void ModelOBJ::importGeometryFirstPass(FILE *pFile)
             break;
 
         case 'm':   // mtllib
+			if (strcmp(buffer, "mtllib") != 0)
+				return false;
             fgets(buffer, sizeof(buffer), pFile);
 			importMaterials(pFile);
             /*sscanf(buffer, "%s %s", buffer, buffer);
@@ -876,16 +971,23 @@ void ModelOBJ::importGeometryFirstPass(FILE *pFile)
                 break;
 
             case 'n':
+				if (strcmp(buffer, "vn") != 0)
+					return false;
+
                 fgets(buffer, sizeof(buffer), pFile);
                 ++m_numberOfNormals;
                 break;
 
             case 't':
+				if (strcmp(buffer, "vt") != 0)
+					return false;
+
                 fgets(buffer, sizeof(buffer), pFile);
                 ++m_numberOfTextureCoords;
+				break;
 
             default:
-                break;
+				return false;
             }
             break;
 
@@ -924,9 +1026,10 @@ void ModelOBJ::importGeometryFirstPass(FILE *pFile)
         m_materials.push_back(defaultMaterial);
         m_materialCache[defaultMaterial.name] = 0;
     }
+	return true;
 }
 
-void ModelOBJ::importGeometrySecondPass(FILE *pFile)
+bool ModelOBJ::importGeometrySecondPass(FILE *pFile)
 {
     int v[3] = {0};
     int vt[3] = {0};
@@ -965,8 +1068,9 @@ void ModelOBJ::importGeometrySecondPass(FILE *pFile)
                 vn[1] = (vn[1] < 0) ? vn[1] + numNormals - 1 : vn[1] - 1;
                 vn[2] = (vn[2] < 0) ? vn[2] + numNormals - 1 : vn[2] - 1;
 
-                addTrianglePosNormal(numTriangles++, activeMaterial,
-                    v[0], v[1], v[2], vn[0], vn[1], vn[2]);
+                if (!addTrianglePosNormal(numTriangles++, activeMaterial,
+                    v[0], v[1], v[2], vn[0], vn[1], vn[2]))
+					return false;
 
                 v[1] = v[2];
                 vn[1] = vn[2];
@@ -976,8 +1080,9 @@ void ModelOBJ::importGeometrySecondPass(FILE *pFile)
                     v[2] = (v[2] < 0) ? v[2] + numVertices - 1 : v[2] - 1;
                     vn[2] = (vn[2] < 0) ? vn[2] + numNormals - 1 : vn[2] - 1;
 
-                    addTrianglePosNormal(numTriangles++, activeMaterial,
-                        v[0], v[1], v[2], vn[0], vn[1], vn[2]);
+                    if (!addTrianglePosNormal(numTriangles++, activeMaterial,
+                        v[0], v[1], v[2], vn[0], vn[1], vn[2]))
+						return false;
 
                     v[1] = v[2];
                     vn[1] = vn[2];
@@ -1000,8 +1105,9 @@ void ModelOBJ::importGeometrySecondPass(FILE *pFile)
                 vn[1] = (vn[1] < 0) ? vn[1] + numNormals - 1 : vn[1] - 1;
                 vn[2] = (vn[2] < 0) ? vn[2] + numNormals - 1 : vn[2] - 1;
 
-                addTrianglePosTexCoordNormal(numTriangles++, activeMaterial,
-                    v[0], v[1], v[2], vt[0], vt[1], vt[2], vn[0], vn[1], vn[2]);
+                if (!addTrianglePosTexCoordNormal(numTriangles++, activeMaterial,
+                    v[0], v[1], v[2], vt[0], vt[1], vt[2], vn[0], vn[1], vn[2]))
+					return false;
 
                 v[1] = v[2];
                 vt[1] = vt[2];
@@ -1013,8 +1119,9 @@ void ModelOBJ::importGeometrySecondPass(FILE *pFile)
                     vt[2] = (vt[2] < 0) ? vt[2] + numTexCoords - 1 : vt[2] - 1;
                     vn[2] = (vn[2] < 0) ? vn[2] + numNormals - 1 : vn[2] - 1;
 
-                    addTrianglePosTexCoordNormal(numTriangles++, activeMaterial,
-                        v[0], v[1], v[2], vt[0], vt[1], vt[2], vn[0], vn[1], vn[2]);
+                    if (!addTrianglePosTexCoordNormal(numTriangles++, activeMaterial,
+                        v[0], v[1], v[2], vt[0], vt[1], vt[2], vn[0], vn[1], vn[2]))
+						return false;
 
                     v[1] = v[2];
                     vt[1] = vt[2];
@@ -1034,8 +1141,9 @@ void ModelOBJ::importGeometrySecondPass(FILE *pFile)
                 vt[1] = (vt[1] < 0) ? vt[1] + numTexCoords - 1 : vt[1] - 1;
                 vt[2] = (vt[2] < 0) ? vt[2] + numTexCoords - 1 : vt[2] - 1;
 
-                addTrianglePosTexCoord(numTriangles++, activeMaterial,
-                    v[0], v[1], v[2], vt[0], vt[1], vt[2]);
+                if (!addTrianglePosTexCoord(numTriangles++, activeMaterial,
+                    v[0], v[1], v[2], vt[0], vt[1], vt[2]))
+					return false;
 
                 v[1] = v[2];
                 vt[1] = vt[2];
@@ -1045,8 +1153,9 @@ void ModelOBJ::importGeometrySecondPass(FILE *pFile)
                     v[2] = (v[2] < 0) ? v[2] + numVertices - 1 : v[2] - 1;
                     vt[2] = (vt[2] < 0) ? vt[2] + numTexCoords - 1 : vt[2] - 1;
 
-                    addTrianglePosTexCoord(numTriangles++, activeMaterial,
-                        v[0], v[1], v[2], vt[0], vt[1], vt[2]);
+                    if (!addTrianglePosTexCoord(numTriangles++, activeMaterial,
+                        v[0], v[1], v[2], vt[0], vt[1], vt[2]))
+						return false;
 
                     v[1] = v[2];
                     vt[1] = vt[2];
@@ -1062,7 +1171,8 @@ void ModelOBJ::importGeometrySecondPass(FILE *pFile)
                 v[1] = (v[1] < 0) ? v[1] + numVertices - 1 : v[1] - 1;
                 v[2] = (v[2] < 0) ? v[2] + numVertices - 1 : v[2] - 1;
 
-                addTrianglePos(numTriangles++, activeMaterial, v[0], v[1], v[2]);
+                if (!addTrianglePos(numTriangles++, activeMaterial, v[0], v[1], v[2]))
+					return false;
 
                 v[1] = v[2];
 
@@ -1121,6 +1231,7 @@ void ModelOBJ::importGeometrySecondPass(FILE *pFile)
             break;
         }
     }
+	return true;
 }
 
 bool ModelOBJ::importMaterials(FILE *pFile)

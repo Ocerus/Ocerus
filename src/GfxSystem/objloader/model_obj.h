@@ -114,15 +114,15 @@ public:
     bool hasTextureCoords() const;
 
 private:
-    void addTrianglePos(int index, int material,
+    bool addTrianglePos(int index, int material,
         int v0, int v1, int v2);
-    void addTrianglePosNormal(int index, int material,
+    bool addTrianglePosNormal(int index, int material,
         int v0, int v1, int v2,
         int vn0, int vn1, int vn2);
-    void addTrianglePosTexCoord(int index, int material,
+    bool addTrianglePosTexCoord(int index, int material,
         int v0, int v1, int v2,
         int vt0, int vt1, int vt2);
-    void addTrianglePosTexCoordNormal(int index, int material,
+    bool addTrianglePosTexCoordNormal(int index, int material,
         int v0, int v1, int v2,
         int vt0, int vt1, int vt2,
         int vn0, int vn1, int vn2);
@@ -132,8 +132,8 @@ private:
     void buildMeshes();
     void generateNormals();
     void generateTangents();
-    void importGeometryFirstPass(FILE *pFile);
-    void importGeometrySecondPass(FILE *pFile);
+    bool importGeometryFirstPass(FILE *pFile);
+    bool importGeometrySecondPass(FILE *pFile);
     bool importMaterials(FILE *pFile);
     void scale(float scaleFactor, float offset[3]);
 

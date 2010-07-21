@@ -14,6 +14,37 @@ ResourceSystem::ResourcePtr Mesh::CreateMe()
 	return ResourceSystem::ResourcePtr(new Mesh());
 }
 
+bool Mesh::LoadModelFromFilePath(const char* path)
+{
+	if (mModel->import(path))
+	{
+		if (mModel->getNumberOfVertices() == 0)
+		{
+			return false;;
+		}
+		else
+		{
+			mModel->normalize();
+
+			// create textures for the meshes
+			for (int i=0; i<mModel->getNumberOfMaterials(); ++i)
+			{
+				const ModelOBJ::Material* objMaterial = &mModel->getMaterial(i);
+				if (!objMaterial->colorMapFilename.empty())
+				{
+					boost::filesystem::path filePath(path);
+					string fileDir = filePath.branch_path().native_directory_string();
+					gResourceMgr.AddResourceFileToGroup(fileDir + "/" + objMaterial->colorMapFilename, "MeshTextures", ResourceSystem::RESTYPE_TEXTURE, ResourceSystem::BPT_ABSOLUTE);
+				}
+			}
+		}
+		return true;
+	}
+	else
+		return false;
+		
+}
+
 size_t Mesh::LoadImpl()
 {
 	DataContainer dc;
@@ -28,24 +59,24 @@ size_t Mesh::LoadImpl()
 	ofs->close();
 
 	mModel = new ModelOBJ();
-	if (mModel->import(tmpFilePath.c_str()))
-	{
-		mModel->normalize();
-
-		// create textures for the meshes
-		for (int i=0; i<mModel->getNumberOfMaterials(); ++i)
-		{
-			const ModelOBJ::Material* objMaterial = &mModel->getMaterial(i);
-			if (!objMaterial->colorMapFilename.empty())
-			{
-				gResourceMgr.AddResourceFileToGroup(GetFileDir() + "/" + objMaterial->colorMapFilename, "MeshTextures", ResourceSystem::RESTYPE_TEXTURE, ResourceSystem::BPT_ABSOLUTE);
-			}
-		}
-	}
-	else
+	if (!LoadModelFromFilePath(tmpFilePath.c_str()))
 	{
 		delete mModel;
-		dataSize = 0;
+
+		ocWarning << "Model '" << GetName() << "' cannot be loaded. Loading NullModel instead!";
+
+		ResourceSystem::ResourcePtr nullModHandle = gResourceMgr.GetResource("General", "NullModel");
+		string filePath = nullModHandle->GetFilePath();
+
+		mModel = new ModelOBJ();
+		if (!LoadModelFromFilePath(filePath.c_str()))
+		{
+			ocError << "Cannot load NullModel!";
+			delete mModel;
+
+			mModel = 0;
+			dataSize = 0;
+		}
 	}
 
 	boost::filesystem::remove(tmpFilePath);

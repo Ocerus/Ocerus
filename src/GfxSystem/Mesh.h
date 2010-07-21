@@ -37,6 +37,7 @@ namespace GfxSystem
 		virtual bool UnloadImpl(void);
 
 	private:
+		bool LoadModelFromFilePath(const char* path);
 
 		ModelOBJ* mModel;
 	};
