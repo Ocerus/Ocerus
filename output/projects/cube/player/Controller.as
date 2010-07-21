@@ -153,9 +153,9 @@ void OnKeyPressed(eKeyCode key, uint32 char)
 					Vector2 impulse =  EXPLOSION_RATIO / 10.0f * MathUtils::Sqrt(length) * delta;
 					if (hisScale.x * hisScale.y > 1)
 					{
-						SpawnSmallStone(hisPos + Vector2(0.4f, 1.0f), Vector2(0.7f,0.5f), impulse + Vector2(0.5f,0.5f));
-						SpawnSmallStone(hisPos + Vector2(-0.4f, 1.0f), Vector2(0.5f,0.6f), impulse + Vector2(-0.5f,0.5f));
-						SpawnSmallStone(hisPos + Vector2(-0.0f, -1.0f), Vector2(0.8f,0.7f), impulse + Vector2(0.0f,-0.5f));
+						SpawnSmallStone(hisPos + Vector2(0.3f, 0.3f), Vector2(0.7f,0.5f), impulse + Vector2(0.5f,0.5f));
+						SpawnSmallStone(hisPos + Vector2(-0.3f, 0.4f), Vector2(0.5f,0.6f), impulse + Vector2(-0.5f,0.5f));
+						SpawnSmallStone(hisPos + Vector2(-0.0f, -0.3f), Vector2(0.8f,0.7f), impulse + Vector2(0.0f,-0.5f));
 					}
 					//-----------------------------------------------------
 					
