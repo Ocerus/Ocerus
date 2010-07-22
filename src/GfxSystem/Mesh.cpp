@@ -20,7 +20,7 @@ bool Mesh::LoadModelFromFilePath(const char* path)
 	{
 		if (mModel->getNumberOfVertices() == 0)
 		{
-			return false;;
+			return false;
 		}
 		else
 		{
@@ -57,6 +57,7 @@ size_t Mesh::LoadImpl()
 	boost::filesystem::ofstream* ofs = new boost::filesystem::ofstream(tmpFilePath, std::ios_base::out | std::ios_base::binary);
 	ofs->write((char*)dc.GetData(), dc.GetSize());
 	ofs->close();
+	dc.Release();
 
 	mModel = new ModelOBJ();
 	if (!LoadModelFromFilePath(tmpFilePath.c_str()))
@@ -68,13 +69,18 @@ size_t Mesh::LoadImpl()
 		ResourceSystem::ResourcePtr nullModHandle = gResourceMgr.GetResource("General", "NullModel");
 		string filePath = nullModHandle->GetFilePath();
 
+		// used only for determining size of data
+		GetRawInputData(filePath, dc);
+		dataSize = dc.GetSize();
+		dc.Release();
+
 		mModel = new ModelOBJ();
 		if (!LoadModelFromFilePath(filePath.c_str()))
 		{
 			ocError << "Cannot load NullModel!";
 			delete mModel;
 
-			mModel = 0;
+			mModel = NULL;
 			dataSize = 0;
 		}
 	}
