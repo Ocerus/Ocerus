@@ -15,6 +15,7 @@ namespace Core
 
 namespace Editor
 {
+	class CreateProjectDialog;
 	class EditorGUI;
 	class EditorMgr;
 	class EditorMenu;

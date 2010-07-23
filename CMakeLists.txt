@@ -216,6 +216,7 @@ set(Core_SRCS
 )
 
 set(Editor_SRCS
+	src/Editor/CreateProjectDialog.cpp
 	src/Editor/EditorGUI.cpp
 	src/Editor/EditorMenu.cpp
 	src/Editor/EditorMgr.cpp

@@ -6,6 +6,7 @@
 #include "ResourceWindow.h"
 #include "PrototypeWindow.h"
 #include "HierarchyWindow.h"
+#include "CreateProjectDialog.h"
 #include "GUISystem/GUIMgr.h"
 #include "GUISystem/ViewportWindow.h"
 #include "EntitySystem/EntityMgr/LayerMgr.h"
@@ -28,15 +29,18 @@ EditorMgr::EditorMgr():
 	mEditorGUI(0),
 	mCurrentProject(0),
 	mCurrentEntity(EntityHandle::Null),
-	mShortcuts(0)
+	mShortcuts(0),
+	mCreateProjectDialog(0)
 {
 	ocInfo << "*** EditorMgr init ***";
 	mShortcuts = new KeyShortcuts();
+	mCreateProjectDialog = new CreateProjectDialog();
 }
 
 EditorMgr::~EditorMgr()
 {
 	delete mShortcuts;
+	delete mCreateProjectDialog;
 }
 
 void EditorMgr::LoadEditor()
@@ -377,10 +381,12 @@ void Editor::EditorMgr::UpdateSceneMenu()
 
 void EditorMgr::ShowCreateProjectDialog()
 {
-	
+	mCreateProjectDialog->OpenDialog();
+/*
 	GUISystem::FolderSelector* folderSelector = new GUISystem::FolderSelector("", (int)EditorMenu::FST_CREATEPROJECT);
 	folderSelector->RegisterCallback(new GUISystem::FolderSelector::Callback<Editor::EditorMenu>(mEditorGUI->GetEditorMenu(), &Editor::EditorMenu::OnFolderSelected));
 	folderSelector->Show("Create project", true, "Project folder:"); ///@todo translate
+*/
 }
 
 void EditorMgr::CreateProject(const string& projectPath)

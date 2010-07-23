@@ -254,6 +254,9 @@ namespace Editor
 
 		//Shortcuts
 		KeyShortcuts* mShortcuts;
+		
+		//Dialogs
+		CreateProjectDialog* mCreateProjectDialog;
 	
 	};
 
