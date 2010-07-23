@@ -6,6 +6,7 @@
 #include "StringConverter.h"
 #include "IInputListener.h"
 #include <OISInputManager.h>
+#include <OISException.h>
 
 #ifdef __UNIX__
 #include <X11/Xlib.h>
@@ -13,9 +14,18 @@
 
 using namespace InputSystem;
 
+#define OIS_EXCEPTION_BEGIN try {
+	
+#define OIS_EXCEPTION_END } catch (const OIS::Exception& e) { \
+		ocError << "OIS Exception: " << e.eText; \
+		CRITICAL_FAILURE("Last error was critical"); \
+	}
+
+
 
 InputSystem::OISListener::OISListener(): mOIS(0), mMouse(0), mKeyboard(0)
 {
+	OIS_EXCEPTION_BEGIN
 	ocInfo << "Initing OIS";
 
 	mMgr = InputMgr::GetSingletonPtr();
@@ -38,6 +48,7 @@ InputSystem::OISListener::OISListener(): mOIS(0), mMouse(0), mKeyboard(0)
 	ocInfo << "OIS created";
 
 	RecreateDevices();
+	OIS_EXCEPTION_END
 }
 
 InputSystem::OISListener::~OISListener()
@@ -205,10 +216,11 @@ void InputSystem::OISListener::ReleaseAll( void )
 void InputSystem::OISListener::RecreateDevices()
 {
 	OC_ASSERT(mOIS);
-
+	
 	int mouseWidth = 0;
 	int mouseHeight = 0;
 
+#ifdef __WIN__
 	if (mKeyboard) mOIS->destroyInputObject(mKeyboard);
 	if (mMouse)
 	{
@@ -217,12 +229,32 @@ void InputSystem::OISListener::RecreateDevices()
 		mouseHeight = ms.height;
 		mOIS->destroyInputObject(mMouse);
 	}
+	mKeyboard = 0;
+	mMouse = 0;
+#endif
 
-	mKeyboard = static_cast<OIS::Keyboard*>(mOIS->createInputObject(OIS::OISKeyboard, true));
-	mKeyboard->setEventCallback(this);
+	if (!mKeyboard)
+	{
+		OIS_EXCEPTION_BEGIN
+		mKeyboard = static_cast<OIS::Keyboard*>(mOIS->createInputObject(OIS::OISKeyboard, true));
+		mKeyboard->setEventCallback(this);
+		OIS_EXCEPTION_END
+	}
 
-	mMouse = static_cast<OIS::Mouse*>(mOIS->createInputObject(OIS::OISMouse, true, "", gGfxWindow.GetFullscreen()));
-	mMouse->setEventCallback(this);
+	if (!mMouse)
+	{
+		OIS_EXCEPTION_BEGIN
+		mMouse = static_cast<OIS::Mouse*>(
+#if __WIN__	// We use modified OIS on Windows.
+			mOIS->createInputObject(OIS::OISMouse, true, "", gGfxWindow.GetFullscreen())
+#else
+			mOIS->createInputObject(OIS::OISMouse, true, "")
+#endif
+		);
+		mMouse->setEventCallback(this);
+		OIS_EXCEPTION_END
+	}
+
 	if (mouseWidth != 0 && mouseHeight != 0)
 	{
 		const OIS::MouseState &ms = mMouse->getMouseState();
@@ -272,6 +304,8 @@ void InputSystem::OISListener::FixKeyInfo( KeyInfo& keyInfo )
 		break;
 	case KC_DIVIDE:
 		keyInfo.charCode = '/';
+		break;
+	default:
 		break;
 	}
 }

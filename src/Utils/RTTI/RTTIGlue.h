@@ -98,9 +98,9 @@ namespace Reflection
 		/// Returns a property identified by it's string key. Access restriction filter can be defined.
 		AbstractProperty* GetPropertyPointer(const StringKey key, const PropertyAccessFlags flagMask = PA_FULL_ACCESS) const
 		{
-			if (mDynamicProperties)
+			if (BaseClass::mDynamicProperties)
 			{
-				AbstractProperty* prop = mDynamicProperties->GetProperty(key, flagMask);
+				AbstractProperty* prop = BaseClass::mDynamicProperties->GetProperty(key, flagMask);
 				if (prop) return prop;
 			}
 
@@ -111,7 +111,7 @@ namespace Reflection
 		void EnumProperties( RTTIBaseClass* owner, PropertyList& out, const PropertyAccessFlags flagMask = PA_FULL_ACCESS ) const
 		{
 			GetRTTI()->EnumProperties(owner, out, flagMask);
-			if (mDynamicProperties) mDynamicProperties->EnumProperties(owner, out, flagMask);
+			if (BaseClass::mDynamicProperties) BaseClass::mDynamicProperties->EnumProperties(owner, out, flagMask);
 		}
 
 	protected :

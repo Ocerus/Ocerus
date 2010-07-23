@@ -5,8 +5,8 @@
 using namespace GUISystem;
 
 
-GUISystem::FolderSelector::FolderSelector(int32 tag):
-	mWindow(0), mButtonOK(0), mButtonCancel(0), mPathBox(0), mFolderList(0), mEditbox(0), mTag(tag), mCallback(0)
+GUISystem::FolderSelector::FolderSelector(const string& rootPath, int32 tag):
+	mWindow(0), mButtonOK(0), mButtonCancel(0), mPathBox(0), mFolderList(0), mEditbox(0), mTag(tag), mCallback(0), mRootPath(rootPath)
 {
 }
 
@@ -80,9 +80,9 @@ bool FolderSelector::OnClicked(const CEGUI::EventArgs& e)
 			CEGUI::ListboxItem* selectedItem = static_cast<CEGUI::ListboxItem*>(mFolderList->getFirstSelectedItem());
 			if (selectedItem == 0)
 				return false;
-			string path = mCurrentPath + "/" + mFolders[selectedItem->getID()];
+			string path = mCurrentPath;//+ "/" + mFolders[selectedItem->getID()];
 			string editboxValue = mEditbox->getText().c_str();
-			mCallback->execute(path, editboxValue, false, mTag);
+			mCallback->execute(GetRelativePath(path), editboxValue, false, mTag);
 		}
 		delete this;
 	}
@@ -104,7 +104,7 @@ void FolderSelector::ChangeFolder(const string& folder)
 	boost::filesystem::path currentPath(mCurrentPath);
 	if (folder == "..")
 	{
-		if (currentPath.has_parent_path())
+		if (currentPath.has_parent_path() && (currentPath.parent_path().directory_string().length() >= mRootPath.length()))
 			currentPath = currentPath.parent_path();
 	}
 	else
@@ -120,6 +120,10 @@ void GUISystem::FolderSelector::UpdateFolderList()
 	{
 		mCurrentPath = boost::filesystem::current_path<boost::filesystem::path>().directory_string();
 	}
+	if (mCurrentPath.length() < mRootPath.length())
+	{
+		mCurrentPath = mRootPath;
+	}
 
 	mFolders.clear();
 	mFolders.push_back("..");
@@ -133,7 +137,7 @@ void GUISystem::FolderSelector::UpdateFolderList()
 	}
 	Containers::sort(mFolders.begin(), mFolders.end());
 
-	mPathBox->setText(mCurrentPath);
+	mPathBox->setText(GetRelativePath(mCurrentPath));
 	mFolderList->resetList();
 
 	for (vector<string>::iterator it = mFolders.begin(); it != mFolders.end(); ++it)
@@ -143,4 +147,12 @@ void GUISystem::FolderSelector::UpdateFolderList()
 		item->setID(it - mFolders.begin());
 		mFolderList->addItem(item);
 	}
+}
+
+string GUISystem::FolderSelector::GetRelativePath(const string& absolutePath)
+{
+	if (absolutePath.length() < mRootPath.size())
+		return "";
+	else
+		return absolutePath.substr(mRootPath.size());
 }

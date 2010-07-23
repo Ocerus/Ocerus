@@ -50,7 +50,7 @@ namespace Editor
 		void SwitchActionButton(uint32 selectedButtonIndex);
 
 		enum eMessageBoxTags { MBT_QUIT };
-		enum eFolderSelectorTags { FST_CREATEPROJECT, FST_OPENPROJECT };
+		enum eFolderSelectorTags { FST_CREATEPROJECT, FST_OPENPROJECT, FST_NEWSCENE };
 
 	private:
 

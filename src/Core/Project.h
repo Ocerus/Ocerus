@@ -59,6 +59,9 @@ namespace Core
 
 			/// Returns the path of the opened project. Returns empty string if there is not an opened project.
 			string GetOpenedProjectPath() const;
+			
+			/// Returns the absolute path of the opened project.
+			string GetAbsoluteOpenedProjectPath() const;
 
 			/// Stores the project info into specified variable.
 			void GetOpenedProjectInfo(ProjectInfo& projectInfo) const;
@@ -73,7 +76,7 @@ namespace Core
 
 			/// Creates the scene with a given file name and scene name.
 			/// @return False, if scene cannot be created, or another scene is already opened; otherwise returns True.
-			bool CreateScene(const string& sceneFilename, const string& sceneName);
+			bool CreateScene(string sceneFilename, const string& sceneName);
 
 			/// Opens the scene at given index in SceneList.
 			/// @return False, if scene is not found, or another scene is already opened; otherwise returns True.

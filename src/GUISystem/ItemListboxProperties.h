@@ -24,8 +24,8 @@ namespace GUISystem
 		/// Default destructor.
 		inline virtual ~ItemListboxWantsMouseWheel() {}
 
-		inline virtual CEGUI::String get(const CEGUI::PropertyReceiver* receiver) const { return mValue ? "True" : "False"; }
-		inline virtual void set(CEGUI::PropertyReceiver* receiver, const CEGUI::String& value) { mValue = StringConverter::FromString<bool>(value.c_str()); }
+		inline virtual CEGUI::String get(const CEGUI::PropertyReceiver*) const { return mValue ? "True" : "False"; }
+		inline virtual void set(CEGUI::PropertyReceiver*, const CEGUI::String& value) { mValue = StringConverter::FromString<bool>(value.c_str()); }
 
 	private:
 

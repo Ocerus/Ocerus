@@ -377,7 +377,8 @@ void Editor::EditorMgr::UpdateSceneMenu()
 
 void EditorMgr::ShowCreateProjectDialog()
 {
-	GUISystem::FolderSelector* folderSelector = new GUISystem::FolderSelector((int)EditorMenu::FST_CREATEPROJECT);
+	
+	GUISystem::FolderSelector* folderSelector = new GUISystem::FolderSelector("", (int)EditorMenu::FST_CREATEPROJECT);
 	folderSelector->RegisterCallback(new GUISystem::FolderSelector::Callback<Editor::EditorMenu>(mEditorGUI->GetEditorMenu(), &Editor::EditorMenu::OnFolderSelected));
 	folderSelector->Show("Create project", true, "Project folder:"); ///@todo translate
 }
@@ -395,7 +396,7 @@ void EditorMgr::CreateProject(const string& projectPath)
 
 void EditorMgr::ShowOpenProjectDialog()
 {
-	GUISystem::FolderSelector* folderSelector = new GUISystem::FolderSelector((int)EditorMenu::FST_OPENPROJECT);
+	GUISystem::FolderSelector* folderSelector = new GUISystem::FolderSelector("", (int)EditorMenu::FST_OPENPROJECT);
 	folderSelector->RegisterCallback(new GUISystem::FolderSelector::Callback<Editor::EditorMenu>(mEditorGUI->GetEditorMenu(), &Editor::EditorMenu::OnFolderSelected));
 	folderSelector->Show("Open project"); ///@todo translate
 }
@@ -424,9 +425,23 @@ void EditorMgr::SaveOpenedScene()
 	}
 }
 
-void EditorMgr::CreateScene()
+void EditorMgr::ShowNewSceneDialog()
 {
-	OC_FAIL("not implemented");
+	const string& projectPath = gEditorMgr.GetCurrentProject()->GetAbsoluteOpenedProjectPath();
+	GUISystem::FolderSelector* folderSelector = new GUISystem::FolderSelector(projectPath, (int)EditorMenu::FST_NEWSCENE);
+	folderSelector->RegisterCallback(new GUISystem::FolderSelector::Callback<Editor::EditorMenu>(mEditorGUI->GetEditorMenu(), &Editor::EditorMenu::OnFolderSelected));
+	folderSelector->Show("New scene", true, "Scene filename:"); ///@todo translate
+}
+
+void EditorMgr::CreateScene(const string& sceneFilename, const string& sceneName)
+{
+	if (!mCurrentProject->CreateScene(sceneFilename, sceneName))
+	{
+		GUISystem::MessageBox* messageBox = new GUISystem::MessageBox(GUISystem::MessageBox::MBT_OK);
+		messageBox->SetText(StringSystem::FormatText(gStringMgrSystem.GetTextData
+			(GUISystem::GUIMgr::GUIGroup, "new_scene_error")) << sceneFilename);
+		messageBox->Show();
+	}
 }
 
 void EditorMgr::ShowQuitDialog()
@@ -808,7 +823,7 @@ bool Editor::EditorMgr::HandleShortcuts( InputSystem::eKeyCode keyCode )
 	}
 	if (mShortcuts->IsShortcutActive(KeyShortcuts::KS_CREATE_SCENE))
 	{
-		CreateScene();
+		ShowNewSceneDialog();
 	}
 	if (mShortcuts->IsShortcutActive(KeyShortcuts::KS_OPEN_PROJECT))
 	{

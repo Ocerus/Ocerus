@@ -28,6 +28,7 @@ quit_message_text=Do you really want to quit?
 scene=Scene
 new_scene=New Scene
 new_scene_hint=Creates a new scene.
+new_scene_error=Cannot create scene "%1".
 open_scene=Open Scene
 open_scene_hint=Opens an existing scene from XML.
 save_scene=Save Scene

@@ -47,7 +47,7 @@ namespace GUISystem {
 		};
 
 		/// Constructs a FolderSelector instance.
-		FolderSelector(int32 tag = 0);
+		FolderSelector(const string& rootPath = "", int32 tag = 0);
 
 		/// Destroys the FolderSelector instance.
 		~FolderSelector();
@@ -78,8 +78,9 @@ namespace GUISystem {
 
 		void ChangeFolder(const string& folder);
 		
-		///
 		void UpdateFolderList();
+		
+		string GetRelativePath(const string& absolutePath);
 
 		CEGUI::Window* mWindow;
 		CEGUI::Window* mButtonOK;
@@ -91,6 +92,7 @@ namespace GUISystem {
 		int mTag;
 		CallbackBase* mCallback;
 
+		string mRootPath;
 		string mCurrentPath;
 		vector<string> mFolders;
 	};

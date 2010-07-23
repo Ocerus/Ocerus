@@ -224,7 +224,7 @@ bool ResourceMgr::AddResourceFileToGroup(const string& filepath, const StringKey
 
 	AddResourceToGroup(group, name, r);
 
-	ocInfo << "Resource '" << name << "' added";
+	ocInfo << "Resource '" << name << "' added to group '" << group << "'.";
 	return true;
 }
 

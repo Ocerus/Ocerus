@@ -231,6 +231,9 @@ set(Editor_SRCS
 	src/Editor/ValueEditors/Models/EntityAttributeModel.cpp
 	src/Editor/ValueEditors/Vector2Editor.cpp
 	src/Editor/ValueEditors/ResourceEditor.cpp
+	src/Editor/ValueEditors/PointEditor.cpp
+	src/Editor/ValueEditors/BoolEditor.cpp
+	src/Editor/ValueEditors/TwoDimEditor.cpp
 )
 
 set(EntitySystem_SRCS
@@ -242,6 +245,7 @@ set(EntitySystem_SRCS
 	src/EntitySystem/EntityMgr/LayerMgr.cpp
 	src/EntitySystem/Components/Camera.cpp
 	src/EntitySystem/Components/DynamicBody.cpp
+	src/EntitySystem/Components/GUILayout.cpp
 	src/EntitySystem/Components/Model.cpp
 	src/EntitySystem/Components/PolygonCollider.cpp
 	src/EntitySystem/Components/Script.cpp
@@ -281,6 +285,7 @@ set(GUISystem_SRCS
 	src/GUISystem/VerticalLayout.cpp
 	src/GUISystem/ViewportWindow.cpp
 	src/GUISystem/FolderSelector.cpp
+	src/GUISystem/ScriptProvider.cpp
 )
 
 set(InputSystem_SRCS

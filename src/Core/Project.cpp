@@ -124,6 +124,11 @@ string Project::GetOpenedProjectPath() const
 	return mProjectPath;
 }
 
+string Project::GetAbsoluteOpenedProjectPath() const
+{
+	return boost::filesystem::complete(boost::filesystem::path(mProjectPath)).directory_string();
+}
+
 void Project::GetOpenedProjectInfo(ProjectInfo& projectInfo) const
 {
 	projectInfo = mProjectInfo;
@@ -198,11 +203,16 @@ void Core::Project::SaveProjectConfig()
 	ocInfo << "Project " << mProjectPath << " saved.";
 }
 
-bool Project::CreateScene(const string& sceneFilename, const string& sceneName)
+bool Project::CreateScene(string sceneFilename, const string& sceneName)
 {
-	if (!IsProjectOpened() || IsSceneOpened()) return false;
+	if (!IsProjectOpened()) return false;
+	if (IsSceneOpened())
+		CloseOpenedScene();
 
-	const string& filename = mProjectPath + "/" + sceneFilename;
+	if (sceneFilename.at(0) == '/')
+		sceneFilename = sceneFilename.substr(1);
+
+	string filename = mProjectPath + "/" + sceneFilename;
 	if (boost::filesystem::exists(filename))
 	{
 		ocWarning << "Cannot create scene '" << filename << "'. Already exists.";
@@ -215,6 +225,7 @@ bool Project::CreateScene(const string& sceneFilename, const string& sceneName)
 		xmlOutput.BeginElement("Scene");
 		xmlOutput.EndElement();
 	}
+	gResourceMgr.AddResourceFileToGroup(sceneFilename, "Project", ResourceSystem::RESTYPE_XMLRESOURCE, ResourceSystem::BPT_PROJECT);
 
 	SceneInfo sceneInfo;
 	sceneInfo.name = sceneName;
@@ -228,6 +239,7 @@ bool Project::CreateScene(const string& sceneFilename, const string& sceneName)
 		gGfxWindow.SetWindowCaption(mProjectInfo.name + " (" + sceneFilename + ")");
 	}
 
+	OpenSceneAtIndex(mSceneIndex);
 	return true;
 }
 

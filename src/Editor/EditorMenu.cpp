@@ -115,7 +115,7 @@ bool Editor::EditorMenu::OnMenuItemClicked(const CEGUI::EventArgs& e)
 
 	if (itemName == menubarPrefix + "/Scene/NewScene")
 	{
-		gEditorMgr.CreateScene();
+		gEditorMgr.ShowNewSceneDialog();
 		return true;
 	}
 
@@ -334,6 +334,10 @@ void Editor::EditorMenu::OnFolderSelected(const string& path, const string& edit
 	case FST_OPENPROJECT:
 		gEditorMgr.Reset();
 		gEditorMgr.OpenProject(path);
+		return;
+	case FST_NEWSCENE:
+		gEditorMgr.Reset();
+		gEditorMgr.CreateScene(path + '/' + editboxValue, editboxValue);
 		return;
 	}
 	ocWarning << "Folder through FolderSelector with tag " << tag << " selected, but no action defined.";
