@@ -595,7 +595,7 @@ bool Editor::EditorMgr::MouseButtonReleased( const InputSystem::MouseInfo& mi, c
 	if (btn == InputSystem::MBTN_RIGHT && mHoveredEntity.IsValid())
 	{
 		// open the context menu
-		PopupMenu* menu = new PopupMenu("EditorRoot/Popup/EntityInScene");
+		PopupMenu* menu = new PopupMenu("EditorRoot/Popup/EntityInScene", true);
 		menu->Init<EntitySystem::EntityHandle>(mHoveredEntity);
 		menu->Open((float32)mi.x, (float32)mi.y);
 		gEditorMgr.RegisterPopupMenu(menu);
@@ -705,7 +705,8 @@ void Editor::EditorMgr::CloseAllPopupMenus()
 {
 	if (!mPopupClosingEnabled) return;
 
-	for (list<PopupMenu*>::iterator it=mPopupMenus.begin(); it!=mPopupMenus.end(); ++it)
+	list<PopupMenu*> popupMenus = mPopupMenus; // We iterate over the copy of the list, because popups with self-destruct will get removed from the original list by calling Close().
+	for (list<PopupMenu*>::iterator it=popupMenus.begin(); it!=popupMenus.end(); ++it)
 	{
 		(*it)->Close();
 	}
