@@ -373,7 +373,7 @@ namespace GUISystem
 		return CEGUI::LeftButton;
 	}
 
-	bool SystemLayoutPropertyCallback(CEGUI::Window* window, CEGUI::String& propname, CEGUI::String& propvalue, void* userdata)
+	inline bool LayoutPropertyCallback(StringSystem::StringMgr& stringMgr, CEGUI::Window* window, CEGUI::String& propname, CEGUI::String& propvalue, void* userdata)
 	{
 		OC_UNUSED(userdata);
 		if ((propname == "Text" || propname == "Tooltip") &&
@@ -382,27 +382,21 @@ namespace GUISystem
 			propvalue.at(propvalue.size() - 1) == '$')
 		{
 			/// Use StringMgr to translate textual data in GUI.
-			CEGUI::String translatedText = gStringMgrSystem.GetTextData(GUIMgr::GUIGroup, propvalue.substr(1, propvalue.size() - 2).c_str());
+			CEGUI::String translatedText = stringMgr.GetTextData(GUIMgr::GUIGroup, propvalue.substr(1, propvalue.size() - 2).c_str());
 			window->setProperty(propname, translatedText);
 			return false;
 		}
 		return true;
 	}
 
+	bool SystemLayoutPropertyCallback(CEGUI::Window* window, CEGUI::String& propname, CEGUI::String& propvalue, void* userdata)
+	{
+		return LayoutPropertyCallback(gStringMgrSystem, window, propname, propvalue, userdata);
+	}
+
 	bool ProjectLayoutPropertyCallback(CEGUI::Window* window, CEGUI::String& propname, CEGUI::String& propvalue, void* userdata)
 	{
-		OC_UNUSED(userdata);
-		if ((propname == "Text" || propname == "Tooltip") &&
-			propvalue.size() > 2 &&
-			propvalue.at(0) == '$' &&
-			propvalue.at(propvalue.size() - 1) == '$')
-		{
-			/// Use StringMgr to translate textual data in GUI.
-			CEGUI::String translatedText = gStringMgrProject.GetTextData(GUIMgr::GUIGroup, propvalue.substr(1, propvalue.size() - 2).c_str());
-			window->setProperty(propname, translatedText);
-			return false;
-		}
-		return true;
+		return LayoutPropertyCallback(gStringMgrProject, window, propname, propvalue, userdata);
 	}
 }
 
