@@ -161,7 +161,7 @@ void Editor::LayerMgrWidget::UpdateTree()
 	mTreeWindow->resetList();
 	selectedItem = 0;
 
-	for (EntitySystem::LayerID layerID = gLayerMgr.GetTopLayerID(); layerID >= gLayerMgr.GetBottomLayerID(); --layerID)
+	for (EntitySystem::LayerID layerID = gLayerMgr.GetBottomLayerID(); layerID <= gLayerMgr.GetTopLayerID(); ++layerID)
 	{
 		string layerName = gLayerMgr.GetLayerName(layerID);
 		if (gLayerMgr.GetActiveLayer() == layerID)
