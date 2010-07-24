@@ -200,17 +200,19 @@ void GfxSystem::GfxWindow::RefreshWindowPosition()
 	mWindowX = windowRect.left;
 	mWindowY = windowRect.top;
 #else
+	int windowX, windowY;
 	windowInfo.info.x11.lock_func();
 	Display* display = windowInfo.info.x11.display;
+	Window window = windowInfo.info.x11.window;
 	XSync(display, false);
-	Window window;
 	XWindowAttributes windowAttributes;
 	XGetWindowAttributes(display, window, &windowAttributes);
 	Window dummy;
-	XTranslateCoordinates(display, window, windowAttributes.root, 0, 0, &mWindowX, &mWindowY, &dummy);
+	XTranslateCoordinates(display, window, windowAttributes.root, 0, 0, &windowX, &windowY, &dummy);
+	mWindowX = static_cast<int32>(windowX);
+	mWindowY = static_cast<int32>(windowY);
 	windowInfo.info.x11.unlock_func();
 #endif
-
 }
 
 void GfxSystem::GfxWindow::UpdateWindowPosition()
