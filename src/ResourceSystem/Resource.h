@@ -54,7 +54,7 @@ namespace ResourceSystem
 		virtual void Reload(void);
 
 		/// If the resource is out of date (with respect to the source of its data), it will be reloaded.
-		virtual void Refresh(void);
+		virtual bool Refresh(void);
 
 		/// Returns the user type of this resource.
 		inline eResourceType GetType(void) const { return mType; }

@@ -967,3 +967,8 @@ HierarchyWindow* Editor::EditorMgr::GetHierarchyWindow() const
 {
 	return mEditorGUI->GetHierarchyWindow();
 }
+
+bool Editor::EditorMgr::IsProjectOpened() const
+{ 
+	return mCurrentProject->IsProjectOpened();
+}

@@ -23,6 +23,7 @@ using namespace ResourceSystem;
 ResourceTypeMap ResourceMgr::NullResourceTypeMap;
 
 const uint64 RESOURCE_UPDATES_DELAY_MILLIS = 500;
+const uint64 REFRESH_PATH_DELAY_MILIS = 777;
 
 ResourceMgr::ResourceMgr( void ):
 	mBasePath(), mListener(0), mResourceUpdatesTimer(false), mMemoryLimit(0), mMemoryUsage(0), mEnforceMemoryLimit(true)
@@ -65,7 +66,8 @@ void ResourceSystem::ResourceMgr::Init( const string& systemPath )
 
 	OC_ASSERT_MSG(mResourceCreationMethods[NUM_RESTYPES-1], "Not all resource types are registered");
 
-	mLastUpdateTime = 0;
+	mLastResourceRefreshTime = 0;
+	mLastPathRefreshTime = 0;
 	mMemoryLimit = std::numeric_limits<size_t>::max();
 	mMemoryUsage = 0;
 	Resource::ResetLastUsedTime();
@@ -182,7 +184,7 @@ bool ResourceMgr::AddResourceFileToGroup(const string& filepath, const StringKey
 	if (dirStr.compare("Thumbs.db") == 0)
 	{
 		ocInfo << "Resource '" << boostPath << "' ignored";
-		return true;
+		return false;
 	}
 	
 	ocTrace << "Adding resource '" << boostPath << "' to group '" << group << "'";
@@ -211,7 +213,7 @@ bool ResourceMgr::AddResourceFileToGroup(const string& filepath, const StringKey
 	if (mResourceGroups.find(group) != mResourceGroups.end() && groupIt->second->find(name) != groupIt->second->end())
 	{
 		// resource already exists
-		return true;
+		return false;
 	}
 
 	ResourcePtr r = mResourceCreationMethods[type]();
@@ -263,18 +265,21 @@ void ResourceSystem::ResourceMgr::AddResourceToGroup( const StringKey& group, co
 	AddResourceToGroup(groupIt, name, res);
 }
 
-void ResourceMgr::RefreshBasePathToGroup(const eBasePathType basePathType, const StringKey& group)
+bool ResourceMgr::RefreshBasePathToGroup(const eBasePathType basePathType, const StringKey& group)
 {
 	OC_ASSERT(basePathType != BPT_ABSOLUTE);
 
-	ocInfo << "Refreshing dir '" << mBasePath[basePathType] << "' to group '" << group << "'";
+	if (mBasePath[basePathType].empty())
+		return false;
 
-	RefreshPathToGroup(mBasePath[basePathType], basePathType, group);
+	return RefreshPathToGroup(mBasePath[basePathType], basePathType, group);
 }
 
-void ResourceMgr::RefreshPathToGroup(const string& path, const eBasePathType basePathType, const StringKey& group)
+bool ResourceMgr::RefreshPathToGroup(const string& path, const eBasePathType basePathType, const StringKey& group)
 {
 	boost::filesystem::path boostPath = path;
+
+	bool result = false;
 
 	// check the path
 	if (!boost::filesystem::exists(boostPath))
@@ -298,14 +303,17 @@ void ResourceMgr::RefreshPathToGroup(const string& path, const eBasePathType bas
 			string dirStr = i->path().filename();
 			if (dirStr.compare(".svn") != 0)
 			{
-				RefreshPathToGroup(filePath, basePathType, group);
+				if (RefreshPathToGroup(filePath, basePathType, group))
+					result = true;
 			}
 		}
 		else if (i->path().filename().compare(Core::Project::PROJECT_FILE_NAME) != 0)
 		{
-			AddResourceFileToGroup(relativePath, group, RESTYPE_AUTODETECT, basePathType);
+			if (AddResourceFileToGroup(relativePath, group, RESTYPE_AUTODETECT, basePathType))
+				result = true;
 		}
 	}
+	return result;
 }
 
 void ResourceMgr::LoadResourcesInGroup(const StringKey& group)
@@ -363,6 +371,12 @@ void ResourceMgr::DeleteGroup(const StringKey& group)
 	UnloadResourcesInGroup(group, true);
 	delete groupIt->second;
 	mResourceGroups.erase(groupIt);
+}
+
+void ResourceMgr::DeleteProjectResources()
+{
+	DeleteGroup("Project");
+	SetBasePath(BPT_PROJECT, "");
 }
 
 void ResourceMgr::SetLoadingListener(IResourceLoadingListener* listener)
@@ -462,17 +476,24 @@ void ResourceSystem::ResourceMgr::DeleteAllResources( void )
 	mResourceGroups.clear();
 }
 
-void ResourceSystem::ResourceMgr::RefreshAllResources( void )
+bool ResourceSystem::ResourceMgr::RefreshAllResources( void )
 {
+	bool result = false;
 	for (ResourceGroupMap::iterator groupIter=mResourceGroups.begin(); groupIter!=mResourceGroups.end(); ++groupIter)
 	{
 		ResourceMap* resMap = groupIter->second;
 		OC_ASSERT(resMap);
 		for (ResourceMap::iterator resIter=resMap->begin(); resIter!=resMap->end(); ++resIter)
 		{
-			resIter->second->Refresh();
+			if (!resIter->second->Refresh())
+			{
+				resIter->second->Unload(true);
+				resMap->erase(resIter);
+				result = true;
+			}
 		}
 	}
+	return result;
 }
 
 void ResourceSystem::ResourceMgr::RefreshAllTextures( void )
@@ -526,16 +547,30 @@ void ResourceSystem::ResourceMgr::ChangeResourceType(ResourcePtr resPointer, eRe
 	ocError << "Can't find resource '" << resPointer->GetName() << "'!!!";
 }
 
-void ResourceSystem::ResourceMgr::CheckForResourcesUpdates( void )
+bool ResourceSystem::ResourceMgr::CheckForResourcesUpdates( void )
 {
 	PROFILE_FNC();
 
 	uint64 currentTime = mResourceUpdatesTimer.GetMilliseconds();
-	if (currentTime - mLastUpdateTime >= RESOURCE_UPDATES_DELAY_MILLIS)
+	if (currentTime - mLastResourceRefreshTime >= RESOURCE_UPDATES_DELAY_MILLIS)
 	{
-		mLastUpdateTime = currentTime;
-		RefreshAllResources();
+		mLastResourceRefreshTime = currentTime;
+		return RefreshAllResources();
 	}
+	return false;
+}
+
+bool ResourceSystem::ResourceMgr::CheckForRefreshPath( void )
+{
+	PROFILE_FNC();
+
+	uint64 currentTime = mResourceUpdatesTimer.GetMilliseconds();
+	if (currentTime - mLastPathRefreshTime >= REFRESH_PATH_DELAY_MILIS)
+	{
+		mLastPathRefreshTime = currentTime;
+		return RefreshBasePathToGroup(ResourceSystem::BPT_PROJECT, "Project");
+	}
+	return false;
 }
 
 void ResourceSystem::ResourceMgr::_NotifyResourceLoaded( const Resource* loadedResource )

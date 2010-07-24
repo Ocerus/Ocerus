@@ -177,7 +177,18 @@ void Application::RunMainLoop()
 		gGUIMgr.ProcessDisconnectedEventList();
 
 		// make sure the resources are up to date
-		if (mDevelopMode) gResourceMgr.CheckForResourcesUpdates();
+		if ((mDevelopMode) && (GetState() != AS_LOADING) && (gEditorMgr.IsProjectOpened()))
+		{
+			bool refreshWindow = false;
+
+			if (gResourceMgr.CheckForRefreshPath())
+				refreshWindow = true;
+			if (gResourceMgr.CheckForResourcesUpdates())
+				refreshWindow = true;
+
+			if (refreshWindow)
+				gEditorMgr.RefreshResourceWindow();
+		}
 
 		// calculate time since last frame
 		float32 delta = CalculateFrameDeltaTime();

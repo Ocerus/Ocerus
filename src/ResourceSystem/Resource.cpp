@@ -181,8 +181,15 @@ void ResourceSystem::Resource::GetRawInputData( const string filePath, DataConta
 	outData.SetData(buffer, bufferSize);
 }
 
-void ResourceSystem::Resource::Refresh( void )
+bool ResourceSystem::Resource::Refresh( void )
 {
+	if (!boost::filesystem::exists(mFilePath))
+	{
+		ocInfo << "Resource file " << mFilePath << " went missing. Unloading the resource.";
+		Unload();
+		return false;
+	}
+
 	if (GetState() == STATE_LOADED)
 	{
 		int64 currentWriteTime = 0;
@@ -194,6 +201,7 @@ void ResourceSystem::Resource::Refresh( void )
 			Reload();
 		}
 	}
+	return true;
 }
 
 void ResourceSystem::Resource::RefreshResourceInfo( void )

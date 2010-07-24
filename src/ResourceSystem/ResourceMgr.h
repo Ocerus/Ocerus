@@ -46,13 +46,15 @@ namespace ResourceSystem
 
 		/// Assigns a resource to a group.
 		/// The resource type if autodetected if you don't specify it.
+		/// Returns true if the resource was successfully added.
 		bool AddResourceFileToGroup(const string& filepath, const StringKey& group, eResourceType type = RESTYPE_AUTODETECT, const eBasePathType basePathType = BPT_SYSTEM, const string& customName = "");
 
 		/// Assigns a resource to a group. Note that if you create the resource this way you must manually delete it later.
 		bool AddManualResourceToGroup(const StringKey& name, const StringKey& group, eResourceType type);
 
 		/// Refreshes given base path, resources are added to given group.
-		void RefreshBasePathToGroup(const eBasePathType basePathType, const StringKey& group);
+		/// Return true if something was added.
+		bool RefreshBasePathToGroup(const eBasePathType basePathType, const StringKey& group);
 
 		/// Loads all resources in the specified group.
 		/// It doesn't need to be called, resources are loaded on-the-fly if someone needs them. But it's
@@ -66,6 +68,9 @@ namespace ResourceSystem
 		/// Unloads and then deletes all resources in the specified group. They can't be reloaded.
 		void DeleteGroup(const StringKey& group);
 
+		/// Unloads and then deletes all resources in project. They can't be reloaded.
+		void DeleteProjectResources();
+
 		/// Unloads and deletes one specific resource. The resource can't be reloaded.
 		void DeleteResource(const StringKey& group, const StringKey& name);
 
@@ -76,14 +81,21 @@ namespace ResourceSystem
 		void DeleteAllResources(void);
 
 		/// Makes sure all loaded resources are up to date.
-		void RefreshAllResources(void);
+		/// Return true if some resource file has been deleted and thus resource unloaded and deleted.
+		bool RefreshAllResources(void);
 
 		/// Reloads all textures. Needed when recreating drawing context.
 		void RefreshAllTextures( void );
 
 		/// Performs a periodic test on resources to determine if they're up to date. The function is non-blocking.
 		/// The function is meant to be called each frame.
-		void CheckForResourcesUpdates(void);
+		/// Returns true, if some resource was deleted.
+		bool CheckForResourcesUpdates(void);
+		
+		/// Performs a periodic test on resource path to determine if some resource has been added. 
+		/// The function is non-blocking. The function is meant to be called each frame.
+		/// Returns true, if something was added.
+		bool CheckForRefreshPath(void);
 
 		/// Loading listener receives callbacks from the manager when a resource is being loaded.
 		void SetLoadingListener(IResourceLoadingListener* listener);
@@ -148,7 +160,8 @@ namespace ResourceSystem
 		IResourceLoadingListener* mListener;
 		ResourceCreationMethod mResourceCreationMethods[NUM_RESTYPES];
 		Utils::Timer mResourceUpdatesTimer;
-		uint64 mLastUpdateTime;
+		uint64 mLastResourceRefreshTime;
+		uint64 mLastPathRefreshTime;
 		size_t mMemoryLimit;
 		size_t mMemoryUsage;
 		bool mEnforceMemoryLimit;
@@ -160,7 +173,8 @@ namespace ResourceSystem
 		void AddResourceToGroup(const StringKey& group, const StringKey& name, const ResourcePtr res);
 
 		/// Refreshes given path, resources are added to given group.
-		void RefreshPathToGroup(const string& path, const eBasePathType basePathType, const StringKey& group);
+		/// Returns true if something was added.
+		bool RefreshPathToGroup(const string& path, const eBasePathType basePathType, const StringKey& group);
 
 		/// Checks if the memory usage is within limits. If not, some of the resources will be freed.
 		/// @param resourceToKeep This resource (if valid) will be preserved at any case.

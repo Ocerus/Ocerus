@@ -100,7 +100,7 @@ void Project::CloseProject()
 	mProjectPath = "";
 	mResourceTypeMap.clear();
 	mSceneList.clear();
-	gResourceMgr.DeleteGroup("Project");
+	gResourceMgr.DeleteProjectResources();
 
 	if (mEditorSupport)
 	{

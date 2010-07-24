@@ -94,6 +94,9 @@ namespace Editor
 
 		/// Returns the ProjectMgr.
 		inline Core::Project* GetCurrentProject() const { return mCurrentProject; }
+		
+		/// Returns whether there is an opened project.
+		bool IsProjectOpened() const;
 
 		/// Refreshes the prototype window.
 		void RefreshPrototypeWindow();
