@@ -245,7 +245,7 @@ void InputSystem::OISListener::RecreateDevices()
 	{
 		OIS_EXCEPTION_BEGIN
 		mMouse = static_cast<OIS::Mouse*>(
-#if __WIN__	// We use modified OIS on Windows.
+#ifdef __WIN__	// We use modified OIS on Windows.
 			mOIS->createInputObject(OIS::OISMouse, true, "", gGfxWindow.GetFullscreen())
 #else
 			mOIS->createInputObject(OIS::OISMouse, true, "")
