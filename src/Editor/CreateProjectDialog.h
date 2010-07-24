@@ -36,7 +36,7 @@ namespace Editor {
 		//@}
 
 		/// FolderSelector callback
-		void OnFolderSelected(const string& path, const string& editboxValue, bool canceled, int32 t);
+		void OnFolderSelected(const string& path, const string& editboxValue, bool canceled, int32 tag);
 
 		bool IsValid();
 		

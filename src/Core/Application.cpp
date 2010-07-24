@@ -473,8 +473,18 @@ void Core::Application::WriteToConsole( const string& message )
 
 void Core::Application::OpenPDF( const string& filePath )
 {
-	ocInfo << "Opening " << filePath;
-	system(filePath.c_str());
+	static string commands[] = { "xdg-open", "kde-open", "gnome-open", "okular", "kpdf", "evince", "xpdf", "acroread", "epdfview" };
+	static size_t commandsCount = 9;
+	static size_t commandIndex = 0;
+	for (; commandIndex < commandsCount; ++commandIndex)
+	{
+		ocInfo << "Opening " << filePath << " with " << commands[commandIndex] << ".";
+		bool result = system((commands[commandIndex] + " " + filePath).c_str());
+		if (result == EXIT_SUCCESS)
+			return;
+		ocInfo << "Cannot open " << filePath << " with " << commands[commandIndex] << ".";
+	}
+	ocWarning << "Cannot find suitable command to open " << filePath << ".";
 }
 
 #endif

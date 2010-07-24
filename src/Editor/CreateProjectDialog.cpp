@@ -109,8 +109,10 @@ bool CreateProjectDialog::OnButtonClicked(const CEGUI::EventArgs& e)
 	return true;
 }
 
-void CreateProjectDialog::OnFolderSelected(const string& path, const string& editboxValue, bool canceled, int32 t)
+void CreateProjectDialog::OnFolderSelected(const string& path, const string& editboxValue, bool canceled, int32 tag)
 {
+	OC_UNUSED(editboxValue);
+	OC_UNUSED(tag);
 	mDialog->setModalState(true);
 	if (canceled)
 		return;

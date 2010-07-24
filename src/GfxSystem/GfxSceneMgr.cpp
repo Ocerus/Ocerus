@@ -51,6 +51,8 @@ void GfxSceneMgr::DrawVisibleDrawables()
 		case CT_Model:
 			gGfxRenderer.DrawModel(drawable, transform);
 			break;
+		default:
+			break;
 		}
 
 	}

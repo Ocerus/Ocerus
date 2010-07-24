@@ -75,6 +75,7 @@ bool BoolEditor::OnEventButtonRemovePressed(const CEGUI::EventArgs& args)
 
 bool BoolEditor::OnEventCheckStateChanged(const CEGUI::EventArgs& args)
 {
+	OC_UNUSED(args);
 	OC_DASSERT(mCheckboxWidget != 0);
 	this->Submit();
 	gEditorMgr.PropertyValueChanged();

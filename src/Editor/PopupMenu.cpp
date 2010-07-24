@@ -207,6 +207,7 @@ void Editor::PopupMenu::Close()
 	{
 		gGUIMgr.DisconnectEvent(*it);
 	}
+	mEventConnections.clear();
 
 	if (mSelfDestruct) delete this;
 }

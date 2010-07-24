@@ -217,6 +217,7 @@ uint32 EntityComponents::DynamicBody::GetContactsCount() const
 
 void EntityComponents::DynamicBody::ZeroVelocity( PropertyFunctionParameters params )
 {
+	OC_UNUSED(params);
 	if (mBody)
 	{
 		mBody->SetLinearVelocity(Vector2_Zero);

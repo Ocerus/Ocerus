@@ -319,6 +319,8 @@ namespace GUISystem
 
 	void GUIMgr::ResolutionChanging(const uint32 width, const uint32 height)
 	{
+		OC_UNUSED(width);
+		OC_UNUSED(height);
 		OC_DASSERT(mCegui);
 
 		mRenderer->grabTextures();

@@ -56,7 +56,7 @@ namespace Reflection
 		/// @param propertyName The name of registered/unregistered property.
 		/// @param reg True if the property is registered, False if the property is unregistered.
 		/// @param success True if the registration/unregistration was successful.
-		virtual void DynamicPropertyChanged(const StringKey propertyName, bool reg, bool success) { }
+		virtual void DynamicPropertyChanged(const StringKey propertyName, bool reg, bool success) { OC_UNUSED(propertyName); OC_UNUSED(reg); OC_UNUSED(success); }
 	
 	protected :
 

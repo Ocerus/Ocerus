@@ -46,7 +46,7 @@ size_t TextResource::LoadImpl()
 				else
 				{
 					size_t newlinePos = value.find("\\n");
-					while (newlinePos != -1)
+					while (newlinePos != string::npos)
 					{
 						value.replace(newlinePos, 2, "\n");
 						newlinePos = value.find("\\n");
