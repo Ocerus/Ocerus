@@ -67,13 +67,15 @@ bool LayerMgr::EntityHasLayer(EntityHandle handle) const
 	return gEntityMgr.HasEntityComponentOfType(handle, CT_Transform);
 }
 
-LayerID LayerMgr::GetLayerID(EntityHandle handle) const
+LayerID LayerMgr::GetEntityLayerID(EntityHandle handle) const
 {
 	return gEntityMgr.GetEntityComponentProperty(handle, gEntityMgr.GetEntityComponent
 		(handle, CT_Transform), "Layer").GetValue<LayerID>();
 }
 
-inline void SetLayerID(EntityHandle handle, LayerID id)
+
+
+inline void SetEntityLayerID(EntityHandle handle, LayerID id)
 {
 	gEntityMgr.GetEntityComponentProperty(handle, gEntityMgr.GetEntityComponent
 		(handle, CT_Transform), "Layer").SetValue<LayerID>(id);
@@ -106,6 +108,15 @@ bool LayerMgr::ExistsLayerName(const string& name) const
 		if ((*it) == name) { return true; }
 	}
 	return false;
+}
+
+LayerID LayerMgr::GetLayerID(const string& name) const
+{
+	for (Layers::const_iterator it = mLayers.begin(); it != mLayers.end(); ++it)
+	{
+		if ((*it) == name) { return (it - mLayers.begin()) - mDifference; }
+	}
+	return 0;
 }
 
 LayerID LayerMgr::GetTopLayerID() const
@@ -186,7 +197,7 @@ bool LayerMgr::DeleteLayer(LayerID id, bool destroyEntities)
 	for (EntityList::iterator it = toDelete.begin(); it != toDelete.end(); ++it)
 	{
 		if (destroyEntities) gEntityMgr.DestroyEntity(*it);
-		else SetLayerID(*it, 0);
+		else SetEntityLayerID(*it, 0);
 	}
 
 	if (mActiveLayerID == id) mActiveLayerID = 0;
@@ -282,7 +293,7 @@ void LayerMgr::GetEntitiesFromLayer(LayerID id, EntityList& out)
 	RefreshList();
 	for (EntityList::iterator it = mList.begin(); it != mList.end(); ++it)
 	{
-		if (GetLayerID(*it) == id) { out.push_back(*it); }
+		if (GetEntityLayerID(*it) == id) { out.push_back(*it); }
 	}
 }
 
@@ -291,23 +302,23 @@ bool LayerMgr::SetLayerOfEntities(LayerID id, EntityList& entities)
 	if (!ExistsLayer(id)) { return false; }
 	for (EntityList::iterator it = entities.begin(); it != entities.end(); ++it)
 	{
-		SetLayerID(*it, id);
+		SetEntityLayerID(*it, id);
 	}
 	return true;
 }
 
 void LayerMgr::MoveEntityUp(EntityHandle entity)
 {
-	LayerID entityLayer = GetLayerID(entity);
+	LayerID entityLayer = GetEntityLayerID(entity);
 	if (entityLayer != GetTopLayerID())
-		SetLayerID(entity, entityLayer + 1);
+		SetEntityLayerID(entity, entityLayer + 1);
 }
 
 void LayerMgr::MoveEntityDown(EntityHandle entity)
 {
-	LayerID entityLayer = GetLayerID(entity);
+	LayerID entityLayer = GetEntityLayerID(entity);
 	if (entityLayer != GetBottomLayerID())
-		SetLayerID(entity, entityLayer - 1);
+		SetEntityLayerID(entity, entityLayer - 1);
 }
 
 void LayerMgr::SetActiveLayer(LayerID layerID)
@@ -345,10 +356,10 @@ void LayerMgr::ShiftEntities(EntitySystem::LayerID from, bool front)
 	bool foreground = from > 0;
 	for (EntityList::iterator it = mList.begin(); it != mList.end(); ++it)
 	{
-		LayerID id = GetLayerID(*it);
+		LayerID id = GetEntityLayerID(*it);
 		if ((foreground && id >= from) || (!foreground && id <= from))
 		{ 
-			SetLayerID(*it, id + (front ? 1 : -1));
+			SetEntityLayerID(*it, id + (front ? 1 : -1));
 		}
 	}
 }

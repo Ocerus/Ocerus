@@ -5,6 +5,7 @@
 #define _EDITOR_LAYERWINDOW_H_
 
 #include "Base.h"
+#include "EntitySystem/EntityMgr/LayerMgr.h"
 #include "GUISystem/CEGUIForwards.h"
 
 namespace Editor
@@ -25,16 +26,17 @@ namespace Editor
 
 		/// Updates the Layer Manager Window.
 		void Update(float32 delta);
-		
+
 		/// @name CEGUI Callbacks
 		//@{
-		bool OnEditNewLayerKeyDown(const CEGUI::EventArgs&);
-		bool OnButtonSetActiveLayerClicked(const CEGUI::EventArgs&);
-		bool OnButtonAddLayerClicked(const CEGUI::EventArgs&);
-		bool OnButtonUpDownClicked(const CEGUI::EventArgs&);
-		bool OnButtonEditEntityClicked(const CEGUI::EventArgs&);
-		bool OnButtonToggleLayerVisibilityClicked(const CEGUI::EventArgs&);
+		bool OnDragContainerMouseButtonDown(const CEGUI::EventArgs&);
+		bool OnLayerExpandClick(const CEGUI::EventArgs&);
+		bool OnLayerMouseDoubleClick(const CEGUI::EventArgs&);
+		//bool OnDragContainerMouseButtonUp(const CEGUI::EventArgs&);
+		//bool OnDragContainerMouseDoubleClick(const CEGUI::EventArgs&);
+		//bool OnRefreshButtonClicked(const CEGUI::EventArgs&);
 		//@}
+
 
 	private:
 
@@ -43,13 +45,19 @@ namespace Editor
 		
 		void UpdateTree();
 
+		void UpdateLayerItem(CEGUI::Window* layerItem, EntitySystem::LayerID layerID);
+		
+		void UpdateEntityItem(CEGUI::Window* entityItem, EntitySystem::EntityHandle entity);
+
 		CEGUI::Window* mWindow;
 		CEGUI::ItemListbox* mTree;
-		
-		
+
 		CEGUI::Window* mNewLayerEditbox;
 		CEGUI::Window* mUpButton;
 		CEGUI::Window* mDownButton;
+
+		set<string> mExpandedLayers;
+		set<EntitySystem::LayerID> mExpandedLayerIDs;
 
 		float32 mUpdateTimer;
 	};

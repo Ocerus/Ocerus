@@ -2,9 +2,12 @@
 #include "Editor/LayerWindow.h"
 #include "Editor/EditorMgr.h"
 #include "GUISystem/CEGUITools.h"
+#include "GUISystem/ItemListboxProperties.h"
 #include "EntitySystem/EntityMgr/LayerMgr.h"
 
 using namespace Editor;
+
+GUISystem::ItemListboxWantsMouseWheel gLayerMouseWheelProperty;
 
 bool MySortCallback(const CEGUI::ItemEntry*, const CEGUI::ItemEntry*);
 
@@ -30,11 +33,11 @@ void Editor::LayerWindow::Init()
 	mTree->setSortMode(CEGUI::ItemListBase::UserSort);
 	mTree->setSortCallback(&MySortCallback);
 	mTree->resetList();
-	//mTree->addProperty(&gResourceMouseWheelProperty);
+	mTree->addProperty(&gLayerMouseWheelProperty);
 	///@todo
 
 	//CEGUI::Window* refreshButton = mWindow->getChildRecursive(mWindow->getName() + "/Toolbar/Refresh");
-	//refreshButton->subscribeEvent(CEGUI::PushButton::EventClicked, //CEGUI::Event::Subscriber(&Editor::ResourceWindow::OnRefreshButtonClicked, this));
+	//refreshButton->subscribeEvent(CEGUI::PushButton::EventClicked, //CEGUI::Event::Subscriber(&Editor::LayerWindow::OnRefreshButtonClicked, this));
 
 	CEGUI_EXCEPTION_END
 
@@ -53,6 +56,112 @@ void Editor::LayerWindow::Update(float32 delta)
 		UpdateTree();
 	}
 }
+bool Editor::LayerWindow::OnDragContainerMouseButtonDown(const CEGUI::EventArgs& e)
+{
+	const CEGUI::MouseEventArgs& args = static_cast<const CEGUI::MouseEventArgs&>(e);
+	CEGUI::DragContainer* dragContainer = static_cast<CEGUI::DragContainer*>(args.window);
+	if (dragContainer->isBeingDragged()) return false;
+
+	CEGUI::ItemEntry* itemEntry = static_cast<CEGUI::ItemEntry*>(args.window->getParent());
+	itemEntry->setSelected(true);
+
+	return true;
+}
+
+bool LayerWindow::OnLayerExpandClick(const CEGUI::EventArgs& e)
+{
+	const CEGUI::MouseEventArgs& args = static_cast<const CEGUI::MouseEventArgs&>(e);
+	CEGUI::Window* layerItem = args.window->getParent();
+
+	if (args.button == CEGUI::LeftButton)
+	{
+		EntitySystem::LayerID layerID = layerItem->getID();
+		string layerName = gLayerMgr.GetLayerName(layerID);
+		set<string>::iterator it = mExpandedLayers.find(layerName); 
+		if (it == mExpandedLayers.end())
+		{
+			mExpandedLayers.insert(layerName);
+		}
+		else
+		{
+			mExpandedLayers.erase(it);
+		}
+		UpdateTree();
+	}
+	return true;
+}
+
+
+bool LayerWindow::OnLayerMouseDoubleClick(const CEGUI::EventArgs& e)
+{
+	const CEGUI::MouseEventArgs& args = static_cast<const CEGUI::MouseEventArgs&>(e);
+	CEGUI::DragContainer* dragContainer = static_cast<CEGUI::DragContainer*>(args.window);
+	if (dragContainer->isBeingDragged()) return false;
+
+	if (args.button == CEGUI::LeftButton)
+	{
+		EntitySystem::LayerID layerID = dragContainer->getID();
+		gLayerMgr.SetActiveLayer(layerID);
+		UpdateTree();
+	}
+	return true;
+}
+
+
+/*
+bool Editor::LayerWindow::OnDragContainerMouseButtonUp(const CEGUI::EventArgs& e)
+{
+	const CEGUI::MouseEventArgs& args = static_cast<const CEGUI::MouseEventArgs&>(e);
+	CEGUI::DragContainer* dragContainer = static_cast<CEGUI::DragContainer*>(args.window);
+	if (dragContainer->isBeingDragged()) return false;
+
+	CEGUI::ItemEntry* itemEntry = static_cast<CEGUI::ItemEntry*>(args.window->getParent());
+	itemEntry->setSelected(true);
+
+	if (args.button == CEGUI::RightButton)
+	{
+		ResourceSystem::ResourcePtr resource = GetItemAtIndex(dragContainer->getID());
+		if (resource.get())
+		{
+			PopupMenu* menu;
+			if (gEditorMgr.GetCurrentProject()->IsResourceScene(resource))
+			{
+				menu = new PopupMenu("EditorRoot/Popup/ResourceWithScene");
+			}
+			else
+			{
+				menu = new PopupMenu("EditorRoot/Popup/Resource");
+			}
+			menu->Init<ResourceSystem::ResourcePtr>(resource);
+			menu->Open(args.position.d_x, args.position.d_y);
+			gEditorMgr.RegisterPopupMenu(menu);
+		}
+		return true;
+	}
+
+	return true;
+}
+
+bool Editor::LayerWindow::OnDragContainerMouseDoubleClick(const CEGUI::EventArgs& e)
+{
+	const CEGUI::MouseEventArgs& args = static_cast<const CEGUI::MouseEventArgs&>(e);
+	CEGUI::DragContainer* dragContainer = static_cast<CEGUI::DragContainer*>(args.window);
+	if (dragContainer->isBeingDragged()) return false;
+
+	if (args.button == CEGUI::LeftButton)
+	{
+		ResourceSystem::ResourcePtr resource = GetItemAtIndex(dragContainer->getID());
+		if (resource.get() && gEditorMgr.GetCurrentProject()->IsResourceScene(resource))
+		{
+			gEditorMgr.GetCurrentProject()->OpenScene(resource);
+		}
+		return true;
+	}
+
+	return true;
+}
+*/
+
 /*
 bool Editor::LayerWindow::OnEditNewLayerKeyDown(const CEGUI::EventArgs& args)
 {
@@ -136,6 +245,7 @@ bool Editor::LayerWindow::OnButtonToggleLayerVisibilityClicked(const CEGUI::Even
 
 void Editor::LayerWindow::UpdateTree()
 {
+	CEGUI_EXCEPTION_BEGIN
 	vector<CEGUI::Window*> itemsToBeDeleted;
 
 	// The range of layers that are already in the window.
@@ -143,8 +253,18 @@ void Editor::LayerWindow::UpdateTree()
 	EntitySystem::LayerID bottomLayerID = 1;
 
 	// The list of entity ids that are already in the window.
-	vector<EntityID> entities;
+	set<EntityID> entities;
 
+	mExpandedLayerIDs.clear();
+	for (set<string>::const_iterator it = mExpandedLayers.begin(); it != mExpandedLayers.end(); ++it)
+	{
+		if (!gLayerMgr.ExistsLayerName(*it))
+			continue;
+
+		mExpandedLayerIDs.insert(gLayerMgr.GetLayerID(*it));
+	}
+
+	// update existing items in the list
 	size_t childCount = mTree->getItemCount();
 	for (size_t i = 0; i < childCount; ++i)
 	{
@@ -163,64 +283,81 @@ void Editor::LayerWindow::UpdateTree()
 				topLayerID = layerID;
 			if (layerID < bottomLayerID)
 				bottomLayerID = layerID;
-			if (item->getText() != gLayerMgr.GetLayerName(layerID))
-				item->setText(gLayerMgr.GetLayerName(layerID));
-			
-			///@todo Update whether layer is active
+
+			UpdateLayerItem(item, layerID);
 		}
 		else
 		{
 			// item is entity
+			entities.insert(item->getID());
 			EntitySystem::EntityHandle entity = gEntityMgr.GetEntity(item->getID());
-			if (!gEntityMgr.EntityExists(entity) || !gLayerMgr.EntityHasLayer(entity))
+
+			// delete nonexistent entities, entities without layer and entities with collapsed layer
+			if (!gEntityMgr.EntityExists(entity) || !gLayerMgr.EntityHasLayer(entity) || mExpandedLayerIDs.find(gLayerMgr.GetEntityLayerID(entity)) == mExpandedLayerIDs.end())
 			{
 				itemsToBeDeleted.push_back(item);
-				break;
+				continue;
 			}
-			entities.push_back(item->getID());
 
-			///@todo Update entity name
+			UpdateEntityItem(item, entity);
 		}
 	}
 
-	// Delete items to be deleted
+	// delete items to be deleted
 	for (vector<CEGUI::Window*>::const_iterator it = itemsToBeDeleted.begin(); it != itemsToBeDeleted.end(); ++it)
 	{
 		gGUIMgr.DestroyWindow(*it);
 	}
 
-	// Add new layers
+	// add new layer items
 	for (EntitySystem::LayerID layerID = gLayerMgr.GetBottomLayerID(); layerID <= gLayerMgr.GetTopLayerID(); ++layerID)
 	{
 		if (layerID >= bottomLayerID && layerID <= topLayerID) continue; // Layers in this range are already in the window
 
 		string layerName = gLayerMgr.GetLayerName(layerID);
-		/*
-		if (gLayerMgr.GetActiveLayer() == layerID)
-			layerName = "* " + layerName;
-		else
-			layerName = "  " + layerName;
-		*/
-		//layerName += (gLayerMgr.IsLayerVisible(layerID)) ? "" : " [hidden]"; ///@todo translate
 
 		CEGUI::ItemEntry* layerItem = static_cast<CEGUI::ItemEntry*>(gCEGUIWM.createWindow("Editor/ListboxItem", mTree->getName() + "/LayerItem" + StringConverter::ToString(layerID)));
-		layerItem->setText(layerName);
 		layerItem->setUserData((void*)1);
 		layerItem->setID(layerID);
+		
+		CEGUI::Window* dragContainer = static_cast<CEGUI::ItemEntry*>(gCEGUIWM.createWindow("DragContainer", mTree->getName() + "/DCLayerItem" + StringConverter::ToString(layerID)));
+		dragContainer->setArea(CEGUI::URect(CEGUI::UDim(0, 16), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
+		layerItem->addChildWindow(dragContainer);
+
+		CEGUI::Window* layerItemText = gCEGUIWM.createWindow("Editor/StaticText", mTree->getName() + "/LayerItemText" + StringConverter::ToString(layerID));
+		layerItemText->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
+		layerItemText->setProperty("FrameEnabled", "False");
+		layerItemText->setProperty("BackgroundEnabled", "False");
+		layerItemText->setMousePassThroughEnabled(true);
+
+		CEGUI::Window* layerItemButton = gCEGUIWM.createWindow("Editor/StaticText", mTree->getName() + "/LayerItemButton" + StringConverter::ToString(layerID));
+		layerItemButton->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), CEGUI::UDim(0, 10), CEGUI::UDim(1, 0)));
+		layerItemButton->setProperty("FrameEnabled", "False");
+		layerItemButton->setProperty("BackgroundEnabled", "False");
+		layerItemButton->subscribeEvent(CEGUI::Window::EventMouseButtonDown, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnLayerExpandClick, this));
+		layerItem->addChildWindow(layerItemButton);
+
+		dragContainer->addChildWindow(layerItemText);
+		dragContainer->subscribeEvent(CEGUI::Window::EventMouseButtonDown, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnDragContainerMouseButtonDown, this));
+		dragContainer->subscribeEvent(CEGUI::Window::EventMouseDoubleClick, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnLayerMouseDoubleClick, this));
+
+		dragContainer->setID(layerID);
+
 		mTree->addChildWindow(layerItem);
+		UpdateLayerItem(layerItem, layerID);
 	}
 	
-	// Add new entities
+	// add new entity items
 	EntitySystem::EntityList entityList;
 	gEntityMgr.GetEntities(entityList);
 	for (EntitySystem::EntityList::const_iterator it = entityList.begin(); it != entityList.end(); ++it)
 	{
-		// Add only new entities
-		if (Containers::find(entities.begin(), entities.end(), it->GetID()) != entities.end())
+		// add only new entities
+		if (entities.find(it->GetID()) != entities.end())
 			continue;
 
-		// Add only entities that have layer
-		if (!gLayerMgr.EntityHasLayer(*it))
+		// add only entities that have an expanded layer
+		if (!gLayerMgr.EntityHasLayer(*it) || mExpandedLayerIDs.find(gLayerMgr.GetEntityLayerID(*it)) == mExpandedLayerIDs.end())
 			continue;
 
 		CEGUI::ItemEntry* entityItem = static_cast<CEGUI::ItemEntry*>( gCEGUIWM.createWindow("Editor/ListboxItem", mTree->getName() + "/EntityItem" + StringConverter::ToString(it->GetID())) );
@@ -228,35 +365,77 @@ void Editor::LayerWindow::UpdateTree()
 		entityItem->setUserData(0);
 			
 		CEGUI::Window* dragContainer = static_cast<CEGUI::ItemEntry*>(gCEGUIWM.createWindow("DragContainer", mTree->getName() + "/DCEntityItem" + StringConverter::ToString(it->GetID())));
-		dragContainer->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
+		dragContainer->setArea(CEGUI::URect(CEGUI::UDim(0, 20), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
 		entityItem->addChildWindow(dragContainer);
 
 		CEGUI::Window* entityItemText = gCEGUIWM.createWindow("Editor/StaticText", mTree->getName() + "/EntityItemText" + StringConverter::ToString(it->GetID()));
 		entityItemText->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
-		entityItemText->setText(string(4, ' ') + gEntityMgr.GetEntityName(*it));
+		
 		entityItemText->setProperty("FrameEnabled", "False");
 		entityItemText->setProperty("BackgroundEnabled", "False");
 		entityItemText->setMousePassThroughEnabled(true);
 
 		dragContainer->addChildWindow(entityItemText);
-		//dragContainer->subscribeEvent(CEGUI::Window::EventMouseButtonDown, CEGUI::Event::Subscriber(&Editor::ResourceWindow::OnDragContainerMouseButtonDown, this));
-		//dragContainer->subscribeEvent(CEGUI::Window::EventMouseButtonUp, CEGUI::Event::Subscriber(&Editor::ResourceWindow::OnDragContainerMouseButtonUp, this));
-		//dragContainer->subscribeEvent(CEGUI::Window::EventMouseDoubleClick, CEGUI::Event::Subscriber(&Editor::ResourceWindow::OnDragContainerMouseDoubleClick, this));
+		dragContainer->subscribeEvent(CEGUI::Window::EventMouseButtonDown, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnDragContainerMouseButtonDown, this));
+		//dragContainer->subscribeEvent(CEGUI::Window::EventMouseButtonUp, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnDragContainerMouseButtonUp, this));
+		//dragContainer->subscribeEvent(CEGUI::Window::EventMouseDoubleClick, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnDragContainerMouseDoubleClick, this));
 
 		dragContainer->setID(it->GetID());
 		//dragContainer->setUserString("DragDataType", "Resource");
 		mTree->addChildWindow(entityItem);
+		UpdateEntityItem(entityItem, *it);
 	}
 	mTree->sortList();
+	CEGUI_EXCEPTION_END
 }
+
+void LayerWindow::UpdateLayerItem(CEGUI::Window* layerItem, EntitySystem::LayerID layerID)
+{
+	CEGUI::Window* layerItemText = layerItem->getChildAtIdx(0)->getChildAtIdx(0);
+	
+	// update layer name
+	if (layerItemText->getText() != gLayerMgr.GetLayerName(layerID))
+		layerItemText->setText(gLayerMgr.GetLayerName(layerID));
+
+	// update whether layer is active
+	if (gLayerMgr.GetActiveLayer() == layerID)
+		layerItemText->setFont("Editor-Bold");
+	else
+		layerItemText->setFont("Editor");
+
+	// update whether layer is visible
+	if (gLayerMgr.IsLayerVisible(layerID))
+		layerItemText->setProperty("TextColours", "tl:FFFFFFFF tr:FFFFFFFF bl:FFFFFFFF br:FFFFFFFF");
+	else
+		layerItemText->setProperty("TextColours", "tl:66FFFFFF tr:66FFFFFF bl:66FFFFFF br:66FFFFFF");
+
+	// update layer expand/collapse icon
+	CEGUI::Window* layerItemButton = layerItem->getChildAtIdx(1);
+	if (mExpandedLayerIDs.find(layerID) == mExpandedLayerIDs.end())
+		layerItemButton->setText("+");
+	else
+		layerItemButton->setText(CEGUI::String(1, 8722)); // minus sign
+}
+
+void LayerWindow::UpdateEntityItem(CEGUI::Window* entityItem, EntitySystem::EntityHandle entity)
+{
+	CEGUI::Window* entityItemText = entityItem->getChildAtIdx(0)->getChildAtIdx(0);
+	
+	// update entity name
+	if (entityItemText->getText() != gEntityMgr.GetEntityName(entity))
+		entityItemText->setText(gEntityMgr.GetEntityName(entity));
+
+}
+
+
 
 bool MySortCallback(const CEGUI::ItemEntry* first , const CEGUI::ItemEntry* second)
 {
 	bool isFirstEntity = (first->getUserData() == 0);
 	bool isSecondEntity = (second->getUserData() == 0);
 
-	EntitySystem::LayerID firstLayerID = isFirstEntity ? gLayerMgr.GetLayerID(gEntityMgr.GetEntity(first->getID())) : first->getID();
-	EntitySystem::LayerID secondLayerID = isSecondEntity ? gLayerMgr.GetLayerID(gEntityMgr.GetEntity(second->getID())) : second->getID();
+	EntitySystem::LayerID firstLayerID = isFirstEntity ? gLayerMgr.GetEntityLayerID(gEntityMgr.GetEntity(first->getID())) : first->getID();
+	EntitySystem::LayerID secondLayerID = isSecondEntity ? gLayerMgr.GetEntityLayerID(gEntityMgr.GetEntity(second->getID())) : second->getID();
 
 	if (firstLayerID != secondLayerID)
 		return firstLayerID < secondLayerID;

@@ -50,6 +50,9 @@ namespace EntitySystem
 		/// Returns whether exists a layer with this name.
 		bool ExistsLayerName(const string& name) const;
 
+		/// Returns ID of the layer specified by name.
+		LayerID GetLayerID(const string& name) const;
+
 		/// Returns the ID of the top layer.
 		LayerID GetTopLayerID() const;
 
@@ -83,17 +86,17 @@ namespace EntitySystem
 		/// Moves the entites from one layer to another one.
 		bool MoveEntities(LayerID from, LayerID to);
 
+		/// Returns whether entity has a layer.
+		bool EntityHasLayer(EntityHandle entity) const;
+
+		/// Gets layer ID of given entity.
+		LayerID GetEntityLayerID(EntityHandle entity) const;
+
 		/// Deletes the layer.
 		/// @param id The layer to be deleted.
 		/// @param destroyEntities Whether to destroy entities in the layer or to move them to initial layer.
 		/// @return If the layer was deleted.
 		bool DeleteLayer(LayerID id, bool destroyEntities);
-
-		/// Returns whether entity has a layer.
-		bool EntityHasLayer(EntityHandle entity) const;
-		
-		/// Gets layer ID of given entity.
-		LayerID GetLayerID(EntityHandle entity) const;
 
 		/// Gets layer name from ID.
 		string GetLayerName(LayerID id) const;

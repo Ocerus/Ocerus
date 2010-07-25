@@ -3,7 +3,8 @@
 
 
 	<Imageset Filename="TaharezLook.imageset" />
-	<Font Filename="DejaVuSans-10.font" />
+	<Font Filename="Editor.font" />
+	<Font Filename="Editor-Bold.font" />
 	<LookNFeel Filename="TaharezLook.looknfeel" />
 	<LookNFeel Filename="Editor.looknfeel" />
 	<WindowRendererSet Filename="CEGUIFalagardWRBase" />
@@ -55,7 +56,7 @@
 
 
 	<Imageset Filename="Vanilla.imageset" />
-	<Font Filename="DejaVuSans-10.font" />
+	<Font Filename="Editor.font" />
 	<LookNFeel Filename="Vanilla.looknfeel" />
 	<WindowRendererSet Filename="CEGUIFalagardWRBase" />
 	<FalagardMapping WindowType="Editor/Titlebar" TargetType="CEGUI/Titlebar" Renderer="Falagard/Titlebar" LookNFeel="Vanilla/Titlebar" />
