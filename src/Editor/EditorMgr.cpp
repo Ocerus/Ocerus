@@ -404,7 +404,7 @@ void EditorMgr::ShowOpenProjectDialog()
 {
 	GUISystem::FolderSelector* folderSelector = new GUISystem::FolderSelector("", (int)EditorMenu::FST_OPENPROJECT);
 	folderSelector->RegisterCallback(new GUISystem::FolderSelector::Callback<Editor::EditorMenu>(mEditorGUI->GetEditorMenu(), &Editor::EditorMenu::OnFolderSelected));
-	folderSelector->Show("Open project"); ///@todo translate
+	folderSelector->Show(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "open_project_folder"));
 }
 
 void EditorMgr::OpenProject(const string& projectPath)
@@ -436,7 +436,8 @@ void EditorMgr::ShowNewSceneDialog()
 	const string& projectPath = gEditorMgr.GetCurrentProject()->GetAbsoluteOpenedProjectPath();
 	GUISystem::FolderSelector* folderSelector = new GUISystem::FolderSelector(projectPath, (int)EditorMenu::FST_NEWSCENE);
 	folderSelector->RegisterCallback(new GUISystem::FolderSelector::Callback<Editor::EditorMenu>(mEditorGUI->GetEditorMenu(), &Editor::EditorMenu::OnFolderSelected));
-	folderSelector->Show("New scene", true, "Scene filename:"); ///@todo translate
+	folderSelector->Show(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "new_scene_folder"), true, 
+	  gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "new_scene_filename"));
 }
 
 void EditorMgr::CreateScene(const string& sceneFilename, const string& sceneName)

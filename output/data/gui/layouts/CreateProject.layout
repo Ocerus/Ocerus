@@ -9,7 +9,7 @@
         <Property Name="UnifiedAreaRect" Value="{{0.5,-140},{0.5,-60},{0.5,140},{0.5,60}}" />
         <Property Name="CloseButtonEnabled" Value="False" />
         <Window Type="Editor/StaticText" Name="FrameWindow/NameLabel" >
-            <Property Name="Text" Value="Name:" />
+            <Property Name="Text" Value="$create_project_name$" />
             <Property Name="HorzExtent" Value="38" />
             <Property Name="VertExtent" Value="13.9688" />
             <Property Name="FrameEnabled" Value="False" />
@@ -22,7 +22,7 @@
             <Property Name="TextParsingEnabled" Value="False" />
         </Window>
         <Window Type="Editor/StaticText" Name="/LocationLabel" >
-            <Property Name="Text" Value="Location:" />
+            <Property Name="Text" Value="$create_project_location$" />
             <Property Name="HorzExtent" Value="54" />
             <Property Name="VertExtent" Value="13.9688" />
             <Property Name="FrameEnabled" Value="False" />
@@ -39,11 +39,11 @@
             <Property Name="UnifiedAreaRect" Value="{{1,-24},{0,30},{1,0},{0,54}}" />
         </Window>
         <Window Type="Editor/Button" Name="/OKButton" >
-            <Property Name="Text" Value="OK" />
+            <Property Name="Text" Value="$ok$" />
             <Property Name="UnifiedAreaRect" Value="{{0.5,-90},{0,60},{0.5,-15},{0,84}}" />
         </Window>
         <Window Type="Editor/Button" Name="/CancelButton" >
-            <Property Name="Text" Value="Cancel" />
+            <Property Name="Text" Value="$cancel$" />
             <Property Name="UnifiedAreaRect" Value="{{0.5,10},{0,60},{0.5,80},{0,84}}" />
         </Window>
     </Window>

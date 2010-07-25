@@ -117,11 +117,11 @@ const TextData* StringMgr::GetTextDataPtr(const StringKey& group, const StringKe
 	  {
 	    return &(tIt->second);
 	  } else {
-	    ocError << GetNameOfManager() << ": Index " << key << (group.ToString().empty()?"":string(" in group ") + group.ToString())
+	    ocInfo << GetNameOfManager() << ": Index " << key << (group.ToString().empty()?"":string(" in group ") + group.ToString())
 	      << " doesn't exist. Return value set to empty TextData.";
 	  }
 	} else {
-	  ocError << GetNameOfManager() << ": Group " << (group.ToString().empty()?"<default>":group.ToString())
+	  ocInfo << GetNameOfManager() << ": Group " << (group.ToString().empty()?"<default>":group.ToString())
 	      << " doesn't exist. Return value set to empty TextData.";
 	}
 	return &NullTextData;
