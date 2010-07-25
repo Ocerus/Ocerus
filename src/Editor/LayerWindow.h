@@ -31,7 +31,9 @@ namespace Editor
 		//@{
 		bool OnDragContainerMouseButtonDown(const CEGUI::EventArgs&);
 		bool OnLayerExpandClick(const CEGUI::EventArgs&);
+		bool OnLayerEyeClick(const CEGUI::EventArgs&);
 		bool OnLayerMouseDoubleClick(const CEGUI::EventArgs&);
+		bool OnEntityMouseDoubleClick(const CEGUI::EventArgs&);
 		bool OnDragDropItemDropped(const CEGUI::EventArgs&);
 		//bool OnDragContainerMouseButtonUp(const CEGUI::EventArgs&);
 		//bool OnDragContainerMouseDoubleClick(const CEGUI::EventArgs&);

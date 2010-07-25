@@ -91,6 +91,19 @@ bool LayerWindow::OnLayerExpandClick(const CEGUI::EventArgs& e)
 	return true;
 }
 
+bool LayerWindow::OnLayerEyeClick(const CEGUI::EventArgs& e)
+{
+	const CEGUI::MouseEventArgs& args = static_cast<const CEGUI::MouseEventArgs&>(e);
+	CEGUI::Window* layerItem = args.window->getParent();
+
+	if (args.button == CEGUI::LeftButton)
+	{
+		EntitySystem::LayerID layerID = layerItem->getID();
+		gLayerMgr.SetLayerVisible(layerID, !gLayerMgr.IsLayerVisible(layerID));
+		UpdateTree();
+	}
+	return true;
+}
 
 bool LayerWindow::OnLayerMouseDoubleClick(const CEGUI::EventArgs& e)
 {
@@ -106,6 +119,21 @@ bool LayerWindow::OnLayerMouseDoubleClick(const CEGUI::EventArgs& e)
 	}
 	return true;
 }
+
+bool LayerWindow::OnEntityMouseDoubleClick(const CEGUI::EventArgs& e)
+{
+	const CEGUI::MouseEventArgs& args = static_cast<const CEGUI::MouseEventArgs&>(e);
+	CEGUI::DragContainer* dragContainer = static_cast<CEGUI::DragContainer*>(args.window);
+	if (dragContainer->isBeingDragged()) return false;
+
+	if (args.button == CEGUI::LeftButton)
+	{
+		EntitySystem::EntityHandle entity = gEntityMgr.GetEntity(dragContainer->getID());
+		gEditorMgr.SetCurrentEntity(entity);
+	}
+	return true;
+}
+
 
 bool LayerWindow::OnDragDropItemDropped(const CEGUI::EventArgs& e)
 {
@@ -374,7 +402,7 @@ void Editor::LayerWindow::UpdateTree()
 		layerItem->setID(layerID);
 		
 		CEGUI::Window* dragContainer = static_cast<CEGUI::ItemEntry*>(gCEGUIWM.createWindow("DragContainer", mTree->getName() + "/DCLayerItem" + StringConverter::ToString(layerID)));
-		dragContainer->setArea(CEGUI::URect(CEGUI::UDim(0, 16), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
+		dragContainer->setArea(CEGUI::URect(CEGUI::UDim(0, 16), CEGUI::UDim(0, 0), CEGUI::UDim(1, -16), CEGUI::UDim(1, 0)));
 		layerItem->addChildWindow(dragContainer);
 
 		CEGUI::Window* layerItemText = gCEGUIWM.createWindow("Editor/StaticText", mTree->getName() + "/LayerItemText" + StringConverter::ToString(layerID));
@@ -389,6 +417,13 @@ void Editor::LayerWindow::UpdateTree()
 		layerItemButton->setProperty("BackgroundEnabled", "False");
 		layerItemButton->subscribeEvent(CEGUI::Window::EventMouseButtonDown, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnLayerExpandClick, this));
 		layerItem->addChildWindow(layerItemButton);
+		
+		CEGUI::Window* layerItemEye = gCEGUIWM.createWindow("Editor/StaticImage", mTree->getName() + "/LayerItemEye" + StringConverter::ToString(layerID));
+		layerItemEye->setArea(CEGUI::URect(CEGUI::UDim(1, -16), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
+		layerItemEye->setProperty("FrameEnabled", "False");
+		layerItemEye->setProperty("BackgroundEnabled", "False");
+		layerItemEye->subscribeEvent(CEGUI::Window::EventMouseButtonDown, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnLayerEyeClick, this));
+		layerItem->addChildWindow(layerItemEye); 
 
 		dragContainer->addChildWindow(layerItemText);
 		dragContainer->subscribeEvent(CEGUI::Window::EventMouseButtonDown, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnDragContainerMouseButtonDown, this));
@@ -434,7 +469,7 @@ void Editor::LayerWindow::UpdateTree()
 		dragContainer->addChildWindow(entityItemText);
 		dragContainer->subscribeEvent(CEGUI::Window::EventMouseButtonDown, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnDragContainerMouseButtonDown, this));
 		//dragContainer->subscribeEvent(CEGUI::Window::EventMouseButtonUp, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnDragContainerMouseButtonUp, this));
-		//dragContainer->subscribeEvent(CEGUI::Window::EventMouseDoubleClick, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnDragContainerMouseDoubleClick, this));
+		dragContainer->subscribeEvent(CEGUI::Window::EventMouseDoubleClick, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnEntityMouseDoubleClick, this));
 		dragContainer->subscribeEvent(CEGUI::Window::EventDragDropItemDropped, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnDragDropItemDropped, this));
 
 		dragContainer->setID(it->GetID());
@@ -449,6 +484,7 @@ void Editor::LayerWindow::UpdateTree()
 void LayerWindow::UpdateLayerItem(CEGUI::Window* layerItem, EntitySystem::LayerID layerID)
 {
 	CEGUI::Window* layerItemText = layerItem->getChildAtIdx(0)->getChildAtIdx(0);
+	CEGUI::Window* layerItemEye = layerItem->getChildAtIdx(2);
 	
 	// update layer name
 	if (layerItemText->getText() != gLayerMgr.GetLayerName(layerID))
@@ -462,9 +498,9 @@ void LayerWindow::UpdateLayerItem(CEGUI::Window* layerItem, EntitySystem::LayerI
 
 	// update whether layer is visible
 	if (gLayerMgr.IsLayerVisible(layerID))
-		layerItemText->setProperty("TextColours", "tl:FFFFFFFF tr:FFFFFFFF bl:FFFFFFFF br:FFFFFFFF");
+		layerItemEye->setProperty("Image", "set:EditorToolbar image:btnEyeEnabled");
 	else
-		layerItemText->setProperty("TextColours", "tl:66FFFFFF tr:66FFFFFF bl:66FFFFFF br:66FFFFFF");
+		layerItemEye->setProperty("Image", "set:EditorToolbar image:btnEyeDisabled");
 
 	// update layer expand/collapse icon
 	CEGUI::Window* layerItemButton = layerItem->getChildAtIdx(1);
