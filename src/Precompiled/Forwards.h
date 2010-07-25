@@ -24,7 +24,7 @@ namespace Editor
 	class PrototypeWindow;
 	class HierarchyWindow;
 	class AbstractValueEditor;
-	class LayerMgrWidget;
+	class LayerWindow;
 	class KeyShortcuts;
 }
 

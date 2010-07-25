@@ -86,8 +86,8 @@ namespace Editor
 		GUISystem::VerticalLayout* mEntityEditorLayout;
 		GUISystem::ViewportWindow* mGameViewport;
 		GUISystem::ViewportWindow* mEditorViewport;
-		LayerMgrWidget* mLayerMgrWidget;
 		EditorMenu* mEditorMenu;
+		LayerWindow* mLayerWindow;
 		ResourceWindow* mResourceWindow;
 		PrototypeWindow* mPrototypeWindow;
 		HierarchyWindow* mHierarchyWindow;

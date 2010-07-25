@@ -267,6 +267,7 @@
             <Property Name="DragMovingEnabled" Value="False" />
             <Property Name="SizingEnabled" Value="False" />
         </Window>
+        <!--
         <Window Type="Editor/FrameWindow" Name="EditorRoot/LayerMgr" >
             <Property Name="Text" Value="$layer_manager$" />
             <Property Name="TitlebarFont" Value="DejaVuSans-10" />
@@ -323,6 +324,7 @@
                 <Property Name="Tooltip" Value="$button_up_hint$" />
             </Window>
         </Window>
+        -->
 
 				<Window Type="Editor/PopupMenu" Name="EditorRoot/Popup/Resource" >
 		    		<Property Name="AlwaysOnTop" Value="True" />

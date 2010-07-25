@@ -222,6 +222,7 @@ set(Editor_SRCS
 	src/Editor/EditorMgr.cpp
 	src/Editor/HierarchyWindow.cpp
 	src/Editor/KeyShortcuts.cpp
+	src/Editor/LayerWindow.cpp
 	src/Editor/LayerMgrWidget.cpp
 	src/Editor/PopupMenu.cpp
 	src/Editor/PrototypeWindow.cpp

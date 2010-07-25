@@ -3,7 +3,7 @@
 #include "Editor/EditorGUI.h"
 #include "Editor/EditorMgr.h"
 #include "Editor/EditorMenu.h"
-#include "Editor/LayerMgrWidget.h"
+#include "Editor/LayerWindow.h"
 #include "Editor/ResourceWindow.h"
 #include "Editor/PrototypeWindow.h"
 #include "Editor/HierarchyWindow.h"
@@ -41,7 +41,7 @@ EditorGUI::EditorGUI():
 	mEntityEditorLayout(0),
 	mGameViewport(0),
 	mEditorViewport(0),
-	mLayerMgrWidget(0),
+	mLayerWindow(0),
 	mResourceWindow(0),
 	mHierarchyWindow(0)
 {
@@ -49,7 +49,7 @@ EditorGUI::EditorGUI():
 
 EditorGUI::~EditorGUI()
 {
-	delete mLayerMgrWidget;
+	delete mLayerWindow;
 	delete mEditorMenu;
 	delete mResourceWindow;
 	delete mPrototypeWindow;
@@ -82,8 +82,8 @@ void EditorGUI::LoadGUI()
 	mEditorMenu->Init();
 
 	// Initialize LayerMgrWidget
-	mLayerMgrWidget = new LayerMgrWidget(gCEGUIWM.getWindow("EditorRoot/LayerMgr"));
-	mLayerMgrWidget->Init();
+	mLayerWindow = new LayerWindow();
+	mLayerWindow->Init();
 
 	// Initialize resource window
 	mResourceWindow = new ResourceWindow();
@@ -184,7 +184,7 @@ void EditorGUI::Update(float32 delta)
 			}
 		}
 	}
-	mLayerMgrWidget->Update(delta);
+	mLayerWindow->Update(delta);
 }
 
 void EditorGUI::Draw(float32 delta)

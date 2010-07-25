@@ -62,7 +62,12 @@ void LayerMgr::SaveLayers(ResourceSystem::XMLOutput& storage)
 	storage.EndElement();
 }
 
-inline LayerID GetLayerID(EntityHandle handle)
+bool LayerMgr::EntityHasLayer(EntityHandle handle) const
+{
+	return gEntityMgr.HasEntityComponentOfType(handle, CT_Transform);
+}
+
+LayerID LayerMgr::GetLayerID(EntityHandle handle) const
 {
 	return gEntityMgr.GetEntityComponentProperty(handle, gEntityMgr.GetEntityComponent
 		(handle, CT_Transform), "Layer").GetValue<LayerID>();
