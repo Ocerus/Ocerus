@@ -71,6 +71,10 @@ namespace EntitySystem
 		/// @return A new ID of the moved layer, 0 in case of error.
 		LayerID MoveLayerBehind(LayerID id, LayerID behind);
 
+		/// Moves the layer above the specified layer.
+		/// @return A new ID of the moved layer, 0 in case of error.
+		LayerID MoveLayerAbove(LayerID id, LayerID above);
+
 		/// Moves the layer top.
 		/// @return A new ID of the moved layer, 0 in case of error.
 		LayerID MoveLayerTop(LayerID id);
@@ -91,6 +95,9 @@ namespace EntitySystem
 
 		/// Gets layer ID of given entity.
 		LayerID GetEntityLayerID(EntityHandle entity) const;
+
+		/// Sets layer ID of given entity.
+		void SetEntityLayerID(EntityHandle handle, LayerID id) const;
 
 		/// Deletes the layer.
 		/// @param id The layer to be deleted.

@@ -73,9 +73,7 @@ LayerID LayerMgr::GetEntityLayerID(EntityHandle handle) const
 		(handle, CT_Transform), "Layer").GetValue<LayerID>();
 }
 
-
-
-inline void SetEntityLayerID(EntityHandle handle, LayerID id)
+void LayerMgr::SetEntityLayerID(EntityHandle handle, LayerID id) const
 {
 	gEntityMgr.GetEntityComponentProperty(handle, gEntityMgr.GetEntityComponent
 		(handle, CT_Transform), "Layer").SetValue<LayerID>(id);
@@ -228,6 +226,19 @@ LayerID LayerMgr::MoveLayerBehind(LayerID id, LayerID behind)
 
 	return newID;
 }
+
+LayerID LayerMgr::MoveLayerAbove(LayerID id, LayerID above)
+{
+	if (GetTopLayerID() == above)
+	{
+		return MoveLayerTop(id);
+	}
+	else
+	{
+		return MoveLayerBehind(id, above + 1);
+	}
+}
+
 
 LayerID LayerMgr::MoveLayerTop(LayerID id)
 {

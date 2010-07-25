@@ -107,6 +107,59 @@ bool LayerWindow::OnLayerMouseDoubleClick(const CEGUI::EventArgs& e)
 	return true;
 }
 
+bool LayerWindow::OnDragDropItemDropped(const CEGUI::EventArgs& e)
+{
+	const CEGUI::DragDropEventArgs& args = static_cast<const CEGUI::DragDropEventArgs&>(e);
+	
+	ocInfo << "Dragged '" << args.dragDropItem->getUserString("DragDataType") << "' to '" << args.window->getUserString("DragDataType");
+	
+	if (args.dragDropItem->getUserString("DragDataType") == "Layer")
+	{
+		if (args.window->getUserString("DragDataType") != "Layer")
+		{
+			// we can only drag a Layer to Layer
+			return true;
+		}
+		LayerID srcLayerID = args.dragDropItem->getID();
+		LayerID destLayerID = args.window->getID();
+		ocInfo << "src: " << srcLayerID << ", dst: " << destLayerID;
+		if (srcLayerID == destLayerID)
+			return true;
+		if (srcLayerID > destLayerID)
+		{
+			gLayerMgr.MoveLayerBehind(srcLayerID, destLayerID);
+		}
+		else
+		{
+			gLayerMgr.MoveLayerAbove(srcLayerID, destLayerID);
+		}
+	}
+	else if (args.dragDropItem->getUserString("DragDataType") == "Entity")
+	{
+		EntitySystem::EntityHandle srcEntity = gEntityMgr.GetEntity(args.dragDropItem->getID());
+		LayerID destLayerID;
+		if (args.window->getUserString("DragDataType") == "Layer")
+		{
+			destLayerID = args.window->getID();
+		}
+		else if (args.window->getUserString("DragDataType") == "Entity")
+		{
+			EntitySystem::EntityHandle entity = gEntityMgr.GetEntity(args.window->getID());
+			if (!gLayerMgr.EntityHasLayer(entity))
+				return true;
+			destLayerID = gLayerMgr.GetEntityLayerID(entity);
+		}
+		else
+		{
+			return true;
+		}
+		gLayerMgr.SetEntityLayerID(srcEntity, destLayerID);
+	}
+	UpdateTree();
+	return true;
+}
+
+
 
 /*
 bool Editor::LayerWindow::OnDragContainerMouseButtonUp(const CEGUI::EventArgs& e)
@@ -276,7 +329,7 @@ void Editor::LayerWindow::UpdateTree()
 			if (!gLayerMgr.ExistsLayer(layerID))
 			{
 				itemsToBeDeleted.push_back(item);
-				break;
+				continue;
 			}
 
 			if (layerID > topLayerID)
@@ -340,8 +393,11 @@ void Editor::LayerWindow::UpdateTree()
 		dragContainer->addChildWindow(layerItemText);
 		dragContainer->subscribeEvent(CEGUI::Window::EventMouseButtonDown, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnDragContainerMouseButtonDown, this));
 		dragContainer->subscribeEvent(CEGUI::Window::EventMouseDoubleClick, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnLayerMouseDoubleClick, this));
+		dragContainer->subscribeEvent(CEGUI::Window::EventDragDropItemDropped, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnDragDropItemDropped, this));
+
 
 		dragContainer->setID(layerID);
+		dragContainer->setUserString("DragDataType", "Layer");
 
 		mTree->addChildWindow(layerItem);
 		UpdateLayerItem(layerItem, layerID);
@@ -379,9 +435,10 @@ void Editor::LayerWindow::UpdateTree()
 		dragContainer->subscribeEvent(CEGUI::Window::EventMouseButtonDown, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnDragContainerMouseButtonDown, this));
 		//dragContainer->subscribeEvent(CEGUI::Window::EventMouseButtonUp, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnDragContainerMouseButtonUp, this));
 		//dragContainer->subscribeEvent(CEGUI::Window::EventMouseDoubleClick, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnDragContainerMouseDoubleClick, this));
+		dragContainer->subscribeEvent(CEGUI::Window::EventDragDropItemDropped, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnDragDropItemDropped, this));
 
 		dragContainer->setID(it->GetID());
-		//dragContainer->setUserString("DragDataType", "Resource");
+		dragContainer->setUserString("DragDataType", "Entity");
 		mTree->addChildWindow(entityItem);
 		UpdateEntityItem(entityItem, *it);
 	}
