@@ -57,3 +57,10 @@ CEGUI::Event::Connection ScriptProvider::subscribeEvent(CEGUI::EventSet* target,
   ScriptCallback callback(subscriber_name.c_str());
   return target->subscribeEvent(name, group, CEGUI::Event::Subscriber(callback));
 }
+
+bool ScriptProvider::executeScriptedEventHandler(const CEGUI::String& handler_name, const CEGUI::EventArgs &e)
+{
+  OC_UNUSED(handler_name);
+	OC_UNUSED(e);
+	return true;
+}

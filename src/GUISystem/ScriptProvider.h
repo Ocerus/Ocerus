@@ -48,12 +48,7 @@ namespace GUISystem
 			OC_UNUSED(str);
 		}
 
-		virtual bool executeScriptedEventHandler(const CEGUI::String& handler_name, const CEGUI::EventArgs &e)
-		{
-			OC_UNUSED(handler_name);
-			OC_UNUSED(e);
-			return true;
-		}
+		virtual bool executeScriptedEventHandler(const CEGUI::String& handler_name, const CEGUI::EventArgs &e);
 	};
 }
 

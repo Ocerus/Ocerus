@@ -1478,7 +1478,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\src\Editor\LayerMgrWidget.h"
+					RelativePath="..\src\Editor\LayerWindow.h"
 					>
 				</File>
 				<File
@@ -1526,7 +1526,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\src\Editor\LayerMgrWidget.cpp"
+					RelativePath="..\src\Editor\LayerWindow.cpp"
 					>
 				</File>
 				<File

@@ -81,7 +81,7 @@ void EditorGUI::LoadGUI()
 	mEditorMenu = new EditorMenu();
 	mEditorMenu->Init();
 
-	// Initialize LayerMgrWidget
+	// Initialize LayerWindow
 	mLayerWindow = new LayerWindow();
 	mLayerWindow->Init();
 

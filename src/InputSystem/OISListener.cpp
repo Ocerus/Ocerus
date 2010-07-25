@@ -262,7 +262,7 @@ void InputSystem::OISListener::RecreateDevices()
 		ms.height = mouseHeight;
 	}
 
-	ocInfo << "OIS keyboar & mouse recreated";
+	ocInfo << "OIS keyboard & mouse recreated";
 }
 
 void InputSystem::OISListener::FixKeyInfo( KeyInfo& keyInfo )
