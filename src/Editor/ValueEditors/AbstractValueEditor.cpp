@@ -35,7 +35,7 @@ CEGUI::Window* Editor::AbstractValueEditor::CreateEditorLabelWidget(const CEGUI:
 CEGUI::PushButton* Editor::AbstractValueEditor::CreateRemoveElementButtonWidget(const CEGUI::String& name)
 {
 	CEGUI::PushButton* button = static_cast<CEGUI::PushButton*>(gCEGUIWM.createWindow("Editor/Button", name));
-	button->setText("RM");
+	button->setText(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "entity_editor_remove"));
 	button->setSize(CEGUI::UVector2(CEGUI::UDim(0, GetEditboxHeight()), CEGUI::UDim(0, GetEditboxHeight())));
 	return button;
 }

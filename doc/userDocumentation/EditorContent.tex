@@ -1,8 +1,8 @@
 \begin{description}
   \item[Namespaces:] Editor, GUISystem
-  \item[Headers:] EditorGUI.h, EditorMenu.h, EditorMgr.h, FolderSelector.h, LayerMgrWidget.h, PopupMenu.h, PrototypeWindow.h, ResourceWindow\-.h and editors of properties
-  \item[Source files:] EditorGUI.cpp, EditorMenu.cpp, EditorMgr.cpp, FolderSelector.cpp, LayerMgrWidget.cpp, PopupMenu.cpp, PrototypeWindow\-.cpp, ResourceWindow.cpp and editors of properties
-  \item[Classes:] EditorGUI, EditorMenu, EditorMgr, FolderSelector, LayerMgrWidget, PopupMenu, PrototypeWindow, ResourceWindow
+  \item[Headers:] CreateProjectDialog.h, EditorGUI.h, EditorMenu.h, EditorMgr\-.h, FolderSelector.h, HierarchyWindow.h, KeyShortCuts.h, LayerWindow.h, PopupMenu.h, PrototypeWindow.h, ResourceWindow\-.h and e\-di\-tors of properties
+  \item[Source files:] CreateProjectDialog.cpp, EditorGUI.cpp, EditorMenu.cpp,\\ EditorMgr.cpp, FolderSelector.cpp, HierarchyWindow.cpp, KeyShortCuts.cpp, LayerWindow.cpp, PopupMenu.cpp, PrototypeWindow\-.cpp, ResourceWindow.cpp and editors of properties
+  \item[Classes:] CreateProjectDialog, EditorGUI, EditorMenu, EditorMgr, Folder\-Selector, HierarchyWindow, KeyShortcuts, LayerWindow, PopupMenu, PrototypeWindow, ResourceWindow
   \item[Libraries used:] CEGUI, SDL
 \end{description}
 
@@ -15,13 +15,56 @@ In the following sections the usage of the editor to make a new game as well as 
 \section{Using the editor}
 \label{sec:editor-using}
 
+In this section the editor user interface will be described. First the managing of whole projects will be introduced as well as managing of their scenes. Then working with entities will be described including their organization and editing with editor tools. Finally the rest of editor features will be revealed.
+
 \subsection{Managing projects}
+
+After the editor application starts you should either create a new project, or open an old one. For the creation of a new project choose \emph{File}$\rightarrow$\emph{Create Project} from the main menu. To the displyed dialog fill the project name and choose the location where the project will be stored and click to the \emph{Ok} button. Then the new project with the default configuration and the selected name will be created.
+
+For opening of an old project choose \emph{File}$\rightarrow$\emph{Open Project} from the main menu. Then find and select the project directory and click to the \emph{Ok} button. If everything is alright the project will be loaded and the default scene will be opened, otherwise the error message will be displayed.
+
+%deploy project
+
+It is also possible to close project by the \emph{File}$\rightarrow$\emph{Close Project} choice or quit application by clicking on the \emph{File}$\rightarrow$\emph{Quit} menu item.
 
 \subsection{Managing scenes}
 
+Every project contains one or more scenes which are loaded separately, have own lists of entities (game objects) and layers but a common list of entity prototypes (templates) and resources.
+
+For creating a new scene choose \emph{Scene}$\rightarrow$\emph{New Scene} from the main menu, select the location of it, type its name and click to the \emph{Ok} button. For opening another scene choose \emph{Scene}$\rightarrow$\emph{Open Scene} from the main menu and select the desired scene from the list. There are also options for saving and closing the current scene in the main menu.
+
 \subsection{Managing entities}
 
+Every scene consists of many entities that consist of components and that can be organized in the hierarchy, in the layers, by the position in the scene and by the prototype they are linked to.
+
+The window with the \emph{Hierarchy} caption is used to manage entities in the entity tree (one entity can have one parent entity and none or many child entities). It is possible to change a parent of an entity by drag and drop it to another entity that should be its new parent or after the last entity to get it to the top of the hierarchy. For moving an entity up or down on the same hierarchy level use the options in the popup menu that can be activated by right mouse button click on the required entity.
+
+Every entity with the \emph{Transform} component is presented in the layer manager (window with the \emph{Layers} caption) in its layer. The layers are sorted from the background to the foreground so entities in the first layer are rendered before (are behind) entities in the second one. To show the list of the entities in some layer click on the \emph{+} sign before its name, to hide it click on the \emph{-} sign at the same place. To show/hide all entities in some layer in the viewports click on the picture with an eye behind its name. To make some layer active (new entities are created to it and the entities in viewport are selected from it) doubleclick to its name that will become bolder. To move the entity to another layer drag and drop it to its name. To move the layer in front of/behind another one drag and drop it to its name.
+% adding, removing layers
+
+Every entity with the \emph{Transform} component and the \emph{Sprite} or the \emph{Model} component is visible in the editor viewport (the bottom window) on its current position. In this viewport it is possible to select entities and manipulate with them by editor tools (see the next subsection) or to zoom in or zoom out the editor camera by the mouse wheel for showing various parts of the scene. In the game viewport (the top window) the entities are shown as it will look in the game (see the next subsection).
+
+In the window with the \emph{Prototypes} caption entity prototypes of the current project are listed. Further information for managing them are mentioned at the end of this subsection.
+
+There are several ways to create a new entity. Choose \emph{Edit}$\rightarrow$\emph{New Entity} from the main menu for creating entity with the \emph{Transform} component at the active layer, in the center of the editor viewport and at the top of the entity hierarchy. Choosing the \emph{Add entity} option in the popup menu activated on some entity in the hierarchy window will do the same except this entity will be a parent of the new one. Another possibility is to create an entity from a prototype by popup menu on the prototype window or draging an item from the prototype list to the hierarchy list or to the editor viewport. It creates an entity with the same components as the chosen prototype has and which is linked to it so it shares some property values with it.
+
+For editing entity properties choose an entity from the hierarchy window, from the layer window or from the editor viewport (only entities in the active layer can be selected) by the left mouse button click. Then the window with \emph{Entity Editor} caption will be filled with general information about the current entity (an ID, a name and a tag) and with every of its components with their properties. A new component can be added to the entity by choosing the desired one from the \emph{Edit}$\rightarrow$\emph{New Component} list in the main menu or from the similar list in the popup menu activated on the current entity in the hierarchy window. An existing component can be removed from the entity by clicking on the button in the top right corner of it in the entity editor window if it is possible (components can be dependent on each other).
+
+Every writable property of the current entity can be changed in the entity editor window by the property editor displayed near the property name. For every property type there can be a different editor. For example the vector property has two edit boxes for x and y coordinates, while the boolean property can be changed by (un)checking the check box. The properties representing a resource (a texture, a model, a script etc.) cannot be edited directly but the resource file name must be draged from the resource window (with the \emph{Resources} caption) and droped on the corresponding edit box in the entity editor. The array properties have several editors for each array item under them that can be added by the \emph{Add} button and removed by its \emph{RM} button. The changes in the array property must be confirmed or reverted by the \emph{Save} or \emph{Rvrt} button.
+
+% linking/unlinking prototype
+
+The current entity can be duplicated or deleted by selecting the \emph{Edit}$\rightarrow$\emph{Du\-pli\-ca\-te Entity} or \emph{Edit}$\rightarrow$\emph{Delete Entity} from the main menu or the corresponding option of the hierarchy window popup menu. More than one entity from the active layer can be selected by holding the \emph{Shift} key and draging over them in the editor viewport. This selection can be duplicated or deleted by selecting the \emph{Edit}$\rightarrow$\emph{Duplicate Selected Entities} or \emph{Edit}$\rightarrow$\emph{Delete Selected Entities} from the main menu.
+
+% creating and managing prototypes, chosing shared properties
+
 \subsection{Editor tools}
+
+There is an editor toolbar at the top of the screen with buttons for running action and easier manipulating with entities. The first three buttons serve for resuming, pausing and restarting the game action. When the action is running the entities are affected by physics and scripts so it is possible to see in the game viewport how the scene will look like in the real game. The action can be paused and resumed by the first two buttons while the third button returns the scene to the state before the first resuming of the action (including all changes made to the entities).
+
+The last four buttons serve for moving, rotating and scaling selected entities. Just select the tool (by pressing the corresponding button) and one or more entities in the editor viewport, hold the left mouse button and move with the mouse pointer. The first tool moves the entities, the second rotates them along the z coordinate (orthogonal to the computer screen), the third rotates the entities with the \emph{Model} component along the y coordinate and the last changes the x and y scale.
+
+For opening this file with the user documentation or the file with possible shortcuts or for showing the information about the editor select the corresponding item in the \emph{Help} list in the main menu.
 
 \section{Description of editor classes}
 
@@ -49,7 +92,7 @@ There are another examples of value editors and its models in the code that can 
 
 There are several layouts implemented for the editor that can be used as examples of a creation of an own layout. The \emph{GUISystem::FolderSelector} class represents the layout for selecting a folder and has methods for showing/hiding it, registering callback for the Ok/Cancel pushing and getting the current and selected folder. The \emph{Editor::PopupMenu} class manages all popup menus in the editor and has methods for opening/closing it, for initializing it and for handling all menu choices.
 
-There are three layout classes for editor components. All of them have initialization and update methods and callbacks for significant events. All of them loads their look from an external XML file and introduces the reactions on events and loading data from the application. The \emph{Editor::LayerMgrWid\-get} manages the layers the entities are put to, the \emph{Editor::PrototypeWindow} manages the prototypes of entities and the \emph{Editor::ResourceWindow} manages the resources that the entities can use.
+There are five layout classes for editor components. All of them have initialization and update methods and callbacks for significant events. All of them loads their look from an external XML file and introduces the reactions on events and loading data from the application. The \emph{Editor::Create\-Project\-Dialog} represents the dialog for creating a new project, the \emph{Editor\-::\-Hierarchy\-Window} manages the hierarchy of entities, the \emph{Editor\-::\-Layer\-Window} manages the layers the entities are put to, the \emph{Editor\-::\-Prototype\-Window} manages the prototypes of entities and the \emph{Editor\-::\-Resource\-Window} manages the resources that the entities can use.
 
 \section{Glossary}
 This is a glossary of the most used terms in the previous sections:

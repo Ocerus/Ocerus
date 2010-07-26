@@ -74,7 +74,7 @@ namespace Editor
 		
 		/// Create add element button
 		mButtonAddElement = static_cast<CEGUI::PushButton*>(gCEGUIWM.createWindow("Editor/Button", namePrefix + "Controls/ButtonAddElement"));
-		mButtonAddElement->setText("Add");
+		mButtonAddElement->setText(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "entity_editor_add"));
 		mButtonAddElement->setArea(CEGUI::URect(CEGUI::UDim(0.5f, 1), CEGUI::UDim(0, 0), CEGUI::UDim(0.6666f, -1), CEGUI::UDim(0, GetEditboxHeight())));
 		mButtonAddElement->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Editor::ArrayEditor<ElementType>::OnEventButtonAddPressed, this));
 
@@ -83,7 +83,7 @@ namespace Editor
 		
 		/// Create revert button
 		mButtonRevert = static_cast<CEGUI::PushButton*>(gCEGUIWM.createWindow("Editor/Button", namePrefix + "Controls/ButtonRevert"));
-		mButtonRevert->setText("Rvrt");
+		mButtonRevert->setText(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "entity_editor_revert"));
 		mButtonRevert->setArea(CEGUI::URect(CEGUI::UDim(0.6666f, 1), CEGUI::UDim(0, 0), CEGUI::UDim(0.8333f, -1), CEGUI::UDim(0, GetEditboxHeight())));
 		mButtonRevert->setEnabled(false);
 		mButtonRevert->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Editor::ArrayEditor<ElementType>::OnEventButtonRevertPressed, this));
@@ -92,7 +92,7 @@ namespace Editor
 
 		/// Create save button
 		mButtonSave = static_cast<CEGUI::PushButton*>(gCEGUIWM.createWindow("Editor/Button", namePrefix + "Controls/ButtonSave"));
-		mButtonSave->setText("Save");
+		mButtonSave->setText(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "entity_editor_save"));
 		mButtonSave->setArea(CEGUI::URect(CEGUI::UDim(0.8333f, 1), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(0, GetEditboxHeight())));
 		mButtonSave->setEnabled(false);
 		mButtonSave->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Editor::ArrayEditor<ElementType>::OnEventButtonSavePressed, this));
