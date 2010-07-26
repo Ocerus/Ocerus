@@ -12,6 +12,8 @@
 
 bool Editor::PopupMenu::OnMenuItemMouseUp( const CEGUI::EventArgs& e )
 {
+	bool handled = false;
+	CEGUI_EXCEPTION_BEGIN
 	CEGUI::Window* menu = gCEGUIWM.getWindow(mName);
 	OC_ASSERT(menu);
 
@@ -21,8 +23,6 @@ bool Editor::PopupMenu::OnMenuItemMouseUp( const CEGUI::EventArgs& e )
 
 	const CEGUI::WindowEventArgs& args = static_cast<const CEGUI::WindowEventArgs&>(e);
 	const CEGUI::String& itemCeguiName = args.window->getName();
-
-	bool handled = false;
 
 	if (mName.find("EditorRoot/Popup/Resource") == 0)
 	{
@@ -137,6 +137,11 @@ bool Editor::PopupMenu::OnMenuItemMouseUp( const CEGUI::EventArgs& e )
 			gEditorMgr.GetEditorGui()->GetLayerWindow()->MoveLayerDown(GetData<LayerID>());
 			handled = true;
 		}
+		else if (itemCeguiName == mName + "/New")
+		{
+			gEditorMgr.GetEditorGui()->GetLayerWindow()->NewLayer(GetData<LayerID>());
+			handled = true;
+		}
 		else if (itemCeguiName == mName + "/Rename")
 		{
 			gEditorMgr.GetEditorGui()->GetLayerWindow()->RenameLayer(GetData<LayerID>());
@@ -170,6 +175,7 @@ bool Editor::PopupMenu::OnMenuItemMouseUp( const CEGUI::EventArgs& e )
 		OC_FAIL("Unknown popup window.");
 	}
 	Close();
+	CEGUI_EXCEPTION_END
 	return handled;
 }
 
@@ -181,6 +187,7 @@ Editor::PopupMenu::PopupMenu( const string& menuName, const bool selfDestruct ):
 
 void Editor::PopupMenu::Init()
 {
+	CEGUI_EXCEPTION_BEGIN
 	CEGUI::Window* menu = gCEGUIWM.getWindow(mName);
 	OC_ASSERT(menu);
 	mEventConnections.push_back(menu->subscribeEvent(CEGUI::Window::EventMouseButtonUp, CEGUI::Event::Subscriber(&PopupMenu::OnMenuMouseUp, this)));
@@ -195,11 +202,13 @@ void Editor::PopupMenu::Init()
 	}
 
 	mInited = true;
+	CEGUI_EXCEPTION_END
 }
 
 Editor::PopupMenu::~PopupMenu()
 {
 	gEditorMgr.UnregisterPopupMenu(this);
+	DisconnectEvents();
 
 	if (mData) delete mData;
 }
@@ -207,7 +216,8 @@ Editor::PopupMenu::~PopupMenu()
 void Editor::PopupMenu::Open( float32 x, float32 y )
 {
 	OC_ASSERT(mInited);
-
+	
+	CEGUI_EXCEPTION_BEGIN
 	gEditorMgr.DisablePopupClosing();
 
 	ocInfo << "Popup " << mName << " opening";
@@ -238,6 +248,7 @@ void Editor::PopupMenu::Open( float32 x, float32 y )
 	menu->setPosition(CEGUI::UVector2(CEGUI::UDim(0, x), CEGUI::UDim(0, y)));
 	menu->show();
 	menu->activate();
+	CEGUI_EXCEPTION_END
 }
 
 void Editor::PopupMenu::ConfigureMenu(CEGUI::Window* parent)
@@ -255,22 +266,28 @@ void Editor::PopupMenu::ConfigureMenu(CEGUI::Window* parent)
 	}
 }
 
-void Editor::PopupMenu::Close()
+void Editor::PopupMenu::DisconnectEvents()
 {
-	CEGUI::Window* menu = gCEGUIWM.getWindow(mName);
-	OC_ASSERT(menu);
-	if (!menu->isVisible()) return;
-	ocInfo << "Popup " << mName << " closing";
-	
-	menu->hide();
-
 	for (list<CEGUI::Event::Connection>::iterator it=mEventConnections.begin(); it!=mEventConnections.end(); ++it)
 	{
 		gGUIMgr.DisconnectEvent(*it);
 	}
 	mEventConnections.clear();
+}
+
+void Editor::PopupMenu::Close()
+{
+	CEGUI_EXCEPTION_BEGIN
+	CEGUI::Window* menu = gCEGUIWM.getWindow(mName);
+	OC_ASSERT(menu);
+	if (!menu->isVisible()) return;
+	ocInfo << "Popup " << mName << " closing";
+
+	menu->hide();
+	DisconnectEvents();
 
 	if (mSelfDestruct) delete this;
+	CEGUI_EXCEPTION_END
 }
 
 bool Editor::PopupMenu::OnMenuMouseUp( const CEGUI::EventArgs& )

@@ -11,6 +11,8 @@ using namespace Editor;
 
 GUISystem::ItemListboxWantsMouseWheel gLayerMouseWheelProperty;
 
+/// Sorting callback function. This function provides an order of items in the list
+/// for the sake of simulating tree widget.
 bool MySortCallback(const CEGUI::ItemEntry*, const CEGUI::ItemEntry*);
 
 Editor::LayerWindow::LayerWindow():
@@ -21,7 +23,6 @@ Editor::LayerWindow::LayerWindow():
 Editor::LayerWindow::~LayerWindow()
 {
 }
-
 
 void Editor::LayerWindow::Init()
 {
@@ -34,12 +35,7 @@ void Editor::LayerWindow::Init()
 	mTree = static_cast<CEGUI::ItemListbox*>(mWindow->getChild(mWindow->getName() + "/List"));
 	mTree->setSortMode(CEGUI::ItemListBase::UserSort);
 	mTree->setSortCallback(&MySortCallback);
-	mTree->resetList();
 	mTree->addProperty(&gLayerMouseWheelProperty);
-	///@todo
-
-	//CEGUI::Window* refreshButton = mWindow->getChildRecursive(mWindow->getName() + "/Toolbar/Refresh");
-	//refreshButton->subscribeEvent(CEGUI::PushButton::EventClicked, //CEGUI::Event::Subscriber(&Editor::LayerWindow::OnRefreshButtonClicked, this));
 
 	CEGUI_EXCEPTION_END
 
@@ -51,12 +47,21 @@ void Editor::LayerWindow::Init()
 
 void Editor::LayerWindow::Update(float32 delta)
 {
+	// Updates tree every second
 	mUpdateTimer += delta;
 	if (mUpdateTimer > 1)
 	{
 		mUpdateTimer = 0;
 		UpdateTree();
 	}
+}
+
+void LayerWindow::NewLayer(EntitySystem::LayerID layerID)
+{
+	GUISystem::PromptBox* prompt = new GUISystem::PromptBox(layerID);
+	prompt->SetText("Please enter new name of the new layer");
+	prompt->RegisterCallback(new GUISystem::PromptBox::Callback<Editor::LayerWindow>(this, &LayerWindow::NewLayerPromptCallback));
+	prompt->Show();
 }
 
 void LayerWindow::MoveLayerUp(EntitySystem::LayerID layerID)
@@ -75,7 +80,7 @@ void LayerWindow::RenameLayer(EntitySystem::LayerID layerID)
 {
 	GUISystem::PromptBox* prompt = new GUISystem::PromptBox(layerID);
 	prompt->SetText("Please enter new name of the layer");
-	prompt->RegisterCallback(new GUISystem::PromptBox::Callback<Editor::LayerWindow>(this, &LayerWindow::PromptCallback));
+	prompt->RegisterCallback(new GUISystem::PromptBox::Callback<Editor::LayerWindow>(this, &LayerWindow::RenameLayerPromptCallback));
 	prompt->Show();
 }
 
@@ -357,19 +362,20 @@ void Editor::LayerWindow::UpdateTree()
 		layerItemButton->subscribeEvent(CEGUI::Window::EventMouseButtonDown, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnLayerItemExpandClick, this));
 		layerItem->addChildWindow(layerItemButton);
 		
-		CEGUI::Window* layerItemEye = gCEGUIWM.createWindow("Editor/StaticImage", mTree->getName() + "/LayerItemEye" + StringConverter::ToString(layerID));
-		layerItemEye->setArea(CEGUI::URect(CEGUI::UDim(1, -16), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
-		layerItemEye->setProperty("FrameEnabled", "False");
-		layerItemEye->setProperty("BackgroundEnabled", "False");
-		layerItemEye->subscribeEvent(CEGUI::Window::EventMouseButtonDown, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnLayerItemVisibilityToggleClick, this));
-		layerItem->addChildWindow(layerItemEye); 
+		CEGUI::Window* layerItemVisibilityToggle = gCEGUIWM.createWindow("Editor/StaticImage", mTree->getName() + "/LayerItemEye" + StringConverter::ToString(layerID));
+		layerItemVisibilityToggle->setArea(CEGUI::URect(CEGUI::UDim(1, -16), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
+		layerItemVisibilityToggle->setProperty("FrameEnabled", "False");
+		layerItemVisibilityToggle->setProperty("BackgroundEnabled", "False");
+		layerItemVisibilityToggle->setWantsMultiClickEvents(false);
+		layerItemVisibilityToggle->setTooltipText(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "layer_visibilitytoggle_hint"));
+		layerItemVisibilityToggle->subscribeEvent(CEGUI::Window::EventMouseButtonDown, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnLayerItemVisibilityToggleClick, this));
+		layerItem->addChildWindow(layerItemVisibilityToggle); 
 
 		dragContainer->addChildWindow(layerItemText);
 		dragContainer->subscribeEvent(CEGUI::Window::EventMouseButtonDown, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnDragContainerMouseButtonDown, this));
 		dragContainer->subscribeEvent(CEGUI::Window::EventMouseButtonUp, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnDragContainerMouseButtonUp, this));
 		dragContainer->subscribeEvent(CEGUI::Window::EventMouseDoubleClick, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnLayerItemDoubleClick, this));
 		dragContainer->subscribeEvent(CEGUI::Window::EventDragDropItemDropped, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnDragDropItemDropped, this));
-
 
 		dragContainer->setID(layerID);
 		dragContainer->setUserString("DragDataType", "Layer");
@@ -461,7 +467,16 @@ void LayerWindow::UpdateEntityItem(CEGUI::Window* entityItem, EntitySystem::Enti
 
 }
 
-void LayerWindow::PromptCallback(bool clickedOK, string text, int32 layerID)
+void LayerWindow::NewLayerPromptCallback(bool clickedOK, string text, int32 layerID)
+{
+	if (!clickedOK)
+		return;
+	LayerID newLayerID = gLayerMgr.AddTopLayer(text);
+	gLayerMgr.MoveLayerBehind(newLayerID, layerID);
+	UpdateTree();
+}
+
+void LayerWindow::RenameLayerPromptCallback(bool clickedOK, string text, int32 layerID)
 {
 	if (!clickedOK)
 		return;

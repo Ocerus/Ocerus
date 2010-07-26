@@ -68,23 +68,21 @@ about_message_text=Ocerus\na game developmnet environment\nhttp://ocerus.hardwir
 # layer manager
 layers=Layers
 initial_layer=Initial layer
-toggle_layer_visibility_hint=Toggles the visibility of the current layer.
-add_new_layer_hint=Adds a new layer.
-set_active_layer_hint=Sets the selected layer as active.
-edit_entity_hint=Edits the selected entity.
-new_layer=New layer:
 layer_moveup=Move up
 layer_moveup_hint=Moves the selected layer up.
 layer_movedown=Move down
 layer_movedown_hint=Moves the selected layer down.
+layer_new=New Layer
+layer_new_hint=Creates a new layer.
 layer_rename=Rename
 layer_rename_hint=Renames the selected layer.
 layer_remove=Remove
 layer_remove_hint=Removes the selected layer.
 layer_entitymoveup=Move up
-layer_entitymovedown=Move down
 layer_entitymoveup_hint=Moves the selected entity to the layer above.
+layer_entitymovedown=Move down
 layer_entitymovedown_hint=Moves the selected entity to the layer below.
+layer_visibilitytoggle_hint=Toggles the visibility of the layer.
 
 # entity editor
 entity_editor=Entity Editor
