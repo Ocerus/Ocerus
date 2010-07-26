@@ -102,6 +102,7 @@ bool GUIConsole::OnEventKeyDown(const CEGUI::EventArgs& args)
 			}
 			break;
 		case CEGUI::Key::Return:
+		case CEGUI::Key::NumpadEnter:
 			SubmitCommand();
 			return true;
 		case CEGUI::Key::ArrowUp:

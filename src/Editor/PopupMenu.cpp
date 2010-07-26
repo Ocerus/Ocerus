@@ -125,7 +125,7 @@ bool Editor::PopupMenu::OnMenuItemMouseUp( const CEGUI::EventArgs& e )
 			}
 		}
 	}
-	else if (mName.find("EditorRoot/Popup/Layer") == 0)
+	else if (mName == "EditorRoot/Popup/Layer")
 	{
 		if (itemCeguiName == mName + "/MoveUp")
 		{
@@ -152,7 +152,23 @@ bool Editor::PopupMenu::OnMenuItemMouseUp( const CEGUI::EventArgs& e )
 			OC_NOT_REACHED();
 		}
 	}
-
+	else if (mName == "EditorRoot/Popup/LayerEntity")
+	{
+		if (itemCeguiName == mName + "/MoveUp")
+		{
+			gEditorMgr.GetEditorGui()->GetLayerWindow()->MoveEntityUp(GetData<EntitySystem::EntityHandle>());
+			handled = true;
+		}
+		else if (itemCeguiName == mName + "/MoveDown")
+		{
+			gEditorMgr.GetEditorGui()->GetLayerWindow()->MoveEntityDown(GetData<EntitySystem::EntityHandle>());
+			handled = true;
+		}
+	}
+	else
+	{
+		OC_FAIL("Unknown popup window.");
+	}
 	Close();
 	return handled;
 }

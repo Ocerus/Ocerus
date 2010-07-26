@@ -86,6 +86,7 @@ bool PromptBox::OnEditboxKeyDown(const CEGUI::EventArgs& e)
 	switch (args.scancode)
 	{
 		case CEGUI::Key::Return:
+		case CEGUI::Key::NumpadEnter:
 			SendPrompt(true);
 			return true;
 		case CEGUI::Key::Escape:

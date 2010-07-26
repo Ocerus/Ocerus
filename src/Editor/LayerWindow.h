@@ -34,22 +34,21 @@ namespace Editor
 		void RenameLayer(EntitySystem::LayerID layerID);
 		
 		void RemoveLayer(EntitySystem::LayerID layerID);
+		
+		void MoveEntityUp(EntitySystem::EntityHandle entity);
+		
+		void MoveEntityDown(EntitySystem::EntityHandle entity);
 
 		/// @name CEGUI Callbacks
 		//@{
-		
-			
-		bool OnDragContainerMouseButtonDown(const CEGUI::EventArgs&);
-		bool OnDragContainerMouseButtonUp(const CEGUI::EventArgs&);
-		bool OnLayerItemExpandClick(const CEGUI::EventArgs&);
-		bool OnLayerItemVisibilityToggleClick(const CEGUI::EventArgs&);
-		bool OnLayerItemDoubleClick(const CEGUI::EventArgs&);
-		bool OnEntityItemDoubleClick(const CEGUI::EventArgs&);
-		bool OnDragDropItemDropped(const CEGUI::EventArgs&);
-		//bool OnDragContainerMouseDoubleClick(const CEGUI::EventArgs&);
-		//bool OnRefreshButtonClicked(const CEGUI::EventArgs&);
+			bool OnDragContainerMouseButtonDown(const CEGUI::EventArgs&);
+			bool OnDragContainerMouseButtonUp(const CEGUI::EventArgs&);
+			bool OnLayerItemExpandClick(const CEGUI::EventArgs&);
+			bool OnLayerItemVisibilityToggleClick(const CEGUI::EventArgs&);
+			bool OnLayerItemDoubleClick(const CEGUI::EventArgs&);
+			bool OnEntityItemDoubleClick(const CEGUI::EventArgs&);
+			bool OnDragDropItemDropped(const CEGUI::EventArgs&);
 		//@}
-
 
 	private:
 
@@ -75,8 +74,6 @@ namespace Editor
 		set<EntitySystem::LayerID> mExpandedLayerIDs;
 
 		float32 mUpdateTimer;
-		
-		EntitySystem::LayerID mSavedLayerID;
 	};
 }
 
