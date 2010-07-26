@@ -75,6 +75,15 @@ edit_entity_hint=Edits the selected entity.
 new_layer=New layer:
 button_down_hint=Moves the selected layer/entity down.
 button_up_hint=Moves the selected layer/entity up.
+layer_moveup=Move up
+layer_moveup_hint=Moves the selected layer up.
+layer_movedown=Move down
+layer_movedown_hint=Moves the selected layer down.
+layer_rename=Rename
+layer_rename_hint=Renames the selected layer.
+layer_remove=Remove
+layer_remove_hint=Removes the selected layer.
+
 
 # entity editor
 entity_editor=Entity Editor

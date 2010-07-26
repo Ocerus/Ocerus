@@ -27,15 +27,25 @@ namespace Editor
 		/// Updates the Layer Manager Window.
 		void Update(float32 delta);
 
+		void MoveLayerUp(EntitySystem::LayerID layerID);
+
+		void MoveLayerDown(EntitySystem::LayerID layerID);
+		
+		void RenameLayer(EntitySystem::LayerID layerID);
+		
+		void RemoveLayer(EntitySystem::LayerID layerID);
+
 		/// @name CEGUI Callbacks
 		//@{
+		
+			
 		bool OnDragContainerMouseButtonDown(const CEGUI::EventArgs&);
-		bool OnLayerExpandClick(const CEGUI::EventArgs&);
-		bool OnLayerEyeClick(const CEGUI::EventArgs&);
-		bool OnLayerMouseDoubleClick(const CEGUI::EventArgs&);
-		bool OnEntityMouseDoubleClick(const CEGUI::EventArgs&);
+		bool OnDragContainerMouseButtonUp(const CEGUI::EventArgs&);
+		bool OnLayerItemExpandClick(const CEGUI::EventArgs&);
+		bool OnLayerItemVisibilityToggleClick(const CEGUI::EventArgs&);
+		bool OnLayerItemDoubleClick(const CEGUI::EventArgs&);
+		bool OnEntityItemDoubleClick(const CEGUI::EventArgs&);
 		bool OnDragDropItemDropped(const CEGUI::EventArgs&);
-		//bool OnDragContainerMouseButtonUp(const CEGUI::EventArgs&);
 		//bool OnDragContainerMouseDoubleClick(const CEGUI::EventArgs&);
 		//bool OnRefreshButtonClicked(const CEGUI::EventArgs&);
 		//@}
@@ -52,6 +62,8 @@ namespace Editor
 		
 		void UpdateEntityItem(CEGUI::Window* entityItem, EntitySystem::EntityHandle entity);
 
+		void PromptCallback(bool clickedOK, string text, int32 tag);
+		
 		CEGUI::Window* mWindow;
 		CEGUI::ItemListbox* mTree;
 
@@ -63,6 +75,8 @@ namespace Editor
 		set<EntitySystem::LayerID> mExpandedLayerIDs;
 
 		float32 mUpdateTimer;
+		
+		EntitySystem::LayerID mSavedLayerID;
 	};
 }
 

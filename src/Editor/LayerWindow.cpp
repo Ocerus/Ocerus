@@ -1,8 +1,10 @@
 #include "Common.h"
 #include "Editor/LayerWindow.h"
 #include "Editor/EditorMgr.h"
+#include "Editor/PopupMenu.h"
 #include "GUISystem/CEGUITools.h"
 #include "GUISystem/ItemListboxProperties.h"
+#include "GUISystem/PromptBox.h"
 #include "EntitySystem/EntityMgr/LayerMgr.h"
 
 using namespace Editor;
@@ -56,6 +58,34 @@ void Editor::LayerWindow::Update(float32 delta)
 		UpdateTree();
 	}
 }
+
+void LayerWindow::MoveLayerUp(EntitySystem::LayerID layerID)
+{
+	gLayerMgr.MoveLayerDown(layerID);
+	UpdateTree();
+}
+
+void LayerWindow::MoveLayerDown(EntitySystem::LayerID layerID)
+{
+	gLayerMgr.MoveLayerUp(layerID);
+	UpdateTree();
+}
+
+void LayerWindow::RenameLayer(EntitySystem::LayerID layerID)
+{
+	mSavedLayerID = layerID;
+	GUISystem::PromptBox* prompt = new GUISystem::PromptBox();
+	prompt->SetText("Please enter new name of the layer");
+	prompt->RegisterCallback(new GUISystem::PromptBox::Callback<Editor::LayerWindow>(this, &LayerWindow::PromptCallback));
+	prompt->Show();
+}
+
+void LayerWindow::RemoveLayer(EntitySystem::LayerID layerID)
+{
+	gLayerMgr.DeleteLayer(layerID, false);
+	UpdateTree();
+}
+
 bool Editor::LayerWindow::OnDragContainerMouseButtonDown(const CEGUI::EventArgs& e)
 {
 	const CEGUI::MouseEventArgs& args = static_cast<const CEGUI::MouseEventArgs&>(e);
@@ -68,7 +98,37 @@ bool Editor::LayerWindow::OnDragContainerMouseButtonDown(const CEGUI::EventArgs&
 	return true;
 }
 
-bool LayerWindow::OnLayerExpandClick(const CEGUI::EventArgs& e)
+bool LayerWindow::OnDragContainerMouseButtonUp(const CEGUI::EventArgs& e)
+{
+	const CEGUI::MouseEventArgs& args = static_cast<const CEGUI::MouseEventArgs&>(e);
+	if (args.button != CEGUI::RightButton)
+		return false;
+
+	CEGUI::DragContainer* dragContainer = static_cast<CEGUI::DragContainer*>(args.window);
+	if (dragContainer->isBeingDragged()) return false;
+
+	CEGUI::ItemEntry* item = static_cast<CEGUI::ItemEntry*>(args.window->getParent());
+	if (item->getUserData())
+	{
+		// item is layer
+		EntitySystem::LayerID layerID = item->getID();
+		if (gLayerMgr.ExistsLayer(layerID))
+		{
+			PopupMenu* menu = new PopupMenu("EditorRoot/Popup/Layer", true);
+			menu->Init<EntitySystem::LayerID>(layerID);
+			menu->Open(args.position.d_x, args.position.d_y);
+			gEditorMgr.RegisterPopupMenu(menu);
+		}
+	}
+	else
+	{
+		// item is entity
+	}
+	return true;
+}
+
+
+bool LayerWindow::OnLayerItemExpandClick(const CEGUI::EventArgs& e)
 {
 	const CEGUI::MouseEventArgs& args = static_cast<const CEGUI::MouseEventArgs&>(e);
 	CEGUI::Window* layerItem = args.window->getParent();
@@ -91,7 +151,7 @@ bool LayerWindow::OnLayerExpandClick(const CEGUI::EventArgs& e)
 	return true;
 }
 
-bool LayerWindow::OnLayerEyeClick(const CEGUI::EventArgs& e)
+bool LayerWindow::OnLayerItemVisibilityToggleClick(const CEGUI::EventArgs& e)
 {
 	const CEGUI::MouseEventArgs& args = static_cast<const CEGUI::MouseEventArgs&>(e);
 	CEGUI::Window* layerItem = args.window->getParent();
@@ -105,7 +165,7 @@ bool LayerWindow::OnLayerEyeClick(const CEGUI::EventArgs& e)
 	return true;
 }
 
-bool LayerWindow::OnLayerMouseDoubleClick(const CEGUI::EventArgs& e)
+bool LayerWindow::OnLayerItemDoubleClick(const CEGUI::EventArgs& e)
 {
 	const CEGUI::MouseEventArgs& args = static_cast<const CEGUI::MouseEventArgs&>(e);
 	CEGUI::DragContainer* dragContainer = static_cast<CEGUI::DragContainer*>(args.window);
@@ -120,7 +180,7 @@ bool LayerWindow::OnLayerMouseDoubleClick(const CEGUI::EventArgs& e)
 	return true;
 }
 
-bool LayerWindow::OnEntityMouseDoubleClick(const CEGUI::EventArgs& e)
+bool LayerWindow::OnEntityItemDoubleClick(const CEGUI::EventArgs& e)
 {
 	const CEGUI::MouseEventArgs& args = static_cast<const CEGUI::MouseEventArgs&>(e);
 	CEGUI::DragContainer* dragContainer = static_cast<CEGUI::DragContainer*>(args.window);
@@ -415,19 +475,20 @@ void Editor::LayerWindow::UpdateTree()
 		layerItemButton->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), CEGUI::UDim(0, 10), CEGUI::UDim(1, 0)));
 		layerItemButton->setProperty("FrameEnabled", "False");
 		layerItemButton->setProperty("BackgroundEnabled", "False");
-		layerItemButton->subscribeEvent(CEGUI::Window::EventMouseButtonDown, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnLayerExpandClick, this));
+		layerItemButton->subscribeEvent(CEGUI::Window::EventMouseButtonDown, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnLayerItemExpandClick, this));
 		layerItem->addChildWindow(layerItemButton);
 		
 		CEGUI::Window* layerItemEye = gCEGUIWM.createWindow("Editor/StaticImage", mTree->getName() + "/LayerItemEye" + StringConverter::ToString(layerID));
 		layerItemEye->setArea(CEGUI::URect(CEGUI::UDim(1, -16), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
 		layerItemEye->setProperty("FrameEnabled", "False");
 		layerItemEye->setProperty("BackgroundEnabled", "False");
-		layerItemEye->subscribeEvent(CEGUI::Window::EventMouseButtonDown, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnLayerEyeClick, this));
+		layerItemEye->subscribeEvent(CEGUI::Window::EventMouseButtonDown, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnLayerItemVisibilityToggleClick, this));
 		layerItem->addChildWindow(layerItemEye); 
 
 		dragContainer->addChildWindow(layerItemText);
 		dragContainer->subscribeEvent(CEGUI::Window::EventMouseButtonDown, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnDragContainerMouseButtonDown, this));
-		dragContainer->subscribeEvent(CEGUI::Window::EventMouseDoubleClick, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnLayerMouseDoubleClick, this));
+		dragContainer->subscribeEvent(CEGUI::Window::EventMouseButtonUp, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnDragContainerMouseButtonUp, this));
+		dragContainer->subscribeEvent(CEGUI::Window::EventMouseDoubleClick, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnLayerItemDoubleClick, this));
 		dragContainer->subscribeEvent(CEGUI::Window::EventDragDropItemDropped, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnDragDropItemDropped, this));
 
 
@@ -468,8 +529,8 @@ void Editor::LayerWindow::UpdateTree()
 
 		dragContainer->addChildWindow(entityItemText);
 		dragContainer->subscribeEvent(CEGUI::Window::EventMouseButtonDown, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnDragContainerMouseButtonDown, this));
-		//dragContainer->subscribeEvent(CEGUI::Window::EventMouseButtonUp, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnDragContainerMouseButtonUp, this));
-		dragContainer->subscribeEvent(CEGUI::Window::EventMouseDoubleClick, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnEntityMouseDoubleClick, this));
+		dragContainer->subscribeEvent(CEGUI::Window::EventMouseButtonUp, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnDragContainerMouseButtonUp, this));
+		dragContainer->subscribeEvent(CEGUI::Window::EventMouseDoubleClick, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnEntityItemDoubleClick, this));
 		dragContainer->subscribeEvent(CEGUI::Window::EventDragDropItemDropped, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnDragDropItemDropped, this));
 
 		dragContainer->setID(it->GetID());
@@ -520,7 +581,14 @@ void LayerWindow::UpdateEntityItem(CEGUI::Window* entityItem, EntitySystem::Enti
 
 }
 
-
+void LayerWindow::PromptCallback(bool clickedOK, string text, int32 tag)
+{
+	OC_UNUSED(tag);
+	if (!clickedOK)
+		return;
+	gLayerMgr.SetLayerName(mSavedLayerID, text);
+	UpdateTree();
+}
 
 bool MySortCallback(const CEGUI::ItemEntry* first , const CEGUI::ItemEntry* second)
 {

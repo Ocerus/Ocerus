@@ -5,6 +5,7 @@
 #include "ResourceWindow.h"
 #include "PrototypeWindow.h"
 #include "HierarchyWindow.h"
+#include "LayerWindow.h"
 #include "GUISystem/CEGUITools.h"
 #include "Core/Project.h"
 
@@ -124,6 +125,33 @@ bool Editor::PopupMenu::OnMenuItemMouseUp( const CEGUI::EventArgs& e )
 			}
 		}
 	}
+	else if (mName.find("EditorRoot/Popup/Layer") == 0)
+	{
+		if (itemCeguiName == mName + "/MoveUp")
+		{
+			gEditorMgr.GetEditorGui()->GetLayerWindow()->MoveLayerUp(GetData<LayerID>());
+			handled = true;
+		}
+		else if (itemCeguiName == mName + "/MoveDown")
+		{
+			gEditorMgr.GetEditorGui()->GetLayerWindow()->MoveLayerDown(GetData<LayerID>());
+			handled = true;
+		}
+		else if (itemCeguiName == mName + "/Rename")
+		{
+			gEditorMgr.GetEditorGui()->GetLayerWindow()->RenameLayer(GetData<LayerID>());
+			handled = true;
+		}
+		else if (itemCeguiName == mName + "/Remove")
+		{
+			gEditorMgr.GetEditorGui()->GetLayerWindow()->RemoveLayer(GetData<LayerID>());
+			handled = true;
+		}
+		else
+		{
+			OC_NOT_REACHED();
+		}
+	}
 
 	Close();
 	return handled;
@@ -172,8 +200,25 @@ void Editor::PopupMenu::Open( float32 x, float32 y )
 
 	ConfigureMenu(menu);
 
-	x -= 0.5f * menu->getWidth().d_offset;
-	y -= 0.5f * menu->getHeight().d_offset;
+	
+	const CEGUI::Size& windowSize = CEGUI::System::getSingleton().getRenderer()->getDisplaySize();	
+
+	if (x + 12 + menu->getWidth().d_offset > windowSize.d_width)
+	{
+		x -= menu->getWidth().d_offset;
+	}
+	else
+	{
+		x += 12;
+	}
+	
+	if (y + menu->getHeight().d_offset > windowSize.d_height)
+	{
+		y -= menu->getHeight().d_offset;
+	}
+
+	//x -= 0.5f * menu->getWidth().d_offset;
+	//y -= 0.5f * menu->getHeight().d_offset;
 	menu->setPosition(CEGUI::UVector2(CEGUI::UDim(0, x), CEGUI::UDim(0, y)));
 	menu->show();
 	menu->activate();

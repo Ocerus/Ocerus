@@ -284,6 +284,7 @@ set(GUISystem_SRCS
 	src/GUISystem/GUIConsole.cpp
 	src/GUISystem/CEGUITools.cpp
 	src/GUISystem/MessageBox.cpp
+	src/GUISystem/PromptBox.cpp
 	src/GUISystem/VerticalLayout.cpp
 	src/GUISystem/ViewportWindow.cpp
 	src/GUISystem/FolderSelector.cpp

@@ -57,6 +57,9 @@ namespace Editor
 		/// Returns the hierarchy window.
 		inline HierarchyWindow* GetHierarchyWindow() const { return mHierarchyWindow; }
 
+		/// Returns the layer window.
+		inline LayerWindow* GetLayerWindow() const { return mLayerWindow; }
+
 		inline EditorMenu* GetEditorMenu() const { return mEditorMenu; }
 
 		/// @name CEGUI Callbacks

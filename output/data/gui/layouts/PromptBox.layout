@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<GUILayout >
+    <Window Type="Editor/FrameWindow" Name="" >
+        <Property Name="Alpha" Value="0.9" />
+        <Property Name="AlwaysOnTop" Value="True" />
+        <Property Name="TitlebarFont" Value="DejaVuSans-10" />
+        <Property Name="SizingEnabled" Value="False" />
+        <Property Name="TitlebarEnabled" Value="False" />
+        <Property Name="UnifiedAreaRect" Value="{{0.0,0},{0.0,0},{0.0,10},{0.0,10}}" />
+        <Property Name="DragMovingEnabled" Value="False" />
+        <Property Name="CloseButtonEnabled" Value="False" />
+        <Window Type="Editor/StaticText" Name="/MessageText" >
+            <Property Name="Text" Value="Message Text." />
+            <Property Name="FrameEnabled" Value="False" />
+            <Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{1,0},{0,24}}" />
+            <Property Name="BackgroundEnabled" Value="False" />
+        </Window>
+		<Window Type="Editor/Editbox" Name="/Editbox" >
+            <Property Name="UnifiedAreaRect" Value="{{0,0},{1,-50},{1,0},{1,-24}}" />
+        </Window>
+
+        <Window Type="Editor/Button" Name="/ButtonOK" >
+            <Property Name="Text" Value="$ok$" />
+            <Property Name="UnifiedAreaRect" Value="{{0.3,-30},{1,-20},{0.3,30},{1,0}}" />
+        </Window>
+        <Window Type="Editor/Button" Name="/ButtonCancel" >
+            <Property Name="Text" Value="$cancel$" />
+            <Property Name="UnifiedAreaRect" Value="{{0.7,-30},{1,-20},{0.7,30},{1,0}}" />
+        </Window>
+    </Window>
+</GUILayout>
