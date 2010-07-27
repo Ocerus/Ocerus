@@ -22,10 +22,14 @@
 #undef CreateWindowA
 #undef CreateWindowW
 
+/// WTF IS CEGUI::WindowManager::getSingleton().recreateWindow()
+#ifdef __WIN__
 
 /// If defined the CEGUI windows will be recycled using a system of caches.
 #define RECYCLE_WINDOWS
 
+
+#endif
 
 using namespace GUISystem;
 
