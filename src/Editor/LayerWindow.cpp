@@ -59,7 +59,7 @@ void Editor::LayerWindow::Update(float32 delta)
 void LayerWindow::NewLayer(EntitySystem::LayerID layerID)
 {
 	GUISystem::PromptBox* prompt = new GUISystem::PromptBox(layerID);
-	prompt->SetText("Please enter new name of the new layer");
+	prompt->SetText(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "layer_new_prompt"));
 	prompt->RegisterCallback(new GUISystem::PromptBox::Callback<Editor::LayerWindow>(this, &LayerWindow::NewLayerPromptCallback));
 	prompt->Show();
 }
@@ -79,7 +79,7 @@ void LayerWindow::MoveLayerDown(EntitySystem::LayerID layerID)
 void LayerWindow::RenameLayer(EntitySystem::LayerID layerID)
 {
 	GUISystem::PromptBox* prompt = new GUISystem::PromptBox(layerID);
-	prompt->SetText("Please enter new name of the layer");
+	prompt->SetText(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "layer_rename_prompt"));
 	prompt->RegisterCallback(new GUISystem::PromptBox::Callback<Editor::LayerWindow>(this, &LayerWindow::RenameLayerPromptCallback));
 	prompt->Show();
 }

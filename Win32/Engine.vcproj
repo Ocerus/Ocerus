@@ -1130,6 +1130,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\GUISystem\PromptBox.h"
+					>
+				</File>
+				<File
 					RelativePath="..\src\GUISystem\ResourceProvider.h"
 					>
 				</File>
@@ -1569,6 +1573,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\src\Editor\ValueEditors\LayerEditor.h"
+						>
+					</File>
+					<File
 						RelativePath="..\src\Editor\ValueEditors\PointEditor.h"
 						>
 					</File>
@@ -1602,6 +1610,10 @@
 					</File>
 					<File
 						RelativePath="..\src\Editor\ValueEditors\BoolEditor.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\src\Editor\ValueEditors\LayerEditor.cpp"
 						>
 					</File>
 					<File
