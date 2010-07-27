@@ -17,7 +17,7 @@ PromptBox::PromptBox(int32 tag): mTag(tag), mCallback(0), mPromptBox(0), mMinWid
 		i++;
 		windowName = "PromptBox" + StringConverter::ToString(i);
 	}
-	while (gCEGUIWM.isWindowPresent(windowName));
+	while (gGUIMgr.WindowExists(windowName.c_str()));
 	mPromptBox = gGUIMgr.LoadSystemLayout("PromptBox.layout", windowName);
 	mPromptBox->setModalState(true);
 
@@ -32,7 +32,7 @@ PromptBox::PromptBox(int32 tag): mTag(tag), mCallback(0), mPromptBox(0), mMinWid
 PromptBox::~PromptBox()
 {
 	delete mCallback;
-	gCEGUIWM.destroyWindow(mPromptBox);
+	gGUIMgr.DestroyWindowDirectly(mPromptBox);
 }
 
 void PromptBox::SetText(const CEGUI::String& text)

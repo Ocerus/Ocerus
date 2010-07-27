@@ -18,7 +18,9 @@ CEGUI::Window* StringEditor::CreateWidget(const CEGUI::String& namePrefix)
 	OC_DASSERT(mEditboxWidget == 0);
 
 	/// Create main editor widget
-	mEditorWidget = gCEGUIWM.createWindow("DefaultWindow", namePrefix);
+	mEditorWidget = gGUIMgr.CreateWindow("DefaultWindow", true);
+	OC_ASSERT(this);
+	OC_ASSERT(mEditorWidget);
 	mEditorWidget->setHeight(CEGUI::UDim(0, GetEditboxHeight()));
 
 	CEGUI::UDim dimMiddle = mModel->IsListElement() ? CEGUI::UDim(0, 32) : CEGUI::UDim(0.5f, 0);
@@ -30,7 +32,7 @@ CEGUI::Window* StringEditor::CreateWidget(const CEGUI::String& namePrefix)
 	mEditorWidget->addChildWindow(labelWidget);
 
 	/// Create editbox widget of the editor
-	mEditboxWidget = static_cast<CEGUI::Editbox*>(gCEGUIWM.createWindow("Editor/Editbox", namePrefix + "/Editbox"));
+	mEditboxWidget = static_cast<CEGUI::Editbox*>(gGUIMgr.CreateWindow("Editor/Editbox", true));
 	mEditboxWidget->setArea(CEGUI::URect(dimMiddle + CEGUI::UDim(0, 2), CEGUI::UDim(0, 0), dimRight, CEGUI::UDim(0, GetEditboxHeight())));
 	mEditboxWidget->setProperty("ReadOnly", mModel->IsReadOnly() ? "True" : "False");
 	mEditorWidget->addChildWindow(mEditboxWidget);

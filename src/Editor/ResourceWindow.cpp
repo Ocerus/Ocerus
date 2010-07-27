@@ -58,12 +58,16 @@ ResourceSystem::ResourcePtr ResourceWindow::GetItemAtIndex(size_t index)
 
 void Editor::ResourceWindow::RebuildTree()
 {
-	mTree->resetList();
+	for (int32 i=mTree->getItemCount()-1; i>=0; --i)
+	{
+		gGUIMgr.DestroyWindow(mTree->getItemFromIndex(i));
+	}
+	OC_ASSERT(mTree->getItemCount() == 0);
 	mItems.clear();
+
 	gResourceMgr.GetResources(mItems, ResourceSystem::BPT_PROJECT);
 	Containers::sort(mItems.begin(), mItems.end(), ResourceComparator);
 
-	uint32 dirItemID = 0;
 	vector<string> dirStack;
 	for (vector<ResourceSystem::ResourcePtr>::const_iterator it = mItems.begin(); it != mItems.end(); ++it)
 	{
@@ -94,7 +98,7 @@ void Editor::ResourceWindow::RebuildTree()
 					dirStack[pathDepth] = dirName;
 				}
 
-				CEGUI::ItemEntry* dirItem = static_cast<CEGUI::ItemEntry*>(gCEGUIWM.createWindow("Editor/ListboxItem", mTree->getName() + "/DirItem" + StringConverter::ToString(dirItemID++)));
+				CEGUI::ItemEntry* dirItem = static_cast<CEGUI::ItemEntry*>(gGUIMgr.CreateWindow("Editor/ListboxItem"));
 				dirItem->setText(string(pathDepth * 4, ' ') + dirName);
 				mTree->addChildWindow(dirItem);
 			}
@@ -105,14 +109,14 @@ void Editor::ResourceWindow::RebuildTree()
 		while (indexTo != resourcePath.size());
 
 
-		CEGUI::ItemEntry* newItem = static_cast<CEGUI::ItemEntry*>(gCEGUIWM.createWindow("Editor/ListboxItem", mTree->getName() + "/Resource" + StringConverter::ToString(resourceIndex)));
+		CEGUI::ItemEntry* newItem = static_cast<CEGUI::ItemEntry*>(gGUIMgr.CreateWindow("Editor/ListboxItem"));
 		newItem->setID(resourceIndex);
 		
-		CEGUI::Window* dragContainer = static_cast<CEGUI::ItemEntry*>(gCEGUIWM.createWindow("DragContainer", mTree->getName() + "/DCResource" + StringConverter::ToString(resourceIndex)));
+		CEGUI::Window* dragContainer = static_cast<CEGUI::ItemEntry*>(gGUIMgr.CreateWindow("DragContainer"));
 		dragContainer->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
 		newItem->addChildWindow(dragContainer);
 
-		CEGUI::Window* newItemText = gCEGUIWM.createWindow("Editor/StaticText", mTree->getName() + "/ResourceText" + StringConverter::ToString(resourceIndex));
+		CEGUI::Window* newItemText = gGUIMgr.CreateWindow("Editor/StaticText");
 		newItemText->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
 		newItemText->setText(string(pathDepth * 4, ' ') + (*it)->GetName());
 		newItemText->setProperty("FrameEnabled", "False");

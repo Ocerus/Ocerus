@@ -13,12 +13,12 @@ void EntityComponents::GUILayout::Create(void)
 
 void EntityComponents::GUILayout::Destroy(void)
 {
-	if (mRootWindow) gGUIMgr.DestroyWindow(mRootWindow);
+	if (mRootWindow) gGUIMgr.DestroyWindowDirectly(mRootWindow);
 }
 
 void EntityComponents::GUILayout::ReloadWindow(void)
 {
-  if (mRootWindow) gGUIMgr.DestroyWindow(mRootWindow);
+  if (mRootWindow) gGUIMgr.DestroyWindowDirectly(mRootWindow);
   if (mLayout)
   {
     mRootWindow = gGUIMgr.LoadProjectLayout(mLayout->GetName(), GetOwner().GetName());

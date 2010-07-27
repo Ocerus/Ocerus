@@ -58,12 +58,12 @@ namespace Editor
 		mNamePrefix = namePrefix;
 
 		/// Create main editor widget
-		mEditorWidget = gCEGUIWM.createWindow("DefaultWindow", namePrefix);
+		mEditorWidget = gGUIMgr.CreateWindow("DefaultWindow", true);
 		mLayout = new GUISystem::VerticalLayout(mEditorWidget, 0, true);
 
 
 		/// Create header widget
-		mHeaderWidget = gCEGUIWM.createWindow("DefaultWindow", namePrefix + "Controls");
+		mHeaderWidget = gGUIMgr.CreateWindow("DefaultWindow", true);
 		mHeaderWidget->setHeight(CEGUI::UDim(0, GetEditboxHeight()));
 		mLayout->AddChildWindow(mHeaderWidget);
 
@@ -73,7 +73,7 @@ namespace Editor
 		mHeaderWidget->addChildWindow(labelWidget);
 		
 		/// Create add element button
-		mButtonAddElement = static_cast<CEGUI::PushButton*>(gCEGUIWM.createWindow("Editor/Button", namePrefix + "Controls/ButtonAddElement"));
+		mButtonAddElement = static_cast<CEGUI::PushButton*>(gGUIMgr.CreateWindow("Editor/Button"));
 		mButtonAddElement->setText(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "entity_editor_add"));
 		mButtonAddElement->setArea(CEGUI::URect(CEGUI::UDim(0.5f, 1), CEGUI::UDim(0, 0), CEGUI::UDim(0.6666f, -1), CEGUI::UDim(0, GetEditboxHeight())));
 		mButtonAddElement->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Editor::ArrayEditor<ElementType>::OnEventButtonAddPressed, this));
@@ -82,7 +82,7 @@ namespace Editor
 		mHeaderWidget->addChildWindow(mButtonAddElement);
 		
 		/// Create revert button
-		mButtonRevert = static_cast<CEGUI::PushButton*>(gCEGUIWM.createWindow("Editor/Button", namePrefix + "Controls/ButtonRevert"));
+		mButtonRevert = static_cast<CEGUI::PushButton*>(gGUIMgr.CreateWindow("Editor/Button"));
 		mButtonRevert->setText(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "entity_editor_revert"));
 		mButtonRevert->setArea(CEGUI::URect(CEGUI::UDim(0.6666f, 1), CEGUI::UDim(0, 0), CEGUI::UDim(0.8333f, -1), CEGUI::UDim(0, GetEditboxHeight())));
 		mButtonRevert->setEnabled(false);
@@ -91,7 +91,7 @@ namespace Editor
 		mHeaderWidget->addChildWindow(mButtonRevert);
 
 		/// Create save button
-		mButtonSave = static_cast<CEGUI::PushButton*>(gCEGUIWM.createWindow("Editor/Button", namePrefix + "Controls/ButtonSave"));
+		mButtonSave = static_cast<CEGUI::PushButton*>(gGUIMgr.CreateWindow("Editor/Button"));
 		mButtonSave->setText(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "entity_editor_save"));
 		mButtonSave->setArea(CEGUI::URect(CEGUI::UDim(0.8333f, 1), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(0, GetEditboxHeight())));
 		mButtonSave->setEnabled(false);

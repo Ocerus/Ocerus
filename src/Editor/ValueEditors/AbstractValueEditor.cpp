@@ -6,7 +6,7 @@ using namespace Editor;
 
 Editor::AbstractValueEditor::~AbstractValueEditor()
 {
-	gCEGUIWM.destroyWindow(mEditorWidget);
+	gGUIMgr.DestroyWindow(mEditorWidget);
 }
 
 CEGUI::Window* Editor::AbstractValueEditor::CreateStaticTextWidget(const CEGUI::String& name, const CEGUI::String& text, const CEGUI::String& tooltip)
@@ -14,7 +14,7 @@ CEGUI::Window* Editor::AbstractValueEditor::CreateStaticTextWidget(const CEGUI::
 	PROFILE_FNC();
 
 	CEGUI::Window* labelWidget;
-	labelWidget = gCEGUIWM.createWindow("Editor/StaticText", name);
+	labelWidget = gGUIMgr.CreateWindow("Editor/StaticText", true);
 	labelWidget->setText(text);
 	labelWidget->setProperty("FrameEnabled", "False");
 	labelWidget->setProperty("BackgroundEnabled", "False");
@@ -34,7 +34,7 @@ CEGUI::Window* Editor::AbstractValueEditor::CreateEditorLabelWidget(const CEGUI:
 }
 CEGUI::PushButton* Editor::AbstractValueEditor::CreateRemoveElementButtonWidget(const CEGUI::String& name)
 {
-	CEGUI::PushButton* button = static_cast<CEGUI::PushButton*>(gCEGUIWM.createWindow("Editor/Button", name));
+	CEGUI::PushButton* button = static_cast<CEGUI::PushButton*>(gGUIMgr.CreateWindow("Editor/Button"));
 	button->setText(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "entity_editor_remove"));
 	button->setSize(CEGUI::UVector2(CEGUI::UDim(0, GetEditboxHeight()), CEGUI::UDim(0, GetEditboxHeight())));
 	return button;
@@ -42,6 +42,6 @@ CEGUI::PushButton* Editor::AbstractValueEditor::CreateRemoveElementButtonWidget(
 
 float Editor::AbstractValueEditor::GetEditboxHeight()
 {
-	static float result = gCEGUIWM.getWindow("EditorRoot")->getFont(true)->getLineSpacing(1.1f) + 10;
+	static float result = gGUIMgr.GetWindow("EditorRoot")->getFont(true)->getLineSpacing(1.1f) + 10;
 	return result;
 }

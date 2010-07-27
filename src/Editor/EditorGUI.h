@@ -86,6 +86,8 @@ namespace Editor
 
 		typedef vector<AbstractValueEditor*> PropertyEditors;
 		PropertyEditors mPropertyEditors;
+		typedef vector<GUISystem::VerticalLayout*> VerticalLayouts;
+		VerticalLayouts mVerticalLayouts;
 		GUISystem::VerticalLayout* mEntityEditorLayout;
 		GUISystem::ViewportWindow* mGameViewport;
 		GUISystem::ViewportWindow* mEditorViewport;

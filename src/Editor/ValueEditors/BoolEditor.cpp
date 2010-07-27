@@ -18,7 +18,7 @@ CEGUI::Window* BoolEditor::CreateWidget(const CEGUI::String& namePrefix)
 	OC_DASSERT(mCheckboxWidget == 0);
 
 	/// Create main editor widget
-	mEditorWidget = gCEGUIWM.createWindow("DefaultWindow", namePrefix);
+	mEditorWidget = gGUIMgr.CreateWindow("DefaultWindow", true);
 	mEditorWidget->setHeight(CEGUI::UDim(0, GetEditboxHeight()));
 
 	CEGUI::UDim dimMiddle = mModel->IsListElement() ? CEGUI::UDim(0, 32) : CEGUI::UDim(0.5f, 0);
@@ -30,7 +30,7 @@ CEGUI::Window* BoolEditor::CreateWidget(const CEGUI::String& namePrefix)
 	mEditorWidget->addChildWindow(labelWidget);
 
 	/// Create checkbox widget of the editor
-	mCheckboxWidget = static_cast<CEGUI::Checkbox*>(gCEGUIWM.createWindow("Editor/Checkbox", namePrefix + "/Checkbox"));
+	mCheckboxWidget = static_cast<CEGUI::Checkbox*>(gGUIMgr.CreateWindow("Editor/Checkbox", true));
 	mCheckboxWidget->setArea(CEGUI::URect(dimMiddle + CEGUI::UDim(0, 6), CEGUI::UDim(0, 0), dimRight, CEGUI::UDim(0, GetEditboxHeight())));
 	mCheckboxWidget->setEnabled(!mModel->IsReadOnly());
 	mEditorWidget->addChildWindow(mCheckboxWidget);

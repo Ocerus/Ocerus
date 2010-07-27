@@ -2,25 +2,5 @@
 
 <Prototypes>
   <Entities>
-    <Entity Name="prototyp1" ID="-488" Transient="false">
-      <Component Type="Transform">
-        <Angle>0</Angle>
-        <Position>0 0</Position>
-        <Layer>0</Layer>
-        <Scale>0.7 1</Scale>
-      </Component>
-      <Component Type="Sprite">
-        <Transparency>0</Transparency>
-        <Texture>tux.png</Texture>
-      </Component>
-      <Component Type="PolygonCollider">
-        <Density>1</Density>
-        <Polygon>
-          <Item>0 0</Item>
-          <Item>10 0</Item>
-          <Item>10 10</Item>
-        </Polygon>
-      </Component>
-    </Entity>
   </Entities>
 </Prototypes>

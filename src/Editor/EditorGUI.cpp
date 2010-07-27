@@ -54,6 +54,7 @@ EditorGUI::~EditorGUI()
 	delete mResourceWindow;
 	delete mPrototypeWindow;
 	delete mHierarchyWindow;
+	if (mEntityEditorLayout) delete mEntityEditorLayout;
 }
 
 void EditorGUI::LoadGUI()
@@ -72,10 +73,10 @@ void EditorGUI::LoadGUI()
 	}
 	gGUIMgr.InitConsole();
 	CEGUI::System::getSingleton().setDefaultTooltip("Editor/Tooltip");
-	mPropertyItemHeight = (int32)gCEGUIWM.getWindow("EditorRoot")->getFont(true)->getLineSpacing(1.1f) + 10;
+	mPropertyItemHeight = (int32)gGUIMgr.GetWindow("EditorRoot")->getFont(true)->getLineSpacing(1.1f) + 10;
 	mComponentGroupHeight = 28;
-	gCEGUIWM.getWindow("EditorRoot")->setMousePassThroughEnabled(true);
-	gCEGUIWM.getWindow(ENTITY_EDITOR_NAME)->addProperty(&gEditorMouseWheelProperty);
+	gGUIMgr.GetWindow("EditorRoot")->setMousePassThroughEnabled(true);
+	gGUIMgr.GetWindow(ENTITY_EDITOR_NAME)->addProperty(&gEditorMouseWheelProperty);
 
 	// Initialize EditorMenu
 	mEditorMenu = new EditorMenu();
@@ -98,11 +99,11 @@ void EditorGUI::LoadGUI()
 	mHierarchyWindow->Init();
 
 	// Initialize top viewport
-	mGameViewport = static_cast<GUISystem::ViewportWindow*>(gCEGUIWM.getWindow("EditorRoot/TopViewport"));
+	mGameViewport = static_cast<GUISystem::ViewportWindow*>(gGUIMgr.GetWindow("EditorRoot/TopViewport"));
 	mGameViewport->SetDragAndDropCamera(false);
 
 	// Initialize bottom viewport
-	mEditorViewport = static_cast<GUISystem::ViewportWindow*>(gCEGUIWM.getWindow("EditorRoot/BottomViewport"));
+	mEditorViewport = static_cast<GUISystem::ViewportWindow*>(gGUIMgr.GetWindow("EditorRoot/BottomViewport"));
 	mEditorViewport->SetDragAndDropCamera(true);
 	mEditorViewport->subscribeEvent(CEGUI::Window::EventDragDropItemDropped, CEGUI::Event::Subscriber(&EditorGUI::OnEditorViewportItemDropped, this));
 
@@ -200,33 +201,37 @@ void EditorGUI::UpdateEntityEditorWindow()
 	mNeedEntityEditorUpdate = false;
 	EntitySystem::EntityHandle currentEntity = gEditorMgr.GetCurrentEntity();
 
-	CEGUI::ScrollablePane* entityEditorPane = static_cast<CEGUI::ScrollablePane*>(gCEGUIWM.getWindow(ENTITY_EDITOR_NAME));
+	CEGUI::ScrollablePane* entityEditorPane = static_cast<CEGUI::ScrollablePane*>(gGUIMgr.GetWindow(ENTITY_EDITOR_NAME));
 	float savedScrollPosition = entityEditorPane->getVerticalScrollPosition() * entityEditorPane->getContentPaneArea().getHeight();
 	OC_ASSERT(entityEditorPane);
 
-	{
-		const CEGUI::Window* entityEditorContentPane = entityEditorPane->getContentPane();
-		OC_ASSERT(entityEditorContentPane);
-
-		// Set layout on Entity Editor
-		if (!mEntityEditorLayout)
-			mEntityEditorLayout = new GUISystem::VerticalLayout(entityEditorPane, entityEditorContentPane);
-
-		// Clear all the content of Entity Editor.
-		size_t childCount = entityEditorContentPane->getChildCount();
-		for (int i = (childCount - 1); i >= 0; --i)
-		{
-			gCEGUIWM.destroyWindow(entityEditorContentPane->getChildAtIdx(i));
-		}
-		
-	}
-
-	// Clear all property editors.
+	// Clear all property editors. The editor windows are destroyed during the process.
 	for (PropertyEditors::const_iterator it = mPropertyEditors.begin(); it != mPropertyEditors.end(); ++it)
 	{
 		delete (*it);
 	}
 	mPropertyEditors.clear();
+
+	// Clear the pane.
+	{
+		const CEGUI::Window* entityEditorContentPane = entityEditorPane->getContentPane();
+		OC_ASSERT(entityEditorContentPane);
+
+		if (!mEntityEditorLayout) mEntityEditorLayout = new GUISystem::VerticalLayout(entityEditorPane, entityEditorContentPane);
+		else mEntityEditorLayout->Clear();
+	}
+
+	// Clear all layouts.
+	for (VerticalLayouts::iterator it=mVerticalLayouts.begin(); it!=mVerticalLayouts.end(); ++it)
+	{
+		delete (*it);
+	}
+	mVerticalLayouts.clear();
+
+
+	// Everything should be clear by now.
+	OC_ASSERT(mEntityEditorLayout->GetChildCount() == 0);
+
 
 	// There is no entity to be selected.
 	if (!currentEntity.Exists()) return;
@@ -236,10 +241,11 @@ void EditorGUI::UpdateEntityEditorWindow()
 	// First "component" is general entity info
 	{
 		const string namePrefix = ENTITY_EDITOR_NAME + "/ComponentGeneralInfo";
-		CEGUI::GroupBox* componentGroup = static_cast<CEGUI::GroupBox*>(gCEGUIWM.createWindow("Editor/GroupBox", namePrefix));
+		CEGUI::GroupBox* componentGroup = static_cast<CEGUI::GroupBox*>(gGUIMgr.CreateWindow("Editor/GroupBox", true));
 		componentGroup->setText(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "general_info"));
 		mEntityEditorLayout->AddChildWindow(componentGroup);
 		GUISystem::VerticalLayout* layout = new GUISystem::VerticalLayout(componentGroup, componentGroup->getContentPane(), true);
+		mVerticalLayouts.push_back(layout);
 
 		{
 			AbstractValueEditor* editor = CreateEntityIDEditor(currentEntity);
@@ -276,12 +282,12 @@ void EditorGUI::UpdateEntityEditorWindow()
 		  sortedPropertyList.insert(*it);
 		}
 
-		CEGUI::GroupBox* componentGroup = static_cast<CEGUI::GroupBox*>(gCEGUIWM.createWindow("Editor/GroupBox", namePrefix));
+		CEGUI::GroupBox* componentGroup = static_cast<CEGUI::GroupBox*>(gGUIMgr.CreateWindow("Editor/GroupBox", true));
 		componentGroup->setText(componentName);
 		mEntityEditorLayout->AddChildWindow(componentGroup);
 
 
-		CEGUI::PushButton* removeComponentButton = static_cast<CEGUI::PushButton*>(gCEGUIWM.createWindow("Editor/Button", namePrefix + "/RemoveButton"));
+		CEGUI::PushButton* removeComponentButton = static_cast<CEGUI::PushButton*>(gGUIMgr.CreateWindow("Editor/Button", true));
 		removeComponentButton->setArea(CEGUI::URect(CEGUI::UDim(1, -8), CEGUI::UDim(0, -24), CEGUI::UDim(1, 12), CEGUI::UDim(0, -4)));
 		removeComponentButton->setText("x");
 		removeComponentButton->setClippedByParent(false);
@@ -301,6 +307,7 @@ void EditorGUI::UpdateEntityEditorWindow()
 		componentGroup->addChildWindow(removeComponentButton);
 
 		GUISystem::VerticalLayout* layout = new GUISystem::VerticalLayout(componentGroup, componentGroup->getContentPane(), true);
+		mVerticalLayouts.push_back(layout);
 		
 		for (set<PropertyHolder>::iterator it = sortedPropertyList.begin(); it != sortedPropertyList.end(); ++it)
 		{
@@ -314,9 +321,10 @@ void EditorGUI::UpdateEntityEditorWindow()
 	mEntityEditorLayout->UnlockUpdates();
 	mEntityEditorLayout->UpdateLayout();
 
+	// restore the scrollbar position
 	entityEditorPane->setVerticalScrollPosition(savedScrollPosition / entityEditorPane->getContentPaneArea().getHeight());
 	
-	/// Nasty hack to solve scrollbar issue
+	// nasty hack to solve scrollbar issue
 	{
 		const CEGUI::UDim height = entityEditorPane->getHeight();
 		entityEditorPane->setHeight(height + CEGUI::UDim(0, 1));

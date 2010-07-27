@@ -21,33 +21,33 @@ Editor::LayerMgrWidget::LayerMgrWidget(CEGUI::Window* layerMgrWindow):
 void Editor::LayerMgrWidget::Init()
 {
 	CEGUI::String prefix = mLayerMgrWindow->getName();
-	mTreeWindow = static_cast<CEGUI::Tree*>(gCEGUIWM.getWindow(prefix + "/Tree"));
+	mTreeWindow = static_cast<CEGUI::Tree*>(gGUIMgr.GetWindow(prefix + "/Tree"));
 
-	mNewLayerEditbox = gCEGUIWM.getWindow(prefix + "/EditNewLayer");
+	mNewLayerEditbox = gGUIMgr.GetWindow(prefix + "/EditNewLayer");
 	mNewLayerEditbox->subscribeEvent(CEGUI::Editbox::EventKeyDown,
 			CEGUI::SubscriberSlot(&Editor::LayerMgrWidget::OnEditNewLayerKeyDown, this));
 
-	CEGUI::Window* btnToggleLayerVisibility = gCEGUIWM.getWindow(prefix + "/ButtonToggleLayerVisibility");
+	CEGUI::Window* btnToggleLayerVisibility = gGUIMgr.GetWindow(prefix + "/ButtonToggleLayerVisibility");
 	btnToggleLayerVisibility->subscribeEvent(CEGUI::PushButton::EventClicked,
 			CEGUI::SubscriberSlot(&Editor::LayerMgrWidget::OnButtonToggleLayerVisibilityClicked, this));
 
-	CEGUI::Window* btnAddLayer = gCEGUIWM.getWindow(prefix + "/ButtonAddLayer");
+	CEGUI::Window* btnAddLayer = gGUIMgr.GetWindow(prefix + "/ButtonAddLayer");
 	btnAddLayer->subscribeEvent(CEGUI::PushButton::EventClicked,
 			CEGUI::SubscriberSlot(&Editor::LayerMgrWidget::OnButtonAddLayerClicked, this));
 
-	CEGUI::Window* btnEditEntity = gCEGUIWM.getWindow(prefix + "/ButtonEditEntity");
+	CEGUI::Window* btnEditEntity = gGUIMgr.GetWindow(prefix + "/ButtonEditEntity");
 	btnEditEntity->subscribeEvent(CEGUI::PushButton::EventClicked,
 			CEGUI::SubscriberSlot(&Editor::LayerMgrWidget::OnButtonEditEntityClicked, this));
 
-	CEGUI::Window* btnSetActiveLayer = gCEGUIWM.getWindow(prefix + "/ButtonSetActiveLayer");
+	CEGUI::Window* btnSetActiveLayer = gGUIMgr.GetWindow(prefix + "/ButtonSetActiveLayer");
 	btnSetActiveLayer->subscribeEvent(CEGUI::PushButton::EventClicked,
 			CEGUI::SubscriberSlot(&Editor::LayerMgrWidget::OnButtonSetActiveLayerClicked, this));
 
-	mUpButton = gCEGUIWM.getWindow(prefix + "/ButtonUp");
+	mUpButton = gGUIMgr.GetWindow(prefix + "/ButtonUp");
 	mUpButton->subscribeEvent(CEGUI::PushButton::EventClicked,
 			CEGUI::SubscriberSlot(&Editor::LayerMgrWidget::OnButtonUpDownClicked, this));
 
-	mDownButton = gCEGUIWM.getWindow(prefix + "/ButtonDown");
+	mDownButton = gGUIMgr.GetWindow(prefix + "/ButtonDown");
 	mDownButton->subscribeEvent(CEGUI::PushButton::EventClicked,
 			CEGUI::SubscriberSlot(&Editor::LayerMgrWidget::OnButtonUpDownClicked, this));
 }
@@ -158,7 +158,7 @@ void Editor::LayerMgrWidget::UpdateTree()
 	}
 
 	// Reset and rebuild tree
-	mTreeWindow->resetList();
+	mTreeWindow->resetList(); // this must be rewriten using gGUIMgr.DestroyWindow()
 	selectedItem = 0;
 
 	for (EntitySystem::LayerID layerID = gLayerMgr.GetBottomLayerID(); layerID <= gLayerMgr.GetTopLayerID(); ++layerID)

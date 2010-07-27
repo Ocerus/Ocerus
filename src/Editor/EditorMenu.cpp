@@ -25,13 +25,13 @@ Editor::EditorMenu::EditorMenu()
 void Editor::EditorMenu::Init()
 {
 	CEGUI_EXCEPTION_BEGIN
-	CEGUI::Window* menubar = gCEGUIWM.getWindow(menubarPrefix);
+	CEGUI::Window* menubar = gGUIMgr.GetWindow(menubarPrefix);
 	InitComponentMenu();
 	ConfigureMenu(menubar);
 	UpdateSceneMenu();
 	menubar->subscribeEvent(CEGUI::Window::EventDeactivated, CEGUI::Event::Subscriber(&Editor::EditorMenu::OnMouseLeavesMenuItem, this));
 
-	CEGUI::Window* toolbar = gCEGUIWM.getWindow(toolbarPrefix);
+	CEGUI::Window* toolbar = gGUIMgr.GetWindow(toolbarPrefix);
 	ConfigureToolbar(toolbar);
 	CEGUI_EXCEPTION_END_CRITICAL
 }
@@ -348,12 +348,11 @@ void Editor::EditorMenu::OnFolderSelected(const string& path, const string& edit
 void Editor::EditorMenu::InitComponentMenu()
 {
 	CEGUI_EXCEPTION_BEGIN
-	CEGUI::Window* addComponentMenu = gCEGUIWM.getWindow(menubarPrefix + "/Edit/NewComponent/AutoPopup");
+	CEGUI::Window* addComponentMenu = gGUIMgr.GetWindow(menubarPrefix + "/Edit/NewComponent/AutoPopup");
 	for (int32 i = 0; i < EntitySystem::NUM_COMPONENT_TYPES; ++i)
 	{
 		const string& componentName = EntitySystem::GetComponentTypeName((EntitySystem::eComponentType)i);
-		CEGUI::Window* componentMenuItem = gCEGUIWM.createWindow("Editor/MenuItem",
-				menubarPrefix + "/Edit/NewComponent/Component" + StringConverter::ToString(i));
+		CEGUI::Window* componentMenuItem = gGUIMgr.CreateWindow("Editor/MenuItem");
 		componentMenuItem->setText(componentName);
 		addComponentMenu->addChildWindow(componentMenuItem);
 	}
@@ -366,17 +365,16 @@ void EditorMenu::UpdateSceneMenu()
 	Core::SceneInfoList scenes;
 	gEditorMgr.GetCurrentProject()->GetSceneList(scenes);
 
-	CEGUI::Window* openSceneMenu = gCEGUIWM.getWindow(menubarPrefix + "/Scene/OpenScene/AutoPopup");
+	CEGUI::Window* openSceneMenu = gGUIMgr.GetWindow(menubarPrefix + "/Scene/OpenScene/AutoPopup");
 	
 	for (int32 i = openSceneMenu->getChildCount() - 1; i >= 0; --i)
 	{
-		gCEGUIWM.destroyWindow(openSceneMenu->getChildAtIdx(i));
+		gGUIMgr.DestroyWindow(openSceneMenu->getChildAtIdx(i));
 	}
 
 	for (Core::SceneInfoList::const_iterator it = scenes.begin(); it != scenes.end(); ++it)
 	{
-		CEGUI::Window* sceneMenuItem = gCEGUIWM.createWindow("Editor/MenuItem",
-				menubarPrefix + "/Scene/OpenScene/Scene" + it->filename);
+		CEGUI::Window* sceneMenuItem = gGUIMgr.CreateWindow("Editor/MenuItem");
 		sceneMenuItem->setText(it->name + " (" + it->filename + ")");
 		sceneMenuItem->setID(it - scenes.begin());
 		openSceneMenu->addChildWindow(sceneMenuItem);

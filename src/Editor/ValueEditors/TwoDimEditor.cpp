@@ -18,7 +18,7 @@ CEGUI::Window* TwoDimEditor::CreateWidget(const CEGUI::String& namePrefix)
 	OC_ASSERT(mEditbox2Widget == 0);
 
 	/// Create main editor widget
-	mEditorWidget = gCEGUIWM.createWindow("DefaultWindow", namePrefix);
+	mEditorWidget = gGUIMgr.CreateWindow("DefaultWindow", true);
 	mEditorWidget->setHeight(CEGUI::UDim(0, 2 * GetEditboxHeight() + 5));
 
 	CEGUI::UDim dimMiddle = mModel->IsListElement() ? CEGUI::UDim(0, 32) : CEGUI::UDim(0.5f, 0);
@@ -41,7 +41,7 @@ CEGUI::Window* TwoDimEditor::CreateWidget(const CEGUI::String& namePrefix)
 	mEditorWidget->addChildWindow(labelWidgetY);
 
 	/// Create editbox widget for x coordinate
-	mEditbox1Widget = static_cast<CEGUI::Editbox*>(gCEGUIWM.createWindow("Editor/Editbox", namePrefix + "/Editbox1"));
+	mEditbox1Widget = static_cast<CEGUI::Editbox*>(gGUIMgr.CreateWindow("Editor/Editbox", true));
 	mEditbox1Widget->setProperty("ReadOnly", mModel->IsReadOnly() ? "True" : "False");
 	mEditbox1Widget->setArea(CEGUI::URect(dimMiddle + CEGUI::UDim(0, 16), CEGUI::UDim(0, 0), dimRight, CEGUI::UDim(0, GetEditboxHeight())));
 	mEditorWidget->addChildWindow(mEditbox1Widget);
@@ -52,7 +52,7 @@ CEGUI::Window* TwoDimEditor::CreateWidget(const CEGUI::String& namePrefix)
 	mEditbox1Widget->subscribeEvent(CEGUI::Editbox::EventKeyDown, CEGUI::Event::Subscriber(&TwoDimEditor::OnEventKeyDown, this));
 
 	/// Create editbox widget for y coordinate
-	mEditbox2Widget = static_cast<CEGUI::Editbox*>(gCEGUIWM.createWindow("Editor/Editbox", namePrefix + "/Editbox2"));
+	mEditbox2Widget = static_cast<CEGUI::Editbox*>(gGUIMgr.CreateWindow("Editor/Editbox", true));
 	mEditbox2Widget->setProperty("ReadOnly", mModel->IsReadOnly() ? "True" : "False");
 	mEditbox2Widget->setArea(CEGUI::URect(dimMiddle + CEGUI::UDim(0, 16), CEGUI::UDim(1, -GetEditboxHeight()), dimRight, CEGUI::UDim(1, 0)));
 	mEditorWidget->addChildWindow(mEditbox2Widget);

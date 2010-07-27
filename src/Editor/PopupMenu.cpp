@@ -14,7 +14,7 @@ bool Editor::PopupMenu::OnMenuItemMouseUp( const CEGUI::EventArgs& e )
 {
 	bool handled = false;
 	CEGUI_EXCEPTION_BEGIN
-	CEGUI::Window* menu = gCEGUIWM.getWindow(mName);
+	CEGUI::Window* menu = gGUIMgr.GetWindow(mName);
 	OC_ASSERT(menu);
 
 	if (!menu->isVisible()) return false;
@@ -188,7 +188,7 @@ Editor::PopupMenu::PopupMenu( const string& menuName, const bool selfDestruct ):
 void Editor::PopupMenu::Init()
 {
 	CEGUI_EXCEPTION_BEGIN
-	CEGUI::Window* menu = gCEGUIWM.getWindow(mName);
+	CEGUI::Window* menu = gGUIMgr.GetWindow(mName);
 	OC_ASSERT(menu);
 	mEventConnections.push_back(menu->subscribeEvent(CEGUI::Window::EventMouseButtonUp, CEGUI::Event::Subscriber(&PopupMenu::OnMenuMouseUp, this)));
 
@@ -221,7 +221,7 @@ void Editor::PopupMenu::Open( float32 x, float32 y )
 	gEditorMgr.DisablePopupClosing();
 
 	ocInfo << "Popup " << mName << " opening";
-	CEGUI::Window* menu = gCEGUIWM.getWindow(mName);
+	CEGUI::Window* menu = gGUIMgr.GetWindow(mName);
 	OC_ASSERT(menu);
 
 	ConfigureMenu(menu);
@@ -278,7 +278,7 @@ void Editor::PopupMenu::DisconnectEvents()
 void Editor::PopupMenu::Close()
 {
 	CEGUI_EXCEPTION_BEGIN
-	CEGUI::Window* menu = gCEGUIWM.getWindow(mName);
+	CEGUI::Window* menu = gGUIMgr.GetWindow(mName);
 	OC_ASSERT(menu);
 	if (!menu->isVisible()) return;
 	ocInfo << "Popup " << mName << " closing";
@@ -298,19 +298,19 @@ bool Editor::PopupMenu::OnMenuMouseUp( const CEGUI::EventArgs& )
 
 void Editor::PopupMenu::InitResourceTypes()
 {
-	CEGUI::Window* menu = gCEGUIWM.getWindow(mName);
+	CEGUI::Window* menu = gGUIMgr.GetWindow(mName);
 	OC_ASSERT(menu);
 
 	size_t childCount = menu->getChildCount();
 	for (int i = (childCount - 1); i >= 0; --i)
 	{
-		gCEGUIWM.destroyWindow(menu->getChildAtIdx(i));
+		gGUIMgr.DestroyWindow(menu->getChildAtIdx(i));
 	}
 
 	for (int resType=0; resType<ResourceSystem::NUM_RESTYPES; ++resType)
 	{
 		string resName = ResourceSystem::GetResourceTypeName((ResourceSystem::eResourceType)resType);
-		CEGUI::Window* menuItem = gCEGUIWM.createWindow("Editor/MenuItem", mName + "/Type" + StringConverter::ToString(resType));
+		CEGUI::Window* menuItem = gGUIMgr.CreateWindow("Editor/MenuItem");
 		menuItem->setText(resName);
 		menuItem->setID(resType);
 		menu->addChildWindow(menuItem);
@@ -323,19 +323,19 @@ void Editor::PopupMenu::InitResourceTypes()
 void Editor::PopupMenu::InitComponentTypes()
 {
 	CEGUI_EXCEPTION_BEGIN
-	CEGUI::Window* addComponentMenu = gCEGUIWM.getWindow(mName + "/NewComponent/AutoPopup");
+	CEGUI::Window* addComponentMenu = gGUIMgr.GetWindow(mName + "/NewComponent/AutoPopup");
 	OC_ASSERT(addComponentMenu);
 
 	size_t childCount = addComponentMenu->getChildCount();
 	for (int i = (childCount - 1); i >= 0; --i)
 	{
-		gCEGUIWM.destroyWindow(addComponentMenu->getChildAtIdx(i));
+		gGUIMgr.DestroyWindow(addComponentMenu->getChildAtIdx(i));
 	}
 
 	for (int32 i = 0; i < EntitySystem::NUM_COMPONENT_TYPES; ++i)
 	{
 		const string& componentName = EntitySystem::GetComponentTypeName((EntitySystem::eComponentType)i);
-		CEGUI::Window* componentMenuItem = gCEGUIWM.createWindow("Editor/MenuItem", mName + "/NewComponent/Component" + StringConverter::ToString(i));
+		CEGUI::Window* componentMenuItem = gGUIMgr.CreateWindow("Editor/MenuItem");
 		componentMenuItem->setText(componentName);
 		addComponentMenu->addChildWindow(componentMenuItem);
 	}

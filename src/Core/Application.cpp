@@ -109,8 +109,6 @@ void Application::Init(const string& startupProjectName)
 
 Application::~Application()
 {
-	HideConsole();
-
 	gEntityMgr.DestroyAllEntities(true, true);
 
 	if (mGameProject) delete mGameProject;
@@ -150,6 +148,7 @@ Application::~Application()
 	Utils::Hash::ClearHashMap();
 
 	// must come last
+	HideConsole();
 	delete mGlobalConfig;
 	LogSystem::Profiler::DestroySingleton();
 	LogSystem::LogMgr::DestroySingleton();

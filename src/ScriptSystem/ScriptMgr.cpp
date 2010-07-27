@@ -991,7 +991,7 @@ void RegisterScriptEditboxMembers(asIScriptEngine *engine, const char *type)
 
 CEGUI::Window* ScriptGetWindow(string name)
 {
-  return gCEGUIWM.isWindowPresent(name) ? gCEGUIWM.getWindow(name) : 0;
+  return gGUIMgr.WindowExists(name) ? gGUIMgr.GetWindow(name) : 0;
 }
 
 void CEGUIStringConstructor(CEGUI::String* self)

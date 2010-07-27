@@ -34,6 +34,15 @@ namespace GUISystem
 		/// method).
 		void AddChildWindow(CEGUI::Window* window);
 
+		/// Returns the number of the child windows.
+		size_t GetChildCount() const;
+
+		/// Clears all data.
+		void Clear();
+		
+		/// Clears the event callbacks.
+		void ClearEventConnections();
+
 		/// Returns the spacing between child windows in pixels.
 		int GetSpacing() const { return mSpacing; }
 
@@ -54,9 +63,7 @@ namespace GUISystem
 
 		/// @name CEGUI Callbacks
 		//@{
-		bool OnManagedWindowDestructionStarted(const CEGUI::EventArgs&);
 		bool OnChildWindowSized(const CEGUI::EventArgs&) { if (LockedUpdates()) return false; UpdateLayout(); return true; }
-		bool OnChildWindowDestructionStarted(const CEGUI::EventArgs&);
 		//@}
 
 	private:

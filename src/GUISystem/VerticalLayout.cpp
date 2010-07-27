@@ -13,46 +13,19 @@ GUISystem::VerticalLayout::VerticalLayout(CEGUI::Window* managedWindow, const CE
 		mSpacing(5),
 		mLockedUpdates(false)
 {
-	mManagedWindow->subscribeEvent(CEGUI::Window::EventDestructionStarted, CEGUI::Event::Subscriber(&GUISystem::VerticalLayout::OnManagedWindowDestructionStarted, this));
-
-	if (mContentPane == 0)
-		mContentPane = mManagedWindow;
+	if (mContentPane == 0) mContentPane = mManagedWindow;
 }
 
 GUISystem::VerticalLayout::~VerticalLayout()
 {
-	for (size_t i = 0; i < mEventConnections.size(); ++i)
-	{
-		CEGUI::Event::Connection* conn = (CEGUI::Event::Connection*)(mEventConnections.at(i));
-		(*conn)->disconnect();
-		delete conn;
-	}
+	ClearEventConnections();
 }
 
 void GUISystem::VerticalLayout::AddChildWindow(CEGUI::Window* window)
 {
 	mManagedWindow->addChildWindow(window);
 	mEventConnections.push_back(new CEGUI::Event::Connection(window->subscribeEvent(CEGUI::Window::EventSized, CEGUI::Event::Subscriber(&GUISystem::VerticalLayout::OnChildWindowSized, this))));
-	mEventConnections.push_back(new CEGUI::Event::Connection(window->subscribeEvent(CEGUI::Window::EventDestructionStarted, CEGUI::Event::Subscriber(&GUISystem::VerticalLayout::OnChildWindowDestructionStarted, this))));
 	mChildWindows.push_back(window);
-}
-
-bool GUISystem::VerticalLayout::OnManagedWindowDestructionStarted(const CEGUI::EventArgs& args)
-{
-	OC_UNUSED(args);
-	delete this;
-	return true;
-}
-
-bool GUISystem::VerticalLayout::OnChildWindowDestructionStarted(const CEGUI::EventArgs& args)
-{
-	const CEGUI::WindowEventArgs& windowEventArgs = static_cast<const CEGUI::WindowEventArgs&>(args);
-	WindowList::iterator it = Containers::find(mChildWindows.begin(), mChildWindows.end(), windowEventArgs.window);
-	if (it != mChildWindows.end())
-	{
-		mChildWindows.erase(it);
-	}
-	return true;
 }
 
 void GUISystem::VerticalLayout::UpdateLayout()
@@ -79,5 +52,34 @@ void GUISystem::VerticalLayout::UpdateLayout()
 		float32 resizeOffset = mManagedWindow->getHeight().d_offset - mContentPane->getHeight().d_offset;
 		mManagedWindow->setHeight(CEGUI::UDim(0, currentY + resizeOffset));
 	}
+
 	UnlockUpdates();
+}
+
+size_t GUISystem::VerticalLayout::GetChildCount() const
+{
+	return mChildWindows.size();
+}
+
+void GUISystem::VerticalLayout::Clear()
+{
+	ClearEventConnections();
+
+	size_t childCount = mContentPane->getChildCount();
+	for (int i = (childCount - 1); i >= 0; --i)
+	{
+		gGUIMgr.DestroyWindow(mContentPane->getChildAtIdx(i));
+	}
+	mChildWindows.clear();
+}
+
+void GUISystem::VerticalLayout::ClearEventConnections()
+{
+	for (size_t i = 0; i < mEventConnections.size(); ++i)
+	{
+		CEGUI::Event::Connection* conn = (CEGUI::Event::Connection*)(mEventConnections.at(i));
+		(*conn)->disconnect();
+		delete conn;
+	}
+	mEventConnections.clear();
 }

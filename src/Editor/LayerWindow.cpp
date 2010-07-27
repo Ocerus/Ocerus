@@ -341,28 +341,28 @@ void Editor::LayerWindow::UpdateTree()
 
 		string layerName = gLayerMgr.GetLayerName(layerID);
 
-		CEGUI::ItemEntry* layerItem = static_cast<CEGUI::ItemEntry*>(gCEGUIWM.createWindow("Editor/ListboxItem", mTree->getName() + "/LayerItem" + StringConverter::ToString(layerID)));
+		CEGUI::ItemEntry* layerItem = static_cast<CEGUI::ItemEntry*>(gGUIMgr.CreateWindow("Editor/ListboxItem"));
 		layerItem->setUserData((void*)1);
 		layerItem->setID(layerID);
 		
-		CEGUI::Window* dragContainer = static_cast<CEGUI::ItemEntry*>(gCEGUIWM.createWindow("DragContainer", mTree->getName() + "/DCLayerItem" + StringConverter::ToString(layerID)));
+		CEGUI::Window* dragContainer = static_cast<CEGUI::ItemEntry*>(gGUIMgr.CreateWindow("DragContainer"));
 		dragContainer->setArea(CEGUI::URect(CEGUI::UDim(0, 16), CEGUI::UDim(0, 0), CEGUI::UDim(1, -16), CEGUI::UDim(1, 0)));
 		layerItem->addChildWindow(dragContainer);
 
-		CEGUI::Window* layerItemText = gCEGUIWM.createWindow("Editor/StaticText", mTree->getName() + "/LayerItemText" + StringConverter::ToString(layerID));
+		CEGUI::Window* layerItemText = gGUIMgr.CreateWindow("Editor/StaticText");
 		layerItemText->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
 		layerItemText->setProperty("FrameEnabled", "False");
 		layerItemText->setProperty("BackgroundEnabled", "False");
 		layerItemText->setMousePassThroughEnabled(true);
 
-		CEGUI::Window* layerItemButton = gCEGUIWM.createWindow("Editor/StaticText", mTree->getName() + "/LayerItemButton" + StringConverter::ToString(layerID));
+		CEGUI::Window* layerItemButton = gGUIMgr.CreateWindow("Editor/StaticText");
 		layerItemButton->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), CEGUI::UDim(0, 10), CEGUI::UDim(1, 0)));
 		layerItemButton->setProperty("FrameEnabled", "False");
 		layerItemButton->setProperty("BackgroundEnabled", "False");
 		layerItemButton->subscribeEvent(CEGUI::Window::EventMouseButtonDown, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnLayerItemExpandClick, this));
 		layerItem->addChildWindow(layerItemButton);
 		
-		CEGUI::Window* layerItemVisibilityToggle = gCEGUIWM.createWindow("Editor/StaticImage", mTree->getName() + "/LayerItemEye" + StringConverter::ToString(layerID));
+		CEGUI::Window* layerItemVisibilityToggle = gGUIMgr.CreateWindow("Editor/StaticImage");
 		layerItemVisibilityToggle->setArea(CEGUI::URect(CEGUI::UDim(1, -16), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
 		layerItemVisibilityToggle->setProperty("FrameEnabled", "False");
 		layerItemVisibilityToggle->setProperty("BackgroundEnabled", "False");
@@ -397,15 +397,15 @@ void Editor::LayerWindow::UpdateTree()
 		if (!gLayerMgr.EntityHasLayer(*it) || mExpandedLayerIDs.find(gLayerMgr.GetEntityLayerID(*it)) == mExpandedLayerIDs.end())
 			continue;
 
-		CEGUI::ItemEntry* entityItem = static_cast<CEGUI::ItemEntry*>( gCEGUIWM.createWindow("Editor/ListboxItem", mTree->getName() + "/EntityItem" + StringConverter::ToString(it->GetID())) );
+		CEGUI::ItemEntry* entityItem = static_cast<CEGUI::ItemEntry*>(gGUIMgr.CreateWindow("Editor/ListboxItem"));
 		entityItem->setID(it->GetID());
 		entityItem->setUserData(0);
 			
-		CEGUI::Window* dragContainer = static_cast<CEGUI::ItemEntry*>(gCEGUIWM.createWindow("DragContainer", mTree->getName() + "/DCEntityItem" + StringConverter::ToString(it->GetID())));
+		CEGUI::Window* dragContainer = static_cast<CEGUI::ItemEntry*>(gGUIMgr.CreateWindow("DragContainer"));
 		dragContainer->setArea(CEGUI::URect(CEGUI::UDim(0, 20), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
 		entityItem->addChildWindow(dragContainer);
 
-		CEGUI::Window* entityItemText = gCEGUIWM.createWindow("Editor/StaticText", mTree->getName() + "/EntityItemText" + StringConverter::ToString(it->GetID()));
+		CEGUI::Window* entityItemText = gGUIMgr.CreateWindow("Editor/StaticText");
 		entityItemText->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
 		
 		entityItemText->setProperty("FrameEnabled", "False");

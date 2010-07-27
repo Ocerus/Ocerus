@@ -13,7 +13,7 @@ GUISystem::FolderSelector::FolderSelector(const string& rootPath, int32 tag):
 GUISystem::FolderSelector::~FolderSelector()
 {
 	delete mCallback;
-	gCEGUIWM.destroyWindow(mWindow);
+	gGUIMgr.DestroyWindow(mWindow);
 }
 
 void GUISystem::FolderSelector::Show(const CEGUI::String& windowTitle, bool showEditbox, const CEGUI::String& editboxLabel)
@@ -50,8 +50,7 @@ void GUISystem::FolderSelector::Show(const CEGUI::String& windowTitle, bool show
 
 void FolderSelector::Hide()
 {
-	if (mWindow)
-		gCEGUIWM.destroyWindow(mWindow);
+	if (mWindow) gGUIMgr.DestroyWindow(mWindow);
 	mWindow = 0;
 }
 

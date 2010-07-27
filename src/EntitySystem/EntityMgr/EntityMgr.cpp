@@ -775,7 +775,7 @@ void EntitySystem::EntityMgr::LoadEntityFromXML(ResourceSystem::XMLNodeIterator 
 	//       otherwise it would screw up their IDs.
 	entity.FinishInit();
 
-	ocInfo << "Entity loaded from XML: " << entity;
+	ocTrace << "Entity loaded from XML: " << entity;
 }
 
 bool EntitySystem::EntityMgr::LoadEntitiesFromResource(ResourceSystem::ResourcePtr res, const bool loadPrototypes)

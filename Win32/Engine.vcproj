@@ -1170,6 +1170,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\GUISystem\PromptBox.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\src\GUISystem\ResourceProvider.cpp"
 					>
 				</File>

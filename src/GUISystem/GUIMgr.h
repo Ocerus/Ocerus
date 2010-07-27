@@ -66,8 +66,32 @@ namespace GUISystem
 		/// Returns a pointer to the active GUI sheet (root) window. Returns 0 if no GUI sheet is set.
 		CEGUI::Window* GetGUISheet() const;
 
-		/// Destroys the specified window object.
+		/// Creates new window.
+		CEGUI::Window* CreateWindow(const string& type, bool reallocateOnHeap = false);
+
+		/// Creates new window without taking caches into consideration.
+		CEGUI::Window* CreateWindowDirectly(const string& type);
+
+		/// Destroys the specified window.
 		void DestroyWindow(CEGUI::Window* window);
+
+		/// Destroys the specified window without taking caches into consideration.
+		void DestroyWindowDirectly(CEGUI::Window* window);
+
+		/// Destroys all children of the given window.
+		void DestroyWindowChildren(CEGUI::Window* window);
+
+		/// Returns the window of the given name if exists.
+		inline CEGUI::Window* GetWindow(const CEGUI::String& name) { return GetWindow(name.c_str()); }
+
+		/// Returns the window of the given name if exists.
+		inline CEGUI::Window* GetWindow(const char* name) { return GetWindow(string(name)); }
+
+		/// Returns the window of the given name if exists.
+		CEGUI::Window* GetWindow(const string& name);
+
+		/// Returns true if the window of the given name exists.
+		bool WindowExists(const string& name);
 		
 		/// Disconnects the event from its handler.
 		/// @todo revision
@@ -86,11 +110,11 @@ namespace GUISystem
 		/// @name IInputListener interface methods
 		/// Those methods inject input into the GUI system.
 		//@{
-			virtual bool KeyPressed(const InputSystem::KeyInfo& ke);
-			virtual bool KeyReleased(const InputSystem::KeyInfo& ke);
-			virtual bool MouseMoved(const InputSystem::MouseInfo& mi);
-			virtual bool MouseButtonPressed(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn);
-			virtual bool MouseButtonReleased(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn);
+		virtual bool KeyPressed(const InputSystem::KeyInfo& ke);
+		virtual bool KeyReleased(const InputSystem::KeyInfo& ke);
+		virtual bool MouseMoved(const InputSystem::MouseInfo& mi);
+		virtual bool MouseButtonPressed(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn);
+		virtual bool MouseButtonReleased(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn);
 		//@}
 
 		struct InputEventInfo
@@ -116,6 +140,7 @@ namespace GUISystem
 
 
 	private:
+
 		CEGUI::System* mCegui;
 		CEGUI::Window* mCurrentRootLayout;
 
@@ -128,7 +153,14 @@ namespace GUISystem
 		ResourceProvider* mResourceProvider;
 		ScriptProvider* mScriptProvider;
 
+		typedef vector<CEGUI::Window*> WindowList;
+		struct WindowTypeCache { WindowList list; size_t count; };
+		typedef hash_map<string, WindowTypeCache*> WindowMap;
+		WindowMap mWindowCache;
 
+		void InitWindowCache(const string& windowType);
+
+		void ClearWindowCaches();
 	};
 }
 #endif

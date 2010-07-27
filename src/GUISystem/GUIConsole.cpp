@@ -26,8 +26,8 @@ void GUIConsole::Init()
 	CEGUI_EXCEPTION_BEGIN
 	mConsoleWidget = gGUIMgr.LoadSystemLayout("Console.layout");
 	gGUIMgr.GetGUISheet()->addChildWindow(mConsoleWidget);
-	mConsolePromptWidget = gCEGUIWM.getWindow("ConsoleRoot/ConsolePrompt");
-	mConsoleMessagesWidget = (CEGUI::Listbox*)gCEGUIWM.getWindow("ConsoleRoot/Pane");
+	mConsolePromptWidget = gGUIMgr.GetWindow("ConsoleRoot/ConsolePrompt");
+	mConsoleMessagesWidget = (CEGUI::Listbox*)gGUIMgr.GetWindow("ConsoleRoot/Pane");
 	mConsolePromptWidget->subscribeEvent(CEGUI::Editbox::EventKeyDown, CEGUI::Event::Subscriber(&GUIConsole::OnEventKeyDown, this));
 	mIsInited = true;
 	CEGUI_EXCEPTION_END
@@ -39,7 +39,7 @@ void GUIConsole::Deinit()
 		return;
 
 	CEGUI_EXCEPTION_BEGIN
-	gCEGUIWM.destroyWindow(mConsoleWidget);
+	gGUIMgr.DestroyWindow(mConsoleWidget);
 	mConsoleWidget = mConsolePromptWidget = mConsoleMessagesWidget = 0;
 	CEGUI_EXCEPTION_END
 }

@@ -39,7 +39,12 @@ void Editor::PrototypeWindow::Init()
 
 void Editor::PrototypeWindow::RebuildTree()
 {
-	mTree->resetList();
+	for (int32 i=mTree->getItemCount()-1; i>=0; --i)
+	{
+		gGUIMgr.DestroyWindow(mTree->getItemFromIndex(i));
+	}
+	OC_ASSERT(mTree->getItemCount() == 0);
+	mItems.clear();
 
 	gEntityMgr.ProcessDestroyQueue();
 	gEntityMgr.GetPrototypes(mItems);
@@ -48,14 +53,14 @@ void Editor::PrototypeWindow::RebuildTree()
 	{
 		size_t itemIndex = (size_t)(it - mItems.begin());
 
-		CEGUI::ItemEntry* newItem = static_cast<CEGUI::ItemEntry*>(gCEGUIWM.createWindow("Editor/ListboxItem", mTree->getName() + "/Item" + StringConverter::ToString(itemIndex)));
+		CEGUI::ItemEntry* newItem = static_cast<CEGUI::ItemEntry*>(gGUIMgr.CreateWindow("Editor/ListboxItem"));
 		newItem->setID(itemIndex);
 		
-		CEGUI::Window* dragContainer = static_cast<CEGUI::ItemEntry*>(gCEGUIWM.createWindow("DragContainer", mTree->getName() + "/ItemDc" + StringConverter::ToString(itemIndex)));
+		CEGUI::Window* dragContainer = static_cast<CEGUI::ItemEntry*>(gGUIMgr.CreateWindow("DragContainer"));
 		dragContainer->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
 		newItem->addChildWindow(dragContainer);
 
-		CEGUI::Window* newItemText = gCEGUIWM.createWindow("Editor/StaticText", mTree->getName() + "/ItemText" + StringConverter::ToString(itemIndex));
+		CEGUI::Window* newItemText = gGUIMgr.CreateWindow("Editor/StaticText");
 		newItemText->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
 		newItemText->setText(gEntityMgr.GetEntityName(*it));
 		newItemText->setProperty("FrameEnabled", "False");

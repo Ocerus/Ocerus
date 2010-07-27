@@ -12,148 +12,18 @@
         <Position>0 0</Position>
       </Component>
     </Entity>
-    <Entity Name="Visual" ID="3" Transient="false">
-      <Component Type="Transform">
-        <Angle>0</Angle>
-        <Layer>0</Layer>
-        <Position>0 0</Position>
-        <Scale>1.2 1.5</Scale>
-      </Component>
-      <Component Type="Sprite">
-        <Transparency>0</Transparency>
-        <Texture>logo-alpha.png</Texture>
-      </Component>
-      <Component Type="Model">
-        <Transparency>0</Transparency>
-        <YAngle>0.6</YAngle>
-        <Mesh>cube.model</Mesh>
-      </Component>
-      <Component Type="DynamicBody">
-        <LinearDamping>0.1</LinearDamping>
-        <AngularDamping>0.5</AngularDamping>
-      </Component>
-      <Component Type="PolygonCollider">
-        <Restitution>0.5</Restitution>
-        <Polygon>
-          <Item>-3 -2</Item>
-          <Item>3 -2</Item>
-          <Item>3 2</Item>
-          <Item>-3 2</Item>
-        </Polygon>
-        <Density>1</Density>
-        <Friction>0.5</Friction>
-      </Component>
+    <Entity Name="EmptyEntity" ID="3" Transient="false">
       <Component Type="Script">
-        <ScriptTimeOut>1000</ScriptTimeOut>
-        <ScriptStates></ScriptStates>
         <ScriptModules>
           <Item>ConstantMover.as</Item>
         </ScriptModules>
         <ScriptTimes></ScriptTimes>
-      </Component>
-    </Entity>
-    <Entity Name="Tux" ID="4" Transient="false">
-      <Component Type="Transform">
-        <Angle>0</Angle>
-        <Layer>0</Layer>
-        <Position>5 2</Position>
-        <Scale>1.2 1.5</Scale>
-      </Component>
-      <Component Type="Sprite">
-        <Transparency>0</Transparency>
-        <Texture>tux.png</Texture>
-      </Component>
-      <Component Type="DynamicBody">
-        <LinearDamping>0.1</LinearDamping>
-        <AngularDamping>0.5</AngularDamping>
-      </Component>
-      <Component Type="PolygonCollider">
-        <Restitution>0.5</Restitution>
-        <Polygon>
-          <Item>-3 -2</Item>
-          <Item>3 -2</Item>
-          <Item>3 2</Item>
-          <Item>-3 2</Item>
-        </Polygon>
-        <Density>1</Density>
-        <Friction>0.5</Friction>
-      </Component>
-    </Entity>
-    <Entity Name="New Entity" ID="5" Transient="false" Prototype="-488">
-      <Component Type="Transform">
-        <Angle>0</Angle>
-        <Layer>0</Layer>
-        <Position>0 0</Position>
-        <Scale>0.7 1</Scale>
-      </Component>
-      <Component Type="Sprite">
-        <Transparency>0</Transparency>
-        <Texture>tux.png</Texture>
-      </Component>
-      <Component Type="PolygonCollider">
-        <Restitution>0.5</Restitution>
-        <Polygon>
-          <Item>0 0</Item>
-          <Item>10 0</Item>
-          <Item>10 10</Item>
-        </Polygon>
-        <Density>1</Density>
-        <Friction>0.5</Friction>
-      </Component>
-    </Entity>
-    <Entity Name="EditorCamera" ID="6" Transient="false">
-      <Component Type="Camera">
-        <Zoom>1</Zoom>
-        <Rotation>0</Rotation>
-        <Position>0 0</Position>
-      </Component>
-    </Entity>
-    <Entity Name="Visual" ID="8" Transient="false">
-      <Component Type="Transform">
-        <Angle>0</Angle>
-        <Layer>0</Layer>
-        <Position>0 0</Position>
-        <Scale>1.2 1.5</Scale>
-      </Component>
-      <Component Type="Sprite">
-        <Transparency>0</Transparency>
-        <Texture>logo-alpha.png</Texture>
-      </Component>
-      <Component Type="Model">
-        <Transparency>0</Transparency>
-        <YAngle>0.6</YAngle>
-        <Mesh>cube.model</Mesh>
-      </Component>
-      <Component Type="DynamicBody">
-        <LinearDamping>0.1</LinearDamping>
-        <AngularDamping>0.5</AngularDamping>
-      </Component>
-      <Component Type="PolygonCollider">
-        <Restitution>0.5</Restitution>
-        <Polygon>
-          <Item>-3 -2</Item>
-          <Item>3 -2</Item>
-          <Item>3 2</Item>
-          <Item>-3 2</Item>
-        </Polygon>
-        <Density>1</Density>
-        <Friction>0.5</Friction>
-      </Component>
-      <Component Type="Script">
-        <ScriptTimeOut>1000</ScriptTimeOut>
         <ScriptStates></ScriptStates>
-        <ScriptModules>
-          <Item>ConstantMover.as</Item>
-        </ScriptModules>
-        <ScriptTimes></ScriptTimes>
+        <ScriptTimeOut>1000</ScriptTimeOut>
       </Component>
     </Entity>
   </Entities>
   <Hierarchy>
-    <Entity ID="3">
-      <Entity ID="4"></Entity>
-    </Entity>
-    <Entity ID="5"></Entity>
-    <Entity ID="8"></Entity>
+    <Entity ID="3"></Entity>
   </Hierarchy>
 </Scene>

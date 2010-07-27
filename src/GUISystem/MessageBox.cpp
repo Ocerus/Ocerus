@@ -10,15 +10,7 @@ const float32 BUTTON_MARGIN = 10.0f;
 
 MessageBox::MessageBox(MessageBox::eMessageBoxType type, int32 tag): mType(type), mTag(tag), mCallback(0), mMessageBox(0), mMinWidth(0)
 {
-	CEGUI::String windowName;
-	int i = 0;
-	do
-	{
-		i++;
-		windowName = "MessageBox" + StringConverter::ToString(i);
-	}
-	while (gCEGUIWM.isWindowPresent(windowName));
-	mMessageBox = gGUIMgr.LoadSystemLayout("MessageBox.layout", windowName);
+	mMessageBox = gGUIMgr.LoadSystemLayout("MessageBox.layout", "MessageBox");
 	mMessageBox->setModalState(true);
 
 	CEGUI::Window* btnOK = mMessageBox->getChild(mMessageBox->getName() + "/ButtonOK");
@@ -62,7 +54,7 @@ MessageBox::MessageBox(MessageBox::eMessageBoxType type, int32 tag): mType(type)
 MessageBox::~MessageBox()
 {
 	delete mCallback;
-	gCEGUIWM.destroyWindow(mMessageBox);
+	gGUIMgr.DestroyWindow(mMessageBox);
 }
 
 void MessageBox::SetText(const CEGUI::String& text)

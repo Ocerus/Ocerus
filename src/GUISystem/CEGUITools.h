@@ -14,8 +14,6 @@
 		CRITICAL_FAILURE("Last error was critical"); \
 	}
 
-#define gCEGUIWM CEGUI::WindowManager::getSingleton()
-
 namespace CEGUI
 {
 	class String;

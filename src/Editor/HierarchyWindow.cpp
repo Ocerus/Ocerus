@@ -52,8 +52,14 @@ void Editor::HierarchyWindow::Init()
 void Editor::HierarchyWindow::RebuildTree()
 {
 	if (!CheckHierarchy()) return;
-	mTree->resetList();
+
+	for (int32 i=mTree->getItemCount()-1; i>=0; --i)
+	{
+		gGUIMgr.DestroyWindow(mTree->getItemFromIndex(i));
+	}
+	OC_ASSERT(mTree->getItemCount() == 0);
 	mItems.clear();
+
 	BuildSubtree(mHierarchy.begin(), 0);
 }
 
@@ -74,14 +80,14 @@ CEGUI::ItemEntry* Editor::HierarchyWindow::AddTreeItem( uint32 index, const stri
 	static unsigned int itemID = 0;
 	++itemID;
 
-	CEGUI::ItemEntry* newItem = static_cast<CEGUI::ItemEntry*>(gCEGUIWM.createWindow("Editor/ListboxItem", mTree->getName() + "/Item" + StringConverter::ToString(itemID)));
+	CEGUI::ItemEntry* newItem = static_cast<CEGUI::ItemEntry*>(gGUIMgr.CreateWindow("Editor/ListboxItem"));
 	newItem->setID(itemID);
 
-	CEGUI::Window* dragContainer = static_cast<CEGUI::ItemEntry*>(gCEGUIWM.createWindow("DragContainer", mTree->getName() + "/ItemContainer" + StringConverter::ToString(itemID)));
+	CEGUI::Window* dragContainer = static_cast<CEGUI::ItemEntry*>(gGUIMgr.CreateWindow("DragContainer"));
 	dragContainer->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
 	newItem->addChildWindow(dragContainer);
 
-	CEGUI::Window* newItemText = gCEGUIWM.createWindow("Editor/StaticText", mTree->getName() + "/ItemText" + StringConverter::ToString(itemID));
+	CEGUI::Window* newItemText = gGUIMgr.CreateWindow("Editor/StaticText");
 	newItemText->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
 	newItemText->setText(string(depth*TREE_LEVEL_CHAR_SIZE, ' ') + textName);
 	newItemText->setProperty("FrameEnabled", "False");
@@ -100,7 +106,7 @@ CEGUI::ItemEntry* Editor::HierarchyWindow::AddTreeItem( uint32 index, const stri
 	OC_ASSERT(index <= mTree->getItemCount());
 	if (index == mTree->getItemCount())
 	{
-		mTree->addItem(newItem);
+		mTree->addItem(newItem); // this is the most time consuming part of the function!!!
 	}
 	else
 	{
@@ -124,7 +130,7 @@ void Editor::HierarchyWindow::RemoveTreeItem( uint32 index )
 {
 	OC_ASSERT(index <= mTree->getItemCount());
 	mItems.erase(mTree->getItemFromIndex(index)->getID());
-	mTree->removeItem(mTree->getItemFromIndex(index));
+	gGUIMgr.DestroyWindow(mTree->getItemFromIndex(index));
 	OC_ASSERT(mTree->getItemCount() == mItems.size());
 }
 

@@ -74,7 +74,7 @@ Core::Game::~Game()
 	delete mPhysics;
 	delete mPhysicsCallbacks;
 	delete mPhysicsDraw;
-	if (mRootWindow && mRootWindow->getName() == "GameRoot") gCEGUIWM.destroyWindow(mRootWindow);
+	if (mRootWindow && mRootWindow->getName() == "GameRoot") gGUIMgr.DestroyWindow(mRootWindow);
 
 	GlobalProperties::SetPointer("Game", 0);
 }
@@ -104,16 +104,16 @@ void Core::Game::CreateDefaultRenderTarget()
 
 void Core::Game::CreateDefaultRootWindow()
 {
-  if (mRootWindow && mRootWindow->getName() == "GameRoot") return;
-  mRootWindow = gCEGUIWM.createWindow("DefaultWindow", "GameRoot");
+	if (mRootWindow && mRootWindow->getName() == "GameRoot") return;
+	mRootWindow = gGUIMgr.CreateWindow("DefaultWindow");
 	mRootWindow->setProperty("UnifiedAreaRect", "{{0,0},{0,0},{1,0},{1,0}}");
 	gGUIMgr.SetGUISheet(mRootWindow);
 }
 
 void Core::Game::SetRootWindow(CEGUI::Window* window)
 { 
-  if (mRootWindow && mRootWindow->getName() == "GameRoot") gCEGUIWM.destroyWindow(mRootWindow);
-  mRootWindow = window;
+	if (mRootWindow && mRootWindow->getName() == "GameRoot") gGUIMgr.DestroyWindow(mRootWindow);
+	mRootWindow = window;
 }
 
 void Core::Game::SetRenderTarget(const GfxSystem::RenderTargetID renderTarget)
