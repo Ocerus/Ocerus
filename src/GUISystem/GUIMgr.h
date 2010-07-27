@@ -67,6 +67,8 @@ namespace GUISystem
 		CEGUI::Window* GetGUISheet() const;
 
 		/// Creates new window.
+		///@param reallocateOnHeap If true the window is constructed anew before being used again.
+		///	      This solves some problems with GUI elements aligning in a wrong way.
 		CEGUI::Window* CreateWindow(const string& type, bool reallocateOnHeap = false);
 
 		/// Creates new window without taking caches into consideration.

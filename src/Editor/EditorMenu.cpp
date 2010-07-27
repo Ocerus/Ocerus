@@ -126,8 +126,7 @@ bool Editor::EditorMenu::OnMenuItemClicked(const CEGUI::EventArgs& e)
 
 	/// Open scene
 	{
-		string pattern = menubarPrefix + "/Scene/OpenScene/Scene";
-		if (itemNameStr.substr(0, pattern.size()) == pattern)
+		if (args.window->isUserStringDefined("IsSceneItem"))
 		{
 			uint32 sceneIndex = args.window->getID();
 			gEditorMgr.Reset();
@@ -375,6 +374,7 @@ void EditorMenu::UpdateSceneMenu()
 	for (Core::SceneInfoList::const_iterator it = scenes.begin(); it != scenes.end(); ++it)
 	{
 		CEGUI::Window* sceneMenuItem = gGUIMgr.CreateWindow("Editor/MenuItem");
+		sceneMenuItem->setUserString("IsSceneItem", "True");
 		sceneMenuItem->setText(it->name + " (" + it->filename + ")");
 		sceneMenuItem->setID(it - scenes.begin());
 		openSceneMenu->addChildWindow(sceneMenuItem);
