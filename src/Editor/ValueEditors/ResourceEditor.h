@@ -47,4 +47,4 @@ namespace Editor
 	};
 }
 
-#endif // _EDITOR_H_
+#endif // _RESOURCEEDITOR_H_

@@ -14,6 +14,7 @@
 #include "PointEditor.h"
 #include "ArrayEditor.h"
 #include "ResourceEditor.h"
+#include "LayerEditor.h"
 
 namespace Editor
 {
@@ -32,6 +33,12 @@ namespace Editor
 
 		case PT_BOOL:
 		  return new Editor::BoolEditor(new PropertyModel<bool>(property));
+		case PT_INT32:
+			if (string(property.GetName()) == "Layer")
+				return new Editor::LayerEditor(new PropertyModel<EntitySystem::LayerID>(property));
+			else
+				return new Editor::StringEditor(new StringPropertyModel(property));
+			
 		case PT_VECTOR2:
 			return new Editor::Vector2Editor(new PropertyModel<Vector2>(property));
 		case PT_POINT:
