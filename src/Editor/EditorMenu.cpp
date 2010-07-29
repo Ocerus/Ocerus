@@ -171,12 +171,9 @@ bool Editor::EditorMenu::OnMenuItemClicked(const CEGUI::EventArgs& e)
 
 	// New component
 	{
-		string pattern = menubarPrefix + "/Edit/NewComponent/Component";
-		if (itemNameStr.substr(0, pattern.size()) == pattern)
+		if (args.window->isUserStringDefined("IsComponentItem"))
 		{
-			OC_DASSERT(itemNameStr.size() > pattern.size());
-			int componentType = StringConverter::FromString<int>(itemNameStr.substr(pattern.size()));
-			gEditorMgr.AddComponent((EntitySystem::eComponentType)componentType);
+			gEditorMgr.AddComponent((EntitySystem::eComponentType)args.window->getID());
 			return true;
 		}
 	}
@@ -354,6 +351,8 @@ void Editor::EditorMenu::InitComponentMenu()
 	{
 		const string& componentName = EntitySystem::GetComponentTypeName((EntitySystem::eComponentType)i);
 		CEGUI::Window* componentMenuItem = gGUIMgr.CreateWindow("Editor/MenuItem");
+		componentMenuItem->setUserString("IsComponentItem", "True");
+		componentMenuItem->setID(i);
 		componentMenuItem->setText(componentName);
 		addComponentMenu->addChildWindow(componentMenuItem);
 	}

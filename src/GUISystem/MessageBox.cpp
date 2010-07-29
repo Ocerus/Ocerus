@@ -54,7 +54,7 @@ MessageBox::MessageBox(MessageBox::eMessageBoxType type, int32 tag): mType(type)
 MessageBox::~MessageBox()
 {
 	delete mCallback;
-	gGUIMgr.DestroyWindow(mMessageBox);
+	gGUIMgr.DestroyWindowDirectly(mMessageBox);
 }
 
 void MessageBox::SetText(const CEGUI::String& text)

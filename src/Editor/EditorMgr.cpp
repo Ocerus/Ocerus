@@ -88,7 +88,7 @@ void Editor::EditorMgr::Update(const float32 delta)
 
 
 		// keys camera control
-		if (mouseAboveWindow && !IsLockedToGame())
+		if (mEditorGUI->GetEditorViewport()->isActive() && !IsLockedToGame())
 		{
 			HandleHeldShortcuts(delta);
 		}
@@ -720,6 +720,7 @@ void Editor::EditorMgr::CloseAllPopupMenus()
 
 	while (!mPopupMenus.empty())
 	{
+		// the item will be removed from mPopupMenus in the dtor of PopupMenu, so we don't need to remove it here
 		delete mPopupMenus.front();
 	}
 }

@@ -113,12 +113,9 @@ bool Editor::PopupMenu::OnMenuItemMouseUp( const CEGUI::EventArgs& e )
 			handled = true;
 		}
 		{
-			string pattern = mName + "/NewComponent/Component";
-			if (itemCeguiName.substr(0, pattern.size()) == pattern)
+			if (args.window->isUserStringDefined("IsComponentItem"))
 			{
-				OC_DASSERT(itemCeguiName.size() > pattern.size());
-				int componentType = StringConverter::FromString<int>(string(itemCeguiName.substr(pattern.size()).c_str()));
-				gEditorMgr.AddComponent((EntitySystem::eComponentType)componentType);
+				gEditorMgr.AddComponent((EntitySystem::eComponentType)args.window->getID());
 				handled = true;
 			}
 		}
@@ -334,6 +331,8 @@ void Editor::PopupMenu::InitComponentTypes()
 	{
 		const string& componentName = EntitySystem::GetComponentTypeName((EntitySystem::eComponentType)i);
 		CEGUI::Window* componentMenuItem = gGUIMgr.CreateWindow("Editor/MenuItem");
+		componentMenuItem->setUserString("IsComponentItem", "True");
+		componentMenuItem->setID(i);
 		componentMenuItem->setText(componentName);
 		addComponentMenu->addChildWindow(componentMenuItem);
 	}
