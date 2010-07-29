@@ -87,9 +87,7 @@ bool Editor::PopupMenu::OnMenuItemMouseUp( const CEGUI::EventArgs& e )
 		}
 		else if (itemCeguiName == mName + "/AddEntity")
 		{
-			gEditorMgr.GetEditorGui()->GetHierarchyWindow()->SetCurrentParent(GetData<EntitySystem::EntityHandle>());
-			gEditorMgr.CreateEntity();
-			gEditorMgr.GetEditorGui()->GetHierarchyWindow()->SetCurrentParent(EntitySystem::EntityHandle::Null);
+			gEditorMgr.GetEditorGui()->GetHierarchyWindow()->CreateEntity(GetData<EntitySystem::EntityHandle>());
 			handled = true;
 		}
 		else if (itemCeguiName == mName + "/NewComponent")

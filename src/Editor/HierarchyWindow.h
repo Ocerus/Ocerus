@@ -69,6 +69,9 @@ namespace Editor
 		/// Moves the selected entity down.
 		void MoveDown();
 
+		/// Creates a new entity with the specified parent. A prompt for typing the name of the entity is shown.
+		void CreateEntity(EntitySystem::EntityHandle parent);
+
 		/// Enables adding of entities to the hierarchy.
 		inline void EnableAddEntities() { mDontAddEntities = false; }
 
@@ -122,6 +125,9 @@ namespace Editor
 		/// Locates an item in the tree and returns its position. Returns -1 if not found. The depth of the item is returned
 		/// in the second parameter.
 		int32 FindTreeItem(const EntitySystem::EntityHandle data, uint32& depth);
+
+		/// Callback for creating a new entity.
+		void NewEntityPromptCallback(bool clickedOK, string text, int32 tag);
 		
 		CEGUI::Window* mWindow;
 		CEGUI::ItemListbox* mTree;

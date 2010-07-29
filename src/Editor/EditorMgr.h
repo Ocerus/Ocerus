@@ -192,9 +192,10 @@ namespace Editor
 		friend class EditorGUI;
 		friend class EditorMenu;
 		friend class PopupMenu;
+		friend class HierarchyWindow;
 
 		/// Creates a new entity.
-		void CreateEntity();
+		void CreateEntity(const string& name);
 
 		/// Duplicates the current entity.
 		void DuplicateCurrentEntity();

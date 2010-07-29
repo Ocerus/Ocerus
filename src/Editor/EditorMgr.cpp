@@ -211,10 +211,10 @@ void Editor::EditorMgr::UpdateCurrentEntityProperty(const EntitySystem::Componen
 	property.SetValueFromString(newValue);
 }
 
-void Editor::EditorMgr::CreateEntity()
+void Editor::EditorMgr::CreateEntity(const string& name)
 {
 	EntitySystem::EntityDescription desc;
-	desc.SetName("New Entity");
+	desc.SetName(name.empty() ? gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "new_entity").c_str() : name);
 	desc.AddComponent(EntitySystem::CT_Transform);
 	EntityHandle newEntity = gEntityMgr.CreateEntity(desc);
 	newEntity.GetProperty("Layer").SetValue(gLayerMgr.GetActiveLayer());

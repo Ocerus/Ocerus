@@ -44,6 +44,7 @@ close_scene_hint=Closes the scene.
 edit=Edit
 new_entity=New Entity
 new_entity_hint=Creates a new entity.
+new_entity_prompt=Enter a new name of the new entity
 new_component=New Component
 new_component_hint=Creates a new component.
 duplicate_entity=Duplicate Entity
