@@ -21,6 +21,10 @@ namespace Utils
 		
 		template<typename T>
 		inline T Max(const T num1, const T num2) { return b2Max(num1, num2); }
+		
+		inline Vector2 Min(const Vector2& num1, const Vector2& num2) { return b2Min(num1, num2); }
+		
+		inline Vector2 Max(const Vector2& num1, const Vector2& num2) { return b2Max(num1, num2); }
 
 		template<typename T>
 		inline void Swap(T& num1, T& num2) { b2Swap(num1, num2); }

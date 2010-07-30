@@ -565,6 +565,105 @@ void RegisterScriptEntityHandle(asIScriptEngine* engine)
 
 }
 
+// Functions for register Vector2 to script
+
+static void Vector2DefaultConstructor(Vector2* self)
+{
+	new(self) Vector2();
+}
+
+static void Vector2CopyConstructor(const Vector2& other, Vector2* self)
+{
+	new(self) Vector2(other.x, other.y);
+}
+
+static void Vector2InitConstructor(float32 x, float32 y, Vector2* self)
+{
+	new(self) Vector2(x,y);
+}
+
+static void Vector2Destructor(Vector2* self)
+{
+	OC_UNUSED(self);
+	//
+}
+
+static Vector2& Vector2AssignOperator(const Vector2& other, Vector2* self)
+{
+	self->x = other.x;
+	self->y = other.y;
+	return *self;
+}
+
+inline static float32 Vector2GetX(const Vector2& self)
+{
+	return self.x;
+}
+
+inline static void Vector2SetX(Vector2& self, float32 value)
+{
+	self.x = value;
+}
+
+inline static float32 Vector2GetY(const Vector2& self)
+{
+	return self.y;
+}
+
+inline static void Vector2SetY(Vector2& self, float32 value)
+{
+	self.y = value;
+}
+
+void RegisterScriptVector2(asIScriptEngine* engine)
+{
+	int32 r;
+	// Register the type
+	r = engine->RegisterObjectType("Vector2", sizeof(Vector2), asOBJ_VALUE | asOBJ_APP_CLASS_C); OC_SCRIPT_ASSERT();
+
+	// Register the object properties getters and setters
+	//r = engine->RegisterObjectProperty("Vector2", "float32 x", offsetof(Vector2, x)); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Vector2", "float32 get_x() const", asFUNCTION(Vector2GetX), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Vector2", "void set_x(float32)", asFUNCTION(Vector2SetX), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+	//r = engine->RegisterObjectProperty("Vector2", "float32 y", offsetof(Vector2, y)); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Vector2", "float32 get_y() const", asFUNCTION(Vector2GetY), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Vector2", "void set_y(float32)", asFUNCTION(Vector2SetY), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+
+	// Register the constructors and destructor
+	r = engine->RegisterObjectBehaviour("Vector2", asBEHAVE_CONSTRUCT,  "void f()", asFUNCTION(Vector2DefaultConstructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectBehaviour("Vector2", asBEHAVE_CONSTRUCT,  "void f(const Vector2 &in)", asFUNCTION(Vector2CopyConstructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectBehaviour("Vector2", asBEHAVE_CONSTRUCT,  "void f(float32, float32)",  asFUNCTION(Vector2InitConstructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectBehaviour("Vector2", asBEHAVE_DESTRUCT,   "void f()",  asFUNCTION(Vector2Destructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+
+	// Register the operator overloads
+	r = engine->RegisterObjectMethod("Vector2", "Vector2& opAssign(const Vector2 &in)", asFUNCTION(Vector2AssignOperator), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+	//r = engine->RegisterObjectMethod("Vector2", "Vector2 &opAddAssign(const Vector2 &in)", asMETHODPR(Vector2, operator+=, (const Vector2 &), Vector2&), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	//r = engine->RegisterObjectMethod("Vector2", "Vector2 &opSubAssign(const Vector2 &in)", asMETHODPR(Vector2, operator-=, (const Vector2 &), Vector2&), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	//r = engine->RegisterObjectMethod("Vector2", "Vector2 &opMulAssign(float32)", asMETHODPR(Vector2, operator*=, (float32), Vector2&), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Vector2", "void opAddAssign(const Vector2 &in)", asMETHODPR(Vector2, operator+=, (const Vector2 &), void), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Vector2", "void opSubAssign(const Vector2 &in)", asMETHODPR(Vector2, operator-=, (const Vector2 &), void), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Vector2", "void opMulAssign(float32)", asMETHODPR(Vector2, operator*=, (float32), void), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	//r = engine->RegisterObjectMethod("Vector2", "Vector2 &opDivAssign(float32)", asMETHODPR(Vector2, operator/=, (float32), Vector2&), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Vector2", "Vector2 opNeg() const", asMETHOD(Vector2, operator-), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Vector2", "bool opEquals(const Vector2 &in) const", asFUNCTIONPR(operator==, (const Vector2&, const Vector2&), bool), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Vector2", "Vector2 opAdd(const Vector2 &in) const", asFUNCTIONPR(operator+, (const Vector2&, const Vector2&), Vector2), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Vector2", "Vector2 opSub(const Vector2 &in) const", asFUNCTIONPR(operator-, (const Vector2&, const Vector2&), Vector2), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+	//r = engine->RegisterObjectMethod("Vector2", "Vector2 opMul(float32) const", asFUNCTIONPR(operator*, (const Vector2&, float32), Vector2), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Vector2", "Vector2 opMul_r(float32) const", asFUNCTIONPR(operator*, (float32, const Vector2&), Vector2), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+	//r = engine->RegisterObjectMethod("Vector2", "Vector2 opDiv(float32) const", asFUNCTIONPR(operator/, (const Vector2&, float32), Vector2), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+
+	// Register the object methods
+	r = engine->RegisterObjectMethod("Vector2", "float32 Length() const", asMETHOD(Vector2, Length), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Vector2", "float32 LengthSquared() const", asMETHOD(Vector2, LengthSquared), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Vector2", "void Set(float32, float32)", asMETHODPR(Vector2, Set, (float32, float32), void), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Vector2", "void SetZero()", asMETHOD(Vector2, SetZero), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Vector2", "float32 Normalize()", asMETHOD(Vector2, Normalize), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Vector2", "bool IsValid() const", asMETHOD(Vector2, IsValid), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Vector2", "float32 Dot(const Vector2 &in) const", asFUNCTION(MathUtils::Dot), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+}
+
+// Functions for register EntityPicker to script
+
 static void EntityPickerDefaultConstructor(EntityPicker* self)
 {
 	asSMessageInfo errorMessage;
@@ -1097,10 +1196,6 @@ void ScriptMgr::ConfigureEngine(void)
 	r = mEngine->RegisterTypedef("float32", "float"); OC_SCRIPT_ASSERT();
 	r = mEngine->RegisterTypedef("float64", "double"); OC_SCRIPT_ASSERT();
 
-	// Register enums
-	///@TODO why is this removed?
-	// r = mEngine->RegisterTypedef("eKeyCode", "uint32"); OC_SCRIPT_ASSERT();
-
 	// Register the script string type
 	RegisterStdString(mEngine);
 
@@ -1115,6 +1210,15 @@ void ScriptMgr::ConfigureEngine(void)
 
 	// Register EntityDescription class and it's methods
 	RegisterScriptEntityDescription(mEngine);
+	
+	// Register Vector2 class and it's methods
+	RegisterScriptVector2(mEngine);
+	
+	// Register EntityPicker class and it's methods
+	RegisterScriptEntityPicker(mEngine);
+	
+	// Register EntityMgr class and it's methods
+	RegisterScriptEntityMgr(mEngine);
 
 	// Register InputMgr class and it's methods
 	RegisterScriptInputMgr(mEngine);
@@ -1138,10 +1242,6 @@ void ScriptMgr::ConfigureEngine(void)
 
 	// Register all additions in ScriptRegister.cpp to script
 	RegisterAllAdditions(mEngine);
-
-	// Register EntityMgr class and it's methods
-	RegisterScriptEntityMgr(mEngine);
-
 
 	// Register getters, setters and array for supported types of properties
 
@@ -1194,10 +1294,6 @@ void ScriptMgr::ConfigureEngine(void)
 	#include "../Utils/Properties/PropertyTypes.h"
 	#undef SCRIPT_ONLY
 	#undef PROPERTY_TYPE
-
-
-	// Register EntityPicker class and it's methods
-	RegisterScriptEntityPicker(mEngine);
 }
 
 asIScriptContext* ScriptMgr::PrepareContext(int32 funcId)
