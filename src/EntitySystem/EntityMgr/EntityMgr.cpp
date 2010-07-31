@@ -675,7 +675,7 @@ void EntitySystem::EntityMgr::LoadEntityPropertyFromXML(const EntityID entityID,
 			Reflection::ePropertyType propertyType = Reflection::PropertyTypes::GetTypeFromName(propertyTypeName);
 			if (propertyType == PT_UNKNOWN)
 			{
-				ocError << "XML:Entity: Unknown property type '" << propertyTypeName << "'.";
+				ocError << "XML: Entity: Unknown property type '" << propertyTypeName << "'.";
 				return;
 			}
 			Reflection::PropertyAccessFlags accessFlags = Reflection::PA_FULL_ACCESS;
@@ -693,13 +693,13 @@ void EntitySystem::EntityMgr::LoadEntityPropertyFromXML(const EntityID entityID,
 			if (!RegisterDynamicPropertyOfEntityComponent(propertyType, entityID, componentID,
 				propertyKey, accessFlags, comment))
 			{
-				ocError << "XML:Entity: Cannot registry dynamic entity property '" << *xmlPropertyIterator << "'.";
+				ocError << "XML: Entity: Cannot registry dynamic entity property '" << *xmlPropertyIterator << "'.";
 				return;
 			}
 		}
 		else
 		{
-			ocError << "XML:Entity: Unknown entity property '" << *xmlPropertyIterator << "' (it might not be marked as initable (PA_INIT))";
+			ocError << "XML: Entity: Unknown entity property '" << *xmlPropertyIterator << "' (it might not be marked as initable (PA_INIT))";
 			return;
 		}
 	}

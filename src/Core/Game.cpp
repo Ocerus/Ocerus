@@ -4,6 +4,7 @@
 #include "DataContainer.h"
 #include "StringConverter.h"
 #include "Core/Application.h"
+#include "Core/Project.h"
 #include "Editor/EditorMgr.h"
 #include "Editor/EditorGUI.h"
 #include "ResourceSystem/XMLResource.h"
@@ -23,6 +24,7 @@ const int32 PHYSICS_VELOCITY_ITERATIONS = 6;
 const int32 PHYSICS_POSITION_ITERATIONS = 2;
 const char* Game::ActionFile = "ActionSave.xml";
 const string Game::GameCameraName = "GameCamera";
+const char* Game::SavePath = "saves";
 
 
 /// Callback receiver from physics.
@@ -459,6 +461,17 @@ bool Core::Game::SaveGameInfoToStorage(ResourceSystem::XMLOutput& storage)
 	storage.BeginElement("CurrentTime");
 	storage.WriteString(Utils::StringConverter::ToString(GetTimeMillis()));
 	storage.EndElement();
+	
+	storage.BeginElement("SceneName");
+	storage.WriteString(gApp.GetGameProject()->GetOpenedSceneName());
+	storage.EndElement();
+	
+	if (!gApp.GetGameProject()->GetRequestedSceneName().empty())
+	{
+	  storage.BeginElement("RequestedSceneName");
+	  storage.WriteString(gApp.GetGameProject()->GetRequestedSceneName());
+	  storage.EndElement();
+	}
 
 	storage.EndElement();
 
@@ -475,6 +488,7 @@ bool Core::Game::LoadGameInfoFromResource(ResourceSystem::ResourcePtr res)
 	
 	ResourceSystem::XMLResourcePtr xml = res;
 	uint64 currentTime = 0;
+	string sceneName, requestedSceneName;
 
 	for (ResourceSystem::XMLNodeIterator it = xml->IterateTopLevel(); it != xml->EndTopLevel(); ++it)
 	{
@@ -486,10 +500,146 @@ bool Core::Game::LoadGameInfoFromResource(ResourceSystem::ResourcePtr res)
 			{
 				currentTime = entIt.GetValue<uint64>();
 			}
+			else if ((*entIt).compare("SceneName") == 0)
+			{
+				sceneName = entIt.GetValue<string>();
+			}
+			else if ((*entIt).compare("RequestedSceneName") == 0)
+			{
+				requestedSceneName = entIt.GetValue<string>();
+			}
 		}
 	}
 
 	mTimer.Reset(currentTime);
+	if (!sceneName.empty()) gApp.GetGameProject()->ForceOpenSceneName(sceneName);
+	if (!requestedSceneName.empty()) gApp.GetGameProject()->RequestOpenScene(requestedSceneName);
 
 	return true;
+}
+
+bool Core::Game::SaveDynamicPropertiesToStorage(ResourceSystem::XMLOutput& storage)
+{
+  storage.BeginElement("DynamicProperties");
+  
+  Reflection::AbstractPropertyList propertyList;
+  mDynamicProperties.EnumProperties(propertyList);
+  for (Reflection::AbstractPropertyList::iterator it = propertyList.begin(); it != propertyList.end(); ++it)
+	{
+		string propName = (*it)->GetKey().ToString();
+		storage.BeginElementStart(propName);
+		storage.AddAttribute("Type", string(Reflection::PropertyTypes::GetStringName((*it)->GetType())));
+		storage.BeginElementFinish();
+
+		// write property value
+		(*it)->WriteValueXML(0, storage);
+
+		storage.EndElement();
+	}
+  storage.EndElement();
+  return true;
+}
+
+bool Core::Game::LoadDynamicPropertiesFromResource(ResourceSystem::ResourcePtr res)
+{
+  mDynamicProperties.ClearProperties();
+  if (!res)
+	{
+		ocError << "XML: Can't load data; null resource pointer";
+		return false;
+	}
+	
+	ResourceSystem::XMLResourcePtr xml = res;
+
+	for (ResourceSystem::XMLNodeIterator it = xml->IterateTopLevel(); it != xml->EndTopLevel(); ++it)
+	{
+		if ((*it).compare("DynamicProperties") != 0) { continue; }
+
+		for (ResourceSystem::XMLNodeIterator entIt = it.IterateChildren(); entIt != it.EndChildren(); ++entIt)
+		{
+			if (entIt.HasAttribute("Type"))
+			{
+			  string propertyTypeName = entIt.GetAttribute<string>("Type");
+			  Reflection::ePropertyType propertyType = Reflection::PropertyTypes::GetTypeFromName(propertyTypeName);
+			  if (propertyType == PT_UNKNOWN)
+			  {
+				  ocInfo << "XML: Game dynamic properties: Unknown property type '" << propertyTypeName << "'.";
+				  continue;
+			  }
+			  
+			  AbstractProperty* prop = 0;
+			  
+			  switch (propertyType)
+	      {
+	      // We generate cases for all property types and arrays of property types here.
+	      #define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter, cloning) case typeID: \
+		      prop = new ValuedProperty<typeClass>(*entIt, PA_FULL_ACCESS, "");
+	      #include "Utils/Properties/PropertyTypes.h"
+	      #undef PROPERTY_TYPE
+
+	      #define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter, cloning) case typeID##_ARRAY: \
+		      prop = new ValuedProperty<Array<typeClass>*>(*entIt, PA_FULL_ACCESS, "");
+	      #include "Utils/Properties/PropertyTypes.h"
+	      #undef PROPERTY_TYPE
+
+	      default:
+		      OC_NOT_REACHED();
+	      }
+	      
+	      if (prop)
+	      {
+	        if (mDynamicProperties.AddProperty(prop))
+	        {
+	          PropertySystem::GetProperties()->push_back(prop);
+	          prop->ReadValueXML(0, entIt);
+	        }
+			    else delete prop;
+	      }
+			  
+			} else continue;
+		}
+	}
+	
+	return true;
+}
+
+bool Core::Game::SaveToFile(const string& fileName)
+{
+  bool result = true;
+	ResourceSystem::XMLOutput storage(gResourceMgr.GetBasePath(ResourceSystem::BPT_PROJECT) + SavePath + '/' + fileName + ".xml");
+	storage.BeginElement("Game");
+	if (!SaveGameInfoToStorage(storage)) result = false;
+	if (!SaveDynamicPropertiesToStorage(storage)) result = false;
+	if (gApp.GetGameProject()->GetRequestedSceneName().empty() && !gEntityMgr.SaveEntitiesToStorage(storage, false, false)) result = false;
+	storage.EndElement();
+	result = result && storage.CloseAndReport();
+	
+	if (result) ocInfo << "Game saved in " << fileName << ".xml.";
+	else ocError << "Game cannot be saved!";
+	return result;
+}
+
+bool Core::Game::LoadFromFile(const string& fileName)
+{
+	bool result = true;
+	PauseAction();
+	
+	if (gResourceMgr.AddResourceFileToGroup(string(SavePath) + '/' + fileName + ".xml", "Saves", ResourceSystem::RESTYPE_AUTODETECT, ResourceSystem::BPT_PROJECT))
+	{
+		gResourceMgr.LoadResourcesInGroup("Saves");
+		gEntityMgr.DestroyAllEntities(false, true);
+		ResourceSystem::ResourcePtr resource = gResourceMgr.GetResource("Saves", string(SavePath) + '/' + fileName + ".xml");
+		if (!LoadGameInfoFromResource(resource)) { result = false; }
+		if (!LoadDynamicPropertiesFromResource(resource)) { result = false; }
+		if (gApp.GetGameProject()->GetRequestedSceneName().empty() && !gEntityMgr.LoadEntitiesFromResource(resource)) { result = false; }
+		gResourceMgr.DeleteGroup("Saves");
+	}
+	else
+	{
+		result = false;
+	}
+
+	if (result) ocInfo << "Game loaded from " << fileName << ".xml.";
+	else ocError << "Game cannot be restarted!";
+	return result;
 }

@@ -32,13 +32,16 @@ namespace Reflection
 		AbstractProperty* GetProperty(const StringKey key, const PropertyAccessFlags flagMask = PA_FULL_ACCESS) const;
 
 		/// Returns true if the property exists.
-		bool HasProperty(const StringKey key);
+		bool HasProperty(const StringKey key) const;
 
 		/// Adds a property.
 		bool AddProperty(AbstractProperty* prop);
 
 		/// Deletes a property. It does not release its memory.
 		bool DeleteProperty(const StringKey key);
+		
+		/// Clears all properties. It does not release theirs memory.
+		void ClearProperties();
 
 	private:
 		AbstractPropertyMap mProperties;

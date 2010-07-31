@@ -119,11 +119,18 @@ namespace Core
 			/// Returns name of the opened scene, or empty string if no scene is opened.
 			string GetOpenedSceneName() const;
 			
+			/// Forces the state of the project as the specified scene was opened.
+			/// Use only when the scene is loaded from another source.
+			void ForceOpenSceneName(const string& scene);
+			
 			/// Opens the scene at given index in SceneList in the next game loop.
 			bool RequestOpenSceneAtIndex(int32 index);
 			
 			/// Opens the scene with a given file name in the next game loop.
 			bool RequestOpenScene(const string& scene) { return RequestOpenSceneAtIndex(GetSceneIndex(scene)); }
+			
+			/// Returns the scene file name which will be openened in the next game loop.
+			string GetRequestedSceneName() const;
 			
 			/// Updates project.
 			void Update();

@@ -82,6 +82,52 @@ This class represents one unique entity in the entity system. This class is regi
   \item bool UnregisterDynamicProperty(const string \&in) const -- unregisters an entity dynamic property of a specific name
 \end{titled-itemize}
 
+\subsubsection{Vector2}
+
+This class represents 2D vector and it is registered as a value type.
+
+\begin{titled-itemize}{Properties}
+  \item float32 x -- x coordinate
+  \item float32 y -- y coordinate
+\end{titled-itemize}
+
+\begin{titled-itemize}{Constructors}
+  \item Vector2() -- default constructor (x = y = 0)
+  \item Vector2(const Vector2 \&in) -- copy constructor
+  \item Vector2(float32 x, float32 y)  -- constructor using coordinates
+\end{titled-itemize}
+
+\begin{titled-itemize}{Operators and methods}
+  \item void operator+=(const Vector2 \&in) -- add a vector to this vector
+  \item void operator-=(const Vector2 \&in) -- subtract a vector from this vector
+  \item void operator*=(float32) -- multiply this vector by a scalar
+  \item Vector2 operator-() const -- negate this vector
+  \item bool operator==(const Vector2 \&in) const -- equality operator
+  \item Vector2 operator+(const Vector2 \&in) const -- returns a sum of this and argument vector
+  \item Vector2 operator-(const Vector2 \&in) const -- returns a difference of this and argument vector
+  \item Vector2 operator*(float32) const -- returns a product of a scalar and this vector
+  \item float32 Length() const -- get the length of this vector (the norm)
+  \item float32 LengthSquared() const -- get the length squared
+  \item void Set(float32, float32) -- set this vector to some specified coordinates
+  \item void SetZero() -- set this vector to all zeros
+  \item float32 Normalize() -- converts this vector into a unit vector and returns the length
+  \item bool IsValid() const -- returns whether this vector contain finite coordinates
+  \item float32 Dot(const Vector2 \&in) const -- returns a scalar product of this and argument vector
+\end{titled-itemize}
+
+\subsubsection{EntityPicker}
+
+This class allows the game to pick an entity based on provided input data. This class is registered as a value type.
+
+\begin{titled-itemize}{Constructors}
+  \item EntityPicker(const Vector2 \&in, const int32, const int32) -- creates a picker for selecting an entity under the current mouse cursor
+\end{titled-itemize}
+
+\begin{titled-itemize}{Operators and methods}
+  \item EntityHandle PickSingleEntity() -- runs the picking query, the result is returned directly
+  \item void PickMultipleEntities(EntityHandle[] &out, const Vector2 &in, const float32) -- runs the picking query, the result is filled into the given array, the query is defined by a rectangle between the last cursor position and the given cursor position, the rectangle is rotated by the given angle
+\end{titled-itemize}
+
 \subsubsection{EntityDescription}
 
 This class contains all info needed to create one instance of an entity. It is basically a collection of component descriptions. This class is registered as a value type.
@@ -162,6 +208,20 @@ This class represents the current project. It is registered as a no-handle refer
   \item int32 GetSceneIndex(const string \&in) const -- returns the index of the scene with a specific name, -1 if does not exist
   \item string GetOpenedSceneName() const -- returns name of the opened scene, or empty string if no scene is opened
   \item string GetSceneName(int32) const -- returns name of the scene at the given index in the scene list
+\end{titled-itemize}
+
+\subsubsection{Game}
+
+This class represents the current game. It is registered as a no-handle reference so the only way to use it is to get reference from a global property.
+
+\begin{titled-itemize}{Operators and methods}
+  \item void ClearDynamicProperties() -- clears the dynamic property list
+  \item bool HasDynamicProperty(const string \&in) const -- returns whether the specified dynamic property exists
+  \item bool DeleteDynamicProperty(const string \&in) -- deletes the specified dynamic property
+  \item bool LoadFromFile(const string \&in) -- loads the game from the specified file
+  \item bool SaveToFile(const string \&in) -- saves the game to the specified file
+  \item T Get\_T(string \&in) -- gets a value of a dynamic property of a specific name and type T from PropertyTypes.h
+  \item void Set\_T(string \&in, T) -- sets a value of a dynamic property of a specific name and type T from PropertyTypes.h
 \end{titled-itemize}
 
 \subsubsection{CEGUIString}
@@ -271,6 +331,7 @@ This class representes the editbox GUI element. It is registered as a basic refe
   \item EntityMgr\& gEntityMgr -- the reference to the entity manager on which it is possible to call methods, this reference cannot be stored to a variable or passed to a function
   \item InputMgr\& gInputMgr -- the reference to the input manager on which it is possible to call methods, this reference cannot be stored to a variable or passed to a function
   \item Project\& gProject -- the reference to the current project on which it is possible to call methods, this reference cannot be stored to a variable or passed to a function
+  \item Game\& game -- the reference to the current game on which it is possible to call methods, this reference cannot be stored to a variable or passed to a function
 \end{titled-itemize}
 
 \subsection{Enumerations}
@@ -288,12 +349,12 @@ This class representes the editbox GUI element. It is registered as a basic refe
 \subsection{Typedefs}
 
 \begin{titled-itemize}{New type = old type}
-	\item float32 = float
-	\item float64 = double
-	\item EntityID = int32
-	\item EntityTag = uint16
-	\item ComponentID = int32
-	\item PropertyAccessFlags = uint8
+  \item float32 = float
+  \item float64 = double
+  \item EntityID = int32
+  \item EntityTag = uint16
+  \item ComponentID = int32
+  \item PropertyAccessFlags = uint8
 \end{titled-itemize}
 
 \section{Additional registered objects}
@@ -302,37 +363,24 @@ This section is about additional registered objects so it should be edited when 
 
 \subsection{Classes}
 
-\subsubsection{Vector2}
+\subsubsection{Point}
 
-This class represents 2D vector and it is registered as a value type.
+This class represents 2D point and it is registered as a value type.
 
 \begin{titled-itemize}{Properties}
-  \item float32 x -- x coordinate
-  \item float32 y -- y coordinate
+  \item int32 x -- x coordinate
+  \item int32 y -- y coordinate
 \end{titled-itemize}
 
 \begin{titled-itemize}{Constructors}
-  \item Vector2() -- default constructor (x = y = 0)
-  \item Vector2(const Vector2 \&in) -- copy constructor
-  \item Vector2(float32 x, float32 y)  -- constructor using coordinates
+  \item Point() -- default constructor (x = y = 0)
+  \item Point(const Point \&in) -- copy constructor
+  \item Point(int32 x, int32 y)  -- constructor using coordinates
 \end{titled-itemize}
 
 \begin{titled-itemize}{Operators and methods}
-  \item void operator+=(const Vector2 \&in) -- add a vector to this vector
-  \item void operator-=(const Vector2 \&in) -- subtract a vector from this vector
-  \item void operator*=(float32) -- multiply this vector by a scalar
-  \item Vector2 operator-() const -- negate this vector
-  \item bool operator==(const Vector2 \&in) const -- equality operator
-  \item Vector2 operator+(const Vector2 \&in) const -- returns a sum of this and argument vector
-  \item Vector2 operator-(const Vector2 \&in) const -- returns a difference of this and argument vector
-  \item Vector2 operator*(float32) const -- returns a product of a scalar and this vector
-  \item float32 Length() const -- get the length of this vector (the norm)
-  \item float32 LengthSquared() const -- get the length squared
-  \item void Set(float32, float32) -- set this vector to some specified coordinates
-  \item void SetZero() -- set this vector to all zeros
-  \item float32 Normalize() -- converts this vector into a unit vector and returns the length
-  \item bool IsValid() const -- returns whether this vector contain finite coordinates
-  \item float32 Dot(const Vector2 \&in) const -- returns a scalar product of this and argument vector
+  \item Point operator-() const -- negate this point
+  \item void Set(int32, int32) -- set this point to some specified coordinates
 \end{titled-itemize}
 
 \subsubsection{Color}
@@ -365,10 +413,10 @@ This class represents 32-bit color and it is registered as a value type.
   \item int32 Abs(const int32)
   \item float32 Min(const float32, const float32)
   \item int32 Min(const int32, const int32)
-  \item Vector2 Min(const Vector2, const Vector2)
+  \item Vector2 Min(const Vector2 &in, const Vector2 &in)
   \item float32 Max(const float32, const float32)
   \item int32 Max(const int32, const int32)
-  \item Vector2 Max(const Vector2, const Vector2)
+  \item Vector2 Max(const Vector2 &in, const Vector2 &in)
   \item int32 Round(const float32)
   \item int64 Round(const float64)
   \item int32 Floor(const float32)

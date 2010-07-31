@@ -8,7 +8,7 @@ void OnUpdateLogic(float32 delta)
     EntityHandle director = gEntityMgr.FindFirstEntity("Director");
     if (director.Exists())
     {
-    	uint32 score = director.Get_uint32("Score");
+    	uint32 score = director.Get_uint32("Score") + game.Get_uint32("TotalScore");
         scoreLabel.SetText(GetTextData("GUI", "score") + ": " + score);
     }
     else

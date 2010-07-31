@@ -706,12 +706,12 @@ void RegisterScriptEntityPicker(asIScriptEngine* engine)
 
 	// Register the constructors and destructor
 	r = engine->RegisterObjectBehaviour("EntityPicker", asBEHAVE_CONSTRUCT, "void f()", asFUNCTION(EntityPickerDefaultConstructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
-	r = engine->RegisterObjectBehaviour("EntityPicker", asBEHAVE_CONSTRUCT, "void f(const Vector2& in, const int32, const int32)", asFUNCTION(EntityPickerConstructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectBehaviour("EntityPicker", asBEHAVE_CONSTRUCT, "void f(const Vector2 &in, const int32, const int32)", asFUNCTION(EntityPickerConstructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectBehaviour("EntityPicker", asBEHAVE_DESTRUCT, "void f()", asFUNCTION(EntityPickerDestructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
 
 	// Register the object methods
 	r = engine->RegisterObjectMethod("EntityPicker", "EntityHandle PickSingleEntity()", asMETHOD(EntityPicker, PickSingleEntity), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-	r = engine->RegisterObjectMethod("EntityPicker", "void PickMultipleEntities(EntityHandle[]& out, const Vector2& in, const float32)", asFUNCTIONPR(EntityPickerPickMultipleEntities, (EntitySystem::EntityPicker&, asIScriptArray*, const Vector2&, const float32 rotation), void), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("EntityPicker", "void PickMultipleEntities(EntityHandle[] &out, const Vector2 &in, const float32)", asFUNCTIONPR(EntityPickerPickMultipleEntities, (EntitySystem::EntityPicker&, asIScriptArray*, const Vector2&, const float32 rotation), void), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
 }
 
 // Functions for register EntityDescription to script
@@ -934,6 +934,30 @@ void RegisterScriptProject(asIScriptEngine* engine)
 	
 	// Register function that returns it
 	r = engine->RegisterGlobalFunction("Project& get_gProject()", asFUNCTION(GetProject), asCALL_CDECL); OC_SCRIPT_ASSERT();
+}
+
+// Functions for register Game to script
+
+Game& GetGame()
+{
+  return GlobalProperties::Get<Core::Game>("Game");
+}
+
+void RegisterScriptGame(asIScriptEngine* engine)
+{
+	int32 r;
+	// Register the type
+	r = engine->RegisterObjectType("Game", 0, asOBJ_REF | asOBJ_NOHANDLE); OC_SCRIPT_ASSERT();
+	
+	// Register the object methods
+	r = engine->RegisterObjectMethod("Game", "void ClearDynamicProperties()", asMETHOD(Game, ClearDynamicProperties), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Game", "bool HasDynamicProperty(const string &in) const", asMETHOD(Game, HasDynamicProperty), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Game", "bool DeleteDynamicProperty(const string &in)", asMETHOD(Game, DeleteDynamicProperty), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Game", "bool LoadFromFile(const string &in)", asMETHOD(Game, LoadFromFile), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Game", "bool SaveToFile(const string &in) const", asMETHOD(Game, SaveToFile), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	
+	// Register function that returns it
+	r = engine->RegisterGlobalFunction("Game& get_game()", asFUNCTION(GetGame), asCALL_CDECL); OC_SCRIPT_ASSERT();
 }
 
 // Functions for register Window to script
@@ -1237,6 +1261,9 @@ void ScriptMgr::ConfigureEngine(void)
 	// Register Project methods
 	RegisterScriptProject(mEngine);
 	
+	// Register Game methods
+	RegisterScriptGame(mEngine);
+	
 	// Register CEGUI components
 	RegisterScriptWindows(mEngine);
 
@@ -1289,7 +1316,12 @@ void ScriptMgr::ConfigureEngine(void)
 		asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT(); \
 	r = mEngine->RegisterObjectMethod("PropertyFunctionParameters", (string("PropertyFunctionParameters opShl(const array_") + typeName + " &in) const").c_str(), \
 		asFUNCTIONPR(PropertyFunctionParametersOperatorShl, (Reflection::PropertyFunctionParameters&, const ScriptArray<typeClass>&), Reflection::PropertyFunctionParameters), \
-		asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+		asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT(); \
+	/* Register getter and setter for the game dynamic properties */ \
+	r = mEngine->RegisterObjectMethod("Game", (string(typeName) + " Get_" + typeName + "(const string &in) const").c_str(), \
+		asMETHODPR(Game, GetDynamicProperty, (const string&) const, typeClass), asCALL_THISCALL); OC_SCRIPT_ASSERT(); \
+	r = mEngine->RegisterObjectMethod("Game", (string("void Set_") + typeName + "(const string &in, const " + typeName + "&in)").c_str(), \
+		asMETHODPR(Game, SetDynamicProperty, (const string&, const typeClass&), void), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	#define SCRIPT_ONLY
 	#include "../Utils/Properties/PropertyTypes.h"
 	#undef SCRIPT_ONLY

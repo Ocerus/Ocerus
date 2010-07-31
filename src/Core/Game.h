@@ -135,6 +135,65 @@ namespace Core
 		virtual bool MouseButtonReleased(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn);
 
 		//@}
+		
+		/// @name Dynamic properties
+		//@{
+		
+		/// Clears the dynamic property list.
+		inline void ClearDynamicProperties() { mDynamicProperties.ClearProperties(); }
+		
+		/// Returns whether the specified dynamic property exists.
+		inline bool HasDynamicProperty(const string& propName) const { return mDynamicProperties.HasProperty(propName); }
+		
+		/// Deletes the specified dynamic property.
+		inline bool DeleteDynamicProperty(const string& propName) { return mDynamicProperties.DeleteProperty(propName); }
+		
+		/// Gets the specified dynamic property.
+		template<typename T>
+		T GetDynamicProperty(const string& propName) const
+		{
+		  AbstractProperty* prop = mDynamicProperties.GetProperty(propName);
+		  if (prop != 0 && prop->GetType() == Reflection::PropertyTypes::GetTypeID<T>()) return prop->GetValue<T>(0);
+		  else return Reflection::PropertyTypes::GetDefaultValue<T>();
+		}
+		
+		/// Sets the specified dynamic property.
+		template<typename T>
+		void SetDynamicProperty(const string& propName, const T& value)
+		{
+		  AbstractProperty* prop = mDynamicProperties.GetProperty(propName);
+		  if (prop != 0)
+		  {
+		    if (prop->GetType() == Reflection::PropertyTypes::GetTypeID<T>()) prop->SetValue<T>(0, value);
+		  }
+		  else
+		  {
+		    prop = new ValuedProperty<T>(propName, PA_FULL_ACCESS, "");
+			  if (mDynamicProperties.AddProperty(prop)) 
+			  {
+			    PropertySystem::GetProperties()->push_back(prop);
+			    prop->SetValue<T>(0, value);
+			  }
+			  else delete prop;
+		  }
+		}
+		
+		/// Saves the dynamic properties to a XML stream.
+		bool SaveDynamicPropertiesToStorage(ResourceSystem::XMLOutput& storage);
+		
+		/// Load the dynamic properties from a XML stream.
+		bool LoadDynamicPropertiesFromResource(ResourceSystem::ResourcePtr res);
+		
+		//@}
+		
+		/// Name of directory to which the files with the game state are saved.
+		static const char* SavePath;
+		
+		/// Saves the game to the specified file.
+		bool SaveToFile(const string& fileName);
+		
+		/// Loads the game from the specified file.
+		bool LoadFromFile(const string& fileName);
 
 	private:
 
@@ -146,6 +205,7 @@ namespace Core
 		GfxSystem::RenderTargetID mRenderTarget; ///< Where the game is to be rendered?
 		EntitySystem::EntityHandle mCamera; ///< Camera used for rendering.
 		CEGUI::Window* mRootWindow;  ///< Root window for in-game GUI elements.
+		Reflection::PropertyMap mDynamicProperties; ///< Dymanic properties saved with the game accessible from scripts.
 
 
 		// Physics.

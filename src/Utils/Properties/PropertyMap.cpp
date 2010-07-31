@@ -35,7 +35,7 @@ AbstractProperty* PropertyMap::GetProperty( const StringKey key, const PropertyA
 	return 0;
 }
 
-bool PropertyMap::HasProperty(const StringKey key)
+bool PropertyMap::HasProperty(const StringKey key) const
 {
 	return mProperties.find(key) != mProperties.end();
 }
@@ -55,4 +55,9 @@ bool PropertyMap::AddProperty( AbstractProperty* prop )
 bool PropertyMap::DeleteProperty(const StringKey key)
 {
 	return mProperties.erase(key) > 0;
+}
+
+void PropertyMap::ClearProperties()
+{
+  mProperties.clear();
 }

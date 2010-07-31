@@ -401,3 +401,14 @@ bool Core::Project::IsResourceScene( const ResourceSystem::ResourcePtr resource 
 {
 	return GetSceneIndex(resource->GetName()) != -1;
 }
+
+void Core::Project::ForceOpenSceneName(const string& scene)
+{
+  int32 index = GetSceneIndex(scene);
+  if (index != -1) mSceneIndex = index;
+}
+
+string Core::Project::GetRequestedSceneName() const
+{
+  return (mRequestSceneIndex != -1) ? mSceneList[mRequestSceneIndex].name : "";
+}
