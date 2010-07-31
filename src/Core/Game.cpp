@@ -434,7 +434,7 @@ void Core::Game::RestartAction(void)
 
 	PauseAction();
 	
-	if (gResourceMgr.AddResourceFileToGroup(ActionFile, "Action", ResourceSystem::RESTYPE_AUTODETECT, ResourceSystem::BPT_SYSTEM, ActionFile))
+	if (gResourceMgr.AddResourceFileToGroup(ActionFile, "Action", ResourceSystem::RESTYPE_AUTODETECT, ResourceSystem::BPT_SYSTEM))
 	{
 		gResourceMgr.LoadResourcesInGroup("Action");
 		gEntityMgr.DestroyAllEntities(false, true);

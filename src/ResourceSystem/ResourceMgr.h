@@ -11,6 +11,7 @@
 /// Macro for easier use
 #define gResourceMgr ResourceSystem::ResourceMgr::GetSingleton()
 
+
 /// %Resource system manages all data which has to be loaded from files or other external storage media.
 namespace ResourceSystem
 {
@@ -47,7 +48,7 @@ namespace ResourceSystem
 		/// Assigns a resource to a group.
 		/// The resource type if autodetected if you don't specify it.
 		/// Returns true if the resource was successfully added.
-		bool AddResourceFileToGroup(const string& filepath, const StringKey& group, eResourceType type = RESTYPE_AUTODETECT, const eBasePathType basePathType = BPT_SYSTEM, const string& customName = "");
+		bool AddResourceFileToGroup(const string& filepath, const StringKey& group, eResourceType type = RESTYPE_AUTODETECT, const eBasePathType basePathType = BPT_SYSTEM);
 
 		/// Assigns a resource to a group. Note that if you create the resource this way you must manually delete it later.
 		bool AddManualResourceToGroup(const StringKey& name, const StringKey& group, eResourceType type);

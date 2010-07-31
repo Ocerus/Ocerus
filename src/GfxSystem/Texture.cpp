@@ -20,37 +20,43 @@ void Texture::Init()
 
 size_t Texture::LoadImpl()
 {
+	mHandle = NULL;
 	// get texture data
 	DataContainer dc;
-	GetRawInputData(dc);
 	
-	// load it to low-level renderer
-	int32 width, height;
-	mHandle = gGfxRenderer.LoadTexture((const unsigned char*)dc.GetData(),
-										dc.GetSize(),
-										PF_RGBA, 0,			//pixel format, reuse texture handle (0 = create new)
-										&width, &height);
-	
-	// we don't need the data buffer anymore
-	size_t dataSize = dc.GetSize();
-	dc.Release();
+	int32 width = 0, height = 0;
+	size_t dataSize = 0;
+	if (GetRawInputData(dc))
+	{
+		// load it to low-level renderer
+		mHandle = gGfxRenderer.LoadTexture((const unsigned char*)dc.GetData(),
+											dc.GetSize(),
+											PF_RGBA, 0,			//pixel format, reuse texture handle (0 = create new)
+											&width, &height);
+		
+		dataSize = dc.GetSize();
+		// we don't need the data buffer anymore
+		dc.Release();
+	}
 
 	// if loading texture fails, load NullTexture instead
 	if (!mHandle)
 	{
 		ocWarning << "Texture '" << GetName() << "' cannot be loaded. Loading NullTexture instead!";
 
-		ResourceSystem::ResourcePtr nullTexHandle = gResourceMgr.GetResource("General", "NullTexture");
+		ResourceSystem::ResourcePtr nullTexHandle = gResourceMgr.GetResource("General", ResourceSystem::RES_NULL_TEXTURE);
 		string filePath = nullTexHandle->GetFilePath();
-		GetRawInputData(filePath, dc);
+
+		if (!GetRawInputData(filePath, dc))
+			ocError << "Cannot load NullTexture!";
 
 		mHandle = gGfxRenderer.LoadTexture((const unsigned char*)dc.GetData(),
 											dc.GetSize(),
 											PF_RGBA, 0,			//pixel format, reuse texture handle (0 = create new)
 											&width, &height);
 
-		// we don't need the data buffer anymore
 		dataSize = dc.GetSize();
+		// we don't need the data buffer anymore
 		dc.Release();
 	}
 

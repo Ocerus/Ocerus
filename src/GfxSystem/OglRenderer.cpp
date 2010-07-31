@@ -280,7 +280,7 @@ void GfxSystem::OglRenderer::DrawTexturedMesh( const TexturedMesh& mesh ) const
 			glEnable(GL_TEXTURE_2D);
 			TexturePtr texRes = (TexturePtr)gResourceMgr.GetResource("MeshTextures", objMaterial->colorMapFilename);
 			if (!texRes)
-				texRes = (TexturePtr)gResourceMgr.GetResource("General", "NullTexture");
+				texRes = (TexturePtr)gResourceMgr.GetResource("General", ResourceSystem::RES_NULL_TEXTURE);
 
 			glBindTexture(GL_TEXTURE_2D, texRes->GetTexture());
 		}

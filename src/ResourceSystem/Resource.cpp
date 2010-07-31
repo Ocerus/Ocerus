@@ -33,19 +33,23 @@ Resource::~Resource()
 	}
 }
 
-InputStream& Resource::OpenInputStream(eInputStreamMode mode)
+InputStream* Resource::OpenInputStream(eInputStreamMode mode)
 {
 	return OpenInputStream(mFilePath, mode);
 }
 
-InputStream& Resource::OpenInputStream(const string filePath, eInputStreamMode mode)
+InputStream* Resource::OpenInputStream(const string filePath, eInputStreamMode mode)
 {
 	OC_ASSERT(mState != STATE_UNINITIALIZED);
-	OC_ASSERT_MSG(boost::filesystem::exists(filePath), "Resource file not found.");
+	//OC_ASSERT_MSG(boost::filesystem::exists(filePath), "Resource file not found.");
+
+	if (!boost::filesystem::exists(filePath))
+		return NULL;
+
 	OC_ASSERT_MSG(!mInputFileStream, "Resource was not closed before reused");
 	mInputFileStream = new boost::filesystem::ifstream(filePath, InputStreamMode(mode));
 	OC_ASSERT(mInputFileStream);
-	return *mInputFileStream;
+	return mInputFileStream;
 }
 
 void Resource::CloseInputStream()
@@ -143,12 +147,12 @@ void ResourceSystem::Resource::EnsureLoaded( void )
 	}
 }
 
-void ResourceSystem::Resource::GetRawInputData( DataContainer& outData )
+bool ResourceSystem::Resource::GetRawInputData( DataContainer& outData )
 {
-	GetRawInputData(mFilePath, outData);
+	return GetRawInputData(mFilePath, outData);
 }
 
-void ResourceSystem::Resource::GetRawInputData( const string filePath, DataContainer& outData )
+bool ResourceSystem::Resource::GetRawInputData( const string filePath, DataContainer& outData )
 {
 	// The data is read in small chunks and the resulting buffer is then composed by merging the chunks together.
 
@@ -157,12 +161,16 @@ void ResourceSystem::Resource::GetRawInputData( const string filePath, DataConta
 	const uint32 tmpMaxSize = 2048; // size of one tmp buffer
 	uint32 tmpLastSize = 0; // size of the last tmp buffer in the vector
 	uint32 bufferSize = 0; // resulting size
-	InputStream& is = OpenInputStream(filePath, ISM_BINARY);
-	while (is.good())
+	InputStream* is = OpenInputStream(filePath, ISM_BINARY);
+
+	if (is == NULL)
+		return false;
+
+	while (is->good())
 	{
 		uint8* tmpBuf = new uint8[tmpMaxSize];
-		is.read((char*)tmpBuf, tmpMaxSize);
-		tmpLastSize = is.gcount();
+		is->read((char*)tmpBuf, tmpMaxSize);
+		tmpLastSize = is->gcount();
 		bufferSize += tmpLastSize;
 		tmps.push_back(tmpBuf);
 	}
@@ -179,6 +187,7 @@ void ResourceSystem::Resource::GetRawInputData( const string filePath, DataConta
 	}
 	OC_ASSERT(buffer+bufferSize == lastBufferPos);
 	outData.SetData(buffer, bufferSize);
+	return true;
 }
 
 bool ResourceSystem::Resource::Refresh( void )

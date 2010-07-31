@@ -30,7 +30,7 @@ EntityMessage::eResult EntityComponents::Sprite::HandleMessage( const EntityMess
 			if (!mTextureHandle)
 			{
 				ocWarning << "Initing sprite with null texture";
-				mTextureHandle = gResourceMgr.GetResource("General", "NullTexture");
+				mTextureHandle = gResourceMgr.GetResource("General", ResourceSystem::RES_NULL_TEXTURE);
 				OC_ASSERT(mTextureHandle);
 			}
 

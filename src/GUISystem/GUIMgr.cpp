@@ -107,9 +107,9 @@ void GUIMgr::Init()
 		CEGUI::WindowFactoryManager::addFactory<CEGUI::TplWindowFactory<ViewportWindow> >();
 
 		///@todo Improve GUI scheme loading. For example Editor.scheme does not need to be loaded unless in editor mode.
-		CEGUI::SchemeManager::getSingleton().create("VanillaSkin.scheme");
-		CEGUI::SchemeManager::getSingleton().create("TaharezLook.scheme");
-		CEGUI::SchemeManager::getSingleton().create("Editor.scheme");
+		CEGUI::SchemeManager::getSingleton().create("gui/schemes/VanillaSkin.scheme");
+		CEGUI::SchemeManager::getSingleton().create("gui/schemes/TaharezLook.scheme");
+		CEGUI::SchemeManager::getSingleton().create("gui/schemes/Editor.scheme");
 
 		// Set defaults
 		mCegui->setDefaultFont("DejaVuSans-10");

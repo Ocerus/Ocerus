@@ -23,7 +23,7 @@ void Editor::PrototypeWindow::Init()
 
 	CEGUI_EXCEPTION_BEGIN
 	
-	mWindow = gGUIMgr.LoadSystemLayout("PrototypeWindow.layout", "EditorRoot/PrototypeWindow");
+	mWindow = gGUIMgr.LoadSystemLayout("gui/layouts/PrototypeWindow.layout", "EditorRoot/PrototypeWindow");
 	OC_ASSERT(mWindow != 0);
 	gGUIMgr.GetGUISheet()->addChildWindow(mWindow);
 	mTree = static_cast<CEGUI::ItemListbox*>(mWindow->getChild(mWindow->getName() + "/List"));

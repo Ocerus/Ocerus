@@ -28,7 +28,7 @@ void Editor::LayerWindow::Init()
 {
 	CEGUI_EXCEPTION_BEGIN
 
-	mWindow = gGUIMgr.LoadSystemLayout("LayerWindow.layout", "EditorRoot/LayerWindow");
+	mWindow = gGUIMgr.LoadSystemLayout("gui/layouts/LayerWindow.layout", "EditorRoot/LayerWindow");
 	OC_ASSERT(mWindow);
 	gGUIMgr.GetGUISheet()->addChildWindow(mWindow);
 

@@ -1,4 +1,4 @@
-#include "Spawner.as"
+#include "effects/Spawner.as"
 
 const float32 EXPLOSION_COOLDOWN = 1.0f;
 const float32 JUMP_COOLDOWN = 2.0f;

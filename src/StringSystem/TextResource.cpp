@@ -17,13 +17,13 @@ TextResource::~TextResource(void)
 
 size_t TextResource::LoadImpl()
 {
-	InputStream& is = OpenInputStream(ISM_TEXT);
+	InputStream* is = OpenInputStream(ISM_TEXT);
 	size_t dataSize = 0;
 	string line = "";
 	bool first = true;
-	while (is.good())
+	while (is->good())
 	{
-		std::getline(is, line);
+		std::getline(*is, line);
 
 		// Get rid of annoying \r from windows EOL characters
 		if (!line.empty() && line[line.size() - 1] == '\r')

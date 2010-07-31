@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <GUIScheme Name="VanillaSkin">
-	<Imageset Filename="Vanilla.imageset" />
-	<LookNFeel Filename="Vanilla.looknfeel" />
+	<Imageset Filename="gui/imagesets/Vanilla.imageset" />
+	<LookNFeel Filename="gui/looknfeel/Vanilla.looknfeel" />
 	<WindowRendererSet Filename="CEGUIFalagardWRBase" />
 	<FalagardMapping WindowType="Vanilla/Titlebar" TargetType="CEGUI/Titlebar" Renderer="Falagard/Titlebar" LookNFeel="Vanilla/Titlebar" />
 	<FalagardMapping WindowType="Vanilla/Button" TargetType="CEGUI/PushButton" Renderer="Falagard/Button" LookNFeel="Vanilla/Button" />

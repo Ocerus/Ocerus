@@ -27,8 +27,8 @@ const uint64 REFRESH_PATH_DELAY_MILIS = 777;
 
 ResourceMgr::ResourceMgr( void ):
 	mBasePath(), mListener(0), mResourceUpdatesTimer(false), mMemoryLimit(0), mMemoryUsage(0), mEnforceMemoryLimit(true)
+	//RES_NULL_TEXTURE("general/NullTexture.png"), RES_NULL_MODEL("general/NullModel.model")
 {
-
 }
 
 void ResourceSystem::ResourceMgr::Init( const string& systemPath )
@@ -171,7 +171,7 @@ bool ResourceMgr::AddResourceDirToGroup(const eBasePathType basePathType, const 
 	return result;
 }
 
-bool ResourceMgr::AddResourceFileToGroup(const string& filepath, const StringKey& group, eResourceType type, const eBasePathType basePathType, const string& customName)
+bool ResourceMgr::AddResourceFileToGroup(const string& filepath, const StringKey& group, eResourceType type, const eBasePathType basePathType)
 {
 	boost::filesystem::path boostPath;
 	
@@ -207,8 +207,7 @@ bool ResourceMgr::AddResourceFileToGroup(const string& filepath, const StringKey
 		type = RESTYPE_UNKNOWN;
 	}
 
-	string name = customName;
-	if (name.empty()) name = boostPath.filename();
+	string name = filepath; //boostPath.filename();
 	ResourceGroupMap::const_iterator groupIt = mResourceGroups.find(group);
 	if (mResourceGroups.find(group) != mResourceGroups.end() && groupIt->second->find(name) != groupIt->second->end())
 	{

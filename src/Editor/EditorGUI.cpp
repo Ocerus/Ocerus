@@ -62,11 +62,11 @@ void EditorGUI::LoadGUI()
 	CEGUI_EXCEPTION_BEGIN
 
 	// Load Imagesets for Editor.
-	CEGUI::ImagesetManager::getSingleton().create("EditorToolbar.imageset");
+	CEGUI::ImagesetManager::getSingleton().create("gui/imagesets/EditorToolbar.imageset");
 
 	CEGUI_EXCEPTION_END
 	
-	if (!gGUIMgr.SetGUISheet(gGUIMgr.LoadSystemLayout("Editor.layout")))
+	if (!gGUIMgr.SetGUISheet(gGUIMgr.LoadSystemLayout("gui/layouts/Editor.layout")))
 	{
 		ocError << "Can't load editor.";
 		return;

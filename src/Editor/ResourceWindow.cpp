@@ -32,7 +32,7 @@ void Editor::ResourceWindow::Init()
 {
 	CEGUI_EXCEPTION_BEGIN
 
-	mWindow = gGUIMgr.LoadSystemLayout("ResourceWindow.layout", "EditorRoot/ResourceWindow");
+	mWindow = gGUIMgr.LoadSystemLayout("gui/layouts/ResourceWindow.layout", "EditorRoot/ResourceWindow");
 	OC_ASSERT(mWindow);
 	gGUIMgr.GetGUISheet()->addChildWindow(mWindow);
 
@@ -118,7 +118,7 @@ void Editor::ResourceWindow::RebuildTree()
 
 		CEGUI::Window* newItemText = gGUIMgr.CreateWindow("Editor/StaticText");
 		newItemText->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
-		newItemText->setText(string(pathDepth * 4, ' ') + (*it)->GetName());
+		newItemText->setText(string(pathDepth * 4, ' ') + boost::filesystem::path((*it)->GetName()).filename());
 		newItemText->setProperty("FrameEnabled", "False");
 		newItemText->setProperty("BackgroundEnabled", "False");
 		newItemText->setMousePassThroughEnabled(true);

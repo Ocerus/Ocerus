@@ -1,2 +1,2 @@
 <?xml version="1.0" ?>
-<Font Name="Editor" Filename="DejaVuSans.ttf" Type="FreeType" Size="9" NativeHorzRes="1024" NativeVertRes="768" AutoScaled="false"/>
+<Font Name="Editor" Filename="gui/fonts/DejaVuSans.ttf" Type="FreeType" Size="9" NativeHorzRes="1024" NativeVertRes="768" AutoScaled="false"/>

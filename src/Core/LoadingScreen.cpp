@@ -42,12 +42,12 @@ void Core::LoadingScreen::DoLoading( eType type, const string& sceneName )
 	case TYPE_GENERAL_RESOURCES:
 
 		// basic resources needed by the program
-		gResourceMgr.AddResourceFileToGroup("general/NullTexture.png", "General", ResourceSystem::RESTYPE_TEXTURE, ResourceSystem::BPT_SYSTEM, "NullTexture");
-		gResourceMgr.AddResourceFileToGroup("general/NullModel.model", "General", ResourceSystem::RESTYPE_MESH, ResourceSystem::BPT_SYSTEM, "NullModel");
+		gResourceMgr.AddResourceFileToGroup(ResourceSystem::RES_NULL_TEXTURE, "General", ResourceSystem::RESTYPE_TEXTURE, ResourceSystem::BPT_SYSTEM);
+		gResourceMgr.AddResourceFileToGroup(ResourceSystem::RES_NULL_MODEL, "General", ResourceSystem::RESTYPE_MESH, ResourceSystem::BPT_SYSTEM);
 
 		// make sure we have the necessary resources
-		if (!gResourceMgr.GetResource("General", "NullTexture") ||
-			!gResourceMgr.GetResource("General", "NullModel")) 
+		if (!gResourceMgr.GetResource("General", ResourceSystem::RES_NULL_TEXTURE) ||
+			!gResourceMgr.GetResource("General", ResourceSystem::RES_NULL_MODEL)) 
 		{
 			OC_FAIL("Some essential resources are missing!");
 		}
@@ -115,7 +115,7 @@ void Core::LoadingScreen::Draw()
 			mAnimationFrame = (mAnimationFrame+1) % 8;
 			mAnimationTimer.Reset();
 		}
-		GfxSystem::TexturePtr texRes = gResourceMgr.GetResource("Loading", "Loading" + StringConverter::ToString(mAnimationFrame) + ".png");
+		GfxSystem::TexturePtr texRes = gResourceMgr.GetResource("Loading", "general/Loading" + StringConverter::ToString(mAnimationFrame) + ".png");
 		if (texRes)
 		{
 			GfxSystem::TexturedQuad quad;

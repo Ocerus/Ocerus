@@ -93,7 +93,7 @@ public:
     const int *getIndexBuffer() const;
     int getIndexSize() const;
 
-    const Material &getMaterial(int i) const;
+    Material &getMaterial(int i);
     const Mesh &getMesh(int i) const;
 
     int getNumberOfIndices() const;
@@ -193,7 +193,7 @@ inline const int *ModelOBJ::getIndexBuffer() const
 inline int ModelOBJ::getIndexSize() const
 { return static_cast<int>(sizeof(int)); }
 
-inline const ModelOBJ::Material &ModelOBJ::getMaterial(int i) const
+inline ModelOBJ::Material &ModelOBJ::getMaterial(int i)
 { return m_materials[i]; }
 
 inline const ModelOBJ::Mesh &ModelOBJ::getMesh(int i) const

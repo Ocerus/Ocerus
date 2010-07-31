@@ -17,9 +17,9 @@ ScriptResource::~ScriptResource(void)
 
 size_t ScriptResource::LoadImpl()
 {
-	InputStream& is = OpenInputStream(ISM_TEXT);
+	InputStream* is = OpenInputStream(ISM_TEXT);
 	stringstream ss;
-	ss << is.rdbuf();
+	ss << is->rdbuf();
 	mScript = ss.str();
 	CloseInputStream();
 	return mScript.size();

@@ -47,6 +47,10 @@ namespace ResourceSystem
 		NUM_BASEPATHTYPES,
 		BPT_ABSOLUTE
 	};
+
+	
+	static const string RES_NULL_TEXTURE = "general/NullTexture.png";
+	static const string RES_NULL_MODEL = "general/NullModel.model";
 	
 	/// String name of types of a base path.
 	const char* GetBasePathTypeName(const eBasePathType basePathType);

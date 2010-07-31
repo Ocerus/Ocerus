@@ -29,12 +29,14 @@ bool Mesh::LoadModelFromFilePath(const char* path)
 			// create textures for the meshes
 			for (int i=0; i<mModel->getNumberOfMaterials(); ++i)
 			{
-				const ModelOBJ::Material* objMaterial = &mModel->getMaterial(i);
+				ModelOBJ::Material* objMaterial = &mModel->getMaterial(i);
 				if (!objMaterial->colorMapFilename.empty())
 				{
 					boost::filesystem::path filePath(path);
 					string fileDir = filePath.branch_path().native_directory_string();
-					gResourceMgr.AddResourceFileToGroup(fileDir + "/" + objMaterial->colorMapFilename, "MeshTextures", ResourceSystem::RESTYPE_TEXTURE, ResourceSystem::BPT_ABSOLUTE);
+
+					objMaterial->colorMapFilename = fileDir + "/" + objMaterial->colorMapFilename;
+					gResourceMgr.AddResourceFileToGroup(objMaterial->colorMapFilename, "MeshTextures", ResourceSystem::RESTYPE_TEXTURE, ResourceSystem::BPT_ABSOLUTE);
 				}
 			}
 		}
@@ -66,7 +68,7 @@ size_t Mesh::LoadImpl()
 
 		ocWarning << "Model '" << GetName() << "' cannot be loaded. Loading NullModel instead!";
 
-		ResourceSystem::ResourcePtr nullModHandle = gResourceMgr.GetResource("General", "NullModel");
+		ResourceSystem::ResourcePtr nullModHandle = gResourceMgr.GetResource("General", ResourceSystem::RES_NULL_MODEL);
 		string filePath = nullModHandle->GetFilePath();
 
 		// used only for determining size of data
