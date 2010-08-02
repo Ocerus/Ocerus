@@ -120,6 +120,7 @@ void Core::Game::SetRootWindow(CEGUI::Window* window)
 
 void Core::Game::SetRenderTarget(const GfxSystem::RenderTargetID renderTarget)
 {
+	if (renderTarget == GfxSystem::InvalidRenderTargetID) return;
 	mRenderTarget = renderTarget;
 	mCamera = gGfxRenderer.GetRenderTargetCamera(mRenderTarget);
 	gGfxRenderer.GetRenderTargetViewport(mRenderTarget)->SetGridEnabled(false);

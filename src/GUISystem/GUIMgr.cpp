@@ -376,6 +376,17 @@ string GUISystem::GUIMgr::GenerateWindowName() const
 	return "EditorCreated_" + StringConverter::ToString(windowID++);
 }
 
+void GUISystem::GUIMgr::_DebugPrintWindowCaches()
+{
+#ifdef RECYCLE_WINDOWS
+	ocInfo << "Window caches:";
+	for (WindowMap::iterator it=mWindowCache.begin(); it!=mWindowCache.end(); ++it)
+	{
+		ocInfo << it->first << ": " << it->second->count;
+	}
+#endif
+}
+
 void GUIMgr::DisconnectEvent( const CEGUI::Event::Connection eventConnection )
 {
 	mDeadEventConnections.push_back(eventConnection);

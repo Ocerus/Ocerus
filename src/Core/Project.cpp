@@ -3,6 +3,7 @@
 #include "Editor/EditorMgr.h"
 #include "Editor/EditorGUI.h"
 #include "Editor/HierarchyWindow.h"
+#include "Editor/LayerWindow.h"
 #include "Core/Game.h"
 #include "Core/Application.h"
 #include "GUISystem/ViewportWindow.h"
@@ -328,11 +329,13 @@ void Project::CloseOpenedScene()
 	mSceneIndex = -1;
 	gGfxWindow.SetWindowCaption(mProjectInfo.name);
 	gEntityMgr.DestroyAllEntities(false, true);
+	gLayerMgr.Clear();
 	if (mEditorSupport)
 	{
 		gEditorMgr.GetEditorGui()->DisableViewports();
 		gEditorMgr.GetHierarchyWindow()->Clear();
-		gLayerMgr.Clear();
+		gEditorMgr.GetLayerWindow()->Clear();
+		gEditorMgr.GetEditorGui()->ClearEntityEditorWindow();
 		gEditorMgr.SwitchActionTool(Editor::EditorMgr::AT_RESTART);
 	}
 }

@@ -24,6 +24,9 @@ namespace Editor
 		/// Initializes the LayerWindow.
 		void Init();
 
+		/// Clears the items.
+		void Clear();
+
 		/// Updates the LayerWindow.
 		void Update(float32 delta);
 

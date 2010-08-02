@@ -220,7 +220,7 @@ void Application::RunMainLoop()
 
 			break;
 		case AS_GAME:
-      mGameProject->Update();
+			mGameProject->Update();
 			mGame->Update(delta);
 			gGUIMgr.Update(delta);
 			if (mEditMode)

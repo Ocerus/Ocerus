@@ -540,8 +540,14 @@ void Editor::HierarchyWindow::MoveDown()
 
 void Editor::HierarchyWindow::Clear()
 {
+	ocInfo << "Clearing HierarchyWindow";
+
 	mHierarchy.clear();
-	mTree->resetList();
+	for (int32 i=mTree->getItemCount()-1; i>=0; --i)
+	{
+		gGUIMgr.DestroyWindow(mTree->getItemFromIndex(i));
+	}
+	OC_ASSERT(mTree->getItemCount() == 0);
 	mItems.clear();
 }
 

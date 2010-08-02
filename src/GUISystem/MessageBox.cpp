@@ -10,7 +10,8 @@ const float32 BUTTON_MARGIN = 10.0f;
 
 MessageBox::MessageBox(MessageBox::eMessageBoxType type, int32 tag): mType(type), mTag(tag), mCallback(0), mMessageBox(0), mMinWidth(0)
 {
-	mMessageBox = gGUIMgr.LoadSystemLayout("MessageBox.layout", "MessageBox");
+	mMessageBox = gGUIMgr.LoadSystemLayout("gui/layouts/MessageBox.layout", "MessageBox");
+	OC_ASSERT(mMessageBox);
 	mMessageBox->setModalState(true);
 
 	CEGUI::Window* btnOK = mMessageBox->getChild(mMessageBox->getName() + "/ButtonOK");

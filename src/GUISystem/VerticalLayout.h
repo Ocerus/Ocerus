@@ -25,7 +25,7 @@ namespace GUISystem
 		/// 		FrameWindow has TitleBar, etc.). It these cases you need to pass managed window's content pane.
 		/// @param resizeParent Whether managed window should be also resized to minimal height necessary to properly
 		/// 		display all children windows.
-		VerticalLayout(CEGUI::Window* managedWindow, const CEGUI::Window* contentPane = 0, bool resizeParent = false);
+		VerticalLayout(CEGUI::Window* managedWindow, CEGUI::Window* contentPane = 0, bool resizeParent = false);
 
 		/// Destroys the VerticalLayout.
 		~VerticalLayout();
@@ -63,7 +63,7 @@ namespace GUISystem
 
 		/// @name CEGUI Callbacks
 		//@{
-		bool OnChildWindowSized(const CEGUI::EventArgs&) { if (LockedUpdates()) return false; UpdateLayout(); return true; }
+		bool OnChildWindowSized(const CEGUI::EventArgs&);
 		//@}
 
 	private:
@@ -74,7 +74,7 @@ namespace GUISystem
 		typedef vector<void*> EventConnectionList;
 		
 		CEGUI::Window* mManagedWindow;
-		const CEGUI::Window* mContentPane;
+		CEGUI::Window* mContentPane;
 		WindowList mChildWindows;
 		EventConnectionList mEventConnections;
 		bool mResizeParent;

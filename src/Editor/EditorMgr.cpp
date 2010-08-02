@@ -382,11 +382,6 @@ void Editor::EditorMgr::UpdateSceneMenu()
 void EditorMgr::ShowCreateProjectDialog()
 {
 	mCreateProjectDialog->OpenDialog();
-/*
-	GUISystem::FolderSelector* folderSelector = new GUISystem::FolderSelector("", (int)EditorMenu::FST_CREATEPROJECT);
-	folderSelector->RegisterCallback(new GUISystem::FolderSelector::Callback<Editor::EditorMenu>(mEditorGUI->GetEditorMenu(), &Editor::EditorMenu::OnFolderSelected));
-	folderSelector->Show("Create project", true, "Project folder:"); ///@todo translate
-*/
 }
 
 void EditorMgr::CreateProject(const string& projectPath)
@@ -973,4 +968,9 @@ HierarchyWindow* Editor::EditorMgr::GetHierarchyWindow() const
 bool Editor::EditorMgr::IsProjectOpened() const
 { 
 	return mCurrentProject->IsProjectOpened();
+}
+
+LayerWindow* Editor::EditorMgr::GetLayerWindow() const
+{
+	return mEditorGUI->GetLayerWindow();
 }

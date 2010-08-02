@@ -32,6 +32,9 @@ namespace Editor
 		
 		/// Updates the entity editor.
 		void UpdateEntityEditorWindow();
+
+		/// Clears the entity editor.
+		void ClearEntityEditorWindow();
 		
 		/// Updates the entity editor in the following call of Update.
 		void NeedUpdateEntityEditorWindow() { mNeedEntityEditorUpdate = true; }
@@ -60,6 +63,7 @@ namespace Editor
 		/// Returns the layer window.
 		inline LayerWindow* GetLayerWindow() const { return mLayerWindow; }
 
+		///@TODO doxygen
 		inline EditorMenu* GetEditorMenu() const { return mEditorMenu; }
 
 		/// @name CEGUI Callbacks

@@ -427,6 +427,17 @@ void Editor::LayerWindow::UpdateTree()
 	CEGUI_EXCEPTION_END
 }
 
+void Editor::LayerWindow::Clear()
+{
+	ocInfo << "Clearing LayerWindow";
+
+	for (int32 i=mTree->getItemCount()-1; i>=0; --i)
+	{
+		gGUIMgr.DestroyWindow(mTree->getItemFromIndex(i));
+	}
+	OC_ASSERT(mTree->getItemCount() == 0);
+}
+
 void LayerWindow::UpdateLayerItem(CEGUI::Window* layerItem, EntitySystem::LayerID layerID)
 {
 	CEGUI::Window* layerItemText = layerItem->getChildAtIdx(0)->getChildAtIdx(0);

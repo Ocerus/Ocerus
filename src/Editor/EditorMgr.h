@@ -17,6 +17,7 @@
 /// Editor subsystem provides functionality for creating and editing games.
 namespace Editor
 {
+	///@TODO doxygen
 	class EditorMgr: public Singleton<EditorMgr>, public InputSystem::IInputListener
 	{
 	public:
@@ -88,6 +89,9 @@ namespace Editor
 
 		/// Returns the hierarchy window pointer.
 		HierarchyWindow* GetHierarchyWindow() const;
+
+		/// Returns the layer window pointer.
+		LayerWindow* GetLayerWindow() const;
 
 		/// Returns the gui object.
 		inline EditorGUI* GetEditorGui() const { return mEditorGUI; }

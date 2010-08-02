@@ -107,7 +107,6 @@ void EditorGUI::LoadGUI()
 	mEditorViewport->SetDragAndDropCamera(true);
 	mEditorViewport->subscribeEvent(CEGUI::Window::EventDragDropItemDropped, CEGUI::Event::Subscriber(&EditorGUI::OnEditorViewportItemDropped, this));
 
-	// Create cameras
 	DisableViewports();
 }
 
@@ -193,33 +192,14 @@ void EditorGUI::Draw(float32 delta)
 	OC_UNUSED(delta);	// It may be handy one day
 }
 
-
-void EditorGUI::UpdateEntityEditorWindow()
+void Editor::EditorGUI::ClearEntityEditorWindow()
 {
-	PROFILE_FNC();
-
-	mNeedEntityEditorUpdate = false;
-	EntitySystem::EntityHandle currentEntity = gEditorMgr.GetCurrentEntity();
-
-	CEGUI::ScrollablePane* entityEditorPane = static_cast<CEGUI::ScrollablePane*>(gGUIMgr.GetWindow(ENTITY_EDITOR_NAME));
-	float savedScrollPosition = entityEditorPane->getVerticalScrollPosition() * entityEditorPane->getContentPaneArea().getHeight();
-	OC_ASSERT(entityEditorPane);
-
 	// Clear all property editors. The editor windows are destroyed during the process.
 	for (PropertyEditors::const_iterator it = mPropertyEditors.begin(); it != mPropertyEditors.end(); ++it)
 	{
 		delete (*it);
 	}
 	mPropertyEditors.clear();
-
-	// Clear the pane.
-	{
-		const CEGUI::Window* entityEditorContentPane = entityEditorPane->getContentPane();
-		OC_ASSERT(entityEditorContentPane);
-
-		if (!mEntityEditorLayout) mEntityEditorLayout = new GUISystem::VerticalLayout(entityEditorPane, entityEditorContentPane);
-		else mEntityEditorLayout->Clear();
-	}
 
 	// Clear all layouts.
 	for (VerticalLayouts::iterator it=mVerticalLayouts.begin(); it!=mVerticalLayouts.end(); ++it)
@@ -228,12 +208,40 @@ void EditorGUI::UpdateEntityEditorWindow()
 	}
 	mVerticalLayouts.clear();
 
+	// Clear the pane.
+	{
+		if (!mEntityEditorLayout)
+		{
+			CEGUI::ScrollablePane* entityEditorPane = static_cast<CEGUI::ScrollablePane*>(gGUIMgr.GetWindow(ENTITY_EDITOR_NAME));
+			CEGUI::Window* entityEditorContentPane = const_cast<CEGUI::ScrolledContainer*>(entityEditorPane->getContentPane());
+			mEntityEditorLayout = new GUISystem::VerticalLayout(entityEditorPane, entityEditorContentPane);
+		}
+		else
+		{
+			// Groupboxes get destroyed here.
+			mEntityEditorLayout->Clear();
+		}
+	}
+
 
 	// Everything should be clear by now.
 	OC_ASSERT(mEntityEditorLayout->GetChildCount() == 0);
+}
 
+void EditorGUI::UpdateEntityEditorWindow()
+{
+	PROFILE_FNC();
+
+	mNeedEntityEditorUpdate = false;
+
+	CEGUI::ScrollablePane* entityEditorPane = static_cast<CEGUI::ScrollablePane*>(gGUIMgr.GetWindow(ENTITY_EDITOR_NAME));
+	OC_ASSERT(entityEditorPane);
+	float savedScrollPosition = entityEditorPane->getVerticalScrollPosition() * entityEditorPane->getContentPaneArea().getHeight();
+
+	ClearEntityEditorWindow();
 
 	// There is no entity to be selected.
+	EntitySystem::EntityHandle currentEntity = gEditorMgr.GetCurrentEntity();
 	if (!currentEntity.Exists()) return;
 
 	mEntityEditorLayout->LockUpdates();

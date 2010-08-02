@@ -6,7 +6,7 @@
 
 using namespace GUISystem;
 
-GUISystem::VerticalLayout::VerticalLayout(CEGUI::Window* managedWindow, const CEGUI::Window* contentPane, bool resizeParent):
+GUISystem::VerticalLayout::VerticalLayout(CEGUI::Window* managedWindow, CEGUI::Window* contentPane, bool resizeParent):
 		mManagedWindow(managedWindow),
 		mContentPane(contentPane),
 		mResizeParent(resizeParent),
@@ -19,6 +19,8 @@ GUISystem::VerticalLayout::VerticalLayout(CEGUI::Window* managedWindow, const CE
 GUISystem::VerticalLayout::~VerticalLayout()
 {
 	ClearEventConnections();
+	if (mContentPane) gGUIMgr.DestroyWindowChildren(mContentPane);
+	gGUIMgr.DestroyWindow(mManagedWindow);
 }
 
 void GUISystem::VerticalLayout::AddChildWindow(CEGUI::Window* window)
@@ -82,4 +84,11 @@ void GUISystem::VerticalLayout::ClearEventConnections()
 		delete conn;
 	}
 	mEventConnections.clear();
+}
+
+bool GUISystem::VerticalLayout::OnChildWindowSized( const CEGUI::EventArgs& )
+{
+	if (LockedUpdates()) return false;
+	UpdateLayout();
+	return true;
 }

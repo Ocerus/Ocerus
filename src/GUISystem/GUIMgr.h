@@ -140,10 +140,16 @@ namespace GUISystem
 		/// This method injects resolution change into GUI system. It is part of IGfxWindowListener interface. Called after window resolution is changed.
 		virtual void ResolutionChanged(const uint32 width, const uint32 height);
 
+		/// Console for printing debug data.
 		inline GUIConsole* GetConsole() { return mGUIConsole; }
 		
+		/// Resource group for GUI resources.
 		static const StringKey GUIGroup;
 
+	public:
+
+		/// Prints info about the window caches into the log.
+		void _DebugPrintWindowCaches();
 
 	private:
 
