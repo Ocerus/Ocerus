@@ -213,6 +213,8 @@ void GUIMgr::DestroyWindow(CEGUI::Window* window)
 	if (window->getParent()) window->getParent()->removeChildWindow(window); // this is the most time consuming action here!!!
 	window->hide();
 
+	if (window->getName().find("EditorCreated") != 0) window->rename(GenerateWindowName());
+
 	WindowTypeCache* cache = mWindowCache[window->getType().c_str()];
 	if (cache && window->isUserStringDefined("CreatedByGuiMgr"))
 	{
@@ -251,7 +253,7 @@ void GUISystem::GUIMgr::DestroyWindowChildren( CEGUI::Window* window )
 	}
 }
 
-CEGUI::Window* GUIMgr::CreateWindow( const string& type, bool reallocateOnHeap )
+CEGUI::Window* GUIMgr::CreateWindow( const string& type, bool reallocateOnHeap, const string& name )
 {
 #ifdef RECYCLE_WINDOWS
 
@@ -283,6 +285,18 @@ CEGUI::Window* GUIMgr::CreateWindow( const string& type, bool reallocateOnHeap )
 		if (window->isPropertyPresent("ReadOnly")) window->setProperty("ReadOnly", "False");
 		window->show();
 	}
+
+	if (!name.empty())
+	{
+		try
+		{
+			window->rename(name);
+		}
+		catch (...)
+		{
+			ocWarning << "Cannot rename window to " << name;
+		}
+	}
 	
 
 	ocTrace << "Created window " << window->getType() << " " << window->getName() << "; " << window->getChildCount() << " children";
@@ -290,14 +304,16 @@ CEGUI::Window* GUIMgr::CreateWindow( const string& type, bool reallocateOnHeap )
 	return window;
 
 #else
-	return CreateWindowDirectly(type);
+	return CreateWindowDirectly(type, name);
 #endif
 }
 
-CEGUI::Window* GUIMgr::CreateWindowDirectly( const string& type )
+CEGUI::Window* GUIMgr::CreateWindowDirectly( const string& type, const string& name )
 {
-	static uint64 windowID = 0;
-	CEGUI::Window* window = CEGUI::WindowManager::getSingleton().createWindow(type, "EngineCreated_" + StringConverter::ToString(windowID++));
+	string windowName;
+	if (name.empty()) windowName = GenerateWindowName();
+	else windowName = name;
+	CEGUI::Window* window = CEGUI::WindowManager::getSingleton().createWindow(type, windowName);
 #ifdef RECYCLE_WINDOWS
 	window->setDestroyedByParent(false); // to prevent CEGUI from destroying our own windows
 #endif
@@ -352,6 +368,12 @@ bool GUISystem::GUIMgr::WindowExists( const string& name )
 void GUISystem::GUIMgr::DestroyWindowDirectly( CEGUI::Window* window )
 {
 	CEGUI::WindowManager::getSingleton().destroyWindow(window);
+}
+
+string GUISystem::GUIMgr::GenerateWindowName() const
+{
+	static uint64 windowID = 0;
+	return "EditorCreated_" + StringConverter::ToString(windowID++);
 }
 
 void GUIMgr::DisconnectEvent( const CEGUI::Event::Connection eventConnection )

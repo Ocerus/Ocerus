@@ -241,7 +241,7 @@ void EditorGUI::UpdateEntityEditorWindow()
 	// First "component" is general entity info
 	{
 		const string namePrefix = ENTITY_EDITOR_NAME + "/ComponentGeneralInfo";
-		CEGUI::GroupBox* componentGroup = static_cast<CEGUI::GroupBox*>(gGUIMgr.CreateWindow("Editor/GroupBox", true));
+		CEGUI::GroupBox* componentGroup = static_cast<CEGUI::GroupBox*>(gGUIMgr.CreateWindow("Editor/GroupBox", true, "EntityInfo"));
 		componentGroup->setText(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "general_info"));
 		mEntityEditorLayout->AddChildWindow(componentGroup);
 		GUISystem::VerticalLayout* layout = new GUISystem::VerticalLayout(componentGroup, componentGroup->getContentPane(), true);
