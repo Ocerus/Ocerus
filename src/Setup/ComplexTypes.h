@@ -17,6 +17,8 @@ extern const Matrix22 Matrix22_Identity;
 typedef b2Transform XForm;
 extern const XForm XForm_Identity;
 
+inline bool operator != (const Vector2& a, const Vector2& b) { return a.x != b.x || a.y != b.y; }
+
 class b2World;
 typedef b2World Physics;
 class b2Body;

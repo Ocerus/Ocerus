@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Game>
+  <GameInfo>
+    <CurrentTime>56509</CurrentTime>
+    <SceneName>level1.xml</SceneName>
+    <RequestedSceneName>level2.xml</RequestedSceneName>
+  </GameInfo>
+  <DynamicProperties>
+    <TotalScore Type="uint32">120</TotalScore>
+  </DynamicProperties>
+</Game>

@@ -567,7 +567,7 @@ Reflection::PropertyHolder EntitySystem::EntityMgr::GetEntityComponentProperty( 
 
 
 	// property not found, print some info about why
-	ocError << "EntityMgr: unknown property '" << propertyKey << "'";
+	ocError << "EntityMgr: unknown property '" << propertyKey << "' with flagmask " << flagMask;
 	PropertyList propertyList;
 	string propertiesString;
 	GetEntityComponentProperties(entity.GetID(), component, propertyList, flagMask);

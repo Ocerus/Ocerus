@@ -25,9 +25,15 @@ EntityMessage::eResult EntityComponents::StaticBody::HandleMessage( const Entity
 		if (!gEntityMgr.IsEntityPrototype(GetOwner())) CreateBody();
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::SYNC_PRE_PHYSICS:	
-		mBody->SetTransform(GetOwner().GetProperty("Position").GetValue<Vector2>(), 
-			GetOwner().GetProperty("Angle").GetValue<float32>());
-		return EntityMessage::RESULT_OK;
+		{
+			Vector2 position = GetOwner().GetProperty("Position").GetValue<Vector2>();
+			float32 angle = GetOwner().GetProperty("Angle").GetValue<float32>();
+			if (position != mBody->GetPosition() || angle != mBody->GetAngle())
+			{
+				mBody->SetTransform(position, angle);
+			}
+			return EntityMessage::RESULT_OK;
+		}
 	default:
 		break;
 	}

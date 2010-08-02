@@ -134,9 +134,7 @@ void Editor::EditorMgr::Update(const float32 delta)
 void Editor::EditorMgr::Draw(float32 delta)
 {
 	// Render game viewport (if visible)
-	if (mEditorGUI->GetGameViewport()->isVisible())
-		GlobalProperties::Get<Core::Game>("Game").Draw(delta);
-	/// @todo We should have member to game, because accessing game through GlobalProperties can be slow.
+	if (mEditorGUI->GetGameViewport()->isVisible()) GlobalProperties::Get<Core::Game>("Game").Draw(delta);
 	
 	// Render editor viewport (if visible)
 	if (mEditorGUI->GetEditorViewport()->isVisible())
@@ -153,11 +151,11 @@ void Editor::EditorMgr::Draw(float32 delta)
 		for (EntityList::iterator it=mSelectedEntities.begin(); it!=mSelectedEntities.end(); ++it)
 		{
 			if (*it == mHoveredEntity) hoveredDrawn = true;
-			DrawEntityPhysicalShape(*it, GfxSystem::Color(0,255,0,100), 2.0f);
+			DrawEntityPhysicalShape(*it, GfxSystem::Color(0,100,250,200), GfxSystem::Color(255,0,0,200), 1.0f);
 		}
 		if (!hoveredDrawn && mHoveredEntity.IsValid())
 		{
-			DrawEntityPhysicalShape(mHoveredEntity, GfxSystem::Color(200,200,200,150), 3.5f);
+			DrawEntityPhysicalShape(mHoveredEntity, GfxSystem::Color(250,250,250,150), GfxSystem::Color(0,0,0,0), 3.5f);
 		}
 
 		// draw the multi-selection stuff
@@ -594,6 +592,12 @@ bool Editor::EditorMgr::MouseButtonReleased( const InputSystem::MouseInfo& mi, c
 		return false;
 	}
 
+	if (btn == InputSystem::MBTN_MIDDLE)
+	{
+		// ignore the middle mouse button for entity selection
+		return false;
+	}
+
 	if (btn == InputSystem::MBTN_RIGHT && mHoveredEntity.IsValid())
 	{
 		// open the context menu
@@ -669,15 +673,19 @@ bool Editor::EditorMgr::GetWorldCursorPos(Vector2& worldCursorPos) const
 	return gGfxRenderer.ConvertScreenToWorldCoords(GfxSystem::Point(ms.x, ms.y), worldCursorPos, rt);
 }
 
-bool Editor::EditorMgr::DrawEntityPhysicalShape( const EntitySystem::EntityHandle entity, const GfxSystem::Color shapeColor, const float32 shapeWidth )
+bool Editor::EditorMgr::DrawEntityPhysicalShape( const EntitySystem::EntityHandle entity, const GfxSystem::Color shapeColor, const GfxSystem::Color fillColor, const float32 shapeWidth )
 {
 	EntitySystem::ComponentIdList components;
 	gEntityMgr.GetEntityComponentsOfType(entity, EntitySystem::CT_PolygonCollider, components);
+	bool noCollider = components.empty();
+	if (noCollider) gEntityMgr.GetEntityComponentsOfType(entity, EntitySystem::CT_Transform, components);
 	bool result = false;
 
 	for (EntitySystem::ComponentIdList::iterator it=components.begin(); it!=components.end(); ++it)
 	{
-		PhysicalShape* shape = gEntityMgr.GetEntityComponentProperty(entity, *it, "PhysicalShape").GetValue<PhysicalShape*>();
+		PhysicalShape* shape = 0;
+		if (noCollider)	shape = gEntityMgr.GetEntityComponentProperty(entity, *it, "PhysicalShapeDummy").GetValue<PhysicalShape*>();
+		else shape = gEntityMgr.GetEntityComponentProperty(entity, *it, "PhysicalShape").GetValue<PhysicalShape*>();
 		if (!shape) continue;
 
 		XForm xf = shape->GetBody()->GetTransform();
@@ -686,12 +694,20 @@ bool Editor::EditorMgr::DrawEntityPhysicalShape( const EntitySystem::EntityHandl
 		OC_ASSERT(vertexCount <= b2_maxPolygonVertices);
 		Vector2 vertices[b2_maxPolygonVertices];
 
+		Vector2 centre = Vector2_Zero;
 		for (int32 i = 0; i < vertexCount; ++i)
 		{
 			vertices[i] = MathUtils::Multiply(xf, poly->m_vertices[i]);
+			centre += vertices[i];
 		}
+		centre *= 1.0f / vertexCount;
 
 		gGfxRenderer.DrawPolygon(vertices, vertexCount, shapeColor, false, shapeWidth);
+		const float32 squareRadius = 0.3f;
+		gGfxRenderer.DrawLine(centre + Vector2(-squareRadius, -squareRadius), centre + Vector2(squareRadius, -squareRadius), fillColor, shapeWidth);
+		gGfxRenderer.DrawLine(centre + Vector2(squareRadius, -squareRadius), centre + Vector2(squareRadius, squareRadius), fillColor, shapeWidth);
+		gGfxRenderer.DrawLine(centre + Vector2(squareRadius, squareRadius), centre + Vector2(-squareRadius, squareRadius), fillColor, shapeWidth);
+		gGfxRenderer.DrawLine(centre + Vector2(-squareRadius, squareRadius), centre + Vector2(-squareRadius, -squareRadius), fillColor, shapeWidth);
 		result = true;
 	}
 

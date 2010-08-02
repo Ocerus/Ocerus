@@ -51,11 +51,19 @@ namespace EntityComponents
 		/// Depth of the entity (ala the Z coordinate).
 		void SetLayer(int32 value);
 
+		/// Returns the physical shape pointer.
+		PhysicalShape* GetPhysicalShape(void) const { return mShape; }
+
 	private:
 		Vector2 mPosition;
 		Vector2 mScale;
 		float32 mAngle;
 		int32 mDepth;
+		PhysicalShape* mShape; // used to support picking of objects without a collider
+		PhysicalBody* mBody;
+
+		void DestroyShape();
+		void CreateShape();
 	};
 }
 

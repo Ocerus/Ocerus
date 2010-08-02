@@ -30,8 +30,12 @@ EntityMessage::eResult EntityComponents::PolygonCollider::HandleMessage( const E
 		}
 		else if (mSensorBody)
 		{
-			mSensorBody->SetTransform(GetOwner().GetProperty("Position").GetValue<Vector2>(), 
-				GetOwner().GetProperty("Angle").GetValue<float32>());
+			Vector2 position = GetOwner().GetProperty("Position").GetValue<Vector2>();
+			float32 angle = GetOwner().GetProperty("Angle").GetValue<float32>();
+			if (position != mSensorBody->GetPosition() || angle != mSensorBody->GetAngle())
+			{
+				mSensorBody->SetTransform(position, angle);
+			}
 		}
 		return EntityMessage::RESULT_OK;
 	case EntityMessage::COMPONENT_DESTROYED:
@@ -83,6 +87,7 @@ void EntityComponents::PolygonCollider::RecreateShape( void )
 		vertices[i].y = mPolygonScale.y * mPolygon.GetRawArrayPtr()[i].y;
 	}
 	shapeDef.Set(vertices, mPolygon.GetSize());
+	delete[] vertices;
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &shapeDef;
 	fixtureDef.density = mDensity;
