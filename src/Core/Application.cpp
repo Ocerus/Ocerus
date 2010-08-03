@@ -261,6 +261,9 @@ void Application::RunMainLoop()
 
 		// update app state machine
 		UpdateState();
+
+		// if we don't have focus yield for a while to allow other apps to work
+		if (!mHasFocus) YieldProcess();
 	}
 }
 
@@ -449,6 +452,11 @@ void Core::Application::OpenPDF( const string& filePath )
 	CreateThread(NULL, 0, OpenPDF_thread, &adjustedPath, 0, NULL);
 }
 
+void Core::Application::YieldProcess()
+{
+	Sleep(1);
+}
+
 #else
 
 //------------
@@ -484,6 +492,11 @@ void Core::Application::OpenPDF( const string& filePath )
 		ocInfo << "Cannot open " << filePath << " with " << commands[commandIndex] << ".";
 	}
 	ocWarning << "Cannot find suitable command to open " << filePath << ".";
+}
+
+void Core::Application::YieldProcess()
+{
+	sleep(1);
 }
 
 #endif

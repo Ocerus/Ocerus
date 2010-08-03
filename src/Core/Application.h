@@ -98,6 +98,9 @@ namespace Core
 		/// Opens a PDF document.
 		void OpenPDF(const string& filePath);
 
+		/// Gives time to run to other applications for a while.
+		void YieldProcess();
+
 	private:
 
 		/// Application states.
