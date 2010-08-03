@@ -27,17 +27,17 @@ namespace Core
 		/// Returns string data based on the provided search key and (optional) section.
 		/// @remarks
 		/// If the key doesn't exist, defaultValue is returned.
-		string GetString(const string& key, const string& defaultValue = "", const string& section = "General" );
+		string GetString(const string& key, const string& defaultValue = "", const string& section = "General" ) const;
 
 		/// Returns integer data based on the provided search key and (optional) section.
 		/// @remarks
 		/// If the key doesn't exist, defaultValue is returned.
-		int32 GetInt32(const string& key, const int32 defaultValue = 0, const string& section = "General" );
+		int32 GetInt32(const string& key, const int32 defaultValue = 0, const string& section = "General" ) const;
 
 		/// Returns boolean data based on the provided search key and (optional) section.
 		/// @remarks
 		/// If the key doesn't exist, defaultValue is returned.
-		bool GetBool(const string& key, const bool defaultValue = false, const string& section = "General" );
+		bool GetBool(const string& key, const bool defaultValue = false, const string& section = "General" ) const;
 
 		/// Saves string data to the specified key and (optional) section.
 		void SetString(const string& key, const string& value, const string& section = "General" );
@@ -63,7 +63,7 @@ namespace Core
 		string mFilePath;
 
 		/// Implementation details.
-		rude::Config* mRudeConfig;
+		mutable rude::Config* mRudeConfig;
 
 	};
 }

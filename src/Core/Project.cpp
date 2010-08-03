@@ -61,6 +61,7 @@ bool Project::OpenProject(const string& path)
 	CloseProject();
 	mProjectPath = path;
 	mProjectConfig = new Core::Config(configFile);
+	GlobalProperties::SetPointer("ProjectConfig", mProjectConfig);
 	LoadProjectConfig();
 
 	// Make sure basePath is terminated with slash.
@@ -96,6 +97,7 @@ void Project::CloseProject()
 
 	CloseOpenedScene();
 	SaveProjectConfig();
+	GlobalProperties::RemovePointer("ProjectConfig");
 	delete mProjectConfig;
 	mProjectConfig = 0;
 	mProjectPath = "";

@@ -39,7 +39,7 @@ bool Core::Config::Save( void )
 	return false;
 }
 
-string Core::Config::GetString( const string& key, const string& defaultValue, const string& section )
+string Core::Config::GetString( const string& key, const string& defaultValue, const string& section ) const
 {
 	mRudeConfig->setSection(section.c_str()); // sets working section...all subsequent calls are related to this section.
 	if (mRudeConfig->exists(key.c_str()))
@@ -47,7 +47,7 @@ string Core::Config::GetString( const string& key, const string& defaultValue, c
 	return defaultValue;
 }
 
-int32 Core::Config::GetInt32( const string& key, const int32 defaultValue, const string& section )
+int32 Core::Config::GetInt32( const string& key, const int32 defaultValue, const string& section ) const
 {
 	mRudeConfig->setSection(section.c_str());
 	if (mRudeConfig->exists(key.c_str()))
@@ -55,7 +55,7 @@ int32 Core::Config::GetInt32( const string& key, const int32 defaultValue, const
 	return defaultValue;
 }
 
-bool Core::Config::GetBool( const string& key, const bool defaultValue, const string& section )
+bool Core::Config::GetBool( const string& key, const bool defaultValue, const string& section ) const
 {
 	mRudeConfig->setSection(section.c_str());
 	if (mRudeConfig->exists(key.c_str()))

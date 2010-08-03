@@ -68,6 +68,9 @@ namespace Core
 
 			/// Sets the project info according to specified variable.
 			void SetOpenedProjectInfo(const ProjectInfo& newProjectInfo);
+
+			/// Returns the project config.
+			inline Config* GetConfig() { return mProjectConfig; }
 		
 		//@}
 		

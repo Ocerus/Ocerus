@@ -47,7 +47,7 @@ void Application::Init(const string& startupProjectName)
 	LogSystem::Profiler::CreateSingleton();
 
 	// get access to config file
-	mGlobalConfig = new Config("config.txt");
+	mGlobalConfig = new Config("config.ini");
 	GlobalProperties::SetPointer("GlobalConfig", mGlobalConfig);
 
 	// make the app settings public

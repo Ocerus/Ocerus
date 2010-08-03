@@ -22,6 +22,11 @@ namespace Utils
             mProperties[key] = value;
         }
 
+		/// Clears the pointer from the properties.
+		static void RemovePointer(const StringKey key) {
+			mProperties.erase(key);
+		}
+
         /// Returns a stored pointer identified by the given string key.
         template<typename T>
         static T* GetPointer(const StringKey key) {

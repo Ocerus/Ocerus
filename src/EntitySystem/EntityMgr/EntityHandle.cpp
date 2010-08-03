@@ -1,6 +1,8 @@
 #include "Common.h"
 #include "EntityHandle.h"
 #include "EntityMessage.h"
+#include "Core/Application.h"
+#include "Core/Project.h"
 
 using namespace EntitySystem;
 
@@ -16,11 +18,11 @@ EntityHandle EntityHandle::CreateUniqueHandle()
 
 EntitySystem::EntityHandle EntitySystem::EntityHandle::CreateUniquePrototypeHandle()
 {
-	Core::Config& config = GlobalProperties::Get<Core::Config>("GlobalConfig");
-	EntityID lastPrototypeID = config.GetInt32("LastFreePrototypeID", -1, "Entities");
+	Core::Config* config = GlobalProperties::GetPointer<Core::Config>("ProjectConfig");
+	EntityID lastPrototypeID = config->GetInt32("LastFreePrototypeID", -1, "General");
 	EntityID newID = lastPrototypeID;
 	DecID(lastPrototypeID);
-	config.SetInt32("LastFreePrototypeID", lastPrototypeID, "Entities");
+	config->SetInt32("LastFreePrototypeID", lastPrototypeID, "General");
 	return EntityHandle(newID);
 }
 
@@ -34,12 +36,12 @@ EntitySystem::EntityHandle EntitySystem::EntityHandle::CreateHandleFromID( const
 
 	if (IsPrototypeID(id))
 	{
-		Core::Config& config = GlobalProperties::Get<Core::Config>("GlobalConfig");
-		EntityID lastPrototypeID = config.GetInt32("LastFreePrototypeID", -1, "Entities");
+		Core::Config* config = GlobalProperties::GetPointer<Core::Config>("ProjectConfig");
+		EntityID lastPrototypeID = config->GetInt32("LastFreePrototypeID", -1, "General");
 		if (lastPrototypeID == id)
 		{
 			DecID(lastPrototypeID);
-			config.SetInt32("LastFreePrototypeID", lastPrototypeID, "Entities");
+			config->SetInt32("LastFreePrototypeID", lastPrototypeID, "General");
 		}
 	}
 	else
