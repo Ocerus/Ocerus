@@ -454,16 +454,28 @@ void EditorMgr::ShowQuitDialog()
 
 bool Editor::EditorMgr::KeyPressed( const InputSystem::KeyInfo& ke )
 {
-	return HandleShortcuts(ke.keyCode);
+	bool result = false;
+
+	if (mEditorGUI->GetEditorViewport()->isCapturedByThis())
+	{
+		result = GlobalProperties::Get<Core::Game>("Game").KeyPressed(ke);
+	}
+
+	return result || HandleShortcuts(ke.keyCode);
 }
 
 bool Editor::EditorMgr::KeyReleased( const InputSystem::KeyInfo& ke )
 {
-	OC_UNUSED(ke);
+	bool result = false;
 
-	if (IsLockedToGame()) return false;
+	if (mEditorGUI->GetEditorViewport()->isCapturedByThis())
+	{
+		result = GlobalProperties::Get<Core::Game>("Game").KeyReleased(ke);
+	}
 
-	return false;
+	if (IsLockedToGame()) return result;
+
+	return result;
 }
 
 bool Editor::EditorMgr::MouseMoved( const InputSystem::MouseInfo& mi )
