@@ -32,6 +32,7 @@ EntityMessage::eResult EntityComponents::DynamicBody::HandleMessage( const Entit
 			if (position != mBody->GetPosition() || angle != mBody->GetAngle())
 			{
 				mBody->SetTransform(position, angle);
+				mBody->SetAwake(true);
 			}
 			return EntityMessage::RESULT_OK;
 		}
