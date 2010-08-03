@@ -117,10 +117,6 @@ bool Editor::LayerWindow::OnDragContainerMouseButtonDown(const CEGUI::EventArgs&
 bool LayerWindow::OnDragContainerMouseButtonUp(const CEGUI::EventArgs& e)
 {
 	const CEGUI::MouseEventArgs& args = static_cast<const CEGUI::MouseEventArgs&>(e);
-	// We only handle right button click.
-	if (args.button != CEGUI::RightButton)
-		return false;
-
 	CEGUI::DragContainer* dragContainer = static_cast<CEGUI::DragContainer*>(args.window);
 	if (dragContainer->isBeingDragged()) return false;
 
@@ -128,23 +124,34 @@ bool LayerWindow::OnDragContainerMouseButtonUp(const CEGUI::EventArgs& e)
 	if (item->getUserData())
 	{
 		// item is layer
-		EntitySystem::LayerID layerID = item->getID();
-		if (gLayerMgr.ExistsLayer(layerID))
+		if (args.button == CEGUI::RightButton)
 		{
-			PopupMenu* menu = new PopupMenu("EditorRoot/Popup/Layer", true);
-			menu->Init<EntitySystem::LayerID>(layerID);
-			menu->Open(args.position.d_x, args.position.d_y);
-			gEditorMgr.RegisterPopupMenu(menu);
+			EntitySystem::LayerID layerID = item->getID();
+			if (gLayerMgr.ExistsLayer(layerID))
+			{
+				PopupMenu* menu = new PopupMenu("EditorRoot/Popup/Layer", true);
+				menu->Init<EntitySystem::LayerID>(layerID);
+				menu->Open(args.position.d_x, args.position.d_y);
+				gEditorMgr.RegisterPopupMenu(menu);
+			}
 		}
 	}
 	else
 	{
 		// item is entity
-		EntitySystem::EntityHandle entity = gEntityMgr.GetEntity(item->getID());
-		PopupMenu* menu = new PopupMenu("EditorRoot/Popup/LayerEntity", true);
-		menu->Init<EntitySystem::EntityHandle>(entity);
-		menu->Open(args.position.d_x, args.position.d_y);
-		gEditorMgr.RegisterPopupMenu(menu);
+		if (args.button == CEGUI::RightButton)
+		{
+			EntitySystem::EntityHandle entity = gEntityMgr.GetEntity(item->getID());
+			PopupMenu* menu = new PopupMenu("EditorRoot/Popup/LayerEntity", true);
+			menu->Init<EntitySystem::EntityHandle>(entity);
+			menu->Open(args.position.d_x, args.position.d_y);
+			gEditorMgr.RegisterPopupMenu(menu);
+		}
+		else if (args.button == CEGUI::LeftButton)
+		{
+			EntitySystem::EntityHandle entity = gEntityMgr.GetEntity(item->getID());
+			gEditorMgr.SetCurrentEntity(entity);
+		}
 	}
 	return true;
 }
@@ -202,21 +209,6 @@ bool LayerWindow::OnLayerItemDoubleClick(const CEGUI::EventArgs& e)
 	return true;
 }
 
-bool LayerWindow::OnEntityItemDoubleClick(const CEGUI::EventArgs& e)
-{
-	const CEGUI::MouseEventArgs& args = static_cast<const CEGUI::MouseEventArgs&>(e);
-	CEGUI::DragContainer* dragContainer = static_cast<CEGUI::DragContainer*>(args.window);
-	if (dragContainer->isBeingDragged()) return false;
-
-	if (args.button == CEGUI::LeftButton)
-	{
-		EntitySystem::EntityHandle entity = gEntityMgr.GetEntity(dragContainer->getID());
-		gEditorMgr.SetCurrentEntity(entity);
-	}
-	return true;
-}
-
-
 bool LayerWindow::OnDragDropItemDropped(const CEGUI::EventArgs& e)
 {
 	const CEGUI::DragDropEventArgs& args = static_cast<const CEGUI::DragDropEventArgs&>(e);
@@ -232,8 +224,8 @@ bool LayerWindow::OnDragDropItemDropped(const CEGUI::EventArgs& e)
 		}
 		LayerID srcLayerID = args.dragDropItem->getID();
 		LayerID destLayerID = args.window->getID();
-		if (srcLayerID == destLayerID)
-			return true;
+		if (srcLayerID == destLayerID) return true;
+
 		if (srcLayerID > destLayerID)
 		{
 			gLayerMgr.MoveLayerBehind(srcLayerID, destLayerID);
@@ -254,8 +246,8 @@ bool LayerWindow::OnDragDropItemDropped(const CEGUI::EventArgs& e)
 		else if (args.window->getUserString("DragDataType") == "Entity")
 		{
 			EntitySystem::EntityHandle entity = gEntityMgr.GetEntity(args.window->getID());
-			if (!gLayerMgr.EntityHasLayer(entity))
-				return true;
+			if (!gLayerMgr.EntityHasLayer(entity)) return true;
+
 			destLayerID = gLayerMgr.GetEntityLayerID(entity);
 		}
 		else
@@ -415,7 +407,6 @@ void Editor::LayerWindow::UpdateTree()
 		dragContainer->addChildWindow(entityItemText);
 		dragContainer->subscribeEvent(CEGUI::Window::EventMouseButtonDown, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnDragContainerMouseButtonDown, this));
 		dragContainer->subscribeEvent(CEGUI::Window::EventMouseButtonUp, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnDragContainerMouseButtonUp, this));
-		dragContainer->subscribeEvent(CEGUI::Window::EventMouseDoubleClick, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnEntityItemDoubleClick, this));
 		dragContainer->subscribeEvent(CEGUI::Window::EventDragDropItemDropped, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnDragDropItemDropped, this));
 
 		dragContainer->setID(it->GetID());

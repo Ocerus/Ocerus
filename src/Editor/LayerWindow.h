@@ -61,7 +61,6 @@ namespace Editor
 			bool OnLayerItemExpandClick(const CEGUI::EventArgs&);
 			bool OnLayerItemVisibilityToggleClick(const CEGUI::EventArgs&);
 			bool OnLayerItemDoubleClick(const CEGUI::EventArgs&);
-			bool OnEntityItemDoubleClick(const CEGUI::EventArgs&);
 			bool OnDragDropItemDropped(const CEGUI::EventArgs&);
 		//@}
 
