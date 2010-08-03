@@ -212,6 +212,7 @@ void GUIMgr::DestroyWindow(CEGUI::Window* window)
 	DestroyWindowChildren(window);
 	if (window->getParent()) window->getParent()->removeChildWindow(window); // this is the most time consuming action here!!!
 	window->hide();
+	window->removeAllEvents();
 
 	if (window->getName().find("EditorCreated") != 0) window->rename(GenerateWindowName());
 
