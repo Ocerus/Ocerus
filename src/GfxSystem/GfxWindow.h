@@ -48,7 +48,7 @@ namespace GfxSystem
 		void SetWindowCaption(const string& caption);
 
 		/// Changes window resolution, recreates drawing context, invokes ScreenListeners.
-		void ChangeResolution(int32 x, int32 y);
+		void ChangeResolution(int32 x, int32 y, bool switchedFromFull = false);
 
 		/// Switches fullscreen on and off.
 		void SwitchFullscreen();
@@ -82,6 +82,9 @@ namespace GfxSystem
 
 		/// Returns true if the window is in fullscreen mode.
 		inline bool GetFullscreen() const { return mFullscreen; }
+
+		/// Sets window position.
+		void SetWindowPosition(int32 xpos, int32 ypos);
 
 		/// Gets windows handle. Windows OS only.
 		WindowHandle _GetWindowHandle() const;

@@ -41,13 +41,8 @@ void GfxWindow::Init(const int32 x, const int32 y, const int32 windowWidth, cons
 
 	// Create drawing context
 	SetWindowCaption(title);
-#ifdef __UNIX__
-	string windowPosEnvValue = StringConverter::ToString(mWindowX) + string(", ") + StringConverter::ToString(mWindowY);
-	setenv("SDL_VIDEO_WINDOW_POS", windowPosEnvValue.c_str(), 1);
-#else
-	string windowPosEnvVar = string("SDL_VIDEO_WINDOW_POS=") + StringConverter::ToString(mWindowX) + string(", ") + StringConverter::ToString(mWindowY);
-	SDL_putenv(windowPosEnvVar.c_str()); // this is the way how to position the window in SDL
-#endif
+	SetWindowPosition(mWindowX, mWindowY);
+
 	if (mFullscreen) mScreen = SDL_SetVideoMode( mFullscreenResolutionWidth, mFullscreenResolutionHeight, 0, flags );
 	else mScreen = SDL_SetVideoMode( mWindowWidth, mWindowHeight, 0, flags );
 
@@ -120,7 +115,7 @@ bool GfxWindow::PopEvent(eWindowEvent &result)
 	return false;
 }
 
-void GfxWindow::ChangeResolution(int32 resWidth, int32 resHeight)
+void GfxWindow::ChangeResolution(int32 resWidth, int32 resHeight, bool switchedFromFull)
 {
 	if (mFullscreen)
 	{
@@ -131,6 +126,12 @@ void GfxWindow::ChangeResolution(int32 resWidth, int32 resHeight)
 	{
 		mWindowWidth = resWidth;
 		mWindowHeight = resHeight;
+	}
+
+	if (!switchedFromFull && !mFullscreen)
+	{
+		RefreshWindowPosition();
+		SetWindowPosition(mWindowX, mWindowY);
 	}
 
 	set<IGfxWindowListener*>::iterator it;
@@ -152,13 +153,22 @@ void GfxWindow::ChangeResolution(int32 resWidth, int32 resHeight)
 		(*it)->ResolutionChanged(resWidth, resHeight);
 	}
 	gInputMgr.ReleaseAll();
+
+	if (switchedFromFull)
+	{
+		RefreshWindowPosition();
+		SetWindowPosition(mWindowX, mWindowY);
+	}
 }
 
 void GfxWindow::SwitchFullscreen()
 {
 	mFullscreen = !mFullscreen;
-	if (mFullscreen) ChangeResolution(mFullscreenResolutionWidth, mFullscreenResolutionHeight);
-	else ChangeResolution(mWindowWidth, mWindowHeight);
+
+	if (mFullscreen) 
+		ChangeResolution(mFullscreenResolutionWidth, mFullscreenResolutionHeight);
+	else 
+		ChangeResolution(mWindowWidth, mWindowHeight, true);
 
 }
 
@@ -186,6 +196,9 @@ WindowHandle GfxWindow::_GetWindowHandle() const
 
 void GfxSystem::GfxWindow::RefreshWindowPosition()
 {
+	if  (mFullscreen)
+		return;
+
 	SDL_SysWMinfo windowInfo;
 	SDL_VERSION(&windowInfo.version);
 	if (!SDL_GetWMInfo(&windowInfo))
@@ -237,4 +250,19 @@ void GfxSystem::GfxWindow::SetWindowCaption( const string& caption )
 {
 	if (GlobalProperties::Get<bool>("DevelopMode"))	SDL_WM_SetCaption(("Ocerus - " + caption).c_str(), NULL);
 	else SDL_WM_SetCaption(caption.c_str(), NULL);
+}
+
+void GfxSystem::GfxWindow::SetWindowPosition(int32 xpos, int32 ypos)
+{
+#ifdef __UNIX__
+	string windowPosEnvValue = StringConverter::ToString(xpos) + string(", ") + StringConverter::ToString(ypos);
+	setenv("SDL_VIDEO_WINDOW_POS", windowPosEnvValue.c_str(), 1);
+#else
+	// adjustment, because SDL has it different than Windows
+	xpos += 8;
+	ypos += 30;
+	string windowPosEnvVar = string("SDL_VIDEO_WINDOW_POS=") + StringConverter::ToString(xpos) + string(", ") + StringConverter::ToString(ypos);
+	SDL_putenv(windowPosEnvVar.c_str()); // this is the way how to position the window in SDL
+#endif
+	
 }
