@@ -266,3 +266,19 @@ void GfxSystem::GfxWindow::SetWindowPosition(int32 xpos, int32 ypos)
 #endif
 	
 }
+
+void GfxSystem::GfxWindow::SetSDLCursor(bool val)
+{
+	if (val)
+		SDL_ShowCursor(SDL_ENABLE);
+	else
+		SDL_ShowCursor(SDL_DISABLE);
+}
+
+bool GfxSystem::GfxWindow::GetSDLCursor()
+{
+	if (SDL_ShowCursor(SDL_QUERY) == SDL_ENABLE)
+		return true;
+	else
+		return false;
+}

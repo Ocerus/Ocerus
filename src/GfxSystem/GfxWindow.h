@@ -95,6 +95,12 @@ namespace GfxSystem
 		/// Removes listener to window resolution change.
 		inline virtual void RemoveScreenListener(IGfxWindowListener * listener) { mGfxWindowListeners.erase(listener); }
 
+		/// Sets whether the SDL cursor should be shown.
+		void SetSDLCursor(bool val);
+
+		/// Returns whether the SDL cursor is shown.
+		bool GetSDLCursor();
+
 	private:
 
 		SDL_Surface* mScreen;

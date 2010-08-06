@@ -341,10 +341,15 @@ void Application::MessagePump( void )
 		{
 			mHasFocus = false;
 			gInputMgr.ReleaseAll();
+
+			// SDL won't let the mouse move when the SDL cursor is disabled, app is in fullscreen but dont have focus
+			if (gGfxWindow.GetFullscreen())
+				gGfxWindow.SetSDLCursor(true);
 		}
 		else if (event == GfxSystem::WE_GAINED_FOCUS)
 		{
 			mHasFocus = true;
+			gGfxWindow.SetSDLCursor(false);
 		}
 	}
 }
