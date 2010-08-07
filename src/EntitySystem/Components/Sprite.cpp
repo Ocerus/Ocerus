@@ -31,7 +31,7 @@ EntityMessage::eResult EntityComponents::Sprite::HandleMessage( const EntityMess
 			{
 				ocWarning << "Initing sprite with null texture";
 				mTextureHandle = gResourceMgr.GetResource("General", ResourceSystem::RES_NULL_TEXTURE);
-				OC_ASSERT(mTextureHandle);
+				OC_ASSERT(mTextureHandle.get());
 			}
 
 			if (!gEntityMgr.IsEntityPrototype(GetOwner()))

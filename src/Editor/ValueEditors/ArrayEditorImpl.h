@@ -14,6 +14,7 @@
 #include "GUISystem/VerticalLayout.h"
 #include "Properties/PropertyEnums.h"
 
+
 namespace Editor
 {
 	/// Creates a value editor for given ElementType. Default implementation creates a string editor.
@@ -77,8 +78,6 @@ namespace Editor
 		mButtonAddElement->setText(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "entity_editor_add"));
 		mButtonAddElement->setArea(CEGUI::URect(CEGUI::UDim(0.5f, 1), CEGUI::UDim(0, 0), CEGUI::UDim(0.6666f, -1), CEGUI::UDim(0, GetEditboxHeight())));
 		mButtonAddElement->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Editor::ArrayEditor<ElementType>::OnEventButtonAddPressed, this));
-
-		
 		mHeaderWidget->addChildWindow(mButtonAddElement);
 		
 		/// Create revert button
@@ -87,7 +86,6 @@ namespace Editor
 		mButtonRevert->setArea(CEGUI::URect(CEGUI::UDim(0.6666f, 1), CEGUI::UDim(0, 0), CEGUI::UDim(0.8333f, -1), CEGUI::UDim(0, GetEditboxHeight())));
 		mButtonRevert->setEnabled(false);
 		mButtonRevert->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Editor::ArrayEditor<ElementType>::OnEventButtonRevertPressed, this));
-
 		mHeaderWidget->addChildWindow(mButtonRevert);
 
 		/// Create save button

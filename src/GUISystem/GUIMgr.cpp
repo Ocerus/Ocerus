@@ -254,7 +254,7 @@ void GUISystem::GUIMgr::DestroyWindowChildren( CEGUI::Window* window )
 	}
 }
 
-CEGUI::Window* GUIMgr::CreateWindow( const string& type, bool reallocateOnHeap, const string& name )
+CEGUI::Window* GUIMgr::CreateWindow( const string& type, bool reallocateOnHeap, const CEGUI::String& name )
 {
 #ifdef RECYCLE_WINDOWS
 
@@ -305,13 +305,14 @@ CEGUI::Window* GUIMgr::CreateWindow( const string& type, bool reallocateOnHeap, 
 	return window;
 
 #else
+	OC_UNUSED(reallocateOnHeap);
 	return CreateWindowDirectly(type, name);
 #endif
 }
 
-CEGUI::Window* GUIMgr::CreateWindowDirectly( const string& type, const string& name )
+CEGUI::Window* GUIMgr::CreateWindowDirectly( const string& type, const CEGUI::String& name )
 {
-	string windowName;
+	CEGUI::String windowName;
 	if (name.empty()) windowName = GenerateWindowName();
 	else windowName = name;
 	CEGUI::Window* window = CEGUI::WindowManager::getSingleton().createWindow(type, windowName);

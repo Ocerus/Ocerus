@@ -66,6 +66,8 @@ namespace Editor
 		///@TODO doxygen
 		inline EditorMenu* GetEditorMenu() const { return mEditorMenu; }
 
+		void AddWidgetToTabNavigation(CEGUI::Window* widget);
+
 		/// @name CEGUI Callbacks
 		//@{
 		bool OnComponentRemoveClicked(const CEGUI::EventArgs&);
@@ -95,6 +97,7 @@ namespace Editor
 		GUISystem::VerticalLayout* mEntityEditorLayout;
 		GUISystem::ViewportWindow* mGameViewport;
 		GUISystem::ViewportWindow* mEditorViewport;
+		GUISystem::TabNavigation* mTabNavigation;
 		EditorMenu* mEditorMenu;
 		LayerWindow* mLayerWindow;
 		ResourceWindow* mResourceWindow;

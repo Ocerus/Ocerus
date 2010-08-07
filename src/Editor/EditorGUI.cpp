@@ -17,6 +17,7 @@
 #include "GUISystem/GUIMgr.h"
 #include "GUISystem/CEGUITools.h"
 #include "GUISystem/ItemListboxProperties.h"
+#include "GUISystem/TabNavigation.h"
 
 #include "GUISystem/VerticalLayout.h"
 #include "GUISystem/ViewportWindow.h"
@@ -41,16 +42,19 @@ EditorGUI::EditorGUI():
 	mEntityEditorLayout(0),
 	mGameViewport(0),
 	mEditorViewport(0),
+	mTabNavigation(0),
 	mLayerWindow(0),
 	mResourceWindow(0),
 	mHierarchyWindow(0)
 {
+	mTabNavigation = new GUISystem::TabNavigation();
 }
 
 EditorGUI::~EditorGUI()
 {
 	delete mLayerWindow;
 	delete mEditorMenu;
+	delete mTabNavigation;
 	delete mResourceWindow;
 	delete mPrototypeWindow;
 	delete mHierarchyWindow;
@@ -194,6 +198,8 @@ void EditorGUI::Draw(float32 delta)
 
 void Editor::EditorGUI::ClearEntityEditorWindow()
 {
+	mTabNavigation->Clear();
+
 	// Clear all property editors. The editor windows are destroyed during the process.
 	for (PropertyEditors::const_iterator it = mPropertyEditors.begin(); it != mPropertyEditors.end(); ++it)
 	{
@@ -338,6 +344,11 @@ void EditorGUI::UpdateEntityEditorWindow()
 		entityEditorPane->setHeight(height + CEGUI::UDim(0, 1));
 		entityEditorPane->setHeight(height);
 	}
+}
+
+void EditorGUI::AddWidgetToTabNavigation(CEGUI::Window* widget)
+{
+	mTabNavigation->AddWidget(widget);
 }
 
 bool Editor::EditorGUI::OnComponentRemoveClicked(const CEGUI::EventArgs& e)

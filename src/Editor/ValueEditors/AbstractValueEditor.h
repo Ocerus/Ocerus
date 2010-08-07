@@ -65,6 +65,9 @@ namespace Editor
 		/// Returns the recommended height of an editbox.
 		static float GetEditboxHeight();
 
+		/// Adds widget to tab navigation.
+		void AddWidgetToTabNavigation(CEGUI::Window* widget);
+
 	protected:
 		/// Main widget of the editor. The widget is automatically destroyed in AbstractValueEditor's destructor.
 		CEGUI::Window* mEditorWidget;

@@ -35,6 +35,7 @@ CEGUI::Window* StringEditor::CreateWidget(const CEGUI::String& namePrefix)
 	mEditboxWidget = static_cast<CEGUI::Editbox*>(gGUIMgr.CreateWindow("Editor/Editbox", true));
 	mEditboxWidget->setArea(CEGUI::URect(dimMiddle + CEGUI::UDim(0, 2), CEGUI::UDim(0, 0), dimRight, CEGUI::UDim(0, GetEditboxHeight())));
 	mEditboxWidget->setProperty("ReadOnly", mModel->IsReadOnly() ? "True" : "False");
+	AddWidgetToTabNavigation(mEditboxWidget);
 	mEditorWidget->addChildWindow(mEditboxWidget);
 
 	/// Create remove button, if needed

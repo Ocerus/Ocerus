@@ -223,7 +223,6 @@ set(Editor_SRCS
 	src/Editor/HierarchyWindow.cpp
 	src/Editor/KeyShortcuts.cpp
 	src/Editor/LayerWindow.cpp
-	src/Editor/LayerMgrWidget.cpp
 	src/Editor/PopupMenu.cpp
 	src/Editor/PrototypeWindow.cpp
 	src/Editor/ResourceWindow.cpp
@@ -290,6 +289,7 @@ set(GUISystem_SRCS
 	src/GUISystem/ViewportWindow.cpp
 	src/GUISystem/FolderSelector.cpp
 	src/GUISystem/ScriptProvider.cpp
+	src/GUISystem/TabNavigation.cpp
 )
 
 set(InputSystem_SRCS

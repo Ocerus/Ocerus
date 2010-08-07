@@ -44,6 +44,7 @@ CEGUI::Window* TwoDimEditor::CreateWidget(const CEGUI::String& namePrefix)
 	mEditbox1Widget = static_cast<CEGUI::Editbox*>(gGUIMgr.CreateWindow("Editor/Editbox", true));
 	mEditbox1Widget->setProperty("ReadOnly", mModel->IsReadOnly() ? "True" : "False");
 	mEditbox1Widget->setArea(CEGUI::URect(dimMiddle + CEGUI::UDim(0, 16), CEGUI::UDim(0, 0), dimRight, CEGUI::UDim(0, GetEditboxHeight())));
+	AddWidgetToTabNavigation(mEditbox1Widget);
 	mEditorWidget->addChildWindow(mEditbox1Widget);
 
 	/// Subscribe to editbox1 events
@@ -55,6 +56,7 @@ CEGUI::Window* TwoDimEditor::CreateWidget(const CEGUI::String& namePrefix)
 	mEditbox2Widget = static_cast<CEGUI::Editbox*>(gGUIMgr.CreateWindow("Editor/Editbox", true));
 	mEditbox2Widget->setProperty("ReadOnly", mModel->IsReadOnly() ? "True" : "False");
 	mEditbox2Widget->setArea(CEGUI::URect(dimMiddle + CEGUI::UDim(0, 16), CEGUI::UDim(1, -GetEditboxHeight()), dimRight, CEGUI::UDim(1, 0)));
+	AddWidgetToTabNavigation(mEditbox2Widget);
 	mEditorWidget->addChildWindow(mEditbox2Widget);
 
 	/// Subscribe to editbox2 events

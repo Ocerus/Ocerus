@@ -58,6 +58,7 @@ namespace GUISystem
 	class GUIConsole;
 	class ViewportWindow;
 	class ScriptProvider;
+	class TabNavigation;
 }
 
 namespace InputSystem

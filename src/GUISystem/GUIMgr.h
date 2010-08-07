@@ -70,10 +70,10 @@ namespace GUISystem
 		///@param reallocateOnHeap If true the window is constructed anew before being used again.
 		///	      This solves some problems with GUI elements aligning in a wrong way.
 		///@param name Desired name. If empty a default name will be generated.
-		CEGUI::Window* CreateWindow(const string& type, bool reallocateOnHeap = false, const string& name = "");
+		CEGUI::Window* CreateWindow(const string& type, bool reallocateOnHeap = false, const CEGUI::String& name = "");
 
 		/// Creates new window without taking caches into consideration.
-		CEGUI::Window* CreateWindowDirectly(const string& type, const string& name = "");
+		CEGUI::Window* CreateWindowDirectly(const string& type, const CEGUI::String& name = "");
 
 		/// Destroys the specified window.
 		void DestroyWindow(CEGUI::Window* window);

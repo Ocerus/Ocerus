@@ -24,7 +24,7 @@ EntityMessage::eResult EntityComponents::Model::HandleMessage( const EntityMessa
 			{
 				ocWarning << "Initing model with null value";
 				mMeshHandle = gResourceMgr.GetResource("General", ResourceSystem::RES_NULL_MODEL);
-				OC_ASSERT(mMeshHandle);
+				OC_ASSERT(mMeshHandle.get());
 			}
 
 			if (!gEntityMgr.IsEntityPrototype(GetOwner()))
