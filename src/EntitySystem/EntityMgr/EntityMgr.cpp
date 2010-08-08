@@ -795,7 +795,7 @@ bool EntitySystem::EntityMgr::LoadEntitiesFromResource(ResourceSystem::ResourceP
 	{
 		if (toplevelIter == xml->EndTopLevel() || (*toplevelIter).compare("Layers") != 0)
 		{
-			ocError << "XML: Expected 'Layers', found " << *toplevelIter;
+			ocError << "XML: Expected 'Layers'";
 			return false;
 		}
 		gLayerMgr.LoadLayers(toplevelIter);
@@ -804,7 +804,7 @@ bool EntitySystem::EntityMgr::LoadEntitiesFromResource(ResourceSystem::ResourceP
 
 	if (toplevelIter == xml->EndTopLevel() || (*toplevelIter).compare("Entities") != 0)
 	{
-		ocError << "XML: Expected 'Entities', found " << *toplevelIter;
+		ocError << "XML: Expected 'Entities'";
 		return false;
 	}
 

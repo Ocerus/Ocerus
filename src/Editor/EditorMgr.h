@@ -111,6 +111,9 @@ namespace Editor
 		/// Updates the scenes in scene menu.
 		void UpdateSceneMenu();
 
+		/// Updates the enabled/disabled state of items in menu.
+		void UpdateMenuItemsEnabled();
+
 		/// Shows dialog for "Create new project"
 		void ShowCreateProjectDialog();
 

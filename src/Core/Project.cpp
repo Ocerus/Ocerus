@@ -79,6 +79,7 @@ bool Project::OpenProject(const string& path)
 		gEditorMgr.RefreshPrototypeWindow();
 		gEditorMgr.RefreshResourceWindow();
 		gEditorMgr.UpdateSceneMenu();
+		gEditorMgr.UpdateMenuItemsEnabled();
 	}
 
 	gGfxWindow.SetWindowCaption(mProjectInfo.name);
@@ -111,6 +112,7 @@ void Project::CloseProject()
 		gEditorMgr.RefreshPrototypeWindow();
 		gEditorMgr.RefreshResourceWindow();
 		gEditorMgr.UpdateSceneMenu();
+		gEditorMgr.UpdateMenuItemsEnabled();
 		gGfxWindow.SetWindowCaption("");
 	}
 
@@ -226,6 +228,10 @@ bool Project::CreateScene(string sceneFilename, const string& sceneName)
 	{
 		ResourceSystem::XMLOutput xmlOutput(filename);
 		xmlOutput.BeginElement("Scene");
+		xmlOutput.BeginElement("Layers");
+		xmlOutput.EndElement();
+		xmlOutput.BeginElement("Entities");
+		xmlOutput.EndElement();
 		xmlOutput.EndElement();
 	}
 	gResourceMgr.AddResourceFileToGroup(sceneFilename, "Project", ResourceSystem::RESTYPE_XMLRESOURCE, ResourceSystem::BPT_PROJECT);
@@ -284,7 +290,11 @@ void Core::Project::OpenScene( const ResourceSystem::ResourcePtr resource )
 		game.ResumeAction();
 	}
 
-	if (mEditorSupport) gGfxWindow.SetWindowCaption(mProjectInfo.name + " (" + resource->GetName() + ")");
+	if (mEditorSupport)
+	{
+		gGfxWindow.SetWindowCaption(mProjectInfo.name + " (" + resource->GetName() + ")");
+		gEditorMgr.UpdateMenuItemsEnabled();
+	}
 
 	ocInfo << "Scene " << resource->GetName() << " loaded.";
 }
@@ -339,6 +349,7 @@ void Project::CloseOpenedScene()
 		gEditorMgr.GetLayerWindow()->Clear();
 		gEditorMgr.GetEditorGui()->ClearEntityEditorWindow();
 		gEditorMgr.SwitchActionTool(Editor::EditorMgr::AT_RESTART);
+		gEditorMgr.UpdateMenuItemsEnabled();
 	}
 }
 

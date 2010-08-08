@@ -248,8 +248,17 @@ void GfxSystem::GfxWindow::UpdateWindowPosition()
 
 void GfxSystem::GfxWindow::SetWindowCaption( const string& caption )
 {
-	if (GlobalProperties::Get<bool>("DevelopMode"))	SDL_WM_SetCaption(("Ocerus - " + caption).c_str(), NULL);
-	else SDL_WM_SetCaption(caption.c_str(), NULL);
+	if (GlobalProperties::Get<bool>("DevelopMode"))
+	{
+		if (caption.empty())
+			SDL_WM_SetCaption("Ocerus", NULL);
+		else
+			SDL_WM_SetCaption(("Ocerus - " + caption).c_str(), NULL);
+	}
+	else
+	{
+		SDL_WM_SetCaption(caption.c_str(), NULL);
+	}
 }
 
 void GfxSystem::GfxWindow::SetWindowPosition(int32 xpos, int32 ypos)

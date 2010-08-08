@@ -43,6 +43,9 @@ namespace Editor
 		/// Updates the list of scenes in scene menu.
 		void UpdateSceneMenu();
 
+		/// Updates the enabled/disabled state of items in menu.
+		void UpdateItemsEnabled();
+
 		/// Switches the currently selected tool button.
 		void SwitchToolButton(uint32 selectedButtonIndex);
 

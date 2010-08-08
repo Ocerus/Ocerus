@@ -384,6 +384,38 @@ void EditorMenu::UpdateSceneMenu()
 	CEGUI_EXCEPTION_END
 }
 
+void EditorMenu::UpdateItemsEnabled()
+{
+	CEGUI_EXCEPTION_BEGIN
+
+	bool editMenuEnabled = gEditorMgr.GetCurrentProject()->IsSceneOpened();
+	bool sceneMenuEnabled = gEditorMgr.GetCurrentProject()->IsProjectOpened();
+
+	// Set enabled/disabled state to items in Edit menu
+	CEGUI::Window* editMenu = gGUIMgr.GetWindow(menubarPrefix + "/Edit/AutoPopup");
+	for (size_t childIdx = 0, childCount = editMenu->getChildCount(); childIdx < childCount; childIdx++)
+	{
+		editMenu->getChildAtIdx(childIdx)->setEnabled(editMenuEnabled);
+	}
+
+	// Set enabled/disabled state to components in AddComponent submenu
+	CEGUI::Window* addComponentMenu = gGUIMgr.GetWindow(menubarPrefix + "/Edit/NewComponent/AutoPopup");
+	for (size_t childIdx = 0, childCount = addComponentMenu->getChildCount(); childIdx < childCount; childIdx++)
+	{
+		addComponentMenu->getChildAtIdx(childIdx)->setEnabled(editMenuEnabled);
+	}
+
+	// Set enabled/disabled state to items in Scene menu
+	CEGUI::Window* sceneMenu = gGUIMgr.GetWindow(menubarPrefix + "/Scene/AutoPopup");
+	for (size_t childIdx = 0, childCount = sceneMenu->getChildCount(); childIdx < childCount; childIdx++)
+	{
+		sceneMenu->getChildAtIdx(childIdx)->setEnabled(sceneMenuEnabled);
+	}
+
+	CEGUI_EXCEPTION_END
+}
+
+
 void Editor::EditorMenu::ConfigureMenu(CEGUI::Window* parent)
 {
 	size_t childCount = parent->getChildCount();

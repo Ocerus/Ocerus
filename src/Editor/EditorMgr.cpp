@@ -387,6 +387,11 @@ void Editor::EditorMgr::UpdateSceneMenu()
 	mEditorGUI->GetEditorMenu()->UpdateSceneMenu();
 }
 
+void EditorMgr::UpdateMenuItemsEnabled()
+{
+	mEditorGUI->GetEditorMenu()->UpdateItemsEnabled();
+}
+
 void EditorMgr::ShowCreateProjectDialog()
 {
 	mCreateProjectDialog->OpenDialog();

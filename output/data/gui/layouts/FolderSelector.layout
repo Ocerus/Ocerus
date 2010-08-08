@@ -38,11 +38,11 @@
             <Window Type="Editor/StaticText" Name="FolderSelector/Frame/EditboxLabel" >
                 <Property Name="Text" Value="Name:" />
                 <Property Name="FrameEnabled" Value="False" />
-                <Property Name="UnifiedAreaRect" Value="{{0,0},{1,-56},{0,90},{1,-32}}" />
+                <Property Name="UnifiedAreaRect" Value="{{0,0},{1,-56},{0,120},{1,-32}}" />
                 <Property Name="BackgroundEnabled" Value="False" />
             </Window>
             <Window Type="Editor/Editbox" Name="FolderSelector/Frame/Editbox" >
-                <Property Name="UnifiedAreaRect" Value="{{0,90},{1,-56},{1,0},{1,-32}}" />
+                <Property Name="UnifiedAreaRect" Value="{{0,120},{1,-56},{1,0},{1,-32}}" />
                 <Property Name="BackgroundEnabled" Value="False" />
             </Window>
         </Window>
