@@ -64,6 +64,7 @@ namespace GUISystem
 		/// @name CEGUI Callbacks
 		//@{
 		bool OnChildWindowSized(const CEGUI::EventArgs&);
+		bool OnChildWindowDestroyed(const CEGUI::EventArgs&);
 		//@}
 
 	private:

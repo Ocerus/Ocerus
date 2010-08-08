@@ -311,15 +311,23 @@ void EditorGUI::UpdateEntityEditorWindow()
 		removeComponentButton->setText("x");
 		removeComponentButton->setClippedByParent(false);
 
-		if (gEntityMgr.CanDestroyEntityComponent(currentEntity, componentID))
+		if (!gEntityMgr.IsEntityLinkedToPrototype(currentEntity))
 		{
-			removeComponentButton->setTooltipText(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "remove_component_hint"));
-			removeComponentButton->setUserString("ComponentID", StringConverter::ToString(componentID));
-			removeComponentButton->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Editor::EditorGUI::OnComponentRemoveClicked, this));
+			if (gEntityMgr.CanDestroyEntityComponent(currentEntity, componentID))
+			{
+				removeComponentButton->setTooltipText(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "remove_component_hint"));
+				removeComponentButton->setUserString("ComponentID", StringConverter::ToString(componentID));
+				removeComponentButton->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Editor::EditorGUI::OnComponentRemoveClicked, this));
+			}
+			else
+			{
+				removeComponentButton->setTooltipText(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "remove_component_error_hint"));
+				removeComponentButton->setEnabled(false);
+			}
 		}
 		else
 		{
-			removeComponentButton->setTooltipText(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "remove_component_error_hint"));
+			removeComponentButton->setTooltipText(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "remove_component_prototype_error_hint"));
 			removeComponentButton->setEnabled(false);
 		}
 

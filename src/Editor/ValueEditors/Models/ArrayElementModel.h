@@ -27,7 +27,7 @@ namespace Editor
 
 		virtual bool IsValid() const { return true; }
 
-		virtual bool IsReadOnly() const { return false; }
+		virtual bool IsReadOnly() const;
 
 		virtual bool IsListElement() const { return true; }
 
@@ -64,7 +64,7 @@ namespace Editor
 
 		virtual bool IsValid() const { return true; }
 
-		virtual bool IsReadOnly() const { return false; }
+		virtual bool IsReadOnly() const;
 
 		virtual bool IsListElement() const { return true; }
 

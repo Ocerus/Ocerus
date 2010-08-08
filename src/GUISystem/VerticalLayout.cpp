@@ -27,6 +27,7 @@ void GUISystem::VerticalLayout::AddChildWindow(CEGUI::Window* window)
 {
 	mManagedWindow->addChildWindow(window);
 	mEventConnections.push_back(new CEGUI::Event::Connection(window->subscribeEvent(CEGUI::Window::EventSized, CEGUI::Event::Subscriber(&GUISystem::VerticalLayout::OnChildWindowSized, this))));
+	mEventConnections.push_back(new CEGUI::Event::Connection(window->subscribeEvent(CEGUI::Window::EventDestructionStarted, CEGUI::Event::Subscriber(&GUISystem::VerticalLayout::OnChildWindowDestroyed, this))));
 	mChildWindows.push_back(window);
 }
 
@@ -90,5 +91,14 @@ bool GUISystem::VerticalLayout::OnChildWindowSized( const CEGUI::EventArgs& )
 {
 	if (LockedUpdates()) return false;
 	UpdateLayout();
+	return true;
+}
+
+bool GUISystem::VerticalLayout::OnChildWindowDestroyed(const CEGUI::EventArgs& e)
+{
+	const CEGUI::WindowEventArgs args = static_cast<const CEGUI::WindowEventArgs&>(e);
+	WindowList::iterator it = Containers::find(mChildWindows.begin(), mChildWindows.end(), args.window);
+	if (it != mChildWindows.end())
+		mChildWindows.erase(it);
 	return true;
 }

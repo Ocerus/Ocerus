@@ -96,6 +96,13 @@ namespace Editor
 		mButtonSave->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Editor::ArrayEditor<ElementType>::OnEventButtonSavePressed, this));
 		mHeaderWidget->addChildWindow(mButtonSave);
 
+		if (mModel->IsReadOnly())
+		{
+			mButtonAddElement->setEnabled(false);
+			mButtonRevert->setEnabled(false);
+			mButtonSave->setEnabled(false);
+		}
+
 		/// Create isShared checkbox, if needed
 		if (mModel->IsShareable())
 		{
@@ -198,6 +205,12 @@ namespace Editor
 		mArray.erase(mArray.begin() + index);
 
 		UpdateEditors();
+	}
+
+	template<class ElementType>
+	bool ArrayEditor<ElementType>::IsReadOnly() const
+	{
+		return mModel->IsReadOnly();
 	}
 
 	template<class ElementType>

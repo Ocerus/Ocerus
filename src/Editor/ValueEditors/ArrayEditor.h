@@ -73,6 +73,9 @@ namespace Editor
 
 				/// Remove the element on given index in internal array.
 				void RemoveElement(uint32 index);
+				
+				/// Returns whether the model of the editor is read only.
+				bool IsReadOnly() const;
 			//@}
 
 		private:

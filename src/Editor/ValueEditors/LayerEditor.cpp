@@ -87,7 +87,9 @@ bool Editor::LayerEditor::OnEventDragDropItemDropped(const CEGUI::EventArgs& e)
 	const CEGUI::DragDropEventArgs& args = static_cast<const CEGUI::DragDropEventArgs&>(e);
 	
 	if (args.dragDropItem->getUserString("DragDataType") != "Layer") { return false; }
-	
+
+	if (mModel->IsReadOnly()) { return true; }
+
 	LayerID layerID= args.dragDropItem->getID();
 	if (!gLayerMgr.ExistsLayer(layerID))
 		return true;

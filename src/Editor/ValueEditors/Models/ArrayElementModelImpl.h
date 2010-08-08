@@ -10,6 +10,11 @@
 
 namespace Editor
 {
+	template<class ElementType>
+	bool ArrayElementModel<ElementType>::IsReadOnly() const
+	{
+		return mParentEditor->IsReadOnly();
+	}
 
 	template<class ElementType>
 	ElementType ArrayElementModel<ElementType>::GetValue() const
@@ -27,6 +32,12 @@ namespace Editor
 	void ArrayElementModel<ElementType>::Remove()
 	{
 		mParentEditor->RemoveElement(mIndex);
+	}
+
+	template<class ElementType>
+	bool ArrayStringElementModel<ElementType>::IsReadOnly() const
+	{
+		return mParentEditor->IsReadOnly();
 	}
 
 	template<class ElementType>

@@ -282,9 +282,19 @@ void Editor::EditorMgr::DeleteSelectedEntities()
 void Editor::EditorMgr::AddComponent(EntitySystem::eComponentType componentType)
 {
 	if (!mCurrentEntity.IsValid()) return;
-	gEntityMgr.AddComponentToEntity(mCurrentEntity, componentType);
-	mEditorGUI->UpdateEntityEditorWindow();
-	if (IsEditingPrototype()) gEntityMgr.SavePrototypes();
+	if (gEntityMgr.IsEntityLinkedToPrototype(mCurrentEntity))
+	{
+		GUISystem::MessageBox* messageBox = new GUISystem::MessageBox(GUISystem::MessageBox::MBT_OK);
+		messageBox->SetText(StringSystem::FormatText(gStringMgrSystem.GetTextData
+			(GUISystem::GUIMgr::GUIGroup, "new_component_prototype_error")));
+		messageBox->Show();
+	}
+	else
+	{
+		gEntityMgr.AddComponentToEntity(mCurrentEntity, componentType);
+		mEditorGUI->UpdateEntityEditorWindow();
+		if (IsEditingPrototype()) gEntityMgr.SavePrototypes();
+	}
 }
 
 

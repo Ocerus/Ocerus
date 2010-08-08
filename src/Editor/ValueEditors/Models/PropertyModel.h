@@ -29,7 +29,12 @@ namespace Editor
 		virtual bool IsValid() const { return mProperty.IsValid(); }
 
 		/// Returns whether the property is read-only.
-		virtual bool IsReadOnly() const { return !(mProperty.GetAccessFlags() & Reflection::PA_EDIT_WRITE); }
+		virtual bool IsReadOnly() const
+		{
+			return !(mProperty.GetAccessFlags() & Reflection::PA_EDIT_WRITE) ||
+				(gEntityMgr.IsEntityLinkedToPrototype(mEntity) &&
+				gEntityMgr.IsPrototypePropertyShared(gEntityMgr.GetEntityPrototype(mEntity), mProperty.GetKey()));
+		}
 
 		/// Returns false.
 		virtual bool IsListElement() const { return false; }

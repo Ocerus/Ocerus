@@ -85,9 +85,10 @@ bool Editor::ResourceEditor::OnEventButtonRemovePressed(const CEGUI::EventArgs& 
 bool Editor::ResourceEditor::OnEventDragDropItemDropped(const CEGUI::EventArgs& e)
 {
 	const CEGUI::DragDropEventArgs& args = static_cast<const CEGUI::DragDropEventArgs&>(e);
-	
+
 	if (args.dragDropItem->getUserString("DragDataType") != "Resource") { return false; }
-	
+	if (mModel->IsReadOnly()) { return true; }
+
 	ResourceWindow* resourceWindow = static_cast<ResourceWindow*>(args.dragDropItem->getUserData());
 	if (resourceWindow == 0) return true;
 
