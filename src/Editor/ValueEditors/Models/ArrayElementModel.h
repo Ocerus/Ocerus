@@ -33,11 +33,17 @@ namespace Editor
 
 		virtual bool IsRemovable() const { return !IsReadOnly(); }
 
+		virtual bool IsShareable() const { return false; }
+
+		virtual bool IsShared() const { return false; }
+
 		virtual ElementType GetValue() const;
 
 		virtual void SetValue(const ElementType& newValue);
 
 		virtual void Remove();
+		
+		virtual void SetShared(bool isShared) { OC_UNUSED(isShared); OC_FAIL("ArrayElementModel does not support SetShared() operation."); }
 
 	private:
 		ArrayEditor<ElementType>* mParentEditor;
@@ -64,11 +70,17 @@ namespace Editor
 
 		virtual bool IsRemovable() const { return !IsReadOnly(); }
 
+		virtual bool IsShareable() const { return false; }
+
+		virtual bool IsShared() const { return false; }
+
 		virtual string GetValue() const;
 
 		virtual void SetValue(const string& newValue);
 
 		virtual void Remove();
+		
+		virtual void SetShared(bool isShared) { OC_UNUSED(isShared); OC_FAIL("ArrayStringElementModel does not support SetShared() operation."); }
 
 	private:
 		ArrayEditor<ElementType>* mParentEditor;

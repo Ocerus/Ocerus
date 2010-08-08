@@ -30,8 +30,17 @@ namespace Editor
 		/// Returns whether the variable is removable.
 		virtual bool IsRemovable() const = 0;
 
+		/// Returns whether the variable is shareable.
+		virtual bool IsShareable() const = 0;
+
+		/// Returns whether the variable is shared.
+		virtual bool IsShared() const = 0;
+
 		/// Removes the variable.
 		virtual void Remove() = 0;
+
+		/// Sets whether the variable is shared. This is used for prototype properties.
+		virtual void SetShared(bool isShared) = 0;
 	};
 
 	/// The ITypedValueEditorModel template class adds value-manipulation methods to

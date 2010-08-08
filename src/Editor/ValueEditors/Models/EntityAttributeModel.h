@@ -38,7 +38,13 @@ namespace Editor
 
 		virtual bool IsRemovable() const { return false; }
 
+		virtual bool IsShareable() const { return false; }
+
+		virtual bool IsShared() const { return false; }
+
 		virtual void Remove() { OC_FAIL("EnitityAttributeModel does not support Remove() operation."); }
+
+		virtual void SetShared(bool isShared) { OC_UNUSED(isShared); OC_FAIL("EntityAttributeModel does not support SetShared() operation."); }
 
 		virtual string GetValue() const;
 
