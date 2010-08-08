@@ -20,7 +20,8 @@ namespace Editor
 		{
 			TYPE_ID,
 			TYPE_NAME,
-			TYPE_TAG
+			TYPE_TAG,
+			TYPE_PROTOTYPE
 		};
 
 		/// Constructs a model for given entity and type of attribute.
@@ -36,13 +37,13 @@ namespace Editor
 
 		virtual bool IsListElement() const { return false; }
 
-		virtual bool IsRemovable() const { return false; }
+		virtual bool IsRemovable() const;
 
 		virtual bool IsShareable() const { return false; }
 
 		virtual bool IsShared() const { return false; }
 
-		virtual void Remove() { OC_FAIL("EnitityAttributeModel does not support Remove() operation."); }
+		virtual void Remove();
 
 		virtual void SetShared(bool isShared) { OC_UNUSED(isShared); OC_FAIL("EntityAttributeModel does not support SetShared() operation."); }
 

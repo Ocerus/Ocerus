@@ -96,6 +96,7 @@ entity_editor_add=Add
 entity_editor_revert=Rvrt
 entity_editor_save=Save
 entity_editor_remove=RM
+prototype_shared_checkbox_hint=Controls whether this property is shared.
 
 # resource editor
 resources=Resources

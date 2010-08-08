@@ -64,6 +64,11 @@ namespace Editor
 	{
 		return new Editor::StringEditor(new EntityAttributeModel(entity, Editor::EntityAttributeModel::TYPE_TAG));
 	}
+	
+	AbstractValueEditor* CreateEntityPrototypeEditor(const EntitySystem::EntityHandle& entity)
+	{
+		return new Editor::StringEditor(new EntityAttributeModel(entity, Editor::EntityAttributeModel::TYPE_PROTOTYPE));
+	}
 }
 
 // Template implementations

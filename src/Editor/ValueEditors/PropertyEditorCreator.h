@@ -20,6 +20,9 @@ namespace Editor
 
 	/// Creates an editor for the user tag of the entity.
 	AbstractValueEditor* CreateEntityTagEditor(const EntitySystem::EntityHandle&);
+
+	/// Creates an editor for the linked prototype of the entity.
+	AbstractValueEditor* CreateEntityPrototypeEditor(const EntitySystem::EntityHandle&);
 }
 
 #endif // _PROPERTYEDITORCREATOR_H_
