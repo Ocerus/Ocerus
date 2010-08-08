@@ -32,7 +32,7 @@ void Editor::ResourceWindow::Init()
 {
 	CEGUI_EXCEPTION_BEGIN
 
-	mWindow = gGUIMgr.LoadSystemLayout("gui/layouts/ResourceWindow.layout", "EditorRoot/ResourceWindow");
+	mWindow = gGUIMgr.LoadSystemLayout("ResourceWindow.layout", "EditorRoot/ResourceWindow");
 	OC_ASSERT(mWindow);
 	gGUIMgr.GetGUISheet()->addChildWindow(mWindow);
 

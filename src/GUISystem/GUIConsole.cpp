@@ -24,7 +24,7 @@ void GUIConsole::Init()
 	OC_DASSERT(mConsoleMessagesWidget == 0);
 	OC_DASSERT(gGUIMgr.GetGUISheet() != 0);
 	CEGUI_EXCEPTION_BEGIN
-	mConsoleWidget = gGUIMgr.LoadSystemLayout("gui/layouts/Console.layout");
+	mConsoleWidget = gGUIMgr.LoadSystemLayout("Console.layout");
 	gGUIMgr.GetGUISheet()->addChildWindow(mConsoleWidget);
 	mConsolePromptWidget = gGUIMgr.GetWindow("ConsoleRoot/ConsolePrompt");
 	mConsoleMessagesWidget = (CEGUI::Listbox*)gGUIMgr.GetWindow("ConsoleRoot/Pane");

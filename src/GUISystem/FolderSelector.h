@@ -59,22 +59,20 @@ namespace GUISystem {
 		/// Hides the folder selector.
 		void Hide();
 
-		/// Returns the value of the extra input box.
-		string GetExitboxValue() const;
-
 		/// Registers a callback function that will be called when user clicks a button. Only the last registered function
 		/// will be called.
 		void RegisterCallback(CallbackBase* callback);
-
-		/// Returns the selected file.
-		string GetSelectedFile();
 
 		/// Sets the current folder.
 		void SetCurrentFolder(string folder);
 
 	private:
 
-		bool OnClicked(const CEGUI::EventArgs&);
+		/// @name CEGUI Callbacks
+		//@{
+			bool OnFolderListClicked(const CEGUI::EventArgs&);
+			bool OnButtonClicked(const CEGUI::EventArgs&);
+		//@}
 
 		void ChangeFolder(const string& folder);
 		

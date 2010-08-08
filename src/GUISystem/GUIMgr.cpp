@@ -155,7 +155,7 @@ CEGUI::Window* GUIMgr::LoadSystemLayout(const CEGUI::String& filename, const CEG
 	CEGUI::Window* resultLayout = 0;
 	CEGUI_EXCEPTION_BEGIN
 	{
-		resultLayout = CEGUI::WindowManager::getSingleton().loadWindowLayout(filename, namePrefix, "", SystemLayoutPropertyCallback);
+		resultLayout = CEGUI::WindowManager::getSingleton().loadWindowLayout("gui/layouts/" + filename, namePrefix, "", SystemLayoutPropertyCallback);
 	}
 	CEGUI_EXCEPTION_END
 

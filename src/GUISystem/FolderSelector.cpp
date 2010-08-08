@@ -29,11 +29,12 @@ void GUISystem::FolderSelector::Show(const CEGUI::String& windowTitle, bool show
 	mButtonCancel = mWindow->getChildRecursive(root->getName() + "/FolderSelector/Frame/Cancel");
 	mPathBox = mWindow->getChildRecursive(root->getName() + "/FolderSelector/Frame/Path");
 	mFolderList = static_cast<CEGUI::Listbox*>(mWindow->getChildRecursive(root->getName() + "/FolderSelector/Frame/FolderList"));
+	mFolderList->setWantsMultiClickEvents(false);
 	mEditbox = mWindow->getChildRecursive(root->getName() + "/FolderSelector/Frame/Editbox");
 
-	mButtonOK->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&GUISystem::FolderSelector::OnClicked, this));
-	mButtonCancel->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&GUISystem::FolderSelector::OnClicked, this));
-	mFolderList->subscribeEvent(CEGUI::Listbox::EventMouseDoubleClick, CEGUI::Event::Subscriber(&GUISystem::FolderSelector::OnClicked, this));
+	mButtonOK->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&GUISystem::FolderSelector::OnButtonClicked, this));
+	mButtonCancel->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&GUISystem::FolderSelector::OnButtonClicked, this));
+	mFolderList->subscribeEvent(CEGUI::Listbox::EventMouseClick, CEGUI::Event::Subscriber(&GUISystem::FolderSelector::OnFolderListClicked, this));
 
 	if (!showEditbox)
 	{
@@ -60,57 +61,58 @@ void FolderSelector::RegisterCallback(FolderSelector::CallbackBase* callback)
 	mCallback = callback;
 }
 
-bool FolderSelector::OnClicked(const CEGUI::EventArgs& e)
+bool FolderSelector::OnFolderListClicked(const CEGUI::EventArgs&)
+{
+	CEGUI::ListboxItem* selectedItem = static_cast<CEGUI::ListboxItem*>(mFolderList->getFirstSelectedItem());
+	if (selectedItem == 0)
+		return false;
+	ChangeFolder(mFolders[selectedItem->getID()]);
+	UpdateFolderList();
+	return true;
+}
+
+bool FolderSelector::OnButtonClicked(const CEGUI::EventArgs& e)
 {
 	const CEGUI::WindowEventArgs& args = static_cast<const CEGUI::WindowEventArgs&>(e);
-	
-	if (args.window == mFolderList)
+
+	string path = "";
+	string editboxValue = "";
+	bool cancelled = true;
+	if (args.window == mButtonOK)
 	{
-		CEGUI::ListboxItem* selectedItem = static_cast<CEGUI::ListboxItem*>(mFolderList->getFirstSelectedItem());
-		if (selectedItem == 0)
-			return false;
-		ChangeFolder(mFolders[selectedItem->getID()]);
-		UpdateFolderList();
+		path = GetRelativePath(mCurrentPath);
+		editboxValue = mEditbox->getText().c_str();
+		cancelled = false;
 	}
-	else if (args.window == mButtonOK)
-	{
-		if (mCallback)
-		{
-			CEGUI::ListboxItem* selectedItem = static_cast<CEGUI::ListboxItem*>(mFolderList->getFirstSelectedItem());
-			if (selectedItem == 0)
-				return false;
-			string path = mCurrentPath;//+ "/" + mFolders[selectedItem->getID()];
-			string editboxValue = mEditbox->getText().c_str();
-			mCallback->execute(GetRelativePath(path), editboxValue, false, mTag);
-		}
-		delete this;
-	}
-	else if (args.window == mButtonCancel)
-	{
-		if (mCallback)
-			mCallback->execute("", "", true, mTag);
-		delete this;
-	}
-	else
-	{
-		OC_NOT_REACHED();
-	}
+
+	if (mCallback)
+		mCallback->execute(path, editboxValue, cancelled, mTag);
+
+	delete this;
 	return true;
 }
 
 void FolderSelector::ChangeFolder(const string& folder)
 {
-	boost::filesystem::path currentPath(mCurrentPath);
-	if (folder == "..")
+	try
 	{
-		if (currentPath.has_parent_path() && (currentPath.parent_path().directory_string().length() >= mRootPath.length()))
-			currentPath = currentPath.parent_path();
+		boost::filesystem::path currentPath(mCurrentPath);
+		if (folder == "..")
+		{
+			if (currentPath.has_parent_path() && (currentPath.parent_path().directory_string().length() >= mRootPath.length()))
+				currentPath = currentPath.parent_path();
+		}
+		else
+		{
+			currentPath = currentPath / folder;
+		}
+		if (boost::filesystem::is_directory(currentPath.directory_string()))
+			mCurrentPath = currentPath.directory_string();
 	}
-	else
+	catch (const boost::system::system_error& e)
 	{
-		currentPath = currentPath / folder;
+		ocWarning << "System exception caught: " << e.what();
 	}
-	mCurrentPath = currentPath.directory_string();
 }
 
 void GUISystem::FolderSelector::UpdateFolderList()
@@ -126,14 +128,21 @@ void GUISystem::FolderSelector::UpdateFolderList()
 
 	mFolders.clear();
 	mFolders.push_back("..");
-	boost::filesystem::directory_iterator endIt;
-	for (boost::filesystem::directory_iterator it(mCurrentPath); it != endIt; ++it)
+	try
 	{
-		if (boost::filesystem::is_directory(it->path()))
+		boost::filesystem::directory_iterator endIt;
+		for (boost::filesystem::directory_iterator it(mCurrentPath); it != endIt; ++it)
 		{
-			mFolders.push_back(it->filename());
+			if (boost::filesystem::is_directory(it->path()))
+			{
+				mFolders.push_back(it->filename());
+			}
 		}
 	}
+	catch (const boost::system::system_error& e)
+	{
+		ocWarning << "System exception caught: " << e.what();
+	}	
 	Containers::sort(mFolders.begin(), mFolders.end());
 
 	mPathBox->setText(GetRelativePath(mCurrentPath));

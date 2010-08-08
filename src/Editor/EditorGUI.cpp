@@ -70,7 +70,7 @@ void EditorGUI::LoadGUI()
 
 	CEGUI_EXCEPTION_END
 	
-	if (!gGUIMgr.SetGUISheet(gGUIMgr.LoadSystemLayout("gui/layouts/Editor.layout")))
+	if (!gGUIMgr.SetGUISheet(gGUIMgr.LoadSystemLayout("Editor.layout")))
 	{
 		ocError << "Can't load editor.";
 		return;
