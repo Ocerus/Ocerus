@@ -28,6 +28,7 @@ namespace Editor {
 			bool OnEventDeactivated(const CEGUI::EventArgs&);
 			bool OnEventButtonRemovePressed(const CEGUI::EventArgs&);
 			bool OnEventKeyDown(const CEGUI::EventArgs&);
+			bool OnEventIsSharedCheckboxChanged(const CEGUI::EventArgs&);
 		//@}
 
 	protected:

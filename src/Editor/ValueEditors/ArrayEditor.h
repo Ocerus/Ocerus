@@ -56,6 +56,7 @@ namespace Editor
 				bool OnEventButtonAddPressed(const CEGUI::EventArgs&);
 				bool OnEventButtonRevertPressed(const CEGUI::EventArgs&);
 				bool OnEventButtonSavePressed(const CEGUI::EventArgs&);
+				bool OnEventIsSharedCheckboxChanged(const CEGUI::EventArgs&);
 			//@}
 
 		protected:

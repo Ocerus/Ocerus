@@ -14,6 +14,7 @@ namespace CEGUI
 	class String;
 	class PushButton;
 	class Window;
+	class Checkbox;
 }
 
 #endif // __CEGUI_FORWARDS_H__

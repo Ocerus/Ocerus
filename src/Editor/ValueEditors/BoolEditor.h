@@ -34,6 +34,7 @@ namespace Editor {
 		//@{
 			bool OnEventButtonRemovePressed(const CEGUI::EventArgs&);
 			bool OnEventCheckStateChanged(const CEGUI::EventArgs&);
+			bool OnEventIsSharedCheckboxChanged(const CEGUI::EventArgs&);
 		//@}
 
 	private:

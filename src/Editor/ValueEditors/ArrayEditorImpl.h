@@ -96,6 +96,18 @@ namespace Editor
 		mButtonSave->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Editor::ArrayEditor<ElementType>::OnEventButtonSavePressed, this));
 		mHeaderWidget->addChildWindow(mButtonSave);
 
+		/// Create isShared checkbox, if needed
+		if (mModel->IsShareable())
+		{
+			labelWidget->setArea(CEGUI::URect(CEGUI::UDim(0, 16), CEGUI::UDim(0, 0), CEGUI::UDim(0.5f, -2), CEGUI::UDim(0, GetEditboxHeight())));
+			CEGUI::Checkbox* isSharedCheckbox = CreateIsSharedCheckboxWidget(namePrefix + "/IsSharedCheckbox");
+			isSharedCheckbox->setPosition(CEGUI::UVector2(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0)));
+			isSharedCheckbox->subscribeEvent(CEGUI::Checkbox::EventCheckStateChanged, CEGUI::Event::Subscriber(&ArrayEditor::OnEventIsSharedCheckboxChanged, this));
+			isSharedCheckbox->setSelected(mModel->IsShared());
+			mEditorWidget->addChildWindow(isSharedCheckbox);
+		}
+
+		
 		/// Update editor and return main widget
 		Update();
 		mLayout->UpdateLayout();
@@ -149,6 +161,14 @@ namespace Editor
 		OC_UNUSED(arg);
 		Submit();
 		gEditorMgr.PropertyValueChanged();
+		return true;
+	}
+
+	template<class ElementType>
+	bool ArrayEditor<ElementType>::OnEventIsSharedCheckboxChanged(const CEGUI::EventArgs& arg)
+	{
+		const CEGUI::WindowEventArgs& winArgs = static_cast<const CEGUI::KeyEventArgs&>(arg);
+		mModel->SetShared(static_cast<CEGUI::Checkbox*>(winArgs.window)->isSelected());
 		return true;
 	}
 

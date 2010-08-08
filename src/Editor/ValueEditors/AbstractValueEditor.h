@@ -7,13 +7,6 @@
 #include "Base.h"
 #include "Models/IValueEditorModel.h"
 #include "GUISystem/CEGUIForwards.h"
-namespace CEGUI
-{
-	class String;
-	class Window;
-	class Editbox;
-	class PushButton;
-}
 
 namespace Editor
 {
@@ -61,6 +54,9 @@ namespace Editor
 
 		/// Creates a button for removing elements and returns it.
 		CEGUI::PushButton* CreateRemoveElementButtonWidget(const CEGUI::String& name);
+
+		/// Creates a checkbox for setting IsShared status.
+		CEGUI::Checkbox* CreateIsSharedCheckboxWidget(const CEGUI::String& name);
 
 		/// Returns the recommended height of an editbox.
 		static float GetEditboxHeight();

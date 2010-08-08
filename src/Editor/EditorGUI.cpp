@@ -325,7 +325,7 @@ void EditorGUI::UpdateEntityEditorWindow()
 		
 		for (set<PropertyHolder>::iterator it = sortedPropertyList.begin(); it != sortedPropertyList.end(); ++it)
 		{
-			AbstractValueEditor* editor = CreatePropertyEditor(*it);
+			AbstractValueEditor* editor = CreatePropertyEditor(*it, currentEntity);
 			mPropertyEditors.push_back(editor);
 			layout->AddChildWindow(editor->CreateWidget(namePrefix + "/" + it->GetKey().ToString() + "Editor"));
 		}

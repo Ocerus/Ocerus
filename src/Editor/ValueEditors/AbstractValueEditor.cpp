@@ -42,6 +42,14 @@ CEGUI::PushButton* Editor::AbstractValueEditor::CreateRemoveElementButtonWidget(
 	return button;
 }
 
+CEGUI::Checkbox* AbstractValueEditor::CreateIsSharedCheckboxWidget(const CEGUI::String& name)
+{
+	CEGUI::Checkbox* checkbox = static_cast<CEGUI::Checkbox*>(gGUIMgr.CreateWindow("Editor/Checkbox", false, name));
+	checkbox->setTooltipText(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "prototype_shared_checkbox_hint"));
+	checkbox->setSize(CEGUI::UVector2(CEGUI::UDim(0, GetEditboxHeight()), CEGUI::UDim(0, GetEditboxHeight())));
+	return checkbox;
+}
+
 float Editor::AbstractValueEditor::GetEditboxHeight()
 {
 	static float result = gGUIMgr.GetWindow("EditorRoot")->getFont(true)->getLineSpacing(1.1f) + 10;

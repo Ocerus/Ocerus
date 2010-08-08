@@ -18,7 +18,7 @@
 
 namespace Editor
 {
-	AbstractValueEditor* CreatePropertyEditor(const PropertyHolder& property)
+	AbstractValueEditor* CreatePropertyEditor(const PropertyHolder& property, const EntityHandle& entity)
 	{
 		PROFILE_FNC();
 
@@ -27,26 +27,26 @@ namespace Editor
 
 		// We generate cases for all Array types here. ArrayEditor is used for such properties.
 		#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter, cloning) case typeID##_ARRAY: \
-			return new Editor::ArrayEditor<typeClass>(new PropertyModel<Array<typeClass>*>(property));
+			return new Editor::ArrayEditor<typeClass>(new PropertyModel<Array<typeClass>*>(property, entity));
 		#include "Utils/Properties/PropertyTypes.h"
 		#undef PROPERTY_TYPE
 
 		case PT_BOOL:
-		  return new Editor::BoolEditor(new PropertyModel<bool>(property));
+		  return new Editor::BoolEditor(new PropertyModel<bool>(property, entity));
 		case PT_INT32:
 			if (string(property.GetName()) == "Layer")
-				return new Editor::LayerEditor(new PropertyModel<EntitySystem::LayerID>(property));
+				return new Editor::LayerEditor(new PropertyModel<EntitySystem::LayerID>(property, entity));
 			else
-				return new Editor::StringEditor(new StringPropertyModel(property));
+				return new Editor::StringEditor(new StringPropertyModel(property, entity));
 			
 		case PT_VECTOR2:
-			return new Editor::Vector2Editor(new PropertyModel<Vector2>(property));
+			return new Editor::Vector2Editor(new PropertyModel<Vector2>(property, entity));
 		case PT_POINT:
-			return new Editor::PointEditor(new PropertyModel<GfxSystem::Point>(property));
+			return new Editor::PointEditor(new PropertyModel<GfxSystem::Point>(property, entity));
 		case PT_RESOURCE:
-			return new Editor::ResourceEditor(new PropertyModel<ResourceSystem::ResourcePtr>(property));
+			return new Editor::ResourceEditor(new PropertyModel<ResourceSystem::ResourcePtr>(property, entity));
 		default:
-			return new Editor::StringEditor(new StringPropertyModel(property));
+			return new Editor::StringEditor(new StringPropertyModel(property, entity));
 		}		
 	}
 

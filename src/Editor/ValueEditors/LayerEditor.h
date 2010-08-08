@@ -40,6 +40,7 @@ namespace Editor
 		//@{
 			bool OnEventDragDropItemDropped(const CEGUI::EventArgs&);
 			bool OnEventButtonRemovePressed(const CEGUI::EventArgs&);
+			bool OnEventIsSharedCheckboxChanged(const CEGUI::EventArgs&);
 		//@}
 
 	private:

@@ -46,6 +46,17 @@ CEGUI::Window* Editor::LayerEditor::CreateWidget(const CEGUI::String& namePrefix
 		mEditorWidget->addChildWindow(removeButton);
 	}
 
+	/// Create isShared checkbox, if needed
+	if (mModel->IsShareable())
+	{
+		labelWidget->setArea(CEGUI::URect(CEGUI::UDim(0, 16), CEGUI::UDim(0, 0), dimMiddle + CEGUI::UDim(0, -2), CEGUI::UDim(1, 0)));
+		CEGUI::Checkbox* isSharedCheckbox = CreateIsSharedCheckboxWidget(namePrefix + "/IsSharedCheckbox");
+		isSharedCheckbox->setPosition(CEGUI::UVector2(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0)));
+		isSharedCheckbox->subscribeEvent(CEGUI::Checkbox::EventCheckStateChanged, CEGUI::Event::Subscriber(&LayerEditor::OnEventIsSharedCheckboxChanged, this));
+		isSharedCheckbox->setSelected(mModel->IsShared());
+		mEditorWidget->addChildWindow(isSharedCheckbox);
+	}
+
 	/// Subscribe to editbox events
 	mEditboxWidget->subscribeEvent(CEGUI::Window::EventDragDropItemDropped, CEGUI::Event::Subscriber(&Editor::LayerEditor::OnEventDragDropItemDropped, this));
 
@@ -85,5 +96,12 @@ bool Editor::LayerEditor::OnEventDragDropItemDropped(const CEGUI::EventArgs& e)
 
 	gEditorMgr.PropertyValueChanged();
 
+	return true;
+}
+
+bool Editor::LayerEditor::OnEventIsSharedCheckboxChanged(const CEGUI::EventArgs& args)
+{
+	const CEGUI::WindowEventArgs& winArgs = static_cast<const CEGUI::KeyEventArgs&>(args);
+	mModel->SetShared(static_cast<CEGUI::Checkbox*>(winArgs.window)->isSelected());
 	return true;
 }
