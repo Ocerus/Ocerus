@@ -72,11 +72,16 @@ namespace GUISystem {
 		//@{
 			bool OnFolderListClicked(const CEGUI::EventArgs&);
 			bool OnButtonClicked(const CEGUI::EventArgs&);
+			bool OnEditboxKeyDown(const CEGUI::EventArgs&);
 		//@}
 
 		void ChangeFolder(const string& folder);
 		
 		void UpdateFolderList();
+		
+		void Submit();
+		
+		void Cancel();
 		
 		string GetRelativePath(const string& absolutePath);
 

@@ -151,6 +151,9 @@ namespace Core
 		/// Saves the configuration file of opened project.
 		void SaveProjectConfig();
 
+		/// Creates default directories and files for new project.
+		void CreateDefaultProjectStructure();
+		
 		string mProjectPath;
 		ProjectInfo mProjectInfo;
 		Core::Config* mProjectConfig;

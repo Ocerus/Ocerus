@@ -44,6 +44,7 @@ bool Project::CreateProject(const string& path)
 	mProjectConfig = new Core::Config(configFile);
 	SetDefaultProjectInfo();
 	SaveProjectConfig();
+	CreateDefaultProjectStructure();
 	gGfxWindow.SetWindowCaption(mProjectInfo.name);
 	ocInfo << "New project at " << path << " created.";
 	return true;
@@ -206,6 +207,19 @@ void Core::Project::SaveProjectConfig()
 
 	mProjectConfig->Save();
 	ocInfo << "Project " << mProjectPath << " saved.";
+}
+
+void Project::CreateDefaultProjectStructure()
+{
+	try
+	{
+		// String dir
+		boost::filesystem::create_directory(mProjectPath + "/strings");
+	}
+	catch (const boost::system::system_error& e)
+	{
+		ocWarning << "System exception: " << e.what();
+	}
 }
 
 bool Project::CreateScene(string sceneFilename, const string& sceneName)

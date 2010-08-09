@@ -22,6 +22,7 @@ void GUISystem::FolderSelector::Show(const CEGUI::String& windowTitle, bool show
 
 	mWindow = gGUIMgr.LoadSystemLayout("FolderSelector.layout", root->getName() + "/");
 	mWindow->setAlwaysOnTop(true);
+	mWindow->setModalState(true);
 	mWindow->getChildRecursive(root->getName() + "/FolderSelector/Frame")->setText(windowTitle);
 	root->addChildWindow(mWindow);
 
@@ -31,6 +32,7 @@ void GUISystem::FolderSelector::Show(const CEGUI::String& windowTitle, bool show
 	mFolderList = static_cast<CEGUI::Listbox*>(mWindow->getChildRecursive(root->getName() + "/FolderSelector/Frame/FolderList"));
 	mFolderList->setWantsMultiClickEvents(false);
 	mEditbox = mWindow->getChildRecursive(root->getName() + "/FolderSelector/Frame/Editbox");
+	mEditbox->subscribeEvent(CEGUI::Editbox::EventKeyDown, CEGUI::Event::Subscriber(&GUISystem::FolderSelector::OnEditboxKeyDown, this));
 
 	mButtonOK->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&GUISystem::FolderSelector::OnButtonClicked, this));
 	mButtonCancel->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&GUISystem::FolderSelector::OnButtonClicked, this));
@@ -44,6 +46,7 @@ void GUISystem::FolderSelector::Show(const CEGUI::String& windowTitle, bool show
 	else
 	{
 		mWindow->getChildRecursive(root->getName() + "/FolderSelector/Frame/EditboxLabel")->setText(editboxLabel);
+		mEditbox->activate();
 	}
 
 	UpdateFolderList();
@@ -74,23 +77,54 @@ bool FolderSelector::OnFolderListClicked(const CEGUI::EventArgs&)
 bool FolderSelector::OnButtonClicked(const CEGUI::EventArgs& e)
 {
 	const CEGUI::WindowEventArgs& args = static_cast<const CEGUI::WindowEventArgs&>(e);
-
-	string path = "";
-	string editboxValue = "";
-	bool cancelled = true;
 	if (args.window == mButtonOK)
 	{
-		path = GetRelativePath(mCurrentPath);
-		editboxValue = mEditbox->getText().c_str();
-		cancelled = false;
+		Submit();
 	}
-
-	if (mCallback)
-		mCallback->execute(path, editboxValue, cancelled, mTag);
-
-	delete this;
+	else
+	{
+		Cancel();
+	}
 	return true;
 }
+
+bool FolderSelector::OnEditboxKeyDown(const CEGUI::EventArgs& args)
+{
+	const CEGUI::KeyEventArgs& keyArgs = static_cast<const CEGUI::KeyEventArgs&>(args);
+	switch (keyArgs.scancode)
+	{
+		case CEGUI::Key::Return:
+		case CEGUI::Key::NumpadEnter:
+			Submit();
+			return true;
+		case CEGUI::Key::Escape:
+			Cancel();
+		default:
+			break;
+	}
+	return false;
+}
+
+void FolderSelector::Submit()
+{
+	if (mCallback)
+	{
+		const string& path = GetRelativePath(mCurrentPath);
+		const string& editboxValue = mEditbox->getText().c_str();
+		mCallback->execute(path, editboxValue, false, mTag);
+	}
+	delete this;
+}
+
+
+void FolderSelector::Cancel()
+{
+	if (mCallback)
+		mCallback->execute("", "", true, mTag);
+	delete this;
+}
+
+
 
 void FolderSelector::ChangeFolder(const string& folder)
 {

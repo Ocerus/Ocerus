@@ -42,6 +42,7 @@ void ViewportWindow::Disable()
 void GUISystem::ViewportWindow::SetCamera(const EntitySystem::EntityHandle& camera)
 {
 	setVisible(true);
+	
 	if (mRenderTarget != GfxSystem::InvalidRenderTargetID)
 	{
 		gGfxRenderer.RemoveRenderTarget(mRenderTarget);
@@ -92,13 +93,14 @@ void GUISystem::ViewportWindow::UpdateViewportArea()
 
 void GUISystem::ViewportWindow::GetArea(Vector2& position, Vector2& size) const
 {
+	CEGUI::Point absPosition = getUnclippedInnerRect().getPosition();
+	CEGUI::Size absSize = getUnclippedInnerRect().getSize();
 	const CEGUI::Size& windowSize = CEGUI::System::getSingleton().getRenderer()->getDisplaySize();
-	const CEGUI::Vector2& ceguiPosition = getPosition().asRelative(windowSize);
-	const CEGUI::Vector2& ceguiSize = getSize().asRelative(windowSize);
-	position.x = ceguiPosition.d_x;
-	position.y = ceguiPosition.d_y;
-	size.x = ceguiSize.d_x;
-	size.y = ceguiSize.d_y;
+
+	position.x = absPosition.d_x / windowSize.d_width;
+	position.y = absPosition.d_y / windowSize.d_height;
+	size.x = absSize.d_width / windowSize.d_width;
+	size.y = absSize.d_height / windowSize.d_height;
 }
 
 void GUISystem::ViewportWindow::CreateCameraMover()
