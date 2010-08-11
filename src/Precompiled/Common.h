@@ -20,6 +20,7 @@
 #include "LogSystem/LogMacros.h"
 
 #include "Utils/Array.h"
+#include "Utils/Callback.h"
 #include "Utils/DataContainer.h"
 #include "Utils/Hash.h"
 #include "Utils/MathUtils.h"

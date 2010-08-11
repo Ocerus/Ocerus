@@ -7,13 +7,12 @@ using namespace GUISystem;
 
 
 GUISystem::FolderSelector::FolderSelector(const string& rootPath, int32 tag):
-	mWindow(0), mButtonOK(0), mButtonCancel(0), mPathBox(0), mFolderList(0), mEditbox(0), mTag(tag), mCallback(0), mRootPath(rootPath)
+	mWindow(0), mButtonOK(0), mButtonCancel(0), mPathBox(0), mFolderList(0), mEditbox(0), mTag(tag), mRootPath(rootPath)
 {
 }
 
 GUISystem::FolderSelector::~FolderSelector()
 {
-	delete mCallback;
 	gGUIMgr.DestroyWindowDirectly(mWindow);
 }
 
@@ -59,12 +58,6 @@ void FolderSelector::Hide()
 	mWindow = 0;
 }
 
-void FolderSelector::RegisterCallback(FolderSelector::CallbackBase* callback)
-{
-	delete mCallback;
-	mCallback = callback;
-}
-
 bool FolderSelector::OnFolderListClicked(const CEGUI::EventArgs&)
 {
 	CEGUI::ListboxItem* selectedItem = static_cast<CEGUI::ListboxItem*>(mFolderList->getFirstSelectedItem());
@@ -108,11 +101,11 @@ bool FolderSelector::OnEditboxKeyDown(const CEGUI::EventArgs& args)
 
 void FolderSelector::Submit()
 {
-	if (mCallback)
+	if (mCallback.IsSet())
 	{
 		const string& path = GetRelativePath(mCurrentPath);
 		const string& editboxValue = mEditbox->getText().c_str();
-		mCallback->execute(path, editboxValue, false, mTag);
+		mCallback.Call(path, editboxValue, false, mTag);
 	}
 	delete this;
 }
@@ -120,8 +113,8 @@ void FolderSelector::Submit()
 
 void FolderSelector::Cancel()
 {
-	if (mCallback)
-		mCallback->execute("", "", true, mTag);
+	if (mCallback.IsSet())
+		mCallback.Call("", "", true, mTag);
 	delete this;
 }
 

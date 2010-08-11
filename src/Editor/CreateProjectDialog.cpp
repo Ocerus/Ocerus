@@ -67,7 +67,7 @@ void CreateProjectDialog::OpenLocationDialog()
 {
 	mDialog->setModalState(false);
 	GUISystem::FolderSelector* folderSelector = new GUISystem::FolderSelector("");
-	folderSelector->RegisterCallback(new GUISystem::FolderSelector::Callback<Editor::CreateProjectDialog>(this, &Editor::CreateProjectDialog::OnFolderSelected));
+	folderSelector->RegisterCallback(GUISystem::FolderSelector::Callback(this, &Editor::CreateProjectDialog::OnFolderSelected));
 	folderSelector->Show(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "create_project_folder"));
 }
 

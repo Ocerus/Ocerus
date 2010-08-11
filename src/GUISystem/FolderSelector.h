@@ -1,50 +1,23 @@
+/// @file
+/// Provides a widget for selecting a folder and optionally entering a string value.
 #ifndef __GUISYSTEM_FOLDERSELECTOR_H__
 #define __GUISYSTEM_FOLDERSELECTOR_H__
 
 #include "Base.h"
 #include "CEGUIForwards.h"
+#include "Utils/Callback.h"
 
 namespace GUISystem {
 
 	class FolderSelector
 	{
 	public:
-
-		/// The base class for callback wrappers.
-		class CallbackBase
-		{
-		public:
-			/// Executes the callback.
-			/// @param path The full path that was selected through the folder selector.
-			/// @param canceled Whether the folder selector was canceled.
-			/// @param tag The tag of the FolderSelector.
-			virtual void execute(const string& path, const string& editboxValue, bool canceled, int32 tag) = 0;
-		};
-
-		/// A callback wrapper that wraps a method of an arbitrary class.
-		template<class Class>
-		class Callback: public CallbackBase
-		{
-		public:
-			/// The type of callback method.
-			typedef void (Class::*Method)(const string&, const string&, bool, int32);
-
-			/// Constructs a callback to specified method on specified instance.
-			Callback(Class* instance, Method method): mInstance(instance), mMethod(method) {}
-
-			/// Executes the callback.
-			/// @param path The full path that was selected through the folder selector.
-			/// @param canceled Whether the folder selector was canceled.
-			/// @param tag The tag of the FolderSelector.
-			virtual void execute(const string& path, const string& editboxValue, bool canceled, int32 tag)
-			{
-				(mInstance->*mMethod)(path, editboxValue, canceled, tag);
-			}
-
-		private:
-			Class* mInstance;
-			Method mMethod;
-		};
+		/// Callback type that signals that user confirmed/cancelled the dialog. Parameters are:
+		/// @param path
+		/// @param editboxValue
+		/// @param wasCancelled
+		/// @param tag
+		typedef Utils::Callback4<void, const string&, const string&, bool, int32> Callback;
 
 		/// Constructs a FolderSelector instance.
 		FolderSelector(const string& rootPath = "", int32 tag = 0);
@@ -61,7 +34,7 @@ namespace GUISystem {
 
 		/// Registers a callback function that will be called when user clicks a button. Only the last registered function
 		/// will be called.
-		void RegisterCallback(CallbackBase* callback);
+		inline void RegisterCallback(Callback callback) { mCallback = callback; }
 
 		/// Sets the current folder.
 		void SetCurrentFolder(string folder);
@@ -93,13 +66,12 @@ namespace GUISystem {
 		CEGUI::Window* mEditbox;
 
 		int mTag;
-		CallbackBase* mCallback;
+		Callback mCallback;
 
 		string mRootPath;
 		string mCurrentPath;
 		vector<string> mFolders;
 	};
-
 }
 
 #endif // __GUISYSTEM_FOLDERSELECTOR_H__
