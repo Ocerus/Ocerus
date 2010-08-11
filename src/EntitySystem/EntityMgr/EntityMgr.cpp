@@ -1244,11 +1244,11 @@ void EntitySystem::EntityMgr::UnlinkEntityFromPrototype( const EntityHandle enti
 	if (parentPrototypeIter == mPrototypes.end())
 	{
 		ocError << "Entity prototype not found: " << parentPrototypeID;
-		return;
 	}
-
-	if (parentPrototypeIter->second != 0)
+	else if (parentPrototypeIter->second != 0)
 		parentPrototypeIter->second->mInstancesCount--;
+
+	entityIt->second->mPrototype = EntityHandle();
 }
 
 bool EntitySystem::EntityMgr::GetEntityComponentProperties( const EntityHandle entity, const ComponentID component, PropertyList& out, const PropertyAccessFlags flagMask /*= PA_FULL_ACCESS*/ ) const
