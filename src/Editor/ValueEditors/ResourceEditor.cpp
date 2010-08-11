@@ -2,7 +2,7 @@
 #include "ResourceEditor.h"
 #include "Editor/ResourceWindow.h"
 #include "Editor/EditorMgr.h"
-#include "GUISystem/CEGUITools.h"
+#include "GUISystem/CEGUICommon.h"
 
 using namespace Editor;
 

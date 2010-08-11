@@ -1,5 +1,8 @@
-#ifndef _CEGUIRESOURCE_H_
-#define _CEGUIRESOURCE_H_
+/// @file
+/// Interconnects CEGUI with Ocerus resource system.
+
+#ifndef _GUISYSTEM_CEGUIRESOURCE_H_
+#define _GUISYSTEM_CEGUIRESOURCE_H_
 
 #include "Base.h"
 #include "ResourcePointers.h"

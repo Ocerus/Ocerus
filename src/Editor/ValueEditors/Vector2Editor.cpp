@@ -1,6 +1,6 @@
 #include "Common.h"
 #include "Vector2Editor.h"
-#include "GUISystem/CEGUITools.h"
+#include "GUISystem/CEGUICommon.h"
 
 using namespace Editor;
 

@@ -1,9 +1,9 @@
 #include "Common.h"
+
 #include "CreateProjectDialog.h"
 #include "EditorMgr.h"
-#include "GUISystem/CEGUITools.h"
+#include "GUISystem/CEGUICommon.h"
 #include "GUISystem/FolderSelector.h"
-#include <CEGUIWindow.h>
 
 using namespace Editor;
 
@@ -24,24 +24,25 @@ Editor::CreateProjectDialog::~CreateProjectDialog()
 
 void CreateProjectDialog::Init()
 {
-	CEGUI_EXCEPTION_BEGIN
-	mDialog = gGUIMgr.LoadSystemLayout("CreateProject.layout", "CreateProjectDialog");
-	mNameValue = mDialog->getChildRecursive("CreateProjectDialog/NameValue");
-	mLocationValue = mDialog->getChildRecursive("CreateProjectDialog/LocationValue");
-	mOKButton = mDialog->getChildRecursive("CreateProjectDialog/OKButton");
-	mCancelButton = mDialog->getChildRecursive("CreateProjectDialog/CancelButton");
-	mLocationButton = mDialog->getChildRecursive("CreateProjectDialog/LocationButton");
+	CEGUI_TRY;
+	{
+		mDialog = gGUIMgr.LoadSystemLayout("CreateProject.layout", "CreateProjectDialog");
+		mNameValue = mDialog->getChildRecursive("CreateProjectDialog/NameValue");
+		mLocationValue = mDialog->getChildRecursive("CreateProjectDialog/LocationValue");
+		mOKButton = mDialog->getChildRecursive("CreateProjectDialog/OKButton");
+		mCancelButton = mDialog->getChildRecursive("CreateProjectDialog/CancelButton");
+		mLocationButton = mDialog->getChildRecursive("CreateProjectDialog/LocationButton");
 
-	mNameValue->subscribeEvent(CEGUI::Editbox::EventTextChanged, CEGUI::Event::Subscriber(&Editor::CreateProjectDialog::OnChanged, this));
-	mLocationValue->subscribeEvent(CEGUI::Editbox::EventTextChanged, CEGUI::Event::Subscriber(&Editor::CreateProjectDialog::OnChanged, this));
-	mOKButton->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Editor::CreateProjectDialog::OnButtonClicked, this));
-	mCancelButton->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Editor::CreateProjectDialog::OnButtonClicked, this));
-	mLocationButton->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Editor::CreateProjectDialog::OnButtonClicked, this));
+		mNameValue->subscribeEvent(CEGUI::Editbox::EventTextChanged, CEGUI::Event::Subscriber(&Editor::CreateProjectDialog::OnChanged, this));
+		mLocationValue->subscribeEvent(CEGUI::Editbox::EventTextChanged, CEGUI::Event::Subscriber(&Editor::CreateProjectDialog::OnChanged, this));
+		mOKButton->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Editor::CreateProjectDialog::OnButtonClicked, this));
+		mCancelButton->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Editor::CreateProjectDialog::OnButtonClicked, this));
+		mLocationButton->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Editor::CreateProjectDialog::OnButtonClicked, this));
 
-	gGUIMgr.GetGUISheet()->addChildWindow(mDialog);
-	mDialog->hide();
-
-	CEGUI_EXCEPTION_END
+		gGUIMgr.GetGUISheet()->addChildWindow(mDialog);
+		mDialog->hide();
+	}
+	CEGUI_CATCH;
 }
 
 void CreateProjectDialog::OpenDialog()

@@ -1,11 +1,10 @@
 #include "Common.h"
 
 #include "GUIMgr.h"
-#include "CEGUITools.h"
 #include "StringSystem/StringMgr.h"
 
 using namespace GUISystem;
-
+/*
 /// Based on code from http://www.cegui.org.uk/wiki/index.php/MenuAndPopup
 void GUISystem::ShowPopup(CEGUI::PopupMenu* popupMenu, const CEGUI::MouseEventArgs& me)
 {
@@ -82,3 +81,4 @@ void GUISystem::ShowPopup(CEGUI::PopupMenu* popupMenu, const CEGUI::MouseEventAr
 	// Ensure it appears on top of the other widgets
 	popupMenu->moveToFront();
 }
+*/

@@ -1,5 +1,6 @@
 #include "Common.h"
 #include "CEGUIResource.h"
+
 #include "CEGUIDataContainer.h"
 #include "DataContainer.h"
 

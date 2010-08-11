@@ -1,34 +1,32 @@
 #include "Common.h"
-
 #include "GUIMgr.h"
+
+#include "CEGUICommon.h"
+#include "GUIConsole.h"
 #include "ResourceProvider.h"
 #include "ScriptProvider.h"
-#include "GUIConsole.h"
-#include "CEGUITools.h"
-
-#include "Core/Application.h"
-
-#include "InputSystem/InputMgr.h"
-#include "InputSystem/InputActions.h"
-
-#include "Editor/EditorMgr.h"
-
-#include "CEGUI.h"
-#include "RendererModules/OpenGL/CEGUIOpenGLRenderer.h"
-
 #include "ViewportWindow.h"
 
+#include "Core/Application.h"
+#include "InputSystem/InputMgr.h"
+#include "InputSystem/InputActions.h"
+#include "Editor/EditorMgr.h"
+
+#include <RendererModules/OpenGL/CEGUIOpenGLRenderer.h>
+
+/// @todo Comment what is this.
 #undef CreateWindow
 #undef CreateWindowA
 #undef CreateWindowW
 
-/// WTF IS CEGUI::WindowManager::getSingleton().recreateWindow()
-#ifdef __WIN__
-
 /// If defined the CEGUI windows will be recycled using a system of caches.
 #define RECYCLE_WINDOWS
 
-
+/// CEGUI windows recycling is generally not necessary on Unices, as the project seems to run
+/// pretty fast without it. Moreover, the functionality needs some modifications in CEGUI
+/// so it does not compile against system-wide CEGUI.
+#ifdef __UNIX__
+	#undef RECYCLE_WINDOWS
 #endif
 
 using namespace GUISystem;
@@ -51,18 +49,18 @@ bool ProjectLayoutPropertyCallback(CEGUI::Window* window, CEGUI::String& propnam
 const StringKey GUIMgr::GUIGroup = "GUI";
 
 GUIMgr::GUIMgr():
-	mCegui(0),
-	mCurrentRootLayout(0),
-	mGUIConsole(0),
+	mCEGUI(0),
 	mRenderer(0),
-	mResourceProvider(0)
+	mResourceProvider(0),
+	mScriptProvider(0),
+	mGUIConsole(0)
 {
 	ocInfo << "*** GUIMgr init ***";
 
 	mRenderer = &CEGUI::OpenGLRenderer::create();
 	mResourceProvider = new ResourceProvider();
 	mScriptProvider = new ScriptProvider();
-	mCegui = &CEGUI::System::create(*mRenderer, mResourceProvider, 0, 0, mScriptProvider);
+	mCEGUI = &CEGUI::System::create(*mRenderer, mResourceProvider, 0, 0, mScriptProvider);
 
 	gInputMgr.AddInputListener(this);
 	gGfxWindow.AddScreenListener(this);
@@ -101,7 +99,7 @@ void GUIMgr::Init()
 	gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_SYSTEM, "gui/layouts", "gui-layouts", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
 	gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_SYSTEM, "gui/looknfeel", "gui-looknfeels", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
 
-	CEGUI_EXCEPTION_BEGIN
+	CEGUI_TRY;
 	{
 		// Register custom Window subclasses to the CEGUI
 		CEGUI::WindowFactoryManager::addFactory<CEGUI::TplWindowFactory<ViewportWindow> >();
@@ -112,11 +110,11 @@ void GUIMgr::Init()
 		CEGUI::SchemeManager::getSingleton().create("gui/schemes/Editor.scheme");
 
 		// Set defaults
-		mCegui->setDefaultFont("DejaVuSans-10");
-		mCegui->setDefaultMouseCursor("Vanilla-Images", "MouseArrow");
-		mCegui->setMouseClickEventGenerationEnabled(true);
+		mCEGUI->setDefaultFont("DejaVuSans-10");
+		mCEGUI->setDefaultMouseCursor("Vanilla-Images", "MouseArrow");
+		mCEGUI->setMouseClickEventGenerationEnabled(true);
 	}
-	CEGUI_EXCEPTION_END_CRITICAL
+	CEGUI_CATCH_CRITICAL;
 }
 
 void GUIMgr::Deinit()
@@ -138,55 +136,56 @@ void GUIMgr::DeinitConsole()
 
 void GUIMgr::LoadSystemScheme(const string& filename)
 {
-	OC_DASSERT(mCegui);
+	OC_DASSERT(mCEGUI);
 	CEGUI::SchemeManager::getSingleton().create(filename);
 }
 
 void GUIMgr::LoadProjectScheme(const string& filename)
 {
-	OC_DASSERT(mCegui);
-	/// @todo resource groups
+	OC_DASSERT(mCEGUI);
 	CEGUI::SchemeManager::getSingleton().create(filename, "project");
 }
 
 CEGUI::Window* GUIMgr::LoadSystemLayout(const CEGUI::String& filename, const CEGUI::String& namePrefix)
 {
-	OC_DASSERT(mCegui);
+	OC_DASSERT(mCEGUI);
 	CEGUI::Window* resultLayout = 0;
-	CEGUI_EXCEPTION_BEGIN
+
+	CEGUI_TRY;
 	{
 		resultLayout = CEGUI::WindowManager::getSingleton().loadWindowLayout("gui/layouts/" + filename, namePrefix, "", SystemLayoutPropertyCallback);
 	}
-	CEGUI_EXCEPTION_END
+	CEGUI_CATCH;
 
-		if (resultLayout) ocInfo << "System GUI layout " << filename << " loaded.";
-		else ocWarning << "Cannot load system GUI layout " << filename << ".";
+	if (resultLayout) ocInfo << "System GUI layout " << filename << " loaded.";
+	else ocWarning << "Cannot load system GUI layout " << filename << ".";
 
-		return resultLayout;
+	return resultLayout;
 }
 
 CEGUI::Window* GUIMgr::LoadProjectLayout(const CEGUI::String& filename, const CEGUI::String& namePrefix)
 {
-	OC_DASSERT(mCegui);
+	OC_DASSERT(mCEGUI);
 	CEGUI::Window* resultLayout = 0;
-	CEGUI_EXCEPTION_BEGIN
+
+	CEGUI_TRY;
 	{
 		resultLayout = CEGUI::WindowManager::getSingleton().loadWindowLayout(filename, namePrefix, "Project", ProjectLayoutPropertyCallback);
 	}
-	CEGUI_EXCEPTION_END
+	CEGUI_CATCH;
 
-		if (resultLayout) ocInfo << "Project GUI layout " << filename << " loaded.";
-		else ocWarning << "Cannot load project GUI layout " << filename << ".";
+	if (resultLayout) ocInfo << "Project GUI layout " << filename << " loaded.";
+	else ocWarning << "Cannot load project GUI layout " << filename << ".";
 
-		return resultLayout;
+	return resultLayout;
 }
 
 bool GUIMgr::SetGUISheet(CEGUI::Window* sheet)
 {
-	OC_DASSERT(mCegui);
+	OC_DASSERT(mCEGUI);
 	if (sheet)
 	{
-		mCegui->setGUISheet(sheet);
+		mCEGUI->setGUISheet(sheet);
 		sheet->setMousePassThroughEnabled(true);
 		ocInfo << "GUI sheet set to " << sheet->getName() << ".";
 		return true;
@@ -199,8 +198,8 @@ bool GUIMgr::SetGUISheet(CEGUI::Window* sheet)
 
 CEGUI::Window* GUIMgr::GetGUISheet() const
 {
-	OC_DASSERT(mCegui);
-	return mCegui->getGUISheet();
+	OC_DASSERT(mCEGUI);
+	return mCEGUI->getGUISheet();
 }
 
 void GUIMgr::DestroyWindow(CEGUI::Window* window)
@@ -217,7 +216,7 @@ void GUIMgr::DestroyWindow(CEGUI::Window* window)
 	if (window->getName().find("EditorCreated") != 0) window->rename(GenerateWindowName());
 
 	WindowTypeCache* cache = mWindowCache[window->getType().c_str()];
-	if (cache && window->isUserStringDefined("CreatedByGuiMgr"))
+	if (cache && window->isUserStringDefined("CreatedByGUIMgr"))
 	{
 		if (cache->count == cache->list.size())
 		{
@@ -246,7 +245,7 @@ void GUISystem::GUIMgr::DestroyWindowChildren( CEGUI::Window* window )
 
 	for (int32 i=window->getChildCount()-1; i>=0; --i)
 	{
-		if (window->getChildAtIdx(i)->isUserStringDefined("CreatedByGuiMgr"))
+		if (window->getChildAtIdx(i)->isUserStringDefined("CreatedByGUIMgr"))
 		{
 			// now we know this window was created by us, so it wasn't created automatically
 			DestroyWindow(window->getChildAtIdx(i));
@@ -278,7 +277,7 @@ CEGUI::Window* GUIMgr::CreateWindow( const string& type, bool reallocateOnHeap, 
 	{
 		window = CEGUI::WindowManager::getSingleton().recreateWindow(window);
 		window->setDestroyedByParent(false); // to prevent CEGUI from destroying our own windows
-		window->setUserString("CreatedByGuiMgr", "True"); // mark this window is ours
+		window->setUserString("CreatedByGUIMgr", "True"); // mark this window is ours
 	}
 	else
 	{
@@ -319,7 +318,7 @@ CEGUI::Window* GUIMgr::CreateWindowDirectly( const string& type, const CEGUI::St
 #ifdef RECYCLE_WINDOWS
 	window->setDestroyedByParent(false); // to prevent CEGUI from destroying our own windows
 #endif
-	window->setUserString("CreatedByGuiMgr", "True"); // mark this window is ours
+	window->setUserString("CreatedByGUIMgr", "True"); // mark this window is ours
 	return window;
 }
 
@@ -357,17 +356,17 @@ void GUISystem::GUIMgr::ClearWindowCaches()
 	mWindowCache.clear();
 }
 
-CEGUI::Window* GUISystem::GUIMgr::GetWindow( const string& name )
+CEGUI::Window* GUISystem::GUIMgr::GetWindow(const CEGUI::String& name)
 {
 	return CEGUI::WindowManager::getSingleton().getWindow(name.c_str());
 }
 
-bool GUISystem::GUIMgr::WindowExists( const string& name )
+bool GUISystem::GUIMgr::WindowExists(const string& name)
 {
 	return CEGUI::WindowManager::getSingleton().isWindowPresent(name.c_str());
 }
 
-void GUISystem::GUIMgr::DestroyWindowDirectly( CEGUI::Window* window )
+void GUISystem::GUIMgr::DestroyWindowDirectly(CEGUI::Window* window)
 {
 	CEGUI::WindowManager::getSingleton().destroyWindow(window);
 }
@@ -389,35 +388,21 @@ void GUISystem::GUIMgr::_DebugPrintWindowCaches()
 #endif
 }
 
-void GUIMgr::DisconnectEvent( const CEGUI::Event::Connection eventConnection )
-{
-	mDeadEventConnections.push_back(eventConnection);
-}
-
-void GUIMgr::ProcessDisconnectedEventList()
-{
-	for (list<CEGUI::Event::Connection>::iterator it=mDeadEventConnections.begin(); it!=mDeadEventConnections.end(); ++it)
-	{
-		(*it)->disconnect();
-	}
-	mDeadEventConnections.clear();
-}
-
 void GUIMgr::RenderGUI() const
 {
-	OC_DASSERT(mCegui);
-	mCegui->renderGUI();
+	OC_DASSERT(mCEGUI);
+	mCEGUI->renderGUI();
 }
 
 void GUIMgr::Update(float32 delta)
 {
-	OC_DASSERT(mCegui);
-	mCegui->injectTimePulse(delta);
+	OC_DASSERT(mCEGUI);
+	mCEGUI->injectTimePulse(delta);
 }
 
 bool GUIMgr::KeyPressed(const InputSystem::KeyInfo& ke)
 {
-	OC_DASSERT(mCegui);
+	OC_DASSERT(mCEGUI);
 	mCurrentInputEvent.keyInfo = &ke;
 
 	// ToggleConsole button is hardwired here.
@@ -426,9 +411,9 @@ bool GUIMgr::KeyPressed(const InputSystem::KeyInfo& ke)
 		return true;
 	}
 
-	if (!mCegui->injectKeyDown(KeyMapperOIStoCEGUI(ke.keyCode)))
+	if (!mCEGUI->injectKeyDown(KeyMapperOIStoCEGUI(ke.keyCode)))
 	{
-		return mCegui->injectChar(ke.charCode);
+		return mCEGUI->injectChar(ke.charCode);
 	}
 
 	return false;
@@ -436,14 +421,14 @@ bool GUIMgr::KeyPressed(const InputSystem::KeyInfo& ke)
 
 bool GUIMgr::KeyReleased(const InputSystem::KeyInfo& ke)
 {
-	OC_DASSERT(mCegui);
+	OC_DASSERT(mCEGUI);
 	mCurrentInputEvent.keyInfo = &ke;
-	return mCegui->injectKeyUp(KeyMapperOIStoCEGUI(ke.keyCode));
+	return mCEGUI->injectKeyUp(KeyMapperOIStoCEGUI(ke.keyCode));
 }
 
 bool GUIMgr::MouseMoved(const InputSystem::MouseInfo& mi)
 {
-	OC_DASSERT(mCegui);
+	OC_DASSERT(mCEGUI);
 	mCurrentInputEvent.mouseInfo = &mi;
 
 	bool wheelInjected = false;
@@ -477,7 +462,7 @@ bool GUIMgr::MouseMoved(const InputSystem::MouseInfo& mi)
 		}
 
 		// inject
-		wheelInjected = mCegui->injectMouseWheelChange(float(mi.wheelDelta) / 75.0f);
+		wheelInjected = mCEGUI->injectMouseWheelChange(float(mi.wheelDelta) / 75.0f);
 
 		// restore previously active window
 		if (wheelTarget)
@@ -487,27 +472,27 @@ bool GUIMgr::MouseMoved(const InputSystem::MouseInfo& mi)
 		}
 	}
 
-	bool positionInjected = mCegui->injectMousePosition(float(mi.x), float(mi.y));
+	bool positionInjected = mCEGUI->injectMousePosition(float(mi.x), float(mi.y));
 
 	return wheelInjected || positionInjected;
 }
 
 bool GUIMgr::MouseButtonPressed(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn)
 {
-	OC_DASSERT(mCegui);
+	OC_DASSERT(mCEGUI);
 	mCurrentInputEvent.mouseInfo = &mi;
 	mCurrentInputEvent.mouseButton = btn;
-	bool result = mCegui->injectMouseButtonDown(ConvertMouseButtonEnum(btn));
+	bool result = mCEGUI->injectMouseButtonDown(ConvertMouseButtonEnum(btn));
 	return result;
 }
 
 bool GUIMgr::MouseButtonReleased(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn)
 {
-	OC_DASSERT(mCegui);
+	OC_DASSERT(mCEGUI);
 	mCurrentInputEvent.mouseInfo = &mi;
 	mCurrentInputEvent.mouseButton = btn;
 	gEditorMgr.EnablePopupClosing();
-	bool result = mCegui->injectMouseButtonUp(ConvertMouseButtonEnum(btn));
+	bool result = mCEGUI->injectMouseButtonUp(ConvertMouseButtonEnum(btn));
 	gEditorMgr.CloseAllPopupMenus();
 	return result;
 }
@@ -516,7 +501,7 @@ void GUIMgr::ResolutionChanging(const uint32 width, const uint32 height)
 {
 	OC_UNUSED(width);
 	OC_UNUSED(height);
-	OC_DASSERT(mCegui);
+	OC_DASSERT(mCEGUI);
 
 	mRenderer->grabTextures();
 
@@ -527,11 +512,11 @@ void GUIMgr::ResolutionChanged(const uint32 width, const uint32 height)
 {
 	OC_UNUSED(width);
 	OC_UNUSED(height);
-	OC_DASSERT(mCegui);
+	OC_DASSERT(mCEGUI);
 
 	mRenderer->restoreTextures();
 
-	return mCegui->notifyDisplaySizeChanged(CEGUI::Size((float32)width, (float32)height));
+	return mCEGUI->notifyDisplaySizeChanged(CEGUI::Size((float32)width, (float32)height));
 }
 
 CEGUI::uint KeyMapperOIStoCEGUI(InputSystem::eKeyCode key)
@@ -579,7 +564,7 @@ bool LayoutPropertyCallback(StringSystem::StringMgr& stringMgr, CEGUI::Window* w
 		propvalue.at(0) == '$' &&
 		propvalue.at(propvalue.size() - 1) == '$')
 	{
-		/// Use StringMgr to translate textual data in GUI.
+		// Using StringMgr to translate textual data in GUI.
 		CEGUI::String translatedText = stringMgr.GetTextData(GUIMgr::GUIGroup, propvalue.substr(1, propvalue.size() - 2).c_str());
 		window->setProperty(propname, translatedText);
 		return false;

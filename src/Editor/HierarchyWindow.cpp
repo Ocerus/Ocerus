@@ -3,7 +3,6 @@
 #include "PopupMenu.h"
 #include "PrototypeWindow.h"
 #include "Core/Game.h"
-#include "GUISystem/CEGUITools.h"
 #include "GUISystem/ItemListboxProperties.h"
 #include "GUISystem/PromptBox.h"
 #include "Editor/EditorMgr.h"
@@ -34,20 +33,20 @@ void Editor::HierarchyWindow::Init()
 
 	mHierarchy.clear();
 
-	CEGUI_EXCEPTION_BEGIN
+	CEGUI_TRY;
+	{
+		mWindow = gGUIMgr.LoadSystemLayout("HierarchyWindow.layout", "EditorRoot/HierarchyWindow");
+		OC_ASSERT(mWindow != 0);
+		gGUIMgr.GetGUISheet()->addChildWindow(mWindow);
+		mTree = static_cast<CEGUI::ItemListbox*>(mWindow->getChild(mWindow->getName() + "/List"));
+		OC_ASSERT(mTree != 0);
 
-	mWindow = gGUIMgr.LoadSystemLayout("HierarchyWindow.layout", "EditorRoot/HierarchyWindow");
-	OC_ASSERT(mWindow != 0);
-	gGUIMgr.GetGUISheet()->addChildWindow(mWindow);
-	mTree = static_cast<CEGUI::ItemListbox*>(mWindow->getChild(mWindow->getName() + "/List"));
-	OC_ASSERT(mTree != 0);
+		mTree->addProperty(&gHierarchyMouseWheelProperty);
 
-	mTree->addProperty(&gHierarchyMouseWheelProperty);
-
-	mTree->subscribeEvent(CEGUI::Window::EventMouseButtonUp, CEGUI::Event::Subscriber(&Editor::HierarchyWindow::OnWindowMouseButtonUp, this));
-	mTree->subscribeEvent(CEGUI::Window::EventDragDropItemDropped, CEGUI::Event::Subscriber(&Editor::HierarchyWindow::OnTreeDragDropItemDropped, this));
-
-	CEGUI_EXCEPTION_END
+		mTree->subscribeEvent(CEGUI::Window::EventMouseButtonUp, CEGUI::Event::Subscriber(&Editor::HierarchyWindow::OnWindowMouseButtonUp, this));
+		mTree->subscribeEvent(CEGUI::Window::EventDragDropItemDropped, CEGUI::Event::Subscriber(&Editor::HierarchyWindow::OnTreeDragDropItemDropped, this));
+	}
+	CEGUI_CATCH;
 }
 
 void Editor::HierarchyWindow::RebuildTree()

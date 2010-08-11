@@ -8,8 +8,8 @@
 #include "Core/Project.h"
 #include "AddOn/scriptbuilder.h"
 #include "AddOn/scriptstring.h"
+#include "GUISystem/CEGUICommon.h"
 #include "GUISystem/GUIConsole.h"
-#include "GUISystem/CEGUITools.h"
 #include "Editor/EditorMgr.h"
 #include "Editor/EditorGUI.h"
 

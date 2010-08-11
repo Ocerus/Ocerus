@@ -1,7 +1,7 @@
 #include "Common.h"
 #include "MessageBox.h"
 
-#include "CEGUITools.h"
+#include "CEGUICommon.h"
 
 using namespace GUISystem;
 

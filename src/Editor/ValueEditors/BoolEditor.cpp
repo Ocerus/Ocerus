@@ -1,6 +1,6 @@
 #include "Common.h"
 #include "BoolEditor.h"
-#include "GUISystem/CEGUITools.h"
+#include "GUISystem/CEGUICommon.h"
 #include "Editor/EditorMgr.h"
 
 using namespace Editor;

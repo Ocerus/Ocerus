@@ -1,7 +1,7 @@
 #include "Common.h"
 #include "TwoDimEditor.h"
 #include "Editor/EditorMgr.h"
-#include "GUISystem/CEGUITools.h"
+#include "GUISystem/CEGUICommon.h"
 
 using namespace Editor;
 

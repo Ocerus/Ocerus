@@ -8,7 +8,7 @@
 #include "Base.h"
 #include "AbstractValueEditor.h"
 #include "Utils/Array.h"
-#include "GUISystem/CEGUITools.h"
+#include "GUISystem/CEGUICommon.h"
 
 namespace CEGUI
 {

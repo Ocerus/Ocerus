@@ -1,10 +1,8 @@
 #include "Common.h"
-
 #include "GUIConsole.h"
-#include "CEGUITools.h"
-#include "ScriptSystem/ScriptMgr.h"
 
-#include "CEGUI.h"
+#include "CEGUICommon.h"
+#include "ScriptSystem/ScriptMgr.h"
 
 using namespace GUISystem;
 
@@ -23,14 +21,16 @@ void GUIConsole::Init()
 	OC_DASSERT(mConsolePromptWidget == 0);
 	OC_DASSERT(mConsoleMessagesWidget == 0);
 	OC_DASSERT(gGUIMgr.GetGUISheet() != 0);
-	CEGUI_EXCEPTION_BEGIN
-	mConsoleWidget = gGUIMgr.LoadSystemLayout("Console.layout");
-	gGUIMgr.GetGUISheet()->addChildWindow(mConsoleWidget);
-	mConsolePromptWidget = gGUIMgr.GetWindow("ConsoleRoot/ConsolePrompt");
-	mConsoleMessagesWidget = (CEGUI::Listbox*)gGUIMgr.GetWindow("ConsoleRoot/Pane");
-	mConsolePromptWidget->subscribeEvent(CEGUI::Editbox::EventKeyDown, CEGUI::Event::Subscriber(&GUIConsole::OnEventKeyDown, this));
-	mIsInited = true;
-	CEGUI_EXCEPTION_END
+	CEGUI_TRY;
+	{
+		mConsoleWidget = gGUIMgr.LoadSystemLayout("Console.layout");
+		gGUIMgr.GetGUISheet()->addChildWindow(mConsoleWidget);
+		mConsolePromptWidget = gGUIMgr.GetWindow("ConsoleRoot/ConsolePrompt");
+		mConsoleMessagesWidget = (CEGUI::Listbox*)gGUIMgr.GetWindow("ConsoleRoot/Pane");
+		mConsolePromptWidget->subscribeEvent(CEGUI::Editbox::EventKeyDown, CEGUI::Event::Subscriber(&GUIConsole::OnEventKeyDown, this));
+		mIsInited = true;
+	}
+	CEGUI_CATCH;
 }
 
 void GUIConsole::Deinit()
@@ -38,10 +38,12 @@ void GUIConsole::Deinit()
 	if (!mIsInited)
 		return;
 
-	CEGUI_EXCEPTION_BEGIN
-	gGUIMgr.DestroyWindow(mConsoleWidget);
-	mConsoleWidget = mConsolePromptWidget = mConsoleMessagesWidget = 0;
-	CEGUI_EXCEPTION_END
+	CEGUI_TRY;
+	{
+		gGUIMgr.DestroyWindow(mConsoleWidget);
+		mConsoleWidget = mConsolePromptWidget = mConsoleMessagesWidget = 0;
+	}
+	CEGUI_CATCH;
 }
 
 void GUIConsole::AppendLogMessage(const string& logMessage, int32 logLevel)

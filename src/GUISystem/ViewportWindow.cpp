@@ -1,9 +1,10 @@
 #include "Common.h"
 #include "ViewportWindow.h"
+#include "CEGUICommon.h"
+
 #include "GfxSystem/GfxRenderer.h"
 #include "GfxSystem/GfxWindow.h"
 #include "GfxSystem/DragDropCameraMover.h"
-#include "CEGUITools.h"
 
 using namespace GUISystem;
 

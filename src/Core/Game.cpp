@@ -8,9 +8,9 @@
 #include "Editor/EditorMgr.h"
 #include "Editor/EditorGUI.h"
 #include "ResourceSystem/XMLResource.h"
-#include "GUISystem/CEGUITools.h"
 #include "GfxSystem/PhysicsDraw.h"
 #include "GfxSystem/Mesh.h"
+#include "GUISystem/CEGUICommon.h"
 
 #include <Box2D.h>
 #include <Box2D/Dynamics/b2WorldCallbacks.h>

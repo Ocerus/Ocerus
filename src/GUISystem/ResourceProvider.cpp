@@ -1,5 +1,6 @@
 #include "Common.h"
 #include "ResourceProvider.h"
+
 #include "CEGUIResource.h"
 
 namespace GUISystem {

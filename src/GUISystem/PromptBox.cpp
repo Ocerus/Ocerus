@@ -1,7 +1,7 @@
 #include "Common.h"
 #include "PromptBox.h"
 
-#include "CEGUITools.h"
+#include "CEGUICommon.h"
 
 using namespace GUISystem;
 
@@ -37,27 +37,29 @@ PromptBox::~PromptBox()
 
 void PromptBox::SetText(const CEGUI::String& text)
 {
-	CEGUI_EXCEPTION_BEGIN
-	CEGUI::Window* messageText = mPromptBox->getChild(mPromptBox->getName() + "/MessageText");
-	CEGUI::Window* editbox = mPromptBox->getChild(mPromptBox->getName() + "/Editbox");
-	const float32 offset = 10;
-	float32 buttonHeight = mPromptBox->getChild(mPromptBox->getName() + "/ButtonOK")->getPixelSize().d_height;
-	float32 editboxHeight = editbox->getPixelSize().d_height;
+	CEGUI_TRY;
+	{
+		CEGUI::Window* messageText = mPromptBox->getChild(mPromptBox->getName() + "/MessageText");
+		CEGUI::Window* editbox = mPromptBox->getChild(mPromptBox->getName() + "/Editbox");
+		const float32 offset = 10;
+		float32 buttonHeight = mPromptBox->getChild(mPromptBox->getName() + "/ButtonOK")->getPixelSize().d_height;
+		float32 editboxHeight = editbox->getPixelSize().d_height;
 	
-	messageText->setText(text);
-	float32 textWidth = StringConverter::FromString<float32>(messageText->getProperty("HorzExtent").c_str());
-	float32 textHeight = StringConverter::FromString<float32>(messageText->getProperty("VertExtent").c_str());
+		messageText->setText(text);
+		float32 textWidth = StringConverter::FromString<float32>(messageText->getProperty("HorzExtent").c_str());
+		float32 textHeight = StringConverter::FromString<float32>(messageText->getProperty("VertExtent").c_str());
 
-	editbox->subscribeEvent(CEGUI::Editbox::EventKeyDown, CEGUI::Event::Subscriber(&PromptBox::OnEditboxKeyDown, this));
+		editbox->subscribeEvent(CEGUI::Editbox::EventKeyDown, CEGUI::Event::Subscriber(&PromptBox::OnEditboxKeyDown, this));
 
-	messageText->setArea(CEGUI::UDim(0,offset), CEGUI::UDim(0,0), CEGUI::UDim(1, -2.0f*offset), CEGUI::UDim(1, -buttonHeight-editboxHeight - offset));
-	mPromptBox->setWidth(CEGUI::UDim(0, textWidth + 2.0f*offset + INNER_FRAME_OFFSET));
-	mPromptBox->setHeight(CEGUI::UDim(0, textHeight + buttonHeight + editboxHeight + offset + INNER_FRAME_OFFSET));
-	mPromptBox->setXPosition(CEGUI::UDim(0.5f, -0.5f*mPromptBox->getPixelSize().d_width));
-	mPromptBox->setYPosition(CEGUI::UDim(0.5f, -0.5f*mPromptBox->getPixelSize().d_height));
+		messageText->setArea(CEGUI::UDim(0,offset), CEGUI::UDim(0,0), CEGUI::UDim(1, -2.0f*offset), CEGUI::UDim(1, -buttonHeight-editboxHeight - offset));
+		mPromptBox->setWidth(CEGUI::UDim(0, textWidth + 2.0f*offset + INNER_FRAME_OFFSET));
+		mPromptBox->setHeight(CEGUI::UDim(0, textHeight + buttonHeight + editboxHeight + offset + INNER_FRAME_OFFSET));
+		mPromptBox->setXPosition(CEGUI::UDim(0.5f, -0.5f*mPromptBox->getPixelSize().d_width));
+		mPromptBox->setYPosition(CEGUI::UDim(0.5f, -0.5f*mPromptBox->getPixelSize().d_height));
 
-	EnsureWindowIsWideEnough();
-	CEGUI_EXCEPTION_END
+		EnsureWindowIsWideEnough();
+	}
+	CEGUI_CATCH;
 }
 
 void PromptBox::Show()

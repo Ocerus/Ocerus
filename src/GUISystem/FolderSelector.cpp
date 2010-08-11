@@ -1,6 +1,7 @@
 #include "Common.h"
 #include "FolderSelector.h"
-#include "CEGUITools.h"
+
+#include "CEGUICommon.h"
 
 using namespace GUISystem;
 

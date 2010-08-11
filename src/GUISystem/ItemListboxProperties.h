@@ -4,10 +4,10 @@
 #ifndef ItemListboxProperties_h__
 #define ItemListboxProperties_h__
 
+#include "CEGUICommon.h"
+
 namespace GUISystem
 {
-	void ShowPopup(CEGUI::PopupMenu* popupMenu, const CEGUI::MouseEventArgs& e);
-
 	/// Declaration of a custom mouse wheel property for ItemListbox.
 	class ItemListboxWantsMouseWheel : public CEGUI::Property
 	{

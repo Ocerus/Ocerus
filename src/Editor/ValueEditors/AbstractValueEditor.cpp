@@ -2,7 +2,7 @@
 #include "AbstractValueEditor.h"
 #include "Editor/EditorMgr.h"
 #include "Editor/EditorGUI.h"
-#include "GUISystem/CEGUITools.h"
+#include "GUISystem/CEGUICommon.h"
 
 using namespace Editor;
 

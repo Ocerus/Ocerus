@@ -1,28 +1,23 @@
-#ifndef _GUIMGR_H_
-#define _GUIMGR_H_
+/// @file
+/// Manager of the GUI system.
+#ifndef _GUISYSTEM_GUIMGR_H_
+#define _GUISYSTEM_GUIMGR_H_
 
 #include "Base.h"
-#include "Singleton.h"
+#include "GUISystem/CEGUIForwards.h"
+#include "Utils/Singleton.h"
 #include "InputSystem/IInputListener.h"
 #include "GfxSystem/IGfxWindowListener.h"
-#include <CEGUIEvent.h>
 
+#include <CEGUIString.h>
+
+/// Access the GUIMgr singleton instance.
 #define gGUIMgr GUISystem::GUIMgr::GetSingleton()
-
-namespace CEGUI
-{
-	class Listbox;
-	class OpenGLRenderer;
-	class System;
-	class Window;
-	class EventArgs;
-	class String;
-}
 
 namespace GUISystem
 {
 	/// The GUIMgr class manages the GUI. The manager depends on InputMgr.
-	class GUIMgr : public Singleton<GUIMgr>, public InputSystem::IInputListener, public GfxSystem::IGfxWindowListener
+	class GUIMgr: public Singleton<GUIMgr>, public InputSystem::IInputListener, public GfxSystem::IGfxWindowListener
 	{
 	public:
 
@@ -67,9 +62,9 @@ namespace GUISystem
 		CEGUI::Window* GetGUISheet() const;
 
 		/// Creates new window.
-		///@param reallocateOnHeap If true the window is constructed anew before being used again.
-		///	      This solves some problems with GUI elements aligning in a wrong way.
-		///@param name Desired name. If empty a default name will be generated.
+		/// @param reallocateOnHeap If true the window is constructed anew before being used again.
+		/// 		This solves some problems with GUI elements aligning in a wrong way.
+		/// @param name Desired name. If empty a default name will be generated.
 		CEGUI::Window* CreateWindow(const string& type, bool reallocateOnHeap = false, const CEGUI::String& name = "");
 
 		/// Creates new window without taking caches into consideration.
@@ -84,28 +79,17 @@ namespace GUISystem
 		/// Destroys all children of the given window.
 		void DestroyWindowChildren(CEGUI::Window* window);
 
-		/// Generates a new name for a window.
-		string GenerateWindowName() const;
+		/// Returns the window of the given name if exists.
+		CEGUI::Window* GetWindow(const CEGUI::String& name);
 
 		/// Returns the window of the given name if exists.
-		inline CEGUI::Window* GetWindow(const CEGUI::String& name) { return GetWindow(name.c_str()); }
+		inline CEGUI::Window* GetWindow(const char* name) { return GetWindow(CEGUI::String(name)); }
 
 		/// Returns the window of the given name if exists.
-		inline CEGUI::Window* GetWindow(const char* name) { return GetWindow(string(name)); }
-
-		/// Returns the window of the given name if exists.
-		CEGUI::Window* GetWindow(const string& name);
+		inline CEGUI::Window* GetWindow(const string& name) { return GetWindow(CEGUI::String(name)); }
 
 		/// Returns true if the window of the given name exists.
 		bool WindowExists(const string& name);
-		
-		/// Disconnects the event from its handler.
-		/// @todo revision
-		void DisconnectEvent(const CEGUI::Event::Connection eventConnection);
-
-		/// Makes sure to actually disconnect the events.
-		/// @todo revision
-		void ProcessDisconnectedEventList();
 
 		/// Renders the GUI.
 		void RenderGUI() const;
@@ -116,23 +100,12 @@ namespace GUISystem
 		/// @name IInputListener interface methods
 		/// Those methods inject input into the GUI system.
 		//@{
-		virtual bool KeyPressed(const InputSystem::KeyInfo& ke);
-		virtual bool KeyReleased(const InputSystem::KeyInfo& ke);
-		virtual bool MouseMoved(const InputSystem::MouseInfo& mi);
-		virtual bool MouseButtonPressed(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn);
-		virtual bool MouseButtonReleased(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn);
+			virtual bool KeyPressed(const InputSystem::KeyInfo& ke);
+			virtual bool KeyReleased(const InputSystem::KeyInfo& ke);
+			virtual bool MouseMoved(const InputSystem::MouseInfo& mi);
+			virtual bool MouseButtonPressed(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn);
+			virtual bool MouseButtonReleased(const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn);
 		//@}
-
-		struct InputEventInfo
-		{
-			const InputSystem::KeyInfo* keyInfo;
-			const InputSystem::MouseInfo* mouseInfo;
-			InputSystem::eMouseButton mouseButton;
-		};
-
-		/// Returns the info about the event being currently processed. This is valid only while any of the event handlers
-		/// is still running.
-		inline InputEventInfo& GetCurrentInputEvent() { return mCurrentInputEvent; }
 
 		/// This method injects resolution change into GUI system. It is part of IGfxWindowListener interface. Called before window resolution is changed.
 		virtual void ResolutionChanging(const uint32 width, const uint32 height);
@@ -146,33 +119,50 @@ namespace GUISystem
 		/// Resource group for GUI resources.
 		static const StringKey GUIGroup;
 
-	public:
-
 		/// Prints info about the window caches into the log.
 		void _DebugPrintWindowCaches();
 
+		/// Holds information about an input event.
+		struct InputEventInfo
+		{
+			const InputSystem::KeyInfo* keyInfo;
+			const InputSystem::MouseInfo* mouseInfo;
+			InputSystem::eMouseButton mouseButton;
+		};
+
+		/// Returns the info about the event being currently processed. This is valid only as long as
+		/// any of the event handlers is still running.
+		inline InputEventInfo& GetCurrentInputEvent() { return mCurrentInputEvent; }
+
 	private:
+		/// Generates a new name for a window.
+		string GenerateWindowName() const;
 
-		CEGUI::System* mCegui;
-		CEGUI::Window* mCurrentRootLayout;
+		/// @name CEGUI related stuff
+		//@{
+			CEGUI::System* mCEGUI;
+			CEGUI::OpenGLRenderer* mRenderer;
+			ResourceProvider* mResourceProvider;
+			ScriptProvider* mScriptProvider;
+		//@}
 
-		list<CEGUI::Event::Connection> mDeadEventConnections;
+		/// Input event being currently processed.
 		InputEventInfo mCurrentInputEvent;
 
+		/// In-game console
 		GUIConsole* mGUIConsole;
 
-		CEGUI::OpenGLRenderer* mRenderer;
-		ResourceProvider* mResourceProvider;
-		ScriptProvider* mScriptProvider;
+		/// @name Window caching optimalization
+		//@{
+			typedef vector<CEGUI::Window*> WindowList;
+			struct WindowTypeCache { WindowList list; size_t count; };
+			typedef hash_map<string, WindowTypeCache*> WindowMap;
+			WindowMap mWindowCache;
 
-		typedef vector<CEGUI::Window*> WindowList;
-		struct WindowTypeCache { WindowList list; size_t count; };
-		typedef hash_map<string, WindowTypeCache*> WindowMap;
-		WindowMap mWindowCache;
+			void InitWindowCache(const string& windowType);
 
-		void InitWindowCache(const string& windowType);
-
-		void ClearWindowCaches();
+			void ClearWindowCaches();
+		//@}
 	};
 }
-#endif
+#endif // _GUISYSTEM_GUIMGR_H_

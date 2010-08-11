@@ -1,16 +1,15 @@
 #include "Common.h"
+
 #include "Editor/EditorMenu.h"
 #include "Editor/EditorMgr.h"
 #include "Editor/EditorGUI.h"
 #include "Editor/HierarchyWindow.h"
-#include "GUISystem/CEGUITools.h"
 #include "Core/Application.h"
 #include "Core/Project.h"
 #include "Core/Game.h"
-
-#include "GUISystem/MessageBox.h"
+#include "GUISystem/CEGUICommon.h"
 #include "GUISystem/FolderSelector.h"
-
+#include "GUISystem/MessageBox.h"
 
 using namespace Editor;
 
@@ -26,16 +25,18 @@ Editor::EditorMenu::EditorMenu()
 
 void Editor::EditorMenu::Init()
 {
-	CEGUI_EXCEPTION_BEGIN
-	CEGUI::Window* menubar = gGUIMgr.GetWindow(menubarPrefix);
-	InitComponentMenu();
-	ConfigureMenu(menubar);
-	UpdateSceneMenu();
-	menubar->subscribeEvent(CEGUI::Window::EventDeactivated, CEGUI::Event::Subscriber(&Editor::EditorMenu::OnMouseLeavesMenuItem, this));
+	CEGUI_TRY;
+	{
+		CEGUI::Window* menubar = gGUIMgr.GetWindow(menubarPrefix);
+		InitComponentMenu();
+		ConfigureMenu(menubar);
+		UpdateSceneMenu();
+		menubar->subscribeEvent(CEGUI::Window::EventDeactivated, CEGUI::Event::Subscriber(&Editor::EditorMenu::OnMouseLeavesMenuItem, this));
 
-	CEGUI::Window* toolbar = gGUIMgr.GetWindow(toolbarPrefix);
-	ConfigureToolbar(toolbar);
-	CEGUI_EXCEPTION_END_CRITICAL
+		CEGUI::Window* toolbar = gGUIMgr.GetWindow(toolbarPrefix);
+		ConfigureToolbar(toolbar);
+	}
+	CEGUI_CATCH_CRITICAL;
 }
 
 bool Editor::EditorMenu::OnMouseEntersMenuItem(const CEGUI::EventArgs& )
@@ -345,74 +346,78 @@ void Editor::EditorMenu::OnFolderSelected(const string& path, const string& edit
 
 void Editor::EditorMenu::InitComponentMenu()
 {
-	CEGUI_EXCEPTION_BEGIN
-	CEGUI::Window* addComponentMenu = gGUIMgr.GetWindow(menubarPrefix + "/Edit/NewComponent/AutoPopup");
-	for (int32 i = 0; i < EntitySystem::NUM_COMPONENT_TYPES; ++i)
+	CEGUI_TRY;
 	{
-		const string& componentName = EntitySystem::GetComponentTypeName((EntitySystem::eComponentType)i);
-		CEGUI::Window* componentMenuItem = gGUIMgr.CreateWindow("Editor/MenuItem");
-		componentMenuItem->setUserString("IsComponentItem", "True");
-		componentMenuItem->setID(i);
-		componentMenuItem->setText(componentName);
-		addComponentMenu->addChildWindow(componentMenuItem);
+		CEGUI::Window* addComponentMenu = gGUIMgr.GetWindow(menubarPrefix + "/Edit/NewComponent/AutoPopup");
+		for (int32 i = 0; i < EntitySystem::NUM_COMPONENT_TYPES; ++i)
+		{
+			const string& componentName = EntitySystem::GetComponentTypeName((EntitySystem::eComponentType)i);
+			CEGUI::Window* componentMenuItem = gGUIMgr.CreateWindow("Editor/MenuItem");
+			componentMenuItem->setUserString("IsComponentItem", "True");
+			componentMenuItem->setID(i);
+			componentMenuItem->setText(componentName);
+			addComponentMenu->addChildWindow(componentMenuItem);
+		}
 	}
-	CEGUI_EXCEPTION_END
+	CEGUI_CATCH;
 }
 
 void EditorMenu::UpdateSceneMenu()
 {
-	CEGUI_EXCEPTION_BEGIN
-	Core::SceneInfoList scenes;
-	gEditorMgr.GetCurrentProject()->GetSceneList(scenes);
-
-	CEGUI::Window* openSceneMenu = gGUIMgr.GetWindow(menubarPrefix + "/Scene/OpenScene/AutoPopup");
-	
-	for (int32 i = openSceneMenu->getChildCount() - 1; i >= 0; --i)
+	CEGUI_TRY;
 	{
-		gGUIMgr.DestroyWindow(openSceneMenu->getChildAtIdx(i));
-	}
+		Core::SceneInfoList scenes;
+		gEditorMgr.GetCurrentProject()->GetSceneList(scenes);
 
-	for (Core::SceneInfoList::const_iterator it = scenes.begin(); it != scenes.end(); ++it)
-	{
-		CEGUI::Window* sceneMenuItem = gGUIMgr.CreateWindow("Editor/MenuItem");
-		sceneMenuItem->setUserString("IsSceneItem", "True");
-		sceneMenuItem->setText(it->name + " (" + it->filename + ")");
-		sceneMenuItem->setID(it - scenes.begin());
-		openSceneMenu->addChildWindow(sceneMenuItem);
+		CEGUI::Window* openSceneMenu = gGUIMgr.GetWindow(menubarPrefix + "/Scene/OpenScene/AutoPopup");
+		
+		for (int32 i = openSceneMenu->getChildCount() - 1; i >= 0; --i)
+		{
+			gGUIMgr.DestroyWindow(openSceneMenu->getChildAtIdx(i));
+		}
+
+		for (Core::SceneInfoList::const_iterator it = scenes.begin(); it != scenes.end(); ++it)
+		{
+			CEGUI::Window* sceneMenuItem = gGUIMgr.CreateWindow("Editor/MenuItem");
+			sceneMenuItem->setUserString("IsSceneItem", "True");
+			sceneMenuItem->setText(it->name + " (" + it->filename + ")");
+			sceneMenuItem->setID(it - scenes.begin());
+			openSceneMenu->addChildWindow(sceneMenuItem);
+		}
+		ConfigureMenu(openSceneMenu);
 	}
-	ConfigureMenu(openSceneMenu);
-	CEGUI_EXCEPTION_END
+	CEGUI_CATCH;
 }
 
 void EditorMenu::UpdateItemsEnabled()
 {
-	CEGUI_EXCEPTION_BEGIN
-
-	bool editMenuEnabled = gEditorMgr.GetCurrentProject()->IsSceneOpened();
-	bool sceneMenuEnabled = gEditorMgr.GetCurrentProject()->IsProjectOpened();
-
-	// Set enabled/disabled state to items in Edit menu
-	CEGUI::Window* editMenu = gGUIMgr.GetWindow(menubarPrefix + "/Edit/AutoPopup");
-	for (size_t childIdx = 0, childCount = editMenu->getChildCount(); childIdx < childCount; childIdx++)
+	CEGUI_TRY;
 	{
-		editMenu->getChildAtIdx(childIdx)->setEnabled(editMenuEnabled);
-	}
+		bool editMenuEnabled = gEditorMgr.GetCurrentProject()->IsSceneOpened();
+		bool sceneMenuEnabled = gEditorMgr.GetCurrentProject()->IsProjectOpened();
 
-	// Set enabled/disabled state to components in AddComponent submenu
-	CEGUI::Window* addComponentMenu = gGUIMgr.GetWindow(menubarPrefix + "/Edit/NewComponent/AutoPopup");
-	for (size_t childIdx = 0, childCount = addComponentMenu->getChildCount(); childIdx < childCount; childIdx++)
-	{
-		addComponentMenu->getChildAtIdx(childIdx)->setEnabled(editMenuEnabled);
-	}
+		// Set enabled/disabled state to items in Edit menu
+		CEGUI::Window* editMenu = gGUIMgr.GetWindow(menubarPrefix + "/Edit/AutoPopup");
+		for (size_t childIdx = 0, childCount = editMenu->getChildCount(); childIdx < childCount; childIdx++)
+		{
+			editMenu->getChildAtIdx(childIdx)->setEnabled(editMenuEnabled);
+		}
 
-	// Set enabled/disabled state to items in Scene menu
-	CEGUI::Window* sceneMenu = gGUIMgr.GetWindow(menubarPrefix + "/Scene/AutoPopup");
-	for (size_t childIdx = 0, childCount = sceneMenu->getChildCount(); childIdx < childCount; childIdx++)
-	{
-		sceneMenu->getChildAtIdx(childIdx)->setEnabled(sceneMenuEnabled);
-	}
+		// Set enabled/disabled state to components in AddComponent submenu
+		CEGUI::Window* addComponentMenu = gGUIMgr.GetWindow(menubarPrefix + "/Edit/NewComponent/AutoPopup");
+		for (size_t childIdx = 0, childCount = addComponentMenu->getChildCount(); childIdx < childCount; childIdx++)
+		{
+			addComponentMenu->getChildAtIdx(childIdx)->setEnabled(editMenuEnabled);
+		}
 
-	CEGUI_EXCEPTION_END
+		// Set enabled/disabled state to items in Scene menu
+		CEGUI::Window* sceneMenu = gGUIMgr.GetWindow(menubarPrefix + "/Scene/AutoPopup");
+		for (size_t childIdx = 0, childCount = sceneMenu->getChildCount(); childIdx < childCount; childIdx++)
+		{
+			sceneMenu->getChildAtIdx(childIdx)->setEnabled(sceneMenuEnabled);
+		}
+	}
+	CEGUI_CATCH;
 }
 
 

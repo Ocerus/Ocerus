@@ -15,13 +15,13 @@
 #include "EntitySystem/EntityMgr/LayerMgr.h"
 
 #include "GUISystem/GUIMgr.h"
-#include "GUISystem/CEGUITools.h"
 #include "GUISystem/ItemListboxProperties.h"
 #include "GUISystem/TabNavigation.h"
 
 #include "GUISystem/VerticalLayout.h"
 #include "GUISystem/ViewportWindow.h"
 
+#include <CEGUI.h>
 
 namespace Editor
 {
@@ -63,12 +63,12 @@ EditorGUI::~EditorGUI()
 
 void EditorGUI::LoadGUI()
 {
-	CEGUI_EXCEPTION_BEGIN
-
-	// Load Imagesets for Editor.
-	CEGUI::ImagesetManager::getSingleton().create("gui/imagesets/EditorToolbar.imageset");
-
-	CEGUI_EXCEPTION_END
+	CEGUI_TRY;
+	{
+		// Load Imagesets for Editor.
+		CEGUI::ImagesetManager::getSingleton().create("gui/imagesets/EditorToolbar.imageset");
+	}
+	CEGUI_CATCH;
 	
 	if (!gGUIMgr.SetGUISheet(gGUIMgr.LoadSystemLayout("Editor.layout")))
 	{

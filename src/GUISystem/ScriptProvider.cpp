@@ -1,5 +1,6 @@
 #include "Common.h"
 #include "ScriptProvider.h"
+
 #include "CEGUIWindow.h"
 #include <angelscript.h>
 

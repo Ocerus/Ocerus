@@ -1,20 +1,22 @@
 /// @file
 /// Declares CEGUI forward declarations.
 
-#ifndef __CEGUI_FORWARDS_H__
-#define __CEGUI_FORWARDS_H__
+#ifndef _GUISYSTEM_CEGUIFORWARDS_H_
+#define _GUISYSTEM_CEGUIFORWARDS_H_
 
 namespace CEGUI
 {
+	class Checkbox;
 	class Editbox;
 	class EventArgs;
 	class ItemEntry;
 	class ItemListbox;
 	class Listbox;
-	class String;
+	class OpenGLRenderer;
 	class PushButton;
+	class String;
+	class System;
 	class Window;
-	class Checkbox;
 }
 
-#endif // __CEGUI_FORWARDS_H__
+#endif // _GUISYSTEM_CEGUIFORWARDS_H_

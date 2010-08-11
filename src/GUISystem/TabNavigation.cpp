@@ -1,6 +1,7 @@
 #include "Common.h"
 #include "TabNavigation.h"
-#include "CEGUITools.h"
+
+#include "CEGUICommon.h"
 
 using namespace GUISystem;
 

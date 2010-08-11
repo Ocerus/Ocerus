@@ -1,8 +1,7 @@
 #include "Common.h"
 #include "VerticalLayout.h"
-#include "CEGUITools.h"
 
-#include "CEGUI.h"
+#include "CEGUICommon.h"
 
 using namespace GUISystem;
 

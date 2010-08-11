@@ -3,7 +3,6 @@
 #include "PopupMenu.h"
 #include "EditorMgr.h"
 #include "ResourceSystem/ResourceMgr.h"
-#include "GUISystem/CEGUITools.h"
 #include "GUISystem/ItemListboxProperties.h"
 #include "Core/Project.h"
 
@@ -30,19 +29,19 @@ Editor::ResourceWindow::~ResourceWindow()
 
 void Editor::ResourceWindow::Init()
 {
-	CEGUI_EXCEPTION_BEGIN
+	CEGUI_TRY;
+	{
+		mWindow = gGUIMgr.LoadSystemLayout("ResourceWindow.layout", "EditorRoot/ResourceWindow");
+		OC_ASSERT(mWindow);
+		gGUIMgr.GetGUISheet()->addChildWindow(mWindow);
 
-	mWindow = gGUIMgr.LoadSystemLayout("ResourceWindow.layout", "EditorRoot/ResourceWindow");
-	OC_ASSERT(mWindow);
-	gGUIMgr.GetGUISheet()->addChildWindow(mWindow);
+		mTree = static_cast<CEGUI::ItemListbox*>(mWindow->getChild(mWindow->getName() + "/List"));
+		mTree->addProperty(&gResourceMouseWheelProperty);
 
-	mTree = static_cast<CEGUI::ItemListbox*>(mWindow->getChild(mWindow->getName() + "/List"));
-	mTree->addProperty(&gResourceMouseWheelProperty);
-
-	CEGUI::Window* refreshButton = mWindow->getChildRecursive(mWindow->getName() + "/Toolbar/Refresh");
-	refreshButton->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Editor::ResourceWindow::OnRefreshButtonClicked, this));
-
-	CEGUI_EXCEPTION_END
+		CEGUI::Window* refreshButton = mWindow->getChildRecursive(mWindow->getName() + "/Toolbar/Refresh");
+		refreshButton->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Editor::ResourceWindow::OnRefreshButtonClicked, this));
+	}
+	CEGUI_CATCH;
 
 	OC_ASSERT(mWindow != 0);
 	OC_ASSERT(mTree != 0);

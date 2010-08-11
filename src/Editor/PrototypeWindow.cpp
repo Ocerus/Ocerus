@@ -2,7 +2,6 @@
 #include "PrototypeWindow.h"
 #include "PopupMenu.h"
 #include "EditorMgr.h"
-#include "GUISystem/CEGUITools.h"
 #include "GUISystem/ItemListboxProperties.h"
 
 using namespace Editor;
@@ -21,18 +20,18 @@ void Editor::PrototypeWindow::Init()
 {
 	mSelectedIndex = -1;
 
-	CEGUI_EXCEPTION_BEGIN
-	
-	mWindow = gGUIMgr.LoadSystemLayout("PrototypeWindow.layout", "EditorRoot/PrototypeWindow");
-	OC_ASSERT(mWindow != 0);
-	gGUIMgr.GetGUISheet()->addChildWindow(mWindow);
-	mTree = static_cast<CEGUI::ItemListbox*>(mWindow->getChild(mWindow->getName() + "/List"));
-	mTree->addProperty(&gPrototypeMouseWheelProperty);
-	OC_ASSERT(mTree != 0);
-	
-	mTree->subscribeEvent(CEGUI::Window::EventMouseButtonUp, CEGUI::Event::Subscriber(&Editor::PrototypeWindow::OnWindowMouseButtonUp, this));
-
-	CEGUI_EXCEPTION_END
+	CEGUI_TRY;
+	{
+		mWindow = gGUIMgr.LoadSystemLayout("PrototypeWindow.layout", "EditorRoot/PrototypeWindow");
+		OC_ASSERT(mWindow != 0);
+		gGUIMgr.GetGUISheet()->addChildWindow(mWindow);
+		mTree = static_cast<CEGUI::ItemListbox*>(mWindow->getChild(mWindow->getName() + "/List"));
+		mTree->addProperty(&gPrototypeMouseWheelProperty);
+		OC_ASSERT(mTree != 0);
+		
+		mTree->subscribeEvent(CEGUI::Window::EventMouseButtonUp, CEGUI::Event::Subscriber(&Editor::PrototypeWindow::OnWindowMouseButtonUp, this));
+	}
+	CEGUI_CATCH;
 
 	RebuildTree();
 }
