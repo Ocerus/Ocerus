@@ -3,7 +3,7 @@
 #include "PopupMenu.h"
 #include "PrototypeWindow.h"
 #include "Core/Game.h"
-#include "GUISystem/ItemListboxProperties.h"
+#include "GUISystem/CEGUICommon.h"
 #include "GUISystem/PromptBox.h"
 #include "Editor/EditorMgr.h"
 #include "Editor/EditorGUI.h"
@@ -14,8 +14,6 @@ using namespace Editor;
 using namespace EntitySystem;
 
 const uint32 TREE_LEVEL_CHAR_SIZE = 4;
-
-GUISystem::ItemListboxWantsMouseWheel gHierarchyMouseWheelProperty;
 
 Editor::HierarchyWindow::HierarchyWindow(): mWindow(0), mTree(0), mCurrentParent(EntitySystem::EntityHandle::Null), mDontAddEntities(false)
 {
@@ -41,7 +39,7 @@ void Editor::HierarchyWindow::Init()
 		mTree = static_cast<CEGUI::ItemListbox*>(mWindow->getChild(mWindow->getName() + "/List"));
 		OC_ASSERT(mTree != 0);
 
-		mTree->addProperty(&gHierarchyMouseWheelProperty);
+		mTree->setUserString("WantsMouseWheel", "True");
 
 		mTree->subscribeEvent(CEGUI::Window::EventMouseButtonUp, CEGUI::Event::Subscriber(&Editor::HierarchyWindow::OnWindowMouseButtonUp, this));
 		mTree->subscribeEvent(CEGUI::Window::EventDragDropItemDropped, CEGUI::Event::Subscriber(&Editor::HierarchyWindow::OnTreeDragDropItemDropped, this));

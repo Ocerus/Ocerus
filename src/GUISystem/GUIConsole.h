@@ -17,8 +17,13 @@ namespace GUISystem
 	/// The GUIConsole class manages the in-game console.
 	class GUIConsole
 	{
-	friend class GUIMgr;
 	public:
+		/// Creates a GUIConsole instance.
+		GUIConsole();
+
+		/// Destroys the GUIConsole instance.
+		~GUIConsole();
+		
 		/// Initializes the console. CEGUI must be already initialized before calling this method.
 		void Init();
 
@@ -49,12 +54,9 @@ namespace GUISystem
 			HistoryCommand(const string& command): originalCommand(command) {}
 
 			string originalCommand;	///< The original command, that was submitted.
-			string modifiedCommand;	///< The modified version of this command before submitting, or null.
+			string modifiedCommand;	///< The modified version of this command before submitting, or null string.
 		};
 		typedef deque<HistoryCommand> HistoryCommands;
-
-		GUIConsole();
-		~GUIConsole();
 
 		/// This callback is called when user presses a key.
 		bool OnEventKeyDown(const CEGUI::EventArgs&);
@@ -74,9 +76,9 @@ namespace GUISystem
 		bool mIsInited;
 		int32 mCurrentLogLevelTreshold;
 
-		CEGUI::Window* mConsoleWidget;
-		CEGUI::Window* mConsolePromptWidget;
-		CEGUI::Listbox* mConsoleMessagesWidget;
+		CEGUI::Window* mWidget;
+		CEGUI::Window* mPromptBoxWidget;
+		CEGUI::Listbox* mMessageBoxWidget;
 
 		HistoryCommands mHistory;
 		HistoryCommands::iterator mCurrentHistoryItem;

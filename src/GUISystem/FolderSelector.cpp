@@ -18,38 +18,52 @@ GUISystem::FolderSelector::~FolderSelector()
 
 void GUISystem::FolderSelector::Show(const CEGUI::String& windowTitle, bool showEditbox, const CEGUI::String& editboxLabel)
 {
-	CEGUI::Window* root = gGUIMgr.GetGUISheet();
-
-	mWindow = gGUIMgr.LoadSystemLayout("FolderSelector.layout", root->getName() + "/");
-	mWindow->setAlwaysOnTop(true);
-	mWindow->setModalState(true);
-	mWindow->getChildRecursive(root->getName() + "/FolderSelector/Frame")->setText(windowTitle);
-	root->addChildWindow(mWindow);
-
-	mButtonOK = mWindow->getChildRecursive(root->getName() + "/FolderSelector/Frame/Ok");
-	mButtonCancel = mWindow->getChildRecursive(root->getName() + "/FolderSelector/Frame/Cancel");
-	mPathBox = mWindow->getChildRecursive(root->getName() + "/FolderSelector/Frame/Path");
-	mFolderList = static_cast<CEGUI::Listbox*>(mWindow->getChildRecursive(root->getName() + "/FolderSelector/Frame/FolderList"));
-	mFolderList->setWantsMultiClickEvents(false);
-	mEditbox = mWindow->getChildRecursive(root->getName() + "/FolderSelector/Frame/Editbox");
-	mEditbox->subscribeEvent(CEGUI::Editbox::EventKeyDown, CEGUI::Event::Subscriber(&GUISystem::FolderSelector::OnEditboxKeyDown, this));
-
-	mButtonOK->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&GUISystem::FolderSelector::OnButtonClicked, this));
-	mButtonCancel->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&GUISystem::FolderSelector::OnButtonClicked, this));
-	mFolderList->subscribeEvent(CEGUI::Listbox::EventMouseClick, CEGUI::Event::Subscriber(&GUISystem::FolderSelector::OnFolderListClicked, this));
-
-	if (!showEditbox)
+	bool success = false;
+	CEGUI_TRY;
 	{
-		mEditbox->hide();
-		mWindow->getChildRecursive(root->getName() + "/FolderSelector/Frame/EditboxLabel")->hide();
-	}
-	else
-	{
-		mWindow->getChildRecursive(root->getName() + "/FolderSelector/Frame/EditboxLabel")->setText(editboxLabel);
-		mEditbox->activate();
-	}
+		CEGUI::Window* root = gGUIMgr.GetGUISheet();
 
-	UpdateFolderList();
+		mWindow = gGUIMgr.LoadSystemLayout("FolderSelector.layout", root->getName() + "/");
+		mWindow->setAlwaysOnTop(true);
+		mWindow->setModalState(true);
+		root->addChildWindow(mWindow);
+		
+		CEGUI::Window* frame = mWindow->getChild(root->getName() + "/FolderSelector/Frame");
+		frame->setText(windowTitle);
+
+		mButtonOK = frame->getChild(root->getName() + "/FolderSelector/ButtonOK");
+		mButtonCancel = frame->getChild(root->getName() + "/FolderSelector/ButtonCancel");
+		mPathBox = frame->getChild(root->getName() + "/FolderSelector/PathBox");
+		mFolderList = static_cast<CEGUI::Listbox*>(frame->getChild(root->getName() + "/FolderSelector/FolderList"));
+		mFolderList->setWantsMultiClickEvents(false);
+		mEditbox = frame->getChild(root->getName() + "/FolderSelector/Editbox");
+		mEditbox->subscribeEvent(CEGUI::Editbox::EventKeyDown, CEGUI::Event::Subscriber(&GUISystem::FolderSelector::OnEditboxKeyDown, this));
+
+		mButtonOK->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&GUISystem::FolderSelector::OnButtonClicked, this));
+		mButtonCancel->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&GUISystem::FolderSelector::OnButtonClicked, this));
+		mFolderList->subscribeEvent(CEGUI::Listbox::EventMouseClick, CEGUI::Event::Subscriber(&GUISystem::FolderSelector::OnFolderListClicked, this));
+
+		if (!showEditbox)
+		{
+			mEditbox->hide();
+			frame->getChild(root->getName() + "/FolderSelector/EditboxLabel")->hide();
+		}
+		else
+		{
+			frame->getChild(root->getName() + "/FolderSelector/EditboxLabel")->setText(editboxLabel);
+			mEditbox->activate();
+		}
+
+		UpdateFolderList();
+		success = true;
+	}
+	CEGUI_CATCH;
+
+	if (!success)
+	{
+		ocError << "Cannot show FolderSelector.";
+		delete this;
+	}
 }
 
 void FolderSelector::Hide()

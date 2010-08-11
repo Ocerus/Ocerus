@@ -2,11 +2,9 @@
 #include "PrototypeWindow.h"
 #include "PopupMenu.h"
 #include "EditorMgr.h"
-#include "GUISystem/ItemListboxProperties.h"
+#include "GUISystem/CEGUICommon.h"
 
 using namespace Editor;
-
-GUISystem::ItemListboxWantsMouseWheel gPrototypeMouseWheelProperty;
 
 Editor::PrototypeWindow::PrototypeWindow()
 {
@@ -26,7 +24,7 @@ void Editor::PrototypeWindow::Init()
 		OC_ASSERT(mWindow != 0);
 		gGUIMgr.GetGUISheet()->addChildWindow(mWindow);
 		mTree = static_cast<CEGUI::ItemListbox*>(mWindow->getChild(mWindow->getName() + "/List"));
-		mTree->addProperty(&gPrototypeMouseWheelProperty);
+		mTree->setUserString("WantsMouseWheel", "True");
 		OC_ASSERT(mTree != 0);
 		
 		mTree->subscribeEvent(CEGUI::Window::EventMouseButtonUp, CEGUI::Event::Subscriber(&Editor::PrototypeWindow::OnWindowMouseButtonUp, this));

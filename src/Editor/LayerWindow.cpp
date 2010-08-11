@@ -2,13 +2,11 @@
 #include "Editor/LayerWindow.h"
 #include "Editor/EditorMgr.h"
 #include "Editor/PopupMenu.h"
-#include "GUISystem/ItemListboxProperties.h"
+#include "GUISystem/CEGUICommon.h"
 #include "GUISystem/PromptBox.h"
 #include "EntitySystem/EntityMgr/LayerMgr.h"
 
 using namespace Editor;
-
-GUISystem::ItemListboxWantsMouseWheel gLayerMouseWheelProperty;
 
 /// Sorting callback function. This function provides an order of items in the list
 /// for the sake of simulating tree widget.
@@ -34,7 +32,7 @@ void Editor::LayerWindow::Init()
 		mTree = static_cast<CEGUI::ItemListbox*>(mWindow->getChild(mWindow->getName() + "/List"));
 		mTree->setSortMode(CEGUI::ItemListBase::UserSort);
 		mTree->setSortCallback(&MySortCallback);
-		mTree->addProperty(&gLayerMouseWheelProperty);
+		mTree->setUserString("WantsMouseWheel", "True");
 	}
 	CEGUI_CATCH;
 

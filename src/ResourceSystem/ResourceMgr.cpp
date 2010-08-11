@@ -197,7 +197,8 @@ bool ResourceMgr::AddResourceFileToGroup(const string& filepath, const StringKey
 	// detect resource type
 	if (type == RESTYPE_AUTODETECT)
 	{
-		ExtToTypeMap::const_iterator i = mExtToTypeMap.find(boostPath.extension().substr(1));
+		string extension = !boostPath.extension().empty() ? boostPath.extension().substr(1) : "";
+		ExtToTypeMap::const_iterator i = mExtToTypeMap.find(extension);
 		if (i != mExtToTypeMap.end())
 			type = i->second;
 	}

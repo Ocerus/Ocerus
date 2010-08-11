@@ -40,7 +40,6 @@ namespace GUISystem {
 		void SetCurrentFolder(string folder);
 
 	private:
-
 		/// @name CEGUI Callbacks
 		//@{
 			bool OnFolderListClicked(const CEGUI::EventArgs&);

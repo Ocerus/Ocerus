@@ -6,7 +6,7 @@
 
 using namespace GUISystem;
 
-GUIConsole::GUIConsole(): mIsInited(false), mCurrentLogLevelTreshold(0), mConsoleWidget(0), mConsolePromptWidget(0), mConsoleMessagesWidget(0)
+GUIConsole::GUIConsole(): mIsInited(false), mCurrentLogLevelTreshold(0), mWidget(0), mPromptBoxWidget(0), mMessageBoxWidget(0)
 {
 	AppendEmptyHistoryCommand();
 }
@@ -17,17 +17,21 @@ GUIConsole::~GUIConsole()
 
 void GUIConsole::Init()
 {
-	OC_DASSERT(mConsoleWidget == 0);
-	OC_DASSERT(mConsolePromptWidget == 0);
-	OC_DASSERT(mConsoleMessagesWidget == 0);
-	OC_DASSERT(gGUIMgr.GetGUISheet() != 0);
+	OC_DASSERT(mWidget == 0);
+	OC_DASSERT(mPromptBoxWidget == 0);
+	OC_DASSERT(mMessageBoxWidget == 0);
+	if (gGUIMgr.GetGUISheet() == 0)
+	{
+		ocError << "Cannot initialize GUIConsole. GUISheet was not set yet.";
+		return;
+	}
 	CEGUI_TRY;
 	{
-		mConsoleWidget = gGUIMgr.LoadSystemLayout("Console.layout");
-		gGUIMgr.GetGUISheet()->addChildWindow(mConsoleWidget);
-		mConsolePromptWidget = gGUIMgr.GetWindow("ConsoleRoot/ConsolePrompt");
-		mConsoleMessagesWidget = (CEGUI::Listbox*)gGUIMgr.GetWindow("ConsoleRoot/Pane");
-		mConsolePromptWidget->subscribeEvent(CEGUI::Editbox::EventKeyDown, CEGUI::Event::Subscriber(&GUIConsole::OnEventKeyDown, this));
+		mWidget = gGUIMgr.LoadSystemLayout("GUIConsole.layout");
+		gGUIMgr.GetGUISheet()->addChildWindow(mWidget);
+		mPromptBoxWidget = gGUIMgr.GetWindow("GUIConsole/PromptBox");
+		mMessageBoxWidget = (CEGUI::Listbox*)gGUIMgr.GetWindow("GUIConsole/MessageBox");
+		mPromptBoxWidget->subscribeEvent(CEGUI::Editbox::EventKeyDown, CEGUI::Event::Subscriber(&GUIConsole::OnEventKeyDown, this));
 		mIsInited = true;
 	}
 	CEGUI_CATCH;
@@ -40,15 +44,15 @@ void GUIConsole::Deinit()
 
 	CEGUI_TRY;
 	{
-		gGUIMgr.DestroyWindow(mConsoleWidget);
-		mConsoleWidget = mConsolePromptWidget = mConsoleMessagesWidget = 0;
+		gGUIMgr.DestroyWindow(mWidget);
+		mWidget = mPromptBoxWidget = mMessageBoxWidget = 0;
 	}
 	CEGUI_CATCH;
 }
 
 void GUIConsole::AppendLogMessage(const string& logMessage, int32 logLevel)
 {
-	if (!mConsoleMessagesWidget) return;
+	if (!mMessageBoxWidget) return;
 	if (logLevel >= mCurrentLogLevelTreshold)
 	{
 		AppendMessage(logMessage);
@@ -62,15 +66,15 @@ void GUIConsole::AppendScriptMessage(const string& message)
 
 void GUISystem::GUIConsole::AppendMessage( const string& message )
 {
-	CEGUI::Scrollbar* scrollbar = mConsoleMessagesWidget->getVertScrollbar();
+	CEGUI::Scrollbar* scrollbar = mMessageBoxWidget->getVertScrollbar();
 	OC_ASSERT(scrollbar);
 	bool scrolledDown = scrollbar->getScrollPosition() == scrollbar->getDocumentSize() - scrollbar->getPageSize();
-	mConsoleMessagesWidget->addItem(new CEGUI::ListboxTextItem(message, 0, 0, true));
+	mMessageBoxWidget->addItem(new CEGUI::ListboxTextItem(message, 0, 0, true));
 	if (scrolledDown)
 	{
 		scrollbar->setScrollPosition(scrollbar->getDocumentSize());
 	}
-	mConsoleMessagesWidget->getHorzScrollbar()->hide();
+	mMessageBoxWidget->getHorzScrollbar()->hide();
 }
 
 void GUIConsole::ToggleConsole()
@@ -78,16 +82,22 @@ void GUIConsole::ToggleConsole()
 	if (!mIsInited)
 		return;
 
-	if (!mConsoleWidget->isVisible())
+	if (!mWidget->isVisible())
 	{
+		// show
 		// fix the scrollbar
-		mConsoleMessagesWidget->getVertScrollbar()->setScrollPosition(mConsoleMessagesWidget->getVertScrollbar()->getDocumentSize());
+		mMessageBoxWidget->getVertScrollbar()->setScrollPosition(mMessageBoxWidget->getVertScrollbar()->getDocumentSize());
+		mWidget->setVisible(true);
+		mWidget->setModalState(true);
+		mPromptBoxWidget->activate();
 	}
-
-	mConsoleWidget->setVisible(!mConsoleWidget->isVisible());
-	mConsolePromptWidget->activate();
+	else
+	{
+		// hide
+		mWidget->setVisible(false);
+		mWidget->setModalState(false);
+	}
 }
-
 
 bool GUIConsole::OnEventKeyDown(const CEGUI::EventArgs& args)
 {
@@ -121,9 +131,9 @@ bool GUIConsole::OnEventKeyDown(const CEGUI::EventArgs& args)
 
 void GUISystem::GUIConsole::SubmitCommand()
 {
-	string message(mConsolePromptWidget->getText().c_str());
+	string message(mPromptBoxWidget->getText().c_str());
 	if (message.empty()) return;
-	mConsolePromptWidget->setText("");
+	mPromptBoxWidget->setText("");
 
 	mCurrentHistoryItem->modifiedCommand.clear();
 
@@ -137,7 +147,7 @@ void GUISystem::GUIConsole::SubmitCommand()
 
 void GUISystem::GUIConsole::ResetCommand()
 {
-	mConsolePromptWidget->setText("");
+	mPromptBoxWidget->setText("");
 }
 
 void GUISystem::GUIConsole::HistoryUp()
@@ -162,7 +172,7 @@ void GUISystem::GUIConsole::HistoryDown()
 
 void GUIConsole::SaveCurrentHistoryCommand()
 {
-	string currentCommand(mConsolePromptWidget->getText().c_str());
+	string currentCommand(mPromptBoxWidget->getText().c_str());
 	if (!mCurrentHistoryItem->modifiedCommand.empty())
 	{
 		mCurrentHistoryItem->modifiedCommand = currentCommand;
@@ -177,11 +187,11 @@ void GUIConsole::LoadCurrentHistoryCommand()
 {
 	if (!mCurrentHistoryItem->modifiedCommand.empty())
 	{
-		mConsolePromptWidget->setText(mCurrentHistoryItem->modifiedCommand);
+		mPromptBoxWidget->setText(mCurrentHistoryItem->modifiedCommand);
 	}
 	else
 	{
-		mConsolePromptWidget->setText(mCurrentHistoryItem->originalCommand);
+		mPromptBoxWidget->setText(mCurrentHistoryItem->originalCommand);
 	}
 }
 

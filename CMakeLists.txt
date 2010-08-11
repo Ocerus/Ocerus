@@ -15,7 +15,8 @@ option(PRECOMPILED_HEADERS "Use precompiled headers." OFF)
 option(BUILD_TESTS "Builds tests." ON)
 option(USE_DBGLIB "Uses DbgLib for debugging." ON)
 option(USE_LEAKDETECTOR "Uses DbgLib's leak detector." OFF)
-option(USE_PROFILER "Uses profiler." OFF)
+option(USE_RTHPROFILER "Uses the included RTHProfiler." OFF)
+option(USE_GPROF "Compiles project for using gprof." OFF)
 
 set(ocerus-engine_INCLUDE_DIRS)
 set(ocerus-engine_LIBRARIES)
@@ -100,7 +101,7 @@ if (USE_DBGLIB OR USE_LEAKDETECTOR)
 
 endif (USE_DBGLIB OR USE_LEAKDETECTOR)
 
-if (USE_PROFILER)
+if (USE_RTHPROFILER)
 	ADD_SUBDIRECTORY(externalLibs/RTHProfiler)
 	set(RTHProfiler_INCLUDE_DIRS
 		${CMAKE_CURRENT_SOURCE_DIR}/externalLibs/RTHProfiler/include
@@ -111,7 +112,12 @@ if (USE_PROFILER)
 	list(APPEND ocerus-engine_LIBRARIES ${RTHProfiler_LIBRARIES})
 
 	list(APPEND ocerus-engine_SYMBOLS USE_PROFILER)
-endif (USE_PROFILER)
+endif (USE_RTHPROFILER)
+
+if (USE_GPROF)
+	message("USING GPROF")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pg")
+endif (USE_GPROF)
 
 ###############################################################################
 ###                             dependencies                                ###
@@ -282,7 +288,6 @@ set(GUISystem_SRCS
 	src/GUISystem/CEGUIResource.cpp
 	src/GUISystem/GUIMgr.cpp
 	src/GUISystem/GUIConsole.cpp
-	src/GUISystem/CEGUITools.cpp
 	src/GUISystem/MessageBox.cpp
 	src/GUISystem/PromptBox.cpp
 	src/GUISystem/VerticalLayout.cpp
@@ -355,13 +360,13 @@ set(Utils_SRCS
 
 include_directories(${ocerus-engine_INCLUDE_DIRS})
 
-set(CMAKE_CXX_FLAGS "-Wall -std=c++0x")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++0x")
 
 foreach(SYMBOL ${ocerus-engine_SYMBOLS})
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D${SYMBOL}")
 endforeach(SYMBOL)
 
-set(CMAKE_CXX_FLAGS_RELEASE "-O2")
+set(CMAKE_CXX_FLAGS_RELEASE "-O1")
 #set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g -Wextra -pedantic -Wno-variadic-macros -Wno-long-long -DUSE_ASSERT -D_DEBUG")
 set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g -Wextra -pedantic -DUSE_ASSERT -D_DEBUG")
 
@@ -393,9 +398,6 @@ link_directories(
     ${CEGUI_LIBRARY_DIRS}
 )
 
-message("CEGUI_LIBRARY_DIRS: " ${CEGUI_LIBRARY_DIRS} )
-message("CEGUI_LIBRARIES: " ${CEGUI_LIBRARIES} )
-
 target_link_libraries(ocerus-engine
     ${ocerus-engine_LIBRARIES}
     ${OIS_LIBRARIES}
@@ -406,6 +408,9 @@ target_link_libraries(ocerus-engine
     ${UNITTEST++_LIBRARY}
     ${ICU_LIBRARIES}
 )
+
+message("CMAKE_C_FLAGS: " ${CMAKE_C_FLAGS})
+message("CMAKE_CXX_FLAGS: " ${CMAKE_CXX_FLAGS})
 
 add_executable(ocerus-main src/Runner/main.cpp)
 

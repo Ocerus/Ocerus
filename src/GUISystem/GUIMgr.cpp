@@ -441,12 +441,11 @@ bool GUIMgr::MouseMoved(const InputSystem::MouseInfo& mi)
 		CEGUI::Window* prevActive = root->getActiveChild();
 
 		// find the first window wanting the mouse wheel
-		while(wheelTarget)
+		while (wheelTarget)
 		{
-			if( wheelTarget->isPropertyPresent("WantsMouseWheel") 
-				&& wheelTarget->getProperty("WantsMouseWheel") == "True"
-				&& wheelTarget->isVisible()
-				&& !wheelTarget->isDisabled())
+			if (wheelTarget->isVisible() && !wheelTarget->isDisabled() &&
+				wheelTarget->isUserStringDefined("WantsMouseWheel") &&
+				wheelTarget->getUserString("WantsMouseWheel") == "True")
 			{   
 				break;
 			}

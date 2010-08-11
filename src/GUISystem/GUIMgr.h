@@ -135,9 +135,6 @@ namespace GUISystem
 		inline InputEventInfo& GetCurrentInputEvent() { return mCurrentInputEvent; }
 
 	private:
-		/// Generates a new name for a window.
-		string GenerateWindowName() const;
-
 		/// @name CEGUI related stuff
 		//@{
 			CEGUI::System* mCEGUI;
@@ -160,8 +157,8 @@ namespace GUISystem
 			WindowMap mWindowCache;
 
 			void InitWindowCache(const string& windowType);
-
 			void ClearWindowCaches();
+			string GenerateWindowName() const;
 		//@}
 	};
 }

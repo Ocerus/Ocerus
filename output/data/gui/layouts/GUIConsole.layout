@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GUILayout>
+	<Window Type="DefaultWindow" Name="GUIConsole">
+		<Property Name="Visible" Value="False"/>
+		<Property Name="Alpha" Value="0.9"/>
+		<Property Name="InheritsAlpha" Value="False"/>
+		<Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}"/>
+		<Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{1,0},{0.33,0}}"/>
+		<Property Name="AlwaysOnTop" Value="True"/>
+		<Window Type="Editor/Editbox" Name="GUIConsole/PromptBox">
+			<Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}"/>
+			<Property Name="UnifiedAreaRect" Value="{{0,0},{1,-24},{1,0},{1,0}}"/>
+		</Window>
+		<Window Type="Editor/Listbox" Name="GUIConsole/MessageBox">
+			<Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}"/>
+			<Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{1,0},{1,-24}}"/>
+		</Window>
+	</Window>
+</GUILayout>
