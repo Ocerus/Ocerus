@@ -35,7 +35,6 @@ namespace GUISystem {
 		OC_UNUSED(out_vec);
 		OC_UNUSED(file_pattern);
 		OC_UNUSED(resource_group);
-		///@todo implement this;
 		return 0;
 	}
 }

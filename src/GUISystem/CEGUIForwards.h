@@ -14,6 +14,7 @@ namespace CEGUI
 	class Listbox;
 	class OpenGLRenderer;
 	class PushButton;
+	class ScrollablePane;
 	class String;
 	class System;
 	class Window;

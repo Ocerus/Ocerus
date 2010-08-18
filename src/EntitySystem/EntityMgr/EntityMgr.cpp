@@ -215,7 +215,7 @@ EntityHandle EntityMgr::CreateEntity(EntityDescription& desc)
 
 	if (GlobalProperties::Get<bool>("DevelopMode"))
 	{
-		gEditorMgr.GetEditorGui()->GetHierarchyWindow()->AddEntityToHierarchy(entityHandle);
+		gEditorMgr.GetHierarchyWindow()->AddEntityToHierarchy(entityHandle);
 	}
 
 	return entityHandle;
@@ -320,7 +320,7 @@ EntityHandle EntityMgr::DuplicateEntity(const EntityHandle oldEntity, const stri
 
 	if (GlobalProperties::Get<bool>("DevelopMode"))
 	{
-		gEditorMgr.GetEditorGui()->GetHierarchyWindow()->AddEntityToHierarchy(newEntity);
+		gEditorMgr.GetHierarchyWindow()->AddEntityToHierarchy(newEntity);
 	}
 
 	return newEntity;
@@ -331,7 +331,7 @@ void EntityMgr::DestroyEntity(const EntityHandle entityToDestroy)
 {
 	if (GlobalProperties::Get<bool>("DevelopMode"))
 	{
-		gEditorMgr.GetEditorGui()->GetHierarchyWindow()->RemoveEntityFromHierarchy(entityToDestroy);
+		gEditorMgr.GetHierarchyWindow()->RemoveEntityFromHierarchy(entityToDestroy);
 	}
 	mEntityDestroyQueue.push_back(entityToDestroy.GetID());
 }

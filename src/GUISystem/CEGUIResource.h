@@ -1,5 +1,5 @@
 /// @file
-/// Interconnects CEGUI with Ocerus resource system.
+/// Provides a Resource type for all CEGUI data.
 
 #ifndef _GUISYSTEM_CEGUIRESOURCE_H_
 #define _GUISYSTEM_CEGUIRESOURCE_H_

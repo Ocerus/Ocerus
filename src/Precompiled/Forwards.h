@@ -19,6 +19,7 @@ namespace Editor
 	class EditorGUI;
 	class EditorMgr;
 	class EditorMenu;
+	class EntityWindow;
 	class PopupMenu;
 	class ResourceWindow;
 	class PrototypeWindow;

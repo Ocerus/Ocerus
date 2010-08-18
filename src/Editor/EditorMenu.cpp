@@ -2,7 +2,6 @@
 
 #include "Editor/EditorMenu.h"
 #include "Editor/EditorMgr.h"
-#include "Editor/EditorGUI.h"
 #include "Editor/HierarchyWindow.h"
 #include "Core/Application.h"
 #include "Core/Project.h"
@@ -161,7 +160,7 @@ bool Editor::EditorMenu::OnMenuItemClicked(const CEGUI::EventArgs& e)
 
 	if (itemName == menubarPrefix + "/Edit/NewEntity")
 	{
-		gEditorMgr.GetEditorGui()->GetHierarchyWindow()->CreateEntity(EntitySystem::EntityHandle::Null);
+		gEditorMgr.GetHierarchyWindow()->CreateEntity(EntitySystem::EntityHandle::Null);
 		return true;
 	}
 

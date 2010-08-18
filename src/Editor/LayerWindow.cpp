@@ -57,7 +57,7 @@ void LayerWindow::NewLayer(EntitySystem::LayerID layerID)
 {
 	GUISystem::PromptBox* prompt = new GUISystem::PromptBox(layerID);
 	prompt->SetText(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "layer_new_prompt"));
-	prompt->RegisterCallback(new GUISystem::PromptBox::Callback<Editor::LayerWindow>(this, &LayerWindow::NewLayerPromptCallback));
+	prompt->RegisterCallback(GUISystem::PromptBox::Callback(this, &LayerWindow::NewLayerPromptCallback));
 	prompt->Show();
 }
 
@@ -77,7 +77,7 @@ void LayerWindow::RenameLayer(EntitySystem::LayerID layerID)
 {
 	GUISystem::PromptBox* prompt = new GUISystem::PromptBox(layerID);
 	prompt->SetText(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "layer_rename_prompt"));
-	prompt->RegisterCallback(new GUISystem::PromptBox::Callback<Editor::LayerWindow>(this, &LayerWindow::RenameLayerPromptCallback));
+	prompt->RegisterCallback(GUISystem::PromptBox::Callback(this, &LayerWindow::RenameLayerPromptCallback));
 	prompt->Show();
 }
 
@@ -468,7 +468,7 @@ void LayerWindow::UpdateEntityItem(CEGUI::Window* entityItem, EntitySystem::Enti
 
 }
 
-void LayerWindow::NewLayerPromptCallback(bool clickedOK, string text, int32 layerID)
+void LayerWindow::NewLayerPromptCallback(bool clickedOK, const string& text, int32 layerID)
 {
 	if (!clickedOK)
 		return;
@@ -477,7 +477,7 @@ void LayerWindow::NewLayerPromptCallback(bool clickedOK, string text, int32 laye
 	UpdateTree();
 }
 
-void LayerWindow::RenameLayerPromptCallback(bool clickedOK, string text, int32 layerID)
+void LayerWindow::RenameLayerPromptCallback(bool clickedOK, const string& text, int32 layerID)
 {
 	if (!clickedOK)
 		return;

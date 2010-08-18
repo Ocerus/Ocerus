@@ -137,13 +137,42 @@ void GUIMgr::DeinitConsole()
 void GUIMgr::LoadSystemScheme(const string& filename)
 {
 	OC_DASSERT(mCEGUI);
-	CEGUI::SchemeManager::getSingleton().create(filename);
+	CEGUI_TRY;
+	{
+		CEGUI::SchemeManager::getSingleton().create(filename);
+	}
+	CEGUI_CATCH;
 }
 
 void GUIMgr::LoadProjectScheme(const string& filename)
 {
 	OC_DASSERT(mCEGUI);
-	CEGUI::SchemeManager::getSingleton().create(filename, "project");
+	CEGUI_TRY;
+	{
+		CEGUI::SchemeManager::getSingleton().create(filename, "project");
+	}
+	CEGUI_CATCH;
+}
+
+void GUIMgr::LoadSystemImageset(const string& filename)
+{
+	OC_DASSERT(mCEGUI);
+	CEGUI_TRY;
+	{
+		CEGUI::ImagesetManager::getSingleton().create("gui/imagesets/" + filename);
+	}
+	CEGUI_CATCH;
+
+}
+
+void GUIMgr::LoadProjectImageset(const string& filename)
+{
+	OC_DASSERT(mCEGUI);
+	CEGUI_TRY;
+	{
+		CEGUI::ImagesetManager::getSingleton().create(filename, "project");
+	}
+	CEGUI_CATCH;
 }
 
 CEGUI::Window* GUIMgr::LoadSystemLayout(const CEGUI::String& filename, const CEGUI::String& namePrefix)

@@ -1,16 +1,14 @@
 /// @file
 /// Provides Tab and Shift+Tab navigation through a list of widgets.
-#ifndef GUISYSTEM_TABNAVIGATION_H
-#define GUISYSTEM_TABNAVIGATION_H
+#ifndef _GUISYSTEM_TABNAVIGATION_H_
+#define _GUISYSTEM_TABNAVIGATION_H_
 
 #include "Base.h"
 #include "CEGUIForwards.h"
 
 namespace GUISystem
 {
-	/**
-	 * The TabNavigation class provides Tab and Shift+Tab navigation through a list of widgets.
-	 */
+	/// The TabNavigation class provides Tab and Shift+Tab navigation through a list of widgets.
 	class TabNavigation
 	{
 	public:
@@ -35,4 +33,4 @@ namespace GUISystem
 	};
 }
 
-#endif // GUISYSTEM_TABNAVIGATION_H
+#endif // _GUISYSTEM_TABNAVIGATION_H_

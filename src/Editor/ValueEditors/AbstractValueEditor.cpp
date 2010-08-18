@@ -1,7 +1,7 @@
 #include "Common.h"
 #include "AbstractValueEditor.h"
 #include "Editor/EditorMgr.h"
-#include "Editor/EditorGUI.h"
+#include "Editor/EntityWindow.h"
 #include "GUISystem/CEGUICommon.h"
 
 using namespace Editor;
@@ -58,5 +58,5 @@ float Editor::AbstractValueEditor::GetEditboxHeight()
 
 void Editor::AbstractValueEditor::AddWidgetToTabNavigation(CEGUI::Window* widget)
 {
-	gEditorMgr.GetEditorGui()->AddWidgetToTabNavigation(widget);
+	gEditorMgr.GetEntityWindow()->AddWidgetToTabNavigation(widget);
 }

@@ -10,7 +10,6 @@
 #include "GUISystem/ViewportWindow.h"
 #include "ScriptSystem/ScriptResource.h"
 #include "Editor/EditorMgr.h"
-#include "Editor/EditorGUI.h"
 #include "EntitySystem/EntityMgr/LayerMgr.h"
 
 
@@ -355,7 +354,7 @@ void Core::Application::RegisterGameInputListener( InputSystem::IInputListener* 
 {
 	if (mDevelopMode)
 	{
-		gEditorMgr.GetEditorGui()->GetGameViewport()->AddInputListener(listener);
+		gEditorMgr.GetGameViewport()->AddInputListener(listener);
 	}
 	else
 	{
@@ -367,10 +366,8 @@ void Core::Application::UnregisterGameInputListener( InputSystem::IInputListener
 {
 	if (mDevelopMode)
 	{
-		if (gEditorMgr.GetEditorGui())
-		{
-			gEditorMgr.GetEditorGui()->GetGameViewport()->RemoveInputListener(listener);
-		}
+		if (gEditorMgr.GetGameViewport())
+			gEditorMgr.GetGameViewport()->RemoveInputListener(listener);
 	}
 	else
 	{

@@ -5,7 +5,7 @@
 #include "Core/Application.h"
 #include "ScriptSystem/ScriptResource.h"
 #include "Editor/EditorMgr.h"
-#include "Editor/EditorGUI.h"
+#include "Editor/EntityWindow.h"
 
 using namespace EntityComponents;
 using namespace EntitySystem;
@@ -260,7 +260,7 @@ void Script::SetModules(Utils::Array<ResourceSystem::ResourcePtr>* modules)
 
 void Script::DynamicPropertyChanged(const StringKey propertyName, bool reg, bool success)
 {
-  if (success && gApp.IsEditMode()) gEditorMgr.GetEditorGui()->NeedUpdateEntityEditorWindow();
+  if (success && gApp.IsEditMode()) gEditorMgr.GetEntityWindow()->RebuildLater();
 	
 	// (Un)link the dynamic property to the module where it is registered so it will be automatically destroyed with the module
 	AngelScript::asIScriptContext* ctx = AngelScript::asGetActiveContext();

@@ -1,7 +1,8 @@
 #include "Common.h"
 #include "Project.h"
-#include "Editor/EditorMgr.h"
 #include "Editor/EditorGUI.h"
+#include "Editor/EditorMgr.h"
+#include "Editor/EntityWindow.h"
 #include "Editor/HierarchyWindow.h"
 #include "Editor/LayerWindow.h"
 #include "Core/Game.h"
@@ -286,7 +287,7 @@ void Core::Project::OpenScene( const ResourceSystem::ResourcePtr resource )
 	Core::Game& game = GlobalProperties::Get<Core::Game>("Game");
 
 	// Set the in-game GUI root window
-	if (gApp.IsEditMode()) game.SetRootWindow(gEditorMgr.GetEditorGui()->GetGameViewport());
+	if (gApp.IsEditMode()) game.SetRootWindow(gEditorMgr.GetGameViewport());
 	else game.CreateDefaultRootWindow();
 
 	gEntityMgr.LoadEntitiesFromResource(resource);
@@ -296,7 +297,7 @@ void Core::Project::OpenScene( const ResourceSystem::ResourcePtr resource )
 	// Set the viewport cameras and run the action in non-edit mode
 	if (gApp.IsEditMode())
 	{
-		gEditorMgr.GetEditorGui()->RefreshCameras();
+		gEditorMgr.GetEditorGUI()->RefreshCameras();
 	}
 	else
 	{
@@ -358,10 +359,10 @@ void Project::CloseOpenedScene()
 	gLayerMgr.Clear();
 	if (mEditorSupport)
 	{
-		gEditorMgr.GetEditorGui()->DisableViewports();
+		gEditorMgr.GetEditorGUI()->DisableViewports();
+		gEditorMgr.GetEntityWindow()->Clear();
 		gEditorMgr.GetHierarchyWindow()->Clear();
 		gEditorMgr.GetLayerWindow()->Clear();
-		gEditorMgr.GetEditorGui()->ClearEntityEditorWindow();
 		gEditorMgr.SwitchActionTool(Editor::EditorMgr::AT_RESTART);
 		gEditorMgr.UpdateMenuItemsEnabled();
 	}

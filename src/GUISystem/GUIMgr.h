@@ -45,6 +45,12 @@ namespace GUISystem
 		/// Loads the project scheme file.
 		void LoadProjectScheme(const string& filename);
         
+		/// Loads the system imageset file.
+		void LoadSystemImageset(const string& filename);
+
+		/// Loads the project imageset file.
+		void LoadProjectImageset(const string& filename);
+
 		/// Loads the system layout file and returns it.
 		/// @param filename The layout filename.
 		/// @param namePrefix Widget names in layout file are prefixed with given prefix.

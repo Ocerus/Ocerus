@@ -8,7 +8,7 @@ using namespace GUISystem;
 const float32 INNER_FRAME_OFFSET = 20.0f;
 const float32 BUTTON_MARGIN = 10.0f;
 
-MessageBox::MessageBox(MessageBox::eMessageBoxType type, int32 tag): mType(type), mTag(tag), mCallback(0), mMessageBox(0), mMinWidth(0)
+MessageBox::MessageBox(MessageBox::eMessageBoxType type, int32 tag): mType(type), mTag(tag), mMessageBox(0), mMinWidth(0)
 {
 	mMessageBox = gGUIMgr.LoadSystemLayout("MessageBox.layout", "MessageBox");
 	OC_ASSERT(mMessageBox);
@@ -54,7 +54,6 @@ MessageBox::MessageBox(MessageBox::eMessageBoxType type, int32 tag): mType(type)
 
 MessageBox::~MessageBox()
 {
-	delete mCallback;
 	gGUIMgr.DestroyWindowDirectly(mMessageBox);
 }
 
@@ -79,12 +78,6 @@ void MessageBox::SetText(const CEGUI::String& text)
 void MessageBox::Show()
 {	
 	gGUIMgr.GetGUISheet()->addChildWindow(mMessageBox);
-}
-
-void MessageBox::RegisterCallback(MessageBox::CallbackBase* callback)
-{
-	delete mCallback;
-	mCallback = callback;
 }
 
 void MessageBox::SetButtons(const MessageBoxButtons& buttons)
@@ -131,15 +124,15 @@ bool MessageBox::OnButtonClicked(const CEGUI::EventArgs& e)
 {
 	const CEGUI::WindowEventArgs& args = static_cast<const CEGUI::WindowEventArgs&>(e);
 	eMessageBoxButton button = (eMessageBoxButton)args.window->getID();
-	if (mCallback != 0)
+	if (mCallback.IsSet())
 	{
-		mCallback->execute(button, mTag);
+		mCallback.Call(button, mTag);
 	}
 	delete this;
 	return true;
 }
 
-void GUISystem::ShowMessageBox(const CEGUI::String& text, MessageBox::eMessageBoxType type, MessageBox::CallbackBase* callback, int32 tag)
+void GUISystem::ShowMessageBox(const CEGUI::String& text, MessageBox::eMessageBoxType type, MessageBox::Callback callback, int32 tag)
 {
 	MessageBox* messageBox = new MessageBox(type, tag);
 	messageBox->SetText(text);

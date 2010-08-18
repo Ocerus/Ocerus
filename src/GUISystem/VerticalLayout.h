@@ -1,11 +1,10 @@
 /// @file
-/// Position the GUI elements in a vertical layout and automatically repositions them when one of them changes its size.
+/// Positions the GUI elements in a vertical layout and automatically repositions them when one of them changes its size.
 
-#ifndef _VERTICALLAYOUT_H_
-#define _VERTICALLAYOUT_H_
+#ifndef _GUISYSTEM_VERTICALLAYOUT_H_
+#define _GUISYSTEM_VERTICALLAYOUT_H_
 
 #include "Base.h"
-
 #include "CEGUIForwards.h"
 
 namespace GUISystem
@@ -34,7 +33,8 @@ namespace GUISystem
 		/// method).
 		void AddChildWindow(CEGUI::Window* window);
 
-		/// Returns the number of the child windows.
+		/// Returns the number of the child windows. Only windows managed by the VerticalLayout (that were registered
+		/// with AddChildWindow) are counted.
 		size_t GetChildCount() const;
 
 		/// Clears all data.
@@ -61,13 +61,13 @@ namespace GUISystem
 		/// Unlock updates. UpdateLayout() updates layout again until updates are locked again.
 		void UnlockUpdates() { mLockedUpdates = false; }
 
+	private:
 		/// @name CEGUI Callbacks
 		//@{
-		bool OnChildWindowSized(const CEGUI::EventArgs&);
-		bool OnChildWindowDestroyed(const CEGUI::EventArgs&);
+			bool OnChildWindowSized(const CEGUI::EventArgs&);
+			bool OnChildWindowDestroyed(const CEGUI::EventArgs&);
 		//@}
 
-	private:
 		VerticalLayout(const VerticalLayout&);
 		VerticalLayout& operator=(const VerticalLayout&);
 
@@ -84,4 +84,4 @@ namespace GUISystem
 	};
 }
 
-#endif // _VERTICALLAYOUT_H_
+#endif // _GUISYSTEM_VERTICALLAYOUT_H_

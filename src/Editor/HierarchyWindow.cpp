@@ -552,11 +552,11 @@ void Editor::HierarchyWindow::CreateEntity(EntitySystem::EntityHandle parent)
 {
 	GUISystem::PromptBox* prompt = new GUISystem::PromptBox(parent != EntitySystem::EntityHandle::Null ? parent.GetID() : 0);
 	prompt->SetText(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "new_entity_prompt"));
-	prompt->RegisterCallback(new GUISystem::PromptBox::Callback<Editor::HierarchyWindow>(this, &HierarchyWindow::NewEntityPromptCallback));
+	prompt->RegisterCallback(GUISystem::PromptBox::Callback(this, &HierarchyWindow::NewEntityPromptCallback));
 	prompt->Show();
 }
 
-void Editor::HierarchyWindow::NewEntityPromptCallback(bool clickedOK, string text, int32 tag)
+void Editor::HierarchyWindow::NewEntityPromptCallback(bool clickedOK, const string& text, int32 tag)
 {
 	if (!clickedOK) return;
 	SetCurrentParent(tag != 0 ? EntitySystem::EntityHandle(tag) : EntitySystem::EntityHandle::Null);

@@ -1,8 +1,7 @@
 /// @file
 /// Handling GUI of editor.
-
-#ifndef _EDITORGUI_H_
-#define _EDITORGUI_H_
+#ifndef _EDITOR_EDITORGUI_H_
+#define _EDITOR_EDITORGUI_H_
 
 #include "Base.h"
 #include "GUISystem/CEGUIForwards.h"
@@ -10,7 +9,8 @@
 
 namespace Editor
 {
-	/// The EditorGUI class manages the editor GUI.
+	/// The EditorGUI class manages the editor GUI. It only manages viewport windows itself, the rest of GUI is
+	/// delegated to another classes.
 	class EditorGUI
 	{
 	public:
@@ -22,23 +22,11 @@ namespace Editor
 		~EditorGUI();
 
 		/// Loads editor GUI.
-		void LoadGUI();
+		void Init();
 
 		/// Updates the GUI.
 		void Update(float32 delta);
-
-		/// Draws viewports managed by Editor
-		void Draw(float32 delta);
 		
-		/// Updates the entity editor.
-		void UpdateEntityEditorWindow();
-
-		/// Clears the entity editor.
-		void ClearEntityEditorWindow();
-		
-		/// Updates the entity editor in the following call of Update.
-		void NeedUpdateEntityEditorWindow() { mNeedEntityEditorUpdate = true; }
-
 		/// Disables viewports.
 		void DisableViewports();
 
@@ -51,11 +39,11 @@ namespace Editor
 		/// Returns the viewport of the game window.
 		inline GUISystem::ViewportWindow* GetGameViewport() const { return mGameViewport; }
 
-		/// Returns the resource window.
-		inline ResourceWindow* GetResourceWindow() const { return mResourceWindow; }
+		/// Returns the editor menu.
+		inline EditorMenu* GetEditorMenu() const { return mEditorMenu; }
 
-		/// Returns the prototype window.
-		inline PrototypeWindow* GetPrototypeWindow() const { return mPrototypeWindow; }
+		/// Returns the entity window.
+		inline EntityWindow* GetEntityWindow() const { return mEntityWindow; }
 
 		/// Returns the hierarchy window.
 		inline HierarchyWindow* GetHierarchyWindow() const { return mHierarchyWindow; }
@@ -63,47 +51,32 @@ namespace Editor
 		/// Returns the layer window.
 		inline LayerWindow* GetLayerWindow() const { return mLayerWindow; }
 
-		///@TODO doxygen
-		inline EditorMenu* GetEditorMenu() const { return mEditorMenu; }
+		/// Returns the prototype window.
+		inline PrototypeWindow* GetPrototypeWindow() const { return mPrototypeWindow; }
 
-		void AddWidgetToTabNavigation(CEGUI::Window* widget);
-
-		/// @name CEGUI Callbacks
-		//@{
-		bool OnComponentRemoveClicked(const CEGUI::EventArgs&);
-		//@}
-
-	public:
+		/// Returns the resource window.
+		inline ResourceWindow* GetResourceWindow() const { return mResourceWindow; }
 
 		/// Name of the entity with the editor camera.
 		static const string EditorCameraName;
-
-		/// Callback from CEGUI.
-		bool OnEditorViewportItemDropped(const CEGUI::EventArgs&);
-
+	
 	private:
-		/// Recursively subscribes every menu item to the mouse enters/leaves/clicked events
-		void ConfigureMenu(CEGUI::Window* parent, bool isMenubar);
-		
-		int32 mPropertyItemHeight;
-		int32 mComponentGroupHeight;
-		float32 mPropertyUpdateTimer;
-		bool mNeedEntityEditorUpdate;
+		/// @name CEGUI Callbacks
+		//@{
+			/// Handles dropping prototypes on editor viewport.
+			bool OnEditorViewportItemDropped(const CEGUI::EventArgs&);
+		//@}
 
-		typedef vector<AbstractValueEditor*> PropertyEditors;
-		PropertyEditors mPropertyEditors;
-		typedef vector<GUISystem::VerticalLayout*> VerticalLayouts;
-		VerticalLayouts mVerticalLayouts;
-		GUISystem::VerticalLayout* mEntityEditorLayout;
 		GUISystem::ViewportWindow* mGameViewport;
 		GUISystem::ViewportWindow* mEditorViewport;
-		GUISystem::TabNavigation* mTabNavigation;
+
 		EditorMenu* mEditorMenu;
-		LayerWindow* mLayerWindow;
-		ResourceWindow* mResourceWindow;
-		PrototypeWindow* mPrototypeWindow;
+		EntityWindow* mEntityWindow;
 		HierarchyWindow* mHierarchyWindow;
+		LayerWindow* mLayerWindow;
+		PrototypeWindow* mPrototypeWindow;
+		ResourceWindow* mResourceWindow;
 	};
 }
 
-#endif // _EDITORGUI_H_
+#endif // _EDITOR_EDITORGUI_H_

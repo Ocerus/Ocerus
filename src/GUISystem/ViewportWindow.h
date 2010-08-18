@@ -1,8 +1,8 @@
 /// @file
-/// Viewport window.
+/// CEGUI representation of viewport window.
 
-#ifndef _VIEWPORT_WINDOW_H_
-#define _VIEWPORT_WINDOW_H_
+#ifndef _GUISYSTEM_VIEWPORTWINDOW_H_
+#define _GUISYSTEM_VIEWPORTWINDOW_H_
 
 #include "Base.h"
 #include <elements/CEGUIFrameWindow.h>
@@ -10,8 +10,7 @@
 
 namespace GUISystem
 {
-	/// The ViewportWindow class represent a viewport window with a frame.
-	/// @todo Add MousePicker.
+	/// The ViewportWindow class represents a viewport window with a frame.
 	class ViewportWindow: public CEGUI::FrameWindow
 	{
 	public:
@@ -58,19 +57,17 @@ namespace GUISystem
 		//@}
 
 	protected:
-
 		///@name CEGUI events.
 		//@{
-		virtual void onSized(CEGUI::WindowEventArgs& e);
-		virtual void onMoved(CEGUI::WindowEventArgs& e);
-		virtual void onMouseMove(CEGUI::MouseEventArgs& e);
-		virtual void onMouseButtonDown(CEGUI::MouseEventArgs& e);
-		virtual void onMouseButtonUp(CEGUI::MouseEventArgs& e);
-		virtual void onMouseWheel(CEGUI::MouseEventArgs& e);
-		virtual void onKeyDown(CEGUI::KeyEventArgs& e);
-		virtual void onKeyUp(CEGUI::KeyEventArgs& e);
+			virtual void onSized(CEGUI::WindowEventArgs& e);
+			virtual void onMoved(CEGUI::WindowEventArgs& e);
+			virtual void onMouseMove(CEGUI::MouseEventArgs& e);
+			virtual void onMouseButtonDown(CEGUI::MouseEventArgs& e);
+			virtual void onMouseButtonUp(CEGUI::MouseEventArgs& e);
+			virtual void onMouseWheel(CEGUI::MouseEventArgs& e);
+			virtual void onKeyDown(CEGUI::KeyEventArgs& e);
+			virtual void onKeyUp(CEGUI::KeyEventArgs& e);
 		//@}
-
 
 		/// Updates viewport area.
 		void UpdateViewportArea();
@@ -94,5 +91,4 @@ namespace GUISystem
 	};
 }
 
-
-#endif // _VIEWPORT_WINDOW_H_
+#endif // _GUISYSTEM_VIEWPORTWINDOW_H_

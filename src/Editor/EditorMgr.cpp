@@ -3,6 +3,7 @@
 #include "EditorGUI.h"
 #include "PopupMenu.h"
 #include "KeyShortcuts.h"
+#include "EntityWindow.h"
 #include "ResourceWindow.h"
 #include "PrototypeWindow.h"
 #include "HierarchyWindow.h"
@@ -55,8 +56,8 @@ void EditorMgr::LoadEditor()
 	mHoveredEntity.Invalidate();
 	mIsInitialTime = true;
 
-	mEditorGUI->LoadGUI();
-	mEditorGUI->GetEditorViewport()->AddInputListener(this);
+	mEditorGUI->Init();
+	GetEditorViewport()->AddInputListener(this);
 }
 
 void Editor::EditorMgr::UnloadEditor()
@@ -176,7 +177,6 @@ void Editor::EditorMgr::Draw(float32 delta)
 
 		gGfxRenderer.FinalizeRenderTarget();
 	}
-	mEditorGUI->Draw(delta);
 }
 
 void Editor::EditorMgr::SetCurrentEntity(const EntitySystem::EntityHandle newCurrentEntity)
@@ -188,10 +188,9 @@ void Editor::EditorMgr::SetCurrentEntity(const EntitySystem::EntityHandle newCur
 	OC_ASSERT(mEditorGUI->GetPrototypeWindow());
 	OC_ASSERT(mEditorGUI->GetHierarchyWindow());
 
-	mEditorGUI->GetPrototypeWindow()->SetSelectedEntity(mCurrentEntity);
-	mEditorGUI->GetHierarchyWindow()->SetSelectedEntity(mCurrentEntity);
-
-	mEditorGUI->UpdateEntityEditorWindow();
+	GetPrototypeWindow()->SetSelectedEntity(mCurrentEntity);
+	GetHierarchyWindow()->SetSelectedEntity(mCurrentEntity);
+	GetEntityWindow()->Rebuild();
 }
 
 void Editor::EditorMgr::UpdateCurrentEntityName(const string& newName)
@@ -292,7 +291,7 @@ void Editor::EditorMgr::AddComponent(EntitySystem::eComponentType componentType)
 	else
 	{
 		gEntityMgr.AddComponentToEntity(mCurrentEntity, componentType);
-		mEditorGUI->UpdateEntityEditorWindow();
+		GetEntityWindow()->Rebuild();
 		if (IsEditingPrototype()) gEntityMgr.SavePrototypes();
 	}
 }
@@ -302,7 +301,7 @@ void Editor::EditorMgr::RemoveComponent(const EntitySystem::ComponentID& compone
 {
 	if (!mCurrentEntity.IsValid()) return;
 	gEntityMgr.DestroyEntityComponent(mCurrentEntity, componentId);
-	mEditorGUI->UpdateEntityEditorWindow();
+	GetEntityWindow()->Rebuild();
 	if (IsEditingPrototype()) gEntityMgr.SavePrototypes();
 }
 
@@ -347,8 +346,14 @@ void Editor::EditorMgr::RestartAction()
 		
 		GlobalProperties::Get<Core::Game>("Game").RestartAction();
 		mIsInitialTime = true;
-		if (!GetCurrentEntity().Exists()) { SetCurrentEntity(EntityHandle::Null); }
-		else { mEditorGUI->UpdateEntityEditorWindow(); }
+		if (!GetCurrentEntity().Exists())
+		{
+			SetCurrentEntity(EntityHandle::Null);
+		}
+		else
+		{
+			GetEntityWindow()->Rebuild();
+		}
 		ocInfo << "Game action restarted";
 	}
 }
@@ -394,7 +399,7 @@ void EditorMgr::UpdateMenuItemsEnabled()
 
 void EditorMgr::ShowCreateProjectDialog()
 {
-	mCreateProjectDialog->OpenDialog();
+	mCreateProjectDialog->Show();
 }
 
 void EditorMgr::CreateProject(const string& projectPath)
@@ -463,7 +468,7 @@ void EditorMgr::ShowQuitDialog()
 {
 	GUISystem::MessageBox* messageBox = new GUISystem::MessageBox(GUISystem::MessageBox::MBT_YES_NO, EditorMenu::MBT_QUIT);
 	messageBox->SetText(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "quit_message_text"));
-	messageBox->RegisterCallback(new GUISystem::MessageBox::Callback<Editor::EditorMenu>(mEditorGUI->GetEditorMenu(), &Editor::EditorMenu::OnMessageBoxClicked));
+	messageBox->RegisterCallback(GUISystem::MessageBox::Callback(mEditorGUI->GetEditorMenu(), &Editor::EditorMenu::OnMessageBoxClicked));
 	messageBox->Show();
 }
 
@@ -1003,17 +1008,52 @@ void Editor::EditorMgr::SelectEntity( const EntitySystem::EntityHandle entity )
 	}
 }
 
-HierarchyWindow* Editor::EditorMgr::GetHierarchyWindow() const
-{
-	return mEditorGUI->GetHierarchyWindow();
-}
+
+
+
 
 bool Editor::EditorMgr::IsProjectOpened() const
 { 
 	return mCurrentProject->IsProjectOpened();
 }
 
-LayerWindow* Editor::EditorMgr::GetLayerWindow() const
+GUISystem::ViewportWindow* EditorMgr::GetEditorViewport() const
 {
-	return mEditorGUI->GetLayerWindow();
+	return mEditorGUI ? mEditorGUI->GetEditorViewport() : 0;
 }
+
+GUISystem::ViewportWindow* EditorMgr::GetGameViewport() const
+{
+	return mEditorGUI ? mEditorGUI->GetGameViewport() : 0;
+}
+
+EditorMenu* EditorMgr::GetEditorMenu() const
+{
+	return mEditorGUI ? mEditorGUI->GetEditorMenu() : 0;
+}
+
+EntityWindow* EditorMgr::GetEntityWindow() const
+{
+	return mEditorGUI ? mEditorGUI->GetEntityWindow() : 0;
+}
+
+HierarchyWindow* EditorMgr::GetHierarchyWindow() const
+{
+	return mEditorGUI ? mEditorGUI->GetHierarchyWindow() : 0;
+}
+
+LayerWindow* EditorMgr::GetLayerWindow() const
+{
+	return mEditorGUI ? mEditorGUI->GetLayerWindow() : 0;
+}
+
+PrototypeWindow* EditorMgr::GetPrototypeWindow() const
+{
+	return mEditorGUI ? mEditorGUI->GetPrototypeWindow() : 0;
+}
+
+ResourceWindow* EditorMgr::GetResourceWindow() const
+{
+	return mEditorGUI ? mEditorGUI->GetResourceWindow() : 0;
+}
+

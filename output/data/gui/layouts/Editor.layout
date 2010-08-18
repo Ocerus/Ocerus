@@ -3,29 +3,6 @@
 	<Window Type="DefaultWindow" Name="EditorRoot">
 		<Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{1,0},{1,0}}"/>
 		<Property Name="HorizontalAlignment" Value="Centre"/>
-		<Window Type="Vanilla/FrameWindow" Name="EditorRoot/EntityEditor">
-			<Property Name="Font" Value="DejaVuSans-10"/>
-			<Property Name="Text" Value="$entity_editor$"/>
-			<Property Name="TitlebarFont" Value="DejaVuSans-10"/>
-			<Property Name="SizingEnabled" Value="False"/>
-			<Property Name="TitlebarEnabled" Value="True"/>
-			<Property Name="UnifiedAreaRect" Value="{{0,0},{0,24},{0.2,0},{1,0}}"/>
-			<Property Name="DragMovingEnabled" Value="False"/>
-			<Property Name="CloseButtonEnabled" Value="False"/>
-			<Window Type="Editor/ScrollablePane" Name="EditorRoot/EntityEditor/Scrollable">
-				<Property Name="ContentArea" Value="l:0 t:0 r:0 b:0"/>
-				<Property Name="HorzStepSize" Value="0.1"/>
-				<Property Name="VertStepSize" Value="0.1"/>
-				<Property Name="HorzOverlapSize" Value="0.01"/>
-				<Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{1,0},{1,0}}"/>
-				<Property Name="VertOverlapSize" Value="0.01"/>
-				<Property Name="HorzScrollPosition" Value="0"/>
-				<Property Name="VertScrollPosition" Value="0"/>
-				<AutoWindow NameSuffix="__auto_container__">
-					<Property Name="ContentArea" Value="l:0 t:0 r:0 b:0"/>
-				</AutoWindow>
-			</Window>
-		</Window>
 		<Window Type="Editor/Menubar" Name="EditorRoot/Menubar">
 			<Property Name="ItemSpacing" Value="10"/>
 			<Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{1,0},{0,24}}"/>

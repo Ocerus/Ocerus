@@ -8,7 +8,7 @@ using namespace GUISystem;
 const float32 INNER_FRAME_OFFSET = 20.0f;
 const float32 BUTTON_MARGIN = 10.0f;
 
-PromptBox::PromptBox(int32 tag): mTag(tag), mCallback(0), mPromptBox(0), mMinWidth(0)
+PromptBox::PromptBox(int32 tag): mTag(tag), mPromptBox(0), mMinWidth(0)
 {
 	CEGUI::String windowName;
 	static int i = 0;
@@ -31,7 +31,6 @@ PromptBox::PromptBox(int32 tag): mTag(tag), mCallback(0), mPromptBox(0), mMinWid
 
 PromptBox::~PromptBox()
 {
-	delete mCallback;
 	gGUIMgr.DestroyWindowDirectly(mPromptBox);
 }
 
@@ -68,12 +67,6 @@ void PromptBox::Show()
 	mPromptBox->getChild(mPromptBox->getName() + "/Editbox")->activate();
 }
 
-void PromptBox::RegisterCallback(PromptBox::CallbackBase* callback)
-{
-	delete mCallback;
-	mCallback = callback;
-}
-
 bool PromptBox::OnButtonClicked(const CEGUI::EventArgs& e)
 {
 	const CEGUI::WindowEventArgs& args = static_cast<const CEGUI::WindowEventArgs&>(e);
@@ -102,11 +95,11 @@ bool PromptBox::OnEditboxKeyDown(const CEGUI::EventArgs& e)
 
 void PromptBox::SendPrompt(bool clickedOK)
 {
-	if (mCallback != 0)
+	if (mCallback.IsSet())
 	{
 		CEGUI::Window* editbox = mPromptBox->getChild(mPromptBox->getName() + "/Editbox");
 		string text = editbox->getText().c_str();
-		mCallback->execute(clickedOK, text, mTag);
+		mCallback.Call(clickedOK, text, mTag);
 	}
 	delete this;
 }
@@ -119,7 +112,7 @@ void GUISystem::PromptBox::EnsureWindowIsWideEnough()
 	}
 }
 
-void GUISystem::ShowPromptBox(const CEGUI::String& text, PromptBox::CallbackBase* callback, int32 tag)
+void GUISystem::ShowPromptBox(const CEGUI::String& text, PromptBox::Callback callback, int32 tag)
 {
 	PromptBox* promptBox = new PromptBox(tag);
 	promptBox->SetText(text);

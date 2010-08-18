@@ -45,19 +45,19 @@ void CreateProjectDialog::Init()
 	CEGUI_CATCH;
 }
 
-void CreateProjectDialog::OpenDialog()
+void CreateProjectDialog::Show()
 {
 	if (mDialog == 0)
 		Init();
 
 	mNameValue->setText("");
-	mLocationValue->setText(""); ///@todo Set default location
+	mLocationValue->setText("");
 	mOKButton->setEnabled(false);
 	mDialog->setModalState(true);
 	mDialog->show();
 }
 
-void CreateProjectDialog::CancelDialog()
+void CreateProjectDialog::Cancel()
 {
 	mDialog->hide();
 	mDialog->setModalState(false);
@@ -71,7 +71,7 @@ void CreateProjectDialog::OpenLocationDialog()
 	folderSelector->Show(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "create_project_folder"));
 }
 
-void CreateProjectDialog::CreateProject()
+void CreateProjectDialog::Confirm()
 {
 	OC_DASSERT(IsValid());
 	string name = mNameValue->getText().c_str();
@@ -93,11 +93,11 @@ bool CreateProjectDialog::OnButtonClicked(const CEGUI::EventArgs& e)
 	const CEGUI::WindowEventArgs& args = static_cast<const CEGUI::WindowEventArgs&>(e);
 	if (args.window == mOKButton)
 	{
-		CreateProject();
+		Confirm();
 	}
 	else if (args.window == mCancelButton)
 	{
-		CancelDialog();
+		Cancel();
 	}
 	else if (args.window == mLocationButton)
 	{

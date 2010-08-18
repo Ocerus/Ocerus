@@ -127,7 +127,7 @@ namespace Editor
 		int32 FindTreeItem(const EntitySystem::EntityHandle data, uint32& depth);
 
 		/// Callback for creating a new entity.
-		void NewEntityPromptCallback(bool clickedOK, string text, int32 tag);
+		void NewEntityPromptCallback(bool clickedOK, const string& text, int32 tag);
 		
 		CEGUI::Window* mWindow;
 		CEGUI::ItemListbox* mTree;

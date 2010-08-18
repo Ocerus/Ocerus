@@ -87,15 +87,36 @@ namespace Editor
 		/// True if the editor is editing a prototype.
 		bool IsEditingPrototype() const;
 
-		/// Returns the hierarchy window pointer.
-		HierarchyWindow* GetHierarchyWindow() const;
+		/// @name GUI-related classes accessors
+		//@{
+			/// Returns the viewport of the editor window.
+			GUISystem::ViewportWindow* GetEditorViewport() const;
 
-		/// Returns the layer window pointer.
-		LayerWindow* GetLayerWindow() const;
+			/// Returns the viewport of the game window.
+			GUISystem::ViewportWindow* GetGameViewport() const;
 
-		/// Returns the gui object.
-		inline EditorGUI* GetEditorGui() const { return mEditorGUI; }
+			/// Returns the EditorGUI.
+			inline EditorGUI* GetEditorGUI() const { return mEditorGUI; }
 
+			/// Returns the editor menu.
+			EditorMenu* GetEditorMenu() const;
+
+			/// Returns the entity window.
+			EntityWindow* GetEntityWindow() const;
+
+			/// Returns the hierarchy window.
+			HierarchyWindow* GetHierarchyWindow() const;
+
+			/// Returns the layer window.
+			LayerWindow* GetLayerWindow() const;
+
+			/// Returns the prototype window.
+			PrototypeWindow* GetPrototypeWindow() const;
+
+			/// Returns the resource window.
+			ResourceWindow* GetResourceWindow() const;
+		//@}
+		
 		/// Returns the ProjectMgr.
 		inline Core::Project* GetCurrentProject() const { return mCurrentProject; }
 		
@@ -192,14 +213,6 @@ namespace Editor
 
 		/// Called by the value editors when their value changes.
 		void PropertyValueChanged();
-
-
-	protected:
-
-		friend class EditorGUI;
-		friend class EditorMenu;
-		friend class PopupMenu;
-		friend class HierarchyWindow;
 
 		/// Creates a new entity.
 		void CreateEntity(const string& name);

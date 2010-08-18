@@ -226,6 +226,7 @@ set(Editor_SRCS
 	src/Editor/EditorGUI.cpp
 	src/Editor/EditorMenu.cpp
 	src/Editor/EditorMgr.cpp
+	src/Editor/EntityWindow.cpp
 	src/Editor/HierarchyWindow.cpp
 	src/Editor/KeyShortcuts.cpp
 	src/Editor/LayerWindow.cpp
@@ -360,7 +361,7 @@ set(Utils_SRCS
 
 include_directories(${ocerus-engine_INCLUDE_DIRS})
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++0x")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++0x ")
 
 foreach(SYMBOL ${ocerus-engine_SYMBOLS})
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D${SYMBOL}")

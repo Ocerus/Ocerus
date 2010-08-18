@@ -108,5 +108,5 @@ void Editor::EntityAttributeModel::SetValue(const string& newValue)
 		gEditorMgr.RefreshPrototypeWindow();
 	}
 
-	gEditorMgr.GetEditorGui()->GetHierarchyWindow()->RefreshEntity(mEntity);
+	gEditorMgr.GetHierarchyWindow()->RefreshEntity(mEntity);
 }

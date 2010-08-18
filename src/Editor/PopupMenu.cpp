@@ -44,7 +44,7 @@ bool Editor::PopupMenu::OnMenuItemMouseUp( const CEGUI::EventArgs& e )
 			{
 				ResourceSystem::eResourceType newType = (ResourceSystem::eResourceType)args.window->getID();
 				gResourceMgr.ChangeResourceType(GetData<ResourceSystem::ResourcePtr>(), newType);
-				gEditorMgr.GetEditorGui()->GetResourceWindow()->Refresh();
+				gEditorMgr.GetResourceWindow()->Refresh();
 				handled = true;
 			}
 		}
@@ -56,7 +56,7 @@ bool Editor::PopupMenu::OnMenuItemMouseUp( const CEGUI::EventArgs& e )
 				desc.SetKind(EntitySystem::EntityDescription::EK_PROTOTYPE);
 				desc.SetName("New Prototype");
 				gEntityMgr.CreateEntity(desc);
-				gEditorMgr.GetEditorGui()->GetPrototypeWindow()->Refresh();
+				gEditorMgr.GetPrototypeWindow()->Refresh();
 				gEntityMgr.SavePrototypes();
 				handled = true;
 			}
@@ -64,7 +64,7 @@ bool Editor::PopupMenu::OnMenuItemMouseUp( const CEGUI::EventArgs& e )
 			{
 				gEntityMgr.DestroyEntity(GetData<EntitySystem::EntityHandle>());
 				gEntityMgr.ProcessDestroyQueue();
-				gEditorMgr.GetEditorGui()->GetPrototypeWindow()->Refresh();
+				gEditorMgr.GetPrototypeWindow()->Refresh();
 				gEntityMgr.SavePrototypes();
 				handled = true;
 			}
@@ -78,17 +78,17 @@ bool Editor::PopupMenu::OnMenuItemMouseUp( const CEGUI::EventArgs& e )
 		{
 			if (itemCeguiName == mName + "/MoveUp")
 			{
-				gEditorMgr.GetEditorGui()->GetHierarchyWindow()->MoveUp();
+				gEditorMgr.GetHierarchyWindow()->MoveUp();
 				handled = true;
 			}
 			else if (itemCeguiName == mName + "/MoveDown")
 			{
-				gEditorMgr.GetEditorGui()->GetHierarchyWindow()->MoveDown();
+				gEditorMgr.GetHierarchyWindow()->MoveDown();
 				handled = true;
 			}
 			else if (itemCeguiName == mName + "/AddEntity")
 			{
-				gEditorMgr.GetEditorGui()->GetHierarchyWindow()->CreateEntity(GetData<EntitySystem::EntityHandle>());
+				gEditorMgr.GetHierarchyWindow()->CreateEntity(GetData<EntitySystem::EntityHandle>());
 				handled = true;
 			}
 			else if (itemCeguiName == mName + "/NewComponent")
@@ -97,10 +97,10 @@ bool Editor::PopupMenu::OnMenuItemMouseUp( const CEGUI::EventArgs& e )
 			}
 			else if (itemCeguiName == mName + "/DuplicateEntity")
 			{
-				EntitySystem::EntityHandle parent = gEditorMgr.GetEditorGui()->GetHierarchyWindow()->GetParent(GetData<EntitySystem::EntityHandle>());
-				gEditorMgr.GetEditorGui()->GetHierarchyWindow()->SetCurrentParent(parent);
+				EntitySystem::EntityHandle parent = gEditorMgr.GetHierarchyWindow()->GetParent(GetData<EntitySystem::EntityHandle>());
+				gEditorMgr.GetHierarchyWindow()->SetCurrentParent(parent);
 				gEditorMgr.DuplicateCurrentEntity();
-				gEditorMgr.GetEditorGui()->GetHierarchyWindow()->SetCurrentParent(EntitySystem::EntityHandle::Null);
+				gEditorMgr.GetHierarchyWindow()->SetCurrentParent(EntitySystem::EntityHandle::Null);
 				handled = true;
 			}
 			else if (itemCeguiName == mName + "/DeleteEntity")
@@ -125,27 +125,27 @@ bool Editor::PopupMenu::OnMenuItemMouseUp( const CEGUI::EventArgs& e )
 		{
 			if (itemCeguiName == mName + "/MoveUp")
 			{
-				gEditorMgr.GetEditorGui()->GetLayerWindow()->MoveLayerUp(GetData<LayerID>());
+				gEditorMgr.GetLayerWindow()->MoveLayerUp(GetData<LayerID>());
 				handled = true;
 			}
 			else if (itemCeguiName == mName + "/MoveDown")
 			{
-				gEditorMgr.GetEditorGui()->GetLayerWindow()->MoveLayerDown(GetData<LayerID>());
+				gEditorMgr.GetLayerWindow()->MoveLayerDown(GetData<LayerID>());
 				handled = true;
 			}
 			else if (itemCeguiName == mName + "/New")
 			{
-				gEditorMgr.GetEditorGui()->GetLayerWindow()->NewLayer(GetData<LayerID>());
+				gEditorMgr.GetLayerWindow()->NewLayer(GetData<LayerID>());
 				handled = true;
 			}
 			else if (itemCeguiName == mName + "/Rename")
 			{
-				gEditorMgr.GetEditorGui()->GetLayerWindow()->RenameLayer(GetData<LayerID>());
+				gEditorMgr.GetLayerWindow()->RenameLayer(GetData<LayerID>());
 				handled = true;
 			}
 			else if (itemCeguiName == mName + "/Remove")
 			{
-				gEditorMgr.GetEditorGui()->GetLayerWindow()->RemoveLayer(GetData<LayerID>());
+				gEditorMgr.GetLayerWindow()->RemoveLayer(GetData<LayerID>());
 				handled = true;
 			}
 			else
@@ -157,12 +157,12 @@ bool Editor::PopupMenu::OnMenuItemMouseUp( const CEGUI::EventArgs& e )
 		{
 			if (itemCeguiName == mName + "/MoveUp")
 			{
-				gEditorMgr.GetEditorGui()->GetLayerWindow()->MoveEntityUp(GetData<EntitySystem::EntityHandle>());
+				gEditorMgr.GetLayerWindow()->MoveEntityUp(GetData<EntitySystem::EntityHandle>());
 				handled = true;
 			}
 			else if (itemCeguiName == mName + "/MoveDown")
 			{
-				gEditorMgr.GetEditorGui()->GetLayerWindow()->MoveEntityDown(GetData<EntitySystem::EntityHandle>());
+				gEditorMgr.GetLayerWindow()->MoveEntityDown(GetData<EntitySystem::EntityHandle>());
 				handled = true;
 			}
 		}

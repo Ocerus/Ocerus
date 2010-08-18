@@ -1,4 +1,6 @@
 /*
+ * This code is based on PlusCallback.  The license follows:
+ *
  * PlusCallback 1.5
  * Copyright (c) 2009-2010 Lewis Van Winkle
  *
@@ -23,18 +25,10 @@
  */
 
 
-#ifndef __CALLBACK_HPP__
-#define __CALLBACK_HPP__
+#ifndef _UTILS_CALLBACK_H_
+#define _UTILS_CALLBACK_H_
 
-#include <string.h>
-#include <stdexcept>
-
-
-//PlusCallback 1.5
-//This library was built on 10.03.2010 to support
-//functions with a maximum of 9 parameters.
-#define CALLBACK_VERSION 1.5
-
+#include "Base.h"
 
 namespace Utils
 {
@@ -133,15 +127,6 @@ namespace Utils
                         return !(*this == rhs);
                     }
 
-                    ///Note that comparison operators may not work with virtual function callbacks.
-                    bool operator<(const Callback0 rhs) const
-                    {
-                        if (mCallback && rhs.mCallback)
-                            return (*mCallback) < (*(rhs.mCallback));
-                        else
-                            return mCallback < rhs.mCallback;
-                    }
-
                     ///Returns true if the callback has been set, or false if the callback is not set and is invalid.
                     bool IsSet() const
                     {
@@ -173,8 +158,6 @@ namespace Utils
                                 Base(){}
                                 virtual R operator()() = 0;
                                 virtual bool operator==(const Base& rhs) const = 0;
-                                virtual bool operator<(const Base& rhs) const = 0;
-                                virtual void* Comp() const = 0; //Returns a pointer used in comparisons.
                         };
 
                         class ChildFree : public Base
@@ -196,20 +179,6 @@ namespace Utils
                                         return (mFunc == r->mFunc);
                                     else
                                         return false;
-                                }
-
-                                virtual bool operator<(const Base& rhs) const
-                                {
-                                    const ChildFree* const r = dynamic_cast<const ChildFree*>(&rhs);
-                                    if (r)
-                                        return mFunc < r->mFunc;
-                                    else
-                                        return true; //Free functions will always be less than methods (because comp returns 0).
-                                }
-
-                                virtual void* Comp() const
-                                {
-                                    return 0;
                                 }
 
                             private:
@@ -236,25 +205,6 @@ namespace Utils
                                         return (mObj == r->mObj) && (mFunc == r->mFunc);
                                     else
                                         return false;
-                                }
-
-                                virtual bool operator<(const Base& rhs) const
-                                {
-                                    const ChildMethod<C>* const r = dynamic_cast<const ChildMethod<C>*>(&rhs);
-                                    if (r)
-                                    {
-                                        if (mObj != r->mObj)
-                                            return mObj < r->mObj;
-                                        else
-                                            return 0 > memcmp((void*)&mFunc, (void*)&(r->mFunc), sizeof(mFunc));
-                                    }
-                                    else
-                                        return mObj < rhs.Comp();
-                                }
-
-                                virtual void* Comp() const
-                                {
-                                    return mObj;
                                 }
 
                             private:
@@ -373,15 +323,6 @@ namespace Utils
                         return !(*this == rhs);
                     }
 
-                    ///Note that comparison operators may not work with virtual function callbacks.
-                    bool operator<(const Callback1 rhs) const
-                    {
-                        if (mCallback && rhs.mCallback)
-                            return (*mCallback) < (*(rhs.mCallback));
-                        else
-                            return mCallback < rhs.mCallback;
-                    }
-
                     ///Returns true if the callback has been set, or false if the callback is not set and is invalid.
                     bool IsSet() const
                     {
@@ -413,8 +354,6 @@ namespace Utils
                                 Base(){}
                                 virtual R operator()(T0 t0) = 0;
                                 virtual bool operator==(const Base& rhs) const = 0;
-                                virtual bool operator<(const Base& rhs) const = 0;
-                                virtual void* Comp() const = 0; //Returns a pointer used in comparisons.
                         };
 
                         class ChildFree : public Base
@@ -436,20 +375,6 @@ namespace Utils
                                         return (mFunc == r->mFunc);
                                     else
                                         return false;
-                                }
-
-                                virtual bool operator<(const Base& rhs) const
-                                {
-                                    const ChildFree* const r = dynamic_cast<const ChildFree*>(&rhs);
-                                    if (r)
-                                        return mFunc < r->mFunc;
-                                    else
-                                        return true; //Free functions will always be less than methods (because comp returns 0).
-                                }
-
-                                virtual void* Comp() const
-                                {
-                                    return 0;
                                 }
 
                             private:
@@ -476,25 +401,6 @@ namespace Utils
                                         return (mObj == r->mObj) && (mFunc == r->mFunc);
                                     else
                                         return false;
-                                }
-
-                                virtual bool operator<(const Base& rhs) const
-                                {
-                                    const ChildMethod<C>* const r = dynamic_cast<const ChildMethod<C>*>(&rhs);
-                                    if (r)
-                                    {
-                                        if (mObj != r->mObj)
-                                            return mObj < r->mObj;
-                                        else
-                                            return 0 > memcmp((void*)&mFunc, (void*)&(r->mFunc), sizeof(mFunc));
-                                    }
-                                    else
-                                        return mObj < rhs.Comp();
-                                }
-
-                                virtual void* Comp() const
-                                {
-                                    return mObj;
                                 }
 
                             private:
@@ -613,15 +519,6 @@ namespace Utils
                         return !(*this == rhs);
                     }
 
-                    ///Note that comparison operators may not work with virtual function callbacks.
-                    bool operator<(const Callback2 rhs) const
-                    {
-                        if (mCallback && rhs.mCallback)
-                            return (*mCallback) < (*(rhs.mCallback));
-                        else
-                            return mCallback < rhs.mCallback;
-                    }
-
                     ///Returns true if the callback has been set, or false if the callback is not set and is invalid.
                     bool IsSet() const
                     {
@@ -653,8 +550,6 @@ namespace Utils
                                 Base(){}
                                 virtual R operator()(T0 t0, T1 t1) = 0;
                                 virtual bool operator==(const Base& rhs) const = 0;
-                                virtual bool operator<(const Base& rhs) const = 0;
-                                virtual void* Comp() const = 0; //Returns a pointer used in comparisons.
                         };
 
                         class ChildFree : public Base
@@ -676,20 +571,6 @@ namespace Utils
                                         return (mFunc == r->mFunc);
                                     else
                                         return false;
-                                }
-
-                                virtual bool operator<(const Base& rhs) const
-                                {
-                                    const ChildFree* const r = dynamic_cast<const ChildFree*>(&rhs);
-                                    if (r)
-                                        return mFunc < r->mFunc;
-                                    else
-                                        return true; //Free functions will always be less than methods (because comp returns 0).
-                                }
-
-                                virtual void* Comp() const
-                                {
-                                    return 0;
                                 }
 
                             private:
@@ -716,25 +597,6 @@ namespace Utils
                                         return (mObj == r->mObj) && (mFunc == r->mFunc);
                                     else
                                         return false;
-                                }
-
-                                virtual bool operator<(const Base& rhs) const
-                                {
-                                    const ChildMethod<C>* const r = dynamic_cast<const ChildMethod<C>*>(&rhs);
-                                    if (r)
-                                    {
-                                        if (mObj != r->mObj)
-                                            return mObj < r->mObj;
-                                        else
-                                            return 0 > memcmp((void*)&mFunc, (void*)&(r->mFunc), sizeof(mFunc));
-                                    }
-                                    else
-                                        return mObj < rhs.Comp();
-                                }
-
-                                virtual void* Comp() const
-                                {
-                                    return mObj;
                                 }
 
                             private:
@@ -853,15 +715,6 @@ namespace Utils
                         return !(*this == rhs);
                     }
 
-                    ///Note that comparison operators may not work with virtual function callbacks.
-                    bool operator<(const Callback3 rhs) const
-                    {
-                        if (mCallback && rhs.mCallback)
-                            return (*mCallback) < (*(rhs.mCallback));
-                        else
-                            return mCallback < rhs.mCallback;
-                    }
-
                     ///Returns true if the callback has been set, or false if the callback is not set and is invalid.
                     bool IsSet() const
                     {
@@ -893,8 +746,6 @@ namespace Utils
                                 Base(){}
                                 virtual R operator()(T0 t0, T1 t1, T2 t2) = 0;
                                 virtual bool operator==(const Base& rhs) const = 0;
-                                virtual bool operator<(const Base& rhs) const = 0;
-                                virtual void* Comp() const = 0; //Returns a pointer used in comparisons.
                         };
 
                         class ChildFree : public Base
@@ -916,20 +767,6 @@ namespace Utils
                                         return (mFunc == r->mFunc);
                                     else
                                         return false;
-                                }
-
-                                virtual bool operator<(const Base& rhs) const
-                                {
-                                    const ChildFree* const r = dynamic_cast<const ChildFree*>(&rhs);
-                                    if (r)
-                                        return mFunc < r->mFunc;
-                                    else
-                                        return true; //Free functions will always be less than methods (because comp returns 0).
-                                }
-
-                                virtual void* Comp() const
-                                {
-                                    return 0;
                                 }
 
                             private:
@@ -956,25 +793,6 @@ namespace Utils
                                         return (mObj == r->mObj) && (mFunc == r->mFunc);
                                     else
                                         return false;
-                                }
-
-                                virtual bool operator<(const Base& rhs) const
-                                {
-                                    const ChildMethod<C>* const r = dynamic_cast<const ChildMethod<C>*>(&rhs);
-                                    if (r)
-                                    {
-                                        if (mObj != r->mObj)
-                                            return mObj < r->mObj;
-                                        else
-                                            return 0 > memcmp((void*)&mFunc, (void*)&(r->mFunc), sizeof(mFunc));
-                                    }
-                                    else
-                                        return mObj < rhs.Comp();
-                                }
-
-                                virtual void* Comp() const
-                                {
-                                    return mObj;
                                 }
 
                             private:
@@ -1093,15 +911,6 @@ namespace Utils
                         return !(*this == rhs);
                     }
 
-                    ///Note that comparison operators may not work with virtual function callbacks.
-                    bool operator<(const Callback4 rhs) const
-                    {
-                        if (mCallback && rhs.mCallback)
-                            return (*mCallback) < (*(rhs.mCallback));
-                        else
-                            return mCallback < rhs.mCallback;
-                    }
-
                     ///Returns true if the callback has been set, or false if the callback is not set and is invalid.
                     bool IsSet() const
                     {
@@ -1133,8 +942,6 @@ namespace Utils
                                 Base(){}
                                 virtual R operator()(T0 t0, T1 t1, T2 t2, T3 t3) = 0;
                                 virtual bool operator==(const Base& rhs) const = 0;
-                                virtual bool operator<(const Base& rhs) const = 0;
-                                virtual void* Comp() const = 0; //Returns a pointer used in comparisons.
                         };
 
                         class ChildFree : public Base
@@ -1156,20 +963,6 @@ namespace Utils
                                         return (mFunc == r->mFunc);
                                     else
                                         return false;
-                                }
-
-                                virtual bool operator<(const Base& rhs) const
-                                {
-                                    const ChildFree* const r = dynamic_cast<const ChildFree*>(&rhs);
-                                    if (r)
-                                        return mFunc < r->mFunc;
-                                    else
-                                        return true; //Free functions will always be less than methods (because comp returns 0).
-                                }
-
-                                virtual void* Comp() const
-                                {
-                                    return 0;
                                 }
 
                             private:
@@ -1196,25 +989,6 @@ namespace Utils
                                         return (mObj == r->mObj) && (mFunc == r->mFunc);
                                     else
                                         return false;
-                                }
-
-                                virtual bool operator<(const Base& rhs) const
-                                {
-                                    const ChildMethod<C>* const r = dynamic_cast<const ChildMethod<C>*>(&rhs);
-                                    if (r)
-                                    {
-                                        if (mObj != r->mObj)
-                                            return mObj < r->mObj;
-                                        else
-                                            return 0 > memcmp((void*)&mFunc, (void*)&(r->mFunc), sizeof(mFunc));
-                                    }
-                                    else
-                                        return mObj < rhs.Comp();
-                                }
-
-                                virtual void* Comp() const
-                                {
-                                    return mObj;
                                 }
 
                             private:
@@ -1333,15 +1107,6 @@ namespace Utils
                         return !(*this == rhs);
                     }
 
-                    ///Note that comparison operators may not work with virtual function callbacks.
-                    bool operator<(const Callback5 rhs) const
-                    {
-                        if (mCallback && rhs.mCallback)
-                            return (*mCallback) < (*(rhs.mCallback));
-                        else
-                            return mCallback < rhs.mCallback;
-                    }
-
                     ///Returns true if the callback has been set, or false if the callback is not set and is invalid.
                     bool IsSet() const
                     {
@@ -1373,8 +1138,6 @@ namespace Utils
                                 Base(){}
                                 virtual R operator()(T0 t0, T1 t1, T2 t2, T3 t3, T4 t4) = 0;
                                 virtual bool operator==(const Base& rhs) const = 0;
-                                virtual bool operator<(const Base& rhs) const = 0;
-                                virtual void* Comp() const = 0; //Returns a pointer used in comparisons.
                         };
 
                         class ChildFree : public Base
@@ -1396,20 +1159,6 @@ namespace Utils
                                         return (mFunc == r->mFunc);
                                     else
                                         return false;
-                                }
-
-                                virtual bool operator<(const Base& rhs) const
-                                {
-                                    const ChildFree* const r = dynamic_cast<const ChildFree*>(&rhs);
-                                    if (r)
-                                        return mFunc < r->mFunc;
-                                    else
-                                        return true; //Free functions will always be less than methods (because comp returns 0).
-                                }
-
-                                virtual void* Comp() const
-                                {
-                                    return 0;
                                 }
 
                             private:
@@ -1436,25 +1185,6 @@ namespace Utils
                                         return (mObj == r->mObj) && (mFunc == r->mFunc);
                                     else
                                         return false;
-                                }
-
-                                virtual bool operator<(const Base& rhs) const
-                                {
-                                    const ChildMethod<C>* const r = dynamic_cast<const ChildMethod<C>*>(&rhs);
-                                    if (r)
-                                    {
-                                        if (mObj != r->mObj)
-                                            return mObj < r->mObj;
-                                        else
-                                            return 0 > memcmp((void*)&mFunc, (void*)&(r->mFunc), sizeof(mFunc));
-                                    }
-                                    else
-                                        return mObj < rhs.Comp();
-                                }
-
-                                virtual void* Comp() const
-                                {
-                                    return mObj;
                                 }
 
                             private:
@@ -1573,15 +1303,6 @@ namespace Utils
                         return !(*this == rhs);
                     }
 
-                    ///Note that comparison operators may not work with virtual function callbacks.
-                    bool operator<(const Callback6 rhs) const
-                    {
-                        if (mCallback && rhs.mCallback)
-                            return (*mCallback) < (*(rhs.mCallback));
-                        else
-                            return mCallback < rhs.mCallback;
-                    }
-
                     ///Returns true if the callback has been set, or false if the callback is not set and is invalid.
                     bool IsSet() const
                     {
@@ -1613,8 +1334,6 @@ namespace Utils
                                 Base(){}
                                 virtual R operator()(T0 t0, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5) = 0;
                                 virtual bool operator==(const Base& rhs) const = 0;
-                                virtual bool operator<(const Base& rhs) const = 0;
-                                virtual void* Comp() const = 0; //Returns a pointer used in comparisons.
                         };
 
                         class ChildFree : public Base
@@ -1636,20 +1355,6 @@ namespace Utils
                                         return (mFunc == r->mFunc);
                                     else
                                         return false;
-                                }
-
-                                virtual bool operator<(const Base& rhs) const
-                                {
-                                    const ChildFree* const r = dynamic_cast<const ChildFree*>(&rhs);
-                                    if (r)
-                                        return mFunc < r->mFunc;
-                                    else
-                                        return true; //Free functions will always be less than methods (because comp returns 0).
-                                }
-
-                                virtual void* Comp() const
-                                {
-                                    return 0;
                                 }
 
                             private:
@@ -1676,25 +1381,6 @@ namespace Utils
                                         return (mObj == r->mObj) && (mFunc == r->mFunc);
                                     else
                                         return false;
-                                }
-
-                                virtual bool operator<(const Base& rhs) const
-                                {
-                                    const ChildMethod<C>* const r = dynamic_cast<const ChildMethod<C>*>(&rhs);
-                                    if (r)
-                                    {
-                                        if (mObj != r->mObj)
-                                            return mObj < r->mObj;
-                                        else
-                                            return 0 > memcmp((void*)&mFunc, (void*)&(r->mFunc), sizeof(mFunc));
-                                    }
-                                    else
-                                        return mObj < rhs.Comp();
-                                }
-
-                                virtual void* Comp() const
-                                {
-                                    return mObj;
                                 }
 
                             private:
@@ -1813,15 +1499,6 @@ namespace Utils
                         return !(*this == rhs);
                     }
 
-                    ///Note that comparison operators may not work with virtual function callbacks.
-                    bool operator<(const Callback7 rhs) const
-                    {
-                        if (mCallback && rhs.mCallback)
-                            return (*mCallback) < (*(rhs.mCallback));
-                        else
-                            return mCallback < rhs.mCallback;
-                    }
-
                     ///Returns true if the callback has been set, or false if the callback is not set and is invalid.
                     bool IsSet() const
                     {
@@ -1853,8 +1530,6 @@ namespace Utils
                                 Base(){}
                                 virtual R operator()(T0 t0, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6) = 0;
                                 virtual bool operator==(const Base& rhs) const = 0;
-                                virtual bool operator<(const Base& rhs) const = 0;
-                                virtual void* Comp() const = 0; //Returns a pointer used in comparisons.
                         };
 
                         class ChildFree : public Base
@@ -1876,20 +1551,6 @@ namespace Utils
                                         return (mFunc == r->mFunc);
                                     else
                                         return false;
-                                }
-
-                                virtual bool operator<(const Base& rhs) const
-                                {
-                                    const ChildFree* const r = dynamic_cast<const ChildFree*>(&rhs);
-                                    if (r)
-                                        return mFunc < r->mFunc;
-                                    else
-                                        return true; //Free functions will always be less than methods (because comp returns 0).
-                                }
-
-                                virtual void* Comp() const
-                                {
-                                    return 0;
                                 }
 
                             private:
@@ -1918,26 +1579,7 @@ namespace Utils
                                         return false;
                                 }
 
-                                virtual bool operator<(const Base& rhs) const
-                                {
-                                    const ChildMethod<C>* const r = dynamic_cast<const ChildMethod<C>*>(&rhs);
-                                    if (r)
-                                    {
-                                        if (mObj != r->mObj)
-                                            return mObj < r->mObj;
-                                        else
-                                            return 0 > memcmp((void*)&mFunc, (void*)&(r->mFunc), sizeof(mFunc));
-                                    }
-                                    else
-                                        return mObj < rhs.Comp();
-                                }
-
-                                virtual void* Comp() const
-                                {
-                                    return mObj;
-                                }
-
-                            private:
+                             private:
                                 C* const mObj;
                                 R (C::* const mFunc)(T0 t0, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6);
                         };
@@ -2053,15 +1695,6 @@ namespace Utils
                         return !(*this == rhs);
                     }
 
-                    ///Note that comparison operators may not work with virtual function callbacks.
-                    bool operator<(const Callback8 rhs) const
-                    {
-                        if (mCallback && rhs.mCallback)
-                            return (*mCallback) < (*(rhs.mCallback));
-                        else
-                            return mCallback < rhs.mCallback;
-                    }
-
                     ///Returns true if the callback has been set, or false if the callback is not set and is invalid.
                     bool IsSet() const
                     {
@@ -2093,8 +1726,6 @@ namespace Utils
                                 Base(){}
                                 virtual R operator()(T0 t0, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7) = 0;
                                 virtual bool operator==(const Base& rhs) const = 0;
-                                virtual bool operator<(const Base& rhs) const = 0;
-                                virtual void* Comp() const = 0; //Returns a pointer used in comparisons.
                         };
 
                         class ChildFree : public Base
@@ -2116,20 +1747,6 @@ namespace Utils
                                         return (mFunc == r->mFunc);
                                     else
                                         return false;
-                                }
-
-                                virtual bool operator<(const Base& rhs) const
-                                {
-                                    const ChildFree* const r = dynamic_cast<const ChildFree*>(&rhs);
-                                    if (r)
-                                        return mFunc < r->mFunc;
-                                    else
-                                        return true; //Free functions will always be less than methods (because comp returns 0).
-                                }
-
-                                virtual void* Comp() const
-                                {
-                                    return 0;
                                 }
 
                             private:
@@ -2156,25 +1773,6 @@ namespace Utils
                                         return (mObj == r->mObj) && (mFunc == r->mFunc);
                                     else
                                         return false;
-                                }
-
-                                virtual bool operator<(const Base& rhs) const
-                                {
-                                    const ChildMethod<C>* const r = dynamic_cast<const ChildMethod<C>*>(&rhs);
-                                    if (r)
-                                    {
-                                        if (mObj != r->mObj)
-                                            return mObj < r->mObj;
-                                        else
-                                            return 0 > memcmp((void*)&mFunc, (void*)&(r->mFunc), sizeof(mFunc));
-                                    }
-                                    else
-                                        return mObj < rhs.Comp();
-                                }
-
-                                virtual void* Comp() const
-                                {
-                                    return mObj;
                                 }
 
                             private:
@@ -2293,15 +1891,6 @@ namespace Utils
                         return !(*this == rhs);
                     }
 
-                    ///Note that comparison operators may not work with virtual function callbacks.
-                    bool operator<(const Callback9 rhs) const
-                    {
-                        if (mCallback && rhs.mCallback)
-                            return (*mCallback) < (*(rhs.mCallback));
-                        else
-                            return mCallback < rhs.mCallback;
-                    }
-
                     ///Returns true if the callback has been set, or false if the callback is not set and is invalid.
                     bool IsSet() const
                     {
@@ -2333,8 +1922,6 @@ namespace Utils
                                 Base(){}
                                 virtual R operator()(T0 t0, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8) = 0;
                                 virtual bool operator==(const Base& rhs) const = 0;
-                                virtual bool operator<(const Base& rhs) const = 0;
-                                virtual void* Comp() const = 0; //Returns a pointer used in comparisons.
                         };
 
                         class ChildFree : public Base
@@ -2356,20 +1943,6 @@ namespace Utils
                                         return (mFunc == r->mFunc);
                                     else
                                         return false;
-                                }
-
-                                virtual bool operator<(const Base& rhs) const
-                                {
-                                    const ChildFree* const r = dynamic_cast<const ChildFree*>(&rhs);
-                                    if (r)
-                                        return mFunc < r->mFunc;
-                                    else
-                                        return true; //Free functions will always be less than methods (because comp returns 0).
-                                }
-
-                                virtual void* Comp() const
-                                {
-                                    return 0;
                                 }
 
                             private:
@@ -2398,25 +1971,6 @@ namespace Utils
                                         return false;
                                 }
 
-                                virtual bool operator<(const Base& rhs) const
-                                {
-                                    const ChildMethod<C>* const r = dynamic_cast<const ChildMethod<C>*>(&rhs);
-                                    if (r)
-                                    {
-                                        if (mObj != r->mObj)
-                                            return mObj < r->mObj;
-                                        else
-                                            return 0 > memcmp((void*)&mFunc, (void*)&(r->mFunc), sizeof(mFunc));
-                                    }
-                                    else
-                                        return mObj < rhs.Comp();
-                                }
-
-                                virtual void* Comp() const
-                                {
-                                    return mObj;
-                                }
-
                             private:
                                 C* const mObj;
                                 R (C::* const mFunc)(T0 t0, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8);
@@ -2442,5 +1996,5 @@ namespace Utils
             }
 
 }
-#endif /*__CALLBACK_HPP__*/
+#endif // _UTILS_CALLBACK_H_
 

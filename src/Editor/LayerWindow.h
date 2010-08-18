@@ -68,8 +68,8 @@ namespace Editor
 		void UpdateLayerItem(CEGUI::Window* layerItem, EntitySystem::LayerID layerID);
 		void UpdateEntityItem(CEGUI::Window* entityItem, EntitySystem::EntityHandle entity);
 
-		void NewLayerPromptCallback(bool clickedOK, string text, int32 tag);
-		void RenameLayerPromptCallback(bool clickedOK, string text, int32 tag);
+		void NewLayerPromptCallback(bool clickedOK, const string& text, int32 tag);
+		void RenameLayerPromptCallback(bool clickedOK, const string& text, int32 tag);
 
 		CEGUI::Window* mWindow;
 		CEGUI::ItemListbox* mTree;

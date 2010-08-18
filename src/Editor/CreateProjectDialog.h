@@ -1,31 +1,34 @@
+/// @file
+/// Dialog for creating new project.
 #ifndef _EDITOR_CREATEPROJECTDIALOG_H_
 #define _EDITOR_CREATEPROJECTDIALOG_H_
 
 #include "Common.h"
 
 namespace Editor {
-
+	/// The CreateProjectDialog class handles the dialog for creating new project.
 	class CreateProjectDialog
 	{
 	public:
-		///
+		/// Constructs a CreateProjectDialog.
 		CreateProjectDialog();
 
-		///
+		/// Destroys the CreateProjectDialog.
 		~CreateProjectDialog();
 
-		///
+		/// Initializes the dialog.
 		void Init();
 
-		///
-		void OpenDialog();
+		/// Shows the dialog.
+		void Show();
 
-		///
-		void CreateProject();
+		/// Confirms the dialog. A new project shall be created according to entered values in dialog.
+		void Confirm();
 		
-		///
-		void CancelDialog();
+		/// Cancels the dialog.
+		void Cancel();
 		
+		/// Opens the location dialog.
 		void OpenLocationDialog();
 
 	private:
@@ -38,8 +41,9 @@ namespace Editor {
 		/// FolderSelector callback
 		void OnFolderSelected(const string& path, const string& editboxValue, bool canceled, int32 tag);
 
+		/// Returns true, iff entered values are valid.
 		bool IsValid();
-		
+
 		CEGUI::Window* mDialog;
 		CEGUI::Window* mNameValue;
 		CEGUI::Window* mLocationValue;

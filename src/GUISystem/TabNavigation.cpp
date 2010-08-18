@@ -17,7 +17,6 @@ void TabNavigation::AddWidget(CEGUI::Window* widget)
 {
 	mTabOrder.push_back(widget);
 	widget->subscribeEvent(CEGUI::Window::EventDestructionStarted, CEGUI::Event::Subscriber(&GUISystem::TabNavigation::OnWidgetDestroyed, this));
-	//widget->subscribeEvent(CEGUI::Window::EventCharacterKey, CEGUI::Event::Subscriber(&GUISystem::TabNavigation::OnEventKeyDown, this));
 	widget->subscribeEvent(CEGUI::Window::EventKeyDown, CEGUI::Event::Subscriber(&GUISystem::TabNavigation::OnEventKeyDown, this));
 }
 
@@ -68,6 +67,3 @@ bool TabNavigation::OnEventKeyDown(const CEGUI::EventArgs& e)
 	}
 	return false;
 }
-
-
-
