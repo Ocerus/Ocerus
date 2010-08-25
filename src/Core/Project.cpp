@@ -21,8 +21,12 @@ Project::Project(bool editorSupport): mProjectConfig(0), mSceneIndex(-1), mReque
 
 Project::~Project()
 {
-	CloseProject();
-	delete mProjectConfig;
+	if (IsProjectOpened())
+	{
+		SaveProjectConfig();
+		GlobalProperties::RemovePointer("ProjectConfig");
+		delete mProjectConfig;
+	}
 }
 
 bool Project::CreateProject(const string& path)
@@ -70,7 +74,7 @@ bool Project::OpenProject(const string& path)
 	string basePath = path;
 	if (!basePath.empty() && basePath.at(basePath.size() - 1) != '/') basePath.append("/");
 
-	// Add project resources.
+	// Add project resources.;
 	gResourceMgr.SetBasePath(ResourceSystem::BPT_PROJECT, basePath);
 	gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_PROJECT, "", "Project", ".*", "", ResourceSystem::RESTYPE_AUTODETECT, mResourceTypeMap);
 	gStringMgrProject.LoadLanguagePack();

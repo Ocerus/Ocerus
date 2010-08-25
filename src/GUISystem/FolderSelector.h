@@ -8,7 +8,7 @@
 #include "Utils/Callback.h"
 
 namespace GUISystem {
-
+	/// The FolderSelector class provides a modal dialog for selecting a folder.
 	class FolderSelector
 	{
 	public:
@@ -20,6 +20,8 @@ namespace GUISystem {
 		typedef Utils::Callback4<void, const string&, const string&, bool, int32> Callback;
 
 		/// Constructs a FolderSelector instance.
+		/// @param rootPath The path that will be considered as root, i.e user cannot get above this path.
+		/// @param tag Tag value that will be passed to callback.
 		FolderSelector(const string& rootPath = "", int32 tag = 0);
 
 		/// Destroys the FolderSelector instance.
@@ -48,13 +50,13 @@ namespace GUISystem {
 		//@}
 
 		void ChangeFolder(const string& folder);
-		
+
 		void UpdateFolderList();
-		
+
 		void Submit();
-		
+
 		void Cancel();
-		
+
 		string GetRelativePath(const string& absolutePath);
 
 		CEGUI::Window* mWindow;

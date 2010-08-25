@@ -22,17 +22,17 @@ namespace Editor
 	{
 	public:
 
-		/// Constructor.
+		/// Creates an EditorMgr instance.
 		EditorMgr();
 
-		/// Destructor.
+		/// Destroys the EditorMgr instance.
 		virtual ~EditorMgr();
 
-		/// Loads editor.
-		void LoadEditor();
+		/// Initializes the editor.
+		void Init();
 
-		/// Unloads editor.
-		void UnloadEditor();
+		/// Deinitializes the editor.
+		void Deinit();
 
 		/// Updates the editor.
 		void Update(float32 delta);
@@ -43,32 +43,31 @@ namespace Editor
 		/// Clear selections and sets initial time.
 		void Reset();
 
-		/// Returns currently edited entity. If no entity is edited,
-		/// invalid EntityHandler is returned.
-		inline const EntitySystem::EntityHandle GetCurrentEntity() const;
+		/// @name Methods related to current and selected entity.
+		//@{
 
-		/// Sets the currently edited entity.
-		void SetCurrentEntity(const EntitySystem::EntityHandle newCurrentEntity);
+			/// Returns currently edited entity. If no entity is edited,
+			/// invalid EntityHandler is returned.
+			inline const EntitySystem::EntityHandle GetCurrentEntity() const;
 
-		/// Returns currently selected entity. If no entity is selected, invalid EntityHandler is returned.
-		/// If there are more selected entities only one of them is chosen.
-		inline const EntitySystem::EntityHandle GetSelectedEntity() const;
+			/// Sets the currently edited entity.
+			void SetCurrentEntity(const EntitySystem::EntityHandle newCurrentEntity);
 
-		/// Selects an entity in the editor window.
-		void SelectEntity(const EntitySystem::EntityHandle entity);
+			/// Returns currently selected entity. If no entity is selected, invalid EntityHandler is returned.
+			/// If there are more selected entities only one of them is chosen.
+			inline const EntitySystem::EntityHandle GetSelectedEntity() const;
 
-		/// Returns true if the entity is in the current selection.
-		bool IsEntitySelected(const EntitySystem::EntityHandle entity) const;
+			/// Selects an entity in the editor window.
+			void SelectEntity(const EntitySystem::EntityHandle entity);
 
-		/// Clears all selected entities.
-		void ClearSelection();
+			/// Returns true if the entity is in the current selection.
+			bool IsEntitySelected(const EntitySystem::EntityHandle entity) const;
 
-		/// Sets a new name for the selected entity.
-		void UpdateCurrentEntityName(const string& newName);
+			/// Clears all selected entities.
+			void ClearSelection();
 
-		/// Sets a new value to a property of the selected entity.
-		void UpdateCurrentEntityProperty(const EntitySystem::ComponentID& componentId, const StringKey propertyKey, const string& newValue);
-
+		//@}
+			
 		/// Adds a new popup menu to the list.
 		void RegisterPopupMenu(PopupMenu* menu);
 

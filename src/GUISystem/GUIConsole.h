@@ -1,3 +1,5 @@
+/// @file
+/// Manages the in-game console.
 #ifndef _GUIConsole_H_
 #define _GUIConsole_H_
 

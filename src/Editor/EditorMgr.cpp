@@ -29,23 +29,25 @@ const float32 CAMERA_MOVEMENT_SPEED = 10.0f; ///< How fast the camera moves by k
 EditorMgr::EditorMgr():
 	mEditorGUI(0),
 	mCurrentProject(0),
-	mCurrentEntity(EntityHandle::Null),
+	mCurrentEntity(EntitySystem::EntityHandle::Null),
 	mShortcuts(0),
 	mCreateProjectDialog(0)
 {
-	ocInfo << "*** EditorMgr init ***";
 	mShortcuts = new KeyShortcuts();
 	mCreateProjectDialog = new CreateProjectDialog();
 }
 
 EditorMgr::~EditorMgr()
 {
+//	Deinit();
 	delete mShortcuts;
 	delete mCreateProjectDialog;
 }
 
-void EditorMgr::LoadEditor()
+void EditorMgr::Init()
 {
+	ocInfo << "*** EditorMgr init ***";
+
 	mEditorGUI = new EditorGUI();
 	mCurrentProject = new Core::Project(true);
 
@@ -60,10 +62,14 @@ void EditorMgr::LoadEditor()
 	GetEditorViewport()->AddInputListener(this);
 }
 
-void Editor::EditorMgr::UnloadEditor()
+void Editor::EditorMgr::Deinit()
 {
+	ocInfo << "*** EditorMgr deinit ***";
+
 	if (mEditorGUI) mEditorGUI->GetEditorViewport()->RemoveInputListener(this);
-	gGUIMgr.DestroyWindow(gGUIMgr.GetGUISheet());
+
+	if (GUISystem::GUIMgr::SingletonExists())
+		gGUIMgr.DestroyWindow(gGUIMgr.GetGUISheet());
 
 	delete mEditorGUI;
 	mEditorGUI = 0;
@@ -191,21 +197,6 @@ void Editor::EditorMgr::SetCurrentEntity(const EntitySystem::EntityHandle newCur
 	GetPrototypeWindow()->SetSelectedEntity(mCurrentEntity);
 	GetHierarchyWindow()->SetSelectedEntity(mCurrentEntity);
 	GetEntityWindow()->Rebuild();
-}
-
-void Editor::EditorMgr::UpdateCurrentEntityName(const string& newName)
-{
-	if (!mCurrentEntity.IsValid()) return;
-
-	gEntityMgr.SetEntityName(mCurrentEntity, newName);
-}
-
-void Editor::EditorMgr::UpdateCurrentEntityProperty(const EntitySystem::ComponentID& componentId, const StringKey propertyKey, const string& newValue)
-{
-	if (!mCurrentEntity.IsValid()) return;
-
-	PropertyHolder property = gEntityMgr.GetEntityComponentProperty(mCurrentEntity, componentId, propertyKey);
-	property.SetValueFromString(newValue);
 }
 
 void Editor::EditorMgr::CreateEntity(const string& name)

@@ -67,7 +67,7 @@ void Core::LoadingScreen::DoLoading( eType type, const string& sceneName )
 		break;
 
 	case TYPE_EDITOR:
-		gEditorMgr.LoadEditor();
+		gEditorMgr.Init();
 		break;
 
 	case TYPE_SCENE:

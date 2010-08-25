@@ -14,6 +14,7 @@
 /// Access the GUIMgr singleton instance.
 #define gGUIMgr GUISystem::GUIMgr::GetSingleton()
 
+/// GUI System manages GUI elements in the game and in the editor.
 namespace GUISystem
 {
 	/// The GUIMgr class manages the GUI. The manager depends on InputMgr.

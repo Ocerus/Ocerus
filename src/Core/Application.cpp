@@ -110,7 +110,8 @@ Application::~Application()
 {
 	gEntityMgr.DestroyAllEntities(true, true);
 
-	if (mGameProject) delete mGameProject;
+	// mGameProject is deleted by EditorMgr in develop mode.
+	if (mGameProject && !mDevelopMode) delete mGameProject;
 	delete mLoadingScreen;
 	delete mGame;
 
