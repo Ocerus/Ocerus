@@ -5,6 +5,7 @@
 #include "ResourceSystem/ResourceMgr.h"
 #include "Core/Project.h"
 #include "GUISystem/CEGUICommon.h"
+#include "GUISystem/PopupMgr.h"
 
 using namespace Editor;
 
@@ -44,6 +45,7 @@ void Editor::ResourceWindow::Init()
 	OC_ASSERT(mWindow != 0);
 	OC_ASSERT(mTree != 0);
 
+	CreatePopupMenu();
 	RebuildTree();
 }
 
@@ -133,6 +135,61 @@ void Editor::ResourceWindow::RebuildTree()
 	}
 }
 
+void ResourceWindow::CreatePopupMenu()
+{
+	mPopupMenu = gPopupMgr->CreatePopupMenu("ResourceWindow/Popup");
+
+	CEGUI::Window* changeTypeMenuItem = gPopupMgr->CreateMenuItem("ResourceWindow/Popup/ChangeType", TR("resource_change_type"), TR("resource_change_type_hint"), PI_INVALID);
+	mPopupMenu->addChildWindow(changeTypeMenuItem);
+	mPopupMenu->addChildWindow(gPopupMgr->CreateMenuItem("ResourceWindow/Popup/OpenScene", TR("open_scene"), TR("open_scene_hint"), PI_OPEN_SCENE));
+
+	mResourceTypesPopupMenu = gPopupMgr->CreatePopupMenu("ResourceWindow/Popup/ChangeType/Popup");
+	for (uint resType = 0; resType < ResourceSystem::NUM_RESTYPES; ++resType)
+	{
+		string resName = ResourceSystem::GetResourceTypeName((ResourceSystem::eResourceType)resType);
+		CEGUI::Window* menuItem = gPopupMgr->CreateMenuItem("ResourceWindow/Popup/ChangeType/Resource" + Utils::StringConverter::ToString(resType), resName, "", resType);
+		mResourceTypesPopupMenu->addChildWindow(menuItem);
+	}
+	changeTypeMenuItem->addChildWindow(mResourceTypesPopupMenu);
+}
+
+void ResourceWindow::DestroyPopupMenu()
+{
+	gPopupMgr->DestroyPopupMenu(mPopupMenu);
+}
+
+void ResourceWindow::SetCurrentResourceType(ResourceSystem::eResourceType resType)
+{
+	for (uint idx = 0; idx < mResourceTypesPopupMenu->getChildCount(); ++idx)
+	{
+		mResourceTypesPopupMenu->getChildAtIdx(idx)->setText(ResourceSystem::GetResourceTypeName((ResourceSystem::eResourceType)idx));
+		if ((ResourceSystem::eResourceType)idx == resType)
+			mResourceTypesPopupMenu->getChildAtIdx(idx)->appendText(" *");
+	}
+}
+
+void ResourceWindow::OnPopupMenuItemClicked(CEGUI::Window* menuItem)
+{
+	if (menuItem->getParent() == mResourceTypesPopupMenu)
+	{
+		// Change type
+		ResourceSystem::eResourceType newResType = (ResourceSystem::eResourceType)menuItem->getID();
+		gResourceMgr.ChangeResourceType(mCurrentPopupResource, newResType);
+		Refresh();
+	}
+	else
+	{
+		switch ((ePopupItem)menuItem->getID())
+		{
+		case PI_OPEN_SCENE:
+			gEditorMgr.GetCurrentProject()->OpenScene(mCurrentPopupResource);
+			break;
+		default:
+			OC_NOT_REACHED();
+		}
+	}
+}
+
 bool Editor::ResourceWindow::OnDragContainerMouseButtonDown(const CEGUI::EventArgs& e)
 {
 	const CEGUI::MouseEventArgs& args = static_cast<const CEGUI::MouseEventArgs&>(e);
@@ -156,21 +213,20 @@ bool Editor::ResourceWindow::OnDragContainerMouseButtonUp(const CEGUI::EventArgs
 
 	if (args.button == CEGUI::RightButton)
 	{
-		ResourceSystem::ResourcePtr resource = GetItemAtIndex(dragContainer->getID());
-		if (resource.get())
+		mCurrentPopupResource = GetItemAtIndex(dragContainer->getID());
+		if (mCurrentPopupResource.get())
 		{
-			PopupMenu* menu;
-			if (gEditorMgr.GetCurrentProject()->IsResourceScene(resource))
+			if (gEditorMgr.GetCurrentProject()->IsResourceScene(mCurrentPopupResource))
 			{
-				menu = new PopupMenu("EditorRoot/Popup/ResourceWithScene");
+				mPopupMenu->getChildAtIdx(1)->setEnabled(true);
 			}
 			else
 			{
-				menu = new PopupMenu("EditorRoot/Popup/Resource");
+				mPopupMenu->getChildAtIdx(1)->setEnabled(false);
 			}
-			menu->Init<ResourceSystem::ResourcePtr>(resource);
-			menu->Open(args.position.d_x, args.position.d_y);
-			gEditorMgr.RegisterPopupMenu(menu);
+
+			SetCurrentResourceType(mCurrentPopupResource->GetType());
+			gPopupMgr->ShowPopup(mPopupMenu, args.position.d_x, args.position.d_y, GUISystem::PopupMgr::Callback(this, &Editor::ResourceWindow::OnPopupMenuItemClicked));
 		}
 		return true;
 	}

@@ -21,7 +21,7 @@ GUISystem::ViewportWindow::~ViewportWindow()
 	if (mIsMovableContent) DeleteCameraMover();
 }
 
-void GUISystem::ViewportWindow::initialiseComponents()
+void GUISystem::ViewportWindow::InitialiseComponents()
 {
 	CEGUI::FrameWindow::initialiseComponents();
 	setCloseButtonEnabled(false);

@@ -9,6 +9,7 @@
 #include "HierarchyWindow.h"
 #include "CreateProjectDialog.h"
 #include "GUISystem/GUIMgr.h"
+#include "GUISystem/PopupMgr.h"
 #include "GUISystem/ViewportWindow.h"
 #include "EntitySystem/EntityMgr/LayerMgr.h"
 #include "Core/Project.h"

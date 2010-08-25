@@ -52,7 +52,7 @@ namespace GUISystem
 
 		/// @name Overridden members from CEGUI::FrameWindow
 		//@{
-		virtual void initialiseComponents();
+		virtual void InitialiseComponents();
 		static const CEGUI::String WidgetTypeName;
 		//@}
 

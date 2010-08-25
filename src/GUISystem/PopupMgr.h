@@ -56,8 +56,13 @@ namespace GUISystem
 		/// Destroys a menu item. You should always use this method to destroy menu items created by CreateMenuItem().
 		void DestroyMenuItem(CEGUI::Window* menuItem);
 
+		/// Hides the current popup if supplied coords do not hit the popup.
+		void DoAutoHide(float posX, float posY);
+
 	private:
 		bool OnMenuItemClicked(const CEGUI::EventArgs&);
+		bool OnPopupMenuOpened(const CEGUI::EventArgs&);
+		void CloseSubmenus(CEGUI::Window*);
 
 		CEGUI::Window* mCurrentPopupWindow;
 		Callback mCurrentCallback;
