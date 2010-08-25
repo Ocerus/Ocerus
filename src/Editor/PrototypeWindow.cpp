@@ -3,6 +3,8 @@
 #include "PopupMenu.h"
 #include "EditorMgr.h"
 #include "GUISystem/CEGUICommon.h"
+#include "GUISystem/PopupMgr.h"
+#include "GUISystem/PromptBox.h"
 
 using namespace Editor;
 
@@ -31,7 +33,29 @@ void Editor::PrototypeWindow::Init()
 	}
 	CEGUI_CATCH;
 
+	CreatePopupMenu();
 	RebuildTree();
+}
+
+void PrototypeWindow::NewPrototype()
+{
+	GUISystem::PromptBox* prompt = new GUISystem::PromptBox();
+	prompt->SetText(TR("layer_new_prompt"));
+	prompt->RegisterCallback(GUISystem::PromptBox::Callback(this, &PrototypeWindow::NewPrototypePromptCallback));
+	prompt->Show();
+}
+
+void PrototypeWindow::DeletePrototype(EntitySystem::EntityHandle entity)
+{
+	gEntityMgr.DestroyEntity(entity);
+	gEntityMgr.ProcessDestroyQueue();
+	Refresh();
+	gEntityMgr.SavePrototypes();
+}
+
+void PrototypeWindow::InstantiatePrototype(EntitySystem::EntityHandle entity)
+{
+	gEditorMgr.SetCurrentEntity(gEntityMgr.InstantiatePrototype(entity));
 }
 
 void Editor::PrototypeWindow::RebuildTree()
@@ -87,25 +111,21 @@ bool Editor::PrototypeWindow::OnDragContainerMouseButtonUp(const CEGUI::EventArg
 	itemEntry->setSelected(true);
 	mSelectedIndex = dragContainer->getID();
 	
-	EntitySystem::EntityHandle item = GetItemAtIndex(mSelectedIndex);
-	if (item.IsValid())
+	mCurrentPopupPrototype = GetItemAtIndex(mSelectedIndex);
+	if (!mCurrentPopupPrototype.IsValid())
+		return true;
+
+	if (args.button == CEGUI::LeftButton)
 	{
-		gEditorMgr.SetCurrentEntity(item);
+		gEditorMgr.SetCurrentEntity(mCurrentPopupPrototype);
 		gEditorMgr.ClearSelection();
 	}
-
-	if (args.button == CEGUI::RightButton)
+	else if (args.button == CEGUI::RightButton)
 	{
-		if (item.IsValid())
-		{
-			PopupMenu* menu = new PopupMenu("EditorRoot/Popup/PrototypeAboveItem");
-			menu->Init<EntitySystem::EntityHandle>(item);
-			menu->Open(args.position.d_x, args.position.d_y);
-			gEditorMgr.RegisterPopupMenu(menu);
-		}
-		return true;
+		mPopupMenu->getChildAtIdx(0)->setEnabled(true);
+		mPopupMenu->getChildAtIdx(2)->setEnabled(true);
+		gPopupMgr->ShowPopup(mPopupMenu, args.position.d_x, args.position.d_y, GUISystem::PopupMgr::Callback(this, &Editor::PrototypeWindow::OnPopupMenuItemClicked));
 	}
-
 	return true;
 }
 
@@ -115,10 +135,9 @@ bool Editor::PrototypeWindow::OnWindowMouseButtonUp(const CEGUI::EventArgs& e)
 
 	if (args.button == CEGUI::RightButton)
 	{
-		PopupMenu* menu = new PopupMenu("EditorRoot/Popup/Prototype");
-		menu->Init<EntitySystem::EntityHandle>(EntitySystem::EntityHandle::Null);
-		menu->Open(args.position.d_x, args.position.d_y);
-		gEditorMgr.RegisterPopupMenu(menu);
+		mPopupMenu->getChildAtIdx(0)->setEnabled(false);
+		mPopupMenu->getChildAtIdx(2)->setEnabled(false);
+		gPopupMgr->ShowPopup(mPopupMenu, args.position.d_x, args.position.d_y, GUISystem::PopupMgr::Callback(this, &Editor::PrototypeWindow::OnPopupMenuItemClicked));
 		return true;
 	}
 	else if (args.button == CEGUI::LeftButton)
@@ -159,4 +178,48 @@ void Editor::PrototypeWindow::SetSelectedEntity( const EntitySystem::EntityHandl
 
 	mSelectedIndex = -1;
 	mTree->clearAllSelections();
+}
+
+void Editor::PrototypeWindow::CreatePopupMenu()
+{
+	mPopupMenu = gPopupMgr->CreatePopupMenu("PrototypeWindow/Popup");
+	mPopupMenu->addChildWindow(gPopupMgr->CreateMenuItem("PrototypeWindow/Popup/InstantiatePrototype", TR("prototype_instantiate"), TR("prototype_instantiate_hint"), PI_INSTANTIATE_PROTOTYPE));
+	mPopupMenu->addChildWindow(gPopupMgr->CreateMenuItem("PrototypeWindow/Popup/AddPrototype", TR("prototype_add"), TR("prototype_add_hint"), PI_ADD_PROTOTYPE));
+	mPopupMenu->addChildWindow(gPopupMgr->CreateMenuItem("PrototypeWindow/Popup/DeletePrototype", TR("prototype_delete"), TR("prototype_delete_hint"), PI_DELETE_PROTOTYPE));
+}
+
+void Editor::PrototypeWindow::DestroyPopupMenu()
+{
+	gPopupMgr->DestroyPopupMenu(mPopupMenu);
+}
+
+void Editor::PrototypeWindow::OnPopupMenuItemClicked(CEGUI::Window* menuItem)
+{
+	switch(static_cast<ePopupItem>(menuItem->getID()))
+	{
+	case PI_ADD_PROTOTYPE:
+		NewPrototype();
+		break;
+	case PI_DELETE_PROTOTYPE:
+		DeletePrototype(mCurrentPopupPrototype);
+		break;
+	case PI_INSTANTIATE_PROTOTYPE:
+		InstantiatePrototype(mCurrentPopupPrototype);
+		break;
+	default:
+		OC_NOT_REACHED();
+	}
+
+}
+
+void Editor::PrototypeWindow::NewPrototypePromptCallback(bool clickedOK, const string& text, int32 tag)
+{
+	OC_UNUSED(tag);
+	if (!clickedOK) return;
+	EntitySystem::EntityDescription desc;
+	desc.SetKind(EntitySystem::EntityDescription::EK_PROTOTYPE);
+	desc.SetName(text);
+	gEntityMgr.CreateEntity(desc);
+	Refresh();
+	gEntityMgr.SavePrototypes();
 }
