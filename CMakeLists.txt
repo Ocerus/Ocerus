@@ -7,8 +7,8 @@ cmake_minimum_required(VERSION 2.6.2)
 
 
 include(UseDoxygen)
-
 set(DOXYFILE_IN "${CMAKE_SOURCE_DIR}/cmake/modules/Doxyfile.in")
+
 
 option(CMAKE_BUILD_TYPE debug)
 option(PRECOMPILED_HEADERS "Use precompiled headers." OFF)
@@ -290,6 +290,7 @@ set(GUISystem_SRCS
 	src/GUISystem/GUIMgr.cpp
 	src/GUISystem/GUIConsole.cpp
 	src/GUISystem/MessageBox.cpp
+	src/GUISystem/PopupMgr.cpp
 	src/GUISystem/PromptBox.cpp
 	src/GUISystem/VerticalLayout.cpp
 	src/GUISystem/ViewportWindow.cpp

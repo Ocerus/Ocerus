@@ -57,6 +57,7 @@ namespace GUISystem
 	class VerticalLayout;
 	class ResourceProvider;
 	class GUIConsole;
+	class PopupMgr;
 	class ViewportWindow;
 	class ScriptProvider;
 	class TabNavigation;

@@ -24,6 +24,9 @@ namespace Editor
 		/// Initializes the LayerWindow.
 		void Init();
 
+		/// Deinitializes the LayerWindow.
+		void Deinit();
+
 		/// Clears the items.
 		void Clear();
 
@@ -54,6 +57,23 @@ namespace Editor
 
 	private:
 
+		enum eLayerPopupItem
+		{
+			LPI_INVALID = 0,
+			LPI_MOVE_UP,
+			LPI_MOVE_DOWN,
+			LPI_NEW,
+			LPI_RENAME,
+			LPI_REMOVE
+		};
+
+		enum eEntityPopupItem
+		{
+			EPI_INVALID = 0,
+			EPI_MOVE_UP,
+			EPI_MOVE_DOWN
+		};
+
 		/// @name CEGUI Callbacks
 		//@{
 			bool OnDragContainerMouseButtonDown(const CEGUI::EventArgs&);
@@ -71,8 +91,18 @@ namespace Editor
 		void NewLayerPromptCallback(bool clickedOK, const string& text, int32 tag);
 		void RenameLayerPromptCallback(bool clickedOK, const string& text, int32 tag);
 
+		void CreatePopupMenus();
+		void DestroyPopupMenus();
+		void OnLayerPopupMenuItemClicked(CEGUI::Window* menuItem);
+		void OnEntityPopupMenuItemClicked(CEGUI::Window* menuItem);
+
 		CEGUI::Window* mWindow;
 		CEGUI::ItemListbox* mTree;
+
+		CEGUI::Window* mLayerPopupMenu;
+		CEGUI::Window* mEntityPopupMenu;
+		EntitySystem::LayerID mCurrentPopupLayerID;
+		EntitySystem::EntityHandle mCurrentPopupEntity;
 
 		set<string> mExpandedLayers;
 		set<EntitySystem::LayerID> mExpandedLayerIDs;

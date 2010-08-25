@@ -11,6 +11,9 @@
 #define gStringMgrSystem StringSystem::StringMgr::GetSystem()
 #define gStringMgrProject StringSystem::StringMgr::GetProject()
 
+/// Macro for entering translated system GUI strings
+#define TR(x) (gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, x))
+
 /// String system manages all text data in the system.
 /// However, only the text data presented to the end user is managed by this system. For example, debug strings
 /// used by programmers are not included.

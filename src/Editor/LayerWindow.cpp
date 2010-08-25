@@ -3,6 +3,7 @@
 #include "Editor/EditorMgr.h"
 #include "Editor/PopupMenu.h"
 #include "GUISystem/CEGUICommon.h"
+#include "GUISystem/PopupMgr.h"
 #include "GUISystem/PromptBox.h"
 #include "EntitySystem/EntityMgr/LayerMgr.h"
 
@@ -13,7 +14,7 @@ using namespace Editor;
 bool MySortCallback(const CEGUI::ItemEntry*, const CEGUI::ItemEntry*);
 
 Editor::LayerWindow::LayerWindow():
-		mWindow(0), mTree(0), mUpdateTimer(0)
+		mWindow(0), mTree(0), mLayerPopupMenu(0), mUpdateTimer(0)
 {
 }
 
@@ -39,7 +40,14 @@ void Editor::LayerWindow::Init()
 	OC_ASSERT(mWindow != 0);
 	OC_ASSERT(mTree != 0);
 
+	CreatePopupMenus();
 	UpdateTree();
+}
+
+void LayerWindow::Deinit()
+{
+	gGUIMgr.DestroyWindowDirectly(mWindow);
+	DestroyPopupMenus();
 }
 
 void Editor::LayerWindow::Update(float32 delta)
@@ -123,13 +131,10 @@ bool LayerWindow::OnDragContainerMouseButtonUp(const CEGUI::EventArgs& e)
 		// item is layer
 		if (args.button == CEGUI::RightButton)
 		{
-			EntitySystem::LayerID layerID = item->getID();
-			if (gLayerMgr.ExistsLayer(layerID))
+			mCurrentPopupLayerID = item->getID();
+			if (gLayerMgr.ExistsLayer(mCurrentPopupLayerID))
 			{
-				PopupMenu* menu = new PopupMenu("EditorRoot/Popup/Layer", true);
-				menu->Init<EntitySystem::LayerID>(layerID);
-				menu->Open(args.position.d_x, args.position.d_y);
-				gEditorMgr.RegisterPopupMenu(menu);
+				gPopupMgr->ShowPopup(mLayerPopupMenu, args.position.d_x, args.position.d_y, GUISystem::PopupMgr::Callback(this, &Editor::LayerWindow::OnLayerPopupMenuItemClicked));
 			}
 		}
 	}
@@ -138,11 +143,8 @@ bool LayerWindow::OnDragContainerMouseButtonUp(const CEGUI::EventArgs& e)
 		// item is entity
 		if (args.button == CEGUI::RightButton)
 		{
-			EntitySystem::EntityHandle entity = gEntityMgr.GetEntity(item->getID());
-			PopupMenu* menu = new PopupMenu("EditorRoot/Popup/LayerEntity", true);
-			menu->Init<EntitySystem::EntityHandle>(entity);
-			menu->Open(args.position.d_x, args.position.d_y);
-			gEditorMgr.RegisterPopupMenu(menu);
+			mCurrentPopupEntity = gEntityMgr.GetEntity(item->getID());
+			gPopupMgr->ShowPopup(mEntityPopupMenu, args.position.d_x, args.position.d_y, GUISystem::PopupMgr::Callback(this, &Editor::LayerWindow::OnEntityPopupMenuItemClicked));
 		}
 		else if (args.button == CEGUI::LeftButton)
 		{
@@ -483,6 +485,67 @@ void LayerWindow::RenameLayerPromptCallback(bool clickedOK, const string& text, 
 		return;
 	gLayerMgr.SetLayerName(layerID, text);
 	UpdateTree();
+}
+
+void LayerWindow::CreatePopupMenus()
+{
+	mLayerPopupMenu = gPopupMgr->CreatePopupMenu("LayerWindow/LayerPopup");
+	mLayerPopupMenu->addChildWindow(gPopupMgr->CreateMenuItem("LayerWindow/LayerPopup/MoveUp", TR("layer_moveup"), TR("layer_moveup_hint"), LPI_MOVE_UP));
+	mLayerPopupMenu->addChildWindow(gPopupMgr->CreateMenuItem("LayerWindow/LayerPopup/MoveDown", TR("layer_movedown"), TR("layer_movedown_hint"), LPI_MOVE_DOWN));
+	mLayerPopupMenu->addChildWindow(gPopupMgr->CreateMenuItem("LayerWindow/LayerPopup/New", TR("layer_new"), TR("layer_new_hint"), LPI_NEW));
+	mLayerPopupMenu->addChildWindow(gPopupMgr->CreateMenuItem("LayerWindow/LayerPopup/Rename", TR("layer_rename"), TR("layer_rename_hint"), LPI_RENAME));
+	mLayerPopupMenu->addChildWindow(gPopupMgr->CreateMenuItem("LayerWindow/LayerPopup/Remove", TR("layer_remove"), TR("layer_remove_hint"), LPI_REMOVE));
+
+	mEntityPopupMenu = gPopupMgr->CreatePopupMenu("LayerWindow/EntityPopup");
+	mEntityPopupMenu->addChildWindow(gPopupMgr->CreateMenuItem("LayerWindow/EntityPopup/MoveUp", TR("layer_entitymoveup"), TR("layer_entitymoveup_hint"), EPI_MOVE_UP));
+	mEntityPopupMenu->addChildWindow(gPopupMgr->CreateMenuItem("LayerWindow/EntityPopup/MoveDown", TR("layer_entitymovedown"), TR("layer_entitymovedown_hint"), EPI_MOVE_DOWN));
+}
+
+void LayerWindow::DestroyPopupMenus()
+{
+	gPopupMgr->DestroyPopupMenu(mLayerPopupMenu);
+	gPopupMgr->DestroyPopupMenu(mEntityPopupMenu);
+	mLayerPopupMenu = 0;
+	mEntityPopupMenu = 0;
+}
+
+void LayerWindow::OnLayerPopupMenuItemClicked(CEGUI::Window* menuItem)
+{
+	switch(static_cast<eLayerPopupItem>(menuItem->getID()))
+	{
+	case LPI_MOVE_UP:
+		MoveLayerUp(mCurrentPopupLayerID);
+		break;
+	case LPI_MOVE_DOWN:
+		MoveLayerDown(mCurrentPopupLayerID);
+		break;
+	case LPI_NEW:
+		NewLayer(mCurrentPopupLayerID);
+		break;
+	case LPI_RENAME:
+		RenameLayer(mCurrentPopupLayerID);
+		break;
+	case LPI_REMOVE:
+		RemoveLayer(mCurrentPopupLayerID);
+		break;
+	default:
+		OC_NOT_REACHED();
+	}
+}
+
+void LayerWindow::OnEntityPopupMenuItemClicked(CEGUI::Window* menuItem)
+{
+	switch(static_cast<eEntityPopupItem>(menuItem->getID()))
+	{
+	case EPI_MOVE_UP:
+		MoveEntityUp(mCurrentPopupEntity);
+		break;
+	case EPI_MOVE_DOWN:
+		MoveEntityDown(mCurrentPopupEntity);
+		break;
+	default:
+		OC_NOT_REACHED();
+	}
 }
 
 bool MySortCallback(const CEGUI::ItemEntry* first , const CEGUI::ItemEntry* second)

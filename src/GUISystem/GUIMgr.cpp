@@ -3,6 +3,7 @@
 
 #include "CEGUICommon.h"
 #include "GUIConsole.h"
+#include "PopupMgr.h"
 #include "ResourceProvider.h"
 #include "ScriptProvider.h"
 #include "ViewportWindow.h"
@@ -71,12 +72,15 @@ GUIMgr::GUIMgr():
 	CEGUI::WidgetLookManager::setDefaultResourceGroup("gui-looknfeels");
 	CEGUI::WindowManager::setDefaultResourceGroup("gui-layouts");
 	mGUIConsole = new GUIConsole();
+	mPopupMgr = new PopupMgr();
 }
 
 GUIMgr::~GUIMgr()
 {
 	delete mGUIConsole;
 	mGUIConsole = 0;
+	delete mPopupMgr;
+	mPopupMgr = 0;
 
 	gGfxWindow.RemoveScreenListener(this);
 	gInputMgr.RemoveInputListener(this);

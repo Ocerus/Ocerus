@@ -120,8 +120,11 @@ namespace GUISystem
 		/// This method injects resolution change into GUI system. It is part of IGfxWindowListener interface. Called after window resolution is changed.
 		virtual void ResolutionChanged(const uint32 width, const uint32 height);
 
-		/// Console for printing debug data.
-		inline GUIConsole* GetConsole() { return mGUIConsole; }
+		/// Returns the console for printing debug data.
+		inline GUIConsole* GetConsole() const { return mGUIConsole; }
+
+		/// Returns the popup menu manager.
+		inline PopupMgr* GetPopupMgr() const { return mPopupMgr; }
 		
 		/// Resource group for GUI resources.
 		static const StringKey GUIGroup;
@@ -155,6 +158,9 @@ namespace GUISystem
 
 		/// In-game console
 		GUIConsole* mGUIConsole;
+
+		/// Popup menu manager
+		PopupMgr* mPopupMgr;
 
 		/// @name Window caching optimalization
 		//@{
