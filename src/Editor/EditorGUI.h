@@ -21,8 +21,11 @@ namespace Editor
 		/// Destructor.
 		~EditorGUI();
 
-		/// Loads editor GUI.
+		/// Initializes editor GUI.
 		void Init();
+
+		/// Deinitializes editor GUI.
+		void Deinit();
 
 		/// Updates the GUI.
 		void Update(float32 delta);

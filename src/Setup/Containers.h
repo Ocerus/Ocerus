@@ -53,7 +53,8 @@ struct pooled_list
 	};
 
 	typedef typename pooled_list::_Node allocable;
-	typedef std::list< _Ty, StlPoolAllocator<_Ty, allocable> > type;
+	//typedef std::list< _Ty, Memory::StlPoolAllocator<_Ty, allocable> > type;
+	typedef std::list< _Ty> type;
 };
 
 template<typename T>
@@ -125,7 +126,7 @@ struct pooled_map
 	};
 
 	typedef typename pooled_map::_Node allocable;
-	typedef std::map< _Key, _Ty, std::less<_Key>, StlPoolAllocator<value_type, allocable> > type;
+	typedef std::map< _Key, _Ty, std::less<_Key>, Memory::StlPoolAllocator<value_type, allocable> > type;
 };
 
 template<typename Key, typename Value>
@@ -139,7 +140,7 @@ public:
 template<typename _Key, typename _Ty>
 struct pooled_multimap: public pooled_map<_Key, _Ty>
 {
-	typedef std::multimap< _Key, _Ty, std::less<_Key>, StlPoolAllocator<typename pooled_map<_Key, _Ty>::value_type, typename pooled_map<_Key, _Ty>::allocable> > type;
+	typedef std::multimap< _Key, _Ty, std::less<_Key>, Memory::StlPoolAllocator<typename pooled_map<_Key, _Ty>::value_type, typename pooled_map<_Key, _Ty>::allocable> > type;
 };
 
 
@@ -172,7 +173,7 @@ struct pooled_hash_map
 	typedef Mapped mapped_type;
 	typedef std::pair<Key const, Mapped> value_type;
 	typedef typename pooled_list< value_type >::allocable allocable;
-	typedef boost::unordered_map<Key, Mapped, boost::hash<Key>, std::equal_to<Key>, StlPoolAllocator<value_type, allocable> > type;
+	typedef boost::unordered_map<Key, Mapped, boost::hash<Key>, std::equal_to<Key>, Memory::StlPoolAllocator<value_type, allocable> > type;
 };
 
 

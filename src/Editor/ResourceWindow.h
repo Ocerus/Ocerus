@@ -35,31 +35,25 @@ namespace Editor
 		/// Refreshes the ResourceWindow, all resources get updated.
 		void Refresh();
 
-		/// Returns the ResourcePtr for the specified MenuItem window.
-		ResourceSystem::ResourcePtr MenuItemToResourcePtr(const CEGUI::Window* menuItem);
+		/// Returns the ResourcePtr for the specified ItemEntry window. It can be used to retrieve
+		/// ResourcePtr for drag 'n' drop source when receiving drag 'n' drop event.
+		ResourceSystem::ResourcePtr ItemEntryToResourcePtr(const CEGUI::Window* itemEntry);
 
+	private:
 		/// @name CEGUI Callbacks
 		//@{
-			bool OnDragContainerMouseButtonDown(const CEGUI::EventArgs&);
 			bool OnDragContainerMouseButtonUp(const CEGUI::EventArgs&);
 			bool OnDragContainerMouseDoubleClick(const CEGUI::EventArgs&);
 		//@}
 
-	private:
-		enum ePopupItem
-		{
-			PI_INVALID = 0,
-			PI_OPEN_SCENE
-		};
-
-		
-		/// Updates resource pool. Returns true if resource pool was modified.
-		bool UpdateResourcePool();
-		void AddResourceToTree(const ResourceSystem::ResourcePtr& resource);
-		void UpdateTree();
-
 		/// @name Popup
 		//@{
+			enum ePopupItem
+			{
+				PI_INVALID = 0,
+				PI_OPEN_SCENE
+			};
+
 			void CreatePopupMenu();
 			void DestroyPopupMenu();
 			void OpenPopupMenu(ResourceSystem::ResourcePtr resource, float32 posX, float32 posY);
@@ -70,7 +64,7 @@ namespace Editor
 			ResourceSystem::ResourcePtr mCurrentPopupResource;	
 		//@}
 
-		/// @name ItemEntry creation and caching
+		/// @name ItemEntry creation, setting and caching
 		//@{
 
 			/// Creates an ItemEntry for resource.
@@ -87,9 +81,6 @@ namespace Editor
 			/// Sets the directory ItemEntry.
 			void SetupDirectoryItemEntry(CEGUI::Window* itemEntry, const string& parentPath, const string& directory);
 
-			/// Updates an ItemEntry.
-			bool UpdateItemEntry(CEGUI::Window* itemEntry);
-
 			/// Stores a resource/directory ItemEntry to cache.
 			void StoreItemEntry(CEGUI::Window* itemEntry);
 
@@ -98,6 +89,9 @@ namespace Editor
 
 			/// Restores a directory ItemEntry from cache. If cache is empty, a newly created ItemEntry is returned.
 			CEGUI::Window* RestoreDirectoryItemEntry();
+
+			/// Updates an ItemEntry.
+			bool UpdateItemEntry(CEGUI::Window* itemEntry);
 
 			/// Destroys the resource ItemEntry cache.
 			void DestroyItemEntryCache();
@@ -108,18 +102,37 @@ namespace Editor
 			ItemEntryCache mDirectoryItemEntryCache;
 		//@}
 
-		uint GetPathIndentLevel(const string& path);
+		/// @name Tree manipulation
+		//@{
 
-		/// Sorting callback function. This function provides an order of items in the list
-		/// for the sake of simulating tree widget.
-		static bool SortCallback(const CEGUI::ItemEntry* first, const CEGUI::ItemEntry* second);
+			/// Updates resource pool. Returns true if resource pool was modified.
+			bool UpdateResourcePool();
 
+			/// Adds a resource to the tree.
+			void AddResourceToTree(const ResourceSystem::ResourcePtr& resource);
+
+			/// Updates all ItemEntries in the tree.
+			void UpdateTree();
+
+			/// Returns the indentation level for specified path.
+			uint GetPathIndentLevel(const string& path);
+
+			/// Sorting callback function. This function provides an order of items in the list
+			/// for the sake of simulating tree widget.
+			static bool SortCallback(const CEGUI::ItemEntry* first, const CEGUI::ItemEntry* second);
+		//@}
+
+		/// Invalid ResourceIndex. It's used to distinguish resource and directory MenuEntries.
 		static uint InvalidResourceIndex;
 
 		float mUpdateTimer;
-		
+
 		typedef vector<ResourceSystem::ResourcePtr> ResourceList;
+
+		/// The pool of ResourcePtrs. EntryItems use their IDs as indexes to this pool.
 		ResourceList mResourcePool;
+
+		/// List of directory paths that are already present in the tree.
 		vector<string> mDirectoryList;
 
 		CEGUI::Window* mWindow;
@@ -127,4 +140,4 @@ namespace Editor
 	};
 }
 
-#endif // EDITOR_RESOURCEWINDOW_H
+#endif // _EDITOR_RESOURCEWINDOW_H_

@@ -105,6 +105,13 @@ void EditorGUI::Init()
 	DisableViewports();
 }
 
+void EditorGUI::Deinit()
+{
+	if (mResourceWindow)
+		mResourceWindow->Deinit();
+}
+
+
 void EditorGUI::DisableViewports()
 {
 	mGameViewport->Disable();

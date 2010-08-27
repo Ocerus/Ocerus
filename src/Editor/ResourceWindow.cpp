@@ -10,13 +10,21 @@ using namespace Editor;
 
 uint Editor::ResourceWindow::InvalidResourceIndex = (uint)-1;
 
-Editor::ResourceWindow::ResourceWindow(): mUpdateTimer(0)
+Editor::ResourceWindow::ResourceWindow():
+	mPopupMenu(0),
+	mResourceTypesPopupMenu(0),
+	mUpdateTimer(0),
+	mWindow(0),
+	mTree(0)
 {
 }
 
 Editor::ResourceWindow::~ResourceWindow()
 {
-
+	if (mWindow || mPopupMenu)
+	{
+		ocError << "ResourceWindow was destroyed without deinitialization.";
+	}
 }
 
 void Editor::ResourceWindow::Init()
@@ -43,6 +51,7 @@ void Editor::ResourceWindow::Init()
 
 void ResourceWindow::Deinit()
 {
+	gGUIMgr.DestroyWindowDirectly(mWindow);
 	DestroyPopupMenu();
 	DestroyItemEntryCache();
 }
@@ -114,9 +123,9 @@ void ResourceWindow::AddResourceToTree(const ResourceSystem::ResourcePtr& resour
 	mResourcePool.push_back(resource);
 	uint resourceIndex = mResourcePool.size() - 1;
 
-	CEGUI::Window* newMenuItem = RestoreResourceItemEntry();
-	SetupResourceItemEntry(newMenuItem, resourceIndex);
-	mTree->addChildWindow(newMenuItem);
+	CEGUI::Window* newItemEntry = RestoreResourceItemEntry();
+	SetupResourceItemEntry(newItemEntry, resourceIndex);
+	mTree->addChildWindow(newItemEntry);
 	
 	const string& resourcePath = resource->GetRelativeFileDir();
 	size_t pathItemStart = 0;
@@ -144,32 +153,32 @@ void ResourceWindow::AddResourceToTree(const ResourceSystem::ResourcePtr& resour
 
 void ResourceWindow::UpdateTree()
 {
-	vector<CEGUI::Window*> menuItemsToBeDeleted;
+	vector<CEGUI::Window*> itemEntriesToBeDeleted;
 
 	size_t childCount = mTree->getItemCount();
 	for (size_t i = 0; i < childCount; ++i)
 	{
-		CEGUI::ItemEntry* menuItem = static_cast<CEGUI::ItemEntry*>(mTree->getItemFromIndex(i));
-		if (!UpdateItemEntry(menuItem))
+		CEGUI::ItemEntry* itemEntry = static_cast<CEGUI::ItemEntry*>(mTree->getItemFromIndex(i));
+		if (!UpdateItemEntry(itemEntry))
 		{
-			menuItemsToBeDeleted.push_back(menuItem);
+			itemEntriesToBeDeleted.push_back(itemEntry);
 		}
 	}
 
 	// delete items to be deleted
-	for (vector<CEGUI::Window*>::const_iterator it = menuItemsToBeDeleted.begin(); it != menuItemsToBeDeleted.end(); ++it)
+	for (vector<CEGUI::Window*>::const_iterator it = itemEntriesToBeDeleted.begin(); it != itemEntriesToBeDeleted.end(); ++it)
 	{
-		CEGUI::Window* menuItem = *it;
-		menuItem->getParent()->removeChildWindow(menuItem);
-		StoreItemEntry(menuItem);
+		CEGUI::Window* itemEntry = *it;
+		itemEntry->getParent()->removeChildWindow(itemEntry);
+		StoreItemEntry(itemEntry);
 	}
 
 	mTree->sortList();
 }
 
-ResourceSystem::ResourcePtr ResourceWindow::MenuItemToResourcePtr(const CEGUI::Window* menuItem)
+ResourceSystem::ResourcePtr ResourceWindow::ItemEntryToResourcePtr(const CEGUI::Window* itemEntry)
 {
-	uint index = menuItem->getID();
+	uint index = itemEntry->getID();
 	if (index >= mResourcePool.size()) return ResourceSystem::ResourcePtr();
 	return mResourcePool.at(index);
 }
@@ -244,18 +253,6 @@ void ResourceWindow::OnPopupMenuItemClicked(CEGUI::Window* menuItem)
 	mCurrentPopupResource.reset();
 }
 
-bool Editor::ResourceWindow::OnDragContainerMouseButtonDown(const CEGUI::EventArgs& e)
-{
-	const CEGUI::MouseEventArgs& args = static_cast<const CEGUI::MouseEventArgs&>(e);
-	CEGUI::DragContainer* dragContainer = static_cast<CEGUI::DragContainer*>(args.window);
-	if (dragContainer->isBeingDragged()) return false;
-
-	CEGUI::ItemEntry* itemEntry = static_cast<CEGUI::ItemEntry*>(args.window->getParent());
-	itemEntry->setSelected(true);
-
-	return true;
-}
-
 bool Editor::ResourceWindow::OnDragContainerMouseButtonUp(const CEGUI::EventArgs& e)
 {
 	const CEGUI::MouseEventArgs& args = static_cast<const CEGUI::MouseEventArgs&>(e);
@@ -267,7 +264,7 @@ bool Editor::ResourceWindow::OnDragContainerMouseButtonUp(const CEGUI::EventArgs
 
 	if (args.button == CEGUI::RightButton)
 	{
-		OpenPopupMenu(MenuItemToResourcePtr(dragContainer), args.position.d_x, args.position.d_y);
+		OpenPopupMenu(ItemEntryToResourcePtr(dragContainer), args.position.d_x, args.position.d_y);
 		return true;
 	}
 
@@ -282,7 +279,7 @@ bool Editor::ResourceWindow::OnDragContainerMouseDoubleClick(const CEGUI::EventA
 
 	if (args.button == CEGUI::LeftButton)
 	{
-		ResourceSystem::ResourcePtr resource = MenuItemToResourcePtr(dragContainer);
+		ResourceSystem::ResourcePtr resource = ItemEntryToResourcePtr(dragContainer);
 		if (resource.get() && gEditorMgr.GetCurrentProject()->IsResourceScene(resource))
 		{
 			gEditorMgr.GetCurrentProject()->OpenScene(resource);
@@ -295,8 +292,8 @@ bool Editor::ResourceWindow::OnDragContainerMouseDoubleClick(const CEGUI::EventA
 
 CEGUI::Window* Editor::ResourceWindow::CreateResourceItemEntry()
 {
-	static uint menuItemCounter = 0;
-	const CEGUI::String& name = "ResourceWindow/Tree/MenuItem" + StringConverter::ToString(menuItemCounter++);
+	static uint itemEntryCounter = 0;
+	const CEGUI::String& name = "ResourceWindow/Tree/ItemEntry" + StringConverter::ToString(itemEntryCounter++);
 	CEGUI::ItemEntry* newItem = static_cast<CEGUI::ItemEntry*>(gGUIMgr.CreateWindowDirectly("Editor/ListboxItem", name));
 	newItem->setUserData(this);
 	CEGUI::Window* dragContainer = gGUIMgr.CreateWindowDirectly("DragContainer", name + "/DC");
@@ -318,7 +315,6 @@ CEGUI::Window* Editor::ResourceWindow::CreateResourceItemEntry()
 
 	dragContainer->addChildWindow(newItemText);
 	dragContainer->addChildWindow(newItemIcon);
-	dragContainer->subscribeEvent(CEGUI::Window::EventMouseButtonDown, CEGUI::Event::Subscriber(&Editor::ResourceWindow::OnDragContainerMouseButtonDown, this));
 	dragContainer->subscribeEvent(CEGUI::Window::EventMouseButtonUp, CEGUI::Event::Subscriber(&Editor::ResourceWindow::OnDragContainerMouseButtonUp, this));
 	dragContainer->subscribeEvent(CEGUI::Window::EventMouseDoubleClick, CEGUI::Event::Subscriber(&Editor::ResourceWindow::OnDragContainerMouseDoubleClick, this));
 	dragContainer->setUserString("DragDataType", "Resource");
@@ -350,7 +346,7 @@ CEGUI::Window* ResourceWindow::CreateDirectoryItemEntry()
 	return itemEntry;
 }
 
-void ResourceWindow::SetupResourceItemEntry(CEGUI::Window* menuItem, uint resourceIndex)
+void ResourceWindow::SetupResourceItemEntry(CEGUI::Window* itemEntry, uint resourceIndex)
 {
 	OC_DASSERT(resourceIndex < mResourcePool.size());
 	ResourceSystem::ResourcePtr res = mResourcePool[resourceIndex];
@@ -358,16 +354,16 @@ void ResourceWindow::SetupResourceItemEntry(CEGUI::Window* menuItem, uint resour
 
 	uint indentLevel = GetPathIndentLevel(res->GetRelativeFileDir());
 
-	menuItem->setID(resourceIndex);
-	menuItem->setUserString("ResourceDir", res->GetRelativeFileDir());
-	menuItem->setUserString("ResourcePath", res->GetRelativeFilePath());
+	itemEntry->setID(resourceIndex);
+	itemEntry->setUserString("ResourceDir", res->GetRelativeFileDir());
+	itemEntry->setUserString("ResourcePath", res->GetRelativeFilePath());
 
-	CEGUI::Window* dragContainer = menuItem->getChildAtIdx(0);
+	CEGUI::Window* dragContainer = itemEntry->getChildAtIdx(0);
 	dragContainer->setArea(CEGUI::URect(CEGUI::UDim(0, indentLevel * 16), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
 	dragContainer->setID(resourceIndex);
 
-	CEGUI::Window* menuItemText = dragContainer->getChildAtIdx(0);
-	menuItemText->setText(boost::filesystem::path(res->GetName()).filename());
+	CEGUI::Window* itemEntryText = dragContainer->getChildAtIdx(0);
+	itemEntryText->setText(boost::filesystem::path(res->GetName()).filename());
 }
 
 void ResourceWindow::SetupDirectoryItemEntry(CEGUI::Window* itemEntry, const string& parentPath, const string& directory)
@@ -382,9 +378,9 @@ void ResourceWindow::SetupDirectoryItemEntry(CEGUI::Window* itemEntry, const str
 	itemEntry->setUserString("ResourcePath", parentPath + directory);
 }
 
-bool ResourceWindow::UpdateItemEntry(CEGUI::Window* menuItem)
+bool ResourceWindow::UpdateItemEntry(CEGUI::Window* itemEntry)
 {
-	uint resourceIndex = menuItem->getID();
+	uint resourceIndex = itemEntry->getID();
 
 	// Directory ItemEntry does not need updates
 	if (resourceIndex == InvalidResourceIndex) return true;
@@ -393,9 +389,9 @@ bool ResourceWindow::UpdateItemEntry(CEGUI::Window* menuItem)
 	ResourceSystem::ResourcePtr res = mResourcePool[resourceIndex];
 	if (res.get() == 0) return false; // item to be deleted
 
-	CEGUI::Window* menuItemIcon = menuItem->getChildAtIdx(0)->getChildAtIdx(1);
-	menuItemIcon->setTooltipText(ResourceSystem::GetResourceTypeName(res->GetType()));
-	menuItemIcon->setProperty("Image", "set:ResourceWindowIcons image:Resource" + ResourceSystem::GetResourceTypeName(res->GetType()));
+	CEGUI::Window* itemEntryIcon = itemEntry->getChildAtIdx(0)->getChildAtIdx(1);
+	itemEntryIcon->setTooltipText(ResourceSystem::GetResourceTypeName(res->GetType()));
+	itemEntryIcon->setProperty("Image", "set:ResourceWindowIcons image:Resource" + ResourceSystem::GetResourceTypeName(res->GetType()));
 	return true;
 }
 

@@ -67,7 +67,8 @@ void Editor::EditorMgr::Deinit()
 {
 	ocInfo << "*** EditorMgr deinit ***";
 
-	if (mEditorGUI) mEditorGUI->GetEditorViewport()->RemoveInputListener(this);
+	mEditorGUI->Deinit();
+	GetEditorViewport()->RemoveInputListener(this);
 
 	if (GUISystem::GUIMgr::SingletonExists())
 		gGUIMgr.DestroyWindow(gGUIMgr.GetGUISheet());
