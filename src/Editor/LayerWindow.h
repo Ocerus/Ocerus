@@ -95,6 +95,28 @@ namespace Editor
 		void OnLayerPopupMenuItemClicked(CEGUI::Window* menuItem);
 		void OnEntityPopupMenuItemClicked(CEGUI::Window* menuItem);
 
+		/// @name ItemEntry caching
+		//@{
+			CEGUI::Window* CreateLayerItem();
+			CEGUI::Window* CreateEntityItem();
+			
+			void SetupLayerItem(CEGUI::Window* layerItem, EntitySystem::LayerID layerID);
+			void SetupEntityItem(CEGUI::Window* entityItem, EntitySystem::EntityHandle entityHandle);
+			
+			void StoreItem(CEGUI::Window* item);
+			
+			CEGUI::Window* RestoreLayerItem();
+			CEGUI::Window* RestoreEntityItem();
+
+			/// Destroys the resource ItemEntry cache.
+			void DestroyItemCache();
+
+			typedef vector<CEGUI::Window*> ItemCache;
+
+			ItemCache mLayerItemCache;
+			ItemCache mEntityItemCache;
+		//@}
+		
 		CEGUI::Window* mWindow;
 		CEGUI::ItemListbox* mTree;
 
