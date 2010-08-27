@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+
+<Imageset Name="ResourceWindowIcons" Imagefile="gui/imagesets/ResourceWindowIcons.png" NativeHorzRes="1024" NativeVertRes="768" AutoScaled="false">
+	<Image Name="Directory" XPos="0" YPos="0" Width="12" Height="12" />
+	<Image Name="ResourceUnknown" XPos="12" YPos="0" Width="12" Height="12" />
+	<Image Name="ResourceTexture" XPos="24" YPos="0" Width="12" Height="12" />
+	<Image Name="ResourceMesh" XPos="36" YPos="0" Width="12" Height="12" />
+	<Image Name="ResourceCEGUI" XPos="48" YPos="0" Width="12" Height="12" />
+	<Image Name="ResourceText" XPos="60" YPos="0" Width="12" Height="12" />
+	<Image Name="ResourceXML" XPos="72" YPos="0" Width="12" Height="12" />
+	<Image Name="ResourceScript" XPos="84" YPos="0" Width="12" Height="12" />
+</Imageset>

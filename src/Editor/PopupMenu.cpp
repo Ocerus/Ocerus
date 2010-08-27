@@ -44,7 +44,6 @@ bool Editor::PopupMenu::OnMenuItemMouseUp( const CEGUI::EventArgs& e )
 			{
 				ResourceSystem::eResourceType newType = (ResourceSystem::eResourceType)args.window->getID();
 				gResourceMgr.ChangeResourceType(GetData<ResourceSystem::ResourcePtr>(), newType);
-				gEditorMgr.GetResourceWindow()->Refresh();
 				handled = true;
 			}
 		}

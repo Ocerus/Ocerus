@@ -5,6 +5,7 @@
 #include "Core/Game.h"
 #include "GUISystem/CEGUICommon.h"
 #include "GUISystem/PromptBox.h"
+#include "GUISystem/PopupMgr.h"
 #include "Editor/EditorMgr.h"
 #include "Editor/EditorGUI.h"
 #include "EntitySystem/EntityMgr/LayerMgr.h"
@@ -45,6 +46,7 @@ void Editor::HierarchyWindow::Init()
 		mTree->subscribeEvent(CEGUI::Window::EventDragDropItemDropped, CEGUI::Event::Subscriber(&Editor::HierarchyWindow::OnTreeDragDropItemDropped, this));
 	}
 	CEGUI_CATCH;
+	CreatePopupMenu();
 }
 
 void Editor::HierarchyWindow::RebuildTree()
@@ -301,21 +303,20 @@ bool Editor::HierarchyWindow::OnDragContainerMouseButtonUp( const CEGUI::EventAr
 	CEGUI::ItemEntry* itemEntry = static_cast<CEGUI::ItemEntry*>(args.window->getParent());
 	EntityMap::iterator entityIter = mItems.find(itemEntry->getID());
 	OC_ASSERT(entityIter != mItems.end());
-	EntitySystem::EntityHandle entity = entityIter->second.entity;
-	gEditorMgr.SetCurrentEntity(entity);
+	mCurrentPopupEntity = entityIter->second.entity;
+	gEditorMgr.SetCurrentEntity(mCurrentPopupEntity);
 
 	if (args.button == CEGUI::RightButton)
 	{
-		if (entity.IsValid())
+		if (mCurrentPopupEntity.IsValid())
 		{
-			PopupMenu* menu = new PopupMenu("EditorRoot/Popup/EntityAboveItem");
-			menu->Init<EntitySystem::EntityHandle>(entity);
-			menu->Open(args.position.d_x, args.position.d_y);
-			gEditorMgr.RegisterPopupMenu(menu);
-		}
-		return true;
-	}
+			// Enable all menu items
+			for (uint idx = 0; idx < mPopupMenu->getChildCount(); ++idx)
+				mPopupMenu->getChildAtIdx(idx)->setEnabled(true);
 
+			gPopupMgr->ShowPopup(mPopupMenu, args.position.d_x, args.position.d_y, GUISystem::PopupMgr::Callback(this, &Editor::HierarchyWindow::OnPopupMenuItemClicked));
+		}
+	}
 	return true;
 }
 
@@ -331,11 +332,15 @@ bool Editor::HierarchyWindow::OnWindowMouseButtonUp( const CEGUI::EventArgs& e )
 
 	if (args.button == CEGUI::RightButton)
 	{
-		PopupMenu* menu = new PopupMenu("EditorRoot/Popup/Entity");
-		menu->Init<EntitySystem::EntityHandle>(EntitySystem::EntityHandle::Null);
-		menu->Open(args.position.d_x, args.position.d_y);
-		gEditorMgr.RegisterPopupMenu(menu);
-		return true;
+		// Disable menu items that require entity
+		mPopupMenu->getChildAtIdx(PI_MOVE_UP)->setEnabled(false);
+		mPopupMenu->getChildAtIdx(PI_MOVE_DOWN)->setEnabled(false);
+		mPopupMenu->getChildAtIdx(PI_NEW_COMPONENT)->setEnabled(false);
+		mPopupMenu->getChildAtIdx(PI_DUPLICATE_ENTITY)->setEnabled(false);
+		mPopupMenu->getChildAtIdx(PI_DELETE_ENTITY)->setEnabled(false);
+		mPopupMenu->getChildAtIdx(PI_CREATE_PROTOTYPE)->setEnabled(false);
+
+		gPopupMgr->ShowPopup(mPopupMenu, args.position.d_x, args.position.d_y, GUISystem::PopupMgr::Callback(this, &Editor::HierarchyWindow::OnPopupMenuItemClicked));
 	}
 
 	return true;
@@ -563,3 +568,74 @@ void Editor::HierarchyWindow::NewEntityPromptCallback(bool clickedOK, const stri
 	gEditorMgr.CreateEntity(text);
 	SetCurrentParent(EntitySystem::EntityHandle::Null);
 }
+
+void HierarchyWindow::CreatePopupMenu()
+{
+	mPopupMenu = gPopupMgr->CreatePopupMenu("HierarchyWindow/Popup");
+	mPopupMenu->addChildWindow(gPopupMgr->CreateMenuItem("HierarchyWindow/Popup/MoveUp", TR("hierarchy_moveup"), TR("hierarchy_moveup_hint"), PI_MOVE_UP));
+	mPopupMenu->addChildWindow(gPopupMgr->CreateMenuItem("HierarchyWindow/Popup/MoveDown", TR("hierarchy_movedown"), TR("hierarchy_movedown_hint"), PI_MOVE_DOWN));
+	mPopupMenu->addChildWindow(gPopupMgr->CreateMenuItem("HierarchyWindow/Popup/AddEntity", TR("hierarchy_add"), TR("hierarchy_add_hint"), PI_ADD_ENTITY));
+	CEGUI::Window* newComponentMenuItem = gPopupMgr->CreateMenuItem("HierarchyWindow/Popup/NewComponent", TR("new_component"), TR("new_component_hint"), PI_NEW_COMPONENT);
+	mPopupMenu->addChildWindow(newComponentMenuItem);
+	mPopupMenu->addChildWindow(gPopupMgr->CreateMenuItem("HierarchyWindow/Popup/DuplicateEntity", TR("hierarchy_duplicate"), TR("hierarchy_duplicate_hint"), PI_DUPLICATE_ENTITY));
+	mPopupMenu->addChildWindow(gPopupMgr->CreateMenuItem("HierarchyWindow/Popup/DeleteEntity", TR("hierarchy_delete"), TR("hierarchy_delete_hint"), PI_DELETE_ENTITY));
+	mPopupMenu->addChildWindow(gPopupMgr->CreateMenuItem("HierarchyWindow/Popup/CreatePrototype", TR("hierarchy_prototype"), TR("hierarchy_prototype_hint"), PI_CREATE_PROTOTYPE));
+
+	mComponentPopupMenu = gPopupMgr->CreatePopupMenu("HierarchyWindow/Popup/NewComponent/AutoPopup");
+	for (uint i = 0; i < EntitySystem::NUM_COMPONENT_TYPES; ++i)
+	{
+		const string& componentName = EntitySystem::GetComponentTypeName((EntitySystem::eComponentType)i);
+		const CEGUI::String& componentMenuItemName = "HierarchyWindow/Popup/NewComponent/Component" + Utils::StringConverter::ToString(i);
+		mComponentPopupMenu->addChildWindow(gPopupMgr->CreateMenuItem(componentMenuItemName, componentName, "", i));
+	}
+	newComponentMenuItem->addChildWindow(mComponentPopupMenu);
+}
+
+void HierarchyWindow::DestroyPopupMenu()
+{
+	gPopupMgr->DestroyPopupMenu(mPopupMenu);
+}
+
+void HierarchyWindow::OnPopupMenuItemClicked(CEGUI::Window* menuItem)
+{
+	if (menuItem->getParent() == mComponentPopupMenu)
+	{
+		// New component menu item clicked
+		gEditorMgr.AddComponent((EntitySystem::eComponentType)menuItem->getID());
+	}
+	else
+	{
+		switch (menuItem->getID())
+		{
+		case PI_MOVE_UP:	
+			MoveUp();
+			break;
+		case PI_MOVE_DOWN:
+			MoveDown();
+			break;
+		case PI_ADD_ENTITY:
+			CreateEntity(mCurrentPopupEntity);
+			break;
+		case PI_DUPLICATE_ENTITY:
+			/// @todo into method
+			{
+				EntitySystem::EntityHandle parent = GetParent(mCurrentPopupEntity);
+				SetCurrentParent(parent);
+				gEditorMgr.DuplicateCurrentEntity();
+				SetCurrentParent(EntitySystem::EntityHandle::Null);
+			}
+			break;
+		case PI_DELETE_ENTITY:
+			/// @todo ugly!!
+			gEditorMgr.DeleteCurrentEntity();
+			break;
+		case PI_CREATE_PROTOTYPE:
+			/// @todo ugly!!
+			gEditorMgr.CreatePrototypeFromCurrentEntity();
+			break;
+		default:
+			OC_NOT_REACHED();
+		}
+	}
+}
+

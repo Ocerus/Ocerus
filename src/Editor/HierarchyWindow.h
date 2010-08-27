@@ -90,6 +90,16 @@ namespace Editor
 		//@}
 
 	private:
+		enum ePopupItem
+		{
+			PI_MOVE_UP = 0,
+			PI_MOVE_DOWN,
+			PI_ADD_ENTITY,
+			PI_NEW_COMPONENT,
+			PI_DUPLICATE_ENTITY,
+			PI_DELETE_ENTITY,
+			PI_CREATE_PROTOTYPE
+		};
 
 		/// Data item stored in the cached item list.
 		struct HierarchyInfo
@@ -136,6 +146,14 @@ namespace Editor
 		HierarchyTree mHierarchy;
 		EntitySystem::EntityHandle mCurrentParent;
 		bool mDontAddEntities;
+		
+		void CreatePopupMenu();
+		void DestroyPopupMenu();
+		void OnPopupMenuItemClicked(CEGUI::Window* menuItem);
+
+		CEGUI::Window* mPopupMenu;
+		CEGUI::Window* mComponentPopupMenu;
+		EntitySystem::EntityHandle mCurrentPopupEntity;
 	};
 }
 

@@ -34,6 +34,7 @@ void Editor::LayerWindow::Init()
 		mTree->setSortMode(CEGUI::ItemListBase::UserSort);
 		mTree->setSortCallback(&MySortCallback);
 		mTree->setUserString("WantsMouseWheel", "True");
+		mTree->subscribeEvent(CEGUI::Window::EventMouseButtonUp, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnTreeMouseButtonUp, this));
 	}
 	CEGUI_CATCH;
 
@@ -134,6 +135,10 @@ bool LayerWindow::OnDragContainerMouseButtonUp(const CEGUI::EventArgs& e)
 			mCurrentPopupLayerID = item->getID();
 			if (gLayerMgr.ExistsLayer(mCurrentPopupLayerID))
 			{
+				// Enable all menu items
+				for (uint idx = 0; idx < mLayerPopupMenu->getChildCount(); ++idx)
+					mLayerPopupMenu->getChildAtIdx(idx)->setEnabled(true);
+
 				gPopupMgr->ShowPopup(mLayerPopupMenu, args.position.d_x, args.position.d_y, GUISystem::PopupMgr::Callback(this, &Editor::LayerWindow::OnLayerPopupMenuItemClicked));
 			}
 		}
@@ -155,6 +160,25 @@ bool LayerWindow::OnDragContainerMouseButtonUp(const CEGUI::EventArgs& e)
 	return true;
 }
 
+bool LayerWindow::OnTreeMouseButtonUp(const CEGUI::EventArgs& e)
+{
+	// User clicked an empty space in tree window
+	const CEGUI::MouseEventArgs& args = static_cast<const CEGUI::MouseEventArgs&>(e);
+	if (args.button == CEGUI::RightButton)
+	{
+		// Disable menu items that require clicking on a layer
+		mLayerPopupMenu->getChildAtIdx(LPI_MOVE_UP)->setEnabled(false);
+		mLayerPopupMenu->getChildAtIdx(LPI_MOVE_DOWN)->setEnabled(false);
+		mLayerPopupMenu->getChildAtIdx(LPI_RENAME)->setEnabled(false);
+		mLayerPopupMenu->getChildAtIdx(LPI_REMOVE)->setEnabled(false);
+
+		if (gLayerMgr.ExistsLayer(mCurrentPopupLayerID))
+		{
+			gPopupMgr->ShowPopup(mLayerPopupMenu, args.position.d_x, args.position.d_y, GUISystem::PopupMgr::Callback(this, &Editor::LayerWindow::OnLayerPopupMenuItemClicked));
+		}
+	}
+	return true;
+}
 
 bool LayerWindow::OnLayerItemExpandClick(const CEGUI::EventArgs& e)
 {

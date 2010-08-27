@@ -237,6 +237,13 @@ size_t ResourceSystem::Resource::GetSize( void ) const
 	else return 0;
 }
 
+string Resource::GetRelativeFilePath(void ) const
+{
+	string filePath = GetFilePath();
+	const string& basePath = gResourceMgr.GetBasePath(mBasePathType);
+	return filePath.size() >= basePath.size() ? filePath.substr(basePath.size()) : filePath;
+}
+
 string ResourceSystem::Resource::GetFileDir( void ) const
 {
 	boost::filesystem::path filePath(GetFilePath());

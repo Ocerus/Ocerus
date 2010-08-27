@@ -71,6 +71,9 @@ namespace ResourceSystem
 		/// Returns the path to the file this resource belongs to. An empty string is returned when no such exists.
 		inline string GetFilePath(void) const { return mFilePath; }
 
+		/// Returns the relative path to the  file this resource belongs to. The path is relative to appropriate base prefix.
+		string GetRelativeFilePath(void) const;
+
 		/// Returns the path to the directory containing the file.
 		string GetFileDir(void) const;
 

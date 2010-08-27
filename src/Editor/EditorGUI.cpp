@@ -166,6 +166,7 @@ void EditorGUI::Update(float32 delta)
 
 	mEntityWindow->Update(delta);
 	mLayerWindow->Update(delta);
+	mResourceWindow->Update(delta);
 }
 
 bool Editor::EditorGUI::OnEditorViewportItemDropped( const CEGUI::EventArgs& e)

@@ -59,8 +59,7 @@ namespace Editor
 
 		enum eLayerPopupItem
 		{
-			LPI_INVALID = 0,
-			LPI_MOVE_UP,
+			LPI_MOVE_UP = 0,
 			LPI_MOVE_DOWN,
 			LPI_NEW,
 			LPI_RENAME,
@@ -69,8 +68,7 @@ namespace Editor
 
 		enum eEntityPopupItem
 		{
-			EPI_INVALID = 0,
-			EPI_MOVE_UP,
+			EPI_MOVE_UP = 0,
 			EPI_MOVE_DOWN
 		};
 
@@ -78,6 +76,7 @@ namespace Editor
 		//@{
 			bool OnDragContainerMouseButtonDown(const CEGUI::EventArgs&);
 			bool OnDragContainerMouseButtonUp(const CEGUI::EventArgs&);
+			bool OnTreeMouseButtonUp(const CEGUI::EventArgs&);
 			bool OnLayerItemExpandClick(const CEGUI::EventArgs&);
 			bool OnLayerItemVisibilityToggleClick(const CEGUI::EventArgs&);
 			bool OnLayerItemDoubleClick(const CEGUI::EventArgs&);

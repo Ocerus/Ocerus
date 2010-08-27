@@ -375,8 +375,7 @@ void Editor::EditorMgr::SwitchActionTool( eActionTool newTool )
 
 void Editor::EditorMgr::RefreshResourceWindow()
 {
-	ResourceWindow* resourceWindow = mEditorGUI->GetResourceWindow();
-	if (resourceWindow) resourceWindow->Refresh();
+	mEditorGUI->GetResourceWindow()->Refresh();
 }
 
 void Editor::EditorMgr::UpdateSceneMenu()
