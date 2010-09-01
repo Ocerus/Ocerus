@@ -1,6 +1,7 @@
 #include "Common.h"
 #include "EditorMgr.h"
 #include "EditorGUI.h"
+#include "EditorMenu.h"
 #include "PopupMenu.h"
 #include "KeyShortcuts.h"
 #include "EntityWindow.h"
@@ -778,13 +779,13 @@ void Editor::EditorMgr::ClearSelection()
 bool Editor::EditorMgr::IsEditingPrototype() const
 {
 	OC_ASSERT(mEditorGUI);
-	return mEditorGUI->GetPrototypeWindow()->GetSelectedItem() == GetCurrentEntity();
+	return gEntityMgr.IsEntityPrototype(GetCurrentEntity());
 }
 
 void Editor::EditorMgr::RefreshPrototypeWindow()
 {
 	OC_ASSERT(mEditorGUI);
-	mEditorGUI->GetPrototypeWindow()->Refresh();
+	mEditorGUI->GetPrototypeWindow()->Update();
 }
 
 void Editor::EditorMgr::PropertyValueChanged()

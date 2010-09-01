@@ -9,10 +9,6 @@
 
 using namespace Editor;
 
-/// Sorting callback function. This function provides an order of items in the list
-/// for the sake of simulating tree widget.
-bool MySortCallback(const CEGUI::ItemEntry*, const CEGUI::ItemEntry*);
-
 Editor::LayerWindow::LayerWindow():
 		mWindow(0), mTree(0), mLayerPopupMenu(0), mEntityPopupMenu(0), mUpdateTimer(0)
 {
@@ -30,15 +26,15 @@ void Editor::LayerWindow::Init()
 {
 	CEGUI_TRY;
 	{
-		mWindow = gGUIMgr.LoadSystemLayout("LayerWindow.layout", "EditorRoot/LayerWindow");
+		mWindow = gGUIMgr.GetWindow("Editor/LayerWindow");
 		OC_ASSERT(mWindow);
-		gGUIMgr.GetGUISheet()->addChildWindow(mWindow);
-
-		mTree = static_cast<CEGUI::ItemListbox*>(mWindow->getChild(mWindow->getName() + "/List"));
+		mTree = static_cast<CEGUI::ItemListbox*>(gGUIMgr.CreateWindowDirectly("Editor/ItemListbox", "Editor/LayerWindow/List"));
+		mTree->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
 		mTree->setSortMode(CEGUI::ItemListBase::UserSort);
-		mTree->setSortCallback(&MySortCallback);
+		mTree->setSortCallback(&Editor::LayerWindow::SortCallback);
 		mTree->setUserString("WantsMouseWheel", "True");
-		mTree->subscribeEvent(CEGUI::Window::EventMouseButtonUp, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnTreeMouseButtonUp, this));
+		mTree->subscribeEvent(CEGUI::Window::EventMouseClick, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnTreeClick, this));
+		mWindow->addChildWindow(mTree);
 	}
 	CEGUI_CATCH;
 
@@ -46,7 +42,7 @@ void Editor::LayerWindow::Init()
 	OC_ASSERT(mTree != 0);
 
 	CreatePopupMenus();
-	UpdateTree();
+	Update();
 }
 
 void LayerWindow::Deinit()
@@ -64,11 +60,11 @@ void Editor::LayerWindow::Update(float32 delta)
 	if (mUpdateTimer > 1)
 	{
 		mUpdateTimer = 0;
-		UpdateTree();
+		Update();
 	}
 }
 
-void LayerWindow::NewLayer(EntitySystem::LayerID layerID)
+void LayerWindow::ShowNewLayerPrompt(EntitySystem::LayerID layerID)
 {
 	GUISystem::PromptBox* prompt = new GUISystem::PromptBox(layerID);
 	prompt->SetText(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "layer_new_prompt"));
@@ -76,19 +72,26 @@ void LayerWindow::NewLayer(EntitySystem::LayerID layerID)
 	prompt->Show();
 }
 
+void LayerWindow::CreateLayer(EntitySystem::LayerID layerID, const string& layerName)
+{
+	EntitySystem::LayerID newLayerID = gLayerMgr.AddTopLayer(layerName);
+	gLayerMgr.MoveLayerBehind(newLayerID, layerID);
+	Update();
+}
+
 void LayerWindow::MoveLayerUp(EntitySystem::LayerID layerID)
 {
 	gLayerMgr.MoveLayerUp(layerID);
-	UpdateTree();
+	Update();
 }
 
 void LayerWindow::MoveLayerDown(EntitySystem::LayerID layerID)
 {
 	gLayerMgr.MoveLayerDown(layerID);
-	UpdateTree();
+	Update();
 }
 
-void LayerWindow::RenameLayer(EntitySystem::LayerID layerID)
+void LayerWindow::ShowRenameLayerPrompt(EntitySystem::LayerID layerID)
 {
 	GUISystem::PromptBox* prompt = new GUISystem::PromptBox(layerID);
 	prompt->SetText(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "layer_rename_prompt"));
@@ -96,37 +99,31 @@ void LayerWindow::RenameLayer(EntitySystem::LayerID layerID)
 	prompt->Show();
 }
 
+void LayerWindow::RenameLayer(EntitySystem::LayerID layerID, const string& newLayerName)
+{
+	gLayerMgr.SetLayerName(layerID, newLayerName);
+	Update();
+}
+
 void LayerWindow::RemoveLayer(EntitySystem::LayerID layerID)
 {
 	gLayerMgr.DeleteLayer(layerID, false);
-	UpdateTree();
+	Update();
 }
 
 void LayerWindow::MoveEntityUp(EntitySystem::EntityHandle entity)
 {
 	gLayerMgr.MoveEntityUp(entity);
-	UpdateTree();
+	Update();
 }
 
 void LayerWindow::MoveEntityDown(EntitySystem::EntityHandle entity)
 {
 	gLayerMgr.MoveEntityDown(entity);
-	UpdateTree();
+	Update();
 }
 
-bool Editor::LayerWindow::OnDragContainerMouseButtonDown(const CEGUI::EventArgs& e)
-{
-	const CEGUI::MouseEventArgs& args = static_cast<const CEGUI::MouseEventArgs&>(e);
-	CEGUI::DragContainer* dragContainer = static_cast<CEGUI::DragContainer*>(args.window);
-	if (dragContainer->isBeingDragged()) return false;
-
-	CEGUI::ItemEntry* itemEntry = static_cast<CEGUI::ItemEntry*>(args.window->getParent());
-	itemEntry->setSelected(true);
-
-	return true;
-}
-
-bool LayerWindow::OnDragContainerMouseButtonUp(const CEGUI::EventArgs& e)
+bool LayerWindow::OnItemClick(const CEGUI::EventArgs& e)
 {
 	const CEGUI::MouseEventArgs& args = static_cast<const CEGUI::MouseEventArgs&>(e);
 	CEGUI::DragContainer* dragContainer = static_cast<CEGUI::DragContainer*>(args.window);
@@ -159,6 +156,7 @@ bool LayerWindow::OnDragContainerMouseButtonUp(const CEGUI::EventArgs& e)
 		}
 		else if (args.button == CEGUI::LeftButton)
 		{
+			item->setSelected(true);
 			EntitySystem::EntityHandle entity = gEntityMgr.GetEntity(item->getID());
 			gEditorMgr.SetCurrentEntity(entity);
 		}
@@ -166,7 +164,7 @@ bool LayerWindow::OnDragContainerMouseButtonUp(const CEGUI::EventArgs& e)
 	return true;
 }
 
-bool LayerWindow::OnTreeMouseButtonUp(const CEGUI::EventArgs& e)
+bool LayerWindow::OnTreeClick(const CEGUI::EventArgs& e)
 {
 	// User clicked an empty space in tree window
 	const CEGUI::MouseEventArgs& args = static_cast<const CEGUI::MouseEventArgs&>(e);
@@ -204,7 +202,7 @@ bool LayerWindow::OnLayerItemExpandClick(const CEGUI::EventArgs& e)
 		{
 			mExpandedLayers.erase(it);
 		}
-		UpdateTree();
+		Update();
 	}
 	return true;
 }
@@ -218,7 +216,7 @@ bool LayerWindow::OnLayerItemVisibilityToggleClick(const CEGUI::EventArgs& e)
 	{
 		EntitySystem::LayerID layerID = layerItem->getID();
 		gLayerMgr.SetLayerVisible(layerID, !gLayerMgr.IsLayerVisible(layerID));
-		UpdateTree();
+		Update();
 	}
 	return true;
 }
@@ -233,7 +231,7 @@ bool LayerWindow::OnLayerItemDoubleClick(const CEGUI::EventArgs& e)
 	{
 		EntitySystem::LayerID layerID = dragContainer->getID();
 		gLayerMgr.SetActiveLayer(layerID);
-		UpdateTree();
+		Update();
 	}
 	return true;
 }
@@ -241,9 +239,7 @@ bool LayerWindow::OnLayerItemDoubleClick(const CEGUI::EventArgs& e)
 bool LayerWindow::OnDragDropItemDropped(const CEGUI::EventArgs& e)
 {
 	const CEGUI::DragDropEventArgs& args = static_cast<const CEGUI::DragDropEventArgs&>(e);
-	
-	ocInfo << "Dragged '" << args.dragDropItem->getUserString("DragDataType") << "' to '" << args.window->getUserString("DragDataType");
-	
+
 	if (args.dragDropItem->getUserString("DragDataType") == "Layer")
 	{
 		if (args.window->getUserString("DragDataType") != "Layer")
@@ -285,11 +281,11 @@ bool LayerWindow::OnDragDropItemDropped(const CEGUI::EventArgs& e)
 		}
 		gLayerMgr.SetEntityLayerID(srcEntity, destLayerID);
 	}
-	UpdateTree();
+	Update();
 	return true;
 }
 
-void Editor::LayerWindow::UpdateTree()
+void Editor::LayerWindow::Update()
 {
 	CEGUI_TRY;
 	{
@@ -361,7 +357,7 @@ void Editor::LayerWindow::UpdateTree()
 		{
 			if (layerID >= bottomLayerID && layerID <= topLayerID) continue; // Layers in this range are already in the window
 
-			CEGUI::Window* layerItem = RestoreLayerItem();
+			CEGUI::ItemEntry* layerItem = RestoreLayerItem();
 			SetupLayerItem(layerItem, layerID);
 			mTree->addChildWindow(layerItem);
 
@@ -381,7 +377,7 @@ void Editor::LayerWindow::UpdateTree()
 			if (!gLayerMgr.EntityHasLayer(*it) || mExpandedLayerIDs.find(gLayerMgr.GetEntityLayerID(*it)) == mExpandedLayerIDs.end())
 				continue;
 
-			CEGUI::Window* entityItem = RestoreEntityItem();
+			CEGUI::ItemEntry* entityItem = RestoreEntityItem();
 			SetupEntityItem(entityItem, *it);
 			mTree->addChildWindow(entityItem);
 
@@ -447,31 +443,30 @@ void LayerWindow::NewLayerPromptCallback(bool clickedOK, const string& text, int
 {
 	if (!clickedOK)
 		return;
-	LayerID newLayerID = gLayerMgr.AddTopLayer(text);
-	gLayerMgr.MoveLayerBehind(newLayerID, layerID);
-	UpdateTree();
+	CreateLayer(layerID, text);
+	Update();
 }
 
 void LayerWindow::RenameLayerPromptCallback(bool clickedOK, const string& text, int32 layerID)
 {
 	if (!clickedOK)
 		return;
-	gLayerMgr.SetLayerName(layerID, text);
-	UpdateTree();
+	RenameLayer(layerID, text);
+	Update();
 }
 
 void LayerWindow::CreatePopupMenus()
 {
-	mLayerPopupMenu = gPopupMgr->CreatePopupMenu("LayerWindow/LayerPopup");
-	mLayerPopupMenu->addChildWindow(gPopupMgr->CreateMenuItem("LayerWindow/LayerPopup/MoveUp", TR("layer_moveup"), TR("layer_moveup_hint"), LPI_MOVE_UP));
-	mLayerPopupMenu->addChildWindow(gPopupMgr->CreateMenuItem("LayerWindow/LayerPopup/MoveDown", TR("layer_movedown"), TR("layer_movedown_hint"), LPI_MOVE_DOWN));
-	mLayerPopupMenu->addChildWindow(gPopupMgr->CreateMenuItem("LayerWindow/LayerPopup/New", TR("layer_new"), TR("layer_new_hint"), LPI_NEW));
-	mLayerPopupMenu->addChildWindow(gPopupMgr->CreateMenuItem("LayerWindow/LayerPopup/Rename", TR("layer_rename"), TR("layer_rename_hint"), LPI_RENAME));
-	mLayerPopupMenu->addChildWindow(gPopupMgr->CreateMenuItem("LayerWindow/LayerPopup/Remove", TR("layer_remove"), TR("layer_remove_hint"), LPI_REMOVE));
+	mLayerPopupMenu = gPopupMgr->CreatePopupMenu("Editor/LayerWindow/LayerPopup");
+	mLayerPopupMenu->addChildWindow(gPopupMgr->CreateMenuItem("Editor/LayerWindow/LayerPopup/MoveUp", TR("layer_moveup"), TR("layer_moveup_hint"), LPI_MOVE_UP));
+	mLayerPopupMenu->addChildWindow(gPopupMgr->CreateMenuItem("Editor/LayerWindow/LayerPopup/MoveDown", TR("layer_movedown"), TR("layer_movedown_hint"), LPI_MOVE_DOWN));
+	mLayerPopupMenu->addChildWindow(gPopupMgr->CreateMenuItem("Editor/LayerWindow/LayerPopup/New", TR("layer_new"), TR("layer_new_hint"), LPI_NEW));
+	mLayerPopupMenu->addChildWindow(gPopupMgr->CreateMenuItem("Editor/LayerWindow/LayerPopup/Rename", TR("layer_rename"), TR("layer_rename_hint"), LPI_RENAME));
+	mLayerPopupMenu->addChildWindow(gPopupMgr->CreateMenuItem("Editor/LayerWindow/LayerPopup/Remove", TR("layer_remove"), TR("layer_remove_hint"), LPI_REMOVE));
 
-	mEntityPopupMenu = gPopupMgr->CreatePopupMenu("LayerWindow/EntityPopup");
-	mEntityPopupMenu->addChildWindow(gPopupMgr->CreateMenuItem("LayerWindow/EntityPopup/MoveUp", TR("layer_entitymoveup"), TR("layer_entitymoveup_hint"), EPI_MOVE_UP));
-	mEntityPopupMenu->addChildWindow(gPopupMgr->CreateMenuItem("LayerWindow/EntityPopup/MoveDown", TR("layer_entitymovedown"), TR("layer_entitymovedown_hint"), EPI_MOVE_DOWN));
+	mEntityPopupMenu = gPopupMgr->CreatePopupMenu("Editor/LayerWindow/EntityPopup");
+	mEntityPopupMenu->addChildWindow(gPopupMgr->CreateMenuItem("Editor/LayerWindow/EntityPopup/MoveUp", TR("layer_entitymoveup"), TR("layer_entitymoveup_hint"), EPI_MOVE_UP));
+	mEntityPopupMenu->addChildWindow(gPopupMgr->CreateMenuItem("Editor/LayerWindow/EntityPopup/MoveDown", TR("layer_entitymovedown"), TR("layer_entitymovedown_hint"), EPI_MOVE_DOWN));
 }
 
 void LayerWindow::DestroyPopupMenus()
@@ -493,10 +488,10 @@ void LayerWindow::OnLayerPopupMenuItemClicked(CEGUI::Window* menuItem)
 		MoveLayerDown(mCurrentPopupLayerID);
 		break;
 	case LPI_NEW:
-		NewLayer(mCurrentPopupLayerID);
+		ShowNewLayerPrompt(mCurrentPopupLayerID);
 		break;
 	case LPI_RENAME:
-		RenameLayer(mCurrentPopupLayerID);
+		ShowRenameLayerPrompt(mCurrentPopupLayerID);
 		break;
 	case LPI_REMOVE:
 		RemoveLayer(mCurrentPopupLayerID);
@@ -521,12 +516,10 @@ void LayerWindow::OnEntityPopupMenuItemClicked(CEGUI::Window* menuItem)
 	}
 }
 
-CEGUI::Window* LayerWindow::CreateLayerItem()
+CEGUI::ItemEntry* LayerWindow::CreateLayerItem()
 {
-	ocInfo << "LayerWindow: Creating layer item.";
-
 	static uint layerItemCounter = 0;
-	CEGUI::String windowName = "ResourceWindow/Tree/LayerItem" + StringConverter::ToString(layerItemCounter++);
+	CEGUI::String windowName = "Editor/LayerWindow/List/LayerItem" + StringConverter::ToString(layerItemCounter++);
 
 	CEGUI::ItemEntry* layerItem = static_cast<CEGUI::ItemEntry*>(gGUIMgr.CreateWindowDirectly("Editor/ListboxItem", windowName));
 	layerItem->setUserData((void*)1);
@@ -558,8 +551,10 @@ CEGUI::Window* LayerWindow::CreateLayerItem()
 	layerItem->addChildWindow(layerItemVisibilityToggle); 
 
 	dragContainer->addChildWindow(layerItemText);
+/*
 	dragContainer->subscribeEvent(CEGUI::Window::EventMouseButtonDown, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnDragContainerMouseButtonDown, this));
-	dragContainer->subscribeEvent(CEGUI::Window::EventMouseButtonUp, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnDragContainerMouseButtonUp, this));
+*/
+	dragContainer->subscribeEvent(CEGUI::Window::EventMouseClick, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnItemClick, this));
 	dragContainer->subscribeEvent(CEGUI::Window::EventMouseDoubleClick, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnLayerItemDoubleClick, this));
 	dragContainer->subscribeEvent(CEGUI::Window::EventDragDropItemDropped, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnDragDropItemDropped, this));
 	dragContainer->setUserString("DragDataType", "Layer");
@@ -567,11 +562,10 @@ CEGUI::Window* LayerWindow::CreateLayerItem()
 	return layerItem;
 }
 
-CEGUI::Window* LayerWindow::CreateEntityItem()
+CEGUI::ItemEntry* LayerWindow::CreateEntityItem()
 {
-	ocInfo << "LayerWindow: Creating entity item.";
 	static uint entityItemCounter = 0;
-	CEGUI::String windowName = "ResourceWindow/Tree/EntityItem" + StringConverter::ToString(entityItemCounter++);
+	CEGUI::String windowName = "Editor/LayerWindow/List/EntityItem" + StringConverter::ToString(entityItemCounter++);
 
 	CEGUI::ItemEntry* entityItem = static_cast<CEGUI::ItemEntry*>(gGUIMgr.CreateWindowDirectly("Editor/ListboxItem", windowName));
 	entityItem->setUserData(0);
@@ -587,27 +581,28 @@ CEGUI::Window* LayerWindow::CreateEntityItem()
 	entityItemText->setMousePassThroughEnabled(true);
 
 	dragContainer->addChildWindow(entityItemText);
-	dragContainer->subscribeEvent(CEGUI::Window::EventMouseButtonDown, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnDragContainerMouseButtonDown, this));
-	dragContainer->subscribeEvent(CEGUI::Window::EventMouseButtonUp, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnDragContainerMouseButtonUp, this));
+	dragContainer->subscribeEvent(CEGUI::Window::EventMouseClick, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnItemClick, this));
 	dragContainer->subscribeEvent(CEGUI::Window::EventDragDropItemDropped, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnDragDropItemDropped, this));
 	dragContainer->setUserString("DragDataType", "Entity");
 
 	return entityItem;
 }
 
-void LayerWindow::SetupLayerItem(CEGUI::Window* layerItem, EntitySystem::LayerID layerID)
+void LayerWindow::SetupLayerItem(CEGUI::ItemEntry* layerItem, EntitySystem::LayerID layerID)
 {
 	layerItem->setID(layerID);
 	layerItem->getChildAtIdx(0)->setID(layerID);
+	layerItem->setSelected(false);
 }
 
-void LayerWindow::SetupEntityItem(CEGUI::Window* entityItem, EntitySystem::EntityHandle entityHandle)
+void LayerWindow::SetupEntityItem(CEGUI::ItemEntry* entityItem, EntitySystem::EntityHandle entityHandle)
 {
 	entityItem->setID(entityHandle.GetID());
 	entityItem->getChildAtIdx(0)->setID(entityHandle.GetID());
+	entityItem->setSelected(false);
 }
 
-void LayerWindow::StoreItem(CEGUI::Window* item)
+void LayerWindow::StoreItem(CEGUI::ItemEntry* item)
 {
 	CEGUI::Window* parent = item->getParent();
 	if (parent)
@@ -624,9 +619,9 @@ void LayerWindow::StoreItem(CEGUI::Window* item)
 	}
 }
 
-CEGUI::Window* LayerWindow::RestoreLayerItem()
+CEGUI::ItemEntry* LayerWindow::RestoreLayerItem()
 {
-	CEGUI::Window* item = 0;
+	CEGUI::ItemEntry* item = 0;
 	if (mLayerItemCache.empty())
 	{
 		item = CreateLayerItem();
@@ -639,9 +634,9 @@ CEGUI::Window* LayerWindow::RestoreLayerItem()
 	return item;
 }
 
-CEGUI::Window* LayerWindow::RestoreEntityItem()
+CEGUI::ItemEntry* LayerWindow::RestoreEntityItem()
 {
-	CEGUI::Window* item = 0;
+	CEGUI::ItemEntry* item = 0;
 	if (mEntityItemCache.empty())
 	{
 		item = CreateEntityItem();
@@ -669,7 +664,7 @@ void LayerWindow::DestroyItemCache()
 	mEntityItemCache.clear();
 }
 
-bool MySortCallback(const CEGUI::ItemEntry* first , const CEGUI::ItemEntry* second)
+bool LayerWindow::SortCallback(const CEGUI::ItemEntry* first , const CEGUI::ItemEntry* second)
 {
 	bool isFirstEntity = (first->getUserData() == 0);
 	bool isSecondEntity = (second->getUserData() == 0);

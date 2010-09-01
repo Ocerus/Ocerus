@@ -55,7 +55,7 @@ bool Editor::PopupMenu::OnMenuItemMouseUp( const CEGUI::EventArgs& e )
 				desc.SetKind(EntitySystem::EntityDescription::EK_PROTOTYPE);
 				desc.SetName("New Prototype");
 				gEntityMgr.CreateEntity(desc);
-				gEditorMgr.GetPrototypeWindow()->Refresh();
+				gEditorMgr.GetPrototypeWindow()->Update();
 				gEntityMgr.SavePrototypes();
 				handled = true;
 			}
@@ -63,7 +63,7 @@ bool Editor::PopupMenu::OnMenuItemMouseUp( const CEGUI::EventArgs& e )
 			{
 				gEntityMgr.DestroyEntity(GetData<EntitySystem::EntityHandle>());
 				gEntityMgr.ProcessDestroyQueue();
-				gEditorMgr.GetPrototypeWindow()->Refresh();
+				gEditorMgr.GetPrototypeWindow()->Update();
 				gEntityMgr.SavePrototypes();
 				handled = true;
 			}
@@ -134,12 +134,12 @@ bool Editor::PopupMenu::OnMenuItemMouseUp( const CEGUI::EventArgs& e )
 			}
 			else if (itemCeguiName == mName + "/New")
 			{
-				gEditorMgr.GetLayerWindow()->NewLayer(GetData<LayerID>());
+				gEditorMgr.GetLayerWindow()->ShowNewLayerPrompt(GetData<LayerID>());
 				handled = true;
 			}
 			else if (itemCeguiName == mName + "/Rename")
 			{
-				gEditorMgr.GetLayerWindow()->RenameLayer(GetData<LayerID>());
+				gEditorMgr.GetLayerWindow()->ShowRenameLayerPrompt(GetData<LayerID>());
 				handled = true;
 			}
 			else if (itemCeguiName == mName + "/Remove")

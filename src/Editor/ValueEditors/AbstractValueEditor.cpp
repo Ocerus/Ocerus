@@ -52,7 +52,7 @@ CEGUI::Checkbox* AbstractValueEditor::CreateIsSharedCheckboxWidget(const CEGUI::
 
 float Editor::AbstractValueEditor::GetEditboxHeight()
 {
-	static float result = gGUIMgr.GetWindow("EditorRoot")->getFont(true)->getLineSpacing(1.1f) + 10;
+	static float result = gGUIMgr.GetGUISheet()->getFont(true)->getLineSpacing(1.1f) + 10;
 	return result;
 }
 

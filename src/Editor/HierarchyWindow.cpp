@@ -420,10 +420,7 @@ bool Editor::HierarchyWindow::OnTreeItemDragDropItemDropped(const CEGUI::EventAr
 	} 
 	else if (args.dragDropItem->getUserString("DragDataType") == "Prototype")
 	{
-		PrototypeWindow* prototypeWindow = static_cast<PrototypeWindow*>(args.dragDropItem->getUserData());
-		if (prototypeWindow == 0) return true;
-		EntitySystem::EntityHandle sourcePrototype = prototypeWindow->GetItemAtIndex(args.dragDropItem->getID());
-
+		EntitySystem::EntityHandle sourcePrototype = EntitySystem::EntityHandle(args.dragDropItem->getID());
 		InstantiatePrototype(sourcePrototype, targetEntity);
 	} 
 	else
@@ -457,10 +454,7 @@ bool Editor::HierarchyWindow::OnTreeDragDropItemDropped(const CEGUI::EventArgs& 
 	} 
 	else if (args.dragDropItem->getUserString("DragDataType") == "Prototype")
 	{
-		PrototypeWindow* prototypeWindow = static_cast<PrototypeWindow*>(args.dragDropItem->getUserData());
-		if (prototypeWindow == 0) { return true; }
-		EntitySystem::EntityHandle sourcePrototype = prototypeWindow->GetItemAtIndex(args.dragDropItem->getID());
-
+		EntitySystem::EntityHandle sourcePrototype = EntitySystem::EntityHandle(args.dragDropItem->getID());
 		InstantiatePrototype(sourcePrototype, EntitySystem::EntityHandle::Null);
 	} 
 	else 

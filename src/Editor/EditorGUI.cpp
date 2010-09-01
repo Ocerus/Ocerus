@@ -182,10 +182,7 @@ bool Editor::EditorGUI::OnEditorViewportItemDropped( const CEGUI::EventArgs& e)
 	
 	if (args.dragDropItem->getUserString("DragDataType") == "Prototype")
 	{
-		PrototypeWindow* prototypeWindow = static_cast<PrototypeWindow*>(args.dragDropItem->getUserData());
-		if (prototypeWindow == 0) return true;
-		EntitySystem::EntityHandle sourcePrototype = prototypeWindow->GetItemAtIndex(args.dragDropItem->getID());
-
+		EntitySystem::EntityHandle sourcePrototype = EntitySystem::EntityHandle(args.dragDropItem->getID());
 		EntitySystem::EntityHandle entity = mHierarchyWindow->InstantiatePrototype(sourcePrototype, EntitySystem::EntityHandle::Null);
 		
 		// move the new entity to the cursor

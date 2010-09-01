@@ -10,6 +10,7 @@ include(FindPkgConfig)
 
 findpkg_begin(CEGUI)
 
+pkg_check_modules(CEGUI CEGUI-OPENGL-0.7.1)
 pkg_check_modules(CEGUI REQUIRED CEGUI-OPENGL)
 
 MARK_AS_ADVANCED(

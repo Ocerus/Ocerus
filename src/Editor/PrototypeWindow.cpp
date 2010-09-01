@@ -1,6 +1,5 @@
 #include "Common.h"
 #include "PrototypeWindow.h"
-#include "PopupMenu.h"
 #include "EditorMgr.h"
 #include "GUISystem/CEGUICommon.h"
 #include "GUISystem/PopupMgr.h"
@@ -8,48 +7,112 @@
 
 using namespace Editor;
 
-Editor::PrototypeWindow::PrototypeWindow()
+Editor::PrototypeWindow::PrototypeWindow(): mPopupMenu(0), mWindow(0), mList(0)
 {
 }
 
 Editor::PrototypeWindow::~PrototypeWindow()
 {
+	if (mWindow || mPopupMenu)
+	{
+		ocError << "PrototypeWindow was destroyed without deinitialization.";		
+	}
 }
 
 void Editor::PrototypeWindow::Init()
 {
-	mSelectedIndex = -1;
-
 	CEGUI_TRY;
 	{
-		mWindow = gGUIMgr.LoadSystemLayout("PrototypeWindow.layout", "EditorRoot/PrototypeWindow");
-		OC_ASSERT(mWindow != 0);
-		gGUIMgr.GetGUISheet()->addChildWindow(mWindow);
-		mTree = static_cast<CEGUI::ItemListbox*>(mWindow->getChild(mWindow->getName() + "/List"));
-		mTree->setUserString("WantsMouseWheel", "True");
-		OC_ASSERT(mTree != 0);
-		
-		mTree->subscribeEvent(CEGUI::Window::EventMouseButtonUp, CEGUI::Event::Subscriber(&Editor::PrototypeWindow::OnWindowMouseButtonUp, this));
+		mWindow = gGUIMgr.GetWindow("Editor/PrototypeWindow");
+		OC_ASSERT(mWindow);
+
+		mList = static_cast<CEGUI::ItemListbox*>(gGUIMgr.CreateWindowDirectly("Editor/ItemListbox", "Editor/PrototypeWindow/List"));
+		mList->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
+		mList->setUserString("WantsMouseWheel", "True");
+		mWindow->addChildWindow(mList);
+		mList->subscribeEvent(CEGUI::Window::EventMouseClick, CEGUI::Event::Subscriber(&Editor::PrototypeWindow::OnListClicked, this));
 	}
 	CEGUI_CATCH;
 
 	CreatePopupMenu();
-	RebuildTree();
+	Update();
 }
 
-void PrototypeWindow::NewPrototype()
+void PrototypeWindow::Deinit()
+{
+	gGUIMgr.DestroyWindowDirectly(mWindow);
+	mWindow = 0;
+
+	DestroyPopupMenu();
+	DestroyItemCache();
+}
+
+void PrototypeWindow::Update()
+{
+	EntitySystem::EntityList prototypes;
+	gEntityMgr.ProcessDestroyQueue();
+	gEntityMgr.GetPrototypes(prototypes);
+
+	while (mList->getItemCount() > prototypes.size())
+	{
+		StorePrototypeItem(mList->getItemFromIndex(0));
+	}
+
+	while (mList->getItemCount() < prototypes.size())
+	{
+		CEGUI::ItemEntry* newItem = RestorePrototypeItem();
+		mList->addItem(newItem);
+	}
+
+	OC_DASSERT(mList->getItemCount() == prototypes.size());
+
+	size_t itemCount = mList->getItemCount();
+	for (size_t idx = 0; idx < itemCount; ++idx)
+	{
+		SetupPrototypeItem(mList->getItemFromIndex(idx), prototypes.at(idx));
+	}
+}
+
+void Editor::PrototypeWindow::SetSelectedEntity( const EntitySystem::EntityHandle entity)
+{
+	size_t itemCount = mList->getItemCount();
+	for (size_t idx = 0; idx < itemCount; ++idx)
+	{
+		CEGUI::ItemEntry* item = mList->getItemFromIndex(idx);
+		if ((int)item->getID() == entity.GetID())
+		{
+			item->setFont("Editor-Bold");
+		}
+		else
+		{
+			item->setFont("Editor");
+		}
+	}
+}
+
+void PrototypeWindow::ShowCreatePrototypePrompt()
 {
 	GUISystem::PromptBox* prompt = new GUISystem::PromptBox();
 	prompt->SetText(TR("layer_new_prompt"));
-	prompt->RegisterCallback(GUISystem::PromptBox::Callback(this, &PrototypeWindow::NewPrototypePromptCallback));
+	prompt->RegisterCallback(GUISystem::PromptBox::Callback(this, &PrototypeWindow::CreatePrototypePromptCallback));
 	prompt->Show();
+}
+
+void PrototypeWindow::CreatePrototype(const string& prototypeName)
+{
+	EntitySystem::EntityDescription desc;
+	desc.SetKind(EntitySystem::EntityDescription::EK_PROTOTYPE);
+	desc.SetName(prototypeName);
+	gEntityMgr.CreateEntity(desc);
+	Update();
+	gEntityMgr.SavePrototypes();
 }
 
 void PrototypeWindow::DeletePrototype(EntitySystem::EntityHandle entity)
 {
 	gEntityMgr.DestroyEntity(entity);
 	gEntityMgr.ProcessDestroyQueue();
-	Refresh();
+	Update();
 	gEntityMgr.SavePrototypes();
 }
 
@@ -58,70 +121,22 @@ void PrototypeWindow::InstantiatePrototype(EntitySystem::EntityHandle entity)
 	gEditorMgr.SetCurrentEntity(gEntityMgr.InstantiatePrototype(entity));
 }
 
-void Editor::PrototypeWindow::RebuildTree()
-{
-	for (int32 i=mTree->getItemCount()-1; i>=0; --i)
-	{
-		gGUIMgr.DestroyWindow(mTree->getItemFromIndex(i));
-	}
-	OC_ASSERT(mTree->getItemCount() == 0);
-	mItems.clear();
-
-	gEntityMgr.ProcessDestroyQueue();
-	gEntityMgr.GetPrototypes(mItems);
-
-	for (EntitySystem::EntityList::iterator it=mItems.begin(); it!=mItems.end(); ++it)
-	{
-		size_t itemIndex = (size_t)(it - mItems.begin());
-
-		CEGUI::ItemEntry* newItem = static_cast<CEGUI::ItemEntry*>(gGUIMgr.CreateWindow("Editor/ListboxItem"));
-		newItem->setID(itemIndex);
-		
-		CEGUI::Window* dragContainer = static_cast<CEGUI::ItemEntry*>(gGUIMgr.CreateWindow("DragContainer"));
-		dragContainer->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
-		newItem->addChildWindow(dragContainer);
-
-		CEGUI::Window* newItemText = gGUIMgr.CreateWindow("Editor/StaticText");
-		newItemText->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
-		newItemText->setText(gEntityMgr.GetEntityName(*it));
-		newItemText->setProperty("FrameEnabled", "False");
-		newItemText->setProperty("BackgroundEnabled", "False");
-		newItemText->setMousePassThroughEnabled(true);
-
-		dragContainer->addChildWindow(newItemText);
-		dragContainer->subscribeEvent(CEGUI::Window::EventMouseButtonUp, CEGUI::Event::Subscriber(&Editor::PrototypeWindow::OnDragContainerMouseButtonUp, this));
-
-		dragContainer->setID(itemIndex);
-		dragContainer->setUserString("DragDataType", "Prototype");
-		dragContainer->setUserData(this);
-
-		mTree->addChildWindow(newItem);
-
-		if (*it == gEditorMgr.GetCurrentEntity()) newItem->select();
-	}
-}
-
-bool Editor::PrototypeWindow::OnDragContainerMouseButtonUp(const CEGUI::EventArgs& e)
+bool Editor::PrototypeWindow::OnListItemClicked(const CEGUI::EventArgs& e)
 {
 	const CEGUI::MouseEventArgs& args = static_cast<const CEGUI::MouseEventArgs&>(e);
 	CEGUI::DragContainer* dragContainer = static_cast<CEGUI::DragContainer*>(args.window);
 	if (dragContainer->isBeingDragged()) return false;
 
-	CEGUI::ItemEntry* itemEntry = static_cast<CEGUI::ItemEntry*>(args.window->getParent());
-	itemEntry->setSelected(true);
-	mSelectedIndex = dragContainer->getID();
-	
-	mCurrentPopupPrototype = GetItemAtIndex(mSelectedIndex);
-	if (!mCurrentPopupPrototype.IsValid())
+	EntitySystem::EntityHandle clickedPrototype = EntitySystem::EntityHandle(dragContainer->getID());
+	if (!clickedPrototype.IsValid())
 		return true;
 
-	if (args.button == CEGUI::LeftButton)
+	CEGUI::ItemEntry* item = static_cast<CEGUI::ItemEntry*>(dragContainer->getParent());
+	item->setSelected(true);
+
+	if (args.button == CEGUI::RightButton)
 	{
-		gEditorMgr.SetCurrentEntity(mCurrentPopupPrototype);
-		gEditorMgr.ClearSelection();
-	}
-	else if (args.button == CEGUI::RightButton)
-	{
+		mCurrentPrototype = clickedPrototype;
 		mPopupMenu->getChildAtIdx(0)->setEnabled(true);
 		mPopupMenu->getChildAtIdx(2)->setEnabled(true);
 		gPopupMgr->ShowPopup(mPopupMenu, args.position.d_x, args.position.d_y, GUISystem::PopupMgr::Callback(this, &Editor::PrototypeWindow::OnPopupMenuItemClicked));
@@ -129,7 +144,25 @@ bool Editor::PrototypeWindow::OnDragContainerMouseButtonUp(const CEGUI::EventArg
 	return true;
 }
 
-bool Editor::PrototypeWindow::OnWindowMouseButtonUp(const CEGUI::EventArgs& e)
+bool Editor::PrototypeWindow::OnListItemDoubleClicked(const CEGUI::EventArgs& e)
+{
+	const CEGUI::MouseEventArgs& args = static_cast<const CEGUI::MouseEventArgs&>(e);
+	CEGUI::DragContainer* dragContainer = static_cast<CEGUI::DragContainer*>(args.window);
+	if (dragContainer->isBeingDragged()) return false;
+
+	EntitySystem::EntityHandle clickedPrototype = EntitySystem::EntityHandle(dragContainer->getID());
+	if (!clickedPrototype.IsValid())
+		return true;
+
+	if (args.button == CEGUI::LeftButton)
+	{
+		gEditorMgr.SetCurrentEntity(clickedPrototype);
+		gEditorMgr.ClearSelection();
+	}
+	return true;
+}
+
+bool Editor::PrototypeWindow::OnListClicked(const CEGUI::EventArgs& e)
 {
 	const CEGUI::MouseEventArgs& args = static_cast<const CEGUI::MouseEventArgs&>(e);
 
@@ -138,46 +171,73 @@ bool Editor::PrototypeWindow::OnWindowMouseButtonUp(const CEGUI::EventArgs& e)
 		mPopupMenu->getChildAtIdx(0)->setEnabled(false);
 		mPopupMenu->getChildAtIdx(2)->setEnabled(false);
 		gPopupMgr->ShowPopup(mPopupMenu, args.position.d_x, args.position.d_y, GUISystem::PopupMgr::Callback(this, &Editor::PrototypeWindow::OnPopupMenuItemClicked));
-		return true;
 	}
-	else if (args.button == CEGUI::LeftButton)
-	{
-		if (mSelectedIndex != -1)
-		{
-			gEditorMgr.SetCurrentEntity(EntitySystem::EntityHandle::Null);
-		}
-	}
-
 	return true;
 }
 
-EntitySystem::EntityHandle Editor::PrototypeWindow::GetItemAtIndex( size_t index )
+CEGUI::ItemEntry* PrototypeWindow::CreatePrototypeItem()
 {
-	if (index >= mItems.size()) return EntitySystem::EntityHandle::Null;
-	return mItems.at(index);
+	static uint prototypeItemCounter = 0;
+	const CEGUI::String& windowName = "Editor/PrototypeWindow/List/PrototypeItem" + StringConverter::ToString(prototypeItemCounter++);
+	CEGUI::ItemEntry* newItem = static_cast<CEGUI::ItemEntry*>(gGUIMgr.CreateWindowDirectly("Editor/ListboxItem", windowName));
+
+	CEGUI::Window* dragContainer = gGUIMgr.CreateWindowDirectly("DragContainer", windowName + "/DC");
+	dragContainer->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
+	newItem->addChildWindow(dragContainer);
+
+	CEGUI::Window* newItemText = gGUIMgr.CreateWindowDirectly("Editor/StaticText", windowName + "/DC/Text");
+	newItemText->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
+	newItemText->setProperty("FrameEnabled", "False");
+	newItemText->setProperty("BackgroundEnabled", "False");
+	newItemText->setMousePassThroughEnabled(true);
+
+	dragContainer->addChildWindow(newItemText);
+	dragContainer->subscribeEvent(CEGUI::Window::EventMouseClick, CEGUI::Event::Subscriber(&Editor::PrototypeWindow::OnListItemClicked, this));
+	dragContainer->subscribeEvent(CEGUI::Window::EventMouseDoubleClick, CEGUI::Event::Subscriber(&Editor::PrototypeWindow::OnListItemDoubleClicked, this));
+	dragContainer->setUserString("DragDataType", "Prototype");
+
+	return newItem;
 }
 
-EntitySystem::EntityHandle Editor::PrototypeWindow::GetSelectedItem()
+void PrototypeWindow::SetupPrototypeItem(CEGUI::ItemEntry* prototypeItem, EntitySystem::EntityHandle mPrototype)
 {
-	if (mTree->getSelectedCount() == 0) return EntitySystem::EntityHandle::Null;
-	else return mItems.at(mSelectedIndex);
+	prototypeItem->setID(mPrototype.GetID());
+	prototypeItem->setText(gEntityMgr.GetEntityName(mPrototype));
+	prototypeItem->getChildAtIdx(0)->setID(mPrototype.GetID());
+	prototypeItem->getChildAtIdx(0)->getChildAtIdx(0)->setFont("Editor");
 }
 
-void Editor::PrototypeWindow::SetSelectedEntity( const EntitySystem::EntityHandle entity )
+void PrototypeWindow::StorePrototypeItem(CEGUI::ItemEntry* prototypeItem)
 {
-	int32 index = 0;
-	for (EntitySystem::EntityList::iterator it=mItems.begin(); it!=mItems.end(); ++it, ++index)
+	CEGUI::Window* parent = prototypeItem->getParent();
+	if (parent)
+		parent->removeChildWindow(prototypeItem);
+
+	mPrototypeItemCache.push_back(prototypeItem);
+}
+
+CEGUI::ItemEntry* PrototypeWindow::RestorePrototypeItem()
+{
+	CEGUI::ItemEntry* prototypeItem = 0;
+	if (mPrototypeItemCache.empty())
 	{
-		if (*it == entity)
-		{
-			mSelectedIndex = index;
-			mTree->selectRange(mSelectedIndex, mSelectedIndex);
-			return;
-		}
+		prototypeItem = CreatePrototypeItem();
 	}
+	else
+	{
+		prototypeItem = mPrototypeItemCache.back();
+		mPrototypeItemCache.pop_back();
+	}
+	return prototypeItem;
+}
 
-	mSelectedIndex = -1;
-	mTree->clearAllSelections();
+void PrototypeWindow::DestroyItemCache()
+{
+	for (ItemCache::iterator it = mPrototypeItemCache.begin(); it != mPrototypeItemCache.end(); ++it)
+	{
+		gGUIMgr.DestroyWindowDirectly((*it));
+	}
+	mPrototypeItemCache.clear();
 }
 
 void Editor::PrototypeWindow::CreatePopupMenu()
@@ -198,28 +258,22 @@ void Editor::PrototypeWindow::OnPopupMenuItemClicked(CEGUI::Window* menuItem)
 	switch(static_cast<ePopupItem>(menuItem->getID()))
 	{
 	case PI_ADD_PROTOTYPE:
-		NewPrototype();
+		ShowCreatePrototypePrompt();
 		break;
 	case PI_DELETE_PROTOTYPE:
-		DeletePrototype(mCurrentPopupPrototype);
+		DeletePrototype(mCurrentPrototype);
 		break;
 	case PI_INSTANTIATE_PROTOTYPE:
-		InstantiatePrototype(mCurrentPopupPrototype);
+		InstantiatePrototype(mCurrentPrototype);
 		break;
 	default:
 		OC_NOT_REACHED();
 	}
-
 }
 
-void Editor::PrototypeWindow::NewPrototypePromptCallback(bool clickedOK, const string& text, int32 tag)
+void Editor::PrototypeWindow::CreatePrototypePromptCallback(bool clickedOK, const string& text, int32 tag)
 {
 	OC_UNUSED(tag);
 	if (!clickedOK) return;
-	EntitySystem::EntityDescription desc;
-	desc.SetKind(EntitySystem::EntityDescription::EK_PROTOTYPE);
-	desc.SetName(text);
-	gEntityMgr.CreateEntity(desc);
-	Refresh();
-	gEntityMgr.SavePrototypes();
+	CreatePrototype(text);
 }

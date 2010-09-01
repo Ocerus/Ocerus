@@ -31,15 +31,15 @@ void Editor::ResourceWindow::Init()
 {
 	CEGUI_TRY;
 	{
-		mWindow = gGUIMgr.LoadSystemLayout("ResourceWindow.layout", "EditorRoot/ResourceWindow");
+		mWindow = gGUIMgr.GetWindow("Editor/ResourceWindow");
 		OC_ASSERT(mWindow);
 		gGUIMgr.LoadSystemImageset("ResourceWindowIcons.imageset");
-		gGUIMgr.GetGUISheet()->addChildWindow(mWindow);
-
-		mTree = static_cast<CEGUI::ItemListbox*>(mWindow->getChild(mWindow->getName() + "/List"));
+		mTree = static_cast<CEGUI::ItemListbox*>(gGUIMgr.CreateWindowDirectly("Editor/ItemListbox", "Editor/ResourceWindow/Tree"));
+		mTree->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
 		mTree->setSortMode(CEGUI::ItemListBase::UserSort);
 		mTree->setSortCallback(&ResourceWindow::SortCallback);
 		mTree->setUserString("WantsMouseWheel", "True");
+		mWindow->addChildWindow(mTree);
 	}
 	CEGUI_CATCH;
 
@@ -185,17 +185,17 @@ ResourceSystem::ResourcePtr ResourceWindow::ItemEntryToResourcePtr(const CEGUI::
 
 void ResourceWindow::CreatePopupMenu()
 {
-	mPopupMenu = gPopupMgr->CreatePopupMenu("ResourceWindow/Popup");
+	mPopupMenu = gPopupMgr->CreatePopupMenu("Editor/ResourceWindow/Popup");
 
-	CEGUI::Window* changeTypeMenuItem = gPopupMgr->CreateMenuItem("ResourceWindow/Popup/ChangeType", TR("resource_change_type"), TR("resource_change_type_hint"), PI_INVALID);
+	CEGUI::Window* changeTypeMenuItem = gPopupMgr->CreateMenuItem("Editor/ResourceWindow/Popup/ChangeType", TR("resource_change_type"), TR("resource_change_type_hint"), PI_INVALID);
 	mPopupMenu->addChildWindow(changeTypeMenuItem);
-	mPopupMenu->addChildWindow(gPopupMgr->CreateMenuItem("ResourceWindow/Popup/OpenScene", TR("open_scene"), TR("open_scene_hint"), PI_OPEN_SCENE));
+	mPopupMenu->addChildWindow(gPopupMgr->CreateMenuItem("Editor/ResourceWindow/Popup/OpenScene", TR("open_scene"), TR("open_scene_hint"), PI_OPEN_SCENE));
 
-	mResourceTypesPopupMenu = gPopupMgr->CreatePopupMenu("ResourceWindow/Popup/ChangeType/Popup");
+	mResourceTypesPopupMenu = gPopupMgr->CreatePopupMenu("Editor/ResourceWindow/Popup/ChangeType/Popup");
 	for (uint resType = 0; resType < ResourceSystem::NUM_RESTYPES; ++resType)
 	{
 		string resName = ResourceSystem::GetResourceTypeName((ResourceSystem::eResourceType)resType);
-		CEGUI::Window* menuItem = gPopupMgr->CreateMenuItem("ResourceWindow/Popup/ChangeType/Resource" + Utils::StringConverter::ToString(resType), resName, "", resType);
+		CEGUI::Window* menuItem = gPopupMgr->CreateMenuItem("Editor/ResourceWindow/Popup/ChangeType/Resource" + Utils::StringConverter::ToString(resType), resName, "", resType);
 		mResourceTypesPopupMenu->addChildWindow(menuItem);
 	}
 	changeTypeMenuItem->addChildWindow(mResourceTypesPopupMenu);
@@ -292,8 +292,8 @@ bool Editor::ResourceWindow::OnDragContainerMouseDoubleClick(const CEGUI::EventA
 
 CEGUI::Window* Editor::ResourceWindow::CreateResourceItemEntry()
 {
-	static uint itemEntryCounter = 0;
-	const CEGUI::String& name = "ResourceWindow/Tree/ItemEntry" + StringConverter::ToString(itemEntryCounter++);
+	static uint resourceItemCounter = 0;
+	const CEGUI::String& name = "Editor/ResourceWindow/Tree/ResourceItem" + StringConverter::ToString(resourceItemCounter++);
 	CEGUI::ItemEntry* newItem = static_cast<CEGUI::ItemEntry*>(gGUIMgr.CreateWindowDirectly("Editor/ListboxItem", name));
 	newItem->setUserData(this);
 	CEGUI::Window* dragContainer = gGUIMgr.CreateWindowDirectly("DragContainer", name + "/DC");
@@ -325,7 +325,7 @@ CEGUI::Window* Editor::ResourceWindow::CreateResourceItemEntry()
 CEGUI::Window* ResourceWindow::CreateDirectoryItemEntry()
 {
 	static uint dirCounter = 0;
-	const CEGUI::String& windowName = "ResourceWindow/Tree/DirItem" + StringConverter::ToString(dirCounter++);
+	const CEGUI::String& windowName = "Editor/ResourceWindow/Tree/DirItem" + StringConverter::ToString(dirCounter++);
 	CEGUI::Window* itemEntry = gGUIMgr.CreateWindowDirectly("Editor/ListboxItem", windowName);
 	itemEntry->setID(InvalidResourceIndex);
 	CEGUI::Window* dragContainer = gGUIMgr.CreateWindowDirectly("DragContainer", windowName + "/DC");
@@ -338,10 +338,12 @@ CEGUI::Window* ResourceWindow::CreateDirectoryItemEntry()
 	itemEntryIcon->setProperty("BackgroundEnabled", "False");
 	itemEntryIcon->setTooltipText("Directory");
 	itemEntryIcon->setProperty("Image", "set:ResourceWindowIcons image:Directory");
+	itemEntryIcon->setMousePassThroughEnabled(false);
 	dragContainer->addChildWindow(itemEntryIcon); 
 
 	CEGUI::Window* itemEntryText = gGUIMgr.CreateWindowDirectly("Editor/ListboxItem", windowName + "/DC/Text");	
 	itemEntryText->setArea(CEGUI::URect(CEGUI::UDim(0, 16), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
+	itemEntryText->setMousePassThroughEnabled(false);
 	dragContainer->addChildWindow(itemEntryText);
 	return itemEntry;
 }
@@ -397,6 +399,10 @@ bool ResourceWindow::UpdateItemEntry(CEGUI::Window* itemEntry)
 
 void Editor::ResourceWindow::StoreItemEntry(CEGUI::Window* itemEntry)
 {
+	CEGUI::Window* parent = itemEntry->getParent();
+	if (parent)
+		parent->removeChildWindow(itemEntry);
+
 	if (itemEntry->getID() == InvalidResourceIndex)
 		mDirectoryItemEntryCache.push_back(itemEntry);
 	else	

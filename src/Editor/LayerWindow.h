@@ -1,6 +1,5 @@
 /// @file
 /// Manages the layer manager window.
-
 #ifndef _EDITOR_LAYERWINDOW_H_
 #define _EDITOR_LAYERWINDOW_H_
 
@@ -30,8 +29,11 @@ namespace Editor
 		/// Clears the items.
 		void Clear();
 
-		/// Updates the LayerWindow.
+		/// Executes regular updates of the LayerWindow.
 		void Update(float32 delta);
+
+		/// Updates the LayerWindow.
+		void Update();
 
 		/// Moves the specified layer up.
 		void MoveLayerUp(EntitySystem::LayerID layerID);
@@ -39,12 +41,19 @@ namespace Editor
 		/// Moves the specified layer down.
 		void MoveLayerDown(EntitySystem::LayerID layerID);
 
-		/// Creates a new layer just under the specified layer. A prompt for typing
-		/// the name of the layer is shown.
-		void NewLayer(EntitySystem::LayerID layerID);
+		/// Shows a prompt for new layer name. If the user confirms the prompt
+		/// a new layer will be created just under specified layer.
+		void ShowNewLayerPrompt(EntitySystem::LayerID layerID);
 
-		/// Renames the specified layer. A prompt for typing new name of the layer is shown.
-		void RenameLayer(EntitySystem::LayerID layerID);
+		/// Creates a new layer just under the specified layer.
+		void CreateLayer(EntitySystem::LayerID layerID, const string& layerName);
+
+		/// Shows a prompt for renaming the specified layer. If the user confirms the prompt
+		/// the specified layer will be renamed.
+		void ShowRenameLayerPrompt(EntitySystem::LayerID layerID);
+
+		/// Renames the specified layer.
+		void RenameLayer(EntitySystem::LayerID layerID, const string& newLayerName);
 
 		/// Removes the specified layer.
 		void RemoveLayer(EntitySystem::LayerID layerID);
@@ -74,21 +83,21 @@ namespace Editor
 
 		/// @name CEGUI Callbacks
 		//@{
-			bool OnDragContainerMouseButtonDown(const CEGUI::EventArgs&);
-			bool OnDragContainerMouseButtonUp(const CEGUI::EventArgs&);
-			bool OnTreeMouseButtonUp(const CEGUI::EventArgs&);
+			bool OnTreeClick(const CEGUI::EventArgs&);
 			bool OnLayerItemExpandClick(const CEGUI::EventArgs&);
 			bool OnLayerItemVisibilityToggleClick(const CEGUI::EventArgs&);
+			bool OnItemClick(const CEGUI::EventArgs&);
 			bool OnLayerItemDoubleClick(const CEGUI::EventArgs&);
 			bool OnDragDropItemDropped(const CEGUI::EventArgs&);
 		//@}
 
-		void UpdateTree();
 		void UpdateLayerItem(CEGUI::Window* layerItem, EntitySystem::LayerID layerID);
 		void UpdateEntityItem(CEGUI::Window* entityItem, EntitySystem::EntityHandle entity);
 
 		void NewLayerPromptCallback(bool clickedOK, const string& text, int32 tag);
 		void RenameLayerPromptCallback(bool clickedOK, const string& text, int32 tag);
+
+		static bool SortCallback(const CEGUI::ItemEntry* first, const CEGUI::ItemEntry* second);
 
 		void CreatePopupMenus();
 		void DestroyPopupMenus();
@@ -97,21 +106,21 @@ namespace Editor
 
 		/// @name ItemEntry caching
 		//@{
-			CEGUI::Window* CreateLayerItem();
-			CEGUI::Window* CreateEntityItem();
+			CEGUI::ItemEntry* CreateLayerItem();
+			CEGUI::ItemEntry* CreateEntityItem();
 			
-			void SetupLayerItem(CEGUI::Window* layerItem, EntitySystem::LayerID layerID);
-			void SetupEntityItem(CEGUI::Window* entityItem, EntitySystem::EntityHandle entityHandle);
+			void SetupLayerItem(CEGUI::ItemEntry* layerItem, EntitySystem::LayerID layerID);
+			void SetupEntityItem(CEGUI::ItemEntry* entityItem, EntitySystem::EntityHandle entityHandle);
 			
-			void StoreItem(CEGUI::Window* item);
+			void StoreItem(CEGUI::ItemEntry* item);
 			
-			CEGUI::Window* RestoreLayerItem();
-			CEGUI::Window* RestoreEntityItem();
+			CEGUI::ItemEntry* RestoreLayerItem();
+			CEGUI::ItemEntry* RestoreEntityItem();
 
 			/// Destroys the resource ItemEntry cache.
 			void DestroyItemCache();
 
-			typedef vector<CEGUI::Window*> ItemCache;
+			typedef vector<CEGUI::ItemEntry*> ItemCache;
 
 			ItemCache mLayerItemCache;
 			ItemCache mEntityItemCache;

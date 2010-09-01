@@ -1,11 +1,9 @@
 /// @file
 /// Displays a list of prototypes in the project.
-
-#ifndef PrototypeWindow_h__
-#define PrototypeWindow_h__
+#ifndef _EDITOR_PROTOTYPEWINDOW_H_
+#define _EDITOR_PROTOTYPEWINDOW_H_
 
 #include "Base.h"
-#include "EditorMenu.h"
 #include "GUISystem/CEGUIForwards.h"
 
 namespace Editor
@@ -15,29 +13,29 @@ namespace Editor
 	{
 	public:
 
-		/// Constructs a ResourceWindow.
+		/// Constructs a PrototypeWindow..
 		PrototypeWindow();
 
-		/// Destroys the ResourceWindow.
+		/// Destroys the PrototypeWindow.
 		~PrototypeWindow();
 
-		/// Initializes the ResourceWindow.
+		/// Initializes the PrototypeWindow.
 		void Init();
 
-		/// Refreshes the tree.
-		inline void Refresh() { RebuildTree(); }
+		/// Deinitializes the PrototypeWindow.
+		void Deinit();
 
-		/// Returns the currently selected item.
-		EntitySystem::EntityHandle GetSelectedItem();
-
-		/// Returns the item at the given position in the tree.
-		EntitySystem::EntityHandle GetItemAtIndex(size_t index);
+		/// Updates the PrototypeWindow.
+		void Update();
 
 		/// Sets the currently selected entity prototype.
-		void SetSelectedEntity(const EntitySystem::EntityHandle entity);
+		void SetSelectedEntity(EntitySystem::EntityHandle entity);
 
-		/// Creates a new prototype. A prompt for typing the name of the prototype is shown.
-		void NewPrototype();
+		/// Shows a prompt for creating a new prototype.
+		void ShowCreatePrototypePrompt();
+
+		/// Creates a new prototype with specified name.
+		void CreatePrototype(const string& prototypeName);
 
 		/// Deletes the specified prototype.
 		void DeletePrototype(EntitySystem::EntityHandle entity);
@@ -45,37 +43,50 @@ namespace Editor
 		/// Instantiates the specified prototype.
 		void InstantiatePrototype(EntitySystem::EntityHandle entity);
 
+	private:
 		/// @name CEGUI Callbacks
 		//@{
-		bool OnDragContainerMouseButtonUp(const CEGUI::EventArgs&);
-		bool OnWindowMouseButtonUp(const CEGUI::EventArgs&);
+			bool OnListItemClicked(const CEGUI::EventArgs&);
+			bool OnListItemDoubleClicked(const CEGUI::EventArgs&);
+			bool OnListClicked(const CEGUI::EventArgs&);
 		//@}
 
-	private:
-		enum ePopupItem
-		{
-			PI_INVALID = 0,
-			PI_ADD_PROTOTYPE,
-			PI_DELETE_PROTOTYPE,
-			PI_INSTANTIATE_PROTOTYPE
-		};
+		/// @name ItemEntry caching
+		//@{
+			CEGUI::ItemEntry* CreatePrototypeItem();
+			void SetupPrototypeItem(CEGUI::ItemEntry* prototypeItem, EntitySystem::EntityHandle mPrototype);
+			void StorePrototypeItem(CEGUI::ItemEntry* prototypeItem);
+			CEGUI::ItemEntry* RestorePrototypeItem();
+			void DestroyItemCache();
 
-		/// Creates the list of prototypes.
-		void RebuildTree();
+			typedef vector<CEGUI::ItemEntry*> ItemCache;
 
-		void CreatePopupMenu();
-		void DestroyPopupMenu();
-		void OnPopupMenuItemClicked(CEGUI::Window* menuItem);
-		void NewPrototypePromptCallback(bool clickedOK, const string& text, int32 tag);
+			ItemCache mPrototypeItemCache;
+		//@}
+
+		/// @name Popup menu
+		//@{
+			enum ePopupItem
+			{
+				PI_INVALID = 0,
+				PI_ADD_PROTOTYPE,
+				PI_DELETE_PROTOTYPE,
+				PI_INSTANTIATE_PROTOTYPE
+			};
+
+			void CreatePopupMenu();
+			void DestroyPopupMenu();
+			void OnPopupMenuItemClicked(CEGUI::Window* menuItem);
+
+			CEGUI::Window* mPopupMenu;
+		//@}
+
+		void CreatePrototypePromptCallback(bool clickedOK, const string& text, int32 tag);
 
 		CEGUI::Window* mWindow;
-		CEGUI::ItemListbox* mTree;
-		int32 mSelectedIndex;
-		EntitySystem::EntityList mItems;
-		
-		CEGUI::Window* mPopupMenu;
-		EntitySystem::EntityHandle mCurrentPopupPrototype;
+		CEGUI::ItemListbox* mList;
+		EntitySystem::EntityHandle mCurrentPrototype;
 	};
 }
 
-#endif 
+#endif // _EDITOR_PROTOTYPEWINDOW_H_
