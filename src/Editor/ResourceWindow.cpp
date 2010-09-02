@@ -13,7 +13,6 @@ uint Editor::ResourceWindow::InvalidResourceIndex = (uint)-1;
 Editor::ResourceWindow::ResourceWindow():
 	mPopupMenu(0),
 	mResourceTypesPopupMenu(0),
-	mUpdateTimer(0),
 	mWindow(0),
 	mTree(0)
 {
@@ -66,25 +65,19 @@ void ResourceWindow::Clear()
 	}
 }
 
-void ResourceWindow::Update(float32 delta)
+void ResourceWindow::Update()
 {
-	// Updates tree every second
-	mUpdateTimer += delta;
-	if (mUpdateTimer > 2)
+	if (UpdateResourcePool())
 	{
-		mUpdateTimer = 0;
-		if (UpdateResourcePool())
-		{
-			// Update tree only if resource pool was modified
-			UpdateTree();
-		}
+		// Update tree only if resource pool was modified
+		UpdateTree();
 	}
 }
 
-void ResourceWindow::Refresh()
+void ResourceWindow::ChangeResourceType(ResourceSystem::ResourcePtr resource, ResourceSystem::eResourceType newType)
 {
-	UpdateResourcePool();
-	UpdateTree();
+	gResourceMgr.ChangeResourceType(resource, newType);
+	Update();
 }
 
 bool ResourceWindow::UpdateResourcePool()
@@ -235,9 +228,8 @@ void ResourceWindow::OnPopupMenuItemClicked(CEGUI::Window* menuItem)
 	if (menuItem->getParent() == mResourceTypesPopupMenu)
 	{
 		// Change type
-		ResourceSystem::eResourceType newResType = (ResourceSystem::eResourceType)menuItem->getID();
-		gResourceMgr.ChangeResourceType(mCurrentPopupResource, newResType);
-		Refresh();
+		ResourceSystem::eResourceType newType = (ResourceSystem::eResourceType)menuItem->getID();
+		ChangeResourceType(mCurrentPopupResource, newType);
 	}
 	else
 	{
@@ -253,7 +245,7 @@ void ResourceWindow::OnPopupMenuItemClicked(CEGUI::Window* menuItem)
 	mCurrentPopupResource.reset();
 }
 
-bool Editor::ResourceWindow::OnDragContainerMouseButtonUp(const CEGUI::EventArgs& e)
+bool Editor::ResourceWindow::OnTreeItemClicked(const CEGUI::EventArgs& e)
 {
 	const CEGUI::MouseEventArgs& args = static_cast<const CEGUI::MouseEventArgs&>(e);
 	CEGUI::DragContainer* dragContainer = static_cast<CEGUI::DragContainer*>(args.window);
@@ -271,7 +263,7 @@ bool Editor::ResourceWindow::OnDragContainerMouseButtonUp(const CEGUI::EventArgs
 	return true;
 }
 
-bool Editor::ResourceWindow::OnDragContainerMouseDoubleClick(const CEGUI::EventArgs& e)
+bool Editor::ResourceWindow::OnTreeItemDoubleClicked(const CEGUI::EventArgs& e)
 {
 	const CEGUI::MouseEventArgs& args = static_cast<const CEGUI::MouseEventArgs&>(e);
 	CEGUI::DragContainer* dragContainer = static_cast<CEGUI::DragContainer*>(args.window);
@@ -315,8 +307,8 @@ CEGUI::Window* Editor::ResourceWindow::CreateResourceItemEntry()
 
 	dragContainer->addChildWindow(newItemText);
 	dragContainer->addChildWindow(newItemIcon);
-	dragContainer->subscribeEvent(CEGUI::Window::EventMouseButtonUp, CEGUI::Event::Subscriber(&Editor::ResourceWindow::OnDragContainerMouseButtonUp, this));
-	dragContainer->subscribeEvent(CEGUI::Window::EventMouseDoubleClick, CEGUI::Event::Subscriber(&Editor::ResourceWindow::OnDragContainerMouseDoubleClick, this));
+	dragContainer->subscribeEvent(CEGUI::Window::EventMouseButtonUp, CEGUI::Event::Subscriber(&Editor::ResourceWindow::OnTreeItemClicked, this));
+	dragContainer->subscribeEvent(CEGUI::Window::EventMouseDoubleClick, CEGUI::Event::Subscriber(&Editor::ResourceWindow::OnTreeItemDoubleClicked, this));
 	dragContainer->setUserString("DragDataType", "Resource");
 	dragContainer->setUserData(this);
 	return newItem;
@@ -466,34 +458,61 @@ uint ResourceWindow::GetPathIndentLevel(const string& path)
 	return indentLevel;
 }
 
+
+
 bool ResourceWindow::SortCallback(const CEGUI::ItemEntry* first, const CEGUI::ItemEntry* second)
 {
-	const CEGUI::String& firstResourcePath = first->getUserString("ResourcePath");
-	const CEGUI::String& secondResourcePath = second->getUserString("ResourcePath");
-	return firstResourcePath < secondResourcePath;
-/*
-	ocInfo << "\n\n--Comparement--";
-	const CEGUI::String& firstResourceDir = first->getUserString("ResourceDir");
-	const CEGUI::String& secondResourceDir = second->getUserString("ResourceDir");
-	const CEGUI::String& firstResourcePath = first->getUserString("ResourcePath");
-	const CEGUI::String& secondResourcePath = second->getUserString("ResourcePath");
-	bool isFirstDirectory = (first->getID() == InvalidResourceIndex);
-	bool isSecondDirectory = (second->getID() == InvalidResourceIndex);
-	ocInfo << "ResourceDirs: '"  << firstResourceDir << "' vs '" << secondResourceDir << "'";
-	ocInfo << "ResourcePaths: '" << firstResourcePath << "' vs '" << secondResourcePath << "'";
-	ocInfo << "IsDirectory: " << isFirstDirectory << " vs " << isSecondDirectory;
-	if (firstResourceDir == secondResourceDir)
-	{
-		if (isFirstDirectory && !isSecondDirectory) return true;
-		if (isSecondDirectory) return false;
+	static const CEGUI::utf32 delim = (CEGUI::utf32)('/');
 
-		const CEGUI::String& firstResourcePath = first->getUserString("ResourcePath");
-		const CEGUI::String& secondResourcePath = second->getUserString("ResourcePath");
-		return firstResourcePath < secondResourcePath;
-	}
-	else
+	if (first == second) return false;
+
+	const CEGUI::String& firstResourcePath = first->getUserString("ResourcePath");
+	const CEGUI::String& secondResourcePath = second->getUserString("ResourcePath");
+
+	size_t firstItemIdxStart = 0;
+	size_t firstItemIdxEnd = firstResourcePath.find(delim);
+	size_t secondItemIdxStart = 0;
+	size_t secondItemIdxEnd = secondResourcePath.find(delim);
+
+	bool firstItemIsDirectory, secondItemIsDirectory;
+
+	do
 	{
-		return firstResourceDir < secondResourceDir;
-	}
-*/
+		firstItemIsDirectory = (firstItemIdxEnd != CEGUI::String::npos);
+		secondItemIsDirectory = (secondItemIdxEnd != CEGUI::String::npos);
+		
+		if (!firstItemIsDirectory && first->getID()== InvalidResourceIndex)
+			firstItemIsDirectory = true;
+
+		if (!secondItemIsDirectory && second->getID()== InvalidResourceIndex)
+			secondItemIsDirectory = true;
+
+		if (firstItemIsDirectory && !secondItemIsDirectory)
+			return true;
+
+		if (!firstItemIsDirectory && secondItemIsDirectory)
+			return false;
+
+		int cmp = firstResourcePath.compare(firstItemIdxStart, firstItemIdxEnd - firstItemIdxStart, secondResourcePath, secondItemIdxStart, secondItemIdxEnd - secondItemIdxStart);
+
+		if (cmp != 0)
+		{
+			return cmp < 0;
+		}
+
+		firstItemIdxStart = firstItemIdxEnd;
+		if (firstItemIdxStart == CEGUI::String::npos)
+			firstItemIdxStart = firstResourcePath.size();
+		else
+			firstItemIdxStart++;
+		firstItemIdxEnd = firstResourcePath.find(delim, firstItemIdxStart);
+
+		secondItemIdxStart = secondItemIdxEnd;
+		if (secondItemIdxStart == CEGUI::String::npos)
+			secondItemIdxStart = secondResourcePath.size();
+		else
+			secondItemIdxStart++;
+		secondItemIdxEnd = secondResourcePath.find(delim, secondItemIdxStart);
+	} while (firstItemIdxStart != firstResourcePath.size() || secondItemIdxStart != secondResourcePath.size());
+	return false;
 }

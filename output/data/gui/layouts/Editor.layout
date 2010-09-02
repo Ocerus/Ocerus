@@ -4,6 +4,24 @@
 		<Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{1,0},{1,0}}"/>
 		<Property Name="HorizontalAlignment" Value="Centre"/>
 
+<!-- Game viewport -->
+		<Window Type="Editor/Viewport" Name="Editor/GameViewport">
+			<Property Name="TitlebarEnabled" Value="False"/>
+			<Property Name="UnifiedAreaRect" Value="{{0.35,0},{0,25},{0.85,0},{0.5,13}}"/>
+			<Property Name="DragMovingEnabled" Value="False"/>
+			<Property Name="SizingEnabled" Value="False"/>
+			<Property Name="CloseButtonEnabled" Value="False"/>
+		</Window>
+
+<!-- Editor viewport -->
+		<Window Type="Editor/Viewport" Name="Editor/EditorViewport">
+			<Property Name="TitlebarEnabled" Value="False"/>
+			<Property Name="UnifiedAreaRect" Value="{{0.35,0},{0.5,12},{0.85,0},{1,0}}"/>
+			<Property Name="DragMovingEnabled" Value="False"/>
+			<Property Name="SizingEnabled" Value="False"/>
+			<Property Name="CloseButtonEnabled" Value="False"/>
+		</Window>
+
 <!-- Layer window -->
 		<Window Type="Editor/FrameWindow" Name="Editor/LayerWindow" >
 			<Property Name="Text" Value="$layers$" />
@@ -254,20 +272,6 @@
 					</Window>
 				</Window>
 			</Window>
-		</Window>
-		<Window Type="Editor/Viewport" Name="EditorRoot/TopViewport">
-			<Property Name="TitlebarFont" Value="DejaVuSans-10"/>
-			<Property Name="TitlebarEnabled" Value="False"/>
-			<Property Name="UnifiedAreaRect" Value="{{0.35,0},{0,25},{0.85,0},{0.5,13}}"/>
-			<Property Name="DragMovingEnabled" Value="False"/>
-			<Property Name="SizingEnabled" Value="False"/>
-		</Window>
-		<Window Type="Editor/Viewport" Name="EditorRoot/BottomViewport">
-			<Property Name="TitlebarFont" Value="DejaVuSans-10"/>
-			<Property Name="TitlebarEnabled" Value="False"/>
-			<Property Name="UnifiedAreaRect" Value="{{0.35,0},{0.5,12},{0.85,0},{1,0}}"/>
-			<Property Name="DragMovingEnabled" Value="False"/>
-			<Property Name="SizingEnabled" Value="False"/>
 		</Window>
 		<Window Type="Editor/PopupMenu" Name="EditorRoot/Popup/EntityInScene">
 			<Property Name="AlwaysOnTop" Value="True"/>

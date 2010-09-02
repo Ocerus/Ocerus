@@ -94,11 +94,11 @@ void EditorGUI::Init()
 	mHierarchyWindow->Init();
 
 	// Initialize top viewport
-	mGameViewport = static_cast<GUISystem::ViewportWindow*>(gGUIMgr.GetWindow("EditorRoot/TopViewport"));
+	mGameViewport = static_cast<GUISystem::ViewportWindow*>(gGUIMgr.GetWindow("Editor/GameViewport"));
 	mGameViewport->SetDragAndDropCamera(false);
 
 	// Initialize bottom viewport
-	mEditorViewport = static_cast<GUISystem::ViewportWindow*>(gGUIMgr.GetWindow("EditorRoot/BottomViewport"));
+	mEditorViewport = static_cast<GUISystem::ViewportWindow*>(gGUIMgr.GetWindow("Editor/EditorViewport"));
 	mEditorViewport->SetDragAndDropCamera(true);
 	mEditorViewport->subscribeEvent(CEGUI::Window::EventDragDropItemDropped, CEGUI::Event::Subscriber(&EditorGUI::OnEditorViewportItemDropped, this));
 
@@ -147,6 +147,13 @@ void EditorGUI::RefreshCameras()
 	mEditorViewport->Activate();
 }
 
+void EditorGUI::UpdateGUIWindows()
+{
+	mLayerWindow->Update();
+	mPrototypeWindow->Update();
+	mResourceWindow->Update();
+}
+
 void EditorGUI::Update(float32 delta)
 {
 	// Setting the active window
@@ -172,8 +179,6 @@ void EditorGUI::Update(float32 delta)
 	}
 
 	mEntityWindow->Update(delta);
-	mLayerWindow->Update(delta);
-	mResourceWindow->Update(delta);
 }
 
 bool Editor::EditorGUI::OnEditorViewportItemDropped( const CEGUI::EventArgs& e)

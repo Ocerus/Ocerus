@@ -10,7 +10,7 @@
 using namespace Editor;
 
 Editor::LayerWindow::LayerWindow():
-		mWindow(0), mTree(0), mLayerPopupMenu(0), mEntityPopupMenu(0), mUpdateTimer(0)
+		mWindow(0), mTree(0), mLayerPopupMenu(0), mEntityPopupMenu(0)
 {
 }
 
@@ -42,7 +42,6 @@ void Editor::LayerWindow::Init()
 	OC_ASSERT(mTree != 0);
 
 	CreatePopupMenus();
-	Update();
 }
 
 void LayerWindow::Deinit()
@@ -51,17 +50,6 @@ void LayerWindow::Deinit()
 	mWindow = 0;
 	DestroyPopupMenus();
 	DestroyItemCache();
-}
-
-void Editor::LayerWindow::Update(float32 delta)
-{
-	// Updates tree every second
-	mUpdateTimer += delta;
-	if (mUpdateTimer > 1)
-	{
-		mUpdateTimer = 0;
-		Update();
-	}
 }
 
 void LayerWindow::ShowNewLayerPrompt(EntitySystem::LayerID layerID)

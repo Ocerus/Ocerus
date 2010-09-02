@@ -80,19 +80,14 @@ bool Project::OpenProject(const string& path)
 	gStringMgrProject.LoadLanguagePack();
 
 	gEntityMgr.LoadPrototypes();
-	if (mEditorSupport)
-	{
-		gEditorMgr.RefreshPrototypeWindow();
-		gEditorMgr.RefreshResourceWindow();
-		gEditorMgr.UpdateSceneMenu();
-		gEditorMgr.UpdateMenuItemsEnabled();
-	}
-
 	gGfxWindow.SetWindowCaption(mProjectInfo.name);
 
 	ocInfo << "Project " << path << " loaded.";
 
 	OpenDefaultScene();
+
+	if (mEditorSupport)
+		gEditorMgr.OnProjectOpened();
 
 	return true;
 }
@@ -111,16 +106,12 @@ void Project::CloseProject()
 	mResourceTypeMap.clear();
 	mSceneList.clear();
 	gResourceMgr.DeleteProjectResources();
-
+	gEntityMgr.DestroyAllEntities(true, false); // Is this OK?
+	
 	if (mEditorSupport)
-	{
-		gEntityMgr.DestroyAllEntities(true, false);
-		gEditorMgr.RefreshPrototypeWindow();
-		gEditorMgr.RefreshResourceWindow();
-		gEditorMgr.UpdateSceneMenu();
-		gEditorMgr.UpdateMenuItemsEnabled();
-		gGfxWindow.SetWindowCaption("");
-	}
+		gEditorMgr.OnProjectClosed();
+
+	gGfxWindow.SetWindowCaption("");
 
 	ocInfo << "Project closed.";
 }
@@ -312,7 +303,7 @@ void Core::Project::OpenScene( const ResourceSystem::ResourcePtr resource )
 	if (mEditorSupport)
 	{
 		gGfxWindow.SetWindowCaption(mProjectInfo.name + " (" + resource->GetName() + ")");
-		gEditorMgr.UpdateMenuItemsEnabled();
+		gEditorMgr.OnSceneOpened();
 	}
 
 	ocInfo << "Scene " << resource->GetName() << " loaded.";
@@ -363,12 +354,7 @@ void Project::CloseOpenedScene()
 	gLayerMgr.Clear();
 	if (mEditorSupport)
 	{
-		gEditorMgr.GetEditorGUI()->DisableViewports();
-		gEditorMgr.GetEntityWindow()->Clear();
-		gEditorMgr.GetHierarchyWindow()->Clear();
-		gEditorMgr.GetLayerWindow()->Clear();
-		gEditorMgr.SwitchActionTool(Editor::EditorMgr::AT_RESTART);
-		gEditorMgr.UpdateMenuItemsEnabled();
+		gEditorMgr.OnSceneClosed();
 	}
 }
 

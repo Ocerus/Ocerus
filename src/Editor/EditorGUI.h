@@ -36,6 +36,9 @@ namespace Editor
 		/// Assigns game and editor cameras to corresponding entities, creates new ones if do not exist.
 		void RefreshCameras();
 
+		/// Updates GUI windows.
+		void UpdateGUIWindows();
+
 		/// Returns the viewport of the editor window.
 		inline GUISystem::ViewportWindow* GetEditorViewport() const { return mEditorViewport; }
 

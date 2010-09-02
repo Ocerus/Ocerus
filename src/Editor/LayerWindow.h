@@ -29,9 +29,6 @@ namespace Editor
 		/// Clears the items.
 		void Clear();
 
-		/// Executes regular updates of the LayerWindow.
-		void Update(float32 delta);
-
 		/// Updates the LayerWindow.
 		void Update();
 
@@ -136,8 +133,6 @@ namespace Editor
 
 		set<string> mExpandedLayers;
 		set<EntitySystem::LayerID> mExpandedLayerIDs;
-
-		float32 mUpdateTimer;
 	};
 }
 

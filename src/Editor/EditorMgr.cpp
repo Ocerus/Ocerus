@@ -5,6 +5,7 @@
 #include "PopupMenu.h"
 #include "KeyShortcuts.h"
 #include "EntityWindow.h"
+#include "LayerWindow.h"
 #include "ResourceWindow.h"
 #include "PrototypeWindow.h"
 #include "HierarchyWindow.h"
@@ -20,6 +21,7 @@
 #include "GUISystem/FolderSelector.h"
 
 #include <Box2D.h>
+
 
 using namespace Editor;
 
@@ -220,7 +222,7 @@ void Editor::EditorMgr::DuplicateCurrentEntity()
 	if (IsEditingPrototype())
 	{
 		gEntityMgr.SavePrototypes();
-		RefreshPrototypeWindow();
+		UpdatePrototypeWindow();
 	}
 	SetCurrentEntity(newEntity);
 }
@@ -233,7 +235,7 @@ void Editor::EditorMgr::DeleteCurrentEntity()
 	if (IsEditingPrototype())
 	{
 		gEntityMgr.SavePrototypes();
-		RefreshPrototypeWindow();
+		UpdatePrototypeWindow();
 	}
 	SetCurrentEntity(EntityHandle::Null);
 }
@@ -243,7 +245,7 @@ void Editor::EditorMgr::CreatePrototypeFromCurrentEntity()
 	if (!mCurrentEntity.Exists()) return;
 	EntitySystem::EntityHandle prototype = gEntityMgr.ExportEntityToPrototype(mCurrentEntity);
 	gEntityMgr.SavePrototypes();
-	RefreshPrototypeWindow();
+	UpdatePrototypeWindow();
 	SetCurrentEntity(prototype);
 	ClearSelection();
 }
@@ -375,9 +377,9 @@ void Editor::EditorMgr::SwitchActionTool( eActionTool newTool )
 	mEditorGUI->GetEditorMenu()->SwitchActionButton((uint32)newTool);
 }
 
-void Editor::EditorMgr::RefreshResourceWindow()
+void Editor::EditorMgr::UpdateResourceWindow()
 {
-	mEditorGUI->GetResourceWindow()->Refresh();
+	mEditorGUI->GetResourceWindow()->Update();
 }
 
 void Editor::EditorMgr::UpdateSceneMenu()
@@ -782,7 +784,7 @@ bool Editor::EditorMgr::IsEditingPrototype() const
 	return gEntityMgr.IsEntityPrototype(GetCurrentEntity());
 }
 
-void Editor::EditorMgr::RefreshPrototypeWindow()
+void Editor::EditorMgr::UpdatePrototypeWindow()
 {
 	OC_ASSERT(mEditorGUI);
 	mEditorGUI->GetPrototypeWindow()->Update();
@@ -1008,6 +1010,38 @@ void Editor::EditorMgr::SelectEntity( const EntitySystem::EntityHandle entity )
 bool Editor::EditorMgr::IsProjectOpened() const
 { 
 	return mCurrentProject->IsProjectOpened();
+}
+
+void EditorMgr::OnProjectOpened()
+{
+	GetPrototypeWindow()->Update();
+	GetResourceWindow()->Update();
+	UpdateSceneMenu();
+	UpdateMenuItemsEnabled();
+}
+
+void EditorMgr::OnProjectClosed()
+{
+	GetPrototypeWindow()->Update();
+	GetResourceWindow()->Update();
+	UpdateSceneMenu();
+	UpdateMenuItemsEnabled();
+}
+
+void EditorMgr::OnSceneOpened()
+{
+	UpdateMenuItemsEnabled();
+	GetLayerWindow()->Update();
+}
+
+void EditorMgr::OnSceneClosed()
+{
+	GetEditorGUI()->DisableViewports();
+	GetEntityWindow()->Clear();
+	GetHierarchyWindow()->Clear();
+	GetLayerWindow()->Clear();
+	SwitchActionTool(Editor::EditorMgr::AT_RESTART);
+	UpdateMenuItemsEnabled();
 }
 
 GUISystem::ViewportWindow* EditorMgr::GetEditorViewport() const

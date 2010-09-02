@@ -30,10 +30,10 @@ namespace Editor
 		void Clear();
 
 		/// Updates the ResourceWindow.
-		void Update(float32 delta);
+		void Update();
 
-		/// Refreshes the ResourceWindow, all resources get updated.
-		void Refresh();
+		/// Changes the type of the resource to a new one.
+		void ChangeResourceType(ResourceSystem::ResourcePtr resource, ResourceSystem::eResourceType newType);
 
 		/// Returns the ResourcePtr for the specified ItemEntry window. It can be used to retrieve
 		/// ResourcePtr for drag 'n' drop source when receiving drag 'n' drop event.
@@ -42,8 +42,8 @@ namespace Editor
 	private:
 		/// @name CEGUI Callbacks
 		//@{
-			bool OnDragContainerMouseButtonUp(const CEGUI::EventArgs&);
-			bool OnDragContainerMouseDoubleClick(const CEGUI::EventArgs&);
+			bool OnTreeItemClicked(const CEGUI::EventArgs&);
+			bool OnTreeItemDoubleClicked(const CEGUI::EventArgs&);
 		//@}
 
 		/// @name Popup
@@ -124,8 +124,6 @@ namespace Editor
 
 		/// Invalid ResourceIndex. It's used to distinguish resource and directory MenuEntries.
 		static uint InvalidResourceIndex;
-
-		float mUpdateTimer;
 
 		typedef vector<ResourceSystem::ResourcePtr> ResourceList;
 

@@ -122,11 +122,20 @@ namespace Editor
 		/// Returns whether there is an opened project.
 		bool IsProjectOpened() const;
 
+		
+		void OnProjectOpened();
+		
+		void OnProjectClosed();
+		
+		void OnSceneOpened();
+		
+		void OnSceneClosed();
+
 		/// Refreshes the prototype window.
-		void RefreshPrototypeWindow();
+		void UpdatePrototypeWindow();
 
 		/// Refreshes the resource window.
-		void RefreshResourceWindow();
+		void UpdateResourceWindow();
 
 		/// Updates the scenes in scene menu.
 		void UpdateSceneMenu();
