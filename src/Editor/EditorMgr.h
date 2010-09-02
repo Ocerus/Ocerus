@@ -66,22 +66,9 @@ namespace Editor
 			/// Clears all selected entities.
 			void ClearSelection();
 
+			/// Returns currently hovered entity.
+			inline EntitySystem::EntityHandle GetHoveredEntity() const { return mHoveredEntity; }
 		//@}
-			
-		/// Adds a new popup menu to the list.
-		void RegisterPopupMenu(PopupMenu* menu);
-
-		/// Removes the popup menu from the list.
-		void UnregisterPopupMenu(PopupMenu* menu);
-
-		/// Disables closing of popup menus.
-		inline void DisablePopupClosing() { mPopupClosingEnabled = false; }
-
-		/// Enables closing of popup menus.
-		inline void EnablePopupClosing() { mPopupClosingEnabled = true; }
-
-		/// Closes all popup menus.
-		void CloseAllPopupMenus();
 
 		/// True if the editor is editing a prototype.
 		bool IsEditingPrototype() const;
@@ -225,11 +212,20 @@ namespace Editor
 		/// Creates a new entity.
 		void CreateEntity(const string& name);
 
+		/// Duplicates the specified entity.
+		void DuplicateEntity(EntitySystem::EntityHandle entity);
+
 		/// Duplicates the current entity.
 		void DuplicateCurrentEntity();
 
+		/// Deletes the specified entity.
+		void DeleteEntity(EntitySystem::EntityHandle entity);
+
 		/// Deletes the current entity.
 		void DeleteCurrentEntity();
+
+		/// Creates a prototype from the specified entity and links it to the prototype.
+		void CreatePrototypeFromEntity(EntitySystem::EntityHandle entity);
 
 		/// Creates a prototype from the current entity and links it to the prototype.
 		void CreatePrototypeFromCurrentEntity();
@@ -239,12 +235,19 @@ namespace Editor
 
 		/// Deletes selected entities.
 		void DeleteSelectedEntities();
-		
-		/// Adds a new component of componentType to current entity.
-		void AddComponent(EntitySystem::eComponentType componentType);
 
+		/// Adds a component of the specified type to the entity.
+		void AddComponentToEntity(EntitySystem::EntityHandle entity, EntitySystem::eComponentType componentType);
+		
+		/// Adds a component of the specified type to the current entity.
+		void AddComponentToCurrentEntity(EntitySystem::eComponentType componentType);
+
+		void RemoveComponentFromEntity(EntitySystem::EntityHandle entity, const EntitySystem::ComponentID& componentId);
+		
 		/// Removes the component with given componentId from current entity.
-		void RemoveComponent(const EntitySystem::ComponentID& componentId);
+		void RemoveComponentFromCurrentEntity(const EntitySystem::ComponentID& componentId);
+
+		
 
 		/// Sets the current edit tool.
 		void SetCurrentEditTool(eEditTool newEditTool);
@@ -256,8 +259,6 @@ namespace Editor
 
 		EditorGUI* mEditorGUI;
 		Core::Project* mCurrentProject;
-		list<PopupMenu*> mPopupMenus;
-		bool mPopupClosingEnabled;
 		EntitySystem::EntityHandle mCurrentEntity; ///< Currently edited entity in the components' window.
 
 		// Selections stuff.
@@ -276,7 +277,6 @@ namespace Editor
 		vector<float32> mEditToolBodyAngles; ///< Initial angle of the bodies.
 		vector<Vector2> mEditToolBodyScales; ///< Initial scale of the bodies.
 		bool mIsInitialTime; ///< Whether the scene is in initial time (before the first call of ResumeAction or after the call of RestartAction).
-
 
 		/// Draws the shape of the entity using the selected color.
 		bool DrawEntityPhysicalShape(const EntitySystem::EntityHandle entity, const GfxSystem::Color shapeColor, const GfxSystem::Color fillColor, const float32 shapeWidth);

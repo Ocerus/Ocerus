@@ -127,7 +127,7 @@ EntitySystem::EntityHandle GUISystem::ViewportWindow::GetCamera() const
 		return gGfxRenderer.GetRenderTargetCamera(mRenderTarget);
 }
 
-void GUISystem::ViewportWindow::AddInputListener( InputSystem::IInputListener* listener )
+void GUISystem::ViewportWindow::AddInputListener(InputSystem::IInputListener* listener)
 {
 	ListenersList::iterator it = find(mListeners.begin(), mListeners.end(), listener);
 	if (it == mListeners.end())
@@ -136,7 +136,7 @@ void GUISystem::ViewportWindow::AddInputListener( InputSystem::IInputListener* l
 	}
 }
 
-void GUISystem::ViewportWindow::RemoveInputListener( InputSystem::IInputListener* listener )
+void GUISystem::ViewportWindow::RemoveInputListener(InputSystem::IInputListener* listener)
 {
 	ListenersList::iterator it = find(mListeners.begin(), mListeners.end(), listener);
 	if (it != mListeners.end())
@@ -145,7 +145,7 @@ void GUISystem::ViewportWindow::RemoveInputListener( InputSystem::IInputListener
 	}
 }
 
-void GUISystem::ViewportWindow::onMouseMove( CEGUI::MouseEventArgs& e )
+void GUISystem::ViewportWindow::onMouseMove(CEGUI::MouseEventArgs& e)
 {
 	CEGUI::FrameWindow::onMouseMove(e);
 
@@ -155,7 +155,7 @@ void GUISystem::ViewportWindow::onMouseMove( CEGUI::MouseEventArgs& e )
 	}
 }
 
-void GUISystem::ViewportWindow::onMouseButtonDown( CEGUI::MouseEventArgs& e )
+void GUISystem::ViewportWindow::onMouseButtonDown(CEGUI::MouseEventArgs& e)
 {
 	CEGUI::FrameWindow::onMouseButtonDown(e);
 
@@ -165,7 +165,7 @@ void GUISystem::ViewportWindow::onMouseButtonDown( CEGUI::MouseEventArgs& e )
 	}
 }
 
-void GUISystem::ViewportWindow::onMouseButtonUp( CEGUI::MouseEventArgs& e )
+void GUISystem::ViewportWindow::onMouseButtonUp(CEGUI::MouseEventArgs& e)
 {
 	CEGUI::FrameWindow::onMouseButtonUp(e);
 
@@ -175,7 +175,7 @@ void GUISystem::ViewportWindow::onMouseButtonUp( CEGUI::MouseEventArgs& e )
 	}
 }
 
-void GUISystem::ViewportWindow::onMouseWheel( CEGUI::MouseEventArgs& e )
+void GUISystem::ViewportWindow::onMouseWheel(CEGUI::MouseEventArgs& e)
 {
 	CEGUI::FrameWindow::onMouseWheel(e);
 

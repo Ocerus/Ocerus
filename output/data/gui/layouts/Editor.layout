@@ -273,38 +273,5 @@
 				</Window>
 			</Window>
 		</Window>
-		<Window Type="Editor/PopupMenu" Name="EditorRoot/Popup/EntityInScene">
-			<Property Name="AlwaysOnTop" Value="True"/>
-			<Property Name="Visible" Value="False"/>
-			<Property Name="FadeInTime" Value="0"/>
-			<Property Name="FadeOutTime" Value="0"/>
-			<Property Name="ItemSpacing" Value="2"/>
-			<Property Name="ClippedByParent" Value="False"/>
-			<Property Name="AutoResizeEnabled" Value="True"/>
-			<Window Type="Editor/MenuItem" Name="EditorRoot/Popup/EntityInScene/NewComponent">
-				<Property Name="Text" Value="$new_component$"/>
-				<Property Name="Tooltip" Value="$new_component_hint$"/>
-				<Window Type="Editor/PopupMenu" Name="EditorRoot/Popup/EntityInScene/NewComponent/AutoPopup">
-					<Property Name="Visible" Value="False"/>
-					<Property Name="FadeInTime" Value="0"/>
-					<Property Name="FadeOutTime" Value="0"/>
-					<Property Name="ItemSpacing" Value="2"/>
-					<Property Name="ClippedByParent" Value="False"/>
-					<Property Name="AutoResizeEnabled" Value="True"/>
-				</Window>
-			</Window>
-			<Window Type="Editor/MenuItem" Name="EditorRoot/Popup/EntityInScene/DuplicateEntity">
-				<Property Name="Text" Value="$hierarchy_duplicate$"/>
-				<Property Name="Tooltip" Value="$hierarchy_duplicate_hint$"/>
-			</Window>
-			<Window Type="Editor/MenuItem" Name="EditorRoot/Popup/EntityInScene/DeleteEntity">
-				<Property Name="Text" Value="$hierarchy_delete$"/>
-				<Property Name="Tooltip" Value="$hierarchy_delete_hint$"/>
-			</Window>
-			<Window Type="Editor/MenuItem" Name="EditorRoot/Popup/EntityInScene/CreatePrototype">
-				<Property Name="Text" Value="$hierarchy_prototype$"/>
-				<Property Name="Tooltip" Value="$hierarchy_prototype_hint$"/>
-			</Window>
-		</Window>
 	</Window>
 </GUILayout>

@@ -2,7 +2,6 @@
 #include "EditorMgr.h"
 #include "EditorGUI.h"
 #include "EditorMenu.h"
-#include "PopupMenu.h"
 #include "KeyShortcuts.h"
 #include "EntityWindow.h"
 #include "LayerWindow.h"
@@ -11,7 +10,6 @@
 #include "HierarchyWindow.h"
 #include "CreateProjectDialog.h"
 #include "GUISystem/GUIMgr.h"
-#include "GUISystem/PopupMgr.h"
 #include "GUISystem/ViewportWindow.h"
 #include "EntitySystem/EntityMgr/LayerMgr.h"
 #include "Core/Project.h"
@@ -56,7 +54,6 @@ void EditorMgr::Init()
 	mCurrentProject = new Core::Project(true);
 
 	mMousePressedInSceneWindow = false;
-	mPopupClosingEnabled = false;
 	mMultiselectStarted = false;
 	SetCurrentEditTool(ET_MOVE);
 	mHoveredEntity.Invalidate();
@@ -214,12 +211,12 @@ void Editor::EditorMgr::CreateEntity(const string& name)
 	newEntity.FinishInit();
 }
 
-void Editor::EditorMgr::DuplicateCurrentEntity()
+void Editor::EditorMgr::DuplicateEntity(EntitySystem::EntityHandle entity)
 {
-	if (!mCurrentEntity.Exists()) return;
-	EntityHandle newEntity = gEntityMgr.DuplicateEntity(mCurrentEntity);
+	if (!entity.Exists()) return;
+	EntityHandle newEntity = gEntityMgr.DuplicateEntity(entity);
 	newEntity.FinishInit();
-	if (IsEditingPrototype())
+	if (gEntityMgr.IsEntityPrototype(entity))
 	{
 		gEntityMgr.SavePrototypes();
 		UpdatePrototypeWindow();
@@ -227,27 +224,43 @@ void Editor::EditorMgr::DuplicateCurrentEntity()
 	SetCurrentEntity(newEntity);
 }
 
-void Editor::EditorMgr::DeleteCurrentEntity()
+void Editor::EditorMgr::DuplicateCurrentEntity()
 {
-	if (!mCurrentEntity.Exists()) return;
-	gEntityMgr.DestroyEntity(mCurrentEntity);
+	DuplicateEntity(mCurrentEntity);
+}
+
+void Editor::EditorMgr::DeleteEntity(EntitySystem::EntityHandle entity)
+{
+	if (!entity.Exists()) return;
+	bool isPrototype = gEntityMgr.IsEntityPrototype(entity);
+	gEntityMgr.DestroyEntity(entity);
 	gEntityMgr.ProcessDestroyQueue();
-	if (IsEditingPrototype())
+	if (isPrototype)
 	{
 		gEntityMgr.SavePrototypes();
 		UpdatePrototypeWindow();
 	}
+}
+
+void Editor::EditorMgr::DeleteCurrentEntity()
+{
+	DeleteEntity(mCurrentEntity);
 	SetCurrentEntity(EntityHandle::Null);
 }
 
-void Editor::EditorMgr::CreatePrototypeFromCurrentEntity()
+void EditorMgr::CreatePrototypeFromEntity(EntitySystem::EntityHandle entity)
 {
-	if (!mCurrentEntity.Exists()) return;
-	EntitySystem::EntityHandle prototype = gEntityMgr.ExportEntityToPrototype(mCurrentEntity);
+	if (!entity.Exists()) return;
+	EntitySystem::EntityHandle prototype = gEntityMgr.ExportEntityToPrototype(entity);
 	gEntityMgr.SavePrototypes();
 	UpdatePrototypeWindow();
 	SetCurrentEntity(prototype);
 	ClearSelection();
+}
+
+void Editor::EditorMgr::CreatePrototypeFromCurrentEntity()
+{
+	CreatePrototypeFromEntity(mCurrentEntity);
 }
 
 void Editor::EditorMgr::DuplicateSelectedEntities()
@@ -274,31 +287,42 @@ void Editor::EditorMgr::DeleteSelectedEntities()
 	mSelectedEntities.clear();
 }
 
-void Editor::EditorMgr::AddComponent(EntitySystem::eComponentType componentType)
+void Editor::EditorMgr::AddComponentToEntity(EntitySystem::EntityHandle entity, EntitySystem::eComponentType componentType)
 {
-	if (!mCurrentEntity.IsValid()) return;
-	if (gEntityMgr.IsEntityLinkedToPrototype(mCurrentEntity))
+	if (!entity.IsValid()) return;
+	if (gEntityMgr.IsEntityLinkedToPrototype(entity))
 	{
 		GUISystem::MessageBox* messageBox = new GUISystem::MessageBox(GUISystem::MessageBox::MBT_OK);
-		messageBox->SetText(StringSystem::FormatText(gStringMgrSystem.GetTextData
-			(GUISystem::GUIMgr::GUIGroup, "new_component_prototype_error")));
+		messageBox->SetText(StringSystem::FormatText(TR("new_component_prototype_error")));
 		messageBox->Show();
 	}
 	else
 	{
-		gEntityMgr.AddComponentToEntity(mCurrentEntity, componentType);
+		gEntityMgr.AddComponentToEntity(entity, componentType);
 		GetEntityWindow()->Rebuild();
-		if (IsEditingPrototype()) gEntityMgr.SavePrototypes();
+		if (gEntityMgr.IsEntityPrototype(entity))
+			gEntityMgr.SavePrototypes();
 	}
 }
 
-
-void Editor::EditorMgr::RemoveComponent(const EntitySystem::ComponentID& componentId)
+void Editor::EditorMgr::AddComponentToCurrentEntity(EntitySystem::eComponentType componentType)
 {
-	if (!mCurrentEntity.IsValid()) return;
-	gEntityMgr.DestroyEntityComponent(mCurrentEntity, componentId);
+	AddComponentToEntity(mCurrentEntity, componentType);
+}
+
+void EditorMgr::RemoveComponentFromEntity(EntitySystem::EntityHandle entity, const EntitySystem::ComponentID& componentId)
+{
+	if (!entity.IsValid()) return;
+	gEntityMgr.DestroyEntityComponent(entity, componentId);
 	GetEntityWindow()->Rebuild();
-	if (IsEditingPrototype()) gEntityMgr.SavePrototypes();
+	if (gEntityMgr.IsEntityPrototype(entity))
+		gEntityMgr.SavePrototypes();
+}
+
+
+void Editor::EditorMgr::RemoveComponentFromCurrentEntity(const EntitySystem::ComponentID& componentId)
+{
+	RemoveComponentFromEntity(mCurrentEntity, componentId);
 }
 
 void Editor::EditorMgr::ResumeAction()
@@ -625,16 +649,6 @@ bool Editor::EditorMgr::MouseButtonReleased( const InputSystem::MouseInfo& mi, c
 		return false;
 	}
 
-	if (btn == InputSystem::MBTN_RIGHT && mHoveredEntity.IsValid())
-	{
-		// open the context menu
-		PopupMenu* menu = new PopupMenu("EditorRoot/Popup/EntityInScene", true);
-		menu->Init<EntitySystem::EntityHandle>(mHoveredEntity);
-		menu->Open((float32)mi.x, (float32)mi.y);
-		gEditorMgr.RegisterPopupMenu(menu);
-		return true;
-	}
-
 	// now select the entity the mouse is at
 	GfxSystem::RenderTargetID rt = mEditorGUI->GetEditorViewport()->GetRenderTarget();
 
@@ -739,37 +753,6 @@ bool Editor::EditorMgr::DrawEntityPhysicalShape( const EntitySystem::EntityHandl
 	}
 
 	return result;
-}
-
-void Editor::EditorMgr::RegisterPopupMenu( PopupMenu* menu )
-{
-	mPopupMenus.push_back(menu);
-}
-
-void Editor::EditorMgr::CloseAllPopupMenus()
-{
-	if (!mPopupClosingEnabled) return;
-
-	list<PopupMenu*> popupMenus = mPopupMenus; // We iterate over the copy of the list, because popups with self-destruct will get removed from the original list by calling Close().
-	for (list<PopupMenu*>::iterator it=popupMenus.begin(); it!=popupMenus.end(); ++it)
-	{
-		(*it)->Close();
-	}
-
-	while (!mPopupMenus.empty())
-	{
-		// the item will be removed from mPopupMenus in the dtor of PopupMenu, so we don't need to remove it here
-		delete mPopupMenus.front();
-	}
-}
-
-void Editor::EditorMgr::UnregisterPopupMenu( PopupMenu* menu )
-{
-	list<PopupMenu*>::iterator it = find(mPopupMenus.begin(), mPopupMenus.end(), menu);
-	if (it != mPopupMenus.end())
-	{
-		mPopupMenus.erase(it);
-	}
 }
 
 void Editor::EditorMgr::ClearSelection()

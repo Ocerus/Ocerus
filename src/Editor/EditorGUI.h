@@ -71,10 +71,26 @@ namespace Editor
 		//@{
 			/// Handles dropping prototypes on editor viewport.
 			bool OnEditorViewportItemDropped(const CEGUI::EventArgs&);
+
+			/// Handles opening popup menu for entities in editor viewport.
+			bool OnEditorViewportClicked(const CEGUI::EventArgs&);
 		//@}
 
+		enum {
+			PI_DUPLICATE_ENTITY,
+			PI_DELETE_ENTITY,
+			PI_CREATE_PROTOTYPE
+		};
+		
+		void CreatePopupMenu();
+		void DestroyPopupMenu();
+		void OnEditorViewportPopupMenuItemClicked(CEGUI::Window* menuItem);
+		EntitySystem::EntityHandle mCurrentPopupEntity;
+		
 		GUISystem::ViewportWindow* mGameViewport;
 		GUISystem::ViewportWindow* mEditorViewport;
+		CEGUI::Window* mPopupMenu;
+		CEGUI::Window* mNewComponentPopupMenu;
 
 		EditorMenu* mEditorMenu;
 		EntityWindow* mEntityWindow;

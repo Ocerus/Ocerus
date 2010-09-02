@@ -34,6 +34,7 @@ void EntityWindow::Init()
 	mWindow->setUserString("WantsMouseWheel", "True");
 	gGUIMgr.GetGUISheet()->addChildWindow(mWindow);
 	mScrollablePane = static_cast<CEGUI::ScrollablePane*>(mWindow->getChild(mWindow->getName() + "/Scrollable"));
+	mScrollablePane->setUserString("WantsMouseWheel", "True");
 	mVerticalLayout = new GUISystem::VerticalLayout(mScrollablePane, const_cast<CEGUI::ScrolledContainer*>(mScrollablePane->getContentPane()));
 }
 
@@ -218,6 +219,6 @@ bool Editor::EntityWindow::OnRemoveComponentButtonClicked(const CEGUI::EventArgs
 {
 	const CEGUI::WindowEventArgs& args = static_cast<const CEGUI::WindowEventArgs&>(e);
 	EntitySystem::ComponentID componentID = args.window->getID();
-	gEditorMgr.RemoveComponent(componentID);
+	gEditorMgr.RemoveComponentFromCurrentEntity(componentID);
 	return true;
 }

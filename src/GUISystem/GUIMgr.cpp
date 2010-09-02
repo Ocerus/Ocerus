@@ -524,10 +524,7 @@ bool GUIMgr::MouseButtonReleased(const InputSystem::MouseInfo& mi, const InputSy
 	mCurrentInputEvent.mouseInfo = &mi;
 	mCurrentInputEvent.mouseButton = btn;
 	GetPopupMgr()->DoAutoHide((float)mi.x, (float)mi.y);
-	
-	gEditorMgr.EnablePopupClosing();
 	bool result = mCEGUI->injectMouseButtonUp(ConvertMouseButtonEnum(btn));
-	gEditorMgr.CloseAllPopupMenus();
 	return result;
 }
 

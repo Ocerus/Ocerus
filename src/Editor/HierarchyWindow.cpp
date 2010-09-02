@@ -1,13 +1,12 @@
 #include "Common.h"
-#include "HierarchyWindow.h"
-#include "PopupMenu.h"
-#include "PrototypeWindow.h"
+#include "Editor/HierarchyWindow.h"
+#include "Editor/EditorMgr.h"
+#include "Editor/EditorGUI.h"
+#include "Editor/PrototypeWindow.h"
 #include "Core/Game.h"
 #include "GUISystem/CEGUICommon.h"
 #include "GUISystem/PromptBox.h"
 #include "GUISystem/PopupMgr.h"
-#include "Editor/EditorMgr.h"
-#include "Editor/EditorGUI.h"
 #include "EntitySystem/EntityMgr/LayerMgr.h"
 #include "ResourceSystem/XMLResource.h"
 
@@ -595,7 +594,7 @@ void HierarchyWindow::OnPopupMenuItemClicked(CEGUI::Window* menuItem)
 	if (menuItem->getParent() == mComponentPopupMenu)
 	{
 		// New component menu item clicked
-		gEditorMgr.AddComponent((EntitySystem::eComponentType)menuItem->getID());
+		gEditorMgr.AddComponentToCurrentEntity((EntitySystem::eComponentType)menuItem->getID());
 	}
 	else
 	{

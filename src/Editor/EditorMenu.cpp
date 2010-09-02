@@ -173,7 +173,7 @@ bool Editor::EditorMenu::OnMenuItemClicked(const CEGUI::EventArgs& e)
 	{
 		if (args.window->isUserStringDefined("IsComponentItem"))
 		{
-			gEditorMgr.AddComponent((EntitySystem::eComponentType)args.window->getID());
+			gEditorMgr.AddComponentToCurrentEntity((EntitySystem::eComponentType)args.window->getID());
 			return true;
 		}
 	}

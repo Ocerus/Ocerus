@@ -17,6 +17,7 @@
 
 #include "GUISystem/CEGUICommon.h"
 #include "GUISystem/GUIMgr.h"
+#include "GUISystem/PopupMgr.h"
 #include "GUISystem/TabNavigation.h"
 #include "GUISystem/VerticalLayout.h"
 #include "GUISystem/ViewportWindow.h"
@@ -31,6 +32,8 @@ using namespace Editor;
 EditorGUI::EditorGUI():
 	mGameViewport(0),
 	mEditorViewport(0),
+	mPopupMenu(0),
+	mNewComponentPopupMenu(0),
 	mEditorMenu(0),
 	mEntityWindow(0),
 	mHierarchyWindow(0),
@@ -101,6 +104,10 @@ void EditorGUI::Init()
 	mEditorViewport = static_cast<GUISystem::ViewportWindow*>(gGUIMgr.GetWindow("Editor/EditorViewport"));
 	mEditorViewport->SetDragAndDropCamera(true);
 	mEditorViewport->subscribeEvent(CEGUI::Window::EventDragDropItemDropped, CEGUI::Event::Subscriber(&EditorGUI::OnEditorViewportItemDropped, this));
+	mEditorViewport->subscribeEvent(CEGUI::Window::EventMouseClick, CEGUI::Event::Subscriber(&EditorGUI::OnEditorViewportClicked, this));
+
+	// Initialize popup menu
+	CreatePopupMenu();
 
 	DisableViewports();
 }
@@ -109,6 +116,8 @@ void EditorGUI::Deinit()
 {
 	if (mResourceWindow)
 		mResourceWindow->Deinit();
+
+	DestroyPopupMenu();
 }
 
 
@@ -201,4 +210,73 @@ bool Editor::EditorGUI::OnEditorViewportItemDropped( const CEGUI::EventArgs& e)
 
 	} 
 	return true;
+}
+
+bool EditorGUI::OnEditorViewportClicked(const CEGUI::EventArgs& e)
+{
+	const CEGUI::MouseEventArgs& args = static_cast<const CEGUI::MouseEventArgs&>(e);
+	if (args.button == CEGUI::RightButton)
+	{
+		EntitySystem::EntityHandle hoveredEntity = gEditorMgr.GetHoveredEntity();
+		if (hoveredEntity.IsValid())
+		{
+			mCurrentPopupEntity = hoveredEntity;
+			gPopupMgr->ShowPopup(mPopupMenu, args.position.d_x, args.position.d_y, GUISystem::PopupMgr::Callback(this, &Editor::EditorGUI::OnEditorViewportPopupMenuItemClicked));
+		}
+	}
+	return true;
+}
+
+
+void Editor::EditorGUI::CreatePopupMenu()
+{
+
+	mNewComponentPopupMenu = gPopupMgr->CreatePopupMenu("Editor/EditorViewport/Popup/NewComponent/AutoPopup");
+	for (uint i = 0; i < EntitySystem::NUM_COMPONENT_TYPES; ++i)
+	{
+		const string& componentName = EntitySystem::GetComponentTypeName((EntitySystem::eComponentType)i);
+		const CEGUI::String& componentMenuItemName = "Editor/EditorViewport/Popup/NewComponent/Component" + Utils::StringConverter::ToString(i);
+		mNewComponentPopupMenu->addChildWindow(gPopupMgr->CreateMenuItem(componentMenuItemName, componentName, "", i));
+	}
+
+	mPopupMenu = gPopupMgr->CreatePopupMenu("Editor/EditorViewport/Popup");
+	CEGUI::Window* newComponentItem = gPopupMgr->CreateMenuItem("Editor/EditorViewport/Popup/NewComponent", TR("new_component"), TR("new_component_hint"));
+	newComponentItem->addChildWindow(mNewComponentPopupMenu);
+	mPopupMenu->addChildWindow(newComponentItem);
+	mPopupMenu->addChildWindow(gPopupMgr->CreateMenuItem("Editor/EditorViewport/Popup/DuplicateEntity", TR("hierarchy_duplicate"), TR("hierarchy_duplicate_hint"), PI_DUPLICATE_ENTITY));
+	mPopupMenu->addChildWindow(gPopupMgr->CreateMenuItem("Editor/EditorViewport/Popup/DeleteEntity", TR("hierarchy_delete"), TR("hierarchy_delete_hint"), PI_DELETE_ENTITY));
+	mPopupMenu->addChildWindow(gPopupMgr->CreateMenuItem("Editor/EditorViewport/Popup/CreatePrototype", TR("hierarchy_prototype"), TR("hierarchy_prototype_hint"), PI_CREATE_PROTOTYPE));
+}
+
+void Editor::EditorGUI::DestroyPopupMenu()
+{
+	gPopupMgr->DestroyPopupMenu(mPopupMenu);
+	mNewComponentPopupMenu = 0;
+	mPopupMenu = 0;
+}
+
+void Editor::EditorGUI::OnEditorViewportPopupMenuItemClicked(CEGUI::Window* menuItem)
+{
+	if (menuItem->getParent() == mNewComponentPopupMenu)
+	{
+		// New component menu item clicked
+		gEditorMgr.AddComponentToCurrentEntity((EntitySystem::eComponentType)menuItem->getID());
+	}
+	else
+	{
+		switch (menuItem->getID())
+		{
+		case PI_DUPLICATE_ENTITY:
+			gEditorMgr.DuplicateEntity(mCurrentPopupEntity);
+			break;
+		case PI_DELETE_ENTITY:
+			gEditorMgr.DeleteEntity(mCurrentPopupEntity);
+			break;
+		case PI_CREATE_PROTOTYPE:
+			gEditorMgr.CreatePrototypeFromEntity(mCurrentPopupEntity);
+			break;
+		default:
+			OC_NOT_REACHED();
+		}
+	}
 }

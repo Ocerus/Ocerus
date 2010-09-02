@@ -115,7 +115,7 @@ bool Editor::PopupMenu::OnMenuItemMouseUp( const CEGUI::EventArgs& e )
 			{
 				if (args.window->isUserStringDefined("IsComponentItem"))
 				{
-					gEditorMgr.AddComponent((EntitySystem::eComponentType)args.window->getID());
+					gEditorMgr.AddComponentToCurrentEntity((EntitySystem::eComponentType)args.window->getID());
 					handled = true;
 				}
 			}

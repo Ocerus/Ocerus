@@ -1,7 +1,6 @@
 #include "Common.h"
 #include "Editor/LayerWindow.h"
 #include "Editor/EditorMgr.h"
-#include "Editor/PopupMenu.h"
 #include "GUISystem/CEGUICommon.h"
 #include "GUISystem/PopupMgr.h"
 #include "GUISystem/PromptBox.h"

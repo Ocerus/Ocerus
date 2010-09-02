@@ -79,7 +79,7 @@ void Editor::PrototypeWindow::SetSelectedEntity( const EntitySystem::EntityHandl
 	for (size_t idx = 0; idx < itemCount; ++idx)
 	{
 		CEGUI::ItemEntry* item = mList->getItemFromIndex(idx);
-		if ((int)item->getID() == entity.GetID())
+		if (entity.IsValid() && (int)item->getID() == entity.GetID())
 		{
 			item->setFont("Editor-Bold");
 		}
