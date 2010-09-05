@@ -9,7 +9,7 @@
 
 using namespace Editor;
 
-const float32 PROPERTY_UPDATE_INTERVAL = 0.3;
+const float32 PROPERTY_UPDATE_INTERVAL = 0.3f;
 
 EntityWindow::EntityWindow(): mWindow(0), mScrollablePane(0), mVerticalLayout(0), mTabNavigation(0), mPropertyUpdateTimer(0), mNeedsRebuild(false)
 {

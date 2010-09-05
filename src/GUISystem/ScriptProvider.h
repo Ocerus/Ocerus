@@ -4,6 +4,7 @@
 #define _GUISYSTEM_SCRIPTPROVIDER_H_
 
 #include "Base.h"
+#include "CEGUIForwards.h"
 #include <CEGUIScriptModule.h>
 
 namespace GUISystem
@@ -40,27 +41,23 @@ namespace GUISystem
 		/// Those methods are only present to satisfy the interface. This functionality is not necessary, so they have
 		/// empty implementation.
 		//@{
-			virtual void executeScriptFile(const CEGUI::String &filename, const CEGUI::String &resourceGroup = "")
-			{
-				OC_UNUSED(filename); OC_UNUSED(resourceGroup);
-			}
+		virtual void executeScriptFile(const CEGUI::String &filename, const CEGUI::String &resourceGroup = "")
+		{
+			OC_UNUSED(filename); OC_UNUSED(resourceGroup);
+		}
 
-			virtual int executeScriptGlobal(const CEGUI::String& function_name)
-			{
-				OC_UNUSED(function_name);
-				return 0;
-			}
+		virtual int executeScriptGlobal(const CEGUI::String& function_name)
+		{
+			OC_UNUSED(function_name);
+			return 0;
+		}
 
-			virtual void executeString(const CEGUI::String &str)
-			{
-				OC_UNUSED(str);
-			}
+		virtual void executeString(const CEGUI::String &str)
+		{
+			OC_UNUSED(str);
+		}
 
-			virtual bool executeScriptedEventHandler(const CEGUI::String& handler_name, const CEGUI::EventArgs &e)
-			{
-				OC_UNUSED(handler_name); OC_UNUSED(e);
-				return true;
-			}
+		virtual bool executeScriptedEventHandler(const CEGUI::String& handler_name, const CEGUI::EventArgs& e);
 		//@}
 	};
 }

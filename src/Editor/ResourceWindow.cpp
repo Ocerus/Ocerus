@@ -8,7 +8,7 @@
 
 using namespace Editor;
 
-uint Editor::ResourceWindow::InvalidResourceIndex = (uint)-1;
+uint32 Editor::ResourceWindow::InvalidResourceIndex = (uint32)-1;
 
 Editor::ResourceWindow::ResourceWindow():
 	mPopupMenu(0),
@@ -114,7 +114,7 @@ bool ResourceWindow::UpdateResourcePool()
 void ResourceWindow::AddResourceToTree(const ResourceSystem::ResourcePtr& resource)
 {
 	mResourcePool.push_back(resource);
-	uint resourceIndex = mResourcePool.size() - 1;
+	size_t resourceIndex = mResourcePool.size() - 1;
 
 	CEGUI::Window* newItemEntry = RestoreResourceItemEntry();
 	SetupResourceItemEntry(newItemEntry, resourceIndex);
@@ -171,7 +171,7 @@ void ResourceWindow::UpdateTree()
 
 ResourceSystem::ResourcePtr ResourceWindow::ItemEntryToResourcePtr(const CEGUI::Window* itemEntry)
 {
-	uint index = itemEntry->getID();
+	uint32 index = itemEntry->getID();
 	if (index >= mResourcePool.size()) return ResourceSystem::ResourcePtr();
 	return mResourcePool.at(index);
 }
@@ -185,7 +185,7 @@ void ResourceWindow::CreatePopupMenu()
 	mPopupMenu->addChildWindow(gPopupMgr->CreateMenuItem("Editor/ResourceWindow/Popup/OpenScene", TR("open_scene"), TR("open_scene_hint"), PI_OPEN_SCENE));
 
 	mResourceTypesPopupMenu = gPopupMgr->CreatePopupMenu("Editor/ResourceWindow/Popup/ChangeType/Popup");
-	for (uint resType = 0; resType < ResourceSystem::NUM_RESTYPES; ++resType)
+	for (size_t resType = 0; resType < ResourceSystem::NUM_RESTYPES; ++resType)
 	{
 		string resName = ResourceSystem::GetResourceTypeName((ResourceSystem::eResourceType)resType);
 		CEGUI::Window* menuItem = gPopupMgr->CreateMenuItem("Editor/ResourceWindow/Popup/ChangeType/Resource" + Utils::StringConverter::ToString(resType), resName, "", resType);
@@ -211,7 +211,7 @@ void ResourceWindow::OpenPopupMenu(ResourceSystem::ResourcePtr resource, float32
 			mPopupMenu->getChildAtIdx(1)->setEnabled(false);
 
 		// Check current resource type
-		for (uint idx = 0; idx < mResourceTypesPopupMenu->getChildCount(); ++idx)
+		for (size_t idx = 0; idx < mResourceTypesPopupMenu->getChildCount(); ++idx)
 		{
 			mResourceTypesPopupMenu->getChildAtIdx(idx)->setText(ResourceSystem::GetResourceTypeName((ResourceSystem::eResourceType)idx));
 			if ((ResourceSystem::eResourceType)idx == mCurrentPopupResource->GetType())
@@ -284,7 +284,7 @@ bool Editor::ResourceWindow::OnTreeItemDoubleClicked(const CEGUI::EventArgs& e)
 
 CEGUI::Window* Editor::ResourceWindow::CreateResourceItemEntry()
 {
-	static uint resourceItemCounter = 0;
+	static uint32 resourceItemCounter = 0;
 	const CEGUI::String& name = "Editor/ResourceWindow/Tree/ResourceItem" + StringConverter::ToString(resourceItemCounter++);
 	CEGUI::ItemEntry* newItem = static_cast<CEGUI::ItemEntry*>(gGUIMgr.CreateWindowDirectly("Editor/ListboxItem", name));
 	newItem->setUserData(this);
@@ -316,7 +316,7 @@ CEGUI::Window* Editor::ResourceWindow::CreateResourceItemEntry()
 
 CEGUI::Window* ResourceWindow::CreateDirectoryItemEntry()
 {
-	static uint dirCounter = 0;
+	static uint32 dirCounter = 0;
 	const CEGUI::String& windowName = "Editor/ResourceWindow/Tree/DirItem" + StringConverter::ToString(dirCounter++);
 	CEGUI::Window* itemEntry = gGUIMgr.CreateWindowDirectly("Editor/ListboxItem", windowName);
 	itemEntry->setID(InvalidResourceIndex);
@@ -340,20 +340,20 @@ CEGUI::Window* ResourceWindow::CreateDirectoryItemEntry()
 	return itemEntry;
 }
 
-void ResourceWindow::SetupResourceItemEntry(CEGUI::Window* itemEntry, uint resourceIndex)
+void ResourceWindow::SetupResourceItemEntry(CEGUI::Window* itemEntry, uint32 resourceIndex)
 {
 	OC_DASSERT(resourceIndex < mResourcePool.size());
 	ResourceSystem::ResourcePtr res = mResourcePool[resourceIndex];
 	OC_DASSERT(res.get() != 0);
 
-	uint indentLevel = GetPathIndentLevel(res->GetRelativeFileDir());
+	uint32 indentLevel = GetPathIndentLevel(res->GetRelativeFileDir());
 
 	itemEntry->setID(resourceIndex);
 	itemEntry->setUserString("ResourceDir", res->GetRelativeFileDir());
 	itemEntry->setUserString("ResourcePath", res->GetRelativeFilePath());
 
 	CEGUI::Window* dragContainer = itemEntry->getChildAtIdx(0);
-	dragContainer->setArea(CEGUI::URect(CEGUI::UDim(0, indentLevel * 16), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
+	dragContainer->setArea(CEGUI::URect(CEGUI::UDim(0, (float32)(indentLevel * 16)), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
 	dragContainer->setID(resourceIndex);
 
 	CEGUI::Window* itemEntryText = dragContainer->getChildAtIdx(0);
@@ -364,9 +364,9 @@ void ResourceWindow::SetupDirectoryItemEntry(CEGUI::Window* itemEntry, const str
 {
 	CEGUI::Window* dragContainer = itemEntry->getChildAtIdx(0);
 	CEGUI::Window* itemEntryText = dragContainer->getChildAtIdx(1);
-	uint indentLevel = GetPathIndentLevel(parentPath);
+	uint32 indentLevel = GetPathIndentLevel(parentPath);
 
-	dragContainer->setArea(CEGUI::URect(CEGUI::UDim(0, indentLevel * 16), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
+	dragContainer->setArea(CEGUI::URect(CEGUI::UDim(0, (float32)(indentLevel * 16)), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
 	itemEntryText->setText(directory);
 	itemEntry->setUserString("ResourceDir", parentPath);
 	itemEntry->setUserString("ResourcePath", parentPath + directory);
@@ -374,7 +374,7 @@ void ResourceWindow::SetupDirectoryItemEntry(CEGUI::Window* itemEntry, const str
 
 bool ResourceWindow::UpdateItemEntry(CEGUI::Window* itemEntry)
 {
-	uint resourceIndex = itemEntry->getID();
+	uint32 resourceIndex = itemEntry->getID();
 
 	// Directory ItemEntry does not need updates
 	if (resourceIndex == InvalidResourceIndex) return true;
@@ -446,9 +446,9 @@ void ResourceWindow::DestroyItemEntryCache()
 	mDirectoryItemEntryCache.clear();
 }
 
-uint ResourceWindow::GetPathIndentLevel(const string& path)
+uint32 ResourceWindow::GetPathIndentLevel(const string& path)
 {
-	uint indentLevel = 0;
+	uint32 indentLevel = 0;
 	size_t pos = path.find('/');
 	while (pos != string::npos)
 	{

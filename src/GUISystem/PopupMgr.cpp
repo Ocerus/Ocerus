@@ -69,7 +69,7 @@ void PopupMgr::DestroyPopupMenu(CEGUI::Window* popupMenu)
 	gGUIMgr.DestroyWindowDirectly(popupMenu);
 }
 
-CEGUI::Window* PopupMgr::CreateMenuItem(const CEGUI::String& windowName, const CEGUI::String& text, const CEGUI::String& tooltip, uint id)
+CEGUI::Window* PopupMgr::CreateMenuItem(const CEGUI::String& windowName, const CEGUI::String& text, const CEGUI::String& tooltip, CEGUI::uint id)
 {
 	CEGUI::Window* menuItem = gGUIMgr.CreateWindow("Editor/MenuItem", false, windowName);
 	menuItem->setText(text);
@@ -144,7 +144,7 @@ bool PopupMgr::OnPopupMenuOpened(const CEGUI::EventArgs& e)
 
 void GUISystem::PopupMgr::CloseSubmenus(CEGUI::Window* window)
 {
-	for (uint idx = 0; idx < window->getChildCount(); ++idx)
+	for (size_t idx = 0; idx < window->getChildCount(); ++idx)
 	{
 		CEGUI::Window* child = window->getChildAtIdx(idx);
 		if (child->testClassName("PopupMenu"))

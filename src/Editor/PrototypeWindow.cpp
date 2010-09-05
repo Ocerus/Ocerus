@@ -177,7 +177,7 @@ bool Editor::PrototypeWindow::OnListClicked(const CEGUI::EventArgs& e)
 
 CEGUI::ItemEntry* PrototypeWindow::CreatePrototypeItem()
 {
-	static uint prototypeItemCounter = 0;
+	static uint32 prototypeItemCounter = 0;
 	const CEGUI::String& windowName = "Editor/PrototypeWindow/List/PrototypeItem" + StringConverter::ToString(prototypeItemCounter++);
 	CEGUI::ItemEntry* newItem = static_cast<CEGUI::ItemEntry*>(gGUIMgr.CreateWindowDirectly("Editor/ListboxItem", windowName));
 

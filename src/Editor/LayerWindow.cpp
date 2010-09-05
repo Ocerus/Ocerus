@@ -126,7 +126,7 @@ bool LayerWindow::OnItemClick(const CEGUI::EventArgs& e)
 			if (gLayerMgr.ExistsLayer(mCurrentPopupLayerID))
 			{
 				// Enable all menu items
-				for (uint idx = 0; idx < mLayerPopupMenu->getChildCount(); ++idx)
+				for (size_t idx = 0; idx < mLayerPopupMenu->getChildCount(); ++idx)
 					mLayerPopupMenu->getChildAtIdx(idx)->setEnabled(true);
 
 				gPopupMgr->ShowPopup(mLayerPopupMenu, args.position.d_x, args.position.d_y, GUISystem::PopupMgr::Callback(this, &Editor::LayerWindow::OnLayerPopupMenuItemClicked));
@@ -505,7 +505,7 @@ void LayerWindow::OnEntityPopupMenuItemClicked(CEGUI::Window* menuItem)
 
 CEGUI::ItemEntry* LayerWindow::CreateLayerItem()
 {
-	static uint layerItemCounter = 0;
+	static uint32 layerItemCounter = 0;
 	CEGUI::String windowName = "Editor/LayerWindow/List/LayerItem" + StringConverter::ToString(layerItemCounter++);
 
 	CEGUI::ItemEntry* layerItem = static_cast<CEGUI::ItemEntry*>(gGUIMgr.CreateWindowDirectly("Editor/ListboxItem", windowName));
@@ -551,7 +551,7 @@ CEGUI::ItemEntry* LayerWindow::CreateLayerItem()
 
 CEGUI::ItemEntry* LayerWindow::CreateEntityItem()
 {
-	static uint entityItemCounter = 0;
+	static uint32 entityItemCounter = 0;
 	CEGUI::String windowName = "Editor/LayerWindow/List/EntityItem" + StringConverter::ToString(entityItemCounter++);
 
 	CEGUI::ItemEntry* entityItem = static_cast<CEGUI::ItemEntry*>(gGUIMgr.CreateWindowDirectly("Editor/ListboxItem", windowName));

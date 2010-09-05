@@ -310,7 +310,7 @@ bool Editor::HierarchyWindow::OnDragContainerMouseButtonUp( const CEGUI::EventAr
 		if (mCurrentPopupEntity.IsValid())
 		{
 			// Enable all menu items
-			for (uint idx = 0; idx < mPopupMenu->getChildCount(); ++idx)
+			for (size_t idx = 0; idx < mPopupMenu->getChildCount(); ++idx)
 				mPopupMenu->getChildAtIdx(idx)->setEnabled(true);
 
 			gPopupMgr->ShowPopup(mPopupMenu, args.position.d_x, args.position.d_y, GUISystem::PopupMgr::Callback(this, &Editor::HierarchyWindow::OnPopupMenuItemClicked));
@@ -575,7 +575,7 @@ void HierarchyWindow::CreatePopupMenu()
 	mPopupMenu->addChildWindow(gPopupMgr->CreateMenuItem("HierarchyWindow/Popup/CreatePrototype", TR("hierarchy_prototype"), TR("hierarchy_prototype_hint"), PI_CREATE_PROTOTYPE));
 
 	mComponentPopupMenu = gPopupMgr->CreatePopupMenu("HierarchyWindow/Popup/NewComponent/AutoPopup");
-	for (uint i = 0; i < EntitySystem::NUM_COMPONENT_TYPES; ++i)
+	for (size_t i = 0; i < EntitySystem::NUM_COMPONENT_TYPES; ++i)
 	{
 		const string& componentName = EntitySystem::GetComponentTypeName((EntitySystem::eComponentType)i);
 		const CEGUI::String& componentMenuItemName = "HierarchyWindow/Popup/NewComponent/Component" + Utils::StringConverter::ToString(i);

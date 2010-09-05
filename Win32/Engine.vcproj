@@ -562,6 +562,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\Utils\Callback.h"
+					>
+				</File>
+				<File
 					RelativePath="..\src\Utils\DataContainer.h"
 					>
 				</File>
@@ -1130,6 +1134,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\GUISystem\PopupMgr.h"
+					>
+				</File>
+				<File
 					RelativePath="..\src\GUISystem\PromptBox.h"
 					>
 				</File>
@@ -1139,6 +1147,10 @@
 				</File>
 				<File
 					RelativePath="..\src\GUISystem\ScriptProvider.h"
+					>
+				</File>
+				<File
+					RelativePath="..\src\GUISystem\TabNavigation.h"
 					>
 				</File>
 				<File
@@ -1174,6 +1186,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\GUISystem\PopupMgr.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\src\GUISystem\PromptBox.cpp"
 					>
 				</File>
@@ -1183,6 +1199,10 @@
 				</File>
 				<File
 					RelativePath="..\src\GUISystem\ScriptProvider.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src\GUISystem\TabNavigation.cpp"
 					>
 				</File>
 				<File
@@ -1474,6 +1494,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\Editor\EntityWindow.h"
+					>
+				</File>
+				<File
 					RelativePath="..\src\GUISystem\FolderSelector.h"
 					>
 				</File>
@@ -1487,10 +1511,6 @@
 				</File>
 				<File
 					RelativePath="..\src\Editor\LayerWindow.h"
-					>
-				</File>
-				<File
-					RelativePath="..\src\Editor\PopupMenu.h"
 					>
 				</File>
 				<File
@@ -1522,6 +1542,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\Editor\EntityWindow.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\src\GUISystem\FolderSelector.cpp"
 					>
 				</File>
@@ -1535,10 +1559,6 @@
 				</File>
 				<File
 					RelativePath="..\src\Editor\LayerWindow.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\src\Editor\PopupMenu.cpp"
 					>
 				</File>
 				<File

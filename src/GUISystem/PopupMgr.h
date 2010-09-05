@@ -51,7 +51,7 @@ namespace GUISystem
 		/// @param text Text of the menu item.
 		/// @param tooltip Tooltip of the menu item.
 		/// @param id ID of the created window.
-		CEGUI::Window* CreateMenuItem(const CEGUI::String& windowName, const CEGUI::String& text, const CEGUI::String& tooltip, uint id = 0);
+		CEGUI::Window* CreateMenuItem(const CEGUI::String& windowName, const CEGUI::String& text, const CEGUI::String& tooltip, CEGUI::uint id = 0);
 		
 		/// Destroys a menu item. You should always use this method to destroy menu items created by CreateMenuItem().
 		void DestroyMenuItem(CEGUI::Window* menuItem);

@@ -232,7 +232,7 @@ void Editor::EditorGUI::CreatePopupMenu()
 {
 
 	mNewComponentPopupMenu = gPopupMgr->CreatePopupMenu("Editor/EditorViewport/Popup/NewComponent/AutoPopup");
-	for (uint i = 0; i < EntitySystem::NUM_COMPONENT_TYPES; ++i)
+	for (size_t i = 0; i < EntitySystem::NUM_COMPONENT_TYPES; ++i)
 	{
 		const string& componentName = EntitySystem::GetComponentTypeName((EntitySystem::eComponentType)i);
 		const CEGUI::String& componentMenuItemName = "Editor/EditorViewport/Popup/NewComponent/Component" + Utils::StringConverter::ToString(i);

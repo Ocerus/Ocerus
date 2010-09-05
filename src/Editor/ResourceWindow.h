@@ -76,7 +76,7 @@ namespace Editor
 			/// Sets the resource ItemEntry according to specified resource.
 			/// @param itemEntry resource ItemEntry.
 			/// @param resourceIndex index to ResourcePool
-			void SetupResourceItemEntry(CEGUI::Window* itemEntry, uint resourceIndex);
+			void SetupResourceItemEntry(CEGUI::Window* itemEntry, uint32 resourceIndex);
 
 			/// Sets the directory ItemEntry.
 			void SetupDirectoryItemEntry(CEGUI::Window* itemEntry, const string& parentPath, const string& directory);
@@ -115,7 +115,7 @@ namespace Editor
 			void UpdateTree();
 
 			/// Returns the indentation level for specified path.
-			uint GetPathIndentLevel(const string& path);
+			uint32 GetPathIndentLevel(const string& path);
 
 			/// Sorting callback function. This function provides an order of items in the list
 			/// for the sake of simulating tree widget.
@@ -123,7 +123,7 @@ namespace Editor
 		//@}
 
 		/// Invalid ResourceIndex. It's used to distinguish resource and directory MenuEntries.
-		static uint InvalidResourceIndex;
+		static uint32 InvalidResourceIndex;
 
 		typedef vector<ResourceSystem::ResourcePtr> ResourceList;
 
