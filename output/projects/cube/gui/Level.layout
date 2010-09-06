@@ -4,10 +4,18 @@
   <Window Type="DefaultWindow" Name="">
     <Property Name="Font" Value="DejaVuSans-10" />
     <Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{1,0},{1,0}}" />
-    <Window Type="Editor/StaticText" Name="/Score" >
+
+    <Window Type="Editor/StaticText" Name="Score" >
       <Property Name="UnifiedAreaRect" Value="{{0.02,0},{-0.1,0},{0.3,0},{0.2,0}}" />
       <Property Name="BackgroundEnabled" Value="False" />
       <Property Name="FrameEnabled" Value="False" />
+			<Property Name="Text" Value="$score$" />
     </Window>
+  
+		<Window Type="Editor/Button" Name="myButton1">
+			<Property Name="UnifiedAreaRect" Value="{{0,100},{0,100},{0,200},{0,200}}" />
+			<Property Name="Text" Value="AHOJ" />
+		</Window>  
+
   </Window>
 </GUILayout>

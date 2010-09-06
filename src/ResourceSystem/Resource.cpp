@@ -72,7 +72,7 @@ bool Resource::Load()
 	gResourceMgr._NotifyResourceLoadingStarted(this);
 
 	SetState(STATE_LOADING);
-	ocTrace << "Loading resource '" << mName << "'";
+	ocInfo << "Loading resource '" << mName << "'";
 	RefreshResourceInfo();
 	mSizeInBytes = LoadImpl();
 	bool loadSuccessful = mSizeInBytes != 0;
