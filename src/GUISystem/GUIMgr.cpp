@@ -21,7 +21,8 @@
 #undef CreateWindowW
 
 /// If defined the CEGUI windows will be recycled using a system of caches.
-#define RECYCLE_WINDOWS
+/// Note: it might not be safe
+//#define RECYCLE_WINDOWS
 
 /// CEGUI windows recycling is generally not necessary on Unices, as the project seems to run
 /// pretty fast without it. Moreover, the functionality needs some modifications in CEGUI
