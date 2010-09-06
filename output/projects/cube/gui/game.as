@@ -1,3 +1,8 @@
+void OnInit()
+{
+  gGUIMgr.LoadProjectScheme(gui/cube.scheme);
+}
+
 void OnUpdateLogic(float32 delta)
 {
   string windowPrefix = this.GetName();
