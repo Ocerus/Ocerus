@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<GUIScheme Name="Editor">
+
+
+	<Imageset Filename="gui/imagesets/TaharezLook.imageset" />
+	<Font Filename="gui/fonts/Editor.font" />
+	<Font Filename="gui/fonts/Editor-Bold.font" />
+	<LookNFeel Filename="gui/looknfeel/TaharezLook.looknfeel" />
+	<LookNFeel Filename="gui/looknfeel/Editor.looknfeel" />
+	<WindowRendererSet Filename="CEGUIFalagardWRBase" />
+	
+	<FalagardMapping WindowType="Cube/Button" TargetType="CEGUI/PushButton" Renderer="Falagard/Button" LookNFeel="TaharezLook/Button" />
+	<FalagardMapping WindowType="Cube/ImageButton" TargetType="CEGUI/PushButton" Renderer="Falagard/Button" LookNFeel="TaharezLook/ImageButton" />
+	<FalagardMapping WindowType="Cube/StaticText" TargetType="DefaultWindow" Renderer="Falagard/StaticText" LookNFeel="TaharezLook/StaticText" />
+
+</GUIScheme>

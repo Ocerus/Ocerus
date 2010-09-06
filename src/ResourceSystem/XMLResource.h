@@ -122,6 +122,8 @@ namespace ResourceSystem
 		template<typename T>
 		T GetChildValue(const XMLNodeIterator iter)
 		{
+			if (mDataMap.number_of_children(iter) == 0) return StringConverter::FromString<T>("");
+
 			// we need to skip all the attributes here
 			XMLDataMap::sibling_iterator child = mDataMap.child(iter, mDataMap.number_of_children(iter) - 1);
 			if (child == mDataMap.end(iter)) return StringConverter::FromString<T>("");
