@@ -434,8 +434,7 @@ void GfxSystem::GfxRenderer::DrawGrid( const RenderTargetID renderTargetID ) con
 		cellSize = cellSize * grid.minorsInMajor;
 	}
 	
-
-	// draw horizontal lines
+	// draw vertical lines
 	for (int32 i = 0; i < VLineCount; ++i)
 	{
 		Vector2 line[2];

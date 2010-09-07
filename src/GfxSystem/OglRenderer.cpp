@@ -61,7 +61,7 @@ void OglRenderer::Init()
 	glEnable(GL_TEXTURE_2D);
 
 	//Enable face culling
-	glEnable(GL_CULL_FACE);
+	//glEnable(GL_CULL_FACE);
 
 	// create buffers for render2texture
 	mFrameBuffer = 0;

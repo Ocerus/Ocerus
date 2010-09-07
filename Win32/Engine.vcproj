@@ -1170,10 +1170,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\src\GUISystem\CEGUITools.cpp"
-					>
-				</File>
-				<File
 					RelativePath="..\src\GUISystem\GUIConsole.cpp"
 					>
 				</File>
