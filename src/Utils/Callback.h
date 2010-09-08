@@ -1,4 +1,5 @@
-///@TODO muze tu nekdo popsat, na co tohle vlastne je a co to dela?
+/// @file
+/// Generic callback solution that uniformly wraps pointers to functions and/or methods.
 
 /*
 * @file This code is based on PlusCallback. The license follows:

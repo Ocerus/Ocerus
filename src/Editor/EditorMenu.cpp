@@ -160,7 +160,7 @@ bool Editor::EditorMenu::OnMenuItemClicked(const CEGUI::EventArgs& e)
 
 	if (itemName == menubarPrefix + "/Edit/NewEntity")
 	{
-		gEditorMgr.GetHierarchyWindow()->CreateEntity(EntitySystem::EntityHandle::Null);
+		gEditorMgr.ShowCreateEntityPrompt();
 		return true;
 	}
 

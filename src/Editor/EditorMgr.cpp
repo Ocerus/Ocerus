@@ -15,8 +15,9 @@
 #include "Core/Project.h"
 #include "Core/Game.h"
 #include "CEGUI.h"
-#include "GUISystem/MessageBox.h"
 #include "GUISystem/FolderSelector.h"
+#include "GUISystem/MessageBox.h"
+#include "GUISystem/PromptBox.h"
 
 #include <Box2D.h>
 
@@ -41,9 +42,10 @@ EditorMgr::EditorMgr():
 
 EditorMgr::~EditorMgr()
 {
-//	Deinit();
 	delete mShortcuts;
 	delete mCreateProjectDialog;
+	delete mEditorGUI;
+	delete mCurrentProject;
 }
 
 void EditorMgr::Init()
@@ -201,19 +203,41 @@ void Editor::EditorMgr::SetCurrentEntity(const EntitySystem::EntityHandle newCur
 	GetEntityWindow()->Rebuild();
 }
 
-void Editor::EditorMgr::CreateEntity(const string& name)
+void Editor::EditorMgr::ShowCreateEntityPrompt(EntityHandle parent)
 {
+	GUISystem::PromptBox* prompt = new GUISystem::PromptBox(parent != EntitySystem::EntityHandle::Null ? parent.GetID() : 0);
+	prompt->SetText(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "new_entity_prompt"));
+	prompt->RegisterCallback(GUISystem::PromptBox::Callback(this, &Editor::EditorMgr::CreateEntityPromptCallback));
+	prompt->Show();
+}
+
+void Editor::EditorMgr::CreateEntityPromptCallback(bool clickedOK, const string& entityName, int32 parentID)
+{
+	if (clickedOK == false)
+		return;
+	EntitySystem::EntityHandle parent = (parentID != 0 ? EntitySystem::EntityHandle(parentID) : EntitySystem::EntityHandle::Null);
+	CreateEntity(entityName, parent);
+}
+
+void Editor::EditorMgr::CreateEntity(const string& name, EntitySystem::EntityHandle parent)
+{
+	GetHierarchyWindow()->SetCurrentParent(parent);
+
 	EntitySystem::EntityDescription desc;
-	desc.SetName(name.empty() ? gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "new_entity").c_str() : name);
+	desc.SetName(name.empty() ? TR("new_entity").c_str() : name);
 	desc.AddComponent(EntitySystem::CT_Transform);
-	EntityHandle newEntity = gEntityMgr.CreateEntity(desc);
+	EntitySystem::EntityHandle newEntity = gEntityMgr.CreateEntity(desc);
 	newEntity.GetProperty("Layer").SetValue(gLayerMgr.GetActiveLayer());
 	newEntity.FinishInit();
+
+	GetHierarchyWindow()->SetCurrentParent(EntitySystem::EntityHandle::Null);
 }
 
 void Editor::EditorMgr::DuplicateEntity(EntitySystem::EntityHandle entity)
 {
 	if (!entity.Exists()) return;
+	EntityHandle parent = GetHierarchyWindow()->GetParent(entity);
+	GetHierarchyWindow()->SetCurrentParent(parent);
 	EntityHandle newEntity = gEntityMgr.DuplicateEntity(entity);
 	newEntity.FinishInit();
 	if (gEntityMgr.IsEntityPrototype(entity))
@@ -222,6 +246,7 @@ void Editor::EditorMgr::DuplicateEntity(EntitySystem::EntityHandle entity)
 		UpdatePrototypeWindow();
 	}
 	SetCurrentEntity(newEntity);
+	GetHierarchyWindow()->SetCurrentParent(EntityHandle::Null);
 }
 
 void Editor::EditorMgr::DuplicateCurrentEntity()
@@ -261,6 +286,31 @@ void EditorMgr::CreatePrototypeFromEntity(EntitySystem::EntityHandle entity)
 void Editor::EditorMgr::CreatePrototypeFromCurrentEntity()
 {
 	CreatePrototypeFromEntity(mCurrentEntity);
+}
+
+EntitySystem::EntityHandle Editor::EditorMgr::InstantiatePrototype(EntitySystem::EntityHandle prototype, EntitySystem::EntityHandle parent)
+{
+	GetHierarchyWindow()->SetCurrentParent(parent);
+
+	// instantiate
+	EntitySystem::EntityHandle newEntity = gEntityMgr.InstantiatePrototype(prototype);
+	if (!newEntity.IsValid()) return newEntity;
+
+	// move the new entity to the middle of the editor window
+	EntitySystem::EntityHandle editorCamera = gEntityMgr.FindFirstEntity(EditorGUI::EditorCameraName);
+	if (editorCamera.IsValid() && newEntity.HasProperty("Position"))
+	{
+		newEntity.GetProperty("Position").SetValue(editorCamera.GetProperty("Position").GetValue<Vector2>());
+	}
+	
+	// move the new entity to the active layer
+	if (newEntity.HasProperty("Layer"))
+	{
+		newEntity.GetProperty("Layer").SetValue(gLayerMgr.GetActiveLayer());
+	}
+
+	gEditorMgr.SetCurrentEntity(newEntity);
+	return newEntity;
 }
 
 void Editor::EditorMgr::DuplicateSelectedEntities()
@@ -767,10 +817,17 @@ bool Editor::EditorMgr::IsEditingPrototype() const
 	return gEntityMgr.IsEntityPrototype(GetCurrentEntity());
 }
 
+void EditorMgr::UpdateHierarchyWindow()
+{
+	OC_ASSERT(mEditorGUI);
+	GetHierarchyWindow()->Update();
+}
+
+
 void Editor::EditorMgr::UpdatePrototypeWindow()
 {
 	OC_ASSERT(mEditorGUI);
-	mEditorGUI->GetPrototypeWindow()->Update();
+	GetPrototypeWindow()->Update();
 }
 
 void Editor::EditorMgr::PropertyValueChanged()

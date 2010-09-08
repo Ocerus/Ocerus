@@ -2,7 +2,6 @@
 #include "Editor/HierarchyWindow.h"
 #include "Editor/EditorMgr.h"
 #include "Editor/EditorGUI.h"
-#include "Editor/PrototypeWindow.h"
 #include "Core/Game.h"
 #include "GUISystem/CEGUICommon.h"
 #include "GUISystem/PromptBox.h"
@@ -13,142 +12,85 @@
 using namespace Editor;
 using namespace EntitySystem;
 
-const uint32 TREE_LEVEL_CHAR_SIZE = 4;
-
 Editor::HierarchyWindow::HierarchyWindow(): mWindow(0), mTree(0), mCurrentParent(EntitySystem::EntityHandle::Null), mDontAddEntities(false)
 {
-
 }
 
 Editor::HierarchyWindow::~HierarchyWindow()
 {
-
+	if (mWindow || mTree || mPopupMenu)
+	{
+		ocError << "HierarchyWindow was destroyed without deinitialization.";
+	}
 }
 
 void Editor::HierarchyWindow::Init()
 {
-	mSelectedIndex = -1;
-
-	mHierarchy.clear();
-
+	ClearHierarchy();
 	CEGUI_TRY;
 	{
-		mWindow = gGUIMgr.LoadSystemLayout("HierarchyWindow.layout", "EditorRoot/HierarchyWindow");
-		OC_ASSERT(mWindow != 0);
-		gGUIMgr.GetGUISheet()->addChildWindow(mWindow);
-		mTree = static_cast<CEGUI::ItemListbox*>(mWindow->getChild(mWindow->getName() + "/List"));
-		OC_ASSERT(mTree != 0);
-
+		mWindow = gGUIMgr.GetWindow("Editor/HierarchyWindow");
+		OC_ASSERT(mWindow);
+		mTree = static_cast<CEGUI::ItemListbox*>(gGUIMgr.CreateWindowDirectly("Editor/ItemListbox", "Editor/HierarchyWindow/Tree"));
+		mTree->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
 		mTree->setUserString("WantsMouseWheel", "True");
 
-		mTree->subscribeEvent(CEGUI::Window::EventMouseButtonUp, CEGUI::Event::Subscriber(&Editor::HierarchyWindow::OnWindowMouseButtonUp, this));
-		mTree->subscribeEvent(CEGUI::Window::EventDragDropItemDropped, CEGUI::Event::Subscriber(&Editor::HierarchyWindow::OnTreeDragDropItemDropped, this));
+		mTree->subscribeEvent(CEGUI::Window::EventMouseClick, CEGUI::Event::Subscriber(&Editor::HierarchyWindow::OnTreeClicked, this));
+		mTree->subscribeEvent(CEGUI::Window::EventDragDropItemDropped, CEGUI::Event::Subscriber(&Editor::HierarchyWindow::OnItemDroppedOnTree, this));
+		mWindow->addChildWindow(mTree);
 	}
 	CEGUI_CATCH;
+
 	CreatePopupMenu();
 }
 
-void Editor::HierarchyWindow::RebuildTree()
+void HierarchyWindow::Deinit()
+{
+	gGUIMgr.DestroyWindowDirectly(mWindow);
+	mWindow = 0;
+	mTree = 0;
+	DestroyPopupMenu();
+}
+
+void Editor::HierarchyWindow::Update()
 {
 	if (!CheckHierarchy()) return;
 
-	for (int32 i=mTree->getItemCount()-1; i>=0; --i)
+	size_t desiredItemCount = GetHierarchySize();
+	for (size_t i = mTree->getItemCount(); i < desiredItemCount; ++i)
 	{
-		gGUIMgr.DestroyWindow(mTree->getItemFromIndex(i));
+		CEGUI::ItemEntry* newItem = RestoreTreeItem();
+		mTree->addItem(newItem);
 	}
-	OC_ASSERT(mTree->getItemCount() == 0);
-	mItems.clear();
 
-	BuildSubtree(mHierarchy.begin(), 0);
+	for (size_t i = mTree->getItemCount(); i > desiredItemCount; --i)
+	{
+		StoreTreeItem(mTree->getItemFromIndex(i - 1));
+	}
+
+	OC_ASSERT(mTree->getItemCount() == desiredItemCount);
+
+	size_t itemIndex = 0;
+	SetupSubtree(mHierarchy.begin(), "", 0, itemIndex);
+	OC_ASSERT(itemIndex == mTree->getItemCount());
 }
 
-void Editor::HierarchyWindow::BuildSubtree( const HierarchyTree::iterator_base& parentIter, uint32 depth )
+void Editor::HierarchyWindow::SetupSubtree(const HierarchyTree::iterator_base& parentIter, const string& hierarchyPath, uint32 depth, size_t& itemIndex)
 {
 	for (HierarchyTree::sibling_iterator siblingIter=mHierarchy.begin(parentIter); siblingIter!=mHierarchy.end(parentIter); ++siblingIter)
 	{
-		AppendTreeItem(siblingIter->GetName(), depth, *siblingIter);
+		string itemHierarchyPath = hierarchyPath + '/' + siblingIter->GetName();
+		CEGUI::ItemEntry* treeItem = mTree->getItemFromIndex(itemIndex++);
+		SetupTreeItem(treeItem, *siblingIter, depth, hierarchyPath);
+
 		if (siblingIter.number_of_children() > 0)
 		{
-			BuildSubtree(siblingIter, depth + 1);
+			SetupSubtree(siblingIter, itemHierarchyPath, depth + 1, itemIndex);
 		}
 	}
 }
 
-CEGUI::ItemEntry* Editor::HierarchyWindow::AddTreeItem( uint32 index, const string& textName, uint32 depth, const EntitySystem::EntityHandle data )
-{
-	static unsigned int itemID = 0;
-	++itemID;
-
-	CEGUI::ItemEntry* newItem = static_cast<CEGUI::ItemEntry*>(gGUIMgr.CreateWindow("Editor/ListboxItem"));
-	newItem->setID(itemID);
-
-	CEGUI::Window* dragContainer = static_cast<CEGUI::ItemEntry*>(gGUIMgr.CreateWindow("DragContainer"));
-	dragContainer->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
-	newItem->addChildWindow(dragContainer);
-
-	CEGUI::Window* newItemText = gGUIMgr.CreateWindow("Editor/StaticText");
-	newItemText->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
-	newItemText->setText(string(depth*TREE_LEVEL_CHAR_SIZE, ' ') + textName);
-	newItemText->setProperty("FrameEnabled", "False");
-	newItemText->setProperty("BackgroundEnabled", "False");
-	newItemText->setMousePassThroughEnabled(true);
-
-	dragContainer->addChildWindow(newItemText);
-	dragContainer->subscribeEvent(CEGUI::Window::EventMouseButtonDown, CEGUI::Event::Subscriber(&Editor::HierarchyWindow::OnDragContainerMouseButtonDown, this));
-	dragContainer->subscribeEvent(CEGUI::Window::EventMouseButtonUp, CEGUI::Event::Subscriber(&Editor::HierarchyWindow::OnDragContainerMouseButtonUp, this));
-	dragContainer->subscribeEvent(CEGUI::Window::EventDragDropItemDropped, CEGUI::Event::Subscriber(&Editor::HierarchyWindow::OnTreeItemDragDropItemDropped, this));
-	dragContainer->setID(itemID);
-	dragContainer->setUserString("DragDataType", "Hierarchy");
-	dragContainer->setUserData(this);
-
-
-	OC_ASSERT(index <= mTree->getItemCount());
-	if (index == mTree->getItemCount())
-	{
-		mTree->addItem(newItem); // this is the most time consuming part of the function!!!
-	}
-	else
-	{
-		mTree->insertItem(newItem, mTree->getItemFromIndex(index));
-	}
-	HierarchyInfo info;
-	info.depth = depth;
-	info.entity = data;
-	mItems[itemID] = info;
-	OC_ASSERT(mTree->getItemCount() == mItems.size());
-
-	return newItem;
-}
-
-CEGUI::ItemEntry* Editor::HierarchyWindow::AppendTreeItem(const string& text, uint32 depth, const EntitySystem::EntityHandle data)
-{
-	return AddTreeItem(mTree->getItemCount(), text, depth, data);
-}
-
-void Editor::HierarchyWindow::RemoveTreeItem( uint32 index )
-{
-	OC_ASSERT(index <= mTree->getItemCount());
-	mItems.erase(mTree->getItemFromIndex(index)->getID());
-	gGUIMgr.DestroyWindow(mTree->getItemFromIndex(index));
-	OC_ASSERT(mTree->getItemCount() == mItems.size());
-}
-
-int32 Editor::HierarchyWindow::FindTreeItem( const EntitySystem::EntityHandle data, uint32& depth )
-{
-	for (size_t i=0; i<mTree->getItemCount(); ++i)
-	{
-		CEGUI::ItemEntry* item = mTree->getItemFromIndex(i);
-		if (mItems[item->getID()].entity == data)
-		{
-			depth = mItems[item->getID()].depth;
-			return (uint32)i;
-		}
-	}
-
-	return -1;
-}
-
-void Editor::HierarchyWindow::AddEntityToHierarchy( const EntitySystem::EntityHandle toAdd, const EntitySystem::EntityHandle parent )
+void Editor::HierarchyWindow::AddEntityToHierarchy(const EntitySystem::EntityHandle toAdd, const EntitySystem::EntityHandle parent)
 {
 	if (mDontAddEntities) return; // the entity will be added to the hierarchy later on
 
@@ -156,64 +98,91 @@ void Editor::HierarchyWindow::AddEntityToHierarchy( const EntitySystem::EntityHa
 	  || toAdd.GetName() == Core::Game::GameCameraName || toAdd.GetName() == Editor::EditorGUI::EditorCameraName) return;
 
 	HierarchyTree::iterator parentIter = mHierarchy.begin();
-	if (parent.IsValid()) parentIter = std::find(mHierarchy.begin(), mHierarchy.end(), parent);
-	if (parentIter == mHierarchy.end())
+	if (parent.IsValid())
 	{
-		ocError << "Parent is not in the hierarchy tree";
-		return;
+		parentIter = Containers::find(mHierarchy.begin(), mHierarchy.end(), parent);
+		if (parentIter == mHierarchy.end())
+		{
+			ocError << "Parent is not in the hierarchy tree";
+			return;
+		}
 	}
 	mHierarchy.append_child(parentIter, toAdd);
-	uint32 parentDepth;
-	int32 parentIndex = FindTreeItem(parent, parentDepth);
-	if (parentIndex == -1) AddTreeItem(0, toAdd.GetName(), 0, toAdd);
-	else AddTreeItem(parentIndex+1, toAdd.GetName(), parentDepth+1, toAdd);
+	Update();
 }
 
-void Editor::HierarchyWindow::AddEntityToHierarchy( const EntitySystem::EntityHandle toAdd )
+void Editor::HierarchyWindow::AddEntityToHierarchy(const EntitySystem::EntityHandle toAdd)
 {
 	AddEntityToHierarchy(toAdd, mCurrentParent);
 }
 
-void Editor::HierarchyWindow::RemoveEntityFromHierarchy( const EntitySystem::EntityHandle toRemove )
+void Editor::HierarchyWindow::RemoveEntityFromHierarchy(const EntitySystem::EntityHandle toRemove)
 {
 	if (gEntityMgr.IsEntityTransient(toRemove) || gEntityMgr.IsEntityPrototype(toRemove)) return;
 
-	uint32 depth;
-	int32 index = FindTreeItem(toRemove, depth);
-	if (index == -1)
-	{
-		ocWarning << "Attempting to remove non-existent tree item";
-		return;
-	}
-
-	HierarchyTree::iterator iter = std::find(mHierarchy.begin(), mHierarchy.end(), toRemove);
+	HierarchyTree::iterator iter = Containers::find(mHierarchy.begin(), mHierarchy.end(), toRemove);
 	if (iter == mHierarchy.end())
 	{
 		ocWarning << "Attempting to remove non-existent hierarchy item";
 		return;
 	}
 
-	// delete all child items in the tree
-	uint32 childItemIndex = index + 1;
-	while (childItemIndex < mTree->getItemCount() && mItems[mTree->getItemFromIndex(childItemIndex)->getID()].depth > depth)
+	HierarchyTree::iterator childIter = iter;
+	while (childIter != mHierarchy.end(iter))
 	{
-		EntitySystem::EntityHandle childEntity = mItems[mTree->getItemFromIndex(childItemIndex)->getID()].entity;
-		gEntityMgr.DestroyEntity(childEntity);
+		ocInfo << "Destroying entity: " << childIter->GetName();
+		gEntityMgr.DestroyEntity(*childIter);
+		++childIter;
 	}
-
 	mHierarchy.erase(iter);
 
-	RemoveTreeItem(index);
+	Update();
+}
+
+void HierarchyWindow::ClearHierarchy()
+{
+	// clear the hierarchy
+	mHierarchy.clear();
+
+	// insert the top element
+	mHierarchy.insert(mHierarchy.begin(), EntitySystem::EntityHandle::Null);
+}
+
+size_t HierarchyWindow::GetHierarchySize()
+{
+	// subtract the top element
+	size_t hierarchySize = mHierarchy.size();
+	if (hierarchySize != 0)
+		--hierarchySize;
+	return hierarchySize;
+}
+
+bool Editor::HierarchyWindow::CheckHierarchy()
+{
+	HierarchyTree::pre_order_iterator endIter = mHierarchy.end(mHierarchy.begin());
+	for (HierarchyTree::iterator it = mHierarchy.begin(mHierarchy.begin()); it!=endIter; ++it)
+	{
+		if (!it->IsValid())
+		{
+			ocError << "Invalid EntityHandle in the hierarchy tree";
+			return false;
+		}
+		if (!it->Exists())
+		{
+			ocError << "Non-existent entity in the hierarchy tree";
+			return false;
+		}
+	}
+
+	return true;
 }
 
 void Editor::HierarchyWindow::LoadHierarchy( ResourceSystem::XMLNodeIterator& xml )
 {
 	ocInfo << "Loading hierarchy";
 
-	mHierarchy.clear();
-
+	ClearHierarchy();
 	LoadSubtree(xml, mHierarchy.begin());
-
 
 	set<EntitySystem::EntityHandle> loadedEntities;
 	for (HierarchyTree::iterator it=mHierarchy.begin(); it!=mHierarchy.end(); ++it)
@@ -238,12 +207,12 @@ void Editor::HierarchyWindow::LoadHierarchy( ResourceSystem::XMLNodeIterator& xm
 		mHierarchy.append_child(mHierarchy.begin(), *it);
 	}
 
-	RebuildTree();
+	Update();
 
 	ocInfo << "Hierarchy loaded";
 }
 
-void Editor::HierarchyWindow::LoadSubtree( ResourceSystem::XMLNodeIterator& xml, const HierarchyTree::iterator_base& parent )
+void Editor::HierarchyWindow::LoadSubtree(ResourceSystem::XMLNodeIterator& xml, const HierarchyTree::iterator_base& parent)
 {
 	for (ResourceSystem::XMLNodeIterator iter=xml.IterateChildren(); iter!=xml.EndChildren(); ++iter)
 	{
@@ -253,7 +222,8 @@ void Editor::HierarchyWindow::LoadSubtree( ResourceSystem::XMLNodeIterator& xml,
 			ocError << "Missing attribute 'ID' in the hierarchy tree description";	
 			continue;
 		}
-		HierarchyTree::iterator childIter = mHierarchy.append_child(parent, EntitySystem::EntityHandle(iter.GetAttribute<EntitySystem::EntityID>("ID")));
+		EntitySystem::EntityHandle entity = EntitySystem::EntityHandle(iter.GetAttribute<EntitySystem::EntityID>("ID"));
+		HierarchyTree::iterator childIter = mHierarchy.append_child(parent, entity);
 		LoadSubtree(iter, childIter);
 	}
 }
@@ -277,53 +247,31 @@ void Editor::HierarchyWindow::SaveSubtree( ResourceSystem::XMLOutput& storage, c
 	}
 }
 
-bool Editor::HierarchyWindow::OnDragContainerMouseButtonDown( const CEGUI::EventArgs& e )
+bool Editor::HierarchyWindow::OnTreeItemClicked( const CEGUI::EventArgs& e )
 {
 	const CEGUI::MouseEventArgs& args = static_cast<const CEGUI::MouseEventArgs&>(e);
 	CEGUI::DragContainer* dragContainer = static_cast<CEGUI::DragContainer*>(args.window);
 	if (dragContainer->isBeingDragged()) return false;
 
-	CEGUI::ItemEntry* itemEntry = static_cast<CEGUI::ItemEntry*>(args.window->getParent());
-	itemEntry->setSelected(true);
-	EntityMap::iterator entityIter = mItems.find(itemEntry->getID());
-	OC_ASSERT(entityIter != mItems.end());
-	EntitySystem::EntityHandle entity = entityIter->second.entity;
-	gEditorMgr.SetCurrentEntity(entity);
+	EntityHandle clickedEntity = EntityHandle(dragContainer->getID());
 
-	return true;
-}
-
-bool Editor::HierarchyWindow::OnDragContainerMouseButtonUp( const CEGUI::EventArgs& e )
-{
-	const CEGUI::MouseEventArgs& args = static_cast<const CEGUI::MouseEventArgs&>(e);
-	CEGUI::DragContainer* dragContainer = static_cast<CEGUI::DragContainer*>(args.window);
-	if (dragContainer->isBeingDragged()) return false;
-
-	CEGUI::ItemEntry* itemEntry = static_cast<CEGUI::ItemEntry*>(args.window->getParent());
-	EntityMap::iterator entityIter = mItems.find(itemEntry->getID());
-	OC_ASSERT(entityIter != mItems.end());
-	mCurrentPopupEntity = entityIter->second.entity;
-	gEditorMgr.SetCurrentEntity(mCurrentPopupEntity);
+	if (args.button == CEGUI::LeftButton)
+	{
+		gEditorMgr.SetCurrentEntity(clickedEntity);
+	}
 
 	if (args.button == CEGUI::RightButton)
 	{
-		if (mCurrentPopupEntity.IsValid())
-		{
-			// Enable all menu items
-			for (size_t idx = 0; idx < mPopupMenu->getChildCount(); ++idx)
-				mPopupMenu->getChildAtIdx(idx)->setEnabled(true);
-
-			gPopupMgr->ShowPopup(mPopupMenu, args.position.d_x, args.position.d_y, GUISystem::PopupMgr::Callback(this, &Editor::HierarchyWindow::OnPopupMenuItemClicked));
-		}
+		OpenPopupMenu(clickedEntity, args.position.d_x, args.position.d_y);
 	}
 	return true;
 }
 
-bool Editor::HierarchyWindow::OnWindowMouseButtonUp( const CEGUI::EventArgs& e )
+bool Editor::HierarchyWindow::OnTreeClicked( const CEGUI::EventArgs& e )
 {
 	const CEGUI::MouseEventArgs& args = static_cast<const CEGUI::MouseEventArgs&>(e);
 
-	if (mTree->getSelectedCount() > 0)
+	if (args.button == CEGUI::LeftButton)
 	{
 		gEditorMgr.SetCurrentEntity(EntitySystem::EntityHandle::Null);
 		gEditorMgr.ClearSelection();
@@ -331,154 +279,116 @@ bool Editor::HierarchyWindow::OnWindowMouseButtonUp( const CEGUI::EventArgs& e )
 
 	if (args.button == CEGUI::RightButton)
 	{
-		// Disable menu items that require entity
-		mPopupMenu->getChildAtIdx(PI_MOVE_UP)->setEnabled(false);
-		mPopupMenu->getChildAtIdx(PI_MOVE_DOWN)->setEnabled(false);
-		mPopupMenu->getChildAtIdx(PI_NEW_COMPONENT)->setEnabled(false);
-		mPopupMenu->getChildAtIdx(PI_DUPLICATE_ENTITY)->setEnabled(false);
-		mPopupMenu->getChildAtIdx(PI_DELETE_ENTITY)->setEnabled(false);
-		mPopupMenu->getChildAtIdx(PI_CREATE_PROTOTYPE)->setEnabled(false);
-
-		gPopupMgr->ShowPopup(mPopupMenu, args.position.d_x, args.position.d_y, GUISystem::PopupMgr::Callback(this, &Editor::HierarchyWindow::OnPopupMenuItemClicked));
+		OpenPopupMenu(EntitySystem::EntityHandle::Null, args.position.d_x, args.position.d_y);
 	}
 
 	return true;
 }
 
-bool Editor::HierarchyWindow::CheckHierarchy()
-{
-	HierarchyTree::pre_order_iterator endIter = mHierarchy.end(mHierarchy.begin());
-	for (HierarchyTree::pre_order_iterator it=mHierarchy.begin(mHierarchy.begin()); it!=endIter; ++it)
-	{
-		if (!it->IsValid())
-		{
-			ocError << "Invalid EntityHandle in the hierarchy tree";
-			return false;
-		}
-		if (!it->Exists())
-		{
-			ocError << "Non-existent entity in the hierarchy tree";
-			return false;
-		}
-	}
-
-	return true;
-}
-
-EntitySystem::EntityHandle Editor::HierarchyWindow::InstantiatePrototype(const EntitySystem::EntityHandle prototype, const EntitySystem::EntityHandle parent)
-{
-	// instantiate
-	mCurrentParent = parent;
-	EntitySystem::EntityHandle newEntity = gEntityMgr.InstantiatePrototype(prototype);
-	if (!newEntity.IsValid()) return newEntity;
-
-	// move the new entity to the middle of the editor window
-	EntitySystem::EntityHandle editorCamera = gEntityMgr.FindFirstEntity(EditorGUI::EditorCameraName);
-	if (editorCamera.IsValid() && newEntity.HasProperty("Position"))
-	{
-		newEntity.GetProperty("Position").SetValue(editorCamera.GetProperty("Position").GetValue<Vector2>());
-	}
-	
-	// move the new entity to the active layer
-	if (newEntity.HasProperty("Layer"))
-	{
-	  newEntity.GetProperty("Layer").SetValue(gLayerMgr.GetActiveLayer());
-	}
-
-	gEditorMgr.SetCurrentEntity(newEntity);
-
-	return newEntity;
-}
-
-bool Editor::HierarchyWindow::OnTreeItemDragDropItemDropped(const CEGUI::EventArgs& e)
+bool Editor::HierarchyWindow::OnItemDroppedOnTreeItem(const CEGUI::EventArgs& e)
 {
 	const CEGUI::DragDropEventArgs& args = static_cast<const CEGUI::DragDropEventArgs&>(e);
 	
-	EntitySystem::EntityHandle targetEntity = mItems[args.window->getID()].entity;
+	EntitySystem::EntityHandle targetEntity = EntityHandle(args.window->getID());
 	
 	if (args.dragDropItem->getUserString("DragDataType") == "Hierarchy")
 	{
-	  EntitySystem::EntityHandle sourceEntity = mItems[args.dragDropItem->getID()].entity;
+		EntitySystem::EntityHandle sourceEntity = EntityHandle(args.dragDropItem->getID());
+		
+		if (sourceEntity == targetEntity)
+			return true;
+		
+		HierarchyTree::iterator sourceIterBegin = Containers::find(mHierarchy.begin(), mHierarchy.end(), sourceEntity);
+		HierarchyTree::iterator targetIter = Containers::find(mHierarchy.begin(), mHierarchy.end(), targetEntity);
 
-	  if (sourceEntity != targetEntity)
-	  {
-		  HierarchyTree::sibling_iterator sourceIter = std::find(mHierarchy.begin(), mHierarchy.end(), sourceEntity);
-		  HierarchyTree::sibling_iterator targetIter = std::find(mHierarchy.begin(), mHierarchy.end(), targetEntity);
-		  OC_ASSERT_MSG(sourceIter != mHierarchy.end() && targetIter != mHierarchy.end(), "Invalid drag'n'drop entities");
+		if (sourceIterBegin == mHierarchy.end() || targetIter == mHierarchy.end())
+			return true;
 
-		  if (mHierarchy.parent(sourceIter) != targetIter && !mHierarchy.is_in_subtree(targetIter, sourceIter))
-		  {
-			  // the sibling iterator is here because reparent works with sibling iterators
-			  HierarchyTree::sibling_iterator sourceIter2 = sourceIter;
-			  ++sourceIter2;
-			  mHierarchy.reparent(targetIter, sourceIter, sourceIter2);
-			  RebuildTree();
-			  SetSelectedEntity(sourceEntity);
-		  }
-	  }
+		HierarchyTree::iterator sourceIterEnd = sourceIterBegin;
+		sourceIterEnd.skip_children();
+		++sourceIterEnd;
+
+		// check whether item was dropped on its parent
+		if (mHierarchy.parent(sourceIterBegin) == targetIter)
+			return true;
+
+		if (mHierarchy.is_in_subtree(targetIter, sourceIterBegin, sourceIterEnd))
+		{
+			// item was dragged to its subtree:
+			HierarchyTree::sibling_iterator childIter = mHierarchy.begin(sourceIterBegin);
+			while (childIter != mHierarchy.end(sourceIterBegin))
+			{
+				HierarchyTree::sibling_iterator iter = childIter;
+				++childIter;
+				mHierarchy.move_before(sourceIterBegin, iter);
+			}
+			sourceIterEnd = mHierarchy.next_sibling(sourceIterBegin);
+			mHierarchy.reparent(targetIter, sourceIterBegin, sourceIterEnd);
+		}
+		else
+		{
+			sourceIterEnd = mHierarchy.next_sibling(sourceIterBegin);
+			mHierarchy.reparent(targetIter, sourceIterBegin, sourceIterEnd);
+		}
+		Update();
 	} 
 	else if (args.dragDropItem->getUserString("DragDataType") == "Prototype")
 	{
 		EntitySystem::EntityHandle sourcePrototype = EntitySystem::EntityHandle(args.dragDropItem->getID());
-		InstantiatePrototype(sourcePrototype, targetEntity);
+		gEditorMgr.InstantiatePrototype(sourcePrototype, targetEntity);
 	} 
 	else
 	{
 		return false;
 	}
-	
 	return true;
 }
 
-bool Editor::HierarchyWindow::OnTreeDragDropItemDropped(const CEGUI::EventArgs& e)
+bool Editor::HierarchyWindow::OnItemDroppedOnTree(const CEGUI::EventArgs& e)
 {
 	const CEGUI::DragDropEventArgs& args = static_cast<const CEGUI::DragDropEventArgs&>(e);
 
 	if (args.dragDropItem->getUserString("DragDataType") == "Hierarchy")
 	{
-		EntitySystem::EntityHandle sourceEntity = mItems[args.dragDropItem->getID()].entity;
+		// Move the dragged entity before the first item in the hierarchy
+		EntitySystem::EntityHandle sourceEntity = EntityHandle(args.dragDropItem->getID());
+		if (!sourceEntity.IsValid())
+			return true;
 
-		HierarchyTree::sibling_iterator sourceIter = std::find(mHierarchy.begin(), mHierarchy.end(), sourceEntity);
-		HierarchyTree::iterator targetIter = mHierarchy.begin();
-		OC_ASSERT_MSG(sourceIter != mHierarchy.end() && targetIter != mHierarchy.end(), "Invalid drag'n'drop entities");
+		HierarchyTree::iterator sourceIter = Containers::find(mHierarchy.begin(), mHierarchy.end(), sourceEntity);
+		HierarchyTree::sibling_iterator lastTopElementIter = --mHierarchy.end(mHierarchy.begin());
+		if (sourceIter == false || sourceIter == lastTopElementIter)
+			return true;
 
-		if (mHierarchy.parent(sourceIter) != targetIter)
-		{
-			HierarchyTree::sibling_iterator sourceIter2 = sourceIter;
-			++sourceIter2;
-			mHierarchy.reparent(targetIter, sourceIter, sourceIter2);
-			RebuildTree();
-			SetSelectedEntity(sourceEntity);
-		}
+		mHierarchy.move_after((HierarchyTree::iterator)lastTopElementIter, sourceIter);
+		Update();
 	} 
 	else if (args.dragDropItem->getUserString("DragDataType") == "Prototype")
 	{
 		EntitySystem::EntityHandle sourcePrototype = EntitySystem::EntityHandle(args.dragDropItem->getID());
-		InstantiatePrototype(sourcePrototype, EntitySystem::EntityHandle::Null);
+		gEditorMgr.InstantiatePrototype(sourcePrototype, EntitySystem::EntityHandle::Null);
 	} 
-	else 
-	{ 
-		return false; 
-	}
-
 	return true;
 }
 
-void Editor::HierarchyWindow::SetSelectedEntity( const EntitySystem::EntityHandle entity )
+void Editor::HierarchyWindow::SetSelectedEntity(EntitySystem::EntityHandle entity)
 {
-	uint32 depth;
-	int32 index = FindTreeItem(entity, depth);
-	mTree->clearAllSelections();
-	if (index != -1)
+	if (!entity.IsValid())
 	{
-		mTree->selectRange(index, index);
-		gEditorMgr.SelectEntity(entity);
+		mTree->clearAllSelections();
+		return;
+	}
+
+	for (size_t idx = 0; idx < mTree->getItemCount(); ++idx)
+	{
+		CEGUI::ItemEntry* treeItem = mTree->getItemFromIndex(idx);
+		treeItem->setSelected((EntitySystem::EntityID)treeItem->getID() == entity.GetID());
 	}
 }
 
-EntitySystem::EntityHandle Editor::HierarchyWindow::GetParent( const EntitySystem::EntityHandle entity ) const
+EntitySystem::EntityHandle Editor::HierarchyWindow::GetParent(EntityHandle entity) const
 {
-	HierarchyTree::iterator entityIter = std::find(mHierarchy.begin(), mHierarchy.end(), entity);
+	HierarchyTree::iterator entityIter = Containers::find(mHierarchy.begin(), mHierarchy.end(), entity);
 	if (entityIter == mHierarchy.end())
 	{
 		ocError << entity << " is not in the hierarchy";
@@ -488,78 +398,58 @@ EntitySystem::EntityHandle Editor::HierarchyWindow::GetParent( const EntitySyste
 	return *parentIter;
 }
 
-void Editor::HierarchyWindow::RefreshEntity( const EntitySystem::EntityHandle entity )
+void Editor::HierarchyWindow::MoveUp(EntitySystem::EntityHandle entity)
 {
-	uint32 depth;
-	int32 index = FindTreeItem(entity, depth);
-	if (index == -1) return;
-
-	CEGUI::ItemEntry* item = mTree->getItemFromIndex(index);
-	OC_ASSERT(item);
-	CEGUI::Window* itemText = item->getChildAtIdx(0)->getChildAtIdx(0);
-	OC_ASSERT(itemText);
-	itemText->setText(string(depth*TREE_LEVEL_CHAR_SIZE, ' ') + entity.GetName());
+	if (!entity.Exists()) return;
+  
+	HierarchyTree::iterator entityIter = Containers::find(mHierarchy.begin(), mHierarchy.end(), entity);
+	if (entityIter == mHierarchy.end()) return;
+  
+	HierarchyTree::iterator sibling = mHierarchy.previous_sibling(entityIter);
+	if (sibling == false) return;
+  
+	mHierarchy.move_before(sibling, entityIter);
+	Update();
 }
 
-void Editor::HierarchyWindow::MoveUp()
+void Editor::HierarchyWindow::MoveDown(EntitySystem::EntityHandle entity)
 {
-  EntitySystem::EntityHandle entity = gEditorMgr.GetCurrentEntity();
-  if (!entity.Exists()) return;
+	if (!entity.Exists()) return;
   
-  HierarchyTree::iterator entityIter = std::find(mHierarchy.begin(), mHierarchy.end(), entity);
-  if (entityIter == mHierarchy.end()) return;
+	HierarchyTree::iterator entityIter = Containers::find(mHierarchy.begin(), mHierarchy.end(), entity);
+	if (entityIter == mHierarchy.end()) return;
   
-  HierarchyTree::iterator sibling = mHierarchy.previous_sibling(entityIter);
-  if (sibling == mHierarchy.end()) return;
+	HierarchyTree::iterator sibling = mHierarchy.next_sibling(entityIter);
+	if (sibling == false) return;
   
-  mHierarchy.move_before(sibling, entityIter);
-  RebuildTree();
-	SetSelectedEntity(entity);
+	mHierarchy.move_after(sibling, entityIter);
+	Update();
 }
 
-void Editor::HierarchyWindow::MoveDown()
+void HierarchyWindow::ReparentUp(EntityHandle entity)
 {
-  EntitySystem::EntityHandle entity = gEditorMgr.GetCurrentEntity();
-  if (!entity.Exists()) return;
+	if (!entity.Exists()) return;
   
-  HierarchyTree::iterator entityIter = std::find(mHierarchy.begin(), mHierarchy.end(), entity);
-  if (entityIter == mHierarchy.end()) return;
+	HierarchyTree::iterator entityIter = Containers::find(mHierarchy.begin(), mHierarchy.end(), entity);
+	if (entityIter == mHierarchy.end()) return;
   
-  HierarchyTree::iterator sibling = mHierarchy.next_sibling(entityIter);
-  if (sibling == mHierarchy.end()) return;
+	HierarchyTree::iterator parent = mHierarchy.parent(entityIter);
+	if (parent == mHierarchy.begin()) return;
   
-  mHierarchy.move_after(sibling, entityIter);
-  RebuildTree();
-	SetSelectedEntity(entity);
+	mHierarchy.move_before(parent, entityIter);
+	Update();
 }
 
 void Editor::HierarchyWindow::Clear()
 {
 	ocInfo << "Clearing HierarchyWindow";
 
-	mHierarchy.clear();
+	ClearHierarchy();
 	for (int32 i=mTree->getItemCount()-1; i>=0; --i)
 	{
-		gGUIMgr.DestroyWindow(mTree->getItemFromIndex(i));
+		StoreTreeItem(mTree->getItemFromIndex(i));
 	}
 	OC_ASSERT(mTree->getItemCount() == 0);
-	mItems.clear();
-}
-
-void Editor::HierarchyWindow::CreateEntity(EntitySystem::EntityHandle parent)
-{
-	GUISystem::PromptBox* prompt = new GUISystem::PromptBox(parent != EntitySystem::EntityHandle::Null ? parent.GetID() : 0);
-	prompt->SetText(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "new_entity_prompt"));
-	prompt->RegisterCallback(GUISystem::PromptBox::Callback(this, &HierarchyWindow::NewEntityPromptCallback));
-	prompt->Show();
-}
-
-void Editor::HierarchyWindow::NewEntityPromptCallback(bool clickedOK, const string& text, int32 tag)
-{
-	if (!clickedOK) return;
-	SetCurrentParent(tag != 0 ? EntitySystem::EntityHandle(tag) : EntitySystem::EntityHandle::Null);
-	gEditorMgr.CreateEntity(text);
-	SetCurrentParent(EntitySystem::EntityHandle::Null);
 }
 
 void HierarchyWindow::CreatePopupMenu()
@@ -567,6 +457,8 @@ void HierarchyWindow::CreatePopupMenu()
 	mPopupMenu = gPopupMgr->CreatePopupMenu("HierarchyWindow/Popup");
 	mPopupMenu->addChildWindow(gPopupMgr->CreateMenuItem("HierarchyWindow/Popup/MoveUp", TR("hierarchy_moveup"), TR("hierarchy_moveup_hint"), PI_MOVE_UP));
 	mPopupMenu->addChildWindow(gPopupMgr->CreateMenuItem("HierarchyWindow/Popup/MoveDown", TR("hierarchy_movedown"), TR("hierarchy_movedown_hint"), PI_MOVE_DOWN));
+	mPopupMenu->addChildWindow(gPopupMgr->CreateMenuItem("HierarchyWindow/Popup/ReparentUp", TR("hierarchy_reparentup"), TR("hierarchy_reparentup_hint"), PI_REPARENT_UP));
+
 	mPopupMenu->addChildWindow(gPopupMgr->CreateMenuItem("HierarchyWindow/Popup/AddEntity", TR("hierarchy_add"), TR("hierarchy_add_hint"), PI_ADD_ENTITY));
 	CEGUI::Window* newComponentMenuItem = gPopupMgr->CreateMenuItem("HierarchyWindow/Popup/NewComponent", TR("new_component"), TR("new_component_hint"), PI_NEW_COMPONENT);
 	mPopupMenu->addChildWindow(newComponentMenuItem);
@@ -589,6 +481,30 @@ void HierarchyWindow::DestroyPopupMenu()
 	gPopupMgr->DestroyPopupMenu(mPopupMenu);
 }
 
+void HierarchyWindow::OpenPopupMenu(EntityHandle clickedEntity, float32 mouseX, float32 mouseY)
+{
+	mCurrentPopupEntity = clickedEntity;
+	if (mCurrentPopupEntity.IsValid())
+	{
+		// Enable all menu items
+		for (size_t idx = 0; idx < mPopupMenu->getChildCount(); ++idx)
+			mPopupMenu->getChildAtIdx(idx)->setEnabled(true);
+	}
+	else
+	{
+		// Disable menu items that require entity
+		mPopupMenu->getChildAtIdx(PI_MOVE_UP)->setEnabled(false);
+		mPopupMenu->getChildAtIdx(PI_MOVE_DOWN)->setEnabled(false);
+		mPopupMenu->getChildAtIdx(PI_REPARENT_UP)->setEnabled(false);
+		mPopupMenu->getChildAtIdx(PI_NEW_COMPONENT)->setEnabled(false);
+		mPopupMenu->getChildAtIdx(PI_DUPLICATE_ENTITY)->setEnabled(false);
+		mPopupMenu->getChildAtIdx(PI_DELETE_ENTITY)->setEnabled(false);
+		mPopupMenu->getChildAtIdx(PI_CREATE_PROTOTYPE)->setEnabled(false);
+	}
+	gPopupMgr->ShowPopup(mPopupMenu, mouseX, mouseY, GUISystem::PopupMgr::Callback(this, &Editor::HierarchyWindow::OnPopupMenuItemClicked));
+}
+
+
 void HierarchyWindow::OnPopupMenuItemClicked(CEGUI::Window* menuItem)
 {
 	if (menuItem->getParent() == mComponentPopupMenu)
@@ -601,29 +517,24 @@ void HierarchyWindow::OnPopupMenuItemClicked(CEGUI::Window* menuItem)
 		switch (menuItem->getID())
 		{
 		case PI_MOVE_UP:	
-			MoveUp();
+			MoveUp(mCurrentPopupEntity);
 			break;
 		case PI_MOVE_DOWN:
-			MoveDown();
+			MoveDown(mCurrentPopupEntity);
+			break;
+		case PI_REPARENT_UP:
+			ReparentUp(mCurrentPopupEntity);
 			break;
 		case PI_ADD_ENTITY:
-			CreateEntity(mCurrentPopupEntity);
+			gEditorMgr.ShowCreateEntityPrompt(mCurrentPopupEntity);
 			break;
 		case PI_DUPLICATE_ENTITY:
-			/// @todo into method
-			{
-				EntitySystem::EntityHandle parent = GetParent(mCurrentPopupEntity);
-				SetCurrentParent(parent);
-				gEditorMgr.DuplicateCurrentEntity();
-				SetCurrentParent(EntitySystem::EntityHandle::Null);
-			}
+			gEditorMgr.DuplicateEntity(mCurrentPopupEntity);
 			break;
 		case PI_DELETE_ENTITY:
-			/// @todo ugly!!
 			gEditorMgr.DeleteCurrentEntity();
 			break;
 		case PI_CREATE_PROTOTYPE:
-			/// @todo ugly!!
 			gEditorMgr.CreatePrototypeFromCurrentEntity();
 			break;
 		default:
@@ -632,3 +543,75 @@ void HierarchyWindow::OnPopupMenuItemClicked(CEGUI::Window* menuItem)
 	}
 }
 
+CEGUI::ItemEntry* Editor::HierarchyWindow::CreateTreeItem()
+{
+	static uint32 itemCounter = 0;
+	CEGUI::String windowName = "Editor/Hierarchy/Tree/EntityItem" + StringConverter::ToString(itemCounter++);
+
+	CEGUI::ItemEntry* newItem = static_cast<CEGUI::ItemEntry*>(gGUIMgr.CreateWindowDirectly("Editor/ListboxItem", windowName));
+	CEGUI::Window* dragContainer = static_cast<CEGUI::ItemEntry*>(gGUIMgr.CreateWindowDirectly("DragContainer", windowName + "/DC"));
+	dragContainer->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
+	newItem->addChildWindow(dragContainer);
+
+	CEGUI::Window* newItemText = gGUIMgr.CreateWindowDirectly("Editor/StaticText", windowName + "/DC/Text");
+	newItemText->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
+	newItemText->setProperty("FrameEnabled", "False");
+	newItemText->setProperty("BackgroundEnabled", "False");
+	newItemText->setMousePassThroughEnabled(true);
+
+	dragContainer->addChildWindow(newItemText);
+	dragContainer->subscribeEvent(CEGUI::Window::EventMouseClick, CEGUI::Event::Subscriber(&Editor::HierarchyWindow::OnTreeItemClicked, this));
+	dragContainer->subscribeEvent(CEGUI::Window::EventDragDropItemDropped, CEGUI::Event::Subscriber(&Editor::HierarchyWindow::OnItemDroppedOnTreeItem, this));
+	dragContainer->setUserString("DragDataType", "Hierarchy");
+
+	return newItem;
+}
+
+void Editor::HierarchyWindow::SetupTreeItem(CEGUI::ItemEntry* treeItem, EntityHandle entity, uint32 hierarchyLevel, const string& hierarchyPath)
+{
+	static const uint32 paddingPerLevel = 16;
+
+	treeItem->setID(entity.GetID());
+	treeItem->setUserString("HierarchyPath", hierarchyPath);
+	treeItem->setSelected(gEditorMgr.GetCurrentEntity() == entity);
+	
+	CEGUI::Window* dragContainer = treeItem->getChildAtIdx(0);
+	dragContainer->setArea(CEGUI::URect(CEGUI::UDim(0, hierarchyLevel * paddingPerLevel), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
+	dragContainer->setID(entity.GetID());
+
+	CEGUI::Window* treeItemText = dragContainer->getChildAtIdx(0);
+	treeItemText->setText(entity.GetName());
+}
+
+void Editor::HierarchyWindow::StoreTreeItem(CEGUI::ItemEntry* treeItem)
+{
+	CEGUI::Window* parent = treeItem->getParent();
+	if (parent)
+		parent->removeChildWindow(treeItem);
+
+	mTreeItemCache.push_back(treeItem);
+}
+
+CEGUI::ItemEntry* Editor::HierarchyWindow::RestoreTreeItem()
+{
+	CEGUI::ItemEntry* treeItem = 0;
+	if (mTreeItemCache.empty())
+	{
+		treeItem = CreateTreeItem();
+	}
+	else
+	{
+		treeItem = mTreeItemCache.back();
+		mTreeItemCache.pop_back();
+	}
+	return treeItem;
+}
+
+void Editor::HierarchyWindow::DestroyTreeItemCache()
+{
+	for (TreeItemCache::iterator it = mTreeItemCache.begin(); it != mTreeItemCache.end(); ++it)
+	{
+		gGUIMgr.DestroyWindowDirectly(*it);
+	}
+	mTreeItemCache.clear();
+}

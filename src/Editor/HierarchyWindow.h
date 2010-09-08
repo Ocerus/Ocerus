@@ -1,8 +1,7 @@
 /// @file
 /// Tree logical hierarchy of game entities.
-
-#ifndef HierarchyWindow_h__
-#define HierarchyWindow_h__
+#ifndef _EDITOR_HIERARCHYWINDOW_H
+#define _EDITOR_HIERARCHYWINDOW_H
 
 #include "Base.h"
 #include "GUISystem/CEGUIForwards.h"
@@ -23,14 +22,14 @@ namespace Editor
 		/// Initializes the window.
 		void Init();
 
-		/// Refreshes the tree.
-		inline void Refresh() { RebuildTree(); }
+		/// Deinitializes the window.
+		void Deinit();
+
+		/// Updates the tree.
+		void Update();
 
 		/// Clears the tree.
 		void Clear();
-
-		/// Refreshes only a single entity in the tree.
-		void RefreshEntity(const EntitySystem::EntityHandle entity);
 
 		/// Loads the hierarchy from an XML input.
 		void LoadHierarchy(ResourceSystem::XMLNodeIterator& xml);
@@ -49,28 +48,31 @@ namespace Editor
 		void RemoveEntityFromHierarchy(const EntitySystem::EntityHandle toRemove);
 
 		/// Sets the currently selected item.
-		void SetSelectedEntity(const EntitySystem::EntityHandle entity);
+		void SetSelectedEntity(EntitySystem::EntityHandle entity);
 
 		/// Returns the hierarchy parent of the given entity. Returns null if no such exists.
-		EntitySystem::EntityHandle GetParent(const EntitySystem::EntityHandle entity) const;
+		EntitySystem::EntityHandle GetParent(EntitySystem::EntityHandle entity) const;
 
 		/// Sets the current parent in the hierarchy. Entities added in the near future will be parented by this entity.
-		void SetCurrentParent(const EntitySystem::EntityHandle val) { mCurrentParent = val; }
+		void SetCurrentParent(EntitySystem::EntityHandle val) { mCurrentParent = val; }
 
-		/// Instantiate an prototype with a specified parent.
-		EntitySystem::EntityHandle InstantiatePrototype(const EntitySystem::EntityHandle prototype, const EntitySystem::EntityHandle parent);
+		/// Clears the hierarchy tree.
+		void ClearHierarchy();
+
+		/// Returns the number of entities in the hierarchy tree.
+		size_t GetHierarchySize();
 
 		/// Runs a check on the consistency of the hierarchy tree. Returns true if it's ok.
 		bool CheckHierarchy();
 		
-		/// Moves the selected entity up.
-		void MoveUp();
+		/// Moves the specified entity before its preceding sibling.
+		void MoveUp(EntitySystem::EntityHandle entity);
 		
-		/// Moves the selected entity down.
-		void MoveDown();
+		/// Moves the specified entity after its succeeding sibling.
+		void MoveDown(EntitySystem::EntityHandle entity);
 
-		/// Creates a new entity with the specified parent. A prompt for typing the name of the entity is shown.
-		void CreateEntity(EntitySystem::EntityHandle parent);
+		/// Moves the specified entity before its parent.
+		void ReparentUp(EntitySystem::EntityHandle entity);
 
 		/// Enables adding of entities to the hierarchy.
 		inline void EnableAddEntities() { mDontAddEntities = false; }
@@ -78,22 +80,21 @@ namespace Editor
 		/// Disables adding of entities to the hierarchy.
 		inline void DisableAddEntities() { mDontAddEntities = true; }
 
-	public:
+	private:
 
 		/// @name CEGUI Callbacks
 		//@{
-		bool OnDragContainerMouseButtonDown(const CEGUI::EventArgs&);
-		bool OnDragContainerMouseButtonUp(const CEGUI::EventArgs&);
-		bool OnWindowMouseButtonUp(const CEGUI::EventArgs&);
-		bool OnTreeItemDragDropItemDropped(const CEGUI::EventArgs&);
-		bool OnTreeDragDropItemDropped(const CEGUI::EventArgs&);
+		bool OnTreeItemClicked(const CEGUI::EventArgs&);
+		bool OnTreeClicked(const CEGUI::EventArgs&);
+		bool OnItemDroppedOnTreeItem(const CEGUI::EventArgs&);
+		bool OnItemDroppedOnTree(const CEGUI::EventArgs&);
 		//@}
 
-	private:
 		enum ePopupItem
 		{
 			PI_MOVE_UP = 0,
 			PI_MOVE_DOWN,
+			PI_REPARENT_UP,
 			PI_ADD_ENTITY,
 			PI_NEW_COMPONENT,
 			PI_DUPLICATE_ENTITY,
@@ -117,31 +118,11 @@ namespace Editor
 		/// Loads the hierarchy recursively.
 		void LoadSubtree(ResourceSystem::XMLNodeIterator& xml, const HierarchyTree::iterator_base& parent);
 
-		/// Creates the tree based on the saved hierarchy.
-		void RebuildTree();
-
 		/// Creates the subtree based on the saved hierarchy.
-		void BuildSubtree(const HierarchyTree::iterator_base& parentIter, uint32 depth);
+		void SetupSubtree(const HierarchyTree::iterator_base& parentIter, const string& hierarchyPath, uint32 depth, size_t& itemIndex);
 
-		/// Adds an item to the tree at the given position.
-		CEGUI::ItemEntry* AddTreeItem(uint32 index, const string& textName, uint32 depth, const EntitySystem::EntityHandle data);
-
-		/// Adds an item to the tree after the last item.
-		CEGUI::ItemEntry* AppendTreeItem(const string& text, uint32 depth, const EntitySystem::EntityHandle data);
-
-		/// Removes an item from the tree at the given position.
-		void RemoveTreeItem(uint32 index);
-
-		/// Locates an item in the tree and returns its position. Returns -1 if not found. The depth of the item is returned
-		/// in the second parameter.
-		int32 FindTreeItem(const EntitySystem::EntityHandle data, uint32& depth);
-
-		/// Callback for creating a new entity.
-		void NewEntityPromptCallback(bool clickedOK, const string& text, int32 tag);
-		
 		CEGUI::Window* mWindow;
 		CEGUI::ItemListbox* mTree;
-		int32 mSelectedIndex;
 		EntityMap mItems;
 		HierarchyTree mHierarchy;
 		EntitySystem::EntityHandle mCurrentParent;
@@ -149,12 +130,28 @@ namespace Editor
 		
 		void CreatePopupMenu();
 		void DestroyPopupMenu();
+		void OpenPopupMenu(EntitySystem::EntityHandle clickedEntity, float32 mouseX, float32 mouseY);
 		void OnPopupMenuItemClicked(CEGUI::Window* menuItem);
 
 		CEGUI::Window* mPopupMenu;
 		CEGUI::Window* mComponentPopupMenu;
 		EntitySystem::EntityHandle mCurrentPopupEntity;
+		
+		/// @name Tree item caching
+		//@{
+
+		CEGUI::ItemEntry* CreateTreeItem();
+		void SetupTreeItem(CEGUI::ItemEntry* treeItem, EntitySystem::EntityHandle entity, uint32 hierarchyDepth, const string& hierarchyPath);
+		void StoreTreeItem(CEGUI::ItemEntry* treeItem);
+		CEGUI::ItemEntry* RestoreTreeItem();
+		void DestroyTreeItemCache();
+
+		typedef vector<CEGUI::ItemEntry*> TreeItemCache;
+
+		TreeItemCache mTreeItemCache;
+
+		//@}
 	};
 }
 
-#endif // HierarchyWindow_h__
+#endif // _EDITOR_HIERARCHYWINDOW_H

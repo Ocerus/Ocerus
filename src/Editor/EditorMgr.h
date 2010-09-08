@@ -118,6 +118,9 @@ namespace Editor
 		
 		void OnSceneClosed();
 
+		/// Refreshes the hierarchy window.
+		void UpdateHierarchyWindow();
+
 		/// Refreshes the prototype window.
 		void UpdatePrototypeWindow();
 
@@ -209,8 +212,11 @@ namespace Editor
 		/// Called by the value editors when their value changes.
 		void PropertyValueChanged();
 
+		/// Shows a prompt for entering new entity name.
+		void ShowCreateEntityPrompt(EntitySystem::EntityHandle parent = EntitySystem::EntityHandle::Null);
+
 		/// Creates a new entity.
-		void CreateEntity(const string& name);
+		void CreateEntity(const string& name = "", EntitySystem::EntityHandle parent = EntitySystem::EntityHandle::Null);
 
 		/// Duplicates the specified entity.
 		void DuplicateEntity(EntitySystem::EntityHandle entity);
@@ -229,6 +235,9 @@ namespace Editor
 
 		/// Creates a prototype from the current entity and links it to the prototype.
 		void CreatePrototypeFromCurrentEntity();
+
+		/// Instantiate an prototype with a specified parent.
+		EntitySystem::EntityHandle InstantiatePrototype(EntitySystem::EntityHandle prototype, EntitySystem::EntityHandle parent);
 
 		/// Duplicates selected entities.
 		void DuplicateSelectedEntities();
@@ -277,6 +286,12 @@ namespace Editor
 		vector<float32> mEditToolBodyAngles; ///< Initial angle of the bodies.
 		vector<Vector2> mEditToolBodyScales; ///< Initial scale of the bodies.
 		bool mIsInitialTime; ///< Whether the scene is in initial time (before the first call of ResumeAction or after the call of RestartAction).
+
+		// Callbacks
+		
+		/// Callback for creating a new entity.
+		void CreateEntityPromptCallback(bool clickedOK, const string& text, int32 parentID);
+
 
 		/// Draws the shape of the entity using the selected color.
 		bool DrawEntityPhysicalShape(const EntitySystem::EntityHandle entity, const GfxSystem::Color shapeColor, const GfxSystem::Color fillColor, const float32 shapeWidth);

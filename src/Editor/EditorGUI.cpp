@@ -197,7 +197,7 @@ bool Editor::EditorGUI::OnEditorViewportItemDropped( const CEGUI::EventArgs& e)
 	if (args.dragDropItem->getUserString("DragDataType") == "Prototype")
 	{
 		EntitySystem::EntityHandle sourcePrototype = EntitySystem::EntityHandle(args.dragDropItem->getID());
-		EntitySystem::EntityHandle entity = mHierarchyWindow->InstantiatePrototype(sourcePrototype, EntitySystem::EntityHandle::Null);
+		EntitySystem::EntityHandle entity = gEditorMgr.InstantiatePrototype(sourcePrototype, EntitySystem::EntityHandle::Null);
 		
 		// move the new entity to the cursor
 		if (entity.HasProperty("Position"))
