@@ -47,7 +47,6 @@ namespace Editor
 		/// @name CEGUI Callbacks
 		//@{
 			bool OnListItemClicked(const CEGUI::EventArgs&);
-			bool OnListItemDoubleClicked(const CEGUI::EventArgs&);
 			bool OnListClicked(const CEGUI::EventArgs&);
 		//@}
 

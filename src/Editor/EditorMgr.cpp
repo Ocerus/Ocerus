@@ -32,7 +32,6 @@ const float32 CAMERA_MOVEMENT_SPEED = 10.0f; ///< How fast the camera moves by k
 EditorMgr::EditorMgr():
 	mEditorGUI(0),
 	mCurrentProject(0),
-	mCurrentEntity(EntitySystem::EntityHandle::Null),
 	mShortcuts(0),
 	mCreateProjectDialog(0)
 {
@@ -123,7 +122,7 @@ void Editor::EditorMgr::Update(const float32 delta)
 			else
 				++it;
 		}
-		if (GetSelectedEntity() != selectedEntity && GetCurrentEntity() == selectedEntity) SetCurrentEntity(GetSelectedEntity());
+		if (GetSelectedEntity() != selectedEntity && GetSelectedEntity() == selectedEntity) SelectEntity(GetSelectedEntity());
 
 		// update the entities if necessary
 		if (!GlobalProperties::Get<Core::Game>("Game").IsActionRunning())
@@ -135,7 +134,7 @@ void Editor::EditorMgr::Update(const float32 delta)
 			gEntityMgr.ProcessDestroyQueue();
 		}
 
-		if (!GetCurrentEntity().Exists()) SetCurrentEntity(EntitySystem::EntityHandle::Null);
+		if (!GetSelectedEntity().Exists()) SelectEntity(EntitySystem::EntityHandle::Null);
 	}
 
 	// update the gui elements on the screen
@@ -189,18 +188,25 @@ void Editor::EditorMgr::Draw(float32 delta)
 	}
 }
 
-void Editor::EditorMgr::SetCurrentEntity(const EntitySystem::EntityHandle newCurrentEntity)
+void Editor::EditorMgr::SelectEntity(EntitySystem::EntityHandle entity)
 {
-	if (mCurrentEntity == newCurrentEntity) return;
-	mCurrentEntity = newCurrentEntity;
+	EntitySystem::EntityHandle oldEntity = GetSelectedEntity();
+	mSelectedEntities.clear();
+	if (entity.IsValid())
+		mSelectedEntities.push_back(entity);
 
-	OC_ASSERT(mEditorGUI);
-	OC_ASSERT(mEditorGUI->GetPrototypeWindow());
-	OC_ASSERT(mEditorGUI->GetHierarchyWindow());
+	if (oldEntity != entity)
+		GetEditorGUI()->SetSelectedEntity(entity);
+}
 
-	GetPrototypeWindow()->SetSelectedEntity(mCurrentEntity);
-	GetHierarchyWindow()->SetSelectedEntity(mCurrentEntity);
-	GetEntityWindow()->Rebuild();
+void EditorMgr::SelectEntities(const EntitySystem::EntityList& entities)
+{
+	EntitySystem::EntityHandle oldEntity = GetSelectedEntity();
+	mSelectedEntities.clear();
+	mSelectedEntities = entities;
+
+	if (oldEntity != GetSelectedEntity())
+		GetEditorGUI()->SetSelectedEntity(GetSelectedEntity());
 }
 
 void Editor::EditorMgr::ShowCreateEntityPrompt(EntityHandle parent)
@@ -245,13 +251,13 @@ void Editor::EditorMgr::DuplicateEntity(EntitySystem::EntityHandle entity)
 		gEntityMgr.SavePrototypes();
 		UpdatePrototypeWindow();
 	}
-	SetCurrentEntity(newEntity);
+	SelectEntity(newEntity);
 	GetHierarchyWindow()->SetCurrentParent(EntityHandle::Null);
 }
 
-void Editor::EditorMgr::DuplicateCurrentEntity()
+void Editor::EditorMgr::DuplicateSelectedEntity()
 {
-	DuplicateEntity(mCurrentEntity);
+	DuplicateEntity(GetSelectedEntity());
 }
 
 void Editor::EditorMgr::DeleteEntity(EntitySystem::EntityHandle entity)
@@ -267,10 +273,10 @@ void Editor::EditorMgr::DeleteEntity(EntitySystem::EntityHandle entity)
 	}
 }
 
-void Editor::EditorMgr::DeleteCurrentEntity()
+void Editor::EditorMgr::DeleteSelectedEntity()
 {
-	DeleteEntity(mCurrentEntity);
-	SetCurrentEntity(EntityHandle::Null);
+	DeleteEntity(GetSelectedEntity());
+	SelectEntity(EntityHandle::Null);
 }
 
 void EditorMgr::CreatePrototypeFromEntity(EntitySystem::EntityHandle entity)
@@ -279,13 +285,13 @@ void EditorMgr::CreatePrototypeFromEntity(EntitySystem::EntityHandle entity)
 	EntitySystem::EntityHandle prototype = gEntityMgr.ExportEntityToPrototype(entity);
 	gEntityMgr.SavePrototypes();
 	UpdatePrototypeWindow();
-	SetCurrentEntity(prototype);
+	SelectEntity(prototype);
 	ClearSelection();
 }
 
-void Editor::EditorMgr::CreatePrototypeFromCurrentEntity()
+void Editor::EditorMgr::CreatePrototypeFromSelectedEntity()
 {
-	CreatePrototypeFromEntity(mCurrentEntity);
+	CreatePrototypeFromEntity(GetSelectedEntity());
 }
 
 EntitySystem::EntityHandle Editor::EditorMgr::InstantiatePrototype(EntitySystem::EntityHandle prototype, EntitySystem::EntityHandle parent)
@@ -309,7 +315,7 @@ EntitySystem::EntityHandle Editor::EditorMgr::InstantiatePrototype(EntitySystem:
 		newEntity.GetProperty("Layer").SetValue(gLayerMgr.GetActiveLayer());
 	}
 
-	gEditorMgr.SetCurrentEntity(newEntity);
+	gEditorMgr.SelectEntity(newEntity);
 	return newEntity;
 }
 
@@ -330,7 +336,7 @@ void Editor::EditorMgr::DeleteSelectedEntities()
 	{
 		if (it->Exists())
 		{
-			if (GetCurrentEntity() == (*it)) { SetCurrentEntity(EntityHandle::Null); }
+			if (GetSelectedEntity() == (*it)) { SelectEntity(EntityHandle::Null); }
 			gEntityMgr.DestroyEntity(*it);
 		}
 	}
@@ -355,9 +361,9 @@ void Editor::EditorMgr::AddComponentToEntity(EntitySystem::EntityHandle entity, 
 	}
 }
 
-void Editor::EditorMgr::AddComponentToCurrentEntity(EntitySystem::eComponentType componentType)
+void Editor::EditorMgr::AddComponentToSelectedEntity(EntitySystem::eComponentType componentType)
 {
-	AddComponentToEntity(mCurrentEntity, componentType);
+	AddComponentToEntity(GetSelectedEntity(), componentType);
 }
 
 void EditorMgr::RemoveComponentFromEntity(EntitySystem::EntityHandle entity, const EntitySystem::ComponentID& componentId)
@@ -370,9 +376,9 @@ void EditorMgr::RemoveComponentFromEntity(EntitySystem::EntityHandle entity, con
 }
 
 
-void Editor::EditorMgr::RemoveComponentFromCurrentEntity(const EntitySystem::ComponentID& componentId)
+void Editor::EditorMgr::RemoveComponentFromSelectedEntity(const EntitySystem::ComponentID& componentId)
 {
-	RemoveComponentFromEntity(mCurrentEntity, componentId);
+	RemoveComponentFromEntity(GetSelectedEntity(), componentId);
 }
 
 void Editor::EditorMgr::ResumeAction()
@@ -416,9 +422,9 @@ void Editor::EditorMgr::RestartAction()
 		
 		GlobalProperties::Get<Core::Game>("Game").RestartAction();
 		mIsInitialTime = true;
-		if (!GetCurrentEntity().Exists())
+		if (!GetSelectedEntity().Exists())
 		{
-			SetCurrentEntity(EntityHandle::Null);
+			SelectEntity(EntityHandle::Null);
 		}
 		else
 		{
@@ -430,7 +436,7 @@ void Editor::EditorMgr::RestartAction()
 
 void Editor::EditorMgr::Reset()
 {
-	SetCurrentEntity(EntityHandle::Null);
+	SelectEntity(EntityHandle::Null);
 	ClearSelection();
 	mIsInitialTime = true;
 }
@@ -601,20 +607,18 @@ bool Editor::EditorMgr::MouseButtonPressed( const InputSystem::MouseInfo& mi, co
 	}
 	else
 	{
-		if ((btn == InputSystem::MBTN_LEFT || btn == InputSystem::MBTN_RIGHT) && mHoveredEntity.IsValid())
+		if (mHoveredEntity.IsValid())
 		{
-			if (find(mSelectedEntities.begin(), mSelectedEntities.end(), mHoveredEntity) == mSelectedEntities.end())
+			if ((btn == InputSystem::MBTN_LEFT && !IsEntitySelected(mHoveredEntity)) || btn == InputSystem::MBTN_RIGHT)
 			{
-				mSelectedEntities.clear();
-			}
-			if (mSelectedEntities.empty())
-			{
-				mSelectedEntities.push_back(mHoveredEntity);
-				SetCurrentEntity(GetSelectedEntity());
+				// If user clicked right mouse button, cancel previous selection by select the hovering entity
+				// (popups work only on one entity). If user clicked left mouse button and entity is not selected,
+				// cancel previous selection by select the hovering entity.
+				SelectEntity(mHoveredEntity);
 			}
 		}
 
-		if (btn == InputSystem::MBTN_LEFT && mHoveredEntity.IsValid() && !mSelectedEntities.empty())
+		if (btn == InputSystem::MBTN_LEFT)
 		{
 			// we've got an entity to edit, so let's init the right tool
 			mEditToolWorking = true;
@@ -717,29 +721,27 @@ bool Editor::EditorMgr::MouseButtonReleased( const InputSystem::MouseInfo& mi, c
 		{
 			// selection of multiple entities in a rectangle
 			mSelectedEntities.clear();
-			EntityPicker picker(mSelectionCursorPosition, gLayerMgr.GetActiveLayer(), gLayerMgr.GetActiveLayer());
+			EntitySystem::EntityPicker picker(mSelectionCursorPosition, gLayerMgr.GetActiveLayer(), gLayerMgr.GetActiveLayer());
 			float32 cameraRotation = gGfxRenderer.GetRenderTargetCameraRotation(rt);
-			if (picker.PickMultipleEntities(worldCursorPos, cameraRotation, mSelectedEntities))
+			EntitySystem::EntityList entities;
+			if (picker.PickMultipleEntities(worldCursorPos, cameraRotation, entities))
 			{
-				if (!IsEntitySelected(GetCurrentEntity())) SetCurrentEntity(GetSelectedEntity());
+				SelectEntities(entities);
 			}
 			else
 			{
-				SetCurrentEntity(EntityHandle::Null);
+				SelectEntity(EntitySystem::EntityHandle::Null);
 			}		
 		}
 		else if (mHoveredEntity.IsValid())
 		{
 			// selection of a single entity under the cursor
-			mSelectedEntities.clear();
-			mSelectedEntities.push_back(mHoveredEntity);
-			SetCurrentEntity(GetSelectedEntity());
+			SelectEntity(mHoveredEntity);
 		}
 		else
 		{
 			// nothing is selected
-			mSelectedEntities.clear();
-			SetCurrentEntity(GetSelectedEntity());
+			SelectEntity(EntitySystem::EntityHandle::Null);
 		}
 
 		return true;
@@ -748,9 +750,8 @@ bool Editor::EditorMgr::MouseButtonReleased( const InputSystem::MouseInfo& mi, c
 	{
 		if (!mHoveredEntity.IsValid())
 		{
-			// nothing is under the cursor
-			mSelectedEntities.clear();
-			SetCurrentEntity(GetSelectedEntity());
+			// nothing is under the cursor, clear selection
+			ClearSelection();
 		}
 	}
 
@@ -805,16 +806,10 @@ bool Editor::EditorMgr::DrawEntityPhysicalShape( const EntitySystem::EntityHandl
 	return result;
 }
 
-void Editor::EditorMgr::ClearSelection()
-{
-	mSelectedEntities.clear();
-	mHoveredEntity.Invalidate();
-}
-
 bool Editor::EditorMgr::IsEditingPrototype() const
 {
 	OC_ASSERT(mEditorGUI);
-	return gEntityMgr.IsEntityPrototype(GetCurrentEntity());
+	return gEntityMgr.IsEntityPrototype(GetSelectedEntity());
 }
 
 void EditorMgr::UpdateHierarchyWindow()
@@ -834,7 +829,7 @@ void Editor::EditorMgr::PropertyValueChanged()
 {
 	if (gEditorMgr.IsEditingPrototype())
 	{
-		gEntityMgr.UpdatePrototypeInstances(GetCurrentEntity());
+		gEntityMgr.UpdatePrototypeInstances(GetSelectedEntity());
 		gEntityMgr.SavePrototypes();
 	}
 }
@@ -922,11 +917,11 @@ bool Editor::EditorMgr::HandleShortcuts( InputSystem::eKeyCode keyCode )
 	}
 	if (mShortcuts->IsShortcutActive(KeyShortcuts::KS_DUPLICATE))
 	{
-		DuplicateCurrentEntity();
+		DuplicateSelectedEntity();
 	}
 	if (mShortcuts->IsShortcutActive(KeyShortcuts::KS_DELETE))
 	{
-		DeleteCurrentEntity();
+		DeleteSelectedEntity();
 	}
 	if (mShortcuts->IsShortcutActive(KeyShortcuts::KS_QUIT))
 	{
@@ -1033,19 +1028,6 @@ bool Editor::EditorMgr::IsEntitySelected( const EntitySystem::EntityHandle entit
 {
 	return std::find(mSelectedEntities.begin(), mSelectedEntities.end(), entity) != mSelectedEntities.end();
 }
-
-void Editor::EditorMgr::SelectEntity( const EntitySystem::EntityHandle entity )
-{
-	if (!IsEntitySelected(entity))
-	{
-		mSelectedEntities.clear();
-		mSelectedEntities.push_back(entity);
-	}
-}
-
-
-
-
 
 bool Editor::EditorMgr::IsProjectOpened() const
 { 

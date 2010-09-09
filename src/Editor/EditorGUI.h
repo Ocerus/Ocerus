@@ -39,6 +39,9 @@ namespace Editor
 		/// Updates GUI windows.
 		void UpdateGUIWindows();
 
+		/// Sets the specified entity as selected in GUI windows.
+		void SetSelectedEntity(EntitySystem::EntityHandle entity);
+
 		/// Returns the viewport of the editor window.
 		inline GUISystem::ViewportWindow* GetEditorViewport() const { return mEditorViewport; }
 

@@ -43,28 +43,25 @@ namespace Editor
 		/// Clear selections and sets initial time.
 		void Reset();
 
-		/// @name Methods related to current and selected entity.
+		/// @name Methods related to selected entities.
 		//@{
 
-			/// Returns currently edited entity. If no entity is edited,
-			/// invalid EntityHandler is returned.
-			inline const EntitySystem::EntityHandle GetCurrentEntity() const;
+			/// Selects an entity to be edited. The previously selected entities become unselected.
+			void SelectEntity(EntitySystem::EntityHandle entity);
 
-			/// Sets the currently edited entity.
-			void SetCurrentEntity(const EntitySystem::EntityHandle newCurrentEntity);
+			/// Selects entities to be edited. The first entity in the list will be displayed in entity editor.
+			/// The previously selected entities become unselected.
+			void SelectEntities(const EntitySystem::EntityList& entities);
 
 			/// Returns currently selected entity. If no entity is selected, invalid EntityHandler is returned.
-			/// If there are more selected entities only one of them is chosen.
-			inline const EntitySystem::EntityHandle GetSelectedEntity() const;
-
-			/// Selects an entity in the editor window.
-			void SelectEntity(const EntitySystem::EntityHandle entity);
+			/// If there are more selected entities, the first one is returned.
+			inline EntitySystem::EntityHandle GetSelectedEntity() const;
 
 			/// Returns true if the entity is in the current selection.
 			bool IsEntitySelected(const EntitySystem::EntityHandle entity) const;
 
 			/// Clears all selected entities.
-			void ClearSelection();
+			inline void ClearSelection();
 
 			/// Returns currently hovered entity.
 			inline EntitySystem::EntityHandle GetHoveredEntity() const { return mHoveredEntity; }
@@ -221,20 +218,20 @@ namespace Editor
 		/// Duplicates the specified entity.
 		void DuplicateEntity(EntitySystem::EntityHandle entity);
 
-		/// Duplicates the current entity.
-		void DuplicateCurrentEntity();
+		/// Duplicates the selected entity.
+		void DuplicateSelectedEntity();
 
 		/// Deletes the specified entity.
 		void DeleteEntity(EntitySystem::EntityHandle entity);
 
-		/// Deletes the current entity.
-		void DeleteCurrentEntity();
+		/// Deletes the selected entity.
+		void DeleteSelectedEntity();
 
 		/// Creates a prototype from the specified entity and links it to the prototype.
 		void CreatePrototypeFromEntity(EntitySystem::EntityHandle entity);
 
-		/// Creates a prototype from the current entity and links it to the prototype.
-		void CreatePrototypeFromCurrentEntity();
+		/// Creates a prototype from the selected entity and links it to the prototype.
+		void CreatePrototypeFromSelectedEntity();
 
 		/// Instantiate an prototype with a specified parent.
 		EntitySystem::EntityHandle InstantiatePrototype(EntitySystem::EntityHandle prototype, EntitySystem::EntityHandle parent);
@@ -248,13 +245,13 @@ namespace Editor
 		/// Adds a component of the specified type to the entity.
 		void AddComponentToEntity(EntitySystem::EntityHandle entity, EntitySystem::eComponentType componentType);
 		
-		/// Adds a component of the specified type to the current entity.
-		void AddComponentToCurrentEntity(EntitySystem::eComponentType componentType);
+		/// Adds a component of the specified type to the selected entity.
+		void AddComponentToSelectedEntity(EntitySystem::eComponentType componentType);
 
 		void RemoveComponentFromEntity(EntitySystem::EntityHandle entity, const EntitySystem::ComponentID& componentId);
 		
-		/// Removes the component with given componentId from current entity.
-		void RemoveComponentFromCurrentEntity(const EntitySystem::ComponentID& componentId);
+		/// Removes the component with given componentId from selected entity.
+		void RemoveComponentFromSelectedEntity(const EntitySystem::ComponentID& componentId);
 
 		
 
@@ -268,15 +265,13 @@ namespace Editor
 
 		EditorGUI* mEditorGUI;
 		Core::Project* mCurrentProject;
-		EntitySystem::EntityHandle mCurrentEntity; ///< Currently edited entity in the components' window.
 
 		// Selections stuff.
 		bool mMousePressedInSceneWindow; ///< True if the mouse button was pressed in the scene editor's window.
 		bool mMultiselectStarted; ///< True if the user started a multi-selection mode.
 		Vector2 mSelectionCursorPosition; ///< World position where the selection started.
 		EntitySystem::EntityHandle mHoveredEntity; ///< Entity the mouse is currently hovering over.
-		typedef vector<EntitySystem::EntityHandle> EntityList;
-		EntityList mSelectedEntities; ///< Currently selected entities.
+		EntitySystem::EntityList mSelectedEntities; ///< Currently selected entities.
 
 		// Tools.
 		eEditTool mEditTool; ///< Current tool.
@@ -307,15 +302,15 @@ namespace Editor
 	
 	};
 
-	inline const EntitySystem::EntityHandle EditorMgr::GetCurrentEntity() const
-	{
-		return mCurrentEntity;
-	}
-
-	inline const EntitySystem::EntityHandle EditorMgr::GetSelectedEntity() const
+	inline EntitySystem::EntityHandle EditorMgr::GetSelectedEntity() const
 	{
 		if (mSelectedEntities.size() == 0) return EntitySystem::EntityHandle::Null;
 		else return mSelectedEntities[0];
+	}
+	
+	inline void EditorMgr::ClearSelection()
+	{
+		SelectEntity(EntitySystem::EntityHandle::Null);
 	}
 }
 

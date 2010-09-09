@@ -42,10 +42,10 @@ void EntityWindow::Update(float32 delta)
 {
 	if (!mWindow) return;
 	mPropertyUpdateTimer += delta;
-	if (mPropertyUpdateTimer > PROPERTY_UPDATE_INTERVAL && gEditorMgr.GetCurrentEntity().IsValid())
+	if (mPropertyUpdateTimer > PROPERTY_UPDATE_INTERVAL && gEditorMgr.GetSelectedEntity().IsValid())
 	{
 		mPropertyUpdateTimer = 0;
-		if (!gEditorMgr.GetCurrentEntity().Exists() || mNeedsRebuild)
+		if (!gEditorMgr.GetSelectedEntity().Exists() || mNeedsRebuild)
 		{
 			Rebuild();
 		}
@@ -69,7 +69,7 @@ void EntityWindow::Rebuild()
 	Clear();
 
 	// There is no entity to be selected.
-	EntitySystem::EntityHandle currentEntity = gEditorMgr.GetCurrentEntity();
+	EntitySystem::EntityHandle currentEntity = gEditorMgr.GetSelectedEntity();
 	if (!currentEntity.Exists()) return;
 
 	mVerticalLayout->LockUpdates();
@@ -219,6 +219,6 @@ bool Editor::EntityWindow::OnRemoveComponentButtonClicked(const CEGUI::EventArgs
 {
 	const CEGUI::WindowEventArgs& args = static_cast<const CEGUI::WindowEventArgs&>(e);
 	EntitySystem::ComponentID componentID = args.window->getID();
-	gEditorMgr.RemoveComponentFromCurrentEntity(componentID);
+	gEditorMgr.RemoveComponentFromSelectedEntity(componentID);
 	return true;
 }

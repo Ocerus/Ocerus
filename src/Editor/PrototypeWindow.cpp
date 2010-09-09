@@ -75,17 +75,23 @@ void PrototypeWindow::Update()
 
 void Editor::PrototypeWindow::SetSelectedEntity( const EntitySystem::EntityHandle entity)
 {
+	if (!entity.IsValid())
+	{
+		mList->clearAllSelections();
+		return;
+	}
+
 	size_t itemCount = mList->getItemCount();
 	for (size_t idx = 0; idx < itemCount; ++idx)
 	{
 		CEGUI::ItemEntry* item = mList->getItemFromIndex(idx);
 		if (entity.IsValid() && (int)item->getID() == entity.GetID())
 		{
-			item->setFont("Editor-Bold");
+			item->setSelected(true);
 		}
 		else
 		{
-			item->setFont("Editor");
+			item->setSelected(false);
 		}
 	}
 }
@@ -118,7 +124,7 @@ void PrototypeWindow::DeletePrototype(EntitySystem::EntityHandle entity)
 
 void PrototypeWindow::InstantiatePrototype(EntitySystem::EntityHandle entity)
 {
-	gEditorMgr.SetCurrentEntity(gEntityMgr.InstantiatePrototype(entity));
+	gEditorMgr.SelectEntity(gEntityMgr.InstantiatePrototype(entity));
 }
 
 bool Editor::PrototypeWindow::OnListItemClicked(const CEGUI::EventArgs& e)
@@ -131,8 +137,7 @@ bool Editor::PrototypeWindow::OnListItemClicked(const CEGUI::EventArgs& e)
 	if (!clickedPrototype.IsValid())
 		return true;
 
-	CEGUI::ItemEntry* item = static_cast<CEGUI::ItemEntry*>(dragContainer->getParent());
-	item->setSelected(true);
+	gEditorMgr.SelectEntity(clickedPrototype);
 
 	if (args.button == CEGUI::RightButton)
 	{
@@ -140,24 +145,6 @@ bool Editor::PrototypeWindow::OnListItemClicked(const CEGUI::EventArgs& e)
 		mPopupMenu->getChildAtIdx(0)->setEnabled(true);
 		mPopupMenu->getChildAtIdx(2)->setEnabled(true);
 		gPopupMgr->ShowPopup(mPopupMenu, args.position.d_x, args.position.d_y, GUISystem::PopupMgr::Callback(this, &Editor::PrototypeWindow::OnPopupMenuItemClicked));
-	}
-	return true;
-}
-
-bool Editor::PrototypeWindow::OnListItemDoubleClicked(const CEGUI::EventArgs& e)
-{
-	const CEGUI::MouseEventArgs& args = static_cast<const CEGUI::MouseEventArgs&>(e);
-	CEGUI::DragContainer* dragContainer = static_cast<CEGUI::DragContainer*>(args.window);
-	if (dragContainer->isBeingDragged()) return false;
-
-	EntitySystem::EntityHandle clickedPrototype = EntitySystem::EntityHandle(dragContainer->getID());
-	if (!clickedPrototype.IsValid())
-		return true;
-
-	if (args.button == CEGUI::LeftButton)
-	{
-		gEditorMgr.SetCurrentEntity(clickedPrototype);
-		gEditorMgr.ClearSelection();
 	}
 	return true;
 }
@@ -193,7 +180,6 @@ CEGUI::ItemEntry* PrototypeWindow::CreatePrototypeItem()
 
 	dragContainer->addChildWindow(newItemText);
 	dragContainer->subscribeEvent(CEGUI::Window::EventMouseClick, CEGUI::Event::Subscriber(&Editor::PrototypeWindow::OnListItemClicked, this));
-	dragContainer->subscribeEvent(CEGUI::Window::EventMouseDoubleClick, CEGUI::Event::Subscriber(&Editor::PrototypeWindow::OnListItemDoubleClicked, this));
 	dragContainer->setUserString("DragDataType", "Prototype");
 
 	return newItem;

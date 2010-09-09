@@ -136,16 +136,13 @@ bool LayerWindow::OnItemClick(const CEGUI::EventArgs& e)
 	else
 	{
 		// item is entity
+		EntitySystem::EntityHandle clickedEntity = gEntityMgr.GetEntity(item->getID());
+		gEditorMgr.SelectEntity(clickedEntity);
+
 		if (args.button == CEGUI::RightButton)
 		{
-			mCurrentPopupEntity = gEntityMgr.GetEntity(item->getID());
+			mCurrentPopupEntity = clickedEntity;
 			gPopupMgr->ShowPopup(mEntityPopupMenu, args.position.d_x, args.position.d_y, GUISystem::PopupMgr::Callback(this, &Editor::LayerWindow::OnEntityPopupMenuItemClicked));
-		}
-		else if (args.button == CEGUI::LeftButton)
-		{
-			item->setSelected(true);
-			EntitySystem::EntityHandle entity = gEntityMgr.GetEntity(item->getID());
-			gEditorMgr.SetCurrentEntity(entity);
 		}
 	}
 	return true;
@@ -373,6 +370,31 @@ void Editor::LayerWindow::Update()
 		mTree->sortList();
 	}
 	CEGUI_CATCH;
+}
+
+void LayerWindow::SetSelectedEntity(EntitySystem::EntityHandle selectedEntity)
+{
+	if (!selectedEntity.IsValid())
+	{
+		mTree->clearAllSelections();
+	}
+	else
+	{
+		size_t itemCount = mTree->getItemCount();
+		for (size_t idx = 0; idx < itemCount; ++idx)
+		{
+			CEGUI::ItemEntry* item = mTree->getItemFromIndex(idx);
+
+			if (item->getUserData() == 0 && (EntitySystem::EntityID)item->getID() == selectedEntity.GetID())
+			{
+				item->setSelected(true);
+			}
+			else
+			{
+				item->setSelected(false);
+			}
+		}
+	}
 }
 
 void Editor::LayerWindow::Clear()

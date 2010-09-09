@@ -12,7 +12,7 @@
 using namespace Editor;
 using namespace EntitySystem;
 
-Editor::HierarchyWindow::HierarchyWindow(): mWindow(0), mTree(0), mCurrentParent(EntitySystem::EntityHandle::Null), mDontAddEntities(false)
+Editor::HierarchyWindow::HierarchyWindow(): mWindow(0), mTree(0), mCurrentParent(EntitySystem::EntityHandle::Null), mDontAddEntities(false), mIsRemovingChildEntities(false)
 {
 }
 
@@ -118,6 +118,8 @@ void Editor::HierarchyWindow::AddEntityToHierarchy(const EntitySystem::EntityHan
 
 void Editor::HierarchyWindow::RemoveEntityFromHierarchy(const EntitySystem::EntityHandle toRemove)
 {
+	if (mIsRemovingChildEntities) return; // We are already inside RemoveEntityFromHierarchy few levels higher in the call stack
+
 	if (gEntityMgr.IsEntityTransient(toRemove) || gEntityMgr.IsEntityPrototype(toRemove)) return;
 
 	HierarchyTree::iterator iter = Containers::find(mHierarchy.begin(), mHierarchy.end(), toRemove);
@@ -127,14 +129,22 @@ void Editor::HierarchyWindow::RemoveEntityFromHierarchy(const EntitySystem::Enti
 		return;
 	}
 
-	HierarchyTree::iterator childIter = iter;
-	while (childIter != mHierarchy.end(iter))
+	mIsRemovingChildEntities = true;
+
+	HierarchyTree::iterator subtreeIter = iter;
+	++subtreeIter;
+	HierarchyTree::iterator subtreeIterEnd = iter;
+	subtreeIterEnd.skip_children();
+	++subtreeIterEnd;
+	
+	while (subtreeIter != subtreeIterEnd)
 	{
-		ocInfo << "Destroying entity: " << childIter->GetName();
-		gEntityMgr.DestroyEntity(*childIter);
-		++childIter;
+		ocInfo << "Destroying " << *subtreeIter << " because it is descendant of " << *iter;
+		gEntityMgr.DestroyEntity(*subtreeIter);
+		++subtreeIter;
 	}
 	mHierarchy.erase(iter);
+	mIsRemovingChildEntities = false;
 
 	Update();
 }
@@ -254,11 +264,7 @@ bool Editor::HierarchyWindow::OnTreeItemClicked( const CEGUI::EventArgs& e )
 	if (dragContainer->isBeingDragged()) return false;
 
 	EntityHandle clickedEntity = EntityHandle(dragContainer->getID());
-
-	if (args.button == CEGUI::LeftButton)
-	{
-		gEditorMgr.SetCurrentEntity(clickedEntity);
-	}
+	gEditorMgr.SelectEntity(clickedEntity);
 
 	if (args.button == CEGUI::RightButton)
 	{
@@ -271,11 +277,8 @@ bool Editor::HierarchyWindow::OnTreeClicked( const CEGUI::EventArgs& e )
 {
 	const CEGUI::MouseEventArgs& args = static_cast<const CEGUI::MouseEventArgs&>(e);
 
-	if (args.button == CEGUI::LeftButton)
-	{
-		gEditorMgr.SetCurrentEntity(EntitySystem::EntityHandle::Null);
-		gEditorMgr.ClearSelection();
-	}
+	gEditorMgr.SelectEntity(EntitySystem::EntityHandle::Null);
+	gEditorMgr.ClearSelection();
 
 	if (args.button == CEGUI::RightButton)
 	{
@@ -510,7 +513,7 @@ void HierarchyWindow::OnPopupMenuItemClicked(CEGUI::Window* menuItem)
 	if (menuItem->getParent() == mComponentPopupMenu)
 	{
 		// New component menu item clicked
-		gEditorMgr.AddComponentToCurrentEntity((EntitySystem::eComponentType)menuItem->getID());
+		gEditorMgr.AddComponentToSelectedEntity((EntitySystem::eComponentType)menuItem->getID());
 	}
 	else
 	{
@@ -532,10 +535,10 @@ void HierarchyWindow::OnPopupMenuItemClicked(CEGUI::Window* menuItem)
 			gEditorMgr.DuplicateEntity(mCurrentPopupEntity);
 			break;
 		case PI_DELETE_ENTITY:
-			gEditorMgr.DeleteCurrentEntity();
+			gEditorMgr.DeleteSelectedEntity();
 			break;
 		case PI_CREATE_PROTOTYPE:
-			gEditorMgr.CreatePrototypeFromCurrentEntity();
+			gEditorMgr.CreatePrototypeFromSelectedEntity();
 			break;
 		default:
 			OC_NOT_REACHED();
@@ -573,7 +576,7 @@ void Editor::HierarchyWindow::SetupTreeItem(CEGUI::ItemEntry* treeItem, EntityHa
 
 	treeItem->setID(entity.GetID());
 	treeItem->setUserString("HierarchyPath", hierarchyPath);
-	treeItem->setSelected(gEditorMgr.GetCurrentEntity() == entity);
+	treeItem->setSelected(gEditorMgr.GetSelectedEntity() == entity);
 	
 	CEGUI::Window* dragContainer = treeItem->getChildAtIdx(0);
 	dragContainer->setArea(CEGUI::URect(CEGUI::UDim(0, hierarchyLevel * paddingPerLevel), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));

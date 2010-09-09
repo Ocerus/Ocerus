@@ -496,13 +496,8 @@ void Core::Application::OpenPDF( const string& filePath )
 
 void Core::Application::YieldProcess()
 {
-#ifdef __WIN__
-	// Update each 1s
-	sleep(1);
-#else
 	// Update each 20ms, mouse is still OK
 	usleep(20000);
-#endif
 }
 
 #endif

@@ -163,6 +163,23 @@ void EditorGUI::UpdateGUIWindows()
 	mResourceWindow->Update();
 }
 
+void EditorGUI::SetSelectedEntity(EntitySystem::EntityHandle entity)
+{
+	if (gEntityMgr.IsEntityPrototype(entity))
+	{
+		GetPrototypeWindow()->SetSelectedEntity(entity);
+		GetHierarchyWindow()->SetSelectedEntity(EntitySystem::EntityHandle::Null);
+		GetLayerWindow()->SetSelectedEntity(EntitySystem::EntityHandle::Null);
+	}
+	else
+	{
+		GetPrototypeWindow()->SetSelectedEntity(EntitySystem::EntityHandle::Null);
+		GetHierarchyWindow()->SetSelectedEntity(entity);
+		GetLayerWindow()->SetSelectedEntity(entity);
+	}
+	GetEntityWindow()->Rebuild();
+}
+
 void EditorGUI::Update(float32 delta)
 {
 	// Setting the active window
@@ -260,7 +277,7 @@ void Editor::EditorGUI::OnEditorViewportPopupMenuItemClicked(CEGUI::Window* menu
 	if (menuItem->getParent() == mNewComponentPopupMenu)
 	{
 		// New component menu item clicked
-		gEditorMgr.AddComponentToCurrentEntity((EntitySystem::eComponentType)menuItem->getID());
+		gEditorMgr.AddComponentToSelectedEntity((EntitySystem::eComponentType)menuItem->getID());
 	}
 	else
 	{

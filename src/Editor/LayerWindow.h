@@ -32,6 +32,9 @@ namespace Editor
 		/// Updates the LayerWindow.
 		void Update();
 
+		/// Sets the currently selected entity.
+		void SetSelectedEntity(EntitySystem::EntityHandle selectedEntity);
+
 		/// Moves the specified layer up.
 		void MoveLayerUp(EntitySystem::LayerID layerID);
 

@@ -127,6 +127,7 @@ namespace Editor
 		HierarchyTree mHierarchy;
 		EntitySystem::EntityHandle mCurrentParent;
 		bool mDontAddEntities;
+		bool mIsRemovingChildEntities;
 		
 		void CreatePopupMenu();
 		void DestroyPopupMenu();

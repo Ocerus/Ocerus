@@ -173,14 +173,14 @@ bool Editor::EditorMenu::OnMenuItemClicked(const CEGUI::EventArgs& e)
 	{
 		if (args.window->isUserStringDefined("IsComponentItem"))
 		{
-			gEditorMgr.AddComponentToCurrentEntity((EntitySystem::eComponentType)args.window->getID());
+			gEditorMgr.AddComponentToSelectedEntity((EntitySystem::eComponentType)args.window->getID());
 			return true;
 		}
 	}
 
 	if (itemName == menubarPrefix + "/Edit/DuplicateEntity")
 	{
-		gEditorMgr.DuplicateCurrentEntity();
+		gEditorMgr.DuplicateSelectedEntity();
 		return true;
 	}
 	
@@ -192,7 +192,7 @@ bool Editor::EditorMenu::OnMenuItemClicked(const CEGUI::EventArgs& e)
 
 	if (itemName == menubarPrefix + "/Edit/DeleteEntity")
 	{
-		gEditorMgr.DeleteCurrentEntity();
+		gEditorMgr.DeleteSelectedEntity();
 		return true;
 	}
 
@@ -204,7 +204,7 @@ bool Editor::EditorMenu::OnMenuItemClicked(const CEGUI::EventArgs& e)
 
 	if (itemName == menubarPrefix + "/Edit/CreatePrototype")
 	{
-		gEditorMgr.CreatePrototypeFromCurrentEntity();
+		gEditorMgr.CreatePrototypeFromSelectedEntity();
 		return true;
 	}
 

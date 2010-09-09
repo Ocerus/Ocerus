@@ -44,7 +44,14 @@ LogSystem::Logger::~Logger( void )
 
 Logger& LogSystem::Logger::operator<<(const EntitySystem::EntityHandle& value)
 {
-	*this << "Entity(" << value.GetID() << ")";
+	if (value.IsValid())
+	{
+		*this << "Entity(\"" << value.GetName() << "\", " << value.GetID() << ")";
+	}
+	else
+	{
+		*this << "Entity(Null, " << EntitySystem::INVALID_ENTITY_ID << ")";
+	}
 	return *this;
 }
 
