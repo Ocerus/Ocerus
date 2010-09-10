@@ -579,7 +579,7 @@ void Editor::HierarchyWindow::SetupTreeItem(CEGUI::ItemEntry* treeItem, EntityHa
 	treeItem->setSelected(gEditorMgr.GetSelectedEntity() == entity);
 	
 	CEGUI::Window* dragContainer = treeItem->getChildAtIdx(0);
-	dragContainer->setArea(CEGUI::URect(CEGUI::UDim(0, hierarchyLevel * paddingPerLevel), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
+	dragContainer->setArea(CEGUI::URect(CEGUI::UDim(0, (float32)(hierarchyLevel * paddingPerLevel)), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
 	dragContainer->setID(entity.GetID());
 
 	CEGUI::Window* treeItemText = dragContainer->getChildAtIdx(0);

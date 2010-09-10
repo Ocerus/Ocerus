@@ -94,6 +94,9 @@ uint32 EntitySystem::EntityPicker::PickMultipleEntities( const Vector2& worldCur
 {
 	Vector2 A = mCursorWorldPosition;
 	Vector2 B = worldCursorPos;
+
+	if (MathUtils::Abs(A.x - B.x) < FLT_EPSILON) return 0;
+	if (MathUtils::Abs(A.y - B.y) < FLT_EPSILON) return 0;
 	if (A.x > B.x) MathUtils::Swap(A, B);
 
 	Vector2 r;

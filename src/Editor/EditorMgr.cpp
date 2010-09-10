@@ -321,25 +321,26 @@ EntitySystem::EntityHandle Editor::EditorMgr::InstantiatePrototype(EntitySystem:
 
 void Editor::EditorMgr::DuplicateSelectedEntities()
 {
+	EntityList tmpVec(mSelectedEntities.size());
 	for (EntityList::iterator it = mSelectedEntities.begin(); it != mSelectedEntities.end(); ++it)
 	{
 		if (it->Exists())
 		{
-			gEntityMgr.DuplicateEntity(*it).FinishInit();
+			EntitySystem::EntityHandle h = gEntityMgr.DuplicateEntity(*it);
+			h.FinishInit();
+			tmpVec.push_back(h);
 		}
 	}
+	mSelectedEntities.assign(tmpVec.begin(), tmpVec.end());
 }
 
 void Editor::EditorMgr::DeleteSelectedEntities()
 {
 	for (EntityList::iterator it = mSelectedEntities.begin(); it != mSelectedEntities.end(); ++it)
 	{
-		if (it->Exists())
-		{
-			if (GetSelectedEntity() == (*it)) { SelectEntity(EntityHandle::Null); }
-			gEntityMgr.DestroyEntity(*it);
-		}
+		DeleteEntity(*it);
 	}
+	SelectEntity(EntityHandle::Null);
 	mSelectedEntities.clear();
 }
 
@@ -634,9 +635,11 @@ bool Editor::EditorMgr::MouseButtonPressed( const InputSystem::MouseInfo& mi, co
 				break;
 			case ET_ROTATE:
 				mEditToolBodyAngles.resize(mSelectedEntities.size());
+				mEditToolBodyPositions.resize(mSelectedEntities.size());
 				for (size_t i=0; i<mSelectedEntities.size(); ++i)
 				{
 					mEditToolBodyAngles[i] = mSelectedEntities[i].GetProperty("Angle").GetValue<float32>();
+					mEditToolBodyPositions[i] = mSelectedEntities[i].GetProperty("Position").GetValue<Vector2>();
 				}
 				break;
 			case ET_ROTATE_Y:
@@ -917,11 +920,11 @@ bool Editor::EditorMgr::HandleShortcuts( InputSystem::eKeyCode keyCode )
 	}
 	if (mShortcuts->IsShortcutActive(KeyShortcuts::KS_DUPLICATE))
 	{
-		DuplicateSelectedEntity();
+		DuplicateSelectedEntities();
 	}
 	if (mShortcuts->IsShortcutActive(KeyShortcuts::KS_DELETE))
 	{
-		DeleteSelectedEntity();
+		DeleteSelectedEntities();
 	}
 	if (mShortcuts->IsShortcutActive(KeyShortcuts::KS_QUIT))
 	{
@@ -991,11 +994,34 @@ void Editor::EditorMgr::ProcessCurrentEditTool(const GfxSystem::Point& screenCur
 		}
 		break;
 	case ET_ROTATE:
+	{
+		if (mSelectedEntities.size() == 1)
+		{
+			mSelectedEntities[0].GetProperty("Angle").SetValue<float32>(mEditToolBodyAngles[0] + EDIT_TOOL_ANGLE_CHANGE_RATIO * scalarDelta);
+			break;
+		}
+		Matrix22 rotationMatrix(EDIT_TOOL_ANGLE_CHANGE_RATIO * scalarDelta);
+		Vector2 centerPos(0,0);
+		Vector2 fromCenterVec;
+
 		for (size_t i=0; i<mSelectedEntities.size(); ++i)
 		{
+			centerPos += mEditToolBodyPositions[i];
+		}
+
+		centerPos.x = centerPos.x / mSelectedEntities.size();
+		centerPos.y = centerPos.y / mSelectedEntities.size();
+
+		for (size_t i=0; i<mSelectedEntities.size(); ++i)
+		{
+			fromCenterVec =  mEditToolBodyPositions[i] - centerPos;
+			fromCenterVec = MathUtils::Multiply(rotationMatrix, fromCenterVec);
+
+			mSelectedEntities[i].GetProperty("Position").SetValue<Vector2>(centerPos + fromCenterVec);
 			mSelectedEntities[i].GetProperty("Angle").SetValue<float32>(mEditToolBodyAngles[i] + EDIT_TOOL_ANGLE_CHANGE_RATIO * scalarDelta);
 		}
 		break;
+	}
 	case ET_ROTATE_Y:
 		for (size_t i=0; i<mSelectedEntities.size(); ++i)
 		{
