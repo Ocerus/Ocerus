@@ -260,7 +260,7 @@ void GfxSystem::OglRenderer::DrawTexturedMesh( const TexturedMesh& mesh ) const
 	glTranslatef( mesh.position.x, mesh.position.y, mesh.z );
 	glRotatef(MathUtils::RadToDeg(mesh.angle), 0, 0, 1);
 	glRotatef(MathUtils::RadToDeg(mesh.yAngle), 0, 1, 0);
-	glScalef(mesh.scale, mesh.scale, mesh.scale);
+	glScalef(mesh.scale.x, mesh.scale.y, MathUtils::Max(mesh.scale.x, mesh.scale.y));
 
 	ModelOBJ* model = (ModelOBJ*)mesh.mesh;
 	OC_DASSERT(model);

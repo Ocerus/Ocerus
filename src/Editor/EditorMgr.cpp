@@ -974,10 +974,9 @@ void Editor::EditorMgr::ProcessCurrentEditTool(const GfxSystem::Point& screenCur
 	gGfxRenderer.ConvertScreenToWorldCoords(GfxSystem::Point(screenCursorPos.x, screenCursorPos.y), worldCursorPos, mEditorGUI->GetEditorViewport()->GetRenderTarget());
 	Vector2 delta = worldCursorPos - mEditToolCursorPosition;
 	delta.y = -delta.y; // so that the editing tool seems more intuitive
+
 	float32 scalarDelta = delta.x * delta.x / 2;
-
 	if (scalarDelta > 8) scalarDelta = MathUtils::Abs(delta.x) * 2;
-
 	if (delta.x < 0) scalarDelta *= -1;
 
 	switch (mEditTool)
@@ -1039,11 +1038,34 @@ void Editor::EditorMgr::ProcessCurrentEditTool(const GfxSystem::Point& screenCur
 		else
 			delta.y *= delta.y;
 
-
 		delta *= EDIT_TOOL_SCALE_CHANGE_RATIO;
 		for (size_t i=0; i<mSelectedEntities.size(); ++i)
 		{
-			Vector2 transformedDelta = MathUtils::Multiply(Matrix22(mSelectedEntities[i].GetProperty("Angle").GetValue<float32>()), delta);
+			float32 angle = mSelectedEntities[i].GetProperty("Angle").GetValue<float32>();
+
+			Vector2 deltax(delta.x, 0);
+
+			Vector2 transformedDeltax = MathUtils::Multiply(Matrix22(angle), deltax);
+
+			transformedDeltax.x = MathUtils::Abs(transformedDeltax.x);
+			transformedDeltax.y = MathUtils::Abs(transformedDeltax.y);
+
+			if (delta.x < 0)
+				transformedDeltax *= -1;
+
+
+			Vector2 deltay(0, delta.y);
+
+			Vector2 transformedDeltay = MathUtils::Multiply(Matrix22(angle), deltay);
+
+			transformedDeltay.x = MathUtils::Abs(transformedDeltay.x);
+			transformedDeltay.y = MathUtils::Abs(transformedDeltay.y);
+
+			if (delta.y < 0)
+				transformedDeltay *= -1;
+
+			Vector2 transformedDelta = transformedDeltay + transformedDeltax;
+
 			mSelectedEntities[i].GetProperty("Scale").SetValue<Vector2>(mEditToolBodyScales[i] + transformedDelta);
 		}
 		break;

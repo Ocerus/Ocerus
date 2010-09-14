@@ -66,11 +66,10 @@ void EntityComponents::Transform::SetLayer(int32 value)
 
 void EntityComponents::Transform::SetScale( Vector2 value )
 {
-	if (value.x < MIN_SCALAR_SCALE || value.y < MIN_SCALAR_SCALE)
-	{
-		return;
-	}
-	mScale = value;
+	if (value.x >= MIN_SCALAR_SCALE)
+		mScale.x = value.x;
+	if (value.y >= MIN_SCALAR_SCALE)
+		mScale.y = value.y;
 }
 
 void EntityComponents::Transform::DestroyShape()

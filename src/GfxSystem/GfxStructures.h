@@ -119,11 +119,11 @@ namespace GfxSystem
 	/// Mesh with a texture attached to it.
 	struct TexturedMesh
 	{
-		TexturedMesh(): position(Vector2_Zero), scale(1.0f), angle(0), z(0), 
+		TexturedMesh(): position(Vector2_Zero), scale(Vector2_Zero), angle(0), z(0), 
 			yAngle(0), mesh(0), transparency(0) {}
 
 		Vector2 position;
-		float32 scale;
+		Vector2 scale;
 		float32 angle;
 		float32 z;
 		float32 yAngle;

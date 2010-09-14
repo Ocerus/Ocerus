@@ -255,7 +255,7 @@ void GfxSystem::GfxRenderer::DrawModel( const EntitySystem::Component* modelComp
 
 	TexturedMesh mesh;
 	mesh.position = transform->GetPosition();
-	mesh.scale = MathUtils::Max(transform->GetScale().x, transform->GetScale().y);
+	mesh.scale = transform->GetScale();
 	mesh.angle = transform->GetAngle();
 	mesh.z = LAYER_Z_SIZE * (float32)transform->GetLayer();
 	mesh.yAngle = model->GetYAngle();
