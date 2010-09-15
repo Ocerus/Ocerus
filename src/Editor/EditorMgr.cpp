@@ -252,6 +252,7 @@ void Editor::EditorMgr::DuplicateEntity(EntitySystem::EntityHandle entity)
 		UpdatePrototypeWindow();
 	}
 	SelectEntity(newEntity);
+	GetEditorGUI()->SetSelectedEntity(newEntity);
 	GetHierarchyWindow()->SetCurrentParent(EntityHandle::Null);
 }
 
@@ -332,6 +333,7 @@ void Editor::EditorMgr::DuplicateSelectedEntities()
 		}
 	}
 	mSelectedEntities.assign(tmpVec.begin(), tmpVec.end());
+	GetEditorGUI()->SetSelectedEntity(*mSelectedEntities.begin());
 }
 
 void Editor::EditorMgr::DeleteSelectedEntities()
@@ -685,6 +687,7 @@ bool Editor::EditorMgr::MouseButtonReleased( const InputSystem::MouseInfo& mi, c
 	if (!GetWorldCursorPos(worldCursorPos))
 	{
 		// we're not in the current viewport
+		mMultiselectStarted = false;
 		return false;
 	}
 
