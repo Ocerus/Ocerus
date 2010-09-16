@@ -125,7 +125,7 @@ This class allows the game to pick an entity based on provided input data. This 
 
 \begin{titled-itemize}{Operators and methods}
   \item EntityHandle PickSingleEntity() -- runs the picking query, the result is returned directly
-  \item void PickMultipleEntities(EntityHandle[] &out, const Vector2 &in, const float32) -- runs the picking query, the result is filled into the given array, the query is defined by a rectangle between the last cursor position and the given cursor position, the rectangle is rotated by the given angle
+  \item void PickMultipleEntities(EntityHandle[] \&out, const Vector2 \&in, const float32) -- runs the picking query, the result is filled into the given array, the query is defined by a rectangle between the last cursor position and the given cursor position, the rectangle is rotated by the given angle
 \end{titled-itemize}
 
 \subsubsection{EntityDescription}
@@ -315,6 +315,16 @@ This class representes the editbox GUI element. It is registered as a basic refe
   \item void SetMaxTextLength(uint32) -- sets the maximum text length for this editbox
 \end{titled-itemize}
 
+\subsubsection{GUIMgr}
+
+This class manages the graphic user interface of the game. It is registered as a no-handle reference so the only way to use it is to get reference from a global property.
+
+\begin{titled-itemize}{Operators and methods}
+  \item void LoadScheme(const string \&in) -- loads the project scheme file
+  \item void LoadImageset(const string \&in) -- loads the project imageset file
+  \item Window@ LoadLayout(const CEGUIString \&in, const CEGUIString \&in) -- loads the project layout file and returns it (the layout filename, widget names in layout file are prefixed with given prefix)
+\end{titled-itemize}
+
 \subsection{Global functions}
 
 \begin{titled-itemize}{Declaration and comment}
@@ -332,6 +342,7 @@ This class representes the editbox GUI element. It is registered as a basic refe
   \item InputMgr\& gInputMgr -- the reference to the input manager on which it is possible to call methods, this reference cannot be stored to a variable or passed to a function
   \item Project\& gProject -- the reference to the current project on which it is possible to call methods, this reference cannot be stored to a variable or passed to a function
   \item Game\& game -- the reference to the current game on which it is possible to call methods, this reference cannot be stored to a variable or passed to a function
+  \item GUIMgr\& gGUIMgr -- the reference to the graphic user interface manager on which it is possible to call methods, this reference cannot be stored to a variable or passed to a function
 \end{titled-itemize}
 
 \subsection{Enumerations}
@@ -413,10 +424,10 @@ This class represents 32-bit color and it is registered as a value type.
   \item int32 Abs(const int32)
   \item float32 Min(const float32, const float32)
   \item int32 Min(const int32, const int32)
-  \item Vector2 Min(const Vector2 &in, const Vector2 &in)
+  \item Vector2 Min(const Vector2 \&in, const Vector2 \&in)
   \item float32 Max(const float32, const float32)
   \item int32 Max(const int32, const int32)
-  \item Vector2 Max(const Vector2 &in, const Vector2 &in)
+  \item Vector2 Max(const Vector2 \&in, const Vector2 \&in)
   \item int32 Round(const float32)
   \item int64 Round(const float64)
   \item int32 Floor(const float32)

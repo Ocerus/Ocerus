@@ -10,12 +10,14 @@
 #include "AddOn/scriptstring.h"
 #include "GUISystem/CEGUICommon.h"
 #include "GUISystem/GUIConsole.h"
+#include "GUISystem/GUIMgr.h"
 #include "Editor/EditorMgr.h"
 #include "Editor/EditorGUI.h"
 
 using namespace ScriptSystem;
 using namespace EntitySystem;
 using namespace InputSystem;
+using namespace GUISystem;
 using namespace AngelScript;
 using namespace Core;
 
@@ -1176,6 +1178,28 @@ void RegisterScriptWindows(asIScriptEngine* engine)
 	r = engine->RegisterGlobalFunction("Window@ GetWindow(string)", asFUNCTION(ScriptGetWindow), asCALL_CDECL); OC_SCRIPT_ASSERT();
 }
 
+// Functions for register GUIMgr to script
+
+GUIMgr& GetGUIMgr()
+{
+	return gGUIMgr;
+}
+
+void RegisterScriptGUIMgr(asIScriptEngine* engine)
+{
+	int32 r;
+	// Register the type
+	r = engine->RegisterObjectType("GUIMgr", 0, asOBJ_REF | asOBJ_NOHANDLE); OC_SCRIPT_ASSERT();
+	
+	// Register the object methods
+	r = engine->RegisterObjectMethod("GUIMgr", "void LoadScheme(const string &in)", asMETHOD(GUIMgr, LoadProjectScheme), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("GUIMgr", "void LoadImageset(const string &in)", asMETHOD(GUIMgr, LoadProjectImageset), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("GUIMgr", "Window@ LoadLayout(const CEGUIString &in, const CEGUIString &in)", asMETHOD(GUIMgr, LoadProjectLayout), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	
+	// Register function that returns it
+	r = engine->RegisterGlobalFunction("GUIMgr& get_gGUIMgr()", asFUNCTION(GetGUIMgr), asCALL_CDECL); OC_SCRIPT_ASSERT();
+}
+
 // Get handle of entity which ran the script
 EntityHandle GetCurrentEntityHandle(void)
 {
@@ -1266,6 +1290,9 @@ void ScriptMgr::ConfigureEngine(void)
 	
 	// Register CEGUI components
 	RegisterScriptWindows(mEngine);
+
+	// Register GUIMgr methods
+	RegisterScriptGUIMgr(mEngine);
 
 	// Register all additions in ScriptRegister.cpp to script
 	RegisterAllAdditions(mEngine);
