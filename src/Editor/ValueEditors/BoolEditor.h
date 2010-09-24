@@ -1,11 +1,12 @@
 /// @file
 /// Declares an editor for boolean properties.
 
-#ifndef _BOOLEDITOR_H_
-#define _BOOLEDITOR_H_
+#ifndef _EDITOR_BOOLEDITOR_H_
+#define _EDITOR_BOOLEDITOR_H_
 
 #include "Base.h"
 #include "AbstractValueEditor.h"
+#include "Models/IValueEditorModel.h"
 
 namespace Editor {
 
@@ -15,13 +16,19 @@ namespace Editor {
 		typedef ITypedValueEditorModel<bool> Model;
 		
 		/// Constructs a BoolEditor that uses given model.
-		BoolEditor(Model* model): mModel(model), mCheckboxWidget(0) { PROFILE_FNC(); }
+		BoolEditor(): mModel(0), mCheckboxWidget(0) {}
 
 		/// Destroys the BoolEditor and its model.
-		~BoolEditor();
+		virtual ~BoolEditor();
+
+		/// Sets the model of the editor.
+		void SetModel(Model* newModel);
+
+		/// Destroys the model.
+		virtual void DestroyModel();
 
 		/// Creates the main widget of this editor and returns it.
-		virtual CEGUI::Window* CreateWidget(const CEGUI::String& namePrefix);
+		virtual CEGUI::Window* GetWidget();
 
 		/// Submits the value from editor widget to the model.
 		virtual void Submit();
@@ -30,17 +37,26 @@ namespace Editor {
 		/// the editor is locked for updates.
 		virtual void Update();
 
+		virtual eValueEditorType GetType() { return VET_PT_BOOL; }
+		
+		static const eValueEditorType Type;
+
+
+	private:
+		void InitWidget();
+		void DeinitWidget();
+		void SetupWidget(Model* model);
+
 		/// @name CEGUI callbacks
 		//@{
-			bool OnEventButtonRemovePressed(const CEGUI::EventArgs&);
+			bool OnRemoveButtonClicked(const CEGUI::EventArgs&);
 			bool OnEventCheckStateChanged(const CEGUI::EventArgs&);
 			bool OnEventIsSharedCheckboxChanged(const CEGUI::EventArgs&);
 		//@}
 
-	private:
 		Model* mModel;
 		CEGUI::Checkbox* mCheckboxWidget;
 	};
 }
 
-#endif // _BOOLEDITOR_H_
+#endif // _EDITOR_BOOLEDITOR_H_

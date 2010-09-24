@@ -35,6 +35,8 @@ namespace Editor
 
 		virtual bool IsReadOnly() const;
 
+		virtual bool IsLocked() const { return false; }
+
 		virtual bool IsListElement() const { return false; }
 
 		virtual bool IsRemovable() const;

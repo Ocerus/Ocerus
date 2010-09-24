@@ -116,6 +116,9 @@ Application::~Application()
 	delete mGame;
 
 	EntitySystem::LayerMgr::DestroySingleton();
+
+	if (mDevelopMode)
+		gEditorMgr.Deinit();
 	Editor::EditorMgr::DestroySingleton();
 
 	GUISystem::GUIMgr::DestroySingleton();

@@ -1,41 +1,120 @@
 /// @file
-/// Declares an abstract editor for properties with two dimensions.
+/// Declares editors for properties with two dimensions.
 
-#ifndef _2DEDITOR_H_
-#define _2DEDITOR_H_
+#ifndef _EDITOR_TWODIMEDITOR_H_
+#define _EDITOR_TWODIMEDITOR_H_
 
 #include "Base.h"
 #include "AbstractValueEditor.h"
+#include "Models/IValueEditorModel.h"
 
 namespace Editor {
 
+	/// An abstract editor for editing properties with two dimensions.
 	class TwoDimEditor: public AbstractValueEditor
 	{
 	public:
 
-		/// Constructs a 2DEditor that uses given model.
-		TwoDimEditor(IValueEditorModel* model): mModel(model), mEditbox1Widget(0), mEditbox2Widget(0) { PROFILE_FNC(); }
+		/// Constructs a TwoDimEditor.
+		TwoDimEditor() {}
 
-		/// Destroys the 2DEditor and its model.
+		/// Destroys the TwoDimEditor.
 		virtual ~TwoDimEditor();
 
-		/// Creates the main widget of this editor and returns it.
-		virtual CEGUI::Window* CreateWidget(const CEGUI::String& namePrefix);
+		/// Returns the main widget of this editor.
+		virtual CEGUI::Window* GetWidget();
+
+		virtual void Submit();
+		
+		virtual void Update();
+		
+	protected:
+		virtual IValueEditorModel* GetModel() = 0;
+		virtual void SetValue(float x, float y) = 0;
+		virtual void GetValue(float& x, float& y) = 0;
+	
+		void InitWidget();
+		void DeinitWidget();
+		bool IsWidgetInited() const;
+		void SetupWidget(IValueEditorModel* model);
 
 		/// @name CEGUI callbacks
 		//@{
 			bool OnEventActivated(const CEGUI::EventArgs&) { this->LockUpdates(); return true;}
 			bool OnEventDeactivated(const CEGUI::EventArgs&);
-			bool OnEventButtonRemovePressed(const CEGUI::EventArgs&);
+			bool OnRemoveButtonClicked(const CEGUI::EventArgs&);
 			bool OnEventKeyDown(const CEGUI::EventArgs&);
 			bool OnEventIsSharedCheckboxChanged(const CEGUI::EventArgs&);
 		//@}
 
+	private:
+		inline CEGUI::Window* GetEditbox1Widget();
+		inline CEGUI::Window* GetEditbox2Widget();
+	};
+
+	template<class Vec>
+	class VectorEditor: public TwoDimEditor
+	{
+	public:
+		typedef ITypedValueEditorModel<Vec> Model;
+
+		/// Constructs a VectorEditor that uses given model.
+		VectorEditor(): mModel(0) {}
+
+		/// Destroys the Vector2Editor and its model.
+		virtual ~VectorEditor()
+		{
+			DestroyModel();
+		}
+
+		void SetModel(Model* newModel)
+		{
+			mModel = newModel;
+			SetupWidget(mModel);
+		}
+		
+		virtual void DestroyModel()
+		{
+			delete mModel;
+			mModel = 0;
+		}
+
 	protected:
-		IValueEditorModel* mModel;
-		CEGUI::Window* mEditbox1Widget;
-		CEGUI::Window* mEditbox2Widget;
+		virtual IValueEditorModel* GetModel() { return mModel; }
+
+		virtual void GetValue(float& x, float& y)
+		{
+			if (mModel->IsValid())
+			{
+				Vec value = mModel->GetValue();
+				x = value.x;
+				y = value.y;
+			}
+		}
+		
+		virtual void SetValue(float x, float y)
+		{
+			Vec value(x, y);
+			mModel->SetValue(value);
+		}
+
+	private:
+		Model* mModel;
+	};
+
+	class Vector2Editor: public VectorEditor<Vector2>
+	{
+	public:
+		virtual eValueEditorType GetType() { return VET_PT_VECTOR2; }
+		static const eValueEditorType Type;
+	};
+
+	class PointEditor: public VectorEditor<GfxSystem::Point>
+	{
+	public:
+		virtual eValueEditorType GetType() { return VET_PT_POINT; }
+		static const eValueEditorType Type;
 	};
 }
 
-#endif // _2DEDITOR_H_
+#endif // _EDITOR_TWODIMEDITOR_H_

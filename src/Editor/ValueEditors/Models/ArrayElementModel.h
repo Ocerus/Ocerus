@@ -1,10 +1,11 @@
 /// @file
-/// Declares a model that allows to use ValueEditors to edit entity attributes.
+/// Declares a model that allows to use ValueEditors to edit array elements.
 
-#ifndef _ARRAYELEMENTMODEL_H_
-#define _ARRAYELEMENTMODEL_H_
+#ifndef _EDITOR_ARRAYELEMENTMODEL_H_
+#define _EDITOR_ARRAYELEMENTMODEL_H_
 
 #include "Base.h"
+#include "../ArrayEditor.h"
 #include "IValueEditorModel.h"
 #include "Utils/StringConverter.h"
 
@@ -14,7 +15,7 @@ namespace Editor
 	class ArrayEditor;
 
 	/// The ArrayElementModel class is a model for ValueEditors that allows to
-	/// view/edit entity attributes, such as entity ID and entity name.
+	/// view/edit elements of arrays.
 	template<class ElementType>
 	class ArrayElementModel: public ITypedValueEditorModel<ElementType>
 	{
@@ -27,7 +28,9 @@ namespace Editor
 
 		virtual bool IsValid() const { return true; }
 
-		virtual bool IsReadOnly() const;
+		virtual bool IsReadOnly() const { return mParentEditor->IsReadOnly(); }
+
+		virtual bool IsLocked() const { return mParentEditor->IsLocked(); }
 
 		virtual bool IsListElement() const { return true; }
 
@@ -37,56 +40,18 @@ namespace Editor
 
 		virtual bool IsShared() const { return false; }
 
-		virtual ElementType GetValue() const;
+		virtual ElementType GetValue() const { return mParentEditor->GetElement(mIndex); }
 
-		virtual void SetValue(const ElementType& newValue);
+		virtual void SetValue(const ElementType& newValue) { mParentEditor->SetElement(mIndex, newValue); }
 
-		virtual void Remove();
+		virtual void Remove() { mParentEditor->RemoveElement(mIndex); }
 		
 		virtual void SetShared(bool isShared) { OC_UNUSED(isShared); OC_FAIL("ArrayElementModel does not support SetShared() operation."); }
 
-	private:
+	protected:
 		ArrayEditor<ElementType>* mParentEditor;
 		uint32 mIndex;
 	};
-
-	template<class ElementType>
-	class ArrayStringElementModel: public ITypedValueEditorModel<string>
-	{
-	public:
-
-		///
-		ArrayStringElementModel(ArrayEditor<ElementType>* parentEditor, uint32 index): mParentEditor(parentEditor), mIndex(index) {}
-
-		virtual string GetName() const { return Utils::StringConverter::ToString(mIndex + 1) + ":"; }
-
-		virtual string GetTooltip() const { return ""; }
-
-		virtual bool IsValid() const { return true; }
-
-		virtual bool IsReadOnly() const;
-
-		virtual bool IsListElement() const { return true; }
-
-		virtual bool IsRemovable() const { return !IsReadOnly(); }
-
-		virtual bool IsShareable() const { return false; }
-
-		virtual bool IsShared() const { return false; }
-
-		virtual string GetValue() const;
-
-		virtual void SetValue(const string& newValue);
-
-		virtual void Remove();
-		
-		virtual void SetShared(bool isShared) { OC_UNUSED(isShared); OC_FAIL("ArrayStringElementModel does not support SetShared() operation."); }
-
-	private:
-		ArrayEditor<ElementType>* mParentEditor;
-		uint32 mIndex;
-	};
-
 }
 
-#endif // _ARRAYELEMENTMODEL_H_
+#endif // _EDITOR_ARRAYELEMENTMODEL_H_

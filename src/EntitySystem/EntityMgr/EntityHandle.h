@@ -138,9 +138,6 @@ namespace EntitySystem
 		static void DecID(EntityID& id);
 	};
 
-	/// List of entities.
-	typedef vector<EntityHandle> EntityList;
-
 	inline EntityHandle::EntityHandle(const EntityHandle& handle): mEntityID(handle.mEntityID) {}
 
 	inline EntityID EntityHandle::GetID(void) const

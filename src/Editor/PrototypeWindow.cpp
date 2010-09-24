@@ -237,6 +237,7 @@ void Editor::PrototypeWindow::CreatePopupMenu()
 void Editor::PrototypeWindow::DestroyPopupMenu()
 {
 	gPopupMgr->DestroyPopupMenu(mPopupMenu);
+	mPopupMenu = 0;
 }
 
 void Editor::PrototypeWindow::OnPopupMenuItemClicked(CEGUI::Window* menuItem)

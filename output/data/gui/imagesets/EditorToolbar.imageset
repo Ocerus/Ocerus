@@ -43,4 +43,12 @@
 	
 	<Image Name="btnEyeEnabled" XPos="0" YPos="128" Width="16" Height="16" />
 	<Image Name="btnEyeDisabled" XPos="16" YPos="128" Width="16" Height="16" />
+	
+	<Image Name="imgLock" XPos="0" YPos="144" Width="16" Height="16" />
+	
+	<Image Name="btnRemoveComponentNormal" XPos="0" YPos="160" Width="14" Height="14" />
+	<Image Name="btnRemoveComponentHover" XPos="16" YPos="160" Width="14" Height="14" />
+	<Image Name="btnRemoveComponentPushed" XPos="32" YPos="160" Width="14" Height="14" />
+	<Image Name="btnRemoveComponentDisabled" XPos="48" YPos="160" Width="14" Height="14" />
+
 </Imageset>

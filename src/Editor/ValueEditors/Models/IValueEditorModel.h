@@ -1,8 +1,8 @@
 /// @file
 /// Declares an interface for value editor models.
 
-#ifndef _IVALUEEDITORMODEL_H_
-#define _IVALUEEDITORMODEL_H_
+#ifndef _EDITOR_IVALUEEDITORMODEL_H_
+#define _EDITOR_IVALUEEDITORMODEL_H_
 
 #include "Base.h"
 
@@ -23,6 +23,9 @@ namespace Editor
 
 		/// Returns whether the variable is read only.
 		virtual bool IsReadOnly() const = 0;
+
+		/// Returns whether the variable is locked.
+		virtual bool IsLocked() const = 0;
 
 		/// Returns whether the variable is list element.
 		virtual bool IsListElement() const = 0;
@@ -57,4 +60,4 @@ namespace Editor
 	};
 }
 
-#endif // _IVALUEEDITORMODEL_H_
+#endif // _EDITOR_IVALUEEDITORMODEL_H_

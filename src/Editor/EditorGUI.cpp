@@ -8,7 +8,6 @@
 #include "Editor/ResourceWindow.h"
 #include "Editor/PrototypeWindow.h"
 #include "Editor/HierarchyWindow.h"
-#include "Editor/ValueEditors/PropertyEditorCreator.h"
 
 #include "Core/Game.h"
 
@@ -116,6 +115,18 @@ void EditorGUI::Deinit()
 {
 	if (mResourceWindow)
 		mResourceWindow->Deinit();
+	
+	if (mEntityWindow)
+		mEntityWindow->Deinit();
+	
+	if (mHierarchyWindow)
+		mHierarchyWindow->Deinit();
+	
+	if (mLayerWindow)
+		mLayerWindow->Deinit();
+	
+	if (mPrototypeWindow)
+		mPrototypeWindow->Deinit();
 
 	DestroyPopupMenu();
 }

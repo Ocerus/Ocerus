@@ -71,9 +71,6 @@ void Editor::EditorMgr::Deinit()
 	mEditorGUI->Deinit();
 	GetEditorViewport()->RemoveInputListener(this);
 
-	if (GUISystem::GUIMgr::SingletonExists())
-		gGUIMgr.DestroyWindow(gGUIMgr.GetGUISheet());
-
 	delete mEditorGUI;
 	mEditorGUI = 0;
 	delete mCurrentProject;

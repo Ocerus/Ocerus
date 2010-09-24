@@ -2,16 +2,18 @@
 #include "EntityWindow.h"
 #include "EditorMgr.h"
 #include "ValueEditors/AbstractValueEditor.h"
-#include "ValueEditors/PropertyEditorCreator.h"
+#include "ValueEditors/ValueEditorFactory.h"
 #include "GUISystem/CEGUICommon.h"
 #include "GUISystem/TabNavigation.h"
 #include "GUISystem/VerticalLayout.h"
+#include "ValueEditors/StringEditor.h"
+
 
 using namespace Editor;
 
 const float32 PROPERTY_UPDATE_INTERVAL = 0.3f;
 
-EntityWindow::EntityWindow(): mWindow(0), mScrollablePane(0), mVerticalLayout(0), mTabNavigation(0), mPropertyUpdateTimer(0), mNeedsRebuild(false)
+EntityWindow::EntityWindow(): mWindow(0), mScrollablePane(0), mVerticalLayout(0), mTabNavigation(0), mValueEditorFactory(0), mPropertyUpdateTimer(0), mNeedsRebuild(false)
 {
 	mTabNavigation = new GUISystem::TabNavigation();
 }
@@ -21,10 +23,12 @@ EntityWindow::~EntityWindow()
 	gGUIMgr.DestroyWindow(mWindow);
 	delete mVerticalLayout;
 	delete mTabNavigation;
+	delete mValueEditorFactory;
 }
 
 void EntityWindow::Init()
 {
+	mValueEditorFactory = new ValueEditorFactory();
 	mWindow = gGUIMgr.LoadSystemLayout("EntityWindow.layout", "Editor");
 	if (!mWindow)
 	{
@@ -37,6 +41,14 @@ void EntityWindow::Init()
 	mScrollablePane->setUserString("WantsMouseWheel", "True");
 	mVerticalLayout = new GUISystem::VerticalLayout(mScrollablePane, const_cast<CEGUI::ScrolledContainer*>(mScrollablePane->getContentPane()));
 }
+
+void EntityWindow::Deinit()
+{
+	delete mValueEditorFactory;
+	mValueEditorFactory = 0;
+	DestroyComponentGroupCache();
+}
+
 
 void EntityWindow::Update(float32 delta)
 {
@@ -74,99 +86,79 @@ void EntityWindow::Rebuild()
 
 	mVerticalLayout->LockUpdates();
 
-	// First "component" is general entity info
+	int32 componentCount = EntitySystem::EntityMgr::GetSingleton().GetNumberOfEntityComponents(currentEntity);
+	while ((int32)mComponentGroupCache.size() < componentCount + 1)
 	{
-		const CEGUI::String namePrefix = mWindow->getName() +"/ComponentGeneralInfo";
-		CEGUI::GroupBox* componentGroup = static_cast<CEGUI::GroupBox*>(gGUIMgr.CreateWindow("Editor/GroupBox", true, "EntityInfo"));
-		componentGroup->setText(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "general_info"));
-		mVerticalLayout->AddChildWindow(componentGroup);
-		GUISystem::VerticalLayout* layout = new GUISystem::VerticalLayout(componentGroup, componentGroup->getContentPane(), true);
-		mVerticalLayouts.push_back(layout);
-
-		{
-			AbstractValueEditor* editor = CreateEntityIDEditor(currentEntity);
-			mPropertyEditors.push_back(editor);
-			layout->AddChildWindow(editor->CreateWidget(namePrefix + "/EntityIdEditor"));
-		}
-		{
-			AbstractValueEditor* editor = CreateEntityNameEditor(currentEntity);
-			mPropertyEditors.push_back(editor);
-			layout->AddChildWindow(editor->CreateWidget(namePrefix + "/EntityNameEditor"));
-		}
-		{
-			AbstractValueEditor* editor = CreateEntityTagEditor(currentEntity);
-			mPropertyEditors.push_back(editor);
-			layout->AddChildWindow(editor->CreateWidget(namePrefix + "/EntityTagEditor"));
-		}
-		{
-			AbstractValueEditor* editor = CreateEntityPrototypeEditor(currentEntity);
-			mPropertyEditors.push_back(editor);
-			layout->AddChildWindow(editor->CreateWidget(namePrefix + "/EntityPrototypeEditor"));
-		}
-
-		layout->UpdateLayout();
+		mComponentGroupCache.push_back(CreateComponentGroup());
 	}
 
-	int32 componentCount = EntitySystem::EntityMgr::GetSingleton().GetNumberOfEntityComponents(currentEntity);
-
-	for (int componentID = 0; componentID < componentCount; ++componentID)
+	// Clear all groups
+	for (size_t idx = 0; idx < mComponentGroupCache.size(); ++idx)
 	{
-		const CEGUI::String namePrefix = mWindow->getName() + "/" + StringConverter::ToString(componentID);
-		const string componentName = EntitySystem::GetComponentTypeName(gEntityMgr.GetEntityComponentType(currentEntity, componentID));
+		ClearComponentGroup(mComponentGroupCache[idx]);
+	}
 
-		// Create component window
-		CEGUI::GroupBox* componentGroup = static_cast<CEGUI::GroupBox*>(gGUIMgr.CreateWindow("Editor/GroupBox", true, namePrefix));
-		componentGroup->setText(componentName);
-		mVerticalLayout->AddChildWindow(componentGroup);
-
-		// Create remove component button
-		CEGUI::PushButton* removeComponentButton = static_cast<CEGUI::PushButton*>(gGUIMgr.CreateWindow("Editor/Button", true, namePrefix + "/RemoveButton"));
-		removeComponentButton->setArea(CEGUI::URect(CEGUI::UDim(1, -8), CEGUI::UDim(0, -24), CEGUI::UDim(1, 12), CEGUI::UDim(0, -4)));
-		removeComponentButton->setText("x");
-		removeComponentButton->setClippedByParent(false);
-
-		if (!gEntityMgr.IsEntityLinkedToPrototype(currentEntity))
+	// First "component" is general entity info
+	{
+		ComponentGroup generalInfo = mComponentGroupCache[0];
+		SetupComponentGroup(generalInfo);
 		{
-			if (gEntityMgr.CanDestroyEntityComponent(currentEntity, componentID))
+			AbstractValueEditor* editor = mValueEditorFactory->GetValueEditorForEntityAttribute(currentEntity, EntityAttributeModel::TYPE_ID);
+			editor->GetWidget()->setVisible(true);
+			mPropertyEditors.push_back(editor);
+			generalInfo.layout->AddChildWindow(editor->GetWidget());
+		}
+		{
+			AbstractValueEditor* editor = mValueEditorFactory->GetValueEditorForEntityAttribute(currentEntity, EntityAttributeModel::TYPE_NAME);
+			editor->GetWidget()->setVisible(true);
+			mPropertyEditors.push_back(editor);
+			generalInfo.layout->AddChildWindow(editor->GetWidget());
+		}
+		{
+			AbstractValueEditor* editor = mValueEditorFactory->GetValueEditorForEntityAttribute(currentEntity, EntityAttributeModel::TYPE_TAG);
+			editor->GetWidget()->setVisible(true);
+			mPropertyEditors.push_back(editor);
+			generalInfo.layout->AddChildWindow(editor->GetWidget());
+		}
+		{
+			AbstractValueEditor* editor = mValueEditorFactory->GetValueEditorForEntityAttribute(currentEntity, EntityAttributeModel::TYPE_PROTOTYPE);
+			editor->GetWidget()->setVisible(true);
+			mPropertyEditors.push_back(editor);
+			generalInfo.layout->AddChildWindow(editor->GetWidget());
+		}
+		generalInfo.layout->UpdateLayout();
+	}
+
+	int componentID = 0;
+	for (size_t idx = 1; idx < mComponentGroupCache.size(); ++idx)
+	{
+		ComponentGroup group = mComponentGroupCache[idx];
+		if (componentID < componentCount)
+		{
+			SetupComponentGroup(group, currentEntity, componentID);
+
+			PropertyList propertyList;
+			gEntityMgr.GetEntityComponentProperties(currentEntity, componentID, propertyList, Reflection::PA_EDIT_READ);
+		
+			set<PropertyHolder> sortedPropertyList;
+			for (PropertyList::iterator it = propertyList.begin(); it != propertyList.end(); ++it)
 			{
-				removeComponentButton->setTooltipText(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "remove_component_hint"));
-				removeComponentButton->setID(componentID);
-				removeComponentButton->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Editor::EntityWindow::OnRemoveComponentButtonClicked, this));
+				sortedPropertyList.insert(*it);
 			}
-			else
+
+			for (set<PropertyHolder>::iterator it = sortedPropertyList.begin(); it != sortedPropertyList.end(); ++it)
 			{
-				removeComponentButton->setTooltipText(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "remove_component_error_hint"));
-				removeComponentButton->setEnabled(false);
+				AbstractValueEditor* editor = mValueEditorFactory->GetValueEditorForProperty(*it, currentEntity);
+				mPropertyEditors.push_back(editor);
+				group.layout->AddChildWindow(editor->GetWidget());
 			}
+			group.layout->UpdateLayout();
 		}
 		else
 		{
-			removeComponentButton->setTooltipText(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "remove_component_prototype_error_hint"));
-			removeComponentButton->setEnabled(false);
+			group.widget->setVisible(false);
 		}
-
-		componentGroup->addChildWindow(removeComponentButton);
-
-		// Create property editors
-		GUISystem::VerticalLayout* layout = new GUISystem::VerticalLayout(componentGroup, componentGroup->getContentPane(), true);
-		mVerticalLayouts.push_back(layout);
-
-		PropertyList propertyList;
-		gEntityMgr.GetEntityComponentProperties(currentEntity, componentID, propertyList, Reflection::PA_EDIT_READ);
-		
-		set<PropertyHolder> sortedPropertyList;
-		for (PropertyList::iterator it = propertyList.begin(); it != propertyList.end(); ++it)
-		{
-		  sortedPropertyList.insert(*it);
-		}
-
-		for (set<PropertyHolder>::iterator it = sortedPropertyList.begin(); it != sortedPropertyList.end(); ++it)
-		{
-			AbstractValueEditor* editor = CreatePropertyEditor(*it, currentEntity);
-			mPropertyEditors.push_back(editor);
-			layout->AddChildWindow(editor->CreateWidget(namePrefix + "/" + it->GetKey().ToString() + "Editor"));
-		}
-		layout->UpdateLayout();
+		++componentID;
 	}
 
 	mVerticalLayout->UnlockUpdates();
@@ -177,9 +169,11 @@ void EntityWindow::Rebuild()
 	
 	// nasty hack to solve scrollbar issue
 	{
+		mVerticalLayout->LockUpdates();
 		const CEGUI::UDim height = mScrollablePane->getHeight();
 		mScrollablePane->setHeight(height + CEGUI::UDim(0, 1));
 		mScrollablePane->setHeight(height);
+		mVerticalLayout->UnlockUpdates();
 	}
 }
 
@@ -192,22 +186,18 @@ void EntityWindow::Clear()
 	// Clear all property editors. The editor windows are destroyed during the process.
 	for (PropertyEditors::const_iterator it = mPropertyEditors.begin(); it != mPropertyEditors.end(); ++it)
 	{
-		delete (*it);
+		mValueEditorFactory->StoreValueEditor(*it);
 	}
 	mPropertyEditors.clear();
 
+/*
 	// Clear all layouts.
 	for (VerticalLayouts::iterator it=mVerticalLayouts.begin(); it!=mVerticalLayouts.end(); ++it)
 	{
 		delete (*it);
 	}
 	mVerticalLayouts.clear();
-
-	// Clear the pane - groupboxes get destroyed here.
-	mVerticalLayout->Clear();
-
-	// Everything should be clear by now.
-	OC_ASSERT(mVerticalLayout->GetChildCount() == 0);
+*/
 }
 
 void Editor::EntityWindow::AddWidgetToTabNavigation(CEGUI::Window* widget)
@@ -221,4 +211,100 @@ bool Editor::EntityWindow::OnRemoveComponentButtonClicked(const CEGUI::EventArgs
 	EntitySystem::ComponentID componentID = args.window->getID();
 	gEditorMgr.RemoveComponentFromSelectedEntity(componentID);
 	return true;
+}
+
+EntityWindow::ComponentGroup Editor::EntityWindow::CreateComponentGroup()
+{
+	static uint32 componentGroupCounter = 0;
+	const CEGUI::String& windowName = "Editor/EntityWindow/ComponentGroup" + StringConverter::ToString(componentGroupCounter++);
+
+	CEGUI::GroupBox* componentGroupWidget = static_cast<CEGUI::GroupBox*>(gGUIMgr.CreateWindowDirectly("Editor/GroupBox", windowName));
+	componentGroupWidget->setWidth(cegui_reldim(1));
+
+	// Create remove component button
+	CEGUI::Window* removeComponentButton = gGUIMgr.CreateWindowDirectly("Editor/ImageButton", windowName + "/RemoveButton");
+	removeComponentButton->setProperty("NormalImage", "set:EditorToolbar image:btnRemoveComponentNormal");
+	removeComponentButton->setProperty("HoverImage", "set:EditorToolbar image:btnRemoveComponentHover");
+	removeComponentButton->setProperty("PushedImage", "set:EditorToolbar image:btnRemoveComponentPushed");
+	removeComponentButton->setProperty("DisabledImage", "set:EditorToolbar image:btnRemoveComponentDisabled");
+
+	removeComponentButton->setVisible(true);
+	removeComponentButton->setSize(CEGUI::UVector2(cegui_absdim(14), cegui_absdim(14)));
+	removeComponentButton->setPosition(CEGUI::UVector2(CEGUI::UDim(1, -6), CEGUI::UDim(0, -20)));
+	removeComponentButton->setClippedByParent(false);
+	removeComponentButton->subscribeEvent(CEGUI::PushButton::EventClicked,
+	CEGUI::Event::Subscriber(&Editor::EntityWindow::OnRemoveComponentButtonClicked, this));
+	componentGroupWidget->addChildWindow(removeComponentButton);
+
+	GUISystem::VerticalLayout* layout = new GUISystem::VerticalLayout(componentGroupWidget, componentGroupWidget->getContentPane(), true);
+
+	ComponentGroup result;
+	result.widget = componentGroupWidget;
+	result.layout = layout;
+
+	mVerticalLayout->AddChildWindow(componentGroupWidget);
+
+	return result;
+}
+
+void EntityWindow::SetupComponentGroup(const Editor::EntityWindow::ComponentGroup& componentGroup)
+{
+	// Setup label
+	componentGroup.widget->setVisible(true);
+	componentGroup.widget->setText(TR("general_info"));
+
+	// Setup remove component button
+	CEGUI::Window* removeComponentButton = componentGroup.widget->getChildAtIdx(0)->getChildAtIdx(0);
+
+	removeComponentButton->setVisible(false);
+}
+
+void EntityWindow::SetupComponentGroup(const Editor::EntityWindow::ComponentGroup& componentGroup, EntitySystem::EntityHandle entity, int componentID)
+{
+	const string componentName = EntitySystem::GetComponentTypeName(gEntityMgr.GetEntityComponentType(entity, componentID));
+
+	// Setup label
+	componentGroup.widget->setVisible(true);
+	componentGroup.widget->setText(componentName);
+
+
+	// Setup remove component button
+	CEGUI::Window* removeComponentButton = componentGroup.widget->getChildAtIdx(0)->getChildAtIdx(0);
+	removeComponentButton->setVisible(true);
+	if (!gEntityMgr.IsEntityLinkedToPrototype(entity))
+	{
+		if (gEntityMgr.CanDestroyEntityComponent(entity, componentID))
+		{
+			removeComponentButton->setEnabled(true);
+			removeComponentButton->setTooltipText(TR("remove_component_hint"));
+			removeComponentButton->setID(componentID);
+		}
+		else
+		{
+			removeComponentButton->setTooltipText(TR("remove_component_error_hint"));
+			removeComponentButton->setEnabled(false);
+		}
+	}
+	else
+	{
+		removeComponentButton->setTooltipText(TR("remove_component_prototype_error_hint"));
+		removeComponentButton->setEnabled(false);
+	}
+}
+
+void EntityWindow::ClearComponentGroup(const Editor::EntityWindow::ComponentGroup& componentGroup)
+{
+	// Clear layout
+	componentGroup.layout->Clear();
+}
+
+
+void EntityWindow::DestroyComponentGroupCache()
+{
+	for (ComponentGroupCache::iterator it = mComponentGroupCache.begin(); it != mComponentGroupCache.end(); ++it)
+	{
+		gGUIMgr.DestroyWindowDirectly(it->widget);
+		delete it->layout;
+	}
+	mComponentGroupCache.clear();
 }

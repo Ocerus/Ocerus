@@ -92,13 +92,14 @@ layer_visibilitytoggle_hint=Toggles the visibility of the layer.
 entity_editor=Entity Editor
 general_info=General Info
 remove_component_hint=Removes the component.
-remove_component_error_hint=This component cannot be removed.
+remove_component_error_hint=This component cannot be removed because other components depend on it.
 remove_component_prototype_error_hint=Components of this entity cannot be removed as long as it is linked to a prototype.
 entity_editor_add=Add
 entity_editor_revert=Rvrt
 entity_editor_save=Save
 entity_editor_remove=RM
 prototype_shared_checkbox_hint=Controls whether this property is shared.
+entity_property_locked_hint=This property is locked because it is shared with the linked prototype.
 
 # resource editor
 resources=Resources

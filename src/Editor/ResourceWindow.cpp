@@ -51,6 +51,7 @@ void Editor::ResourceWindow::Init()
 void ResourceWindow::Deinit()
 {
 	gGUIMgr.DestroyWindowDirectly(mWindow);
+	mWindow = 0;
 	DestroyPopupMenu();
 	DestroyItemEntryCache();
 }
@@ -197,6 +198,7 @@ void ResourceWindow::CreatePopupMenu()
 void ResourceWindow::DestroyPopupMenu()
 {
 	gPopupMgr->DestroyPopupMenu(mPopupMenu);
+	mPopupMenu = 0;
 }
 
 void ResourceWindow::OpenPopupMenu(ResourceSystem::ResourcePtr resource, float32 posX, float32 posY)

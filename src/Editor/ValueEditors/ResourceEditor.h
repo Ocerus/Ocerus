@@ -1,12 +1,12 @@
 /// @file
 /// Declares an editor for resources.
 
-#ifndef _RESOURCEEDITOR_H_
-#define _RESOURCEEDITOR_H_
+#ifndef _EDITOR_RESOURCEEDITOR_H_
+#define _EDITOR_RESOURCEEDITOR_H_
 
 #include "Base.h"
-#include "AbstractValueEditor.h"
-#include "GUISystem/CEGUIForwards.h"
+#include "StringEditor.h"
+#include "Models/StringValueEditorModel.h"
 
 namespace Editor
 {
@@ -14,37 +14,29 @@ namespace Editor
 	/// the name of the selected resource and allows to change the resource by drag&dropping the
 	/// resource from resource list.
 	/// @see ResourceWindow
-	class ResourceEditor: public AbstractValueEditor
+	class ResourceEditor: public StringEditor
 	{
 	public:
-		typedef ITypedValueEditorModel<ResourceSystem::ResourcePtr> Model;
+		typedef StringValueEditorModel<ResourceSystem::ResourcePtr> Model;
 
 		/// Constructs a ResourceEditor that uses given model.
-		ResourceEditor(Model* model): mModel(model), mEditboxWidget(0) { }
+		ResourceEditor() {}
 
 		/// Destroys the ResourceEditor and its model.
-		~ResourceEditor();
+		virtual ~ResourceEditor() {}
 
-		/// Creates the main widget of this editor and returns it.
-		virtual CEGUI::Window* CreateWidget(const CEGUI::String& namePrefix);
+		/// Sets the model of the editor.
+		void SetModel(Model* newModel);
 
-		/// Does nothing. ResourceEditor is submitted automatically when drag&dropped from resource list.
-		virtual void Submit();
+		virtual void Submit() {};
 
-		/// Polls the model for current value and updates the editor widget, unless
-		/// the editor is locked for updates.
-		virtual void Update();
+		virtual eValueEditorType GetType() { return VET_PT_RESOURCE; }
 
-		/// @name CEGUI callbacks
-		//@{
-			bool OnEventDragDropItemDropped(const CEGUI::EventArgs&);
-			bool OnEventButtonRemovePressed(const CEGUI::EventArgs&);
-			bool OnEventIsSharedCheckboxChanged(const CEGUI::EventArgs&);
-		//@}
+		static const eValueEditorType Type;
 
 	private:
-		Model* mModel;
-		CEGUI::Window* mEditboxWidget;
+		void InitWidget();
+		bool OnEventDragDropItemDropped(const CEGUI::EventArgs&);
 	};
 }
 

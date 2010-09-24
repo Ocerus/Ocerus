@@ -2,20 +2,13 @@
 /// Declares an editor for array properties convertible to strings.
 /// Because ArrayEditor is template class, don't forget to include ArrayEditorImpl.h as well.
 
-#ifndef _ARRAYEDITOR_H_
-#define _ARRAYEDITOR_H_
+#ifndef _EDITOR_ARRAYEDITOR_H_
+#define _EDITOR_ARRAYEDITOR_H_
 
 #include "Base.h"
 #include "AbstractValueEditor.h"
+#include "Models/ArrayElementModel.h"
 #include "Utils/Array.h"
-#include "GUISystem/CEGUICommon.h"
-
-namespace CEGUI
-{
-	class Listbox;
-	class Window;
-	class Editbox;
-}
 
 namespace Editor
 {
@@ -35,13 +28,19 @@ namespace Editor
 			typedef ITypedValueEditorModel<ArrayType*> Model;
 
 			/// Constructs an ArrayEditor on given model.
-			ArrayEditor(Model* model): mModel(model), mHeaderWidget(0), mLayout(0), mButtonAddElement(0), mButtonRevert(0), mButtonSave(0) { PROFILE_FNC(); }
+			ArrayEditor(): mModel(0), mHeaderWidget(0), mMainLayout(0), mBodyLayout(0), mButtonAddElement(0), mButtonRevert(0), mButtonSave(0) {}
 
 			/// Destroys the ArrayEditor and its model.
-			virtual ~ArrayEditor() { DeleteEditors(); DeleteInternalArray(); delete mModel; }
+			virtual ~ArrayEditor() { DestroyModel(); ResetWidget(); DeinitWidget(); }
 
-			/// Creates the main widget of this editor and returns it.
-			virtual CEGUI::Window* CreateWidget(const CEGUI::String& namePrefix);
+			void SetModel(Model* model);
+			
+			virtual void DestroyModel();
+
+			virtual void ResetWidget();
+
+			/// 
+			virtual CEGUI::Window* GetWidget();
 
 			/// Submits the value from editor widget to the model.
 			virtual void Submit();
@@ -50,14 +49,9 @@ namespace Editor
 			/// the editor is locked for updates.
 			virtual void Update();
 
-			
-			/// @name CEGUI callbacks
-			//@{
-				bool OnEventButtonAddPressed(const CEGUI::EventArgs&);
-				bool OnEventButtonRevertPressed(const CEGUI::EventArgs&);
-				bool OnEventButtonSavePressed(const CEGUI::EventArgs&);
-				bool OnEventIsSharedCheckboxChanged(const CEGUI::EventArgs&);
-			//@}
+			eValueEditorType GetType();
+
+			static const eValueEditorType Type;
 
 		protected:
 			friend class ArrayElementModel<ElementType>;
@@ -76,9 +70,18 @@ namespace Editor
 				
 				/// Returns whether the model of the editor is read only.
 				bool IsReadOnly() const;
+
+				/// Returns whether the model of the editor is locked.
+				bool IsLocked() const;
 			//@}
 
 		private:
+			void InitWidget();
+			
+			void DeinitWidget();
+			
+			void SetupWidget(Model* model);
+			
 			/// Submits all element editors, so mArray will be in sync with Editors.
 			void SubmitEditors();
 
@@ -103,6 +106,17 @@ namespace Editor
 			/// Unlocks updates.
 			void UnlockUpdates();
 
+			/// Creates new value editor for array element on given index.
+			AbstractValueEditor* CreateArrayElementEditor(uint32 index);
+
+			/// @name CEGUI callbacks
+			//@{
+				bool OnEventButtonAddPressed(const CEGUI::EventArgs&);
+				bool OnEventButtonRevertPressed(const CEGUI::EventArgs&);
+				bool OnEventButtonSavePressed(const CEGUI::EventArgs&);
+				bool OnEventIsSharedCheckboxChanged(const CEGUI::EventArgs&);
+			//@}
+
 			typedef vector<ElementType*> InternalArray;
 
 			InternalArray mArray;
@@ -110,12 +124,12 @@ namespace Editor
 			vector<AbstractValueEditor*> mElementEditors;
 			CEGUI::String mNamePrefix;
 			CEGUI::Window* mHeaderWidget;
-			GUISystem::VerticalLayout* mLayout;
+			GUISystem::VerticalLayout* mMainLayout;
+			GUISystem::VerticalLayout* mBodyLayout;
 			CEGUI::PushButton* mButtonAddElement;
 			CEGUI::PushButton* mButtonRevert;
 			CEGUI::PushButton* mButtonSave;
 	};
-
 }
 
 #endif // _ARRAYEDITOR_H_

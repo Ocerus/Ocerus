@@ -482,6 +482,7 @@ void HierarchyWindow::CreatePopupMenu()
 void HierarchyWindow::DestroyPopupMenu()
 {
 	gPopupMgr->DestroyPopupMenu(mPopupMenu);
+	mPopupMenu = 0;
 }
 
 void HierarchyWindow::OpenPopupMenu(EntityHandle clickedEntity, float32 mouseX, float32 mouseY)

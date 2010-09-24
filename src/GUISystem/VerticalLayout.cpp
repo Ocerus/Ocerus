@@ -41,14 +41,23 @@ void GUISystem::VerticalLayout::UpdateLayout()
 	for (WindowList::iterator it = mChildWindows.begin(); it != mChildWindows.end(); ++it)
 	{
 		CEGUI::Window* currentChild = *it;
-		currentChild->setPosition(CEGUI::UVector2(CEGUI::UDim(0, 0), CEGUI::UDim(0, (float32)currentY)));
-		currentChild->setWidth(CEGUI::UDim(1, 0));
+		if (!currentChild->isVisible())
+		{
+			currentChild->setPosition(CEGUI::UVector2(cegui_absdim(0), cegui_absdim(0)));
+			continue;
+		}
+		currentChild->setPosition(CEGUI::UVector2(cegui_absdim(0), cegui_absdim((float32)currentY)));
+		if (currentChild->getWidth() != CEGUI::UDim(1, 0))
+			currentChild->setWidth(CEGUI::UDim(1, 0));
 		currentY += (int)currentChild->getHeight().d_offset;
 
 		// If not last child window
-		if (it != mChildWindows.end() - 1)
-			currentY += mSpacing;
+//		if (it != mChildWindows.end() - 1)
+		currentY += mSpacing;
+
 	}
+	currentY -= mSpacing;
+	
 	if (mResizeParent)
 	{
 		float32 resizeOffset = mManagedWindow->getHeight().d_offset - mContentPane->getHeight().d_offset;
@@ -66,12 +75,6 @@ size_t GUISystem::VerticalLayout::GetChildCount() const
 void GUISystem::VerticalLayout::Clear()
 {
 	ClearEventConnections();
-
-	size_t childCount = mContentPane->getChildCount();
-	for (int i = (childCount - 1); i >= 0; --i)
-	{
-		gGUIMgr.DestroyWindow(mContentPane->getChildAtIdx(i));
-	}
 	mChildWindows.clear();
 }
 
@@ -86,8 +89,9 @@ void GUISystem::VerticalLayout::ClearEventConnections()
 	mEventConnections.clear();
 }
 
-bool GUISystem::VerticalLayout::OnChildWindowSized( const CEGUI::EventArgs& )
+bool GUISystem::VerticalLayout::OnChildWindowSized( const CEGUI::EventArgs& e )
 {
+	OC_UNUSED(e);
 	if (LockedUpdates()) return false;
 	UpdateLayout();
 	return true;

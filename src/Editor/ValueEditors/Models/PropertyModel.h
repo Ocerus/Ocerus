@@ -1,13 +1,15 @@
 /// @file
 /// Declares an interface for value editor models.
 
-#ifndef _PROPERTYMODEL_H_
-#define _PROPERTYMODEL_H_
+#ifndef _EDITOR_PROPERTYMODEL_H_
+#define _EDITOR_PROPERTYMODEL_H_
 
 #include "Base.h"
 #include "IValueEditorModel.h"
 #include "Utils/Properties/PropertyHolder.h"
+#include "Utils/ResourcePointers.h"
 #include "EntitySystem/EntityMgr/EntityMgr.h"
+#include "EntitySystem/EntityMgr/LayerMgr.h"
 
 namespace Editor
 {
@@ -31,9 +33,14 @@ namespace Editor
 		/// Returns whether the property is read-only.
 		virtual bool IsReadOnly() const
 		{
-			return !(mProperty.GetAccessFlags() & Reflection::PA_EDIT_WRITE) ||
-				(gEntityMgr.IsEntityLinkedToPrototype(mEntity) &&
-				gEntityMgr.IsPrototypePropertyShared(gEntityMgr.GetEntityPrototype(mEntity), mProperty.GetKey()));
+			return !(mProperty.GetAccessFlags() & Reflection::PA_EDIT_WRITE) || IsLocked();
+		}
+
+		/// Returns whether the variable is locked.
+		virtual bool IsLocked() const
+		{
+			return gEntityMgr.IsEntityLinkedToPrototype(mEntity) &&
+				gEntityMgr.IsPrototypePropertyShared(gEntityMgr.GetEntityPrototype(mEntity), mProperty.GetKey());
 		}
 
 		/// Returns false.
@@ -85,6 +92,30 @@ namespace Editor
 		/// Sets the property value from string representation in newValue.
 		virtual void SetValue(const string& newValue) { return mProperty.SetValueFromString(newValue); }
 	};
+
+	class LayerPropertyModel: public PropertyModel<string>
+	{
+	public:
+	
+		LayerPropertyModel(const PropertyHolder& property, const EntitySystem::EntityHandle& entity = EntitySystem::EntityHandle()): PropertyModel<string>(property, entity)
+		{
+			OC_DASSERT(property.GetType() == PT_INT32);
+		}
+
+		/// Returns the string representation of the property value.
+		virtual string GetValue() const
+		{ 
+			EntitySystem::LayerID layerID = mProperty.GetValue<int32>();
+			if (gLayerMgr.ExistsLayer(layerID))
+				return gLayerMgr.GetLayerName(layerID);
+			return "";
+		}
+
+		/// Sets the property value from string representation in newValue.
+		virtual void SetValue(const string&) {}
+
+		virtual bool IsReadOnly() const { return true; }
+	};
 }
 
-#endif // 
+#endif // _EDITOR_PROPERTYMODEL_H_

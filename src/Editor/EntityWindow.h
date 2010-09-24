@@ -21,6 +21,9 @@ namespace Editor
 		/// Initializes the window.
 		void Init();
 
+		/// Deinitializes the window.
+		void Deinit();
+
 		/// Updates values of the properties in widgets.
 		void Update(float32 delta);
 		
@@ -33,23 +36,44 @@ namespace Editor
 		/// Clears the window.
 		void Clear();
 
+		/// Returns the value editor cache.
+		inline ValueEditorFactory* GetValueEditorFactory() { return mValueEditorFactory; }
+
 		/// Adds a widget to tab navigation of this window.
 		void AddWidgetToTabNavigation(CEGUI::Window* widget);
 
 	private:
 		/// Manages clicking remove component button.
 		bool OnRemoveComponentButtonClicked(const CEGUI::EventArgs&);
-		
+
+		struct ComponentGroup
+		{
+			CEGUI::Window* widget;
+			GUISystem::VerticalLayout* layout;
+		};
+
+		ComponentGroup CreateComponentGroup();
+		void SetupComponentGroup(const ComponentGroup& componentGroup);
+		void SetupComponentGroup(const ComponentGroup& componentGroup, EntitySystem::EntityHandle entity, int componentID);
+		void ClearComponentGroup(const ComponentGroup& componentGroup);
+		void StoreComponentGroup(const ComponentGroup& componentGroup);
+		ComponentGroup RestoreComponentGroup();
+		void DestroyComponentGroupCache();
+
 		CEGUI::Window* mWindow;
 		CEGUI::ScrollablePane* mScrollablePane;
 
 		typedef vector<AbstractValueEditor*> PropertyEditors;
 		typedef vector<GUISystem::VerticalLayout*> VerticalLayouts;
 
+		typedef vector<ComponentGroup> ComponentGroupCache;
+
 		PropertyEditors mPropertyEditors;
 		VerticalLayouts mVerticalLayouts;
 		GUISystem::VerticalLayout* mVerticalLayout;
 		GUISystem::TabNavigation* mTabNavigation;
+		ValueEditorFactory* mValueEditorFactory;
+		ComponentGroupCache mComponentGroupCache;
 
 		float32 mPropertyUpdateTimer;
 		bool mNeedsRebuild;

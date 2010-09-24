@@ -1,11 +1,11 @@
 /// @file
 /// Declares an abstract value editor with model.
 
-#ifndef _ABSTRACTVALUEEDITOR_H_
-#define _ABSTRACTVALUEEDITOR_H_
+#ifndef _EDITOR_ABSTRACTVALUEEDITOR_H_
+#define _EDITOR_ABSTRACTVALUEEDITOR_H_
 
 #include "Base.h"
-#include "Models/IValueEditorModel.h"
+#include "ValueEditorTypes.h"
 #include "GUISystem/CEGUIForwards.h"
 
 namespace Editor
@@ -16,16 +16,14 @@ namespace Editor
 	class AbstractValueEditor
 	{
 	public:
+		/// Constructs an AbstractValueEditor.
 		AbstractValueEditor(): mEditorWidget(0), mUpdatesLocked(false) {}
 
-		virtual ~AbstractValueEditor();
+		/// Destroys the AbstractValueEditor.
+		virtual ~AbstractValueEditor() {}
 
-		/// Creates the editor widget and returns it. The value editor manages its
-		/// height so you should not change it. Some value editors can even change
-		/// their height during their lifetime (e.g expanding and collapsing the editor),
-		/// so you might want to handle the EventSized event (or you can use a layout
-		/// manager such as GUISystem::VerticalLayout).
-		virtual CEGUI::Window* CreateWidget(const CEGUI::String& namePrefix) = 0;
+		/// Returns the widget of the editor.
+		CEGUI::Window* GetWidget() { return mEditorWidget; }
 
 		/// Polls the model for current value and updates the editor widget, unless
 		/// the editor is locked for updates.
@@ -35,6 +33,15 @@ namespace Editor
 
 		/// Submits the value from editor widget to the model.
 		virtual void Submit() = 0;
+
+		/// Returns the type of value editor.
+		virtual eValueEditorType GetType() = 0;
+
+		/// Destroys the model.
+		virtual void DestroyModel() = 0;
+
+		/// Resets the widget so the editor can be stored to editors cache. 
+		virtual void ResetWidget();
 
 		/// Returns whether editor is locked for updates.
 		bool UpdatesLocked() const { return mUpdatesLocked; }
@@ -46,17 +53,17 @@ namespace Editor
 		/// Unlock editor for updates. Update() will update editor as long as it stays unlocked.
 		void UnlockUpdates() { mUpdatesLocked = false; }
 
-		/// Creates a new static text widget, sets the common properties and returns it.
-		CEGUI::Window* CreateStaticTextWidget(const CEGUI::String& name, const CEGUI::String& text, const CEGUI::String& tooltip);
+		/// Creates a label widget with specified name and returns it.
+		CEGUI::Window* CreateLabelWidget(const CEGUI::String& name);
+		
+		/// Creates a button for removing elements with specified name and returns it.
+		CEGUI::Window* CreateRemoveButtonWidget(const CEGUI::String& name);
 
-		/// Creates the main editor label widget and returns it.
-		CEGUI::Window* CreateEditorLabelWidget(const CEGUI::String& name, const Editor::IValueEditorModel* model);
-
-		/// Creates a button for removing elements and returns it.
-		CEGUI::PushButton* CreateRemoveElementButtonWidget(const CEGUI::String& name);
-
-		/// Creates a checkbox for setting IsShared status.
+		/// Creates a checkbox for setting IsShared status with specified name and returns it.
 		CEGUI::Checkbox* CreateIsSharedCheckboxWidget(const CEGUI::String& name);
+
+		/// Creates an image widget with a lock with specified name and returns it.
+		CEGUI::Window* CreateIsLockedImageWidget(const CEGUI::String& name);
 
 		/// Returns the recommended height of an editbox.
 		static float GetEditboxHeight();
@@ -64,13 +71,16 @@ namespace Editor
 		/// Adds widget to tab navigation.
 		void AddWidgetToTabNavigation(CEGUI::Window* widget);
 
+		/// Returns ValueEditorFactory.
+		ValueEditorFactory* GetValueEditorFactory();
+
 	protected:
-		/// Main widget of the editor. The widget is automatically destroyed in AbstractValueEditor's destructor.
+		/// Main widget of the editor.
 		CEGUI::Window* mEditorWidget;
-		
+
 	private:
 		bool mUpdatesLocked;
 	};
 }
 
-#endif // _ABSTRACTVALUEEDITOR_H_
+#endif // _EDITOR_ABSTRACTVALUEEDITOR_H_

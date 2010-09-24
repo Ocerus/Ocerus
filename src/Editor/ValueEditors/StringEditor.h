@@ -1,11 +1,12 @@
 /// @file
 /// Declares an editor for properties convertible to strings.
 
-#ifndef _STRINGEDITOR_H_
-#define _STRINGEDITOR_H_
+#ifndef _EDITOR_STRINGEDITOR_H_
+#define _EDITOR_STRINGEDITOR_H_
 
 #include "Base.h"
 #include "AbstractValueEditor.h"
+#include "Models/IValueEditorModel.h"
 
 namespace Editor {
 
@@ -15,14 +16,21 @@ namespace Editor {
 		typedef ITypedValueEditorModel<string> Model;
 		
 		/// Constructs a StringEditor that uses given model.
-		StringEditor(Model* model): mModel(model), mEditboxWidget(0) { PROFILE_FNC(); }
+		StringEditor(): mModel(0), mEditboxWidget(0) { }
 
 		/// Destroys the StringEditor and its model.
 		~StringEditor();
 
-		/// Creates the main widget of this editor and returns it.
-		virtual CEGUI::Window* CreateWidget(const CEGUI::String& namePrefix);
+		/// Sets the model of the editor.
+		void SetModel(Model* newModel);
 
+		/// Destroys the model.
+		virtual void DestroyModel();
+
+		/// Creates the main widget of this editor and returns it.
+		virtual CEGUI::Window* GetWidget();
+
+		
 		/// Submits the value from editor widget to the model.
 		virtual void Submit();
 
@@ -30,16 +38,26 @@ namespace Editor {
 		/// the editor is locked for updates.
 		virtual void Update();
 
+		virtual eValueEditorType GetType() { return VET_PT_STRING; }
+
+		static const eValueEditorType Type;
+
+	protected:
 		/// @name CEGUI callbacks
 		//@{
 			bool OnEventActivated(const CEGUI::EventArgs&) { this->LockUpdates(); return true;}
 			bool OnEventDeactivated(const CEGUI::EventArgs&) { this->UnlockUpdates(); return true;}
-			bool OnEventButtonRemovePressed(const CEGUI::EventArgs&);
+			bool OnRemoveButtonClicked(const CEGUI::EventArgs&);
 			bool OnEventIsSharedCheckboxChanged(const CEGUI::EventArgs&);
 			bool OnEventKeyDown(const CEGUI::EventArgs&);
 		//@}
 
-	private:
+		void InitWidget();
+		void DeinitWidget();
+		void SetupWidget(Model* model);
+
+		CEGUI::Window* GetEditboxWidget();
+
 		Model* mModel;
 		CEGUI::Window* mEditboxWidget;
 	};

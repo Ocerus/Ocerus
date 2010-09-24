@@ -233,15 +233,14 @@ set(Editor_SRCS
 	src/Editor/PrototypeWindow.cpp
 	src/Editor/ResourceWindow.cpp
 	src/Editor/ValueEditors/AbstractValueEditor.cpp
+	src/Editor/ValueEditors/ArrayEditor.cpp
 	src/Editor/ValueEditors/StringEditor.cpp
-	src/Editor/ValueEditors/PropertyEditorCreator.cpp
-	src/Editor/ValueEditors/Models/EntityAttributeModel.cpp
-	src/Editor/ValueEditors/Vector2Editor.cpp
-	src/Editor/ValueEditors/LayerEditor.cpp
 	src/Editor/ValueEditors/ResourceEditor.cpp
-	src/Editor/ValueEditors/PointEditor.cpp
 	src/Editor/ValueEditors/BoolEditor.cpp
 	src/Editor/ValueEditors/TwoDimEditor.cpp
+	src/Editor/ValueEditors/ValueEditorFactory.cpp
+	src/Editor/ValueEditors/Models/EntityAttributeModel.cpp
+	src/Editor/ValueEditors/Models/StringValueEditorModel.cpp
 )
 
 set(EntitySystem_SRCS

@@ -242,20 +242,20 @@ void Script::RegisterReflection()
 
 void Script::SetModules(Utils::Array<ResourceSystem::ResourcePtr>* modules)
 {
-  for (int i = modules->GetSize() - 1; i >= 0; --i)
-  {
-    if (!(ScriptSystem::ScriptResourcePtr)((*modules)[i]))
-    {
-      for (int j = i; j < modules->GetSize() - 1; ++j)
-      {
-        (*modules)[j] = (*modules)[j + 1];
-      }
-      modules->Resize(modules->GetSize() - 1);
-    }
-  }
+	for (int i = modules->GetSize() - 1; i >= 0; --i)
+	{
+		if (!(ScriptSystem::ScriptResourcePtr)((*modules)[i]))
+		{
+			for (int j = i; j < modules->GetSize() - 1; ++j)
+			{
+				(*modules)[j] = (*modules)[j + 1];
+			}
+			modules->Resize(modules->GetSize() - 1);
+		}
+	}
 
-  mModules.CopyFrom(*modules); mNeedUpdate = true;
-  if (!mIsUpdating) UpdateMessageHandlers();
+	mModules.CopyFrom(*modules); mNeedUpdate = true;
+	if (!mIsUpdating) UpdateMessageHandlers();
 }
 
 void Script::DynamicPropertyChanged(const StringKey propertyName, bool reg, bool success)
