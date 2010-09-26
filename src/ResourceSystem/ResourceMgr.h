@@ -115,8 +115,8 @@ namespace ResourceSystem
 		/// Retrieves all resources in given base path type.
 		void GetResources(vector<ResourcePtr>& output, eBasePathType basePathType);
 
-		/// Changes the type of the resource to a new one.
-		void ChangeResourceType(ResourcePtr resPointer, eResourceType newType);
+		/// Changes the type of the resource to a new one. Returns pointer to the new resource.
+		ResourcePtr ChangeResourceType(ResourcePtr resPointer, eResourceType newType);
 
 		/// Sets the memory limit the resource manager should try to keep.
 		/// The limit is given in bytes.

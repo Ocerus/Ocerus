@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<GUILayout >
+<GUILayout>
   <Window Type="DefaultWindow" Name="">
     <Property Name="Font" Value="DejaVuSans-10" />
     <Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{1,0},{1,0}}" />
@@ -12,8 +12,11 @@
 			<Property Name="Text" Value="$score$" />
     </Window>
   
-		<Window Type="Cube/Button" Name="myButton1">
+		<Window Type="Cube/ImageButton" Name="ExplosionButton">
 			<Property Name="UnifiedAreaRect" Value="{{0,100},{0,100},{0,200},{0,200}}" />
+			<Property Name="NormalImage" Value="set:ExplosionButton image:On"/>
+			<Property Name="HoverImage" Value="set:ExplosionButton image:On"/>
+			<Property Name="PushedImage" Value="set:ExplosionButton image:Off"/>
 			<Property Name="Text" Value="AHOJ" />
 		</Window>  
 

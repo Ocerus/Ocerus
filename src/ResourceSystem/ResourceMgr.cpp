@@ -511,11 +511,11 @@ void ResourceSystem::ResourceMgr::RefreshAllTextures( void )
 	}
 }
 
-void ResourceSystem::ResourceMgr::ChangeResourceType(ResourcePtr resPointer, eResourceType newType)
+ResourceSystem::ResourcePtr ResourceSystem::ResourceMgr::ChangeResourceType(ResourcePtr resPointer, eResourceType newType)
 {
 	ocInfo << "Changing type of resource " << resPointer->GetName() << " to " << GetResourceTypeName(newType);
 
-	// searching throught the groups
+	// searching through the groups
 	for (ResourceGroupMap::iterator groupIter=mResourceGroups.begin(); groupIter!=mResourceGroups.end(); ++groupIter)
 	{
 		ResourceMap* resMap = groupIter->second;
@@ -540,11 +540,12 @@ void ResourceSystem::ResourceMgr::ChangeResourceType(ResourcePtr resPointer, eRe
 
 				// adding new resource to manager
 				AddResourceToGroup(groupIter, r->GetName(), r);
-				return;
+				return r;
 			}
 		}
 	}
 	ocError << "Can't find resource '" << resPointer->GetName() << "'!!!";
+	return resPointer;
 }
 
 bool ResourceSystem::ResourceMgr::CheckForResourcesUpdates( void )

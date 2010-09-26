@@ -1,6 +1,7 @@
 void OnInit()
 {
-  gGUIMgr.LoadProjectScheme(gui/cube.scheme);
+  gGUIMgr.LoadScheme("gui/cube.scheme");
+  gGUIMgr.LoadImageset("gui/cube.imageset");
 }
 
 void OnUpdateLogic(float32 delta)

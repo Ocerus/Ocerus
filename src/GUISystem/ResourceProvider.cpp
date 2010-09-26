@@ -16,6 +16,12 @@ namespace GUISystem {
 			return;
 		}
 		CEGUIResourcePtr res = rawRes;
+		if (!res)
+		{
+			// seems like the conversion to CEGUIResource failed, so let's try to fix the resource type
+			rawRes = gResourceMgr.ChangeResourceType(rawRes, ResourceSystem::RESTYPE_CEGUIRESOURCE);
+			res = (CEGUIResourcePtr)rawRes;
+		}
 		res->GetResource(output);
 	}
 
