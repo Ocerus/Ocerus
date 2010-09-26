@@ -1589,18 +1589,6 @@
 						>
 					</File>
 					<File
-						RelativePath="..\src\Editor\ValueEditors\LayerEditor.h"
-						>
-					</File>
-					<File
-						RelativePath="..\src\Editor\ValueEditors\PointEditor.h"
-						>
-					</File>
-					<File
-						RelativePath="..\src\Editor\ValueEditors\PropertyEditorCreator.h"
-						>
-					</File>
-					<File
 						RelativePath="..\src\Editor\ValueEditors\ResourceEditor.h"
 						>
 					</File>
@@ -1613,7 +1601,11 @@
 						>
 					</File>
 					<File
-						RelativePath="..\src\Editor\ValueEditors\Vector2Editor.h"
+						RelativePath="..\src\Editor\ValueEditors\ValueEditorFactory.h"
+						>
+					</File>
+					<File
+						RelativePath="..\src\Editor\ValueEditors\ValueEditorTypes.h"
 						>
 					</File>
 				</Filter>
@@ -1625,19 +1617,11 @@
 						>
 					</File>
 					<File
+						RelativePath="..\src\Editor\ValueEditors\ArrayEditor.cpp"
+						>
+					</File>
+					<File
 						RelativePath="..\src\Editor\ValueEditors\BoolEditor.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\src\Editor\ValueEditors\LayerEditor.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\src\Editor\ValueEditors\PointEditor.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\src\Editor\ValueEditors\PropertyEditorCreator.cpp"
 						>
 					</File>
 					<File
@@ -1653,7 +1637,7 @@
 						>
 					</File>
 					<File
-						RelativePath="..\src\Editor\ValueEditors\Vector2Editor.cpp"
+						RelativePath="..\src\Editor\ValueEditors\ValueEditorFactory.cpp"
 						>
 					</File>
 				</Filter>
@@ -1683,12 +1667,20 @@
 							RelativePath="..\src\Editor\ValueEditors\Models\PropertyModel.h"
 							>
 						</File>
+						<File
+							RelativePath="..\src\Editor\ValueEditors\Models\StringValueEditorModel.h"
+							>
+						</File>
 					</Filter>
 					<Filter
 						Name="src"
 						>
 						<File
 							RelativePath="..\src\Editor\ValueEditors\Models\EntityAttributeModel.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\src\Editor\ValueEditors\Models\StringValueEditorModel.cpp"
 							>
 						</File>
 					</Filter>

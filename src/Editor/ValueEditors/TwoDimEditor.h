@@ -30,8 +30,8 @@ namespace Editor {
 		
 	protected:
 		virtual IValueEditorModel* GetModel() = 0;
-		virtual void SetValue(float x, float y) = 0;
-		virtual void GetValue(float& x, float& y) = 0;
+		virtual void SetValue(float32 x, float32 y) = 0;
+		virtual void GetValue(float32& x, float32& y) = 0;
 	
 		void InitWidget();
 		void DeinitWidget();
@@ -82,17 +82,17 @@ namespace Editor {
 	protected:
 		virtual IValueEditorModel* GetModel() { return mModel; }
 
-		virtual void GetValue(float& x, float& y)
+		virtual void GetValue(float32& x, float32& y)
 		{
 			if (mModel->IsValid())
 			{
 				Vec value = mModel->GetValue();
-				x = value.x;
-				y = value.y;
+				x = (float32)value.x;
+				y = (float32)value.y;
 			}
 		}
 		
-		virtual void SetValue(float x, float y)
+		virtual void SetValue(float32 x, float32 y)
 		{
 			Vec value(x, y);
 			mModel->SetValue(value);

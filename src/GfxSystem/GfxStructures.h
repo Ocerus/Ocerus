@@ -31,6 +31,7 @@ namespace GfxSystem
 	struct Point
 	{
 		Point(int32 _x, int32 _y): x(_x), y(_y) {}
+		Point(float32 _x, float32 _y): x((int32)_x), y((int32)_y) {}
 		Point(void): x(0), y(0) {}
 
 		int32 x, y;

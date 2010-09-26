@@ -2,11 +2,11 @@
 
 <Game>
   <GameInfo>
-    <CurrentTime>56509</CurrentTime>
-    <SceneName>level1.xml</SceneName>
-    <RequestedSceneName>level2.xml</RequestedSceneName>
+    <CurrentTime>66536</CurrentTime>
+    <SceneName>level2.xml</SceneName>
+    <RequestedSceneName>level1.xml</RequestedSceneName>
   </GameInfo>
   <DynamicProperties>
-    <TotalScore Type="uint32">120</TotalScore>
+    <TotalScore Type="uint32">140</TotalScore>
   </DynamicProperties>
 </Game>

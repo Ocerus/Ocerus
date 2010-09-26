@@ -1,3 +1,4 @@
+#include "Common.h"
 #include "ValueEditorFactory.h"
 
 #include "Editor/ValueEditors/ArrayEditor.h"
