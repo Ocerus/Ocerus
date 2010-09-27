@@ -1,7 +1,7 @@
 void OnInit()
 {
   gGUIMgr.LoadScheme("gui/cube.scheme");
-  gGUIMgr.LoadImageset("gui/cube.imageset");
+  gGUIMgr.LoadImageset("gui/buttons.imageset");
 }
 
 void OnUpdateLogic(float32 delta)
@@ -11,6 +11,7 @@ void OnUpdateLogic(float32 delta)
   Window@ scoreLabel = GetWindow(windowPrefix + "/Score");
   if (scoreLabel !is null)
   {
+  Println("aa");
     EntityHandle director = gEntityMgr.FindFirstEntity("Director");
     if (director.Exists())
     {

@@ -101,8 +101,8 @@
         <ScriptModules>
           <Item>effects/ScoreFader.as</Item>
         </ScriptModules>
-        <FadeMovementSpeed Type="float32">0.1</FadeMovementSpeed>
         <FadeAlphaSpeed Type="float32">2</FadeAlphaSpeed>
+        <FadeMovementSpeed Type="float32">0.1</FadeMovementSpeed>
       </Component>
     </Entity>
     <Entity Name="Coin1" ID="-503" Tag="2" Transient="false">
@@ -113,7 +113,6 @@
         <Angle>0</Angle>
       </Component>
       <Component Type="PolygonCollider">
-        <Restitution>0.5</Restitution>
         <Polygon>
           <Item>-0.1 -0.1</Item>
           <Item>0.1 -0.1</Item>
@@ -122,6 +121,7 @@
         </Polygon>
         <Friction>0.5</Friction>
         <Density>1</Density>
+        <Restitution>0.5</Restitution>
       </Component>
     </Entity>
     <Entity Name="Background2" ID="-502" Tag="0" Transient="false">
@@ -136,7 +136,6 @@
         <Texture>tiles/bg2.png</Texture>
       </Component>
       <Component Type="PolygonCollider">
-        <Restitution>0</Restitution>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
@@ -145,6 +144,7 @@
         </Polygon>
         <Friction>0</Friction>
         <Density>1</Density>
+        <Restitution>0</Restitution>
       </Component>
     </Entity>
     <Entity Name="Background1" ID="-501" Tag="0" Transient="false">
@@ -159,7 +159,6 @@
         <Texture>tiles/bg1.png</Texture>
       </Component>
       <Component Type="PolygonCollider">
-        <Restitution>0</Restitution>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
@@ -168,16 +167,16 @@
         </Polygon>
         <Friction>0</Friction>
         <Density>1</Density>
+        <Restitution>0</Restitution>
       </Component>
     </Entity>
     <Entity Name="Stone2" ID="-500" Tag="0" Transient="false">
       <Component Type="Transform"></Component>
       <Component Type="DynamicBody">
-        <AngularDamping>0.5</AngularDamping>
         <LinearDamping>0.1</LinearDamping>
+        <AngularDamping>0.5</AngularDamping>
       </Component>
       <Component Type="PolygonCollider">
-        <Restitution>0</Restitution>
         <Polygon>
           <Item>-0.1 -0.21</Item>
           <Item>0.25 -0.12</Item>
@@ -189,6 +188,7 @@
         </Polygon>
         <Friction>1</Friction>
         <Density>1</Density>
+        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -198,11 +198,10 @@
     <Entity Name="Stone1" ID="-499" Tag="0" Transient="false">
       <Component Type="Transform"></Component>
       <Component Type="DynamicBody">
-        <AngularDamping>0.5</AngularDamping>
         <LinearDamping>0.1</LinearDamping>
+        <AngularDamping>0.5</AngularDamping>
       </Component>
       <Component Type="PolygonCollider">
-        <Restitution>0</Restitution>
         <Polygon>
           <Item>-0.65 -0.2</Item>
           <Item>-0.25 -0.5</Item>
@@ -214,6 +213,7 @@
         </Polygon>
         <Friction>10</Friction>
         <Density>1</Density>
+        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -227,7 +227,6 @@
         <Texture>tiles/tile2.png</Texture>
       </Component>
       <Component Type="PolygonCollider">
-        <Restitution>0</Restitution>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
@@ -236,13 +235,13 @@
         </Polygon>
         <Friction>0</Friction>
         <Density>1</Density>
+        <Restitution>0</Restitution>
       </Component>
     </Entity>
     <Entity Name="Land2" ID="-496" Tag="0" Transient="false">
       <Component Type="Transform"></Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
-        <Restitution>0</Restitution>
         <Polygon>
           <Item>-0.83 -0.15</Item>
           <Item>0.83 -0.5</Item>
@@ -251,6 +250,7 @@
         </Polygon>
         <Friction>1</Friction>
         <Density>1</Density>
+        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -261,7 +261,6 @@
       <Component Type="Transform"></Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
-        <Restitution>0</Restitution>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
@@ -270,6 +269,7 @@
         </Polygon>
         <Friction>1</Friction>
         <Density>1</Density>
+        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
         <Transparency>0</Transparency>
@@ -278,9 +278,9 @@
     </Entity>
     <Entity Name="GameGUI" ID="-16" Tag="0" Transient="false">
       <Component Type="GUILayout">
+        <Visible>true</Visible>
         <Callback>gui/game.as</Callback>
         <Layout>gui/game.layout</Layout>
-        <Visible>true</Visible>
       </Component>
     </Entity>
   </Entities>

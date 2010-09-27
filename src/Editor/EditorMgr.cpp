@@ -629,6 +629,11 @@ bool Editor::EditorMgr::MouseButtonPressed( const InputSystem::MouseInfo& mi, co
 				mEditToolBodyPositions.resize(mSelectedEntities.size());
 				for (size_t i=0; i<mSelectedEntities.size(); ++i)
 				{
+					if (!mSelectedEntities[i].HasProperty("Position"))
+					{
+						mEditToolWorking = false;
+						break;
+					}
 					mEditToolBodyPositions[i] = mSelectedEntities[i].GetProperty("Position").GetValue<Vector2>();
 				}
 				break;
@@ -637,6 +642,12 @@ bool Editor::EditorMgr::MouseButtonPressed( const InputSystem::MouseInfo& mi, co
 				mEditToolBodyPositions.resize(mSelectedEntities.size());
 				for (size_t i=0; i<mSelectedEntities.size(); ++i)
 				{
+					if (!mSelectedEntities[i].HasProperty("Angle")
+						|| !mSelectedEntities[i].HasProperty("Position"))
+					{
+						mEditToolWorking = false;
+						break;
+					}
 					mEditToolBodyAngles[i] = mSelectedEntities[i].GetProperty("Angle").GetValue<float32>();
 					mEditToolBodyPositions[i] = mSelectedEntities[i].GetProperty("Position").GetValue<Vector2>();
 				}
@@ -645,7 +656,8 @@ bool Editor::EditorMgr::MouseButtonPressed( const InputSystem::MouseInfo& mi, co
 				mEditToolBodyAngles.resize(mSelectedEntities.size());
 				for (size_t i=0; i<mSelectedEntities.size(); ++i)
 				{
-					if (!gEntityMgr.HasEntityComponentOfType(mSelectedEntities[i], EntitySystem::CT_Model))
+					if (!gEntityMgr.HasEntityComponentOfType(mSelectedEntities[i], EntitySystem::CT_Model)
+						|| !mSelectedEntities[i].HasProperty("YAngle"))
 					{
 						mEditToolWorking = false;
 						break;

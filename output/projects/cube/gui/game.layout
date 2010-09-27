@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <GUILayout>
-  <Window Type="DefaultWindow" Name="">
+  <Window Type="DefaultWindow" Name="GameGUI">
     <Property Name="Font" Value="DejaVuSans-10" />
     <Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{1,0},{1,0}}" />
 
@@ -12,12 +12,25 @@
 			<Property Name="Text" Value="$score$" />
     </Window>
   
+		<Window Type="Cube/ImageButton" Name="StateButton">
+			<Property Name="UnifiedAreaRect" Value="{{0,2},{1,-52},{0,52},{1,-2}}" />
+			<Property Name="NormalImage" Value="set:Buttons image:CubeLight"/>
+			<Property Name="HoverImage" Value="set:Buttons image:CubeLight"/>
+			<Property Name="PushedImage" Value="set:Buttons image:CubeLight"/>
+		</Window>  
+
+		<Window Type="Cube/ImageButton" Name="JumpButton">
+			<Property Name="UnifiedAreaRect" Value="{{0,54},{1,-52},{0,104},{1,-2}}" />
+			<Property Name="NormalImage" Value="set:Buttons image:JumpOn"/>
+			<Property Name="HoverImage" Value="set:Buttons image:JumpHover"/>
+			<Property Name="PushedImage" Value="set:Buttons image:JumpOff"/>
+		</Window>  
+
 		<Window Type="Cube/ImageButton" Name="ExplosionButton">
-			<Property Name="UnifiedAreaRect" Value="{{0,100},{0,100},{0,200},{0,200}}" />
-			<Property Name="NormalImage" Value="set:ExplosionButton image:On"/>
-			<Property Name="HoverImage" Value="set:ExplosionButton image:On"/>
-			<Property Name="PushedImage" Value="set:ExplosionButton image:Off"/>
-			<Property Name="Text" Value="AHOJ" />
+			<Property Name="UnifiedAreaRect" Value="{{0,106},{1,-52},{0,156},{1,-2}}" />
+			<Property Name="NormalImage" Value="set:Buttons image:ExplosionOn"/>
+			<Property Name="HoverImage" Value="set:Buttons image:ExplosionHover"/>
+			<Property Name="PushedImage" Value="set:Buttons image:ExplosionOff"/>
 		</Window>  
 
   </Window>
