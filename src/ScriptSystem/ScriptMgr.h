@@ -29,6 +29,9 @@ namespace ScriptSystem
 {
 	/// Vector of pointers to ScriptResource
 	typedef vector<ScriptResourcePtr> ScriptResourcePtrs;
+
+	/// Prefixed added to the user made GUI windows.
+	const string USER_GUI_WINDOWS_PREFIX = "UserGUI_";
 	
 	/// This class encapsulates script engine and manages access to script modules.
 	class ScriptMgr : public Singleton<ScriptMgr>

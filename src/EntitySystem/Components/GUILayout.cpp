@@ -21,7 +21,7 @@ void EntityComponents::GUILayout::ReloadWindow(void)
 	if (mRootWindow) gGUIMgr.DestroyWindowDirectly(mRootWindow);
 	if (mLayout)
 	{
-		mRootWindow = gGUIMgr.LoadProjectLayout(mLayout->GetName(), GetOwner().GetName());
+		mRootWindow = gGUIMgr.LoadProjectLayout(mLayout->GetName(), ScriptSystem::USER_GUI_WINDOWS_PREFIX);
 		if (mRootWindow)
 		{
 			CEGUI::Window* parentWindow = GlobalProperties::Get<Core::Game>("Game").GetRootWindow();

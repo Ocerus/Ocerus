@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <GUILayout>
-  <Window Type="DefaultWindow" Name="GameGUI">
+  <Window Type="DefaultWindow" Name="">
     <Property Name="Font" Value="DejaVuSans-10" />
     <Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{1,0},{1,0}}" />
 

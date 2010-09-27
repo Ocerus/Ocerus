@@ -74,7 +74,7 @@ int ScriptMgr::IncludeCallback(const char* fileName, const char* from, AngelScri
 template<typename T>
 void ScriptPrintln(const T& msg)
 {
-  ScriptPrintln(Utils::StringConverter::ToString<T>(msg));
+	ScriptPrintln(Utils::StringConverter::ToString<T>(msg));
 }
 
 void ScriptPrintln(const string& msg)
@@ -94,27 +94,27 @@ void ScriptPrintln(const string& msg)
 template<typename T>
 string& AssignToString(const T& value, string& self)
 {
-  self = Utils::StringConverter::ToString<T>(value);
-  return self;
+	self = Utils::StringConverter::ToString<T>(value);
+	return self;
 }
 
 template<typename T>
 string& AddAssignToString(const T& value, string& self)
 {
-  self += Utils::StringConverter::ToString<T>(value);
-  return self;
+	self += Utils::StringConverter::ToString<T>(value);
+	return self;
 }
 
 template<typename T>
 string AddStringType(string& self, const T& value)
 {
-  return self + Utils::StringConverter::ToString<T>(value);
+	return self + Utils::StringConverter::ToString<T>(value);
 }
 
 template<typename T>
 string AddTypeString(const T& value, string& self)
 {
-  return Utils::StringConverter::ToString<T>(value) + self;
+	return Utils::StringConverter::ToString<T>(value) + self;
 }
 
 ScriptMgr::ScriptMgr()
@@ -155,30 +155,30 @@ T EntityHandleGetValue(EntitySystem::EntityHandle& handle, const string& propNam
 {
 	if (handle.Exists())
 	{
-	  Reflection::PropertyHolder ph;
-	  if (gEntityMgr.HasEntityProperty(handle, StringKey(propName), Reflection::PA_SCRIPT_READ))
-	  {
-	    ph = gEntityMgr.GetEntityProperty(handle, StringKey(propName), Reflection::PA_SCRIPT_READ);
-	  }
-	  if (ph.IsValid())
-	  {
-	    if (ph.GetType() == Reflection::PropertyTypes::GetTypeID<T>())
-	    {
-	      return ph.GetValue<T>();
-	    }
-	    else
-	    {
-	      asGetActiveContext()->SetException(("Can't convert property '" + propName + "' from '" + 
-	        Reflection::PropertyTypes::GetStringName(ph.GetType()) + "' to '" +
-	        Reflection::PropertyTypes::GetStringName(Reflection::PropertyTypes::GetTypeID<T>()) + "'").c_str());
-	      return Reflection::PropertyTypes::GetDefaultValue<T>();
-	    }
-	  }
-	  else
-	  {
-		  asGetActiveContext()->SetException(("Property '" + propName + "' does not exist or you don't have access rights!").c_str());
-		  return Reflection::PropertyTypes::GetDefaultValue<T>();
-	  }
+		Reflection::PropertyHolder ph;
+		if (gEntityMgr.HasEntityProperty(handle, StringKey(propName), Reflection::PA_SCRIPT_READ))
+		{
+			ph = gEntityMgr.GetEntityProperty(handle, StringKey(propName), Reflection::PA_SCRIPT_READ);
+		}
+		if (ph.IsValid())
+		{
+			if (ph.GetType() == Reflection::PropertyTypes::GetTypeID<T>())
+			{
+				return ph.GetValue<T>();
+			}
+			else
+			{
+				asGetActiveContext()->SetException(("Can't convert property '" + propName + "' from '" + 
+					Reflection::PropertyTypes::GetStringName(ph.GetType()) + "' to '" +
+					Reflection::PropertyTypes::GetStringName(Reflection::PropertyTypes::GetTypeID<T>()) + "'").c_str());
+				return Reflection::PropertyTypes::GetDefaultValue<T>();
+			}
+		}
+		else
+		{
+			asGetActiveContext()->SetException(("Property '" + propName + "' does not exist or you don't have access rights!").c_str());
+			return Reflection::PropertyTypes::GetDefaultValue<T>();
+		}
 	}
 	else
 	{
@@ -193,28 +193,28 @@ void EntityHandleSetValue(EntitySystem::EntityHandle& handle, const string& prop
 {
 	if (handle.Exists())
 	{
-	  Reflection::PropertyHolder ph;
-	  if (gEntityMgr.HasEntityProperty(handle, StringKey(propName), Reflection::PA_SCRIPT_WRITE))
-	  {
-	    ph = gEntityMgr.GetEntityProperty(handle, StringKey(propName), Reflection::PA_SCRIPT_WRITE);
-	  }
-	  if (ph.IsValid())
-	  {
-	    if (ph.GetType() == Reflection::PropertyTypes::GetTypeID<T>())
-	    {
-	      ph.SetValue<T>(value);
-	    }
-	    else
-	    {
-	      asGetActiveContext()->SetException(("Can't convert property '" + propName + "' from '" + 
-	        Reflection::PropertyTypes::GetStringName(ph.GetType()) + "' to '" +
-	        Reflection::PropertyTypes::GetStringName(Reflection::PropertyTypes::GetTypeID<T>()) + "'").c_str());
-	    }
-	  }
-	  else
-	  {
-		  asGetActiveContext()->SetException(("Property '" + propName + "' does not exist or you don't have access rights!").c_str());
-	  }
+		Reflection::PropertyHolder ph;
+		if (gEntityMgr.HasEntityProperty(handle, StringKey(propName), Reflection::PA_SCRIPT_WRITE))
+		{
+			ph = gEntityMgr.GetEntityProperty(handle, StringKey(propName), Reflection::PA_SCRIPT_WRITE);
+		}
+		if (ph.IsValid())
+		{
+			if (ph.GetType() == Reflection::PropertyTypes::GetTypeID<T>())
+			{
+				ph.SetValue<T>(value);
+			}
+			else
+			{
+				asGetActiveContext()->SetException(("Can't convert property '" + propName + "' from '" + 
+					Reflection::PropertyTypes::GetStringName(ph.GetType()) + "' to '" +
+					Reflection::PropertyTypes::GetStringName(Reflection::PropertyTypes::GetTypeID<T>()) + "'").c_str());
+			}
+		}
+		else
+		{
+			asGetActiveContext()->SetException(("Property '" + propName + "' does not exist or you don't have access rights!").c_str());
+		}
 	}
 	else
 	{
@@ -227,28 +227,28 @@ void EntityHandleCallFunction(EntitySystem::EntityHandle& handle, string& propNa
 {
 	if (handle.Exists())
 	{
-	  Reflection::PropertyHolder ph;
-	  if (gEntityMgr.HasEntityProperty(handle, StringKey(propName), Reflection::PA_SCRIPT_WRITE))
-	  {
-	    ph = gEntityMgr.GetEntityProperty(handle, StringKey(propName), Reflection::PA_SCRIPT_WRITE);
-	  }
-	  if (ph.IsValid())
-	  {
-	    if (ph.GetType() == Reflection::PropertyTypes::GetTypeID<PropertyFunctionParameters>())
-	    {
-	      ph.SetValue<PropertyFunctionParameters>(value);
-	    }
-	    else
-	    {
-	      asGetActiveContext()->SetException(("Can't convert property '" + propName + "' from '" + 
-	        Reflection::PropertyTypes::GetStringName(ph.GetType()) + "' to '" +
-	        Reflection::PropertyTypes::GetStringName(Reflection::PropertyTypes::GetTypeID<PropertyFunctionParameters>()) + "'").c_str());
-	    }
-	  }
-	  else
-	  {
-		  asGetActiveContext()->SetException(("Function '" + propName + "' does not exist or you don't have access rights!").c_str());
-	  }
+		Reflection::PropertyHolder ph;
+		if (gEntityMgr.HasEntityProperty(handle, StringKey(propName), Reflection::PA_SCRIPT_WRITE))
+		{
+			ph = gEntityMgr.GetEntityProperty(handle, StringKey(propName), Reflection::PA_SCRIPT_WRITE);
+		}
+		if (ph.IsValid())
+		{
+			if (ph.GetType() == Reflection::PropertyTypes::GetTypeID<PropertyFunctionParameters>())
+			{
+				ph.SetValue<PropertyFunctionParameters>(value);
+			}
+			else
+			{
+				asGetActiveContext()->SetException(("Can't convert property '" + propName + "' from '" + 
+					Reflection::PropertyTypes::GetStringName(ph.GetType()) + "' to '" +
+					Reflection::PropertyTypes::GetStringName(Reflection::PropertyTypes::GetTypeID<PropertyFunctionParameters>()) + "'").c_str());
+			}
+		}
+		else
+		{
+			asGetActiveContext()->SetException(("Function '" + propName + "' does not exist or you don't have access rights!").c_str());
+		}
 	}
 	else
 	{
@@ -310,30 +310,30 @@ ScriptArray<U> EntityHandleGetArrayValue(EntitySystem::EntityHandle& handle, str
 {
 	if (handle.Exists())
 	{
-	  Reflection::PropertyHolder ph;
-	  if (gEntityMgr.HasEntityProperty(handle, StringKey(propName), Reflection::PA_SCRIPT_WRITE))
-	  {
-	    ph = gEntityMgr.GetEntityProperty(handle, StringKey(propName), Reflection::PA_SCRIPT_WRITE);
-	  }
-	  if (ph.IsValid())
-	  {
-	    if (ph.GetType() == Reflection::PropertyTypes::GetTypeID<Array<U>*>())
-	    {
-	      return ScriptArray<U>(ph.GetValue<Array<U>*>());
-	    }
-	    else
-	    {
-	      asGetActiveContext()->SetException(("Can't convert property '" + propName + "' from '" + 
-	        Reflection::PropertyTypes::GetStringName(ph.GetType()) + "' to '" +
-	        Reflection::PropertyTypes::GetStringName(Reflection::PropertyTypes::GetTypeID<Array<U>*>()) + "'").c_str());
-	      return ScriptArray<U>(0);
-	    }
-	  }
-	  else
-	  {
-		  asGetActiveContext()->SetException(("Property '" + propName + "' does not exist or you don't have access rights!").c_str());
-		  return ScriptArray<U>(0);
-	  }
+		Reflection::PropertyHolder ph;
+		if (gEntityMgr.HasEntityProperty(handle, StringKey(propName), Reflection::PA_SCRIPT_WRITE))
+		{
+			ph = gEntityMgr.GetEntityProperty(handle, StringKey(propName), Reflection::PA_SCRIPT_WRITE);
+		}
+		if (ph.IsValid())
+		{
+			if (ph.GetType() == Reflection::PropertyTypes::GetTypeID<Array<U>*>())
+			{
+				return ScriptArray<U>(ph.GetValue<Array<U>*>());
+			}
+			else
+			{
+				asGetActiveContext()->SetException(("Can't convert property '" + propName + "' from '" + 
+					Reflection::PropertyTypes::GetStringName(ph.GetType()) + "' to '" +
+					Reflection::PropertyTypes::GetStringName(Reflection::PropertyTypes::GetTypeID<Array<U>*>()) + "'").c_str());
+				return ScriptArray<U>(0);
+			}
+		}
+		else
+		{
+			asGetActiveContext()->SetException(("Property '" + propName + "' does not exist or you don't have access rights!").c_str());
+			return ScriptArray<U>(0);
+		}
 	}
 	else
 	{
@@ -348,30 +348,30 @@ const ScriptArray<U> EntityHandleGetConstArrayValue(EntitySystem::EntityHandle& 
 {
 	if (handle.Exists())
 	{
-	  Reflection::PropertyHolder ph;
-	  if (gEntityMgr.HasEntityProperty(handle, StringKey(propName), Reflection::PA_SCRIPT_READ))
-	  {
-	    ph = gEntityMgr.GetEntityProperty(handle, StringKey(propName), Reflection::PA_SCRIPT_READ);
-	  }
-	  if (ph.IsValid())
-	  {
-	    if (ph.GetType() == Reflection::PropertyTypes::GetTypeID<Array<U>*>())
-	    {
-	      return ScriptArray<U>(ph.GetValue<Array<U>*>());
-	    }
-	    else
-	    {
-	      asGetActiveContext()->SetException(("Can't convert property '" + propName + "' from '" + 
-	        Reflection::PropertyTypes::GetStringName(ph.GetType()) + "' to '" +
-	        Reflection::PropertyTypes::GetStringName(Reflection::PropertyTypes::GetTypeID<Array<U>*>()) + "'").c_str());
-	      return ScriptArray<U>(0);
-	    }
-	  }
-	  else
-	  {
-		  asGetActiveContext()->SetException(("Property '" + propName + "' does not exist or you don't have access rights!").c_str());
-		  return ScriptArray<U>(0);
-	  }
+		Reflection::PropertyHolder ph;
+		if (gEntityMgr.HasEntityProperty(handle, StringKey(propName), Reflection::PA_SCRIPT_READ))
+		{
+			ph = gEntityMgr.GetEntityProperty(handle, StringKey(propName), Reflection::PA_SCRIPT_READ);
+		}
+		if (ph.IsValid())
+		{
+			if (ph.GetType() == Reflection::PropertyTypes::GetTypeID<Array<U>*>())
+			{
+				return ScriptArray<U>(ph.GetValue<Array<U>*>());
+			}
+			else
+			{
+				asGetActiveContext()->SetException(("Can't convert property '" + propName + "' from '" + 
+					Reflection::PropertyTypes::GetStringName(ph.GetType()) + "' to '" +
+					Reflection::PropertyTypes::GetStringName(Reflection::PropertyTypes::GetTypeID<Array<U>*>()) + "'").c_str());
+				return ScriptArray<U>(0);
+			}
+		}
+		else
+		{
+			asGetActiveContext()->SetException(("Property '" + propName + "' does not exist or you don't have access rights!").c_str());
+			return ScriptArray<U>(0);
+		}
 	}
 	else
 	{
@@ -412,7 +412,7 @@ static void StringKeyDestructor(StringKey* self)
 
 StringKey StringToStringKey(const string* self)
 {
-  return StringKey(*self);
+	return StringKey(*self);
 }
 
 void RegisterScriptStringKey(asIScriptEngine* engine)
@@ -495,11 +495,11 @@ static void EntityHandleDestructor(EntityHandle* self)
 
 template <class T>
 bool RegisterDynamicProperty(const EntityHandle& self,
-	const string& propertyName, const PropertyAccessFlags accessFlags, const string& comment)
+							 const string& propertyName, const PropertyAccessFlags accessFlags, const string& comment)
 {
 	ComponentID id = gEntityMgr.GetEntityComponent(self, CT_Script);
 	if (id == -1) return false;
-  return self.RegisterDynamicPropertyOfComponent<T>(id, StringKey(propertyName), accessFlags, comment);
+	return self.RegisterDynamicPropertyOfComponent<T>(id, StringKey(propertyName), accessFlags, comment);
 }
 
 bool UnregisterDynamicProperty(const EntityHandle& self, const string& propertyName)
@@ -860,7 +860,7 @@ void RegisterScriptInputMgr(asIScriptEngine* engine)
 	int32 r;
 	// Register the type
 	r = engine->RegisterObjectType("InputMgr", 0, asOBJ_REF | asOBJ_NOHANDLE); OC_SCRIPT_ASSERT();
-	
+
 	// Register enum eKeyCode
 	r = engine->RegisterEnum("eKeyCode"); OC_SCRIPT_ASSERT();
 	for (uint8 code = 0; code < InputSystem::NUM_KEY_CODE; ++code)
@@ -868,10 +868,10 @@ void RegisterScriptInputMgr(asIScriptEngine* engine)
 		const char* keyString = GetKeyCodeString(code);
 		if (keyString != 0)
 		{
-		  r = engine->RegisterEnumValue("eKeyCode", keyString, code); OC_SCRIPT_ASSERT();
+			r = engine->RegisterEnumValue("eKeyCode", keyString, code); OC_SCRIPT_ASSERT();
 		}
 	}
-	
+
 	// Register struct MouseState
 	r = engine->RegisterObjectType("MouseState", sizeof(MouseState), asOBJ_VALUE | asOBJ_POD); OC_SCRIPT_ASSERT();
 	//r = engine->RegisterObjectProperty("MouseState", "int32 x", offsetof(MouseState, x)); OC_SCRIPT_ASSERT();
@@ -886,21 +886,21 @@ void RegisterScriptInputMgr(asIScriptEngine* engine)
 	//r = engine->RegisterObjectProperty("MouseState", "uint8 buttons", offsetof(MouseState, buttons)); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("MouseState", "uint8 get_buttons() const", asFUNCTION(MouseStateGetButtons), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("MouseState", "void set_buttons(uint8)", asFUNCTION(MouseStateSetButtons), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
-	
-	
+
+
 	// Register enum eMouseButton
 	r = engine->RegisterEnum("eMouseButton"); OC_SCRIPT_ASSERT();
 	r = engine->RegisterEnumValue("eMouseButton", "MBTN_LEFT", InputSystem::MBTN_LEFT); OC_SCRIPT_ASSERT();
 	r = engine->RegisterEnumValue("eMouseButton", "MBTN_RIGHT", InputSystem::MBTN_RIGHT); OC_SCRIPT_ASSERT();
 	r = engine->RegisterEnumValue("eMouseButton", "MBTN_MIDDLE", InputSystem::MBTN_MIDDLE); OC_SCRIPT_ASSERT();
 	r = engine->RegisterEnumValue("eMouseButton", "MBTN_UNKNOWN", InputSystem::MBTN_UNKNOWN); OC_SCRIPT_ASSERT();
-	
+
 	// Register the object methods
 	r = engine->RegisterObjectMethod("InputMgr", "void CaptureInput()", asMETHOD(InputMgr, CaptureInput), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("InputMgr", "bool IsKeyDown(const eKeyCode) const", asMETHOD(InputMgr, IsKeyDown), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("InputMgr", "bool IsMouseButtonPressed(const eMouseButton) const", asMETHOD(InputMgr, IsMouseButtonPressed), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("InputMgr", "MouseState& GetMouseState() const", asMETHOD(InputMgr, GetMouseState), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-	
+
 	// Register function that returns it
 	r = engine->RegisterGlobalFunction("InputMgr& get_gInputMgr()", asFUNCTION(GetInputMgr), asCALL_CDECL); OC_SCRIPT_ASSERT();
 }
@@ -909,15 +909,15 @@ void RegisterScriptInputMgr(asIScriptEngine* engine)
 
 string ProjectGetSceneName(int32 index, const Project* self)
 {
-  SceneInfoList list;
-  self->GetSceneList(list);
-  if (index >= 0 && index < (int32)list.size()) return list[index].name;
-  else return "";
+	SceneInfoList list;
+	self->GetSceneList(list);
+	if (index >= 0 && index < (int32)list.size()) return list[index].name;
+	else return "";
 }
 
 Project& GetProject()
 {
-  return *gApp.GetGameProject();
+	return *gApp.GetGameProject();
 }
 
 void RegisterScriptProject(asIScriptEngine* engine)
@@ -925,7 +925,7 @@ void RegisterScriptProject(asIScriptEngine* engine)
 	int32 r;
 	// Register the type
 	r = engine->RegisterObjectType("Project", 0, asOBJ_REF | asOBJ_NOHANDLE); OC_SCRIPT_ASSERT();
-	
+
 	// Register the object methods
 	r = engine->RegisterObjectMethod("Project", "bool OpenScene(const string &in)", asMETHOD(Project, RequestOpenScene), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("Project", "bool OpenSceneAtIndex(int32)", asMETHOD(Project, RequestOpenSceneAtIndex), asCALL_THISCALL); OC_SCRIPT_ASSERT();
@@ -933,7 +933,7 @@ void RegisterScriptProject(asIScriptEngine* engine)
 	r = engine->RegisterObjectMethod("Project", "int32 GetSceneIndex(const string &in) const", asMETHOD(Project, GetSceneIndex), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("Project", "string GetOpenedSceneName() const", asMETHOD(Project, GetOpenedSceneName), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("Project", "string GetSceneName(int32) const", asFUNCTION(ProjectGetSceneName), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
-	
+
 	// Register function that returns it
 	r = engine->RegisterGlobalFunction("Project& get_gProject()", asFUNCTION(GetProject), asCALL_CDECL); OC_SCRIPT_ASSERT();
 }
@@ -942,7 +942,7 @@ void RegisterScriptProject(asIScriptEngine* engine)
 
 Game& GetGame()
 {
-  return GlobalProperties::Get<Core::Game>("Game");
+	return GlobalProperties::Get<Core::Game>("Game");
 }
 
 void RegisterScriptGame(asIScriptEngine* engine)
@@ -950,14 +950,14 @@ void RegisterScriptGame(asIScriptEngine* engine)
 	int32 r;
 	// Register the type
 	r = engine->RegisterObjectType("Game", 0, asOBJ_REF | asOBJ_NOHANDLE); OC_SCRIPT_ASSERT();
-	
+
 	// Register the object methods
 	r = engine->RegisterObjectMethod("Game", "void ClearDynamicProperties()", asMETHOD(Game, ClearDynamicProperties), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("Game", "bool HasDynamicProperty(const string &in) const", asMETHOD(Game, HasDynamicProperty), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("Game", "bool DeleteDynamicProperty(const string &in)", asMETHOD(Game, DeleteDynamicProperty), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("Game", "bool LoadFromFile(const string &in)", asMETHOD(Game, LoadFromFile), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("Game", "bool SaveToFile(const string &in) const", asMETHOD(Game, SaveToFile), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-	
+
 	// Register function that returns it
 	r = engine->RegisterGlobalFunction("Game& get_game()", asFUNCTION(GetGame), asCALL_CDECL); OC_SCRIPT_ASSERT();
 }
@@ -968,213 +968,213 @@ void RegisterScriptGame(asIScriptEngine* engine)
 template<class A, class B>
 B* WindowRefCast(A* a)
 {
-  // If the handle already is a null handle, then just return the null handle
-  if (!a) return 0;
+	// If the handle already is a null handle, then just return the null handle
+	if (!a) return 0;
 
-  // Check if casting is correct (real class of a is derived from class B)
-  if (!a->testClassName(B::EventNamespace)) return 0;
-  
-  // Now try to dynamically cast the pointer to the wanted type
-  B* b = static_cast<B*>(a);
-  WindowAddRef(b);
-   
-  return b;
+	// Check if casting is correct (real class of a is derived from class B)
+	if (!a->testClassName(B::EventNamespace)) return 0;
+
+	// Now try to dynamically cast the pointer to the wanted type
+	B* b = static_cast<B*>(a);
+	WindowAddRef(b);
+
+	return b;
 }
 
 template<class T>
 void WindowAddRef(T* self)
 {
-  OC_UNUSED(self);
-  // Do nothing
+	OC_UNUSED(self);
+	// Do nothing
 }
 
 template<class T>
 void WindowRelease(T* self)
 {
-  OC_UNUSED(self);
-  // Do nothing
+	OC_UNUSED(self);
+	// Do nothing
 }
 
 bool WindowIsDisabled(const CEGUI::Window* self)
 {
-  return self->isDisabled();
+	return self->isDisabled();
 }
 
 bool WindowIsVisible(const CEGUI::Window* self)
 {
-  return self->isVisible();
+	return self->isVisible();
 }
 
 template<class T>
 void RegisterScriptWindowMembers(asIScriptEngine *engine, const char *type)
 {
-  int32 r;
-  
-  // Register the object behaviour
-  r = engine->RegisterObjectBehaviour(type, asBEHAVE_ADDREF, "void f()", asFUNCTIONPR(WindowAddRef, (T*), void), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
-  r = engine->RegisterObjectBehaviour(type, asBEHAVE_RELEASE, "void f()", asFUNCTIONPR(WindowRelease, (T*), void), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
-  
-  // Register the object methods
-  r = engine->RegisterObjectMethod(type, "const CEGUIString& GetName() const", asMETHOD(T, getName), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-  r = engine->RegisterObjectMethod(type, "const CEGUIString& GetType() const", asMETHOD(T, getType), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-  r = engine->RegisterObjectMethod(type, "bool IsDisabled() const", asFUNCTION(WindowIsDisabled), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
-  r = engine->RegisterObjectMethod(type, "bool IsDisabled(bool) const", asMETHOD(T, isDisabled), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-  r = engine->RegisterObjectMethod(type, "bool IsVisible() const", asFUNCTION(WindowIsVisible), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
-  r = engine->RegisterObjectMethod(type, "bool IsVisible(bool) const", asMETHOD(T, isVisible), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-  r = engine->RegisterObjectMethod(type, "bool IsActive() const", asMETHOD(T, isActive), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-  r = engine->RegisterObjectMethod(type, "const CEGUIString& GetText() const", asMETHOD(T, getText), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-  r = engine->RegisterObjectMethod(type, "bool InheritsAlpha() const", asMETHOD(T, inheritsAlpha), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-  r = engine->RegisterObjectMethod(type, "float32 GetAlpha() const", asMETHOD(T, getAlpha), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-  r = engine->RegisterObjectMethod(type, "float32 GetEffectiveAlpha() const", asMETHOD(T, getEffectiveAlpha), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-  r = engine->RegisterObjectMethod(type, "Window@ GetParent() const", asMETHOD(T, getParent), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-  r = engine->RegisterObjectMethod(type, "const CEGUIString& GetTooltipText() const", asMETHOD(T, getTooltipText), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-  r = engine->RegisterObjectMethod(type, "bool InheritsTooltipText() const", asMETHOD(T, inheritsTooltipText), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-  r = engine->RegisterObjectMethod(type, "void SetEnabled(bool)", asMETHOD(T, setEnabled), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-  r = engine->RegisterObjectMethod(type, "void SetVisible(bool)", asMETHOD(T, setVisible), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-  r = engine->RegisterObjectMethod(type, "void Activate()", asMETHOD(T, activate), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-  r = engine->RegisterObjectMethod(type, "void Deactivate()", asMETHOD(T, deactivate), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-  r = engine->RegisterObjectMethod(type, "void SetText(const CEGUIString& in)", asMETHOD(T, setText), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-  r = engine->RegisterObjectMethod(type, "void SetAlpha(float32)", asMETHOD(T, setAlpha), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-  r = engine->RegisterObjectMethod(type, "void SetInheritsAlpha(bool)", asMETHOD(T, setInheritsAlpha), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-  r = engine->RegisterObjectMethod(type, "void SetTooltipText(const CEGUIString& in)", asMETHOD(T, setTooltipText), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-  r = engine->RegisterObjectMethod(type, "void SetInheritsTooltipText(bool)", asMETHOD(T, setInheritsTooltipText), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	int32 r;
+
+	// Register the object behaviour
+	r = engine->RegisterObjectBehaviour(type, asBEHAVE_ADDREF, "void f()", asFUNCTIONPR(WindowAddRef, (T*), void), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectBehaviour(type, asBEHAVE_RELEASE, "void f()", asFUNCTIONPR(WindowRelease, (T*), void), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+
+	// Register the object methods
+	r = engine->RegisterObjectMethod(type, "const CEGUIString& GetName() const", asMETHOD(T, getName), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod(type, "const CEGUIString& GetType() const", asMETHOD(T, getType), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod(type, "bool IsDisabled() const", asFUNCTION(WindowIsDisabled), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod(type, "bool IsDisabled(bool) const", asMETHOD(T, isDisabled), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod(type, "bool IsVisible() const", asFUNCTION(WindowIsVisible), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod(type, "bool IsVisible(bool) const", asMETHOD(T, isVisible), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod(type, "bool IsActive() const", asMETHOD(T, isActive), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod(type, "const CEGUIString& GetText() const", asMETHOD(T, getText), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod(type, "bool InheritsAlpha() const", asMETHOD(T, inheritsAlpha), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod(type, "float32 GetAlpha() const", asMETHOD(T, getAlpha), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod(type, "float32 GetEffectiveAlpha() const", asMETHOD(T, getEffectiveAlpha), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod(type, "Window@ GetParent() const", asMETHOD(T, getParent), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod(type, "const CEGUIString& GetTooltipText() const", asMETHOD(T, getTooltipText), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod(type, "bool InheritsTooltipText() const", asMETHOD(T, inheritsTooltipText), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod(type, "void SetEnabled(bool)", asMETHOD(T, setEnabled), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod(type, "void SetVisible(bool)", asMETHOD(T, setVisible), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod(type, "void Activate()", asMETHOD(T, activate), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod(type, "void Deactivate()", asMETHOD(T, deactivate), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod(type, "void SetText(const CEGUIString& in)", asMETHOD(T, setText), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod(type, "void SetAlpha(float32)", asMETHOD(T, setAlpha), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod(type, "void SetInheritsAlpha(bool)", asMETHOD(T, setInheritsAlpha), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod(type, "void SetTooltipText(const CEGUIString& in)", asMETHOD(T, setTooltipText), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod(type, "void SetInheritsTooltipText(bool)", asMETHOD(T, setInheritsTooltipText), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 }
 
 template<class T>
 void RegisterScriptButtonBaseMembers(asIScriptEngine *engine, const char *type)
 {
-  RegisterScriptWindowMembers<T>(engine, type);
-  
-  int32 r;
-  r = engine->RegisterObjectBehaviour("Window", asBEHAVE_REF_CAST, (string(type) + "@ f()").c_str(), asFUNCTION((WindowRefCast<CEGUI::Window, T>)), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
-  r = engine->RegisterObjectBehaviour(type, asBEHAVE_IMPLICIT_REF_CAST, "Window@ f()", asFUNCTION((WindowRefCast<T, CEGUI::Window>)), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
-  
-  r = engine->RegisterObjectMethod(type, "bool IsHovering() const", asMETHOD(T, isHovering), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-  r = engine->RegisterObjectMethod(type, "bool IsPushed() const", asMETHOD(T, isPushed), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	RegisterScriptWindowMembers<T>(engine, type);
+
+	int32 r;
+	r = engine->RegisterObjectBehaviour("Window", asBEHAVE_REF_CAST, (string(type) + "@ f()").c_str(), asFUNCTION((WindowRefCast<CEGUI::Window, T>)), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectBehaviour(type, asBEHAVE_IMPLICIT_REF_CAST, "Window@ f()", asFUNCTION((WindowRefCast<T, CEGUI::Window>)), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+
+	r = engine->RegisterObjectMethod(type, "bool IsHovering() const", asMETHOD(T, isHovering), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod(type, "bool IsPushed() const", asMETHOD(T, isPushed), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 }
 
 template<class T>
 void RegisterScriptCheckboxMembers(asIScriptEngine *engine, const char *type)
 {
-  RegisterScriptButtonBaseMembers<T>(engine, type);
-  
-  int32 r;
-  r = engine->RegisterObjectBehaviour("ButtonBase", asBEHAVE_REF_CAST, (string(type) + "@ f()").c_str(), asFUNCTION((WindowRefCast<CEGUI::ButtonBase, T>)), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
-  r = engine->RegisterObjectBehaviour(type, asBEHAVE_IMPLICIT_REF_CAST, "ButtonBase@ f()", asFUNCTION((WindowRefCast<T, CEGUI::ButtonBase>)), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
-  
-  r = engine->RegisterObjectMethod(type, "bool IsSelected() const", asMETHOD(T, isSelected), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-  r = engine->RegisterObjectMethod(type, "void SetSelected(bool)", asMETHOD(T, setSelected), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	RegisterScriptButtonBaseMembers<T>(engine, type);
+
+	int32 r;
+	r = engine->RegisterObjectBehaviour("ButtonBase", asBEHAVE_REF_CAST, (string(type) + "@ f()").c_str(), asFUNCTION((WindowRefCast<CEGUI::ButtonBase, T>)), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectBehaviour(type, asBEHAVE_IMPLICIT_REF_CAST, "ButtonBase@ f()", asFUNCTION((WindowRefCast<T, CEGUI::ButtonBase>)), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+
+	r = engine->RegisterObjectMethod(type, "bool IsSelected() const", asMETHOD(T, isSelected), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod(type, "void SetSelected(bool)", asMETHOD(T, setSelected), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 }
 
 template<class T>
 void RegisterScriptPushButtonMembers(asIScriptEngine *engine, const char *type)
 {
-  RegisterScriptButtonBaseMembers<T>(engine, type);
-  
-  int32 r;
-  r = engine->RegisterObjectBehaviour("ButtonBase", asBEHAVE_REF_CAST, (string(type) + "@ f()").c_str(), asFUNCTION((WindowRefCast<CEGUI::ButtonBase, T>)), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
-  r = engine->RegisterObjectBehaviour(type, asBEHAVE_IMPLICIT_REF_CAST, "ButtonBase@ f()", asFUNCTION((WindowRefCast<T, CEGUI::ButtonBase>)), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+	RegisterScriptButtonBaseMembers<T>(engine, type);
+
+	int32 r;
+	r = engine->RegisterObjectBehaviour("ButtonBase", asBEHAVE_REF_CAST, (string(type) + "@ f()").c_str(), asFUNCTION((WindowRefCast<CEGUI::ButtonBase, T>)), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectBehaviour(type, asBEHAVE_IMPLICIT_REF_CAST, "ButtonBase@ f()", asFUNCTION((WindowRefCast<T, CEGUI::ButtonBase>)), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
 }
 
 template<class T>
 void RegisterScriptRadioButtonMembers(asIScriptEngine *engine, const char *type)
 {
-  RegisterScriptButtonBaseMembers<T>(engine, type);
-  
-  int32 r;
-  r = engine->RegisterObjectBehaviour("ButtonBase", asBEHAVE_REF_CAST, (string(type) + "@ f()").c_str(), asFUNCTION((WindowRefCast<CEGUI::ButtonBase, T>)), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
-  r = engine->RegisterObjectBehaviour(type, asBEHAVE_IMPLICIT_REF_CAST, "ButtonBase@ f()", asFUNCTION((WindowRefCast<T, CEGUI::ButtonBase>)), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
-  
-  r = engine->RegisterObjectMethod(type, "bool IsSelected() const", asMETHOD(T, isSelected), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-  r = engine->RegisterObjectMethod(type, "void SetSelected(bool)", asMETHOD(T, setSelected), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-  r = engine->RegisterObjectMethod(type, "uint32 GetGroupID() const", asMETHOD(T, getGroupID), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-  r = engine->RegisterObjectMethod(type, "void SetGroupID(uint32)", asMETHOD(T, setGroupID), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	RegisterScriptButtonBaseMembers<T>(engine, type);
+
+	int32 r;
+	r = engine->RegisterObjectBehaviour("ButtonBase", asBEHAVE_REF_CAST, (string(type) + "@ f()").c_str(), asFUNCTION((WindowRefCast<CEGUI::ButtonBase, T>)), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectBehaviour(type, asBEHAVE_IMPLICIT_REF_CAST, "ButtonBase@ f()", asFUNCTION((WindowRefCast<T, CEGUI::ButtonBase>)), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+
+	r = engine->RegisterObjectMethod(type, "bool IsSelected() const", asMETHOD(T, isSelected), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod(type, "void SetSelected(bool)", asMETHOD(T, setSelected), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod(type, "uint32 GetGroupID() const", asMETHOD(T, getGroupID), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod(type, "void SetGroupID(uint32)", asMETHOD(T, setGroupID), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 }
 
 template<class T>
 void RegisterScriptEditboxMembers(asIScriptEngine *engine, const char *type)
 {
-  RegisterScriptWindowMembers<T>(engine, type);
-  
-  int32 r;
-  r = engine->RegisterObjectBehaviour("Window", asBEHAVE_REF_CAST, (string(type) + "@ f()").c_str(), asFUNCTION((WindowRefCast<CEGUI::Window, T>)), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
-  r = engine->RegisterObjectBehaviour(type, asBEHAVE_IMPLICIT_REF_CAST, "Window@ f()", asFUNCTION((WindowRefCast<T, CEGUI::Window>)), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
-  
-  r = engine->RegisterObjectMethod(type, "bool HasInputFocus() const", asMETHOD(T, hasInputFocus), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-  r = engine->RegisterObjectMethod(type, "bool IsReadOnly() const", asMETHOD(T, isReadOnly), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-  r = engine->RegisterObjectMethod(type, "bool IsTextMasked() const", asMETHOD(T, isTextMasked), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-  r = engine->RegisterObjectMethod(type, "bool IsTextValid() const", asMETHOD(T, isTextValid), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-  r = engine->RegisterObjectMethod(type, "const CEGUIString& GetValidationString() const", asMETHOD(T, getValidationString), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-  r = engine->RegisterObjectMethod(type, "uint32 GetMaskCodePoint() const", asMETHOD(T, getMaskCodePoint), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-  r = engine->RegisterObjectMethod(type, "uint32 GetMaxTextLength() const", asMETHOD(T, getMaxTextLength), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-  r = engine->RegisterObjectMethod(type, "void SetReadOnly(bool)", asMETHOD(T, setReadOnly), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-  r = engine->RegisterObjectMethod(type, "void SetTextMasked(bool)", asMETHOD(T, setTextMasked), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-  r = engine->RegisterObjectMethod(type, "void SetValidationString(const CEGUIString &in)", asMETHOD(T, setValidationString), asCALL_THISCALL); OC_SCRIPT_ASSERT();  
-  r = engine->RegisterObjectMethod(type, "void SetMaskCodePoint(uint32)", asMETHOD(T, setMaskCodePoint), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-  r = engine->RegisterObjectMethod(type, "void SetMaxTextLength(uint32)", asMETHOD(T, setMaxTextLength), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	RegisterScriptWindowMembers<T>(engine, type);
+
+	int32 r;
+	r = engine->RegisterObjectBehaviour("Window", asBEHAVE_REF_CAST, (string(type) + "@ f()").c_str(), asFUNCTION((WindowRefCast<CEGUI::Window, T>)), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectBehaviour(type, asBEHAVE_IMPLICIT_REF_CAST, "Window@ f()", asFUNCTION((WindowRefCast<T, CEGUI::Window>)), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+
+	r = engine->RegisterObjectMethod(type, "bool HasInputFocus() const", asMETHOD(T, hasInputFocus), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod(type, "bool IsReadOnly() const", asMETHOD(T, isReadOnly), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod(type, "bool IsTextMasked() const", asMETHOD(T, isTextMasked), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod(type, "bool IsTextValid() const", asMETHOD(T, isTextValid), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod(type, "const CEGUIString& GetValidationString() const", asMETHOD(T, getValidationString), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod(type, "uint32 GetMaskCodePoint() const", asMETHOD(T, getMaskCodePoint), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod(type, "uint32 GetMaxTextLength() const", asMETHOD(T, getMaxTextLength), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod(type, "void SetReadOnly(bool)", asMETHOD(T, setReadOnly), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod(type, "void SetTextMasked(bool)", asMETHOD(T, setTextMasked), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod(type, "void SetValidationString(const CEGUIString &in)", asMETHOD(T, setValidationString), asCALL_THISCALL); OC_SCRIPT_ASSERT();  
+	r = engine->RegisterObjectMethod(type, "void SetMaskCodePoint(uint32)", asMETHOD(T, setMaskCodePoint), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod(type, "void SetMaxTextLength(uint32)", asMETHOD(T, setMaxTextLength), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 }
 
 CEGUI::Window* ScriptGetWindow(string name)
 {
-  return gGUIMgr.WindowExists(name) ? gGUIMgr.GetWindow(name) : 0;
+	string fullName = USER_GUI_WINDOWS_PREFIX + name;
+	return gGUIMgr.WindowExists(fullName) ? gGUIMgr.GetWindow(fullName) : 0;
 }
 
 void CEGUIStringConstructor(CEGUI::String* self)
 {
-  new(self) CEGUI::String();
+	new(self) CEGUI::String();
 }
 
 void CEGUIStringDestructor(CEGUI::String* self)
 {
 	OC_UNUSED(self);
-	//
 }
 
 CEGUI::String StringToCEGUIString(const string* self)
 {
-  return CEGUI::String((const CEGUI::utf8*)self->c_str());
+	return CEGUI::String((const CEGUI::utf8*)self->c_str());
 }
 
 string CEGUIStringToString(const CEGUI::String* self)
 {
-  return string(self->c_str());
+	return string(self->c_str());
 }
 
 void RegisterScriptWindows(asIScriptEngine* engine)
 {
-  int32 r;
-	
+	int32 r;
+
 	// Register the CEGUI string as the class that can be easily cast from/to string
 	r = engine->RegisterObjectType("CEGUIString", sizeof(CEGUI::String), asOBJ_VALUE | asOBJ_APP_CLASS_CDA); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectBehaviour("CEGUIString", asBEHAVE_CONSTRUCT, "void f()", asFUNCTION(CEGUIStringConstructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectBehaviour("CEGUIString", asBEHAVE_IMPLICIT_VALUE_CAST, "string f() const", asFUNCTION(CEGUIStringToString), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
-  r = engine->RegisterObjectBehaviour("string", asBEHAVE_IMPLICIT_VALUE_CAST, "CEGUIString f() const", asFUNCTION(StringToCEGUIString), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
-  r = engine->RegisterObjectBehaviour("CEGUIString", asBEHAVE_DESTRUCT, "void f()",  asFUNCTION(CEGUIStringDestructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
-	
+	r = engine->RegisterObjectBehaviour("string", asBEHAVE_IMPLICIT_VALUE_CAST, "CEGUIString f() const", asFUNCTION(StringToCEGUIString), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectBehaviour("CEGUIString", asBEHAVE_DESTRUCT, "void f()",  asFUNCTION(CEGUIStringDestructor), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+
 	// Register the Window class
 	r = engine->RegisterObjectType("Window", 0, asOBJ_REF); OC_SCRIPT_ASSERT();
 	RegisterScriptWindowMembers<CEGUI::Window>(engine, "Window");
-	
+
 	// Register the ButtonBase class
 	r = engine->RegisterObjectType("ButtonBase", 0, asOBJ_REF); OC_SCRIPT_ASSERT();
 	RegisterScriptButtonBaseMembers<CEGUI::ButtonBase>(engine, "ButtonBase");
-	
+
 	// Register the Checkbox class
 	r = engine->RegisterObjectType("Checkbox", 0, asOBJ_REF); OC_SCRIPT_ASSERT();
 	RegisterScriptCheckboxMembers<CEGUI::Checkbox>(engine, "Checkbox");
-	
+
 	// Register the PushButton class
 	r = engine->RegisterObjectType("PushButton", 0, asOBJ_REF); OC_SCRIPT_ASSERT();
 	RegisterScriptPushButtonMembers<CEGUI::PushButton>(engine, "PushButton");
-	
+
 	// Register the RadioButton class
 	r = engine->RegisterObjectType("RadioButton", 0, asOBJ_REF); OC_SCRIPT_ASSERT();
 	RegisterScriptRadioButtonMembers<CEGUI::RadioButton>(engine, "RadioButton");
-	
+
 	// Register the Editbox class
 	r = engine->RegisterObjectType("Editbox", 0, asOBJ_REF); OC_SCRIPT_ASSERT();
 	RegisterScriptEditboxMembers<CEGUI::Editbox>(engine, "Editbox");
-	
+
 	r = engine->RegisterGlobalFunction("Window@ GetWindow(string)", asFUNCTION(ScriptGetWindow), asCALL_CDECL); OC_SCRIPT_ASSERT();
 }
 
@@ -1190,12 +1190,12 @@ void RegisterScriptGUIMgr(asIScriptEngine* engine)
 	int32 r;
 	// Register the type
 	r = engine->RegisterObjectType("GUIMgr", 0, asOBJ_REF | asOBJ_NOHANDLE); OC_SCRIPT_ASSERT();
-	
+
 	// Register the object methods
 	r = engine->RegisterObjectMethod("GUIMgr", "void LoadScheme(const string &in)", asMETHOD(GUIMgr, LoadProjectScheme), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("GUIMgr", "void LoadImageset(const string &in)", asMETHOD(GUIMgr, LoadProjectImageset), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("GUIMgr", "Window@ LoadLayout(const CEGUIString &in, const CEGUIString &in)", asMETHOD(GUIMgr, LoadProjectLayout), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-	
+
 	// Register function that returns it
 	r = engine->RegisterGlobalFunction("GUIMgr& get_gGUIMgr()", asFUNCTION(GetGUIMgr), asCALL_CDECL); OC_SCRIPT_ASSERT();
 }
@@ -1239,7 +1239,7 @@ void ScriptMgr::ConfigureEngine(void)
 
 	// The first character in the single quoted string will be interpreted as a single uint32 value instead of a string literal
 	r = mEngine->SetEngineProperty(asEP_USE_CHARACTER_LITERALS, 1); OC_SCRIPT_ASSERT();
-	
+
 	// Register typedefs for real numbers
 	r = mEngine->RegisterTypedef("float32", "float"); OC_SCRIPT_ASSERT();
 	r = mEngine->RegisterTypedef("float64", "double"); OC_SCRIPT_ASSERT();
@@ -1253,18 +1253,18 @@ void ScriptMgr::ConfigureEngine(void)
 	// Register PropertyFunctionParameter class and it's methods
 	RegisterScriptPropertyFunctionParameters(mEngine);
 
-    // Register EntityHandle class and it's methods
+	// Register EntityHandle class and it's methods
 	RegisterScriptEntityHandle(mEngine);
 
 	// Register EntityDescription class and it's methods
 	RegisterScriptEntityDescription(mEngine);
-	
+
 	// Register Vector2 class and it's methods
 	RegisterScriptVector2(mEngine);
-	
+
 	// Register EntityPicker class and it's methods
 	RegisterScriptEntityPicker(mEngine);
-	
+
 	// Register EntityMgr class and it's methods
 	RegisterScriptEntityMgr(mEngine);
 
@@ -1281,13 +1281,13 @@ void ScriptMgr::ConfigureEngine(void)
 
 	// Register StringMgr methods
 	RegisterScriptStringMgr(mEngine);
-	
+
 	// Register Project methods
 	RegisterScriptProject(mEngine);
-	
+
 	// Register Game methods
 	RegisterScriptGame(mEngine);
-	
+
 	// Register CEGUI components
 	RegisterScriptWindows(mEngine);
 
@@ -1299,24 +1299,24 @@ void ScriptMgr::ConfigureEngine(void)
 
 	// Register getters, setters and array for supported types of properties
 
-   #define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter, cloning) \
+#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter, cloning) \
 	/* Register println function */ \
 	r = mEngine->RegisterGlobalFunction((string("void Println(const ") + typeName + " &in)").c_str(), asFUNCTIONPR(ScriptPrintln, (const typeClass&), void), asCALL_CDECL); OC_SCRIPT_ASSERT(); \
 	/* Register convert to string operators */ \
 	if (typeID != PT_STRING) \
 	{\
-	  r = mEngine->RegisterObjectMethod("string", (string("string &opAssign(const ") + typeName + " &in)").c_str(), asFUNCTIONPR(AssignToString, (const typeClass&, string&), string&), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT(); \
-	  r = mEngine->RegisterObjectMethod("string", (string("string &opAddAssign(const ") + typeName + " &in)").c_str(), asFUNCTIONPR(AddAssignToString, (const typeClass&, string&), string&), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT(); \
-	  r = mEngine->RegisterObjectMethod("string", (string("string opAdd(const ") + typeName + " &in) const").c_str(), asFUNCTIONPR(AddStringType, (string&, const typeClass&), string), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT(); \
-	  r = mEngine->RegisterObjectMethod("string", (string("string opAdd_r(const ") + typeName + " &in) const").c_str(), asFUNCTIONPR(AddTypeString, (const typeClass&, string&), string), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT(); \
+	r = mEngine->RegisterObjectMethod("string", (string("string &opAssign(const ") + typeName + " &in)").c_str(), asFUNCTIONPR(AssignToString, (const typeClass&, string&), string&), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT(); \
+	r = mEngine->RegisterObjectMethod("string", (string("string &opAddAssign(const ") + typeName + " &in)").c_str(), asFUNCTIONPR(AddAssignToString, (const typeClass&, string&), string&), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT(); \
+	r = mEngine->RegisterObjectMethod("string", (string("string opAdd(const ") + typeName + " &in) const").c_str(), asFUNCTIONPR(AddStringType, (string&, const typeClass&), string), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT(); \
+	r = mEngine->RegisterObjectMethod("string", (string("string opAdd_r(const ") + typeName + " &in) const").c_str(), asFUNCTIONPR(AddTypeString, (const typeClass&, string&), string), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT(); \
 	}\
 	/* Register getter and setter */ \
 	r = mEngine->RegisterObjectMethod("EntityHandle", (string(typeName) + " Get_" + typeName + "(const string &in) const").c_str(), \
-		asFUNCTIONPR(EntityHandleGetValue, (EntitySystem::EntityHandle&, const string&), typeClass), \
-		asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT(); \
+	asFUNCTIONPR(EntityHandleGetValue, (EntitySystem::EntityHandle&, const string&), typeClass), \
+	asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT(); \
 	r = mEngine->RegisterObjectMethod("EntityHandle", (string("void Set_") + typeName + "(const string &in, const " + typeName + "&in) const").c_str(), \
-		asFUNCTIONPR(EntityHandleSetValue, (EntitySystem::EntityHandle&, const string&, const typeClass&), void), \
-		asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT(); \
+	asFUNCTIONPR(EntityHandleSetValue, (EntitySystem::EntityHandle&, const string&, const typeClass&), void), \
+	asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT(); \
 	/* Register the array type */ \
 	r = mEngine->RegisterObjectType((string("array_") + typeName).c_str(), sizeof(ScriptArray<typeClass>), asOBJ_VALUE | asOBJ_POD | asOBJ_APP_CLASS_CA); OC_SCRIPT_ASSERT(); \
 	/* Register the default (dummy) constructor of array type */ \
@@ -1329,30 +1329,30 @@ void ScriptMgr::ConfigureEngine(void)
 	r = mEngine->RegisterObjectBehaviour((string("array_") + typeName).c_str(), asBEHAVE_INDEX, (string(typeName) + " f(int32) const").c_str(), asMETHODPR(ScriptArray<typeClass>, operator[], (int32) const, typeClass), asCALL_THISCALL); OC_SCRIPT_ASSERT(); \
 	/* Register array const and non-const getter */ \
 	r = mEngine->RegisterObjectMethod("EntityHandle", (string("array_") + typeName + " Get_array_" + typeName + "(string &in) const").c_str(), \
-		asFUNCTIONPR(EntityHandleGetArrayValue, (EntitySystem::EntityHandle&, string&), ScriptArray<typeClass>), \
-		asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT(); \
+	asFUNCTIONPR(EntityHandleGetArrayValue, (EntitySystem::EntityHandle&, string&), ScriptArray<typeClass>), \
+	asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT(); \
 	r = mEngine->RegisterObjectMethod("EntityHandle", (string("const array_") + typeName + " Get_const_array_" + typeName + "(string &in) const").c_str(), \
-		asFUNCTIONPR(EntityHandleGetConstArrayValue, (EntitySystem::EntityHandle&, string&), const ScriptArray<typeClass>), \
-		asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT(); \
+	asFUNCTIONPR(EntityHandleGetConstArrayValue, (EntitySystem::EntityHandle&, string&), const ScriptArray<typeClass>), \
+	asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT(); \
 	/* Register method for registering dynamic properties */ \
 	r = mEngine->RegisterObjectMethod("EntityHandle", (string("bool RegisterDynamicProperty_") + typeName + "(const string &in, const PropertyAccessFlags, const string &in) const").c_str(), \
-		asFUNCTION(RegisterDynamicProperty<typeClass>), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT(); \
+	asFUNCTION(RegisterDynamicProperty<typeClass>), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT(); \
 	/* Register operator<< method for PropertyFunctionParameters */ \
 	r = mEngine->RegisterObjectMethod("PropertyFunctionParameters", (string("PropertyFunctionParameters opShl(const ") + typeName + " &in) const").c_str(), \
-		asFUNCTIONPR(PropertyFunctionParametersOperatorShl, (Reflection::PropertyFunctionParameters&, const typeClass&), Reflection::PropertyFunctionParameters), \
-		asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT(); \
+	asFUNCTIONPR(PropertyFunctionParametersOperatorShl, (Reflection::PropertyFunctionParameters&, const typeClass&), Reflection::PropertyFunctionParameters), \
+	asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT(); \
 	r = mEngine->RegisterObjectMethod("PropertyFunctionParameters", (string("PropertyFunctionParameters opShl(const array_") + typeName + " &in) const").c_str(), \
-		asFUNCTIONPR(PropertyFunctionParametersOperatorShl, (Reflection::PropertyFunctionParameters&, const ScriptArray<typeClass>&), Reflection::PropertyFunctionParameters), \
-		asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT(); \
+	asFUNCTIONPR(PropertyFunctionParametersOperatorShl, (Reflection::PropertyFunctionParameters&, const ScriptArray<typeClass>&), Reflection::PropertyFunctionParameters), \
+	asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT(); \
 	/* Register getter and setter for the game dynamic properties */ \
 	r = mEngine->RegisterObjectMethod("Game", (string(typeName) + " Get_" + typeName + "(const string &in) const").c_str(), \
-		asMETHODPR(Game, GetDynamicProperty, (const string&) const, typeClass), asCALL_THISCALL); OC_SCRIPT_ASSERT(); \
+	asMETHODPR(Game, GetDynamicProperty, (const string&) const, typeClass), asCALL_THISCALL); OC_SCRIPT_ASSERT(); \
 	r = mEngine->RegisterObjectMethod("Game", (string("void Set_") + typeName + "(const string &in, const " + typeName + "&in)").c_str(), \
-		asMETHODPR(Game, SetDynamicProperty, (const string&, const typeClass&), void), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-	#define SCRIPT_ONLY
-	#include "../Utils/Properties/PropertyTypes.h"
-	#undef SCRIPT_ONLY
-	#undef PROPERTY_TYPE
+	asMETHODPR(Game, SetDynamicProperty, (const string&, const typeClass&), void), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+#define SCRIPT_ONLY
+#include "../Utils/Properties/PropertyTypes.h"
+#undef SCRIPT_ONLY
+#undef PROPERTY_TYPE
 }
 
 asIScriptContext* ScriptMgr::PrepareContext(int32 funcId)
@@ -1423,14 +1423,14 @@ bool ScriptMgr::ExecuteContext(asIScriptContext* ctx, uint32 timeOut)
 
 int ExecuteStringEngine(asIScriptEngine *engine, const char *code, asIScriptModule *mod, asIScriptContext *ctx)
 {
-  // Wrap the code in a function so that it can be compiled and executed
+	// Wrap the code in a function so that it can be compiled and executed
 	string funcCode = "void ExecuteString() {\n";
 	funcCode += code;
 	funcCode += "\n;}";
-	
+
 	// If no module was provided, get a dummy from the engine
 	asIScriptModule *execMod = mod ? mod : engine->GetModule("ExecuteString", asGM_ALWAYS_CREATE);
-	
+
 	// Compile the function that can be executed
 	asIScriptFunction *func = 0;
 	int r = execMod->CompileFunction("ExecuteString", funcCode.c_str(), -1, 0, &func);
@@ -1449,7 +1449,7 @@ int ExecuteStringEngine(asIScriptEngine *engine, const char *code, asIScriptModu
 
 	// Execute the function
 	r = execCtx->Execute();
-	
+
 	// Clean up
 	func->Release();
 	if( !ctx ) execCtx->Release();
@@ -1475,20 +1475,20 @@ bool ScriptMgr::ExecuteString(const char* script, const char* moduleName)
 	// Execute the script string and get result
 	switch(ExecuteStringEngine(mEngine, script, mod, 0))
 	{
-		case asERROR: // failed to build
-		case asINVALID_CONFIGURATION:
-		case asBUILD_IN_PROGRESS:
-		case asEXECUTION_ABORTED:
-		case asEXECUTION_SUSPENDED:
-		case asEXECUTION_EXCEPTION:
-			result = false;
-			break;
-		case asEXECUTION_FINISHED:
-			result = true;
-			break;
-		default:
-			OC_NOT_REACHED();
-			result = false;
+	case asERROR: // failed to build
+	case asINVALID_CONFIGURATION:
+	case asBUILD_IN_PROGRESS:
+	case asEXECUTION_ABORTED:
+	case asEXECUTION_SUSPENDED:
+	case asEXECUTION_EXCEPTION:
+		result = false;
+		break;
+	case asEXECUTION_FINISHED:
+		result = true;
+		break;
+	default:
+		OC_NOT_REACHED();
+		result = false;
 	}
 
 	mExecFromConsole = false;
@@ -1543,13 +1543,13 @@ int32 ScriptMgr::GetFunctionID(const char* moduleName, const char* funcDecl)
 
 const char* ScriptMgr::GetFunctionModuleName(int32 funcId)
 {
-  const asIScriptFunction *function = mEngine->GetFunctionDescriptorById(funcId);
+	const asIScriptFunction *function = mEngine->GetFunctionDescriptorById(funcId);
 	return function ? function->GetModuleName() : 0;
 }
 
 const char* ScriptMgr::GetFunctionDeclaration(int32 funcId)
 {
-  const asIScriptFunction *function = mEngine->GetFunctionDescriptorById(funcId);
+	const asIScriptFunction *function = mEngine->GetFunctionDescriptorById(funcId);
 	return function ? function->GetDeclaration() : 0;
 }
 
@@ -1604,15 +1604,15 @@ bool ScriptMgr::SetFunctionArgument(AngelScript::asIScriptContext* ctx, const ui
 
 	switch (parameter.GetType())
 	{
-	#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter, cloning) \
-		case typeID: \
-			errorCode = ctx->SetArg##scriptSetter(parameterIndex, ARGVALUE_##scriptSetter(parameter.GetData<typeClass>())); \
-			break;
-	#include "Utils/Properties/PropertyTypes.h"
-	#undef PROPERTY_TYPE
+#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter, cloning) \
+case typeID: \
+	errorCode = ctx->SetArg##scriptSetter(parameterIndex, ARGVALUE_##scriptSetter(parameter.GetData<typeClass>())); \
+	break;
+#include "Utils/Properties/PropertyTypes.h"
+#undef PROPERTY_TYPE
 
-	default:
-		OC_ASSERT_MSG(false, "Unknown or unsupported property type");
+default:
+	OC_ASSERT_MSG(false, "Unknown or unsupported property type");
 	}
 
 	if (errorCode == -12)

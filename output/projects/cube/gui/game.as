@@ -6,12 +6,9 @@ void OnInit()
 
 void OnUpdateLogic(float32 delta)
 {
-  string windowPrefix = this.GetName();
-
-  Window@ scoreLabel = GetWindow(windowPrefix + "/Score");
+  Window@ scoreLabel = GetWindow("Score");
   if (scoreLabel !is null)
   {
-  Println("aa");
     EntityHandle director = gEntityMgr.FindFirstEntity("Director");
     if (director.Exists())
     {
