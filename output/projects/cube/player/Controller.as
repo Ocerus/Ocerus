@@ -117,61 +117,69 @@ void OnKeyPressed(eKeyCode key, uint32 char)
 	{
 		if (this.Get_bool("IsLight"))
 		{
-			if (this.Get_float32("JumpCooldown") > 0.0f || this.Get_float32("LastLandCollisionCooldown") == 0.0f) return;
-			this.Set_float32("JumpCooldown", JUMP_COOLDOWN);
-			
-			Vector2 dir = this.Get_Vector2("Position") - this.Get_Vector2("LastLandPosition");
-			dir.Normalize();
-			this.CallFunction("ApplyLinearImpulse", PropertyFunctionParameters() << JUMP_RATIO * dir);
-			
-			Vector2 dustPos = 0.5f * (this.Get_Vector2("Position") + this.Get_Vector2("LastLandPosition"));
-			SpawnJumpDust(dustPos);
+			TryJump();
 		}
 		else
 		{
-			if (this.Get_float32("ExplosionCooldown") > 0) return;
-			this.Set_float32("ExplosionCooldown", EXPLOSION_COOLDOWN);
-			
-			Vector2 myPos = this.Get_Vector2("Position");
-			EntityPicker picker(myPos - Vector2(EXPLOSION_PULL_RADIUS, EXPLOSION_PULL_RADIUS), 1, 1);
-			EntityHandle[] entities;
-			picker.PickMultipleEntities(entities, myPos + Vector2(EXPLOSION_PULL_RADIUS, EXPLOSION_PULL_RADIUS), 0);
-			uint32 destroyedCount = 0;
-			for (int i=0; i< int(entities.length()); ++i)
-			{
-				if (entities[i] == this) continue;
-				
-				Vector2 hisPos = entities[i].Get_Vector2("Position");
-				Vector2 delta = hisPos - myPos;
-				float32 length = delta.Normalize();
-				if (destroyedCount < EXPLOSION_DESTROY_COUNT && length <= EXPLOSION_DESTROY_RADIUS) 
-				{
-					SpawnExplosion(hisPos);
-					
-					//MUHE: Pokud vybuchne velkej kamen, tak vytvori 3 maly
-					Vector2 hisScale = entities[i].Get_Vector2("Scale");
-					Vector2 impulse =  EXPLOSION_RATIO / 10.0f * MathUtils::Sqrt(length) * delta;
-					if (hisScale.x * hisScale.y > 1)
-					{
-						SpawnSmallStone(hisPos + Vector2(0.3f, 0.3f), Vector2(0.7f,0.5f), impulse + Vector2(0.5f,0.5f));
-						SpawnSmallStone(hisPos + Vector2(-0.3f, 0.4f), Vector2(0.5f,0.6f), impulse + Vector2(-0.5f,0.5f));
-						SpawnSmallStone(hisPos + Vector2(-0.0f, -0.3f), Vector2(0.8f,0.7f), impulse + Vector2(0.0f,-0.5f));
-					}
-					//-----------------------------------------------------
-					
-					gEntityMgr.DestroyEntity(entities[i]);
-					destroyedCount++;
-				}
-				else
-				{
-					Vector2 impulse = EXPLOSION_RATIO * MathUtils::Sqrt(length) * delta;
-					entities[i].CallFunction("ApplyLinearImpulse", PropertyFunctionParameters() << impulse);
-				}
-			}
-			
-			SpawnExplosionDust(this.Get_Vector2("Position"));
+			TryExplode();
 		}
 	}
+}
+
+void TryJump()
+{
+	if (this.Get_float32("JumpCooldown") > 0.0f || this.Get_float32("LastLandCollisionCooldown") == 0.0f) return;
+	this.Set_float32("JumpCooldown", JUMP_COOLDOWN);
+			
+	Vector2 dir = this.Get_Vector2("Position") - this.Get_Vector2("LastLandPosition");
+	dir.Normalize();
+	this.CallFunction("ApplyLinearImpulse", PropertyFunctionParameters() << JUMP_RATIO * dir);
+			
+	Vector2 dustPos = 0.5f * (this.Get_Vector2("Position") + this.Get_Vector2("LastLandPosition"));
+	SpawnJumpDust(dustPos);
+}
+
+void TryExplode()
+{
+	if (this.Get_float32("ExplosionCooldown") > 0) return;
+	this.Set_float32("ExplosionCooldown", EXPLOSION_COOLDOWN);
+			
+	Vector2 myPos = this.Get_Vector2("Position");
+	EntityPicker picker(myPos - Vector2(EXPLOSION_PULL_RADIUS, EXPLOSION_PULL_RADIUS), 1, 1);
+	EntityHandle[] entities;
+	picker.PickMultipleEntities(entities, myPos + Vector2(EXPLOSION_PULL_RADIUS, EXPLOSION_PULL_RADIUS), 0);
+	uint32 destroyedCount = 0;
+	for (int i=0; i< int(entities.length()); ++i)
+	{
+		if (entities[i] == this) continue;
+				
+		Vector2 hisPos = entities[i].Get_Vector2("Position");
+		Vector2 delta = hisPos - myPos;
+		float32 length = delta.Normalize();
+		if (destroyedCount < EXPLOSION_DESTROY_COUNT && length <= EXPLOSION_DESTROY_RADIUS) 
+		{
+			SpawnExplosion(hisPos);
+					
+			Vector2 hisScale = entities[i].Get_Vector2("Scale");
+			Vector2 impulse =  EXPLOSION_RATIO / 10.0f * MathUtils::Sqrt(length) * delta;
+			if (hisScale.x * hisScale.y > 1)
+			{
+				SpawnSmallStone(hisPos + Vector2(0.3f, 0.3f), Vector2(0.7f,0.5f), impulse + Vector2(0.5f,0.5f));
+				SpawnSmallStone(hisPos + Vector2(-0.3f, 0.4f), Vector2(0.5f,0.6f), impulse + Vector2(-0.5f,0.5f));
+				SpawnSmallStone(hisPos + Vector2(-0.0f, -0.3f), Vector2(0.8f,0.7f), impulse + Vector2(0.0f,-0.5f));
+			}
+					
+			gEntityMgr.DestroyEntity(entities[i]);
+			destroyedCount++;
+		}
+		else
+		{
+			Vector2 impulse = EXPLOSION_RATIO * MathUtils::Sqrt(length) * delta;
+			entities[i].CallFunction("ApplyLinearImpulse", PropertyFunctionParameters() << impulse);
+		}
+	}
+			
+	SpawnExplosionDust(this.Get_Vector2("Position"));
 }
 
 void OnCollisionStarted(EntityHandle other, Vector2 normal, Vector2 contactPoint)

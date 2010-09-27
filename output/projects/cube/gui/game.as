@@ -5,14 +5,22 @@ void OnInit()
 
 void OnUpdateLogic(float32 delta)
 {
+  EntityHandle director = gEntityMgr.FindFirstEntity("Director");
+  if (!director.Exists()) return;
+  
   Window@ scoreLabel = GetWindow("Score");
   if (scoreLabel !is null)
   {
-    EntityHandle director = gEntityMgr.FindFirstEntity("Director");
-    if (director.Exists())
-    {
-    	uint32 score = director.Get_uint32("Score") + game.Get_uint32("TotalScore");
-      scoreLabel.SetText(GetTextData("GUI", "score") + score);
-    }
+   	uint32 score = director.Get_uint32("Score") + game.Get_uint32("TotalScore");
+    scoreLabel.SetText("" + score);
+  }
+
+  Window@ timeLabel = GetWindow("Time");
+  if (timeLabel !is null)
+  {
+   	float32 timeInSeconds = director.Get_float32("Time");
+   	uint32 timeMinutes = MathUtils::Floor(timeInSeconds / 60);
+   	uint32 timeSeconds = MathUtils::Round(timeInSeconds - timeMinutes);
+    timeLabel.SetText(timeMinutes + ":" + timeSeconds);
   }
 }
