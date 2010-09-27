@@ -6,7 +6,7 @@ void OnInit()
 void OnUpdateLogic(float32 delta)
 {
   EntityHandle director = gEntityMgr.FindFirstEntity("Director");
-  if (!director.Exists()) return;
+  if (!director.IsValid()) return;
   
   Window@ scoreLabel = GetWindow("Score");
   if (scoreLabel !is null)
@@ -22,5 +22,19 @@ void OnUpdateLogic(float32 delta)
    	uint32 timeMinutes = MathUtils::Floor(timeInSeconds / 60);
    	uint32 timeSeconds = MathUtils::Round(timeInSeconds - timeMinutes);
     timeLabel.SetText(timeMinutes + ":" + timeSeconds);
+  }
+  
+  EntityHandle player = gEntityMgr.FindFirstEntity("Player");
+  Window@ stateButton = GetWindow("StateButton");
+  if (player.IsValid() && (stateButton !is null))
+  {
+  	if (player.Get_bool("IsLight"))
+  	{
+ 			stateButton.SetProperty("NormalImage", "set:Buttons image:CubeLight");
+ 		}
+ 		else
+ 		{
+ 			stateButton.SetProperty("NormalImage", "set:Buttons image:CubeHeavy");
+ 		}
   }
 }

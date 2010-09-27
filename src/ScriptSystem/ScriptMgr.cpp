@@ -1005,6 +1005,25 @@ bool WindowIsVisible(const CEGUI::Window* self)
 	return self->isVisible();
 }
 
+CEGUI::String WindowGetProperty(const CEGUI::String& propertyName, const CEGUI::Window* self)
+{
+	CEGUI_TRY;
+	{
+		return self->getProperty(propertyName);
+	}
+	CEGUI_CATCH;
+	return "";
+}
+
+void WindowSetProperty(const CEGUI::String& propertyName, const CEGUI::String& value, CEGUI::Window* self)
+{
+	CEGUI_TRY;
+	{
+		self->setProperty(propertyName, value);
+	}
+	CEGUI_CATCH;
+}
+
 template<class T>
 void RegisterScriptWindowMembers(asIScriptEngine *engine, const char *type)
 {
@@ -1038,6 +1057,9 @@ void RegisterScriptWindowMembers(asIScriptEngine *engine, const char *type)
 	r = engine->RegisterObjectMethod(type, "void SetInheritsAlpha(bool)", asMETHOD(T, setInheritsAlpha), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod(type, "void SetTooltipText(const CEGUIString& in)", asMETHOD(T, setTooltipText), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod(type, "void SetInheritsTooltipText(bool)", asMETHOD(T, setInheritsTooltipText), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod(type, "CEGUIString GetProperty(const CEGUIString& in) const", asFUNCTION(WindowGetProperty), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod(type, "void SetProperty(const CEGUIString& in, const CEGUIString& in)", asFUNCTION(WindowSetProperty), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+
 }
 
 template<class T>
