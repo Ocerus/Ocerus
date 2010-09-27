@@ -1,9 +1,10 @@
 <?xml version="1.0" ?>
 <GUIScheme Name="Cube">
 
-	<Imageset Filename="gui/buttons.imageset" ResourceGroup="Project" />
-	<Imageset Filename="gui/icons.imageset" ResourceGroup="Project" />
-	<Font Filename="gui/score.font" ResourceGroup="Project" />
+	<Imageset Filename="gui/buttons.imageset" />
+	<Imageset Filename="gui/icons.imageset" />
+	<Font Filename="gui/score.font" />
+	<Font Filename="gui/leveltitle.font" />
 	
 	<FalagardMapping WindowType="Cube/Button" TargetType="CEGUI/PushButton" Renderer="Falagard/Button" LookNFeel="TaharezLook/Button" />
 	<FalagardMapping WindowType="Cube/ImageButton" TargetType="CEGUI/PushButton" Renderer="Falagard/Button" LookNFeel="TaharezLook/ImageButton" />

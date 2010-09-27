@@ -64,5 +64,15 @@
 			<Property Name="PushedImage" Value="set:Buttons image:ExplosionOff"/>
 		</Window>  
 
+
+		<Window Type="Cube/StaticText" Name="LevelTitle" >
+		  <Property Name="Font" Value="LevelTitle" />
+			<Property Name="TextColours" Value="tl:FFFF0000 tr:FFFF0000 bl:FF005555 br:FF005555" />
+	    <Property Name="UnifiedAreaRect" Value="{{0.4,30},{0.3,0},{0.7,0},{0.5,0}}" />
+	    <Property Name="BackgroundEnabled" Value="False" />
+	    <Property Name="FrameEnabled" Value="False" />
+			<Property Name="Text" Value="$levelTitle$" />
+	  </Window>
+
   </Window>
 </GUILayout>

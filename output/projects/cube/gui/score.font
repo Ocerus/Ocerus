@@ -1,2 +1,2 @@
 <?xml version="1.0" ?>
-<Font Name="Score" Filename="gui/score.ttf" ResourceGroup="Project" Type="FreeType" Size="10" NativeHorzRes="1024" NativeVertRes="768" AutoScaled="false"/>
+<Font Name="Score" Filename="gui/score.ttf" Type="FreeType" Size="10"/>

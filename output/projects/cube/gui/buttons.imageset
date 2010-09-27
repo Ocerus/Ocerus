@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 
-<Imageset Name="Buttons" Imagefile="gui/buttons.png" ResourceGroup="Project">
+<Imageset Name="Buttons" Imagefile="gui/buttons.png">
 	
 	<Image Name="ExplosionOn" XPos="0" YPos="0" Width="128" Height="128" />
 	<Image Name="ExplosionOff" XPos="128" YPos="0" Width="128" Height="128" />

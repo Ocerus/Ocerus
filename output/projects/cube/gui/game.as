@@ -1,6 +1,17 @@
+float32 TitleAnimState;
+
 void OnInit()
 {
   gGUIMgr.LoadScheme("gui/cube.scheme");
+}
+
+void OnPostInit()
+{
+  TitleAnimState = 0.0;
+  GetWindow("LevelTitle").SetProperty("Alpha", "0.0");
+  //TODO get level name or index
+  int32 levelIndex = 1;
+  GetWindow("LevelTitle").SetText(GetTextData("GUI", "levelTitle") + levelIndex);
 }
 
 void OnUpdateLogic(float32 delta)
@@ -8,21 +19,13 @@ void OnUpdateLogic(float32 delta)
   EntityHandle director = gEntityMgr.FindFirstEntity("Director");
   if (!director.IsValid()) return;
   
-  Window@ scoreLabel = GetWindow("Score");
-  if (scoreLabel !is null)
-  {
-   	uint32 score = director.Get_uint32("Score") + game.Get_uint32("TotalScore");
-    scoreLabel.SetText("" + score);
-  }
+ 	uint32 score = director.Get_uint32("Score") + game.Get_uint32("TotalScore");
+  GetWindow("Score").SetText("" + score);
 
-  Window@ timeLabel = GetWindow("Time");
-  if (timeLabel !is null)
-  {
-   	float32 timeInSeconds = director.Get_float32("Time");
-   	uint32 timeMinutes = MathUtils::Floor(timeInSeconds / 60);
-   	uint32 timeSeconds = MathUtils::Round(timeInSeconds - timeMinutes);
-    timeLabel.SetText(timeMinutes + ":" + timeSeconds);
-  }
+ 	float32 timeInSeconds = director.Get_float32("Time");
+ 	uint32 timeMinutes = MathUtils::Floor(timeInSeconds / 60);
+ 	uint32 timeSeconds = MathUtils::Round(timeInSeconds - timeMinutes);
+  GetWindow("Time").SetText(timeMinutes + ":" + timeSeconds);
   
   EntityHandle player = gEntityMgr.FindFirstEntity("Player");
   Window@ stateButton = GetWindow("StateButton");
@@ -36,5 +39,27 @@ void OnUpdateLogic(float32 delta)
  		{
  			stateButton.SetProperty("NormalImage", "set:Buttons image:CubeHeavy");
  		}
+  }
+  
+
+  if (TitleAnimState < 3.0)
+  {
+  	if (TitleAnimState > 1.0 && TitleAnimState <= 2.0) TitleAnimState = TitleAnimState + 0.01f;
+  	else TitleAnimState = TitleAnimState + 0.03f;
+
+  	if (TitleAnimState > 3.0) TitleAnimState = 3.0;
+
+  	if (TitleAnimState <= 1.0)
+		{
+			GetWindow("LevelTitle").SetProperty("Alpha", "" + TitleAnimState);
+		}
+		else if (TitleAnimState <= 2.0)
+		{
+			GetWindow("LevelTitle").SetProperty("Alpha", "1.0");
+		}
+		else
+		{
+			GetWindow("LevelTitle").SetProperty("Alpha", "" + (3.0-TitleAnimState));
+		}
   }
 }

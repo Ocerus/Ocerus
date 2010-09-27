@@ -41,7 +41,7 @@ EntityMessage::eResult EntityComponents::GUILayout::HandleMessage(const EntityMe
 	if (gEntityMgr.IsEntityPrototype(GetOwner())) return EntityMessage::RESULT_IGNORED;
 
 	// send the message to the script
-	if (msg.type == EntityMessage::INIT || msg.type == EntityMessage::UPDATE_LOGIC)
+	if (msg.type == EntityMessage::INIT || msg.type == EntityMessage::POST_INIT || msg.type == EntityMessage::UPDATE_LOGIC)
 	{
 		if (mCallback && !mScriptUpdateError && mVisible)
 		{

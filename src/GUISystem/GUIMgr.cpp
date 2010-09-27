@@ -154,7 +154,16 @@ void GUIMgr::LoadProjectScheme(const string& filename)
 	OC_ASSERT(mCEGUI);
 	CEGUI_TRY;
 	{
+		CEGUI::String oldResourceGroup = mCEGUI->getResourceProvider()->getDefaultResourceGroup();
+		CEGUI::String oldImagesetGroup = CEGUI::Imageset::getDefaultResourceGroup();
+		CEGUI::String oldFontGroup = CEGUI::Font::getDefaultResourceGroup();
+		mCEGUI->getResourceProvider()->setDefaultResourceGroup("Project");
+		CEGUI::Imageset::setDefaultResourceGroup("Project");
+		CEGUI::Font::setDefaultResourceGroup("Project");
 		CEGUI::SchemeManager::getSingleton().create(filename, "Project");
+		mCEGUI->getResourceProvider()->setDefaultResourceGroup(oldResourceGroup);
+		CEGUI::Imageset::setDefaultResourceGroup(oldImagesetGroup);
+		CEGUI::Font::setDefaultResourceGroup(oldFontGroup);
 	}
 	CEGUI_CATCH;
 }
@@ -168,16 +177,6 @@ void GUIMgr::LoadSystemImageset(const string& filename)
 	}
 	CEGUI_CATCH;
 
-}
-
-void GUIMgr::LoadProjectImageset(const string& filename)
-{
-	OC_DASSERT(mCEGUI);
-	CEGUI_TRY;
-	{
-		CEGUI::ImagesetManager::getSingleton().create(filename, "Project");
-	}
-	CEGUI_CATCH;
 }
 
 CEGUI::Window* GUIMgr::LoadSystemLayout(const CEGUI::String& filename, const CEGUI::String& namePrefix)

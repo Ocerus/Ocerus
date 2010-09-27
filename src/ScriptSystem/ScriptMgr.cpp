@@ -1215,7 +1215,6 @@ void RegisterScriptGUIMgr(asIScriptEngine* engine)
 
 	// Register the object methods
 	r = engine->RegisterObjectMethod("GUIMgr", "void LoadScheme(const string &in)", asMETHOD(GUIMgr, LoadProjectScheme), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-	r = engine->RegisterObjectMethod("GUIMgr", "void LoadImageset(const string &in)", asMETHOD(GUIMgr, LoadProjectImageset), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("GUIMgr", "Window@ LoadLayout(const CEGUIString &in, const CEGUIString &in)", asMETHOD(GUIMgr, LoadProjectLayout), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 
 	// Register function that returns it
