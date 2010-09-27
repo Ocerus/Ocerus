@@ -236,9 +236,9 @@ void Editor::EditorMgr::CreateEntity(const string& name, EntitySystem::EntityHan
 	GetHierarchyWindow()->SetCurrentParent(EntitySystem::EntityHandle::Null);
 }
 
-void Editor::EditorMgr::DuplicateEntity(EntitySystem::EntityHandle entity)
+EntityHandle Editor::EditorMgr::DuplicateEntity(EntitySystem::EntityHandle entity)
 {
-	if (!entity.Exists()) return;
+	if (!entity.Exists()) return EntityHandle::Null;
 	EntityHandle parent = GetHierarchyWindow()->GetParent(entity);
 	GetHierarchyWindow()->SetCurrentParent(parent);
 	EntityHandle newEntity = gEntityMgr.DuplicateEntity(entity);
@@ -251,11 +251,12 @@ void Editor::EditorMgr::DuplicateEntity(EntitySystem::EntityHandle entity)
 	SelectEntity(newEntity);
 	GetEditorGUI()->SetSelectedEntity(newEntity);
 	GetHierarchyWindow()->SetCurrentParent(EntityHandle::Null);
+	return newEntity;
 }
 
-void Editor::EditorMgr::DuplicateSelectedEntity()
+EntityHandle Editor::EditorMgr::DuplicateSelectedEntity()
 {
-	DuplicateEntity(GetSelectedEntity());
+	return DuplicateEntity(GetSelectedEntity());
 }
 
 void Editor::EditorMgr::DeleteEntity(EntitySystem::EntityHandle entity)
@@ -319,17 +320,16 @@ EntitySystem::EntityHandle Editor::EditorMgr::InstantiatePrototype(EntitySystem:
 
 void Editor::EditorMgr::DuplicateSelectedEntities()
 {
-	EntityList tmpVec(mSelectedEntities.size());
-	for (EntityList::iterator it = mSelectedEntities.begin(); it != mSelectedEntities.end(); ++it)
+	EntityList tmpOldSelected = mSelectedEntities;
+	EntityList tmpNewSelected(mSelectedEntities.size());
+	for (EntityList::iterator it = tmpOldSelected.begin(); it != tmpOldSelected.end(); ++it)
 	{
 		if (it->Exists())
 		{
-			EntitySystem::EntityHandle h = gEntityMgr.DuplicateEntity(*it);
-			h.FinishInit();
-			tmpVec.push_back(h);
+			tmpNewSelected.push_back(DuplicateEntity(*it));
 		}
 	}
-	mSelectedEntities.assign(tmpVec.begin(), tmpVec.end());
+	mSelectedEntities.assign(tmpNewSelected.begin(), tmpNewSelected.end());
 	GetEditorGUI()->SetSelectedEntity(*mSelectedEntities.begin());
 }
 
@@ -858,6 +858,8 @@ bool Editor::EditorMgr::HandleShortcuts( InputSystem::eKeyCode keyCode )
 {
 	mShortcuts->KeyPressed(keyCode);
 
+	// shortcuts that are active even if the game is running
+
 	if (mShortcuts->IsShortcutActive(KeyShortcuts::KS_START_ACTION) && !IsLockedToGame())
 	{
 		SwitchActionTool(AT_RUN);
@@ -893,10 +895,15 @@ bool Editor::EditorMgr::HandleShortcuts( InputSystem::eKeyCode keyCode )
 
 		return true;
 	}
+	if (mShortcuts->IsShortcutActive(KeyShortcuts::KS_FULLSCREEN))
+	{
+		gGfxWindow.SwitchFullscreen();
+	}
 
 
 	if (IsLockedToGame()) return false;
 
+	// shortcuts that are NOT active when the game is running 
 
 	if (mShortcuts->IsShortcutActive(KeyShortcuts::KS_TOOL_MOVE))
 	{
@@ -942,9 +949,9 @@ bool Editor::EditorMgr::HandleShortcuts( InputSystem::eKeyCode keyCode )
 	{
 		ShowQuitDialog();
 	}
-	if (mShortcuts->IsShortcutActive(KeyShortcuts::KS_FULLSCREEN))
+	if (mShortcuts->IsShortcutActive(KeyShortcuts::KS_CENTER_CAM))
 	{
-		gGfxWindow.SwitchFullscreen();
+		CenterCameraOnEntity(GetSelectedEntity());
 	}
 
 	return false;
@@ -978,6 +985,14 @@ void Editor::EditorMgr::HandleHeldShortcuts( float32 delta )
 		camera.GetProperty("Position").SetValue<Vector2>(cameraPos + Vector2(0, movementSpeed));
 	}
 	
+}
+
+void Editor::EditorMgr::CenterCameraOnEntity(const EntitySystem::EntityHandle entity)
+{
+	EntitySystem::EntityHandle camera = mEditorGUI->GetEditorViewport()->GetCamera();
+	OC_ASSERT(camera.IsValid());
+	if (entity.HasProperty("Position"))
+		camera.GetProperty("Position").SetValue<Vector2>(entity.GetProperty("Position").GetValue<Vector2>());
 }
 
 void Editor::EditorMgr::ProcessCurrentEditTool(const GfxSystem::Point& screenCursorPos)

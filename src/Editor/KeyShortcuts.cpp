@@ -41,6 +41,10 @@ KeyShortcuts::KeyShortcuts()
 	// Fullscreen
 	mShortcuts.insert(ShortcutPair(InputSystem::KC_RETURN, Shortcut(KS_FULLSCREEN, MK_ALT)));
 
+	// Center camera on entity
+	mShortcuts.insert(ShortcutPair(InputSystem::KC_SPACE, Shortcut(KS_CENTER_CAM, MK_NOMOD)));
+
+
 
 	// shortcuts which need to be held down to make effect
 

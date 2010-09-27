@@ -215,11 +215,11 @@ namespace Editor
 		/// Creates a new entity.
 		void CreateEntity(const string& name = "", EntitySystem::EntityHandle parent = EntitySystem::EntityHandle::Null);
 
-		/// Duplicates the specified entity.
-		void DuplicateEntity(EntitySystem::EntityHandle entity);
+		/// Duplicates the specified entity. Returns handle to the new entity.
+		EntityHandle DuplicateEntity(EntitySystem::EntityHandle entity);
 
-		/// Duplicates the selected entity.
-		void DuplicateSelectedEntity();
+		/// Duplicates the selected entity. Returns handle to the new entity.
+		EntityHandle DuplicateSelectedEntity();
 
 		/// Deletes the specified entity.
 		void DeleteEntity(EntitySystem::EntityHandle entity);
@@ -253,13 +253,14 @@ namespace Editor
 		/// Removes the component with given componentId from selected entity.
 		void RemoveComponentFromSelectedEntity(const EntitySystem::ComponentID& componentId);
 
-		
-
 		/// Sets the current edit tool.
 		void SetCurrentEditTool(eEditTool newEditTool);
 
 		/// Handles held key shortcuts (i.e. for camera movement)
-		void HandleHeldShortcuts( float32 delta );
+		void HandleHeldShortcuts(float32 delta);
+
+		/// Centers editors camera on given entity.
+		void CenterCameraOnEntity(const EntitySystem::EntityHandle entity);
 
 	private:
 

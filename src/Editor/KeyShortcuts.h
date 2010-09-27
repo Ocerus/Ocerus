@@ -42,6 +42,8 @@ namespace Editor
 		static const KeyShortcut KS_QUIT = 1<<19;
 		
 		static const KeyShortcut KS_FULLSCREEN = 1<<20;
+
+		static const KeyShortcut KS_CENTER_CAM = 1<<21;
 		
 		/// Constructs a Shortcuts.
 		KeyShortcuts();
