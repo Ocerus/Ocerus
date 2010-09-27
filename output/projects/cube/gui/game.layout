@@ -5,12 +5,31 @@
     <Property Name="Font" Value="DejaVuSans-10" />
     <Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{1,0},{1,0}}" />
 
-    <Window Type="Cube/StaticText" Name="Score" >
-      <Property Name="UnifiedAreaRect" Value="{{0.02,0},{-0.1,0},{0.3,0},{0.2,0}}" />
-      <Property Name="BackgroundEnabled" Value="False" />
-      <Property Name="FrameEnabled" Value="False" />
-			<Property Name="Text" Value="$score$" />
-    </Window>
+    <Window Type="Cube/FrameWindow" Name="InfoFrame" >
+			<Property Name="SizingEnabled" Value="False" />
+			<Property Name="TitlebarEnabled" Value="True" />
+			<Property Name="DragMovingEnabled" Value="False" />
+			<Property Name="CloseButtonEnabled" Value="False" />
+			<Property Name="UnifiedAreaRect" Value="{{0.0,-10},{0.0,-30},{0.15,0},{0.0,50}}" />
+
+	    <Window Type="Cube/StaticText" Name="Score" >
+		    <Property Name="Font" Value="Score" />
+				<Property Name="TextColours" Value="tl:FF00FFFF tr:FF00FFFF bl:FF005500 br:FF005500" />
+	      <Property Name="UnifiedAreaRect" Value="{{0.15,0},{0.25,0},{1.0,0},{0.5,0}}" />
+	      <Property Name="BackgroundEnabled" Value="False" />
+	      <Property Name="FrameEnabled" Value="False" />
+				<Property Name="Text" Value="$score$" />
+	    </Window>
+
+	    <Window Type="Cube/StaticText" Name="Time" >
+		    <Property Name="Font" Value="Score" />
+				<Property Name="TextColours" Value="tl:FF00FFFF tr:FF00FFFF bl:FF005500 br:FF005500" />
+	      <Property Name="UnifiedAreaRect" Value="{{0.15,0},{0.6,0},{1.0,0},{0.9,0}}" />
+	      <Property Name="BackgroundEnabled" Value="False" />
+	      <Property Name="FrameEnabled" Value="False" />
+				<Property Name="Text" Value="$time$" />
+	    </Window>
+	  </Window>
   
 		<Window Type="Cube/ImageButton" Name="StateButton">
 			<Property Name="UnifiedAreaRect" Value="{{0,2},{1,-52},{0,52},{1,-2}}" />

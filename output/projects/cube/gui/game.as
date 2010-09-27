@@ -1,7 +1,6 @@
 void OnInit()
 {
   gGUIMgr.LoadScheme("gui/cube.scheme");
-  gGUIMgr.LoadImageset("gui/buttons.imageset");
 }
 
 void OnUpdateLogic(float32 delta)
