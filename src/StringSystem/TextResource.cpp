@@ -5,6 +5,8 @@ using namespace StringSystem;
 
 const string TextResource::GroupNameKey = "group";
 
+TextResourceUnloadCallback TextResource::mUnloadCallback;
+
 ResourceSystem::ResourcePtr TextResource::CreateMe(void)
 {
 	return ResourceSystem::ResourcePtr(new TextResource());
@@ -65,6 +67,7 @@ size_t TextResource::LoadImpl()
 bool TextResource::UnloadImpl()
 {
 	mTextDataMap.clear();
+	if (TextResource::mUnloadCallback != 0) TextResource::mUnloadCallback(this);
 	return true;
 }
 
@@ -92,4 +95,9 @@ const TextDataMap* TextResource::GetTextDataMap(void)
 {
 	EnsureLoaded();
 	return &mTextDataMap;
+}
+
+void TextResource::SetUnloadCallback(TextResourceUnloadCallback callback)
+{
+	TextResource::mUnloadCallback = callback;
 }

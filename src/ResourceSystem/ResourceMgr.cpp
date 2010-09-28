@@ -489,7 +489,7 @@ bool ResourceSystem::ResourceMgr::RefreshAllResources( void )
 			{
 				resIter->second->Unload(true);
 				resMap->erase(resIter);
-				result = true;
+				return true;
 			}
 		}
 	}

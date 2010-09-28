@@ -2,6 +2,7 @@
 #include "ResourcePointers.h"
 #include "StringMgr.h"
 #include "TextResource.h"
+#include "EntitySystem/EntityMgr/EntityMgr.h"
 
 
 using namespace StringSystem;
@@ -9,11 +10,13 @@ using namespace StringSystem;
 StringMgr* StringMgr::msSystem = 0;
 StringMgr* StringMgr::msProject = 0;
 const TextData StringMgr::NullTextData = TextData("");
+const string StringMgr::ResourceGroup = "Strings";
 
 StringMgr::StringMgr(const ResourceSystem::eBasePathType basePathType, const string& basePath)
 {
 	mBasePathType = basePathType;
 	mBasePath = basePath;
+	mUpdating = false;
 	ocInfo << "*** " << GetNameOfManager() << " init ***";
 }
 
@@ -28,84 +31,64 @@ string StringMgr::GetNameOfManager()
   return string("StringMgr (") + ResourceSystem::GetBasePathTypeName(mBasePathType) + " - " + mBasePath + ")";
 }
 
-bool StringMgr::LoadLanguagePack(const string& lang, const string& country)
+bool StringMgr::AddDataFromDir(const string& path)
 {
+  return gResourceMgr.AddResourceDirToGroup(mBasePathType, mBasePath + path, ResourceSystem::GetBasePathTypeName(mBasePathType) + ResourceGroup, ".*", 
+	  "", ResourceSystem::RESTYPE_TEXTRESOURCE, ResourceSystem::ResourceMgr::NullResourceTypeMap, false);
+}
+
+bool StringMgr::LoadLanguagePack(const string& lang, const string& country)
+{	
 	bool result = true;
-	ocInfo << GetNameOfManager() << ": Changing language to " << lang << "-" << country << ".";
+	ocInfo << GetNameOfManager() << ": Loading language " << lang << "-" << country << ".";
 	UnloadData();
 	if (!lang.empty())
 	{
 	  if (!country.empty())
 	  {
-	    // Load country specific texts.
-	    if (!LoadDataFromDir(lang + "/" + country)) { result = false; }
+	    // Add country specific texts.
+	    if (!AddDataFromDir(lang + "/" + country)) { result = false; }
 	  }
-	  // Load language specific texts.
-	  if (!LoadDataFromDir(lang)) { result = false; }
+	  // Add language specific texts.
+	  if (!AddDataFromDir(lang)) { result = false; }
 	}
-	// Load default texts.
-	if (!LoadDataFromDir("")) { result = false; }
+	// Add default texts.
+	if (!AddDataFromDir("")) { result = false; }
+	
+	// Load texts to the memory
+	gResourceMgr.LoadResourcesInGroup(ResourceSystem::GetBasePathTypeName(mBasePathType) + ResourceGroup);
+	vector<ResourceSystem::ResourcePtr> resourceGroup;
+	gResourceMgr.GetResourceGroup(ResourceSystem::GetBasePathTypeName(mBasePathType) + ResourceGroup, resourceGroup);
+	
+	vector<ResourceSystem::ResourcePtr>::iterator it;
+
+	for (it = resourceGroup.begin(); it != resourceGroup.end(); it++)
+	{
+		TextResourcePtr tp = (TextResourcePtr)(*it);
+		const TextDataMap* dm = tp->GetTextDataMap();
+		mGroupTextDataMap[tp->GetGroupName()].insert(dm->begin(), dm->end());
+	}
+	
 	mLanguage = lang;
 	mCountry = country;
 	return result;
 }
 
-bool StringMgr::LoadDataFromDir(const string& path, const string& includeRegexp, const string& excludeRegexp, 
-  bool recursive)
-{
-	bool result = true;
-	result = gResourceMgr.AddResourceDirToGroup(mBasePathType, mBasePath + path, "strings", includeRegexp, 
-	  excludeRegexp, ResourceSystem::RESTYPE_TEXTRESOURCE, ResourceSystem::ResourceMgr::NullResourceTypeMap, recursive);
-	gResourceMgr.LoadResourcesInGroup("strings");
-
-	vector<ResourceSystem::ResourcePtr> resourceGroup;
-	gResourceMgr.GetResourceGroup("strings", resourceGroup);
-
-	vector<ResourceSystem::ResourcePtr>::iterator it;
-
-	for (it = resourceGroup.begin(); it != resourceGroup.end(); it++)
-	{
-		TextResourcePtr tp = (TextResourcePtr)(*it);
-		const TextDataMap* dm = tp->GetTextDataMap();
-		mGroupTextDataMap[tp->GetGroupName()].insert(dm->begin(), dm->end());
-	}
-
-	gResourceMgr.DeleteGroup("strings");
-	return result;
+bool StringMgr::Refresh()
+{ 
+  if (mUpdating) return false;
+  return LoadLanguagePack(mLanguage, mCountry);
 }
 
-bool StringMgr::LoadDataFromFile(const string& filepath, bool pathRelative)
-{
-	ResourceSystem::eBasePathType pathType;
-	if (pathRelative) pathType = ResourceSystem::BPT_SYSTEM;
-	else pathType = ResourceSystem::BPT_ABSOLUTE;
-
-	bool result = true;
-	result = gResourceMgr.AddResourceFileToGroup(mBasePath + filepath, "strings", ResourceSystem::RESTYPE_TEXTRESOURCE, pathType);
-	gResourceMgr.LoadResourcesInGroup("strings");
-
-	vector<ResourceSystem::ResourcePtr> resourceGroup;
-	gResourceMgr.GetResourceGroup("strings", resourceGroup);
-
-	vector<ResourceSystem::ResourcePtr>::iterator it;
-
-	for (it = resourceGroup.begin(); it != resourceGroup.end(); it++)
-	{
-		TextResourcePtr tp = (TextResourcePtr)(*it);
-		const TextDataMap* dm = tp->GetTextDataMap();
-		mGroupTextDataMap[tp->GetGroupName()].insert(dm->begin(), dm->end());
-	}
-
-	gResourceMgr.DeleteGroup("strings");
-	return result;
-}
 
 bool StringMgr::UnloadData(void)
 {
+	mUpdating = true;
 	mGroupTextDataMap.clear();
+	gResourceMgr.DeleteGroup(ResourceSystem::GetBasePathTypeName(mBasePathType) + ResourceGroup);
+	mUpdating = false;
 	return true;
 }
-
 
 const TextData* StringMgr::GetTextDataPtr(const StringKey& group, const StringKey& key)
 {
@@ -142,11 +125,33 @@ const TextData StringMgr::GetTextData(const StringKey& key)
   return *GetTextDataPtr("", key);
 }
 
+void ResourceUnloadCallback(TextResource* resource)
+{
+	if (!resource) return;
+	if (resource->GetBasePathType() == ResourceSystem::BPT_SYSTEM) gStringMgrSystem.Refresh();
+	else if (resource->GetBasePathType() == ResourceSystem::BPT_PROJECT)
+	{	
+	  // If text resources with GUI texts are unloaded, broadcast message to all GUILayout components
+	  if (gStringMgrProject.Refresh() && resource->GetGroupName() == GUISystem::GUIMgr::GUIGroup.ToString())
+	  {
+	    EntitySystem::EntityList entities;
+	    gEntityMgr.GetEntitiesWithComponent(entities, EntitySystem::CT_GUILayout);
+	    for (EntitySystem::EntityList::const_iterator it = entities.begin(); it != entities.end(); ++it)
+	    {
+	      gEntityMgr.PostMessage(*it, EntitySystem::EntityMessage::RESOURCE_UPDATE);
+	    }
+	  }
+	}
+}
+
 void StringMgr::Init(const string& systemBasePath, const string& projectBasePath)
 {
   OC_ASSERT(msSystem == 0 && msProject == 0);
   msSystem = new StringMgr(ResourceSystem::BPT_SYSTEM, systemBasePath);
   msProject = new StringMgr(ResourceSystem::BPT_PROJECT, projectBasePath);
+  
+  // Set text resource unload callback
+	TextResource::SetUnloadCallback(&ResourceUnloadCallback);
 }
 
 bool StringMgr::IsInited()

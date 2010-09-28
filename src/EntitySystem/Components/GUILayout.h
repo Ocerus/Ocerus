@@ -31,6 +31,12 @@ namespace EntityComponents
 		/// Layout used for defining the GUI.
 		void SetLayout(ResourceSystem::ResourcePtr value);
 		
+		/// Scheme used for defining the GUI.
+		ResourceSystem::ResourcePtr GetScheme(void) const { return mScheme; }
+
+		/// Scheme used for defining the GUI.
+		void SetScheme(ResourceSystem::ResourcePtr value);
+		
 		/// Script module with functions used as a callback for GUI events.
 		ResourceSystem::ResourcePtr GetCallback(void) const { return mCallback; }
 
@@ -46,6 +52,7 @@ namespace EntityComponents
 	private:
 
 		ResourceSystem::ResourcePtr mLayout;
+		ResourceSystem::ResourcePtr mScheme;
 		ResourceSystem::ResourcePtr mCallback;
 		bool mVisible;
 		

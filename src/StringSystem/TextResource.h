@@ -10,6 +10,9 @@
 
 namespace StringSystem
 {
+	/// Callback invoked when a text resource is to be unloaded.
+	typedef void (*TextResourceUnloadCallback)(TextResource* resource);
+	
 	/// This class represents a single text resource.
 	/// Main purpose of the class is to load and parse a .str file, not to store the actual data. You should
 	///	only use StringMgr to load text resources (although its possible to load it directly with ResourceMgr,
@@ -43,6 +46,9 @@ namespace StringSystem
 		
 		/// Text item with this key which is the first in the file contains the group name.
 		static const string GroupNameKey;
+		
+		/// Register the callback for reloading the text resource
+		static void SetUnloadCallback(TextResourceUnloadCallback callback);
 
 	protected:
 
@@ -56,6 +62,9 @@ namespace StringSystem
 		
 		/// Name of group to which the text data belongs.
 		string mGroupName;
+		
+		/// Callback for reloading the text resource
+		static TextResourceUnloadCallback mUnloadCallback;
 
 	};
 }

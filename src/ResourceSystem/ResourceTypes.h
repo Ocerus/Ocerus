@@ -53,7 +53,7 @@ namespace ResourceSystem
 	static const string RES_NULL_MODEL = "general/NullModel.model";
 	
 	/// String name of types of a base path.
-	const char* GetBasePathTypeName(const eBasePathType basePathType);
+	string GetBasePathTypeName(const eBasePathType basePathType);
 
 	/// Returns a string representation of the given resource type.
 	string GetResourceTypeName(const eResourceType type);

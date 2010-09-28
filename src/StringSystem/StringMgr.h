@@ -38,14 +38,10 @@ namespace StringSystem
 		/// ISO 639-1 codes (http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)
 		/// and ISO 3166-1 alpha-2 codes (http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
 		bool LoadLanguagePack(const string& lang = "", const string& country = "");
-
-		/// Adds all text resources in a given directory and loads them into the memory.
-		bool LoadDataFromDir(const string& path, const string& includeRegexp = ".*", const string& excludeRegexp = "",
-		  bool recursive = false);
-
-		/// Loads the text resource from a provided file.
-		bool LoadDataFromFile(const string& filepath, bool pathRelative = true);
-
+		
+		/// Reloads all strings for a current language.
+		bool Refresh();
+		
 		/// Unloads all data of the manager.
 		bool UnloadData(void);
 
@@ -83,6 +79,9 @@ namespace StringSystem
 
 	private:
 
+		/// Adds all text resources in a given directory to ResourceMgr to group strings.
+		bool AddDataFromDir(const string& path);
+		
 		/// Container used to store the parsed data (the same type used is in TextRes!).
 		GroupTextDataMap mGroupTextDataMap;
 
@@ -98,6 +97,9 @@ namespace StringSystem
 		/// Type of a base path which the ResourceMgr is called with.
 		ResourceSystem::eBasePathType mBasePathType;
 		
+		/// Whether the string manager is being updated.
+		bool mUpdating;
+		
 		/// Returns string representation of a type of this manager instance.
 		string GetNameOfManager();
 		
@@ -106,7 +108,9 @@ namespace StringSystem
 		
 		/// The project string manager.
 		static StringMgr* msProject;
-
+		
+		/// The name of the used resource group.
+		static const string ResourceGroup;
 	};
 }
 

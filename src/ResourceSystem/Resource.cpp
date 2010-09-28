@@ -65,7 +65,11 @@ bool Resource::Load()
 {
 	// wraps around LoadImpl and does some additional work
 
-	OC_ASSERT(GetState() == STATE_INITIALIZED);
+	if (GetState() != STATE_INITIALIZED)
+	{
+	  ocError << "Resource '" << mName << "' is NOT initialized!";
+	  return false;
+	}
 	if (mIsManual) return false; // manual resources must be loaded by the user
 
 	// make sure the resource mgr is synchronized
@@ -94,7 +98,11 @@ bool Resource::Load()
 bool Resource::Unload(bool allowManual)
 {
 	// wraps around UnloadImpl and does some additional work
-	OC_ASSERT(mState != STATE_UNINITIALIZED);
+	if (mState == STATE_UNINITIALIZED)
+	{
+	  ocError << "Resource '" << mName << "' is NOT initialized!";
+	  return false;
+	}
 	// make sure the resource mgr is synchronized
 	gResourceMgr._NotifyResourceUnloaded(this);
 	if (GetState() == STATE_INITIALIZED)

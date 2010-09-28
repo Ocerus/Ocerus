@@ -9,6 +9,7 @@
 #include "GfxSystem/GfxWindow.h"
 #include "GUISystem/ViewportWindow.h"
 #include "ScriptSystem/ScriptResource.h"
+#include "StringSystem/TextResource.h"
 #include "Editor/EditorMgr.h"
 #include "EntitySystem/EntityMgr/LayerMgr.h"
 
@@ -123,8 +124,9 @@ Application::~Application()
 
 	GUISystem::GUIMgr::DestroySingleton();
 
-	// cancel unload callback for script resources
+	// Cancel unload callback for script and text resources
 	ScriptSystem::ScriptResource::SetUnloadCallback(0);
+	StringSystem::TextResource::SetUnloadCallback(0);
 	ResourceSystem::ResourceMgr::GetSingleton().UnloadAllResources();
 
 	EntitySystem::EntityMgr::DestroySingleton();

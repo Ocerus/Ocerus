@@ -1,10 +1,5 @@
 float32 TitleAnimState;
 
-void OnInit()
-{
-  gGUIMgr.LoadScheme("gui/cube.scheme");
-}
-
 void OnPostInit()
 {
   TitleAnimState = 0.0;
