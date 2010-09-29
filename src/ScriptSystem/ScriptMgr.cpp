@@ -53,7 +53,7 @@ int ScriptMgr::IncludeCallback(const char* fileName, const char* from, AngelScri
 	ScriptResourcePtr sp = gResourceMgr.GetResource("Project", fileName);
 	if (!sp)
 	{
-		ocInfo << "Failed to load script file " << fileName << ".";
+		ocInfo << "Failed to load script file " << fileName << " included from " << from << ".";
 		return -1;
 	}
 

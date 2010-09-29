@@ -1,3 +1,5 @@
+#include "player/GuiControl.as"
+
 float32 TitleAnimState;
 
 void OnPostInit()
@@ -22,21 +24,61 @@ void OnUpdateLogic(float32 delta)
  	uint32 timeSeconds = MathUtils::Round(timeInSeconds - timeMinutes);
   GetWindow("Time").SetText(timeMinutes + ":" + timeSeconds);
   
-  EntityHandle player = gEntityMgr.FindFirstEntity("Player");
-  Window@ stateButton = GetWindow("StateButton");
-  if (player.IsValid() && (stateButton !is null))
-  {
-  	if (player.Get_bool("IsLight"))
-  	{
- 			stateButton.SetProperty("NormalImage", "set:Buttons image:CubeLight");
- 		}
- 		else
- 		{
- 			stateButton.SetProperty("NormalImage", "set:Buttons image:CubeHeavy");
- 		}
-  }
-  
+  UpdateButtons();
+  LevelTitleAnimation(delta);
+}
 
+void UpdateButtons()
+{
+  EntityHandle player = gEntityMgr.FindFirstEntity("Player");
+  if (!player.IsValid()) return;
+  
+ 	if (player.Get_bool("IsLight"))
+ 	{
+		SetButtonSingleImage("StateButton", "CubeLight");
+ 	}
+ 	else
+ 	{
+		SetButtonSingleImage("StateButton", "CubeHeavy");
+ 	}
+ 	
+ 	if (CanJump(player))
+ 	{
+ 		SetButtonAllImages("JumpButton", "Jump");
+ 	}
+ 	else
+ 	{
+ 		SetButtonSingleImage("JumpButton", "JumpOff");
+ 	}
+
+ 	if (CanExplode(player))
+ 	{
+ 		SetButtonAllImages("ExplosionButton", "Explosion");
+ 	}
+ 	else
+ 	{
+ 		SetButtonSingleImage("ExplosionButton", "ExplosionOff");
+ 	}
+}
+
+void SetButtonSingleImage(string button, string image)
+{
+	Window@ wnd = GetWindow(button);
+	wnd.SetProperty("NormalImage", "set:Buttons image:" + image);
+	wnd.SetProperty("HoverImage", "set:Buttons image:" + image);
+	wnd.SetProperty("PushedImage", "set:Buttons image:" + image);
+}
+
+void SetButtonAllImages(string button, string image)
+{
+	Window@ wnd = GetWindow(button);
+	wnd.SetProperty("NormalImage", "set:Buttons image:" + image + "On");
+	wnd.SetProperty("HoverImage", "set:Buttons image:" + image + "Hover");
+	wnd.SetProperty("PushedImage", "set:Buttons image:" + image + "Off");
+}
+
+void LevelTitleAnimation(float32 delta)
+{
   if (TitleAnimState < 3.0)
   {
   	if (TitleAnimState > 1.0 && TitleAnimState <= 2.0) TitleAnimState = TitleAnimState + 0.01f;

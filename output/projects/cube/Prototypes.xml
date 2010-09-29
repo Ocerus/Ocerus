@@ -10,7 +10,6 @@
         <Angle>0</Angle>
       </Component>
       <Component Type="Sprite">
-        <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>10</FrameCount>
@@ -19,14 +18,15 @@
         <FrameIndex>0</FrameIndex>
         <Texture>effects/dust.png</Texture>
         <AnimDuration>1</AnimDuration>
+        <AnimTime>0</AnimTime>
       </Component>
       <Component Type="Script">
-        <ScriptTimes></ScriptTimes>
-        <ScriptStates></ScriptStates>
         <ScriptTimeOut>1000</ScriptTimeOut>
         <ScriptModules>
           <Item>effects/DustFader.as</Item>
         </ScriptModules>
+        <ScriptTimes></ScriptTimes>
+        <ScriptStates></ScriptStates>
       </Component>
     </Entity>
     <Entity Name="ExplosionDust" ID="-507" Tag="0" Transient="false">
@@ -37,7 +37,6 @@
         <Angle>0</Angle>
       </Component>
       <Component Type="Sprite">
-        <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0.6</Transparency>
         <FrameCount>10</FrameCount>
@@ -46,14 +45,15 @@
         <FrameIndex>0</FrameIndex>
         <Texture>effects/dust.png</Texture>
         <AnimDuration>0.3</AnimDuration>
+        <AnimTime>0</AnimTime>
       </Component>
       <Component Type="Script">
-        <ScriptTimes></ScriptTimes>
-        <ScriptStates></ScriptStates>
         <ScriptTimeOut>1000</ScriptTimeOut>
         <ScriptModules>
           <Item>effects/DustFader.as</Item>
         </ScriptModules>
+        <ScriptTimes></ScriptTimes>
+        <ScriptStates></ScriptStates>
       </Component>
     </Entity>
     <Entity Name="JumpDust" ID="-506" Tag="0" Transient="false">
@@ -64,7 +64,6 @@
         <Angle>0</Angle>
       </Component>
       <Component Type="Sprite">
-        <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0.1</Transparency>
         <FrameCount>10</FrameCount>
@@ -73,14 +72,15 @@
         <FrameIndex>0</FrameIndex>
         <Texture>effects/dust.png</Texture>
         <AnimDuration>0.4</AnimDuration>
+        <AnimTime>0</AnimTime>
       </Component>
       <Component Type="Script">
-        <ScriptTimes></ScriptTimes>
-        <ScriptStates></ScriptStates>
         <ScriptTimeOut>1000</ScriptTimeOut>
         <ScriptModules>
           <Item>effects/DustFader.as</Item>
         </ScriptModules>
+        <ScriptTimes></ScriptTimes>
+        <ScriptStates></ScriptStates>
       </Component>
     </Entity>
     <Entity Name="Score10" ID="-504" Tag="0" Transient="false">
@@ -95,12 +95,12 @@
         <Texture>effects/score_10.png</Texture>
       </Component>
       <Component Type="Script">
-        <ScriptTimes></ScriptTimes>
-        <ScriptStates></ScriptStates>
         <ScriptTimeOut>1000</ScriptTimeOut>
         <ScriptModules>
           <Item>effects/ScoreFader.as</Item>
         </ScriptModules>
+        <ScriptTimes></ScriptTimes>
+        <ScriptStates></ScriptStates>
         <FadeAlphaSpeed Type="float32">2</FadeAlphaSpeed>
         <FadeMovementSpeed Type="float32">0.1</FadeMovementSpeed>
       </Component>
@@ -173,8 +173,8 @@
     <Entity Name="Stone2" ID="-500" Tag="0" Transient="false">
       <Component Type="Transform"></Component>
       <Component Type="DynamicBody">
-        <LinearDamping>0.1</LinearDamping>
         <AngularDamping>0.5</AngularDamping>
+        <LinearDamping>0.1</LinearDamping>
       </Component>
       <Component Type="PolygonCollider">
         <Polygon>
@@ -198,8 +198,8 @@
     <Entity Name="Stone1" ID="-499" Tag="0" Transient="false">
       <Component Type="Transform"></Component>
       <Component Type="DynamicBody">
-        <LinearDamping>0.1</LinearDamping>
         <AngularDamping>0.5</AngularDamping>
+        <LinearDamping>0.1</LinearDamping>
       </Component>
       <Component Type="PolygonCollider">
         <Polygon>
@@ -278,8 +278,9 @@
     </Entity>
     <Entity Name="GameGUI" ID="-16" Tag="0" Transient="false">
       <Component Type="GUILayout">
-        <Visible>true</Visible>
         <Callback>gui/game.as</Callback>
+        <Scheme>gui/cube.scheme</Scheme>
+        <Visible>true</Visible>
         <Layout>gui/game.layout</Layout>
       </Component>
     </Entity>
