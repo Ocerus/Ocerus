@@ -64,6 +64,7 @@ void BoolEditor::InitWidget()
 
 	// Create editbox widget
 	mCheckboxWidget = static_cast<CEGUI::Checkbox*>(gGUIMgr.CreateWindowDirectly("Editor/Checkbox", editorName + "/Checkbox"));
+	mCheckboxWidget->subscribeEvent(CEGUI::Checkbox::EventCheckStateChanged, CEGUI::Event::Subscriber(&BoolEditor::OnEventCheckStateChanged, this));
 	mEditorWidget->addChildWindow(mCheckboxWidget);
 
 	// Create remove button widget
@@ -166,5 +167,6 @@ bool Editor::BoolEditor::OnEventIsSharedCheckboxChanged(const CEGUI::EventArgs& 
 {
 	const CEGUI::WindowEventArgs& winArgs = static_cast<const CEGUI::KeyEventArgs&>(args);
 	mModel->SetShared(static_cast<CEGUI::Checkbox*>(winArgs.window)->isSelected());
+	gEditorMgr.PropertyValueChanged();
 	return true;
 }

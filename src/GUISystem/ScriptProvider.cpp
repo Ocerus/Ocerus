@@ -1,6 +1,7 @@
 #include "Common.h"
 #include "ScriptProvider.h"
 #include "CEGUICommon.h"
+#include "Core/Game.h"
 
 #include <angelscript.h>
 
@@ -8,15 +9,17 @@ using namespace GUISystem;
 
 bool ScriptCallback::operator()(const CEGUI::EventArgs &args) const
 {
+	if (!GlobalProperties::Get<Core::Game>("Game").IsActionRunning()) return false;
+	
 	const CEGUI::WindowEventArgs* argument = static_cast<const CEGUI::WindowEventArgs*>(&args);
 
 	CEGUI::Window* rootWindow = argument ? argument->window : 0;
-	while (rootWindow != 0 && rootWindow->isUserStringDefined("RootWindow")) rootWindow = rootWindow->getParent();
+	while (rootWindow != 0 && !rootWindow->isUserStringDefined("RootWindow")) rootWindow = rootWindow->getParent();
 
 	string module = "GuiCallback.as";
 	if (rootWindow)
 	{
-		EntitySystem::EntityHandle* handle = (EntityHandle*)rootWindow->getUserData();
+		EntitySystem::EntityHandle* handle = (EntitySystem::EntityHandle*)rootWindow->getUserData();
 		if (handle != 0 && handle->Exists())
 		{
 			EntitySystem::ComponentID cmpId = gEntityMgr.GetEntityComponent(*handle, EntitySystem::CT_GUILayout);

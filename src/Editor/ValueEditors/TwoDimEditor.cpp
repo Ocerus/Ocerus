@@ -80,6 +80,7 @@ bool Editor::TwoDimEditor::OnEventIsSharedCheckboxChanged(const CEGUI::EventArgs
 {
 	const CEGUI::WindowEventArgs& winArgs = static_cast<const CEGUI::KeyEventArgs&>(args);
 	GetModel()->SetShared(static_cast<CEGUI::Checkbox*>(winArgs.window)->isSelected());
+	gEditorMgr.PropertyValueChanged();
 	return true;
 }
 

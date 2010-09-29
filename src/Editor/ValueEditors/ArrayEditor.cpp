@@ -14,6 +14,7 @@
 #include "GUISystem/CEGUICommon.h"
 #include "GUISystem/GUIMgr.h"
 #include "GUISystem/VerticalLayout.h"
+#include "Editor/EditorMgr.h"
 
 namespace Editor
 {
@@ -238,6 +239,7 @@ namespace Editor
 	{
 		const CEGUI::WindowEventArgs& winArgs = static_cast<const CEGUI::KeyEventArgs&>(arg);
 		mModel->SetShared(static_cast<CEGUI::Checkbox*>(winArgs.window)->isSelected());
+		gEditorMgr.PropertyValueChanged();
 		return true;
 	}
 
