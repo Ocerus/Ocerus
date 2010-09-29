@@ -42,22 +42,30 @@ void UpdateButtons()
 		SetButtonSingleImage("StateButton", "CubeHeavy");
  	}
  	
- 	if (CanJump(player))
- 	{
- 		SetButtonAllImages("JumpButton", "Jump");
- 	}
- 	else
- 	{
- 		SetButtonSingleImage("JumpButton", "JumpOff");
- 	}
+ 	UpdateSkillButton(CanJump(player), "Jump");
+ 	UpdateSkillButton(CanExplode(player), "Explosion");
+}
 
- 	if (CanExplode(player))
+void UpdateSkillButton(bool enabled, string skill)
+{
+ 	if (enabled)
  	{
- 		SetButtonAllImages("ExplosionButton", "Explosion");
+ 		SetButtonAllImages(skill + "Button", skill);
+ 		GetWindow(skill + "Cooldown").SetVisible(false);
  	}
  	else
  	{
- 		SetButtonSingleImage("ExplosionButton", "ExplosionOff");
+ 		SetButtonSingleImage(skill + "Button", skill + "Off");
+ 		float32 cooldown = MathUtils::Ceiling(gEntityMgr.FindFirstEntity("Player").Get_float32(skill + "Cooldown"));
+ 		if (cooldown > 0)
+ 		{
+			GetWindow(skill + "Cooldown").SetText("" + cooldown);
+ 			GetWindow(skill + "Cooldown").SetVisible(true);
+ 		}
+ 		else
+ 		{
+ 			GetWindow(skill + "Cooldown").SetVisible(false);
+ 		}
  	}
 }
 

@@ -57,6 +57,16 @@
 			<Property Name="HoverImage" Value="set:Buttons image:JumpHover"/>
 			<Property Name="PushedImage" Value="set:Buttons image:JumpOff"/>
 			<Event Name="MouseClick" Function="OnJumpButtonClicked"/>
+
+	    <Window Type="Cube/StaticText" Name="JumpCooldown" >
+		    <Property Name="Font" Value="LevelTitle" />
+				<Property Name="TextColours" Value="tl:FFFF0000 tr:FFFF0000 bl:FF440000 br:FF440000" />
+	      <Property Name="UnifiedAreaRect" Value="{{0.0,0},{0.0,0},{1.0,0},{1.0,0}}" />
+	      <Property Name="BackgroundEnabled" Value="False" />
+	      <Property Name="FrameEnabled" Value="False" />
+				<Property Name="HorzFormatting" Value="HorzCentred" />
+				<Property Name="Text" Value="10" />
+	    </Window>
 		</Window>  
 
 		<Window Type="Cube/ImageButton" Name="ExplosionButton">
@@ -65,6 +75,16 @@
 			<Property Name="HoverImage" Value="set:Buttons image:ExplosionHover"/>
 			<Property Name="PushedImage" Value="set:Buttons image:ExplosionOff"/>
 			<Event Name="MouseClick" Function="OnExplosionButtonClicked"/>
+
+	    <Window Type="Cube/StaticText" Name="ExplosionCooldown" >
+		    <Property Name="Font" Value="LevelTitle" />
+				<Property Name="TextColours" Value="tl:FFFF0000 tr:FFFF0000 bl:FF440000 br:FF440000" />
+	      <Property Name="UnifiedAreaRect" Value="{{0.0,0},{0.0,0},{1.0,0},{1.0,0}}" />
+	      <Property Name="BackgroundEnabled" Value="False" />
+	      <Property Name="FrameEnabled" Value="False" />
+				<Property Name="HorzFormatting" Value="HorzCentred" />
+				<Property Name="Text" Value="10" />
+	    </Window>
 		</Window>  
 
 
