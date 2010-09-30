@@ -1,5 +1,9 @@
+#include "GameControl.as"
+
 void OnPostInit()
 {
+	InitGameControl();
+
   this.RegisterDynamicProperty_uint32("Score", PA_FULL_ACCESS, "Score the player got so far in this level.");
   this.RegisterDynamicProperty_float32("Time", PA_FULL_ACCESS, "Time in seconds.");
   

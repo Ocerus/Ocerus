@@ -288,7 +288,11 @@ public:
 	}
 
 	// Returns a size of the array
-	inline int32 GetSize() const { return mArray->GetSize(); }
+	int32 GetSize() const
+	{
+		if (!mArray) return 0;
+		return mArray->GetSize();
+	}
 
 	// Resize an array to a newSize
 	inline void Resize(int32 newSize)
@@ -298,7 +302,14 @@ public:
 			asGetActiveContext()->SetException("Cannot resize array to negative size!");
 			return;
 		}
-		mArray->Resize(newSize);
+		if (!mArray)
+		{
+			asGetActiveContext()->SetException("Used uninicialized array!");
+		}
+		else
+		{
+			mArray->Resize(newSize);
+		}
 	}
 private:
 	Utils::Array<T>* mArray;
@@ -378,6 +389,26 @@ const ScriptArray<U> EntityHandleGetConstArrayValue(EntitySystem::EntityHandle& 
 		asGetActiveContext()->SetException("Invalid entity handle!");
 		return ScriptArray<U>(0);
 	}
+}
+
+
+// Template function called from scripts that finds array property (propName) of Game.
+template<typename U>
+ScriptArray<U> GameGetArrayValue(Core::Game& handle, string& propName)
+{
+	if (!handle.HasDynamicProperty(propName))
+	{
+		handle.SetDynamicProperty(propName, new Array<U>());
+	}
+
+	return ScriptArray<U>(handle.GetDynamicProperty<Array<U>*>(propName));
+}
+
+// Template function called from scripts that finds array property (propName) of Game.
+template<typename U>
+const ScriptArray<U> GameGetConstArrayValue(Core::Game& handle, string& propName)
+{
+	return GameGetArrayValue<U>(handle, propName);
 }
 
 // Functions for register ScriptArray<U> to script
@@ -917,6 +948,7 @@ string ProjectGetSceneName(int32 index, const Project* self)
 
 Project& GetProject()
 {
+	OC_ASSERT(gApp.GetGameProject());
 	return *gApp.GetGameProject();
 }
 
@@ -1369,7 +1401,14 @@ void ScriptMgr::ConfigureEngine(void)
 	r = mEngine->RegisterObjectMethod("Game", (string(typeName) + " Get_" + typeName + "(const string &in) const").c_str(), \
 	asMETHODPR(Game, GetDynamicProperty, (const string&) const, typeClass), asCALL_THISCALL); OC_SCRIPT_ASSERT(); \
 	r = mEngine->RegisterObjectMethod("Game", (string("void Set_") + typeName + "(const string &in, const " + typeName + "&in)").c_str(), \
-	asMETHODPR(Game, SetDynamicProperty, (const string&, const typeClass&), void), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	asMETHODPR(Game, SetDynamicProperty, (const string&, const typeClass&), void), asCALL_THISCALL); OC_SCRIPT_ASSERT(); \
+	/* Register array const and non-const getter */ \
+	r = mEngine->RegisterObjectMethod("Game", (string("array_") + typeName + " Get_array_" + typeName + "(string &in) const").c_str(), \
+	asFUNCTIONPR(GameGetArrayValue, (Core::Game&, string&), ScriptArray<typeClass>), \
+	asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT(); \
+	r = mEngine->RegisterObjectMethod("Game", (string("const array_") + typeName + " Get_const_array_" + typeName + "(string &in) const").c_str(), \
+	asFUNCTIONPR(GameGetConstArrayValue, (Core::Game&, string&), const ScriptArray<typeClass>), \
+	asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
 #define SCRIPT_ONLY
 #include "../Utils/Properties/PropertyTypes.h"
 #undef SCRIPT_ONLY

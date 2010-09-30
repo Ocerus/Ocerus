@@ -1,4 +1,5 @@
 #include "player/GuiControl.as"
+#include "GameControl.as"
 
 float32 TitleAnimState;
 
@@ -6,9 +7,8 @@ void OnPostInit()
 {
   TitleAnimState = 0.0;
   GetWindow("LevelTitle").SetProperty("Alpha", "0.0");
-  //TODO get level name or index
-  int32 levelIndex = 1;
-  GetWindow("LevelTitle").SetText(GetTextData("GUI", "levelTitle") + levelIndex);
+  int32 levelIndex = GetCurrentLevelIndex();
+  GetWindow("LevelTitle").SetText(GetTextData("GUI", "levelTitle") + (levelIndex+1));
 }
 
 void OnUpdateLogic(float32 delta)
