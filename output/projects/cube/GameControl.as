@@ -53,3 +53,23 @@ void InitGameControl()
 		levels[1] = "level2.xml";
 	}
 }
+
+void PauseGame()
+{
+	game.PauseAction();
+}
+
+void ResumeGame()
+{
+	game.ResumeAction();
+}
+
+void RestartGame()
+{
+	gProject.OpenScene(gProject.GetOpenedSceneName());
+}
+
+void QuitGame()
+{
+	game.Quit();
+}

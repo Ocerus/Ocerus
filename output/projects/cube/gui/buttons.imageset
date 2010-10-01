@@ -13,4 +13,7 @@
 	<Image Name="CubeLight" XPos="0" YPos="258" Width="128" Height="128" />
 	<Image Name="CubeHeavy" XPos="128" YPos="258" Width="128" Height="128" />
 
+	<Image Name="MenuGreen" XPos="0" YPos="387" Width="50" Height="38" />
+	<Image Name="MenuRed" XPos="51" YPos="387" Width="50" Height="38" />
+
 </Imageset>

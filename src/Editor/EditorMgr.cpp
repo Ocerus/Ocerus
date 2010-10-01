@@ -381,6 +381,12 @@ void Editor::EditorMgr::RemoveComponentFromSelectedEntity(const EntitySystem::Co
 	RemoveComponentFromEntity(GetSelectedEntity(), componentId);
 }
 
+
+bool Editor::EditorMgr::WasActionRestarted()
+{
+	return mIsInitialTime && !GlobalProperties::Get<Core::Game>("Game").IsActionRunning();
+}
+
 void Editor::EditorMgr::ResumeAction()
 {
 	Core::Game& game = GlobalProperties::Get<Core::Game>("Game");

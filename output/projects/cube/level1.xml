@@ -45,9 +45,9 @@
         </ScriptModules>
         <ScriptTimes></ScriptTimes>
         <ScriptStates></ScriptStates>
-        <YOffsetPeriod Type="float32">0.25</YOffsetPeriod>
-        <YOffsetAmplitude Type="float32">0.15</YOffsetAmplitude>
         <YOffsetTime Type="float32">0</YOffsetTime>
+        <YOffsetAmplitude Type="float32">0.15</YOffsetAmplitude>
+        <YOffsetPeriod Type="float32">0.25</YOffsetPeriod>
       </Component>
     </Entity>
     <Entity Name="Land1" ID="2" Tag="0" Transient="false" Prototype="-495">
@@ -560,8 +560,8 @@
         </ScriptModules>
         <ScriptTimes></ScriptTimes>
         <ScriptStates></ScriptStates>
-        <Time Type="float32" Comment="Time in seconds.">0</Time>
         <Score Type="uint32">0</Score>
+        <Time Type="float32" Comment="Time in seconds.">0</Time>
       </Component>
     </Entity>
     <Entity Name="Player" ID="20" Tag="0" Transient="false">
@@ -598,12 +598,12 @@
         </ScriptModules>
         <ScriptTimes></ScriptTimes>
         <ScriptStates></ScriptStates>
+        <LastLandCollisionCooldown Type="float32">0</LastLandCollisionCooldown>
+        <ExplosionCooldown Type="float32">0</ExplosionCooldown>
         <JumpCooldown Type="float32">0</JumpCooldown>
         <State Type="uint32">0</State>
-        <LastLandPosition Type="Vector2">0 0</LastLandPosition>
-        <ExplosionCooldown Type="float32">0</ExplosionCooldown>
         <IsLight Type="bool">true</IsLight>
-        <LastLandCollisionCooldown Type="float32">0</LastLandCollisionCooldown>
+        <LastLandPosition Type="Vector2">0 0</LastLandPosition>
       </Component>
     </Entity>
     <Entity Name="GameCamera" ID="21" Tag="0" Transient="false">
@@ -3196,8 +3196,8 @@
         </ScriptModules>
         <ScriptTimes></ScriptTimes>
         <ScriptStates></ScriptStates>
-        <YOffsetPeriod Type="float32">0.1</YOffsetPeriod>
         <YOffsetAmplitude Type="float32">0.1</YOffsetAmplitude>
+        <YOffsetPeriod Type="float32">0.1</YOffsetPeriod>
       </Component>
     </Entity>
     <Entity Name="Land1" ID="105" Tag="0" Transient="false" Prototype="-495">
@@ -3448,8 +3448,8 @@
         </ScriptModules>
         <ScriptTimes></ScriptTimes>
         <ScriptStates></ScriptStates>
-        <YOffsetPeriod Type="float32">0.1</YOffsetPeriod>
         <YOffsetAmplitude Type="float32">0.1</YOffsetAmplitude>
+        <YOffsetPeriod Type="float32">0.1</YOffsetPeriod>
       </Component>
     </Entity>
     <Entity Name="Coin1" ID="113" Tag="2" Transient="false" Prototype="-503">
@@ -3488,8 +3488,8 @@
         </ScriptModules>
         <ScriptTimes></ScriptTimes>
         <ScriptStates></ScriptStates>
-        <YOffsetPeriod Type="float32">0.1</YOffsetPeriod>
         <YOffsetAmplitude Type="float32">0.1</YOffsetAmplitude>
+        <YOffsetPeriod Type="float32">0.1</YOffsetPeriod>
       </Component>
     </Entity>
     <Entity Name="Coin1" ID="114" Tag="2" Transient="false" Prototype="-503">
@@ -3528,8 +3528,8 @@
         </ScriptModules>
         <ScriptTimes></ScriptTimes>
         <ScriptStates></ScriptStates>
-        <YOffsetPeriod Type="float32">0.1</YOffsetPeriod>
         <YOffsetAmplitude Type="float32">0.1</YOffsetAmplitude>
+        <YOffsetPeriod Type="float32">0.1</YOffsetPeriod>
       </Component>
     </Entity>
     <Entity Name="Coin1" ID="115" Tag="2" Transient="false" Prototype="-503">
@@ -3568,8 +3568,8 @@
         </ScriptModules>
         <ScriptTimes></ScriptTimes>
         <ScriptStates></ScriptStates>
-        <YOffsetPeriod Type="float32">0.1</YOffsetPeriod>
         <YOffsetAmplitude Type="float32">0.1</YOffsetAmplitude>
+        <YOffsetPeriod Type="float32">0.1</YOffsetPeriod>
       </Component>
     </Entity>
     <Entity Name="Coin1" ID="116" Tag="2" Transient="false" Prototype="-503">
@@ -3608,8 +3608,8 @@
         </ScriptModules>
         <ScriptTimes></ScriptTimes>
         <ScriptStates></ScriptStates>
-        <YOffsetPeriod Type="float32">0.1</YOffsetPeriod>
         <YOffsetAmplitude Type="float32">0.1</YOffsetAmplitude>
+        <YOffsetPeriod Type="float32">0.1</YOffsetPeriod>
       </Component>
     </Entity>
     <Entity Name="Coin1" ID="117" Tag="2" Transient="false" Prototype="-503">
@@ -3648,8 +3648,8 @@
         </ScriptModules>
         <ScriptTimes></ScriptTimes>
         <ScriptStates></ScriptStates>
-        <YOffsetPeriod Type="float32">0.1</YOffsetPeriod>
         <YOffsetAmplitude Type="float32">0.1</YOffsetAmplitude>
+        <YOffsetPeriod Type="float32">0.1</YOffsetPeriod>
       </Component>
     </Entity>
     <Entity Name="Coin1" ID="118" Tag="2" Transient="false" Prototype="-503">
@@ -3688,8 +3688,8 @@
         </ScriptModules>
         <ScriptTimes></ScriptTimes>
         <ScriptStates></ScriptStates>
-        <YOffsetPeriod Type="float32">0.1</YOffsetPeriod>
         <YOffsetAmplitude Type="float32">0.1</YOffsetAmplitude>
+        <YOffsetPeriod Type="float32">0.1</YOffsetPeriod>
       </Component>
     </Entity>
     <Entity Name="Coin1" ID="119" Tag="2" Transient="false" Prototype="-503">
@@ -3728,8 +3728,8 @@
         </ScriptModules>
         <ScriptTimes></ScriptTimes>
         <ScriptStates></ScriptStates>
-        <YOffsetPeriod Type="float32">0.1</YOffsetPeriod>
         <YOffsetAmplitude Type="float32">0.1</YOffsetAmplitude>
+        <YOffsetPeriod Type="float32">0.1</YOffsetPeriod>
       </Component>
     </Entity>
     <Entity Name="Coin1" ID="120" Tag="2" Transient="false" Prototype="-503">
@@ -3768,8 +3768,8 @@
         </ScriptModules>
         <ScriptTimes></ScriptTimes>
         <ScriptStates></ScriptStates>
-        <YOffsetPeriod Type="float32">0.1</YOffsetPeriod>
         <YOffsetAmplitude Type="float32">0.1</YOffsetAmplitude>
+        <YOffsetPeriod Type="float32">0.1</YOffsetPeriod>
       </Component>
     </Entity>
     <Entity Name="Coin1" ID="121" Tag="2" Transient="false" Prototype="-503">
@@ -3808,8 +3808,8 @@
         </ScriptModules>
         <ScriptTimes></ScriptTimes>
         <ScriptStates></ScriptStates>
-        <YOffsetPeriod Type="float32">0.1</YOffsetPeriod>
         <YOffsetAmplitude Type="float32">0.1</YOffsetAmplitude>
+        <YOffsetPeriod Type="float32">0.1</YOffsetPeriod>
       </Component>
     </Entity>
     <Entity Name="Coin1" ID="122" Tag="2" Transient="false" Prototype="-503">
@@ -3848,8 +3848,8 @@
         </ScriptModules>
         <ScriptTimes></ScriptTimes>
         <ScriptStates></ScriptStates>
-        <YOffsetPeriod Type="float32">0.1</YOffsetPeriod>
         <YOffsetAmplitude Type="float32">0.1</YOffsetAmplitude>
+        <YOffsetPeriod Type="float32">0.1</YOffsetPeriod>
       </Component>
     </Entity>
     <Entity Name="Coin1" ID="123" Tag="2" Transient="false" Prototype="-503">
@@ -3888,8 +3888,8 @@
         </ScriptModules>
         <ScriptTimes></ScriptTimes>
         <ScriptStates></ScriptStates>
-        <YOffsetPeriod Type="float32">0.1</YOffsetPeriod>
         <YOffsetAmplitude Type="float32">0.1</YOffsetAmplitude>
+        <YOffsetPeriod Type="float32">0.1</YOffsetPeriod>
       </Component>
     </Entity>
     <Entity Name="GameGUI" ID="124" Tag="0" Transient="false" Prototype="-16">
@@ -3900,12 +3900,21 @@
         <Layout>gui/game.layout</Layout>
       </Component>
     </Entity>
+    <Entity Name="MenuGUI" ID="125" Tag="0" Transient="false" Prototype="-513">
+      <Component Type="GUILayout">
+        <Callback>gui/menu.as</Callback>
+        <Scheme></Scheme>
+        <Visible>true</Visible>
+        <Layout></Layout>
+      </Component>
+    </Entity>
   </Entities>
   <Hierarchy>
     <Entity ID="20"></Entity>
     <Entity ID="19"></Entity>
     <Entity ID="1"></Entity>
     <Entity ID="124"></Entity>
+    <Entity ID="125"></Entity>
     <Entity ID="31">
       <Entity ID="30"></Entity>
       <Entity ID="100"></Entity>

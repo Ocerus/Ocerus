@@ -219,7 +219,10 @@ This class represents the current game. It is registered as a no-handle referenc
   \item bool HasDynamicProperty(const string \&in) const -- returns whether the specified dynamic property exists
   \item bool DeleteDynamicProperty(const string \&in) -- deletes the specified dynamic property
   \item bool LoadFromFile(const string \&in) -- loads the game from the specified file
+  \item void PauseAction() -- pauses the game action until resumed again
+  \item void ResumeAction() -- resumes the game action if paused
   \item bool SaveToFile(const string \&in) -- saves the game to the specified file
+  \item void Quit() -- quits the game
   \item T Get\_T(string \&in) -- gets a value of a dynamic property of a specific name and type T from PropertyTypes.h
   \item void Set\_T(string \&in, T) -- sets a value of a dynamic property of a specific name and type T from PropertyTypes.h
 \end{titled-itemize}

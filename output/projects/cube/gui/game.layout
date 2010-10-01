@@ -51,6 +51,14 @@
 			<Event Name="MouseClick" Function="OnStateButtonClicked"/>
 		</Window>  
 
+		<Window Type="Cube/ImageButton" Name="MenuButton">
+			<Property Name="UnifiedAreaRect" Value="{{1.0,-40},{1.0,-40},{1.0,0},{1.0,0}}" />
+			<Property Name="NormalImage" Value="set:Buttons image:MenuGreen"/>
+			<Property Name="HoverImage" Value="set:Buttons image:MenuRed"/>
+			<Property Name="PushedImage" Value="set:Buttons image:MenuRed"/>
+			<Event Name="MouseClick" Function="OnMenuButtonClicked"/>
+		</Window>  
+
 		<Window Type="Cube/ImageButton" Name="JumpButton">
 			<Property Name="UnifiedAreaRect" Value="{{0,54},{1,-52},{0,104},{1,-2}}" />
 			<Property Name="NormalImage" Value="set:Buttons image:JumpOn"/>

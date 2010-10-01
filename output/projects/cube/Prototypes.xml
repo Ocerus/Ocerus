@@ -2,6 +2,13 @@
 
 <Prototypes>
   <Entities>
+    <Entity Name="MenuGUI" ID="-513" Tag="0" Transient="false">
+      <Component Type="GUILayout">
+        <Callback>gui/menu.as</Callback>
+        <Scheme></Scheme>
+        <Layout>gui/menu.layout</Layout>
+      </Component>
+    </Entity>
     <Entity Name="Explosion" ID="-508" Tag="0" Transient="false">
       <Component Type="Transform">
         <Layer>0</Layer>
@@ -280,7 +287,6 @@
       <Component Type="GUILayout">
         <Callback>gui/game.as</Callback>
         <Scheme>gui/cube.scheme</Scheme>
-        <Visible>true</Visible>
         <Layout>gui/game.layout</Layout>
       </Component>
     </Entity>

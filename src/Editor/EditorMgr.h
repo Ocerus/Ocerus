@@ -166,6 +166,9 @@ namespace Editor
 		/// Restarts the edited game action to the initial (saved) state.
 		void RestartAction();
 
+		/// Returns true if the action was restarted and not resumed again yet.
+		bool WasActionRestarted();
+
 		/// Returns true if the input is locked to the game window.
 		bool IsLockedToGame() const;
 

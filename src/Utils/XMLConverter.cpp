@@ -50,5 +50,6 @@ template<>
 ResourceSystem::ResourcePtr XMLConverter::ReadFromXML(ResourceSystem::XMLNodeIterator& input)
 {
 	string name = input.GetChildValue<string>();
+	if (name.empty()) return 0;
 	return gResourceMgr.GetResource("Project", name);
 }

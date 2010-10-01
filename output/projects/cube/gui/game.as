@@ -123,3 +123,9 @@ void OnExplosionButtonClicked(Window@ wnd)
 {
 	TryExplode(gEntityMgr.FindFirstEntity("Player"));
 }
+
+void OnMenuButtonClicked(Window@ wnd)
+{
+	PauseGame();
+	gEntityMgr.FindFirstEntity("MenuGUI").Set_bool("Visible", true);
+}

@@ -977,6 +977,19 @@ Game& GetGame()
 	return GlobalProperties::Get<Core::Game>("Game");
 }
 
+void QuitGame(Game* self)
+{
+	if (gApp.IsEditMode())
+	{
+		gEditorMgr.RestartAction();
+		gEditorMgr.SwitchActionTool(Editor::EditorMgr::AT_RESTART);
+	}
+	else
+	{
+		gApp.Shutdown();
+	}
+}
+
 void RegisterScriptGame(asIScriptEngine* engine)
 {
 	int32 r;
@@ -989,6 +1002,9 @@ void RegisterScriptGame(asIScriptEngine* engine)
 	r = engine->RegisterObjectMethod("Game", "bool DeleteDynamicProperty(const string &in)", asMETHOD(Game, DeleteDynamicProperty), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("Game", "bool LoadFromFile(const string &in)", asMETHOD(Game, LoadFromFile), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("Game", "bool SaveToFile(const string &in) const", asMETHOD(Game, SaveToFile), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Game", "void PauseAction()", asMETHOD(Game, PauseAction), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Game", "void ResumeAction()", asMETHOD(Game, ResumeAction), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Game", "void Quit()", asFUNCTION(QuitGame), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
 
 	// Register function that returns it
 	r = engine->RegisterGlobalFunction("Game& get_game()", asFUNCTION(GetGame), asCALL_CDECL); OC_SCRIPT_ASSERT();
