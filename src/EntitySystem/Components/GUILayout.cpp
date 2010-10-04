@@ -31,6 +31,7 @@ void EntityComponents::GUILayout::ReloadWindow(void)
 				parentWindow->addChildWindow(mRootWindow);
 			}
 			mRootWindow->setVisible(mVisible);
+			mRootWindow->setEnabled(mEnabled); 
 			mRootWindow->setUserData(GetOwnerPtr());
 			mRootWindow->setUserString("RootWindow", "");
 		}
@@ -97,6 +98,7 @@ void EntityComponents::GUILayout::RegisterReflection()
 	RegisterProperty<ResourceSystem::ResourcePtr>("Scheme", &GUILayout::GetScheme, &GUILayout::SetScheme, PA_FULL_ACCESS, "Scheme used for defining the GUI.");
 	RegisterProperty<ResourceSystem::ResourcePtr>("Callback", &GUILayout::GetCallback, &GUILayout::SetCallback, PA_FULL_ACCESS, "Script module with functions used as a callback for GUI events.");
 	RegisterProperty<bool>("Visible", &GUILayout::GetVisible, &GUILayout::SetVisible, PA_FULL_ACCESS, "Whether the GUI layout is visible.");
+	RegisterProperty<bool>("Enabled", &GUILayout::GetEnabled, &GUILayout::SetEnabled, PA_FULL_ACCESS, "Whether the GUI layout reacts on an user input.");
 }
 
 void EntityComponents::GUILayout::SetLayout(ResourceSystem::ResourcePtr value)
@@ -150,5 +152,14 @@ void EntityComponents::GUILayout::SetVisible(bool value)
 	{
 		mRootWindow->setVisible(mVisible);
 		mRootWindow->moveToFront();
+	}
+}
+
+void EntityComponents::GUILayout::SetEnabled(bool value)
+{ 
+	mEnabled = value;
+	if (mRootWindow)
+	{
+		mRootWindow->setEnabled(mEnabled);
 	}
 }

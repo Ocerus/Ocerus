@@ -2,12 +2,13 @@
 
 void OnPostInit()
 {
-	gEntityMgr.FindFirstEntity("MenuGUI").Set_bool("Visible", false);
+	this.Set_bool("Visible", false);
 }
 
 void OnContinueClicked(Window@ wnd)
 {
-	gEntityMgr.FindFirstEntity("MenuGUI").Set_bool("Visible", false);
+	this.Set_bool("Visible", false);
+	gEntityMgr.FindFirstEntity("GameGUI").Set_bool("Enabled", true);
 	ResumeGame();
 }
 

@@ -20,14 +20,16 @@ bool ScriptCallback::operator()(const CEGUI::EventArgs &args) const
 	while (rootWindow != 0 && !rootWindow->isUserStringDefined("RootWindow")) rootWindow = rootWindow->getParent();
 
 	string module = "GuiCallback.as";
+	EntitySystem::EntityHandle* handle = 0;
 	if (rootWindow)
 	{
-		EntitySystem::EntityHandle* handle = (EntitySystem::EntityHandle*)rootWindow->getUserData();
+		handle = (EntitySystem::EntityHandle*)rootWindow->getUserData();
 		if (handle != 0 && handle->Exists())
 		{
 			EntitySystem::ComponentID cmpId = gEntityMgr.GetEntityComponent(*handle, EntitySystem::CT_GUILayout);
 			if (cmpId != -1)
 			{
+				// if (!handle->GetComponentProperty(cmpId, "Enabled").GetValue<bool>()) return false;
 				ResourceSystem::ResourcePtr resource = handle->GetComponentProperty(cmpId, "Callback").GetValue<ResourceSystem::ResourcePtr>();
 				if (resource)
 				{
@@ -44,6 +46,7 @@ bool ScriptCallback::operator()(const CEGUI::EventArgs &args) const
 	AngelScript::asIScriptContext* ctx = gScriptMgr.PrepareContext(funcId);
 	if (ctx == 0) return false;
 
+	if (handle) ctx->SetUserData(handle);
 	ctx->SetArgObject(0, argument ? argument->window : 0);
 	gScriptMgr.ExecuteContext(ctx, 1000);
 	ctx->Release();

@@ -49,12 +49,19 @@ namespace EntityComponents
 		/// Sets whether the GUI layout is visible.
 		void SetVisible(bool value);
 
+		/// Returns whether the GUI layout is enabled.
+		bool GetEnabled(void) const { return mEnabled; }
+
+		/// Sets whether the GUI layout is enabled.
+		void SetEnabled(bool value);
+
 	private:
 
 		ResourceSystem::ResourcePtr mLayout;
 		ResourceSystem::ResourcePtr mScheme;
 		ResourceSystem::ResourcePtr mCallback;
 		bool mVisible;
+		bool mEnabled;
 		
 		CEGUI::Window* mRootWindow;
 		bool mScriptUpdateError;
