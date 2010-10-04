@@ -112,8 +112,8 @@ namespace ResourceSystem
 		/// If the group can't be found, empty vector is returned.
 		void GetResourceGroup(const StringKey& group, vector<ResourcePtr>& output);
 
-		/// Retrieves all resources in given base path type.
-		void GetResources(vector<ResourcePtr>& output, eBasePathType basePathType);
+		/// Retrieves all resources in given path.
+		void GetResources(vector<ResourcePtr>& output, eBasePathType basePathType, const string& path = "", bool recursive = true);
 
 		/// Changes the type of the resource to a new one. Returns pointer to the new resource.
 		ResourcePtr ChangeResourceType(ResourcePtr resPointer, eResourceType newType);

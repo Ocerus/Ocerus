@@ -1,10 +1,5 @@
 #include "GameControl.as"
 
-void OnPostInit()
-{
-	this.Set_bool("Visible", false);
-}
-
 void OnContinueClicked(Window@ wnd)
 {
 	this.Set_bool("Visible", false);

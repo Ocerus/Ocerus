@@ -39,8 +39,11 @@ namespace StringSystem
 		/// and ISO 3166-1 alpha-2 codes (http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
 		bool LoadLanguagePack(const string& lang = "", const string& country = "");
 		
-		/// Reloads all strings for a current language.
-		bool Refresh();
+		/// Reloads all strings for a current language if neccessary.
+		bool Update();
+
+		/// Reloads all strings for a current language in next call of Refresh.
+		void NeedsUpdate() { mNeedsUpdate = true; }
 		
 		/// Unloads all data of the manager.
 		bool UnloadData(void);
@@ -97,8 +100,8 @@ namespace StringSystem
 		/// Type of a base path which the ResourceMgr is called with.
 		ResourceSystem::eBasePathType mBasePathType;
 		
-		/// Whether the string manager is being updated.
-		bool mUpdating;
+		/// Whether the string manager needs an update.
+		bool mNeedsUpdate;
 		
 		/// Returns string representation of a type of this manager instance.
 		string GetNameOfManager();
@@ -108,9 +111,6 @@ namespace StringSystem
 		
 		/// The project string manager.
 		static StringMgr* msProject;
-		
-		/// The name of the used resource group.
-		static const string ResourceGroup;
 	};
 }
 

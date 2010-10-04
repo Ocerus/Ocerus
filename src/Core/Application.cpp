@@ -9,6 +9,7 @@
 #include "GfxSystem/GfxWindow.h"
 #include "GUISystem/ViewportWindow.h"
 #include "ScriptSystem/ScriptResource.h"
+#include "StringSystem/StringMgr.h"
 #include "StringSystem/TextResource.h"
 #include "Editor/EditorMgr.h"
 #include "EntitySystem/EntityMgr/LayerMgr.h"
@@ -186,6 +187,19 @@ void Application::RunMainLoop()
 				refreshWindow = true;
 			if (gResourceMgr.CheckForResourcesUpdates())
 				refreshWindow = true;
+
+			// refresh strings
+			gStringMgrSystem.Update();
+			if (gStringMgrProject.Update())
+			{
+				// refresh project GUI layout
+				EntitySystem::EntityList entities;
+				gEntityMgr.GetEntitiesWithComponent(entities, EntitySystem::CT_GUILayout);
+				for (EntitySystem::EntityList::const_iterator it = entities.begin(); it != entities.end(); ++it)
+				{
+					gEntityMgr.PostMessage(*it, EntitySystem::EntityMessage::RESOURCE_UPDATE);
+				}
+			}
 
 			if (refreshWindow)
 				gEditorMgr.UpdateResourceWindow();

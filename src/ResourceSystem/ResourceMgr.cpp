@@ -415,7 +415,7 @@ void ResourceMgr::GetResourceGroup(const StringKey& group, vector<ResourcePtr>& 
 	return;
 }
 
-void ResourceMgr::GetResources(vector<ResourcePtr>& output, eBasePathType basePathType)
+void ResourceMgr::GetResources(vector<ResourcePtr>& output, eBasePathType basePathType, const string& path, bool recursive)
 {
 	for (ResourceGroupMap::const_iterator gi = mResourceGroups.begin(); gi != mResourceGroups.end(); ++gi)
 	{
@@ -424,7 +424,12 @@ void ResourceMgr::GetResources(vector<ResourcePtr>& output, eBasePathType basePa
 		for (ResourceMap::const_iterator ri = resmap.begin(); ri != resmap.end(); ri++)
 		{
 			if (ri->second->GetBasePathType() == basePathType)
-				output.push_back(ri->second);
+			{
+				string resourceName = ri->second->GetName();
+				if ((path.empty() || resourceName.find(path) == 0) && 
+					(recursive || resourceName.find('/', path.length()) == string::npos))
+					output.push_back(ri->second);
+			}
 		}
 	}
 }
