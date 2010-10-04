@@ -29,7 +29,6 @@ bool ScriptCallback::operator()(const CEGUI::EventArgs &args) const
 			EntitySystem::ComponentID cmpId = gEntityMgr.GetEntityComponent(*handle, EntitySystem::CT_GUILayout);
 			if (cmpId != -1)
 			{
-				// if (!handle->GetComponentProperty(cmpId, "Enabled").GetValue<bool>()) return false;
 				ResourceSystem::ResourcePtr resource = handle->GetComponentProperty(cmpId, "Callback").GetValue<ResourceSystem::ResourcePtr>();
 				if (resource)
 				{

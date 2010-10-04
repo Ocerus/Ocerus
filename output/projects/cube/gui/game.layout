@@ -48,6 +48,7 @@
 			<Property Name="NormalImage" Value="set:Buttons image:CubeLight"/>
 			<Property Name="HoverImage" Value="set:Buttons image:CubeLight"/>
 			<Property Name="PushedImage" Value="set:Buttons image:CubeLight"/>
+			<Property Name="DisabledImage" Value="set:Buttons image:CubeLight"/>
 			<Event Name="MouseClick" Function="OnStateButtonClicked"/>
 		</Window>  
 
@@ -56,6 +57,7 @@
 			<Property Name="NormalImage" Value="set:Buttons image:MenuGreen"/>
 			<Property Name="HoverImage" Value="set:Buttons image:MenuRed"/>
 			<Property Name="PushedImage" Value="set:Buttons image:MenuRed"/>
+			<Property Name="DisabledImage" Value="set:Buttons image:MenuRed"/>
 			<Event Name="MouseClick" Function="OnMenuButtonClicked"/>
 		</Window>  
 
@@ -64,6 +66,7 @@
 			<Property Name="NormalImage" Value="set:Buttons image:JumpOn"/>
 			<Property Name="HoverImage" Value="set:Buttons image:JumpHover"/>
 			<Property Name="PushedImage" Value="set:Buttons image:JumpOff"/>
+			<Property Name="DisabledImage" Value="set:Buttons image:JumpOff"/>
 			<Event Name="MouseClick" Function="OnJumpButtonClicked"/>
 
 	    <Window Type="Cube/StaticText" Name="JumpCooldown" >
@@ -82,6 +85,7 @@
 			<Property Name="NormalImage" Value="set:Buttons image:ExplosionOn"/>
 			<Property Name="HoverImage" Value="set:Buttons image:ExplosionHover"/>
 			<Property Name="PushedImage" Value="set:Buttons image:ExplosionOff"/>
+			<Property Name="DisabledImage" Value="set:Buttons image:ExplosionOff"/>
 			<Event Name="MouseClick" Function="OnExplosionButtonClicked"/>
 
 	    <Window Type="Cube/StaticText" Name="ExplosionCooldown" >

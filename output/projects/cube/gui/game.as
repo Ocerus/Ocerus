@@ -75,6 +75,7 @@ void SetButtonSingleImage(string button, string image)
 	wnd.SetProperty("NormalImage", "set:Buttons image:" + image);
 	wnd.SetProperty("HoverImage", "set:Buttons image:" + image);
 	wnd.SetProperty("PushedImage", "set:Buttons image:" + image);
+	wnd.SetProperty("DisabledImage", "set:Buttons image:" + image);	
 }
 
 void SetButtonAllImages(string button, string image)
@@ -83,6 +84,7 @@ void SetButtonAllImages(string button, string image)
 	wnd.SetProperty("NormalImage", "set:Buttons image:" + image + "On");
 	wnd.SetProperty("HoverImage", "set:Buttons image:" + image + "Hover");
 	wnd.SetProperty("PushedImage", "set:Buttons image:" + image + "Off");
+	wnd.SetProperty("DisabledImage", "set:Buttons image:" + image + "Off");
 }
 
 void LevelTitleAnimation(float32 delta)
