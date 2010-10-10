@@ -263,6 +263,8 @@ class ScriptArray
 public:
 	inline ScriptArray(Utils::Array<T>* array = 0) : mArray(array) {}
 
+	~ScriptArray() {}
+
 	// Read accessor to an array item.
 	inline T operator[](const int32 index) const
 	{

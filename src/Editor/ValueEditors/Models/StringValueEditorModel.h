@@ -69,6 +69,9 @@ namespace Editor
 	private:
 		WrappedModel* mWrappedModel;
 	};
+
+       template<>
+       string StringValueEditorModel<ResourceSystem::ResourcePtr>::GetValue() const;
 }
 
 #endif // _EDITOR_STRINGVALUEEDITORMODEL_H_
