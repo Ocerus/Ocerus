@@ -92,7 +92,7 @@ void Editor::TwoDimEditor::InitWidget()
 	CEGUI::String editorName = "Editor/EntityWindow/ValueEditors/TwoDimEditor" + Utils::StringConverter::ToString(editorCounter++);
 
 	// Create main editor widget
-	mEditorWidget = gGUIMgr.CreateWindowDirectly("DefaultWindow", editorName);
+	mEditorWidget = gGUIMgr.CreateWindow("DefaultWindow", editorName);
 	mEditorWidget->setHeight(cegui_absdim(2 * GetEditboxHeight() + 5));
 
 	// Create label widget
@@ -110,9 +110,9 @@ void Editor::TwoDimEditor::InitWidget()
 	mEditorWidget->addChildWindow(labelWidgetY);
 
 	// Create editbox widget
-	CEGUI::Window* editbox1Widget = gGUIMgr.CreateWindowDirectly("Editor/Editbox", editorName + "/Editbox1");
+	CEGUI::Window* editbox1Widget = gGUIMgr.CreateWindow("Editor/Editbox", editorName + "/Editbox1");
 	mEditorWidget->addChildWindow(editbox1Widget);
-	CEGUI::Window* editbox2Widget = gGUIMgr.CreateWindowDirectly("Editor/Editbox", editorName + "/Editbox2");
+	CEGUI::Window* editbox2Widget = gGUIMgr.CreateWindow("Editor/Editbox", editorName + "/Editbox2");
 	mEditorWidget->addChildWindow(editbox2Widget);
 
 	editbox1Widget->subscribeEvent(CEGUI::Editbox::EventActivated, CEGUI::Event::Subscriber(&TwoDimEditor::OnEventActivated, this));
@@ -140,7 +140,7 @@ void Editor::TwoDimEditor::InitWidget()
 
 void Editor::TwoDimEditor::DeinitWidget()
 {
-	gGUIMgr.DestroyWindowDirectly(mEditorWidget);
+	gGUIMgr.DestroyWindow(mEditorWidget);
 	mEditorWidget = 0;
 }
 

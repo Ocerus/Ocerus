@@ -55,7 +55,7 @@ void BoolEditor::InitWidget()
 	CEGUI::String editorName = "Editor/EntityWindow/ValueEditors/BoolEditor" + Utils::StringConverter::ToString(editorCounter++);
 	
 	// Create main editor widget
-	mEditorWidget = gGUIMgr.CreateWindowDirectly("DefaultWindow", editorName);
+	mEditorWidget = gGUIMgr.CreateWindow("DefaultWindow", editorName);
 	mEditorWidget->setHeight(CEGUI::UDim(0, GetEditboxHeight()));
 
 	// Create label widget
@@ -63,12 +63,12 @@ void BoolEditor::InitWidget()
 	mEditorWidget->addChildWindow(labelWidget);
 
 	// Create editbox widget
-	mCheckboxWidget = static_cast<CEGUI::Checkbox*>(gGUIMgr.CreateWindowDirectly("Editor/Checkbox", editorName + "/Checkbox"));
+	mCheckboxWidget = static_cast<CEGUI::Checkbox*>(gGUIMgr.CreateWindow("Editor/Checkbox", editorName + "/Checkbox"));
 	mCheckboxWidget->subscribeEvent(CEGUI::Checkbox::EventCheckStateChanged, CEGUI::Event::Subscriber(&BoolEditor::OnEventCheckStateChanged, this));
 	mEditorWidget->addChildWindow(mCheckboxWidget);
 
 	// Create remove button widget
-	CEGUI::Window* removeButton = gGUIMgr.CreateWindowDirectly("Editor/Button", editorName + "/RemoveButton");
+	CEGUI::Window* removeButton = gGUIMgr.CreateWindow("Editor/Button", editorName + "/RemoveButton");
 	removeButton->setText(TR("entity_editor_remove"));
 	removeButton->setSize(CEGUI::UVector2(CEGUI::UDim(0, GetEditboxHeight()), CEGUI::UDim(0, GetEditboxHeight())));
 	removeButton->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&BoolEditor::OnRemoveButtonClicked, this));
@@ -87,7 +87,7 @@ void BoolEditor::InitWidget()
 
 void BoolEditor::DeinitWidget()
 {
-	gGUIMgr.DestroyWindowDirectly(mEditorWidget);
+	gGUIMgr.DestroyWindow(mEditorWidget);
 	mEditorWidget = 0;
 }
 

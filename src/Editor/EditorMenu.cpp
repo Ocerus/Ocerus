@@ -2,23 +2,17 @@
 
 #include "Editor/EditorMenu.h"
 #include "Editor/EditorMgr.h"
-#include "Editor/HierarchyWindow.h"
 #include "Core/Application.h"
 #include "Core/Project.h"
-#include "Core/Game.h"
 #include "GUISystem/CEGUICommon.h"
-#include "GUISystem/FolderSelector.h"
-#include "GUISystem/MessageBox.h"
 
 using namespace Editor;
 
-namespace Editor
+Editor::EditorMenu::EditorMenu()
 {
-	const string menubarPrefix = "EditorRoot/Menubar";
-	const string toolbarPrefix = "EditorRoot/Toolbar";
 }
 
-Editor::EditorMenu::EditorMenu()
+EditorMenu::~EditorMenu()
 {
 }
 
@@ -26,43 +20,22 @@ void Editor::EditorMenu::Init()
 {
 	CEGUI_TRY;
 	{
-		CEGUI::Window* menubar = gGUIMgr.GetWindow(menubarPrefix);
-		InitComponentMenu();
-		ConfigureMenu(menubar);
-		UpdateSceneMenu();
-		menubar->subscribeEvent(CEGUI::Window::EventDeactivated, CEGUI::Event::Subscriber(&Editor::EditorMenu::OnMouseLeavesMenuItem, this));
-
-		CEGUI::Window* toolbar = gGUIMgr.GetWindow(toolbarPrefix);
-		ConfigureToolbar(toolbar);
+		mTopMenu = static_cast<CEGUI::PopupMenu*>(gGUIMgr.GetWindow("Editor/TopMenu"));
+		InitMenu();
+		InitToolbar();
+		mTopMenu->subscribeEvent(CEGUI::Window::EventDeactivated, CEGUI::Event::Subscriber(&Editor::EditorMenu::OnTopMenuDeactivated, this));
 	}
 	CEGUI_CATCH_CRITICAL;
 }
 
-bool Editor::EditorMenu::OnMouseEntersMenuItem(const CEGUI::EventArgs& )
+bool Editor::EditorMenu::OnTopMenuDeactivated(const CEGUI::EventArgs& e)
 {
-	return true;
-}
-
-bool Editor::EditorMenu::OnMouseLeavesMenuItem(const CEGUI::EventArgs& e)
-{
-	// Close a menu
-	const CEGUI::WindowEventArgs& we = static_cast<const CEGUI::WindowEventArgs&>(e);
-	
-	CEGUI::Window* menubar = we.window;
-	while(menubar)
+	OC_UNUSED(e);
+	CEGUI::MenuItem* popupMenu = mTopMenu->getPopupMenuItem();
+	if(popupMenu)
 	{
-		if( menubar->testClassName("Menubar") )
-		{
-			// We found the root; a menu bar
-			CEGUI::MenuItem* popupMenu = static_cast<CEGUI::Menubar*>(menubar)->getPopupMenuItem();
-			if(popupMenu)
-			{
-				// This does not close sub-popup menus, only the current one
-				popupMenu->closePopupMenu();
-			}
-			break;
-		}
-		menubar = menubar->getParent();
+		// This does not close sub-popup menus, only the current one
+		popupMenu->closePopupMenu();
 	}
 	return true;
 }
@@ -71,294 +44,119 @@ bool Editor::EditorMenu::OnMouseLeavesMenuItem(const CEGUI::EventArgs& e)
 bool Editor::EditorMenu::OnMenuItemClicked(const CEGUI::EventArgs& e)
 {
 	const CEGUI::WindowEventArgs& args = static_cast<const CEGUI::WindowEventArgs&>(e);
-	const CEGUI::String& itemName = args.window->getName();
-	const string itemNameStr = itemName.c_str();
+	CEGUI::Window* menuItem = args.window;
+	CEGUI::Window* submenu = menuItem->getParent();
 
-	/// ---- File menu ----
-	if (itemName == menubarPrefix + "/File")
+	if (submenu == mComponentsSubmenu)
 	{
-		return true;
+		// New component
+		EntitySystem::eComponentType componentType = (EntitySystem::eComponentType)args.window->getID();
+		gEditorMgr.AddComponentToSelectedEntity(componentType);
 	}
-
-	if (itemName == menubarPrefix + "/File/CreateProject")
+	else if (submenu == mOpenSceneSubmenu)
 	{
-		gEditorMgr.ShowCreateProjectDialog();
-		return true;
+		// Open scene
+		uint32 sceneIndex = args.window->getID();
+		gEditorMgr.Reset();
+		gEditorMgr.GetCurrentProject()->OpenSceneAtIndex(sceneIndex);
 	}
-
-	if (itemName == menubarPrefix + "/File/OpenProject")
+	else
 	{
-		gEditorMgr.ShowOpenProjectDialog();
-		return true;
-	}
-
-	if (itemName == menubarPrefix + "/File/DeployProject")
-	{
-		return true;
-	}
-
-	if (itemName == menubarPrefix + "/File/CloseProject")
-	{
-		gEditorMgr.CloseProject();
-		return true;
-	}
-
-	if (itemName == menubarPrefix + "/File/Quit")
-	{
-		gEditorMgr.ShowQuitDialog();
-		return true;
-	}
-
-	/// ---- Scene menu ----
-	if (itemName == menubarPrefix + "/Scene")
-	{
-		return true;
-	}
-
-	if (itemName == menubarPrefix + "/Scene/NewScene")
-	{
-		gEditorMgr.ShowNewSceneDialog();
-		return true;
-	}
-
-	if (itemName == menubarPrefix + "/Scene/OpenScene")
-	{
-		return true;
-	}
-
-	/// Open scene
-	{
-		if (args.window->isUserStringDefined("IsSceneItem"))
+		switch (menuItem->getID())
 		{
-			uint32 sceneIndex = args.window->getID();
-			gEditorMgr.Reset();
-			gEditorMgr.GetCurrentProject()->OpenSceneAtIndex(sceneIndex);
-			return true;
+		case MI_FILE_CREATEPROJECT:
+			gEditorMgr.ShowCreateProjectDialog();
+			break;
+		case MI_FILE_OPENPROJECT:
+			gEditorMgr.ShowOpenProjectDialog();
+			break;
+		case MI_FILE_CLOSEPROJECT:
+			gEditorMgr.CloseProject();
+			break;
+		case MI_FILE_QUIT:
+			gEditorMgr.ShowQuitDialog();
+			break;
+		case MI_SCENE_NEW:
+			gEditorMgr.ShowNewSceneDialog();
+			break;
+		case MI_SCENE_SAVE:
+			gEditorMgr.SaveOpenedScene();
+			break;
+		case MI_SCENE_CLOSE:
+			if (gEditorMgr.GetCurrentProject()->IsSceneOpened())
+			{
+				gEditorMgr.GetCurrentProject()->CloseOpenedScene();
+			}
+			break;
+		case MI_EDIT_NEWENTITY:
+			gEditorMgr.ShowCreateEntityPrompt();
+			break;
+		case MI_EDIT_DUPLICATEENTITY:
+			gEditorMgr.DuplicateSelectedEntity();
+			break;
+		case MI_EDIT_DUPLICATESELECTEDENTITIES:
+			gEditorMgr.DuplicateSelectedEntities();
+			break;
+		case MI_EDIT_DELETEENTITY:
+			gEditorMgr.DeleteSelectedEntity();
+			break;
+		case MI_EDIT_DELETESELECTEDENTITIES:
+			gEditorMgr.DeleteSelectedEntities();
+			break;
+		case MI_EDIT_CREATEPROTOTYPE:
+			gEditorMgr.CreatePrototypeFromSelectedEntity();
+			break;
+		case MI_HELP_USERDOCUMENTATION:
+			gApp.OpenPDF("data/docs/Documentation.pdf");
+			break;
+		case MI_HELP_SHORTCUTS:
+			gApp.OpenPDF("data/docs/Shortcuts.pdf");
+			break;
+		case MI_HELP_ABOUT:
+			GUISystem::ShowMessageBox(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup,
+																   "about_message_text"));
+			break;
+		default:
+			break;
 		}
+		
 	}
-
-	if (itemName == menubarPrefix + "/Scene/SaveScene")
-	{
-		gEditorMgr.SaveOpenedScene();
-		return true;			
-	}
-
-	if (itemName == menubarPrefix + "/Scene/CloseScene")
-	{
-		if (gEditorMgr.GetCurrentProject()->IsSceneOpened())
-		{
-			gEditorMgr.GetCurrentProject()->CloseOpenedScene();
-		}
-		return true;			
-	}
-
-	/// ---- Edit menu ----
-	if (itemName == menubarPrefix + "/Edit")
-	{
-		return true;
-	}
-
-	if (itemName == menubarPrefix + "/Edit/NewEntity")
-	{
-		gEditorMgr.ShowCreateEntityPrompt();
-		return true;
-	}
-
-	if (itemName == menubarPrefix + "/Edit/NewComponent")
-	{
-		return true;
-	}
-
-	// New component
-	{
-		if (args.window->isUserStringDefined("IsComponentItem"))
-		{
-			gEditorMgr.AddComponentToSelectedEntity((EntitySystem::eComponentType)args.window->getID());
-			return true;
-		}
-	}
-
-	if (itemName == menubarPrefix + "/Edit/DuplicateEntity")
-	{
-		gEditorMgr.DuplicateSelectedEntity();
-		return true;
-	}
-	
-	if (itemName == menubarPrefix + "/Edit/DuplicateSelectedEntities")
-	{
-		gEditorMgr.DuplicateSelectedEntities();
-		return true;
-	}
-
-	if (itemName == menubarPrefix + "/Edit/DeleteEntity")
-	{
-		gEditorMgr.DeleteSelectedEntity();
-		return true;
-	}
-
-	if (itemName == menubarPrefix + "/Edit/DeleteSelectedEntities")
-	{
-		gEditorMgr.DeleteSelectedEntities();
-		return true;
-	}
-
-	if (itemName == menubarPrefix + "/Edit/CreatePrototype")
-	{
-		gEditorMgr.CreatePrototypeFromSelectedEntity();
-		return true;
-	}
-
-	/// ---- Help ----
-	if (itemName == menubarPrefix + "/Help")
-	{
-		return true;
-	}
-
-	if (itemName == menubarPrefix + "/Help/UserDocumentation")
-	{
-		gApp.OpenPDF("data/docs/Documentation.pdf");
-		return true;
-	}
-
-	if (itemName == menubarPrefix + "/Help/Shortcuts")
-	{
-		gApp.OpenPDF("data/docs/Shortcuts.pdf");
-		return true;
-	}
-
-	if (itemName == menubarPrefix + "/Help/About")
-	{
-		GUISystem::ShowMessageBox(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "about_message_text"));
-		return true;
-	}
-
-
-	ocWarning << "MenuItem " << itemName << " clicked, but no action defined.";
 	return true;
 }
 
 bool Editor::EditorMenu::OnToolbarButtonStateChanged(const CEGUI::EventArgs& e)
 {
 	const CEGUI::WindowEventArgs& args = static_cast<const CEGUI::WindowEventArgs&>(e);
-	const CEGUI::String& buttonName = args.window->getName();
 	CEGUI::RadioButton* button = static_cast<CEGUI::RadioButton*>(args.window);
-
 	if (!button->isSelected()) return false;
-
-	ocDebug << "Toolbar button " << buttonName << " clicked.";
-
-	/// ---- Resume action ----
-	if (buttonName == toolbarPrefix + "/ResumeAction")
+	CEGUI::RadioButton* radioButton = static_cast<CEGUI::RadioButton*>(args.window);
+	
+	if (radioButton->getGroupID() == TG_ACTION_TOOLS)
 	{
-		gEditorMgr.ResumeAction();
-		return true;
-	}
-
-	/// ---- Pause action ----
-	if (buttonName == toolbarPrefix + "/PauseAction")
-	{
-		if (!GlobalProperties::Get<Core::Game>("Game").IsActionRunning())
+		switch ((EditorMgr::eActionTool)radioButton->getID())
 		{
-			gEditorMgr.SwitchActionTool(Editor::EditorMgr::AT_RESTART);
+		case EditorMgr::AT_RUN:
+			gEditorMgr.ResumeAction();
+			return true;
+		case EditorMgr::AT_PAUSE:
+			if (!gEditorMgr.IsActionRunning())
+			{
+				gEditorMgr.SwitchActionTool(Editor::EditorMgr::AT_RESTART);
+				return true;
+			}
+			gEditorMgr.PauseAction();
+			return true;
+		case EditorMgr::AT_RESTART:
+			gEditorMgr.RestartAction();
 			return true;
 		}
-
-		gEditorMgr.PauseAction();
-		return true;
 	}
-
-	/// ---- Restart action ----
-	if (buttonName == toolbarPrefix + "/RestartAction")
+	else if (radioButton->getGroupID() == TG_EDIT_TOOLS)
 	{
-		gEditorMgr.RestartAction();
+		gEditorMgr.SetCurrentEditTool((EditorMgr::eEditTool)radioButton->getID());
 		return true;
 	}
-
-	/// ---- Edit tool move ----
-	if (buttonName == toolbarPrefix + "/EditToolMove")
-	{
-		gEditorMgr.SetCurrentEditTool(EditorMgr::ET_MOVE);
-		return true;
-	}
-
-	/// ---- Edit tool rotate ----
-	if (buttonName == toolbarPrefix + "/EditToolRotateZ")
-	{
-		gEditorMgr.SetCurrentEditTool(EditorMgr::ET_ROTATE);
-		return true;
-	}
-
-	/// ---- Edit tool rotate-y ----
-	if (buttonName == toolbarPrefix + "/EditToolRotateY")
-	{
-		gEditorMgr.SetCurrentEditTool(EditorMgr::ET_ROTATE_Y);
-		return true;
-	}
-
-	/// ---- Edit tool scale ----
-	if (buttonName == toolbarPrefix + "/EditToolScale")
-	{
-		gEditorMgr.SetCurrentEditTool(EditorMgr::ET_SCALE);
-		return true;
-	}
-
-	ocWarning << "Toolbar button " << buttonName << " clicked, but no action defined.";
 	return true;
-}
-
-void Editor::EditorMenu::OnMessageBoxClicked(GUISystem::MessageBox::eMessageBoxButton button, int32 t)
-{
-	eMessageBoxTags tag = (eMessageBoxTags)t;
-	switch(tag)
-	{
-	case MBT_QUIT:
-		if (button == GUISystem::MessageBox::MBB_YES)
-			gApp.Shutdown();
-		return;
-	}
-	ocWarning << "MessageBox with tag " << tag << " clicked, but no action defined.";
-}
-
-void Editor::EditorMenu::OnFolderSelected(const string& path, const string& editboxValue, bool canceled, int32 t)
-{
-	if (canceled) return;
-	eFolderSelectorTags tag = (eFolderSelectorTags)t;
-	switch(tag)
-	{
-	case FST_CREATEPROJECT:
-		gEditorMgr.Reset();
-		gEditorMgr.CreateProject(path + '/' + editboxValue);
-		return;
-	case FST_OPENPROJECT:
-		gEditorMgr.Reset();
-		gEditorMgr.OpenProject(path);
-		return;
-	case FST_NEWSCENE:
-		gEditorMgr.Reset();
-		gEditorMgr.CreateScene(path + '/' + editboxValue, editboxValue);
-		return;
-	}
-	ocWarning << "Folder through FolderSelector with tag " << tag << " selected, but no action defined.";
-}
-
-
-
-void Editor::EditorMenu::InitComponentMenu()
-{
-	CEGUI_TRY;
-	{
-		CEGUI::Window* addComponentMenu = gGUIMgr.GetWindow(menubarPrefix + "/Edit/NewComponent/AutoPopup");
-		for (int32 i = 0; i < EntitySystem::NUM_COMPONENT_TYPES; ++i)
-		{
-			const string& componentName = EntitySystem::GetComponentTypeName((EntitySystem::eComponentType)i);
-			CEGUI::Window* componentMenuItem = gGUIMgr.CreateWindow("Editor/MenuItem");
-			componentMenuItem->setUserString("IsComponentItem", "True");
-			componentMenuItem->setID(i);
-			componentMenuItem->setText(componentName);
-			addComponentMenu->addChildWindow(componentMenuItem);
-		}
-	}
-	CEGUI_CATCH;
 }
 
 void EditorMenu::UpdateSceneMenu()
@@ -368,22 +166,16 @@ void EditorMenu::UpdateSceneMenu()
 		Core::SceneInfoList scenes;
 		gEditorMgr.GetCurrentProject()->GetSceneList(scenes);
 
-		CEGUI::Window* openSceneMenu = gGUIMgr.GetWindow(menubarPrefix + "/Scene/OpenScene/AutoPopup");
-		
-		for (int32 i = openSceneMenu->getChildCount() - 1; i >= 0; --i)
+		for (int32 i = mOpenSceneSubmenu->getChildCount() - 1; i >= 0; --i)
 		{
-			gGUIMgr.DestroyWindow(openSceneMenu->getChildAtIdx(i));
+			gGUIMgr.DestroyWindow(mOpenSceneSubmenu->getChildAtIdx(i));
 		}
 
 		for (Core::SceneInfoList::const_iterator it = scenes.begin(); it != scenes.end(); ++it)
 		{
-			CEGUI::Window* sceneMenuItem = gGUIMgr.CreateWindow("Editor/MenuItem");
-			sceneMenuItem->setUserString("IsSceneItem", "True");
-			sceneMenuItem->setText(it->name + " (" + it->filename + ")");
-			sceneMenuItem->setID(it - scenes.begin());
-			openSceneMenu->addChildWindow(sceneMenuItem);
+			int sceneID = it - scenes.begin();
+			mOpenSceneSubmenu->addChildWindow(CreateMenuItem("Editor/TopMenu/Scene/OpenScene/" + StringConverter::ToString(sceneID), it->name + " (" + it->filename + ")", "", sceneID));
 		}
-		ConfigureMenu(openSceneMenu);
 	}
 	CEGUI_CATCH;
 }
@@ -396,92 +188,26 @@ void EditorMenu::UpdateItemsEnabled()
 		bool sceneMenuEnabled = gEditorMgr.GetCurrentProject()->IsProjectOpened();
 
 		// Set enabled/disabled state to items in Edit menu
-		CEGUI::Window* editMenu = gGUIMgr.GetWindow(menubarPrefix + "/Edit/AutoPopup");
+		CEGUI::Window* editMenu = mTopMenu->getItemFromIndex(2)->getChildAtIdx(0);
 		for (size_t childIdx = 0, childCount = editMenu->getChildCount(); childIdx < childCount; childIdx++)
 		{
 			editMenu->getChildAtIdx(childIdx)->setEnabled(editMenuEnabled);
 		}
 
 		// Set enabled/disabled state to components in AddComponent submenu
-		CEGUI::Window* addComponentMenu = gGUIMgr.GetWindow(menubarPrefix + "/Edit/NewComponent/AutoPopup");
-		for (size_t childIdx = 0, childCount = addComponentMenu->getChildCount(); childIdx < childCount; childIdx++)
+		for (size_t childIdx = 0, childCount = mComponentsSubmenu->getChildCount(); childIdx < childCount; childIdx++)
 		{
-			addComponentMenu->getChildAtIdx(childIdx)->setEnabled(editMenuEnabled);
+			mComponentsSubmenu->getChildAtIdx(childIdx)->setEnabled(editMenuEnabled);
 		}
 
 		// Set enabled/disabled state to items in Scene menu
-		CEGUI::Window* sceneMenu = gGUIMgr.GetWindow(menubarPrefix + "/Scene/AutoPopup");
+		CEGUI::Window* sceneMenu = mTopMenu->getItemFromIndex(1)->getChildAtIdx(0);
 		for (size_t childIdx = 0, childCount = sceneMenu->getChildCount(); childIdx < childCount; childIdx++)
 		{
 			sceneMenu->getChildAtIdx(childIdx)->setEnabled(sceneMenuEnabled);
 		}
 	}
 	CEGUI_CATCH;
-}
-
-
-void Editor::EditorMenu::ConfigureMenu(CEGUI::Window* parent)
-{
-	size_t childCount = parent->getChildCount();
-	for(size_t childIdx = 0; childIdx < childCount; childIdx++)
-	{
-		if (parent->getChildAtIdx(childIdx)->testClassName("MenuItem")
-				|| parent->getChildAtIdx(childIdx)->testClassName("PopupMenu"))
-		{
-			parent->getChildAtIdx(childIdx)->subscribeEvent(CEGUI::MenuItem::EventMouseEnters,
-					CEGUI::Event::Subscriber(&Editor::EditorMenu::OnMouseEntersMenuItem, this));
-
-			if(parent->getChildAtIdx(childIdx)->testClassName("MenuItem"))
-			{
-				parent->getChildAtIdx(childIdx)->subscribeEvent(CEGUI::MenuItem::EventClicked,
-						CEGUI::Event::Subscriber(&Editor::EditorMenu::OnMenuItemClicked, this));
-			}
-		}
-		ConfigureMenu(parent->getChildAtIdx(childIdx));
-	}
-}
-
-void Editor::EditorMenu::ConfigureToolbar(CEGUI::Window* parent)
-{
-	size_t childCount = parent->getChildCount();
-	for(size_t childIdx = 0; childIdx < childCount; childIdx++)
-	{
-		CEGUI::Window* child = parent->getChildAtIdx(childIdx);
-		
-		if (child->testClassName("RadioButton"))
-		{
-			CEGUI::RadioButton* radioButton = static_cast<CEGUI::RadioButton*>(child);
-			const CEGUI::String& name = radioButton->getName();
-
-			// set radio button groups
-			if ((name == (toolbarPrefix + "/ResumeAction")) ||
-				(name == (toolbarPrefix + "/PauseAction")) ||
-				(name == (toolbarPrefix + "/RestartAction")) )
-			{
-				radioButton->setGroupID(0);
-				mActionButtons.push_back(radioButton);
-			}
-			else if ((name == (toolbarPrefix + "/EditToolMove")) ||
-					 (name == (toolbarPrefix + "/EditToolRotateZ")) ||
-					 (name == (toolbarPrefix + "/EditToolRotateY")) ||
-					 (name == (toolbarPrefix + "/EditToolScale")) )
-			{
-				radioButton->setGroupID(1);
-				mToolButtons.push_back(radioButton);
-			}
-
-			// initially selected radio buttons
-			if ((name == (toolbarPrefix + "/RestartAction")) ||
-				(name == (toolbarPrefix + "/EditToolMove")) )
-			{
-				radioButton->setSelected(true);
-			}
-
-			child->subscribeEvent(CEGUI::RadioButton::EventSelectStateChanged,
-					CEGUI::Event::Subscriber(&Editor::EditorMenu::OnToolbarButtonStateChanged, this));
-		}
-		ConfigureToolbar(child);
-	}
 }
 
 void Editor::EditorMenu::SwitchToolButton( uint32 selectedButtonIndex )
@@ -494,4 +220,126 @@ void Editor::EditorMenu::SwitchActionButton( uint32 selectedButtonIndex )
 {
 	OC_ASSERT_MSG(selectedButtonIndex < mActionButtons.size(), "Invalid tool button index");
 	mActionButtons[selectedButtonIndex]->setSelected(true);
+}
+
+void EditorMenu::InitMenu()
+{
+	// File submenu
+	CEGUI::Window* itemFile = CreateMenuItem("Editor/TopMenu/File", TR("file"), "", MI_INVALID);
+	mTopMenu->addChildWindow(itemFile);
+	CEGUI::Window* fileSubmenu = CreatePopupMenu("Editor/TopMenu/File/AutoPopup");
+	itemFile->addChildWindow(fileSubmenu);
+	fileSubmenu->addChildWindow(CreateMenuItem("Editor/TopMenu/File/CreateProject", TR("create_project"), TR("create_project_hint"), MI_FILE_CREATEPROJECT));
+	fileSubmenu->addChildWindow(CreateMenuItem("Editor/TopMenu/File/OpenProject", TR("open_project"), TR("open_project_hint"), MI_FILE_OPENPROJECT));
+	fileSubmenu->addChildWindow(CreateMenuItem("Editor/TopMenu/File/CloseProject", TR("close_project"), TR("close_project_hint"), MI_FILE_CLOSEPROJECT));
+	fileSubmenu->addChildWindow(CreateMenuItem("Editor/TopMenu/File/Quit", TR("quit"), TR("quit_hint"), MI_FILE_QUIT));
+
+	// Scene submenu
+	CEGUI::Window* itemScene = CreateMenuItem("Editor/TopMenu/Scene", TR("scene"), "", MI_INVALID);
+	mTopMenu->addChildWindow(itemScene);
+	CEGUI::Window* sceneSubmenu = CreatePopupMenu("Editor/TopMenu/Scene/AutoPopup");
+	itemScene->addChildWindow(sceneSubmenu);
+	sceneSubmenu->addChildWindow(CreateMenuItem("Editor/TopMenu/Scene/NewScene", TR("new_scene"), TR("new_scene_hint"), MI_SCENE_NEW));
+	CEGUI::Window* itemOpenScene = CreateMenuItem("Editor/TopMenu/Scene/OpenScene", TR("open_scene"), TR("open_scene_hint"), MI_INVALID);
+	sceneSubmenu->addChildWindow(itemOpenScene);
+	sceneSubmenu->addChildWindow(CreateMenuItem("Editor/TopMenu/Scene/SaveScene", TR("save_scene"), TR("save_scene_hint"), MI_SCENE_SAVE));
+	sceneSubmenu->addChildWindow(CreateMenuItem("Editor/TopMenu/Scene/CloseScene", TR("close_scene"), TR("close_scene_hint"), MI_SCENE_CLOSE));
+
+	// OpenScene submenu
+	mOpenSceneSubmenu = CreatePopupMenu("Editor/TopMenu/Scene/OpenScene/AutoPopup");
+	itemOpenScene->addChildWindow(mOpenSceneSubmenu);
+
+	// Edit submenu
+	CEGUI::Window* itemEdit = CreateMenuItem("Editor/TopMenu/Edit", TR("edit"), "", MI_INVALID);
+	mTopMenu->addChildWindow(itemEdit);
+	CEGUI::Window* editSubmenu = CreatePopupMenu("Editor/TopMenu/Edit/AutoPopup");
+	itemEdit->addChildWindow(editSubmenu);
+	editSubmenu->addChildWindow(CreateMenuItem("Editor/TopMenu/Edit/NewEntity", TR("new_entity"), TR("new_entity_hint"), MI_EDIT_NEWENTITY));
+	CEGUI::Window* itemNewComponent = CreateMenuItem("Editor/TopMenu/Edit/NewComponent", TR("new_component"), TR("new_component_hint"), MI_INVALID);
+	editSubmenu->addChildWindow(itemNewComponent);
+	editSubmenu->addChildWindow(CreateMenuItem("Editor/TopMenu/Edit/DuplicateEntity", TR("duplicate_entity"), TR("duplicate_entity_hint"), MI_EDIT_DUPLICATEENTITY));
+	editSubmenu->addChildWindow(CreateMenuItem("Editor/TopMenu/Edit/DuplicateSelectedEntities", TR("duplicate_selected_entities"), TR("duplicate_selected_entities_hint"), MI_EDIT_DUPLICATESELECTEDENTITIES));
+	editSubmenu->addChildWindow(CreateMenuItem("Editor/TopMenu/Edit/DeleteEntity", TR("delete_entity"), TR("delete_entity_hint"), MI_EDIT_DELETEENTITY));
+	editSubmenu->addChildWindow(CreateMenuItem("Editor/TopMenu/Edit/DeleteSelectedEntities", TR("delete_selected_entities"), TR("delete_selected_entities_hint"), MI_EDIT_DELETESELECTEDENTITIES));
+	editSubmenu->addChildWindow(CreateMenuItem("Editor/TopMenu/Edit/CreatePrototype", TR("create_prototype"), TR("create_prototype_hint"), MI_EDIT_CREATEPROTOTYPE));
+
+	// Components submenu
+	mComponentsSubmenu = CreatePopupMenu("Editor/TopMenu/Edit/NewComponent/AutoPopup");
+	itemNewComponent->addChildWindow(mComponentsSubmenu);
+	for (size_t i = 0; i < EntitySystem::NUM_COMPONENT_TYPES; ++i)
+	{
+		const string& componentName = EntitySystem::GetComponentTypeName((EntitySystem::eComponentType)i);
+		const CEGUI::String& componentMenuItemName = "Editor/TopMenu/Edit/NewComponent/Component" + Utils::StringConverter::ToString(i);
+		mComponentsSubmenu->addChildWindow(CreateMenuItem(componentMenuItemName, componentName, "", i));
+	}
+
+	// Help submenu
+	CEGUI::Window* itemHelp = CreateMenuItem("Editor/TopMenu/Help", TR("help"), "", MI_INVALID);
+	mTopMenu->addChildWindow(itemHelp);
+	CEGUI::Window* helpSubmenu = CreatePopupMenu("Editor/TopMenu/Help/AutoPopup");
+	itemHelp->addChildWindow(helpSubmenu);
+	helpSubmenu->addChildWindow(CreateMenuItem("Editor/TopMenu/Help/UserDocumentation", TR("user_documentation"), TR("user_documentation_hint"), MI_HELP_USERDOCUMENTATION));
+	helpSubmenu->addChildWindow(CreateMenuItem("Editor/TopMenu/Help/Shortcuts", TR("shortcuts"), TR("shortcuts"), MI_HELP_SHORTCUTS));
+	helpSubmenu->addChildWindow(CreateMenuItem("Editor/TopMenu/Help/About", TR("about"), TR("about_hint"), MI_HELP_ABOUT));
+}
+
+void EditorMenu::InitToolbar()
+{
+	CEGUI::Window* toolbar = gGUIMgr.GetWindow("Editor/TopMenu/Toolbar");
+
+	mActionButtons.push_back(CreateToolbarItem("Editor/TopMenu/Toolbar/ResumeAction", "btnResumeAction", TR("resume_action_hint"), EditorMgr::AT_RUN, TG_ACTION_TOOLS));
+	mActionButtons.push_back(CreateToolbarItem("Editor/TopMenu/Toolbar/PauseAction", "btnPauseAction", TR("pause_action_hint"), EditorMgr::AT_PAUSE, TG_ACTION_TOOLS));
+	mActionButtons.push_back(CreateToolbarItem("Editor/TopMenu/Toolbar/RestartAction", "btnRestartAction", TR("restart_action_hint"), EditorMgr::AT_RESTART, TG_ACTION_TOOLS));
+
+	mToolButtons.push_back(CreateToolbarItem("Editor/TopMenu/Toolbar/EditToolMove", "btnEditToolMove", TR("edit_tool_move_hint"), EditorMgr::ET_MOVE, TG_EDIT_TOOLS));
+	mToolButtons.push_back(CreateToolbarItem("Editor/TopMenu/Toolbar/EditToolRotateZ", "btnEditToolRotate", TR("edit_tool_rotate_hint"), EditorMgr::ET_ROTATE, TG_EDIT_TOOLS));
+	mToolButtons.push_back(CreateToolbarItem("Editor/TopMenu/Toolbar/EditToolRotateY", "btnEditToolRotateZ", TR("edit_tool_rotate_y_hint"), EditorMgr::ET_ROTATE_Y, TG_EDIT_TOOLS));
+	mToolButtons.push_back(CreateToolbarItem("Editor/TopMenu/Toolbar/EditToolScale", "btnEditToolScale", TR("edit_tool_scale_hint"), EditorMgr::ET_SCALE, TG_EDIT_TOOLS));
+
+	for (RadioButtonList::const_iterator it = mActionButtons.begin(); it != mActionButtons.end(); ++it)
+		toolbar->addChildWindow(*it);
+
+	for (RadioButtonList::const_iterator it = mToolButtons.begin(); it != mToolButtons.end(); ++it)
+		toolbar->addChildWindow(*it);
+
+	SwitchActionButton(EditorMgr::AT_RESTART);
+	SwitchToolButton(EditorMgr::ET_MOVE);
+}
+
+CEGUI::Window* Editor::EditorMenu::CreateMenuItem(const CEGUI::String& name, const CEGUI::String& text, const CEGUI::String& tooltip, size_t tag)
+{
+	CEGUI::Window* menuItem = gGUIMgr.CreateWindow("Editor/MenuItem", name);
+	menuItem->setID((CEGUI::uint)tag);
+	menuItem->setText(text);
+	menuItem->setTooltipText(tooltip);
+	menuItem->subscribeEvent(CEGUI::MenuItem::EventClicked, CEGUI::Event::Subscriber(&Editor::EditorMenu::OnMenuItemClicked, this));
+	return menuItem;
+}
+
+CEGUI::Window* Editor::EditorMenu::CreatePopupMenu(const CEGUI::String& name)
+{
+	CEGUI::PopupMenu* popupMenu = static_cast<CEGUI::PopupMenu*>(gGUIMgr.CreateWindow("Editor/PopupMenu", name));
+	popupMenu->setVisible(false);
+	popupMenu->setFadeInTime(0.1);
+	popupMenu->setFadeOutTime(0.1);
+	popupMenu->setItemSpacing(2);
+	popupMenu->setAutoResizeEnabled(true);
+	return popupMenu;
+}
+
+CEGUI::RadioButton* Editor::EditorMenu::CreateToolbarItem(const CEGUI::String& name, const CEGUI::String& imageName, const CEGUI::String& tooltip, size_t tag, size_t groupID)
+{
+	static uint32 left = 0;
+	CEGUI::RadioButton* toolbarItem = static_cast<CEGUI::RadioButton*>(gGUIMgr.CreateWindow("Editor/ToolbarRadioButton", name));
+	toolbarItem->setID((CEGUI::uint)tag);
+	toolbarItem->setGroupID(groupID);
+	toolbarItem->setProperty("NormalImage", "set:EditorToolbar image:" + imageName + "Normal");
+	toolbarItem->setProperty("HoverImage", "set:EditorToolbar image:" + imageName + "Hover");
+	toolbarItem->setProperty("PushedImage", "set:EditorToolbar image:" + imageName + "Pushed");
+	toolbarItem->setTooltipText(tooltip);
+	toolbarItem->setPosition(CEGUI::UVector2(cegui_absdim(left), cegui_absdim(0)));
+	toolbarItem->setSize(CEGUI::UVector2(cegui_absdim(16), cegui_reldim(1)));
+	toolbarItem->subscribeEvent(CEGUI::RadioButton::EventSelectStateChanged, CEGUI::Event::Subscriber(&Editor::EditorMenu::OnToolbarButtonStateChanged, this));
+	left += 20;
+	return toolbarItem;
 }

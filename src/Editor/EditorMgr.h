@@ -9,6 +9,7 @@
 #include "InputSystem/IInputListener.h"
 #include "EntitySystem/ComponentMgr/ComponentID.h"
 #include "EntitySystem/ComponentMgr/ComponentEnums.h"
+#include "GUISystem/MessageBox.h"
 #include "InputSystem/IInputListener.h"
 
 /// Macro for easier use.
@@ -166,6 +167,9 @@ namespace Editor
 		/// Restarts the edited game action to the initial (saved) state.
 		void RestartAction();
 
+		/// Returns true if action of the edited game is currently running.
+		bool IsActionRunning();
+
 		/// Returns true if the action was restarted and not resumed again yet.
 		bool WasActionRestarted();
 
@@ -287,7 +291,15 @@ namespace Editor
 		bool mIsInitialTime; ///< Whether the scene is in initial time (before the first call of ResumeAction or after the call of RestartAction).
 
 		// Callbacks
-		
+		enum eMessageBoxTags { MBT_QUIT };
+		enum eFolderSelectorTags { FST_CREATEPROJECT, FST_OPENPROJECT, FST_NEWSCENE };
+
+		/// MessageBox callback
+		void OnMessageBoxClicked(GUISystem::MessageBox::eMessageBoxButton button, int32 tag);
+
+		/// FolderSelector callback
+		void OnFolderSelected(const string& path, const string& editboxValue, bool canceled, int32 t);
+
 		/// Callback for creating a new entity.
 		void CreateEntityPromptCallback(bool clickedOK, const string& text, int32 parentID);
 

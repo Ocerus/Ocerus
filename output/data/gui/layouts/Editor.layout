@@ -4,6 +4,39 @@
 		<Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{1,0},{1,0}}"/>
 		<Property Name="HorizontalAlignment" Value="Centre"/>
 
+<!-- TopMenu and Toolbar window -->
+		<Window Type="Editor/Menubar" Name="Editor/TopMenu">
+			<Property Name="ItemSpacing" Value="10"/>
+			<Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{1,0},{0,24}}"/>
+
+			<Window Type="DefaultWindow" Name="Editor/TopMenu/Toolbar">
+				<Property Name="UnifiedAreaRect" Value="{{0.5,0},{0,4},{1,0},{0,20}}"/>
+			</Window>
+		</Window>
+
+<!-- Entity window -->
+		<Window Type="Editor/FrameWindow" Name="Editor/EntityWindow">
+			<Property Name="Text" Value="$entity_editor$"/>
+			<Property Name="SizingEnabled" Value="False"/>
+			<Property Name="TitlebarEnabled" Value="True"/>
+			<Property Name="UnifiedAreaRect" Value="{{0,0},{0,24},{0.2,0},{1,0}}"/>
+			<Property Name="DragMovingEnabled" Value="False"/>
+			<Property Name="CloseButtonEnabled" Value="False"/>
+			<Window Type="Editor/ScrollablePane" Name="Editor/EntityWindow/Scrollable">
+				<Property Name="ContentArea" Value="l:0 t:0 r:0 b:0"/>
+				<Property Name="HorzStepSize" Value="0.1"/>
+				<Property Name="VertStepSize" Value="0.1"/>
+				<Property Name="HorzOverlapSize" Value="0.01"/>
+				<Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{1,0},{1,0}}"/>
+				<Property Name="VertOverlapSize" Value="0.01"/>
+				<Property Name="HorzScrollPosition" Value="0"/>
+				<Property Name="VertScrollPosition" Value="0"/>
+				<AutoWindow NameSuffix="__auto_container__">
+					<Property Name="ContentArea" Value="l:0 t:0 r:0 b:0"/>
+				</AutoWindow>
+			</Window>
+		</Window>
+
 <!-- Hierarchy window -->
 		<Window Type="Editor/FrameWindow" Name="Editor/HierarchyWindow">
 			<Property Name="Text" Value="$hierarchy$" />
@@ -61,227 +94,6 @@
 			<Property Name="DragMovingEnabled" Value="False" />
 			<Property Name="CloseButtonEnabled" Value="False" />
 		</Window>
-		
 
-		<Window Type="Editor/Menubar" Name="EditorRoot/Menubar">
-			<Property Name="ItemSpacing" Value="10"/>
-			<Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{1,0},{0,24}}"/>
-			<Window Type="DefaultWindow" Name="EditorRoot/Toolbar">
-				<Property Name="UnifiedAreaRect" Value="{{0.5,0},{0,4},{1,0},{0,20}}"/>
-				<Window Type="Editor/ToolbarRadioButton" Name="EditorRoot/Toolbar/ResumeAction">
-					<Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{0,16},{1,0}}"/>
-					<Property Name="NormalImage" Value="set:EditorToolbar image:btnResumeActionNormal"/>
-					<Property Name="HoverImage" Value="set:EditorToolbar image:btnResumeActionHover"/>
-					<Property Name="PushedImage" Value="set:EditorToolbar image:btnResumeActionPushed"/>
-					<Property Name="Tooltip" Value="$resume_action_hint$"/>
-				</Window>
-				<Window Type="Editor/ToolbarRadioButton" Name="EditorRoot/Toolbar/PauseAction">
-					<Property Name="UnifiedAreaRect" Value="{{0,20},{0,0},{0,36},{1,0}}"/>
-					<Property Name="NormalImage" Value="set:EditorToolbar image:btnPauseActionNormal"/>
-					<Property Name="HoverImage" Value="set:EditorToolbar image:btnPauseActionHover"/>
-					<Property Name="PushedImage" Value="set:EditorToolbar image:btnPauseActionPushed"/>
-					<Property Name="Tooltip" Value="$pause_action_hint$"/>
-				</Window>
-				<Window Type="Editor/ToolbarRadioButton" Name="EditorRoot/Toolbar/RestartAction">
-					<Property Name="UnifiedAreaRect" Value="{{0,40},{0,0},{0,56},{1,0}}"/>
-					<Property Name="NormalImage" Value="set:EditorToolbar image:btnRestartActionNormal"/>
-					<Property Name="HoverImage" Value="set:EditorToolbar image:btnRestartActionHover"/>
-					<Property Name="PushedImage" Value="set:EditorToolbar image:btnRestartActionPushed"/>
-					<Property Name="Tooltip" Value="$restart_action_hint$"/>
-				</Window>
-				<Window Type="Editor/ToolbarRadioButton" Name="EditorRoot/Toolbar/EditToolMove">
-					<Property Name="UnifiedAreaRect" Value="{{0,60},{0,0},{0,76},{1,0}}"/>
-					<Property Name="NormalImage" Value="set:EditorToolbar image:btnEditToolMoveNormal"/>
-					<Property Name="HoverImage" Value="set:EditorToolbar image:btnEditToolMoveHover"/>
-					<Property Name="PushedImage" Value="set:EditorToolbar image:btnEditToolMovePushed"/>
-					<Property Name="Tooltip" Value="$edit_tool_move_hint$"/>
-				</Window>
-				<Window Type="Editor/ToolbarRadioButton" Name="EditorRoot/Toolbar/EditToolRotateZ">
-					<Property Name="UnifiedAreaRect" Value="{{0,80},{0,0},{0,96},{1,0}}"/>
-					<Property Name="NormalImage" Value="set:EditorToolbar image:btnEditToolRotateNormal"/>
-					<Property Name="HoverImage" Value="set:EditorToolbar image:btnEditToolRotateHover"/>
-					<Property Name="PushedImage" Value="set:EditorToolbar image:btnEditToolRotatePushed"/>
-					<Property Name="Tooltip" Value="$edit_tool_rotate_hint$"/>
-				</Window>
-				<Window Type="Editor/ToolbarRadioButton" Name="EditorRoot/Toolbar/EditToolRotateY">
-					<Property Name="UnifiedAreaRect" Value="{{0,100},{0,0},{0,116},{1,0}}"/>
-					<Property Name="NormalImage" Value="set:EditorToolbar image:btnEditToolRotateZNormal"/>
-					<Property Name="HoverImage" Value="set:EditorToolbar image:btnEditToolRotateZHover"/>
-					<Property Name="PushedImage" Value="set:EditorToolbar image:btnEditToolRotateZPushed"/>
-					<Property Name="Tooltip" Value="$edit_tool_rotate_y_hint$"/>
-				</Window>
-				<Window Type="Editor/ToolbarRadioButton" Name="EditorRoot/Toolbar/EditToolScale">
-					<Property Name="UnifiedAreaRect" Value="{{0,120},{0,0},{0,136},{1,0}}"/>
-					<Property Name="NormalImage" Value="set:EditorToolbar image:btnEditToolScaleNormal"/>
-					<Property Name="HoverImage" Value="set:EditorToolbar image:btnEditToolScaleHover"/>
-					<Property Name="PushedImage" Value="set:EditorToolbar image:btnEditToolScalePushed"/>
-					<Property Name="Tooltip" Value="$edit_tool_scale_hint$"/>
-				</Window>
-			</Window>
-			<Window Type="Editor/MenuItem" Name="EditorRoot/Menubar/File">
-				<Property Name="Text" Value="$file$"/>
-				<Property Name="UnifiedAreaRect" Value="{{0,7},{0,0},{0,33},{0,19}}"/>
-				<Property Name="VerticalAlignment" Value="Centre"/>
-				<Window Type="Editor/PopupMenu" Name="EditorRoot/Menubar/File/AutoPopup">
-					<Property Name="Visible" Value="False"/>
-					<Property Name="FadeInTime" Value="0"/>
-					<Property Name="FadeOutTime" Value="0"/>
-					<Property Name="ItemSpacing" Value="2"/>
-					<Property Name="ClippedByParent" Value="False"/>
-					<Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{0,100},{0,88.299}}"/>
-					<Property Name="AutoResizeEnabled" Value="True"/>
-					<Window Type="Editor/MenuItem" Name="EditorRoot/Menubar/File/CreateProject">
-						<Property Name="Text" Value="$create_project$"/>
-						<Property Name="Tooltip" Value="$create_project_hint$"/>
-						<Property Name="UnifiedAreaRect" Value="{{0,2},{0,2},{0,96},{0,21}}"/>
-					</Window>
-					<Window Type="Editor/MenuItem" Name="EditorRoot/Menubar/File/OpenProject">
-						<Property Name="Text" Value="$open_project$"/>
-						<Property Name="Tooltip" Value="$open_project_hint$"/>
-						<Property Name="UnifiedAreaRect" Value="{{0,2},{0,23},{0,96},{0,42}}"/>
-					</Window>
-					<Window Type="Editor/MenuItem" Name="EditorRoot/Menubar/File/CloseProject">
-						<Property Name="Text" Value="$close_project$"/>
-						<Property Name="Tooltip" Value="$close_project_hint$"/>
-						<Property Name="UnifiedAreaRect" Value="{{0,2},{0,44},{0,96},{0,63}}"/>
-					</Window>
-					<Window Type="Editor/MenuItem" Name="EditorRoot/Menubar/File/Quit">
-						<Property Name="Text" Value="$quit$"/>
-						<Property Name="Tooltip" Value="$quit_hint$"/>
-						<Property Name="UnifiedAreaRect" Value="{{0,2},{0,65},{0,96},{0,84}}"/>
-					</Window>
-				</Window>
-			</Window>
-			<Window Type="Editor/MenuItem" Name="EditorRoot/Menubar/Scene">
-				<Property Name="Text" Value="$scene$"/>
-				<Property Name="UnifiedAreaRect" Value="{{0,43},{0,0},{0,86},{0,19}}"/>
-				<Property Name="VerticalAlignment" Value="Centre"/>
-				<Window Type="Editor/PopupMenu" Name="EditorRoot/Menubar/Scene/AutoPopup">
-					<Property Name="Visible" Value="False"/>
-					<Property Name="FadeInTime" Value="0"/>
-					<Property Name="FadeOutTime" Value="0"/>
-					<Property Name="ItemSpacing" Value="2"/>
-					<Property Name="ClippedByParent" Value="False"/>
-					<Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{0,86},{0,67.3928}}"/>
-					<Property Name="AutoResizeEnabled" Value="True"/>
-					<Window Type="Editor/MenuItem" Name="EditorRoot/Menubar/Scene/NewScene">
-						<Property Name="Text" Value="$new_scene$"/>
-						<Property Name="Tooltip" Value="$new_scene_hint$"/>
-						<Property Name="UnifiedAreaRect" Value="{{0,2},{0,2},{0,82},{0,21}}"/>
-					</Window>
-					<Window Type="Editor/MenuItem" Name="EditorRoot/Menubar/Scene/OpenScene">
-						<Property Name="Text" Value="$open_scene$"/>
-						<Property Name="Tooltip" Value="$open_scene_hint$"/>
-						<Property Name="UnifiedAreaRect" Value="{{0,2},{0,23},{0,82},{0,42}}"/>
-						<Window Type="Editor/PopupMenu" Name="EditorRoot/Menubar/Scene/OpenScene/AutoPopup">
-							<Property Name="Visible" Value="False"/>
-							<Property Name="FadeInTime" Value="0"/>
-							<Property Name="FadeOutTime" Value="0"/>
-							<Property Name="ItemSpacing" Value="2"/>
-							<Property Name="ClippedByParent" Value="False"/>
-							<Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{0,6},{0,5.674}}"/>
-							<Property Name="AutoResizeEnabled" Value="True"/>
-						</Window>
-					</Window>
-					<Window Type="Editor/MenuItem" Name="EditorRoot/Menubar/Scene/SaveScene">
-						<Property Name="Text" Value="$save_scene$"/>
-						<Property Name="Tooltip" Value="$save_scene_hint$"/>
-						<Property Name="UnifiedAreaRect" Value="{{0,2},{0,44},{0,82},{0,63}}"/>
-					</Window>
-					<Window Type="Editor/MenuItem" Name="EditorRoot/Menubar/Scene/CloseScene">
-						<Property Name="Text" Value="$close_scene$"/>
-						<Property Name="Tooltip" Value="$close_scene_hint$"/>
-						<Property Name="UnifiedAreaRect" Value="{{0,2},{0,44},{0,82},{0,63}}"/>
-					</Window>
-				</Window>
-			</Window>
-			<Window Type="Editor/MenuItem" Name="EditorRoot/Menubar/Edit">
-				<Property Name="Text" Value="$edit$"/>
-				<Property Name="UnifiedAreaRect" Value="{{0,96},{0,0},{0,124},{0,19}}"/>
-				<Property Name="VerticalAlignment" Value="Centre"/>
-				<Window Type="Editor/PopupMenu" Name="EditorRoot/Menubar/Edit/AutoPopup">
-					<Property Name="Visible" Value="False"/>
-					<Property Name="FadeInTime" Value="0"/>
-					<Property Name="FadeOutTime" Value="0"/>
-					<Property Name="ItemSpacing" Value="2"/>
-					<Property Name="ClippedByParent" Value="False"/>
-					<Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{0,126},{0,109.206}}"/>
-					<Property Name="AutoResizeEnabled" Value="True"/>
-					<Window Type="Editor/MenuItem" Name="EditorRoot/Menubar/Edit/NewEntity">
-						<Property Name="Text" Value="$new_entity$"/>
-						<Property Name="Tooltip" Value="$new_entity_hint$"/>
-						<Property Name="UnifiedAreaRect" Value="{{0,2},{0,2},{0,122},{0,21}}"/>
-					</Window>
-					<Window Type="Editor/MenuItem" Name="EditorRoot/Menubar/Edit/NewComponent">
-						<Property Name="Text" Value="$new_component$"/>
-						<Property Name="Tooltip" Value="$new_component_hint$"/>
-						<Property Name="UnifiedAreaRect" Value="{{0,2},{0,23},{0,122},{0,42}}"/>
-						<Window Type="Editor/PopupMenu" Name="EditorRoot/Menubar/Edit/NewComponent/AutoPopup">
-							<Property Name="Visible" Value="False"/>
-							<Property Name="FadeInTime" Value="0"/>
-							<Property Name="FadeOutTime" Value="0"/>
-							<Property Name="ItemSpacing" Value="2"/>
-							<Property Name="ClippedByParent" Value="False"/>
-							<Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{0,6},{0,5.674}}"/>
-							<Property Name="AutoResizeEnabled" Value="True"/>
-						</Window>
-					</Window>
-					<Window Type="Editor/MenuItem" Name="EditorRoot/Menubar/Edit/DuplicateEntity">
-						<Property Name="Text" Value="$duplicate_entity$"/>
-						<Property Name="Tooltip" Value="$duplicate_entity_hint$"/>
-						<Property Name="UnifiedAreaRect" Value="{{0,2},{0,44},{0,122},{0,63}}"/>
-					</Window>
-					<Window Type="Editor/MenuItem" Name="EditorRoot/Menubar/Edit/DuplicateSelectedEntities">
-						<Property Name="Text" Value="$duplicate_selected_entities$"/>
-						<Property Name="Tooltip" Value="$duplicate_selected_entities_hint$"/>
-						<Property Name="UnifiedAreaRect" Value="{{0,2},{0,65},{0,122},{0,84}}"/>
-					</Window>
-					<Window Type="Editor/MenuItem" Name="EditorRoot/Menubar/Edit/DeleteEntity">
-						<Property Name="Text" Value="$delete_entity$"/>
-						<Property Name="Tooltip" Value="$delete_entity_hint$"/>
-						<Property Name="UnifiedAreaRect" Value="{{0,2},{0,86},{0,122},{0,105}}"/>
-					</Window>
-					<Window Type="Editor/MenuItem" Name="EditorRoot/Menubar/Edit/DeleteSelectedEntities">
-						<Property Name="Text" Value="$delete_selected_entities$"/>
-						<Property Name="Tooltip" Value="$delete_selected_entities_hint$"/>
-						<Property Name="UnifiedAreaRect" Value="{{0,2},{0,107},{0,122},{0,126}}"/>
-					</Window>
-					<Window Type="Editor/MenuItem" Name="EditorRoot/Menubar/Edit/CreatePrototype">
-						<Property Name="Text" Value="$create_prototype$"/>
-						<Property Name="Tooltip" Value="$create_prototype_hint$"/>
-						<Property Name="UnifiedAreaRect" Value="{{0,2},{0,128},{0,122},{0,147}}"/>
-					</Window>
-				</Window>
-			</Window>
-			<Window Type="Editor/MenuItem" Name="EditorRoot/Menubar/Help">
-				<Property Name="Text" Value="$help$"/>
-				<Property Name="UnifiedAreaRect" Value="{{0,43},{0,0},{0,86},{0,19}}"/>
-				<Property Name="VerticalAlignment" Value="Centre"/>
-				<Window Type="Editor/PopupMenu" Name="EditorRoot/Menubar/Help/AutoPopup">
-					<Property Name="Visible" Value="False"/>
-					<Property Name="FadeInTime" Value="0"/>
-					<Property Name="FadeOutTime" Value="0"/>
-					<Property Name="ItemSpacing" Value="2"/>
-					<Property Name="ClippedByParent" Value="False"/>
-					<Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{0,86},{0,67.3928}}"/>
-					<Property Name="AutoResizeEnabled" Value="True"/>
-					<Window Type="Editor/MenuItem" Name="EditorRoot/Menubar/Help/UserDocumentation">
-						<Property Name="Text" Value="$user_documentation$"/>
-						<Property Name="Tooltip" Value="$user_documentation_hint$"/>
-						<Property Name="UnifiedAreaRect" Value="{{0,2},{0,2},{0,82},{0,21}}"/>
-					</Window>
-					<Window Type="Editor/MenuItem" Name="EditorRoot/Menubar/Help/Shortcuts">
-						<Property Name="Text" Value="$shortcuts$"/>
-						<Property Name="Tooltip" Value="$shortcuts_hint$"/>
-						<Property Name="UnifiedAreaRect" Value="{{0,2},{0,23},{0,82},{0,42}}"/>
-					</Window>
-					<Window Type="Editor/MenuItem" Name="EditorRoot/Menubar/Help/About">
-						<Property Name="Text" Value="$about$"/>
-						<Property Name="Tooltip" Value="$about_hint$"/>
-						<Property Name="UnifiedAreaRect" Value="{{0,2},{0,44},{0,82},{0,63}}"/>
-					</Window>
-				</Window>
-			</Window>
-		</Window>
 	</Window>
 </GUILayout>

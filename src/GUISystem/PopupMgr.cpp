@@ -54,7 +54,7 @@ void PopupMgr::HidePopup()
 
 CEGUI::Window* PopupMgr::CreatePopupMenu(const CEGUI::String& windowName)
 {
-	CEGUI::PopupMenu* popupMenu = static_cast<CEGUI::PopupMenu*>(gGUIMgr.CreateWindowDirectly("Editor/PopupMenu", windowName));
+	CEGUI::PopupMenu* popupMenu = static_cast<CEGUI::PopupMenu*>(gGUIMgr.CreateWindow("Editor/PopupMenu", windowName));
 	popupMenu->setAlwaysOnTop(true);
 	popupMenu->setVisible(false);
 	popupMenu->setAutoResizeEnabled(true);
@@ -66,12 +66,12 @@ CEGUI::Window* PopupMgr::CreatePopupMenu(const CEGUI::String& windowName)
 
 void PopupMgr::DestroyPopupMenu(CEGUI::Window* popupMenu)
 {
-	gGUIMgr.DestroyWindowDirectly(popupMenu);
+	gGUIMgr.DestroyWindow(popupMenu);
 }
 
 CEGUI::Window* PopupMgr::CreateMenuItem(const CEGUI::String& windowName, const CEGUI::String& text, const CEGUI::String& tooltip, CEGUI::uint id)
 {
-	CEGUI::Window* menuItem = gGUIMgr.CreateWindow("Editor/MenuItem", false, windowName);
+	CEGUI::Window* menuItem = gGUIMgr.CreateWindow("Editor/MenuItem", windowName);
 	menuItem->setText(text);
 	menuItem->setTooltipText(tooltip);
 	menuItem->setID(id);
@@ -82,7 +82,7 @@ CEGUI::Window* PopupMgr::CreateMenuItem(const CEGUI::String& windowName, const C
 
 void PopupMgr::DestroyMenuItem(CEGUI::Window* menuItem)
 {
-	gGUIMgr.DestroyWindowDirectly(menuItem);
+	gGUIMgr.DestroyWindow(menuItem);
 }
 
 void PopupMgr::DoAutoHide(float posX, float posY)

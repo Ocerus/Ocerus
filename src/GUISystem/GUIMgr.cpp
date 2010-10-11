@@ -15,22 +15,6 @@
 
 #include <RendererModules/OpenGL/CEGUIOpenGLRenderer.h>
 
-/// @todo Comment what is this.
-#undef CreateWindow
-#undef CreateWindowA
-#undef CreateWindowW
-
-/// If defined the CEGUI windows will be recycled using a system of caches.
-/// Note: it might not be safe
-//#define RECYCLE_WINDOWS
-
-/// CEGUI windows recycling is generally not necessary on Unices, as the project seems to run
-/// pretty fast without it. Moreover, the functionality needs some modifications in CEGUI
-/// so it does not compile against system-wide CEGUI.
-#ifdef __UNIX__
-	#undef RECYCLE_WINDOWS
-#endif
-
 using namespace GUISystem;
 
 /// @name Prototypes for utility functions
@@ -125,7 +109,6 @@ void GUIMgr::Init()
 void GUIMgr::Deinit()
 {
 	DeinitConsole();
-	ClearWindowCaches();
 	CEGUI::WindowManager::getSingleton().destroyAllWindows();
 }
 
@@ -235,160 +218,6 @@ CEGUI::Window* GUIMgr::GetGUISheet() const
 	return mCEGUI->getGUISheet();
 }
 
-void GUIMgr::DestroyWindow(CEGUI::Window* window)
-{
-	if (!window) return;
-
-#ifdef RECYCLE_WINDOWS
-
-	DestroyWindowChildren(window);
-	if (window->getParent()) window->getParent()->removeChildWindow(window); // this is the most time consuming action here!!!
-	window->hide();
-	window->removeAllEvents();
-
-	if (window->getName().find("EditorCreated") != 0) window->rename(GenerateWindowName());
-
-	WindowTypeCache* cache = mWindowCache[window->getType().c_str()];
-	if (cache && window->isUserStringDefined("CreatedByGUIMgr"))
-	{
-		if (cache->count == cache->list.size())
-		{
-			size_t firstIndex = cache->list.size();
-			cache->list.resize(cache->list.size() + 200);
-			for (size_t i=firstIndex; i<cache->list.size(); ++i) cache->list[i] = 0;
-		}
-		cache->list[cache->count++] = window;
-		ocTrace << "Destroyed window " << window->getType() << " " << window->getName() << " " << window << "; " << window->getChildCount() << " children";
-	}
-	else
-	{
-		OC_FAIL("This shouldn't happen. Windows not created by us should be destroyed using DestroyWindowDirectly().");
-		ocWarning << "Destroying CEGUI window " << window->getType() << " " << window->getName() << " " << window;
-		DestroyWindowDirectly(window);
-	}
-
-#else
-	return DestroyWindowDirectly(window);
-#endif
-}
-
-void GUISystem::GUIMgr::DestroyWindowChildren( CEGUI::Window* window )
-{
-	if (!window) return;
-
-	for (int32 i=window->getChildCount()-1; i>=0; --i)
-	{
-		if (window->getChildAtIdx(i)->isUserStringDefined("CreatedByGUIMgr"))
-		{
-			// now we know this window was created by us, so it wasn't created automatically
-			DestroyWindow(window->getChildAtIdx(i));
-		}
-	}
-}
-
-CEGUI::Window* GUIMgr::CreateWindow( const string& type, bool reallocateOnHeap, const CEGUI::String& name )
-{
-#ifdef RECYCLE_WINDOWS
-
-	if (mWindowCache.find(type) == mWindowCache.end()) InitWindowCache(type);
-	
-	WindowTypeCache* cache = mWindowCache[type];
-	OC_ASSERT(cache);
-
-	if (cache->count == 0)
-	{
-		ocWarning << "Cache too small; creating CEGUI window " << type << " directly";
-		cache->list[cache->count++] = CreateWindowDirectly(type);
-	}
-
-	--cache->count;
-	CEGUI::Window* window = cache->list[cache->count];
-	cache->list[cache->count] = 0;
-	OC_ASSERT(window);
-
-	if (reallocateOnHeap)
-	{
-		window = CEGUI::WindowManager::getSingleton().recreateWindow(window);
-		window->setDestroyedByParent(false); // to prevent CEGUI from destroying our own windows
-		window->setUserString("CreatedByGUIMgr", "True"); // mark this window is ours
-	}
-	else
-	{
-		window->setArea(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), CEGUI::UDim(0, 0));
-		if (window->isPropertyPresent("ReadOnly")) window->setProperty("ReadOnly", "False");
-		window->show();
-	}
-
-	if (!name.empty())
-	{
-		try
-		{
-			window->rename(name);
-		}
-		catch (...)
-		{
-			ocWarning << "Cannot rename window to " << name;
-		}
-	}
-	
-
-	ocTrace << "Created window " << window->getType() << " " << window->getName() << "; " << window->getChildCount() << " children";
-
-	return window;
-
-#else
-	OC_UNUSED(reallocateOnHeap);
-	return CreateWindowDirectly(type, name);
-#endif
-}
-
-CEGUI::Window* GUIMgr::CreateWindowDirectly( const string& type, const CEGUI::String& name )
-{
-	CEGUI::String windowName;
-	if (name.empty()) windowName = GenerateWindowName();
-	else windowName = name;
-	CEGUI::Window* window = CEGUI::WindowManager::getSingleton().createWindow(type, windowName);
-#ifdef RECYCLE_WINDOWS
-	window->setDestroyedByParent(false); // to prevent CEGUI from destroying our own windows
-#endif
-	window->setUserString("CreatedByGUIMgr", "True"); // mark this window is ours
-	return window;
-}
-
-void GUISystem::GUIMgr::InitWindowCache( const string& type )
-{
-	const size_t cacheSize = 300;
-	ocInfo << "Creating a cache for " << cacheSize << " GUI windows " << type;
-
-	WindowTypeCache* cache = new WindowTypeCache();
-	cache->list.resize(2*cacheSize);
-	cache->count = cacheSize;
-
-	for (size_t i=0; i<cache->list.size(); ++i) cache->list[i] = 0;
-
-	for (size_t i=0; i<cache->count; ++i)
-	{
-		cache->list[i] = CreateWindowDirectly(type);
-	}
-
-	mWindowCache[type] = cache;
-}
-
-void GUISystem::GUIMgr::ClearWindowCaches()
-{
-	for (WindowMap::iterator it=mWindowCache.begin(); it!=mWindowCache.end(); ++it)
-	{
-		WindowTypeCache* cache = it->second;
-		OC_ASSERT(cache);
-		for (size_t i=0; i<cache->count; ++i)
-		{
-			CEGUI::WindowManager::getSingleton().destroyWindow(cache->list[i]);
-		}
-		delete cache;
-	}
-	mWindowCache.clear();
-}
-
 CEGUI::Window* GUISystem::GUIMgr::GetWindow(const CEGUI::String& name)
 {
 	return CEGUI::WindowManager::getSingleton().getWindow(name.c_str());
@@ -399,26 +228,14 @@ bool GUISystem::GUIMgr::WindowExists(const string& name)
 	return CEGUI::WindowManager::getSingleton().isWindowPresent(name.c_str());
 }
 
-void GUISystem::GUIMgr::DestroyWindowDirectly(CEGUI::Window* window)
+CEGUI::Window* GUIMgr::CreateWindow(const CEGUI::String& type, const CEGUI::String& name)
+{
+	return CEGUI::WindowManager::getSingleton().createWindow(type, name);
+}
+
+void GUISystem::GUIMgr::DestroyWindow(CEGUI::Window* window)
 {
 	CEGUI::WindowManager::getSingleton().destroyWindow(window);
-}
-
-string GUISystem::GUIMgr::GenerateWindowName() const
-{
-	static uint64 windowID = 0;
-	return "EditorCreated_" + StringConverter::ToString(windowID++);
-}
-
-void GUISystem::GUIMgr::_DebugPrintWindowCaches()
-{
-#ifdef RECYCLE_WINDOWS
-	ocInfo << "Window caches:";
-	for (WindowMap::iterator it=mWindowCache.begin(); it!=mWindowCache.end(); ++it)
-	{
-		ocInfo << it->first << ": " << it->second->count;
-	}
-#endif
 }
 
 void GUIMgr::RenderGUI() const

@@ -13,7 +13,7 @@ GUISystem::FolderSelector::FolderSelector(const string& rootPath, int32 tag):
 
 GUISystem::FolderSelector::~FolderSelector()
 {
-	gGUIMgr.DestroyWindowDirectly(mWindow);
+	gGUIMgr.DestroyWindow(mWindow);
 }
 
 void GUISystem::FolderSelector::Show(const CEGUI::String& windowTitle, bool showEditbox, const CEGUI::String& editboxLabel)

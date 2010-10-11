@@ -55,11 +55,11 @@ namespace Editor
 		CEGUI::String editorName = "Editor/EntityWindow/ValueEditors/ArrayEditor" + string(Reflection::PropertyTypes::GetStringName(Reflection::PropertyTypes::GetTypeID<ElementType>())) +  Utils::StringConverter::ToString(editorCounter++);
 		
 		// Create main editor widget
-		mEditorWidget = gGUIMgr.CreateWindowDirectly("DefaultWindow", editorName);
+		mEditorWidget = gGUIMgr.CreateWindow("DefaultWindow", editorName);
 		mMainLayout = new GUISystem::VerticalLayout(mEditorWidget, 0, true);
 		
 		// Create header widget
-		mHeaderWidget = gGUIMgr.CreateWindowDirectly("DefaultWindow", editorName + "/Header");
+		mHeaderWidget = gGUIMgr.CreateWindow("DefaultWindow", editorName + "/Header");
 		mHeaderWidget->setHeight(CEGUI::UDim(0, GetEditboxHeight()));
 		mMainLayout->AddChildWindow(mHeaderWidget);
 
@@ -69,14 +69,14 @@ namespace Editor
 		mHeaderWidget->addChildWindow(labelWidget);
 
 		// Create add element button
-		mButtonAddElement = static_cast<CEGUI::PushButton*>(gGUIMgr.CreateWindowDirectly("Editor/Button", editorName + "/Header/AddElementButton"));
+		mButtonAddElement = static_cast<CEGUI::PushButton*>(gGUIMgr.CreateWindow("Editor/Button", editorName + "/Header/AddElementButton"));
 		mButtonAddElement->setText(TR("entity_editor_add"));
 		mButtonAddElement->setArea(CEGUI::URect(CEGUI::UDim(0.5f, 1), CEGUI::UDim(0, 0), CEGUI::UDim(0.6666f, -1), CEGUI::UDim(0, GetEditboxHeight())));
 		mButtonAddElement->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Editor::ArrayEditor<ElementType>::OnEventButtonAddPressed, this));
 		mHeaderWidget->addChildWindow(mButtonAddElement);
 
 		// Create revert button
-		mButtonRevert = static_cast<CEGUI::PushButton*>(gGUIMgr.CreateWindowDirectly("Editor/Button", editorName + "/Header/RevertButton"));
+		mButtonRevert = static_cast<CEGUI::PushButton*>(gGUIMgr.CreateWindow("Editor/Button", editorName + "/Header/RevertButton"));
 		mButtonRevert->setText(TR("entity_editor_revert"));
 		mButtonRevert->setArea(CEGUI::URect(CEGUI::UDim(0.6666f, 1), CEGUI::UDim(0, 0), CEGUI::UDim(0.8333f, -1), CEGUI::UDim(0, GetEditboxHeight())));
 		mButtonRevert->setEnabled(false);
@@ -84,7 +84,7 @@ namespace Editor
 		mHeaderWidget->addChildWindow(mButtonRevert);
 
 		// Create save button
-		mButtonSave = static_cast<CEGUI::PushButton*>(gGUIMgr.CreateWindowDirectly("Editor/Button", editorName + "/Header/SaveButton"));
+		mButtonSave = static_cast<CEGUI::PushButton*>(gGUIMgr.CreateWindow("Editor/Button", editorName + "/Header/SaveButton"));
 		mButtonSave->setText(TR("entity_editor_save"));
 		mButtonSave->setArea(CEGUI::URect(CEGUI::UDim(0.8333f, 1), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(0, GetEditboxHeight())));
 		mButtonSave->setEnabled(false);
@@ -98,7 +98,7 @@ namespace Editor
 		mHeaderWidget->addChildWindow(isSharedCheckbox);
 
 		// Create body widget
-		CEGUI::Window* bodyWidget = gGUIMgr.CreateWindowDirectly("DefaultWindow", editorName + "/Body");
+		CEGUI::Window* bodyWidget = gGUIMgr.CreateWindow("DefaultWindow", editorName + "/Body");
 		mBodyLayout = new GUISystem::VerticalLayout(bodyWidget, 0, true);
 		mMainLayout->AddChildWindow(bodyWidget);
 	}
@@ -108,7 +108,7 @@ namespace Editor
 	{
 		delete mBodyLayout;
 		delete mMainLayout;
-		gGUIMgr.DestroyWindowDirectly(mEditorWidget);
+		gGUIMgr.DestroyWindow(mEditorWidget);
 		mEditorWidget = 0;
 	}
 

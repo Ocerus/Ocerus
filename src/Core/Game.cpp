@@ -107,7 +107,7 @@ void Core::Game::CreateDefaultRenderTarget()
 void Core::Game::CreateDefaultRootWindow()
 {
 	if (mRootWindow && mRootWindow->getName() == "GameRoot") return;
-	mRootWindow = gGUIMgr.CreateWindow("DefaultWindow");
+	mRootWindow = gGUIMgr.CreateWindow("DefaultWindow", "GameRoot");
 	mRootWindow->setProperty("UnifiedAreaRect", "{{0,0},{0,0},{1,0},{1,0}}");
 	gGUIMgr.SetGUISheet(mRootWindow);
 }

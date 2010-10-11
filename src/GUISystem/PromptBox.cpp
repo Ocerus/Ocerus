@@ -31,7 +31,7 @@ PromptBox::PromptBox(int32 tag): mTag(tag), mPromptBox(0), mMinWidth(0)
 
 PromptBox::~PromptBox()
 {
-	gGUIMgr.DestroyWindowDirectly(mPromptBox);
+	gGUIMgr.DestroyWindow(mPromptBox);
 }
 
 void PromptBox::SetText(const CEGUI::String& text)

@@ -981,6 +981,7 @@ Game& GetGame()
 
 void QuitGame(Game* self)
 {
+	OC_UNUSED(self);
 	if (gApp.IsEditMode())
 	{
 		gEditorMgr.RestartAction();

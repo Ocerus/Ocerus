@@ -26,7 +26,7 @@ void Editor::PrototypeWindow::Init()
 		mWindow = gGUIMgr.GetWindow("Editor/PrototypeWindow");
 		OC_ASSERT(mWindow);
 
-		mList = static_cast<CEGUI::ItemListbox*>(gGUIMgr.CreateWindowDirectly("Editor/ItemListbox", "Editor/PrototypeWindow/List"));
+		mList = static_cast<CEGUI::ItemListbox*>(gGUIMgr.CreateWindow("Editor/ItemListbox", "Editor/PrototypeWindow/List"));
 		mList->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
 		mList->setUserString("WantsMouseWheel", "True");
 		mWindow->addChildWindow(mList);
@@ -40,7 +40,7 @@ void Editor::PrototypeWindow::Init()
 
 void PrototypeWindow::Deinit()
 {
-	gGUIMgr.DestroyWindowDirectly(mWindow);
+	gGUIMgr.DestroyWindow(mWindow);
 	mWindow = 0;
 
 	DestroyPopupMenu();
@@ -166,13 +166,13 @@ CEGUI::ItemEntry* PrototypeWindow::CreatePrototypeItem()
 {
 	static uint32 prototypeItemCounter = 0;
 	const CEGUI::String& windowName = "Editor/PrototypeWindow/List/PrototypeItem" + StringConverter::ToString(prototypeItemCounter++);
-	CEGUI::ItemEntry* newItem = static_cast<CEGUI::ItemEntry*>(gGUIMgr.CreateWindowDirectly("Editor/ListboxItem", windowName));
+	CEGUI::ItemEntry* newItem = static_cast<CEGUI::ItemEntry*>(gGUIMgr.CreateWindow("Editor/ListboxItem", windowName));
 
-	CEGUI::Window* dragContainer = gGUIMgr.CreateWindowDirectly("DragContainer", windowName + "/DC");
+	CEGUI::Window* dragContainer = gGUIMgr.CreateWindow("DragContainer", windowName + "/DC");
 	dragContainer->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
 	newItem->addChildWindow(dragContainer);
 
-	CEGUI::Window* newItemText = gGUIMgr.CreateWindowDirectly("Editor/StaticText", windowName + "/DC/Text");
+	CEGUI::Window* newItemText = gGUIMgr.CreateWindow("Editor/StaticText", windowName + "/DC/Text");
 	newItemText->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
 	newItemText->setProperty("FrameEnabled", "False");
 	newItemText->setProperty("BackgroundEnabled", "False");
@@ -221,7 +221,7 @@ void PrototypeWindow::DestroyItemCache()
 {
 	for (ItemCache::iterator it = mPrototypeItemCache.begin(); it != mPrototypeItemCache.end(); ++it)
 	{
-		gGUIMgr.DestroyWindowDirectly((*it));
+		gGUIMgr.DestroyWindow((*it));
 	}
 	mPrototypeItemCache.clear();
 }

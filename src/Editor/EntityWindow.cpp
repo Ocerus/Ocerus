@@ -29,6 +29,26 @@ EntityWindow::~EntityWindow()
 void EntityWindow::Init()
 {
 	mValueEditorFactory = new ValueEditorFactory();
+
+	CEGUI_TRY;
+	{
+		mWindow = gGUIMgr.GetWindow("Editor/EntityWindow");
+		mWindow->setUserString("WantsMouseWheel", "True");
+
+		//mScrollablePane = static_cast<CEGUI::ScrollablePane*>(gGUIMgr.CreateWindow("Editor/ScrollablePane", "Editor/EntityWindow/Scrollable"));
+		//mScrollablePane->setArea(CEGUI::URect(cegui_absdim(0), cegui_absdim(0), cegui_absdim(1), cegui_absdim(1)));
+
+		mScrollablePane = static_cast<CEGUI::ScrollablePane*>(mWindow->getChild("Editor/EntityWindow/Scrollable"));
+
+		mScrollablePane->setUserString("WantsMouseWheel", "True");
+
+		mVerticalLayout = new GUISystem::VerticalLayout(mScrollablePane, const_cast<CEGUI::ScrolledContainer*>(mScrollablePane->getContentPane()));
+
+		mWindow->addChildWindow(mScrollablePane);
+	}
+	CEGUI_CATCH_CRITICAL;
+
+/*
 	mWindow = gGUIMgr.LoadSystemLayout("EntityWindow.layout", "Editor");
 	if (!mWindow)
 	{
@@ -40,15 +60,16 @@ void EntityWindow::Init()
 	mScrollablePane = static_cast<CEGUI::ScrollablePane*>(mWindow->getChild(mWindow->getName() + "/Scrollable"));
 	mScrollablePane->setUserString("WantsMouseWheel", "True");
 	mVerticalLayout = new GUISystem::VerticalLayout(mScrollablePane, const_cast<CEGUI::ScrolledContainer*>(mScrollablePane->getContentPane()));
+*/
 }
 
 void EntityWindow::Deinit()
 {
+	gGUIMgr.DestroyWindow(mWindow);
 	delete mValueEditorFactory;
 	mValueEditorFactory = 0;
 	DestroyComponentGroupCache();
 }
-
 
 void EntityWindow::Update(float32 delta)
 {
@@ -218,11 +239,11 @@ EntityWindow::ComponentGroup Editor::EntityWindow::CreateComponentGroup()
 	static uint32 componentGroupCounter = 0;
 	const CEGUI::String& windowName = "Editor/EntityWindow/ComponentGroup" + StringConverter::ToString(componentGroupCounter++);
 
-	CEGUI::GroupBox* componentGroupWidget = static_cast<CEGUI::GroupBox*>(gGUIMgr.CreateWindowDirectly("Editor/GroupBox", windowName));
+	CEGUI::GroupBox* componentGroupWidget = static_cast<CEGUI::GroupBox*>(gGUIMgr.CreateWindow("Editor/GroupBox", windowName));
 	componentGroupWidget->setWidth(cegui_reldim(1));
 
 	// Create remove component button
-	CEGUI::Window* removeComponentButton = gGUIMgr.CreateWindowDirectly("Editor/ImageButton", windowName + "/RemoveButton");
+	CEGUI::Window* removeComponentButton = gGUIMgr.CreateWindow("Editor/ImageButton", windowName + "/RemoveButton");
 	removeComponentButton->setProperty("NormalImage", "set:EditorToolbar image:btnRemoveComponentNormal");
 	removeComponentButton->setProperty("HoverImage", "set:EditorToolbar image:btnRemoveComponentHover");
 	removeComponentButton->setProperty("PushedImage", "set:EditorToolbar image:btnRemoveComponentPushed");
@@ -303,7 +324,7 @@ void EntityWindow::DestroyComponentGroupCache()
 {
 	for (ComponentGroupCache::iterator it = mComponentGroupCache.begin(); it != mComponentGroupCache.end(); ++it)
 	{
-		gGUIMgr.DestroyWindowDirectly(it->widget);
+		gGUIMgr.DestroyWindow(it->widget);
 		delete it->layout;
 	}
 	mComponentGroupCache.clear();

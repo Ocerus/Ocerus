@@ -94,7 +94,7 @@ void Editor::StringEditor::InitWidget()
 	CEGUI::String editorName = "Editor/EntityWindow/ValueEditors/StringEditor" + Utils::StringConverter::ToString(editorCounter++);
 	
 	// Create main editor widget
-	mEditorWidget = gGUIMgr.CreateWindowDirectly("DefaultWindow", editorName);
+	mEditorWidget = gGUIMgr.CreateWindow("DefaultWindow", editorName);
 	mEditorWidget->setHeight(CEGUI::UDim(0, GetEditboxHeight()));
 
 	// Create label widget
@@ -102,11 +102,11 @@ void Editor::StringEditor::InitWidget()
 	mEditorWidget->addChildWindow(labelWidget);
 
 	// Create editbox widget
-	mEditboxWidget = gGUIMgr.CreateWindowDirectly("Editor/Editbox", editorName + "/Editbox");
+	mEditboxWidget = gGUIMgr.CreateWindow("Editor/Editbox", editorName + "/Editbox");
 	mEditorWidget->addChildWindow(mEditboxWidget);
 
 	// Create remove button widget
-	CEGUI::Window* removeButton = gGUIMgr.CreateWindowDirectly("Editor/Button", editorName + "/RemoveButton");
+	CEGUI::Window* removeButton = gGUIMgr.CreateWindow("Editor/Button", editorName + "/RemoveButton");
 	removeButton->setText(TR("entity_editor_remove"));
 	removeButton->setSize(CEGUI::UVector2(CEGUI::UDim(0, GetEditboxHeight()), CEGUI::UDim(0, GetEditboxHeight())));
 	removeButton->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&StringEditor::OnRemoveButtonClicked, this));
@@ -130,7 +130,7 @@ void Editor::StringEditor::InitWidget()
 
 void Editor::StringEditor::DeinitWidget()
 {
-	gGUIMgr.DestroyWindowDirectly(mEditorWidget);
+	gGUIMgr.DestroyWindow(mEditorWidget);
 	mEditorWidget = 0;
 }
 

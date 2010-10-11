@@ -15,7 +15,7 @@ void AbstractValueEditor::ResetWidget()
 
 CEGUI::Window* AbstractValueEditor::CreateLabelWidget(const CEGUI::String& name)
 {
-	CEGUI::Window* labelWidget = gGUIMgr.CreateWindowDirectly("Editor/StaticText", name + "/Label");
+	CEGUI::Window* labelWidget = gGUIMgr.CreateWindow("Editor/StaticText", name + "/Label");
 	labelWidget->setProperty("FrameEnabled", "False");
 	labelWidget->setProperty("BackgroundEnabled", "False");
 	labelWidget->setProperty("VertFormatting", "VertCentred");
@@ -24,7 +24,7 @@ CEGUI::Window* AbstractValueEditor::CreateLabelWidget(const CEGUI::String& name)
 
 CEGUI::Window* Editor::AbstractValueEditor::CreateRemoveButtonWidget(const CEGUI::String& name)
 {
-	CEGUI::Window* removeButton = gGUIMgr.CreateWindowDirectly("Editor/Button", name);
+	CEGUI::Window* removeButton = gGUIMgr.CreateWindow("Editor/Button", name);
 	removeButton->setText(TR("entity_editor_remove"));
 	removeButton->setSize(CEGUI::UVector2(CEGUI::UDim(0, GetEditboxHeight()), CEGUI::UDim(0, GetEditboxHeight())));
 	return removeButton;
@@ -32,7 +32,7 @@ CEGUI::Window* Editor::AbstractValueEditor::CreateRemoveButtonWidget(const CEGUI
 
 CEGUI::Checkbox* AbstractValueEditor::CreateIsSharedCheckboxWidget(const CEGUI::String& name)
 {
-	CEGUI::Checkbox* checkbox = static_cast<CEGUI::Checkbox*>(gGUIMgr.CreateWindowDirectly("Editor/Checkbox", name));
+	CEGUI::Checkbox* checkbox = static_cast<CEGUI::Checkbox*>(gGUIMgr.CreateWindow("Editor/Checkbox", name));
 	checkbox->setTooltipText(TR("prototype_shared_checkbox_hint"));
 	checkbox->setSize(CEGUI::UVector2(CEGUI::UDim(0, GetEditboxHeight()), CEGUI::UDim(0, GetEditboxHeight())));
 	return checkbox;
@@ -40,7 +40,7 @@ CEGUI::Checkbox* AbstractValueEditor::CreateIsSharedCheckboxWidget(const CEGUI::
 
 CEGUI::Window* AbstractValueEditor::CreateIsLockedImageWidget(const CEGUI::String& name)
 {
-	CEGUI::Window* lockWidget = gGUIMgr.CreateWindowDirectly("Editor/StaticImage", name);
+	CEGUI::Window* lockWidget = gGUIMgr.CreateWindow("Editor/StaticImage", name);
 	lockWidget->setProperty("FrameEnabled", "False");
 	lockWidget->setProperty("BackgroundEnabled", "False");
 	lockWidget->setProperty("Image", "set:EditorToolbar image:imgLock");

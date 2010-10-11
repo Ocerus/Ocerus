@@ -84,6 +84,8 @@ namespace GUISystem
 
 		HistoryCommands mHistory;
 		HistoryCommands::iterator mCurrentHistoryItem;
+		
+		bool mSuppressAppendingMessage;
 	};
 
 	inline void GUIConsole::SetLogLevelTreshold(int32 newLogLevelTreshold)

@@ -13,7 +13,9 @@ namespace CEGUI
 	class ItemListbox;
 	class Listbox;
 	class OpenGLRenderer;
+	class PopupMenu;
 	class PushButton;
+	class RadioButton;
 	class ScrollablePane;
 	class String;
 	class System;

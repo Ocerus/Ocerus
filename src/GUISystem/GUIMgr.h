@@ -65,23 +65,11 @@ namespace GUISystem
 		/// Returns a pointer to the active GUI sheet (root) window. Returns 0 if no GUI sheet is set.
 		CEGUI::Window* GetGUISheet() const;
 
-		/// Creates new window.
-		/// @param reallocateOnHeap If true the window is constructed anew before being used again.
-		/// 		This solves some problems with GUI elements aligning in a wrong way.
-		/// @param name Desired name. If empty a default name will be generated.
-		CEGUI::Window* CreateWindow(const string& type, bool reallocateOnHeap = false, const CEGUI::String& name = "");
-
-		/// Creates new window without taking caches into consideration.
-		CEGUI::Window* CreateWindowDirectly(const string& type, const CEGUI::String& name = "");
+		/// Creates a window of specified type with specified name.
+		CEGUI::Window* CreateWindow(const CEGUI::String& type, const CEGUI::String& name);
 
 		/// Destroys the specified window.
 		void DestroyWindow(CEGUI::Window* window);
-
-		/// Destroys the specified window without taking caches into consideration.
-		void DestroyWindowDirectly(CEGUI::Window* window);
-
-		/// Destroys all children of the given window.
-		void DestroyWindowChildren(CEGUI::Window* window);
 
 		/// Returns the window of the given name if exists.
 		CEGUI::Window* GetWindow(const CEGUI::String& name);
@@ -126,9 +114,6 @@ namespace GUISystem
 		/// Resource group for GUI resources.
 		static const StringKey GUIGroup;
 
-		/// Prints info about the window caches into the log.
-		void _DebugPrintWindowCaches();
-
 		/// Holds information about an input event.
 		struct InputEventInfo
 		{
@@ -158,18 +143,6 @@ namespace GUISystem
 
 		/// Popup menu manager
 		PopupMgr* mPopupMgr;
-
-		/// @name Window caching optimalization
-		//@{
-			typedef vector<CEGUI::Window*> WindowList;
-			struct WindowTypeCache { WindowList list; size_t count; };
-			typedef hash_map<string, WindowTypeCache*> WindowMap;
-			WindowMap mWindowCache;
-
-			void InitWindowCache(const string& windowType);
-			void ClearWindowCaches();
-			string GenerateWindowName() const;
-		//@}
 	};
 }
 #endif // _GUISYSTEM_GUIMGR_H_

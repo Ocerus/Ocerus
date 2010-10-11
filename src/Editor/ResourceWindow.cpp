@@ -33,7 +33,7 @@ void Editor::ResourceWindow::Init()
 		mWindow = gGUIMgr.GetWindow("Editor/ResourceWindow");
 		OC_ASSERT(mWindow);
 		gGUIMgr.LoadSystemImageset("ResourceWindowIcons.imageset");
-		mTree = static_cast<CEGUI::ItemListbox*>(gGUIMgr.CreateWindowDirectly("Editor/ItemListbox", "Editor/ResourceWindow/Tree"));
+		mTree = static_cast<CEGUI::ItemListbox*>(gGUIMgr.CreateWindow("Editor/ItemListbox", "Editor/ResourceWindow/Tree"));
 		mTree->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
 		mTree->setSortMode(CEGUI::ItemListBase::UserSort);
 		mTree->setSortCallback(&ResourceWindow::SortCallback);
@@ -50,7 +50,7 @@ void Editor::ResourceWindow::Init()
 
 void ResourceWindow::Deinit()
 {
-	gGUIMgr.DestroyWindowDirectly(mWindow);
+	gGUIMgr.DestroyWindow(mWindow);
 	mWindow = 0;
 	DestroyPopupMenu();
 	DestroyItemEntryCache();
@@ -288,19 +288,19 @@ CEGUI::Window* Editor::ResourceWindow::CreateResourceItemEntry()
 {
 	static uint32 resourceItemCounter = 0;
 	const CEGUI::String& name = "Editor/ResourceWindow/Tree/ResourceItem" + StringConverter::ToString(resourceItemCounter++);
-	CEGUI::ItemEntry* newItem = static_cast<CEGUI::ItemEntry*>(gGUIMgr.CreateWindowDirectly("Editor/ListboxItem", name));
+	CEGUI::ItemEntry* newItem = static_cast<CEGUI::ItemEntry*>(gGUIMgr.CreateWindow("Editor/ListboxItem", name));
 	newItem->setUserData(this);
-	CEGUI::Window* dragContainer = gGUIMgr.CreateWindowDirectly("DragContainer", name + "/DC");
+	CEGUI::Window* dragContainer = gGUIMgr.CreateWindow("DragContainer", name + "/DC");
 	dragContainer->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
 	newItem->addChildWindow(dragContainer);
 
-	CEGUI::Window* newItemText = gGUIMgr.CreateWindowDirectly("Editor/StaticText", name + "/DC/Text");
+	CEGUI::Window* newItemText = gGUIMgr.CreateWindow("Editor/StaticText", name + "/DC/Text");
 	newItemText->setArea(CEGUI::URect(CEGUI::UDim(0, 16), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
 	newItemText->setProperty("FrameEnabled", "False");
 	newItemText->setProperty("BackgroundEnabled", "False");
 	newItemText->setMousePassThroughEnabled(true);
 
-	CEGUI::Window* newItemIcon = gGUIMgr.CreateWindowDirectly("Editor/StaticImage", name + "/DC/Icon");
+	CEGUI::Window* newItemIcon = gGUIMgr.CreateWindow("Editor/StaticImage", name + "/DC/Icon");
 	newItemIcon->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0.5, -6), CEGUI::UDim(0, 12), CEGUI::UDim(0.5, 6)));
 	newItemIcon->setProperty("FrameEnabled", "False");
 	newItemIcon->setProperty("BackgroundEnabled", "False");
@@ -320,13 +320,13 @@ CEGUI::Window* ResourceWindow::CreateDirectoryItemEntry()
 {
 	static uint32 dirCounter = 0;
 	const CEGUI::String& windowName = "Editor/ResourceWindow/Tree/DirItem" + StringConverter::ToString(dirCounter++);
-	CEGUI::Window* itemEntry = gGUIMgr.CreateWindowDirectly("Editor/ListboxItem", windowName);
+	CEGUI::Window* itemEntry = gGUIMgr.CreateWindow("Editor/ListboxItem", windowName);
 	itemEntry->setID(InvalidResourceIndex);
-	CEGUI::Window* dragContainer = gGUIMgr.CreateWindowDirectly("DragContainer", windowName + "/DC");
+	CEGUI::Window* dragContainer = gGUIMgr.CreateWindow("DragContainer", windowName + "/DC");
 	dragContainer->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
 	itemEntry->addChildWindow(dragContainer);
 
-	CEGUI::Window* itemEntryIcon = gGUIMgr.CreateWindowDirectly("Editor/StaticImage", windowName + "/DC/Icon");
+	CEGUI::Window* itemEntryIcon = gGUIMgr.CreateWindow("Editor/StaticImage", windowName + "/DC/Icon");
 	itemEntryIcon->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0.5, -6), CEGUI::UDim(0, 12), CEGUI::UDim(0.5, 6)));
 	itemEntryIcon->setProperty("FrameEnabled", "False");
 	itemEntryIcon->setProperty("BackgroundEnabled", "False");
@@ -335,7 +335,7 @@ CEGUI::Window* ResourceWindow::CreateDirectoryItemEntry()
 	itemEntryIcon->setMousePassThroughEnabled(false);
 	dragContainer->addChildWindow(itemEntryIcon); 
 
-	CEGUI::Window* itemEntryText = gGUIMgr.CreateWindowDirectly("Editor/ListboxItem", windowName + "/DC/Text");	
+	CEGUI::Window* itemEntryText = gGUIMgr.CreateWindow("Editor/ListboxItem", windowName + "/DC/Text");	
 	itemEntryText->setArea(CEGUI::URect(CEGUI::UDim(0, 16), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
 	itemEntryText->setMousePassThroughEnabled(false);
 	dragContainer->addChildWindow(itemEntryText);
@@ -437,13 +437,13 @@ void ResourceWindow::DestroyItemEntryCache()
 {
 	for (ItemEntryCache::iterator it = mResourceItemEntryCache.begin(); it != mResourceItemEntryCache.end(); ++it)
 	{
-		gGUIMgr.DestroyWindowDirectly((*it));
+		gGUIMgr.DestroyWindow((*it));
 	}
 	mResourceItemEntryCache.clear();
 
 	for (ItemEntryCache::iterator it = mDirectoryItemEntryCache.begin(); it != mDirectoryItemEntryCache.end(); ++it)
 	{
-		gGUIMgr.DestroyWindowDirectly((*it));
+		gGUIMgr.DestroyWindow((*it));
 	}
 	mDirectoryItemEntryCache.clear();
 }

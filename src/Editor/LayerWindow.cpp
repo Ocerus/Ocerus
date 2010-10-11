@@ -27,7 +27,7 @@ void Editor::LayerWindow::Init()
 	{
 		mWindow = gGUIMgr.GetWindow("Editor/LayerWindow");
 		OC_ASSERT(mWindow);
-		mTree = static_cast<CEGUI::ItemListbox*>(gGUIMgr.CreateWindowDirectly("Editor/ItemListbox", "Editor/LayerWindow/List"));
+		mTree = static_cast<CEGUI::ItemListbox*>(gGUIMgr.CreateWindow("Editor/ItemListbox", "Editor/LayerWindow/List"));
 		mTree->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
 		mTree->setSortMode(CEGUI::ItemListBase::UserSort);
 		mTree->setSortCallback(&Editor::LayerWindow::SortCallback);
@@ -45,7 +45,7 @@ void Editor::LayerWindow::Init()
 
 void LayerWindow::Deinit()
 {
-	gGUIMgr.DestroyWindowDirectly(mWindow);
+	gGUIMgr.DestroyWindow(mWindow);
 	mWindow = 0;
 	DestroyPopupMenus();
 	DestroyItemCache();
@@ -530,27 +530,27 @@ CEGUI::ItemEntry* LayerWindow::CreateLayerItem()
 	static uint32 layerItemCounter = 0;
 	CEGUI::String windowName = "Editor/LayerWindow/List/LayerItem" + StringConverter::ToString(layerItemCounter++);
 
-	CEGUI::ItemEntry* layerItem = static_cast<CEGUI::ItemEntry*>(gGUIMgr.CreateWindowDirectly("Editor/ListboxItem", windowName));
+	CEGUI::ItemEntry* layerItem = static_cast<CEGUI::ItemEntry*>(gGUIMgr.CreateWindow("Editor/ListboxItem", windowName));
 	layerItem->setUserData((void*)1);
 
-	CEGUI::Window* dragContainer = gGUIMgr.CreateWindowDirectly("DragContainer", windowName + "/DC");
+	CEGUI::Window* dragContainer = gGUIMgr.CreateWindow("DragContainer", windowName + "/DC");
 	dragContainer->setArea(CEGUI::URect(CEGUI::UDim(0, 16), CEGUI::UDim(0, 0), CEGUI::UDim(1, -16), CEGUI::UDim(1, 0)));
 	layerItem->addChildWindow(dragContainer);
 
-	CEGUI::Window* layerItemText = gGUIMgr.CreateWindowDirectly("Editor/StaticText", windowName + "/DC/Text");
+	CEGUI::Window* layerItemText = gGUIMgr.CreateWindow("Editor/StaticText", windowName + "/DC/Text");
 	layerItemText->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
 	layerItemText->setProperty("FrameEnabled", "False");
 	layerItemText->setProperty("BackgroundEnabled", "False");
 	layerItemText->setMousePassThroughEnabled(true);
 
-	CEGUI::Window* layerItemButton = gGUIMgr.CreateWindowDirectly("Editor/StaticText", windowName + "/Button");
+	CEGUI::Window* layerItemButton = gGUIMgr.CreateWindow("Editor/StaticText", windowName + "/Button");
 	layerItemButton->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), CEGUI::UDim(0, 10), CEGUI::UDim(1, 0)));
 	layerItemButton->setProperty("FrameEnabled", "False");
 	layerItemButton->setProperty("BackgroundEnabled", "False");
 	layerItemButton->subscribeEvent(CEGUI::Window::EventMouseButtonDown, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnLayerItemExpandClick, this));
 	layerItem->addChildWindow(layerItemButton);
 
-	CEGUI::Window* layerItemVisibilityToggle = gGUIMgr.CreateWindowDirectly("Editor/StaticImage", windowName + "/VisibilityToggle");
+	CEGUI::Window* layerItemVisibilityToggle = gGUIMgr.CreateWindow("Editor/StaticImage", windowName + "/VisibilityToggle");
 	layerItemVisibilityToggle->setArea(CEGUI::URect(CEGUI::UDim(1, -16), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
 	layerItemVisibilityToggle->setProperty("FrameEnabled", "False");
 	layerItemVisibilityToggle->setProperty("BackgroundEnabled", "False");
@@ -576,14 +576,14 @@ CEGUI::ItemEntry* LayerWindow::CreateEntityItem()
 	static uint32 entityItemCounter = 0;
 	CEGUI::String windowName = "Editor/LayerWindow/List/EntityItem" + StringConverter::ToString(entityItemCounter++);
 
-	CEGUI::ItemEntry* entityItem = static_cast<CEGUI::ItemEntry*>(gGUIMgr.CreateWindowDirectly("Editor/ListboxItem", windowName));
+	CEGUI::ItemEntry* entityItem = static_cast<CEGUI::ItemEntry*>(gGUIMgr.CreateWindow("Editor/ListboxItem", windowName));
 	entityItem->setUserData(0);
 
-	CEGUI::Window* dragContainer = gGUIMgr.CreateWindowDirectly("DragContainer", windowName + "/DC");
+	CEGUI::Window* dragContainer = gGUIMgr.CreateWindow("DragContainer", windowName + "/DC");
 	dragContainer->setArea(CEGUI::URect(CEGUI::UDim(0, 20), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
 	entityItem->addChildWindow(dragContainer);
 
-	CEGUI::Window* entityItemText = gGUIMgr.CreateWindowDirectly("Editor/StaticText", windowName + "/DC/Text");
+	CEGUI::Window* entityItemText = gGUIMgr.CreateWindow("Editor/StaticText", windowName + "/DC/Text");
 	entityItemText->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
 	entityItemText->setProperty("FrameEnabled", "False");
 	entityItemText->setProperty("BackgroundEnabled", "False");
@@ -662,13 +662,13 @@ void LayerWindow::DestroyItemCache()
 {
 	for (ItemCache::iterator it = mLayerItemCache.begin(); it != mLayerItemCache.end(); ++it)
 	{
-		gGUIMgr.DestroyWindowDirectly((*it));
+		gGUIMgr.DestroyWindow((*it));
 	}
 	mLayerItemCache.clear();
 
 	for (ItemCache::iterator it = mEntityItemCache.begin(); it != mEntityItemCache.end(); ++it)
 	{
-		gGUIMgr.DestroyWindowDirectly((*it));
+		gGUIMgr.DestroyWindow((*it));
 	}
 	mEntityItemCache.clear();
 }

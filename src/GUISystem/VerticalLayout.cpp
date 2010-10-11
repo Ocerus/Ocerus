@@ -18,8 +18,7 @@ GUISystem::VerticalLayout::VerticalLayout(CEGUI::Window* managedWindow, CEGUI::W
 GUISystem::VerticalLayout::~VerticalLayout()
 {
 	ClearEventConnections();
-	if (mContentPane) gGUIMgr.DestroyWindowChildren(mContentPane);
-	gGUIMgr.DestroyWindow(mManagedWindow);
+	//gGUIMgr.DestroyWindow(mManagedWindow);
 }
 
 void GUISystem::VerticalLayout::AddChildWindow(CEGUI::Window* window)

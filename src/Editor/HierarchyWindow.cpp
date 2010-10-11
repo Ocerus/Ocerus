@@ -31,7 +31,7 @@ void Editor::HierarchyWindow::Init()
 	{
 		mWindow = gGUIMgr.GetWindow("Editor/HierarchyWindow");
 		OC_ASSERT(mWindow);
-		mTree = static_cast<CEGUI::ItemListbox*>(gGUIMgr.CreateWindowDirectly("Editor/ItemListbox", "Editor/HierarchyWindow/Tree"));
+		mTree = static_cast<CEGUI::ItemListbox*>(gGUIMgr.CreateWindow("Editor/ItemListbox", "Editor/HierarchyWindow/Tree"));
 		mTree->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
 		mTree->setUserString("WantsMouseWheel", "True");
 
@@ -46,7 +46,7 @@ void Editor::HierarchyWindow::Init()
 
 void HierarchyWindow::Deinit()
 {
-	gGUIMgr.DestroyWindowDirectly(mWindow);
+	gGUIMgr.DestroyWindow(mWindow);
 	mWindow = 0;
 	mTree = 0;
 	DestroyPopupMenu();
@@ -552,12 +552,12 @@ CEGUI::ItemEntry* Editor::HierarchyWindow::CreateTreeItem()
 	static uint32 itemCounter = 0;
 	CEGUI::String windowName = "Editor/Hierarchy/Tree/EntityItem" + StringConverter::ToString(itemCounter++);
 
-	CEGUI::ItemEntry* newItem = static_cast<CEGUI::ItemEntry*>(gGUIMgr.CreateWindowDirectly("Editor/ListboxItem", windowName));
-	CEGUI::Window* dragContainer = static_cast<CEGUI::ItemEntry*>(gGUIMgr.CreateWindowDirectly("DragContainer", windowName + "/DC"));
+	CEGUI::ItemEntry* newItem = static_cast<CEGUI::ItemEntry*>(gGUIMgr.CreateWindow("Editor/ListboxItem", windowName));
+	CEGUI::Window* dragContainer = static_cast<CEGUI::ItemEntry*>(gGUIMgr.CreateWindow("DragContainer", windowName + "/DC"));
 	dragContainer->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
 	newItem->addChildWindow(dragContainer);
 
-	CEGUI::Window* newItemText = gGUIMgr.CreateWindowDirectly("Editor/StaticText", windowName + "/DC/Text");
+	CEGUI::Window* newItemText = gGUIMgr.CreateWindow("Editor/StaticText", windowName + "/DC/Text");
 	newItemText->setArea(CEGUI::URect(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
 	newItemText->setProperty("FrameEnabled", "False");
 	newItemText->setProperty("BackgroundEnabled", "False");
@@ -615,7 +615,7 @@ void Editor::HierarchyWindow::DestroyTreeItemCache()
 {
 	for (TreeItemCache::iterator it = mTreeItemCache.begin(); it != mTreeItemCache.end(); ++it)
 	{
-		gGUIMgr.DestroyWindowDirectly(*it);
+		gGUIMgr.DestroyWindow(*it);
 	}
 	mTreeItemCache.clear();
 }

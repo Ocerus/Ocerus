@@ -6,7 +6,7 @@
 
 using namespace GUISystem;
 
-GUIConsole::GUIConsole(): mIsInited(false), mCurrentLogLevelTreshold(0), mWidget(0), mPromptBoxWidget(0), mMessageBoxWidget(0)
+GUIConsole::GUIConsole(): mIsInited(false), mCurrentLogLevelTreshold(0), mWidget(0), mPromptBoxWidget(0), mMessageBoxWidget(0), mSuppressAppendingMessage(false)
 {
 	AppendEmptyHistoryCommand();
 }
@@ -66,6 +66,8 @@ void GUIConsole::AppendScriptMessage(const string& message)
 
 void GUISystem::GUIConsole::AppendMessage( const string& message )
 {
+	if (mSuppressAppendingMessage) return;
+	mSuppressAppendingMessage = true;
 	CEGUI::Scrollbar* scrollbar = mMessageBoxWidget->getVertScrollbar();
 	OC_ASSERT(scrollbar);
 	bool scrolledDown = scrollbar->getScrollPosition() == scrollbar->getDocumentSize() - scrollbar->getPageSize();
@@ -75,6 +77,7 @@ void GUISystem::GUIConsole::AppendMessage( const string& message )
 		scrollbar->setScrollPosition(scrollbar->getDocumentSize());
 	}
 	mMessageBoxWidget->getHorzScrollbar()->hide();
+	mSuppressAppendingMessage = false;
 }
 
 void GUIConsole::ToggleConsole()

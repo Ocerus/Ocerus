@@ -19,7 +19,7 @@ Editor::CreateProjectDialog::CreateProjectDialog():
 
 Editor::CreateProjectDialog::~CreateProjectDialog()
 {
-	gGUIMgr.DestroyWindowDirectly(mDialog);
+	gGUIMgr.DestroyWindow(mDialog);
 }
 
 void CreateProjectDialog::Init()

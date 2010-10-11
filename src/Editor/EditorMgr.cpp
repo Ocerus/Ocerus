@@ -12,6 +12,7 @@
 #include "GUISystem/GUIMgr.h"
 #include "GUISystem/ViewportWindow.h"
 #include "EntitySystem/EntityMgr/LayerMgr.h"
+#include "Core/Application.h"
 #include "Core/Project.h"
 #include "Core/Game.h"
 #include "CEGUI.h"
@@ -214,6 +215,41 @@ void Editor::EditorMgr::ShowCreateEntityPrompt(EntityHandle parent)
 	prompt->Show();
 }
 
+void Editor::EditorMgr::OnMessageBoxClicked(GUISystem::MessageBox::eMessageBoxButton button, int32 t)
+{
+	eMessageBoxTags tag = (eMessageBoxTags)t;
+	switch(tag)
+	{
+	case MBT_QUIT:
+		if (button == GUISystem::MessageBox::MBB_YES)
+			gApp.Shutdown();
+		return;
+	}
+	ocWarning << "MessageBox with tag " << tag << " clicked, but no action defined.";
+}
+
+void Editor::EditorMgr::OnFolderSelected(const string& path, const string& editboxValue, bool canceled, int32 t)
+{
+	if (canceled) return;
+	eFolderSelectorTags tag = (eFolderSelectorTags)t;
+	switch(tag)
+	{
+	case FST_CREATEPROJECT:
+		Reset();
+		CreateProject(path + '/' + editboxValue);
+		return;
+	case FST_OPENPROJECT:
+		Reset();
+		OpenProject(path);
+		return;
+	case FST_NEWSCENE:
+		Reset();
+		CreateScene(path + '/' + editboxValue, editboxValue);
+		return;
+	}
+	ocWarning << "Folder through FolderSelector with tag " << tag << " selected, but no action defined.";
+}
+
 void Editor::EditorMgr::CreateEntityPromptCallback(bool clickedOK, const string& entityName, int32 parentID)
 {
 	if (clickedOK == false)
@@ -375,16 +411,19 @@ void EditorMgr::RemoveComponentFromEntity(EntitySystem::EntityHandle entity, con
 		gEntityMgr.SavePrototypes();
 }
 
-
 void Editor::EditorMgr::RemoveComponentFromSelectedEntity(const EntitySystem::ComponentID& componentId)
 {
 	RemoveComponentFromEntity(GetSelectedEntity(), componentId);
 }
 
+bool EditorMgr::IsActionRunning()
+{
+	return GlobalProperties::Get<Core::Game>("Game").IsActionRunning();
+}
 
 bool Editor::EditorMgr::WasActionRestarted()
 {
-	return mIsInitialTime && !GlobalProperties::Get<Core::Game>("Game").IsActionRunning();
+	return mIsInitialTime && !IsActionRunning();
 }
 
 void Editor::EditorMgr::ResumeAction()
@@ -496,8 +535,8 @@ void EditorMgr::CreateProject(const string& projectPath)
 
 void EditorMgr::ShowOpenProjectDialog()
 {
-	GUISystem::FolderSelector* folderSelector = new GUISystem::FolderSelector("", (int)EditorMenu::FST_OPENPROJECT);
-	folderSelector->RegisterCallback(GUISystem::FolderSelector::Callback(mEditorGUI->GetEditorMenu(), &Editor::EditorMenu::OnFolderSelected));
+	GUISystem::FolderSelector* folderSelector = new GUISystem::FolderSelector("", (int)EditorMgr::FST_OPENPROJECT);
+	folderSelector->RegisterCallback(GUISystem::FolderSelector::Callback(this, &Editor::EditorMgr::OnFolderSelected));
 	folderSelector->Show(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "open_project_folder"));
 }
 
@@ -528,8 +567,8 @@ void EditorMgr::SaveOpenedScene()
 void EditorMgr::ShowNewSceneDialog()
 {
 	const string& projectPath = gEditorMgr.GetCurrentProject()->GetAbsoluteOpenedProjectPath();
-	GUISystem::FolderSelector* folderSelector = new GUISystem::FolderSelector(projectPath, (int)EditorMenu::FST_NEWSCENE);
-	folderSelector->RegisterCallback(GUISystem::FolderSelector::Callback(mEditorGUI->GetEditorMenu(), &Editor::EditorMenu::OnFolderSelected));
+	GUISystem::FolderSelector* folderSelector = new GUISystem::FolderSelector(projectPath, (int)EditorMgr::FST_NEWSCENE);
+	folderSelector->RegisterCallback(GUISystem::FolderSelector::Callback(this, &Editor::EditorMgr::OnFolderSelected));
 	folderSelector->Show(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "new_scene_folder"), true, 
 	  gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "new_scene_filename"));
 }
@@ -547,9 +586,9 @@ void EditorMgr::CreateScene(const string& sceneFilename, const string& sceneName
 
 void EditorMgr::ShowQuitDialog()
 {
-	GUISystem::MessageBox* messageBox = new GUISystem::MessageBox(GUISystem::MessageBox::MBT_YES_NO, EditorMenu::MBT_QUIT);
+	GUISystem::MessageBox* messageBox = new GUISystem::MessageBox(GUISystem::MessageBox::MBT_YES_NO, EditorMgr::MBT_QUIT);
 	messageBox->SetText(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "quit_message_text"));
-	messageBox->RegisterCallback(GUISystem::MessageBox::Callback(mEditorGUI->GetEditorMenu(), &Editor::EditorMenu::OnMessageBoxClicked));
+	messageBox->RegisterCallback(GUISystem::MessageBox::Callback(this, &Editor::EditorMgr::OnMessageBoxClicked));
 	messageBox->Show();
 }
 

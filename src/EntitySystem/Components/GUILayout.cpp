@@ -13,12 +13,12 @@ void EntityComponents::GUILayout::Create(void)
 
 void EntityComponents::GUILayout::Destroy(void)
 {
-	if (mRootWindow) gGUIMgr.DestroyWindowDirectly(mRootWindow);
+	if (mRootWindow) gGUIMgr.DestroyWindow(mRootWindow);
 }
 
 void EntityComponents::GUILayout::ReloadWindow(void)
 {  
-	if (mRootWindow) gGUIMgr.DestroyWindowDirectly(mRootWindow);
+	if (mRootWindow) gGUIMgr.DestroyWindow(mRootWindow);
 	if (mLayout)
 	{
 		if (mScheme) gGUIMgr.LoadProjectScheme(mScheme->GetName());
