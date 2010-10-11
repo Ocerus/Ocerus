@@ -103,7 +103,17 @@ void EntityWindow::Rebuild()
 
 	// There is no entity to be selected.
 	EntitySystem::EntityHandle currentEntity = gEditorMgr.GetSelectedEntity();
-	if (!currentEntity.Exists()) return;
+
+	if (!currentEntity.Exists())
+	{
+		// Clear all groups
+		for (size_t idx = 0; idx < mComponentGroupCache.size(); ++idx)
+		{
+			ClearComponentGroup(mComponentGroupCache[idx]);
+			mComponentGroupCache[idx].widget->setVisible(false);
+		}
+		return;
+	}
 
 	mVerticalLayout->LockUpdates();
 

@@ -58,6 +58,9 @@ namespace Editor
 			/// If there are more selected entities, the first one is returned.
 			inline EntitySystem::EntityHandle GetSelectedEntity() const;
 
+			/// Removes the specified entity from the selection. Does nothing if the entity was not selected.
+			void UnselectEntity(EntitySystem::EntityHandle entity);
+
 			/// Returns true if the entity is in the current selection.
 			bool IsEntitySelected(const EntitySystem::EntityHandle entity) const;
 
@@ -115,6 +118,8 @@ namespace Editor
 		void OnSceneOpened();
 		
 		void OnSceneClosed();
+		
+		void OnEntityDestroyed(EntitySystem::EntityHandle destroyedEntity);
 
 		/// Refreshes the hierarchy window.
 		void UpdateHierarchyWindow();

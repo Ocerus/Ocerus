@@ -1144,6 +1144,19 @@ void Editor::EditorMgr::ProcessCurrentEditTool(const GfxSystem::Point& screenCur
 	}
 }
 
+void EditorMgr::UnselectEntity(EntitySystem::EntityHandle entity)
+{
+	EntitySystem::EntityHandle oldEntity = GetSelectedEntity();
+
+	EntitySystem::EntityList::iterator it = std::find(mSelectedEntities.begin(), mSelectedEntities.end(), entity);
+	if (it != mSelectedEntities.end())
+		mSelectedEntities.erase(it);
+
+	EntitySystem::EntityHandle newEntity = GetSelectedEntity();
+	if (oldEntity != newEntity)
+		GetEditorGUI()->SetSelectedEntity(newEntity);
+}
+
 bool Editor::EditorMgr::IsEntitySelected( const EntitySystem::EntityHandle entity ) const
 {
 	return std::find(mSelectedEntities.begin(), mSelectedEntities.end(), entity) != mSelectedEntities.end();
@@ -1184,6 +1197,12 @@ void EditorMgr::OnSceneClosed()
 	GetLayerWindow()->Clear();
 	SwitchActionTool(Editor::EditorMgr::AT_RESTART);
 	UpdateMenuItemsEnabled();
+}
+
+void EditorMgr::OnEntityDestroyed(EntitySystem::EntityHandle destroyedEntity)
+{
+	GetHierarchyWindow()->RemoveEntityFromHierarchy(destroyedEntity);
+	UnselectEntity(destroyedEntity);
 }
 
 GUISystem::ViewportWindow* EditorMgr::GetEditorViewport() const

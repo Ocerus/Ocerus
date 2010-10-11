@@ -331,7 +331,7 @@ void EntityMgr::DestroyEntity(const EntityHandle entityToDestroy)
 {
 	if (GlobalProperties::Get<bool>("DevelopMode"))
 	{
-		gEditorMgr.GetHierarchyWindow()->RemoveEntityFromHierarchy(entityToDestroy);
+		gEditorMgr.OnEntityDestroyed(entityToDestroy);
 	}
 	mEntityDestroyQueue.push_back(entityToDestroy.GetID());
 }
