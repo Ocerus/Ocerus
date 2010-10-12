@@ -273,6 +273,16 @@ bool Editor::HierarchyWindow::OnTreeItemClicked( const CEGUI::EventArgs& e )
 	return true;
 }
 
+bool HierarchyWindow::OnTreeItemDoubleClicked(const CEGUI::EventArgs& e)
+{
+	const CEGUI::MouseEventArgs& args = static_cast<const CEGUI::MouseEventArgs&>(e);
+	if (args.button == CEGUI::LeftButton)
+	{
+		gEditorMgr.CenterCameraOnSelectedEntity();
+	}
+	return true;
+}
+
 bool Editor::HierarchyWindow::OnTreeClicked( const CEGUI::EventArgs& e )
 {
 	const CEGUI::MouseEventArgs& args = static_cast<const CEGUI::MouseEventArgs&>(e);
@@ -565,6 +575,7 @@ CEGUI::ItemEntry* Editor::HierarchyWindow::CreateTreeItem()
 
 	dragContainer->addChildWindow(newItemText);
 	dragContainer->subscribeEvent(CEGUI::Window::EventMouseClick, CEGUI::Event::Subscriber(&Editor::HierarchyWindow::OnTreeItemClicked, this));
+	dragContainer->subscribeEvent(CEGUI::Window::EventMouseDoubleClick, CEGUI::Event::Subscriber(&Editor::HierarchyWindow::OnTreeItemDoubleClicked, this));
 	dragContainer->subscribeEvent(CEGUI::Window::EventDragDropItemDropped, CEGUI::Event::Subscriber(&Editor::HierarchyWindow::OnItemDroppedOnTreeItem, this));
 	dragContainer->setUserString("DragDataType", "Hierarchy");
 

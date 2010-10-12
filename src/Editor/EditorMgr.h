@@ -54,6 +54,9 @@ namespace Editor
 			/// The previously selected entities become unselected.
 			void SelectEntities(const EntitySystem::EntityList& entities);
 
+			/// Centers camera on selected entity.
+			void CenterCameraOnSelectedEntity();
+
 			/// Returns currently selected entity. If no entity is selected, invalid EntityHandler is returned.
 			/// If there are more selected entities, the first one is returned.
 			inline EntitySystem::EntityHandle GetSelectedEntity() const;

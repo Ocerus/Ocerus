@@ -207,6 +207,12 @@ void EditorMgr::SelectEntities(const EntitySystem::EntityList& entities)
 		GetEditorGUI()->SetSelectedEntity(GetSelectedEntity());
 }
 
+void EditorMgr::CenterCameraOnSelectedEntity()
+{
+	CenterCameraOnEntity(GetSelectedEntity());
+}
+
+
 void Editor::EditorMgr::ShowCreateEntityPrompt(EntityHandle parent)
 {
 	GUISystem::PromptBox* prompt = new GUISystem::PromptBox(parent != EntitySystem::EntityHandle::Null ? parent.GetID() : 0);
@@ -996,7 +1002,7 @@ bool Editor::EditorMgr::HandleShortcuts( InputSystem::eKeyCode keyCode )
 	}
 	if (mShortcuts->IsShortcutActive(KeyShortcuts::KS_CENTER_CAM))
 	{
-		CenterCameraOnEntity(GetSelectedEntity());
+		CenterCameraOnSelectedEntity();
 	}
 
 	return false;

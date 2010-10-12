@@ -85,6 +85,7 @@ namespace Editor
 		/// @name CEGUI Callbacks
 		//@{
 		bool OnTreeItemClicked(const CEGUI::EventArgs&);
+		bool OnTreeItemDoubleClicked(const CEGUI::EventArgs&);
 		bool OnTreeClicked(const CEGUI::EventArgs&);
 		bool OnItemDroppedOnTreeItem(const CEGUI::EventArgs&);
 		bool OnItemDroppedOnTree(const CEGUI::EventArgs&);
