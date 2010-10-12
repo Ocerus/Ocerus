@@ -433,3 +433,9 @@ string Core::Project::GetRequestedSceneName() const
 {
   return (mRequestSceneIndex != -1) ? mSceneList[mRequestSceneIndex].name : "";
 }
+
+void Core::Project::SetResourceType(ResourceSystem::ResourcePtr resource, ResourceSystem::eResourceType newType)
+{
+	string filePath = resource->GetName();
+	mResourceTypeMap[filePath] = newType;
+}

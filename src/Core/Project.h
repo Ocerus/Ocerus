@@ -103,6 +103,9 @@ namespace Core
 			/// Closes the opened scene.
 			void CloseOpenedScene();
 
+			/// Saves the association between specified resource and resource type to the resource type map.
+			void SetResourceType(ResourceSystem::ResourcePtr resource, ResourceSystem::eResourceType newType);
+			
 			/// Returns true if a scene is opened.
 			bool IsSceneOpened() const;
 

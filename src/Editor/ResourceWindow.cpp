@@ -64,6 +64,7 @@ void ResourceWindow::Clear()
 		mTree->getContentPane()->removeChildWindow(itemEntry);
 		StoreItemEntry(itemEntry);
 	}
+	mDirectoryList.clear();
 }
 
 void ResourceWindow::Update()
@@ -73,12 +74,6 @@ void ResourceWindow::Update()
 		// Update tree only if resource pool was modified
 		UpdateTree();
 	}
-}
-
-void ResourceWindow::ChangeResourceType(ResourceSystem::ResourcePtr resource, ResourceSystem::eResourceType newType)
-{
-	gResourceMgr.ChangeResourceType(resource, newType);
-	Update();
 }
 
 bool ResourceWindow::UpdateResourcePool()
@@ -231,7 +226,8 @@ void ResourceWindow::OnPopupMenuItemClicked(CEGUI::Window* menuItem)
 	{
 		// Change type
 		ResourceSystem::eResourceType newType = (ResourceSystem::eResourceType)menuItem->getID();
-		ChangeResourceType(mCurrentPopupResource, newType);
+		gEditorMgr.ChangeResourceType(mCurrentPopupResource, newType);
+		Update();
 	}
 	else
 	{

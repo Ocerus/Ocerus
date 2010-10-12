@@ -1046,6 +1046,13 @@ void Editor::EditorMgr::CenterCameraOnEntity(const EntitySystem::EntityHandle en
 		camera.GetProperty("Position").SetValue<Vector2>(entity.GetProperty("Position").GetValue<Vector2>());
 }
 
+void EditorMgr::ChangeResourceType(ResourceSystem::ResourcePtr resource, ResourceSystem::eResourceType newType)
+{
+	GetCurrentProject()->SetResourceType(resource, newType);
+	gResourceMgr.ChangeResourceType(resource, newType);
+}
+
+
 void Editor::EditorMgr::ProcessCurrentEditTool(const GfxSystem::Point& screenCursorPos)
 {
 	Vector2 worldCursorPos;
@@ -1184,7 +1191,7 @@ void EditorMgr::OnProjectOpened()
 void EditorMgr::OnProjectClosed()
 {
 	GetPrototypeWindow()->Update();
-	GetResourceWindow()->Update();
+	GetResourceWindow()->Clear();
 	UpdateSceneMenu();
 	UpdateMenuItemsEnabled();
 }

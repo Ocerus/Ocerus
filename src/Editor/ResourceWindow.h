@@ -32,9 +32,6 @@ namespace Editor
 		/// Updates the ResourceWindow.
 		void Update();
 
-		/// Changes the type of the resource to a new one.
-		void ChangeResourceType(ResourceSystem::ResourcePtr resource, ResourceSystem::eResourceType newType);
-
 		/// Returns the ResourcePtr for the specified ItemEntry window. It can be used to retrieve
 		/// ResourcePtr for drag 'n' drop source when receiving drag 'n' drop event.
 		ResourceSystem::ResourcePtr ItemEntryToResourcePtr(const CEGUI::Window* itemEntry);
