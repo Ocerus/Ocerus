@@ -421,7 +421,7 @@ void Editor::LayerWindow::Clear()
 	OC_ASSERT(mTree->getItemCount() == 0);
 }
 
-void LayerWindow::UpdateLayerItem(CEGUI::Window* layerItem, EntitySystem::LayerID layerID)
+void LayerWindow::UpdateLayerItem(CEGUI::ItemEntry* layerItem, EntitySystem::LayerID layerID)
 {
 	CEGUI::Window* layerItemText = layerItem->getChildAtIdx(0)->getChildAtIdx(0);
 	CEGUI::Window* layerItemEye = layerItem->getChildAtIdx(2);
@@ -451,7 +451,7 @@ void LayerWindow::UpdateLayerItem(CEGUI::Window* layerItem, EntitySystem::LayerI
 		layerItemButton->setText(CEGUI::String(1, 8722)); // minus sign
 }
 
-void LayerWindow::UpdateEntityItem(CEGUI::Window* entityItem, EntitySystem::EntityHandle entity)
+void LayerWindow::UpdateEntityItem(CEGUI::ItemEntry* entityItem, EntitySystem::EntityHandle entity)
 {
 	CEGUI::Window* entityItemText = entityItem->getChildAtIdx(0)->getChildAtIdx(0);
 	
@@ -459,6 +459,8 @@ void LayerWindow::UpdateEntityItem(CEGUI::Window* entityItem, EntitySystem::Enti
 	if (entityItemText->getText() != gEntityMgr.GetEntityName(entity))
 		entityItemText->setText(gEntityMgr.GetEntityName(entity));
 
+	if (gEditorMgr.GetSelectedEntity() == entity)
+		entityItem->setSelected(true);
 }
 
 void LayerWindow::NewLayerPromptCallback(bool clickedOK, const string& text, int32 layerID)

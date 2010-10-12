@@ -91,8 +91,8 @@ namespace Editor
 			bool OnDragDropItemDropped(const CEGUI::EventArgs&);
 		//@}
 
-		void UpdateLayerItem(CEGUI::Window* layerItem, EntitySystem::LayerID layerID);
-		void UpdateEntityItem(CEGUI::Window* entityItem, EntitySystem::EntityHandle entity);
+		void UpdateLayerItem(CEGUI::ItemEntry* layerItem, EntitySystem::LayerID layerID);
+		void UpdateEntityItem(CEGUI::ItemEntry* entityItem, EntitySystem::EntityHandle entity);
 
 		void NewLayerPromptCallback(bool clickedOK, const string& text, int32 tag);
 		void RenameLayerPromptCallback(bool clickedOK, const string& text, int32 tag);
