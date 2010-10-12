@@ -107,14 +107,16 @@ refresh_resources_hint=Refreshes the list of resources.
 resource_change_type=Change Type
 resource_change_type_hint=Changes the type of the resource.
 
-# prototype editor
+# prototype window
 prototypes=Prototypes
 prototype_add=Add Prototype
 prototype_add_hint=Creates new empty prototype
+prototype_new_prompt=Enter a name of the new prototype
 prototype_delete=Delete Prototype
 prototype_delete_hint=Deletes the prototype
 prototype_instantiate=Create Entity
 prototype_instantiate_hint=Instantiantes the prototype into new entity
+
 
 # hierarchy editor
 hierarchy=Hierarchy
