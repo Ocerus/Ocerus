@@ -1,8 +1,8 @@
 \begin{description}
   \item[Namespaces:] GUISystem
-  \item[Headers:] CEGUIForwards.h, CEGUIResource.h, CEGUITools.h, GUIConsole.h, GUIMgr.h, ItemListboxProperties.h, MessageBox.h, Prompt\-Box.h, ResourceProvider.h, ScriptProvider.h, VerticalLayout.h, ViewportWindow.h
-  \item[Source files:] CEGUIResource.cpp, CEGUITools.cpp, GUIConsole.cpp, \\GUIMgr.cpp, MessageBox.cpp, PromptBox.cpp, ResourceProvider\-.cpp, ScriptProvider.cpp, VerticalLayout.cpp, ViewportWindow.cpp
-  \item[Classes:] CEGUIResource, GUIConsole, GUIMgr, Item\-Listbox\-Wants\-Mou\-se\-Wheel, MessageBox, PromptBox, ResourceProvider, ScriptCallback, ScriptProvider, VerticalLayout, ViewportWindow
+  \item[Headers:] CEGUICommon.h, CEGUIForwards.h, CEGUIResource.h, FolderSelector.h, GUIConsole.h, GUIMgr.h, MessageBox.h, PopupMgr.h, Prompt\-Box.h, ResourceProvider.h, ScriptProvider.h, TabNavigator.h, VerticalLayout.h, ViewportWindow.h
+  \item[Source files:] CEGUIResource.cpp, FolderSelector.cpp, GUIConsole.cpp, \\GUIMgr.cpp, MessageBox.cpp, PopupMgr.cpp, PromptBox.cpp, Re\-sourceProvider.cpp, ScriptProvider.cpp, TabNavigation.cpp, Ver\-ti\-cal\-Layout.cpp, ViewportWindow.cpp
+  \item[Classes:] CEGUIResource, FolderSelector, GUIConsole, GUIMgr, MessageBox, PopupMgr, PromptBox, ResourceProvider, ScriptCallback, ScriptProvider, VerticalLayout, ViewportWindow
   \item[Libraries used:] CEGUI
 \end{description}
 
@@ -38,13 +38,17 @@ When the CEGUI library needs a resource it calls an appropriate method of a reso
 
 A GUI layout defines a composition of GUI elements including their properties such as position, size and content and their behavior. Their properties can be defined in an external XML file but more dynamic compositions need also a lot of a code support, their behavior can be defined in an external script file but more complicated reactions have to be also native coded.
 
-As an example that can be used both in the editor and in the game the \emph{GUISystem::MessageBox} class was created which provides a modal dialog for informing the user or for asking the user a question and receiving the answer. The basic layout with all possible buttons is specified in an XML file which is loaded in a class constructor where these buttons are mapped to the correspondent objects and displayed according to a message box type. Setting of a message text (\emph{MessageBox::SetText}) also changes a static text GUI element specified in an XML file. The behavior after the user clicks to one of buttons is defined by a callback function that can be registered by the \emph{MessageBox::RegisterCallback} method and that gets the kind of the chosen button and the ID specified in a constructor parameter. For an easier usage there is the global function \emph{GUISystem::ShowMessageBox} that takes all necessary parameters (a text, a kind of a message box, a callback and an ID) and creates and shows an appropriate message box. A similar concept has the \emph{PromptBox} class providing a modal dialog that asks for a text input from the user.
+As an example that can be used both in the editor and in the game the \emph{GUISystem::MessageBox} class was created which provides a modal dialog for informing the user or for asking the user a question and receiving the answer. The basic layout with all possible buttons is specified in an XML file which is loaded in a class constructor where these buttons are mapped to the correspondent objects and displayed according to a message box type. Setting of a message text (\emph{MessageBox::SetText}) also changes a static text GUI element specified in an XML file. The behavior after the user clicks to one of buttons is defined by a callback function that can be registered by the \emph{MessageBox::RegisterCallback} method and that gets the kind of the chosen button and the ID specified in a constructor parameter. For an easier usage there is the global function \emph{GUISystem::ShowMessageBox} that takes all necessary parameters (a text, a kind of a message box, a callback and an ID) and creates and shows an appropriate message box. A similar concept have the \emph{PromptBox} class providing a modal dialog that asks for a text input from the user and the \emph{GUISystem::FolderSelector} class providing a modal dialog for selecting a folder.
 
 Another example is the \emph{GUISystem::VerticalLayout} class that helps to keep GUI elements positioned in a vertical layout and automatically repositions them when one of them changes its size. In its constructor the container in which all child elements should be managed is specified, then the \emph{VerticalLayout::AddChildWindow} method is used for adding them. It is also possible to set a spacing between them and there is a method for updating a layout. It is obvious that this layout is defined without any XML file. For more information about creating own layouts see section \ref{sec:gui-creating}.
 
 \subsection{Viewports}
 
 The \emph{GUISystem::ViewportWindow} class represents a viewport window with a frame where a scene is rendered by the graphic system. For defining a position, an angle and a zoom of a view of a scene which will be displayed in the viewport a camera in form of an entity with a camera component must be set by the \emph{ViewportWindow::SetCamera} method. It is possible to define whether the viewport allows a direct edit of a view and displayed entities by the \emph{ViewportWindow::SetMovableContent} method. For example in the editor there are two viewports -- in the bottom one the scene can be edited whereas in the top one the result is only shown. The method \emph{ViewportWindow::AddInputListener} registers the input listener so any class can react to mouse and keyboard actions done in the viewport when it has been activated by the method \emph{ViewportWindow::Activate}.
+
+\subsection{Popup menus}
+
+The \emph{GUISystem::PopupMgr} class provides methods creating (\emph{Popup\-Mgr\-::\-Create\-Popup\-Menu} / \emph{PopupMgr::CreateMenuItem}) and destroying (\emph{PopupMgr::DestroyPopupMenu} / \emph{PopupMgr::DestroyMenuItem}) popup menu and its items as well as showing (\emph{PopupMgr::ShowPopup}) and hiding (\emph{PopupMgr::HidePopup}) it and it also cares about calling a proper callback when a menu item is clicked on. The callback method is provided to the manager when the popup menu is being opened by the \emph{PopupMgr::ShowPopup} method.
 
 \subsection{GUI console}
 \label{sec:gui-console}
@@ -58,17 +62,17 @@ This section focuses on creating a GUI to the game. First there is a description
 
 \subsection{Defining a layout}
 
-The GUI layout for the game should be defined in a file with the \emph{.layout} extension and the XML internal structure. Since the CEGUI library is used for the GUI system a layout must fulfil its specification which is widely described in its documentation \cite{cegui} therefore there is only a brief description it the following paragraphs.
+The GUI layout for the game should be defined in a file with the \emph{.layout} extension and the XML internal structure. Since the CEGUI library is used for the GUI system a layout must fulfill its specification which is widely described in its documentation \cite{cegui} therefore there is only a brief description it the following paragraphs.
 
 The \verb/<GUILayout>/ element is the root element in layout XML files that must contain a single \verb/<Window>/ element representing the root GUI element. The \verb/<Window>/ element must have the \verb/Type/ attribute which specifies the type of window to be created. This may refer to a concrete window type, an alias, or a falagard mapped type (see the next paragraph). It can have also the \verb/Name/ attribute specifying a unique name of the window. This element may contain \verb/<Property>/ elements with the \verb/Name/ and \verb/Value/ attributes used to set properties of the window, \verb/<Event>/ elements with the \verb/Name/ and \verb/Function/ attributes used to create bindings between the window and script functions (see the next subsection) and another \verb/<Window>/ elements as its child windows. For supported window types, properties and events see the CEGUI documentation.
 
-For defining connections between physical window type and window look (rendering, fonts, imagesets) the scheme file is used which is another XML file with a specific structure. Its root element is the \verb/GUIScheme/ one that can contain any number of for example \verb/<Imageset>/, \verb/<Font>/, \verb/<LookNFeel>/, \verb/<WindowAlias>/ or \verb/<FalagardMapping>/ elements. For concrete usage of these elements as well as building a GUI layout with own fonts, images etc. see the CEGUI documentation.
+For defining connections between a physical window type and a window look (rendering, fonts, imagesets) a scheme file is used which is another XML file with a specific structure. Its root element is the \verb/GUIScheme/ one that can contain any number of for example \verb/<Imageset>/, \verb/<Font>/, \verb/<LookNFeel>/, \verb/<WindowAlias>/ or \verb/<FalagardMapping>/ elements. For concrete usage of these elements as well as building a GUI layout with own fonts, images etc. see the CEGUI documentation.
 
 The only specific feature of writing GUI layouts for this game engine is the translation of a text in the \verb/Text/ and \verb/Tooltip/ properties if it is surrounded by \$ characters (i.e. \verb/Text=$text$/). This text is used as a key and the word \verb/GUI/ as a group for the string manager and it is replaced by the result according to the current language when the layout is loaded to the engine.
 
 \subsection{Event handling}
 
-Events generated by an interaction of user with GUI elements (mouse clicking, key pressing, etc.) can be handled by script functions written to a script module. If a layout is connected with a script module via a GUI layout component (see the next section) every occurence of an event specified in the \verb/Name/ attribute of the layout element \verb/<Event>/ will be followed by calling a script function with the name equal to the \verb/Function/ attribute in the same tag with a \verb/Window@/ parameter holding a reference to the window which the element is child of.
+Events generated by an interaction of user with GUI elements (mouse clicking, key pressing, etc.) can be handled by script functions written to a script module. If a layout is connected with a script module via a GUI layout component (see the next section) every occurrence of an event specified in the \verb/Name/ attribute of the layout element \verb/<Event>/ will be followed by calling a script function with the name equal to the \verb/Function/ attribute in the same tag with a \verb/Window@/ parameter holding a reference to the window which the element is child of.
 
 For example assume this is a part of a layout
 
@@ -93,9 +97,9 @@ void ContinueClick(Window@ window)
 
 \subsection{GUI layout component}
 
-The GUI layout component serves as a connection of one GUI layout file and one script module with functions that serves as callbacks to events of GUI elements described in the layout. Beside of these two properties there is a property \verb/Visible/ indicating whether the layout should be visible and active.
+The GUI layout component serves as a connection of one GUI layout file and one script module with functions that serves as callbacks to events of GUI elements described in the layout. Beside of these two properties there are the property \verb/Visible/ indicating whether the layout is visible, the property \verb/Enabled/ indicating whether layout elements reacts on an user input and the property \verb/Scheme/ referring to the GUI scheme file that is loaded before the layout file.
 
-It loads the layout on its initialization to the GUI system and it calls a script function with the declaration \verb/void OnUpdateLogic(float32)/ in the specified module every time it receives the \emph{UPDATE\_LOGIC} message where it is possible to update all information displayed by GUI elements (use the global function \verb/Window@ GetWindow(string)/ with the name specified in the layout file to get the reference to the window).
+On its initialization it loads the scheme and the layout to the GUI system and it calls script functions with the declarations \verb/void OnInit()/ and \verb/void OnPostInit()/ in the specified module. Every time it receives the \emph{UPDATE\_LOGIC} message it calls a script function with the declaration \verb/void OnUpdateLogic(float32)/ where it is possible to update all information displayed by GUI elements (use the global function \verb/Window@ GetWindow/ \verb/(string)/ with the name specified in the layout file to get the reference to the window).
 
 To show the GUI layout just add this component to any entity in the scene (or create a new one) and set the \verb/Visible/ property to true. The GUI elements are displayed over all entities and are not affected by cameras nor layers.
 
@@ -110,4 +114,5 @@ This is a glossary of the most used terms in the previous sections:
   \item[GUI console] -- a window where log and script messages immediately appears and which allows an input of script commands
   \item[GUI event] -- a significant situation made by the user input such as a mouse click or a keyboard press
   \item[Callback] -- a function or method that is called as a reaction to a GUI event
+  \item[Scheme] -- a definition of connections between a physical window type and a window look
 \end{description}

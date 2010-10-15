@@ -6,10 +6,10 @@
 namespace Editor
 {
 	/// Template specialization of GetValue() for resources.
-	template<>
-	string StringValueEditorModel<ResourceSystem::ResourcePtr>::GetValue() const
+	/*template<>
+	virtual string StringValueEditorModel<ResourceSystem::ResourcePtr>::GetValue() const
 	{
 		ResourceSystem::ResourcePtr resource = mWrappedModel->GetValue(); 
 		return resource ? resource->GetName() : "";
-	}
+	}*/
 }

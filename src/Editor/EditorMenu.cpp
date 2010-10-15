@@ -320,8 +320,8 @@ CEGUI::Window* Editor::EditorMenu::CreatePopupMenu(const CEGUI::String& name)
 {
 	CEGUI::PopupMenu* popupMenu = static_cast<CEGUI::PopupMenu*>(gGUIMgr.CreateWindow("Editor/PopupMenu", name));
 	popupMenu->setVisible(false);
-	popupMenu->setFadeInTime(0.1);
-	popupMenu->setFadeOutTime(0.1);
+	popupMenu->setFadeInTime((float)0.1);
+	popupMenu->setFadeOutTime((float)0.1);
 	popupMenu->setItemSpacing(2);
 	popupMenu->setAutoResizeEnabled(true);
 	return popupMenu;
@@ -337,7 +337,7 @@ CEGUI::RadioButton* Editor::EditorMenu::CreateToolbarItem(const CEGUI::String& n
 	toolbarItem->setProperty("HoverImage", "set:EditorToolbar image:" + imageName + "Hover");
 	toolbarItem->setProperty("PushedImage", "set:EditorToolbar image:" + imageName + "Pushed");
 	toolbarItem->setTooltipText(tooltip);
-	toolbarItem->setPosition(CEGUI::UVector2(cegui_absdim(left), cegui_absdim(0)));
+	toolbarItem->setPosition(CEGUI::UVector2(cegui_absdim((float)left), cegui_absdim(0)));
 	toolbarItem->setSize(CEGUI::UVector2(cegui_absdim(16), cegui_reldim(1)));
 	toolbarItem->subscribeEvent(CEGUI::RadioButton::EventSelectStateChanged, CEGUI::Event::Subscriber(&Editor::EditorMenu::OnToolbarButtonStateChanged, this));
 	left += 20;

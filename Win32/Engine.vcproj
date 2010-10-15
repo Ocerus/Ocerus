@@ -1106,6 +1106,10 @@
 				Name="inc"
 				>
 				<File
+					RelativePath="..\src\GUISystem\CEGUICommon.h"
+					>
+				</File>
+				<File
 					RelativePath="..\src\GUISystem\CEGUIForwards.h"
 					>
 				</File>
@@ -1114,7 +1118,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\src\GUISystem\CEGUITools.h"
+					RelativePath="..\src\GUISystem\FolderSelector.h"
 					>
 				</File>
 				<File
@@ -1123,10 +1127,6 @@
 				</File>
 				<File
 					RelativePath="..\src\GUISystem\GUIMgr.h"
-					>
-				</File>
-				<File
-					RelativePath="..\src\GUISystem\ItemListboxProperties.h"
 					>
 				</File>
 				<File
@@ -1167,6 +1167,10 @@
 				>
 				<File
 					RelativePath="..\src\GUISystem\CEGUIResource.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src\GUISystem\FolderSelector.cpp"
 					>
 				</File>
 				<File
@@ -1494,10 +1498,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\src\GUISystem\FolderSelector.h"
-					>
-				</File>
-				<File
 					RelativePath="..\src\Editor\HierarchyWindow.h"
 					>
 				</File>
@@ -1539,10 +1539,6 @@
 				</File>
 				<File
 					RelativePath="..\src\Editor\EntityWindow.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\src\GUISystem\FolderSelector.cpp"
 					>
 				</File>
 				<File
@@ -1649,10 +1645,6 @@
 						>
 						<File
 							RelativePath="..\src\Editor\ValueEditors\Models\ArrayElementModel.h"
-							>
-						</File>
-						<File
-							RelativePath="..\src\Editor\ValueEditors\Models\ArrayElementModelImpl.h"
 							>
 						</File>
 						<File

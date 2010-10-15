@@ -70,8 +70,8 @@ namespace Editor
 		WrappedModel* mWrappedModel;
 	};
 
-       template<>
-       string StringValueEditorModel<ResourceSystem::ResourcePtr>::GetValue() const;
+       /*template<>
+       virtual string StringValueEditorModel<ResourceSystem::ResourcePtr>::GetValue() const;*/
 }
 
 #endif // _EDITOR_STRINGVALUEEDITORMODEL_H_

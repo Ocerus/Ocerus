@@ -16,13 +16,13 @@ void OnUpdateLogic(float32 delta)
   EntityHandle director = gEntityMgr.FindFirstEntity("Director");
   if (!director.IsValid()) return;
   
- 	uint32 score = director.Get_uint32("Score") + game.Get_uint32("TotalScore");
+  uint32 score = director.Get_uint32("Score") + game.Get_uint32("TotalScore");
   GetWindow("Score").SetText("" + score);
 
- 	float32 timeInSeconds = director.Get_float32("Time");
- 	uint32 timeMinutes = MathUtils::Floor(timeInSeconds / 60);
- 	uint32 timeSeconds = MathUtils::Round(timeInSeconds - timeMinutes);
-  GetWindow("Time").SetText(timeMinutes + ":" + timeSeconds);
+  float32 timeInSeconds = director.Get_float32("Time");
+  uint32 timeMinutes = MathUtils::Floor(timeInSeconds / 60);
+  uint32 timeSeconds = MathUtils::Round(timeInSeconds - timeMinutes * 60);
+  GetWindow("Time").SetText(timeMinutes + ":" + ((timeSeconds < 10) ? "0" : "") + timeSeconds);
   
   UpdateButtons();
   LevelTitleAnimation(delta);

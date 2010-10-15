@@ -228,6 +228,8 @@ bool GUISystem::GUIMgr::WindowExists(const string& name)
 	return CEGUI::WindowManager::getSingleton().isWindowPresent(name.c_str());
 }
 
+#undef CreateWindow
+
 CEGUI::Window* GUIMgr::CreateWindow(const CEGUI::String& type, const CEGUI::String& name)
 {
 	return CEGUI::WindowManager::getSingleton().createWindow(type, name);
