@@ -7,6 +7,7 @@
 		<Property Name="TitlebarEnabled" Value="True" />
 		<Property Name="DragMovingEnabled" Value="False" />
 		<Property Name="CloseButtonEnabled" Value="False" />
+		<Property Name="Alpha" Value="0.95" />
     <Property Name="UnifiedAreaRect" Value="{{0.5,-70},{0.2,0},{0.5,70},{0.8,0}}" />
 
 		<Window Type="TaharezLook/MenuItem" Name="IngameMenu/Continue">
@@ -29,7 +30,6 @@
 			<Property Name="UnifiedAreaRect" Value="{{0.0,0},{0.75,0},{1.0,0},{1.0,0}}"/>
 			<Event Name="MouseClick" Function="OnQuitClicked"/>
 		</Window>
-
 
   </Window>
 </GUILayout>

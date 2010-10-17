@@ -129,6 +129,6 @@ void OnExplosionButtonClicked(Window@ wnd)
 void OnMenuButtonClicked(Window@ wnd)
 {
 	PauseGame();
-        this.Set_bool("Enabled", false);
+	this.Set_bool("Enabled", false);
 	gEntityMgr.FindFirstEntity("MenuGUI").Set_bool("Visible", true);
 }

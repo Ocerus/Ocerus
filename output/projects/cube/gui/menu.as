@@ -1,4 +1,5 @@
 #include "GameControl.as"
+#include "gui/textbox.as"
 
 void OnContinueClicked(Window@ wnd)
 {
@@ -14,7 +15,9 @@ void OnRestartClicked(Window@ wnd)
 
 void OnHelpClicked(Window@ wnd)
 {
-	Println("help");
+	TextboxSetText(GetTextData("GUI", "helpText"));
+	gEntityMgr.FindFirstEntity("TextboxGUI").Set_bool("Visible", true);
+	this.Set_bool("Enabled", false);
 }
 
 void OnQuitClicked(Window@ wnd)
