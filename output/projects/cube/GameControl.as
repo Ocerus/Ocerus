@@ -3,8 +3,10 @@ void ExitLevel()
 	EntityHandle director = gEntityMgr.FindFirstEntity("Director");
 	if (director.Exists())	
 	{
-		uint32 total = game.Get_uint32("TotalScore") + director.Get_uint32("Score");
-		game.Set_uint32("TotalScore", total);
+		uint32 totalScore = game.Get_uint32("TotalScore") + director.Get_uint32("Score");
+		game.Set_uint32("TotalScore", totalScore);
+		float32 totalTime = game.Get_float32("TotalTime") + director.Get_float32("Time");
+		game.Set_float32("TotalTime", totalScore);
 	}	
 	game.SaveToFile("TestGame");
 	if (HasNextLevel())

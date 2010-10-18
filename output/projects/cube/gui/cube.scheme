@@ -5,6 +5,7 @@
 	<Imageset Filename="gui/icons.imageset" />
 	<Font Filename="gui/score.font" />
 	<Font Filename="gui/leveltitle.font" />
+	<Font Filename="gui/endscreen.font" />
 	
 	<FalagardMapping WindowType="Cube/Button" TargetType="CEGUI/PushButton" Renderer="Falagard/Button" LookNFeel="TaharezLook/Button" />
 	<FalagardMapping WindowType="Cube/ImageButton" TargetType="CEGUI/PushButton" Renderer="Falagard/Button" LookNFeel="TaharezLook/ImageButton" />
