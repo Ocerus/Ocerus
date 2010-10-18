@@ -1,4 +1,6 @@
 #include "Common.h"
+#include "Core/Application.h"
+#include "Editor/EditorMgr.h"
 #include "ResourceProvider.h"
 
 #include "CEGUIResource.h"
@@ -19,7 +21,12 @@ namespace GUISystem {
 		if (!res)
 		{
 			// seems like the conversion to CEGUIResource failed, so let's try to fix the resource type
-			rawRes = gResourceMgr.ChangeResourceType(rawRes, ResourceSystem::RESTYPE_CEGUIRESOURCE);
+			if (gApp.IsDevelopMode())
+				gEditorMgr.ChangeResourceType(rawRes, ResourceSystem::RESTYPE_CEGUIRESOURCE);
+			else
+				gResourceMgr.ChangeResourceType(rawRes, ResourceSystem::RESTYPE_CEGUIRESOURCE);
+
+			rawRes = gResourceMgr.GetResource(resourceGroup.c_str(), filename.c_str());
 			res = (CEGUIResourcePtr)rawRes;
 		}
 		res->GetResource(output);
