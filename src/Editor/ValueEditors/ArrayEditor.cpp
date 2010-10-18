@@ -235,11 +235,15 @@ namespace Editor
 	}
 
 	template<class ElementType>
-	bool ArrayEditor<ElementType>::OnEventIsSharedCheckboxChanged(const CEGUI::EventArgs& arg)
+	bool ArrayEditor<ElementType>::OnEventIsSharedCheckboxChanged(const CEGUI::EventArgs& args)
 	{
-		const CEGUI::WindowEventArgs& winArgs = static_cast<const CEGUI::KeyEventArgs&>(arg);
-		mModel->SetShared(static_cast<CEGUI::Checkbox*>(winArgs.window)->isSelected());
-		gEditorMgr.PropertyValueChanged();
+		const CEGUI::WindowEventArgs& winArgs = static_cast<const CEGUI::KeyEventArgs&>(args);
+		bool isSelected = static_cast<CEGUI::Checkbox*>(winArgs.window)->isSelected();
+		if (mModel->IsShared() != isSelected)
+		{
+			mModel->SetShared(isSelected);
+			gEditorMgr.PropertyValueChanged();
+		}
 		return true;
 	}
 
