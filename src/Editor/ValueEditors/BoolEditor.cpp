@@ -166,7 +166,11 @@ bool BoolEditor::OnEventCheckStateChanged(const CEGUI::EventArgs& args)
 bool Editor::BoolEditor::OnEventIsSharedCheckboxChanged(const CEGUI::EventArgs& args)
 {
 	const CEGUI::WindowEventArgs& winArgs = static_cast<const CEGUI::KeyEventArgs&>(args);
-	mModel->SetShared(static_cast<CEGUI::Checkbox*>(winArgs.window)->isSelected());
-	gEditorMgr.PropertyValueChanged();
+	bool isSelected = static_cast<CEGUI::Checkbox*>(winArgs.window)->isSelected();
+	if (mModel->IsShared() != isSelected)
+	{
+		mModel->SetShared(isSelected);
+		gEditorMgr.PropertyValueChanged();
+	}
 	return true;
 }
