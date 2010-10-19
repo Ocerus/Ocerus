@@ -376,7 +376,8 @@ void Editor::EditorMgr::DuplicateSelectedEntities()
 
 void Editor::EditorMgr::DeleteSelectedEntities()
 {
-	for (EntityList::iterator it = mSelectedEntities.begin(); it != mSelectedEntities.end(); ++it)
+	EntityList tmpOldSelected = mSelectedEntities;
+	for (EntityList::iterator it = tmpOldSelected.begin(); it != tmpOldSelected.end(); ++it)
 	{
 		DeleteEntity(*it);
 	}
