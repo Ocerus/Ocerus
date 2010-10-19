@@ -27,7 +27,6 @@ const uint64 REFRESH_PATH_DELAY_MILIS = 777;
 
 ResourceMgr::ResourceMgr( void ):
 	mBasePath(), mListener(0), mResourceUpdatesTimer(false), mMemoryLimit(0), mMemoryUsage(0), mEnforceMemoryLimit(true)
-	//RES_NULL_TEXTURE("general/NullTexture.png"), RES_NULL_MODEL("general/NullModel.model")
 {
 }
 
@@ -519,6 +518,12 @@ void ResourceSystem::ResourceMgr::RefreshAllTextures( void )
 ResourceSystem::ResourcePtr ResourceSystem::ResourceMgr::ChangeResourceType(ResourcePtr resPointer, eResourceType newType)
 {
 	ocInfo << "Changing type of resource " << resPointer->GetName() << " to " << GetResourceTypeName(newType);
+
+	if (resPointer->GetState() >= Resource::STATE_LOADING)
+	{
+		ocInfo << "Cannot change type of resource " << resPointer->GetName() << " because it is being used.";
+		return NULL;
+	}
 
 	// searching through the groups
 	for (ResourceGroupMap::iterator groupIter=mResourceGroups.begin(); groupIter!=mResourceGroups.end(); ++groupIter)
