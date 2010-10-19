@@ -60,6 +60,10 @@ bool Editor::EditorMenu::OnMenuItemClicked(const CEGUI::EventArgs& e)
 		gEditorMgr.Reset();
 		gEditorMgr.GetCurrentProject()->OpenSceneAtIndex(sceneIndex);
 	}
+	else if (submenu == mDeploySubmenu)
+	{
+		// Deploy project
+	}
 	else
 	{
 		switch (menuItem->getID())
@@ -232,6 +236,24 @@ void EditorMenu::InitMenu()
 	fileSubmenu->addChildWindow(CreateMenuItem("Editor/TopMenu/File/CreateProject", TR("create_project"), TR("create_project_hint"), MI_FILE_CREATEPROJECT));
 	fileSubmenu->addChildWindow(CreateMenuItem("Editor/TopMenu/File/OpenProject", TR("open_project"), TR("open_project_hint"), MI_FILE_OPENPROJECT));
 	fileSubmenu->addChildWindow(CreateMenuItem("Editor/TopMenu/File/CloseProject", TR("close_project"), TR("close_project_hint"), MI_FILE_CLOSEPROJECT));
+	CEGUI::Window* itemDeployProject = CreateMenuItem("Editor/TopMenu/File/DeployProject", TR("deploy_project"), TR("deploy_project_hint"), MI_INVALID);
+	fileSubmenu->addChildWindow(itemDeployProject);
+	mDeploySubmenu = CreatePopupMenu("Editor/TopMenu/File/DeployProject/AutoPopup");
+	itemDeployProject->addChildWindow(mDeploySubmenu);
+	vector<string> availablePlatforms;
+	gApp.GetAvailableDeployPlatforms(availablePlatforms);
+	if (availablePlatforms.empty())
+	{
+		bool enabled = false;
+		mDeploySubmenu->addChildWindow(CreateMenuItem("Editor/TopMenu/File/DeployProject/Empty", TR("no_platform"), "", MI_INVALID, enabled));
+	}
+	else
+	{
+		for (vector<string>::iterator it=availablePlatforms.begin(); it!=availablePlatforms.end(); ++it)
+		{
+			mDeploySubmenu->addChildWindow(CreateMenuItem("Editor/TopMenu/File/DeployProject/" + *it, *it, "", MI_INVALID));
+		}
+	}
 	fileSubmenu->addChildWindow(CreateMenuItem("Editor/TopMenu/File/Quit", TR("quit"), TR("quit_hint"), MI_FILE_QUIT));
 
 	// Scene submenu
@@ -306,12 +328,13 @@ void EditorMenu::InitToolbar()
 	SwitchToolButton(EditorMgr::ET_MOVE);
 }
 
-CEGUI::Window* Editor::EditorMenu::CreateMenuItem(const CEGUI::String& name, const CEGUI::String& text, const CEGUI::String& tooltip, size_t tag)
+CEGUI::Window* Editor::EditorMenu::CreateMenuItem(const CEGUI::String& name, const CEGUI::String& text, const CEGUI::String& tooltip, size_t tag, bool enabled)
 {
 	CEGUI::Window* menuItem = gGUIMgr.CreateWindow("Editor/MenuItem", name);
 	menuItem->setID((CEGUI::uint)tag);
 	menuItem->setText(text);
 	menuItem->setTooltipText(tooltip);
+	if (!enabled) menuItem->disable();
 	menuItem->subscribeEvent(CEGUI::MenuItem::EventClicked, CEGUI::Event::Subscriber(&Editor::EditorMenu::OnMenuItemClicked, this));
 	return menuItem;
 }

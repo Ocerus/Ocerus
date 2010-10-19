@@ -76,13 +76,14 @@ namespace Editor
 
 		void InitMenu();
 		void InitToolbar();
-		CEGUI::Window* CreateMenuItem(const CEGUI::String& name, const CEGUI::String& text, const CEGUI::String& tooltip, size_t tag);
+		CEGUI::Window* CreateMenuItem(const CEGUI::String& name, const CEGUI::String& text, const CEGUI::String& tooltip, size_t tag, bool enabled = true);
 		CEGUI::Window* CreatePopupMenu(const CEGUI::String& name);
 		CEGUI::RadioButton* CreateToolbarItem(const CEGUI::String& name, const CEGUI::String& imageName, const CEGUI::String& tooltip, size_t tag, size_t groupID);
 
 		CEGUI::PopupMenu* mTopMenu;
 		CEGUI::Window* mOpenSceneSubmenu;
 		CEGUI::Window* mComponentsSubmenu;
+		CEGUI::Window* mDeploySubmenu;
 
 		typedef vector<CEGUI::RadioButton*> RadioButtonList;
 		RadioButtonList mToolButtons;

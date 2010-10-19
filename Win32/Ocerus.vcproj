@@ -282,7 +282,8 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine=""
+				Description="Copying binaries to the output directory..."
+				CommandLine="copy /V /Y /B &quot;$(TargetPath)&quot; &quot;../output&quot;&#x0D;&#x0A;copy /V /Y /B &quot;$(TargetDir)$(TargetName).pdb&quot; &quot;../output&quot;&#x0D;&#x0A;copy /V /Y /B &quot;$(TargetDir)libexpat.dll&quot; &quot;../output&quot;&#x0D;&#x0A;"
 				ExcludedFromBuild="true"
 			/>
 		</Configuration>
@@ -376,8 +377,8 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				Description="Copying binaries to the output directory..."
-				CommandLine="copy /V /Y /B &quot;$(TargetPath)&quot; &quot;../output&quot;&#x0D;&#x0A;copy /V /Y /B &quot;$(TargetDir)$(TargetName).pdb&quot; &quot;../output&quot;&#x0D;&#x0A;copy /V /Y /B &quot;$(SolutionDir)bin\Develop\libexpat.dll&quot; &quot;../output&quot;&#x0D;&#x0A;"
+				Description="Copying binaries to the deploy directory..."
+				CommandLine="mkdir &quot;..\deploy\$(PlatformName)&quot;&#x0D;&#x0A;copy /V /Y /B &quot;$(TargetPath)&quot; &quot;../output/deploy/$(PlatformName)/&quot;&#x0D;&#x0A;copy /V /Y /B &quot;$(TargetDir)$(TargetName).pdb&quot; &quot;../output/deploy/$(PlatformName)/&quot;&#x0D;&#x0A;copy /V /Y /B &quot;$(SolutionDir)bin\Develop\libexpat.dll&quot; &quot;../output/deploy/$(PlatformName)/&quot;&#x0D;&#x0A;"
 				ExcludedFromBuild="false"
 			/>
 		</Configuration>
@@ -390,10 +391,6 @@
 			>
 			<File
 				RelativePath="..\src\Runner\main.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\src\Runner\StartupProject.h"
 				>
 			</File>
 		</Filter>

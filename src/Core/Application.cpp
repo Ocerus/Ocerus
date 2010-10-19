@@ -37,11 +37,8 @@ Application::Application():
 	#endif
 }
 
-void Application::Init(const string& startupProjectName)
+void Application::Init()
 {
-	// set up basic data
-	mStartupProjectName = startupProjectName;
-
 	// create basic singletons
 	LogSystem::LogMgr::CreateSingleton();
 	LogSystem::LogMgr::GetSingleton().Init("CoreLog.txt");
@@ -62,7 +59,7 @@ void Application::Init(const string& startupProjectName)
 	mConsoleHeight = mGlobalConfig->GetInt32("ConsoleH", 768, "Windows");
 
 	// debug window
-	/*if (mDevelopMode) */ShowConsole();
+	if (mDevelopMode) ShowConsole();
 
 	// create singletons
 
@@ -229,8 +226,12 @@ void Application::RunMainLoop()
 			else
 			{
 				if (!mGameProject) mGameProject = new Project(false);
-				OC_ASSERT_MSG(!mStartupProjectName.empty(), "Startup project must be defined when deploying the game!");
-				mGameProject->OpenProject(mStartupProjectName);
+				if (!mGameProject->OpenProject("."))
+				{
+					ocError << "Invalid project; quiting...";
+					Shutdown();
+					break;
+				}
 			}
 
 			RequestStateChange(AS_GAME, true);
@@ -396,6 +397,21 @@ void Core::Application::UnregisterGameInputListener( InputSystem::IInputListener
 	}
 }
 
+void Core::Application::GetAvailableDeployPlatforms( vector<string>& out )
+{
+	boost::filesystem::path deployDirectory = "deploy";
+	if (!boost::filesystem::exists(deployDirectory)) return;
+	boost::filesystem::directory_iterator iend;
+	for (boost::filesystem::directory_iterator i(deployDirectory); i!=iend; ++i)
+	{
+		if (boost::filesystem::is_directory(i->path()))
+		{	
+			out.push_back(i->path().filename());
+		}
+	}
+}
+
+
 //-----------------------------------------------------
 // Platfofm specific functions follow.
 
@@ -519,6 +535,5 @@ void Core::Application::YieldProcess()
 	// Update each 20ms, mouse is still OK
 	usleep(20000);
 }
-
 #endif
 

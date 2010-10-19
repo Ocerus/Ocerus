@@ -2,7 +2,6 @@
 /// Application entry point.
 #include "Common.h"
 
-#include "StartupProject.h"
 #include "../Setup/Settings.h"
 #include "../Core/Application.h"
 #include "../LogSystem/LogMgr.h"
@@ -95,7 +94,7 @@ int main(int argc, char* argv[])
 	{
 		// run the application itself
 		Core::Application* app = new Core::Application();
-		app->Init(Core::DEFAULT_PROJECT_NAME);
+		app->Init();
 		app->RunMainLoop();
 		delete app;
 	}
