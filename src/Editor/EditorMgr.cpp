@@ -291,7 +291,6 @@ EntityHandle Editor::EditorMgr::DuplicateEntity(EntitySystem::EntityHandle entit
 		UpdatePrototypeWindow();
 	}
 	SelectEntity(newEntity);
-	GetEditorGUI()->SetSelectedEntity(newEntity);
 	GetHierarchyWindow()->SetCurrentParent(EntityHandle::Null);
 	return newEntity;
 }
@@ -363,7 +362,7 @@ EntitySystem::EntityHandle Editor::EditorMgr::InstantiatePrototype(EntitySystem:
 void Editor::EditorMgr::DuplicateSelectedEntities()
 {
 	EntityList tmpOldSelected = mSelectedEntities;
-	EntityList tmpNewSelected(mSelectedEntities.size());
+	EntityList tmpNewSelected;
 	for (EntityList::iterator it = tmpOldSelected.begin(); it != tmpOldSelected.end(); ++it)
 	{
 		if (it->Exists())
@@ -371,8 +370,8 @@ void Editor::EditorMgr::DuplicateSelectedEntities()
 			tmpNewSelected.push_back(DuplicateEntity(*it));
 		}
 	}
+	SelectEntity(*tmpNewSelected.begin());
 	mSelectedEntities.assign(tmpNewSelected.begin(), tmpNewSelected.end());
-	GetEditorGUI()->SetSelectedEntity(*mSelectedEntities.begin());
 }
 
 void Editor::EditorMgr::DeleteSelectedEntities()
