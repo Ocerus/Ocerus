@@ -179,7 +179,7 @@ CEGUI::ItemEntry* PrototypeWindow::CreatePrototypeItem()
 	newItemText->setMousePassThroughEnabled(true);
 
 	dragContainer->addChildWindow(newItemText);
-	dragContainer->subscribeEvent(CEGUI::Window::EventMouseClick, CEGUI::Event::Subscriber(&Editor::PrototypeWindow::OnListItemClicked, this));
+	dragContainer->subscribeEvent(CEGUI::Window::EventMouseButtonUp, CEGUI::Event::Subscriber(&Editor::PrototypeWindow::OnListItemClicked, this));
 	dragContainer->setUserString("DragDataType", "Prototype");
 
 	return newItem;
@@ -188,9 +188,8 @@ CEGUI::ItemEntry* PrototypeWindow::CreatePrototypeItem()
 void PrototypeWindow::SetupPrototypeItem(CEGUI::ItemEntry* prototypeItem, EntitySystem::EntityHandle mPrototype)
 {
 	prototypeItem->setID(mPrototype.GetID());
-	prototypeItem->setText(gEntityMgr.GetEntityName(mPrototype));
+	prototypeItem->getChildAtIdx(0)->getChildAtIdx(0)->setText(gEntityMgr.GetEntityName(mPrototype));
 	prototypeItem->getChildAtIdx(0)->setID(mPrototype.GetID());
-	prototypeItem->getChildAtIdx(0)->getChildAtIdx(0)->setFont("Editor");
 }
 
 void PrototypeWindow::StorePrototypeItem(CEGUI::ItemEntry* prototypeItem)

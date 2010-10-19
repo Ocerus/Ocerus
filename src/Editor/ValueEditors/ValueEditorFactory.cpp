@@ -4,6 +4,7 @@
 #include "Editor/ValueEditors/ArrayEditor.h"
 #include "Editor/ValueEditors/BoolEditor.h"
 #include "Editor/ValueEditors/StringEditor.h"
+#include "Editor/ValueEditors/PrototypeEditor.h"
 #include "Editor/ValueEditors/ResourceEditor.h"
 #include "Editor/ValueEditors/TwoDimEditor.h"
 
@@ -70,5 +71,8 @@ Editor::AbstractValueEditor* ValueEditorFactory::GetValueEditorForProperty(const
 
 AbstractValueEditor* ValueEditorFactory::GetValueEditorForEntityAttribute(EntitySystem::EntityHandle entity, EntityAttributeModel::eAttributeType type)
 {
-	return GetValueEditorWithModel<StringEditor>(new EntityAttributeModel(entity, type));
+	if (type == EntityAttributeModel::TYPE_PROTOTYPE)
+		return GetValueEditorWithModel<PrototypeEditor>(new EntityAttributeModel(entity, type));
+	else
+		return GetValueEditorWithModel<StringEditor>(new EntityAttributeModel(entity, type));
 }

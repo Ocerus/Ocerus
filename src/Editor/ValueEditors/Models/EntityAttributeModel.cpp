@@ -2,6 +2,7 @@
 #include "EntityAttributeModel.h"
 #include "Editor/EditorMgr.h"
 #include "Editor/EditorGUI.h"
+#include "Editor/EntityWindow.h"
 
 using namespace Editor;
 
@@ -63,7 +64,10 @@ void EntityAttributeModel::Remove()
 {
 	OC_ASSERT(mType == TYPE_PROTOTYPE);
 	if (gEntityMgr.IsEntityLinkedToPrototype(mEntity))
+	{
 		gEntityMgr.UnlinkEntityFromPrototype(mEntity);
+		gEditorMgr.GetEditorGUI()->GetEntityWindow()->RebuildLater();
+	}
 }
 
 string Editor::EntityAttributeModel::GetValue() const
@@ -99,6 +103,14 @@ void Editor::EntityAttributeModel::SetValue(const string& newValue)
 			gEntityMgr.SetEntityTag(mEntity, StringConverter::FromString<EntitySystem::EntityTag>(newValue));
 			gEditorMgr.PropertyValueChanged(); // to propagate the value from prototypes
 			break;
+		case TYPE_PROTOTYPE:
+			{
+				EntitySystem::EntityID prototypeID = Utils::StringConverter::FromString<EntitySystem::EntityID> (newValue);
+				EntitySystem::EntityHandle prototype(prototypeID);
+				gEntityMgr.LinkEntityToPrototype(mEntity, prototype);
+				gEditorMgr.GetEditorGUI()->GetEntityWindow()->RebuildLater();
+				break;
+			}
 		default: OC_NOT_REACHED();
 	}
 

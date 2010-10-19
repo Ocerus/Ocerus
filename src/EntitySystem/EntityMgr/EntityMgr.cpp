@@ -1213,6 +1213,13 @@ int32 EntitySystem::EntityMgr::GetNumberOfEntityComponents( const EntityHandle e
 
 void EntitySystem::EntityMgr::LinkEntityToPrototype( const EntityHandle entity, const EntityHandle prototype )
 {
+	EntityMap::iterator entityIt = mEntities.find(entity.GetID());
+	if (entityIt == mEntities.end())
+	{
+		ocError << "Cannot link entity " << entity << " ; not found";
+		return;
+	}
+
 	PrototypeMap::iterator protIt = mPrototypes.find(prototype.GetID());
 	if (protIt == mPrototypes.end())
 	{
@@ -1220,6 +1227,7 @@ void EntitySystem::EntityMgr::LinkEntityToPrototype( const EntityHandle entity, 
 		return;
 	}
 
+	entityIt->second->mPrototype = prototype;
 	protIt->second->mInstancesCount++;
 	UpdatePrototypeInstance(prototype.GetID(), entity.GetID());
 }

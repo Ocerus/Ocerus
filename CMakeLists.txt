@@ -235,6 +235,7 @@ set(Editor_SRCS
 	src/Editor/ValueEditors/AbstractValueEditor.cpp
 	src/Editor/ValueEditors/ArrayEditor.cpp
 	src/Editor/ValueEditors/StringEditor.cpp
+	src/Editor/ValueEditors/PrototypeEditor.cpp
 	src/Editor/ValueEditors/ResourceEditor.cpp
 	src/Editor/ValueEditors/BoolEditor.cpp
 	src/Editor/ValueEditors/TwoDimEditor.cpp

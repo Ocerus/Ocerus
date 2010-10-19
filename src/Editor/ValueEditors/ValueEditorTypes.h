@@ -10,6 +10,7 @@ namespace Editor
 		VET_PT_RESOURCE,
 		VET_PT_STRING,
 		VET_PT_VECTOR2,
+		VET_PT_PROTOTYPE,
 
 		// Array editors:
 		#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter, cloning) VET_##typeID##_ARRAY,
