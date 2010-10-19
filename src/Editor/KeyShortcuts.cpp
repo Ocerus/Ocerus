@@ -36,7 +36,8 @@ KeyShortcuts::KeyShortcuts()
 	mShortcuts.insert(ShortcutPair(InputSystem::KC_DELETE, Shortcut(KS_DELETE, MK_NOMOD)));
 
 	// Quit
-	mShortcuts.insert(ShortcutPair(InputSystem::KC_ESCAPE, Shortcut(KS_QUIT, MK_NOMOD)));
+	// not a good idea; it usually collides with shortcuts the game uses
+	//mShortcuts.insert(ShortcutPair(InputSystem::KC_ESCAPE, Shortcut(KS_QUIT, MK_NOMOD)));
 
 	// Fullscreen
 	mShortcuts.insert(ShortcutPair(InputSystem::KC_RETURN, Shortcut(KS_FULLSCREEN, MK_ALT)));

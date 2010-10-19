@@ -62,7 +62,7 @@ void Application::Init(const string& startupProjectName)
 	mConsoleHeight = mGlobalConfig->GetInt32("ConsoleH", 768, "Windows");
 
 	// debug window
-	if (mDevelopMode) ShowConsole();
+	/*if (mDevelopMode) */ShowConsole();
 
 	// create singletons
 

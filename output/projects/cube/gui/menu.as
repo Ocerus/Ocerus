@@ -3,9 +3,7 @@
 
 void OnContinueClicked(Window@ wnd)
 {
-	this.Set_bool("Visible", false);
-	gEntityMgr.FindFirstEntity("GameGUI").Set_bool("Enabled", true);
-	ResumeGame();
+	TryCloseMenu();
 }
 
 void OnRestartClicked(Window@ wnd)
@@ -23,4 +21,12 @@ void OnHelpClicked(Window@ wnd)
 void OnQuitClicked(Window@ wnd)
 {
 	QuitGame();
+}
+
+void OnKeyPressed(eKeyCode key, uint32 char)
+{
+	if (key == KC_ESCAPE)
+	{
+		TryCloseMenu();
+	}
 }

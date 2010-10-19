@@ -6,7 +6,7 @@ void ExitLevel()
 		uint32 totalScore = game.Get_uint32("TotalScore") + director.Get_uint32("Score");
 		game.Set_uint32("TotalScore", totalScore);
 		float32 totalTime = game.Get_float32("TotalTime") + director.Get_float32("Time");
-		game.Set_float32("TotalTime", totalScore);
+		game.Set_float32("TotalTime", totalTime);
 	}	
 	game.SaveToFile("TestGame");
 	if (HasNextLevel())
@@ -74,4 +74,39 @@ void RestartGame()
 void QuitGame()
 {
 	game.Quit();
+}
+
+void TryOpenMenu()
+{
+	EntityHandle gameGui = gEntityMgr.FindFirstEntity("GameGUI");
+	EntityHandle menuGui = gEntityMgr.FindFirstEntity("MenuGUI");
+	if (!gameGui.Get_bool("Enabled") || !gameGui.Get_bool("Visible")) return;
+	
+	PauseGame();
+	gameGui.Set_bool("Enabled", false);
+	menuGui.Set_bool("Visible", true);
+}
+
+void TryCloseMenu()
+{
+	EntityHandle gameGui = gEntityMgr.FindFirstEntity("GameGUI");
+	EntityHandle menuGui = gEntityMgr.FindFirstEntity("MenuGUI");
+	if (!menuGui.Get_bool("Enabled") || !menuGui.Get_bool("Visible")) return;
+	
+	menuGui.Set_bool("Visible", false);
+	gameGui.Set_bool("Enabled", true);
+	ResumeGame();
+}
+
+void ToggleMenu()
+{
+	EntityHandle menuGui = gEntityMgr.FindFirstEntity("MenuGUI");
+	if (menuGui.Get_bool("Visible"))	
+	{
+		TryCloseMenu();
+	}
+	else
+	{
+		TryOpenMenu();
+	}
 }

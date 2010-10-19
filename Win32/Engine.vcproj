@@ -1585,6 +1585,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\src\Editor\ValueEditors\PrototypeEditor.h"
+						>
+					</File>
+					<File
 						RelativePath="..\src\Editor\ValueEditors\ResourceEditor.h"
 						>
 					</File>
@@ -1618,6 +1622,10 @@
 					</File>
 					<File
 						RelativePath="..\src\Editor\ValueEditors\BoolEditor.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\src\Editor\ValueEditors\PrototypeEditor.cpp"
 						>
 					</File>
 					<File
