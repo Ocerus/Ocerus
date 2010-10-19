@@ -12,7 +12,6 @@ using namespace GUISystem;
 bool ScriptCallback::operator()(const CEGUI::EventArgs &args) const
 {
 	if (gApp.IsEditMode() && gEditorMgr.WasActionRestarted()) return false;
-	if (!gApp.IsEditMode() && !GlobalProperties::Get<Core::Game>("Game").IsActionRunning()) return false;
 	
 	const CEGUI::WindowEventArgs* argument = static_cast<const CEGUI::WindowEventArgs*>(&args);
 
