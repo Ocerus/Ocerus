@@ -34,7 +34,7 @@ void Core::LoadingScreen::DoLoading( eType type, const string& sceneName )
 	case TYPE_BASIC_RESOURCES:
 
 		// resources for the loading screen
-		gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_SYSTEM, "general", "Loading", ".+Loading.\\.png");
+		gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_SYSTEM, "general/common", "Loading", ".+Loading.\\.png");
 		gResourceMgr.LoadResourcesInGroup("Loading");
 
 		break;
@@ -115,7 +115,7 @@ void Core::LoadingScreen::Draw()
 			mAnimationFrame = (mAnimationFrame+1) % 8;
 			mAnimationTimer.Reset();
 		}
-		GfxSystem::TexturePtr texRes = gResourceMgr.GetResource("Loading", "general/Loading" + StringConverter::ToString(mAnimationFrame) + ".png");
+		GfxSystem::TexturePtr texRes = gResourceMgr.GetResource("Loading", "general/common/Loading" + StringConverter::ToString(mAnimationFrame) + ".png");
 		if (texRes)
 		{
 			GfxSystem::TexturedQuad quad;

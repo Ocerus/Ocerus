@@ -143,6 +143,12 @@ namespace GUISystem
 
 		/// Popup menu manager
 		PopupMgr* mPopupMgr;
+
+		/// Initializes the basic general stuff.
+		void LoadGeneralResources();
+		
+		/// Initializes the editor stuff.
+		void LoadEditorResources();
 	};
 }
 #endif // _GUISYSTEM_GUIMGR_H_

@@ -81,6 +81,36 @@ GUIMgr::~GUIMgr()
 
 void GUIMgr::Init()
 {
+	LoadGeneralResources();
+
+	if (gApp.IsDevelopMode())
+	{
+		LoadEditorResources();
+	}
+}
+
+void GUIMgr::LoadGeneralResources()
+{
+	/// Register CEGUI system resources.
+	gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_SYSTEM, "general/gui/schemes", "gui-schemes", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
+	gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_SYSTEM, "general/gui/imagesets", "gui-imagesets", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
+	gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_SYSTEM, "general/gui/fonts", "gui-fonts", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
+	gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_SYSTEM, "general/gui/looknfeel", "gui-looknfeels", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
+
+	CEGUI_TRY;
+	{
+		CEGUI::SchemeManager::getSingleton().create("general/gui/schemes/TaharezLook.scheme");
+
+		// Set defaults
+		mCEGUI->setDefaultFont("DejaVuSans-10");
+		mCEGUI->setDefaultMouseCursor("TaharezLook", "MouseArrow");
+		mCEGUI->setMouseClickEventGenerationEnabled(true);
+	}
+	CEGUI_CATCH_CRITICAL;
+}
+
+void GUIMgr::LoadEditorResources()
+{
 	/// Register CEGUI system resources.
 	gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_SYSTEM, "gui/schemes", "gui-schemes", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
 	gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_SYSTEM, "gui/imagesets", "gui-imagesets", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
@@ -93,9 +123,7 @@ void GUIMgr::Init()
 		// Register custom Window subclasses to the CEGUI
 		CEGUI::WindowFactoryManager::addFactory<CEGUI::TplWindowFactory<ViewportWindow> >();
 
-		///@todo Improve GUI scheme loading. For example Editor.scheme does not need to be loaded unless in editor mode.
 		CEGUI::SchemeManager::getSingleton().create("gui/schemes/VanillaSkin.scheme");
-		CEGUI::SchemeManager::getSingleton().create("gui/schemes/TaharezLook.scheme");
 		CEGUI::SchemeManager::getSingleton().create("gui/schemes/Editor.scheme");
 
 		// Set defaults

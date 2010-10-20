@@ -570,6 +570,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\Utils\FilesystemUtils.h"
+					>
+				</File>
+				<File
 					RelativePath="..\src\Utils\GlobalProperties.h"
 					>
 				</File>
@@ -629,6 +633,10 @@
 			<Filter
 				Name="src"
 				>
+				<File
+					RelativePath="..\src\Utils\FilesystemUtils.cpp"
+					>
+				</File>
 				<File
 					RelativePath="..\src\Utils\GlobalProperties.cpp"
 					>

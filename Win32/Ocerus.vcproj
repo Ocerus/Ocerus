@@ -378,7 +378,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Copying binaries to the deploy directory..."
-				CommandLine="mkdir &quot;..\deploy\$(PlatformName)&quot;&#x0D;&#x0A;copy /V /Y /B &quot;$(TargetPath)&quot; &quot;../output/deploy/$(PlatformName)/&quot;&#x0D;&#x0A;copy /V /Y /B &quot;$(TargetDir)$(TargetName).pdb&quot; &quot;../output/deploy/$(PlatformName)/&quot;&#x0D;&#x0A;copy /V /Y /B &quot;$(SolutionDir)bin\Develop\libexpat.dll&quot; &quot;../output/deploy/$(PlatformName)/&quot;&#x0D;&#x0A;"
+				CommandLine="mkdir &quot;..\output\deploy\$(PlatformName)&quot;&#x0D;&#x0A;copy /V /Y /B &quot;$(TargetPath)&quot; &quot;../output/deploy/$(PlatformName)/&quot;&#x0D;&#x0A;copy /V /Y /B &quot;$(TargetDir)$(TargetName).pdb&quot; &quot;../output/deploy/$(PlatformName)/&quot;&#x0D;&#x0A;copy /V /Y /B &quot;$(SolutionDir)bin\Develop\libexpat.dll&quot; &quot;../output/deploy/$(PlatformName)/&quot;&#x0D;&#x0A;"
 				ExcludedFromBuild="false"
 			/>
 		</Configuration>

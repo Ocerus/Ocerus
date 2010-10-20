@@ -2,10 +2,10 @@
 <GUIScheme Name="Editor">
 
 
-	<Imageset Filename="gui/imagesets/TaharezLook.imageset" />
+	<Imageset Filename="general/gui/imagesets/TaharezLook.imageset" />
 	<Font Filename="gui/fonts/Editor.font" />
 	<Font Filename="gui/fonts/Editor-Bold.font" />
-	<LookNFeel Filename="gui/looknfeel/TaharezLook.looknfeel" />
+	<LookNFeel Filename="general/gui/looknfeel/TaharezLook.looknfeel" />
 	<LookNFeel Filename="gui/looknfeel/Editor.looknfeel" />
 	<WindowRendererSet Filename="CEGUIFalagardWRBase" />
 	<FalagardMapping WindowType="Editor/Button"      TargetType="CEGUI/PushButton"  Renderer="Falagard/Button"       LookNFeel="TaharezLook/Button" />

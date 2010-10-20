@@ -63,6 +63,17 @@ bool Editor::EditorMenu::OnMenuItemClicked(const CEGUI::EventArgs& e)
 	else if (submenu == mDeploySubmenu)
 	{
 		// Deploy project
+		string platform = args.window->getText().c_str();
+		
+		///@todo vyber adresare + chybove hlasky + uspesna hlaska
+		if (!gEditorMgr.GetCurrentProject() || !gEditorMgr.GetCurrentProject()->IsProjectOpened())
+		{
+			ocError << "No project opened";
+		}
+		else
+		{
+			gApp.DeployCurrentProject(platform, "C:\\ocerus_hra");
+		}
 	}
 	else
 	{

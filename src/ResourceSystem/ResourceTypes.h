@@ -49,8 +49,8 @@ namespace ResourceSystem
 	};
 
 	
-	static const string RES_NULL_TEXTURE = "general/NullTexture.png";
-	static const string RES_NULL_MODEL = "general/NullModel.model";
+	static const string RES_NULL_TEXTURE = "general/common/NullTexture.png";
+	static const string RES_NULL_MODEL = "general/common/NullModel.model";
 	
 	/// String name of types of a base path.
 	string GetBasePathTypeName(const eBasePathType basePathType);

@@ -13,11 +13,14 @@
 #include "StringSystem/TextResource.h"
 #include "Editor/EditorMgr.h"
 #include "EntitySystem/EntityMgr/LayerMgr.h"
+#include "Utils/FilesystemUtils.h"
 
 
 using namespace Core;
 
-#define MAX_DELTA_TIME 0.5f
+const float32 MAX_DELTA_TIME = 0.5f;
+const char* DEPLOY_DIRECTORY = "deploy";
+
 
 Application::Application():
 	StateMachine<eAppState>(AS_INITING),
@@ -399,7 +402,7 @@ void Core::Application::UnregisterGameInputListener( InputSystem::IInputListener
 
 void Core::Application::GetAvailableDeployPlatforms( vector<string>& out )
 {
-	boost::filesystem::path deployDirectory = "deploy";
+	boost::filesystem::path deployDirectory = DEPLOY_DIRECTORY;
 	if (!boost::filesystem::exists(deployDirectory)) return;
 	boost::filesystem::directory_iterator iend;
 	for (boost::filesystem::directory_iterator i(deployDirectory); i!=iend; ++i)
@@ -408,6 +411,33 @@ void Core::Application::GetAvailableDeployPlatforms( vector<string>& out )
 		{	
 			out.push_back(i->path().filename());
 		}
+	}
+}
+
+void Core::Application::DeployCurrentProject( const string& platform, const string& destination )
+{
+	if (!mGameProject || !mGameProject->IsProjectOpened())
+	{
+		ocWarning << "Invalid project to deploy";
+		return;
+	}
+
+	Core::ProjectInfo pi;
+	mGameProject->GetOpenedProjectInfo(pi);
+	ocInfo << "Deploying project " << pi.name << " for the " << platform << " platform into " << destination;
+
+	try
+	{
+		boost::filesystem::path destinationPath = destination;
+		boost::filesystem::remove_all(destinationPath);
+		FilesystemUtils::CopyDirectory(".", destination, ".*\\.dll", "\\.svn");
+		FilesystemUtils::CopyDirectory(string(DEPLOY_DIRECTORY) + string("/") + platform, destination, ".*", "\\.svn");
+		FilesystemUtils::CopyDirectory("data/general", destination + "/data/general", ".*", "\\.svn");
+		FilesystemUtils::CopyDirectory(mGameProject->GetOpenedProjectPath(), destination, ".*", "\\.svn");
+	}
+	catch (std::exception& e)
+	{
+		ocError << "Deploying failed: " << e.what();
 	}
 }
 
