@@ -42,7 +42,8 @@ EntityMessage::eResult EntityComponents::GUILayout::HandleMessage(const EntityMe
 {
 	if (mCallback && (((msg.type == EntityMessage::INIT || msg.type == EntityMessage::POST_INIT) 
 		&& !gEntityMgr.IsEntityPrototype(GetOwner())) 
-		|| (msg.type == EntityMessage::UPDATE_LOGIC && !mScriptUpdateError && mVisible)))
+		|| (msg.type == EntityMessage::UPDATE_LOGIC && !mScriptUpdateError && mVisible)
+		|| ((msg.type == EntityMessage::KEY_PRESSED || msg.type == EntityMessage::KEY_RELEASED) && mEnabled)))
 	{
 		// Get function ID from module name and function declaration
 		int32 funcId = gScriptMgr.GetFunctionID(mCallback->GetName().c_str(),
@@ -77,6 +78,8 @@ EntityMessage::eResult EntityComponents::GUILayout::HandleMessage(const EntityMe
 		}
 	case EntityMessage::POST_INIT:
 	case EntityMessage::UPDATE_LOGIC:
+	case EntityMessage::KEY_PRESSED:
+	case EntityMessage::KEY_RELEASED:
 		{
 			return EntityMessage::RESULT_OK;
 		}

@@ -130,11 +130,3 @@ void OnMenuButtonClicked(Window@ wnd)
 {
 	TryOpenMenu();
 }
-
-void OnKeyPressed(eKeyCode key, uint32 char)
-{
-	if (key == KC_ESCAPE)
-	{
-		TryOpenMenu();
-	}
-}

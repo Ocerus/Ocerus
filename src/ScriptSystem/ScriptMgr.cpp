@@ -531,7 +531,12 @@ bool RegisterDynamicProperty(const EntityHandle& self,
 							 const string& propertyName, const PropertyAccessFlags accessFlags, const string& comment)
 {
 	ComponentID id = gEntityMgr.GetEntityComponent(self, CT_Script);
-	if (id == -1) return false;
+	if (id == -1)
+	{
+		ocWarning << "Dynamic property " << propertyName << " cannot be registered because the entity '"
+			<< self.GetName() << "' (" << self.GetID() << ") has not the Script component.";
+		return false;
+	}
 	return self.RegisterDynamicPropertyOfComponent<T>(id, StringKey(propertyName), accessFlags, comment);
 }
 
