@@ -1216,14 +1216,20 @@ void EntitySystem::EntityMgr::LinkEntityToPrototype( const EntityHandle entity, 
 	EntityMap::iterator entityIt = mEntities.find(entity.GetID());
 	if (entityIt == mEntities.end())
 	{
-		ocError << "Cannot link entity " << entity << " ; not found";
+		ocError << "Cannot link entity " << entity << " to prototype " << prototype << ". Entity " << entity << " not found.";
+		return;
+	}
+	
+	if (IsEntityPrototype(entity))
+	{
+		ocError << "Cannot link entity " << entity << " to prototype " << prototype << ". Cannot link a prototype to another prototype.";
 		return;
 	}
 
 	PrototypeMap::iterator protIt = mPrototypes.find(prototype.GetID());
 	if (protIt == mPrototypes.end())
 	{
-		ocError << "Cannot find prototype " << prototype << " to link";
+		ocError << "Cannot link entity " << entity << " to prototype " << prototype << ". Prototype " << prototype << " not found.";
 		return;
 	}
 
