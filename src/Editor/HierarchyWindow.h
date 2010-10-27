@@ -13,6 +13,12 @@ namespace Editor
 	{
 	public:
 
+		enum eAddItemMode
+		{
+			ADD_APPEND,
+			ADD_PREPEND
+		};
+
 		/// Default constructor.
 		HierarchyWindow();
 
@@ -38,11 +44,11 @@ namespace Editor
 		void SaveHierarchy(ResourceSystem::XMLOutput& storage);
 
 		/// Adds a new entity to the hierarchy as a parent of the current parent (see SetCurrentParent()).
-		void AddEntityToHierarchy(const EntitySystem::EntityHandle toAdd);
+		void AddEntityToHierarchy(const EntitySystem::EntityHandle toAdd, eAddItemMode addMode = ADD_APPEND);
 
 		/// Adds a new entity to the hierarchy as a parent of the given entity. If the parent is null the new entity is added
 		/// to the root.
-		void AddEntityToHierarchy(const EntitySystem::EntityHandle toAdd, const EntitySystem::EntityHandle parent);
+		void AddEntityToHierarchy(const EntitySystem::EntityHandle toAdd, const EntitySystem::EntityHandle parent, eAddItemMode addMode = ADD_APPEND);
 
 		/// Removes an entity from the hierarchy.
 		void RemoveEntityFromHierarchy(const EntitySystem::EntityHandle toRemove);

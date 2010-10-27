@@ -13,6 +13,7 @@
 #include "../ComponentMgr/ComponentMgr.h"
 #include "Properties/PropertyAccess.h"
 #include "ResourceSystem/XMLOutput.h"
+#include "Editor/HierarchyWindow.h"
 
 /// Macro for easier use.
 #define gEntityMgr EntitySystem::EntityMgr::GetSingleton()
@@ -54,15 +55,16 @@ namespace EntitySystem
 		/// @name Entity manipulation
 		//@{
 
-		/// Creates new entity accordingly to its description and returns its handle.
-		EntityHandle CreateEntity(EntityDescription& desc);
+		/// Creates new entity accordingly to its description and returns its handle. AddMode means if it should be appended or prepended in HierarchyWindow.
+		EntityHandle CreateEntity(EntityDescription& desc, Editor::HierarchyWindow::eAddItemMode addMode = Editor::HierarchyWindow::ADD_APPEND);
 		
 		/// Creates new entity from prototype.
 		EntityHandle InstantiatePrototype(const EntityHandle prototype, const Vector2& position = Vector2_Zero, const string& newName = "");
 		
 		/// Duplicates the entity with a new name.
 		/// If a name is not specified, the old name is used.
-		EntityHandle DuplicateEntity(const EntityHandle oldEntity, const string& newName = "");
+		/// AddMode means if it should be appended or prepended in HierarchyWindow.
+		EntityHandle DuplicateEntity(const EntityHandle oldEntity, const string& newName = "", Editor::HierarchyWindow::eAddItemMode addMode = Editor::HierarchyWindow::ADD_APPEND);
 
 		/// Destroys a specified entity if it exists.
 		void DestroyEntity(const EntityHandle entityToDestroy);

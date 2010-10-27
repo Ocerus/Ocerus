@@ -9,7 +9,6 @@
 #include "GfxSystem/GfxSceneMgr.h"
 #include "Editor/EditorMgr.h"
 #include "Editor/EditorGUI.h"
-#include "Editor/HierarchyWindow.h"
 
 namespace EntitySystem
 {
@@ -135,7 +134,7 @@ void EntityMgr::BroadcastMessage(const EntityMessage& msg)
 	}
 }
 
-EntityHandle EntityMgr::CreateEntity(EntityDescription& desc)
+EntityHandle EntityMgr::CreateEntity(EntityDescription& desc, Editor::HierarchyWindow::eAddItemMode addMode)
 {
 	OC_ASSERT(mComponentMgr);
 
@@ -215,7 +214,7 @@ EntityHandle EntityMgr::CreateEntity(EntityDescription& desc)
 
 	if (GlobalProperties::Get<bool>("DevelopMode"))
 	{
-		gEditorMgr.GetHierarchyWindow()->AddEntityToHierarchy(entityHandle);
+		gEditorMgr.GetHierarchyWindow()->AddEntityToHierarchy(entityHandle, addMode);
 	}
 
 	return entityHandle;
@@ -246,7 +245,7 @@ EntityHandle EntityMgr::InstantiatePrototype(const EntityHandle prototype, const
 	return instance;
 }
 
-EntityHandle EntityMgr::DuplicateEntity(const EntityHandle oldEntity, const string& newName)
+EntityHandle EntityMgr::DuplicateEntity(const EntityHandle oldEntity, const string& newName, Editor::HierarchyWindow::eAddItemMode addMode)
 {
 	OC_ASSERT(mComponentMgr);
 
@@ -320,7 +319,7 @@ EntityHandle EntityMgr::DuplicateEntity(const EntityHandle oldEntity, const stri
 
 	if (GlobalProperties::Get<bool>("DevelopMode"))
 	{
-		gEditorMgr.GetHierarchyWindow()->AddEntityToHierarchy(newEntity);
+		gEditorMgr.GetHierarchyWindow()->AddEntityToHierarchy(newEntity, addMode);
 	}
 
 	return newEntity;

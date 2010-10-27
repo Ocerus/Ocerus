@@ -90,7 +90,7 @@ void Editor::HierarchyWindow::SetupSubtree(const HierarchyTree::iterator_base& p
 	}
 }
 
-void Editor::HierarchyWindow::AddEntityToHierarchy(const EntitySystem::EntityHandle toAdd, const EntitySystem::EntityHandle parent)
+void Editor::HierarchyWindow::AddEntityToHierarchy(const EntitySystem::EntityHandle toAdd, const EntitySystem::EntityHandle parent, eAddItemMode addMode)
 {
 	if (mDontAddEntities) return; // the entity will be added to the hierarchy later on
 
@@ -107,13 +107,16 @@ void Editor::HierarchyWindow::AddEntityToHierarchy(const EntitySystem::EntityHan
 			return;
 		}
 	}
-	mHierarchy.append_child(parentIter, toAdd);
+	if (addMode == ADD_APPEND)
+		mHierarchy.append_child(parentIter, toAdd);
+	else
+		mHierarchy.prepend_child(parentIter, toAdd);
 	Update();
 }
 
-void Editor::HierarchyWindow::AddEntityToHierarchy(const EntitySystem::EntityHandle toAdd)
+void Editor::HierarchyWindow::AddEntityToHierarchy(const EntitySystem::EntityHandle toAdd, eAddItemMode addMode)
 {
-	AddEntityToHierarchy(toAdd, mCurrentParent);
+	AddEntityToHierarchy(toAdd, mCurrentParent, addMode);
 }
 
 void Editor::HierarchyWindow::RemoveEntityFromHierarchy(const EntitySystem::EntityHandle toRemove)

@@ -271,7 +271,7 @@ void Editor::EditorMgr::CreateEntity(const string& name, EntitySystem::EntityHan
 	EntitySystem::EntityDescription desc;
 	desc.SetName(name.empty() ? TR("new_entity").c_str() : name);
 	desc.AddComponent(EntitySystem::CT_Transform);
-	EntitySystem::EntityHandle newEntity = gEntityMgr.CreateEntity(desc);
+	EntitySystem::EntityHandle newEntity = gEntityMgr.CreateEntity(desc, Editor::HierarchyWindow::ADD_PREPEND);
 	newEntity.GetProperty("Layer").SetValue(gLayerMgr.GetActiveLayer());
 	newEntity.FinishInit();
 
@@ -283,7 +283,7 @@ EntityHandle Editor::EditorMgr::DuplicateEntity(EntitySystem::EntityHandle entit
 	if (!entity.Exists()) return EntityHandle::Null;
 	EntityHandle parent = GetHierarchyWindow()->GetParent(entity);
 	GetHierarchyWindow()->SetCurrentParent(parent);
-	EntityHandle newEntity = gEntityMgr.DuplicateEntity(entity);
+	EntityHandle newEntity = gEntityMgr.DuplicateEntity(entity, "", Editor::HierarchyWindow::ADD_PREPEND);
 	newEntity.FinishInit();
 	if (gEntityMgr.IsEntityPrototype(entity))
 	{
@@ -361,6 +361,9 @@ EntitySystem::EntityHandle Editor::EditorMgr::InstantiatePrototype(EntitySystem:
 
 void Editor::EditorMgr::DuplicateSelectedEntities()
 {
+	if (mSelectedEntities.size() == 0)
+		return;
+
 	EntityList tmpOldSelected = mSelectedEntities;
 	EntityList tmpNewSelected;
 	for (EntityList::iterator it = tmpOldSelected.begin(); it != tmpOldSelected.end(); ++it)
