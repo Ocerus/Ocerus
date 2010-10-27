@@ -496,13 +496,13 @@ void Core::Application::WriteToConsole( const string& str )
 	WriteConsole(GetStdHandle(STD_OUTPUT_HANDLE), str.c_str(), str.length(), &writtenChars, NULL);
 }
 
-DWORD WINAPI OpenPDF_thread(LPVOID lpParam)
+DWORD WINAPI Open_thread(LPVOID lpParam)
 {
 	system(((string*)lpParam)->c_str());
 	return 0;
 }
 
-void Core::Application::OpenPDF( const string& filePath )
+void Core::Application::OpenFileInExternalApp( const string& filePath )
 {
 	static string adjustedPath;
 	
@@ -515,7 +515,7 @@ void Core::Application::OpenPDF( const string& filePath )
 	}
 	ocInfo << "Opening " << adjustedPath;
 
-	CreateThread(NULL, 0, OpenPDF_thread, &adjustedPath, 0, NULL);
+	CreateThread(NULL, 0, Open_thread, &adjustedPath, 0, NULL);
 }
 
 void Core::Application::YieldProcess()
@@ -544,7 +544,7 @@ void Core::Application::WriteToConsole( const string& message )
     std::cerr << message;
 }
 
-void Core::Application::OpenPDF( const string& filePath )
+void Core::Application::OpenFileInExternalApp( const string& filePath )
 {
 	static string commands[] = { "xdg-open", "kde-open", "gnome-open", "okular", "kpdf", "evince", "xpdf", "acroread", "epdfview" };
 	static size_t commandsCount = 9;

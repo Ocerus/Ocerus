@@ -122,10 +122,10 @@ bool Editor::EditorMenu::OnMenuItemClicked(const CEGUI::EventArgs& e)
 			gEditorMgr.CreatePrototypeFromSelectedEntity();
 			break;
 		case MI_HELP_USERDOCUMENTATION:
-			gApp.OpenPDF("data/docs/Documentation.pdf");
+			gApp.OpenFileInExternalApp("data/docs/Documentation.pdf");
 			break;
 		case MI_HELP_SHORTCUTS:
-			gApp.OpenPDF("data/docs/Shortcuts.pdf");
+			gApp.OpenFileInExternalApp("data/docs/Shortcuts.pdf");
 			break;
 		case MI_HELP_ABOUT:
 			GUISystem::ShowMessageBox(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup,

@@ -5,6 +5,7 @@
 #include "GUISystem/CEGUICommon.h"
 #include "GUISystem/PopupMgr.h"
 #include "ResourceSystem/ResourceMgr.h"
+#include "Core/Application.h"
 
 using namespace Editor;
 
@@ -273,6 +274,10 @@ bool Editor::ResourceWindow::OnTreeItemDoubleClicked(const CEGUI::EventArgs& e)
 		if (resource.get() && gEditorMgr.GetCurrentProject()->IsResourceScene(resource))
 		{
 			gEditorMgr.GetCurrentProject()->OpenScene(resource);
+		}
+		else
+		{
+			Core::Application::GetSingleton().OpenFileInExternalApp(resource->GetFilePath());
 		}
 		return true;
 	}

@@ -94,8 +94,8 @@ namespace Core
 		/// Returns project used for the game itself.
 		Project* GetGameProject() { return mGameProject; }
 
-		/// Opens a PDF document.
-		void OpenPDF(const string& filePath);
+		/// Opens a file in default external application.
+		void OpenFileInExternalApp(const string& filePath);
 
 		/// Gives time to run to other applications for a while.
 		void YieldProcess();
