@@ -5,7 +5,7 @@
 
 using namespace GUISystem;
 
-TabNavigation::TabNavigation()
+TabNavigation::TabNavigation(CEGUI::ScrollablePane* scrollablePane): mScrollablePane(scrollablePane)
 {
 }
 
@@ -63,6 +63,29 @@ bool TabNavigation::OnEventKeyDown(const CEGUI::EventArgs& e)
 		}
 		while ((!newWidget->isVisible() || newWidget->isDisabled() || newWidget->getProperty("ReadOnly") == "True" ) && itFocus != itCurrent);
 		newWidget->activate();
+
+		// Make sure active widget will be visible
+		if (mScrollablePane)
+		{
+			CEGUI::Window* w = newWidget;
+			CEGUI::Vector2 widgetOffset(0, 0);
+			do
+			{
+				widgetOffset += w->getPosition().asAbsolute(w->getParentPixelSize());
+				w = w->getParent();
+			}
+			while (w != mScrollablePane && w != 0);
+
+			float32 scrollViewTop = mScrollablePane->getContentPaneArea().getSize().d_height * mScrollablePane->getVerticalScrollPosition();
+			float32 scrollViewBottom = scrollViewTop + mScrollablePane->getClipRect().getHeight();
+			
+			if (widgetOffset.d_y < scrollViewTop || widgetOffset.d_y + newWidget->getPixelSize().d_height > scrollViewBottom)
+			{
+				// We need to scroll
+				mScrollablePane->setVerticalScrollPosition(widgetOffset.d_y / mScrollablePane->getContentPaneArea().getSize().d_height);
+			}
+		}
+
 		return true;
 	}
 	return false;

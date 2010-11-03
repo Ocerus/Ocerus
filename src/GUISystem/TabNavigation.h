@@ -13,7 +13,9 @@ namespace GUISystem
 	{
 	public:
 		/// Constructs a TabNavigation instance.
-		TabNavigation();
+		/// @param scrollablePane If scrollablePane is passed, TabNavigation ensures, that pane will be
+		/// automatically scrolled so the new active widget will be visible.
+		TabNavigation(CEGUI::ScrollablePane* scrollablePane = 0);
 
 		/// Destroys the TabNavigation.
 		~TabNavigation();
@@ -30,6 +32,7 @@ namespace GUISystem
 
 		typedef vector<CEGUI::Window*> WidgetList;
 		WidgetList mTabOrder;
+		CEGUI::ScrollablePane* mScrollablePane;
 	};
 }
 

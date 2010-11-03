@@ -15,7 +15,6 @@ const float32 PROPERTY_UPDATE_INTERVAL = 0.3f;
 
 EntityWindow::EntityWindow(): mWindow(0), mScrollablePane(0), mVerticalLayout(0), mTabNavigation(0), mValueEditorFactory(0), mPropertyUpdateTimer(0), mNeedsRebuild(false)
 {
-	mTabNavigation = new GUISystem::TabNavigation();
 }
 
 EntityWindow::~EntityWindow()
@@ -45,22 +44,9 @@ void EntityWindow::Init()
 		mVerticalLayout = new GUISystem::VerticalLayout(mScrollablePane, const_cast<CEGUI::ScrolledContainer*>(mScrollablePane->getContentPane()));
 
 		mWindow->addChildWindow(mScrollablePane);
+		mTabNavigation = new GUISystem::TabNavigation(mScrollablePane);
 	}
 	CEGUI_CATCH_CRITICAL;
-
-/*
-	mWindow = gGUIMgr.LoadSystemLayout("EntityWindow.layout", "Editor");
-	if (!mWindow)
-	{
-		ocError << "Can't load EntityWindow.";
-		return;
-	}
-	mWindow->setUserString("WantsMouseWheel", "True");
-	gGUIMgr.GetGUISheet()->addChildWindow(mWindow);
-	mScrollablePane = static_cast<CEGUI::ScrollablePane*>(mWindow->getChild(mWindow->getName() + "/Scrollable"));
-	mScrollablePane->setUserString("WantsMouseWheel", "True");
-	mVerticalLayout = new GUISystem::VerticalLayout(mScrollablePane, const_cast<CEGUI::ScrolledContainer*>(mScrollablePane->getContentPane()));
-*/
 }
 
 void EntityWindow::Deinit()

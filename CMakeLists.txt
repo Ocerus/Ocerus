@@ -342,6 +342,7 @@ set(StringSystem_SRCS
 )
 
 set(Utils_SRCS
+	src/Utils/FilesystemUtils.cpp
 	src/Utils/StringKey.cpp
 	src/Utils/Properties/PropertySystem.cpp
 	src/Utils/Properties/AbstractProperty.cpp
