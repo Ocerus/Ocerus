@@ -42,8 +42,5 @@ bool Editor::ResourceEditor::OnEventDragDropItemDropped(const CEGUI::EventArgs& 
 	ResourceSystem::ResourcePtr resource = resourceWindow->ItemEntryToResourcePtr(args.dragDropItem);
 	if (resource.get())	model->GetWrappedModel()->SetValue(resource);
 	Update();
-
-	gEditorMgr.PropertyValueChanged();
-
 	return true;
 }

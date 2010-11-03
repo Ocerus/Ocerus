@@ -32,7 +32,5 @@ bool Editor::PrototypeEditor::OnEventDragDropItemDropped(const CEGUI::EventArgs&
 	string prototypeIDString = Utils::StringConverter::ToString(prototypeID);
 	mModel->SetValue(prototypeIDString);
 	Update();
-
-	gEditorMgr.PropertyValueChanged();
 	return true;
 }

@@ -56,7 +56,6 @@ bool StringEditor::OnEventIsSharedCheckboxChanged(const CEGUI::EventArgs& args)
 	if (mModel->IsShared() != isSelected)
 	{
 		mModel->SetShared(isSelected);
-		gEditorMgr.PropertyValueChanged();
 	}
 	return true;
 }
@@ -81,7 +80,6 @@ bool StringEditor::OnEventKeyDown(const CEGUI::EventArgs& args)
 		case CEGUI::Key::NumpadEnter:
 			this->Submit();
 			mEditboxWidget->deactivate();
-			gEditorMgr.PropertyValueChanged();
 			return true;
 		default:
 			break;

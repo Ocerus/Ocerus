@@ -147,3 +147,6 @@ no=No
 
 # folder selector
 select_folder=Select Folder
+
+# error messages
+error_link_prototype_to_prototype=Cannot link a prototype to another prototype.

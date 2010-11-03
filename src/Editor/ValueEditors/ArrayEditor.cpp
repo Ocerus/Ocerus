@@ -229,8 +229,6 @@ namespace Editor
 	{
 		OC_UNUSED(arg);
 		Submit();
-		///@todo: check
-		//gEditorMgr.PropertyValueChanged();
 		return true;
 	}
 
@@ -242,7 +240,6 @@ namespace Editor
 		if (mModel->IsShared() != isSelected)
 		{
 			mModel->SetShared(isSelected);
-			gEditorMgr.PropertyValueChanged();
 		}
 		return true;
 	}

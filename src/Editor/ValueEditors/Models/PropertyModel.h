@@ -6,6 +6,7 @@
 
 #include "Base.h"
 #include "IValueEditorModel.h"
+#include "Editor/EditorMgr.h"
 #include "Utils/Properties/PropertyHolder.h"
 #include "Utils/ResourcePointers.h"
 #include "EntitySystem/EntityMgr/EntityMgr.h"
@@ -62,16 +63,25 @@ namespace Editor
 		{
 			OC_ASSERT(IsShareable());
 			if (isShared)
+			{
 				gEntityMgr.SetPrototypePropertyShared(mEntity, mProperty.GetKey());
+			}
 			else
+			{
 				gEntityMgr.SetPrototypePropertyNonShared(mEntity, mProperty.GetKey());
+			}
+			gEditorMgr.PropertyValueChanged();
 		}
 
 		/// Returns the value of the property.
 		virtual T GetValue() const { return mProperty.GetValue<T>(); }
 
 		/// Sets the newValue to the property.
-		virtual void SetValue(const T& newValue) { return mProperty.SetValue<T>(newValue); }
+		virtual void SetValue(const T& newValue)\
+		{
+			mProperty.SetValue<T>(newValue);
+			gEditorMgr.PropertyValueChanged();
+		}
 
 	protected:
 		PropertyHolder mProperty;
@@ -90,7 +100,11 @@ namespace Editor
 		virtual string GetValue() const { return mProperty.GetValueString(); }
 
 		/// Sets the property value from string representation in newValue.
-		virtual void SetValue(const string& newValue) { return mProperty.SetValueFromString(newValue); }
+		virtual void SetValue(const string& newValue)
+		{
+			mProperty.SetValueFromString(newValue);
+			gEditorMgr.PropertyValueChanged();
+		}
 	};
 
 	class LayerPropertyModel: public PropertyModel<string>

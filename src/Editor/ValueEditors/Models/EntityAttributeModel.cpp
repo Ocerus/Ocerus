@@ -98,26 +98,33 @@ void Editor::EntityAttributeModel::SetValue(const string& newValue)
 	{
 		case TYPE_NAME: 
 			gEntityMgr.SetEntityName(mEntity, newValue);
+			gEditorMgr.UpdateHierarchyWindow();
+			if (gEditorMgr.IsEditingPrototype())
+			{
+				gEditorMgr.UpdatePrototypeWindow();
+			}
+			gEditorMgr.PropertyValueChanged();
 			break;
 		case TYPE_TAG:
 			gEntityMgr.SetEntityTag(mEntity, StringConverter::FromString<EntitySystem::EntityTag>(newValue));
-			gEditorMgr.PropertyValueChanged(); // to propagate the value from prototypes
+			gEditorMgr.PropertyValueChanged();
 			break;
 		case TYPE_PROTOTYPE:
 			{
 				EntitySystem::EntityID prototypeID = Utils::StringConverter::FromString<EntitySystem::EntityID> (newValue);
 				EntitySystem::EntityHandle prototype(prototypeID);
-				gEntityMgr.LinkEntityToPrototype(mEntity, prototype);
-				gEditorMgr.GetEditorGUI()->GetEntityWindow()->RebuildLater();
+				if (!gEntityMgr.IsEntityPrototype(mEntity))
+				{
+					gEntityMgr.LinkEntityToPrototype(mEntity, prototype);
+					gEditorMgr.GetEditorGUI()->GetEntityWindow()->RebuildLater();
+					gEditorMgr.PropertyValueChanged();
+				}
+				else
+				{
+					GUISystem::ShowMessageBox(TR("error_link_prototype_to_prototype"));
+				}
 				break;
 			}
 		default: OC_NOT_REACHED();
 	}
-
-	if (gEditorMgr.IsEditingPrototype())
-	{
-		gEditorMgr.UpdatePrototypeWindow();
-	}
-
-	gEditorMgr.UpdateHierarchyWindow();
 }

@@ -68,7 +68,6 @@ bool TwoDimEditor::OnEventKeyDown(const CEGUI::EventArgs& args)
 			this->Submit();
 			GetEditbox1Widget()->deactivate();
 			GetEditbox2Widget()->deactivate();
-			gEditorMgr.PropertyValueChanged();
 			return true;
 		default:
 			break;
@@ -83,7 +82,6 @@ bool Editor::TwoDimEditor::OnEventIsSharedCheckboxChanged(const CEGUI::EventArgs
 	if (GetModel()->IsShared() != isSelected)
 	{
 		GetModel()->SetShared(isSelected);
-		gEditorMgr.PropertyValueChanged();
 	}
 	return true;
 }

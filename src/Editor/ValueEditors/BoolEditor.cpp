@@ -159,7 +159,6 @@ bool BoolEditor::OnEventCheckStateChanged(const CEGUI::EventArgs& args)
 	OC_UNUSED(args);
 	OC_DASSERT(mCheckboxWidget != 0);
 	this->Submit();
-	gEditorMgr.PropertyValueChanged();
 	return true;
 }
 
@@ -170,7 +169,6 @@ bool Editor::BoolEditor::OnEventIsSharedCheckboxChanged(const CEGUI::EventArgs& 
 	if (mModel->IsShared() != isSelected)
 	{
 		mModel->SetShared(isSelected);
-		gEditorMgr.PropertyValueChanged();
 	}
 	return true;
 }
