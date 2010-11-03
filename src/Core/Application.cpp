@@ -544,20 +544,37 @@ void Core::Application::WriteToConsole( const string& message )
     std::cerr << message;
 }
 
+bool OpenFileUsingCommands(const string& filePath, string commands[], uint32 commandsCount)
+{
+	for (uint32 idx = 0; idx < commandsCount; ++idx)
+	{
+		ocInfo << "Opening " << filePath << " with " << commands[idx] << ".";
+		bool result = system((commands[idx] + " " + filePath).c_str());
+		if (result == EXIT_SUCCESS)
+			return true;
+		ocInfo << "Cannot open " << filePath << " with " << commands[idx] << ".";
+	}
+	return false;
+}
+
 void Core::Application::OpenFileInExternalApp( const string& filePath )
 {
-	static string commands[] = { "xdg-open", "kde-open", "gnome-open", "okular", "kpdf", "evince", "xpdf", "acroread", "epdfview" };
-	static size_t commandsCount = 9;
-	static size_t commandIndex = 0;
-	for (; commandIndex < commandsCount; ++commandIndex)
+	static string generalCommands[] = { "xdg-open", "kde-open", "gnome-open" };
+	static uint32 generalCommandsCount = 3;
+	static string pdfCommands[] = { "okular", "kpdf", "evince", "xpdf", "acroread", "epdfview" };
+	static uint32 pdfCommandsCount = 6;
+
+	bool result = OpenFileUsingCommands(filePath, generalCommands, generalCommandsCount);
+	if (!result)
 	{
-		ocInfo << "Opening " << filePath << " with " << commands[commandIndex] << ".";
-		bool result = system((commands[commandIndex] + " " + filePath).c_str());
-		if (result == EXIT_SUCCESS)
-			return;
-		ocInfo << "Cannot open " << filePath << " with " << commands[commandIndex] << ".";
+		if (filePath.compare(filePath.size() - 3, 3, "pdf") == 0)
+		{
+			result = OpenFileUsingCommands(filePath, pdfCommands, pdfCommandsCount);
+		}
+
+		if (!result)
+			ocWarning << "Cannot find suitable command to open " << filePath << ".";		
 	}
-	ocWarning << "Cannot find suitable command to open " << filePath << ".";
 }
 
 void Core::Application::YieldProcess()
