@@ -16,7 +16,8 @@ option(BUILD_TESTS "Builds tests." ON)
 option(USE_DBGLIB "Uses DbgLib for debugging." ON)
 option(USE_LEAKDETECTOR "Uses DbgLib's leak detector." OFF)
 option(USE_RTHPROFILER "Uses the included RTHProfiler." OFF)
-option(USE_GPROF "Compiles project for using gprof." OFF)
+option(USE_GPROF "Compiles the project for using gprof." OFF)
+option(DEPLOY "Compiles the project in DEPLOY mode." OFF)
 
 set(ocerus-engine_INCLUDE_DIRS)
 set(ocerus-engine_LIBRARIES)
@@ -118,6 +119,12 @@ if (USE_GPROF)
 	message("USING GPROF")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pg")
 endif (USE_GPROF)
+
+if (DEPLOY)
+	message("Compiling DEPLOY version.")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDEPLOY")
+endif (USE_GPROF)
+
 
 ###############################################################################
 ###                             dependencies                                ###

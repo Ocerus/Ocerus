@@ -6,9 +6,9 @@ float32 TitleAnimState;
 void OnPostInit()
 {
   TitleAnimState = 0.0;
-  GetWindow("LevelTitle").SetProperty("Alpha", "0.0");
+  GetWindow("GameLayout/LevelTitle").SetProperty("Alpha", "0.0");
   int32 levelIndex = GetCurrentLevelIndex();
-  GetWindow("LevelTitle").SetText(GetTextData("GUI", "levelTitle") + (levelIndex+1));
+  GetWindow("GameLayout/LevelTitle").SetText(GetTextData("GUI", "levelTitle") + (levelIndex+1));
 }
 
 void OnUpdateLogic(float32 delta)
@@ -17,12 +17,12 @@ void OnUpdateLogic(float32 delta)
   if (!director.IsValid()) return;
   
   uint32 score = director.Get_uint32("Score") + game.Get_uint32("TotalScore");
-  GetWindow("Score").SetText("" + score);
+  GetWindow("GameLayout/Score").SetText("" + score);
 
   float32 timeInSeconds = director.Get_float32("Time");
   uint32 timeMinutes = MathUtils::Floor(timeInSeconds / 60);
   uint32 timeSeconds = MathUtils::Round(timeInSeconds - timeMinutes * 60);
-  GetWindow("Time").SetText(timeMinutes + ":" + ((timeSeconds < 10) ? "0" : "") + timeSeconds);
+  GetWindow("GameLayout/Time").SetText(timeMinutes + ":" + ((timeSeconds < 10) ? "0" : "") + timeSeconds);
   
   UpdateButtons();
   LevelTitleAnimation(delta);
@@ -35,11 +35,11 @@ void UpdateButtons()
   
  	if (player.Get_bool("IsLight"))
  	{
-		SetButtonSingleImage("StateButton", "CubeLight");
+		SetButtonSingleImage("GameLayout/StateButton", "CubeLight");
  	}
  	else
  	{
-		SetButtonSingleImage("StateButton", "CubeHeavy");
+		SetButtonSingleImage("GameLayout/StateButton", "CubeHeavy");
  	}
  	
  	UpdateSkillButton(CanJump(player), "Jump");
@@ -50,21 +50,21 @@ void UpdateSkillButton(bool enabled, string skill)
 {
  	if (enabled)
  	{
- 		SetButtonAllImages(skill + "Button", skill);
- 		GetWindow(skill + "Cooldown").SetVisible(false);
+ 		SetButtonAllImages("GameLayout/" + skill + "Button", skill);
+ 		GetWindow("GameLayout/" + skill + "Cooldown").SetVisible(false);
  	}
  	else
  	{
- 		SetButtonSingleImage(skill + "Button", skill + "Off");
+ 		SetButtonSingleImage("GameLayout/" + skill + "Button", skill + "Off");
  		float32 cooldown = MathUtils::Ceiling(gEntityMgr.FindFirstEntity("Player").Get_float32(skill + "Cooldown"));
  		if (cooldown > 0)
  		{
-			GetWindow(skill + "Cooldown").SetText("" + cooldown);
- 			GetWindow(skill + "Cooldown").SetVisible(true);
+			GetWindow("GameLayout/" + skill + "Cooldown").SetText("" + cooldown);
+ 			GetWindow("GameLayout/" + skill + "Cooldown").SetVisible(true);
  		}
  		else
  		{
- 			GetWindow(skill + "Cooldown").SetVisible(false);
+ 			GetWindow("GameLayout/" + skill + "Cooldown").SetVisible(false);
  		}
  	}
 }
@@ -98,15 +98,15 @@ void LevelTitleAnimation(float32 delta)
 
   	if (TitleAnimState <= 1.0)
 		{
-			GetWindow("LevelTitle").SetProperty("Alpha", "" + TitleAnimState);
+			GetWindow("GameLayout/LevelTitle").SetProperty("Alpha", "" + TitleAnimState);
 		}
 		else if (TitleAnimState <= 2.0)
 		{
-			GetWindow("LevelTitle").SetProperty("Alpha", "1.0");
+			GetWindow("GameLayout/LevelTitle").SetProperty("Alpha", "1.0");
 		}
 		else
 		{
-			GetWindow("LevelTitle").SetProperty("Alpha", "" + (3.0-TitleAnimState));
+			GetWindow("GameLayout/LevelTitle").SetProperty("Alpha", "" + (3.0-TitleAnimState));
 		}
   }
 }
