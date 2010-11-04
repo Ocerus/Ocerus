@@ -76,6 +76,7 @@ bool StringEditor::OnEventKeyDown(const CEGUI::EventArgs& args)
 		case CEGUI::Key::Escape:
 			mEditboxWidget->deactivate();
 			return true;
+		case CEGUI::Key::Tab:
 		case CEGUI::Key::Return:
 		case CEGUI::Key::NumpadEnter:
 			this->Submit();

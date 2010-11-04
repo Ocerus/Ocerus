@@ -63,6 +63,7 @@ bool TwoDimEditor::OnEventKeyDown(const CEGUI::EventArgs& args)
 			GetEditbox1Widget()->deactivate();
 			GetEditbox2Widget()->deactivate();
 			return true;
+		case CEGUI::Key::Tab:
 		case CEGUI::Key::Return:
 		case CEGUI::Key::NumpadEnter:
 			this->Submit();
