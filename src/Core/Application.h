@@ -103,8 +103,12 @@ namespace Core
 		/// Fills the vector with platforms where the game can be deployed.
 		void GetAvailableDeployPlatforms(vector<string>& out);
 
-		/// Deploys the current project into the specified directory.
-		void DeployCurrentProject(const string& platform, const string& destination);
+		/// Deploys the current project into the specified directory. Returns true,
+		/// if deployment was successful.
+		bool DeployCurrentProject(const string& platform, const string& destination);
+
+		/// Returns true, if a project can be deployed to specified destination.
+		bool CheckDeployDestination(const string& destination);
 
 	private:
 

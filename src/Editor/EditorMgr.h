@@ -151,6 +151,12 @@ namespace Editor
 		/// Opens the project specified with given path.
 		void OpenProject(const string& projectPath);
 
+		/// Shows dialog for "Deploy project".
+		void ShowDeployProjectDialog(const string& platform);
+
+		/// Deploys the current project into the specified directory.
+		void DeployCurrentProject(const string& platform, const string& destination);
+
 		/// Closes the opened project.
 		void CloseProject();
 
@@ -304,7 +310,9 @@ namespace Editor
 
 		// Callbacks
 		enum eMessageBoxTags { MBT_QUIT };
-		enum eFolderSelectorTags { FST_CREATEPROJECT, FST_OPENPROJECT, FST_NEWSCENE };
+		enum eFolderSelectorTags { FST_CREATEPROJECT, FST_OPENPROJECT, FST_DEPLOYPROJECT, FST_NEWSCENE };
+
+		string mDeployPlatform;
 
 		/// MessageBox callback
 		void OnMessageBoxClicked(GUISystem::MessageBox::eMessageBoxButton button, int32 tag);

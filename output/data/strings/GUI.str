@@ -24,6 +24,10 @@ open_project_error=Cannot open project in "%1".
 open_project_folder=Select the project to open
 deploy_project=Deploy Project
 deploy_project_hint=Deploys the project.
+deploy_project_folder=Select the destination folder to deploy
+deploy_project_success=Project successfully deployed.
+deploy_project_fail=Project deployment failed.
+deploy_project_bad_destination=Invalid deployment destination path. Make sure you are deploying to an empty directory.
 close_project=Close Project
 close_project_hint=Closes the project.
 quit=Quit
@@ -150,3 +154,4 @@ select_folder=Select Folder
 
 # error messages
 error_link_prototype_to_prototype=Cannot link a prototype to another prototype.
+error_no_project_opened=No project opened.

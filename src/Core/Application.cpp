@@ -414,12 +414,14 @@ void Core::Application::GetAvailableDeployPlatforms( vector<string>& out )
 	}
 }
 
-void Core::Application::DeployCurrentProject( const string& platform, const string& destination )
+
+
+bool Core::Application::DeployCurrentProject( const string& platform, const string& destination )
 {
 	if (!mGameProject || !mGameProject->IsProjectOpened())
 	{
 		ocWarning << "Invalid project to deploy";
-		return;
+		return false;
 	}
 
 	Core::ProjectInfo pi;
@@ -438,9 +440,31 @@ void Core::Application::DeployCurrentProject( const string& platform, const stri
 	catch (std::exception& e)
 	{
 		ocError << "Deploying failed: " << e.what();
+		return false;
 	}
+	return true;
 }
 
+bool Application::CheckDeployDestination(const string& destination)
+{
+	boost::filesystem::path destinationPath = destination;
+	if (!boost::filesystem::exists(destinationPath))
+	{
+		ocWarning << "Deployment destination path does not exist.";
+		return false;
+	}
+	if (!boost::filesystem::is_directory(destinationPath))
+	{
+		ocWarning << "Deployment destination path is not a directory.";
+		return false;
+	}
+	if (!boost::filesystem::is_empty(destinationPath))
+	{
+		ocWarning << "Deployment destination path is not empty.";
+		return false;
+	}
+	return true;
+}
 
 //-----------------------------------------------------
 // Platfofm specific functions follow.

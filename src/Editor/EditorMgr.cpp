@@ -248,6 +248,9 @@ void Editor::EditorMgr::OnFolderSelected(const string& path, const string& editb
 		Reset();
 		OpenProject(path);
 		return;
+	case FST_DEPLOYPROJECT:
+		DeployCurrentProject(mDeployPlatform, path);
+		return;
 	case FST_NEWSCENE:
 		Reset();
 		CreateScene(path + '/' + editboxValue, editboxValue);
@@ -557,6 +560,38 @@ void EditorMgr::OpenProject(const string& projectPath)
 		messageBox->SetText(StringSystem::FormatText(gStringMgrSystem.GetTextData
 			(GUISystem::GUIMgr::GUIGroup, "open_project_error")) << projectPath);
 		messageBox->Show();
+	}
+}
+
+void EditorMgr::ShowDeployProjectDialog(const string& platform)
+{
+	if (!GetCurrentProject() || !GetCurrentProject()->IsProjectOpened())
+	{
+		GUISystem::ShowMessageBox(TR("error_no_project_opened"));
+		return;
+	}
+
+	mDeployPlatform = platform;
+	GUISystem::FolderSelector* folderSelector = new GUISystem::FolderSelector("", (int)EditorMgr::FST_DEPLOYPROJECT);
+	folderSelector->RegisterCallback(GUISystem::FolderSelector::Callback(this, &Editor::EditorMgr::OnFolderSelected));
+	folderSelector->Show(TR("deploy_project_folder"));
+}
+
+void EditorMgr::DeployCurrentProject(const string& platform, const string& destination)
+{
+	if (!gApp.CheckDeployDestination(destination))
+	{
+		GUISystem::ShowMessageBox(TR("deploy_project_bad_destination"));
+		return;
+	}
+
+	if (gApp.DeployCurrentProject(platform, destination))
+	{
+		GUISystem::ShowMessageBox(TR("deploy_project_success"));
+	}
+	else
+	{
+		GUISystem::ShowMessageBox(TR("deploy_project_fail"));
 	}
 }
 
