@@ -185,7 +185,7 @@ EntityMessage::eResult Script::HandleMessage(const EntityMessage& msg)
 		{
 			mCurrentArrayIndex = mFuncIDToArrayIndex[funcId];
 			// Check whether is time to run OnAction script
-			if (mTimes[mCurrentArrayIndex] > gScriptMgr.GetTime()) { continue; }
+			if (mTimes[mCurrentArrayIndex] > gScriptMgr.GetGameTime()) { continue; }
 		} else mCurrentArrayIndex = -1;
 		// Return new context prepared to call function from module
 		AngelScript::asIScriptContext* ctx = gScriptMgr.PrepareContext(funcId);

@@ -103,8 +103,11 @@ namespace ScriptSystem
 		/// PrepareContext, AddContextToManager and AddContextAsCoRoutineToManager.
 		void ClearModules();
 
-		/// Returns the current time the script manager is using.
-		uint64 GetTime() const;
+		/// Returns the current game time.
+		uint64 GetGameTime() const;
+
+		/// Returns the current global time.
+		uint64 GetGlobalTime() const;
 
 		/// Returns true if the command/script is executed from the GUI console.
 		inline bool IsExecutedFromConsole() const { return mExecFromConsole; }

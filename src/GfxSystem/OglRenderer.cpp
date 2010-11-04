@@ -80,10 +80,6 @@ void OglRenderer::Init()
 
 bool OglRenderer::BeginRenderingImpl() const
 {
-	// we must disable automatic resource unloading here because the textures would be unloaded before they would be
-	// rendered on the screen
-	gResourceMgr.DisableMemoryLimitEnforcing();
-
 	glViewport(0, 0, gGfxWindow.GetCurrentResolutionWidth(), gGfxWindow.GetCurrentResolutionHeight());
 	glClear(GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
@@ -92,9 +88,6 @@ bool OglRenderer::BeginRenderingImpl() const
 
 void OglRenderer::EndRenderingImpl() const
 {
-	// after the rendering is done, we must again enable automatic unloading of resources
-	gResourceMgr.EnableMemoryLimitEnforcing();
-
 	SDL_GL_SwapBuffers();
 }
 

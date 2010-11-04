@@ -8,9 +8,9 @@
 
 \section{Purpose of the core}
 
-The Core namespace is the main part of the whole system. It contains its entry point and other classes closely related to the application itself. Its main task is to initialize and configure other engine systems, invokes their update and draw methods in the main loop and in the end correctly finalize them.
+The Core namespace is the main part of the whole system. It contains its entry point and other classes closely related to the application itself. Its main task is to initialize and configure other engine systems, invoke their update and draw methods in the main loop and in the end correctly finalize them.
 
-In the following sections the class representing the application as well as the classes corresponding to the application states (loading screen, game),  configuration and project managing will be introduced. In the last section there is a small glossary of used terms.
+In the following sections the class representing the application as well as the classes corresponding to the application states (loading screen, game), configuration and project management will be introduced. In the last section there is a small glossary of used terms.
 
 \section{Application}
 
@@ -18,7 +18,7 @@ When the program starts it creates an instance of the class \emph{Core::Applicat
 
 On the initialization of the application the configuration is read (see section \ref{sec:config}) and all engine systems are created and initialized as well as the loading screen and game classes. The state of application is changed to \emph{loading} and the main loop is running until the state is changed to \emph{shutdown}. At the main loop window messages are processed, performance statistic are updated and other engine systems including the game class are loaded (in a \emph{loading} state) or updated and drawn (in a \emph{game} state).
 
-In the application class there are also methods for getting an average and last FPS statistic and methods for showing and hiding a debug console as well as writing message to it. There are also the variables indicating whether the current application instance includes the editor (in a game distribution the editor should be disabled) and whether the editor is currently turned on so the game is running only in a small window instead of a full screen mode.
+In the application class there are also methods for getting an average and last FPS statistic, methods for showing and hiding a debug console as well as writing message to it or a method for executing an external file. There are also the variables indicating whether the current application instance includes the editor (in a game distribution the editor should be disabled) and whether the editor is currently turned on so the game is running only in a small window instead of a full screen mode. From this class it is possible to get the current project as well as deploy it to the specific platform and destination.
 
 \section{Game}
 
@@ -33,6 +33,8 @@ There are several methods for handling a game action. The action can be paused, 
 When the action is running physics and logic of entities are updated in the method \emph{Update} which means the corresponding messages are broadcast to all entities before and after the update of the physical engine.
 
 Since the class \emph{Core::Game} registers the input listener to itself there are callbacks where it is possible to react to keyboard and mouse events such as a key or mouse button press/release or a mouse move. The corresponding information such as a current mouse position is available through the callback parameters.
+
+If it is necessary to store some extra information that is shared among the game scenes (i.e. total score) the dynamic properties of this class should be used. There are template methods for getting or setting any kind of value under its name as well as methods for deleting one or all properties and for loading and saving them from/to a file. The properties are now stored along with other game stuff.
 
 \section{Loading screen}
 

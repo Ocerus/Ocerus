@@ -103,7 +103,7 @@ void EntityWindow::Rebuild()
 
 	mVerticalLayout->LockUpdates();
 
-	int32 componentCount = EntitySystem::EntityMgr::GetSingleton().GetNumberOfEntityComponents(currentEntity);
+	int32 componentCount = gEntityMgr.GetNumberOfEntityComponents(currentEntity);
 	while ((int32)mComponentGroupCache.size() < componentCount + 1)
 	{
 		mComponentGroupCache.push_back(CreateComponentGroup());
@@ -137,6 +137,7 @@ void EntityWindow::Rebuild()
 			mPropertyEditors.push_back(editor);
 			generalInfo.layout->AddChildWindow(editor->GetWidget());
 		}
+		if (!gEntityMgr.IsEntityPrototype(currentEntity))
 		{
 			AbstractValueEditor* editor = mValueEditorFactory->GetValueEditorForEntityAttribute(currentEntity, EntityAttributeModel::TYPE_PROTOTYPE);
 			editor->GetWidget()->setVisible(true);

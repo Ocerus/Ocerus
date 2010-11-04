@@ -40,9 +40,12 @@ bool GfxSystem::GfxRenderer::BeginRendering()
 {
 	OC_ASSERT(!mIsRendering);
 	OC_ASSERT(mSceneMgr);
-	mIsRendering = true;
 	if (BeginRenderingImpl())
 	{
+		mIsRendering = true;
+		// we must disable automatic resource unloading here because the textures
+		// would be unloaded before they would be rendered on the screen
+		gResourceMgr.DisableMemoryLimitEnforcing();
 		ClearScreen(Color(100,100,100));
 		return true;
 	}
@@ -55,6 +58,8 @@ bool GfxSystem::GfxRenderer::BeginRendering()
 void GfxSystem::GfxRenderer::EndRendering()
 {
 	OC_ASSERT(mIsRendering);
+	// after the rendering is done, we must again enable automatic unloading of resources
+	gResourceMgr.EnableMemoryLimitEnforcing();
 	EndRenderingImpl();
 	mIsRendering = false;
 	mCurrentRenderTargetID = -1;

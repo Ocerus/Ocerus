@@ -333,7 +333,7 @@ void ScriptSetAndSleep(int32 state, uint64 time)
 			{
 				// Set state and time
 				(*states)[index] = state;
-				(*times)[index] = gScriptMgr.GetTime() + time;
+				(*times)[index] = gScriptMgr.GetGameTime() + time;
 				return;
 			} else exception = "This function must be called from OnAction handler.";
 		} else exception = "This function must be called from entity with Script component.";

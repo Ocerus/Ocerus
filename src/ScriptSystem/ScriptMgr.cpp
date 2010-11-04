@@ -42,7 +42,7 @@ void MessageCallback(const asSMessageInfo* msg, void* param)
 void LineCallback(asIScriptContext* ctx, uint64* deadline)
 {
 	// If the time out is reached we abort the script
-	if (*deadline <= gScriptMgr.GetTime()) ctx->Abort();
+	if (*deadline <= gScriptMgr.GetGlobalTime()) ctx->Abort();
 }
 
 int ScriptMgr::IncludeCallback(const char* fileName, const char* from, AngelScript::CScriptBuilder* builder, void* userParam)
@@ -1013,6 +1013,7 @@ void RegisterScriptGame(asIScriptEngine* engine)
 	r = engine->RegisterObjectMethod("Game", "void PauseAction()", asMETHOD(Game, PauseAction), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("Game", "void ResumeAction()", asMETHOD(Game, ResumeAction), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("Game", "void Quit()", asFUNCTION(QuitGame), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Game", "uint64 GetTime()", asMETHOD(Game, GetTimeMillis), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 
 	// Register function that returns it
 	r = engine->RegisterGlobalFunction("Game& get_game()", asFUNCTION(GetGame), asCALL_CDECL); OC_SCRIPT_ASSERT();
@@ -1476,7 +1477,7 @@ bool ScriptMgr::ExecuteContext(asIScriptContext* ctx, uint32 timeOut)
 	{
 		r = ctx->SetLineCallback(asFUNCTION(LineCallback), &deadline, asCALL_CDECL);
 		OC_ASSERT_MSG(r >= 0, "Failed to register line callback function.");
-		deadline = GetTime() + timeOut;
+		deadline = GetGlobalTime() + timeOut;
 	}
 
 	// Execute the script function and get result
@@ -1714,7 +1715,12 @@ default:
 	return true;
 }
 
-uint64 ScriptSystem::ScriptMgr::GetTime() const
+uint64 ScriptSystem::ScriptMgr::GetGameTime() const
 {
 	return GlobalProperties::Get<Core::Game>("Game").GetTimeMillis();
+}
+
+uint64 ScriptSystem::ScriptMgr::GetGlobalTime() const
+{
+	return gApp.GetCurrentTimeMillis();
 }
