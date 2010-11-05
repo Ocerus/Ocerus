@@ -177,6 +177,9 @@ namespace EntitySystem
 		/// Propagates the current state of properties of the prototype to its instances.
 		void UpdatePrototypeInstances(const EntityHandle prototype);
 
+		/// Propagates the current state of properties of all prototypes to its instances.
+		void UpdatePrototypesInstances();
+
 		/// Create a prototype from the entity. Returns the handle to the prototype or null if there was error.
 		EntityHandle ExportEntityToPrototype(const EntityHandle entity);
 

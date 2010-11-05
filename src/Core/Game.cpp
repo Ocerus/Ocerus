@@ -445,6 +445,7 @@ void Core::Game::RestartAction(void)
 		if (!LoadGameInfoFromResource(resource)) { result = false; }
 		if (!gEntityMgr.LoadEntitiesFromResource(resource)) { result = false; }
 		gResourceMgr.DeleteGroup("Action");
+		gEntityMgr.UpdatePrototypesInstances();
 	}
 	else
 	{

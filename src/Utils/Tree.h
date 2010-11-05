@@ -553,11 +553,17 @@ void tree<T, tree_node_allocator>::copy_(const tree<T, tree_node_allocator>& oth
 
 template <class T, class tree_node_allocator>
 void tree<T, tree_node_allocator>::clear()
-	{
+{
 	if(head)
+	{
 		while(head->next_sibling!=feet)
 			erase(pre_order_iterator(head->next_sibling));
+		
+		erase_children(head);
+		erase_children(feet);
 	}
+
+}
 
 template<class T, class tree_node_allocator> 
 void tree<T, tree_node_allocator>::erase_children(const iterator_base& it)

@@ -825,6 +825,8 @@ bool EntitySystem::EntityMgr::LoadEntitiesFromResource(ResourceSystem::ResourceP
 		}
 	}
 
+	UpdatePrototypesInstances();
+
 	if (GlobalProperties::Get<bool>("DevelopMode"))
 	{
 		gEditorMgr.GetHierarchyWindow()->EnableAddEntities();
@@ -1009,6 +1011,19 @@ bool EntitySystem::EntityMgr::GetEntityComponentsOfType( const EntityHandle enti
 
 	return true;
 }
+
+void EntitySystem::EntityMgr::UpdatePrototypesInstances()
+{
+	EntityList prototypes;
+
+	GetPrototypes(prototypes);
+
+	for (EntityList::iterator it=prototypes.begin(); it!=prototypes.end(); ++it)
+	{
+		UpdatePrototypeInstances(*it);
+	}
+}
+
 
 void EntitySystem::EntityMgr::UpdatePrototypeInstances( const EntityHandle prototype )
 {
