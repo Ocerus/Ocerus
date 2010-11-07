@@ -155,3 +155,4 @@ select_folder=Select Folder
 # error messages
 error_link_prototype_to_prototype=Cannot link a prototype to another prototype.
 error_no_project_opened=No project opened.
+error_cannot_link_prototype=Cannot link instance to prototype because of component mismatch.

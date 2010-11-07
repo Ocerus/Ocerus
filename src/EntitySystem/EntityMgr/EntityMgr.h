@@ -160,7 +160,7 @@ namespace EntitySystem
 		EntityHandle FindFirstPrototype(const string& name);
 
 		/// Assigns the given entity to the prototype.
-		void LinkEntityToPrototype(const EntityHandle entity, const EntityHandle prototype);
+		bool LinkEntityToPrototype(const EntityHandle entity, const EntityHandle prototype);
 
 		/// Destroys the link between the component and its prototype.
 		void UnlinkEntityFromPrototype(const EntityHandle entity);
@@ -266,6 +266,9 @@ namespace EntitySystem
 		/// Returns the number of components attached to the entity.
 		int32 GetNumberOfEntityComponents(const EntityHandle entity) const;
 
+		/// Adds a component of the specified type to all instances of given prototype.
+		void AddComponentToPrototypeInstances(const EntityHandle prototype, const eComponentType componentType);
+
 		/// Adds a component of the specified type to the entity. Returned is an ID of the new component.
 		ComponentID AddComponentToEntity(const EntityHandle entity, const eComponentType componentType);
 
@@ -306,7 +309,7 @@ namespace EntitySystem
 		void DestroyEntityImmediately(const EntityID entityToDestroy, const bool erase);
 
 		/// Propagates the current state of properties of the prototype to the specified instances.
-		void UpdatePrototypeInstance(const EntityID prototype, const EntityID instance);
+		bool UpdatePrototypeInstance(const EntityID prototype, const EntityID instance);
 
 		/// Marks all (appliable) properties of the prototype component as shared.
 		void MarkPrototypePropertiesShared(const EntityHandle entity, ComponentID cid);

@@ -1036,7 +1036,7 @@ void EntitySystem::EntityMgr::UpdatePrototypeInstances( const EntityHandle proto
 	}
 }
 
-void EntitySystem::EntityMgr::UpdatePrototypeInstance( const EntityID prototype, const EntityID instance )
+bool EntitySystem::EntityMgr::UpdatePrototypeInstance( const EntityID prototype, const EntityID instance )
 {
 	OC_ASSERT(mPrototypes.find(prototype) != mPrototypes.end());
 	PrototypeInfo* prototypeInfo = mPrototypes[prototype];
@@ -1045,25 +1045,52 @@ void EntitySystem::EntityMgr::UpdatePrototypeInstance( const EntityID prototype,
 	ComponentTypeList instanceComponentTypes;
 	GetEntityComponentTypes(prototype, prototypeComponentTypes);
 	GetEntityComponentTypes(instance, instanceComponentTypes);
-	if (prototypeComponentTypes.size() > instanceComponentTypes.size())
+
+	// if the instance has more components than its prototype, it must be unlinked
+	if (prototypeComponentTypes.size() < instanceComponentTypes.size())
 	{
-		ocError << "Cannot propagate prototype " << prototype << " to instance " << instance << "; not enough components in instance";
-		return;
+		ocWarning << "Cannot propagate prototype " << prototype << " to instance " << instance << "; too many components in instance";
+		ocWarning << "Unlinking " << instance << " from " << prototype << ".";
+		UnlinkEntityFromPrototype(instance);
+		return false;
+	}
+
+	// iterate through components of the instance. If there is mismath in component types with its protope, instance must be unlinked.
+	ComponentID currentComponent = 0;
+	ComponentTypeList::iterator protIt=prototypeComponentTypes.begin();
+	ComponentTypeList::iterator instIt=instanceComponentTypes.begin();
+	for (; instanceComponentTypes.size() < (size_t)currentComponent; ++protIt, ++instIt, ++currentComponent)
+	{
+		if (*protIt != *instIt)
+		{
+			ocWarning << "Cannot propagate prototype " << prototype << " to instance " << instance << "; components mismatch";
+			ocWarning << "Unlinking " << instance << " from " << prototype << ".";
+			UnlinkEntityFromPrototype(instance);
+			return false;
+		}
+	}
+
+	// Add missing components from instance to match its prototype
+	for (; prototypeComponentTypes.size() < (size_t)currentComponent; ++protIt, ++currentComponent)
+	{
+		EntityHandle instHandle = GetEntity(instance);
+		AddComponentToEntity(instHandle, *protIt);
 	}
 
 	// propagate some of the entity attributes of the prototype
 	SetEntityTag(instance, GetEntityTag(prototype));
 
-	// iterate through components of the prototype
-	ComponentID currentComponent = 0;
-	ComponentTypeList::iterator protIt=prototypeComponentTypes.begin();
-	ComponentTypeList::iterator instIt=instanceComponentTypes.begin();
+	// iterate through components of the prototype and propagete component values
+	currentComponent = 0;
+	protIt=prototypeComponentTypes.begin();
+	instIt=instanceComponentTypes.begin();
 	for (; protIt!=prototypeComponentTypes.end(); ++protIt, ++instIt, ++currentComponent)
 	{
 		if (*protIt != *instIt)
 		{
 			ocError << "Cannot propagate prototype " << prototype << " to instance " << instance << "; components mismatch";
-			return;
+			UnlinkEntityFromPrototype(instance);
+			return false;
 		}
 
 		// update shared properties
@@ -1083,6 +1110,7 @@ void EntitySystem::EntityMgr::UpdatePrototypeInstance( const EntityID prototype,
 			}
 		}
 	}
+	return true;
 }
 
 bool EntitySystem::EntityMgr::IsEntityPrototype( const EntityHandle entity ) const
@@ -1091,6 +1119,17 @@ bool EntitySystem::EntityMgr::IsEntityPrototype( const EntityHandle entity ) con
 		return false;
 
 	return mPrototypes.find(entity.GetID()) != mPrototypes.end();
+}
+
+void EntitySystem::EntityMgr::AddComponentToPrototypeInstances( const EntityHandle prototype, const eComponentType componentType)
+{
+	for (EntityMap::iterator it=mEntities.begin(); it!=mEntities.end(); ++it)
+	{
+		if (it->second->mPrototype == prototype)
+		{
+			AddComponentToEntity(it->first, componentType);
+		}
+	}
 }
 
 EntitySystem::ComponentID EntitySystem::EntityMgr::AddComponentToEntity( const EntityHandle entity, const eComponentType componentType )
@@ -1115,6 +1154,7 @@ EntitySystem::ComponentID EntitySystem::EntityMgr::AddComponentToEntity( const E
 	if (IsEntityPrototype(entity))
 	{
 		MarkPrototypePropertiesShared(entity, cmpID);
+		AddComponentToPrototypeInstances(entity, componentType);
 	}
 
 	return cmpID;
@@ -1225,31 +1265,35 @@ int32 EntitySystem::EntityMgr::GetNumberOfEntityComponents( const EntityHandle e
 	return mComponentMgr->GetNumberOfEntityComponents(entity.GetID());
 }
 
-void EntitySystem::EntityMgr::LinkEntityToPrototype( const EntityHandle entity, const EntityHandle prototype )
+bool EntitySystem::EntityMgr::LinkEntityToPrototype( const EntityHandle entity, const EntityHandle prototype )
 {
 	EntityMap::iterator entityIt = mEntities.find(entity.GetID());
 	if (entityIt == mEntities.end())
 	{
 		ocError << "Cannot link entity " << entity << " to prototype " << prototype << ". Entity " << entity << " not found.";
-		return;
+		return false;
 	}
 	
 	if (IsEntityPrototype(entity))
 	{
 		ocError << "Cannot link entity " << entity << " to prototype " << prototype << ". Cannot link a prototype to another prototype.";
-		return;
+		return false;
 	}
 
 	PrototypeMap::iterator protIt = mPrototypes.find(prototype.GetID());
 	if (protIt == mPrototypes.end())
 	{
 		ocError << "Cannot link entity " << entity << " to prototype " << prototype << ". Prototype " << prototype << " not found.";
-		return;
+		return false;
 	}
 
 	entityIt->second->mPrototype = prototype;
 	protIt->second->mInstancesCount++;
-	UpdatePrototypeInstance(prototype.GetID(), entity.GetID());
+	if (!UpdatePrototypeInstance(prototype.GetID(), entity.GetID()))
+	{
+		return false;
+	}
+	return true;
 }
 
 void EntitySystem::EntityMgr::UnlinkEntityFromPrototype( const EntityHandle entity )

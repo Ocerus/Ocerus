@@ -2,16 +2,16 @@
 
 <Game>
   <GameInfo>
-    <CurrentTime>84328</CurrentTime>
+    <CurrentTime>77426</CurrentTime>
     <SceneName>level2.xml</SceneName>
   </GameInfo>
   <DynamicProperties>
-    <TotalScore Type="uint32">140</TotalScore>
     <Levels Type="Array<string>*">
       <Item>level1.xml</Item>
       <Item>level2.xml</Item>
     </Levels>
-    <TotalTime Type="float32">460.776</TotalTime>
+    <TotalTime Type="float32">77.4213</TotalTime>
+    <TotalScore Type="uint32">150</TotalScore>
   </DynamicProperties>
   <Layers Difference="2" ActiveLayer="0">
     <Layer Visible="true">BG</Layer>
@@ -23,1795 +23,1797 @@
   <Entities>
     <Entity Name="LevelExit" ID="1" Tag="1" Transient="false">
       <Component Type="Transform">
-        <Angle>0</Angle>
         <Layer>2</Layer>
         <Scale>0.25 0.25</Scale>
-        <Position>34.4865 -20.9262</Position>
+        <Position>34.4865 -20.6456</Position>
+        <Angle>0</Angle>
       </Component>
       <Component Type="PolygonCollider">
+        <Restitution>0.5</Restitution>
+        <Friction>0.5</Friction>
         <Polygon>
           <Item>-1 -1</Item>
           <Item>1 -1</Item>
           <Item>1 1</Item>
           <Item>-1 1</Item>
         </Polygon>
-        <Friction>0.5</Friction>
         <Density>1</Density>
-        <Restitution>0.5</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>objects/finish.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
       <Component Type="Script">
-        <ScriptTimes></ScriptTimes>
-        <ScriptStates></ScriptStates>
         <ScriptTimeOut>1000</ScriptTimeOut>
         <ScriptModules>
           <Item>UpDownWaver.as</Item>
         </ScriptModules>
-        <YOffsetAmplitude Type="float32">0.15</YOffsetAmplitude>
+        <ScriptTimes></ScriptTimes>
+        <ScriptStates></ScriptStates>
+        <YOffsetTime Type="float32">77.4213</YOffsetTime>
         <YOffsetPeriod Type="float32">0.25</YOffsetPeriod>
-        <YOffsetTime Type="float32">84.3168</YOffsetTime>
+        <YOffsetAmplitude Type="float32">0.15</YOffsetAmplitude>
       </Component>
     </Entity>
-    <Entity Name="Land1" ID="2" Tag="0" Transient="false">
+    <Entity Name="Land1" ID="2" Tag="0" Transient="false" Prototype="-495">
       <Component Type="Transform">
-        <Angle>0.771347</Angle>
         <Layer>0</Layer>
         <Scale>0.341819 0.770372</Scale>
         <Position>14.3733 -5.84627</Position>
+        <Angle>0.771347</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
           <Item>0.85 0.6</Item>
           <Item>-0.85 0.6</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile0.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Land2" ID="3" Tag="0" Transient="false">
+    <Entity Name="Land2" ID="3" Tag="0" Transient="false" Prototype="-496">
       <Component Type="Transform">
-        <Angle>-0.386523</Angle>
         <Layer>0</Layer>
         <Scale>1.17467 1.00194</Scale>
         <Position>10.3113 -6.1562</Position>
+        <Angle>-0.386523</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.83 -0.15</Item>
           <Item>0.83 -0.5</Item>
           <Item>0.83 0.5</Item>
           <Item>-0.83 0.5</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile1.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
     <Entity Name="Land" ID="4" Tag="0" Transient="false"></Entity>
-    <Entity Name="Land1" ID="5" Tag="0" Transient="false">
+    <Entity Name="Land1" ID="5" Tag="0" Transient="false" Prototype="-495">
       <Component Type="Transform">
-        <Angle>0.00419999</Angle>
         <Layer>0</Layer>
         <Scale>1.95109 0.836793</Scale>
         <Position>2.668 -0.574</Position>
+        <Angle>0.00419999</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
           <Item>0.85 0.6</Item>
           <Item>-0.85 0.6</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile0.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Land1" ID="263" Tag="0" Transient="false">
+    <Entity Name="Land1" ID="263" Tag="0" Transient="false" Prototype="-495">
       <Component Type="Transform">
-        <Angle>2.21756</Angle>
         <Layer>0</Layer>
         <Scale>0.341819 0.770372</Scale>
         <Position>24.3904 -12.2854</Position>
+        <Angle>2.21756</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
           <Item>0.85 0.6</Item>
           <Item>-0.85 0.6</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile0.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Land2" ID="6" Tag="0" Transient="false">
+    <Entity Name="Land2" ID="6" Tag="0" Transient="false" Prototype="-496">
       <Component Type="Transform">
-        <Angle>0</Angle>
         <Layer>0</Layer>
         <Scale>1 1</Scale>
         <Position>4.77042 -1.02916</Position>
+        <Angle>0</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.83 -0.15</Item>
           <Item>0.83 -0.5</Item>
           <Item>0.83 0.5</Item>
           <Item>-0.83 0.5</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile1.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="LandFiller" ID="7" Tag="0" Transient="false">
+    <Entity Name="LandFiller" ID="7" Tag="0" Transient="false" Prototype="-497">
       <Component Type="Transform">
-        <Angle>1.57176</Angle>
         <Layer>-1</Layer>
         <Scale>25.1803 3.69577</Scale>
         <Position>-0.584903 -8.3527</Position>
+        <Angle>1.57176</Angle>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile2.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
           <Item>0.35 0.2</Item>
           <Item>-0.35 0.2</Item>
         </Polygon>
-        <Friction>0</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
     </Entity>
-    <Entity Name="Land2" ID="8" Tag="0" Transient="false">
+    <Entity Name="Land2" ID="8" Tag="0" Transient="false" Prototype="-496">
       <Component Type="Transform">
-        <Angle>1.122</Angle>
         <Layer>0</Layer>
         <Scale>1 1</Scale>
         <Position>0.458421 -1.55716</Position>
+        <Angle>1.122</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.83 -0.15</Item>
           <Item>0.83 -0.5</Item>
           <Item>0.83 0.5</Item>
           <Item>-0.83 0.5</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile1.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Land2" ID="9" Tag="0" Transient="false">
+    <Entity Name="Land2" ID="9" Tag="0" Transient="false" Prototype="-496">
       <Component Type="Transform">
-        <Angle>-0.938119</Angle>
         <Layer>0</Layer>
         <Scale>1 1</Scale>
         <Position>6.06102 -2.07024</Position>
+        <Angle>-0.938119</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.83 -0.15</Item>
           <Item>0.83 -0.5</Item>
           <Item>0.83 0.5</Item>
           <Item>-0.83 0.5</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile1.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Land1" ID="10" Tag="0" Transient="false">
+    <Entity Name="Land1" ID="10" Tag="0" Transient="false" Prototype="-495">
       <Component Type="Transform">
-        <Angle>0.0879555</Angle>
         <Layer>0</Layer>
         <Scale>0.97831 0.730317</Scale>
         <Position>7.11093 -2.41683</Position>
+        <Angle>0.0879555</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
           <Item>0.85 0.6</Item>
           <Item>-0.85 0.6</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile0.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Land2" ID="11" Tag="0" Transient="false">
+    <Entity Name="Land2" ID="11" Tag="0" Transient="false" Prototype="-496">
       <Component Type="Transform">
-        <Angle>0.443715</Angle>
         <Layer>0</Layer>
         <Scale>1 1</Scale>
         <Position>8.58188 -2.44817</Position>
+        <Angle>0.443715</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.83 -0.15</Item>
           <Item>0.83 -0.5</Item>
           <Item>0.83 0.5</Item>
           <Item>-0.83 0.5</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile1.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Land1" ID="12" Tag="0" Transient="false">
+    <Entity Name="Land1" ID="12" Tag="0" Transient="false" Prototype="-495">
       <Component Type="Transform">
-        <Angle>4.4827</Angle>
         <Layer>0</Layer>
         <Scale>1.52407 0.875075</Scale>
         <Position>10.304 -4.47144</Position>
+        <Angle>4.4827</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
           <Item>0.85 0.6</Item>
           <Item>-0.85 0.6</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile0.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Land2" ID="13" Tag="0" Transient="false">
+    <Entity Name="Land2" ID="13" Tag="0" Transient="false" Prototype="-496">
       <Component Type="Transform">
-        <Angle>-1.0349</Angle>
         <Layer>0</Layer>
         <Scale>0.418763 0.613466</Scale>
         <Position>10.1345 -2.956</Position>
+        <Angle>-1.0349</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.83 -0.15</Item>
           <Item>0.83 -0.5</Item>
           <Item>0.83 0.5</Item>
           <Item>-0.83 0.5</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile1.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Land2" ID="270" Tag="0" Transient="false">
+    <Entity Name="Land2" ID="270" Tag="0" Transient="false" Prototype="-496">
       <Component Type="Transform">
-        <Angle>-1.86797</Angle>
         <Layer>0</Layer>
         <Scale>1.17467 1.00194</Scale>
         <Position>33.0047 -23.5096</Position>
+        <Angle>-1.86797</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.83 -0.15</Item>
           <Item>0.83 -0.5</Item>
           <Item>0.83 0.5</Item>
           <Item>-0.83 0.5</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile1.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="LandFiller" ID="14" Tag="0" Transient="false">
+    <Entity Name="LandFiller" ID="14" Tag="0" Transient="false" Prototype="-497">
       <Component Type="Transform">
-        <Angle>1.58123</Angle>
         <Layer>-1</Layer>
         <Scale>6.13599 6.88526</Scale>
         <Position>7.00251 0.657741</Position>
+        <Angle>1.58123</Angle>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile2.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
           <Item>0.35 0.2</Item>
           <Item>-0.35 0.2</Item>
         </Polygon>
-        <Friction>0</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
     </Entity>
-    <Entity Name="Land1" ID="271" Tag="0" Transient="false">
+    <Entity Name="Land1" ID="271" Tag="0" Transient="false" Prototype="-495">
       <Component Type="Transform">
-        <Angle>-1.49223</Angle>
         <Layer>0</Layer>
         <Scale>0.502837 0.809275</Scale>
         <Position>36.2829 -20.9511</Position>
+        <Angle>-1.49223</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
           <Item>0.85 0.6</Item>
           <Item>-0.85 0.6</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile0.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Land2" ID="272" Tag="0" Transient="false">
+    <Entity Name="Land2" ID="272" Tag="0" Transient="false" Prototype="-496">
       <Component Type="Transform">
-        <Angle>-1.99222</Angle>
         <Layer>0</Layer>
         <Scale>0.418763 0.613466</Scale>
         <Position>35.855 -21.5466</Position>
+        <Angle>-1.99222</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.83 -0.15</Item>
           <Item>0.83 -0.5</Item>
           <Item>0.83 0.5</Item>
           <Item>-0.83 0.5</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile1.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Land1" ID="273" Tag="0" Transient="false">
+    <Entity Name="Land1" ID="273" Tag="0" Transient="false" Prototype="-495">
       <Component Type="Transform">
-        <Angle>3.6595</Angle>
         <Layer>0</Layer>
         <Scale>1.52291 1.08518</Scale>
         <Position>34.8144 -22.5577</Position>
+        <Angle>3.6595</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
           <Item>0.85 0.6</Item>
           <Item>-0.85 0.6</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile0.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Land2" ID="274" Tag="0" Transient="false">
+    <Entity Name="Land2" ID="274" Tag="0" Transient="false" Prototype="-496">
       <Component Type="Transform">
-        <Angle>-0.375396</Angle>
         <Layer>0</Layer>
         <Scale>1 1</Scale>
         <Position>35.321 -20.2063</Position>
+        <Angle>-0.375396</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.83 -0.15</Item>
           <Item>0.83 -0.5</Item>
           <Item>0.83 0.5</Item>
           <Item>-0.83 0.5</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile1.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Land1" ID="18" Tag="0" Transient="false">
+    <Entity Name="Land1" ID="18" Tag="0" Transient="false" Prototype="-495">
       <Component Type="Transform">
-        <Angle>-0.534912</Angle>
         <Layer>0</Layer>
         <Scale>0.502837 0.809275</Scale>
         <Position>9.89387 -2.26332</Position>
+        <Angle>-0.534912</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
           <Item>0.85 0.6</Item>
           <Item>-0.85 0.6</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile0.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Land2" ID="275" Tag="0" Transient="false">
+    <Entity Name="Land2" ID="275" Tag="0" Transient="false" Prototype="-496">
       <Component Type="Transform">
-        <Angle>8.51074</Angle>
         <Layer>0</Layer>
         <Scale>0.517888 0.829594</Scale>
         <Position>24.2752 -17.9402</Position>
+        <Angle>8.51074</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.83 -0.15</Item>
           <Item>0.83 -0.5</Item>
           <Item>0.83 0.5</Item>
           <Item>-0.83 0.5</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile1.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
     <Entity Name="Director" ID="19" Tag="0" Transient="false">
       <Component Type="Transform">
-        <Angle>-2</Angle>
         <Layer>0</Layer>
         <Scale>1 1</Scale>
         <Position>0 0</Position>
+        <Angle>-2</Angle>
       </Component>
       <Component Type="Script">
-        <ScriptTimes></ScriptTimes>
-        <ScriptStates></ScriptStates>
         <ScriptTimeOut>1000</ScriptTimeOut>
         <ScriptModules>
           <Item>Director.as</Item>
           <Item>LevelProperties.as</Item>
         </ScriptModules>
-        <Time Type="float32" Comment="Time in seconds.">84.3168</Time>
-        <Score Type="uint32">80</Score>
+        <ScriptTimes></ScriptTimes>
+        <ScriptStates></ScriptStates>
+        <Time Type="float32" Comment="Time in seconds.">77.4213</Time>
+        <Score Type="uint32">150</Score>
       </Component>
     </Entity>
-    <Entity Name="Land1" ID="276" Tag="0" Transient="false">
+    <Entity Name="Land1" ID="276" Tag="0" Transient="false" Prototype="-495">
       <Component Type="Transform">
-        <Angle>7.91493</Angle>
         <Layer>0</Layer>
         <Scale>1.80547 0.703866</Scale>
         <Position>24.1711 -19.5669</Position>
+        <Angle>7.91493</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
           <Item>0.85 0.6</Item>
           <Item>-0.85 0.6</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile0.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
     <Entity Name="Player" ID="20" Tag="0" Transient="false">
       <Component Type="Transform">
-        <Angle>168.02</Angle>
         <Layer>1</Layer>
         <Scale>0.0646108 0.0646108</Scale>
-        <Position>34.2441 -19.9904</Position>
+        <Position>34.0862 -20.3991</Position>
+        <Angle>139.295</Angle>
       </Component>
       <Component Type="DynamicBody">
-        <LinearDamping>0.1</LinearDamping>
         <AngularDamping>20</AngularDamping>
+        <LinearDamping>0.1</LinearDamping>
       </Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.5 -0.5</Item>
           <Item>0.5 -0.5</Item>
           <Item>0.5 0.5</Item>
           <Item>-0.5 0.5</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>0.1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Model">
-        <YAngle>0</YAngle>
         <Mesh>player/cube.model</Mesh>
+        <YAngle>0</YAngle>
         <Transparency>0</Transparency>
       </Component>
       <Component Type="Script">
-        <ScriptTimes></ScriptTimes>
-        <ScriptStates></ScriptStates>
         <ScriptTimeOut>1000</ScriptTimeOut>
         <ScriptModules>
           <Item>player/Controller.as</Item>
         </ScriptModules>
-        <JumpCooldown Type="float32">0</JumpCooldown>
-        <ExplosionCooldown Type="float32">0</ExplosionCooldown>
+        <ScriptTimes></ScriptTimes>
+        <ScriptStates></ScriptStates>
         <IsLight Type="bool">true</IsLight>
-        <LastLandPosition Type="Vector2">31.2748 -20.3607</LastLandPosition>
+        <ExplosionCooldown Type="float32">0</ExplosionCooldown>
+        <LastLandPosition Type="Vector2">31.2468 -20.3456</LastLandPosition>
         <State Type="uint32">1</State>
+        <JumpCooldown Type="float32">0</JumpCooldown>
         <LastLandCollisionCooldown Type="float32">0</LastLandCollisionCooldown>
       </Component>
     </Entity>
-    <Entity Name="Land1" ID="277" Tag="0" Transient="false">
+    <Entity Name="Land1" ID="277" Tag="0" Transient="false" Prototype="-495">
       <Component Type="Transform">
-        <Angle>1.68278</Angle>
         <Layer>0</Layer>
         <Scale>3.31753 0.928365</Scale>
         <Position>24.5147 -23.9618</Position>
+        <Angle>1.68278</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
           <Item>0.85 0.6</Item>
           <Item>-0.85 0.6</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile0.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
     <Entity Name="GameCamera" ID="21" Tag="0" Transient="false">
       <Component Type="Camera">
-        <Zoom>1</Zoom>
-        <Position>34.2616 -19.9962</Position>
+        <Position>34.0209 -20.4731</Position>
         <Rotation>0</Rotation>
+        <Zoom>1</Zoom>
       </Component>
     </Entity>
-    <Entity Name="Land1" ID="278" Tag="0" Transient="false">
+    <Entity Name="Land1" ID="278" Tag="0" Transient="false" Prototype="-495">
       <Component Type="Transform">
-        <Angle>1.68278</Angle>
         <Layer>0</Layer>
         <Scale>3.31753 0.928365</Scale>
         <Position>25.1994 -29.5971</Position>
+        <Angle>1.68278</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
           <Item>0.85 0.6</Item>
           <Item>-0.85 0.6</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile0.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
     <Entity Name="EditorCamera" ID="22" Tag="0" Transient="false">
       <Component Type="Camera">
-        <Zoom>0.14641</Zoom>
         <Position>35.7687 -24.1148</Position>
         <Rotation>0</Rotation>
+        <Zoom>0.14641</Zoom>
       </Component>
     </Entity>
-    <Entity Name="Land1" ID="279" Tag="0" Transient="false">
+    <Entity Name="Land1" ID="279" Tag="0" Transient="false" Prototype="-495">
       <Component Type="Transform">
-        <Angle>-1.83154</Angle>
         <Layer>0</Layer>
         <Scale>3.31753 0.928365</Scale>
         <Position>30.6235 -32.34</Position>
+        <Angle>-1.83154</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
           <Item>0.85 0.6</Item>
           <Item>-0.85 0.6</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile0.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="LandFiller" ID="23" Tag="0" Transient="false">
+    <Entity Name="LandFiller" ID="23" Tag="0" Transient="false" Prototype="-497">
       <Component Type="Transform">
-        <Angle>0.00442854</Angle>
         <Layer>-1</Layer>
         <Scale>9.0443 9.45566</Scale>
         <Position>2.21983 1.02858</Position>
+        <Angle>0.00442854</Angle>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile2.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
           <Item>0.35 0.2</Item>
           <Item>-0.35 0.2</Item>
         </Polygon>
-        <Friction>0</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
     </Entity>
-    <Entity Name="LandFiller" ID="24" Tag="0" Transient="false">
+    <Entity Name="LandFiller" ID="24" Tag="0" Transient="false" Prototype="-497">
       <Component Type="Transform">
-        <Angle>1.57149</Angle>
         <Layer>-1</Layer>
         <Scale>1.96835 2.22892</Scale>
         <Position>8.77325 2.28978</Position>
+        <Angle>1.57149</Angle>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile2.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
           <Item>0.35 0.2</Item>
           <Item>-0.35 0.2</Item>
         </Polygon>
-        <Friction>0</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
     </Entity>
-    <Entity Name="LandFiller" ID="25" Tag="0" Transient="false">
+    <Entity Name="LandFiller" ID="25" Tag="0" Transient="false" Prototype="-497">
       <Component Type="Transform">
-        <Angle>0</Angle>
         <Layer>-1</Layer>
         <Scale>46.0163 4.98408</Scale>
         <Position>16.1287 3.47562</Position>
+        <Angle>0</Angle>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile2.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
           <Item>0.35 0.2</Item>
           <Item>-0.35 0.2</Item>
         </Polygon>
-        <Friction>0</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
     </Entity>
-    <Entity Name="LandFiller" ID="26" Tag="0" Transient="false">
+    <Entity Name="LandFiller" ID="26" Tag="0" Transient="false" Prototype="-497">
       <Component Type="Transform">
-        <Angle>0.78914</Angle>
         <Layer>-1</Layer>
         <Scale>4.13041 13.3087</Scale>
         <Position>15.996 1.10419</Position>
+        <Angle>0.78914</Angle>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile2.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
           <Item>0.35 0.2</Item>
           <Item>-0.35 0.2</Item>
         </Polygon>
-        <Friction>0</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
     </Entity>
-    <Entity Name="LandFiller" ID="27" Tag="0" Transient="false">
+    <Entity Name="LandFiller" ID="27" Tag="0" Transient="false" Prototype="-497">
       <Component Type="Transform">
-        <Angle>1.57149</Angle>
         <Layer>-1</Layer>
         <Scale>1.68909 19.5095</Scale>
         <Position>13.0867 2.39844</Position>
+        <Angle>1.57149</Angle>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile2.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
           <Item>0.35 0.2</Item>
           <Item>-0.35 0.2</Item>
         </Polygon>
-        <Friction>0</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
     </Entity>
-    <Entity Name="Land1" ID="28" Tag="0" Transient="false">
+    <Entity Name="Land1" ID="28" Tag="0" Transient="false" Prototype="-495">
       <Component Type="Transform">
-        <Angle>1.85904</Angle>
         <Layer>0</Layer>
         <Scale>1.97629 0.71899</Scale>
         <Position>0.118397 -3.72994</Position>
+        <Angle>1.85904</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
           <Item>0.85 0.6</Item>
           <Item>-0.85 0.6</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile0.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="LandFiller" ID="29" Tag="0" Transient="false">
+    <Entity Name="LandFiller" ID="29" Tag="0" Transient="false" Prototype="-497">
       <Component Type="Transform">
-        <Angle>-0.632414</Angle>
         <Layer>-1</Layer>
         <Scale>3.81148 10.0788</Scale>
         <Position>14.837 -2.76894</Position>
+        <Angle>-0.632414</Angle>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile2.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
           <Item>0.35 0.2</Item>
           <Item>-0.35 0.2</Item>
         </Polygon>
-        <Friction>0</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
     </Entity>
     <Entity Name="Background1" ID="30" Tag="0" Transient="false">
       <Component Type="Transform">
-        <Angle>0</Angle>
         <Layer>-2</Layer>
         <Scale>1.59255 1.44736</Scale>
         <Position>26.1615 -3.90182</Position>
+        <Angle>0</Angle>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/bg1.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
           <Item>0.35 0.2</Item>
           <Item>-0.35 0.2</Item>
         </Polygon>
-        <Friction>0</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
     </Entity>
     <Entity Name="Background" ID="31" Tag="0" Transient="false"></Entity>
-    <Entity Name="Land2" ID="32" Tag="0" Transient="false">
+    <Entity Name="Land2" ID="32" Tag="0" Transient="false" Prototype="-496">
       <Component Type="Transform">
-        <Angle>1.12103</Angle>
         <Layer>0</Layer>
         <Scale>1 1</Scale>
         <Position>15.0952 -5.30102</Position>
+        <Angle>1.12103</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.83 -0.15</Item>
           <Item>0.83 -0.5</Item>
           <Item>0.83 0.5</Item>
           <Item>-0.83 0.5</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile1.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Land1" ID="33" Tag="0" Transient="false">
+    <Entity Name="Land1" ID="33" Tag="0" Transient="false" Prototype="-495">
       <Component Type="Transform">
-        <Angle>0.873668</Angle>
         <Layer>0</Layer>
         <Scale>3.01021 1.00505</Scale>
         <Position>16.8998 -2.58984</Position>
+        <Angle>0.873668</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
           <Item>0.85 0.6</Item>
           <Item>-0.85 0.6</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile0.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Land1" ID="34" Tag="0" Transient="false">
+    <Entity Name="Land1" ID="34" Tag="0" Transient="false" Prototype="-495">
       <Component Type="Transform">
-        <Angle>2.34301</Angle>
         <Layer>0</Layer>
         <Scale>1.26845 1.0026</Scale>
         <Position>23.1135 -16.9986</Position>
+        <Angle>2.34301</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
           <Item>0.85 0.6</Item>
           <Item>-0.85 0.6</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile0.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Land1" ID="35" Tag="0" Transient="false">
+    <Entity Name="Land1" ID="35" Tag="0" Transient="false" Prototype="-495">
       <Component Type="Transform">
-        <Angle>0.276889</Angle>
         <Layer>0</Layer>
         <Scale>1 1</Scale>
         <Position>23.7727 -13.8475</Position>
+        <Angle>0.276889</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
           <Item>0.85 0.6</Item>
           <Item>-0.85 0.6</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile0.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Land2" ID="36" Tag="0" Transient="false">
+    <Entity Name="Land2" ID="36" Tag="0" Transient="false" Prototype="-496">
       <Component Type="Transform">
-        <Angle>1.73383</Angle>
         <Layer>0</Layer>
         <Scale>1 1</Scale>
         <Position>22.8411 -15.4285</Position>
+        <Angle>1.73383</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.83 -0.15</Item>
           <Item>0.83 -0.5</Item>
           <Item>0.83 0.5</Item>
           <Item>-0.83 0.5</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile1.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Land1" ID="37" Tag="0" Transient="false">
+    <Entity Name="Land1" ID="37" Tag="0" Transient="false" Prototype="-495">
       <Component Type="Transform">
-        <Angle>5.45419</Angle>
         <Layer>0</Layer>
         <Scale>1 1</Scale>
         <Position>30.476 -18.2945</Position>
+        <Angle>5.45419</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
           <Item>0.85 0.6</Item>
           <Item>-0.85 0.6</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile0.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Land1" ID="38" Tag="0" Transient="false">
+    <Entity Name="Land1" ID="38" Tag="0" Transient="false" Prototype="-495">
       <Component Type="Transform">
-        <Angle>6.30141</Angle>
         <Layer>0</Layer>
         <Scale>0.916309 0.778255</Scale>
         <Position>33.9634 -19.5003</Position>
+        <Angle>6.30141</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
           <Item>0.85 0.6</Item>
           <Item>-0.85 0.6</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile0.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Land2" ID="39" Tag="0" Transient="false">
+    <Entity Name="Land2" ID="39" Tag="0" Transient="false" Prototype="-496">
       <Component Type="Transform">
-        <Angle>-0.151645</Angle>
         <Layer>0</Layer>
         <Scale>1.60062 0.9214</Scale>
         <Position>31.9487 -19.365</Position>
+        <Angle>-0.151645</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.83 -0.15</Item>
           <Item>0.83 -0.5</Item>
           <Item>0.83 0.5</Item>
           <Item>-0.83 0.5</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile1.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Land2" ID="41" Tag="0" Transient="false">
+    <Entity Name="Land2" ID="41" Tag="0" Transient="false" Prototype="-496">
       <Component Type="Transform">
-        <Angle>0.312552</Angle>
         <Layer>0</Layer>
         <Scale>2.38276 0.885016</Scale>
         <Position>26.1178 -7.68151</Position>
+        <Angle>0.312552</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.83 -0.15</Item>
           <Item>0.83 -0.5</Item>
           <Item>0.83 0.5</Item>
           <Item>-0.83 0.5</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile1.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Land1" ID="42" Tag="0" Transient="false">
+    <Entity Name="Land1" ID="42" Tag="0" Transient="false" Prototype="-495">
       <Component Type="Transform">
-        <Angle>0.135653</Angle>
         <Layer>0</Layer>
         <Scale>0.881127 0.709288</Scale>
         <Position>28.7119 -6.9419</Position>
+        <Angle>0.135653</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
           <Item>0.85 0.6</Item>
           <Item>-0.85 0.6</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile0.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Land2" ID="43" Tag="0" Transient="false">
+    <Entity Name="Land2" ID="43" Tag="0" Transient="false" Prototype="-496">
       <Component Type="Transform">
-        <Angle>-0.660729</Angle>
         <Layer>0</Layer>
         <Scale>0.926185 1.01419</Scale>
         <Position>29.6676 -11.6858</Position>
+        <Angle>-0.660729</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.83 -0.15</Item>
           <Item>0.83 -0.5</Item>
           <Item>0.83 0.5</Item>
           <Item>-0.83 0.5</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile1.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Land1" ID="44" Tag="0" Transient="false">
+    <Entity Name="Land1" ID="44" Tag="0" Transient="false" Prototype="-495">
       <Component Type="Transform">
-        <Angle>-1.92156</Angle>
         <Layer>0</Layer>
         <Scale>1 1</Scale>
         <Position>30.2088 -13.2858</Position>
+        <Angle>-1.92156</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
           <Item>0.85 0.6</Item>
           <Item>-0.85 0.6</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile0.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Land2" ID="45" Tag="0" Transient="false">
+    <Entity Name="Land2" ID="45" Tag="0" Transient="false" Prototype="-496">
       <Component Type="Transform">
-        <Angle>-1.4432</Angle>
         <Layer>0</Layer>
         <Scale>1.2746 0.983459</Scale>
         <Position>29.6585 -14.8809</Position>
+        <Angle>-1.4432</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.83 -0.15</Item>
           <Item>0.83 -0.5</Item>
           <Item>0.83 0.5</Item>
           <Item>-0.83 0.5</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile1.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Land1" ID="46" Tag="0" Transient="false">
+    <Entity Name="Land1" ID="46" Tag="0" Transient="false" Prototype="-495">
       <Component Type="Transform">
-        <Angle>-1.52428</Angle>
         <Layer>0</Layer>
         <Scale>1.27179 0.915254</Scale>
         <Position>29.9347 -16.9455</Position>
+        <Angle>-1.52428</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
           <Item>0.85 0.6</Item>
           <Item>-0.85 0.6</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile0.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Land2" ID="47" Tag="0" Transient="false">
+    <Entity Name="Land2" ID="47" Tag="0" Transient="false" Prototype="-496">
       <Component Type="Transform">
-        <Angle>-1.41887</Angle>
         <Layer>0</Layer>
         <Scale>1 1</Scale>
         <Position>29.5459 -7.89823</Position>
+        <Angle>-1.41887</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.83 -0.15</Item>
           <Item>0.83 -0.5</Item>
           <Item>0.83 0.5</Item>
           <Item>-0.83 0.5</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile1.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Land1" ID="48" Tag="0" Transient="false">
+    <Entity Name="Land1" ID="48" Tag="0" Transient="false" Prototype="-495">
       <Component Type="Transform">
-        <Angle>-1.60826</Angle>
         <Layer>0</Layer>
         <Scale>1.45436 0.854747</Scale>
         <Position>29.6935 -9.95921</Position>
+        <Angle>-1.60826</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
           <Item>0.85 0.6</Item>
           <Item>-0.85 0.6</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile0.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Land1" ID="53" Tag="0" Transient="false">
+    <Entity Name="Land1" ID="53" Tag="0" Transient="false" Prototype="-495">
       <Component Type="Transform">
-        <Angle>0.488154</Angle>
         <Layer>0</Layer>
         <Scale>0.910142 0.620429</Scale>
         <Position>23.538 -8.13601</Position>
+        <Angle>0.488154</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
           <Item>0.85 0.6</Item>
           <Item>-0.85 0.6</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile0.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="LandFiller" ID="54" Tag="0" Transient="false">
+    <Entity Name="LandFiller" ID="54" Tag="0" Transient="false" Prototype="-497">
       <Component Type="Transform">
-        <Angle>0</Angle>
         <Layer>-1</Layer>
         <Scale>22.5701 2.03911</Scale>
         <Position>25.1394 2.10971</Position>
+        <Angle>0</Angle>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile2.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
           <Item>0.35 0.2</Item>
           <Item>-0.35 0.2</Item>
         </Polygon>
-        <Friction>0</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
     </Entity>
-    <Entity Name="LandFiller" ID="55" Tag="0" Transient="false">
+    <Entity Name="LandFiller" ID="55" Tag="0" Transient="false" Prototype="-497">
       <Component Type="Transform">
-        <Angle>0</Angle>
         <Layer>-1</Layer>
         <Scale>15.543 10.9605</Scale>
         <Position>11.8518 -0.0268251</Position>
+        <Angle>0</Angle>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile2.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
           <Item>0.35 0.2</Item>
           <Item>-0.35 0.2</Item>
         </Polygon>
-        <Friction>0</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
     </Entity>
-    <Entity Name="LandFiller" ID="56" Tag="0" Transient="false">
+    <Entity Name="LandFiller" ID="56" Tag="0" Transient="false" Prototype="-497">
       <Component Type="Transform">
-        <Angle>0</Angle>
         <Layer>-1</Layer>
         <Scale>6.01973 11.1507</Scale>
         <Position>12.498 -3.64677</Position>
+        <Angle>0</Angle>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile2.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
           <Item>0.35 0.2</Item>
           <Item>-0.35 0.2</Item>
         </Polygon>
-        <Friction>0</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
     </Entity>
-    <Entity Name="LandFiller" ID="57" Tag="0" Transient="false">
+    <Entity Name="LandFiller" ID="57" Tag="0" Transient="false" Prototype="-497">
       <Component Type="Transform">
-        <Angle>0</Angle>
         <Layer>-1</Layer>
         <Scale>21.9604 7.29501</Scale>
         <Position>25.5103 0.731829</Position>
+        <Angle>0</Angle>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile2.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
           <Item>0.35 0.2</Item>
           <Item>-0.35 0.2</Item>
         </Polygon>
-        <Friction>0</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
     </Entity>
-    <Entity Name="LandFiller" ID="58" Tag="0" Transient="false">
+    <Entity Name="LandFiller" ID="58" Tag="0" Transient="false" Prototype="-497">
       <Component Type="Transform">
-        <Angle>-0.0144712</Angle>
         <Layer>-1</Layer>
         <Scale>13.3223 20.6387</Scale>
         <Position>27.4169 -2.70756</Position>
+        <Angle>-0.0144712</Angle>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile2.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
           <Item>0.35 0.2</Item>
           <Item>-0.35 0.2</Item>
         </Polygon>
-        <Friction>0</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
     </Entity>
     <Entity Name="Objects" ID="61" Tag="0" Transient="false"></Entity>
-    <Entity Name="Stone1" ID="62" Tag="0" Transient="false">
+    <Entity Name="Stone1" ID="62" Tag="0" Transient="false" Prototype="-499">
       <Component Type="Transform">
-        <Angle>-0.0572664</Angle>
         <Layer>1</Layer>
         <Scale>1.12729 1.3204</Scale>
-        <Position>28.4661 -8.11859</Position>
+        <Position>28.465 -8.12004</Position>
+        <Angle>-0.077319</Angle>
       </Component>
       <Component Type="DynamicBody">
-        <LinearDamping>0.1</LinearDamping>
         <AngularDamping>0.5</AngularDamping>
+        <LinearDamping>0.1</LinearDamping>
       </Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>10</Friction>
         <Polygon>
           <Item>-0.65 -0.2</Item>
           <Item>-0.25 -0.5</Item>
@@ -1821,131 +1823,94 @@
           <Item>-0.2 0.5</Item>
           <Item>-0.65 0.3</Item>
         </Polygon>
-        <Friction>10</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>objects/stone1.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="LandFiller" ID="321" Tag="0" Transient="false">
+    <Entity Name="LandFiller" ID="321" Tag="0" Transient="false" Prototype="-497">
       <Component Type="Transform">
-        <Angle>0.101465</Angle>
         <Layer>-1</Layer>
         <Scale>7.21445 44.9582</Scale>
         <Position>22.1529 -26.7918</Position>
+        <Angle>0.101465</Angle>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile2.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
           <Item>0.35 0.2</Item>
           <Item>-0.35 0.2</Item>
         </Polygon>
-        <Friction>0</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
     </Entity>
-    <Entity Name="Stone1" ID="65" Tag="0" Transient="false">
+    <Entity Name="LandFiller" ID="322" Tag="0" Transient="false" Prototype="-497">
       <Component Type="Transform">
-        <Angle>3.15732</Angle>
-        <Layer>1</Layer>
-        <Scale>1 1</Scale>
-        <Position>25.5373 -8.57642</Position>
-      </Component>
-      <Component Type="DynamicBody">
-        <LinearDamping>0.1</LinearDamping>
-        <AngularDamping>0.5</AngularDamping>
-      </Component>
-      <Component Type="PolygonCollider">
-        <Polygon>
-          <Item>-0.65 -0.2</Item>
-          <Item>-0.25 -0.5</Item>
-          <Item>0.65 -0.3</Item>
-          <Item>0.65 0.05</Item>
-          <Item>0.4 0.5</Item>
-          <Item>-0.2 0.5</Item>
-          <Item>-0.65 0.3</Item>
-        </Polygon>
-        <Friction>10</Friction>
-        <Density>1</Density>
-        <Restitution>0</Restitution>
-      </Component>
-      <Component Type="Sprite">
-        <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
-        <Texture>objects/stone1.png</Texture>
-        <AnimDuration>0</AnimDuration>
-        <AnimTime>0</AnimTime>
-        <AnimRepeats>false</AnimRepeats>
-        <Transparency>0</Transparency>
-        <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
-      </Component>
-    </Entity>
-    <Entity Name="LandFiller" ID="322" Tag="0" Transient="false">
-      <Component Type="Transform">
-        <Angle>0.279071</Angle>
         <Layer>-1</Layer>
         <Scale>12.188 7.64186</Scale>
         <Position>26.3552 -5.97496</Position>
+        <Angle>0.279071</Angle>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile2.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
           <Item>0.35 0.2</Item>
           <Item>-0.35 0.2</Item>
         </Polygon>
-        <Friction>0</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
     </Entity>
-    <Entity Name="Stone2" ID="66" Tag="0" Transient="false">
+    <Entity Name="Stone2" ID="66" Tag="0" Transient="false" Prototype="-500">
       <Component Type="Transform">
-        <Angle>-3.59324</Angle>
         <Layer>1</Layer>
         <Scale>1 1</Scale>
-        <Position>21.6748 -9.26873</Position>
+        <Position>20.1219 -2.71088</Position>
+        <Angle>-2.82847</Angle>
       </Component>
       <Component Type="DynamicBody">
-        <LinearDamping>0.1</LinearDamping>
         <AngularDamping>0.5</AngularDamping>
+        <LinearDamping>0.1</LinearDamping>
       </Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.1 -0.21</Item>
           <Item>0.25 -0.12</Item>
@@ -1955,274 +1920,274 @@
           <Item>-0.26 0.11</Item>
           <Item>-0.26 -0.08</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>objects/stone2.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="LandFiller" ID="323" Tag="0" Transient="false">
+    <Entity Name="LandFiller" ID="323" Tag="0" Transient="false" Prototype="-497">
       <Component Type="Transform">
-        <Angle>1.62246</Angle>
         <Layer>-1</Layer>
         <Scale>8.40657 5.48842</Scale>
         <Position>30.95 -9.19004</Position>
+        <Angle>1.62246</Angle>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile2.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
           <Item>0.35 0.2</Item>
           <Item>-0.35 0.2</Item>
         </Polygon>
-        <Friction>0</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
     </Entity>
-    <Entity Name="LandFiller" ID="324" Tag="0" Transient="false">
+    <Entity Name="LandFiller" ID="324" Tag="0" Transient="false" Prototype="-497">
       <Component Type="Transform">
-        <Angle>1.57189</Angle>
         <Layer>-1</Layer>
         <Scale>34.4954 60.2928</Scale>
         <Position>48.6231 -28.8896</Position>
+        <Angle>1.57189</Angle>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile2.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
           <Item>0.35 0.2</Item>
           <Item>-0.35 0.2</Item>
         </Polygon>
-        <Friction>0</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
     </Entity>
-    <Entity Name="LandFiller" ID="325" Tag="0" Transient="false">
+    <Entity Name="LandFiller" ID="325" Tag="0" Transient="false" Prototype="-497">
       <Component Type="Transform">
-        <Angle>1.58792</Angle>
         <Layer>-1</Layer>
         <Scale>3.44973 5.98698</Scale>
         <Position>35.9485 -18.6934</Position>
+        <Angle>1.58792</Angle>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile2.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
           <Item>0.35 0.2</Item>
           <Item>-0.35 0.2</Item>
         </Polygon>
-        <Friction>0</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
     </Entity>
-    <Entity Name="LandFiller" ID="326" Tag="0" Transient="false">
+    <Entity Name="LandFiller" ID="326" Tag="0" Transient="false" Prototype="-497">
       <Component Type="Transform">
-        <Angle>1.29413</Angle>
         <Layer>-1</Layer>
         <Scale>29.7387 41.2153</Scale>
         <Position>38.7791 -36.3165</Position>
+        <Angle>1.29413</Angle>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile2.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
           <Item>0.35 0.2</Item>
           <Item>-0.35 0.2</Item>
         </Polygon>
-        <Friction>0</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
     </Entity>
-    <Entity Name="LandFiller" ID="327" Tag="0" Transient="false">
+    <Entity Name="LandFiller" ID="327" Tag="0" Transient="false" Prototype="-497">
       <Component Type="Transform">
-        <Angle>1.58792</Angle>
         <Layer>-1</Layer>
         <Scale>2.83622 5.27818</Scale>
         <Position>35.4643 -23.4534</Position>
+        <Angle>1.58792</Angle>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile2.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
           <Item>0.35 0.2</Item>
           <Item>-0.35 0.2</Item>
         </Polygon>
-        <Friction>0</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
     </Entity>
-    <Entity Name="Background2" ID="330" Tag="0" Transient="false">
+    <Entity Name="Background2" ID="330" Tag="0" Transient="false" Prototype="-502">
       <Component Type="Transform">
-        <Angle>-0.0142698</Angle>
         <Layer>-2</Layer>
         <Scale>1.79792 4.8572</Scale>
         <Position>26.2271 -13.8033</Position>
+        <Angle>-0.0142698</Angle>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/bg2.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
           <Item>0.35 0.2</Item>
           <Item>-0.35 0.2</Item>
         </Polygon>
-        <Friction>0</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
     </Entity>
-    <Entity Name="Background2" ID="334" Tag="0" Transient="false">
+    <Entity Name="Background2" ID="334" Tag="0" Transient="false" Prototype="-502">
       <Component Type="Transform">
-        <Angle>0</Angle>
         <Layer>-2</Layer>
         <Scale>1.82196 8.8396</Scale>
         <Position>26.6645 -32.8568</Position>
+        <Angle>0</Angle>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/bg2.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
           <Item>0.35 0.2</Item>
           <Item>-0.35 0.2</Item>
         </Polygon>
-        <Friction>0</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
     </Entity>
-    <Entity Name="Background2" ID="335" Tag="0" Transient="false">
+    <Entity Name="Background2" ID="335" Tag="0" Transient="false" Prototype="-502">
       <Component Type="Transform">
-        <Angle>3.11481</Angle>
         <Layer>-2</Layer>
         <Scale>1.69451 5.75525</Scale>
         <Position>26.6835 -21.7254</Position>
+        <Angle>3.11481</Angle>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/bg2.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
           <Item>0.35 0.2</Item>
           <Item>-0.35 0.2</Item>
         </Polygon>
-        <Friction>0</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
     </Entity>
-    <Entity Name="Stone1" ID="80" Tag="0" Transient="false">
+    <Entity Name="Stone1" ID="80" Tag="0" Transient="false" Prototype="-499">
       <Component Type="Transform">
-        <Angle>-3.61244</Angle>
         <Layer>1</Layer>
         <Scale>1.0743 0.972008</Scale>
-        <Position>31.8649 -20.1055</Position>
+        <Position>31.8739 -20.1081</Position>
+        <Angle>-3.61244</Angle>
       </Component>
       <Component Type="DynamicBody">
-        <LinearDamping>0.1</LinearDamping>
         <AngularDamping>0.5</AngularDamping>
+        <LinearDamping>0.1</LinearDamping>
       </Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>10</Friction>
         <Polygon>
           <Item>-0.65 -0.2</Item>
           <Item>-0.25 -0.5</Item>
@@ -2232,975 +2197,693 @@
           <Item>-0.2 0.5</Item>
           <Item>-0.65 0.3</Item>
         </Polygon>
-        <Friction>10</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>objects/stone1.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Land2" ID="341" Tag="0" Transient="false">
+    <Entity Name="Land2" ID="341" Tag="0" Transient="false" Prototype="-496">
       <Component Type="Transform">
-        <Angle>0.562646</Angle>
         <Layer>0</Layer>
         <Scale>1 1</Scale>
         <Position>19.1214 -1.18354</Position>
+        <Angle>0.562646</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.83 -0.15</Item>
           <Item>0.83 -0.5</Item>
           <Item>0.83 0.5</Item>
           <Item>-0.83 0.5</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile1.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Land1" ID="85" Tag="0" Transient="false">
+    <Entity Name="Land1" ID="85" Tag="0" Transient="false" Prototype="-495">
       <Component Type="Transform">
-        <Angle>-3.08689</Angle>
         <Layer>0</Layer>
         <Scale>1.80547 0.703866</Scale>
         <Position>15.7594 -9.8975</Position>
+        <Angle>-3.08689</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
           <Item>0.85 0.6</Item>
           <Item>-0.85 0.6</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile0.png</Texture>
-        <AnimDuration>0</AnimDuration>
-        <AnimTime>0</AnimTime>
-        <AnimRepeats>false</AnimRepeats>
-        <Transparency>0</Transparency>
-        <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
-      </Component>
-    </Entity>
-    <Entity Name="Coin1" ID="342" Tag="2" Transient="false">
-      <Component Type="Transform">
-        <Angle>0</Angle>
-        <Layer>0</Layer>
-        <Scale>1.5 1.5</Scale>
-        <Position>27.9808 -24.6464</Position>
-      </Component>
-      <Component Type="PolygonCollider">
-        <Polygon>
-          <Item>-0.1 -0.1</Item>
-          <Item>0.1 -0.1</Item>
-          <Item>0.1 0.1</Item>
-          <Item>-0.1 0.1</Item>
-        </Polygon>
-        <Friction>0.5</Friction>
-        <Density>1</Density>
-        <Restitution>0.5</Restitution>
-      </Component>
-      <Component Type="Sprite">
-        <FrameSize>(0, 0)</FrameSize>
         <FrameIndex>0</FrameIndex>
-        <Texture>objects/coin.png</Texture>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
-      </Component>
-      <Component Type="Script">
-        <ScriptTimes></ScriptTimes>
-        <ScriptStates></ScriptStates>
-        <ScriptTimeOut>1000</ScriptTimeOut>
-        <ScriptModules>
-          <Item>UpDownWaver.as</Item>
-        </ScriptModules>
-        <YOffsetAmplitude Type="float32">0.1</YOffsetAmplitude>
-        <YOffsetPeriod Type="float32">0.1</YOffsetPeriod>
       </Component>
     </Entity>
-    <Entity Name="Land2" ID="86" Tag="0" Transient="false">
+    <Entity Name="Land2" ID="86" Tag="0" Transient="false" Prototype="-496">
       <Component Type="Transform">
-        <Angle>-3.79957</Angle>
         <Layer>0</Layer>
         <Scale>0.517888 0.829594</Scale>
         <Position>17.3849 -9.96578</Position>
+        <Angle>-3.79957</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.83 -0.15</Item>
           <Item>0.83 -0.5</Item>
           <Item>0.83 0.5</Item>
           <Item>-0.83 0.5</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile1.png</Texture>
-        <AnimDuration>0</AnimDuration>
-        <AnimTime>0</AnimTime>
-        <AnimRepeats>false</AnimRepeats>
-        <Transparency>0</Transparency>
-        <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
-      </Component>
-    </Entity>
-    <Entity Name="Coin1" ID="343" Tag="2" Transient="false">
-      <Component Type="Transform">
-        <Angle>0</Angle>
-        <Layer>0</Layer>
-        <Scale>1.5 1.5</Scale>
-        <Position>29.9645 -24.4562</Position>
-      </Component>
-      <Component Type="PolygonCollider">
-        <Polygon>
-          <Item>-0.1 -0.1</Item>
-          <Item>0.1 -0.1</Item>
-          <Item>0.1 0.1</Item>
-          <Item>-0.1 0.1</Item>
-        </Polygon>
-        <Friction>0.5</Friction>
-        <Density>1</Density>
-        <Restitution>0.5</Restitution>
-      </Component>
-      <Component Type="Sprite">
-        <FrameSize>(0, 0)</FrameSize>
         <FrameIndex>0</FrameIndex>
-        <Texture>objects/coin.png</Texture>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
-      </Component>
-      <Component Type="Script">
-        <ScriptTimes></ScriptTimes>
-        <ScriptStates></ScriptStates>
-        <ScriptTimeOut>1000</ScriptTimeOut>
-        <ScriptModules>
-          <Item>UpDownWaver.as</Item>
-        </ScriptModules>
-        <YOffsetAmplitude Type="float32">0.1</YOffsetAmplitude>
-        <YOffsetPeriod Type="float32">0.1</YOffsetPeriod>
       </Component>
     </Entity>
-    <Entity Name="Land1" ID="87" Tag="0" Transient="false">
+    <Entity Name="Land1" ID="87" Tag="0" Transient="false" Prototype="-495">
       <Component Type="Transform">
-        <Angle>-3.19363</Angle>
         <Layer>0</Layer>
         <Scale>0.902035 0.611066</Scale>
         <Position>23.7164 -12.1586</Position>
+        <Angle>-3.19363</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
           <Item>0.85 0.6</Item>
           <Item>-0.85 0.6</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile0.png</Texture>
-        <AnimDuration>0</AnimDuration>
-        <AnimTime>0</AnimTime>
-        <AnimRepeats>false</AnimRepeats>
-        <Transparency>0</Transparency>
-        <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
-      </Component>
-    </Entity>
-    <Entity Name="Coin1" ID="344" Tag="2" Transient="false">
-      <Component Type="Transform">
-        <Angle>0</Angle>
-        <Layer>0</Layer>
-        <Scale>1.5 1.5</Scale>
-        <Position>29.0177 -24.6444</Position>
-      </Component>
-      <Component Type="PolygonCollider">
-        <Polygon>
-          <Item>-0.1 -0.1</Item>
-          <Item>0.1 -0.1</Item>
-          <Item>0.1 0.1</Item>
-          <Item>-0.1 0.1</Item>
-        </Polygon>
-        <Friction>0.5</Friction>
-        <Density>1</Density>
-        <Restitution>0.5</Restitution>
-      </Component>
-      <Component Type="Sprite">
-        <FrameSize>(0, 0)</FrameSize>
         <FrameIndex>0</FrameIndex>
-        <Texture>objects/coin.png</Texture>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
-      </Component>
-      <Component Type="Script">
-        <ScriptTimes></ScriptTimes>
-        <ScriptStates></ScriptStates>
-        <ScriptTimeOut>1000</ScriptTimeOut>
-        <ScriptModules>
-          <Item>UpDownWaver.as</Item>
-        </ScriptModules>
-        <YOffsetAmplitude Type="float32">0.1</YOffsetAmplitude>
-        <YOffsetPeriod Type="float32">0.1</YOffsetPeriod>
       </Component>
     </Entity>
-    <Entity Name="Land1" ID="88" Tag="0" Transient="false">
+    <Entity Name="Land1" ID="88" Tag="0" Transient="false" Prototype="-495">
       <Component Type="Transform">
-        <Angle>-3.40463</Angle>
         <Layer>0</Layer>
         <Scale>0.826598 0.829089</Scale>
         <Position>18.1642 -10.9251</Position>
+        <Angle>-3.40463</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
           <Item>0.85 0.6</Item>
           <Item>-0.85 0.6</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile0.png</Texture>
-        <AnimDuration>0</AnimDuration>
-        <AnimTime>0</AnimTime>
-        <AnimRepeats>false</AnimRepeats>
-        <Transparency>0</Transparency>
-        <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
-      </Component>
-    </Entity>
-    <Entity Name="Coin1" ID="345" Tag="2" Transient="false">
-      <Component Type="Transform">
-        <Angle>0</Angle>
-        <Layer>0</Layer>
-        <Scale>1.5 1.5</Scale>
-        <Position>30.9894 -23.9461</Position>
-      </Component>
-      <Component Type="PolygonCollider">
-        <Polygon>
-          <Item>-0.1 -0.1</Item>
-          <Item>0.1 -0.1</Item>
-          <Item>0.1 0.1</Item>
-          <Item>-0.1 0.1</Item>
-        </Polygon>
-        <Friction>0.5</Friction>
-        <Density>1</Density>
-        <Restitution>0.5</Restitution>
-      </Component>
-      <Component Type="Sprite">
-        <FrameSize>(0, 0)</FrameSize>
         <FrameIndex>0</FrameIndex>
-        <Texture>objects/coin.png</Texture>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
-      </Component>
-      <Component Type="Script">
-        <ScriptTimes></ScriptTimes>
-        <ScriptStates></ScriptStates>
-        <ScriptTimeOut>1000</ScriptTimeOut>
-        <ScriptModules>
-          <Item>UpDownWaver.as</Item>
-        </ScriptModules>
-        <YOffsetAmplitude Type="float32">0.1</YOffsetAmplitude>
-        <YOffsetPeriod Type="float32">0.1</YOffsetPeriod>
       </Component>
     </Entity>
-    <Entity Name="Land2" ID="89" Tag="0" Transient="false">
+    <Entity Name="Land2" ID="89" Tag="0" Transient="false" Prototype="-496">
       <Component Type="Transform">
-        <Angle>-3.07139</Angle>
         <Layer>0</Layer>
         <Scale>1.00438 0.815523</Scale>
         <Position>21.2868 -11.3941</Position>
+        <Angle>-3.07139</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.83 -0.15</Item>
           <Item>0.83 -0.5</Item>
           <Item>0.83 0.5</Item>
           <Item>-0.83 0.5</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile1.png</Texture>
-        <AnimDuration>0</AnimDuration>
-        <AnimTime>0</AnimTime>
-        <AnimRepeats>false</AnimRepeats>
-        <Transparency>0</Transparency>
-        <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
-      </Component>
-    </Entity>
-    <Entity Name="Coin1" ID="346" Tag="2" Transient="false">
-      <Component Type="Transform">
-        <Angle>0</Angle>
-        <Layer>0</Layer>
-        <Scale>1.5 1.5</Scale>
-        <Position>26.9781 -24.4197</Position>
-      </Component>
-      <Component Type="PolygonCollider">
-        <Polygon>
-          <Item>-0.1 -0.1</Item>
-          <Item>0.1 -0.1</Item>
-          <Item>0.1 0.1</Item>
-          <Item>-0.1 0.1</Item>
-        </Polygon>
-        <Friction>0.5</Friction>
-        <Density>1</Density>
-        <Restitution>0.5</Restitution>
-      </Component>
-      <Component Type="Sprite">
-        <FrameSize>(0, 0)</FrameSize>
         <FrameIndex>0</FrameIndex>
-        <Texture>objects/coin.png</Texture>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
-      </Component>
-      <Component Type="Script">
-        <ScriptTimes></ScriptTimes>
-        <ScriptStates></ScriptStates>
-        <ScriptTimeOut>1000</ScriptTimeOut>
-        <ScriptModules>
-          <Item>UpDownWaver.as</Item>
-        </ScriptModules>
-        <YOffsetAmplitude Type="float32">0.1</YOffsetAmplitude>
-        <YOffsetPeriod Type="float32">0.1</YOffsetPeriod>
       </Component>
     </Entity>
-    <Entity Name="Land1" ID="90" Tag="0" Transient="false">
+    <Entity Name="Land1" ID="90" Tag="0" Transient="false" Prototype="-495">
       <Component Type="Transform">
-        <Angle>-3.20857</Angle>
         <Layer>0</Layer>
         <Scale>0.818263 0.61217</Scale>
         <Position>19.5258 -11.0837</Position>
+        <Angle>-3.20857</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
           <Item>0.85 0.6</Item>
           <Item>-0.85 0.6</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile0.png</Texture>
-        <AnimDuration>0</AnimDuration>
-        <AnimTime>0</AnimTime>
-        <AnimRepeats>false</AnimRepeats>
-        <Transparency>0</Transparency>
-        <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
-      </Component>
-    </Entity>
-    <Entity Name="Coin1" ID="347" Tag="2" Transient="false">
-      <Component Type="Transform">
-        <Angle>0</Angle>
-        <Layer>0</Layer>
-        <Scale>1.5 1.5</Scale>
-        <Position>26.0018 -23.9468</Position>
-      </Component>
-      <Component Type="PolygonCollider">
-        <Polygon>
-          <Item>-0.1 -0.1</Item>
-          <Item>0.1 -0.1</Item>
-          <Item>0.1 0.1</Item>
-          <Item>-0.1 0.1</Item>
-        </Polygon>
-        <Friction>0.5</Friction>
-        <Density>1</Density>
-        <Restitution>0.5</Restitution>
-      </Component>
-      <Component Type="Sprite">
-        <FrameSize>(0, 0)</FrameSize>
         <FrameIndex>0</FrameIndex>
-        <Texture>objects/coin.png</Texture>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
-      </Component>
-      <Component Type="Script">
-        <ScriptTimes></ScriptTimes>
-        <ScriptStates></ScriptStates>
-        <ScriptTimeOut>1000</ScriptTimeOut>
-        <ScriptModules>
-          <Item>UpDownWaver.as</Item>
-        </ScriptModules>
-        <YOffsetAmplitude Type="float32">0.1</YOffsetAmplitude>
-        <YOffsetPeriod Type="float32">0.1</YOffsetPeriod>
       </Component>
     </Entity>
-    <Entity Name="Land2" ID="92" Tag="0" Transient="false">
+    <Entity Name="Land2" ID="92" Tag="0" Transient="false" Prototype="-496">
       <Component Type="Transform">
-        <Angle>-3.26447</Angle>
         <Layer>0</Layer>
         <Scale>0.62307 0.737717</Scale>
         <Position>22.6036 -11.7754</Position>
+        <Angle>-3.26447</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.83 -0.15</Item>
           <Item>0.83 -0.5</Item>
           <Item>0.83 0.5</Item>
           <Item>-0.83 0.5</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile1.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Land1" ID="96" Tag="0" Transient="false">
+    <Entity Name="Land1" ID="96" Tag="0" Transient="false" Prototype="-495">
       <Component Type="Transform">
-        <Angle>-3.24926</Angle>
         <Layer>0</Layer>
         <Scale>1.97195 0.942771</Scale>
         <Position>2.4895 -5.91867</Position>
+        <Angle>-3.24926</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
           <Item>0.85 0.6</Item>
           <Item>-0.85 0.6</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile0.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="LandFiller" ID="97" Tag="0" Transient="false">
+    <Entity Name="LandFiller" ID="97" Tag="0" Transient="false" Prototype="-497">
       <Component Type="Transform">
-        <Angle>-0.645471</Angle>
         <Layer>-1</Layer>
         <Scale>2.59404 7.40936</Scale>
         <Position>22.6995 -13.4431</Position>
+        <Angle>-0.645471</Angle>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile2.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
           <Item>0.35 0.2</Item>
           <Item>-0.35 0.2</Item>
         </Polygon>
-        <Friction>0</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
     </Entity>
-    <Entity Name="LandFiller" ID="98" Tag="0" Transient="false">
+    <Entity Name="LandFiller" ID="98" Tag="0" Transient="false" Prototype="-497">
       <Component Type="Transform">
-        <Angle>-0.227163</Angle>
         <Layer>-1</Layer>
         <Scale>11.8837 8.78615</Scale>
         <Position>16.1609 -11.9394</Position>
+        <Angle>-0.227163</Angle>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile2.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
           <Item>0.35 0.2</Item>
           <Item>-0.35 0.2</Item>
         </Polygon>
-        <Friction>0</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
     </Entity>
-    <Entity Name="LandFiller" ID="99" Tag="0" Transient="false">
+    <Entity Name="LandFiller" ID="99" Tag="0" Transient="false" Prototype="-497">
       <Component Type="Transform">
-        <Angle>-0.38072</Angle>
         <Layer>-1</Layer>
         <Scale>20.0551 17.88</Scale>
         <Position>5.08659 -10.8548</Position>
+        <Angle>-0.38072</Angle>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile2.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
           <Item>0.35 0.2</Item>
           <Item>-0.35 0.2</Item>
         </Polygon>
-        <Friction>0</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
     </Entity>
-    <Entity Name="Background1" ID="100" Tag="0" Transient="false">
+    <Entity Name="Background1" ID="100" Tag="0" Transient="false" Prototype="-501">
       <Component Type="Transform">
-        <Angle>0</Angle>
         <Layer>-2</Layer>
         <Scale>1.59255 1.44736</Scale>
         <Position>8.4064 -3.66924</Position>
+        <Angle>0</Angle>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/bg1.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
           <Item>0.35 0.2</Item>
           <Item>-0.35 0.2</Item>
         </Polygon>
-        <Friction>0</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
     </Entity>
-    <Entity Name="Background2" ID="101" Tag="0" Transient="false">
+    <Entity Name="Background2" ID="101" Tag="0" Transient="false" Prototype="-502">
       <Component Type="Transform">
-        <Angle>0</Angle>
         <Layer>-2</Layer>
         <Scale>1.60308 4.05997</Scale>
         <Position>7.90224 -13.0901</Position>
+        <Angle>0</Angle>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/bg2.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
           <Item>0.35 0.2</Item>
           <Item>-0.35 0.2</Item>
         </Polygon>
-        <Friction>0</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
     </Entity>
-    <Entity Name="LandFiller" ID="102" Tag="0" Transient="false">
+    <Entity Name="LandFiller" ID="102" Tag="0" Transient="false" Prototype="-497">
       <Component Type="Transform">
-        <Angle>1.58792</Angle>
         <Layer>-1</Layer>
         <Scale>8.47803 6.30004</Scale>
         <Position>31.2859 -15.5851</Position>
+        <Angle>1.58792</Angle>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile2.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
           <Item>0.35 0.2</Item>
           <Item>-0.35 0.2</Item>
         </Polygon>
-        <Friction>0</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
     </Entity>
     <Entity Name="Collectables" ID="103" Tag="0" Transient="false"></Entity>
-    <Entity Name="Land1" ID="105" Tag="0" Transient="false">
+    <Entity Name="Land1" ID="105" Tag="0" Transient="false" Prototype="-495">
       <Component Type="Transform">
-        <Angle>-3.40758</Angle>
         <Layer>0</Layer>
         <Scale>1.9987 1.49075</Scale>
         <Position>5.47693 -6.84103</Position>
+        <Angle>-3.40758</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
           <Item>0.85 0.6</Item>
           <Item>-0.85 0.6</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile0.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Land1" ID="106" Tag="0" Transient="false">
+    <Entity Name="Land1" ID="106" Tag="0" Transient="false" Prototype="-495">
       <Component Type="Transform">
-        <Angle>-1.87314</Angle>
         <Layer>0</Layer>
         <Scale>3.31753 0.928365</Scale>
         <Position>32.0982 -27.0207</Position>
+        <Angle>-1.87314</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
           <Item>0.85 0.6</Item>
           <Item>-0.85 0.6</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile0.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="LandFiller" ID="107" Tag="0" Transient="false">
+    <Entity Name="LandFiller" ID="107" Tag="0" Transient="false" Prototype="-497">
       <Component Type="Transform">
-        <Angle>-0</Angle>
         <Layer>-1</Layer>
         <Scale>35.1526 66.1299</Scale>
         <Position>9.15884 -25.5125</Position>
+        <Angle>-0</Angle>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile2.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
           <Item>0.35 0.2</Item>
           <Item>-0.35 0.2</Item>
         </Polygon>
-        <Friction>0</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
     </Entity>
-    <Entity Name="LandFiller" ID="108" Tag="0" Transient="false">
+    <Entity Name="LandFiller" ID="108" Tag="0" Transient="false" Prototype="-497">
       <Component Type="Transform">
-        <Angle>1.57189</Angle>
         <Layer>-1</Layer>
         <Scale>34.4954 60.2928</Scale>
         <Position>44.1302 -6.04493</Position>
+        <Angle>1.57189</Angle>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile2.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
           <Item>0.35 0.2</Item>
           <Item>-0.35 0.2</Item>
         </Polygon>
-        <Friction>0</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
     </Entity>
-    <Entity Name="LandFiller" ID="109" Tag="0" Transient="false">
+    <Entity Name="LandFiller" ID="109" Tag="0" Transient="false" Prototype="-497">
       <Component Type="Transform">
-        <Angle>1.57189</Angle>
         <Layer>-1</Layer>
         <Scale>35.3866 46.0828</Scale>
         <Position>-10.3497 -8.70612</Position>
+        <Angle>1.57189</Angle>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile2.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
           <Item>0.35 0.2</Item>
           <Item>-0.35 0.2</Item>
         </Polygon>
-        <Friction>0</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
     </Entity>
-    <Entity Name="LandFiller" ID="110" Tag="0" Transient="false">
+    <Entity Name="LandFiller" ID="110" Tag="0" Transient="false" Prototype="-497">
       <Component Type="Transform">
-        <Angle>1.57189</Angle>
         <Layer>-1</Layer>
         <Scale>35.2782 178.765</Scale>
         <Position>14.7833 16.4606</Position>
+        <Angle>1.57189</Angle>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile2.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
           <Item>0.35 0.2</Item>
           <Item>-0.35 0.2</Item>
         </Polygon>
-        <Friction>0</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
     </Entity>
-    <Entity Name="Background2" ID="111" Tag="0" Transient="false">
+    <Entity Name="Background2" ID="111" Tag="0" Transient="false" Prototype="-502">
       <Component Type="Transform">
-        <Angle>3.14246</Angle>
         <Layer>-2</Layer>
         <Scale>1.58487 2.78501</Scale>
         <Position>7.82142 -18.3057</Position>
+        <Angle>3.14246</Angle>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/bg2.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
           <Item>0.35 0.2</Item>
           <Item>-0.35 0.2</Item>
         </Polygon>
-        <Friction>0</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
     </Entity>
-    <Entity Name="Coin1" ID="119" Tag="2" Transient="false">
-      <Component Type="Transform">
-        <Angle>0</Angle>
-        <Layer>0</Layer>
-        <Scale>1.5 1.5</Scale>
-        <Position>27.0256 -18.092</Position>
-      </Component>
-      <Component Type="PolygonCollider">
-        <Polygon>
-          <Item>-0.1 -0.1</Item>
-          <Item>0.1 -0.1</Item>
-          <Item>0.1 0.1</Item>
-          <Item>-0.1 0.1</Item>
-        </Polygon>
-        <Friction>0.5</Friction>
-        <Density>1</Density>
-        <Restitution>0.5</Restitution>
-      </Component>
-      <Component Type="Sprite">
-        <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
-        <Texture>objects/coin.png</Texture>
-        <AnimDuration>0</AnimDuration>
-        <AnimTime>0</AnimTime>
-        <AnimRepeats>false</AnimRepeats>
-        <Transparency>0</Transparency>
-        <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
-      </Component>
-      <Component Type="Script">
-        <ScriptTimes></ScriptTimes>
-        <ScriptStates></ScriptStates>
-        <ScriptTimeOut>1000</ScriptTimeOut>
-        <ScriptModules>
-          <Item>UpDownWaver.as</Item>
-        </ScriptModules>
-        <YOffsetAmplitude Type="float32">0.1</YOffsetAmplitude>
-        <YOffsetPeriod Type="float32">0.1</YOffsetPeriod>
-      </Component>
-    </Entity>
-    <Entity Name="GameGUI" ID="124" Tag="0" Transient="false">
+    <Entity Name="GameGUI" ID="124" Tag="0" Transient="false" Prototype="-16">
       <Component Type="GUILayout">
         <Callback>gui/game.as</Callback>
         <Scheme>gui/cube.scheme</Scheme>
@@ -3209,49 +2892,51 @@
         <Enabled>true</Enabled>
       </Component>
     </Entity>
-    <Entity Name="Land2" ID="125" Tag="0" Transient="false">
+    <Entity Name="Land2" ID="125" Tag="0" Transient="false" Prototype="-496">
       <Component Type="Transform">
-        <Angle>2.71116</Angle>
         <Layer>0</Layer>
         <Scale>1.44519 1.32066</Scale>
         <Position>8.10732 -7.36736</Position>
+        <Angle>2.71116</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.83 -0.15</Item>
           <Item>0.83 -0.5</Item>
           <Item>0.83 0.5</Item>
           <Item>-0.83 0.5</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile1.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Stone1" ID="126" Tag="0" Transient="false">
+    <Entity Name="Stone1" ID="126" Tag="0" Transient="false" Prototype="-499">
       <Component Type="Transform">
-        <Angle>0.394129</Angle>
         <Layer>1</Layer>
         <Scale>1.12729 1.3204</Scale>
-        <Position>19.8916 -1.99509</Position>
+        <Position>19.8489 -1.983</Position>
+        <Angle>0.309957</Angle>
       </Component>
       <Component Type="DynamicBody">
-        <LinearDamping>0.1</LinearDamping>
         <AngularDamping>0.5</AngularDamping>
+        <LinearDamping>0.1</LinearDamping>
       </Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>10</Friction>
         <Polygon>
           <Item>-0.65 -0.2</Item>
           <Item>-0.25 -0.5</Item>
@@ -3261,34 +2946,34 @@
           <Item>-0.2 0.5</Item>
           <Item>-0.65 0.3</Item>
         </Polygon>
-        <Friction>10</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>objects/stone1.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Stone1" ID="127" Tag="0" Transient="false">
+    <Entity Name="Stone1" ID="127" Tag="0" Transient="false" Prototype="-499">
       <Component Type="Transform">
-        <Angle>-2.34238</Angle>
         <Layer>1</Layer>
         <Scale>0.60852 1.70736</Scale>
-        <Position>19.0833 -2.8652</Position>
+        <Position>19.0487 -2.85102</Position>
+        <Angle>-2.34044</Angle>
       </Component>
       <Component Type="DynamicBody">
-        <LinearDamping>0.1</LinearDamping>
         <AngularDamping>0.5</AngularDamping>
+        <LinearDamping>0.1</LinearDamping>
       </Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>10</Friction>
         <Polygon>
           <Item>-0.65 -0.2</Item>
           <Item>-0.25 -0.5</Item>
@@ -3298,34 +2983,34 @@
           <Item>-0.2 0.5</Item>
           <Item>-0.65 0.3</Item>
         </Polygon>
-        <Friction>10</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>objects/stone1.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Stone1" ID="128" Tag="0" Transient="false">
+    <Entity Name="Stone1" ID="128" Tag="0" Transient="false" Prototype="-499">
       <Component Type="Transform">
-        <Angle>0.177445</Angle>
         <Layer>1</Layer>
         <Scale>0.906825 1.24163</Scale>
-        <Position>18.0171 -3.21491</Position>
+        <Position>18.0026 -3.23112</Position>
+        <Angle>0.185517</Angle>
       </Component>
       <Component Type="DynamicBody">
-        <LinearDamping>0.1</LinearDamping>
         <AngularDamping>0.5</AngularDamping>
+        <LinearDamping>0.1</LinearDamping>
       </Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>10</Friction>
         <Polygon>
           <Item>-0.65 -0.2</Item>
           <Item>-0.25 -0.5</Item>
@@ -3335,34 +3020,34 @@
           <Item>-0.2 0.5</Item>
           <Item>-0.65 0.3</Item>
         </Polygon>
-        <Friction>10</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>objects/stone1.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Stone2" ID="129" Tag="0" Transient="false">
+    <Entity Name="Stone2" ID="129" Tag="0" Transient="false" Prototype="-500">
       <Component Type="Transform">
-        <Angle>9.01416</Angle>
         <Layer>1</Layer>
         <Scale>1.07505 1.08675</Scale>
-        <Position>8.06429 -3.54598</Position>
+        <Position>8.05684 -3.51108</Position>
+        <Angle>8.81456</Angle>
       </Component>
       <Component Type="DynamicBody">
-        <LinearDamping>0.1</LinearDamping>
         <AngularDamping>0.5</AngularDamping>
+        <LinearDamping>0.1</LinearDamping>
       </Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.1 -0.21</Item>
           <Item>0.25 -0.12</Item>
@@ -3372,34 +3057,34 @@
           <Item>-0.26 0.11</Item>
           <Item>-0.26 -0.08</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>objects/stone2.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Stone2" ID="130" Tag="0" Transient="false">
+    <Entity Name="Stone2" ID="130" Tag="0" Transient="false" Prototype="-500">
       <Component Type="Transform">
-        <Angle>4.58459</Angle>
         <Layer>1</Layer>
         <Scale>0.650579 0.892553</Scale>
-        <Position>6.8352 -3.05096</Position>
+        <Position>6.82795 -3.05135</Position>
+        <Angle>4.58704</Angle>
       </Component>
       <Component Type="DynamicBody">
-        <LinearDamping>0.1</LinearDamping>
         <AngularDamping>0.5</AngularDamping>
+        <LinearDamping>0.1</LinearDamping>
       </Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.1 -0.21</Item>
           <Item>0.25 -0.12</Item>
@@ -3409,34 +3094,34 @@
           <Item>-0.26 0.11</Item>
           <Item>-0.26 -0.08</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>objects/stone2.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Stone2" ID="131" Tag="0" Transient="false">
+    <Entity Name="Stone2" ID="131" Tag="0" Transient="false" Prototype="-500">
       <Component Type="Transform">
-        <Angle>4.03921</Angle>
         <Layer>1</Layer>
         <Scale>1.40755 1.39</Scale>
-        <Position>8.54913 -3.12499</Position>
+        <Position>8.56429 -3.12348</Position>
+        <Angle>4.06085</Angle>
       </Component>
       <Component Type="DynamicBody">
-        <LinearDamping>0.1</LinearDamping>
         <AngularDamping>0.5</AngularDamping>
+        <LinearDamping>0.1</LinearDamping>
       </Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.1 -0.21</Item>
           <Item>0.25 -0.12</Item>
@@ -3446,34 +3131,34 @@
           <Item>-0.26 0.11</Item>
           <Item>-0.26 -0.08</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>objects/stone2.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Stone2" ID="132" Tag="0" Transient="false">
+    <Entity Name="Stone2" ID="132" Tag="0" Transient="false" Prototype="-500">
       <Component Type="Transform">
-        <Angle>2.45828</Angle>
         <Layer>1</Layer>
         <Scale>1.07505 1.08675</Scale>
-        <Position>18.9305 -3.52277</Position>
+        <Position>18.9174 -3.53398</Position>
+        <Angle>2.54314</Angle>
       </Component>
       <Component Type="DynamicBody">
-        <LinearDamping>0.1</LinearDamping>
         <AngularDamping>0.5</AngularDamping>
+        <LinearDamping>0.1</LinearDamping>
       </Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.1 -0.21</Item>
           <Item>0.25 -0.12</Item>
@@ -3483,34 +3168,34 @@
           <Item>-0.26 0.11</Item>
           <Item>-0.26 -0.08</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>objects/stone2.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Stone2" ID="133" Tag="0" Transient="false">
+    <Entity Name="Stone2" ID="133" Tag="0" Transient="false" Prototype="-500">
       <Component Type="Transform">
-        <Angle>6.16303</Angle>
         <Layer>1</Layer>
         <Scale>1.07505 1.08675</Scale>
-        <Position>17.2083 -3.60834</Position>
+        <Position>17.194 -3.61929</Position>
+        <Angle>6.15111</Angle>
       </Component>
       <Component Type="DynamicBody">
-        <LinearDamping>0.1</LinearDamping>
         <AngularDamping>0.5</AngularDamping>
+        <LinearDamping>0.1</LinearDamping>
       </Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.1 -0.21</Item>
           <Item>0.25 -0.12</Item>
@@ -3520,34 +3205,34 @@
           <Item>-0.26 0.11</Item>
           <Item>-0.26 -0.08</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>objects/stone2.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Stone1" ID="134" Tag="0" Transient="false">
+    <Entity Name="Stone1" ID="134" Tag="0" Transient="false" Prototype="-499">
       <Component Type="Transform">
-        <Angle>-3.63143</Angle>
         <Layer>1</Layer>
         <Scale>0.60852 1.70736</Scale>
-        <Position>7.28905 -3.50574</Position>
+        <Position>7.28399 -3.50193</Position>
+        <Angle>-3.63908</Angle>
       </Component>
       <Component Type="DynamicBody">
-        <LinearDamping>0.1</LinearDamping>
         <AngularDamping>0.5</AngularDamping>
+        <LinearDamping>0.1</LinearDamping>
       </Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>10</Friction>
         <Polygon>
           <Item>-0.65 -0.2</Item>
           <Item>-0.25 -0.5</Item>
@@ -3557,23 +3242,21 @@
           <Item>-0.2 0.5</Item>
           <Item>-0.65 0.3</Item>
         </Polygon>
-        <Friction>10</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>objects/stone1.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="MenuGUI" ID="135" Tag="0" Transient="false">
+    <Entity Name="MenuGUI" ID="135" Tag="0" Transient="false" Prototype="-513">
       <Component Type="GUILayout">
         <Callback>gui/menu.as</Callback>
         <Scheme></Scheme>
@@ -3582,469 +3265,597 @@
         <Enabled>true</Enabled>
       </Component>
     </Entity>
-    <Entity Name="Land1" ID="166" Tag="0" Transient="false">
+    <Entity Name="Land1" ID="166" Tag="0" Transient="false" Prototype="-495">
       <Component Type="Transform">
-        <Angle>-6.14674</Angle>
         <Layer>0</Layer>
         <Scale>1.9987 1.49075</Scale>
         <Position>12.6433 -5.78403</Position>
+        <Angle>-6.14674</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
           <Item>0.85 0.6</Item>
           <Item>-0.85 0.6</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile0.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Land2" ID="167" Tag="0" Transient="false">
+    <Entity Name="Land2" ID="167" Tag="0" Transient="false" Prototype="-496">
       <Component Type="Transform">
-        <Angle>3.09961</Angle>
         <Layer>0</Layer>
         <Scale>1.44519 1.32066</Scale>
         <Position>13.3452 -9.53456</Position>
+        <Angle>3.09961</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.83 -0.15</Item>
           <Item>0.83 -0.5</Item>
           <Item>0.83 0.5</Item>
           <Item>-0.83 0.5</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile1.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Land1" ID="168" Tag="0" Transient="false">
+    <Entity Name="Land1" ID="168" Tag="0" Transient="false" Prototype="-495">
       <Component Type="Transform">
-        <Angle>-3.4437</Angle>
         <Layer>0</Layer>
         <Scale>1.9987 1.49075</Scale>
         <Position>10.4637 -9.29881</Position>
+        <Angle>-3.4437</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
           <Item>0.85 0.6</Item>
           <Item>-0.85 0.6</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile0.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Land1" ID="169" Tag="0" Transient="false">
+    <Entity Name="Land1" ID="169" Tag="0" Transient="false" Prototype="-495">
       <Component Type="Transform">
-        <Angle>-3.4437</Angle>
         <Layer>0</Layer>
         <Scale>1.9987 1.49075</Scale>
         <Position>10.4637 -9.29881</Position>
+        <Angle>-3.4437</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
           <Item>0.85 0.6</Item>
           <Item>-0.85 0.6</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile0.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="LandFiller" ID="170" Tag="0" Transient="false">
+    <Entity Name="LandFiller" ID="170" Tag="0" Transient="false" Prototype="-497">
       <Component Type="Transform">
-        <Angle>-0.566802</Angle>
         <Layer>0</Layer>
         <Scale>2.48945 2.85814</Scale>
         <Position>21.8043 -0.502437</Position>
+        <Angle>-0.566802</Angle>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile2.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>0</Friction>
         <Polygon>
           <Item>-0.35 -0.2</Item>
           <Item>0.35 -0.2</Item>
           <Item>0.35 0.2</Item>
           <Item>-0.35 0.2</Item>
         </Polygon>
-        <Friction>0</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
     </Entity>
-    <Entity Name="Land1" ID="171" Tag="0" Transient="false">
+    <Entity Name="Land1" ID="171" Tag="0" Transient="false" Prototype="-495">
       <Component Type="Transform">
-        <Angle>-0.176899</Angle>
         <Layer>0</Layer>
         <Scale>1.99358 0.882068</Scale>
         <Position>20.3873 -0.744967</Position>
+        <Angle>-0.176899</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
           <Item>0.85 0.6</Item>
           <Item>-0.85 0.6</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile0.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Land1" ID="172" Tag="0" Transient="false">
+    <Entity Name="Land1" ID="172" Tag="0" Transient="false" Prototype="-495">
       <Component Type="Transform">
-        <Angle>-1.92156</Angle>
         <Layer>0</Layer>
         <Scale>1 1</Scale>
         <Position>22.6648 -3.83377</Position>
+        <Angle>-1.92156</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
           <Item>0.85 0.6</Item>
           <Item>-0.85 0.6</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile0.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Land2" ID="173" Tag="0" Transient="false">
+    <Entity Name="Land2" ID="173" Tag="0" Transient="false" Prototype="-496">
       <Component Type="Transform">
-        <Angle>-0.919873</Angle>
         <Layer>0</Layer>
         <Scale>0.926185 1.01419</Scale>
         <Position>22.3037 -2.07171</Position>
+        <Angle>-0.919873</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.83 -0.15</Item>
           <Item>0.83 -0.5</Item>
           <Item>0.83 0.5</Item>
           <Item>-0.83 0.5</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile1.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Land2" ID="174" Tag="0" Transient="false">
+    <Entity Name="Land2" ID="174" Tag="0" Transient="false" Prototype="-496">
       <Component Type="Transform">
-        <Angle>-1.71744</Angle>
         <Layer>0</Layer>
         <Scale>1.2746 0.983459</Scale>
         <Position>22.0059 -5.40246</Position>
+        <Angle>-1.71744</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.83 -0.15</Item>
           <Item>0.83 -0.5</Item>
           <Item>0.83 0.5</Item>
           <Item>-0.83 0.5</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile1.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Land1" ID="175" Tag="0" Transient="false">
+    <Entity Name="Land1" ID="175" Tag="0" Transient="false" Prototype="-495">
       <Component Type="Transform">
-        <Angle>-1.79852</Angle>
         <Layer>0</Layer>
         <Scale>1.27179 0.915254</Scale>
         <Position>21.7127 -7.46465</Position>
+        <Angle>-1.79852</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
           <Item>0.85 0.6</Item>
           <Item>-0.85 0.6</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile0.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Land2" ID="176" Tag="0" Transient="false">
+    <Entity Name="Land2" ID="176" Tag="0" Transient="false" Prototype="-496">
       <Component Type="Transform">
-        <Angle>1.71185</Angle>
         <Layer>0</Layer>
         <Scale>1.17467 1.00194</Scale>
         <Position>24.6138 -13.1957</Position>
+        <Angle>1.71185</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.83 -0.15</Item>
           <Item>0.83 -0.5</Item>
           <Item>0.83 0.5</Item>
           <Item>-0.83 0.5</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile1.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Land1" ID="190" Tag="0" Transient="false">
+    <Entity Name="Land1" ID="190" Tag="0" Transient="false" Prototype="-495">
       <Component Type="Transform">
-        <Angle>-1.40471</Angle>
         <Layer>0</Layer>
         <Scale>0.341819 0.770372</Scale>
         <Position>21.4771 -8.63623</Position>
+        <Angle>-1.40471</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
           <Item>0.85 0.6</Item>
           <Item>-0.85 0.6</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile0.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Land1" ID="199" Tag="0" Transient="false">
+    <Entity Name="Land1" ID="199" Tag="0" Transient="false" Prototype="-495">
       <Component Type="Transform">
-        <Angle>2.39976</Angle>
         <Layer>0</Layer>
         <Scale>0.341819 0.770372</Scale>
         <Position>20.1496 -11.255</Position>
+        <Angle>2.39976</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
           <Item>0.85 0.6</Item>
           <Item>-0.85 0.6</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile0.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Land1" ID="208" Tag="0" Transient="false">
+    <Entity Name="Land1" ID="208" Tag="0" Transient="false" Prototype="-495">
       <Component Type="Transform">
-        <Angle>-0.131949</Angle>
         <Layer>0</Layer>
         <Scale>0.341819 0.770372</Scale>
         <Position>21.5124 -8.58378</Position>
+        <Angle>-0.131949</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
           <Item>0.85 0.6</Item>
           <Item>-0.85 0.6</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile0.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
-    <Entity Name="Land1" ID="209" Tag="0" Transient="false">
+    <Entity Name="Land1" ID="209" Tag="0" Transient="false" Prototype="-495">
       <Component Type="Transform">
-        <Angle>-6.14674</Angle>
         <Layer>0</Layer>
         <Scale>0.847075 0.826882</Scale>
         <Position>22.3004 -8.48957</Position>
+        <Angle>-6.14674</Angle>
       </Component>
       <Component Type="StaticBody"></Component>
       <Component Type="PolygonCollider">
+        <Restitution>0</Restitution>
+        <Friction>1</Friction>
         <Polygon>
           <Item>-0.85 -0.55</Item>
           <Item>0.85 -0.6</Item>
           <Item>0.85 0.6</Item>
           <Item>-0.85 0.6</Item>
         </Polygon>
-        <Friction>1</Friction>
         <Density>1</Density>
-        <Restitution>0</Restitution>
       </Component>
       <Component Type="Sprite">
+        <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
-        <FrameIndex>0</FrameIndex>
         <Texture>tiles/tile0.png</Texture>
+        <FrameIndex>0</FrameIndex>
         <AnimDuration>0</AnimDuration>
         <AnimTime>0</AnimTime>
         <AnimRepeats>false</AnimRepeats>
         <Transparency>0</Transparency>
         <FrameCount>1</FrameCount>
-        <SkipSpace>(0, 0)</SkipSpace>
       </Component>
     </Entity>
   </Entities>
+  <Hierarchy>
+    <Entity ID="20"></Entity>
+    <Entity ID="19"></Entity>
+    <Entity ID="1"></Entity>
+    <Entity ID="124"></Entity>
+    <Entity ID="135"></Entity>
+    <Entity ID="31">
+      <Entity ID="30"></Entity>
+      <Entity ID="100"></Entity>
+      <Entity ID="101"></Entity>
+      <Entity ID="111"></Entity>
+    </Entity>
+    <Entity ID="61">
+      <Entity ID="62"></Entity>
+      <Entity ID="66"></Entity>
+      <Entity ID="80"></Entity>
+    </Entity>
+    <Entity ID="103"></Entity>
+    <Entity ID="4">
+      <Entity ID="5"></Entity>
+      <Entity ID="6"></Entity>
+      <Entity ID="8"></Entity>
+      <Entity ID="9"></Entity>
+      <Entity ID="10"></Entity>
+      <Entity ID="11"></Entity>
+      <Entity ID="12"></Entity>
+      <Entity ID="13"></Entity>
+      <Entity ID="14"></Entity>
+      <Entity ID="3"></Entity>
+      <Entity ID="18"></Entity>
+      <Entity ID="7"></Entity>
+      <Entity ID="23"></Entity>
+      <Entity ID="24"></Entity>
+      <Entity ID="25"></Entity>
+      <Entity ID="26"></Entity>
+      <Entity ID="27"></Entity>
+      <Entity ID="28"></Entity>
+      <Entity ID="29"></Entity>
+      <Entity ID="2"></Entity>
+      <Entity ID="32"></Entity>
+      <Entity ID="33"></Entity>
+      <Entity ID="34"></Entity>
+      <Entity ID="35"></Entity>
+      <Entity ID="36"></Entity>
+      <Entity ID="37"></Entity>
+      <Entity ID="38"></Entity>
+      <Entity ID="39"></Entity>
+      <Entity ID="41"></Entity>
+      <Entity ID="42"></Entity>
+      <Entity ID="43"></Entity>
+      <Entity ID="44"></Entity>
+      <Entity ID="45"></Entity>
+      <Entity ID="46"></Entity>
+      <Entity ID="47"></Entity>
+      <Entity ID="48"></Entity>
+      <Entity ID="53"></Entity>
+      <Entity ID="54"></Entity>
+      <Entity ID="55"></Entity>
+      <Entity ID="56"></Entity>
+      <Entity ID="57"></Entity>
+      <Entity ID="58"></Entity>
+      <Entity ID="85"></Entity>
+      <Entity ID="86"></Entity>
+      <Entity ID="87"></Entity>
+      <Entity ID="88"></Entity>
+      <Entity ID="89"></Entity>
+      <Entity ID="90"></Entity>
+      <Entity ID="92"></Entity>
+      <Entity ID="96"></Entity>
+      <Entity ID="97"></Entity>
+      <Entity ID="98"></Entity>
+      <Entity ID="99"></Entity>
+      <Entity ID="102"></Entity>
+      <Entity ID="105"></Entity>
+      <Entity ID="106"></Entity>
+      <Entity ID="107"></Entity>
+      <Entity ID="108"></Entity>
+      <Entity ID="109"></Entity>
+      <Entity ID="110"></Entity>
+    </Entity>
+    <Entity ID="125"></Entity>
+    <Entity ID="166"></Entity>
+    <Entity ID="167"></Entity>
+    <Entity ID="168"></Entity>
+    <Entity ID="169"></Entity>
+    <Entity ID="170"></Entity>
+    <Entity ID="171"></Entity>
+    <Entity ID="172"></Entity>
+    <Entity ID="173"></Entity>
+    <Entity ID="174"></Entity>
+    <Entity ID="175"></Entity>
+    <Entity ID="176"></Entity>
+    <Entity ID="190"></Entity>
+    <Entity ID="199"></Entity>
+    <Entity ID="208"></Entity>
+    <Entity ID="209"></Entity>
+    <Entity ID="263"></Entity>
+    <Entity ID="270"></Entity>
+    <Entity ID="271"></Entity>
+    <Entity ID="272"></Entity>
+    <Entity ID="273"></Entity>
+    <Entity ID="274"></Entity>
+    <Entity ID="275"></Entity>
+    <Entity ID="276"></Entity>
+    <Entity ID="277"></Entity>
+    <Entity ID="278"></Entity>
+    <Entity ID="279"></Entity>
+    <Entity ID="321"></Entity>
+    <Entity ID="322"></Entity>
+    <Entity ID="323"></Entity>
+    <Entity ID="324"></Entity>
+    <Entity ID="325"></Entity>
+    <Entity ID="326"></Entity>
+    <Entity ID="327"></Entity>
+    <Entity ID="330"></Entity>
+    <Entity ID="334"></Entity>
+    <Entity ID="335"></Entity>
+    <Entity ID="341"></Entity>
+    <Entity ID="126"></Entity>
+    <Entity ID="127"></Entity>
+    <Entity ID="128"></Entity>
+    <Entity ID="129"></Entity>
+    <Entity ID="130"></Entity>
+    <Entity ID="131"></Entity>
+    <Entity ID="132"></Entity>
+    <Entity ID="133"></Entity>
+    <Entity ID="134"></Entity>
+  </Hierarchy>
 </Game>

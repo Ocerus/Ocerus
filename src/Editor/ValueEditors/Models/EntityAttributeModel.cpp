@@ -115,7 +115,10 @@ void Editor::EntityAttributeModel::SetValue(const string& newValue)
 				EntitySystem::EntityHandle prototype(prototypeID);
 				if (!gEntityMgr.IsEntityPrototype(mEntity))
 				{
-					gEntityMgr.LinkEntityToPrototype(mEntity, prototype);
+					if (!gEntityMgr.LinkEntityToPrototype(mEntity, prototype))
+					{
+						GUISystem::ShowMessageBox(TR("error_cannot_link_prototype"));
+					}
 					gEditorMgr.GetEditorGUI()->GetEntityWindow()->RebuildLater();
 					gEditorMgr.PropertyValueChanged();
 				}
