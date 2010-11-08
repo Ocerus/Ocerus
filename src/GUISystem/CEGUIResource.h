@@ -38,6 +38,7 @@ namespace GUISystem {
 
 		virtual size_t LoadImpl(void);
 		virtual bool UnloadImpl(void);
+		virtual void Reload(void);
 
 		DataContainer mData;
 	};

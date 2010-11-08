@@ -23,6 +23,11 @@ bool CEGUIResource::UnloadImpl()
 	return true;
 }
 
+void CEGUIResource::Reload( void )
+{
+	//should contact CEGUI
+}
+
 /// The copy operation is omitted, only pointers are copied instead.
 void CEGUIResource::GetResource(CEGUI::RawDataContainer& outData)
 {
