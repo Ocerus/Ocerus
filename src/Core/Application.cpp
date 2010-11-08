@@ -226,7 +226,7 @@ void Application::RunMainLoop()
 				//DEBUG
 				// note that this must come before the project is being opened as it's referenced during opening of the project
 				mGameProject = gEditorMgr.GetCurrentProject();
-				//gEditorMgr.OpenProject("projects/cube");
+				gEditorMgr.OpenProject("projects/cube");
 			}
 			else
 			{
