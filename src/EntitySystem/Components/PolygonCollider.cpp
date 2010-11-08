@@ -172,7 +172,10 @@ void EntityComponents::PolygonCollider::SetPolygon( Array<Vector2>* val )
 	//-------------------------------------------------------//
 
 	mPolygon.CopyFrom(*val);
-	if (GetOwner().IsInited()) RecreateShape();
+	if (GetOwner().IsInited() && !gEntityMgr.IsEntityPrototype(GetOwner()))
+	{
+		RecreateShape();
+	}
 }
 
 float32 EntityComponents::PolygonCollider::GetDensity( void ) const
