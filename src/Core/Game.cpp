@@ -267,6 +267,16 @@ void Core::Game::Draw(const float32 passedDelta)
 
 bool Core::Game::KeyPressed(const KeyInfo& ke)
 {
+	if (!IsActionRunning())
+	{
+		if (!GlobalProperties::Get<bool>("DevelopMode") || !gEditorMgr.WasActionRestarted())
+		{
+			// here we could filter only entities having GUILayout but I think it's ok as it works now
+			gEntityMgr.BroadcastMessage(EntityMessage::KEY_PRESSED, PropertyFunctionParameters() << ke.keyCode << ke.charCode);
+			return true;
+		}
+	}
+
 	if (!IsActionRunning()) return false;
 
 	if (GlobalProperties::Get<bool>("DevelopMode"))
@@ -281,6 +291,16 @@ bool Core::Game::KeyPressed(const KeyInfo& ke)
 
 bool Core::Game::KeyReleased(const KeyInfo& ke)
 {
+	if (!IsActionRunning())
+	{
+		if (!GlobalProperties::Get<bool>("DevelopMode") || !gEditorMgr.WasActionRestarted())
+		{
+			// here we could filter only entities having GUILayout but I think it's ok as it works now
+			gEntityMgr.BroadcastMessage(EntityMessage::KEY_RELEASED, PropertyFunctionParameters() << ke.keyCode << ke.charCode);
+			return true;
+		}
+	}
+
 	if (!IsActionRunning()) return false;
 
 	gEntityMgr.BroadcastMessage(EntityMessage::KEY_RELEASED, PropertyFunctionParameters() << ke.keyCode << ke.charCode);

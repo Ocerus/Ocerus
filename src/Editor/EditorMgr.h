@@ -188,7 +188,7 @@ namespace Editor
 		bool WasActionRestarted();
 
 		/// Returns true if the input is locked to the game window.
-		bool IsLockedToGame() const;
+		bool IsLockedToGame();
 
 		/// The type of edit tool.
 		enum eEditTool { ET_MOVE=0, ET_ROTATE, ET_ROTATE_Y, ET_SCALE };

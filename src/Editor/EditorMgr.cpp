@@ -938,9 +938,9 @@ void Editor::EditorMgr::PropertyValueChanged()
 	}
 }
 
-bool Editor::EditorMgr::IsLockedToGame() const
+bool Editor::EditorMgr::IsLockedToGame()
 {
-	return GlobalProperties::Get<Core::Game>("Game").IsActionRunning();
+	return !WasActionRestarted();
 }
 
 bool Editor::EditorMgr::HandleShortcuts( InputSystem::eKeyCode keyCode )
