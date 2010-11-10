@@ -269,6 +269,11 @@ bool Core::Game::KeyPressed(const KeyInfo& ke)
 {
 	if (!IsActionRunning())
 	{
+		if (GlobalProperties::Get<bool>("DevelopMode") && !gEditorMgr.WasActionRestarted())
+		{
+			if (gEditorMgr.HandleShortcuts(ke.keyCode)) return true;
+		}
+
 		if (!GlobalProperties::Get<bool>("DevelopMode") || !gEditorMgr.WasActionRestarted())
 		{
 			// here we could filter only entities having GUILayout but I think it's ok as it works now
