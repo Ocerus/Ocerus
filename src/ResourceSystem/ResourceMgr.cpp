@@ -492,6 +492,7 @@ bool ResourceSystem::ResourceMgr::RefreshAllResources( void )
 			if (!resIter->second->Refresh())
 			{
 				resIter->second->Unload(true);
+				ocInfo << "Deleting resource " << resIter->second->GetName() << " from resource manager.";
 				resMap->erase(resIter);
 				return true;
 			}

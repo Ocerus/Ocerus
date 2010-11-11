@@ -85,6 +85,7 @@ EntityMessage::eResult EntityComponents::GUILayout::HandleMessage(const EntityMe
 		}
 	case EntityMessage::RESOURCE_UPDATE:
 		{
+			if (!gEntityMgr.IsEntityPrototype(GetOwner())) ReloadWindow();
 			mScriptUpdateError = false;
 			HandleMessage(EntityMessage(EntityMessage::INIT));
 			HandleMessage(EntityMessage(EntityMessage::POST_INIT));

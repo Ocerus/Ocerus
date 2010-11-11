@@ -188,9 +188,9 @@ void Application::RunMainLoop()
 			if (gResourceMgr.CheckForResourcesUpdates())
 				refreshWindow = true;
 
-			// refresh strings
+			// refresh strings && layouts
 			gStringMgrSystem.Update();
-			if (gStringMgrProject.Update())
+			if (gStringMgrProject.Update() || gGUIMgr.Update())
 			{
 				// refresh project GUI layout
 				EntitySystem::EntityList entities;

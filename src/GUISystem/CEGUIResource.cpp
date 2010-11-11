@@ -25,7 +25,7 @@ bool CEGUIResource::UnloadImpl()
 
 void CEGUIResource::Reload( void )
 {
-	//should contact CEGUI
+	gGUIMgr.NeedsUpdate();
 }
 
 /// The copy operation is omitted, only pointers are copied instead.

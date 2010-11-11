@@ -397,6 +397,13 @@ void GUIMgr::ResolutionChanged(const uint32 width, const uint32 height)
 	return mCEGUI->notifyDisplaySizeChanged(CEGUI::Size((float32)width, (float32)height));
 }
 
+bool GUIMgr::Update()
+{ 
+	bool result = mNeedsUpdate;
+	mNeedsUpdate = false;
+	return result;
+}
+
 CEGUI::uint KeyMapperOIStoCEGUI(InputSystem::eKeyCode key)
 {
 	switch (key) {

@@ -64,7 +64,9 @@ bool Resource::Load()
 {
 	// wraps around LoadImpl and does some additional work
 
-	if (GetState() != STATE_INITIALIZED)
+	bool miss = (GetState() == STATE_MISSING);
+
+	if ((GetState() != STATE_INITIALIZED) && !miss)
 	{
 	  ocError << "Resource '" << mName << "' is NOT initialized!";
 	  return false;
@@ -81,7 +83,10 @@ bool Resource::Load()
 	bool loadSuccessful = mSizeInBytes != 0;
 	if (loadSuccessful)
 	{
-		SetState(STATE_LOADED);
+		if (!miss)
+			SetState(STATE_LOADED);
+		else
+			SetState(STATE_MISSING_LOADED);
 		ocInfo << "Resource '" << mName << "' loaded";
 		// make sure the resource mgr is synchronized
 		gResourceMgr._NotifyResourceLoaded(this);
@@ -141,7 +146,7 @@ void ResourceSystem::Resource::EnsureLoaded( void )
 	}
 
 	// if the resource is not load it, then load it
-	if (mState != STATE_LOADED)
+	if ((mState != STATE_LOADED) && (mState != STATE_MISSING_LOADED))
 	{
 		if (IsManual())
 		{
@@ -199,11 +204,20 @@ bool ResourceSystem::Resource::GetRawInputData( const string filePath, DataConta
 
 bool ResourceSystem::Resource::Refresh( void )
 {
+	
+
 	if (!boost::filesystem::exists(mFilePath))
 	{
+		if ((GetState() == STATE_MISSING)||(GetState() == STATE_MISSING_LOADED))
+			return true;
+
 		ocInfo << "Resource file " << mFilePath << " went missing. Unloading the resource.";
 		if (GetState() == STATE_LOADED)
+		{
 			Unload();
+			SetState(STATE_MISSING);
+			return true;
+		}
 		return false;
 	}
 
@@ -213,7 +227,12 @@ bool ResourceSystem::Resource::Refresh( void )
 	{ 
 		ocWarning << "Resource file " << mFilePath << " went missing after the resource was loaded";
 		if (GetState() == STATE_LOADED)
+		{
 			Unload();
+			SetState(STATE_MISSING);
+			mLastWriteTime = 0;
+			return true;
+		}
 		return false;
 	}
 	if (currentWriteTime > mLastWriteTime)
@@ -235,7 +254,7 @@ void ResourceSystem::Resource::RefreshResourceInfo( void )
 
 void ResourceSystem::Resource::Reload( void )
 {
-	if (GetState() != STATE_LOADED)
+	if ((GetState() != STATE_LOADED)&&(GetState() != STATE_MISSING_LOADED))
 	{
 		return;
 	}

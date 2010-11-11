@@ -126,6 +126,12 @@ namespace GUISystem
 		/// any of the event handlers is still running.
 		inline InputEventInfo& GetCurrentInputEvent() { return mCurrentInputEvent; }
 
+		/// Reloads all layouts if neccessary.
+		bool Update();
+
+		/// Reloads all layouts in next call of Update.
+		inline void NeedsUpdate() { mNeedsUpdate = true; }
+
 	private:
 		/// @name CEGUI related stuff
 		//@{
@@ -149,6 +155,9 @@ namespace GUISystem
 		
 		/// Initializes the editor stuff.
 		void LoadEditorResources();
+		
+		/// Whether the GUI layouts resources have been modified and the GUI needs update.
+		bool mNeedsUpdate;
 	};
 }
 #endif // _GUISYSTEM_GUIMGR_H_

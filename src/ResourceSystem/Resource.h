@@ -34,7 +34,11 @@ namespace ResourceSystem
 			/// The resource is fully loaded and ready to use.
 			STATE_LOADED,
 			/// The resource failed to load.
-			STATE_FAILED
+			STATE_FAILED,
+			/// The resource went missing after being loaded.
+			STATE_MISSING,
+			/// The resource went missing but default resource was loaded instead.
+			STATE_MISSING_LOADED
 		};
 
 		/// No need to override.
