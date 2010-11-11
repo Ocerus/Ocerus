@@ -5,7 +5,8 @@ void SpawnScore10(const Vector2 position)
 
 void SpawnJumpDust(const Vector2 position)
 {
-	EntityHandle entity = gEntityMgr.InstantiatePrototype(gEntityMgr.FindFirstPrototype("JumpDust"), position, "JumpDust");
+	EntityHandle prototype = gEntityMgr.FindFirstPrototype("JumpDust");
+	EntityHandle entity = gEntityMgr.InstantiatePrototype(prototype, position, "JumpDust");
 }
 
 void SpawnExplosionDust(const Vector2 position)

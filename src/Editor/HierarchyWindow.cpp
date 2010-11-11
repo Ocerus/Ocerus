@@ -222,6 +222,15 @@ void Editor::HierarchyWindow::LoadHierarchy( ResourceSystem::XMLNodeIterator& xm
 
 	Update();
 
+	// hack to make mTree->addItem() working without freezing the app for few seconds. So we freeze it after it's loaded :)
+	size_t oldItemCount = mTree->getItemCount();
+	mTree->addItem(RestoreTreeItem());
+	mTree->selectRange(mTree->getItemCount()-1, mTree->getItemCount()-1);
+	mTree->addItem(RestoreTreeItem());
+	StoreTreeItem(mTree->getItemFromIndex(mTree->getItemCount()-1));
+	StoreTreeItem(mTree->getItemFromIndex(mTree->getItemCount()-1));
+	OC_ASSERT(oldItemCount == mTree->getItemCount());
+
 	ocInfo << "Hierarchy loaded";
 }
 
