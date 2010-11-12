@@ -492,19 +492,19 @@ namespace Memory
 
 
 
-		// SharedChunkAllocation is an allocation policy that actually defers its allocations to
-		// a global shared free list.
-		//
-		// This means that two freelists allocating objects that are identical (or nearly identical)
-		// in size will actually share chunks and blocks of memory.  If an application uses
-		// a significant number of freelists, this can eliminate much of the excess memory stored
-		// in freelists waiting to be allocated while still giving you virtually all of the benefits of
-		// freelist allocation.  The main tradeoff you will be making by using this policy is that
-		// allocations within the same freelist are likely to be located at random areas of memory,
-		// eliminating the locality of reference benefits that individual freelists can give you.
-		//
-		// It should be noted that STLPort's default allocator behaves remarkably similar to this
-		// allocation policy
+		/// SharedChunkAllocation is an allocation policy that actually defers its allocations to
+		/// a global shared free list.
+		///
+		/// This means that two freelists allocating objects that are identical (or nearly identical)
+		/// in size will actually share chunks and blocks of memory.  If an application uses
+		/// a significant number of freelists, this can eliminate much of the excess memory stored
+		/// in freelists waiting to be allocated while still giving you virtually all of the benefits of
+		/// freelist allocation.  The main tradeoff you will be making by using this policy is that
+		/// allocations within the same freelist are likely to be located at random areas of memory,
+		/// eliminating the locality of reference benefits that individual freelists can give you.
+		///
+		/// It should be noted that STLPort's default allocator behaves remarkably similar to this
+		/// allocation policy
 		template< typename T >
 		class SharedChunkAllocation
 		{

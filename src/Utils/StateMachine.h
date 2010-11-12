@@ -15,6 +15,7 @@ namespace Utils
 		/// Constructs the state machine and sets the initial state.
 		StateMachine(T initialState): mState(initialState), mNextState(initialState), mLocked(false) {}
 
+		/// Default virtual destructor.
 		virtual ~StateMachine() {}
 
 		/// Returns the current state of the machine.

@@ -22,6 +22,7 @@ namespace Utils
 		/// it will be constructed in the manual mode.
 		Timer(const bool manual = false);
 
+		/// Default destructor.
 		~Timer(void);
 
 		/// Resets the current time to zero.

@@ -8,17 +8,18 @@
 
 namespace InputSystem
 {
-  /// Key code constants.
+	/// Key code constants.
 	/// The codes are copied from OIS, so you can cast the type directly from and to OIS.
-  enum eKeyCode
+	enum eKeyCode
 	{
 		#define KEY_CODE(x, y) x = y,
 		#include "KeyCodes.h"
 		#undef KEY_CODE
-		
+
 		NUM_KEY_CODE = 0xFF
 	};
-	
+
+	/// Returns the given key code as a string.
 	const char* GetKeyCodeString(uint8 code);
 
 	/// Data of an keyboard input event.
@@ -71,7 +72,7 @@ namespace InputSystem
 
 		/// Conversion constructor.
 		MouseInfo(const MouseState& ms): 
-			x(ms.x),
+		x(ms.x),
 			y(ms.y),
 			dx(0),
 			dy(0),

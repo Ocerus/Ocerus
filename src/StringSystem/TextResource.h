@@ -23,6 +23,7 @@ namespace StringSystem
 	{
 	public:
 
+		/// Default virtual destructor.
 		virtual ~TextResource(void);
 
 		/// Factory method.

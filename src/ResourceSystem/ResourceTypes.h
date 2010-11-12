@@ -49,7 +49,10 @@ namespace ResourceSystem
 	};
 
 	
+	/// Null texture used when the correct texture can't be loaded.
 	static const string RES_NULL_TEXTURE = "general/common/NullTexture.png";
+
+	/// Null model used when the correct model cant' be loaded.
 	static const string RES_NULL_MODEL = "general/common/NullModel.model";
 	
 	/// String name of types of a base path.

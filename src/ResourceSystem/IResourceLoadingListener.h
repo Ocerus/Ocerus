@@ -14,7 +14,10 @@ namespace ResourceSystem
 	{
 	public:
 
+		/// Default constructor.
 		IResourceLoadingListener(void) {}
+
+		/// Default virtual destructor.
 		virtual ~IResourceLoadingListener(void) {}
 
 		/// Called when a group of resources is being loaded. In resourceCount you are told how many resources will be

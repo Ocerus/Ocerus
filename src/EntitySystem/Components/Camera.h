@@ -26,13 +26,22 @@ namespace EntityComponents
 		/// Called from RTTI when the component is allowed to set up its properties.
 		static void RegisterReflection(void);
 		
+		/// Zoom of the camera. 1.0 means everything has its default size.
 		float32 GetZoom(void) const { return mZoom; }
+
+		/// Zoom of the camera. 1.0 means everything has its default size.
 		void SetZoom(float32 value) { mZoom = value; }
 		
+		/// Rotation of the camera along the Z axis.
 		float32 GetRotation(void) const { return mRotation; }
+
+		/// Rotation of the camera along the Z axis.
 		void SetRotation(float32 value) { mRotation = value; }
 
+		/// World position of the camera.
 		Vector2 GetPosition(void) const { return mPosition; }
+
+		/// World position of the camera.
 		void SetPosition(Vector2 value) { mPosition = value; }	
 
 	private:

@@ -71,6 +71,7 @@ namespace Utils
                     {
                     }
 
+					///Constructs a copy of a callback.
                     Callback0(const Callback0& c)
                         :mCallback(c.mCallback)
                     {
@@ -81,6 +82,7 @@ namespace Utils
                         }
                     }
 
+					///Assigns another callback to this one.
                     Callback0& operator=(const Callback0& rhs)
                     {
                         mCallback = rhs.mCallback;
@@ -93,6 +95,7 @@ namespace Utils
                         return *this;
                     }
 
+					/// Default destructor.
                     ~Callback0()
                     {
                     }

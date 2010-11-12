@@ -205,8 +205,12 @@ namespace GfxSystem
 
 		/// True if the rendering began but still didn't finish.
 		bool mIsRendering;
+
+		/// Scene management.
 		GfxSceneMgr* mSceneMgr;
 
+	private:
+	
 		/// Disabled.
 		GfxRenderer(const GfxRenderer&);
 		GfxRenderer& operator=(const GfxRenderer&);

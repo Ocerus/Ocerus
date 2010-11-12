@@ -16,6 +16,7 @@ namespace Utils
 	{
 	public:
 
+		/// Default constructor. No data are created or stored.
 		DataContainer(void): mData(0), mSize (0) {}
 
 		/// Note that the destructor doesn't destroy the carried data.

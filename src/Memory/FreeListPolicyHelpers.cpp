@@ -1,3 +1,7 @@
+/// @file
+/// Free lists / memory pooling implementation taken from Game Programming Gems 5. Edited to fit with our code and
+/// comment style.
+
 #include "Common.h"
 #include "FreeListPolicyHelpers.h"
 

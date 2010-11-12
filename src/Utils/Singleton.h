@@ -18,12 +18,14 @@ namespace Utils
 	{
 	public:
 
+		/// Default constructor.
 		Singleton(void)
 		{
 			OC_ASSERT(!msSingleton);
 			msSingleton = static_cast<T*>(this);
 		}
 
+		/// Default destructor.
 		~Singleton(void)
 		{
 			OC_ASSERT(msSingleton);

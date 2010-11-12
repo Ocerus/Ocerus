@@ -11,6 +11,8 @@ namespace GUISystem {
 	/// The ResourceProvider class allows CEGUI load resources through our ResourceSystem.
 	class ResourceProvider: public CEGUI::DefaultResourceProvider
 	{
+	public:
+
 		/// Loads a resource from given filename and group and stores it to output container.
 		virtual void loadRawDataContainer(const CEGUI::String& filename, CEGUI::RawDataContainer& output, const CEGUI::String& resourceGroup);
 

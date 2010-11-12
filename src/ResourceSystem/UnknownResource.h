@@ -1,5 +1,5 @@
 /// @file
-/// Derived class from Resource representing texture.
+/// Derived class from Resource representing a resource of an unknown type.
 
 #ifndef _UNKNOWRESOURCE_H_
 #define _UNKNOWRESOURCE_H_
@@ -9,10 +9,11 @@
 
 namespace ResourceSystem
 {
-	/// Resource class representing texture.
+	/// Resource class representing a resource of an unknown type.
 	class UnknownResource : public ResourceSystem::Resource
 	{
 	public:
+
 		/// Default destructor.
 		virtual ~UnknownResource(void){}
 

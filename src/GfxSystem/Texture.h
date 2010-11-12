@@ -42,13 +42,12 @@ namespace GfxSystem
 		virtual size_t LoadImpl(void);
 		virtual bool UnloadImpl(void);
 
-		void Init(void);
-
 	private:
 		TextureHandle mHandle;
 		ePixelFormat mFormat;
 		uint32 mHeight, mWidth;
 
+		void Init(void);
 	};
 }
 

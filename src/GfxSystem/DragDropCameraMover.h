@@ -8,8 +8,8 @@
 
 namespace GfxSystem 
 {
-	// Provides Drag'n'Drop camera movement with given render target.
-	// Must be used as Input Listener.
+	/// Provides Drag'n'Drop camera movement with given render target.
+	/// It receives input through IInputListener as other parts of the system (editor, game).
 	class DragDropCameraMover : public InputSystem::IInputListener
 	{
 	public:

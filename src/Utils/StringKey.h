@@ -29,6 +29,7 @@ namespace Utils
 		/// Copy constructor.
 		StringKey(const StringKey& rhs);
 
+		/// Default destructor.
 		~StringKey(void);
 
 		/// Assignment operator.
@@ -57,6 +58,7 @@ namespace Utils
 		/// Invalid key representing no real string.
 		static const StringKey Null;
 
+		/// Structure holding the key data in the memory. The StringKey references this structure.
 		struct StringKeyData
 		{
 			StringKeyData(string refString): mRefCount(0), mRefString(refString) {}

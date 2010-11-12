@@ -11,17 +11,18 @@
 namespace CEGUI { class RawDataContainer; }
 
 namespace GUISystem {
-	/**
-	 * The CEGUIResource class is a resource wrapper that allows loading of CEGUI
-	 * resources through Ocerus resource system. Unfortunately CEGUI is not designed
-	 * to allow automatic resource unloading and reloading on demand, thus CEGUIResource
-	 * is considered unloaded as soon as the resource is delivered to CEGUI.
-	 * @warning: Again, CEGUI resources cannot be unloaded by resource manager because of
-	 * simple CEGUI architecture.
-	 */
+	
+	/// The CEGUIResource class is a resource wrapper that allows loading of CEGUI
+	/// resources through Ocerus resource system. Unfortunately CEGUI is not designed
+	/// to allow automatic resource unloading and reloading on demand, thus CEGUIResource
+	/// is considered unloaded as soon as the resource is delivered to CEGUI.
+	/// @warning: Again, CEGUI resources cannot be unloaded by resource manager because of
+	/// simple CEGUI architecture.
 	class CEGUIResource: public ResourceSystem::Resource
 	{
 	public:
+		
+		/// Default destructor.
 		virtual ~CEGUIResource() {}
 
 		/// Factory method.
