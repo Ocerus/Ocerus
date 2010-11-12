@@ -126,9 +126,15 @@ bool CreateProjectDialog::IsValid()
 	if (mNameValue->getText().empty())
 		return false;
 
-	///@todo Check location exists
+	boost::filesystem::path projectLocation = mLocationValue->getText().c_str();
+	boost::filesystem::path projectPath = projectLocation / mNameValue->getText().c_str();
 
-	///@todo Check project name does not exist in location
+	// Not valid, if project location does not exist.
+	if (!boost::filesystem::exists(projectLocation)) return false;
 
+	// Not valid, if project path already exists.
+	if (boost::filesystem::exists(projectPath)) return false;
+
+	// Valid otherwise.
 	return true;
 }
