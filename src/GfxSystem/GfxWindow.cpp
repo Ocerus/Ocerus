@@ -115,7 +115,7 @@ bool GfxWindow::PopEvent(eWindowEvent &result)
 	return false;
 }
 
-void GfxWindow::ChangeResolution(int32 resWidth, int32 resHeight, bool switchedFromFull)
+void GfxWindow::ChangeResolution(const int32 resWidth, const int32 resHeight, const bool switchedFromFull)
 {
 	if (mFullscreen)
 	{
@@ -161,15 +161,19 @@ void GfxWindow::ChangeResolution(int32 resWidth, int32 resHeight, bool switchedF
 	}
 }
 
-void GfxWindow::SwitchFullscreen()
+void GfxWindow::SetFullscreen(const bool value)
 {
-	mFullscreen = !mFullscreen;
+	mFullscreen = value;
 
 	if (mFullscreen) 
 		ChangeResolution(mFullscreenResolutionWidth, mFullscreenResolutionHeight);
 	else 
 		ChangeResolution(mWindowWidth, mWindowHeight, true);
+}
 
+void GfxWindow::SwitchFullscreen()
+{
+	SetFullscreen(!mFullscreen);
 }
 
 WindowHandle GfxWindow::_GetWindowHandle() const
@@ -276,7 +280,7 @@ void GfxSystem::GfxWindow::SetWindowPosition(int32 xpos, int32 ypos)
 	
 }
 
-void GfxSystem::GfxWindow::SetSDLCursor(bool val)
+void GfxSystem::GfxWindow::SetSDLCursorVisibility(const bool val)
 {
 	if (val)
 		SDL_ShowCursor(SDL_ENABLE);

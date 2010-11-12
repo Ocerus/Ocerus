@@ -48,7 +48,10 @@ namespace GfxSystem
 		void SetWindowCaption(const string& caption);
 
 		/// Changes window resolution, recreates drawing context, invokes ScreenListeners.
-		void ChangeResolution(int32 x, int32 y, bool switchedFromFull = false);
+		void ChangeResolution(const int32 x, const int32 y, const bool switchedFromFull = false);
+		
+		/// Sets fullscreen mode.
+		void SetFullscreen(const bool value);
 
 		/// Switches fullscreen on and off.
 		void SwitchFullscreen();
@@ -96,7 +99,7 @@ namespace GfxSystem
 		inline virtual void RemoveScreenListener(IGfxWindowListener * listener) { mGfxWindowListeners.erase(listener); }
 
 		/// Sets whether the SDL cursor should be shown.
-		void SetSDLCursor(bool val);
+		void SetSDLCursorVisibility(const bool value);
 
 		/// Returns whether the SDL cursor is shown.
 		bool GetSDLCursor();
