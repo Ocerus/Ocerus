@@ -147,6 +147,7 @@ void EntityWindow::Rebuild()
 		generalInfo.layout->UpdateLayout();
 	}
 
+	// common components follow
 	int componentID = 0;
 	for (size_t idx = 1; idx < mComponentGroupCache.size(); ++idx)
 	{
