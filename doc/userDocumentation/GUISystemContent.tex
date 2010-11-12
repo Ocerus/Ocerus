@@ -18,23 +18,30 @@ In this section all necessary parts of GUI system will be introduced with their 
 
 \subsection{GUI manager}
 
-The main class of GUI system is the \emph{GUISystem::GUIMgr} which is a connector for drawing, input handling and resource providing between the CEGUI library and the engine. During creation it creates a CEGUI renderer, connects the resource manager with the CEGUI system via the \emph{GUISystem::Resource\-Provider} class (see section \ref{sec:gui-resources}), provides itself as a input and screen listener and creates GUI console which is then accesible via the \emph{GUIMgr::GetConsole} method (see section \ref{sec:gui-console}). On initialization (\emph{GUIMgr::Init}) it loads necessary GUI resources (schemes, imagesets, fonts, layouts, looknfeels) and creates a root window.
+The main class of the GUI system is the \emph{GUISystem::GUIMgr} which is a connector for drawing, input handling and resource and script providing between the CEGUI library and the engine. During its creation it creates a CEGUI renderer, connects the resource manager with the CEGUI system via the \emph{GUISystem::Resource\-Provider} class (see section \ref{sub:gui-resources}), connects the script manager with the CEGUI system via the \emph{GUISystem::ScriptProvider} class (see section \ref{sub:gui-script}), provides itself as an input and screen listener and creates the GUI console which is then accesible via the \emph{GUIMgr::GetConsole} method (see section \ref{sub:gui-console}). On initialization (\emph{GUIMgr::Init}) it loads necessary GUI resources (schemes, imagesets, fonts, layouts, looknfeels) and creates a root window.
 
-For loading a root layout from a file the method \emph{GUIMgr::LoadRootLayout} is provided with only one parameter specifying a name of a file where a layout is defined. This method calls the \emph{GUIMgr::LoadWindowLayout} which is a common method for loading a window layout from a file that also provides a translation of all texts via the string manager. There are also methods for unloading and getting the current root layout. For more information about layout see section \ref{sec:gui-layouts}.
+For loading a root layout from a file the method \emph{GUIMgr::LoadRootLayout} is provided with only one parameter specifying a name of a file where a layout is defined. This method calls the \emph{GUIMgr::LoadWindowLayout} which is a common method for loading a window layout from a file that also provides a translation of all texts via the string manager. There are also methods for unloading and getting the current root layout. For more information about layouts see section \ref{sub:gui-layouts}.
 
 Sometimes it is needed to disconnect a callback function from an event such as a mouse click on a button. Since the CEGUI library crashes when an event is disconnected in its callback the \emph{GUIMgr::DisconnectEvent} method is introduced which adds the event to the list of events that should be disconnected and the real disconnection will process after calling the method \emph{GUIMgr::ProcessDisconnectedEventList} in the application main loop.
 
 There are two more methods called in the application main loop. First the \emph{GUIMgr::Update} updates time of GUI system, then the \emph{GUIMgr::Render\-GUI} draws the whole GUI. There are several input callback methods that converts an OIS library representation of keyboard and mouse events to a CEGUI one and forwards them to the CEGUI library. It is possible to get the currently processing input event by the \emph{GUIMgr::GetCurrentInputEvent} method. There is also a callback method for a resolution change that forwards this information to the CEGUI library too.
 
 \subsection{GUI resources}
-\label{sec:gui-resources}
+\label{sub:gui-resources}
 
 A GUI resource is represented by the \emph{GUISystem::CEGUIResource} class. Since the CEGUI library is not designed to allow an automatic resource unloading and reloading on demand this class only loads raw data by the resource manager and after providing them to the CEGUI library by the \emph{CEGUIResource::GetResource} method it unloads them.
 
 When the CEGUI library needs a resource it calls an appropriate method of a resource provider class provided on an initialization of the library. In this engine it is the \emph{GUISystem::ResourceProvider} class and its method \emph{ResourceProvider::loadRawDataContainer} that gets the resource from the resource manager and forwards its data to the library.
 
+\subsection{Script provider}
+\label{sub:gui-script}
+
+For a connection of the CEGUI library and the script system the \emph{GUISystem::ScriptProvider} class is introduced implementing \emph{CEGUI::ScriptModule} interface. The only method from this interface which truly needs an implementation is the \emph{ScriptModule::subscribeEvent} which provides a name of event, a name of function that should handle it and an object to which the name of event and an object with a callback method should be subscribed.
+
+This transformation is implemented by the \emph{GUISystem::ScriptCallback} class which stores the function name given in its constructor and which calls an appropriate script function as an callback. It calls a function from the script module associated with the GUI layout component of the layout which gets the event or a function from the \verb/GuiCallback.as/ module as a default. For more information see section \ref{sub:gui-event}.
+
 \subsection{Layouts}
-\label{sec:gui-layouts}
+\label{sub:gui-layouts}
 
 A GUI layout defines a composition of GUI elements including their properties such as position, size and content and their behavior. Their properties can be defined in an external XML file but more dynamic compositions need also a lot of a code support, their behavior can be defined in an external script file but more complicated reactions have to be also native coded.
 
@@ -51,9 +58,9 @@ The \emph{GUISystem::ViewportWindow} class represents a viewport window with a f
 The \emph{GUISystem::PopupMgr} class provides methods creating (\emph{Popup\-Mgr\-::\-Create\-Popup\-Menu} / \emph{PopupMgr::CreateMenuItem}) and destroying (\emph{PopupMgr::DestroyPopupMenu} / \emph{PopupMgr::DestroyMenuItem}) popup menu and its items as well as showing (\emph{PopupMgr::ShowPopup}) and hiding (\emph{PopupMgr::HidePopup}) it and it also cares about calling a proper callback when a menu item is clicked on. The callback method is provided to the manager when the popup menu is being opened by the \emph{PopupMgr::ShowPopup} method.
 
 \subsection{GUI console}
-\label{sec:gui-console}
+\label{sub:gui-console}
 
-The \emph{GUISystem::GUIConsole} class manages the console accessible both in the game and in the editor. The console receives all messages from the log system via the method \emph{GUIConsole::AppendLogMessage} and shows those ones which have an equal or higher level than previously set by the \emph{GUIConsole::SetLogLevelTreshold} method. In addition the user can type commands to the console prompt line which are sent to the script system as a body of a method without parameters that is immediately built and run and if there is a call of the \verb/Print/ function its content will be printed to the console via \emph{GUIConsole::AppendScriptMessage} method. For better usage of the console a history of previously type commands is stored and can be revealed by up and down arrows. The console can be shown or hide by \emph{GUIConsole::ToggleConsole} method.
+The \emph{GUISystem::GUIConsole} class manages the console accessible both in the game and in the editor. The console receives all messages from the log system via the method \emph{GUIConsole::AppendLogMessage} and shows those ones which have an equal or higher level than previously set by the \emph{GUIConsole::SetLogLevelTreshold} method. In addition the user can type commands to the console prompt line which are sent to the script system as a body of a method without parameters that is immediately built and run and if there is a call of the \verb/Print/ function its content will be printed to the console via \emph{GUIConsole::AppendScriptMessage} method. For better usage of the console a history of previously typed commands is stored and can be revealed by up and down arrows. The console can be shown or hide by \emph{GUIConsole::ToggleConsole} method.
 
 \section{Creating GUI}
 \label{sec:gui-creating}
@@ -66,13 +73,14 @@ The GUI layout for the game should be defined in a file with the \emph{.layout} 
 
 The \verb/<GUILayout>/ element is the root element in layout XML files that must contain a single \verb/<Window>/ element representing the root GUI element. The \verb/<Window>/ element must have the \verb/Type/ attribute which specifies the type of window to be created. This may refer to a concrete window type, an alias, or a falagard mapped type (see the next paragraph). It can have also the \verb/Name/ attribute specifying a unique name of the window. This element may contain \verb/<Property>/ elements with the \verb/Name/ and \verb/Value/ attributes used to set properties of the window, \verb/<Event>/ elements with the \verb/Name/ and \verb/Function/ attributes used to create bindings between the window and script functions (see the next subsection) and another \verb/<Window>/ elements as its child windows. For supported window types, properties and events see the CEGUI documentation.
 
-For defining connections between a physical window type and a window look (rendering, fonts, imagesets) a scheme file is used which is another XML file with a specific structure. Its root element is the \verb/GUIScheme/ one that can contain any number of for example \verb/<Imageset>/, \verb/<Font>/, \verb/<LookNFeel>/, \verb/<WindowAlias>/ or \verb/<FalagardMapping>/ elements. For concrete usage of these elements as well as building a GUI layout with own fonts, images etc. see the CEGUI documentation.
+For defining connections between a physical window type and a window look (rendering, fonts, imagesets) a scheme file is used which is another XML file with a specific structure. Its root element is the \verb/<GUIScheme>/ one that can contain any number of for example \verb/<Imageset>/, \verb/<Font>/, \verb/<LookNFeel>/, \verb/<WindowAlias>/ or \verb/<FalagardMapping>/ elements. For concrete usage of these elements as well as building a GUI layout with own fonts, images etc. see the CEGUI documentation.
 
 The only specific feature of writing GUI layouts for this game engine is the translation of a text in the \verb/Text/ and \verb/Tooltip/ properties if it is surrounded by \$ characters (i.e. \verb/Text=$text$/). This text is used as a key and the word \verb/GUI/ as a group for the string manager and it is replaced by the result according to the current language when the layout is loaded to the engine.
 
 \subsection{Event handling}
+\label{sub:gui-event}
 
-Events generated by an interaction of user with GUI elements (mouse clicking, key pressing, etc.) can be handled by script functions written to a script module. If a layout is connected with a script module via a GUI layout component (see the next section) every occurrence of an event specified in the \verb/Name/ attribute of the layout element \verb/<Event>/ will be followed by calling a script function with the name equal to the \verb/Function/ attribute in the same tag with a \verb/Window@/ parameter holding a reference to the window which the element is child of.
+Events generated by an interaction of the user with GUI elements (mouse clicking, key pressing, etc.) can be handled by script functions written to a script module. If a layout is connected with a script module via a GUI layout component (see the next section) every occurrence of an event specified in the \verb/Name/ attribute of the layout element \verb/<Event>/ will be followed by calling a script function with the name equal to the \verb/Function/ attribute in the same tag with a \verb/Window@/ parameter holding a reference to the window which the element is child of.
 
 For example assume this is a part of a layout
 
@@ -99,7 +107,7 @@ void ContinueClick(Window@ window)
 
 The GUI layout component serves as a connection of one GUI layout file and one script module with functions that serves as callbacks to events of GUI elements described in the layout. Beside of these two properties there are the property \verb/Visible/ indicating whether the layout is visible, the property \verb/Enabled/ indicating whether layout elements reacts on an user input and the property \verb/Scheme/ referring to the GUI scheme file that is loaded before the layout file.
 
-On its initialization it loads the scheme and the layout to the GUI system and it calls script functions with the declarations \verb/void OnInit()/ and \verb/void OnPostInit()/ in the specified module. Every time it receives the \emph{UPDATE\_LOGIC} message it calls a script function with the declaration \verb/void OnUpdateLogic(float32)/ where it is possible to update all information displayed by GUI elements (use the global function \verb/Window@ GetWindow/ \verb/(string)/ with the name specified in the layout file to get the reference to the window).
+On its initialization it loads the scheme and the layout to the GUI system and it calls script functions with the declarations \verb/void OnInit()/ and \verb/void OnPostInit()/ in the specified module. Every time it receives the \emph{UPDATE\_LOGIC} message it calls a script function with the declaration \verb/void OnUpdateLogic(float32)/ where it is possible to update all information displayed by GUI elements (use the global function \verb/Window@ GetWindow/ \verb/(string)/ with the name specified in the layout file to get the reference to the window). It can also globally reacts on a key pressing and releasing by the \verb$void OnKeyPressed/Released(eKeyCode, uint32)$ functions when the layout is enabled.
 
 To show the GUI layout just add this component to any entity in the scene (or create a new one) and set the \verb/Visible/ property to true. The GUI elements are displayed over all entities and are not affected by cameras nor layers.
 

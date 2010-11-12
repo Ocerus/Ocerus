@@ -34,7 +34,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy /V /Y /B Documentation.pdf &quot;..\..\output\data\docs&quot;&#x0D;&#x0A;copy /V /Y /B Shortcuts.pdf &quot;..\..\output\data\docs&quot;"
+				CommandLine="copy /V /Y /B Documentation.pdf &quot;..\..\output\data\docs&quot;&#x0D;&#x0A;copy /V /Y /B Shortcuts.pdf &quot;..\..\output\data\docs&quot;&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -57,7 +57,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy /V /Y /B Documentation.pdf &quot;..\..\output\data\docs&quot;&#x0D;&#x0A;copy /V /Y /B Shortcuts.pdf &quot;..\..\output\data\docs&quot;"
+				CommandLine="copy /V /Y /B Documentation.pdf &quot;..\..\output\data\docs&quot;&#x0D;&#x0A;copy /V /Y /B Shortcuts.pdf &quot;..\..\output\data\docs&quot;&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>
@@ -104,7 +104,7 @@
 						Name="VCCustomBuildTool"
 						Description="Building whole documentation..."
 						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet Documentation.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet Documentation.tex&#x0D;&#x0A;"
-						AdditionalDependencies="Documentation.tex;CoreContent.tex;EditorContent.tex;EntitySystemContent.tex;GfxSystem.tex;GUISystem.tex;InputSystemContent.tex;LogSystemContent.tex;PlatformSetupContent.tex;ResourceSystemContent.tex;ScriptRegisterContent.tex;ScriptSystemContent.tex;StringSystemContent.tex;UtilsContent.tex"
+						AdditionalDependencies="Documentation.tex;CoreContent.tex;EditorContent.tex;EntitySystemContent.tex;GfxSystemContent.tex;GUISystemContent.tex;InputSystemContent.tex;LogSystemContent.tex;PlatformSetupContent.tex;ResourceSystemContent.tex;ScriptRegisterContent.tex;ScriptSystemContent.tex;StringSystemContent.tex;UtilsContent.tex"
 						Outputs="Documentation.pdf"
 					/>
 				</FileConfiguration>
@@ -115,7 +115,7 @@
 						Name="VCCustomBuildTool"
 						Description="Building whole documentation..."
 						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet Documentation.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet Documentation.tex&#x0D;&#x0A;"
-						AdditionalDependencies="Documentation.tex;CoreContent.tex;EditorContent.tex;EntitySystemContent.tex;GfxSystem.tex;GUISystem.tex;InputSystemContent.tex;LogSystemContent.tex;PlatformSetupContent.tex;ResourceSystemContent.tex;ScriptRegisterContent.tex;ScriptSystemContent.tex;StringSystemContent.tex;UtilsContent.tex"
+						AdditionalDependencies="Documentation.tex;CoreContent.tex;EditorContent.tex;EntitySystemContent.tex;GfxSystemContent.tex;GUISystemContent.tex;InputSystemContent.tex;LogSystemContent.tex;PlatformSetupContent.tex;ResourceSystemContent.tex;ScriptRegisterContent.tex;ScriptSystemContent.tex;StringSystemContent.tex;UtilsContent.tex"
 						Outputs="Documentation.pdf"
 					/>
 				</FileConfiguration>
@@ -389,7 +389,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Building Shortcuts.pdf"
-						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet Shorcuts.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet Shortcuts.tex"
+						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet Shorcuts.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet Shortcuts.tex&#x0D;&#x0A;"
 						Outputs="Shortcuts.pdf"
 					/>
 				</FileConfiguration>
@@ -399,7 +399,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Building Shortcuts.pdf"
-						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet Shorcuts.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet Shortcuts.tex"
+						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet Shorcuts.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet Shortcuts.tex&#x0D;&#x0A;"
 						Outputs="Shortcuts.pdf"
 					/>
 				</FileConfiguration>

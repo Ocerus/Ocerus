@@ -280,9 +280,8 @@ bool Core::Game::KeyPressed(const KeyInfo& ke)
 			gEntityMgr.BroadcastMessage(EntityMessage::KEY_PRESSED, PropertyFunctionParameters() << ke.keyCode << ke.charCode);
 			return true;
 		}
+		else return false;
 	}
-
-	if (!IsActionRunning()) return false;
 
 	if (GlobalProperties::Get<bool>("DevelopMode"))
 	{

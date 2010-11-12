@@ -1,9 +1,9 @@
 \begin{description}
   \item[Namespaces:] EntitySystem, EntityComponents
-  \item[Headers:] Component.h, ComponentEnums.h, ComponentHeaders.h, ComponentID.h, ComponentIterators.h, ComponentMgr.h, Com\-po\-nent\-Ty\-pes\-.h, EntityDescription.h, EntityHandle.h, EntityMessage.h, Entity\-Message\-Types.h, EntityMgr.h, EntityPicker.h, LayerMgr.h
-  \item[Source files:] Component.cpp, ComponentEnums.cpp, ComponentMgr.cpp, EntityDescription.cpp, EntityHandle.cpp, EntityMessage.cpp, Entity\-Mgr.cpp, EntityPicker.cpp, LayerMgr.cpp
-  \item[Classes:] Component, EntityComponentsIterator, ComponentMgr, EntityDescription, EntityHandle, EntityMessage, EntityMgr, EntityPicker, LayerMgr
-  \item[Libraries used:] none
+  \item[Headers:] Component.h, ComponentEnums.h, ComponentHeaders.h, ComponentID.h, ComponentIterators.h, ComponentMgr.h, Com\-po\-nent\-Ty\-pes\-.h, EntityDescription.h, EntityHandle.h, EntityMessage.h, Entity\-Message\-Types.h, EntityMgr.h, EntityPicker.h, LayerMgr.h and entity components
+  \item[Source files:] Component.cpp, ComponentEnums.cpp, ComponentMgr.cpp, EntityDescription.cpp, EntityHandle.cpp, EntityMessage.cpp, Entity\-Mgr.cpp, EntityPicker.cpp, LayerMgr.cpp and entity components
+  \item[Classes:] Component, EntityComponentsIterator, ComponentMgr, EntityDescription, EntityHandle, EntityMessage, EntityMgr, EntityPicker, LayerMgr and entity components
+  \item[Libraries used:] Box2D, AngelScript, CEGUI
 \end{description}
 
 \section{Purpose of the entity system}
@@ -61,6 +61,8 @@ RegisterProperty<int32>("IntProp", &ComponentName::GetIntProp,
 \end{verbatim}
 
 After the creation of the class a new component type must be registered in ComponentTypes.h where a new line like \verb/COMPONENT_TYPE(CT_COMPONENT_/ \verb/NAME, ComponentName)/ should be added. Finally the header file where the component is declared must be added to ComponentHeaders.h, for example \verb|#include "../Components/ComponentName.h"/|. Now the component is ready to be added to entities.
+
+Already implemented components are documented along with the corresponding systems that use them.
 
 \subsection{Adding new entity message types}
 \label{sub:entity-newmessages}

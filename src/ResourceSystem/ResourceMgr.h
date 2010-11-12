@@ -17,8 +17,9 @@ namespace ResourceSystem
 {
 	/// This class manages all resources of the program. A resource is everything what is loaded from disk or any
 	///	other persistent medium (or even network stream).
-	/// Resources are coupled into groups for easier manipulation. Resources are unloaded and reloaded as the system sees fit. There are different states a resource can be in. It can either not exist in the system, or it can
-	/// exist in the system but not loaded, or it can be loaded in the memory.
+	/// Resources are coupled into groups for easier manipulation. Resources are unloaded and reloaded
+	/// as the system sees fit. There are different states a resource can be in. It can either not exist
+	/// in the system, or it can exist in the system but not loaded, or it can be loaded in the memory.
 	class ResourceMgr : public Singleton<ResourceMgr>
 	{
 	public:

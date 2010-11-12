@@ -1,26 +1,27 @@
 \begin{description}
   \item[Namespaces:] InputSystem
-  \item[Headers:] IInputListener.h, InputActions.h, InputMgr.h, OISListener.h
-  \item[Source files:] InputMgr.cpp, OISListener.cpp
-  \item[Classes:] InputMgr, IInputListener
+  \item[Headers:] IInputListener.h, InputActions.h, InputMgr.h, KeyCodes.h, OISListener.h
+  \item[Source files:] InputActions.cpp, InputMgr.cpp, OISListener.cpp
+  \item[Classes:] InputMgr, IInputListener, OISListener
   \item[Libraries used:] OIS
 \end{description}
 
-\section{Introduction}
-Each game must somehow react to the input from the player. It can come from a keyboard, a mouse or a gamepad. To keep things organized handling of those devices were concentrated into a single part of the engine - the Input System.
+\section{Purpose of the input system}
 
+Since each game must somehow react to the input from the player, the input system was implemented which can handle keyboard and mouse events and forward them to other systems.
 
-\section{What does it do}
-The needs of games are different, but the ways they want to access the input devices are still the same. Either they want to receive a notification when something interesting happens or they want to poll the device for its current state. The \emph{InputMgr} implements both of the approaches.
+In the following section the way of receiving and distributing input events is described.
 
-The first one is provided via the \emph{IInputListener} interface which you may implement and then register into the \emph{InputMgr} by using its \emph{AddInputListener} method. You'll then receive the notification in callbacks of the interface.
+\section{Input manager}
+The needs of games are different, but the ways they want to access the input devices are still the same. Either they want to receive a notification when something interesting happens or they want to poll the device for its current state. The \emph{InputSystem::InputMgr} class implements both of the approaches.
 
-The second approach is supported by multiple methods in \emph{InputMgr} for querying the device state. For example, \emph{IsKeyDown} will tell you if any specific key is currently held down and \emph{GetMouseState} will return a whole bunch of mouse related informations.
+The first one is provided via the \emph{InputSystem::IInputListener} interface which should be implemented and then registered by using the \emph{InputMgr::\-AddInputListener} method for receiving the notification in callbacks of the interface.
 
+The second approach is supported by multiple methods for querying the device state. The \emph{InputMgr::IsKeyDown} method returns whether any specific key is currently held down while the \emph{InputMgr::IsMouseButtonPressed} method does the same with the currently pressed mouse button. Finally the \emph{InputMgr::GetMouseState} returns a whole bunch of mouse related information such as a cursor and wheel position or pressed buttons.
 
-\section{Event processing}
-To keep things synchronized the event processing is executed in the main game thread. At the beginning of each iteration of the game loop the \emph{Capture} method is called. Inside the events are recognized and then distributed.
+To keep things synchronized the event processing is executed in the main game thread. At the beginning of each iteration of the game loop the \emph{InputMgr::Capture} method is called where the events are recognized and then distributed to the listeners.
 
+The \emph{InputSystem::InputMgr} class is only a proxy class which calls methods of the implementation specific class \emph{InputSystem::OISListener} which implements the \emph{OIS::MouseListener} and \emph{OIS::KeyListener} interfaces from the OIS library used for the platform independent input management.
 
 
 %\section{Glossary}

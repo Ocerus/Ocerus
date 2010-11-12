@@ -1054,7 +1054,7 @@
 				Name="src"
 				>
 				<File
-					RelativePath="..\src\InputSystem\InputAction.cpp"
+					RelativePath="..\src\InputSystem\InputActions.cpp"
 					>
 				</File>
 				<File
