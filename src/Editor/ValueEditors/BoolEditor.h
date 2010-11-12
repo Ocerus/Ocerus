@@ -10,9 +10,11 @@
 
 namespace Editor {
 
+	/// Represents an item in the entity editor working with a boolean value.
 	class BoolEditor: public AbstractValueEditor
 	{
 	public:
+		/// Model of the item.
 		typedef ITypedValueEditorModel<bool> Model;
 		
 		/// Constructs a BoolEditor that uses given model.

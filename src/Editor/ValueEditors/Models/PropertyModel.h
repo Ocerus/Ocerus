@@ -88,7 +88,8 @@ namespace Editor
 		EntitySystem::EntityHandle mEntity;
 	};
 
-	/// The StringPropertyModel class is a ValueEditorModel that manages a property. This class converts property
+
+	/// The StringPropertyModel class is a ValueEditorModel that manages a string property. This class converts property
 	/// values to strings, so it works with editors that manages strings.
 	class StringPropertyModel: public PropertyModel<string>
 	{
@@ -107,10 +108,13 @@ namespace Editor
 		}
 	};
 
+
+	/// The LayerPropertyModel template class is a ValueEditorModel that manages a layer property of an entity.
 	class LayerPropertyModel: public PropertyModel<string>
 	{
 	public:
 	
+		/// Constructs the model from a property corresponding to the entity layer and the entity itself. The entity can be null.
 		LayerPropertyModel(const PropertyHolder& property, const EntitySystem::EntityHandle& entity = EntitySystem::EntityHandle()): PropertyModel<string>(property, entity)
 		{
 			OC_DASSERT(property.GetType() == PT_INT32);
@@ -125,7 +129,6 @@ namespace Editor
 			return "";
 		}
 
-		/// Sets the property value from string representation in newValue.
 		virtual void SetValue(const string&) {}
 
 		virtual bool IsReadOnly() const { return true; }

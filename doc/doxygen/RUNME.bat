@@ -1,1 +1,1 @@
-doxygen Battleships.dox
+doxygen Ocerus.dox

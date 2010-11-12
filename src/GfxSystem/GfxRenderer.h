@@ -12,6 +12,7 @@
 /// Macro for easier use.
 #define gGfxRenderer GfxSystem::GfxRenderer::GetSingleton()
 
+/// Rendering capabilities of the engine.
 namespace GfxSystem
 {
 	/// Rendering of everything except GUI. The rendering is done via rendering targets which define a viewport in the output

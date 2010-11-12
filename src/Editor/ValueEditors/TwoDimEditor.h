@@ -10,7 +10,7 @@
 
 namespace Editor {
 
-	/// An abstract editor for editing properties with two dimensions.
+	/// Represents an item in the entity editor working with two values of the same type.
 	class TwoDimEditor: public AbstractValueEditor
 	{
 	public:
@@ -21,7 +21,6 @@ namespace Editor {
 		/// Destroys the TwoDimEditor.
 		virtual ~TwoDimEditor();
 
-		/// Returns the main widget of this editor.
 		virtual CEGUI::Window* GetWidget();
 
 		virtual void Submit();
@@ -29,21 +28,39 @@ namespace Editor {
 		virtual void Update();
 		
 	protected:
+
+		/// Returns the model handling the data.
 		virtual IValueEditorModel* GetModel() = 0;
+
+		/// Sets new value into the model.
 		virtual void SetValue(float32 x, float32 y) = 0;
+
+		/// Gets a value from the model.
 		virtual void GetValue(float32& x, float32& y) = 0;
 	
+		/// Creates the GUI widget.
 		void InitWidget();
+
+		/// Destroys the GUI widget.
 		void DeinitWidget();
+		
+		/// True if the GUI widget is created and inited.
 		bool IsWidgetInited() const;
+
+		/// Sets attributes of the widget according to the given value model.
 		void SetupWidget(IValueEditorModel* model);
 
 		/// @name CEGUI callbacks
 		//@{
+			/// Called when an item widget is activated.
 			bool OnEventActivated(const CEGUI::EventArgs&) { this->LockUpdates(); return true;}
+			/// Called when an item widget is deactivated.
 			bool OnEventDeactivated(const CEGUI::EventArgs&);
+			/// Called when the mouse clicks on an item widget.
 			bool OnRemoveButtonClicked(const CEGUI::EventArgs&);
+			/// Called when a key is pressed while an item widget has focus.
 			bool OnEventKeyDown(const CEGUI::EventArgs&);
+			/// Called when the checkbox designating a property is shared is changed.
 			bool OnEventIsSharedCheckboxChanged(const CEGUI::EventArgs&);
 		//@}
 
@@ -52,6 +69,9 @@ namespace Editor {
 		inline CEGUI::Window* GetEditbox2Widget();
 	};
 
+
+	/// Represents an item in the entity editor working with a vector value. The elements of the vector are
+	/// specified by the template.
 	template<class Vec>
 	class VectorEditor: public TwoDimEditor
 	{
@@ -67,6 +87,7 @@ namespace Editor {
 			DestroyModel();
 		}
 
+		/// Changes the value model of the editor.
 		void SetModel(Model* newModel)
 		{
 			mModel = newModel;
@@ -102,18 +123,22 @@ namespace Editor {
 		Model* mModel;
 	};
 
+
+	/// Represents an item in the entity editor working with a Vector2 value.
 	class Vector2Editor: public VectorEditor<Vector2>
 	{
 	public:
 		virtual eValueEditorType GetType() { return VET_PT_VECTOR2; }
-		static const eValueEditorType Type;
+		static const eValueEditorType Type; ///< Static type of the editor.
 	};
 
+
+	/// Represents an item in the entity editor working with a Point value.
 	class PointEditor: public VectorEditor<GfxSystem::Point>
 	{
 	public:
 		virtual eValueEditorType GetType() { return VET_PT_POINT; }
-		static const eValueEditorType Type;
+		static const eValueEditorType Type; ///< Static type of the editor.
 	};
 }
 

@@ -10,9 +10,11 @@
 
 namespace Editor {
 
+	/// Represents an item in the entity editor working with a string value.
 	class StringEditor: public AbstractValueEditor
 	{
 	public:
+		/// Model of editable string values.
 		typedef ITypedValueEditorModel<string> Model;
 		
 		/// Constructs a StringEditor that uses given model.
@@ -40,6 +42,7 @@ namespace Editor {
 
 		virtual eValueEditorType GetType() { return VET_PT_STRING; }
 
+		/// Static type of the editor.
 		static const eValueEditorType Type;
 
 	protected:

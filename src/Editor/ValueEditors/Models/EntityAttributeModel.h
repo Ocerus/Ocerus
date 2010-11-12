@@ -16,12 +16,13 @@ namespace Editor
 	class EntityAttributeModel: public ITypedValueEditorModel<string>
 	{
 	public:
+		/// Type of the entity attribute manipulated by this model.
 		enum eAttributeType
 		{
-			TYPE_ID,
-			TYPE_NAME,
-			TYPE_TAG,
-			TYPE_PROTOTYPE
+			TYPE_ID, ///< ID of the entity.
+			TYPE_NAME, ///< Name of the entity.
+			TYPE_TAG, ///< Tag of the entity.
+			TYPE_PROTOTYPE ///< Prototype of the entity.
 		};
 
 		/// Constructs a model for given entity and type of attribute.

@@ -15,10 +15,11 @@
 /// Macro for easier use.
 #define gEditorMgr Editor::EditorMgr::GetSingleton()
 
-/// Editor subsystem provides functionality for creating and editing games.
+/// %Editor subsystem provides functionality for creating and editing games.
 namespace Editor
 {
-	///@TODO doxygen
+	/// Manages the editation of a scene in the application. It manipulates with entities, work with edit tools
+	/// manages the currently opened project and all GUI elements needed for the editor control by the user.
 	class EditorMgr: public Singleton<EditorMgr>, public InputSystem::IInputListener
 	{
 	public:
@@ -113,15 +114,19 @@ namespace Editor
 		/// Returns whether there is an opened project.
 		bool IsProjectOpened() const;
 
-		
+		/// Called after a project is opened opened.
 		void OnProjectOpened();
 		
+		/// Called after a project is closed.
 		void OnProjectClosed();
 		
+		/// Called after a scene is opened.
 		void OnSceneOpened();
 		
+		/// Called after a scene is closed.
 		void OnSceneClosed();
 		
+		/// Called after an entity is destroyed in the EntityMgr.
 		void OnEntityDestroyed(EntitySystem::EntityHandle destroyedEntity);
 
 		/// Refreshes the hierarchy window.

@@ -1,5 +1,5 @@
 /// @file
-/// Entry point to the Entity system.
+/// Entry point to the entity system.
 
 #ifndef _ENTITYMGR_H_
 #define _ENTITYMGR_H_

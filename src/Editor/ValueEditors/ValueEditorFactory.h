@@ -11,20 +11,30 @@
 namespace Editor
 {
 
+	/// Factory pattern implementation for creating value editors like BoolEditor or StringEditor.
 	class ValueEditorFactory
 	{
 	public:
+
+		/// Default constructor.
 		ValueEditorFactory();
+
+		/// Default destructor.
 		~ValueEditorFactory();
 
+		/// Stores unused value editor into a cache for later use.
 		void StoreValueEditor(AbstractValueEditor* editor);
 
+		/// Reuses a value editor from the cache. Creates a new one if none is cached.
 		template<class ValueEditor> ValueEditor* RestoreValueEditor();
 
+		/// Creates a value editor of the correct type for the given propery.
 		AbstractValueEditor* GetValueEditorForProperty(const Reflection::PropertyHolder& property, const EntitySystem::EntityHandle& entity);
 
+		/// Creates a value editor of the correct type for the given entity attribute.
 		AbstractValueEditor* GetValueEditorForEntityAttribute(EntitySystem::EntityHandle entity, EntityAttributeModel::eAttributeType);
 
+		/// Creates a value editor of the correct type based on the given value model.
 		template<class ValueEditor>
 		ValueEditor* GetValueEditorWithModel(typename ValueEditor::Model* model);
 

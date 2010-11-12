@@ -46,6 +46,7 @@ namespace Editor
 		/// Manages clicking remove component button.
 		bool OnRemoveComponentButtonClicked(const CEGUI::EventArgs&);
 
+		/// Group of properties representing a component in the entity editor.
 		struct ComponentGroup
 		{
 			CEGUI::Window* widget;

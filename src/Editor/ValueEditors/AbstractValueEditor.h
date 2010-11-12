@@ -10,9 +10,10 @@
 
 namespace Editor
 {
-	/// The AbstractValueEditor class declares an interface for value editors and also
+	/// Declares an interface for value editors and also
 	/// implements the basic functionality of update locking that can be used by
 	/// subclasses. Moreover, it provides methods that can be used in subclasses.
+	/// The value editors represent an item in the entity editor window.
 	class AbstractValueEditor
 	{
 	public:

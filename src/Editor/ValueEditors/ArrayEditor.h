@@ -33,13 +33,13 @@ namespace Editor
 			/// Destroys the ArrayEditor and its model.
 			virtual ~ArrayEditor() { DestroyModel(); ResetWidget(); DeinitWidget(); }
 
+			/// Assigns new model to the editor.
 			void SetModel(Model* model);
 			
 			virtual void DestroyModel();
 
 			virtual void ResetWidget();
 
-			/// 
 			virtual CEGUI::Window* GetWidget();
 
 			/// Submits the value from editor widget to the model.

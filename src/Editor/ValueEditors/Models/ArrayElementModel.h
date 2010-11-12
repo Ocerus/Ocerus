@@ -20,6 +20,8 @@ namespace Editor
 	class ArrayElementModel: public ITypedValueEditorModel<ElementType>
 	{
 	public:
+
+		/// Constructs the model from the parrent array editor and index of the item it is modelling.
 		ArrayElementModel(ArrayEditor<ElementType>* parentEditor, uint32 index): mParentEditor(parentEditor), mIndex(index) {}
 
 		virtual string GetName() const { return Utils::StringConverter::ToString(mIndex) + ":"; }

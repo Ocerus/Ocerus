@@ -1585,10 +1585,6 @@
 						>
 					</File>
 					<File
-						RelativePath="..\src\Editor\ValueEditors\ArrayEditorImpl.h"
-						>
-					</File>
-					<File
 						RelativePath="..\src\Editor\ValueEditors\BoolEditor.h"
 						>
 					</File>

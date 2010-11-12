@@ -10,13 +10,19 @@
 
 namespace Editor
 {
+	/// The StringValueEditorModel class is a model for ValueEditors that allow to
+	/// view/edit string values.
 	template<class T>
 	class StringValueEditorModel: public ITypedValueEditorModel<string>
 	{
 	public:
+		/// Inner model this class extends.
 		typedef ITypedValueEditorModel<T> WrappedModel;
 		
+		/// Constructs the model from a base model.
 		StringValueEditorModel(WrappedModel* wrappedModel): mWrappedModel(wrappedModel) {}
+
+		/// Default destructor.
 		virtual ~StringValueEditorModel() { delete mWrappedModel; }
 
 		/// Returns the name of the edited variable.
@@ -64,14 +70,12 @@ namespace Editor
 			mWrappedModel->SetValue(Utils::StringConverter::FromString<T>(newValue));
 		}
 		
+		/// Inner model this class extends.
 		WrappedModel* GetWrappedModel() const { return mWrappedModel; }
 
 	private:
 		WrappedModel* mWrappedModel;
 	};
-
-       /*template<>
-       virtual string StringValueEditorModel<ResourceSystem::ResourcePtr>::GetValue() const;*/
 }
 
 #endif // _EDITOR_STRINGVALUEEDITORMODEL_H_
