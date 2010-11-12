@@ -38,7 +38,6 @@ namespace Reflection
 
 		/// Constructs a PropertyFunctionParameter that will hold a reference to given property.
 		/// Data are not copied.
-		/// @todo: better disambiguation of those two constructors
 		template<class T>
 		PropertyFunctionParameter(T& property, bool):
 			mType(PropertyTypes::GetTypeID<T>()),

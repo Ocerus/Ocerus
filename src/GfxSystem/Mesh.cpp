@@ -54,7 +54,6 @@ size_t Mesh::LoadImpl()
 	size_t dataSize = dc.GetSize();
 
 	// this is not very nice but it's the fastest way to make OBJ loading working
-	///TODO the model loader should be rewritten
 	string tmpFilePath = GetFilePath() + ".tmp";
 	boost::filesystem::ofstream* ofs = new boost::filesystem::ofstream(tmpFilePath, std::ios_base::out | std::ios_base::binary);
 	ofs->write((char*)dc.GetData(), dc.GetSize());

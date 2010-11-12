@@ -63,7 +63,6 @@ namespace ResourceSystem
 
 	/// Specifies resource types for given resources in project. The string used as the key is resource
 	/// file path relative to the project root.
-	/// @todo We may want to rename this type (I'm out of inspiration now).
 	typedef map<string, eResourceType> ResourceTypeMap;
 
 }

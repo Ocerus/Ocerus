@@ -16,7 +16,6 @@ namespace EntitySystem
 	typedef int32 LayerID;
 	
 	/// Manages the layers for entities in editor.
-	/// @todo It's very unfortunate to signal errors by returning zero LayerID, because zero is valid LayerID.
 	class LayerMgr: public Singleton<LayerMgr>
 	{
 	public:

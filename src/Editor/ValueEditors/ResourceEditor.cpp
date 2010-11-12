@@ -32,7 +32,6 @@ bool Editor::ResourceEditor::OnEventDragDropItemDropped(const CEGUI::EventArgs& 
 	if (args.dragDropItem->getUserString("DragDataType") != "Resource") { return false; }
 	if (model->IsReadOnly())
 	{ 
-		/// @todo error message
 		return true;
 	}
 

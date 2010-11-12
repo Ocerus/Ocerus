@@ -47,8 +47,6 @@
 #define AS_PROCESS_METADATA 1
 #endif
 
-// TODO: Implement flags for turning on/off include directives and conditional programming
-
 
 
 //---------------------------

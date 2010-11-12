@@ -30,7 +30,6 @@ namespace EntityComponents
 		Array<Vector2>* GetPolygon(void) const { return const_cast<Array<Vector2>*>(&mPolygon); }
 
 		/// Definition of the polygon.
-		/// @todo Update the physics when the value changes.
 		void SetPolygon(Array<Vector2>* val);
 
 		/// Density of the shape's material.
