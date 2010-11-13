@@ -19,8 +19,6 @@
 using namespace Core;
 
 const float32 MAX_DELTA_TIME = 0.5f;
-const char* DEPLOY_DIRECTORY = "deploy";
-
 
 Application::Application():
 	StateMachine<eAppState>(AS_INITING),
@@ -67,7 +65,7 @@ void Application::Init()
 	// create singletons
 
 	ResourceSystem::ResourceMgr::CreateSingleton();
-	ResourceSystem::ResourceMgr::GetSingleton().Init("data/");
+	ResourceSystem::ResourceMgr::GetSingleton().Init(GetDataDir());
 
 	StringSystem::StringMgr::Init();
 	gStringMgrSystem.LoadLanguagePack(mGlobalConfig->GetString("Language", "", "Editor"), mGlobalConfig->GetString("Country", "", "Editor"));
@@ -404,7 +402,7 @@ void Core::Application::UnregisterGameInputListener( InputSystem::IInputListener
 
 void Core::Application::GetAvailableDeployPlatforms( vector<string>& out )
 {
-	boost::filesystem::path deployDirectory = DEPLOY_DIRECTORY;
+	boost::filesystem::path deployDirectory = GetDeployDir();
 	if (!boost::filesystem::exists(deployDirectory)) return;
 	boost::filesystem::directory_iterator iend;
 	for (boost::filesystem::directory_iterator i(deployDirectory); i!=iend; ++i)
@@ -435,7 +433,7 @@ bool Core::Application::DeployCurrentProject( const string& platform, const stri
 		boost::filesystem::path destinationPath = destination;
 		boost::filesystem::remove_all(destinationPath);
 		FilesystemUtils::CopyDirectory(".", destination, ".*\\.dll", "\\.svn");
-		FilesystemUtils::CopyDirectory(string(DEPLOY_DIRECTORY) + string("/") + platform, destination, ".*", "\\.svn");
+		FilesystemUtils::CopyDirectory(GetDeployDir() + string("/") + platform, destination, ".*", "\\.svn");
 		FilesystemUtils::CopyDirectory("data/general", destination + "/data/general", ".*", "\\.svn");
 		FilesystemUtils::CopyDirectory(mGameProject->GetOpenedProjectPath(), destination, ".*", "\\.svn");
 	}
@@ -549,6 +547,16 @@ void Core::Application::YieldProcess()
 	Sleep(1);
 }
 
+string Application::GetDataDir() const
+{
+	return "data/";
+}
+
+string Application::GetDeployDir() const
+{
+	return "deploy";
+}
+
 #else
 
 //------------
@@ -608,5 +616,39 @@ void Core::Application::YieldProcess()
 	// Update each 20ms, mouse is still OK
 	usleep(20000);
 }
+
+// Default value for OCERUS_SHARED_DIR. It can be set in cmake.
+#ifndef OCERUS_SHARED_DIR
+#define OCERUS_SHARED_DIR "/usr/share/ocerus"
+#endif
+
+string GetOcerusSharedDir()
+{
+	static string ocerusSharedDir;
+#ifdef _DEBUG // In debug build we can consider current directory as ocerusSharedDir
+	if (ocerusSharedDir.empty() && boost::filesystem::exists("data") && boost::filesystem::exists("deploy"))
+	{
+		// current directory is valid ocerusSharedDir
+		ocerusSharedDir = ".";
+	}
+#endif
+
+	if (ocerusSharedDir.empty())
+	{
+		ocerusSharedDir = OCERUS_SHARED_DIR;
+	}
+	return ocerusSharedDir;
+}
+
+string Application::GetDataDir() const
+{
+	return GetOcerusSharedDir() + "/data/";
+}
+
+string Application::GetDeployDir() const
+{
+	return GetOcerusSharedDir() + "/deploy/";
+}
+
 #endif
 

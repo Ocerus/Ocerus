@@ -5,19 +5,22 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
 
 cmake_minimum_required(VERSION 2.6.2)
 
-
 include(UseDoxygen)
 set(DOXYFILE_IN "${CMAKE_SOURCE_DIR}/cmake/modules/Doxyfile.in")
 
 
-option(CMAKE_BUILD_TYPE debug)
 option(PRECOMPILED_HEADERS "Use precompiled headers." OFF)
-option(BUILD_TESTS "Builds tests." ON)
-option(USE_DBGLIB "Uses DbgLib for debugging." ON)
+option(BUILD_TESTS "Builds tests." OFF)
+option(USE_DBGLIB "Uses DbgLib for debugging." OFF)
 option(USE_LEAKDETECTOR "Uses DbgLib's leak detector." OFF)
 option(USE_RTHPROFILER "Uses the included RTHProfiler." OFF)
 option(USE_GPROF "Compiles the project for using gprof." OFF)
 option(DEPLOY "Compiles the project in DEPLOY mode." OFF)
+
+set(CMAKE_INSTALL_PREFIX "/usr/local")
+set(CMAKE_BUILD_TYPE Release)
+
+set(OCERUS_SHARED_DIR "share/ocerus" CACHE STRING "Path to the ocerus shared data directory (relative to CMAKE_INSTALL PREFIX)")
 
 set(ocerus-engine_INCLUDE_DIRS)
 set(ocerus-engine_LIBRARIES)
@@ -123,7 +126,7 @@ endif (USE_GPROF)
 if (DEPLOY)
 	message("Compiling DEPLOY version.")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDEPLOY")
-endif (USE_GPROF)
+endif (DEPLOY)
 
 
 ###############################################################################
@@ -375,7 +378,9 @@ foreach(SYMBOL ${ocerus-engine_SYMBOLS})
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D${SYMBOL}")
 endforeach(SYMBOL)
 
-set(CMAKE_CXX_FLAGS_RELEASE "-O1")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DOCERUS_SHARED_DIR=\"\\\"${CMAKE_INSTALL_PREFIX}/${OCERUS_SHARED_DIR}\\\"\" ")
+
+set(CMAKE_CXX_FLAGS_RELEASE "-O2 ")
 #set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g -Wextra -pedantic -Wno-variadic-macros -Wno-long-long -DUSE_ASSERT -D_DEBUG")
 set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g -Wextra -pedantic -DUSE_ASSERT -D_DEBUG")
 
@@ -418,8 +423,8 @@ target_link_libraries(ocerus-engine
     ${ICU_LIBRARIES}
 )
 
-message("CMAKE_C_FLAGS: " ${CMAKE_C_FLAGS})
-message("CMAKE_CXX_FLAGS: " ${CMAKE_CXX_FLAGS})
+#message("CMAKE_C_FLAGS: " ${CMAKE_C_FLAGS})
+#message("CMAKE_CXX_FLAGS: " ${CMAKE_CXX_FLAGS})
 
 add_executable(ocerus-main src/Runner/main.cpp)
 
@@ -432,9 +437,10 @@ target_link_libraries(ocerus-main ocerus-engine)
 if (BUILD_TESTS)
     file(GLOB Tests_SRCS src/*/test/Test*.cpp src/*/*/test/Test*.cpp src/*/*/*/test/Test*.cpp)
 
-    foreach (test ${Tests_SRCS})
-    	message("Adding test: ${test}")
-    endforeach()
+#    foreach (test ${Tests_SRCS})
+#    	message("Adding test: ${test}")
+#    endforeach()
+
     include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}/src/Runner
     )
@@ -445,3 +451,22 @@ if (BUILD_TESTS)
 
     target_link_libraries(ocerus-test ocerus-engine)
 endif (BUILD_TESTS)
+
+
+
+###############################################################################
+###                             Installation                                ###
+###############################################################################
+
+set_property(TARGET ocerus-main PROPERTY INSTALL_RPATH_USE_LINK_PATH TRUE)
+
+install(TARGETS ocerus-main RUNTIME DESTINATION bin)
+
+install(DIRECTORY output/deploy output/data output/projects
+		DESTINATION ${OCERUS_SHARED_DIR}
+		PATTERN ".svn" EXCLUDE)
+
+#install(TARGETS ocerus-main
+		#RUNTIME DESTINATION bin
+		#LIBRARY DESTINATION lib
+		#ARCHIVE DESTINATION lib/static)

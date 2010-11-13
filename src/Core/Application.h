@@ -110,6 +110,12 @@ namespace Core
 		/// Returns true, if a project can be deployed to specified destination.
 		bool CheckDeployDestination(const string& destination);
 
+		/// Returns the data directory.
+		string GetDataDir() const;
+
+		/// Returns the deploy directory.
+		string GetDeployDir() const;
+
 	private:
 
 		/// Application states.
