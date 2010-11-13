@@ -1,3 +1,13 @@
+IF(DEFINED CMAKE_BUILD_TYPE)
+   SET(CMAKE_BUILD_TYPE ${CMAKE_BUILD_TYPE} CACHE STRING "Choose the type of
+build, options are: None(CMAKE_CXX_FLAGS or CMAKE_C_FLAGS used) Debug
+Release RelWithDebInfo MinSizeRel.")
+ELSE()
+   SET(CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the type of build,
+options are: None(CMAKE_CXX_FLAGS or CMAKE_C_FLAGS used) Debug Release
+RelWithDebInfo MinSizeRel.")
+ENDIF()
+
 project(ocerus)
 
 # where to look first for cmake modules
@@ -8,7 +18,6 @@ cmake_minimum_required(VERSION 2.6.2)
 include(UseDoxygen)
 set(DOXYFILE_IN "${CMAKE_SOURCE_DIR}/cmake/modules/Doxyfile.in")
 
-
 option(PRECOMPILED_HEADERS "Use precompiled headers." OFF)
 option(BUILD_TESTS "Builds tests." OFF)
 option(USE_DBGLIB "Uses DbgLib for debugging." OFF)
@@ -17,15 +26,13 @@ option(USE_RTHPROFILER "Uses the included RTHProfiler." OFF)
 option(USE_GPROF "Compiles the project for using gprof." OFF)
 option(DEPLOY "Compiles the project in DEPLOY mode." OFF)
 
-set(CMAKE_INSTALL_PREFIX "/usr/local")
-set(CMAKE_BUILD_TYPE Release)
+set(DEPLOY_TARGET_NAME "${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR}" CACHE STRING "Name of the target platform for DEPLOY build.")
 
-set(OCERUS_SHARED_DIR "share/ocerus" CACHE STRING "Path to the ocerus shared data directory (relative to CMAKE_INSTALL PREFIX)")
+set(OCERUS_SHARED_DIR "share/ocerus" CACHE STRING "Path to the ocerus shared data directory (relative to CMAKE_INSTALL_PREFIX)")
 
 set(ocerus-engine_INCLUDE_DIRS)
 set(ocerus-engine_LIBRARIES)
 set(ocerus-engine_SYMBOLS)
-
 
 ###############################################################################
 ###                      bundled external libraries                         ###
@@ -423,8 +430,18 @@ target_link_libraries(ocerus-engine
     ${ICU_LIBRARIES}
 )
 
-#message("CMAKE_C_FLAGS: " ${CMAKE_C_FLAGS})
-#message("CMAKE_CXX_FLAGS: " ${CMAKE_CXX_FLAGS})
+# Create symlinks
+execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_SOURCE_DIR}/output/data ${CMAKE_BINARY_DIR}/data)
+execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_SOURCE_DIR}/output/deploy ${CMAKE_BINARY_DIR}/deploy)
+execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_SOURCE_DIR}/output/projects ${CMAKE_BINARY_DIR}/projects)
+
+message("Ocerus build configuration")
+message("Build type: ${CMAKE_BUILD_TYPE}")
+message("Install prefix: ${CMAKE_INSTALL_PREFIX}")
+message("Ocerus shared dir: ${OCERUS_SHARED_DIR}")
+
+message("CMAKE_CXX_FLAGS: " ${CMAKE_CXX_FLAGS})
+
 
 add_executable(ocerus-main src/Runner/main.cpp)
 
@@ -458,15 +475,12 @@ endif (BUILD_TESTS)
 ###                             Installation                                ###
 ###############################################################################
 
-set_property(TARGET ocerus-main PROPERTY INSTALL_RPATH_USE_LINK_PATH TRUE)
-
-install(TARGETS ocerus-main RUNTIME DESTINATION bin)
-
-install(DIRECTORY output/deploy output/data output/projects
-		DESTINATION ${OCERUS_SHARED_DIR}
-		PATTERN ".svn" EXCLUDE)
-
-#install(TARGETS ocerus-main
-		#RUNTIME DESTINATION bin
-		#LIBRARY DESTINATION lib
-		#ARCHIVE DESTINATION lib/static)
+if (DEPLOY)
+	install(TARGETS ocerus-main RUNTIME DESTINATION "${CMAKE_SOURCE_DIR}/output/deploy/${DEPLOY_TARGET_NAME}")
+else (DEPLOY)
+	set_property(TARGET ocerus-main PROPERTY INSTALL_RPATH_USE_LINK_PATH TRUE)
+	install(TARGETS ocerus-main RUNTIME DESTINATION bin)
+	install(DIRECTORY output/deploy output/data output/projects
+			DESTINATION ${OCERUS_SHARED_DIR}
+			PATTERN ".svn" EXCLUDE)
+endif (DEPLOY)
