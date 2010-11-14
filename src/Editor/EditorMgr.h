@@ -171,6 +171,12 @@ namespace Editor
 		/// Shows dialog for "New scene".
 		void ShowNewSceneDialog();
 
+		/// Shows save scene dialog and opens scene with given index.
+		void OpenSceneAtIndex(const int32 index);
+		
+		/// Closes opened scene.
+		void CloseScene();
+
 		/// Creates new scene.
 		void CreateScene(const string& sceneFilename, const string& sceneName);
 
@@ -290,7 +296,6 @@ namespace Editor
 
 		/// Changes the type of the resource to a new one.
 		void ChangeResourceType(ResourceSystem::ResourcePtr resource, ResourceSystem::eResourceType newType);
-
 		
 	private:
 
@@ -314,15 +319,42 @@ namespace Editor
 		bool mIsInitialTime; ///< Whether the scene is in initial time (before the first call of ResumeAction or after the call of RestartAction).
 
 		// Callbacks
-		enum eMessageBoxTags { MBT_QUIT };
+		enum eMessageBoxTags { MBT_QUIT, MBT_SAVE  };
 		enum eFolderSelectorTags { FST_CREATEPROJECT, FST_OPENPROJECT, FST_DEPLOYPROJECT, FST_NEWSCENE };
 
 		string mDeployPlatform;
+		
+		/// Shows Message Box asking wheter you want to save current scene. 
+		void ShowSaveMessageBox(GUISystem::MessageBox::Callback callback);
 
-		/// MessageBox callback
-		void OnMessageBoxClicked(GUISystem::MessageBox::eMessageBoxButton button, int32 tag);
+		/// Saves current scene if user choosed yes in SaveMessageBox.
+		void ResolveSaveMessageBoxClicked(GUISystem::MessageBox::eMessageBoxButton button, int32 tag);
 
-		/// FolderSelector callback
+		/// Create project SaveMessageBox callback.
+		void OnCreateProjSaveMessageBoxClicked(GUISystem::MessageBox::eMessageBoxButton button, int32 tag);
+
+		/// Open project SaveMessageBox callback.
+		void OnOpenProjSaveMessageBoxClicked(GUISystem::MessageBox::eMessageBoxButton button, int32 tag);
+
+		/// Close project SaveMessageBox callback.
+		void OnCloseProjSaveMessageBoxClicked(GUISystem::MessageBox::eMessageBoxButton button, int32 tag);
+
+		/// QuitMessageBox callback.
+		void OnQuitMessageBoxClicked(GUISystem::MessageBox::eMessageBoxButton button, int32 tag);
+		
+		/// QuitMessageBox callback with asking to save scene.
+		void OnQuitSaveMessageBoxClicked(GUISystem::MessageBox::eMessageBoxButton button, int32 tag);
+				
+		/// New scene SaveMessageBox callback.
+		void OnNewSceneSaveMessageBoxClicked(GUISystem::MessageBox::eMessageBoxButton button, int32 tag);
+		
+		/// Open scene SaveMessageBox callback.
+		void OnOpenSceneSaveMessageBoxClicked(GUISystem::MessageBox::eMessageBoxButton button, int32 tag);
+		
+		/// Close scene SaveMessageBox callback.
+		void OnCloseSceneSaveMessageBoxClicked(GUISystem::MessageBox::eMessageBoxButton button, int32 tag);
+
+		/// FolderSelector callback.
 		void OnFolderSelected(const string& path, const string& editboxValue, bool canceled, int32 t);
 
 		/// Callback for creating a new entity.
@@ -340,6 +372,10 @@ namespace Editor
 		
 		//Dialogs
 		CreateProjectDialog* mCreateProjectDialog;
+
+		//Index of currently opening scene
+		//Used in callback for save scene dialog
+		int32 mOpeningSceneIndex;
 	
 	};
 

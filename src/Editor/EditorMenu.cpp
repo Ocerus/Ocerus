@@ -57,8 +57,7 @@ bool Editor::EditorMenu::OnMenuItemClicked(const CEGUI::EventArgs& e)
 	{
 		// Open scene
 		uint32 sceneIndex = args.window->getID();
-		gEditorMgr.Reset();
-		gEditorMgr.GetCurrentProject()->OpenSceneAtIndex(sceneIndex);
+		gEditorMgr.OpenSceneAtIndex(sceneIndex);
 	}
 	else if (submenu == mDeploySubmenu)
 	{
@@ -89,10 +88,7 @@ bool Editor::EditorMenu::OnMenuItemClicked(const CEGUI::EventArgs& e)
 			gEditorMgr.SaveOpenedScene();
 			break;
 		case MI_SCENE_CLOSE:
-			if (gEditorMgr.GetCurrentProject()->IsSceneOpened())
-			{
-				gEditorMgr.GetCurrentProject()->CloseOpenedScene();
-			}
+			gEditorMgr.CloseScene();
 			break;
 		case MI_EDIT_NEWENTITY:
 			gEditorMgr.ShowCreateEntityPrompt();

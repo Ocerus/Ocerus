@@ -33,6 +33,7 @@ close_project_hint=Closes the project.
 quit=Quit
 quit_hint=Quits the application.
 quit_message_text=Do you really want to quit?
+save_message_text=Do you want to save changes to "%1"?
 scene=Scene
 new_scene=New Scene
 new_scene_hint=Creates a new scene. [CTRL + N]
