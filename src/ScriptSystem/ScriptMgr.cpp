@@ -1007,6 +1007,13 @@ void SetFullscreen(const bool value, Game* self)
 	}
 }
 
+bool GetFullscreen(Game* self)
+{
+	OC_UNUSED(self);
+
+	return gGfxWindow.GetFullscreen();
+}
+
 void RegisterScriptGame(asIScriptEngine* engine)
 {
 	int32 r;
@@ -1024,6 +1031,7 @@ void RegisterScriptGame(asIScriptEngine* engine)
 	r = engine->RegisterObjectMethod("Game", "void Quit()", asFUNCTION(QuitGame), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("Game", "uint64 GetTime()", asMETHOD(Game, GetTimeMillis), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod("Game", "void SetFullscreen(const bool)", asFUNCTION(SetFullscreen), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod("Game", "bool GetFullscreen()", asFUNCTION(GetFullscreen), asCALL_CDECL_OBJFIRST); OC_SCRIPT_ASSERT();
 
 	// Register function that returns it
 	r = engine->RegisterGlobalFunction("Game& get_game()", asFUNCTION(GetGame), asCALL_CDECL); OC_SCRIPT_ASSERT();
