@@ -9,6 +9,7 @@ void EntityComponents::GUILayout::Create(void)
 {
 	mRootWindow = 0;
 	mScriptUpdateError = false;
+	mCallbackTimeOut = 1000;
 }
 
 void EntityComponents::GUILayout::Destroy(void)
@@ -63,7 +64,7 @@ EntityMessage::eResult EntityComponents::GUILayout::HandleMessage(const EntityMe
 					OC_ASSERT_MSG(result, "Can't set script function argument; check EntityMessageTypes.h");
 				}
 				// Execute script with time out
-				if (!gScriptMgr.ExecuteContext(ctx, 1000) && msg.type == EntityMessage::UPDATE_LOGIC) { mScriptUpdateError = true; }
+				if (!gScriptMgr.ExecuteContext(ctx, mCallbackTimeOut) && msg.type == EntityMessage::UPDATE_LOGIC) { mScriptUpdateError = true; }
 				// Release context
 				ctx->Release();
 			} else if (msg.type == EntityMessage::UPDATE_LOGIC) { mScriptUpdateError = true; }
@@ -101,6 +102,7 @@ void EntityComponents::GUILayout::RegisterReflection()
 	RegisterProperty<ResourceSystem::ResourcePtr>("Layout", &GUILayout::GetLayout, &GUILayout::SetLayout, PA_FULL_ACCESS, "Layout used for defining the GUI.");
 	RegisterProperty<ResourceSystem::ResourcePtr>("Scheme", &GUILayout::GetScheme, &GUILayout::SetScheme, PA_FULL_ACCESS, "Scheme used for defining the GUI.");
 	RegisterProperty<ResourceSystem::ResourcePtr>("Callback", &GUILayout::GetCallback, &GUILayout::SetCallback, PA_FULL_ACCESS, "Script module with functions used as a callback for GUI events.");
+	RegisterProperty<uint32>("CallbackTimeOut", &GUILayout::GetCallbackTimeOut, &GUILayout::SetCallbackTimeOut, PA_FULL_ACCESS, "Maximum time of execution the callback scripts in ms (0 means infinity).");
 	RegisterProperty<bool>("Visible", &GUILayout::GetVisible, &GUILayout::SetVisible, PA_FULL_ACCESS, "Whether the GUI layout is visible.");
 	RegisterProperty<bool>("Enabled", &GUILayout::GetEnabled, &GUILayout::SetEnabled, PA_FULL_ACCESS, "Whether the GUI layout reacts on an user input.");
 }

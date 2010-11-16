@@ -68,19 +68,32 @@ The project has not been created from scratch but it is based on several librari
 In this list a brief description of all used libraries is provided:
 
 \begin{itemize}
-  \item AngelScript -- a script engine with an own language
-  \item Boost -- a package of helper data structures and algorithms
-  \item Box2D -- a library providing 2D real-time physics
-  \item CEGUI -- a graphic user interface engine
-  \item DbgLib -- tools for a real-time debugging and crash dumps
-  \item Expat -- a XML parser
-  \item OIS -- a library for managing events from input devices
-  \item OpenGL -- an API for 2D and 3D graphics
-  \item RTHProfiler -- an interactive real-time profiling of code
-  \item RudeConfig -- a library for managing configure files
-  \item SDL -- a tool for an easier graphic rendering
-  \item SOIL -- a library for loading textures of various formats
-  \item UnitTest++ -- a framework for a unit testing
+  \item AngelScript\cite{angelscript} -- a script engine with an own language
+  \item Boost\cite{boost} -- a package of helper data structures and algorithms
+  \item Box2D\cite{box2d} -- a library providing 2D real-time physics
+  \item CEGUI\cite{cegui} -- a graphic user interface engine
+  \item DbgLib\cite{dbglib} -- tools for a real-time debugging and crash dumps
+  \item Expat\cite{expat} -- a XML parser
+  \item OIS\cite{ois} -- a library for managing events from input devices
+  \item OpenGL\cite{opengl} -- an API for 2D and 3D graphics
+  \item RTHProfiler\cite{rthprofiler} -- an interactive real-time profiling of code
+  \item RudeConfig\cite{rudeconfig} -- a library for managing configure files
+  \item SDL\cite{sdl} -- a tool for an easier graphic rendering
+  \item SOIL\cite{soil} -- a library for loading textures of various formats
+  \item UnitTest++\cite{unittest} -- a framework for a unit testing
+\end{itemize}
+
+Except these libraries some small pieces of a third party code were used:
+
+\begin{itemize}
+  \item Properties and RTTI\cite{gpg5} -- a basic concept of entity properties and runtime type information
+  \item Tree\cite{tree} -- an STL-like container class for n-ary trees
+  \item FreeList\cite{gpg5} -- free lists / memory pooling implementation
+  \item STL pool allocator\cite{allocator} -- pooled allocators for STL
+  \item GLEW\cite{glew} -- the OpenGL extension wrangler library
+  \item OBJ loader\cite{objloader} -- the Wavefront OBJ file loader
+  \item PlusCallback\cite{pluscallback} -- an easy use of function and method callbacks
+  \item Script builder and script string\cite{angelscript} -- an implementation of strings in the script engine and building more files to a script module
 \end{itemize}
 
 In the following chapters each of the project systems will be described from both the user and the design view. At the beginning of each chapter there is a section about a purpose of the described system and at the end of most chapters there is a small glossary of terms used in that chapter.
@@ -147,10 +160,28 @@ In the following chapters each of the project systems will be described from bot
 
 \begin{thebibliography}{9}
 \addcontentsline{toc}{chapter}{Bibliography} %'Bibliography' into toc
-\bibitem {opengl} OpenGL standard -- http://www.opengl.org/
+\bibitem {angelscript}AngelScript -- http://www.angelcode.com/angelscript
+\bibitem {boost}Boost -- http://www.boost.org
+\bibitem {box2d}Box2D -- http://www.box2d.org
+\bibitem {cegui}CEGUI -- http://www.cegui.org.uk
+\bibitem {dbglib}DbgLib -- http://dbg.sourceforge.net
+\bibitem {expat}Expat -- http://expat.sourceforge.net
+\bibitem {ois}OIS -- http://sourceforge.net/projects/wgois
+\bibitem {opengl}OpenGL -- http://www.opengl.org
+\bibitem {rthprofiler}Real-Time Hierarchical Profiling -- Greg Hjelstrom, Byon Garrabrant: Game Programming Gems 3, Charles River Media, 2002, ISBN: 1584502339
+\bibitem {rudeconfig}RudeConfig -- http://rudeserver.com/config
+\bibitem {sdl}SDL -- http://www.libsdl.org
+\bibitem {soil}SOIL -- http://www.lonesock.net/soil.html
+\bibitem {unittest}UnitTest++ -- http://unittest-cpp.sourceforge.net
+\bibitem {gpg5}Kim Pallister: Game Programming Gems 5, Charles River Media, 2005, ISBN: 1584503521
+\bibitem {tree}Kasper Peeters, http://www.aei.mpg.de/~peekas/tree
+\bibitem {allocator}http://www.sjbrown.co.uk/2004/05/01/pooled-allocators-for-the-stl
+\bibitem {glew}http://glew.sourceforge.net
+\bibitem {objloader}http://www.dhpoware.com
+\bibitem {pluscallback}http://codeplea.com/pluscallback
 \bibitem {obj}Wavefront OBJ file structure -- http://en.wikipedia.org/wiki/Obj
-\bibitem {cegui}CEGUI documentation -- http://cegui.org.uk/api\_reference/index.html
-\bibitem {angelscript}AngelScript documentation -- file /AngelScript/index.html
+\bibitem {cegui-doc}CEGUI documentation -- http://cegui.org.uk/api\_reference/index.html
+\bibitem {angelscript-doc}AngelScript documentation -- file /AngelScript/index.html
 \bibitem {ISO-639-1}ISO 639-1 -- http://en.wikipedia.org/wiki/List\_of\_ISO\_639-1\_codes
 \bibitem {ISO-3166-1}ISO 3166-1 alpha-2 -- http://en.wikipedia.org/wiki/ISO\_3166-1\_alpha-2
 \end{thebibliography}

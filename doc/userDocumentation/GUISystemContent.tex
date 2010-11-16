@@ -69,7 +69,7 @@ This section focuses on creating a GUI to the game. First there is a description
 
 \subsection{Defining a layout}
 
-The GUI layout for the game should be defined in a file with the \emph{.layout} extension and the XML internal structure. Since the CEGUI library is used for the GUI system a layout must fulfill its specification which is widely described in its documentation \cite{cegui} therefore there is only a brief description it the following paragraphs.
+The GUI layout for the game should be defined in a file with the \emph{.layout} extension and the XML internal structure. Since the CEGUI library is used for the GUI system a layout must fulfill its specification which is widely described in its documentation \cite{cegui-doc} therefore there is only a brief description it the following paragraphs.
 
 The \verb/<GUILayout>/ element is the root element in layout XML files that must contain a single \verb/<Window>/ element representing the root GUI element. The \verb/<Window>/ element must have the \verb/Type/ attribute which specifies the type of window to be created. This may refer to a concrete window type, an alias, or a falagard mapped type (see the next paragraph). It can have also the \verb/Name/ attribute specifying a unique name of the window. This element may contain \verb/<Property>/ elements with the \verb/Name/ and \verb/Value/ attributes used to set properties of the window, \verb/<Event>/ elements with the \verb/Name/ and \verb/Function/ attributes used to create bindings between the window and script functions (see the next subsection) and another \verb/<Window>/ elements as its child windows. For supported window types, properties and events see the CEGUI documentation.
 

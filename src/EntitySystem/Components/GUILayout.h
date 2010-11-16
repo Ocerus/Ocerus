@@ -55,11 +55,18 @@ namespace EntityComponents
 		/// Sets whether the GUI layout is enabled.
 		void SetEnabled(bool value);
 
+		/// Maximum time of execution the callback scripts in ms (0 means infinity).
+		uint32 GetCallbackTimeOut(void) const { return mCallbackTimeOut; }
+
+		/// Maximum time of execution the callback scripts in ms (0 means infinity).
+		void SetCallbackTimeOut(uint32 value) { mCallbackTimeOut = value; }
+
 	private:
 
 		ResourceSystem::ResourcePtr mLayout;
 		ResourceSystem::ResourcePtr mScheme;
 		ResourceSystem::ResourcePtr mCallback;
+		uint32 mCallbackTimeOut;
 		bool mVisible;
 		bool mEnabled;
 		
