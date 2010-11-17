@@ -1315,10 +1315,13 @@ void EntitySystem::EntityMgr::UnlinkEntityFromPrototype( const EntityHandle enti
 	PrototypeMap::iterator parentPrototypeIter = mPrototypes.find(parentPrototypeID);
 	if (parentPrototypeIter == mPrototypes.end())
 	{
-		ocError << "Entity prototype not found: " << parentPrototypeID;
+		// not wanted
+		//ocError << "Entity prototype not found: " << parentPrototypeID;
 	}
 	else if (parentPrototypeIter->second != 0)
+	{
 		parentPrototypeIter->second->mInstancesCount--;
+	}
 
 	entityIt->second->mPrototype = EntityHandle();
 }

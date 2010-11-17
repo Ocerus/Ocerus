@@ -51,7 +51,7 @@ int ScriptMgr::IncludeCallback(const char* fileName, const char* from, AngelScri
 	OC_UNUSED(userParam);
 	// Try to get existing script resource
 	ScriptResourcePtr sp = gResourceMgr.GetResource("Project", fileName);
-	if (!sp)
+	if (!sp || sp->GetState() == ResourceSystem::Resource::STATE_MISSING)
 	{
 		ocInfo << "Failed to load script file " << fileName << " included from " << from << ".";
 		return -1;
