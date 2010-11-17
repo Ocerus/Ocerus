@@ -1,41 +1,60 @@
 \begin{description}
   \item[Namespaces:] Utils, Reflection
-  \item[Headers:] the Utils directory
-  \item[Source files:] the Utils directory
-  \item[Classes:] Array, DataContainer, GlobalProperties, Singleton, StateMachine, StringKey, Timer, AbstractProperty, Property, PropertyFunctionParameter, PropertyFunctionParameters, PropertyHolder, PropertyList, TypedProperty, RTTI, RTTINullClass, RTTIBaseClass, RTTIGlue
+  \item[Headers:] Array.h, Callback.h, DataContainer.h, FilesystemUtils.h, GlobalProperties.h, Hash.h, MathConsts.h, MathUtils.h, Properties.h, ResourcePointers.h, Singleton.h, SmartAssert.h, StateMachine.h, StringConverter.h, StringKey.h, Timer.h, Tree.h, XMLConverter.h, AbstractProperty.h, Property.h, PropertyAccess.h, PropertyEnums.h, PropertyFunctionParameters.h, PropertyHolder.h, PropertyList.h, Property\-Map.h, PropertySystem.h, PropertyTypes.h, TypedProperty.h, ValuedProperty.h, RTTI.h, RTTIBaseClass.h, RTTIGlue.h
+  \item[Source files:] FilesystemUtils.cpp, GlobalProperties.cpp, Hash.cpp, Math\-Utils.cpp, SmartAssert.cpp, StringConverter.cpp, StringKey.cpp, Ti\-mer\-.cpp, XMLConverter.cpp, AbstractProperty.cpp, Property\-Enums\-.cpp, PropertyFunctionParameters.cpp, PropertyHolder.cpp, Property\-Map\-.cpp, PropertySystem.cpp, RTTI.cpp
+  \item[Classes:] Array, CallbackX, DataContainer, GlobalProperties, Singleton,\\ StateMachine, StringKey, Timer, AbstractProperty, Property, PropertyFunctionParameter, PropertyFunctionParameters, PropertyHolder, PropertyList, TypedProperty, RTTI, RTTINullClass, RTTIBaseClass, RTTIGlue
   \item[Libraries used:] none
 \end{description}
 
 
-\section{Introduction}
-During the development of a game you usually need several helper classes and methods such as those for math or containers. This kind of stuff does not fit anywhere because it is too general. Placing it in a specific subsystem would make it unusable anywhere else. So it is best to aggregate this in one place.
+\section{Purpose of utilities}
+During the development of a game usually several helper classes and methods are needed such as those for math or containers. This kind of stuff does not fit anywhere because it is too general. Placing it in a specific subsystem would make it unusable anywhere else so they were aggregated in this namespace.
 
+In the following sections there is a brief description of helper classes and methods as well as a description of the RTTI and property system. In the last section there is a small glossary of used terms.
 
+\section{Helper classes and methods}
+There are several categories of utilities: containers (i.e. tree), math functions (i.e. hash) and design patterns (i.e. singleton). Here is the list of them with a brief description:
 
-\section{Categories}
-There are several categories of utilities: containers (i.e. tree), math functions (i.e. hash) and design patterns (i.e. singleton). The utilities are usually simple enough to understand, so it's best to read the code and/or the doxygen documentation. However, a few of them are a bit more complicated. That's why they're described in the following sections.
+\begin{itemize}
+  \item Array -- a templated representation of an array with the information about its size
+  \item Callback -- a generic callback solution that uniformly wraps pointers to functions and/or methods
+  \item DataContainer -- a class storing a pointer to a data buffer and its size
+  \item FilesystemUtils -- utility functions for working with files and directories
+  \item GlobalProperties -- globally accessible variables identified by string identifiers
+  \item Hash -- custom hash and reverse hash functions
+  \item MathUtils -- helper math functions
+  \item ResourcePointers -- a file that gathers smart pointers of all resources together so that it can be included with no overhead
+  \item Singleton -- a singleton pattern implementation
+  \item SmartAssert -- a smart assert macro implementation
+  \item StateMachine -- an implementation of a basic finite state machine
+  \item StringConverter -- a set of functions for converting different values to and from a string
+  \item StringKey -- a class that serves as a key into maps and other structures where strings are used to index data, but a high speed is necessary
+  \item Timer -- a support for time measurement
+  \item Tree -- an STL-like container class for n-ary trees
+  \item XMLConverter -- a set of functions for reading/writing different values from/to XML
+\end{itemize}
 
-
-\subsection{RTTI}
+\section{RTTI}
 RTTI is a shortage for \emph{Run-Time Type Information}. It is a mechanism which allows an instance of a class to know what its class is, the name of the class and other attributes. The instance is also able to create new instances of the same class, cloning itself.
 
-RTTI is implemented using C++ templates. To make a use of it you must derive your class from \emph{RTTIGlue} which takes two template arguments. The first one is your class and the second one is its predecessor in the RTTI hierarchy. If there is none or you do not want to specify that inherit \emph{RTTIBaseClass} instead of \emph{RTTIGlue}. The mechanism will automatically call the static \emph{RegisterReflection} function of your class if defined. The function is called only once during the startup. Here you may adjust attributes of the class or add new ones.
+RTTI is implemented using C++ templates. For using it a new class must derive from the \emph{Reflection::RTTIGlue} class which takes two template arguments. The first one is the new class and the second one is its predecessor in the RTTI hierarchy. If there is no parent then the new class should inherit from the \emph{Reflection::RTTIBaseClass} class. The mechanism will automatically call the static \emph{RegisterReflection} method of the new class during the startup if defined. In this method new properties and functions can be registered for the reflection (see section \ref{sec:utils-properties}) or a component dependency can be added by the \emph{AddComponentDependency} method.
+
+\section{Properties}
+\label{sec:utils-properties}
+Properties are special RTTI attributes of classes which allow accessing data of their instances using string names. This greatly helps encapsulating classes and provides an uniform data access interface.
+
+To make use of properties the class must already using RTTI. A getter and setter method for each of data provided as properties must be defined. Then the static \emph{RegisterReflection} function must be defined and inside its body the \emph{RegisterProperty} method must be called for each property providing pointers to the data getter and setter. To access the data of an instance the \verb/GetRTTI()->GetProperty()/ order on the instance is used. It returns the \emph{Reflection::PropertyHolder} class on which it is possible to call the template \emph{GetValue} or \emph{SetValue} methods.
+
+It is also possible to set a custom function as a special property. The function must take the \emph{PropertyFunctionParameters} class as a single parameter and return \verb/void/. It must be registered by using the \emph{RegisterFunction} method. The function can be then used in a similar way as the common properties, but the \emph{CallFunction} method is used instead of the \emph{SetValue} one.
 
 
-\subsection{Properties}
-\emph{Properties} are special \emph{RTTI} attributes of classes which allow accessing data of their instances using string names. This greatly helps encapsulating classes and provides an uniform data access interface.
+\section{Glossary}
+This is a glossary of the most used terms in the previous sections:
 
-To make use of \emph{Properties} your class must be already using \emph{RTTI}. Create a getter and setter method for each of your data you want to provide as properties. Define the static \emph{RegisterReflection} function (see the RTTI section for details) and inside its body call \emph{RegisterProperty} providing pointers to the data getters and setters. For details about this function see the doxygen docs. To access the data of an instance use \verb'GetRTTI()->GetProperty()' on the instance. It will give you \emph{PropertyHolder} on which you can finally call the templatized \emph{GetValue} or \emph{SetValue} methods.
-
-You can also set a custom function as a special property. The function must take \emph{PropertyFunctionParameters} as a single parameter and return \verb'void'. You can register it using \emph{RegisterFunction}. The function can be then used in a similar way as the common properties, but you use \emph{CallFunction} instead of \emph{SetValue}.
-
-
-%\section{Glossary}
-%This is a glossary of the most used terms in the previous sections:
-%
-%\begin{description}
-%  \item[Resource] -- a unit of data the game will be working with as a whole. The data is usually stored in an external device.
-%\end{description}
+\begin{description}
+  \item[RTTI] -- a system for getting type information on run-time
+  \item[Property] -- a class attribute accessible by its name that must be registered to the RTTI system
+\end{description}
 
 
 %\begin{thebibliography}{9}                                                                                                

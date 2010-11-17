@@ -7,16 +7,18 @@
 \end{description}
 
 
-\section{Introduction}
-To be able to build the engine for different platforms it was decided to concentrate all platform specific settings into one place. These include basic type definitions, macros, standard header file includes and containers. All of these can be found in the header files in the \verb'Setup' directory under the source tree.
+\section{Purpose of the platform setup}
+To be able to build the engine for different platforms it was decided to concentrate all platform specific settings into one place. These include basic type definitions, macros, standard header file includes and containers. All of these can be found in the header files in the \verb/Setup/ directory under the source tree.
+
+In the following section the content of these files will be described.
 
 
 \section{Specific header files}
-The main header file included in most compilation units is \verb'Settings.h'. It contains basic settings for the platform (macros controlling the behaviour of libraries for example), but more importantly it aggregates other setup headers together.
+The main header file included in most compilation units is \verb/Settings.h/. It contains basic settings for the platform (macros controlling the behavior of libraries for example), but more importantly it aggregates other setup headers together.
 
-In \verb'Platform.h' you can find macros defining the currently used platform. These macros are then used in other parts of the project to branch the code for specific platforms in compile time. In \verb'BasicTypes.h' there are definitions of simple types used in the whole project (integer, float, etc.). In \verb'Containers.h' there are definitions of the STL-like containers. And \verb'ComplexTypes.h' contains definitions of other complex STL-like data structures.
+In \verb/Platform.h/ you can find macros defining the currently used platform. These macros are then used in other parts of the project to branch the code for specific platforms in compile time. In \verb/BasicTypes.h/ there are definitions of simple types used in the whole project (integer, float, etc.). In \verb/Containers.h/ there are definitions of the STL-like containers. And \verb/ComplexTypes.h/ contains definitions of other complex STL-like data structures.
 
-\verb'Memory.h' defines the memory allocation method used by the project and includes their implementation from the memory subsystem (the \verb'Memory' directory).
+\verb/Memory_pre.h/ and \verb/Memory_post.h/ define the memory allocation method used by the project and includes their implementation from the memory subsystem.
 
 
 %\section{Glossary}

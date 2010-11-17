@@ -1,5 +1,5 @@
 /// @file
-/// Set of functions for writing different values to XML.
+/// Set of functions for reading/writing different values from/to XML.
 
 #ifndef XMLConverter_h__
 #define XMLConverter_h__

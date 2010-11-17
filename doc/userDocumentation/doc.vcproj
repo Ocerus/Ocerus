@@ -104,7 +104,7 @@
 						Name="VCCustomBuildTool"
 						Description="Building whole documentation..."
 						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet Documentation.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet Documentation.tex&#x0D;&#x0A;"
-						AdditionalDependencies="Documentation.tex;CoreContent.tex;EditorContent.tex;EntitySystemContent.tex;GfxSystemContent.tex;GUISystemContent.tex;InputSystemContent.tex;LogSystemContent.tex;PlatformSetupContent.tex;ResourceSystemContent.tex;ScriptRegisterContent.tex;ScriptSystemContent.tex;StringSystemContent.tex;UtilsContent.tex"
+						AdditionalDependencies="Documentation.tex;CoreContent.tex;EditorContent.tex;EntitySystemContent.tex;GfxSystemContent.tex;GUISystemContent.tex;InputSystemContent.tex;LogSystemContent.tex;MemoryContent.tex;PlatformSetupContent.tex;ResourceSystemContent.tex;ScriptRegisterContent.tex;ScriptSystemContent.tex;StringSystemContent.tex;UtilsContent.tex"
 						Outputs="Documentation.pdf"
 					/>
 				</FileConfiguration>
@@ -115,7 +115,7 @@
 						Name="VCCustomBuildTool"
 						Description="Building whole documentation..."
 						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet Documentation.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet Documentation.tex&#x0D;&#x0A;"
-						AdditionalDependencies="Documentation.tex;CoreContent.tex;EditorContent.tex;EntitySystemContent.tex;GfxSystemContent.tex;GUISystemContent.tex;InputSystemContent.tex;LogSystemContent.tex;PlatformSetupContent.tex;ResourceSystemContent.tex;ScriptRegisterContent.tex;ScriptSystemContent.tex;StringSystemContent.tex;UtilsContent.tex"
+						AdditionalDependencies="Documentation.tex;CoreContent.tex;EditorContent.tex;EntitySystemContent.tex;GfxSystemContent.tex;GUISystemContent.tex;InputSystemContent.tex;LogSystemContent.tex;MemoryContent.tex;PlatformSetupContent.tex;ResourceSystemContent.tex;ScriptRegisterContent.tex;ScriptSystemContent.tex;StringSystemContent.tex;UtilsContent.tex"
 						Outputs="Documentation.pdf"
 					/>
 				</FileConfiguration>
@@ -273,6 +273,32 @@
 						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet LogSystem.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet LogSystem.tex&#x0D;&#x0A;"
 						AdditionalDependencies="LogSystem.tex;LogSystemContent.tex"
 						Outputs="LogSystem.pdf"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\Memory.tex"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Building Memory documentation..."
+						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet Memory.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet Memory.tex"
+						AdditionalDependencies="Memory.tex;MemoryContent.tex"
+						Outputs="Memory.pdf"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Building Memory documentation..."
+						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet Memory.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet Memory.tex"
+						AdditionalDependencies="Memory.tex;MemoryContent.tex"
+						Outputs="Memory.pdf"
 					/>
 				</FileConfiguration>
 			</File>
@@ -570,6 +596,18 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\MemoryContent.tex"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool

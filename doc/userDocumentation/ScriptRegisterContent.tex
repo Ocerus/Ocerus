@@ -224,7 +224,8 @@ This class represents the current game. It is registered as a no-handle referenc
   \item bool SaveToFile(const string \&in) -- saves the game to the specified file
   \item void Quit() -- quits the game
   \item uint64 GetTime() -- returns the current game time in miliseconds
-  \item void SetFullscreen(const bool) -- sets whether the game is in fullscreen mode
+  \item bool GetFullscreen() -- returns whether the game is in the fullscreen mode
+  \item void SetFullscreen(const bool) -- sets whether the game is in the fullscreen mode
   \item T Get\_T(string \&in) -- gets a value of a dynamic property of a specific name and type T from PropertyTypes.h
   \item void Set\_T(string \&in, T) -- sets a value of a dynamic property of a specific name and type T from PropertyTypes.h
 \end{titled-itemize}
