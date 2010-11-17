@@ -22,5 +22,29 @@ To support multiple platforms the engine defines a set of global type definition
 of the application. They all reside in headers in the <i>Setup</i> directory. The main header included in most files
 is Settings.h.
 
+@section timeline Project Timeline
+There is a project development timeline in the following list:
+
+01/2010 - reviewing existing code, use cases, unit test framework, library structure, log system, utilities
+
+02/2010 - script system, graphic system, entity system, 2D graphic components
+
+03/2010 - entity messages, camera and script component, profiler, memory management
+
+04/2010 - gui system, entity picking, dynamic properties
+
+05/2010 - rendering, gui console, resource system, input system, layer manager
+
+06/2010 - physic and model components, string manager, project management, editor
+
+07/2010 - documentation, poligon collider component
+
+08/2010 - loading screen, resource refreshing, hierarchy window
+
+09/2010 - configuration, sprite animation, testing, sample game
+
+10/2010 - GUI layout component, sample game GUI, shortcuts, documentation, game deploy
+
+11/2010 - testing, reviewing documentation, project deploy
   
 */
