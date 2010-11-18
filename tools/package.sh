@@ -62,7 +62,8 @@ if [ "$CUR_DIR_NAME" != "trunk" ]; then
 	exit
 fi
 
-OUTPUT_DIR=../cd
+
+OUTPUT_DIR=../output
 
 
 clearDirectory $OUTPUT_DIR/bin/Win32
@@ -98,6 +99,8 @@ processDirectory . externalLibs/rudeconfig $OUTPUT_DIR/sources '.*' $LIBS_EXCLUD
 processDirectory . externalLibs/SDL $OUTPUT_DIR/sources '.*' $LIBS_EXCLUDE
 processDirectory . externalLibs/SOIL $OUTPUT_DIR/sources '.*' $LIBS_EXCLUDE`excludeDir lib`
 processDirectory . externalLibs/UnitTest++ $OUTPUT_DIR/sources '.*' $LIBS_EXCLUDE
+
+processDirectory ../cd . $OUTPUT_DIR
 
 
 cd tools
