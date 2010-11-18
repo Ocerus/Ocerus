@@ -1,3 +1,10 @@
+#!/bin/bash
+set -e
+
+function clearDirectory {
+	echo "Removing `pwd`/$1"
+	rm -rf `pwd`/"$1"
+}
 
 function processDirectory {
 	# copies the directory into the output
@@ -37,6 +44,16 @@ function processDirectory {
 	cd - > /dev/null
 }
 
+function excludeDir {
+	echo -n '.*/'"$1"'\(/.*\)?$'
+}
+
+function excludeDirs {
+	for dir in "$@"; do
+		echo -n '.*/'"$dir"'\(/.*\)?$\|'
+	done
+}
+
 
 cd ..
 CUR_DIR_NAME=`basename \`pwd\``
@@ -45,23 +62,42 @@ if [ "$CUR_DIR_NAME" != "trunk" ]; then
 	exit
 fi
 
-OUTPUT_DIR=../output
+OUTPUT_DIR=../cd
 
-rm -rf $OUTPUT_DIR/bin/Win32
-rm -rf $OUTPUT_DIR/doc
-rm -rf $OUTPUT_DIR/shared
-rm -rf $OUTPUT_DIR/sources
 
-#processDirectory Win32/bin/Develop . $OUTPUT_DIR/bin/Win32 '.*Ocerus\.exe$\|.*Ocerus\.pdb$\|.*libexpat\.dll$'
-#processDirectory output . $OUTPUT_DIR/bin/Win32 '.*dbghelp\.dll$\|.*SDL\.dll$\|.*SILLY\.dll$\|.*SILLY_d\.dll$'
-#processDirectory . doc/doxygen $OUTPUT_DIR '.*/html/.*$\|.*index\.html$\|.*mainpage\.txt$\|.*Ocerus\.dox$'
-#processDirectory . doc/userDocumentation $OUTPUT_DIR '.*Documentation\.pdf$'
+clearDirectory $OUTPUT_DIR/bin/Win32
+clearDirectory $OUTPUT_DIR/doc
+clearDirectory $OUTPUT_DIR/shared
+clearDirectory $OUTPUT_DIR/sources/cmake
+clearDirectory $OUTPUT_DIR/sources/externalLibs
+clearDirectory $OUTPUT_DIR/sources/src
+clearDirectory $OUTPUT_DIR/sources/Win32
+
+
+processDirectory Win32/bin/Develop . $OUTPUT_DIR/bin/Win32 '.*Ocerus\.exe$\|.*Ocerus\.pdb$\|.*libexpat\.dll$'
+processDirectory output . $OUTPUT_DIR/bin/Win32 '.*dbghelp\.dll$\|.*SDL\.dll$\|.*SILLY\.dll$\|.*SILLY_d\.dll$'
+processDirectory . doc/doxygen $OUTPUT_DIR '.*/html/.*$\|.*index\.html$\|.*mainpage\.txt$\|.*Ocerus\.dox$'
+processDirectory . doc/userDocumentation $OUTPUT_DIR '.*Documentation\.pdf$'
 processDirectory output . $OUTPUT_DIR/shared '.*/data/.*\|.*/deploy/.*' '.*ActionSave\.xml$'
-#processDirectory output/projects . $OUTPUT_DIR/shared/samples
-#processDirectory . src $OUTPUT_DIR/sources
-#processDirectory . cmake $OUTPUT_DIR/sources
-#processDirectory . . $OUTPUT_DIR/sources '.*CMakeLists.txt$'
-#processDirectory . Win32 $OUTPUT_DIR/sources '.*\.vcproj$\|.*\.sln$\|.*\.txt$\|.*\.wew$' '.*/bin/.*'
+processDirectory output/projects . $OUTPUT_DIR/shared/samples
+processDirectory . src $OUTPUT_DIR/sources
+processDirectory . cmake $OUTPUT_DIR/sources
+processDirectory . . $OUTPUT_DIR/sources '.*CMakeLists.txt$'
+processDirectory . Win32 $OUTPUT_DIR/sources '.*\.vcproj$\|.*\.sln$\|.*\.txt$\|.*\.wew$' '.*/bin/.*'
+LIBS_EXCLUDE=`excludeDirs obj tmp bin debug develop release`'.*\.vcproj\..+$\|'
+processDirectory . externalLibs/angelscript $OUTPUT_DIR/sources '.*' $LIBS_EXCLUDE`excludeDir lib`
+processDirectory . externalLibs/boost $OUTPUT_DIR/sources '.*' $LIBS_EXCLUDE
+processDirectory . externalLibs/Box2D $OUTPUT_DIR/sources '.*' $LIBS_EXCLUDE`excludeDir library`
+processDirectory . externalLibs/cegui $OUTPUT_DIR/sources '.*' $LIBS_EXCLUDE'.*/lib/CEGUI.*\.lib$'
+processDirectory . externalLibs/DbgLib $OUTPUT_DIR/sources '.*' $LIBS_EXCLUDE
+processDirectory . externalLibs/dx9 $OUTPUT_DIR/sources '.*' $LIBS_EXCLUDE
+processDirectory . externalLibs/expat $OUTPUT_DIR/sources '.*' $LIBS_EXCLUDE
+processDirectory . externalLibs/ois $OUTPUT_DIR/sources '.*' $LIBS_EXCLUDE`excludeDir lib`
+processDirectory . externalLibs/RTHProfiler $OUTPUT_DIR/sources '.*' $LIBS_EXCLUDE`excludeDir lib`
+processDirectory . externalLibs/rudeconfig $OUTPUT_DIR/sources '.*' $LIBS_EXCLUDE`excludeDir lib`
+processDirectory . externalLibs/SDL $OUTPUT_DIR/sources '.*' $LIBS_EXCLUDE
+processDirectory . externalLibs/SOIL $OUTPUT_DIR/sources '.*' $LIBS_EXCLUDE`excludeDir lib`
+processDirectory . externalLibs/UnitTest++ $OUTPUT_DIR/sources '.*' $LIBS_EXCLUDE
 
 
 cd tools
