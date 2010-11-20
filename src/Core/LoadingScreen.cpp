@@ -34,7 +34,11 @@ void Core::LoadingScreen::DoLoading( eType type, const string& sceneName )
 	case TYPE_BASIC_RESOURCES:
 
 		// resources for the loading screen
-		gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_SYSTEM, "general/common", "Loading", ".+Loading.\\.png");
+		if (!gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_SYSTEM, "general/common", "Loading", ".+Loading.\\.png"))
+		{
+			boost::filesystem::path boostPath = boost::filesystem::complete(gResourceMgr.GetBasePath(ResourceSystem::BPT_SYSTEM) + "general/common");
+			CRITICAL_FAILURE(("Cannot locate essential resources at \"" + boostPath.string() + "\"").c_str());
+		}
 		gResourceMgr.LoadResourcesInGroup("Loading");
 
 		break;

@@ -47,7 +47,7 @@ namespace Core
 		virtual ~Application(void);
 
 		/// Inits the application (creates singletons, ...).
-		void Init();
+		void Init(const string& dir);
 
 		/// Main loop of the whole project.
 		void RunMainLoop(void);
@@ -127,6 +127,7 @@ namespace Core
 		bool mEditMode; ///< if true the editor is currently turned on and the game is running only in a small window.
 		Project* mGameProject; ///< Project used for the game itself.
 		bool mHasFocus;
+		string mDir;
 
 		/// Represents global settings of the application.
 		Config* mGlobalConfig;

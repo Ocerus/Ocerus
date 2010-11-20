@@ -68,6 +68,15 @@ int main(int argc, char* argv[])
 	OC_UNUSED(argv);
 #endif
 
+	string dir;
+
+	#ifdef __WIN__
+	dir = lpCmdLine;
+	#else
+	if (argc >= 2)
+		dir = argv[1];
+	#endif
+
 	// initialize memory
 	Memory::InitGlobalMemoryAllocation();
 
@@ -94,7 +103,7 @@ int main(int argc, char* argv[])
 	{
 		// run the application itself
 		Core::Application* app = new Core::Application();
-		app->Init();
+		app->Init(dir);
 		app->RunMainLoop();
 		delete app;
 	}

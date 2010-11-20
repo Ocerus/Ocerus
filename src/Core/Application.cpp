@@ -38,8 +38,10 @@ Application::Application():
 	#endif
 }
 
-void Application::Init()
+void Application::Init(const string& dir)
 {
+	mDir = dir;
+
 	// create basic singletons
 	LogSystem::LogMgr::CreateSingleton();
 	LogSystem::LogMgr::GetSingleton().Init("CoreLog.txt");
@@ -549,12 +551,16 @@ void Core::Application::YieldProcess()
 
 string Application::GetDataDir() const
 {
-	return "data/";
+	boost::filesystem::path boostPath = mDir;
+	boostPath /= "data/";
+	return boostPath.string();
 }
 
 string Application::GetDeployDir() const
 {
-	return "deploy";
+	boost::filesystem::path boostPath = mDir;
+	boostPath /= "deploy/";
+	return boostPath.string();
 }
 
 #else
