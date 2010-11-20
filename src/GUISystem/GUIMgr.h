@@ -29,7 +29,10 @@ namespace GUISystem
 		virtual ~GUIMgr();
 
 		/// Initializes GUI.
-		void Init();
+		void Init(const string& ceguiLogPath);
+
+		/// Initializes GUI resources.
+		void InitResources();
 
 		/// Deinitializes GUI.
 		void Deinit();

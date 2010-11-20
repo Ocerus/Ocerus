@@ -41,23 +41,6 @@ GUIMgr::GUIMgr():
 	mScriptProvider(0),
 	mGUIConsole(0)
 {
-	ocInfo << "*** GUIMgr init ***";
-
-	mRenderer = &CEGUI::OpenGLRenderer::create();
-	mResourceProvider = new ResourceProvider();
-	mScriptProvider = new ScriptProvider();
-	mCEGUI = &CEGUI::System::create(*mRenderer, mResourceProvider, 0, 0, mScriptProvider);
-
-	gInputMgr.AddInputListener(this);
-	gGfxWindow.AddScreenListener(this);
-
-	CEGUI::Imageset::setDefaultResourceGroup("gui-imagesets");
-	CEGUI::Font::setDefaultResourceGroup("gui-fonts");
-	CEGUI::Scheme::setDefaultResourceGroup("gui-schemes");
-	CEGUI::WidgetLookManager::setDefaultResourceGroup("gui-looknfeels");
-	CEGUI::WindowManager::setDefaultResourceGroup("gui-layouts");
-	mGUIConsole = new GUIConsole();
-	mPopupMgr = new PopupMgr();
 }
 
 GUIMgr::~GUIMgr()
@@ -79,7 +62,28 @@ GUIMgr::~GUIMgr()
 	delete mScriptProvider;
 }
 
-void GUIMgr::Init()
+void GUIMgr::Init(const string& ceguiLogPath)
+{
+	ocInfo << "*** GUIMgr init ***";
+
+	mRenderer = &CEGUI::OpenGLRenderer::create();
+	mResourceProvider = new ResourceProvider();
+	mScriptProvider = new ScriptProvider();
+	mCEGUI = &CEGUI::System::create(*mRenderer, mResourceProvider, 0, 0, mScriptProvider, "", ceguiLogPath);
+
+	gInputMgr.AddInputListener(this);
+	gGfxWindow.AddScreenListener(this);
+
+	CEGUI::Imageset::setDefaultResourceGroup("gui-imagesets");
+	CEGUI::Font::setDefaultResourceGroup("gui-fonts");
+	CEGUI::Scheme::setDefaultResourceGroup("gui-schemes");
+	CEGUI::WidgetLookManager::setDefaultResourceGroup("gui-looknfeels");
+	CEGUI::WindowManager::setDefaultResourceGroup("gui-layouts");
+	mGUIConsole = new GUIConsole();
+	mPopupMgr = new PopupMgr();
+}
+
+void GUIMgr::InitResources()
 {
 	LoadGeneralResources();
 

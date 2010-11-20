@@ -60,12 +60,33 @@ void Application::Init(const string& sharedDir)
 	}
 
 	// create basic singletons
+
+	boost::filesystem::path logDir;
+	boost::filesystem::ofstream outStream;
+
+	boost::filesystem::path tempPath(std::getenv("TEMP"));
+	const char* coreLogFilename = "CoreLog.txt";
+	const char* configFilename = "config.ini";
+	const char* ceguiLogFilename = "CEGUI.log";
+	const char* ocerusTempDir = "Ocerus";
+	outStream.open(coreLogFilename);
+
+	if (!outStream.is_open())
+	{
+		logDir = tempPath /= ocerusTempDir;
+		boost::filesystem::create_directory(logDir);
+	}
+	else
+	{
+		outStream.close();
+	}
+
 	LogSystem::LogMgr::CreateSingleton();
-	LogSystem::LogMgr::GetSingleton().Init("CoreLog.txt");
+	LogSystem::LogMgr::GetSingleton().Init((logDir / coreLogFilename).string());
 	LogSystem::Profiler::CreateSingleton();
 
 	// get access to config file
-	mGlobalConfig = new Config("config.ini");
+	mGlobalConfig = new Config((logDir / configFilename).string());
 	GlobalProperties::SetPointer("GlobalConfig", mGlobalConfig);
 
 	// make the app settings public
@@ -120,6 +141,7 @@ void Application::Init(const string& sharedDir)
 	EntitySystem::EntityMgr::CreateSingleton();
 
 	GUISystem::GUIMgr::CreateSingleton();
+	GUISystem::GUIMgr::GetSingleton().Init((logDir / ceguiLogFilename).string());
 
 	Editor::EditorMgr::CreateSingleton();
 	EntitySystem::LayerMgr::CreateSingleton();

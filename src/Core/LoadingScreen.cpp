@@ -66,7 +66,7 @@ void Core::LoadingScreen::DoLoading( eType type, const string& sceneName )
 		gResourceMgr.LoadResourcesInGroup("Scripts");
 
 		// start up the GUI stuff
-		gGUIMgr.Init();
+		gGUIMgr.InitResources();
 
 		break;
 
