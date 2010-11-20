@@ -1,0 +1,112 @@
+Ocerus Linux Installation Instructions
+**************************************
+
+This document describes how to install Ocerus on linux system.
+
+Manual compilation
+******************
+
+Unlike Ocerus Windows version, the Linux version compiles with shared system
+libraries in mind. This however means that you need the following libraries in
+the system:
+
+* CEGUI-0.7.1 (http://www.cegui.org.uk)
+* OIS-1.2.0 (http://sourceforge.net/projects/wgois)
+* Boost-1.41.0 (http://www.boost.org)
+* Expat-2.0.1 (http://expat.sourceforge.net)
+* SDL-1.2 (http://www.libsdl.org)
+* UnitTest++-1.4 (http://unittest-cpp.sourceforge.net)
+
+All of these libraries are opensource and most of them are probably in your
+distribution. You also need the following tools:
+* GCC-4.4
+* CMake-2.8
+
+The following step-by-step guide is written for Ubuntu Linux 10.10:
+
+1. Install necessary tools
+
+sudo apt-get install build-essential cmake cmake-curses-gui
+
+2. Install CEGUI
+Unfortunatelly CEGUI in version 0.7.1 is not present in most of linux
+distributions, so you need to compile it yourself. But first you need to
+install CEGUI build dependencies:
+
+    sudo apt-get install libfreetype6-dev libpcre3-dev libxml2-dev libglew15-dev libdevil-dev libpng-dev libmng-dev libxpm-dev libxcursor-dev libxxf86vm-dev
+
+Then you need to extract CEGUI sources to a directory. You can find the
+CEGUI-0.7.1.tar.gz file on the CD:
+
+    tar xzf CEGUI-0.7.1.tar.gz
+    cd CEGUI-0.7.1
+
+After that you need to configure CEGUI with the following command:
+
+    ./configure --enable-devil \
+                --enable-libxml \
+                --disable-tinyxml \
+                --disable-expat \
+                --disable-lua-module \
+                --disable-ogre-renderer \
+                --enable-opengl-renderer
+
+If you do not want to install the application to system paths (and you
+should not want to) you can define installation prefix with --prefix
+parameter:
+
+    ./configure --prefix=/usr/local \
+                --enable-devil \
+                --enable-libxml \
+                --disable-tinyxml \
+                --disable-expat \
+                --disable-lua-module \
+                --disable-ogre-renderer \
+                --enable-opengl-renderer
+
+Then just run:
+
+    make
+    make install
+
+3. Install other dependencies
+
+    sudo apt-get install libois-dev libboost-system-dev
+    libboost-filesystem-dev libboost-regex-dev libexpat-dev libsdl1.2-dev libunittest++-dev
+
+4. Compile OCERUS
+Ocerus uses the CMake build system that allows to compile projects out of
+sources, so your build directory is different than your source directory. So
+first create your build directory.
+
+    mkdir ocerus-build
+    cd ocerus-build
+
+Then you have to configure the project. The configuration process looks for
+all the dependencies. If you installed CEGUI to a different directory, you
+need to tell CMake about it. CEGUI uses pkg-config to propagate library
+information so you need to setup PKG_CONFIG_PATH environment variable. For
+instance, if your installation prefix was /usr/local, you need to set
+PKG_CONFIG_PATH with the following command:
+
+    export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
+
+After that you are ready to configure the project. Use path to ocerus source
+dir as an argument to cmake command:
+
+    cmake /mnt/cdrom/sources
+
+If you want to change some build options, you can use ccmake command:
+
+    ccmake /mnt/cdrom/sources
+
+Finally type make:
+
+    make
+
+After the project was build, you can immediatelly run it by typing:
+
+    ./ocerus-main
+
+
+
