@@ -22,8 +22,6 @@ The main class of the GUI system is the \emph{GUISystem::GUIMgr} which is a conn
 
 For loading a root layout from a file the method \emph{GUIMgr::LoadRootLayout} is provided with only one parameter specifying a name of a file where a layout is defined. This method calls the \emph{GUIMgr::LoadWindowLayout} which is a common method for loading a window layout from a file that also provides a translation of all texts via the string manager. There are also methods for unloading and getting the current root layout. For more information about layouts see section \ref{sub:gui-layouts}.
 
-Sometimes it is needed to disconnect a callback function from an event such as a mouse click on a button. Since the CEGUI library crashes when an event is disconnected in its callback the \emph{GUIMgr::DisconnectEvent} method is introduced which adds the event to the list of events that should be disconnected and the real disconnection will process after calling the method \emph{GUIMgr::ProcessDisconnectedEventList} in the application main loop.
-
 There are two more methods called in the application main loop. First the \emph{GUIMgr::Update} updates time of GUI system, then the \emph{GUIMgr::Render\-GUI} draws the whole GUI. There are several input callback methods that converts an OIS library representation of keyboard and mouse events to a CEGUI one and forwards them to the CEGUI library. It is possible to get the currently processing input event by the \emph{GUIMgr::GetCurrentInputEvent} method. There is also a callback method for a resolution change that forwards this information to the CEGUI library too.
 
 \subsection{GUI resources}
