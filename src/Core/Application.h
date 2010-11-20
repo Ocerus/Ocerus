@@ -41,13 +41,13 @@ namespace Core
 	public:
 
 		/// Does all necessary init prior to the main execution.
-		Application(void);
+		Application();
 
 		/// Cleans up everything.
 		virtual ~Application(void);
 
 		/// Inits the application (creates singletons, ...).
-		void Init(const string& dir);
+		void Init(const string& sharedDir);
 
 		/// Main loop of the whole project.
 		void RunMainLoop(void);
@@ -127,7 +127,6 @@ namespace Core
 		bool mEditMode; ///< if true the editor is currently turned on and the game is running only in a small window.
 		Project* mGameProject; ///< Project used for the game itself.
 		bool mHasFocus;
-		string mDir;
 
 		/// Represents global settings of the application.
 		Config* mGlobalConfig;
@@ -156,6 +155,10 @@ namespace Core
 		int32 mConsoleY;
 		int32 mConsoleWidth;
 		int32 mConsoleHeight;
+
+		/// Paths
+		string mSharedDir;
+		string mUserDir;
 
 	};
 }

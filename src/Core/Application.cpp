@@ -38,9 +38,26 @@ Application::Application():
 	#endif
 }
 
-void Application::Init(const string& dir)
+void Application::Init(const string& sharedDir)
 {
-	mDir = dir;
+	mSharedDir = sharedDir;
+	
+	if (mSharedDir.empty())
+	{
+#ifdef _DEBUG // In debug build we can consider current directory as mSharedDir
+		if (boost::filesystem::exists("data") && boost::filesystem::exists("deploy"))
+		{
+			mSharedDir = ".";
+		}
+#endif
+
+#ifdef OCERUS_SHARED_DIR
+		if (mSharedDir.empty())
+		{
+			mSharedDir = OCERUS_SHARED_DIR;
+		}
+#endif
+	}
 
 	// create basic singletons
 	LogSystem::LogMgr::CreateSingleton();
@@ -63,6 +80,17 @@ void Application::Init(const string& dir)
 
 	// debug window
 	if (mDevelopMode) ShowConsole();
+
+	// test shared dirs
+	if (!boost::filesystem::exists(GetDataDir()))
+	{
+		ocError << "Ocerus data directory does not exist: " << GetDataDir();
+	}
+
+	if (mDevelopMode && !boost::filesystem::exists(GetDeployDir()))
+	{
+		ocError << "Ocerus deploy directory does not exist: " << GetDeployDir();
+	}
 
 	// create singletons
 
@@ -468,6 +496,20 @@ bool Application::CheckDeployDestination(const string& destination)
 	return true;
 }
 
+string Application::GetDataDir() const
+{
+	boost::filesystem::path boostPath = mSharedDir;
+	boostPath /= "data/";
+	return boostPath.string();
+}
+
+string Application::GetDeployDir() const
+{
+	boost::filesystem::path boostPath = mSharedDir;
+	boostPath /= "deploy/";
+	return boostPath.string();
+}
+
 //-----------------------------------------------------
 // Platfofm specific functions follow.
 
@@ -549,20 +591,6 @@ void Core::Application::YieldProcess()
 	Sleep(1);
 }
 
-string Application::GetDataDir() const
-{
-	boost::filesystem::path boostPath = mDir;
-	boostPath /= "data/";
-	return boostPath.string();
-}
-
-string Application::GetDeployDir() const
-{
-	boost::filesystem::path boostPath = mDir;
-	boostPath /= "deploy/";
-	return boostPath.string();
-}
-
 #else
 
 //------------
@@ -621,39 +649,6 @@ void Core::Application::YieldProcess()
 {
 	// Update each 20ms, mouse is still OK
 	usleep(20000);
-}
-
-// Default value for OCERUS_SHARED_DIR. It can be set in cmake.
-#ifndef OCERUS_SHARED_DIR
-#define OCERUS_SHARED_DIR "/usr/share/ocerus"
-#endif
-
-string GetOcerusSharedDir()
-{
-	static string ocerusSharedDir;
-#ifdef _DEBUG // In debug build we can consider current directory as ocerusSharedDir
-	if (ocerusSharedDir.empty() && boost::filesystem::exists("data") && boost::filesystem::exists("deploy"))
-	{
-		// current directory is valid ocerusSharedDir
-		ocerusSharedDir = ".";
-	}
-#endif
-
-	if (ocerusSharedDir.empty())
-	{
-		ocerusSharedDir = OCERUS_SHARED_DIR;
-	}
-	return ocerusSharedDir;
-}
-
-string Application::GetDataDir() const
-{
-	return GetOcerusSharedDir() + "/data/";
-}
-
-string Application::GetDeployDir() const
-{
-	return GetOcerusSharedDir() + "/deploy/";
 }
 
 #endif

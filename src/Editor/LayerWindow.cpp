@@ -23,7 +23,7 @@ Editor::LayerWindow::~LayerWindow()
 
 void Editor::LayerWindow::Init()
 {
-	CEGUI_TRY;
+	OC_CEGUI_TRY;
 	{
 		mWindow = gGUIMgr.GetWindow("Editor/LayerWindow");
 		OC_ASSERT(mWindow);
@@ -35,7 +35,7 @@ void Editor::LayerWindow::Init()
 		mTree->subscribeEvent(CEGUI::Window::EventMouseClick, CEGUI::Event::Subscriber(&Editor::LayerWindow::OnTreeClicked, this));
 		mWindow->addChildWindow(mTree);
 	}
-	CEGUI_CATCH;
+	OC_CEGUI_CATCH;
 
 	OC_ASSERT(mWindow != 0);
 	OC_ASSERT(mTree != 0);
@@ -284,7 +284,7 @@ bool LayerWindow::OnDragDropItemDropped(const CEGUI::EventArgs& e)
 
 void Editor::LayerWindow::Update()
 {
-	CEGUI_TRY;
+	OC_CEGUI_TRY;
 	{
 		vector<CEGUI::ItemEntry*> itemsToBeDeleted;
 
@@ -382,7 +382,7 @@ void Editor::LayerWindow::Update()
 		}
 		mTree->sortList();
 	}
-	CEGUI_CATCH;
+	OC_CEGUI_CATCH;
 }
 
 void LayerWindow::SetSelectedEntity(EntitySystem::EntityHandle selectedEntity)

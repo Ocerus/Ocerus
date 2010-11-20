@@ -1082,21 +1082,21 @@ bool WindowIsVisible(const CEGUI::Window* self)
 
 CEGUI::String WindowGetProperty(const CEGUI::String& propertyName, const CEGUI::Window* self)
 {
-	CEGUI_TRY;
+	OC_CEGUI_TRY;
 	{
 		return self->getProperty(propertyName);
 	}
-	CEGUI_CATCH;
+	OC_CEGUI_CATCH;
 	return "";
 }
 
 void WindowSetProperty(const CEGUI::String& propertyName, const CEGUI::String& value, CEGUI::Window* self)
 {
-	CEGUI_TRY;
+	OC_CEGUI_TRY;
 	{
 		self->setProperty(propertyName, value);
 	}
-	CEGUI_CATCH;
+	OC_CEGUI_CATCH;
 }
 
 template<class T>

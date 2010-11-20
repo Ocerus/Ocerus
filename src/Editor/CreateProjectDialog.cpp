@@ -24,7 +24,7 @@ Editor::CreateProjectDialog::~CreateProjectDialog()
 
 void CreateProjectDialog::Init()
 {
-	CEGUI_TRY;
+	OC_CEGUI_TRY;
 	{
 		mDialog = gGUIMgr.LoadSystemLayout("CreateProject.layout", "CreateProjectDialog");
 		mNameValue = mDialog->getChildRecursive("CreateProjectDialog/NameValue");
@@ -42,7 +42,7 @@ void CreateProjectDialog::Init()
 		gGUIMgr.GetGUISheet()->addChildWindow(mDialog);
 		mDialog->hide();
 	}
-	CEGUI_CATCH;
+	OC_CEGUI_CATCH;
 }
 
 void CreateProjectDialog::Show()

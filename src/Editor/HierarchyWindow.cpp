@@ -27,7 +27,7 @@ Editor::HierarchyWindow::~HierarchyWindow()
 void Editor::HierarchyWindow::Init()
 {
 	ClearHierarchy();
-	CEGUI_TRY;
+	OC_CEGUI_TRY;
 	{
 		mWindow = gGUIMgr.GetWindow("Editor/HierarchyWindow");
 		OC_ASSERT(mWindow);
@@ -39,7 +39,7 @@ void Editor::HierarchyWindow::Init()
 		mTree->subscribeEvent(CEGUI::Window::EventDragDropItemDropped, CEGUI::Event::Subscriber(&Editor::HierarchyWindow::OnItemDroppedOnTree, this));
 		mWindow->addChildWindow(mTree);
 	}
-	CEGUI_CATCH;
+	OC_CEGUI_CATCH;
 
 	CreatePopupMenu();
 }

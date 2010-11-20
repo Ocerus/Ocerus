@@ -21,7 +21,7 @@ Editor::PrototypeWindow::~PrototypeWindow()
 
 void Editor::PrototypeWindow::Init()
 {
-	CEGUI_TRY;
+	OC_CEGUI_TRY;
 	{
 		mWindow = gGUIMgr.GetWindow("Editor/PrototypeWindow");
 		OC_ASSERT(mWindow);
@@ -32,7 +32,7 @@ void Editor::PrototypeWindow::Init()
 		mWindow->addChildWindow(mList);
 		mList->subscribeEvent(CEGUI::Window::EventMouseClick, CEGUI::Event::Subscriber(&Editor::PrototypeWindow::OnListClicked, this));
 	}
-	CEGUI_CATCH;
+	OC_CEGUI_CATCH;
 
 	CreatePopupMenu();
 	Update();

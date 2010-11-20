@@ -97,7 +97,7 @@ void GUIMgr::LoadGeneralResources()
 	gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_SYSTEM, "general/gui/fonts", "gui-fonts", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
 	gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_SYSTEM, "general/gui/looknfeel", "gui-looknfeels", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
 
-	CEGUI_TRY;
+	OC_CEGUI_TRY;
 	{
 		CEGUI::SchemeManager::getSingleton().create("general/gui/schemes/TaharezLook.scheme");
 
@@ -106,7 +106,7 @@ void GUIMgr::LoadGeneralResources()
 		mCEGUI->setDefaultMouseCursor("TaharezLook", "MouseArrow");
 		mCEGUI->setMouseClickEventGenerationEnabled(true);
 	}
-	CEGUI_CATCH_CRITICAL;
+	OC_CEGUI_CATCH_CRITICAL;
 }
 
 void GUIMgr::LoadEditorResources()
@@ -118,7 +118,7 @@ void GUIMgr::LoadEditorResources()
 	gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_SYSTEM, "gui/layouts", "gui-layouts", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
 	gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_SYSTEM, "gui/looknfeel", "gui-looknfeels", ".*", "", ResourceSystem::RESTYPE_CEGUIRESOURCE);
 
-	CEGUI_TRY;
+	OC_CEGUI_TRY;
 	{
 		// Register custom Window subclasses to the CEGUI
 		CEGUI::WindowFactoryManager::addFactory<CEGUI::TplWindowFactory<ViewportWindow> >();
@@ -131,7 +131,7 @@ void GUIMgr::LoadEditorResources()
 		mCEGUI->setDefaultMouseCursor("Vanilla-Images", "MouseArrow");
 		mCEGUI->setMouseClickEventGenerationEnabled(true);
 	}
-	CEGUI_CATCH_CRITICAL;
+	OC_CEGUI_CATCH_CRITICAL;
 }
 
 void GUIMgr::Deinit()
@@ -153,17 +153,17 @@ void GUIMgr::DeinitConsole()
 void GUIMgr::LoadSystemScheme(const string& filename)
 {
 	OC_ASSERT(mCEGUI);
-	CEGUI_TRY;
+	OC_CEGUI_TRY;
 	{
 		CEGUI::SchemeManager::getSingleton().create(filename);
 	}
-	CEGUI_CATCH;
+	OC_CEGUI_CATCH;
 }
 
 void GUIMgr::LoadProjectScheme(const string& filename)
 {
 	OC_ASSERT(mCEGUI);
-	CEGUI_TRY;
+	OC_CEGUI_TRY;
 	{
 		CEGUI::String oldResourceGroup = mCEGUI->getResourceProvider()->getDefaultResourceGroup();
 		CEGUI::String oldImagesetGroup = CEGUI::Imageset::getDefaultResourceGroup();
@@ -176,17 +176,17 @@ void GUIMgr::LoadProjectScheme(const string& filename)
 		CEGUI::Imageset::setDefaultResourceGroup(oldImagesetGroup);
 		CEGUI::Font::setDefaultResourceGroup(oldFontGroup);
 	}
-	CEGUI_CATCH;
+	OC_CEGUI_CATCH;
 }
 
 void GUIMgr::LoadSystemImageset(const string& filename)
 {
 	OC_DASSERT(mCEGUI);
-	CEGUI_TRY;
+	OC_CEGUI_TRY;
 	{
 		CEGUI::ImagesetManager::getSingleton().create("gui/imagesets/" + filename);
 	}
-	CEGUI_CATCH;
+	OC_CEGUI_CATCH;
 
 }
 
@@ -195,11 +195,11 @@ CEGUI::Window* GUIMgr::LoadSystemLayout(const CEGUI::String& filename, const CEG
 	OC_DASSERT(mCEGUI);
 	CEGUI::Window* resultLayout = 0;
 
-	CEGUI_TRY;
+	OC_CEGUI_TRY;
 	{
 		resultLayout = CEGUI::WindowManager::getSingleton().loadWindowLayout("gui/layouts/" + filename, namePrefix, "", SystemLayoutPropertyCallback);
 	}
-	CEGUI_CATCH;
+	OC_CEGUI_CATCH;
 
 	if (resultLayout) ocInfo << "System GUI layout " << filename << " loaded.";
 	else ocWarning << "Cannot load system GUI layout " << filename << ".";
@@ -212,11 +212,11 @@ CEGUI::Window* GUIMgr::LoadProjectLayout(const CEGUI::String& filename, const CE
 	OC_DASSERT(mCEGUI);
 	CEGUI::Window* resultLayout = 0;
 
-	CEGUI_TRY;
+	OC_CEGUI_TRY;
 	{
 		resultLayout = CEGUI::WindowManager::getSingleton().loadWindowLayout(filename, namePrefix, "Project", ProjectLayoutPropertyCallback);
 	}
-	CEGUI_CATCH;
+	OC_CEGUI_CATCH;
 
 	if (resultLayout) ocInfo << "Project GUI layout " << filename << " loaded.";
 	else ocWarning << "Cannot load project GUI layout " << filename << ".";

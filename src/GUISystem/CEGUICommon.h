@@ -11,16 +11,16 @@
 /// use the following macros.
 //@{
 	/// The beginning of the CEGUI exception handling block.
-	#define CEGUI_TRY try {
+	#define OC_CEGUI_TRY try {
 
 	/// The end of the CEGUI exception handling block that handles non-critical exceptions.
-	#define CEGUI_CATCH \
+	#define OC_CEGUI_CATCH \
 		} catch(const CEGUI::Exception& e) { \
 			ocError << "CEGUI Error: " << e.getMessage(); \
 		}
 
 	/// The end of the CEGUI exception handling block that handles critical exceptions.
-	#define CEGUI_CATCH_CRITICAL \
+	#define OC_CEGUI_CATCH_CRITICAL \
 		} catch(const CEGUI::Exception& e) { \
 			ocError << "CEGUI Error: " << e.getMessage(); \
 			CRITICAL_FAILURE("Last error was critical"); \

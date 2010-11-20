@@ -29,7 +29,7 @@ Editor::ResourceWindow::~ResourceWindow()
 
 void Editor::ResourceWindow::Init()
 {
-	CEGUI_TRY;
+	OC_CEGUI_TRY;
 	{
 		mWindow = gGUIMgr.GetWindow("Editor/ResourceWindow");
 		OC_ASSERT(mWindow);
@@ -41,7 +41,7 @@ void Editor::ResourceWindow::Init()
 		mTree->setUserString("WantsMouseWheel", "True");
 		mWindow->addChildWindow(mTree);
 	}
-	CEGUI_CATCH;
+	OC_CEGUI_CATCH;
 
 	OC_ASSERT(mWindow != 0);
 	OC_ASSERT(mTree != 0);

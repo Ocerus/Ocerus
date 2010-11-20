@@ -36,7 +36,7 @@ PromptBox::~PromptBox()
 
 void PromptBox::SetText(const CEGUI::String& text)
 {
-	CEGUI_TRY;
+	OC_CEGUI_TRY;
 	{
 		CEGUI::Window* messageText = mPromptBox->getChild(mPromptBox->getName() + "/MessageText");
 		CEGUI::Window* editbox = mPromptBox->getChild(mPromptBox->getName() + "/Editbox");
@@ -58,7 +58,7 @@ void PromptBox::SetText(const CEGUI::String& text)
 
 		EnsureWindowIsWideEnough();
 	}
-	CEGUI_CATCH;
+	OC_CEGUI_CATCH;
 }
 
 void PromptBox::Show()

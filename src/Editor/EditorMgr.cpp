@@ -223,15 +223,9 @@ void Editor::EditorMgr::ShowCreateEntityPrompt(EntityHandle parent)
 
 void Editor::EditorMgr::ResolveSaveMessageBoxClicked(GUISystem::MessageBox::eMessageBoxButton button, int32 t)
 {
-	eMessageBoxTags tag = (eMessageBoxTags)t;
-	switch(tag)
-	{
-	case MBT_SAVE:
-		if (button == GUISystem::MessageBox::MBB_YES)
-			SaveOpenedScene();
-		return;
-	}
-	ocWarning << "MessageBox with tag " << tag << " clicked, but no action defined.";
+	OC_UNUSED(t);
+	if (button == GUISystem::MessageBox::MBB_YES)
+		SaveOpenedScene();
 }
 
 void Editor::EditorMgr::OnCreateProjSaveMessageBoxClicked(GUISystem::MessageBox::eMessageBoxButton button, int32 t)
@@ -287,33 +281,21 @@ void Editor::EditorMgr::OnCloseSceneSaveMessageBoxClicked(GUISystem::MessageBox:
 
 void Editor::EditorMgr::OnQuitSaveMessageBoxClicked(GUISystem::MessageBox::eMessageBoxButton button, int32 t)
 {
-	eMessageBoxTags tag = (eMessageBoxTags)t;
-	switch(tag)
+	OC_UNUSED(t);
+	if (button == GUISystem::MessageBox::MBB_YES)
 	{
-	case MBT_QUIT:
-		if (button == GUISystem::MessageBox::MBB_YES)
-		{
-			SaveOpenedScene();
-			gApp.Shutdown();
-		}
-		if (button == GUISystem::MessageBox::MBB_NO)
-			gApp.Shutdown();
-		return;
+		SaveOpenedScene();
+		gApp.Shutdown();
 	}
-	ocWarning << "MessageBox with tag " << tag << " clicked, but no action defined.";
+	if (button == GUISystem::MessageBox::MBB_NO)
+		gApp.Shutdown();
 }
 
 void Editor::EditorMgr::OnQuitMessageBoxClicked(GUISystem::MessageBox::eMessageBoxButton button, int32 t)
 {
-	eMessageBoxTags tag = (eMessageBoxTags)t;
-	switch(tag)
-	{
-	case MBT_QUIT:
-		if (button == GUISystem::MessageBox::MBB_YES)
-			gApp.Shutdown();
-		return;
-	}
-	ocWarning << "MessageBox with tag " << tag << " clicked, but no action defined.";
+	OC_UNUSED(t);
+	if (button == GUISystem::MessageBox::MBB_YES)
+		gApp.Shutdown();
 }
 
 void Editor::EditorMgr::OnFolderSelected(const string& path, const string& editboxValue, bool canceled, int32 t)

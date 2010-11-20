@@ -18,14 +18,14 @@ EditorMenu::~EditorMenu()
 
 void Editor::EditorMenu::Init()
 {
-	CEGUI_TRY;
+	OC_CEGUI_TRY;
 	{
 		mTopMenu = static_cast<CEGUI::PopupMenu*>(gGUIMgr.GetWindow("Editor/TopMenu"));
 		InitMenu();
 		InitToolbar();
 		mTopMenu->subscribeEvent(CEGUI::Window::EventDeactivated, CEGUI::Event::Subscriber(&Editor::EditorMenu::OnTopMenuDeactivated, this));
 	}
-	CEGUI_CATCH_CRITICAL;
+	OC_CEGUI_CATCH_CRITICAL;
 }
 
 bool Editor::EditorMenu::OnTopMenuDeactivated(const CEGUI::EventArgs& e)
@@ -163,7 +163,7 @@ bool Editor::EditorMenu::OnToolbarButtonStateChanged(const CEGUI::EventArgs& e)
 
 void EditorMenu::UpdateSceneMenu()
 {
-	CEGUI_TRY;
+	OC_CEGUI_TRY;
 	{
 		Core::SceneInfoList scenes;
 		gEditorMgr.GetCurrentProject()->GetSceneList(scenes);
@@ -179,12 +179,12 @@ void EditorMenu::UpdateSceneMenu()
 			mOpenSceneSubmenu->addChildWindow(CreateMenuItem("Editor/TopMenu/Scene/OpenScene/" + StringConverter::ToString(sceneID), it->name + " (" + it->filename + ")", "", sceneID));
 		}
 	}
-	CEGUI_CATCH;
+	OC_CEGUI_CATCH;
 }
 
 void EditorMenu::UpdateItemsEnabled()
 {
-	CEGUI_TRY;
+	OC_CEGUI_TRY;
 	{
 		bool editMenuEnabled = gEditorMgr.GetCurrentProject()->IsSceneOpened();
 		bool sceneMenuEnabled = gEditorMgr.GetCurrentProject()->IsProjectOpened();
@@ -209,7 +209,7 @@ void EditorMenu::UpdateItemsEnabled()
 			sceneMenu->getChildAtIdx(childIdx)->setEnabled(sceneMenuEnabled);
 		}
 	}
-	CEGUI_CATCH;
+	OC_CEGUI_CATCH;
 }
 
 void Editor::EditorMenu::SwitchToolButton( uint32 selectedButtonIndex )

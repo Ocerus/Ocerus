@@ -8,6 +8,7 @@
 #include "../LogSystem/LogMacros.h"
 #include "../Memory/GlobalAllocation.h"
 #include <exception>
+#include <CEGUIExceptions.h>
 
 #include <boost/regex.hpp>
 #include "Utils/StringKey.h"
@@ -64,17 +65,15 @@ INT WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 #else
 int main(int argc, char* argv[])
 {
-	OC_UNUSED(argc);
-	OC_UNUSED(argv);
 #endif
 
-	string dir;
+	string sharedDir;
 
 	#ifdef __WIN__
-	dir = lpCmdLine;
+	sharedDir = lpCmdLine;
 	#else
 	if (argc >= 2)
-		dir = argv[1];
+		sharedDir = argv[1];
 	#endif
 
 	// initialize memory
@@ -103,9 +102,19 @@ int main(int argc, char* argv[])
 	{
 		// run the application itself
 		Core::Application* app = new Core::Application();
-		app->Init(dir);
+		app->Init(sharedDir);
 		app->RunMainLoop();
 		delete app;
+	}
+	catch (CEGUI::Exception& e)
+	{
+		if (LogSystem::LogMgr::GetSingletonPtr())
+		{
+			LogSystem::LogMgr::GetSingleton().LogMessage(string("A CEGUI exception has occured: ") + e.what()
+			, LL_ERROR);
+		}
+		OC_FAIL(e.what());
+		return -1;
 	}
 	catch (std::exception& e)
 	{
@@ -114,6 +123,15 @@ int main(int argc, char* argv[])
 			LogSystem::LogMgr::GetSingleton().LogMessage(string("An exception has occured: ") + e.what(), LL_ERROR);
 		}
 		OC_FAIL(e.what());
+		return -1;
+	}
+	catch (const char* e)
+	{
+		if (LogSystem::LogMgr::GetSingletonPtr())
+		{
+			LogSystem::LogMgr::GetSingleton().LogMessage(string("An exception has occured: ") + string(e), LL_ERROR);
+		}
+		OC_FAIL(e);
 		return -1;
 	}
 	catch (...)
@@ -125,7 +143,6 @@ int main(int argc, char* argv[])
 		OC_FAIL("An unknown exception has occured!");
 		return -1;
 	}
-
 	return 0;
 }
 

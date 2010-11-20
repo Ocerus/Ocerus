@@ -25,7 +25,7 @@ void GUIConsole::Init()
 		ocError << "Cannot initialize GUIConsole. GUISheet was not set yet.";
 		return;
 	}
-	CEGUI_TRY;
+	OC_CEGUI_TRY;
 	{
 		mWidget = gGUIMgr.LoadSystemLayout("GUIConsole.layout");
 		gGUIMgr.GetGUISheet()->addChildWindow(mWidget);
@@ -34,7 +34,7 @@ void GUIConsole::Init()
 		mPromptBoxWidget->subscribeEvent(CEGUI::Editbox::EventKeyDown, CEGUI::Event::Subscriber(&GUIConsole::OnEventKeyDown, this));
 		mIsInited = true;
 	}
-	CEGUI_CATCH;
+	OC_CEGUI_CATCH;
 }
 
 void GUIConsole::Deinit()
@@ -42,12 +42,12 @@ void GUIConsole::Deinit()
 	if (!mIsInited)
 		return;
 
-	CEGUI_TRY;
+	OC_CEGUI_TRY;
 	{
 		gGUIMgr.DestroyWindow(mWidget);
 		mWidget = mPromptBoxWidget = mMessageBoxWidget = 0;
 	}
-	CEGUI_CATCH;
+	OC_CEGUI_CATCH;
 }
 
 void GUIConsole::AppendLogMessage(const string& logMessage, int32 logLevel)

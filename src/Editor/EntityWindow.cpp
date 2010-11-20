@@ -29,7 +29,7 @@ void EntityWindow::Init()
 {
 	mValueEditorFactory = new ValueEditorFactory();
 
-	CEGUI_TRY;
+	OC_CEGUI_TRY;
 	{
 		mWindow = gGUIMgr.GetWindow("Editor/EntityWindow");
 		mWindow->setUserString("WantsMouseWheel", "True");
@@ -46,7 +46,7 @@ void EntityWindow::Init()
 		mWindow->addChildWindow(mScrollablePane);
 		mTabNavigation = new GUISystem::TabNavigation(mScrollablePane);
 	}
-	CEGUI_CATCH_CRITICAL;
+	OC_CEGUI_CATCH_CRITICAL;
 }
 
 void EntityWindow::Deinit()

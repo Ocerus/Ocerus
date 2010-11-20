@@ -19,7 +19,7 @@ GUISystem::FolderSelector::~FolderSelector()
 void GUISystem::FolderSelector::Show(const CEGUI::String& windowTitle, bool showEditbox, const CEGUI::String& editboxLabel)
 {
 	bool success = false;
-	CEGUI_TRY;
+	OC_CEGUI_TRY;
 	{
 		CEGUI::Window* root = gGUIMgr.GetGUISheet();
 
@@ -57,7 +57,7 @@ void GUISystem::FolderSelector::Show(const CEGUI::String& windowTitle, bool show
 		UpdateFolderList();
 		success = true;
 	}
-	CEGUI_CATCH;
+	OC_CEGUI_CATCH;
 
 	if (!success)
 	{
