@@ -8,8 +8,31 @@
 
 
 \section{Purpose of the memory system}
+The memory system controls the memory allocation of the whole application. It attempts to work under the hood, so that the rest of the project doesn't need to know about that. It provides tools to override the default dynamic memory allocation as well as custom specialized allocators for small objects or containers.
 
-\section{Specific header files}
+Because games are very different from other applications they also have specific memory requirements. However, the default managers in current compilers are targeted to common programs. The game is a real-time performance-intensive application while it also allocates and deallocates a lot of objects on a regular basis. An example of this might be graphical effects spawned and destroyed during the play to keep the action high. In this case it is much more efficient to pool the objects instead of allocating them on the general heap. Another problem arises on game consoles where the memory available to the game is very limited and the engine must hold a tight control on the state of the memory and dynamically clean it if necessary while the action is still running.
+
+
+
+\section{Parts of the system}
+
+\subsection{Global allocation}
+The main part of this system are overriden default memory allocation functions of the compiler. The \emph{Memory} subsystem provides alternatives to \emph{malloc} and \emph{free} called \emph{Memory::CustomMalloc} and \emph{Memory::CustomFree}. The \emph{new} and \emph{delete} operators are overriden automatically, so the programmer doesn't need to worry about using the functions manually. Note that all this works in the libraries the application uses as well.
+
+
+\subsection{Free lists}
+The \emph{Memory::FreeList} is a templatized implementation of a memory pool allocator. Its configuration is done by specifying the policies as template arguments. The \emph{Memory::FreeList} then provides methods for allocation (\emph{Allocate}) and deallocation (\emph{Free)}. From the user's point of view they work the same way as \emph{new} and \emph{delete} while even the constructor/destructor is called if required by the construction policy.
+
+The allocation policy defines the structure of the pool in the memory. This may also influence the performance depending on the character of allocations/deallocations. The construction policy enables or disables the use of constructors/destructors while allocating/deallocating an object. The growth policy defines the way the memory pool is enlarged or shrinked when needed. This can also influence the performance and memory consumption.
+
+
+\subsection{Stl pool allocator}
+The \emph{Memory::StlPoolAllocator} is a templatized STL-compilant pooled allocator. It is implemented as a wrapper on the top of \emph{Memory::FreeList} with parameters suitable for STL containers. The allocator is completely ready to be directly used with the containers by supplying it as a template parameter into them. In the engine this is done in the \emph{Containers.h} file. The pooled containers are named \emph{pooled\_list}, \emph{pooled\_set}, etc.
+
+
+\subsection{Class allocation}
+As mentioned before it is common in games to rapidly allocate and deallocate objects of the same type - a graphical effect might be an example. At the same time the programmer might not want to store the objects in a structure suitable for pooling and generally care about the memory management. In this case all he has to do is to derive the effect class from \emph{Memory::ClassAllocation} with the correct template paramters. The class controls the way instances of the deriving class are allocated and deallocated by overriding the \emph{new} and \emph{delete} operators. The usage of the class then doesn't change while the instance may be pooled.
+
 
 
 %\section{Glossary}
