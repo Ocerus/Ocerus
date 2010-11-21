@@ -44,12 +44,20 @@ void Application::Init(const string& sharedDir)
 	
 	if (mSharedDir.empty())
 	{
-#ifdef _DEBUG // In debug build we can consider current directory as mSharedDir
+#if defined(_DEBUG) // In debug build we can consider current directory as mSharedDir
 		if (boost::filesystem::exists("data") && boost::filesystem::exists("deploy"))
 		{
 			mSharedDir = ".";
 		}
 #endif
+
+#if defined(DEPLOY) // In deploy build we can consider current directory as mSharedDir
+		if (boost::filesystem::exists("data"))
+		{
+			mSharedDir = ".";
+		}
+#endif
+
 
 #ifdef OCERUS_SHARED_DIR
 		if (mSharedDir.empty())
@@ -64,16 +72,20 @@ void Application::Init(const string& sharedDir)
 	boost::filesystem::path logDir;
 	boost::filesystem::ofstream outStream;
 
-	boost::filesystem::path tempPath(std::getenv("TEMP"));
 	const char* coreLogFilename = "CoreLog.txt";
 	const char* configFilename = "config.ini";
 	const char* ceguiLogFilename = "CEGUI.log";
-	const char* ocerusTempDir = "Ocerus";
 	outStream.open(coreLogFilename);
 
 	if (!outStream.is_open())
 	{
+#if defined(__WIN__)
+		boost::filesystem::path tempPath(std::getenv("TEMP"));
+		const char* ocerusTempDir = "Ocerus";
 		logDir = tempPath /= ocerusTempDir;
+#else
+		logDir = boost::filesystem::path(string(std::getenv("HOME")) + "/.ocerus/logs");
+#endif
 		boost::filesystem::create_directory(logDir);
 	}
 	else
