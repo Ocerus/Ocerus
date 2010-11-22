@@ -360,6 +360,11 @@ namespace Editor
 		/// Callback for creating a new entity.
 		void CreateEntityPromptCallback(bool clickedOK, const string& text, int32 parentID);
 
+		/// Called when the editor viewport window is activated.
+		bool OnEditorViewportActivated(const CEGUI::EventArgs&);
+
+		/// Called when the editor viewport window is deactivated.
+		bool OnEditorViewportDeactivated(const CEGUI::EventArgs&);
 
 		/// Draws the shape of the entity using the selected color.
 		bool DrawEntityPhysicalShape(const EntitySystem::EntityHandle entity, const GfxSystem::Color shapeColor, const GfxSystem::Color fillColor, const float32 shapeWidth);
@@ -367,14 +372,14 @@ namespace Editor
 		/// Processes the currently selected edit tool.
 		void ProcessCurrentEditTool(const GfxSystem::Point& screenCursorPos);
 
-		//Shortcuts
+		// Shortcuts
 		KeyShortcuts* mShortcuts;
 		
-		//Dialogs
+		// Dialogs
 		CreateProjectDialog* mCreateProjectDialog;
 
-		//Index of currently opening scene
-		//Used in callback for save scene dialog
+		// Index of currently opening scene
+		// Used in callback for save scene dialog
 		int32 mOpeningSceneIndex;
 	
 	};

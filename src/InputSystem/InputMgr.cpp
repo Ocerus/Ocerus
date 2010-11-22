@@ -30,6 +30,7 @@ void InputSystem::InputMgr::CaptureInput( void )
 void InputSystem::InputMgr::AddInputListener( IInputListener* listener )
 {
 	OC_ASSERT(listener);
+	if (std::find(mListeners.begin(), mListeners.end(), listener) != mListeners.end()) return;
 	mListeners.push_back(listener);
 }
 
@@ -44,7 +45,9 @@ void InputSystem::InputMgr::RemoveInputListener( IInputListener* listener )
 	OC_ASSERT(listener);
 	ListenersList::iterator it = Containers::find(mListeners.begin(), mListeners.end(), listener);
 	if (it != mListeners.end())
+	{
 		mListeners.erase(it);
+	}
 }
 
 void InputSystem::InputMgr::RemoveAllInputListeners( void )

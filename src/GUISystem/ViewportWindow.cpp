@@ -31,6 +31,7 @@ void GUISystem::ViewportWindow::InitialiseComponents()
 
 void ViewportWindow::Disable()
 {
+	deactivate();
 	setVisible(false);
 	if (mRenderTarget != GfxSystem::InvalidRenderTargetID)
 	{
@@ -205,4 +206,9 @@ void GUISystem::ViewportWindow::onKeyUp( CEGUI::KeyEventArgs& e )
 void GUISystem::ViewportWindow::Activate()
 {
 	activate();
+}
+
+bool GUISystem::ViewportWindow::IsDisabled() const
+{
+	return !isActive();
 }

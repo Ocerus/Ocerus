@@ -24,6 +24,9 @@ namespace GUISystem
 		/// Disables the viewport. You can enable it again by setting a camera.
 		void Disable();
 
+		/// Returns true if the viewport is disabled.
+		bool IsDisabled() const;
+
 		/// Sets the camera of the viewport to newCamera.
 		void SetCamera(const EntitySystem::EntityHandle& newCamera);
 

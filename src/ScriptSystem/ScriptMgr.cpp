@@ -1005,6 +1005,10 @@ void SetFullscreen(const bool value, Game* self)
 	{
 		gGfxWindow.SetFullscreen(value);
 	}
+	else
+	{
+		ocInfo << "SetFullscreen(" << value << ") called from script";
+	}
 }
 
 bool GetFullscreen(Game* self)

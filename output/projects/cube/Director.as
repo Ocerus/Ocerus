@@ -1,5 +1,10 @@
 #include "GameControl.as"
 
+void OnInit()
+{
+	game.SetFullscreen(true);	
+}
+
 void OnUpdateLogic(float32 delta)
 {
 	EntityHandle player = gEntityMgr.FindFirstEntity("Player");

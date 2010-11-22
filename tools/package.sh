@@ -79,7 +79,7 @@ processDirectory Win32/bin/Develop . $OUTPUT_DIR/bin/Win32 '.*Ocerus\.exe$\|.*Oc
 processDirectory output . $OUTPUT_DIR/bin/Win32 '.*dbghelp\.dll$\|.*SDL\.dll$\|.*SILLY\.dll$\|.*SILLY_d\.dll$'
 processDirectory . doc/doxygen $OUTPUT_DIR '.*/html/.*$\|.*index\.html$\|.*mainpage\.txt$\|.*Ocerus\.dox$'
 processDirectory . doc/userDocumentation $OUTPUT_DIR '.*Documentation\.pdf$'
-processDirectory output . $OUTPUT_DIR/shared '.*/data/.*\|.*/deploy/.*' '.*ActionSave\.xml$'
+processDirectory output . $OUTPUT_DIR/shared '.*/data/.*\|.*/deploy/.*\|.*/test/.*' '.*ActionSave\.xml$'
 processDirectory output/projects . $OUTPUT_DIR/shared/samples
 processDirectory . src $OUTPUT_DIR/sources
 processDirectory . cmake $OUTPUT_DIR/sources

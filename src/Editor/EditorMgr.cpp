@@ -63,6 +63,9 @@ void EditorMgr::Init()
 
 	mEditorGUI->Init();
 	GetEditorViewport()->AddInputListener(this);
+	GetEditorViewport()->subscribeEvent(CEGUI::Window::EventActivated, CEGUI::Event::Subscriber(&EditorMgr::OnEditorViewportActivated, this));
+	GetEditorViewport()->subscribeEvent(CEGUI::Window::EventDeactivated, CEGUI::Event::Subscriber(&EditorMgr::OnEditorViewportDeactivated, this));
+	mEditorGUI->DisableViewports();
 }
 
 void Editor::EditorMgr::Deinit()
@@ -641,12 +644,18 @@ void EditorMgr::ShowOpenProjectDialog()
 
 void EditorMgr::OpenProject(const string& projectPath)
 {
+	if (projectPath.empty()) return;
+
 	if (!mCurrentProject->OpenProject(projectPath))
 	{
 		GUISystem::MessageBox* messageBox = new GUISystem::MessageBox(GUISystem::MessageBox::MBT_OK);
 		messageBox->SetText(StringSystem::FormatText(gStringMgrSystem.GetTextData
 			(GUISystem::GUIMgr::GUIGroup, "open_project_error")) << projectPath);
 		messageBox->Show();
+	}
+	else
+	{
+		GlobalProperties::Get<Core::Config>("GlobalConfig").SetString("LastProject", projectPath);
 	}
 }
 
@@ -806,6 +815,9 @@ bool Editor::EditorMgr::KeyReleased( const InputSystem::KeyInfo& ke )
 
 bool Editor::EditorMgr::MouseMoved( const InputSystem::MouseInfo& mi )
 {
+	OC_ASSERT(mEditorGUI);
+	if (!mEditorGUI->GetEditorViewport()->isVisible()) return false;
+
 	if (mEditToolWorking)
 	{
 		ProcessCurrentEditTool(GfxSystem::Point(mi.x, mi.y));
@@ -818,6 +830,7 @@ bool Editor::EditorMgr::MouseMoved( const InputSystem::MouseInfo& mi )
 bool Editor::EditorMgr::MouseButtonPressed( const InputSystem::MouseInfo& mi, const InputSystem::eMouseButton btn )
 {
 	OC_ASSERT(mEditorGUI);
+	if (!mEditorGUI->GetEditorViewport()->isVisible()) return false;
 	mEditorGUI->GetEditorViewport()->activate();
 	mEditorGUI->GetEditorViewport()->captureInput();
 
@@ -917,6 +930,7 @@ bool Editor::EditorMgr::MouseButtonReleased( const InputSystem::MouseInfo& mi, c
 
 	OC_ASSERT(mEditorGUI);
 	mEditorGUI->GetEditorViewport()->releaseInput();
+	if (!mEditorGUI->GetEditorViewport()->isVisible()) return false;
 
 	bool editToolWasWorking = mEditToolWorking;
 	mEditToolWorking = false;
@@ -1358,6 +1372,18 @@ bool Editor::EditorMgr::IsEntitySelected( const EntitySystem::EntityHandle entit
 bool Editor::EditorMgr::IsProjectOpened() const
 { 
 	return mCurrentProject->IsProjectOpened();
+}
+
+bool Editor::EditorMgr::OnEditorViewportActivated( const CEGUI::EventArgs& )
+{
+	gInputMgr.RemoveInputListener(this);
+	return true;
+}
+
+bool Editor::EditorMgr::OnEditorViewportDeactivated( const CEGUI::EventArgs& )
+{
+	gInputMgr.AddInputListener(this);
+	return true;
 }
 
 void EditorMgr::OnProjectOpened()

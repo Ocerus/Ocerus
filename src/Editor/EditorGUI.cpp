@@ -107,8 +107,6 @@ void EditorGUI::Init()
 
 	// Initialize popup menu
 	CreatePopupMenu();
-
-	DisableViewports();
 }
 
 void EditorGUI::Deinit()
