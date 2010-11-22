@@ -157,7 +157,7 @@ namespace Core
 		int32 mConsoleHeight;
 
 		/// Paths
-		string mDataDir;
+		string mSharedDir;
 	};
 }
 

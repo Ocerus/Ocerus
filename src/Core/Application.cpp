@@ -40,28 +40,37 @@ Application::Application():
 
 void Application::Init(const string& sharedDir)
 {
-	mDataDir = sharedDir;
+	mSharedDir = sharedDir;
 	
-	if (mDataDir.empty())
+	if (mSharedDir.empty())
 	{
-		// if the data directory is not defined use defaults
+		// if the data directory is not defined use defaults, try to use following cases
 
-		#ifdef OCERUS_SHARED_DIR
-		if (mDataDir.empty())
+		#ifdef _DEBUG // in debug mode we can assume current directory as sharedDir
+		if (mSharedDir.empty() && boost::filesystem::exists("data") && boost::filesystem::exists("deploy"))
 		{
-			mDataDir = OCERUS_SHARED_DIR;
-		}
-		#elif DEPLOY
-		if (boost::filesystem::exists("data"))
-		{
-			mDataDir = ".";
-		}
-		#else
-		if (boost::filesystem::exists("data") && boost::filesystem::exists("deploy"))
-		{
-			mDataDir = ".";
+			mSharedDir = ".";
 		}
 		#endif
+
+		#ifdef DEPLOY // in deploy mode we can assume current directory as sharedDir
+		if (mSharedDir.empty() && boost::filesystem::exists("data"))
+		{
+			mSharedDir = ".";
+		}
+		#endif
+
+		#ifdef OCERUS_SHARED_DIR // if sharedDir still not set, use OCERUS_SHARED_DIR macro
+		if (mSharedDir.empty())
+		{
+			mSharedDir = OCERUS_SHARED_DIR;
+		}
+		#endif
+
+		if (mSharedDir.empty()) // finally use the current directory as fallback
+		{
+			mSharedDir = ".";
+		}
 	}
 
 	// prepare paths for the application
@@ -530,14 +539,14 @@ bool Application::CheckDeployDestination(const string& destination)
 
 string Application::GetDataDirectory() const
 {
-	boost::filesystem::path boostPath = mDataDir;
+	boost::filesystem::path boostPath = mSharedDir;
 	boostPath /= "data/";
 	return boostPath.string();
 }
 
 string Application::GetDeployDirectory() const
 {
-	boost::filesystem::path boostPath = mDataDir;
+	boost::filesystem::path boostPath = mSharedDir;
 	boostPath /= "deploy/";
 	return boostPath.string();
 }
