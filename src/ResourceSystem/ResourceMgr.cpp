@@ -217,11 +217,12 @@ bool ResourceMgr::AddResourceFileToGroup(const string& filepath, const StringKey
 
 	ResourcePtr r = mResourceCreationMethods[type]();
 	r->SetState(Resource::STATE_INITIALIZED);
-	r->SetName(name);
 	r->SetGroup(group);
 	r->SetFilePath(boostPath.string());
 	r->SetType(type);
 	r->SetBasePathType(basePathType);
+	
+	r->SetName(r->GetRelativeFileDir() + boostPath.filename());
 
 	AddResourceToGroup(group, name, r);
 
