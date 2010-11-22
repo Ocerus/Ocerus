@@ -6,6 +6,7 @@
 
 #include "Base.h"
 #include "GUISystem/CEGUIForwards.h"
+#include "GUISystem/MessageBox.h"
 
 namespace Editor
 {
@@ -42,6 +43,11 @@ namespace Editor
 			bool OnTreeItemClicked(const CEGUI::EventArgs&);
 			bool OnTreeItemDoubleClicked(const CEGUI::EventArgs&);
 		//@}
+		/// Callback for the messagebox asking if the current scene should be saved before opening new one.
+		void OnOpenSceneSaveMessageBoxClicked(GUISystem::MessageBox::eMessageBoxButton button, int32 tag);
+
+		/// Remembers the scene resource which is being opened for the callback OnOpenSceneSaveMessageBoxClicked.
+		ResourceSystem::ResourcePtr mOpeningSceneResource;
 
 		/// @name Popup
 		//@{

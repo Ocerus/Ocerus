@@ -273,7 +273,19 @@ bool Editor::ResourceWindow::OnTreeItemDoubleClicked(const CEGUI::EventArgs& e)
 		ResourceSystem::ResourcePtr resource = ItemEntryToResourcePtr(dragContainer);
 		if (resource.get() && gEditorMgr.GetCurrentProject()->IsResourceScene(resource))
 		{
-			gEditorMgr.GetCurrentProject()->OpenScene(resource);
+			if (gEditorMgr.GetCurrentProject() && gEditorMgr.GetCurrentProject()->IsSceneOpened())
+			{
+				mOpeningSceneResource = resource;
+				GUISystem::MessageBox* messageBox = new GUISystem::MessageBox(GUISystem::MessageBox::MBT_YES_NO_CANCEL, 0);
+				messageBox->SetText(StringSystem::FormatText(gStringMgrSystem.GetTextData
+						(GUISystem::GUIMgr::GUIGroup, "save_message_text")) << gEditorMgr.GetCurrentProject()->GetOpenedSceneName());
+				messageBox->RegisterCallback(GUISystem::MessageBox::Callback(this, &Editor::ResourceWindow::OnOpenSceneSaveMessageBoxClicked));
+				messageBox->Show();
+			}
+			else
+			{
+				gEditorMgr.GetCurrentProject()->OpenScene(resource);
+			}
 		}
 		else
 		{
@@ -283,6 +295,19 @@ bool Editor::ResourceWindow::OnTreeItemDoubleClicked(const CEGUI::EventArgs& e)
 	}
 
 	return true;
+}
+
+void Editor::ResourceWindow::OnOpenSceneSaveMessageBoxClicked(GUISystem::MessageBox::eMessageBoxButton button, int32 tag)
+{
+	OC_UNUSED(tag);
+	OC_ASSERT(mOpeningSceneResource);
+	if (button == GUISystem::MessageBox::MBB_YES)
+	{
+		gEditorMgr.SaveOpenedScene();
+		gEditorMgr.GetCurrentProject()->OpenScene(mOpeningSceneResource);
+	}
+	if (button == GUISystem::MessageBox::MBB_NO)
+		gEditorMgr.GetCurrentProject()->OpenScene(mOpeningSceneResource);
 }
 
 CEGUI::Window* Editor::ResourceWindow::CreateResourceItemEntry()

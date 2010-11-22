@@ -115,11 +115,13 @@ void Application::Init(const string& sharedDir)
 	if (!boost::filesystem::exists(GetDataDirectory()))
 	{
 		ocError << "Ocerus data directory does not exist: " << GetDataDirectory();
+		CRITICAL_FAILURE(("Ocerus data directory does not exist: " + GetDataDirectory()).c_str());
 	}
 
 	if (mDevelopMode && !boost::filesystem::exists(GetDeployDirectory()))
 	{
 		ocError << "Ocerus deploy directory does not exist: " << GetDeployDirectory();
+		CRITICAL_FAILURE(("Ocerus deploy directory does not exist: " + GetDeployDirectory()).c_str());
 	}
 
 	// create singletons
