@@ -67,8 +67,7 @@ void Application::Init(const string& sharedDir)
 #endif
 	}
 
-	// create basic singletons
-
+	// prepare paths for the application
 	boost::filesystem::path logDir;
 	boost::filesystem::ofstream outStream;
 
@@ -93,6 +92,7 @@ void Application::Init(const string& sharedDir)
 		outStream.close();
 	}
 
+	// create basic singletons
 	LogSystem::LogMgr::CreateSingleton();
 	LogSystem::LogMgr::GetSingleton().Init((logDir / coreLogFilename).string());
 	LogSystem::Profiler::CreateSingleton();
