@@ -40,31 +40,28 @@ Application::Application():
 
 void Application::Init(const string& sharedDir)
 {
-	mSharedDir = sharedDir;
+	mDataDir = sharedDir;
 	
-	if (mSharedDir.empty())
+	if (mDataDir.empty())
 	{
-#if defined(_DEBUG) // In debug build we can consider current directory as mSharedDir
-		if (boost::filesystem::exists("data") && boost::filesystem::exists("deploy"))
-		{
-			mSharedDir = ".";
-		}
-#endif
+		// if the data directory is not defined use defaults
 
-#if defined(DEPLOY) // In deploy build we can consider current directory as mSharedDir
+		#ifdef OCERUS_SHARED_DIR
+		if (mDataDir.empty())
+		{
+			mDataDir = OCERUS_SHARED_DIR;
+		}
+		#elif DEPLOY
 		if (boost::filesystem::exists("data"))
 		{
-			mSharedDir = ".";
+			mDataDir = ".";
 		}
-#endif
-
-
-#ifdef OCERUS_SHARED_DIR
-		if (mSharedDir.empty())
+		#else
+		if (boost::filesystem::exists("data") && boost::filesystem::exists("deploy"))
 		{
-			mSharedDir = OCERUS_SHARED_DIR;
+			mDataDir = ".";
 		}
-#endif
+		#endif
 	}
 
 	// prepare paths for the application
@@ -78,13 +75,13 @@ void Application::Init(const string& sharedDir)
 
 	if (!outStream.is_open())
 	{
-#if defined(__WIN__)
+		#if defined(__WIN__)
 		boost::filesystem::path tempPath(std::getenv("TEMP"));
 		const char* ocerusTempDir = "Ocerus";
 		logDir = tempPath /= ocerusTempDir;
-#else
+		#else
 		logDir = boost::filesystem::path(string(std::getenv("HOME")) + "/.ocerus/logs");
-#endif
+		#endif
 		boost::filesystem::create_directory(logDir);
 	}
 	else
@@ -115,20 +112,20 @@ void Application::Init(const string& sharedDir)
 	if (mDevelopMode) ShowConsole();
 
 	// test shared dirs
-	if (!boost::filesystem::exists(GetDataDir()))
+	if (!boost::filesystem::exists(GetDataDirectory()))
 	{
-		ocError << "Ocerus data directory does not exist: " << GetDataDir();
+		ocError << "Ocerus data directory does not exist: " << GetDataDirectory();
 	}
 
-	if (mDevelopMode && !boost::filesystem::exists(GetDeployDir()))
+	if (mDevelopMode && !boost::filesystem::exists(GetDeployDirectory()))
 	{
-		ocError << "Ocerus deploy directory does not exist: " << GetDeployDir();
+		ocError << "Ocerus deploy directory does not exist: " << GetDeployDirectory();
 	}
 
 	// create singletons
 
 	ResourceSystem::ResourceMgr::CreateSingleton();
-	ResourceSystem::ResourceMgr::GetSingleton().Init(GetDataDir());
+	ResourceSystem::ResourceMgr::GetSingleton().Init(GetDataDirectory());
 
 	StringSystem::StringMgr::Init();
 	gStringMgrSystem.LoadLanguagePack(mGlobalConfig->GetString("Language", "", "Editor"), mGlobalConfig->GetString("Country", "", "Editor"));
@@ -466,7 +463,7 @@ void Core::Application::UnregisterGameInputListener( InputSystem::IInputListener
 
 void Core::Application::GetAvailableDeployPlatforms( vector<string>& out )
 {
-	boost::filesystem::path deployDirectory = GetDeployDir();
+	boost::filesystem::path deployDirectory = GetDeployDirectory();
 	if (!boost::filesystem::exists(deployDirectory)) return;
 	boost::filesystem::directory_iterator iend;
 	for (boost::filesystem::directory_iterator i(deployDirectory); i!=iend; ++i)
@@ -497,7 +494,7 @@ bool Core::Application::DeployCurrentProject( const string& platform, const stri
 		boost::filesystem::path destinationPath = destination;
 		boost::filesystem::remove_all(destinationPath);
 		FilesystemUtils::CopyDirectory(".", destination, ".*\\.dll", "\\.svn");
-		FilesystemUtils::CopyDirectory(GetDeployDir() + string("/") + platform, destination, ".*", "\\.svn");
+		FilesystemUtils::CopyDirectory(GetDeployDirectory() + string("/") + platform, destination, ".*", "\\.svn");
 		FilesystemUtils::CopyDirectory("data/general", destination + "/data/general", ".*", "\\.svn");
 		FilesystemUtils::CopyDirectory(mGameProject->GetOpenedProjectPath(), destination, ".*", "\\.svn");
 	}
@@ -530,16 +527,16 @@ bool Application::CheckDeployDestination(const string& destination)
 	return true;
 }
 
-string Application::GetDataDir() const
+string Application::GetDataDirectory() const
 {
-	boost::filesystem::path boostPath = mSharedDir;
+	boost::filesystem::path boostPath = mDataDir;
 	boostPath /= "data/";
 	return boostPath.string();
 }
 
-string Application::GetDeployDir() const
+string Application::GetDeployDirectory() const
 {
-	boost::filesystem::path boostPath = mSharedDir;
+	boost::filesystem::path boostPath = mDataDir;
 	boostPath /= "deploy/";
 	return boostPath.string();
 }

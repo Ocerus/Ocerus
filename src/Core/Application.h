@@ -110,11 +110,11 @@ namespace Core
 		/// Returns true, if a project can be deployed to specified destination.
 		bool CheckDeployDestination(const string& destination);
 
-		/// Returns the data directory.
-		string GetDataDir() const;
+		/// Returns the directory where the application expects its data.
+		string GetDataDirectory() const;
 
-		/// Returns the deploy directory.
-		string GetDeployDir() const;
+		/// Returns the deploy directory where the application expects pre-built engine binaries used for deployment.
+		string GetDeployDirectory() const;
 
 	private:
 
@@ -157,9 +157,7 @@ namespace Core
 		int32 mConsoleHeight;
 
 		/// Paths
-		string mSharedDir;
-		string mUserDir;
-
+		string mDataDir;
 	};
 }
 
