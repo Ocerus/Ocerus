@@ -31,8 +31,8 @@ namespace Core
 	{
 	public:
 
-		/// Default constructor.
-		Game(void);
+		/// Constructs the game while defining a directory to store temporary game stuff.
+		Game(const string& tempDirectory);
 
 		/// Default destructor.
 		virtual ~Game(void);
@@ -86,9 +86,6 @@ namespace Core
 		/// Resumes the game action.
 		void ResumeAction(void);
 
-		/// Name of file to which the game state is temporarly saved.
-		static const char* ActionFile;
-		
 		/// Save the game state to which the restart action will rollback.
 		void SaveAction(void);
 		
@@ -206,6 +203,7 @@ namespace Core
 		EntitySystem::EntityHandle mCamera; ///< Camera used for rendering.
 		CEGUI::Window* mRootWindow;  ///< Root window for in-game GUI elements.
 		Reflection::PropertyMap mDynamicProperties; ///< Dymanic properties saved with the game accessible from scripts.
+		string mTempActionSave; ///< File for temporary save of the action.
 
 
 		// Physics.

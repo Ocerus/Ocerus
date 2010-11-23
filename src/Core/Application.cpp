@@ -77,7 +77,7 @@ void Application::Init(const string& sharedDir)
 	boost::filesystem::path logDir;
 	boost::filesystem::ofstream outStream;
 
-	const char* coreLogFilename = "CoreLog.txt";
+	const char* coreLogFilename = "Core.log";
 	const char* configFilename = "config.ini";
 	const char* ceguiLogFilename = "CEGUI.log";
 	outStream.open(coreLogFilename);
@@ -168,7 +168,7 @@ void Application::Init(const string& sharedDir)
 
 	// create core states
 	mLoadingScreen = new LoadingScreen();
-	mGame = new Game();
+	mGame = new Game(logDir.string());
 
 	// init finished, now loading
 	RequestStateChange(AS_LOADING);

@@ -22,7 +22,7 @@ using namespace InputSystem;
 const float PHYSICS_TIMESTEP = 0.016f;
 const int32 PHYSICS_VELOCITY_ITERATIONS = 6;
 const int32 PHYSICS_POSITION_ITERATIONS = 2;
-const char* Game::ActionFile = "ActionSave.xml";
+const char* TMP_ACTION_FILE = "tmpActionSave.xml";
 const string Game::GameCameraName = "GameCamera";
 const char* Game::SavePath = "saves";
 
@@ -49,16 +49,20 @@ private:
 };
 
 
-Core::Game::Game():
+Core::Game::Game(const string& tempDirectory):
 	StateMachine<eGameState>(GS_NOT_INITED),
 	mActionRestarted(true),
 	mTimer(true),
 	mRenderTarget(GfxSystem::InvalidRenderTargetID),
 	mCamera(EntitySystem::EntityHandle::Null),
 	mRootWindow(0),
+	mTempActionSave(""),
 	mPhysics(0),
 	mPhysicsCallbacks(0)
 {
+	if (!tempDirectory.empty()) mTempActionSave = tempDirectory + string("/") + TMP_ACTION_FILE;
+	else mTempActionSave = string("./") + TMP_ACTION_FILE;
+
 	mPhysicsCallbacks = new PhysicsCallbacks(this);
 	mPhysicsDraw = new GfxSystem::PhysicsDraw();
 	mPhysics = new b2World(b2Vec2(0.0f, 0.0f), true);
@@ -437,7 +441,7 @@ void Core::Game::ResumeAction(void)
 void Core::Game::SaveAction(void)
 {
 	bool result = true;
-	ResourceSystem::XMLOutput storage(gResourceMgr.GetBasePath(ResourceSystem::BPT_SYSTEM) + ActionFile);
+	ResourceSystem::XMLOutput storage(mTempActionSave);
 	storage.BeginElement("Action");
 	if (!gEntityMgr.SaveEntitiesToStorage(storage, false, true)) result = false;
 	if (!SaveGameInfoToStorage(storage)) result = false;
@@ -446,7 +450,7 @@ void Core::Game::SaveAction(void)
 	
 	if (result)
 	{
-		ocInfo << "Action saved in " << ActionFile;
+		ocInfo << "Action saved in " << mTempActionSave;
 	}
 	else 
 	{
@@ -461,11 +465,11 @@ void Core::Game::RestartAction(void)
 
 	PauseAction();
 	
-	if (gResourceMgr.AddResourceFileToGroup(ActionFile, "Action", ResourceSystem::RESTYPE_AUTODETECT, ResourceSystem::BPT_SYSTEM))
+	if (gResourceMgr.AddResourceFileToGroup(mTempActionSave, "Action", ResourceSystem::RESTYPE_AUTODETECT, ResourceSystem::BPT_ABSOLUTE))
 	{
 		gResourceMgr.LoadResourcesInGroup("Action");
 		gEntityMgr.DestroyAllEntities(false, true);
-		ResourceSystem::ResourcePtr resource = gResourceMgr.GetResource("Action", ActionFile);
+		ResourceSystem::ResourcePtr resource = gResourceMgr.GetResource("Action", mTempActionSave);
 		if (!LoadGameInfoFromResource(resource)) { result = false; }
 		if (!gEntityMgr.LoadEntitiesFromResource(resource)) { result = false; }
 		gResourceMgr.DeleteGroup("Action");
@@ -476,7 +480,7 @@ void Core::Game::RestartAction(void)
 		result = false;
 	}
 
-	if (result) ocInfo << "Action restarted from " << ActionFile;
+	if (result) ocInfo << "Action restarted from " << mTempActionSave;
 	else ocError << "Action cannot be restarted!";
 }
 
