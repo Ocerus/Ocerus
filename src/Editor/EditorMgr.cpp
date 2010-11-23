@@ -63,8 +63,8 @@ void EditorMgr::Init()
 
 	mEditorGUI->Init();
 	GetEditorViewport()->AddInputListener(this);
-	GetEditorViewport()->subscribeEvent(CEGUI::Window::EventActivated, CEGUI::Event::Subscriber(&EditorMgr::OnEditorViewportActivated, this));
-	GetEditorViewport()->subscribeEvent(CEGUI::Window::EventDeactivated, CEGUI::Event::Subscriber(&EditorMgr::OnEditorViewportDeactivated, this));
+	GetEditorViewport()->subscribeEvent(CEGUI::Window::EventShown, CEGUI::Event::Subscriber(&EditorMgr::OnEditorViewportActivated, this));
+	GetEditorViewport()->subscribeEvent(CEGUI::Window::EventHidden, CEGUI::Event::Subscriber(&EditorMgr::OnEditorViewportDeactivated, this));
 	mEditorGUI->DisableViewports();
 }
 
@@ -796,7 +796,12 @@ bool Editor::EditorMgr::KeyPressed( const InputSystem::KeyInfo& ke )
 		result = GlobalProperties::Get<Core::Game>("Game").KeyPressed(ke);
 	}
 
-	return result || HandleShortcuts(ke.keyCode);
+	if (!result)
+	{
+		result = HandleShortcuts(ke.keyCode);
+	}
+
+	return result;
 }
 
 bool Editor::EditorMgr::KeyReleased( const InputSystem::KeyInfo& ke )
