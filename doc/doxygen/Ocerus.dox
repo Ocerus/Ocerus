@@ -98,7 +98,11 @@ RECURSIVE              = YES
 EXCLUDE                = 
 EXCLUDE_SYMLINKS       = NO
 EXCLUDE_PATTERNS       = */Common.* \
-                         */Setup/*.* \
+                         */Setup/BasicTypes.* \
+                         */Setup/ComplexTypes.* \
+                         */Setup/Containers.* \
+                         */Setup/Memory*.* \
+                         */Setup/Platform.* \
                          */GfxSystem/glew/*.*
 EXCLUDE_SYMBOLS        = CEGUI \
                          kp \
