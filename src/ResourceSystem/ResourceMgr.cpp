@@ -512,7 +512,7 @@ void ResourceSystem::ResourceMgr::RefreshAllTextures( void )
 		{
 			ResourcePtr res = resIter->second;
 			if ((res->GetType() == RESTYPE_TEXTURE) && (res->GetState() == Resource::STATE_LOADED))
-				resIter->second->Reload();
+				resIter->second->Unload();
 		}
 	}
 }
