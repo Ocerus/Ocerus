@@ -1121,12 +1121,12 @@ bool Editor::EditorMgr::HandleShortcuts( InputSystem::eKeyCode keyCode )
 		return true;
 	}
 	
-	if (mShortcuts->IsShortcutActive(KeyShortcuts::KS_PLAY_PAUSE) && IsLockedToGame())
+	if (mShortcuts->IsShortcutActive(KeyShortcuts::KS_PLAY_PAUSE) && IsActionRunning())
 	{
 		SwitchActionTool(AT_PAUSE);
 		return true;
 	}
-	if (mShortcuts->IsShortcutActive(KeyShortcuts::KS_PLAY_PAUSE) && !IsLockedToGame())
+	if (mShortcuts->IsShortcutActive(KeyShortcuts::KS_PLAY_PAUSE) && !IsActionRunning())
 	{
 		SwitchActionTool(AT_RUN);
 		return true;
