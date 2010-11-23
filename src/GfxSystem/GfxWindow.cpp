@@ -22,8 +22,6 @@ void GfxWindow::Init(const int32 x, const int32 y, const int32 windowWidth, cons
 	mWindowY = y;
 	mWindowWidth = windowWidth;
 	mWindowHeight = windowHeight;
-	mFullscreenResolutionWidth = resx;
-	mFullscreenResolutionHeight = resy;
 	mFullscreen = fullscreen;
 
 	// Initializes the video subsystem
@@ -31,6 +29,17 @@ void GfxWindow::Init(const int32 x, const int32 y, const int32 windowWidth, cons
 	{
 		ocError << "Unable to init SDL: " << SDL_GetError();
 		return;
+	}
+	
+	if (resx)
+	{
+		mFullscreenResolutionWidth = resx;
+		mFullscreenResolutionHeight = resy;
+	}
+	else
+	{
+		mFullscreenResolutionWidth = GetSystemResolutionWidth();
+		mFullscreenResolutionHeight = GetSystemResolutionHeight();
 	}
 
 	int32 flags = SDL_OPENGL | SDL_RESIZABLE;
@@ -294,4 +303,18 @@ bool GfxSystem::GfxWindow::GetSDLCursor()
 		return true;
 	else
 		return false;
+}
+
+int32 GfxSystem::GfxWindow::GetSystemResolutionWidth() const
+{
+	const SDL_VideoInfo* info = SDL_GetVideoInfo();
+	OC_ASSERT(info);
+	return info->current_w;
+}
+
+int32 GfxSystem::GfxWindow::GetSystemResolutionHeight() const
+{
+	const SDL_VideoInfo* info = SDL_GetVideoInfo();
+	OC_ASSERT(info);
+	return info->current_h;
 }

@@ -1015,7 +1015,7 @@ bool GetFullscreen(Game* self)
 {
 	OC_UNUSED(self);
 
-	return gGfxWindow.GetFullscreen();
+	return gGfxWindow.IsFullscreen();
 }
 
 void RegisterScriptGame(asIScriptEngine* engine)

@@ -146,8 +146,8 @@ void Application::Init(const string& sharedDir)
 	int32 windowY = mGlobalConfig->GetInt32("WindowY", 50, "Windows");
 	int32 windowWidth = mGlobalConfig->GetInt32("WindowWidth", 1024, "Windows");
 	int32 windowHeight = mGlobalConfig->GetInt32("WindowHeight", 768, "Windows");
-	int32 resX = mGlobalConfig->GetInt32("FullscreenResolutionWidth", 1280, "Windows");
-	int32 resY = mGlobalConfig->GetInt32("FullscreenResolutionHeight", 1024, "Windows");
+	int32 resX = mGlobalConfig->GetInt32("FullscreenResolutionWidth", 0, "Windows");
+	int32 resY = mGlobalConfig->GetInt32("FullscreenResolutionHeight", 0, "Windows");
 	bool fullscreen = mGlobalConfig->GetBool("Fullscreen", false, "Windows");
 	GfxSystem::GfxWindow::GetSingleton().Init(windowX, windowY, windowWidth, windowHeight, resX, resY, fullscreen, "Loading...");
 
@@ -214,7 +214,7 @@ Application::~Application()
 	mGlobalConfig->SetInt32("WindowHeight", gGfxWindow.GetWindowHeight(), "Windows");
 	mGlobalConfig->SetInt32("FullscreenResolutionWidth", gGfxWindow.GetFullscreenResolutionWidth(), "Windows");
 	mGlobalConfig->SetInt32("FullscreenResolutionHeight", gGfxWindow.GetFullscreenResolutionHeight(), "Windows");
-	mGlobalConfig->SetBool("Fullscreen", gGfxWindow.GetFullscreen(), "Windows");
+	mGlobalConfig->SetBool("Fullscreen", gGfxWindow.IsFullscreen(), "Windows");
 	GfxSystem::GfxWindow::DestroySingleton();
 
 	StringSystem::StringMgr::Deinit();
@@ -435,7 +435,7 @@ void Application::MessagePump( void )
 			gInputMgr.ReleaseAll();
 
 			// SDL won't let the mouse move when the SDL cursor is disabled, app is in fullscreen but dont have focus
-			if (gGfxWindow.GetFullscreen())
+			if (gGfxWindow.IsFullscreen())
 				gGfxWindow.SetSDLCursorVisibility(true);
 		}
 		else if (event == GfxSystem::WE_GAINED_FOCUS)

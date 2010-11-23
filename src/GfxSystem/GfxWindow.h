@@ -77,14 +77,20 @@ namespace GfxSystem
 		/// Returns the window height.
 		inline int32 GetWindowHeight() const { return mWindowHeight; }
 
-		/// Returns the currently active resolution width.
-		inline int32 GetCurrentResolutionWidth() const;
+		/// Returns application window resolution width.
+		inline int32 GetAppResolutionWidth() const;
 
-		/// Returns the currently active resolution height.
-		inline int32 GetCurrentResolutionHeight() const;
+		/// Returns application window resolution height.
+		inline int32 GetAppResolutionHeight() const;
+		
+		/// Returns system resolution width. Must be called after SDL_INIT.
+		int32 GetSystemResolutionWidth() const;
+
+		/// Returns system resolution height. Must be called after SDL_INIT.
+		int32 GetSystemResolutionHeight() const;
 
 		/// Returns true if the window is in fullscreen mode.
-		inline bool GetFullscreen() const { return mFullscreen; }
+		inline bool IsFullscreen() const { return mFullscreen; }
 
 		/// Sets window position.
 		void SetWindowPosition(int32 xpos, int32 ypos);
@@ -125,13 +131,13 @@ namespace GfxSystem
 	//---------------
 	// Implementation
 
-	int32 GfxSystem::GfxWindow::GetCurrentResolutionWidth() const
+	int32 GfxSystem::GfxWindow::GetAppResolutionWidth() const
 	{
 		if (mFullscreen) return mFullscreenResolutionWidth;
 		else return mWindowWidth;
 	}
 
-	int32 GfxSystem::GfxWindow::GetCurrentResolutionHeight() const
+	int32 GfxSystem::GfxWindow::GetAppResolutionHeight() const
 	{
 		if (mFullscreen) return mFullscreenResolutionHeight;
 		else return mWindowHeight;

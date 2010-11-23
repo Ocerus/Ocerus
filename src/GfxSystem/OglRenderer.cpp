@@ -80,7 +80,7 @@ void OglRenderer::Init()
 
 bool OglRenderer::BeginRenderingImpl() const
 {
-	glViewport(0, 0, gGfxWindow.GetCurrentResolutionWidth(), gGfxWindow.GetCurrentResolutionHeight());
+	glViewport(0, 0, gGfxWindow.GetAppResolutionWidth(), gGfxWindow.GetAppResolutionHeight());
 	glClear(GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 	return true;
@@ -115,7 +115,7 @@ void OglRenderer::SetViewportImpl(const GfxViewport* viewport)
 		Point topleft, bottomright;
 		viewport->CalculateScreenBoundaries(topleft, bottomright);
 		// note that we are subtracting the Y pos from the resolution to workaround a bug in the SDL OpenGL impl
-		glViewport(topleft.x, gGfxWindow.GetCurrentResolutionHeight()-bottomright.y, bottomright.x-topleft.x, bottomright.y-topleft.y);
+		glViewport(topleft.x, gGfxWindow.GetAppResolutionHeight()-bottomright.y, bottomright.x-topleft.x, bottomright.y-topleft.y);
 		glCullFace(GL_FRONT);
 	}
 
@@ -421,7 +421,7 @@ void GfxSystem::OglRenderer::ClearViewport( const GfxViewport& viewport, const C
 	Point topleft, bottomright;
 	viewport.CalculateScreenBoundaries(topleft, bottomright);
 	// note that we are subtracting the Y pos from the resolution to workaround a bug in the SDL OpenGL impl
-	glScissor(topleft.x, gGfxWindow.GetCurrentResolutionHeight()-bottomright.y, bottomright.x-topleft.x, bottomright.y-topleft.y);
+	glScissor(topleft.x, gGfxWindow.GetAppResolutionHeight()-bottomright.y, bottomright.x-topleft.x, bottomright.y-topleft.y);
 
 	glEnable(GL_SCISSOR_TEST);
 

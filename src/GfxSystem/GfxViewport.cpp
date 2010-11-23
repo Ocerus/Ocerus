@@ -64,8 +64,8 @@ void GfxSystem::GfxViewport::CalculateWorldBoundaries( Vector2& topleft, Vector2
 	else
 	{
 		// size of objects doesn't depend on resolution
-		int32 resx = gGfxWindow.GetCurrentResolutionWidth();
-		int32 resy = gGfxWindow.GetCurrentResolutionHeight();
+		int32 resx = gGfxWindow.GetAppResolutionWidth();
+		int32 resy = gGfxWindow.GetAppResolutionHeight();
 		topleft.x = -resx * mSize.x / 2;
 		bottomright.x = resx * mSize.x / 2;
 		topleft.y = -resy * mSize.y / 2;
@@ -90,8 +90,8 @@ void GfxSystem::GfxViewport::CalculateScreenBoundaries( Point& topleft, Point& b
 	}
 	else
 	{
-		int32 resx = gGfxWindow.GetCurrentResolutionWidth();
-		int32 resy = gGfxWindow.GetCurrentResolutionHeight();
+		int32 resx = gGfxWindow.GetAppResolutionWidth();
+		int32 resy = gGfxWindow.GetAppResolutionHeight();
 
 		topleft.x = (int32)(mPosition.x * resx);
 		topleft.y = (int32)(mPosition.y * resy);
