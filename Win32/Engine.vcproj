@@ -307,6 +307,78 @@
 				ExcludedFromBuild="true"
 			/>
 		</Configuration>
+		<Configuration
+			Name="Deploy_Release|Win32"
+			OutputDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="4"
+			CharacterSet="0"
+			WholeProgramOptimization="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+				CommandLine=""
+				Outputs=""
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="2"
+				InlineFunctionExpansion="2"
+				AdditionalIncludeDirectories="../src;../src/Precompiled;../src/Utils;../externalLibs/SDL/inc;../externalLibs/boost/inc;../externalLibs/ois/includes;../externalLibs/cegui/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib;../externalLibs/angelscript/include;../externalLibs/RTHProfiler/include;../externalLibs/SOIL/src;../externalLibs/DbgLib"
+				PreprocessorDefinitions="DEPLOY;WIN32;NDEBUG;_WINDOWS;USE_DBGLIB;NO_CONSOLE"
+				RuntimeLibrary="2"
+				RuntimeTypeInfo="false"
+				UsePrecompiledHeader="2"
+				PrecompiledHeaderThrough="Common.h"
+				PrecompiledHeaderFile="$(IntDir)\Common.pch"
+				WarningLevel="4"
+				WarnAsError="true"
+				Detect64BitPortabilityProblems="false"
+				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLibrarianTool"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				Description="Copying DLL files to output dir..."
+				CommandLine="copy /V /Y /B ..\externalLibs\cegui\bin\vs9\Release\*.dll &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /V /Y /B ..\externalLibs\expat\bin\Release\*.dll &quot;$(OutDir)&quot;&#x0D;&#x0A;"
+				ExcludedFromBuild="true"
+			/>
+		</Configuration>
 	</Configurations>
 	<References>
 	</References>
@@ -939,6 +1011,14 @@
 								CompileAs="2"
 							/>
 						</FileConfiguration>
+						<FileConfiguration
+							Name="Deploy_Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
 					</File>
 				</Filter>
 			</Filter>
@@ -1305,6 +1385,16 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Deploy_Develop|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="1"
+						PrecompiledHeaderFile="$(IntDir)\Common.pch"
+						ShowIncludes="false"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Deploy_Release|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"

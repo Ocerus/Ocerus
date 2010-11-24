@@ -16,11 +16,15 @@ if exist "%DOTNET4%" (
 	exit
 )
 
-echo ------------- Building doc.vcproj
+echo ------------- Building documentation
 echo.
 %MSBUILD% ..\Win32\Ocerus.sln /t:doc /p:Configuration=Release
 
-echo ------------- Building Ocerus.vcproj
+echo ------------- Building Ocerus:Deploy
+echo.
+%MSBUILD% ..\Win32\Ocerus.sln /t:_Ocerus /p:Configuration=Deploy
+
+echo ------------- Building Ocerus:Release
 echo.
 %MSBUILD% ..\Win32\Ocerus.sln /t:_Ocerus /p:Configuration=Release
 

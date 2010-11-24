@@ -382,6 +382,95 @@
 				ExcludedFromBuild="false"
 			/>
 		</Configuration>
+		<Configuration
+			Name="Deploy_Release|Win32"
+			OutputDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="1"
+			CharacterSet="0"
+			WholeProgramOptimization="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+				CommandLine=""
+				Outputs=""
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="2"
+				InlineFunctionExpansion="2"
+				AdditionalIncludeDirectories="../src;../src/Precompiled;../src/Utils;../externalLibs/boost/inc;../externalLibs/hge/include;../externalLibs/ois/includes;../externalLibs/cegui/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib;../externalLibs/angelscript/include;../externalLibs/angelscript/add_on/scriptstring;../externalLibs/DbgLib"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;USE_DBGLIB"
+				RuntimeLibrary="2"
+				RuntimeTypeInfo="false"
+				UsePrecompiledHeader="0"
+				PrecompiledHeaderThrough="Common.h"
+				WarningLevel="4"
+				WarnAsError="true"
+				Detect64BitPortabilityProblems="false"
+				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				OutputFile="$(OutDir)/Ocerus.exe"
+				LinkIncremental="1"
+				AdditionalLibraryDirectories="../externalLibs/boost/lib;../externalLibs/SDL/lib;../externalLibs/cegui/dependencies/lib"
+				IgnoreDefaultLibraryNames="libci.lib;libcmt.lib"
+				GenerateDebugInformation="true"
+				ProgramDatabaseFile="$(TargetDir)$(TargetName).pdb"
+				SubSystem="2"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
+				TargetMachine="1"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				Description="Copying binaries to the deploy directory..."
+				CommandLine="mkdir &quot;..\output\deploy\$(PlatformName)&quot;&#x0D;&#x0A;copy /V /Y /B &quot;$(TargetPath)&quot; &quot;../output/deploy/$(PlatformName)/&quot;&#x0D;&#x0A;copy /V /Y /B &quot;$(TargetDir)$(TargetName).pdb&quot; &quot;../output/deploy/$(PlatformName)/&quot;&#x0D;&#x0A;copy /V /Y /B &quot;$(SolutionDir)bin\Develop\libexpat.dll&quot; &quot;../output/deploy/$(PlatformName)/&quot;&#x0D;&#x0A;"
+				ExcludedFromBuild="false"
+			/>
+		</Configuration>
 	</Configurations>
 	<References>
 	</References>
