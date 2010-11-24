@@ -119,7 +119,7 @@
 				Optimization="2"
 				InlineFunctionExpansion="2"
 				AdditionalIncludeDirectories="../src;../src/Precompiled;../src/Utils;../externalLibs/SDL/inc;../externalLibs/boost/inc;../externalLibs/ois/includes;../externalLibs/cegui/cegui/include;../externalLibs/rudeconfig/include;../externalLibs/Box2D/Include;../externalLibs/Box2D/Source;../externalLibs/expat/lib;../externalLibs/angelscript/include;../externalLibs/RTHProfiler/include;../externalLibs/SOIL/src;../externalLibs/DbgLib"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;USE_DBGLIB"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;USE_DBGLIB;NO_CONSOLE"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="false"
 				UsePrecompiledHeader="2"

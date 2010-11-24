@@ -118,7 +118,9 @@ void Application::Init(const string& sharedDir)
 	mConsoleHeight = mGlobalConfig->GetInt32("ConsoleH", 768, "Windows");
 
 	// debug window
+	#if !NO_CONSOLE
 	if (mDevelopMode) ShowConsole();
+	#endif
 
 	// test shared dirs
 	if (!boost::filesystem::exists(GetDataDirectory()))

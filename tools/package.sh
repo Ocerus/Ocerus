@@ -75,7 +75,7 @@ clearDirectory $OUTPUT_DIR/sources/src
 clearDirectory $OUTPUT_DIR/sources/Win32
 
 
-processDirectory Win32/bin/Develop . $OUTPUT_DIR/bin/Win32 '.*Ocerus\.exe$\|.*Ocerus\.pdb$\|.*libexpat\.dll$'
+processDirectory Win32/bin/Release . $OUTPUT_DIR/bin/Win32 '.*Ocerus\.exe$\|.*Ocerus\.pdb$\|.*libexpat\.dll$'
 processDirectory output . $OUTPUT_DIR/bin/Win32 '.*dbghelp\.dll$\|.*SDL\.dll$\|.*SILLY\.dll$\|.*SILLY_d\.dll$'
 processDirectory . doc/doxygen $OUTPUT_DIR '.*/html/.*$\|.*index\.html$\|.*mainpage\.txt$\|.*Ocerus\.dox$'
 processDirectory . doc/userDocumentation $OUTPUT_DIR '.*Documentation\.pdf$'
