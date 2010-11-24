@@ -55,16 +55,23 @@ function excludeDirs {
 }
 
 
-cd ..
+
 CUR_DIR_NAME=`basename \`pwd\``
-if [ "$CUR_DIR_NAME" != "trunk" ]; then
+if [ "$CUR_DIR_NAME" != "tools" ]; then
 	echo "The script must be run from the tools/ directory"
 	exit
 fi
 
 
-OUTPUT_DIR=../output
+OS=`uname | tr [A-Z] [a-z]`
+if [[ "$OS" == cygwin* ]]; then
+	./buildVs9.bat
+fi
 
+
+cd ..
+
+OUTPUT_DIR=../output
 
 clearDirectory $OUTPUT_DIR/bin/Win32
 clearDirectory $OUTPUT_DIR/doc
