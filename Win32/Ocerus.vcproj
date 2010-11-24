@@ -483,6 +483,22 @@
 				>
 			</File>
 		</Filter>
+		<File
+			RelativePath=".\_Ocerus.rc"
+			>
+		</File>
+		<File
+			RelativePath=".\icon1.ico"
+			>
+		</File>
+		<File
+			RelativePath=".\ocerus.ico"
+			>
+		</File>
+		<File
+			RelativePath=".\resource.h"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>
