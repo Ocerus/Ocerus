@@ -131,7 +131,10 @@ void StringMgr::Init(const string& systemBasePath, const string& projectBasePath
 	msSystem = new StringMgr(ResourceSystem::BPT_SYSTEM, systemBasePath);
 	msProject = new StringMgr(ResourceSystem::BPT_PROJECT, projectBasePath);
 
-	gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_SYSTEM, systemBasePath, "Strings", ".+\\.str");
+	if (GlobalProperties::Get<bool>("DevelopMode"))
+	{
+		gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_SYSTEM, systemBasePath, "Strings", ".+\\.str");
+	}
   
 	// Set text resource unload callback
 	TextResource::SetUnloadCallback(&ResourceUnloadCallback);

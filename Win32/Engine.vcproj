@@ -309,8 +309,8 @@
 		</Configuration>
 		<Configuration
 			Name="Deploy_Release|Win32"
-			OutputDirectory="$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			OutputDirectory="bin\$(ConfigurationName)"
+			IntermediateDirectory="bin\$(ConfigurationName)_Engine"
 			ConfigurationType="4"
 			CharacterSet="0"
 			WholeProgramOptimization="1"
