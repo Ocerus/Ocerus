@@ -43,8 +43,12 @@ namespace Editor
 		void AddWidgetToTabNavigation(CEGUI::Window* widget);
 
 	private:
+
 		/// Manages clicking remove component button.
 		bool OnRemoveComponentButtonClicked(const CEGUI::EventArgs&);
+
+		/// Clears the window except the GUI layouts.
+		void ClearPropertyEditors();
 
 		/// Group of properties representing a component in the entity editor.
 		struct ComponentGroup

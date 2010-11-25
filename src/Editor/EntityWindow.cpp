@@ -34,11 +34,7 @@ void EntityWindow::Init()
 		mWindow = gGUIMgr.GetWindow("Editor/EntityWindow");
 		mWindow->setUserString("WantsMouseWheel", "True");
 
-		//mScrollablePane = static_cast<CEGUI::ScrollablePane*>(gGUIMgr.CreateWindow("Editor/ScrollablePane", "Editor/EntityWindow/Scrollable"));
-		//mScrollablePane->setArea(CEGUI::URect(cegui_absdim(0), cegui_absdim(0), cegui_absdim(1), cegui_absdim(1)));
-
 		mScrollablePane = static_cast<CEGUI::ScrollablePane*>(mWindow->getChild("Editor/EntityWindow/Scrollable"));
-
 		mScrollablePane->setUserString("WantsMouseWheel", "True");
 
 		mVerticalLayout = new GUISystem::VerticalLayout(mScrollablePane, const_cast<CEGUI::ScrolledContainer*>(mScrollablePane->getContentPane()));
@@ -85,7 +81,7 @@ void EntityWindow::Rebuild()
 	mNeedsRebuild = false;
 	float verticalScrollPosition = mScrollablePane->getVerticalScrollPosition() * mScrollablePane->getContentPaneArea().getHeight();
 
-	Clear();
+	ClearPropertyEditors();
 
 	// There is no entity to be selected.
 	EntitySystem::EntityHandle currentEntity = gEditorMgr.GetSelectedEntity();
@@ -200,6 +196,15 @@ void EntityWindow::Clear()
 {
 	if (!mWindow) return;
 
+	ocInfo << "Clearing EntityWindow";
+
+	ClearPropertyEditors();
+}
+
+void EntityWindow::ClearPropertyEditors()
+{
+	if (!mWindow) return;
+
 	mTabNavigation->Clear();
 
 	// Clear all property editors. The editor windows are destroyed during the process.
@@ -208,15 +213,6 @@ void EntityWindow::Clear()
 		mValueEditorFactory->StoreValueEditor(*it);
 	}
 	mPropertyEditors.clear();
-
-/*
-	// Clear all layouts.
-	for (VerticalLayouts::iterator it=mVerticalLayouts.begin(); it!=mVerticalLayouts.end(); ++it)
-	{
-		delete (*it);
-	}
-	mVerticalLayouts.clear();
-*/
 }
 
 void Editor::EntityWindow::AddWidgetToTabNavigation(CEGUI::Window* widget)

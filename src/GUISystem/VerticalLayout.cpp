@@ -18,7 +18,6 @@ GUISystem::VerticalLayout::VerticalLayout(CEGUI::Window* managedWindow, CEGUI::W
 GUISystem::VerticalLayout::~VerticalLayout()
 {
 	ClearEventConnections();
-	//gGUIMgr.DestroyWindow(mManagedWindow);
 }
 
 void GUISystem::VerticalLayout::AddChildWindow(CEGUI::Window* window)
@@ -50,8 +49,6 @@ void GUISystem::VerticalLayout::UpdateLayout()
 			currentChild->setWidth(CEGUI::UDim(1, 0));
 		currentY += (int)currentChild->getHeight().d_offset;
 
-		// If not last child window
-//		if (it != mChildWindows.end() - 1)
 		currentY += mSpacing;
 
 	}
@@ -75,6 +72,7 @@ void GUISystem::VerticalLayout::Clear()
 {
 	ClearEventConnections();
 	mChildWindows.clear();
+	mManagedWindow->setArea(CEGUI::URect(CEGUI::UDim(0,0),CEGUI::UDim(0,0),CEGUI::UDim(0,0),CEGUI::UDim(0,0)));
 }
 
 void GUISystem::VerticalLayout::ClearEventConnections()
