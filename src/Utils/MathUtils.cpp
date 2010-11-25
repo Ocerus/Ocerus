@@ -32,7 +32,7 @@ float32 MathUtils::Clamp( const float32 num, const float32 min, const float32 ma
 
 float32 MathUtils::Wrap( const float32 num, const float32 min, const float32 max )
 {
-	if (max >= min) return num;
+	if (max <= min) return num;
 	float32 res = num;
 	float32 d = max - min;
 	while (res > max)

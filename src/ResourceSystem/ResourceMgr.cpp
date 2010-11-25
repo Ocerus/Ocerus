@@ -425,9 +425,9 @@ void ResourceMgr::GetResources(vector<ResourcePtr>& output, eBasePathType basePa
 		{
 			if (ri->second->GetBasePathType() == basePathType)
 			{
-				string resourceName = ri->second->GetName();
-				if ((path.empty() || resourceName.find(path) == 0) && 
-					(recursive || resourceName.find('/', path.length()) == string::npos))
+				boost::filesystem::path resourceName(ri->second->GetName());
+				if ((path.empty() || resourceName.string().find(path) == 0) && 
+					(recursive || resourceName.string().find('/', path.length()) == string::npos))
 					output.push_back(ri->second);
 			}
 		}

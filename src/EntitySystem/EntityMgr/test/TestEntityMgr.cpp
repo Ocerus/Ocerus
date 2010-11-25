@@ -14,7 +14,10 @@ SUITE(EntityMgr)
 		EntityList entities;
 
 		desc.Reset();
-		CHECK(gEntityMgr.CreateEntity(desc) == EntityHandle::Null);
+
+		bool* boolPointer = new bool(false);
+		Utils::GlobalProperties::SetPointer("DevelopMode", boolPointer);
+		CHECK(gEntityMgr.CreateEntity(desc).IsValid());
 
 		desc.Reset();
 		desc.AddComponent(CT_Transform);
@@ -42,7 +45,7 @@ SUITE(EntityMgr)
 		CHECK_EQUAL((size_t)3, entities.size());
 
 		gEntityMgr.GetEntities(entities);
-		CHECK_EQUAL((size_t)3, entities.size());
+		CHECK_EQUAL((size_t)4, entities.size());
 
 		gEntityMgr.DestroyEntity(entity2);
 		gEntityMgr.DestroyEntity(entity1);
@@ -53,7 +56,7 @@ SUITE(EntityMgr)
 		CHECK(!gEntityMgr.EntityExists(entity2));
 
 		gEntityMgr.GetEntities(entities);
-		CHECK_EQUAL((size_t)1, entities.size());
+		CHECK_EQUAL((size_t)2, entities.size());
 
 		gEntityMgr.DestroyAllEntities(true, true);
 		gEntityMgr.GetEntities(entities);
