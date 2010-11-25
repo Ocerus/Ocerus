@@ -285,7 +285,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Building Memory documentation..."
-						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet Memory.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet Memory.tex"
+						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet Memory.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet Memory.tex&#x0D;&#x0A;"
 						AdditionalDependencies="Memory.tex;MemoryContent.tex"
 						Outputs="Memory.pdf"
 					/>
@@ -296,7 +296,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Building Memory documentation..."
-						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet Memory.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet Memory.tex"
+						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet Memory.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet Memory.tex&#x0D;&#x0A;"
 						AdditionalDependencies="Memory.tex;MemoryContent.tex"
 						Outputs="Memory.pdf"
 					/>
@@ -414,8 +414,9 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Building Shortcuts.pdf"
+						Description="Building Shortcuts..."
 						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet Shorcuts.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet Shortcuts.tex&#x0D;&#x0A;"
+						AdditionalDependencies="Shortcuts.tex"
 						Outputs="Shortcuts.pdf"
 					/>
 				</FileConfiguration>
@@ -424,8 +425,9 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Building Shortcuts.pdf"
+						Description="Building Shortcuts..."
 						CommandLine="pdflatex.exe -interaction=nonstopmode -draftmode -quiet Shorcuts.tex&#x0D;&#x0A;pdflatex.exe -interaction=nonstopmode -quiet Shortcuts.tex&#x0D;&#x0A;"
+						AdditionalDependencies="Shortcuts.tex"
 						Outputs="Shortcuts.pdf"
 					/>
 				</FileConfiguration>
@@ -498,6 +500,14 @@
 						Name="VCCustomBuildTool"
 					/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\EditorContent.tex"
@@ -524,6 +534,14 @@
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -582,6 +600,14 @@
 						Name="VCCustomBuildTool"
 					/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\LogSystemContent.tex"
@@ -614,12 +640,28 @@
 						Name="VCCustomBuildTool"
 					/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\PlatformSetupContent.tex"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -638,12 +680,28 @@
 						Name="VCCustomBuildTool"
 					/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\ScriptRegisterContent.tex"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -682,12 +740,28 @@
 						Name="VCCustomBuildTool"
 					/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\UtilsContent.tex"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
