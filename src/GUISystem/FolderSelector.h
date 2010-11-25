@@ -8,10 +8,12 @@
 #include "Utils/Callback.h"
 
 namespace GUISystem {
+
 	/// The FolderSelector class provides a modal dialog for selecting a folder.
 	class FolderSelector
 	{
 	public:
+
 		/// Callback type that signals that user confirmed/cancelled the dialog. Parameters are:
 		/// @param path
 		/// @param editboxValue
@@ -42,6 +44,7 @@ namespace GUISystem {
 		void SetCurrentFolder(string folder);
 
 	private:
+
 		/// @name CEGUI Callbacks
 		//@{
 			bool OnFolderListClicked(const CEGUI::EventArgs&);
@@ -49,14 +52,25 @@ namespace GUISystem {
 			bool OnEditboxKeyDown(const CEGUI::EventArgs&);
 		//@}
 
+		/// Changes the current directory to another.
 		void ChangeFolder(const string& folder);
 
+		/// Updates the GUI list of folders.
 		void UpdateFolderList();
 
+		/// Fills the out vector with folders inside the given directory.
+		void ListDirectoryContent(const string& directory, vector<string>& out);
+
+		/// Fills the out vector with logical drives.
+		void ListDrives(vector<string>& out);
+
+		/// Confirms the form.
 		void Submit();
 
+		/// Cancels the form.
 		void Cancel();
 
+		/// Returns the relative path to the current directory.
 		string GetRelativePath(const string& absolutePath);
 
 		CEGUI::Window* mWindow;

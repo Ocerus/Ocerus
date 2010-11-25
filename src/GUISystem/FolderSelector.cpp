@@ -9,6 +9,7 @@ using namespace GUISystem;
 GUISystem::FolderSelector::FolderSelector(const string& rootPath, int32 tag):
 	mWindow(0), mButtonOK(0), mButtonCancel(0), mPathBox(0), mFolderList(0), mEditbox(0), mTag(tag), mRootPath(rootPath)
 {
+	mCurrentPath = boost::filesystem::current_path<boost::filesystem::path>().directory_string();
 }
 
 GUISystem::FolderSelector::~FolderSelector()
@@ -142,14 +143,25 @@ void FolderSelector::ChangeFolder(const string& folder)
 		if (folder == "..")
 		{
 			if (currentPath.has_parent_path() && (currentPath.parent_path().directory_string().length() >= mRootPath.length()))
+			{
 				currentPath = currentPath.parent_path();
+			}
 		}
 		else
 		{
 			currentPath = currentPath / folder;
 		}
+
 		if (boost::filesystem::is_directory(currentPath.directory_string()))
+		{
 			mCurrentPath = currentPath.directory_string();
+		}
+
+		if (mCurrentPath[mCurrentPath.length()-1] == ':')
+		{
+			// this is a E: type of path. We want rather a selection of drives. Let's clear the path altogether to designate that.
+			mCurrentPath.clear();
+		}
 	}
 	catch (const boost::system::system_error& e)
 	{
@@ -159,32 +171,27 @@ void FolderSelector::ChangeFolder(const string& folder)
 
 void GUISystem::FolderSelector::UpdateFolderList()
 {
-	if (!boost::filesystem::is_directory(mCurrentPath))
+	if (!mCurrentPath.empty() && !boost::filesystem::is_directory(mCurrentPath))
 	{
+		ocWarning << "Current path '" << mCurrentPath << "' is an incorrect directory; using current directory";
 		mCurrentPath = boost::filesystem::current_path<boost::filesystem::path>().directory_string();
 	}
+
 	if (mCurrentPath.length() < mRootPath.length())
 	{
 		mCurrentPath = mRootPath;
 	}
 
 	mFolders.clear();
-	mFolders.push_back("..");
-	try
+	if (mCurrentPath.empty())
 	{
-		boost::filesystem::directory_iterator endIt;
-		for (boost::filesystem::directory_iterator it(mCurrentPath); it != endIt; ++it)
-		{
-			if (boost::filesystem::is_directory(it->path()))
-			{
-				mFolders.push_back(it->filename());
-			}
-		}
+		// if the path is empty it means we're listing drives
+		ListDrives(mFolders);
 	}
-	catch (const boost::system::system_error& e)
+	else
 	{
-		ocWarning << "System exception caught: " << e.what();
-	}	
+		ListDirectoryContent(mCurrentPath, mFolders);
+	}
 	Containers::sort(mFolders.begin(), mFolders.end());
 
 	mPathBox->setText(GetRelativePath(mCurrentPath));
@@ -206,3 +213,50 @@ string GUISystem::FolderSelector::GetRelativePath(const string& absolutePath)
 	else
 		return absolutePath.substr(mRootPath.size());
 }
+
+void GUISystem::FolderSelector::ListDirectoryContent( const string& directory, vector<string>& out )
+{
+	out.push_back("..");
+	try
+	{
+		boost::filesystem::directory_iterator endIt;
+		for (boost::filesystem::directory_iterator it(directory); it != endIt; ++it)
+		{
+			if (boost::filesystem::is_directory(it->path()))
+			{
+				out.push_back(it->filename());
+			}
+		}
+	}
+	catch (const boost::system::system_error& e)
+	{
+		ocWarning << "System exception caught: " << e.what();
+	}
+}
+
+
+#if defined(__WIN__)
+
+#define WIN32_LEAN_AND_MEAN	// Exclude rarely-used stuff from Windows headers
+#include <Windows.h>
+#include <tchar.h>
+
+void GUISystem::FolderSelector::ListDrives( vector<string>& out )
+{
+	TCHAR szBuffer[1024];
+	::GetLogicalDriveStrings(1024, szBuffer);
+	TCHAR *pch = szBuffer;
+	while (*pch) {
+		out.push_back(pch);
+		pch = &pch[_tcslen(pch) + 1];
+	}
+}
+
+#else
+
+void GUISystem::FolderSelector::ListDrives( vector<string>& out )
+{
+	OC_FAIL("There are no drives in Linux paths");
+}
+
+#endif
