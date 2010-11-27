@@ -70,7 +70,7 @@ shortcuts=Shorcuts
 shortcuts_hint=Displays a list of shortcuts of the editor.
 about=About
 about_hint=Displays the info about the application.
-about_message_text=Ocerus\na game developmnet environment\nhttp://ocerus.hardwire.cz
+about_message_text=Ocerus\na game development environment\nhttp://ocerus.sourceforge.net
 deploy_project=Deploy
 deploy_project_hint=Deploys the game for a specific platform.
 no_platform=empty
@@ -156,4 +156,4 @@ select_folder=Select Folder
 # error messages
 error_link_prototype_to_prototype=Cannot link a prototype to another prototype.
 error_no_project_opened=No project opened.
-error_cannot_link_prototype=Cannot link instance to prototype because of component mismatch.
+error_cannot_link_prototype=Cannot link an instance to a prototype because of component mismatch.

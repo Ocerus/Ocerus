@@ -617,7 +617,7 @@ void Core::Application::OpenFileInExternalApp( const string& filePath )
 {
 	static string adjustedPath;
 	
-	adjustedPath = filePath;
+	adjustedPath = mSharedDir + "\\" + filePath;
 	size_t slashPos = adjustedPath.find('/');
 	while (slashPos != string::npos)
 	{
@@ -675,16 +675,18 @@ void Core::Application::OpenFileInExternalApp( const string& filePath )
 	static string pdfCommands[] = { "okular", "kpdf", "evince", "xpdf", "acroread", "epdfview" };
 	static uint32 pdfCommandsCount = 6;
 
-	bool result = OpenFileUsingCommands(filePath, generalCommands, generalCommandsCount);
+	string adjustedPath = mSharedDir + '/' + filePath;
+	
+	bool result = OpenFileUsingCommands(adjustedPath, generalCommands, generalCommandsCount);
 	if (!result)
 	{
-		if (filePath.compare(filePath.size() - 3, 3, "pdf") == 0)
+		if (adjustedPath.compare(adjustedPath.size() - 3, 3, "pdf") == 0)
 		{
-			result = OpenFileUsingCommands(filePath, pdfCommands, pdfCommandsCount);
+			result = OpenFileUsingCommands(adjustedPath, pdfCommands, pdfCommandsCount);
 		}
 
 		if (!result)
-			ocWarning << "Cannot find suitable command to open " << filePath << ".";		
+			ocWarning << "Cannot find suitable command to open " << adjustedPath << ".";		
 	}
 }
 
