@@ -684,8 +684,18 @@ void Core::Application::OpenFileInExternalApp( const string& filePath )
 	static string pdfCommands[] = { "okular", "kpdf", "evince", "xpdf", "acroread", "epdfview" };
 	static uint32 pdfCommandsCount = 6;
 
-	string adjustedPath = mSharedDir + '/' + filePath;
-	
+	string adjustedPath;
+	if (boost::filesystem::path(filePath).is_complete())
+	{
+		// the path is absolute, so use it as it is
+		adjustedPath = filePath;
+	}
+	else
+	{
+		// otherwise use it relative to the shared directory
+		adjustedPath = mSharedDir + "/" + filePath;
+	}
+
 	bool result = OpenFileUsingCommands(adjustedPath, generalCommands, generalCommandsCount);
 	if (!result)
 	{
