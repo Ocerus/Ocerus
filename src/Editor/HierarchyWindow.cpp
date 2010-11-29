@@ -128,7 +128,7 @@ void Editor::HierarchyWindow::RemoveEntityFromHierarchy(const EntitySystem::Enti
 	HierarchyTree::iterator iter = Containers::find(mHierarchy.begin(), mHierarchy.end(), toRemove);
 	if (iter == mHierarchy.end())
 	{
-		ocWarning << "Attempting to remove non-existent hierarchy item";
+		//ocWarning << "Attempting to remove non-existent hierarchy item";
 		return;
 	}
 
