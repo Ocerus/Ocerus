@@ -11,6 +11,9 @@
 /// Helper methods and definitions for unit testing.
 namespace Test
 {
+	/// Inits the basics.
+	void Init(bool developMode);
+
 	/// Inits the resource manager.
 	void InitResources(void);
 

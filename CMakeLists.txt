@@ -316,7 +316,7 @@ set(GUISystem_SRCS
 )
 
 set(InputSystem_SRCS
-	src/InputSystem/InputAction.cpp
+	src/InputSystem/InputActions.cpp
 	src/InputSystem/InputMgr.cpp
 	src/InputSystem/OISListener.cpp
 )
@@ -467,6 +467,8 @@ if (BUILD_TESTS)
     set_target_properties(ocerus-test PROPERTIES COMPILE_FLAGS "-DUNIT_TESTS")
 
     target_link_libraries(ocerus-test ocerus-engine)
+
+	execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_SOURCE_DIR}/output/test ${CMAKE_BINARY_DIR}/test)
 endif (BUILD_TESTS)
 
 

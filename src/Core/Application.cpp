@@ -89,7 +89,7 @@ void Application::Init(const string& sharedDir)
 		const char* ocerusTempDir = "Ocerus";
 		logDir = tempPath /= ocerusTempDir;
 		#else
-		logDir = boost::filesystem::path(string(std::getenv("HOME")) + "/.ocerus/logs");
+		logDir = boost::filesystem::path(string(std::getenv("HOME")) + "/.ocerus");
 		#endif
 		boost::filesystem::create_directory(logDir);
 	}

@@ -36,7 +36,7 @@ namespace Memory
 
 			LinkedListAllocation() : mFreeBlocks( 0 )
 			{
-				OC_ASSERT_MSG(sizeof(T) >= sizeof(FreeBlock*), "T must be bigger then T* to use the LinkedListAllocation free list policy");
+				OC_ASSERT_MSG(sizeof(T) >= sizeof(FreeBlock*), "T must be bigger than T* to use the LinkedListAllocation free list policy");
 			}
 
 		protected:

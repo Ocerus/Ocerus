@@ -1,5 +1,5 @@
 #include "Common.h"
-#include "UnitTests.h"
+#include "Runner/UnitTests.h"
 #include "../LayerMgr.h"
 
 using namespace EntitySystem;
@@ -8,6 +8,7 @@ SUITE(LayerMgr)
 {
 	TEST(Init)
 	{
+		::Test::Init(false);
 		::Test::InitEntities();
 		StringSystem::StringMgr::Init();
 		LayerMgr::CreateSingleton();

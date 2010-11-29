@@ -8,11 +8,9 @@ SUITE(StringMgr)
 {
 	TEST(Init)
 	{
+		::Test::Init(true);
 		::Test::InitResources();
-		bool* boolPointer = new bool(true);
-		Utils::GlobalProperties::SetPointer("DevelopMode", boolPointer);
 		StringMgr::Init();
-
 		CHECK(StringMgr::IsInited());
 	}
 	

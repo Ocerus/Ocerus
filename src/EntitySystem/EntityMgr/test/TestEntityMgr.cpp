@@ -1,5 +1,5 @@
 #include "Common.h"
-#include "UnitTests.h"
+#include "Runner/UnitTests.h"
 
 using namespace EntitySystem;
 
@@ -7,6 +7,7 @@ SUITE(EntityMgr)
 {
 	TEST(EntityManipulation)
 	{
+		::Test::Init(false);
 		::Test::InitResources();
 		::Test::InitEntities();
 
@@ -14,9 +15,6 @@ SUITE(EntityMgr)
 		EntityList entities;
 
 		desc.Reset();
-
-		bool* boolPointer = new bool(false);
-		Utils::GlobalProperties::SetPointer("DevelopMode", boolPointer);
 		CHECK(gEntityMgr.CreateEntity(desc).IsValid());
 
 		desc.Reset();

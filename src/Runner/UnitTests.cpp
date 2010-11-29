@@ -44,9 +44,21 @@ void Test::InitEntities( const string& resourceFileName )
 {
 	InitEntities();
 	OC_ASSERT(ResourceSystem::ResourceMgr::SingletonExists());
-	gResourceMgr.AddResourceFileToGroup("entities.xml", "entities"); 
+	//gResourceMgr.AddResourceFileToGroup("entities.xml", "entities");
+	gResourceMgr.AddResourceFileToGroup(resourceFileName, "entities"); 
 	gEntityMgr.LoadEntitiesFromResource(gResourceMgr.GetResource("entities", "entities.xml"));
 }
+
+void Test::Init(bool developMode)
+{
+	static bool* boolPointer = 0;
+	if (boolPointer == 0)
+		boolPointer = new bool(false);
+
+	*boolPointer = developMode;
+	Utils::GlobalProperties::SetPointer("DevelopMode", boolPointer);
+}
+
 
 void Test::CleanSubsystems( void )
 {

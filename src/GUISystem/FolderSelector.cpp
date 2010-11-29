@@ -256,6 +256,7 @@ void GUISystem::FolderSelector::ListDrives( vector<string>& out )
 
 void GUISystem::FolderSelector::ListDrives( vector<string>& out )
 {
+	OC_UNUSED(out);
 	OC_FAIL("There are no drives in Linux paths");
 }
 
