@@ -617,7 +617,16 @@ void Core::Application::OpenFileInExternalApp( const string& filePath )
 {
 	static string adjustedPath;
 	
-	adjustedPath = mSharedDir + "\\" + filePath;
+	if (boost::filesystem::path(filePath).is_complete())
+	{
+		// the path is absolute, so use it as it is
+		adjustedPath = filePath;
+	}
+	else
+	{
+		// otherwise use it relative to the shared directory
+		adjustedPath = mSharedDir + "\\" + filePath;
+	}
 	size_t slashPos = adjustedPath.find('/');
 	while (slashPos != string::npos)
 	{
