@@ -128,6 +128,8 @@ bool Editor::EditorMenu::OnMenuItemClicked(const CEGUI::EventArgs& e)
 
 bool Editor::EditorMenu::OnToolbarButtonStateChanged(const CEGUI::EventArgs& e)
 {
+	if (!gEditorMgr.IsProjectOpened()) return false;
+
 	const CEGUI::WindowEventArgs& args = static_cast<const CEGUI::WindowEventArgs&>(e);
 	CEGUI::RadioButton* button = static_cast<CEGUI::RadioButton*>(args.window);
 	if (!button->isSelected()) return false;
