@@ -91,10 +91,10 @@ processDirectory output/projects . $OUTPUT_DIR/shared/samples
 processDirectory . src $OUTPUT_DIR/sources
 processDirectory . cmake $OUTPUT_DIR/sources
 processDirectory . . $OUTPUT_DIR/sources '.*CMakeLists.txt$'
-processDirectory . Win32 $OUTPUT_DIR/sources '.*\.vcproj$\|.*\.sln$\|.*\.txt$\|.*\.wew$' '.*/bin/.*'
+processDirectory . Win32 $OUTPUT_DIR/sources '.*\.vcproj$\|.*\.sln$\|.*\.txt$\|.*\.wew$\|.*\.aps$\|.*\.rc$\|.*\.ico$\|.*\.h$' '.*/bin/.*'
 LIBS_EXCLUDE=`excludeDirs obj tmp bin debug develop release`'.*\.vcproj\..+$\|'
 processDirectory . externalLibs/angelscript $OUTPUT_DIR/sources '.*' $LIBS_EXCLUDE`excludeDir lib`
-processDirectory . externalLibs/boost $OUTPUT_DIR/sources '.*' $LIBS_EXCLUDE
+processDirectory . externalLibs/boost $OUTPUT_DIR/sources '.*'
 processDirectory . externalLibs/Box2D $OUTPUT_DIR/sources '.*' $LIBS_EXCLUDE`excludeDir library`
 processDirectory . externalLibs/cegui $OUTPUT_DIR/sources '.*' $LIBS_EXCLUDE'.*/lib/CEGUI.*\.lib$'
 processDirectory . externalLibs/DbgLib $OUTPUT_DIR/sources '.*' $LIBS_EXCLUDE

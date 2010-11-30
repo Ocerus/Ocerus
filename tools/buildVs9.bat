@@ -18,7 +18,7 @@ if exist "%DOTNET4%" (
 
 echo ------------- Building documentation
 echo.
-%MSBUILD% ..\Win32\Ocerus.sln /t:doc /p:Configuration=Release
+%MSBUILD% ..\doc\userDocumentation\doc.vcproj /p:Configuration=Release
 
 echo ------------- Building Ocerus:Deploy
 echo.

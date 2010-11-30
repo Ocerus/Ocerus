@@ -1,0 +1,1 @@
+These are script used for creating a package of the application to be burned on a CD.

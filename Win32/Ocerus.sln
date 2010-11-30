@@ -59,8 +59,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CEGUIExpatParser", "..\exte
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CEGUISILLYImageCodec", "..\externalLibs\cegui\projects\premake\ImageCodecModules\SILLYImageCodec\CEGUISILLYImageCodec.vcproj", "{DF6787C8-0FA1-0D4D-AE81-0F3450F4ACB7}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "doc", "..\doc\userDocumentation\doc.vcproj", "{57D797D3-5853-4E8B-A89A-6F9D01B136F8}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "angelscript", "..\externalLibs\angelscript\projects\msvc9\angelscript.vcproj", "{39E6AF97-6BA3-4A72-8C61-BCEBF214EBFD}"
 EndProject
 Global
@@ -232,16 +230,6 @@ Global
 		{DF6787C8-0FA1-0D4D-AE81-0F3450F4ACB7}.Develop|Win32.Build.0 = Release_Static|Win32
 		{DF6787C8-0FA1-0D4D-AE81-0F3450F4ACB7}.Release|Win32.ActiveCfg = Release_Static|Win32
 		{DF6787C8-0FA1-0D4D-AE81-0F3450F4ACB7}.Release|Win32.Build.0 = Release_Static|Win32
-		{57D797D3-5853-4E8B-A89A-6F9D01B136F8}.Debug|Win32.ActiveCfg = Debug|Win32
-		{57D797D3-5853-4E8B-A89A-6F9D01B136F8}.Debug|Win32.Build.0 = Debug|Win32
-		{57D797D3-5853-4E8B-A89A-6F9D01B136F8}.Deploy_Develop|Win32.ActiveCfg = Release|Win32
-		{57D797D3-5853-4E8B-A89A-6F9D01B136F8}.Deploy_Develop|Win32.Build.0 = Release|Win32
-		{57D797D3-5853-4E8B-A89A-6F9D01B136F8}.Deploy|Win32.ActiveCfg = Release|Win32
-		{57D797D3-5853-4E8B-A89A-6F9D01B136F8}.Deploy|Win32.Build.0 = Release|Win32
-		{57D797D3-5853-4E8B-A89A-6F9D01B136F8}.Develop|Win32.ActiveCfg = Debug|Win32
-		{57D797D3-5853-4E8B-A89A-6F9D01B136F8}.Develop|Win32.Build.0 = Debug|Win32
-		{57D797D3-5853-4E8B-A89A-6F9D01B136F8}.Release|Win32.ActiveCfg = Release|Win32
-		{57D797D3-5853-4E8B-A89A-6F9D01B136F8}.Release|Win32.Build.0 = Release|Win32
 		{39E6AF97-6BA3-4A72-8C61-BCEBF214EBFD}.Debug|Win32.ActiveCfg = Debug|Win32
 		{39E6AF97-6BA3-4A72-8C61-BCEBF214EBFD}.Debug|Win32.Build.0 = Debug|Win32
 		{39E6AF97-6BA3-4A72-8C61-BCEBF214EBFD}.Deploy_Develop|Win32.ActiveCfg = Release|Win32
