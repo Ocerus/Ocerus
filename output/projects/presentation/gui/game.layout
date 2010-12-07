@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<GUILayout>
+<Window Type="DefaultWindow" Name="GameLayout">
+	<Property Name="Font" Value="DejaVuSans-10" />
+	<Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{1,0},{1,0}}" />
+
+	<Window Type="Cube/FrameWindow" Name="GameLayout/InfoFrame" >
+		<Property Name="SizingEnabled" Value="False" />
+		<Property Name="TitlebarEnabled" Value="True" />
+		<Property Name="DragMovingEnabled" Value="False" />
+		<Property Name="CloseButtonEnabled" Value="False" />
+		<Property Name="UnifiedAreaRect" Value="{{0.0,-10},{0.0,-30},{0.0,110},{0.0,60}}" />
+
+		<Window Type="Cube/StaticImage" Name="GameLayout/ScoreIcon1" >
+			<Property Name="Image" Value="set:Icons image:Coin" />
+			<Property Name="UnifiedAreaRect" Value="{{0.15,0},{0.25,0},{0.15,20},{0.25,20}}" />
+			<Property Name="FrameEnabled" Value="False" />
+		</Window>
+
+	    <Window Type="Cube/StaticText" Name="GameLayout/Score" >
+			<Property Name="Font" Value="Score" />
+			<Property Name="TextColours" Value="tl:FF00FFFF tr:FF00FFFF bl:FF005500 br:FF005500" />
+			<Property Name="UnifiedAreaRect" Value="{{0.15,30},{0.25,0},{1.0,0},{0.25,20}}" />
+			<Property Name="BackgroundEnabled" Value="False" />
+			<Property Name="FrameEnabled" Value="False" />
+			<Property Name="Text" Value="999999" />
+	    </Window>
+
+		<Window Type="Cube/StaticImage" Name="GameLayout/ScoreIcon2" >
+			<Property Name="Image" Value="set:Icons image:Clock" />
+			<Property Name="UnifiedAreaRect" Value="{{0.15,0},{0.6,0},{0.15,20},{0.6,20}}" />
+			<Property Name="FrameEnabled" Value="False" />
+		</Window>
+
+		<Window Type="Cube/StaticText" Name="GameLayout/Time" >
+			<Property Name="Font" Value="Score" />
+			<Property Name="TextColours" Value="tl:FF00FFFF tr:FF00FFFF bl:FF005500 br:FF005500" />
+			<Property Name="UnifiedAreaRect" Value="{{0.15,30},{0.6,0},{1.0,0},{0.6,20}}" />
+			<Property Name="BackgroundEnabled" Value="False" />
+			<Property Name="FrameEnabled" Value="False" />
+			<Property Name="Text" Value="99:99" />
+		</Window>
+	</Window>
+  
+	<Window Type="Cube/ImageButton" Name="GameLayout/StateButton">
+		<Property Name="UnifiedAreaRect" Value="{{0,2},{1,-52},{0,52},{1,-2}}" />
+		<Property Name="NormalImage" Value="set:Buttons image:CubeLight"/>
+		<Property Name="HoverImage" Value="set:Buttons image:CubeLight"/>
+		<Property Name="PushedImage" Value="set:Buttons image:CubeLight"/>
+		<Property Name="DisabledImage" Value="set:Buttons image:CubeLight"/>
+		<Event Name="MouseClick" Function="OnStateButtonClicked"/>
+	</Window>  
+
+	<Window Type="Cube/ImageButton" Name="GameLayout/MenuButton">
+		<Property Name="UnifiedAreaRect" Value="{{1.0,-40},{1.0,-40},{1.0,0},{1.0,0}}" />
+		<Property Name="NormalImage" Value="set:Buttons image:MenuGreen"/>
+		<Property Name="HoverImage" Value="set:Buttons image:MenuRed"/>
+		<Property Name="PushedImage" Value="set:Buttons image:MenuRed"/>
+		<Property Name="DisabledImage" Value="set:Buttons image:MenuRed"/>
+		<Event Name="MouseClick" Function="OnMenuButtonClicked"/>
+	</Window>  
+
+	<Window Type="Cube/ImageButton" Name="GameLayout/JumpButton">
+		<Property Name="UnifiedAreaRect" Value="{{0,54},{1,-52},{0,104},{1,-2}}" />
+		<Property Name="NormalImage" Value="set:Buttons image:JumpOn"/>
+		<Property Name="HoverImage" Value="set:Buttons image:JumpHover"/>
+		<Property Name="PushedImage" Value="set:Buttons image:JumpOff"/>
+		<Property Name="DisabledImage" Value="set:Buttons image:JumpOff"/>
+		<Event Name="MouseClick" Function="OnJumpButtonClicked"/>
+
+	    <Window Type="Cube/StaticText" Name="GameLayout/JumpCooldown" >
+			<Property Name="Font" Value="LevelTitle" />
+			<Property Name="TextColours" Value="tl:FFFF0000 tr:FFFF0000 bl:FF440000 br:FF440000" />
+			<Property Name="UnifiedAreaRect" Value="{{0.0,0},{0.0,0},{1.0,0},{1.0,0}}" />
+			<Property Name="BackgroundEnabled" Value="False" />
+			<Property Name="FrameEnabled" Value="False" />
+			<Property Name="HorzFormatting" Value="HorzCentred" />
+			<Property Name="Text" Value="10" />
+		</Window>
+	</Window>  
+
+	<Window Type="Cube/ImageButton" Name="GameLayout/ExplosionButton">
+		<Property Name="UnifiedAreaRect" Value="{{0,106},{1,-52},{0,156},{1,-2}}" />
+		<Property Name="NormalImage" Value="set:Buttons image:ExplosionOn"/>
+		<Property Name="HoverImage" Value="set:Buttons image:ExplosionHover"/>
+		<Property Name="PushedImage" Value="set:Buttons image:ExplosionOff"/>
+		<Property Name="DisabledImage" Value="set:Buttons image:ExplosionOff"/>
+		<Event Name="MouseClick" Function="OnExplosionButtonClicked"/>
+
+	    <Window Type="Cube/StaticText" Name="GameLayout/ExplosionCooldown" >
+			<Property Name="Font" Value="LevelTitle" />
+			<Property Name="TextColours" Value="tl:FFFF0000 tr:FFFF0000 bl:FF440000 br:FF440000" />
+			<Property Name="UnifiedAreaRect" Value="{{0.0,0},{0.0,0},{1.0,0},{1.0,0}}" />
+			<Property Name="BackgroundEnabled" Value="False" />
+			<Property Name="FrameEnabled" Value="False" />
+			<Property Name="HorzFormatting" Value="HorzCentred" />
+			<Property Name="Text" Value="10" />
+		</Window>
+	</Window>  
+
+	<Window Type="Cube/StaticText" Name="GameLayout/LevelTitle" >
+		<Property Name="Font" Value="LevelTitle" />
+		<Property Name="TextColours" Value="tl:FFFF0000 tr:FFFF0000 bl:FF005555 br:FF005555" />
+		<Property Name="UnifiedAreaRect" Value="{{0.4,30},{0.3,0},{0.7,0},{0.5,0}}" />
+		<Property Name="BackgroundEnabled" Value="False" />
+		<Property Name="FrameEnabled" Value="False" />
+		<Property Name="Text" Value="$levelTitle$" />
+	</Window>
+
+</Window>
+</GUILayout>

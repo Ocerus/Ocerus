@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+
+<Imageset Name="Buttons" Imagefile="gui/buttons.png">
+	
+	<Image Name="ExplosionOn" XPos="0" YPos="0" Width="128" Height="128" />
+	<Image Name="ExplosionOff" XPos="128" YPos="0" Width="128" Height="128" />
+	<Image Name="ExplosionHover" XPos="256" YPos="0" Width="128" Height="128" />
+
+	<Image Name="JumpOn" XPos="0" YPos="129" Width="128" Height="128" />
+	<Image Name="JumpOff" XPos="128" YPos="129" Width="128" Height="128" />
+	<Image Name="JumpHover" XPos="256" YPos="129" Width="128" Height="128" />
+
+	<Image Name="CubeLight" XPos="0" YPos="258" Width="128" Height="128" />
+	<Image Name="CubeHeavy" XPos="128" YPos="258" Width="128" Height="128" />
+
+	<Image Name="MenuGreen" XPos="0" YPos="387" Width="50" Height="38" />
+	<Image Name="MenuRed" XPos="51" YPos="387" Width="50" Height="38" />
+
+</Imageset>

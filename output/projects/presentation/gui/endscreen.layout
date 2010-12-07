@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<GUILayout>
+	<Window Type="TaharezLook/FrameWindow" Name="EndScreen">
+		<Property Name="SizingEnabled" Value="False" />
+		<Property Name="TitlebarEnabled" Value="False" />
+		<Property Name="DragMovingEnabled" Value="False" />
+		<Property Name="CloseButtonEnabled" Value="False" />
+		<Property Name="RollUpEnabled" Value="False" />
+    <Property Name="Alpha" Value="0.0" />
+	  <Property Name="UnifiedAreaRect" Value="{{0.0,0},{0.2,0},{1.0,0},{1.0,0}}" />
+
+    <Window Type="TaharezLook/StaticText" Name="TotalScore/Title" >
+      <Property Name="BackgroundEnabled" Value="False" />
+      <Property Name="FrameEnabled" Value="False" />
+      <Property Name="VertFormatting" Value="TopAligned" />
+      <Property Name="InheritsAlpha" Value="False" />
+      <Property Name="UnifiedAreaRect" Value="{{0.0,0},{0.0,0},{0.5,0},{1.0,0}}" />
+      <Property Name="HorzFormatting" Value="RightAligned" />
+			<Property Name="Text" Value="$totalScore$" />
+	    <Property Name="Font" Value="EndScreen" />
+    </Window>
+
+    <Window Type="TaharezLook/StaticText" Name="TotalScore/Value" >
+      <Property Name="BackgroundEnabled" Value="False" />
+      <Property Name="FrameEnabled" Value="False" />
+      <Property Name="VertFormatting" Value="TopAligned" />
+      <Property Name="InheritsAlpha" Value="False" />
+      <Property Name="UnifiedAreaRect" Value="{{0.5,0},{0.0,0},{1.0,0},{1.0,0}}" />
+      <Property Name="HorzFormatting" Value="LeftAligned" />
+			<Property Name="Text" Value="empty" />
+	    <Property Name="Font" Value="EndScreen" />
+    </Window>
+
+
+    <Window Type="TaharezLook/StaticText" Name="TotalTime/Title" >
+      <Property Name="BackgroundEnabled" Value="False" />
+      <Property Name="FrameEnabled" Value="False" />
+      <Property Name="VertFormatting" Value="TopAligned" />
+      <Property Name="InheritsAlpha" Value="False" />
+      <Property Name="UnifiedAreaRect" Value="{{0.0,0},{0.0,30},{0.5,0},{1.0,0}}" />
+      <Property Name="HorzFormatting" Value="RightAligned" />
+			<Property Name="Text" Value="$totalTime$" />
+	    <Property Name="Font" Value="EndScreen" />
+    </Window>
+
+    <Window Type="TaharezLook/StaticText" Name="TotalTime/Value" >
+      <Property Name="BackgroundEnabled" Value="False" />
+      <Property Name="FrameEnabled" Value="False" />
+      <Property Name="VertFormatting" Value="TopAligned" />
+      <Property Name="InheritsAlpha" Value="False" />
+      <Property Name="UnifiedAreaRect" Value="{{0.5,0},{0.0,30},{1.0,0},{1.0,0}}" />
+      <Property Name="HorzFormatting" Value="LeftAligned" />
+			<Property Name="Text" Value="empty" />
+	    <Property Name="Font" Value="EndScreen" />
+    </Window>
+
+
+    <Window Type="TaharezLook/Button" Name="QuitButton" >
+      <Property Name="VertFormatting" Value="BottomAligned" />
+      <Property Name="InheritsAlpha" Value="False" />
+      <Property Name="UnifiedAreaRect" Value="{{0.5,-75},{0.5,0},{0.5,75},{0.5,40}}" />
+      <Property Name="HorzFormatting" Value="RightAligned" />
+			<Property Name="Text" Value="$quit$" />
+	    <Property Name="Font" Value="Score" />
+			<Event Name="MouseClick" Function="OnQuitClicked"/>
+    </Window>
+
+  </Window>
+
+</GUILayout>

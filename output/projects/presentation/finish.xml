@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Scene>
+  <Layers Difference="0" ActiveLayer="0">
+    <Layer Visible="true">Initial layer</Layer>
+  </Layers>
+  <Entities>
+    <Entity Name="GameCamera" ID="126" Tag="0" Transient="false">
+      <Component Type="Camera">
+        <Zoom>1</Zoom>
+        <Position>1.16567 0</Position>
+        <Rotation>0</Rotation>
+      </Component>
+    </Entity>
+    <Entity Name="EditorCamera" ID="127" Tag="0" Transient="false">
+      <Component Type="Camera">
+        <Zoom>1</Zoom>
+        <Position>1.16567 0</Position>
+        <Rotation>0</Rotation>
+      </Component>
+    </Entity>
+    <Entity Name="endscreen" ID="128" Tag="0" Transient="false">
+      <Component Type="GUILayout">
+        <Callback>gui/endscreen.as</Callback>
+        <Scheme></Scheme>
+        <Visible>true</Visible>
+        <Layout>gui/endscreen.layout</Layout>
+        <Enabled>true</Enabled>
+      </Component>
+    </Entity>
+  </Entities>
+  <Hierarchy>
+    <Entity ID="128"></Entity>
+  </Hierarchy>
+</Scene>

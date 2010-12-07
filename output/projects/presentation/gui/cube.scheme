@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<GUIScheme Name="Cube">
+
+	<Imageset Filename="gui/buttons.imageset" />
+	<Imageset Filename="gui/icons.imageset" />
+	<Font Filename="gui/score.font" />
+	<Font Filename="gui/leveltitle.font" />
+	<Font Filename="gui/endscreen.font" />
+	
+	<FalagardMapping WindowType="Cube/Button" TargetType="CEGUI/PushButton" Renderer="Falagard/Button" LookNFeel="TaharezLook/Button" />
+	<FalagardMapping WindowType="Cube/ImageButton" TargetType="CEGUI/PushButton" Renderer="Falagard/Button" LookNFeel="TaharezLook/ImageButton" />
+	<FalagardMapping WindowType="Cube/StaticText" TargetType="DefaultWindow" Renderer="Falagard/StaticText" LookNFeel="TaharezLook/StaticText" />
+	<FalagardMapping WindowType="Cube/StaticImage" TargetType="DefaultWindow" Renderer="Falagard/StaticImage" LookNFeel="TaharezLook/StaticImage" />
+	<FalagardMapping WindowType="Cube/FrameWindow"  TargetType="CEGUI/FrameWindow" Renderer="Falagard/FrameWindow"  LookNFeel="TaharezLook/FrameWindow" />
+	<FalagardMapping WindowType="Cube/GroupBox" TargetType="CEGUI/GroupBox"   Renderer="Falagard/Default"   LookNFeel="TaharezLook/GroupBox" />
+
+</GUIScheme>

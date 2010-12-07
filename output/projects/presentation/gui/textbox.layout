@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<GUILayout>
+  <Window Type="TaharezLook/FrameWindow" Name="TextBox">
+		<Property Name="Text" Value="$textboxTitle$" />
+		<Property Name="SizingEnabled" Value="False" />
+		<Property Name="TitlebarEnabled" Value="True" />
+		<Property Name="DragMovingEnabled" Value="False" />
+		<Property Name="CloseButtonEnabled" Value="True" />
+		<Property Name="RollUpEnabled" Value="False" />
+		<Property Name="Alpha" Value="0.95" />
+	  <Property Name="UnifiedAreaRect" Value="{{0.2,0},{0.2,0},{0.8,0},{0.8,0}}" />
+
+    <Window Type="TaharezLook/StaticText" Name="TextBox/Text" >
+      <Property Name="UnifiedAreaRect" Value="{{0.0,10},{0.0,10},{1.0,-10},{1.0,-10}}" />
+      <Property Name="BackgroundEnabled" Value="False" />
+      <Property Name="FrameEnabled" Value="False" />
+      <Property Name="HorzFormatting" Value="WordWrapLeftAligned" />
+      <Property Name="VertFormatting" Value="TopAligned" />
+	    <Property Name="VertScrollbar" Value="True" />
+			<Property Name="Text" Value="empty" />
+    </Window>
+
+		<Event Name="Shown" Function="OnShown"/>
+		<Event Name="CloseClicked" Function="OnCloseClicked"/>
+
+  </Window>
+  
+</GUILayout>

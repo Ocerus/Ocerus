@@ -1,0 +1,12 @@
+group=GUI
+
+levelTitle=LEVEL
+ingameMenu=Menu
+continue=Continue
+restartLevel=Restart Level
+help=Help
+quit=Quit Game
+helpText=Help\nThis is a sample game showing how Ocerus can be used to build games. In this game you control a cube and you're aim is to get to the level exit marked with a white flag.\n\nYou can rotate the cube by using the left/right arrow keys, change it's mode (light/heavy) using the down arrow and use its ability (depending on the current mode) using the up arrow. While in the light mode the cube can jump. While in the heavy mode the cube destroys rocks around it.
+textboxTitle=Info
+totalScore=TOTAL SCORE: 
+totalTime=TOTAL TIME: 

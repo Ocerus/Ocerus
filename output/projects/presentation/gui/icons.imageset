@@ -1,0 +1,8 @@
+<?xml version="1.0" ?>
+
+<Imageset Name="Icons" Imagefile="gui/icons.png">
+	
+	<Image Name="Coin" XPos="2" YPos="2" Width="16" Height="16" />
+	<Image Name="Clock" XPos="25" YPos="2" Width="81" Height="82" />
+
+</Imageset>
