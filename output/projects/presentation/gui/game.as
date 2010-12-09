@@ -16,8 +16,8 @@ void OnUpdateLogic(float32 delta)
   EntityHandle director = gEntityMgr.FindFirstEntity("Director");
   if (!director.IsValid()) return;
   
-  uint32 score = director.Get_uint32("Score") + game.Get_uint32("TotalScore");
-  GetWindow("GameLayout/Score").SetText("" + score);
+  //uint32 score = director.Get_uint32("Score") + game.Get_uint32("TotalScore");
+  //GetWindow("GameLayout/Score").SetText("" + score);
 
   float32 timeInSeconds = director.Get_float32("Time");
   uint32 timeMinutes = MathUtils::Floor(timeInSeconds / 60);
