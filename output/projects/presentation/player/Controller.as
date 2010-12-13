@@ -43,8 +43,8 @@ void OnUpdateLogic(float32 delta)
 	if (gInputMgr.IsKeyDown(KC_RIGHT)) torque = 1;
 	if (gInputMgr.IsKeyDown(KC_LEFT)) torque = -1;
 	
-	if (this.Get_bool("IsLight")) torque *= 6;
-	else torque *= 150;
+	if (this.Get_bool("IsLight")) torque *= 60;
+	else torque *= 200;
 	this.CallFunction("ApplyTorque", PropertyFunctionParameters() << torque);
 	
 	// apply some additional linear force
@@ -52,7 +52,7 @@ void OnUpdateLogic(float32 delta)
 	if (gInputMgr.IsKeyDown(KC_RIGHT)) force = Vector2(1, 0);
 	if (gInputMgr.IsKeyDown(KC_LEFT)) force = Vector2(-1, 0);
 	
-	if (this.Get_bool("IsLight")) force *= 1;
+	if (this.Get_bool("IsLight")) force *= 10;
 	else force *= 20;
 	this.CallFunction("ApplyForce", PropertyFunctionParameters() << force);
 	

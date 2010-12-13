@@ -6,7 +6,7 @@ const float32 EXPLOSION_RATIO = 20.0f;
 const float32 EXPLOSION_PULL_RADIUS = 1.0f;
 const float32 EXPLOSION_DESTROY_RADIUS = 1.5f;
 const uint32 EXPLOSION_DESTROY_COUNT = 5;
-const float32 JUMP_RATIO = 0.8f;
+const float32 JUMP_RATIO = 10.0f;
 const float32 JUMP_MAX_DELAY = 0.2f;
 
 
@@ -87,13 +87,13 @@ void SetMode(EntityHandle entity, bool willBeLight)
   
 	if (entity.Get_bool("IsLight"))
   {
-		entity.Set_float32("Density", 0.1f);
+		entity.Set_float32("Density", 1.0f);
 		entity.Set_float32("Friction", 1.0f);  
   }
   else
   {
-		entity.Set_float32("Density", 10.0f);
-		entity.Set_float32("Friction", 0.1f);  
+		entity.Set_float32("Density", 15.0f);
+		entity.Set_float32("Friction", 0.3f);  
   }
 }
 
