@@ -25,7 +25,7 @@ void OnUpdateLogic(float32 delta)
   GetWindow("GameLayout/Time").SetText(timeMinutes + ":" + ((timeSeconds < 10) ? "0" : "") + timeSeconds);
   
   UpdateButtons();
-  LevelTitleAnimation(delta);
+  //LevelTitleAnimation(delta);
 }
 
 void UpdateButtons()
