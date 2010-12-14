@@ -1,0 +1,95 @@
+- dobry den, ja jsem Ondrej Mocny a chci vam tu predstavit softwarovy projekt Ocerus
+- osnova: co je Ocerus, autori, hlavni vlastnosti
+- na zaver dotazy
+Co je Ocerus:
+- nastroj pro tvorbu 2.5D her
+- 2.5D
+- herni engine + editor
+- prezentace jako hra
+- primo ukazovat o cem mluvim
+Autori:
+- portrety
+- predstavni
+Vlastnosti:
+- standardni veci
+- fyzika, GUI, skripty (ukazat)
+- specialni veci
+Real-time editace:
+- real-time editace
+- posouvani/rotace objektu
+- zmena skriptu a textur
+- ukazka: zmena konstanty sily skoku
+- ukazka: pocmarani krabice
+- neni nutny refresh
+Komponentovy model:
+- komponentovy model
+- jdou menit za behu
+- ukazka: poletujici napis, odstraneni skriptu, uprava Position
+- -> uprava chovani objektu za behu
+Prototypy objektu:
+- prototypy objektu
+- herni objekty existuji samy o sobe
+- hodi se predpripravit objekty
+- ukazka: kameny, instance
+- uprava sdilene property
+- to se hodi
+Co chybi:
+- co chybi
+- nejdulezitejsi - zvuky
+- nedostatek casu, nebyly v planu
+- do budoucna
+- pouziti jako komponenta
+Konec:
+- tak a to by bylo ode me vsechno
+- dotazy
+
+
+
+
+- dobry den, ja jsem Ondrej Mocny a chci vam tu predstavit softwarovy projekt Ocerus
+- nejdriv kratce popisu, co Ocerus je, zminim se o jeho autorech, a pak budu mluvit o hlavnich vlasnostech aplikace
+- na zaver tu bude urcite cas na dotazy
+- Ocerus je nastroj pro tvorbu 2.5D her
+- 2.5D, alespon v nasem pojeti, znamena, ze vetsina herni akce i zobrazovani se deje ve 2 rozmerech, ale nektere objekty mohou byt trojrozmerne
+- Ocerus integruje dohromady herni engine s editorem
+- a abysme tohle demonstrovali, tak jsme prezentaci pripravili primo v nasem editoru jako hru, ve ktere hrac ovlada rotujici krabici
+- takze budeme moct primo ukazovat to, o cem budu dal mluvit
+- tady muzete videt portrety nas-autoru
+- pokud nas nepoznavate, tak ja jsem Ondrej Mocny, tohle je Lukas Herman, tohle Tomas Svoboda a Michal Cevora tu neska neni
+- kdyz se posunem dal, tak je tu seznam takovych standardnich veci, ktere herni engine musi umet k tomu, aby na nem nejaka hra bezela
+- takze, jak muzete videt z padajicich bedynek, mame tu fyzikalni engine, podporu pro GUI, viz tlacitka na stranach obrazovky, mame podporu pro skipty, atd.
+- navic nas editor ale umi nektere specialni veci
+- jednou z nich je to, ze behem spustene herni akce muzu hru primo editovat a zmeny se okamzite projevi ve hre
+- takze muzu treba mysi posouvat kameny nebo hracovu krabici, ale zaroven muzu hru ovladat
+- co je ale zajimavejsi, je, ze muzu behem hry upravit skripty a textury a zmena se okamzite projevi
+- otevrem si napr. skript pro ovladani krabice, zmenime konstantu urcujici silu skoku, ulozime, prepnem se zpet, a krabice skace vys
+- nebo si otevreme texturu krabice v grafickem editoru, pocmarame ji, ulzime, prepnem se zpet, a ve hre je pocmarana
+- neni potreba nikde nic rucne refreshovat nebo nacitat, zmeny se ihned projevi v editoru
+- dalsi uzitecnou vlatnosti Ocerusu je, ze vsechny herni objekty jsou slozene POUZE z komponent, ktere jsme predpripravili
+- komponenty jdou v objektu menit i za behu hry a tak je mozne menit jejich funkcnost
+- kdyz v editoru vybereme objekt, treba tento poletujici napis, a podivame se na levou stranu obrazovky, tak je tam nekolik boxiku
+- kazdy boxik predstavuje jednu komponentu a uvnitr nej se daji nastavovat jeji vlastnosti
+- takze muzeme napriklad zastavit houpani textu odstranenim komponenty skript
+- nebo muzem upravit vlastnost Position v komponente Transform
+- timhle zpusobem muzu ze hry menit chovani objekty, napr. po kolizi s hracem
+- ted dojedem k posledni dulzite vlastnosti, a to jsou prototypy objektu
+- kazdy herni objekt existuje ve scene sam o sobe, bez toho aby mel nejakou tridu nebo sablonu
+- nekdy se ale muze hodit mit moznost znovupouzit predpripraveny objekt, protoze se bude vyskytovat v mnoha kopiich ve hre
+- napriklad tady by to byly kameny, kterych bude v kazde scene asi hodne
+- proto jsme si pro ne pripravili prototyp
+- ten je videt na prave strane obrazovky v okynku s prototypama
+- prototpy neexistuji v zadne scene, misto toho zijou v projektu jakoby globalne
+- takze vyberu prototyp kamenu, pretahnu ho do sceny, on se mi tam naklonuje jako normalni zivy herni objekt
+- teda nezivy, ale uz existuje ve scene
+- instanci muzu vytvorit kolik chci, ale dulezite je, ze u prototypu muzu rict, ze nektere komponenty nebo vlastnosti se budou sdilet
+- kdyz pak danou vlastnost upravim v prototypu, zmeni se u vsech jeho instanci
+- to se hodi v pripade, kdybych chtel napriklad zmenit texturu u vsech kamenu
+- jinak bych to musel delat rucne
+- no a nakonec se dostavam k tomu, co nam v projektu chybi
+- asi nejdulezitejsi z nich je podpora zvuku
+- bohuzel kvuli casu, ktery jsme na projekt meli, jsme museli podporu zvuku vypustit, abychom projekt byli schopni dokoncit
+- nicmene zvuky jdou do budoucna do enginu zapojit
+- samozrejme opet jako komponentu herniho objektu
+- pouziti by pak vypadalo tak, ze uzivatel pripoji k objektu tuto komponentu, definuje v ni soubor se zvukem a ten se prehraje bud automaticky nebo aktivaci ze skriptu
+- tak a to by bylo ode me vsechno
+- a ted jestli mate nake dotazy
