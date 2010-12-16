@@ -93,3 +93,8 @@ Konec:
 - pouziti by pak vypadalo tak, ze uzivatel pripoji k objektu tuto komponentu, definuje v ni soubor se zvukem a ten se prehraje bud automaticky nebo aktivaci ze skriptu
 - tak a to by bylo ode me vsechno
 - a ted jestli mate nake dotazy
+
+
+
+"Measuring programming progress by lines of code is like measuring aircraft building progress by weight."
+- Bill Gates
