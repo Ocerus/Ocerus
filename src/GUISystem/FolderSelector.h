@@ -47,7 +47,7 @@ namespace GUISystem {
 
 		/// @name CEGUI Callbacks
 		//@{
-			bool OnFolderListClicked(const CEGUI::EventArgs&);
+			bool OnFolderListDoubleClicked(const CEGUI::EventArgs&);
 			bool OnButtonClicked(const CEGUI::EventArgs&);
 			bool OnEditboxKeyDown(const CEGUI::EventArgs&);
 		//@}
