@@ -50,6 +50,7 @@ namespace GUISystem {
 			bool OnFolderListDoubleClicked(const CEGUI::EventArgs&);
 			bool OnButtonClicked(const CEGUI::EventArgs&);
 			bool OnEditboxKeyDown(const CEGUI::EventArgs&);
+			bool OnCreateDirectoryClicked(const CEGUI::EventArgs&);
 		//@}
 
 		/// Changes the current directory to another.
@@ -72,6 +73,9 @@ namespace GUISystem {
 
 		/// Returns the relative path to the current directory.
 		string GetRelativePath(const string& absolutePath);
+
+		/// Callback for creating a new directory.
+		void CreateDirectoryPromptCallback(bool clickedOK, const string& newDirectory, int32 tag);
 
 		CEGUI::Window* mWindow;
 		CEGUI::Window* mButtonOK;

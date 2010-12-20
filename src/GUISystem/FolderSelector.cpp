@@ -1,5 +1,7 @@
 #include "Common.h"
 #include "FolderSelector.h"
+#include "PromptBox.h"
+#include "MessageBox.h"
 
 #include "CEGUICommon.h"
 
@@ -46,6 +48,10 @@ void GUISystem::FolderSelector::Show(const CEGUI::String& windowTitle, bool show
 				CEGUI::Event::Subscriber(&GUISystem::FolderSelector::OnButtonClicked, this));
 		mFolderList->subscribeEvent(CEGUI::Listbox::EventMouseDoubleClick,
 				CEGUI::Event::Subscriber(&GUISystem::FolderSelector::OnFolderListDoubleClicked, this));
+
+		CEGUI::Window* buttonCreateDirectory = frame->getChild(root->getName() + "/FolderSelector/ButtonCreateDirectory");
+		buttonCreateDirectory->subscribeEvent(CEGUI::PushButton::EventClicked,
+				CEGUI::Event::Subscriber(&GUISystem::FolderSelector::OnCreateDirectoryClicked, this));
 
 		if (!showEditbox)
 		{
@@ -98,6 +104,40 @@ bool FolderSelector::OnButtonClicked(const CEGUI::EventArgs& e)
 		Cancel();
 	}
 	return true;
+}
+
+bool FolderSelector::OnCreateDirectoryClicked(const CEGUI::EventArgs& e)
+{
+	OC_UNUSED(e);
+	ShowPromptBox(TR("create_directory_prompt"),
+			PromptBox::Callback(this, &FolderSelector::CreateDirectoryPromptCallback));
+	return true;
+}
+
+void FolderSelector::CreateDirectoryPromptCallback(bool clickedOK, const string& newDirectory, int32 tag)
+{
+	OC_UNUSED(tag);
+	if (clickedOK == false)
+		return;
+
+	boost::filesystem::path path(mCurrentPath);
+	path = path / newDirectory;
+	if (boost::filesystem::exists(path))
+	{
+		ShowMessageBox(TR("error_while_creating_directory") + ": " + TR("directory_already_exists"), MessageBox::MBT_OK);
+	}
+	else
+	{
+		try
+		{
+			boost::filesystem::create_directory(path);
+			UpdateFolderList();
+		}
+		catch (const boost::system::system_error& e)
+		{
+			ShowMessageBox(TR("error_while_creating_directory") + ": " + string(e.what()), MessageBox::MBT_OK);
+		}
+	}
 }
 
 bool FolderSelector::OnEditboxKeyDown(const CEGUI::EventArgs& args)
