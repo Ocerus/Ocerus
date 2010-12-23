@@ -37,12 +37,12 @@ InputSystem::OISListener::OISListener(): mOIS(0), mMouse(0), mKeyboard(0)
 	pl.insert(OIS::ParamList::value_type("WINDOW", StringConverter::ToString(hWnd)));
 
 	// let the standard mouse cursor be
-	pl.insert(Containers::make_pair(string("w32_mouse"), string("DISCL_BACKGROUND" )));
-	pl.insert(Containers::make_pair(string("w32_mouse"), string("DISCL_NONEXCLUSIVE")));
-	pl.insert(Containers::make_pair(string("x11_mouse_grab"), string("false" )));
-	pl.insert(Containers::make_pair(string("x11_mouse_hide"), string("true")));
-	pl.insert(Containers::make_pair(string("x11_keyboard_grab"), string("false")));
-	pl.insert(Containers::make_pair(string("XAutoRepeatOn"), string("true")));
+	pl.insert(OIS::ParamList::value_type("w32_mouse", "DISCL_BACKGROUND"));
+	pl.insert(OIS::ParamList::value_type("w32_mouse", "DISCL_NONEXCLUSIVE"));
+	pl.insert(OIS::ParamList::value_type("x11_mouse_grab", "false"));
+	pl.insert(OIS::ParamList::value_type("x11_mouse_hide", "true"));
+	pl.insert(OIS::ParamList::value_type("x11_keyboard_grab", "false"));
+	pl.insert(OIS::ParamList::value_type("XAutoRepeatOn", "true"));
 
 	mOIS = OIS::InputManager::createInputSystem(pl);
 	ocInfo << "OIS created";

@@ -20,7 +20,7 @@ void Texture::Init()
 
 size_t Texture::LoadImpl()
 {
-	mHandle = NULL;
+	mHandle = 0;
 	// get texture data
 	DataContainer dc;
 	

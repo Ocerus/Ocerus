@@ -382,7 +382,7 @@ bool Editor::HierarchyWindow::OnItemDroppedOnTree(const CEGUI::EventArgs& e)
 
 		HierarchyTree::iterator sourceIter = Containers::find(mHierarchy.begin(), mHierarchy.end(), sourceEntity);
 		HierarchyTree::sibling_iterator lastTopElementIter = --mHierarchy.end(mHierarchy.begin());
-		if (sourceIter == false || sourceIter == lastTopElementIter)
+		if (sourceIter == 0 || sourceIter == lastTopElementIter)
 			return true;
 
 		mHierarchy.move_after((HierarchyTree::iterator)lastTopElementIter, sourceIter);
@@ -431,7 +431,7 @@ void Editor::HierarchyWindow::MoveUp(EntitySystem::EntityHandle entity)
 	if (entityIter == mHierarchy.end()) return;
   
 	HierarchyTree::iterator sibling = mHierarchy.previous_sibling(entityIter);
-	if (sibling == false) return;
+	if (sibling == 0) return;
   
 	mHierarchy.move_before(sibling, entityIter);
 	Update();
@@ -445,7 +445,7 @@ void Editor::HierarchyWindow::MoveDown(EntitySystem::EntityHandle entity)
 	if (entityIter == mHierarchy.end()) return;
   
 	HierarchyTree::iterator sibling = mHierarchy.next_sibling(entityIter);
-	if (sibling == false) return;
+	if (sibling == 0) return;
   
 	mHierarchy.move_after(sibling, entityIter);
 	Update();
