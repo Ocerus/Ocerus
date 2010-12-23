@@ -607,7 +607,7 @@ void EditorMgr::ShowSaveMessageBox(GUISystem::MessageBox::Callback callback)
 
 void EditorMgr::ShowCreateProjectDialog()
 {
-	if (mCurrentProject && mCurrentProject->IsSceneOpened())
+	if (IsCurrentSceneUnsaved())
 	{
 		ShowSaveMessageBox(GUISystem::MessageBox::Callback(this, &Editor::EditorMgr::OnCreateProjSaveMessageBoxClicked));
 	}
@@ -630,7 +630,7 @@ void EditorMgr::CreateProject(const string& projectPath)
 
 void EditorMgr::ShowOpenProjectDialog()
 {
-	if (mCurrentProject && mCurrentProject->IsSceneOpened())
+	if (IsCurrentSceneUnsaved())
 	{
 		ShowSaveMessageBox(GUISystem::MessageBox::Callback(this, &Editor::EditorMgr::OnOpenProjSaveMessageBoxClicked));
 	}
@@ -693,7 +693,7 @@ void EditorMgr::DeployCurrentProject(const string& platform, const string& desti
 
 void EditorMgr::CloseProject()
 {
-	if (mCurrentProject && mCurrentProject->IsSceneOpened())
+	if (IsCurrentSceneUnsaved())
 	{
 		ShowSaveMessageBox(GUISystem::MessageBox::Callback(this, &Editor::EditorMgr::OnCloseProjSaveMessageBoxClicked));
 	}
@@ -713,7 +713,7 @@ void EditorMgr::SaveOpenedScene()
 
 void EditorMgr::ShowNewSceneDialog()
 {
-	if (mCurrentProject && mCurrentProject->IsSceneOpened())
+	if (IsCurrentSceneUnsaved())
 	{
 		ShowSaveMessageBox(GUISystem::MessageBox::Callback(this, &Editor::EditorMgr::OnNewSceneSaveMessageBoxClicked));
 	}
@@ -730,7 +730,7 @@ void EditorMgr::ShowNewSceneDialog()
 
 void EditorMgr::OpenSceneAtIndex(const int32 index)
 {
-	if (mCurrentProject && mCurrentProject->IsSceneOpened())
+	if (IsCurrentSceneUnsaved())
 	{
 		mOpeningSceneIndex = index;
 		ShowSaveMessageBox(GUISystem::MessageBox::Callback(this, &Editor::EditorMgr::OnOpenSceneSaveMessageBoxClicked));
@@ -744,7 +744,7 @@ void EditorMgr::OpenSceneAtIndex(const int32 index)
 
 void EditorMgr::CloseScene()
 {
-	if (mCurrentProject && mCurrentProject->IsSceneOpened())
+	if (IsCurrentSceneUnsaved())
 	{
 		ShowSaveMessageBox(GUISystem::MessageBox::Callback(this, &Editor::EditorMgr::OnCloseSceneSaveMessageBoxClicked));
 	}
@@ -770,7 +770,7 @@ void EditorMgr::CreateScene(const string& sceneFilename, const string& sceneName
 {
 	string fixedName = sceneName;
 	if (!hasEnding(fixedName, ".xml")) fixedName = fixedName + ".xml";
-	string fixedFilename = sceneName;
+	string fixedFilename = sceneFilename;
 	if (!hasEnding(fixedFilename, ".xml")) fixedFilename = fixedFilename + ".xml";
 
 	if (!mCurrentProject->CreateScene(fixedFilename, fixedName))
@@ -788,7 +788,7 @@ void EditorMgr::CreateScene(const string& sceneFilename, const string& sceneName
 
 void EditorMgr::ShowQuitDialog()
 {
-	if (mCurrentProject && mCurrentProject->IsSceneOpened())
+	if (IsCurrentSceneUnsaved())
 	{
 		GUISystem::MessageBox* messageBox = new GUISystem::MessageBox(GUISystem::MessageBox::MBT_YES_NO_CANCEL, EditorMgr::MBT_QUIT);
 		messageBox->SetText(StringSystem::FormatText(gStringMgrSystem.GetTextData
@@ -1407,6 +1407,11 @@ bool Editor::EditorMgr::OnEditorViewportDeactivated( const CEGUI::EventArgs& )
 {
 	gInputMgr.AddInputListener(this);
 	return true;
+}
+
+bool Editor::EditorMgr::IsCurrentSceneUnsaved() const
+{
+	return mCurrentProject && mCurrentProject->IsSceneOpened();
 }
 
 void EditorMgr::OnProjectOpened()

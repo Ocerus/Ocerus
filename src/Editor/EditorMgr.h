@@ -327,6 +327,9 @@ namespace Editor
 		/// Shows Message Box asking wheter you want to save current scene. 
 		void ShowSaveMessageBox(GUISystem::MessageBox::Callback callback);
 
+		/// Returns true if there is a scene open and it has unsaved changes.
+		bool IsCurrentSceneUnsaved() const;
+
 		/// Saves current scene if user choosed yes in SaveMessageBox.
 		void ResolveSaveMessageBoxClicked(GUISystem::MessageBox::eMessageBoxButton button, int32 tag);
 
