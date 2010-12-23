@@ -27,7 +27,19 @@
 			<Window Type="Editor/Editbox" Name="FolderSelector/PathBox">
 				<Property Name="ReadOnly" Value="True"/>
 				<Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}"/>
-				<Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{1,0},{0,24}}"/>
+				<Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{1,-40},{0,24}}"/>
+			</Window>
+			<Window Type="Editor/Button" Name="FolderSelector/ButtonCreateDirectory">
+				<Property Name="Tooltip" Value="$create_directory$" />
+				<Property Name="Font" Value="DejaVuSans-10"/>
+				<Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}"/>
+				<Property Name="UnifiedAreaRect" Value="{{1,-40},{0,0},{1,0},{0,24}}"/>
+				<Window Type="Editor/StaticImage" Name="FolderSelector/ButtonCreateDirectory/Image">
+					<Property Name="UnifiedAreaRect" Value="{{0.5,-6},{0.5, -6},{0.5, 6},{0.5, 6}}"/>
+					<Property Name="Image" Value="set:ResourceWindowIcons image:Directory" />
+					<Property Name="MousePassThroughEnabled" Value="True" />
+					<Property Name="FrameEnabled" Value="False" />
+				</Window>
 			</Window>
 			<Window Type="Editor/Listbox" Name="FolderSelector/FolderList">
 				<Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}"/>

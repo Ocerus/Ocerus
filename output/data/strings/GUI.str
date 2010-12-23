@@ -151,7 +151,11 @@ yes=Yes
 no=No
 
 # folder selector
+create_directory=Create Directory
+create_directory_prompt=Please enter the name of the directory.
 select_folder=Select Folder
+error_while_creating_directory=Error while creating directory
+directory_already_exists=Directory already exists.
 
 # error messages
 error_link_prototype_to_prototype=Cannot link a prototype to another prototype.
