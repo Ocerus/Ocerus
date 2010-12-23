@@ -785,6 +785,7 @@ bool EntitySystem::EntityMgr::LoadEntitiesFromResource(ResourceSystem::ResourceP
 		return false;
 	}
 	ResourceSystem::XMLResourcePtr xml = res;
+	OC_ASSERT_MSG(xml, "Wrong entity resource");
 
 	bool result = true;
 

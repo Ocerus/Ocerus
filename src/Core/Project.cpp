@@ -5,6 +5,7 @@
 #include "Editor/EntityWindow.h"
 #include "Editor/HierarchyWindow.h"
 #include "Editor/LayerWindow.h"
+#include "Editor/ResourceWindow.h"
 #include "Core/Game.h"
 #include "Core/Application.h"
 #include "GUISystem/ViewportWindow.h"
@@ -74,12 +75,25 @@ bool Project::OpenProject(const string& path)
 	string basePath = path;
 	if (!basePath.empty() && basePath.at(basePath.size() - 1) != '/') basePath.append("/");
 
-	// Add project resources.;
+	// Add project resources.
 	gResourceMgr.SetBasePath(ResourceSystem::BPT_PROJECT, basePath);
 	gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_PROJECT, "", "Project", ".*", "", ResourceSystem::RESTYPE_AUTODETECT, mResourceTypeMap);
 	gStringMgrProject.LoadLanguagePack();
 
+	// Make sure scene resources are all XML.
+	for (size_t i=0; i<GetSceneCount(); ++i)
+	{
+		ResourceSystem::ResourcePtr res = gResourceMgr.GetResource("Project", mSceneList[i].filename);
+		if (res && res->GetType() != ResourceSystem::RESTYPE_XMLRESOURCE)
+		{
+			SetResourceType(res, ResourceSystem::RESTYPE_XMLRESOURCE);
+			gResourceMgr.ChangeResourceType(res, ResourceSystem::RESTYPE_XMLRESOURCE);
+		}
+	}
+
+	// Load prototypes.
 	gEntityMgr.LoadPrototypes();
+
 	gGfxWindow.SetWindowCaption(mProjectInfo.name);
 
 	ocInfo << "Project " << path << " loaded.";
@@ -87,7 +101,9 @@ bool Project::OpenProject(const string& path)
 	OpenDefaultScene();
 
 	if (mEditorSupport)
+	{
 		gEditorMgr.OnProjectOpened();
+	}
 
 	return true;
 }
@@ -242,6 +258,8 @@ bool Project::CreateScene(string sceneFilename, const string& sceneName)
 		xmlOutput.EndElement();
 		xmlOutput.BeginElement("Entities");
 		xmlOutput.EndElement();
+		xmlOutput.BeginElement("Hierarchy");
+		xmlOutput.EndElement();
 		xmlOutput.EndElement();
 	}
 	gResourceMgr.AddResourceFileToGroup(sceneFilename, "Project", ResourceSystem::RESTYPE_XMLRESOURCE, ResourceSystem::BPT_PROJECT);
@@ -267,7 +285,17 @@ bool Project::OpenSceneAtIndex(int32 sceneIndex)
 	if (sceneIndex < 0 || sceneIndex >= (int32)mSceneList.size()) return false;
 	if (IsSceneOpened()) CloseOpenedScene();
 
-	OpenScene(gResourceMgr.GetResource("Project", mSceneList[sceneIndex].filename));
+	ResourceSystem::ResourcePtr res = gResourceMgr.GetResource("Project", mSceneList[sceneIndex].filename);
+	if (res->GetType() != ResourceSystem::RESTYPE_XMLRESOURCE)
+	{
+		SetResourceType(res, ResourceSystem::RESTYPE_XMLRESOURCE);
+		res = gEditorMgr.ChangeResourceType(res, ResourceSystem::RESTYPE_XMLRESOURCE);
+		if (gApp.IsEditMode())
+		{
+			gEditorMgr.GetResourceWindow()->Update();
+		}
+	}
+	OpenScene(res);
 
 	return true;
 }
@@ -276,8 +304,20 @@ void Core::Project::OpenScene( const ResourceSystem::ResourcePtr resource )
 {
 	if (IsSceneOpened()) CloseOpenedScene();
 
+	OC_ASSERT_MSG(resource, "Wrong scene resource");
 	mSceneIndex = GetSceneIndex(resource->GetName());
-	OC_ASSERT_MSG(mSceneIndex != -1, "Wrong scene resource");
+	if (mSceneIndex == -1)
+	{
+		ocError << "Scene resource is not in the scene list of the project";
+		mSceneIndex = -1;
+		return;
+	}
+	if (resource->GetType() != ResourceSystem::RESTYPE_XMLRESOURCE)
+	{
+		ocError << "Scene resource must be of the XML type";
+		mSceneIndex = -1;
+		return;
+	}
 
 	Core::Game& game = GlobalProperties::Get<Core::Game>("Game");
 

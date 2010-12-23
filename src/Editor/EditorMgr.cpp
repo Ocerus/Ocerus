@@ -757,14 +757,32 @@ void EditorMgr::CloseScene()
 	}
 }
 
+bool hasEnding (const string& fullString, const string& ending)
+{
+	if (fullString.length() > ending.length()) {
+		return (0 == fullString.compare (fullString.length() - ending.length(), ending.length(), ending));
+	} else {
+		return false;
+	}
+}
+
 void EditorMgr::CreateScene(const string& sceneFilename, const string& sceneName)
 {
-	if (!mCurrentProject->CreateScene(sceneFilename, sceneName))
+	string fixedName = sceneName;
+	if (!hasEnding(fixedName, ".xml")) fixedName = fixedName + ".xml";
+	string fixedFilename = sceneName;
+	if (!hasEnding(fixedFilename, ".xml")) fixedFilename = fixedFilename + ".xml";
+
+	if (!mCurrentProject->CreateScene(fixedFilename, fixedName))
 	{
 		GUISystem::MessageBox* messageBox = new GUISystem::MessageBox(GUISystem::MessageBox::MBT_OK);
 		messageBox->SetText(StringSystem::FormatText(gStringMgrSystem.GetTextData
-			(GUISystem::GUIMgr::GUIGroup, "new_scene_error")) << sceneFilename);
+			(GUISystem::GUIMgr::GUIGroup, "new_scene_error")) << fixedFilename);
 		messageBox->Show();
+	}
+	else
+	{
+		GetResourceWindow()->Update();
 	}
 }
 
@@ -1245,10 +1263,10 @@ void Editor::EditorMgr::CenterCameraOnEntity(const EntitySystem::EntityHandle en
 		camera.GetProperty("Position").SetValue<Vector2>(entity.GetProperty("Position").GetValue<Vector2>());
 }
 
-void EditorMgr::ChangeResourceType(ResourceSystem::ResourcePtr resource, ResourceSystem::eResourceType newType)
+ResourceSystem::ResourcePtr EditorMgr::ChangeResourceType(ResourceSystem::ResourcePtr resource, ResourceSystem::eResourceType newType)
 {
 	GetCurrentProject()->SetResourceType(resource, newType);
-	gResourceMgr.ChangeResourceType(resource, newType);
+	return gResourceMgr.ChangeResourceType(resource, newType);
 }
 
 

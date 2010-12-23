@@ -35,9 +35,9 @@ namespace ResourceSystem
 				return boost::shared_ptr<T>();
 			if (T::GetResourceType() != (*this)->GetType())
 			{
-				ocWarning << "Trying to convert resource '" << (*this)->GetName() << "' of type " <<
+				ocWarning << "Invalid resource pointer conversion of '" << (*this)->GetName() << "' from " <<
 					ResourceSystem::GetResourceTypeName((*this)->GetType()) << " to " <<
-					ResourceSystem::GetResourceTypeName(T::GetResourceType()) << ".";
+					ResourceSystem::GetResourceTypeName(T::GetResourceType()) << ". Returning NULL.";
 				return boost::shared_ptr<T>();
 			}
 			return boost::static_pointer_cast<T>(*this);

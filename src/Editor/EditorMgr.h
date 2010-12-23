@@ -294,8 +294,8 @@ namespace Editor
 		/// Centers editors camera on given entity.
 		void CenterCameraOnEntity(const EntitySystem::EntityHandle entity);
 
-		/// Changes the type of the resource to a new one.
-		void ChangeResourceType(ResourceSystem::ResourcePtr resource, ResourceSystem::eResourceType newType);
+		/// Changes the type of the resource to a new one and returns it.
+		ResourceSystem::ResourcePtr ChangeResourceType(ResourceSystem::ResourcePtr resource, ResourceSystem::eResourceType newType);
 		
 	private:
 
