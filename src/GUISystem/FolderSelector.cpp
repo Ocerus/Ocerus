@@ -1,7 +1,5 @@
 #include "Common.h"
 #include "FolderSelector.h"
-#include "PromptBox.h"
-#include "MessageBox.h"
 
 #include "CEGUICommon.h"
 
@@ -38,20 +36,13 @@ void GUISystem::FolderSelector::Show(const CEGUI::String& windowTitle, bool show
 		mButtonCancel = frame->getChild(root->getName() + "/FolderSelector/ButtonCancel");
 		mPathBox = frame->getChild(root->getName() + "/FolderSelector/PathBox");
 		mFolderList = static_cast<CEGUI::Listbox*>(frame->getChild(root->getName() + "/FolderSelector/FolderList"));
-		mFolderList->setWantsMultiClickEvents(true);
+		mFolderList->setWantsMultiClickEvents(false);
 		mEditbox = frame->getChild(root->getName() + "/FolderSelector/Editbox");
-		mEditbox->subscribeEvent(CEGUI::Editbox::EventKeyDown,
-				CEGUI::Event::Subscriber(&GUISystem::FolderSelector::OnEditboxKeyDown, this));
-		mButtonOK->subscribeEvent(CEGUI::PushButton::EventClicked,
-				CEGUI::Event::Subscriber(&GUISystem::FolderSelector::OnButtonClicked, this));
-		mButtonCancel->subscribeEvent(CEGUI::PushButton::EventClicked,
-				CEGUI::Event::Subscriber(&GUISystem::FolderSelector::OnButtonClicked, this));
-		mFolderList->subscribeEvent(CEGUI::Listbox::EventMouseDoubleClick,
-				CEGUI::Event::Subscriber(&GUISystem::FolderSelector::OnFolderListDoubleClicked, this));
+		mEditbox->subscribeEvent(CEGUI::Editbox::EventKeyDown, CEGUI::Event::Subscriber(&GUISystem::FolderSelector::OnEditboxKeyDown, this));
 
-		CEGUI::Window* buttonCreateDirectory = frame->getChild(root->getName() + "/FolderSelector/ButtonCreateDirectory");
-		buttonCreateDirectory->subscribeEvent(CEGUI::PushButton::EventClicked,
-				CEGUI::Event::Subscriber(&GUISystem::FolderSelector::OnCreateDirectoryClicked, this));
+		mButtonOK->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&GUISystem::FolderSelector::OnButtonClicked, this));
+		mButtonCancel->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&GUISystem::FolderSelector::OnButtonClicked, this));
+		mFolderList->subscribeEvent(CEGUI::Listbox::EventMouseClick, CEGUI::Event::Subscriber(&GUISystem::FolderSelector::OnFolderListClicked, this));
 
 		if (!showEditbox)
 		{
@@ -82,7 +73,7 @@ void FolderSelector::Hide()
 	mWindow = 0;
 }
 
-bool FolderSelector::OnFolderListDoubleClicked(const CEGUI::EventArgs&)
+bool FolderSelector::OnFolderListClicked(const CEGUI::EventArgs&)
 {
 	CEGUI::ListboxItem* selectedItem = static_cast<CEGUI::ListboxItem*>(mFolderList->getFirstSelectedItem());
 	if (selectedItem == 0)
@@ -106,40 +97,6 @@ bool FolderSelector::OnButtonClicked(const CEGUI::EventArgs& e)
 	return true;
 }
 
-bool FolderSelector::OnCreateDirectoryClicked(const CEGUI::EventArgs& e)
-{
-	OC_UNUSED(e);
-	ShowPromptBox(TR("create_directory_prompt"),
-			PromptBox::Callback(this, &FolderSelector::CreateDirectoryPromptCallback));
-	return true;
-}
-
-void FolderSelector::CreateDirectoryPromptCallback(bool clickedOK, const string& newDirectory, int32 tag)
-{
-	OC_UNUSED(tag);
-	if (clickedOK == false)
-		return;
-
-	boost::filesystem::path path(mCurrentPath);
-	path = path / newDirectory;
-	if (boost::filesystem::exists(path))
-	{
-		ShowMessageBox(TR("error_while_creating_directory") + ": " + TR("directory_already_exists"), MessageBox::MBT_OK);
-	}
-	else
-	{
-		try
-		{
-			boost::filesystem::create_directory(path);
-			UpdateFolderList();
-		}
-		catch (const boost::system::system_error& e)
-		{
-			ShowMessageBox(TR("error_while_creating_directory") + ": " + string(e.what()), MessageBox::MBT_OK);
-		}
-	}
-}
-
 bool FolderSelector::OnEditboxKeyDown(const CEGUI::EventArgs& args)
 {
 	const CEGUI::KeyEventArgs& keyArgs = static_cast<const CEGUI::KeyEventArgs&>(args);
@@ -161,11 +118,6 @@ void FolderSelector::Submit()
 {
 	if (mCallback.IsSet())
 	{
-		CEGUI::ListboxItem* selectedItem = static_cast<CEGUI::ListboxItem*>(mFolderList->getFirstSelectedItem());
-		if (selectedItem != 0)
-		{
-			ChangeFolder(mFolders[selectedItem->getID()]);
-		}
 		const string& path = GetRelativePath(mCurrentPath);
 		const string& editboxValue = mEditbox->getText().c_str();
 		mCallback.Call(path, editboxValue, false, mTag);
@@ -180,6 +132,7 @@ void FolderSelector::Cancel()
 		mCallback.Call("", "", true, mTag);
 	delete this;
 }
+
 
 
 void FolderSelector::ChangeFolder(const string& folder)
