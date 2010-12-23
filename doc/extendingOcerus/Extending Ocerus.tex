@@ -1,0 +1,72 @@
+\documentclass[a4paper, 12pt]{report}
+
+\usepackage[USenglish]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[ansinew]{inputenc}
+\usepackage{lmodern} %Type1-font for non-english texts and characters
+\usepackage{graphicx}
+
+\newenvironment{titled-itemize}[1]
+{
+\vspace{5mm}
+\noindent\emph{#1}
+\begin{itemize}
+}
+{
+\end{itemize}
+}
+
+\begin{document}
+
+\pagestyle{empty} %No headings for the first pages.
+
+\title{Guide for extending the Ocerus project}
+\author{Lukas Hermann, Ondrej Mocny, Tomas Svoboda, Michal Cevora}
+
+\pagestyle{plain} %Now display headings: headings / fancy / ...
+
+\tableofcontents %Table of contents
+\cleardoublepage %The first chapter should start on an odd page.
+
+\chapter{Introduction}
+
+The project Ocerus was designed to be easily extendable on well defined places in code. It allows developers to create even more diverse games. This document serves as a cookbook and shows a sequence of steps that will lead to extension of the Ocerus. There are several ways of extending the Ocerus. Each way will be discussed in separate chapters.
+This document only shows how to make things work. If you want to understand how they work, you should see the Design documentation.
+
+\chapter{Components}
+
+\section{blabla}
+
+\chapter{Scripts}
+
+\section{blabla}
+
+\chapter{Resource Types}
+
+\section{blabla}
+
+\chapter{Renderer}
+
+\section{blabla}
+
+%% A small distance to the other stuff in the table of contents (toc)
+\addtocontents{toc}{\protect\vspace*{\baselineskip}}
+
+%% The Bibliography 
+\begin{thebibliography}{9}
+\addcontentsline{toc}{chapter}{Bibliography} %'Bibliography' into toc
+\bibitem {angelscript}AngelScript -- http://www.angelcode.com/angelscript
+
+\end{thebibliography}
+
+%% The List of Figures
+\clearpage
+\addcontentsline{toc}{chapter}{List of Figures}
+\listoffigures
+
+%% The List of Tables
+\clearpage
+\addcontentsline{toc}{chapter}{List of Tables}
+\listoftables
+
+\end{document}
