@@ -304,7 +304,7 @@ void Core::Project::OpenScene( const ResourceSystem::ResourcePtr resource )
 {
 	if (IsSceneOpened()) CloseOpenedScene();
 
-	OC_ASSERT_MSG(resource, "Wrong scene resource");
+	OC_ASSERT_MSG((bool)resource, "Wrong scene resource");
 	mSceneIndex = GetSceneIndex(resource->GetName());
 	if (mSceneIndex == -1)
 	{

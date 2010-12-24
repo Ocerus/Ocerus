@@ -99,8 +99,8 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine=""
-				ExcludedFromBuild="true"
+				CommandLine="copy /V /Y /B &quot;$(TargetPath)&quot; &quot;testBinaries\&quot;&#x0D;&#x0A;copy /V /Y /B &quot;$(TargetDir)libexpat.dll&quot; &quot;testBinaries\&quot;&#x0D;&#x0A;"
+				ExcludedFromBuild="false"
 			/>
 		</Configuration>
 		<Configuration
@@ -188,8 +188,8 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Copying binaries to the output directory..."
-				CommandLine="copy /V /Y /B &quot;$(TargetPath)&quot; &quot;../output&quot;&#x0D;&#x0A;copy /V /Y /B &quot;$(TargetDir)$(TargetName).pdb&quot; &quot;../output&quot;&#x0D;&#x0A;copy /V /Y /B &quot;$(TargetDir)libexpat.dll&quot; &quot;../output&quot;&#x0D;&#x0A;"
-				ExcludedFromBuild="true"
+				CommandLine="copy /V /Y /B &quot;$(TargetPath)&quot; &quot;testBinaries\&quot;&#x0D;&#x0A;copy /V /Y /B &quot;$(TargetDir)libexpat.dll&quot; &quot;testBinaries\&quot;&#x0D;&#x0A;"
+				ExcludedFromBuild="false"
 			/>
 		</Configuration>
 		<Configuration
@@ -284,8 +284,8 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Copying binaries to the output directory..."
-				CommandLine="copy /V /Y /B &quot;$(TargetPath)&quot; &quot;../output&quot;&#x0D;&#x0A;copy /V /Y /B &quot;$(TargetDir)$(TargetName).pdb&quot; &quot;../output&quot;&#x0D;&#x0A;copy /V /Y /B &quot;$(TargetDir)libexpat.dll&quot; &quot;../output&quot;&#x0D;&#x0A;"
-				ExcludedFromBuild="true"
+				CommandLine="copy /V /Y /B &quot;$(TargetPath)&quot; &quot;testBinaries\&quot;&#x0D;&#x0A;copy /V /Y /B &quot;$(TargetDir)libexpat.dll&quot; &quot;testBinaries\&quot;&#x0D;&#x0A;"
+				ExcludedFromBuild="false"
 			/>
 		</Configuration>
 		<Configuration
