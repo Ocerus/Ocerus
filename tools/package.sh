@@ -65,7 +65,7 @@ fi
 
 OS=`uname | tr [A-Z] [a-z]`
 if [[ "$OS" == cygwin* ]]; then
-	echo "\n\n
+	echo "\n\n"
 	echo "------MAKE SURE YOU BUILD THE FOLLOWING PROJECTS FIRST:"
 	echo "* doc/userDocumentation/doc"
 	echo "* Win32/_Ocerus in Release"

@@ -116,6 +116,9 @@ namespace Core
 		/// Returns the deploy directory where the application expects pre-built engine binaries used for deployment.
 		string GetDeployDirectory() const;
 
+		/// Returns the directory which the application uses for temporary files.
+		string GetTempDirectory() const;
+
 	private:
 
 		/// Application states.
@@ -158,6 +161,7 @@ namespace Core
 
 		/// Paths
 		string mSharedDir;
+		string mTempDir;
 	};
 }
 

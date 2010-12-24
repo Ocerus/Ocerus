@@ -74,37 +74,39 @@ void Application::Init(const string& sharedDir)
 	}
 
 	// prepare paths for the application
-	boost::filesystem::path logDir;
-	boost::filesystem::ofstream outStream;
-
 	const char* coreLogFilename = "Core.log";
 	const char* configFilename = "config.ini";
 	const char* ceguiLogFilename = "CEGUI.log";
-	outStream.open(coreLogFilename);
 
+	// detect if the temp path exists and create it if needed
+	boost::filesystem::path tempDir;
+	boost::filesystem::ofstream outStream;
+	outStream.open(coreLogFilename);
 	if (!outStream.is_open())
 	{
 		#if defined(__WIN__)
 		boost::filesystem::path tempPath(std::getenv("TEMP"));
 		const char* ocerusTempDir = "Ocerus";
-		logDir = tempPath /= ocerusTempDir;
+		tempDir = tempPath /= ocerusTempDir;
 		#else
-		logDir = boost::filesystem::path(string(std::getenv("HOME")) + "/.ocerus");
+		tempDir = boost::filesystem::path(string(std::getenv("HOME")) + "/.ocerus");
 		#endif
-		boost::filesystem::create_directory(logDir);
+		boost::filesystem::create_directory(tempDir);
 	}
 	else
 	{
 		outStream.close();
 	}
+	mTempDir = tempDir.string();
+	if (mTempDir.empty()) mTempDir = ".";
 
 	// create basic singletons
 	LogSystem::LogMgr::CreateSingleton();
-	LogSystem::LogMgr::GetSingleton().Init((logDir / coreLogFilename).string());
+	LogSystem::LogMgr::GetSingleton().Init((tempDir / coreLogFilename).string());
 	LogSystem::Profiler::CreateSingleton();
 
 	// get access to config file
-	mGlobalConfig = new Config((logDir / configFilename).string());
+	mGlobalConfig = new Config((tempDir / configFilename).string());
 	GlobalProperties::SetPointer("GlobalConfig", mGlobalConfig);
 
 	// make the app settings public
@@ -163,14 +165,14 @@ void Application::Init(const string& sharedDir)
 	EntitySystem::EntityMgr::CreateSingleton();
 
 	GUISystem::GUIMgr::CreateSingleton();
-	GUISystem::GUIMgr::GetSingleton().Init((logDir / ceguiLogFilename).string());
+	GUISystem::GUIMgr::GetSingleton().Init((tempDir / ceguiLogFilename).string());
 
 	Editor::EditorMgr::CreateSingleton();
 	EntitySystem::LayerMgr::CreateSingleton();
 
 	// create core states
 	mLoadingScreen = new LoadingScreen();
-	mGame = new Game(logDir.string());
+	mGame = new Game(tempDir.string());
 
 	// init finished, now loading
 	RequestStateChange(AS_LOADING);
@@ -551,6 +553,11 @@ string Application::GetDeployDirectory() const
 	boost::filesystem::path boostPath = mSharedDir;
 	boostPath /= "deploy/";
 	return boostPath.string();
+}
+
+string Core::Application::GetTempDirectory() const
+{
+	return mTempDir;
 }
 
 //-----------------------------------------------------

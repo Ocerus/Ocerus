@@ -1,5 +1,6 @@
 #include "Common.h"
 #include "Mesh.h"
+#include "Core/Application.h"
 #include "DataContainer.h"
 #include "objloader/model_obj.h"
 
@@ -54,7 +55,7 @@ size_t Mesh::LoadImpl()
 	size_t dataSize = dc.GetSize();
 
 	// this is not very nice but it's the fastest way to make OBJ loading working
-	string tmpFilePath = GetFilePath() + ".tmp";
+	string tmpFilePath = gApp.GetTempDirectory() + "/model.tmp";
 	boost::filesystem::ofstream* ofs = new boost::filesystem::ofstream(tmpFilePath, std::ios_base::out | std::ios_base::binary);
 	ofs->write((char*)dc.GetData(), dc.GetSize());
 	ofs->close();
