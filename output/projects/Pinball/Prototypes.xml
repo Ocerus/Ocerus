@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Prototypes>
+  <Entities>
+    <Entity Name="Barrier" ID="-1" Tag="0" Transient="false">
+      <Component Type="Transform"></Component>
+      <Component Type="Sprite">
+        <AnimTime>0</AnimTime>
+        <AnimDuration>0</AnimDuration>
+        <FrameSize>(0, 0)</FrameSize>
+        <Texture>textures/steel.jpg</Texture>
+        <FrameCount>1</FrameCount>
+        <Transparency>0</Transparency>
+        <AnimRepeats>false</AnimRepeats>
+        <FrameIndex>0</FrameIndex>
+        <SkipSpace>(0, 0)</SkipSpace>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Polygon>
+          <Item>5.12 -5.12</Item>
+          <Item>5.12 5.12</Item>
+          <Item>-5.12 5.12</Item>
+          <Item>-5.12 -5.12</Item>
+        </Polygon>
+        <Friction>0.5</Friction>
+        <Density>1</Density>
+        <Restitution>0.5</Restitution>
+      </Component>
+      <Component Type="StaticBody"></Component>
+    </Entity>
+  </Entities>
+</Prototypes>

@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Scene>
+  <Layers Difference="0" ActiveLayer="0">
+    <Layer Visible="true">Initial layer</Layer>
+  </Layers>
+  <Entities>
+    <Entity Name="GameCamera" ID="126" Tag="0" Transient="false">
+      <Component Type="Camera">
+        <Rotation>0</Rotation>
+        <Position>-19.4043 -0.992077</Position>
+        <Zoom>0.21763</Zoom>
+      </Component>
+    </Entity>
+    <Entity Name="Barrier" ID="7" Tag="0" Transient="false" Prototype="-1">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Position>-23.9203 -0.10658</Position>
+        <Angle>-1.57228</Angle>
+        <Scale>1.92545 0.0986328</Scale>
+      </Component>
+      <Component Type="Sprite">
+        <AnimTime>0</AnimTime>
+        <AnimDuration>0</AnimDuration>
+        <FrameSize>(0, 0)</FrameSize>
+        <Texture>textures/steel.jpg</Texture>
+        <FrameCount>1</FrameCount>
+        <Transparency>0</Transparency>
+        <AnimRepeats>false</AnimRepeats>
+        <FrameIndex>0</FrameIndex>
+        <SkipSpace>(0, 0)</SkipSpace>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Polygon>
+          <Item>5.12 -5.12</Item>
+          <Item>5.12 5.12</Item>
+          <Item>-5.12 5.12</Item>
+          <Item>-5.12 -5.12</Item>
+        </Polygon>
+        <Friction>0.5</Friction>
+        <Density>1</Density>
+        <Restitution>0.5</Restitution>
+      </Component>
+      <Component Type="StaticBody"></Component>
+    </Entity>
+    <Entity Name="EditorCamera" ID="127" Tag="0" Transient="false">
+      <Component Type="Camera">
+        <Rotation>0</Rotation>
+        <Position>-19.4043 -0.992077</Position>
+        <Zoom>0.21763</Zoom>
+      </Component>
+    </Entity>
+    <Entity Name="Barrier" ID="8" Tag="0" Transient="false" Prototype="-1">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Position>-3.60488 -0.202652</Position>
+        <Angle>-1.57228</Angle>
+        <Scale>1.92545 0.0986328</Scale>
+      </Component>
+      <Component Type="Sprite">
+        <AnimTime>0</AnimTime>
+        <AnimDuration>0</AnimDuration>
+        <FrameSize>(0, 0)</FrameSize>
+        <Texture>textures/steel.jpg</Texture>
+        <FrameCount>1</FrameCount>
+        <Transparency>0</Transparency>
+        <AnimRepeats>false</AnimRepeats>
+        <FrameIndex>0</FrameIndex>
+        <SkipSpace>(0, 0)</SkipSpace>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Polygon>
+          <Item>5.12 -5.12</Item>
+          <Item>5.12 5.12</Item>
+          <Item>-5.12 5.12</Item>
+          <Item>-5.12 -5.12</Item>
+        </Polygon>
+        <Friction>0.5</Friction>
+        <Density>1</Density>
+        <Restitution>0.5</Restitution>
+      </Component>
+      <Component Type="StaticBody"></Component>
+    </Entity>
+    <Entity Name="Ball" ID="128" Tag="0" Transient="false">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Position>-21.6208 -6.18018</Position>
+        <Angle>0</Angle>
+        <Scale>1 1</Scale>
+      </Component>
+      <Component Type="Sprite">
+        <AnimTime>0</AnimTime>
+        <AnimDuration>0</AnimDuration>
+        <FrameSize>(0, 0)</FrameSize>
+        <Texture>textures/ball.png</Texture>
+        <FrameCount>1</FrameCount>
+        <Transparency>0</Transparency>
+        <AnimRepeats>false</AnimRepeats>
+        <FrameIndex>0</FrameIndex>
+        <SkipSpace>(0, 0)</SkipSpace>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Polygon>
+          <Item>0 -0.5</Item>
+          <Item>0.35 -0.35</Item>
+          <Item>0.5 0</Item>
+          <Item>0.35 0.35</Item>
+          <Item>0 0.5</Item>
+          <Item>-0.35 0.35</Item>
+          <Item>-0.5 0</Item>
+          <Item>-0.35 -0.35</Item>
+        </Polygon>
+        <Friction>0.5</Friction>
+        <Density>1</Density>
+        <Restitution>0.5</Restitution>
+      </Component>
+      <Component Type="DynamicBody">
+        <LinearDamping>0.1</LinearDamping>
+        <AngularDamping>0.5</AngularDamping>
+      </Component>
+    </Entity>
+    <Entity Name="Barrier" ID="9" Tag="0" Transient="false" Prototype="-1">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Position>-20.0925 9.29588</Position>
+        <Angle>0</Angle>
+        <Scale>0.843012 0.0921886</Scale>
+      </Component>
+      <Component Type="Sprite">
+        <AnimTime>0</AnimTime>
+        <AnimDuration>0</AnimDuration>
+        <FrameSize>(0, 0)</FrameSize>
+        <Texture>textures/steel.jpg</Texture>
+        <FrameCount>1</FrameCount>
+        <Transparency>0</Transparency>
+        <AnimRepeats>false</AnimRepeats>
+        <FrameIndex>0</FrameIndex>
+        <SkipSpace>(0, 0)</SkipSpace>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Polygon>
+          <Item>5.12 -5.12</Item>
+          <Item>5.12 5.12</Item>
+          <Item>-5.12 5.12</Item>
+          <Item>-5.12 -5.12</Item>
+        </Polygon>
+        <Friction>0.5</Friction>
+        <Density>1</Density>
+        <Restitution>0.5</Restitution>
+      </Component>
+      <Component Type="StaticBody"></Component>
+    </Entity>
+    <Entity Name="Barrier" ID="10" Tag="0" Transient="false" Prototype="-1">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Position>-7.47281 9.18235</Position>
+        <Angle>0</Angle>
+        <Scale>0.843012 0.0921886</Scale>
+      </Component>
+      <Component Type="Sprite">
+        <AnimTime>0</AnimTime>
+        <AnimDuration>0</AnimDuration>
+        <FrameSize>(0, 0)</FrameSize>
+        <Texture>textures/steel.jpg</Texture>
+        <FrameCount>1</FrameCount>
+        <Transparency>0</Transparency>
+        <AnimRepeats>false</AnimRepeats>
+        <FrameIndex>0</FrameIndex>
+        <SkipSpace>(0, 0)</SkipSpace>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Polygon>
+          <Item>5.12 -5.12</Item>
+          <Item>5.12 5.12</Item>
+          <Item>-5.12 5.12</Item>
+          <Item>-5.12 -5.12</Item>
+        </Polygon>
+        <Friction>0.5</Friction>
+        <Density>1</Density>
+        <Restitution>0.5</Restitution>
+      </Component>
+      <Component Type="StaticBody"></Component>
+    </Entity>
+    <Entity Name="Barrier" ID="11" Tag="0" Transient="false" Prototype="-1">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Position>-21.5304 3.90833</Position>
+        <Angle>0.591487</Angle>
+        <Scale>0.6 0.0837205</Scale>
+      </Component>
+      <Component Type="Sprite">
+        <AnimTime>0</AnimTime>
+        <AnimDuration>0</AnimDuration>
+        <FrameSize>(0, 0)</FrameSize>
+        <Texture>textures/steel.jpg</Texture>
+        <FrameCount>1</FrameCount>
+        <Transparency>0</Transparency>
+        <AnimRepeats>false</AnimRepeats>
+        <FrameIndex>0</FrameIndex>
+        <SkipSpace>(0, 0)</SkipSpace>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Polygon>
+          <Item>5.12 -5.12</Item>
+          <Item>5.12 5.12</Item>
+          <Item>-5.12 5.12</Item>
+          <Item>-5.12 -5.12</Item>
+        </Polygon>
+        <Friction>0.5</Friction>
+        <Density>1</Density>
+        <Restitution>0.5</Restitution>
+      </Component>
+      <Component Type="StaticBody"></Component>
+    </Entity>
+    <Entity Name="Barrier" ID="12" Tag="0" Transient="false" Prototype="-1">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Position>-6.00312 4.14289</Position>
+        <Angle>2.58765</Angle>
+        <Scale>0.6 0.0837205</Scale>
+      </Component>
+      <Component Type="Sprite">
+        <AnimTime>0</AnimTime>
+        <AnimDuration>0</AnimDuration>
+        <FrameSize>(0, 0)</FrameSize>
+        <Texture>textures/steel.jpg</Texture>
+        <FrameCount>1</FrameCount>
+        <Transparency>0</Transparency>
+        <AnimRepeats>false</AnimRepeats>
+        <FrameIndex>0</FrameIndex>
+        <SkipSpace>(0, 0)</SkipSpace>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Polygon>
+          <Item>5.12 -5.12</Item>
+          <Item>5.12 5.12</Item>
+          <Item>-5.12 5.12</Item>
+          <Item>-5.12 -5.12</Item>
+        </Polygon>
+        <Friction>0.5</Friction>
+        <Density>1</Density>
+        <Restitution>0.5</Restitution>
+      </Component>
+      <Component Type="StaticBody"></Component>
+    </Entity>
+    <Entity Name="Barrier" ID="14" Tag="0" Transient="false" Prototype="-1">
+      <Component Type="Transform">
+        <Layer>0</Layer>
+        <Position>-13.4991 -9.44267</Position>
+        <Angle>0</Angle>
+        <Scale>2 0.0921886</Scale>
+      </Component>
+      <Component Type="Sprite">
+        <AnimTime>0</AnimTime>
+        <AnimDuration>0</AnimDuration>
+        <FrameSize>(0, 0)</FrameSize>
+        <Texture>textures/steel.jpg</Texture>
+        <FrameCount>1</FrameCount>
+        <Transparency>0</Transparency>
+        <AnimRepeats>false</AnimRepeats>
+        <FrameIndex>0</FrameIndex>
+        <SkipSpace>(0, 0)</SkipSpace>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Polygon>
+          <Item>5.12 -5.12</Item>
+          <Item>5.12 5.12</Item>
+          <Item>-5.12 5.12</Item>
+          <Item>-5.12 -5.12</Item>
+        </Polygon>
+        <Friction>0.5</Friction>
+        <Density>1</Density>
+        <Restitution>0.5</Restitution>
+      </Component>
+      <Component Type="StaticBody"></Component>
+    </Entity>
+  </Entities>
+  <Hierarchy>
+    <Entity ID="14"></Entity>
+    <Entity ID="12"></Entity>
+    <Entity ID="10"></Entity>
+    <Entity ID="9"></Entity>
+    <Entity ID="8"></Entity>
+    <Entity ID="128"></Entity>
+    <Entity ID="7"></Entity>
+    <Entity ID="11"></Entity>
+  </Hierarchy>
+</Scene>
