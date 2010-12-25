@@ -199,12 +199,14 @@ endif (SDL_FOUND)
 ###############
 # UnitTest++
 ###############
-find_package(UnitTest++ 1.4 REQUIRED)
-if (UNITTEST++_FOUND)
-    include_directories(${UNITTEST++_INCLUDE_DIR})
-else (UNITTEST++_FOUND)
-    message(FATAL_ERROR "UnitTest++ library cannot be found in your system.")
-endif (UNITTEST++_FOUND)
+if (BUILD_TESTS)
+	find_package(UnitTest++ 1.4 REQUIRED)
+	if (UNITTEST++_FOUND)
+		include_directories(${UNITTEST++_INCLUDE_DIR})
+	else (UNITTEST++_FOUND)
+		message(FATAL_ERROR "UnitTest++ library cannot be found in your system.")
+	endif (UNITTEST++_FOUND)
+endif (BUILD_TESTS)
 
 ###############
 # ICU
@@ -426,9 +428,12 @@ target_link_libraries(ocerus-engine
     ${EXPAT_LIBRARIES}
     ${SDL_LIBRARY}
     ${CEGUI_LIBRARIES}
-    ${UNITTEST++_LIBRARY}
     ${ICU_LIBRARIES}
 )
+
+if (BUILD_TESTS)
+	target_link_libraries(ocerus-engine ${UNITTEST++_LIBRARY})
+endif (BUILD_TESTS)
 
 # Create symlinks
 execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_SOURCE_DIR}/output/data ${CMAKE_BINARY_DIR}/data)
