@@ -10,6 +10,7 @@
 #include "Core/Application.h"
 #include "GUISystem/ViewportWindow.h"
 #include "EntitySystem/EntityMgr/LayerMgr.h"
+#include "Utils/FilesystemUtils.h"
 
 using namespace Core;
 
@@ -50,8 +51,8 @@ bool Project::CreateProject(const string& name, const string& path)
 	mProjectConfig = new Core::Config(configFile);
 	SetDefaultProjectInfo();
 	mProjectInfo.name = name;
-	SaveProjectConfig();
 	CreateDefaultProjectStructure();
+	SaveProjectConfig();
 	ocInfo << "New project at " << path << " created.";
 	return OpenProject(path);
 }
@@ -233,8 +234,14 @@ void Project::CreateDefaultProjectStructure()
 {
 	try
 	{
-		// String dir
-		boost::filesystem::create_directory(mProjectPath + "/strings");
+		FilesystemUtils::CopyDirectory(gApp.GetDataDirectory() + "dummy", mProjectPath, ".*", "\\.svn");
+
+		// the scene file was copied to the project directory by the command above
+		SceneInfo sceneInfo;
+		sceneInfo.filename = "defaultScene.xml";
+		sceneInfo.name = sceneInfo.filename;
+		mSceneList.push_back(sceneInfo);
+		mSceneIndex = mSceneList.size() - 1;
 	}
 	catch (const boost::system::system_error& e)
 	{

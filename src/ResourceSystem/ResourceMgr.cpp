@@ -376,7 +376,11 @@ void ResourceMgr::DeleteGroup(const StringKey& group)
 void ResourceMgr::DeleteProjectResources()
 {
 	DeleteGroup("Project");
+	DeleteGroup("MeshTextures");
 	SetBasePath(BPT_PROJECT, "");
+	vector<ResourcePtr> resources;
+	GetResources(resources, ResourceSystem::BPT_PROJECT);
+	OC_ASSERT_MSG(resources.empty(), "Some resources were not cleaned while closing the project.");
 }
 
 void ResourceMgr::SetLoadingListener(IResourceLoadingListener* listener)

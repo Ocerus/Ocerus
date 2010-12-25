@@ -105,6 +105,7 @@ bool ResourceWindow::UpdateResourcePool()
 			resourcePoolModified = true;
 		}
 	}
+
 	return resourcePoolModified;
 }
 
