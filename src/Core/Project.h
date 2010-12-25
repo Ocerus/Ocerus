@@ -46,7 +46,7 @@ namespace Core
 
 			/// Creates a new project that will be saved in the specified path and opens it.
 			/// @return Returns true if new project was created.
-			bool CreateProject(const string& path);
+			bool CreateProject(const string& name, const string& path);
 
 			/// Opens a project in the specified path.
 			bool OpenProject(const string& path);

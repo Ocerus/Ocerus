@@ -148,7 +148,7 @@ namespace Editor
 		void ShowCreateProjectDialog();
 
 		/// Creates a new project in specified path.
-		void CreateProject(const string& projectPath);
+		void CreateProject(const string& name, const string& projectPath);
 		
 		/// Shows dialog for "Open project".
 		void ShowOpenProjectDialog();

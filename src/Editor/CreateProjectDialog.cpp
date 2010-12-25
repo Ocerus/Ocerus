@@ -77,7 +77,7 @@ void CreateProjectDialog::Confirm()
 	string name = mNameValue->getText().c_str();
 	string location = mLocationValue->getText().c_str();
 	gEditorMgr.Reset();
-	gEditorMgr.CreateProject(location + '/' + name);
+	gEditorMgr.CreateProject(name, location + '/' + name);
 	mDialog->hide();
 	mDialog->setModalState(false);
 }

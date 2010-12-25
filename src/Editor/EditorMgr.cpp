@@ -308,8 +308,7 @@ void Editor::EditorMgr::OnFolderSelected(const string& path, const string& editb
 	switch(tag)
 	{
 	case FST_CREATEPROJECT:
-		Reset();
-		CreateProject(path + '/' + editboxValue);
+		OC_FAIL("not used; project creation is done in CreateProjectDialog.cpp");
 		return;
 	case FST_OPENPROJECT:
 		Reset();
@@ -617,9 +616,9 @@ void EditorMgr::ShowCreateProjectDialog()
 	}
 }
 
-void EditorMgr::CreateProject(const string& projectPath)
+void EditorMgr::CreateProject(const string& name, const string& projectPath)
 {
-	if (!mCurrentProject->CreateProject(projectPath))
+	if (!mCurrentProject->CreateProject(name, projectPath))
 	{
 		GUISystem::MessageBox* messageBox = new GUISystem::MessageBox(GUISystem::MessageBox::MBT_OK);
 		messageBox->SetText(StringSystem::FormatText(gStringMgrSystem.GetTextData

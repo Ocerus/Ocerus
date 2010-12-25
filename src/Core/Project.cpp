@@ -30,7 +30,7 @@ Project::~Project()
 	}
 }
 
-bool Project::CreateProject(const string& path)
+bool Project::CreateProject(const string& name, const string& path)
 {
 	string configFile = path + "/" + PROJECT_FILE_NAME;
 	if (!boost::filesystem::is_directory(path) && !boost::filesystem::create_directory(path))
@@ -49,11 +49,11 @@ bool Project::CreateProject(const string& path)
 	mProjectPath = path;
 	mProjectConfig = new Core::Config(configFile);
 	SetDefaultProjectInfo();
+	mProjectInfo.name = name;
 	SaveProjectConfig();
 	CreateDefaultProjectStructure();
-	gGfxWindow.SetWindowCaption(mProjectInfo.name);
 	ocInfo << "New project at " << path << " created.";
-	return true;
+	return OpenProject(path);
 }
 
 bool Project::OpenProject(const string& path)
