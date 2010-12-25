@@ -190,6 +190,7 @@ void EditorMenu::UpdateItemsEnabled()
 	{
 		bool editMenuEnabled = gEditorMgr.GetCurrentProject()->IsSceneOpened();
 		bool sceneMenuEnabled = gEditorMgr.GetCurrentProject()->IsProjectOpened();
+		bool toolbarEnabled = editMenuEnabled;
 
 		// Set enabled/disabled state to items in Edit menu
 		CEGUI::Window* editMenu = mTopMenu->getItemFromIndex(2)->getChildAtIdx(0);
@@ -198,17 +199,27 @@ void EditorMenu::UpdateItemsEnabled()
 			editMenu->getChildAtIdx(childIdx)->setEnabled(editMenuEnabled);
 		}
 
-		// Set enabled/disabled state to components in AddComponent submenu
+		// Set enabled/disabled state to the components in the AddComponent submenu
 		for (size_t childIdx = 0, childCount = mComponentsSubmenu->getChildCount(); childIdx < childCount; childIdx++)
 		{
 			mComponentsSubmenu->getChildAtIdx(childIdx)->setEnabled(editMenuEnabled);
 		}
 
-		// Set enabled/disabled state to items in Scene menu
+		// Set enabled/disabled state to the items in the Scene menu
 		CEGUI::Window* sceneMenu = mTopMenu->getItemFromIndex(1)->getChildAtIdx(0);
 		for (size_t childIdx = 0, childCount = sceneMenu->getChildCount(); childIdx < childCount; childIdx++)
 		{
 			sceneMenu->getChildAtIdx(childIdx)->setEnabled(sceneMenuEnabled);
+		}
+
+		// Set enabled/disabled state to the items in the toolbar
+		for (RadioButtonList::iterator it=mActionButtons.begin(); it!=mActionButtons.end(); ++it)
+		{
+			(*it)->setEnabled(toolbarEnabled);
+		}
+		for (RadioButtonList::iterator it=mToolButtons.begin(); it!=mToolButtons.end(); ++it)
+		{
+			(*it)->setEnabled(toolbarEnabled);
 		}
 	}
 	OC_CEGUI_CATCH;

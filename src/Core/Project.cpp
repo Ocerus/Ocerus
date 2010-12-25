@@ -131,7 +131,9 @@ void Project::CloseProject()
 	gEntityMgr.DestroyAllEntities(true, false); // Is this OK?
 	
 	if (mEditorSupport)
+	{
 		gEditorMgr.OnProjectClosed();
+	}
 
 	gGfxWindow.SetWindowCaption("");
 

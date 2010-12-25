@@ -283,74 +283,10 @@ void Application::RunMainLoop()
 		float32 delta = CalculateFrameDeltaTime();
 
 		// update logic
-		switch (GetState())
-		{
-		case AS_LOADING:
-
-			mLoadingScreen->DoLoading(LoadingScreen::TYPE_BASIC_RESOURCES);
-			mLoadingScreen->DoLoading(LoadingScreen::TYPE_GENERAL_RESOURCES);
-			if (mDevelopMode) mLoadingScreen->DoLoading(LoadingScreen::TYPE_EDITOR);
-
-			mGame->Init();
-
-			gGfxWindow.SetWindowCaption("");
-
-			if (mDevelopMode)
-			{
-				// note that this must come before the project is being opened as it's referenced during opening of the project
-				mGameProject = gEditorMgr.GetCurrentProject();
-				gEditorMgr.OpenProject(mGlobalConfig->GetString("LastProject"));
-			}
-			else
-			{
-				if (!mGameProject) mGameProject = new Project(false);
-				if (!mGameProject->OpenProject("."))
-				{
-					ocError << "Invalid project; quiting...";
-					Shutdown();
-					break;
-				}
-			}
-
-			RequestStateChange(AS_GAME, true);
-
-			break;
-		case AS_GAME:
-			mGameProject->Update();
-			mGame->Update(delta);
-			gGUIMgr.Update(delta);
-			if (mEditMode)
-			{
-				gEditorMgr.Update(delta);
-			}
-			break;
-		default:
-			break;
-		}
+		FrameUpdate(delta);
 
 		// draw
-		if (gGfxRenderer.BeginRendering())
-		{
-			switch (GetState())
-			{
-			case AS_GAME:
-				
-				if (mEditMode)
-				{
-					gEditorMgr.Draw(delta);
-				}
-				else
-				{
-					mGame->Draw(delta);
-				}
-				gGUIMgr.RenderGUI();
-				break;
-			default:
-				break;
-			}
-
-			gGfxRenderer.EndRendering();
-		}
+		FrameDraw(delta);
 
 		// update FPS and other performance counters
 		UpdateStats();
@@ -555,6 +491,81 @@ string Application::GetDeployDirectory() const
 	return boostPath.string();
 }
 
+void Application::FrameUpdate(float32 delta)
+{
+	switch (GetState())
+	{
+	case AS_LOADING:
+
+		mLoadingScreen->DoLoading(LoadingScreen::TYPE_BASIC_RESOURCES);
+		mLoadingScreen->DoLoading(LoadingScreen::TYPE_GENERAL_RESOURCES);
+		if (mDevelopMode) mLoadingScreen->DoLoading(LoadingScreen::TYPE_EDITOR);
+
+		mGame->Init();
+
+		gGfxWindow.SetWindowCaption("");
+
+		if (mDevelopMode)
+		{
+			// note that this must come before the project is being opened as it's referenced during opening of the project
+			mGameProject = gEditorMgr.GetCurrentProject();
+			gEditorMgr.OnProjectClosed();
+			gEditorMgr.OpenProject(mGlobalConfig->GetString("LastProject"));
+		}
+		else
+		{
+			if (!mGameProject) mGameProject = new Project(false);
+			if (!mGameProject->OpenProject("."))
+			{
+				ocError << "Invalid project; quiting...";
+				Shutdown();
+				break;
+			}
+		}
+
+		RequestStateChange(AS_GAME, true);
+
+		break;
+	case AS_GAME:
+		mGameProject->Update();
+		mGame->Update(delta);
+		gGUIMgr.Update(delta);
+		if (mEditMode)
+		{
+			gEditorMgr.Update(delta);
+		}
+		break;
+	default:
+		break;
+	}
+}
+
+void Application::FrameDraw( float32 delta )
+{
+	if (gGfxRenderer.BeginRendering())
+	{
+		switch (GetState())
+		{
+		case AS_GAME:
+
+			if (mEditMode)
+			{
+				gEditorMgr.Draw(delta);
+			}
+			else
+			{
+				mGame->Draw(delta);
+			}
+			gGUIMgr.RenderGUI();
+			break;
+		default:
+			break;
+		}
+
+		gGfxRenderer.EndRendering();
+	}
+}
+
 string Core::Application::GetTempDirectory() const
 {
 	return mTempDir;
@@ -723,4 +734,3 @@ void Core::Application::YieldProcess()
 }
 
 #endif
-

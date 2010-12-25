@@ -162,6 +162,12 @@ namespace Core
 		/// Paths
 		string mSharedDir;
 		string mTempDir;
+
+		/// Update the application logic in the current frame (called from the main loop).
+		void FrameUpdate(float32 delta);
+
+		/// Redraws the application in the current frame (called from the main loop).
+		void FrameDraw(float32 delta);
 	};
 }
 
