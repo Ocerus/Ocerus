@@ -23,9 +23,25 @@ GUISystem::VerticalLayout::~VerticalLayout()
 void GUISystem::VerticalLayout::AddChildWindow(CEGUI::Window* window)
 {
 	mManagedWindow->addChildWindow(window);
-	mEventConnections.push_back(new CEGUI::Event::Connection(window->subscribeEvent(CEGUI::Window::EventSized, CEGUI::Event::Subscriber(&GUISystem::VerticalLayout::OnChildWindowSized, this))));
-	mEventConnections.push_back(new CEGUI::Event::Connection(window->subscribeEvent(CEGUI::Window::EventDestructionStarted, CEGUI::Event::Subscriber(&GUISystem::VerticalLayout::OnChildWindowDestroyed, this))));
+	mEventConnections[window].push_back(window->subscribeEvent(CEGUI::Window::EventSized, CEGUI::Event::Subscriber(&GUISystem::VerticalLayout::OnChildWindowSized, this)));
+	mEventConnections[window].push_back(window->subscribeEvent(CEGUI::Window::EventDestructionStarted, CEGUI::Event::Subscriber(&GUISystem::VerticalLayout::OnChildWindowDestroyed, this)));
 	mChildWindows.push_back(window);
+}
+
+void GUISystem::VerticalLayout::RemoveChildWindow(CEGUI::Window* window)
+{
+	WindowList::iterator windowIt = Containers::find(mChildWindows.begin(), mChildWindows.end(), window);
+	if (windowIt != mChildWindows.end()) mChildWindows.erase(windowIt);
+
+	EventConnections::iterator eventIt = mEventConnections.find(window);
+	if (eventIt != mEventConnections.end())
+	{
+		for (EventConnectionsList::iterator it=eventIt->second.begin(); it!=eventIt->second.end(); ++it)
+		{
+			(*it)->disconnect();
+		}
+		mEventConnections.erase(eventIt);
+	}
 }
 
 void GUISystem::VerticalLayout::UpdateLayout()
@@ -77,11 +93,13 @@ void GUISystem::VerticalLayout::Clear()
 
 void GUISystem::VerticalLayout::ClearEventConnections()
 {
-	for (size_t i = 0; i < mEventConnections.size(); ++i)
+	for (EventConnections::iterator eventListIt=mEventConnections.begin(); eventListIt!=mEventConnections.end(); ++eventListIt)
 	{
-		CEGUI::Event::Connection* conn = (CEGUI::Event::Connection*)(mEventConnections.at(i));
-		(*conn)->disconnect();
-		delete conn;
+		EventConnectionsList& list = eventListIt->second;
+		for (EventConnectionsList::iterator eventIt=list.begin(); eventIt!=list.end(); ++eventIt)
+		{
+			(*eventIt)->disconnect();
+		}
 	}
 	mEventConnections.clear();
 }
@@ -99,6 +117,8 @@ bool GUISystem::VerticalLayout::OnChildWindowDestroyed(const CEGUI::EventArgs& e
 	const CEGUI::WindowEventArgs args = static_cast<const CEGUI::WindowEventArgs&>(e);
 	WindowList::iterator it = Containers::find(mChildWindows.begin(), mChildWindows.end(), args.window);
 	if (it != mChildWindows.end())
+	{
 		mChildWindows.erase(it);
+	}
 	return true;
 }

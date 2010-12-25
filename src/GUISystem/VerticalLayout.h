@@ -6,6 +6,7 @@
 
 #include "Base.h"
 #include "CEGUIForwards.h"
+#include "CEGUIEvent.h"
 
 namespace GUISystem
 {
@@ -29,9 +30,12 @@ namespace GUISystem
 		/// Destroys the VerticalLayout.
 		~VerticalLayout();
 		
-		/// Adds child window to managed window. You must use this method (instead of managed window's addChildWindow()
-		/// method).
+		/// Adds child window to the managed window. You must use this method instead of the managed window's
+		/// addChildWindow() method.
 		void AddChildWindow(CEGUI::Window* window);
+
+		/// Removes the window from children of the managed window.
+		void RemoveChildWindow(CEGUI::Window* window);
 
 		/// Returns the number of the child windows. Only windows managed by the VerticalLayout (that were registered
 		/// with AddChildWindow) are counted.
@@ -72,12 +76,13 @@ namespace GUISystem
 		VerticalLayout& operator=(const VerticalLayout&);
 
 		typedef vector<CEGUI::Window*> WindowList;
-		typedef vector<void*> EventConnectionList;
+		typedef vector<CEGUI::Event::Connection> EventConnectionsList;
+		typedef map<CEGUI::Window*, EventConnectionsList> EventConnections;
 		
 		CEGUI::Window* mManagedWindow;
 		CEGUI::Window* mContentPane;
 		WindowList mChildWindows;
-		EventConnectionList mEventConnections;
+		EventConnections mEventConnections;
 		bool mResizeParent;
 		int mSpacing;
 		bool mLockedUpdates;

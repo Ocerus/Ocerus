@@ -188,7 +188,9 @@ namespace Editor
 	{
 		SubmitEditors();
 		SubmitInternalArray();
+		UpdateInternalArray();
 		UnlockUpdates();
+		UpdateEditors();
 	}
 
 	template<class ElementType>
@@ -301,6 +303,7 @@ namespace Editor
 			mBodyLayout->LockUpdates();
 			while (mArray.size() < mElementEditors.size())
 			{
+				mBodyLayout->RemoveChildWindow(mElementEditors.back()->GetWidget());
 				GetValueEditorFactory()->StoreValueEditor(mElementEditors.back());
 				mElementEditors.pop_back();
 			}

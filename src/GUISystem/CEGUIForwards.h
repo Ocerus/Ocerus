@@ -20,6 +20,7 @@ namespace CEGUI
 	class String;
 	class System;
 	class Window;
+	class Event;
 }
 
 #endif // _GUISYSTEM_CEGUIFORWARDS_H_
