@@ -1285,11 +1285,14 @@ void Editor::EditorMgr::ProcessCurrentEditTool(const GfxSystem::Point& screenCur
 	case ET_MOVE:
 		for (size_t i=0; i<mSelectedEntities.size(); ++i)
 		{
-			mSelectedEntities[i].GetProperty("Position").SetValue<Vector2>(mEditToolBodyPositions[i] + worldCursorPos - mEditToolCursorPosition);
-			if (gEntityMgr.HasEntityComponentOfType(mSelectedEntities[i], EntitySystem::CT_DynamicBody))
+			if (!gEntityMgr.IsEntityPropertyShared(mSelectedEntities[i], "Position"))
 			{
-				PropertyFunctionParameters params;
-				mSelectedEntities[i].GetFunction("ZeroVelocity").CallFunction(params);
+				mSelectedEntities[i].GetProperty("Position").SetValue<Vector2>(mEditToolBodyPositions[i] + worldCursorPos - mEditToolCursorPosition);
+				if (gEntityMgr.HasEntityComponentOfType(mSelectedEntities[i], EntitySystem::CT_DynamicBody))
+				{
+					PropertyFunctionParameters params;
+					mSelectedEntities[i].GetFunction("ZeroVelocity").CallFunction(params);
+				}
 			}
 		}
 		break;
@@ -1297,7 +1300,10 @@ void Editor::EditorMgr::ProcessCurrentEditTool(const GfxSystem::Point& screenCur
 	{
 		if (mSelectedEntities.size() == 1)
 		{
-			mSelectedEntities[0].GetProperty("Angle").SetValue<float32>(mEditToolBodyAngles[0] + EDIT_TOOL_ANGLE_CHANGE_RATIO * scalarDelta);
+			if (!gEntityMgr.IsEntityPropertyShared(mSelectedEntities[0], "Angle"))
+			{
+				mSelectedEntities[0].GetProperty("Angle").SetValue<float32>(mEditToolBodyAngles[0] + EDIT_TOOL_ANGLE_CHANGE_RATIO * scalarDelta);
+			}
 			break;
 		}
 		Matrix22 rotationMatrix(EDIT_TOOL_ANGLE_CHANGE_RATIO * scalarDelta);
@@ -1317,15 +1323,24 @@ void Editor::EditorMgr::ProcessCurrentEditTool(const GfxSystem::Point& screenCur
 			fromCenterVec =  mEditToolBodyPositions[i] - centerPos;
 			fromCenterVec = MathUtils::Multiply(rotationMatrix, fromCenterVec);
 
-			mSelectedEntities[i].GetProperty("Position").SetValue<Vector2>(centerPos + fromCenterVec);
-			mSelectedEntities[i].GetProperty("Angle").SetValue<float32>(mEditToolBodyAngles[i] + EDIT_TOOL_ANGLE_CHANGE_RATIO * scalarDelta);
+			if (!gEntityMgr.IsEntityPropertyShared(mSelectedEntities[i], "Position"))
+			{
+				mSelectedEntities[i].GetProperty("Position").SetValue<Vector2>(centerPos + fromCenterVec);
+			}
+			if (!gEntityMgr.IsEntityPropertyShared(mSelectedEntities[i], "Angle"))
+			{
+				mSelectedEntities[i].GetProperty("Angle").SetValue<float32>(mEditToolBodyAngles[i] + EDIT_TOOL_ANGLE_CHANGE_RATIO * scalarDelta);
+			}
 		}
 		break;
 	}
 	case ET_ROTATE_Y:
 		for (size_t i=0; i<mSelectedEntities.size(); ++i)
 		{
-			mSelectedEntities[i].GetProperty("YAngle").SetValue<float32>(mEditToolBodyAngles[i] + EDIT_TOOL_ANGLE_CHANGE_RATIO * scalarDelta);
+			if (!gEntityMgr.IsEntityPropertyShared(mSelectedEntities[i], "YAngle"))
+			{
+				mSelectedEntities[i].GetProperty("YAngle").SetValue<float32>(mEditToolBodyAngles[i] + EDIT_TOOL_ANGLE_CHANGE_RATIO * scalarDelta);
+			}
 		}
 		break;
 	case ET_SCALE:
@@ -1367,7 +1382,10 @@ void Editor::EditorMgr::ProcessCurrentEditTool(const GfxSystem::Point& screenCur
 
 			Vector2 transformedDelta = transformedDeltay + transformedDeltax;
 
-			mSelectedEntities[i].GetProperty("Scale").SetValue<Vector2>(mEditToolBodyScales[i] + transformedDelta);
+			if (!gEntityMgr.IsEntityPropertyShared(mSelectedEntities[i], "Scale"))
+			{
+				mSelectedEntities[i].GetProperty("Scale").SetValue<Vector2>(mEditToolBodyScales[i] + transformedDelta);
+			}
 		}
 		break;
 	}

@@ -168,6 +168,9 @@ namespace EntitySystem
 		/// Returns true if the property of the prototype is marked as shared (and thus propagated to instances).
 		bool IsPrototypePropertyShared(const EntityHandle prototype, const StringKey testedProperty) const;
 
+		/// Returns true if the property of the entity is shared among the instances of its prototype.
+		bool IsEntityPropertyShared(const EntityHandle entity, const StringKey testedProperty) const;
+
 		/// Marks the property as shared among instances of the prototype.
 		void SetPrototypePropertyShared(const EntityHandle prototype, const StringKey propertyToMark);
 

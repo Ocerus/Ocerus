@@ -1174,6 +1174,21 @@ bool EntitySystem::EntityMgr::IsPrototypePropertyShared( const EntityHandle prot
 	return protInfo->mSharedProperties.find(testedProperty) != protInfo->mSharedProperties.end();
 }
 
+bool EntitySystem::EntityMgr::IsEntityPropertyShared( const EntityHandle entity, const StringKey testedProperty ) const
+{
+	if (!IsEntityLinkedToPrototype(entity)) return false;
+
+	EntityMap::const_iterator entityInfoIter = mEntities.find(entity.GetID());
+	if (entityInfoIter == mEntities.end())
+	{
+		ocError << "Entity not found";
+		return false;
+	}
+	EntityInfo* entityInfo = entityInfoIter->second;
+
+	return IsPrototypePropertyShared(entityInfo->mPrototype, testedProperty);
+}
+
 void EntitySystem::EntityMgr::SetPrototypePropertyShared( const EntityHandle prototype, const StringKey propertyToMark )
 {
 	if (!IsEntityPrototype(prototype))
