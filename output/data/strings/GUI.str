@@ -2,13 +2,13 @@
 group=GUI
 
 # action toolbar
-resume_action_hint=Resumes action.
-pause_action_hint=Pauses action. [Space]
-restart_action_hint=Starts or restarts action. [F9]
-edit_tool_move_hint=Switches to a move edit tool. [Q]
-edit_tool_rotate_hint=Switches to a rotate edit tool. [W]
-edit_tool_rotate_y_hint=Switches to a rotate-y edit tool. [E]
-edit_tool_scale_hint=Switches to a scale edit tool. [R]
+resume_action_hint=Start or resume the game action.
+pause_action_hint=Pause the game action. [Space]
+restart_action_hint=Stop and rewind the game action. [F9]
+edit_tool_move_hint=Move objects. [Q]
+edit_tool_rotate_hint=Rotate objects. [W]
+edit_tool_rotate_y_hint=Rotate objects along the Y axis. [E]
+edit_tool_scale_hint=Scale objects. [R]
 
 # main menu
 file=File
