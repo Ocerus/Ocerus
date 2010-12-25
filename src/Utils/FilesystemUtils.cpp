@@ -44,6 +44,8 @@ void Utils::FilesystemUtils::CopyDirectory( const string& source, const string& 
 		}
 		else
 		{
+			ocInfo << "copy_file: " << i->path() << " -> " << destinationPath;
+			// beware that overwrite_if_exists doesn't work when the original file can't be removed
 			boost::filesystem::copy_file(i->path(), destinationPath, boost::filesystem::copy_option::overwrite_if_exists);
 		}
 	}

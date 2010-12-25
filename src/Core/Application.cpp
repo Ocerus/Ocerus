@@ -507,9 +507,9 @@ bool Core::Application::DeployCurrentProject( const string& platform, const stri
 	{
 		boost::filesystem::path destinationPath = destination;
 		boost::filesystem::remove_all(destinationPath);
-		FilesystemUtils::CopyDirectory(".", destination, ".*\\.dll", "\\.svn");
-		FilesystemUtils::CopyDirectory(GetDeployDirectory() + string("/") + platform, destination, ".*", "\\.svn");
-		FilesystemUtils::CopyDirectory("data/general", destination + "/data/general", ".*", "\\.svn");
+		FilesystemUtils::CopyDirectory(".", destination, ".*\\.dll", "\\.svn|libexpat\\.dll");
+		FilesystemUtils::CopyDirectory(GetDeployDirectory() + platform, destination, ".*", "\\.svn");
+		FilesystemUtils::CopyDirectory(GetDataDirectory() + "general", destination + "/data/general", ".*", "\\.svn");
 		FilesystemUtils::CopyDirectory(mGameProject->GetOpenedProjectPath(), destination, ".*", "\\.svn");
 	}
 	catch (std::exception& e)
