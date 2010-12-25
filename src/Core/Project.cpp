@@ -59,7 +59,13 @@ bool Project::CreateProject(const string& path)
 bool Project::OpenProject(const string& path)
 {
 	string configFile = path + "/" + PROJECT_FILE_NAME;
-	if (!boost::filesystem::is_directory(path) || !boost::filesystem::exists(configFile))
+	bool projectOk = false;
+	try
+	{
+		projectOk = boost::filesystem::is_directory(path) && boost::filesystem::exists(configFile);
+	}
+	catch (boost::exception&)	{}
+	if (!projectOk)
 	{
 		ocWarning << "Cannot open project " << path << ".";
 		return false;
