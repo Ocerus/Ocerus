@@ -34,7 +34,13 @@ Project::~Project()
 bool Project::CreateProject(const string& name, const string& path)
 {
 	string configFile = path + "/" + PROJECT_FILE_NAME;
-	if (!boost::filesystem::is_directory(path) && !boost::filesystem::create_directory(path))
+	bool destinationOk = false;
+	try
+	{
+		destinationOk = boost::filesystem::is_directory(path) || boost::filesystem::create_directory(path);
+	}
+	catch (boost::exception&){}
+	if (!destinationOk)
 	{
 		ocWarning << "Cannot create project directory " << path << ".";
 		return false;
