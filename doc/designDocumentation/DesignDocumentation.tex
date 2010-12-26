@@ -85,7 +85,9 @@ Except these libraries some small pieces of a third party code were used:
   \item Script builder and script string\cite{angelscript} -- an implementation of strings in the script engine and building more files to a script module
 \end{itemize}
 
-In the following chapters each of the project systems will be described from the design view. At the beginning of each chapter there are a UML class diagram and a section about a purpose of the described system and at the end of most chapters there is a small glossary of terms used in that chapter.
+In the following chapters each of the project systems will be described from the design view. At the beginning of each chapter there are a UML class diagram
+%todo explanation of stereotypes
+and a section about a purpose of the described system and at the end of most chapters there is a small glossary of terms used in that chapter.
 
 
 \chapter{Core}
@@ -105,7 +107,14 @@ In the following sections the class representing the application as well as the 
 
 \section{Application}
 
-When the program starts it creates an instance of the class \emph{Core::Application}, initializes it by calling its method \emph{Init} and calls the \emph{RunMainLoop} method which runs until the application is shutdown, then the instance is deleted and the program finishes.
+When the program starts it creates an instance of the class \emph{Core::Application}, initializes it by calling its method \emph{Init} and calls the \emph{RunMainLoop} method which runs until the application is shutdown, then the instance is deleted and the program finishes (see figure \ref{fig:application-states}).
+
+\begin{figure}[htbp]
+	\centering
+		\includegraphics[width=1\textwidth]{ApplicationStates.pdf}
+	\caption{Possible states of the Application class}
+	\label{fig:application-states}
+\end{figure}
 
 On the initialization of the application the configuration is read (see section \ref{sec:config}) and all engine systems are created and initialized as well as the loading screen and game classes. The state of application is changed to \emph{loading} and the main loop is running until the state is changed to \emph{shutdown}. At the main loop window messages are processed, performance statistic are updated and other engine systems including the game class are loaded (in the \emph{loading} state) or updated and drawn (in the \emph{game} state).
 
@@ -113,9 +122,38 @@ In the application class there are also methods for getting an average and last 
 
 \section{Game}
 
-The \emph{Core::Game} class manages the most important stuff needed to run the game such as drawing a scene, updating physics and logic of entities, measuring time, handling a game action or resolving an user interaction. Of course it mostly delegates this work to other parts of the engine.
+The \emph{Core::Game} class manages the most important stuff needed to run the game such as drawing a scene, updating physics and logic of entities, measuring time, handling a game action or resolving an user interaction. Of course it mostly delegates this work to other parts of the engine (see table \ref{tab:game-relation}).
 
-Before the game initialization at the method \emph{Init} a valid render target must be set by method \emph{SetRenderTarget} to know where to draw the game content. This is done for example by the editor when the game is run from it. Then physics, time, an action etc. are initialized and in the \emph{Update} method called in the main loop they are updated.
+\begin{table}[htbp]
+	\centering
+		%{\scriptsize 
+		\begin{tabular}{|p{0.18\hsize}|p{0.75\hsize}|}
+			\hline
+			Design entity & Relation to the Game class\\
+			\hline
+			\multicolumn{2}{|c|}{Game is affected by}\\
+			\hline
+			Application & initializes, updates, destroys it\\
+			Editor & sets render target, can delegate input\\
+			InputMgr & can delegate input\\
+			ResourceMgr & loads the saved game\\
+			\hline
+			\multicolumn{2}{|c|}{Game affects what}\\
+			\hline
+			GfxRenderer & invokes drawing entities\\
+			Physics & initializes, updates and destroys it, processes its events\\
+			EntityMgr & broadcasts update and draw messages to entities\\
+			ScriptMgr & gives the game time\\
+			GUIMgr & stores the root window for the game GUI\\
+			\hline
+		\end{tabular}
+		%}
+	\caption[Relations of the Game class]{Relations of the Game class}
+	\label{tab:game-relation}
+\end{table}
+
+
+Before the game initialization at the method \emph{Init} a valid render target (a camera and a viewport, see section \ref{sec:render-target}) must be set by the method \emph{SetRenderTarget} or the default one must be created by the method \emph{CreateDefaultRenderTarget} to know where to draw the game content. This is done by the \emph{Core::Project} class when a scene is being opened and it can delegate it to the editor if it is available. Then physics, time, an action etc. are initialized and in the \emph{Update} method called in the main loop they are updated.
 
 The drawing of a scene is invoked in the method \emph{Draw}. The render target is cleared, all entities in the current scene are drawn by a renderer and the rendering is finalized.
 
@@ -140,7 +178,7 @@ In the present implementation the loading progress is shown as a ring divided to
 \section{Configuration}
 \label{sec:config}
 
-The \emph{Core::Config} class allows storing a configuration data needed by various parts of the program. Supported data types are strings, integers and booleans and they are indexed by text keys and they can be grouped to named sections.
+The \emph{Core::Config} class allows storing a configuration data needed by various parts of the program. It serves as a proxy class between the engine and the RudeConfig library\cite{rudeconfig}. Supported data types are strings, integers and booleans and they are indexed by text keys and they can be grouped to named sections.
 
 This class is initialized by a name of the file where data are or will be stored. Although changes to a configuration are saved when the class is being destructed it is possible to force it and get the result of this action by the method \emph{Save}.
 
@@ -182,6 +220,7 @@ The graphic system implements functionalities related to the rendering of game e
 In the following sections the concept of viewports and render targets will be described as well as the process of rendering game entities, the way of creating the application window will be revealed and the management of meshes and textures will be introduced. In the last section there is a small glossary of used terms.
 
 \section{Graphic viewport and render target}
+\label{sec:render-target}
 
 The \emph{GfxSystem::GfxViewport} class defines a place where all game entities will be rendered. It simply stores the information about a position and a size within the global window that can be obtained from some texture and also the data needed for drawing a grid which is useful in the edit mode. It has methods for getting and setting these properties as well as other ones for calculating its boundaries in the world or scene space.
 
@@ -191,7 +230,7 @@ For easy moving and zooming a camera by a mouse in a render target the \emph{Gfx
 
 \section{Renderer and scene manager}
 
-The \emph{GfxSystem::GfxRenderer} is the main class that manages a rendering of entities to render targets. This is a platform independent abstract class handling a communication with other engine systems from which now derives only the \emph{GfxSystem::OglRenderer} class implementing a low level rendering in the OpenGL \cite{opengl} library. If it is necessary to implement a rendering for another library (i.e. DirectX) it should be done by deriving another class and implementing all abstract methods.
+The \emph{GfxSystem::GfxRenderer} is the main class that manages a rendering of entities to render targets. This is a platform independent abstract class handling a communication with other engine systems from which now derives only the \emph{GfxSystem::OglRenderer} class implementing a low level rendering in the OpenGL library\cite{opengl}. If it is necessary to implement a rendering for another library (i.e. DirectX) it should be done by deriving another class and implementing all abstract methods.
 
 The abstract class has methods for managing its render targets, for drawing simple shapes as well as textures and meshes or for clearing the screen. The rendering must be started by the \emph{GfxRenderer::BeginRendering} method, then the current render target must be set and cleared. After everything is drawn the \emph{GfxRenderer::FinalizeRenderTarget} method must be called and then another render target is set or the whole rendering is finished by the \emph{GfxRenderer::EndRendering} method.
 
