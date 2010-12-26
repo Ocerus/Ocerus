@@ -237,9 +237,95 @@ EntityMessage::eResult EntityComponents::ExampleComp::
 }
 \end{verbatim}
 
-\chapter{Scripts}
+\chapter{Script System}
 
-\section{blabla}
+The Script system provides quite powerful tool for programming the game logic without having to modify and compile the source code. Even if there are hundreds of registered functions, classes, operators etc., it could be useful to register some more. The Script system is prepared for this so it is not difficult to register new stuff.
+
+Following sections will show simple example of how to register a new class with methods in the Script system. It will be described only briefly. For more details, please see the AngelScript documentation. Especially chapter \emph{Using AngelScript/Registering the application interface}.
+
+\section{Registering New Class}
+
+All new classes and functions should be registered in the \emph{RegisterAllAdditions} function in the \emph{ScriptRegister.cpp} file (located in \emph{ScriptSystem}).
+
+Registering of new class looks like this:
+
+\begin{verbatim}
+r = engine->RegisterObjectType("NewClass", sizeof(NewClass),
+ asOBJ_VALUE | asOBJ_APP_CLASS_C);
+OC_SCRIPT_ASSERT();
+\end{verbatim}
+
+\begin{itemize}
+\item
+The method returns an integer typed result of registering. Name of the variable, the result is being assigned to, should be \emph{r}, because it is then checked for error in the \emph{OC\_SCRIPT\_ASSERT()} macro.
+
+\item
+The first parameter of the method defines the name of the class in a script.
+
+\item
+The second parameter defines the size of the class in bytes.
+
+\item
+The last parameter is a flag defining the behavior. For details see the AngelScript documentation. This particular combination means that the class is handled as object value (not reference) and needs to be constructed and destructed by constructor and destructor.
+\end{itemize}
+
+\subsection{Class Methods}
+Class methods should be registered like this:
+
+\begin{verbatim}
+void NewClass::ClassMethod(float32 f) const
+{
+  // Do something
+}
+
+r = engine->RegisterObjectMethod("NewClass",
+ "int32 class_method(float32) const", 
+  asMETHODPR(NewClass, ClassMethod, (float32), int32),
+  asCALL_THISCALL);
+OC_SCRIPT_ASSERT();
+\end{verbatim}
+
+\begin{itemize}
+\item
+The first parameter is the name of the methods class.
+\item
+The second parameter defines name and signature of the method in a script.
+\item
+The third parameter defines type and C++ name of the function. When the function is method of some class (as in this example), then \emph{asMETHODPR} macro is used with parameters: name of class, name of method, parameter types and return type.
+\item
+The last parameter defines how the function should be called. \emph{asCALL\_THISCALL} means that it should be called as a class method. Details in the AngelScript documentation.
+\end{itemize}
+
+\subsection{Constructors and Destructors}
+
+If a constructor or destructor is needed they shall be registered the following way:
+
+\begin{verbatim}
+void Constructor(void *memory)
+{
+  // Initialize the pre-allocated memory by calling the
+  // object constructor with the placement-new operator
+  new(memory) Object();
+}
+
+void Destructor(void *memory)
+{
+  // Uninitialize the memory by calling the object destructor
+  ((Object*)memory)->~Object();
+}
+
+// Register the behaviours
+r = engine->RegisterObjectBehaviour("val",
+  asBEHAVE_CONSTRUCT, "void f()", asFUNCTION(Constructor),
+  asCALL_CDECL_OBJLAST);
+OC_SCRIPT_ASSERT();
+r = engine->RegisterObjectBehaviour("val",
+  asBEHAVE_DESTRUCT, "void f()", asFUNCTION(Destructor),
+  asCALL_CDECL_OBJLAST);
+OC_SCRIPT_ASSERT();
+
+\end{verbatim}
+
 
 \chapter{Resource Types}
 
