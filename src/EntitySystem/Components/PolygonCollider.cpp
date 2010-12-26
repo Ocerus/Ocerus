@@ -38,6 +38,7 @@ EntityMessage::eResult EntityComponents::PolygonCollider::HandleMessage( const E
 			}
 		}
 		return EntityMessage::RESULT_OK;
+	case EntityMessage::COMPONENT_CREATED:
 	case EntityMessage::COMPONENT_DESTROYED:
 		{
 			eComponentType cmpType = (eComponentType)*msg.parameters.GetParameter(0).GetData<uint32>();

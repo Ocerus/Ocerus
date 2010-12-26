@@ -26,7 +26,9 @@ ENTITY_MESSAGE_TYPE(UPDATE_POST_PHYSICS, "void OnUpdatePostPhysics(float32)", Pa
 /// Sent when the resources of this entity is going to be updated.
 ENTITY_MESSAGE_TYPE(RESOURCE_UPDATE, "void OnResourceUpdate()", NO_PARAMS)
 /// Sent after a component of the entity was deleted. The component type is passed in the parameter.
-ENTITY_MESSAGE_TYPE(COMPONENT_DESTROYED, "void OnComponentDeleted(uint32)", Params(PT_UINT32))
+ENTITY_MESSAGE_TYPE(COMPONENT_DESTROYED, "void OnComponentDestroyed(uint32)", Params(PT_UINT32))
+/// Sent when a component which was just created needs to notify other components of its creation. The component type is passed in the parameter.
+ENTITY_MESSAGE_TYPE(COMPONENT_CREATED, "void OnComponentCreated(uint32)", Params(PT_UINT32))
 /// Sent in every game loop.
 ENTITY_MESSAGE_TYPE(CHECK_ACTION, "void OnAction()", NO_PARAMS)
 /// Sent when the user presses a key.

@@ -1158,6 +1158,10 @@ EntitySystem::ComponentID EntitySystem::EntityMgr::AddComponentToEntity( const E
 		AddComponentToPrototypeInstances(entity, componentType);
 	}
 
+	PostMessage(entity, EntityMessage(EntityMessage::COMPONENT_CREATED, Reflection::PropertyFunctionParameters() << (uint32)componentType));
+
+	ocInfo << "Created component " << componentType << " of " << entity;
+
 	return cmpID;
 }
 
