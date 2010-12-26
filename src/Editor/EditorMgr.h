@@ -138,9 +138,6 @@ namespace Editor
 		/// Refreshes the resource window.
 		void UpdateResourceWindow();
 
-		/// Updates the scenes in scene menu.
-		void UpdateSceneMenu();
-
 		/// Updates the enabled/disabled state of items in menu.
 		void UpdateMenuItemsEnabled();
 

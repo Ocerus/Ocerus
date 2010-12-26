@@ -113,7 +113,10 @@ namespace Core
 			bool IsResourceScene(const ResourceSystem::ResourcePtr resource) const;
 
 			/// Returns the list of scenes.
-			void GetSceneList(SceneInfoList& scenes) const;
+			void GetSceneList(SceneInfoList& scenes);
+
+			/// Makes sure all scene are present in the project.
+			void RefreshSceneList();
 			
 			/// Gets the index of the scene with a specific name.
 			/// @return Index of the scene or -1 if no such a scene exist.

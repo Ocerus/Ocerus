@@ -427,12 +427,15 @@ void ResourceMgr::GetResources(vector<ResourcePtr>& output, eBasePathType basePa
 		output.reserve(output.size() + resmap.size());
 		for (ResourceMap::const_iterator ri = resmap.begin(); ri != resmap.end(); ri++)
 		{
-			if (ri->second->GetBasePathType() == basePathType)
+			ResourcePtr res = ri->second;
+			bool notMissing = res->GetState() != Resource::STATE_MISSING && res->GetState() != Resource::STATE_MISSING_LOADED;
+			bool basePathOk = res->GetBasePathType() == basePathType;
+			if (notMissing && basePathOk)
 			{
-				boost::filesystem::path resourceName(ri->second->GetName());
+				boost::filesystem::path resourceName(res->GetName());
 				if ((path.empty() || resourceName.string().find(path) == 0) && 
 					(recursive || resourceName.string().find('/', path.length()) == string::npos))
-					output.push_back(ri->second);
+					output.push_back(res);
 			}
 		}
 	}

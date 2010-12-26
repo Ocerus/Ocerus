@@ -585,11 +585,6 @@ void Editor::EditorMgr::UpdateResourceWindow()
 	mEditorGUI->GetResourceWindow()->Update();
 }
 
-void Editor::EditorMgr::UpdateSceneMenu()
-{
-	mEditorGUI->GetEditorMenu()->UpdateSceneMenu();
-}
-
 void EditorMgr::UpdateMenuItemsEnabled()
 {
 	mEditorGUI->GetEditorMenu()->UpdateItemsEnabled();
@@ -1435,7 +1430,6 @@ void EditorMgr::OnProjectOpened()
 {
 	GetPrototypeWindow()->Update();
 	GetResourceWindow()->Update();
-	UpdateSceneMenu();
 	UpdateMenuItemsEnabled();
 }
 
@@ -1443,7 +1437,6 @@ void EditorMgr::OnProjectClosed()
 {
 	GetPrototypeWindow()->Update();
 	GetResourceWindow()->Clear();
-	UpdateSceneMenu();
 	UpdateMenuItemsEnabled();
 }
 

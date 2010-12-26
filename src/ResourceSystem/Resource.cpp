@@ -204,8 +204,6 @@ bool ResourceSystem::Resource::GetRawInputData( const string filePath, DataConta
 
 bool ResourceSystem::Resource::Refresh( void )
 {
-	
-
 	if (!boost::filesystem::exists(mFilePath))
 	{
 		if ((GetState() == STATE_MISSING)||(GetState() == STATE_MISSING_LOADED))

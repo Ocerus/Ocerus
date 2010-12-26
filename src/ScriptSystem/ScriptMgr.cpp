@@ -945,7 +945,7 @@ void RegisterScriptInputMgr(asIScriptEngine* engine)
 
 // Functions for register Project to script
 
-string ProjectGetSceneName(int32 index, const Project* self)
+string ProjectGetSceneName(int32 index, Project* self)
 {
 	SceneInfoList list;
 	self->GetSceneList(list);

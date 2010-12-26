@@ -93,16 +93,8 @@ bool Project::OpenProject(const string& path)
 	gResourceMgr.AddResourceDirToGroup(ResourceSystem::BPT_PROJECT, "", "Project", ".*", "", ResourceSystem::RESTYPE_AUTODETECT, mResourceTypeMap);
 	gStringMgrProject.LoadLanguagePack();
 
-	// Make sure scene resources are all XML.
-	for (size_t i=0; i<GetSceneCount(); ++i)
-	{
-		ResourceSystem::ResourcePtr res = gResourceMgr.GetResource("Project", mSceneList[i].filename);
-		if (res && res->GetType() != ResourceSystem::RESTYPE_XMLRESOURCE)
-		{
-			SetResourceType(res, ResourceSystem::RESTYPE_XMLRESOURCE);
-			gResourceMgr.ChangeResourceType(res, ResourceSystem::RESTYPE_XMLRESOURCE);
-		}
-	}
+	// Make sure scene resources are up to date.
+	RefreshSceneList();
 
 	// Load prototypes.
 	gEntityMgr.LoadPrototypes();
@@ -227,6 +219,7 @@ void Core::Project::SaveProjectConfig()
 	}
 
 	// Save scene list
+	mProjectConfig->RemoveSection("scenes");
 	for (SceneInfoList::const_iterator it = mSceneList.begin(); it != mSceneList.end(); ++it)
 	{
 		mProjectConfig->SetString(it->filename, "", "scenes");
@@ -293,7 +286,6 @@ bool Project::CreateScene(string sceneFilename, const string& sceneName)
 
 	if (mEditorSupport)
 	{
-		gEditorMgr.UpdateSceneMenu();
 		gGfxWindow.SetWindowCaption(mProjectInfo.name + " (" + sceneFilename + ")");
 	}
 
@@ -307,7 +299,7 @@ bool Project::OpenSceneAtIndex(int32 sceneIndex)
 	if (IsSceneOpened()) CloseOpenedScene();
 
 	ResourceSystem::ResourcePtr res = gResourceMgr.GetResource("Project", mSceneList[sceneIndex].filename);
-	if (res->GetType() != ResourceSystem::RESTYPE_XMLRESOURCE)
+	if (res && res->GetType() != ResourceSystem::RESTYPE_XMLRESOURCE)
 	{
 		SetResourceType(res, ResourceSystem::RESTYPE_XMLRESOURCE);
 		res = gEditorMgr.ChangeResourceType(res, ResourceSystem::RESTYPE_XMLRESOURCE);
@@ -325,7 +317,12 @@ void Core::Project::OpenScene( const ResourceSystem::ResourcePtr resource )
 {
 	if (IsSceneOpened()) CloseOpenedScene();
 
-	OC_ASSERT_MSG((bool)resource, "Wrong scene resource");
+	if (!resource || resource->GetState() == ResourceSystem::Resource::STATE_MISSING || resource->GetState() == ResourceSystem::Resource::STATE_MISSING_LOADED)
+	{
+		ocError << "Scene resource went missing";
+		mSceneIndex = -1;
+		return;
+	}
 	mSceneIndex = GetSceneIndex(resource->GetName());
 	if (mSceneIndex == -1)
 	{
@@ -386,6 +383,12 @@ bool Project::SaveOpenedScene()
 	OC_DASSERT(mSceneIndex >= 0 && mSceneIndex < (int32)mSceneList.size());
 	
 	ResourceSystem::ResourcePtr sceneResource = gResourceMgr.GetResource("Project", mSceneList[mSceneIndex].filename);
+	if (!sceneResource)
+	{
+		ocError << "Can't save scene: the resource doesn't exist";
+		return false;
+	}
+
 	ResourceSystem::XMLOutput xmlOutput(sceneResource->GetFilePath());
 	xmlOutput.BeginElement("Scene");
 	if (!gEntityMgr.SaveEntitiesToStorage(xmlOutput))
@@ -419,8 +422,9 @@ void Project::CloseOpenedScene()
 	}
 }
 
-void Project::GetSceneList(SceneInfoList& scenes) const
+void Project::GetSceneList(SceneInfoList& scenes)
 {
+	RefreshSceneList();
 	scenes = mSceneList;
 }
 
@@ -499,4 +503,25 @@ void Core::Project::SetResourceType(ResourceSystem::ResourcePtr resource, Resour
 {
 	string filePath = resource->GetName();
 	mResourceTypeMap[filePath] = newType;
+}
+
+void Core::Project::RefreshSceneList()
+{
+	for (SceneInfoList::iterator it=mSceneList.begin(); it!=mSceneList.end();)
+	{
+		ResourceSystem::ResourcePtr res = gResourceMgr.GetResource("Project", it->filename);
+		if (!res)
+		{
+			it = mSceneList.erase(it);
+		}
+		else
+		{
+			if (res->GetType() != ResourceSystem::RESTYPE_XMLRESOURCE)
+			{
+				SetResourceType(res, ResourceSystem::RESTYPE_XMLRESOURCE);
+				gResourceMgr.ChangeResourceType(res, ResourceSystem::RESTYPE_XMLRESOURCE);
+			}
+			++it;
+		}
+	}
 }
