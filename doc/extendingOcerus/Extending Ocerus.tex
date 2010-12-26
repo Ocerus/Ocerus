@@ -54,12 +54,15 @@ namespace EntityComponents
 }
 \end{verbatim}
 
-There are few methods in this class that should be overridden. Namely, \emph{Create}, \emph{Destroy}, \emph{HandleMessage} and \emph{RegisterReflection}. \emph{Create} and \emph{Destroy} methods are called afterthe  creation respectively before the destruction of the component. \emph{HandleMessage} and \emph{RegisterReflection} method will be described in a later sections.
-Then, the component type must be registered in the \emph{\_ComponentTypes.h} header file (located in \emph{EntitySystem/Components}). New line \emph{COMPONENT\_TYPE(ExampleComp)} should be added. Finally the header file with the component class must be included in the \emph{\_ComponentTypes.h} header file.
+There are few methods in this class that should be overridden. Namely, \emph{Create}, \emph{Destroy}, \emph{HandleMessage} and \emph{RegisterReflection}. \emph{Create} and \emph{Destroy} methods are called after the creation respectively before the destruction of the component. \emph{HandleMessage} and \emph{RegisterReflection} method will be described in a later sections.
+
+Then, the component type must be registered in the \emph{\_ComponentTypes.h} header file (located in \emph{EntitySystem/Components}). New line \emph{COMPONENT\_TYPE(ExampleComp)} should be added.
+
+Finally the header file with the component class must be included in the \emph{\_ComponentHeaders.h} header file.
 
 \section{Adding Component Properties}
 
-The component properties are represented by class attributes. But just defining a class attribute is not enough to make it a regular property. It needs to be registered in the RTI. Registering properties is done in static method \emph{RegisterReflection}. It is called during the initialization process of the \emph{EntitySystem}. In this method, there should be called the \emph{RegisterProperty} function. Usage of that function looks like this:
+The component properties are represented by class members. But just defining a class member is not enough to make it into a regular property. It needs to be registered in the RTI. Registering properties is done in static method \emph{RegisterReflection}. It is called during the initialization process of the \emph{EntitySystem}. In this method, there should be called the \emph{RegisterProperty} function. Usage of that function looks like this:
 
 \begin{verbatim}
 RegisterProperty<Property type>("Property name", &GetterMethod, 
@@ -103,8 +106,8 @@ namespace EntityComponents
   class ExampleComp : public RTTIGlue<ExampleComp, Component>
   {
   public:
-    virtual void Create(void);
-    virtual void Destroy(void);
+    virtual void Create(void){mAmplitude = mPeriod = mTimer = 0;}
+    virtual void Destroy(void){}
 
     void Reset(void)
     {
@@ -122,8 +125,8 @@ namespace EntityComponents
       RegisterProperty<float32>("Timer", &GetTimer, 
         &SetTimer,PA_FULL_ACCESS,"Time from the start.");
 
-     RegisterFunction("Reset", &Reset, PA_SCRIPT_WRITE,
-      "Resets the timer.");
+      RegisterFunction("Reset", &Reset, PA_SCRIPT_WRITE,
+        "Resets the timer.");
 
       AddComponentDependency(CT_Transform);
     }
@@ -164,8 +167,7 @@ Name is simply name of the message type. Must be unique.
 \item
 If an entity has a script component, then when it receives a message, a function in script is called. And that functions name and signature is defined by the second parameter in the \emph{ENTITY\_MESSAGE\_TYPE} macro.
 \item
-The third parameter defines parameters that can be added to the message. When no parameter is needed, then \emph{NO\_PARAMS} macro should be used. Otherwise, the \emph{Params} macro should be used. It accepts property types as parameters. Property types are discussed in the previous section.
-So a message with float32 and int32 parameters will have \emph{Params(PT\_FLOAT32, PT\_INT32)}.
+The third parameter defines parameters that can be added to the message. When no parameter is needed, then \emph{NO\_PARAMS} macro should be used. Otherwise, the \emph{Params} macro should be used. It accepts property types as parameters. So a message with float32 and int32 parameters will have \emph{Params(PT\_FLOAT32, PT\_INT32)}.
 
 Note that the parameters must correspond to the script function signature defined in the second parameter of \emph{ENTITY\_MESSAGE\_TYPE} macro. So it could look like this: 
 
@@ -178,32 +180,54 @@ ENTITY_MESSAGE_TYPE(HELLO, "void Hello(float32, int32)",
 
 \subsection{Handling Messages}
 
- The handling of messages is done by the \emph{HandleMessage} method of the component class. It accepts \emph{EntityMessage} as parameter. The \emph{EntityMessage} contains the message type and message parameters. 
+ The handling of messages is done by the \emph{HandleMessage} method of the component class. It accepts \emph{EntityMessage} as a parameter. The \emph{EntityMessage} contains the message type and message parameters. 
 
 The \emph{HandleMessage} method must return result. \emph{RESULT\_OK} if the message was accepted, \emph{RESULT\_IGNORED} when the message was ignored and \emph{RESULT\_ERROR} if an error occurred.
 
-The example component, which makes an entity to move up and down, can have the \emph{HandleMessage} method implemented like this:
+The example component, which makes an entity to move up and down, could have the \emph{HandleMessage} method implemented like this:
 
 \begin{verbatim}
+
 EntityMessage::eResult EntityComponents::ExampleComp::
   HandleMessage( const EntityMessage& msg )
 {
   switch (msg.type)
   {
-    case EntityMessage::SYNC_PRE_PHYSICS:
+  case EntityMessage::INIT:
     {
-      mTimer += msg.parameters.GetParameter(0);
+      // Get transform component
+      Component* transform = gEntityMgr.
+        GetEntityComponentPtr(GetOwner(), CT_Transform);
+      // Get position property from component
+      // mStartPosition must be declared as a member variable
+      mStartPosition = transform->GetProperty("Position").
+      GetValue<Vector2>();
+
+      return EntityMessage::RESULT_OK;
+    }
+  case EntityMessage::SYNC_PRE_PHYSICS:
+    {
+      // Get first (and only) message parameter
+      float32 delta = *msg.parameters.GetParameter(0).
+        GetData<float32>();
+
+      if ((delta <= 0)|| (mPeriod <= 0))
+        return EntityMessage::RESULT_OK;
+
+      mTimer += delta;
+
+      // Calculate an offset from the start position
       float32 offset = mAmplitude * 
-        MathUtils::Sin(mTimer) / mPeriod;
+        MathUtils::Sin(mTimer / mPeriod * 2 * MathUtils::PI);
 
-      Component* transform = gEntityMgr.GetEntityComponentPtr
-        (GetOwner(), CT_Transform);
+      Component* transform = 
+      gEntityMgr.GetEntityComponentPtr(GetOwner(), CT_Transform);
 
-      Vector2 pos = transform->GetProperty("Position").
-        GetValue<Vector2>();
+      Vector2 pos = mStartPosition;
       pos.y += offset;
 
-     transform->GetProperty("Position").SetValue(pos);
+      // Set new value to the position property
+      transform->GetProperty("Position").SetValue(pos);
 
       return EntityMessage::RESULT_OK;
     }
