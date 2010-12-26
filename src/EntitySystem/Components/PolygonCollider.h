@@ -70,6 +70,9 @@ namespace EntityComponents
 		/// Removes the shape from world (body).
 		void DestroyShape(void);
 
+		/// Fills the array with raw vertices for Box2d.
+		void GetBox2dVertices(Array<Vector2>* polygon, b2Vec2* vertices);
+
 	};
 }
 

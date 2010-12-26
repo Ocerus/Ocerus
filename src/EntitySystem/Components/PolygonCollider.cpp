@@ -81,11 +81,7 @@ void EntityComponents::PolygonCollider::RecreateShape( void )
 	b2PolygonShape shapeDef;
 	mPolygonScale = GetOwner().GetProperty("Scale").GetValue<Vector2>();
 	b2Vec2* vertices = new b2Vec2[mPolygon.GetSize()];
-	for (int i=0; i<mPolygon.GetSize(); ++i)
-	{
-		vertices[i].x = mPolygonScale.x * mPolygon.GetRawArrayPtr()[i].x;
-		vertices[i].y = mPolygonScale.y * mPolygon.GetRawArrayPtr()[i].y;
-	}
+	GetBox2dVertices(&mPolygon, vertices);
 	shapeDef.Set(vertices, mPolygon.GetSize());
 	delete[] vertices;
 	b2FixtureDef fixtureDef;
@@ -144,20 +140,20 @@ void EntityComponents::PolygonCollider::DestroyShape( void )
 
 void EntityComponents::PolygonCollider::SetPolygon( Array<Vector2>* val )
 {
-	int32 count = val->GetSize();
+	int32 vertexCount = val->GetSize();
 
-	if (count < 3) return;
+	if (vertexCount < 3) return;
 
 	//----------- Test for preventing Box2D assert ----------//
 	float32 area = 0;
 	Vector2* vs = val->GetRawArrayPtr();
 
-	for (int32 i = 0; i < count; ++i)
+	for (int32 i = 0; i < vertexCount; ++i)
 	{
 		// Triangle vertices.
 		Vector2 p1(0,0);
 		Vector2 p2 = vs[i];
-		Vector2 p3 = i + 1 < count ? vs[i+1] : vs[0];
+		Vector2 p3 = i + 1 < vertexCount ? vs[i+1] : vs[0];
 
 		Vector2 e1 = p2 - p1;
 		Vector2 e2 = p3 - p1;
@@ -167,8 +163,23 @@ void EntityComponents::PolygonCollider::SetPolygon( Array<Vector2>* val )
 		area += 0.5f * D;;
 	}
 
-	if (area <= FLT_EPSILON)
-		return;
+	if (area <= FLT_EPSILON) return;
+
+
+	b2Vec2* vertices = new b2Vec2[vertexCount];
+	GetBox2dVertices(val, vertices);
+	bool verticesOk = true;
+	for (int32 i = 0; i < vertexCount; ++i)
+	{
+		int32 i1 = i;
+		int32 i2 = i + 1 < vertexCount ? i + 1 : 0;
+		if ((vertices[i2] - vertices[i1]).LengthSquared() <= FLT_EPSILON * FLT_EPSILON)
+		{
+			verticesOk = false;
+		}
+	}
+	delete[] vertices;
+	if (!verticesOk) return;
 	//-------------------------------------------------------//
 
 	mPolygon.CopyFrom(*val);
@@ -217,4 +228,14 @@ void EntityComponents::PolygonCollider::SetRestitution( float32 val )
 {
 	mRestitution = val;
 	if (mShape) mShape->SetRestitution(mRestitution);
+}
+
+void EntityComponents::PolygonCollider::GetBox2dVertices( Array<Vector2>* polygon, b2Vec2* vertices )
+{
+	Vector2 scale = GetOwner().GetProperty("Scale").GetValue<Vector2>();
+	for (int i=0; i<polygon->GetSize(); ++i)
+	{
+		vertices[i].x = scale.x * polygon->GetRawArrayPtr()[i].x;
+		vertices[i].y = scale.y * polygon->GetRawArrayPtr()[i].y;
+	}
 }
