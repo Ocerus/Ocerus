@@ -2,8 +2,8 @@
 #include "FolderSelector.h"
 #include "PromptBox.h"
 #include "MessageBox.h"
-
 #include "CEGUICommon.h"
+#include <boost/algorithm/string/predicate.hpp>
 
 using namespace GUISystem;
 
@@ -224,7 +224,7 @@ void GUISystem::FolderSelector::UpdateFolderList()
 		mCurrentPath = boost::filesystem::current_path<boost::filesystem::path>().directory_string();
 	}
 
-	if (mCurrentPath.length() < mRootPath.length())
+	if (!boost::istarts_with(mCurrentPath, mRootPath))
 	{
 		mCurrentPath = mRootPath;
 	}
@@ -255,10 +255,14 @@ void GUISystem::FolderSelector::UpdateFolderList()
 
 string GUISystem::FolderSelector::GetRelativePath(const string& absolutePath)
 {
-	if (absolutePath.length() < mRootPath.size())
+	if (!boost::istarts_with(absolutePath, mRootPath))
+	{
 		return "";
+	}
 	else
+	{
 		return absolutePath.substr(mRootPath.size());
+	}
 }
 
 void GUISystem::FolderSelector::ListDirectoryContent( const string& directory, vector<string>& out )
