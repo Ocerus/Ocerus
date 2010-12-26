@@ -1656,5 +1656,10 @@ void EntitySystem::EntityMgr::MarkPrototypePropertiesShared( const EntityHandle 
 
 bool EntitySystem::EntityMgr::IsPrototypePropertyAppliableToBeShared( const PropertyHolder prop ) const
 {
+	if (string("Position").compare(prop.GetName()) == 0
+		|| string("Angle").compare(prop.GetName()) == 0
+		|| string("Scale").compare(prop.GetName()) == 0
+		|| string("Layer").compare(prop.GetName()) == 0)
+		return false;
 	return (prop.GetAccessFlags() & Reflection::PA_INIT) != 0;
 }

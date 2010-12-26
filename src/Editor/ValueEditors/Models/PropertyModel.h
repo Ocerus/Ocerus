@@ -132,6 +132,8 @@ namespace Editor
 		virtual void SetValue(const string&) {}
 
 		virtual bool IsReadOnly() const { return true; }
+
+		virtual bool IsShareable() const { return false; }
 	};
 }
 
