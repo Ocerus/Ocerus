@@ -327,6 +327,83 @@ This is a glossary of the most used terms in the previous sections:
   \item[Layer] -- a number which defines a z-coordinate of an entity in a scene
 \end{description}
 
+
+\chapter{GUI system}
+
+\begin{figure}[htbp]
+	\centering
+		\includegraphics[width=1\textwidth]{GUISystemClassDiagram.pdf}
+	\caption{Class diagram of the GUI system namespace}
+	\label{fig:guisystem-diagram}
+\end{figure}
+
+\section{Purpose of the GUI system}
+
+The GUI system provides creating and drawing a graphic user interface based on the CEGUI library for the editor and the game itself. It also manages a user interaction with GUI elements, element layouts, viewports and GUI console.
+
+In the following sections the GUI manager and its resource and script providers will be described as well as concept of layouts, viewports, popup menus and the GUI console. In the last section there is a small glossary of used terms.
+
+\section{GUI manager}
+
+The main class of the GUI system is the \emph{GUISystem::GUIMgr} which is a connector for drawing, input handling and resource and script providing between the CEGUI library and the engine. During its creation it creates a CEGUI renderer, connects the resource manager with the CEGUI system via the \emph{GUISystem::Resource\-Provider} class (see section \ref{sec:gui-resources}), connects the script manager with the CEGUI system via the \emph{GUISystem::ScriptProvider} class (see section \ref{sec:gui-script}), provides itself as an input and screen listener and creates the GUI console which is then accessible via the \emph{GUIMgr::GetConsole} method (see section \ref{sec:gui-console}). On its initialization (\emph{GUIMgr::Init}) it loads necessary GUI resources (schemes, image sets, fonts, layouts and looknfeels) and creates a root window.
+
+For loading a root layout from a file the method \emph{GUIMgr::LoadRootLayout} is provided with only one parameter specifying a name of a file where a layout is defined. This method calls the \emph{GUIMgr::LoadWindowLayout} which is a common method for loading a window layout from a file that also provides a translation of all texts via the string manager. There are also methods for unloading and getting the current root layout. For more information about layouts see section \ref{sec:gui-layouts}.
+
+There are two methods called in the application main loop. First the \emph{GUIMgr::Update} updates time of the GUI system, and then the \emph{GUIMgr::Render\-GUI} draws the whole GUI. There are several input callback methods that converts an OIS library representation of keyboard and mouse events to a CEGUI one and forwards them to the CEGUI library. It is possible to get the currently processing input event by the \emph{GUIMgr::GetCurrentInputEvent} method. There is also a callback method for a resolution change that forwards this information to the CEGUI library too.
+
+\section{GUI resources}
+\label{sec:gui-resources}
+
+A GUI resource is represented by the \emph{GUISystem::CEGUIResource} class. Since the CEGUI library is not designed to allow an automatic resource unloading and reloading on demand this class only loads raw data by the resource manager and after providing them to the CEGUI library by the \emph{CEGUIResource::GetResource} method it unloads them.
+
+When the CEGUI library needs a resource it calls an appropriate method of a resource provider class provided on an initialization of the library. In this engine it is the \emph{GUISystem::ResourceProvider} class and its method \emph{ResourceProvider::loadRawDataContainer} that gets the resource from the resource manager and forwards its data to the library.
+
+\section{Script provider}
+\label{sec:gui-script}
+
+For a connection of the CEGUI library and the script system the \emph{GUISystem::ScriptProvider} class is introduced implementing the \emph{CEGUI::ScriptModule} interface. The only method from this interface which truly needs an implementation is the \emph{ScriptModule::subscribeEvent} which provides a name of event, a name of function that should handle it and an object to which the name of event and an object with a callback method should be subscribed.
+
+This transformation is implemented by the \emph{GUISystem::ScriptCallback} class which stores the function name given in its constructor and which calls an appropriate script function as a callback. It calls a function from the script module associated with the GUI layout component of the layout which gets the event or a function from the \verb/GuiCallback.as/ module as a default. For more information see the User Guide document.
+%todo the User Guide document???
+
+\section{Layouts}
+\label{sec:gui-layouts}
+
+A GUI layout defines a composition of GUI elements including their properties such as position, size and content and their behavior. Their properties can be defined in an external XML file but more dynamic compositions need also a lot of a code support, their behavior can be defined in an external script file but more complicated reactions have to be also native coded.
+
+As an example that can be used both in the editor and in the game the \emph{GUISystem::MessageBox} class was created which provides a modal dialog for informing the user or for asking the user a question and receiving the answer. The basic layout with all possible buttons is specified in an XML file which is loaded in a class constructor where these buttons are mapped to the correspondent objects and displayed according to a message box type. Setting of a message text (\emph{MessageBox::SetText}) also changes a static text GUI element specified in an XML file. The behavior after the user clicks to one of buttons is defined by a callback function that can be registered by the \emph{MessageBox::RegisterCallback} method and that gets the kind of the chosen button and the ID specified in a constructor parameter. For an easier usage there is the global function \emph{GUISystem::ShowMessageBox} that takes all necessary parameters (a text, a kind of a message box, a callback and an ID) and creates and shows an appropriate message box. A similar concept has the \emph{GUISystem::PromptBox} class providing a modal dialog that asks for a text input from the user and the \emph{GUISystem::FolderSelector} class providing a modal dialog for selecting a folder.
+
+Another example is the \emph{GUISystem::VerticalLayout} class that helps to keep GUI elements positioned in a vertical layout and automatically repositions them when one of them changes its size. In its constructor the container in which all child elements should be managed is specified, and then the \emph{VerticalLayout::AddChildWindow} method is used for adding them. It is also possible to set spacing between them and there is a method for updating a layout. It is obvious that this layout is defined without any XML file. For more information about creating own layouts see the User Guide document.
+%todo the User Guide document???
+
+\section{Viewports}
+
+The \emph{GUISystem::ViewportWindow} class represents a viewport window with a frame where a scene is rendered by the graphic system. For defining a position, an angle and a zoom of a view of a scene which will be displayed in the viewport a camera in form of an entity with a camera component must be set by the \emph{ViewportWindow::SetCamera} method. It is possible to define whether the viewport allows a direct edit of a view and displayed entities by the \emph{ViewportWindow::SetMovableContent} method. For example in the editor there are two viewports -- in the bottom one the scene can be edited whereas in the top one the result is only shown. The method \emph{ViewportWindow::AddInputListener} registers the input listener so any class can react to mouse and keyboard actions done in the viewport when it has been activated by the method \emph{ViewportWindow::Activate}.
+
+\section{Popup menus}
+
+The \emph{GUISystem::PopupMgr} class provides methods creating (\emph{Popup\-Mgr\-::\-Create\-Popup\-Menu} / \emph{PopupMgr::CreateMenuItem}) and destroying (\emph{PopupMgr::DestroyPopupMenu} / \emph{PopupMgr::DestroyMenuItem}) popup menu and its items as well as showing (\emph{PopupMgr::ShowPopup}) and hiding (\emph{PopupMgr::HidePopup}) it and it also cares about calling a proper callback when a menu item is clicked on. The callback method is provided to the manager when the popup menu is being opened by the \emph{PopupMgr::ShowPopup} method.
+
+\section{GUI console}
+\label{sec:gui-console}
+
+The \emph{GUISystem::GUIConsole} class manages the console accessible both in the game and in the editor. The console receives all messages from the log system via the method \emph{GUIConsole::AppendLogMessage} and shows those ones which have an equal or higher level than previously set by the \emph{GUIConsole::SetLogLevelTreshold} method. In addition the user can type commands to the console prompt line which are sent to the script system as a body of a method without parameters that is immediately built and run and if there is a call of the \verb/Print/ function its content will be printed to the console via the \emph{GUIConsole::AppendScriptMessage} method. For better usage of the console a history of previously typed commands is stored and can be revealed by up and down arrows. The console can be shown or hide by \emph{GUIConsole::ToggleConsole} method.
+
+\section{Glossary}
+This is a glossary of the most used terms in the previous sections:
+
+\begin{description}
+  \item[GUI] -- a graphic user interface
+  \item[GUI element] -- an element from which the whole GUI is created such as label, edit box, list etc.
+  \item[Layout] -- a composition of GUI elements including definition of their properties and behavior
+  \item[Viewport] -- a GUI element where a scene can be rendered by the graphic system
+  \item[GUI console] -- a window where log and script messages immediately appears and which allows an input of script commands
+  \item[GUI event] -- a significant situation made by the user input such as a mouse click or a keyboard press
+  \item[Callback] -- a function or method that is called as a reaction to a GUI event
+  \item[Scheme] -- a definition of connections between a physical window type and a window look
+\end{description}
+
+
 %% A small distance to the other stuff in the table of contents (toc)
 \addtocontents{toc}{\protect\vspace*{\baselineskip}}
 
