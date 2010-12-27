@@ -205,7 +205,7 @@ EntityMessage::eResult EntityComponents::ExampleComp::
 
       return EntityMessage::RESULT_OK;
     }
-  case EntityMessage::SYNC_PRE_PHYSICS:
+  case EntityMessage::UPDATE_LOGIC:
     {
       // Get first (and only) message parameter
       float32 delta = *msg.parameters.GetParameter(0).
@@ -273,13 +273,13 @@ The last parameter is a flag defining the behavior. For details see the AngelScr
 Class methods should be registered like this:
 
 \begin{verbatim}
-void NewClass::ClassMethod(float32 f) const
+int32 NewClass::ClassMethod(float32 f)
 {
   // Do something
 }
 
 r = engine->RegisterObjectMethod("NewClass",
- "int32 class_method(float32) const", 
+ "int32 class_method(float32)", 
   asMETHODPR(NewClass, ClassMethod, (float32), int32),
   asCALL_THISCALL);
 OC_SCRIPT_ASSERT();
@@ -296,7 +296,7 @@ The third parameter defines type and C++ name of the function. When the function
 The last parameter defines how the function should be called. \emph{asCALL\_THISCALL} means that it should be called as a class method. Details in the AngelScript documentation.
 \end{itemize}
 
-\subsection{Constructors and Destructors}
+\subsection{Constructor and Destructor}
 
 If a constructor or destructor is needed they shall be registered the following way:
 
@@ -305,21 +305,21 @@ void Constructor(void *memory)
 {
   // Initialize the pre-allocated memory by calling the
   // object constructor with the placement-new operator
-  new(memory) Object();
+  new(memory) NewClass();
 }
 
 void Destructor(void *memory)
 {
   // Uninitialize the memory by calling the object destructor
-  ((Object*)memory)->~Object();
+  ((NewClass*)memory)->~NewClass();
 }
 
 // Register the behaviours
-r = engine->RegisterObjectBehaviour("val",
+r = engine->RegisterObjectBehaviour("NewClass",
   asBEHAVE_CONSTRUCT, "void f()", asFUNCTION(Constructor),
   asCALL_CDECL_OBJLAST);
 OC_SCRIPT_ASSERT();
-r = engine->RegisterObjectBehaviour("val",
+r = engine->RegisterObjectBehaviour("NewClass",
   asBEHAVE_DESTRUCT, "void f()", asFUNCTION(Destructor),
   asCALL_CDECL_OBJLAST);
 OC_SCRIPT_ASSERT();
@@ -329,7 +329,68 @@ OC_SCRIPT_ASSERT();
 
 \chapter{Resource Types}
 
-\section{blabla}
+All resources in the Ocerus are managed by the Resource manager. Each resource have its type. There are some basic resource defined in the Resource manager but sometimes it would be nice to define some new. For example creating a new component that adds sounds would need a new resource type.
+
+New resource types are defined as a class derived from the \emph{Resource} class. It is necessary to add the new resource type to the \emph{eResourceType} enum and resource type name to the \emph{ResourceTypeNames} string array. Both are defined in the \emph{ResourceType.h} header.
+
+The new resource class has to override some methods:
+
+\begin{itemize}
+\item
+Constructor and destructor.
+\item
+Static \emph{CreateMe()} method. Returns special \emph{ResourceSystem::ResourcePtr} pointer that points to new resource class intance. So it should look like this:
+
+\begin{verbatim}
+ResourceSystem::ResourcePtr NewResource::CreateMe()
+{
+  return ResourceSystem::ResourcePtr(new NewResource());
+}
+\end{verbatim}
+
+\item
+Static method that returns the \emph{eResourceType} of the resource.
+
+\begin{verbatim}
+static ResourceSystem::eResourceType GetResourceType() 
+{ 
+  return ResourceSystem::RESTYPE_NEWRESOURCE; 
+}
+\end{verbatim}
+
+\item
+Protected abstract method \emph{LoadImpl}. This method is called when the resource is being loaded. It should parse the data from the file stream into something useful. It should use \emph{DataContainer} class and \emph{GetRawInputData} method for getting data from the source file.
+
+The \emph{LoadImpl} should look like this:
+
+\begin{verbatim}
+ResourceSystem::ResourcePtr NewResource::CreateMe()
+{
+  return ResourceSystem::ResourcePtr(new NewResource());
+}
+size_t NewResource::LoadImpl()
+{
+  DataContainer dc;
+  size_t dataSize = 0;
+
+  if (GetRawInputData(dc))
+  {
+    size_t dataSize = dc.GetSize();
+    uint8* data = new unit8[dataSize];
+    // parse the data ...
+    dc.Release();
+  }
+  return dataSize;
+}
+\end{verbatim}
+
+\item
+Protected abstract method \emph{UnloadImpl}. This method is called when the resource is being unloaded. It should release all data the resource was using.
+
+\item
+The resource class can have additional methods for accessing the resource type specific structures. Those method should alway begin with \emph{EnsureLoaded()}. It (surprisingly) ensures that the resource is loaded (the \emph{LoadImpl} method was called).
+
+\end{itemize}
 
 \chapter{Renderer}
 
