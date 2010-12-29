@@ -44,8 +44,7 @@ public:
 EntitySystem::EntityPicker::EntityPicker( const Vector2& worldCursorPos, const int32 minLayer, const int32 maxLayer ):
 	mCursorWorldPosition(worldCursorPos),
 	mMinLayer(minLayer),
-	mMaxLayer(maxLayer),
-	mResult()
+	mMaxLayer(maxLayer)
 {
 
 }

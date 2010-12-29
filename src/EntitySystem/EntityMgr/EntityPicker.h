@@ -36,9 +36,6 @@ namespace EntitySystem
 		int32 mMinLayer;
 		int32 mMaxLayer;
 
-		// Found entities.
-		EntityHandle mResult;
-
 		// Disabled.
 		EntityPicker(const EntityPicker& rhs);
 		EntityPicker& operator=(const EntityPicker& rhs);
