@@ -1,5 +1,6 @@
-const float32 MAX_ANGLE_DELTA = 0.6;
-const float32 ANGLE_CHANGE_RATIO = 10.0;
+const float32 MAX_ANGLE_DELTA = 0.6f;
+const float32 ANGLE_IMPULSE_RATIO = 10000.0f;
+const float32 ANGLE_CHANGE_RATIO = 10.0f;
 
 
 void OnPostInit()
@@ -23,29 +24,74 @@ void OnUpdateLogic(float32 delta)
   // get current values
   float32 angle = this.Get_float32("Angle");
   float32 initAngle = this.Get_float32("InitAngle");
+
+
+  // react on the keys and (indirectly) change the angle by applying an impulse to the object
+  float32 impulse = ANGLE_IMPULSE_RATIO * delta;
+  float32 change = ANGLE_CHANGE_RATIO * delta;
+  if (this.Get_bool("LeftSided"))
+  {
+    if (gInputMgr.IsKeyDown(KC_LEFT))
+    {
+      // not entirely in the upper position yet
+      if (angle > initAngle - MAX_ANGLE_DELTA) this.CallFunction("ApplyAngularImpulse", PropertyFunctionParameters() << -impulse);
+    }
+    else
+    {
+      // move the paddle down
+      this.Set_float32("Angle", this.Get_float32("Angle") + change);
+      this.CallFunction("ZeroAngularVelocity", PropertyFunctionParameters());
+    }      
+  }
+  else
+  {
+    if (gInputMgr.IsKeyDown(KC_RIGHT))
+    {
+      // not entirely in the upper position yet
+      if (angle < initAngle + MAX_ANGLE_DELTA) this.CallFunction("ApplyAngularImpulse", PropertyFunctionParameters() << impulse);
+    }
+    else
+    {
+      // move the paddle down
+      this.Set_float32("Angle", this.Get_float32("Angle") - change);
+      this.CallFunction("ZeroAngularVelocity", PropertyFunctionParameters());
+    }
+  }
+}
+
+void OnUpdatePostPhysics(float32 delta)
+{
+  EnsurePaddleIsInBounds();
+}
+
+void EnsurePaddleIsInBounds()
+{
+  // eliminate eny unwanted velocities accumulating in our body
+  this.CallFunction("ZeroLinearVelocity", PropertyFunctionParameters());  
+
+  // get current values
+  float32 angle = this.Get_float32("Angle");
+  float32 initAngle = this.Get_float32("InitAngle");
   
-  // compute new rotation of the paddle and react to the keys
+  // make sure the angle stays in the bounds
   if (this.Get_bool("LeftSided"))
   {
     if (angle > initAngle) angle = initAngle;
-    if (gInputMgr.IsKeyDown(KC_LEFT)) angle -= ANGLE_CHANGE_RATIO * delta;
-    else angle += ANGLE_CHANGE_RATIO * delta;
     if (angle < initAngle - MAX_ANGLE_DELTA) angle = initAngle - MAX_ANGLE_DELTA;
   }
   else
   {
     if (angle < initAngle) angle = initAngle;
-    if (gInputMgr.IsKeyDown(KC_RIGHT)) angle += ANGLE_CHANGE_RATIO * delta;
-    else  angle -= ANGLE_CHANGE_RATIO * delta;
     if (angle > initAngle + MAX_ANGLE_DELTA) angle = initAngle + MAX_ANGLE_DELTA;
   }
   
   // set new values to the object
-  this.Set_float32("Angle", angle);
+  if (angle != this.Get_float32("Angle"))
+  {
+    this.Set_float32("Angle", angle);
+    this.CallFunction("ZeroVelocity", PropertyFunctionParameters());  
+  }
   Vector2 pivotLocalPos = MathUtils::RotateVector(this.Get_Vector2("Pivot"), angle);
   Vector2 newPos = this.Get_Vector2("InitPivotPosition") - pivotLocalPos;
   this.Set_Vector2("Position", newPos);
-  
-  // eliminate eny unwanted velocities accumulating in our body
-  this.CallFunction("ZeroVelocity", PropertyFunctionParameters());  
 }

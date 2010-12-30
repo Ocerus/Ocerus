@@ -49,6 +49,12 @@ namespace EntityComponents
 		/// Applies an angular impulse. First parameter is the impulse (float).
 		void ApplyAngularImpulseWorldCoords(PropertyFunctionParameters params);
 
+		/// Zeroes out the linear velocity of the body.
+		void ZeroLinearVelocity(PropertyFunctionParameters params);
+
+		/// Zeroes out the angular velocity of the body.
+		void ZeroAngularVelocity(PropertyFunctionParameters params);
+
 		/// Zeroes out all velocities of the body.
 		void ZeroVelocity(PropertyFunctionParameters params);
 

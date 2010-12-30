@@ -58,6 +58,8 @@ void EntityComponents::DynamicBody::RegisterReflection( void )
 	RegisterFunction("ApplyAngularImpulse", &DynamicBody::ApplyAngularImpulseWorldCoords, PA_SCRIPT_WRITE, "Applies angular impulse to the object in the world coords.");
 	RegisterFunction("ApplyAngularImpulseWorldCoords", &DynamicBody::ApplyAngularImpulseWorldCoords, PA_SCRIPT_WRITE, "Applies angular impulse to the object in the world coords.");
 	RegisterFunction("ZeroVelocity", &DynamicBody::ZeroVelocity, PA_SCRIPT_WRITE, "Zeroes out all velocities of the body.");
+	RegisterFunction("ZeroLinearVelocity", &DynamicBody::ZeroLinearVelocity, PA_SCRIPT_WRITE, "Zeroes out the linear velocity of the body.");
+	RegisterFunction("ZeroAngularVelocity", &DynamicBody::ZeroAngularVelocity, PA_SCRIPT_WRITE, "Zeroes out the angular velocity of the body.");
 	RegisterProperty<float32>("LinearDamping", &DynamicBody::GetLinearDamping, &DynamicBody::SetLinearDamping, PA_FULL_ACCESS, "How much is the body going to slow down in the linear motion.");
 	RegisterProperty<float32>("AngularDamping", &DynamicBody::GetAngularDamping, &DynamicBody::SetAngularDamping, PA_FULL_ACCESS, "How much is the body going to slow down in the angular motion.");
 	RegisterProperty<Vector2>("LinearVelocity", &DynamicBody::GetLinearVelocity, 0, PA_EDIT_READ | PA_SCRIPT_READ, "Current velocity of the linear motion.");
@@ -229,5 +231,26 @@ void EntityComponents::DynamicBody::ZeroVelocity( PropertyFunctionParameters par
 	{
 		mBody->SetLinearVelocity(Vector2_Zero);
 		mBody->SetAngularVelocity(0);
+		mBody->SetAwake(true);
+	}
+}
+
+void EntityComponents::DynamicBody::ZeroLinearVelocity( PropertyFunctionParameters params )
+{
+	OC_UNUSED(params);
+	if (mBody)
+	{
+		mBody->SetLinearVelocity(Vector2_Zero);
+		mBody->SetAwake(true);
+	}
+}
+
+void EntityComponents::DynamicBody::ZeroAngularVelocity( PropertyFunctionParameters params )
+{
+	OC_UNUSED(params);
+	if (mBody)
+	{
+		mBody->SetAngularVelocity(0);
+		mBody->SetAwake(true);
 	}
 }
