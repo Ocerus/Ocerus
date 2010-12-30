@@ -282,6 +282,7 @@ void RegisterMathUtils(asIScriptEngine* engine)
 	r = engine->RegisterGlobalFunction("float32 Angle(const Vector2 &in, const Vector2 &in)", asFUNCTIONPR(Angle, (const Vector2&, const Vector2 &in), float32), asCALL_CDECL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterGlobalFunction("float32 RadToDeg(const float32)", asFUNCTION(RadToDeg), asCALL_CDECL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterGlobalFunction("Vector2 VectorFromAngle(const float32, const float32)", asFUNCTIONPR(VectorFromAngle, (const float32, const float32), Vector2), asCALL_CDECL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterGlobalFunction("Vector2 RotateVector(const Vector2 &in, const float32)", asFUNCTIONPR(RotateVector, (const Vector2 &in, const float32), Vector2), asCALL_CDECL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterGlobalFunction("bool IsPowerOfTwo(const uint32)", asFUNCTION(IsPowerOfTwo), asCALL_CDECL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterGlobalFunction("float32 ComputePolygonArea(Vector2[] &in)", asFUNCTION(ScriptComputePolygonArea), asCALL_CDECL); OC_SCRIPT_ASSERT();
 }

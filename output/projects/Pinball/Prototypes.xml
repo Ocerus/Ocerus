@@ -5,17 +5,18 @@
     <Entity Name="Barrier" ID="-1" Tag="0" Transient="false">
       <Component Type="Transform"></Component>
       <Component Type="Sprite">
-        <AnimTime>0</AnimTime>
-        <AnimDuration>0</AnimDuration>
-        <FrameSize>(0, 0)</FrameSize>
-        <Texture>textures/steel.jpg</Texture>
-        <FrameCount>1</FrameCount>
-        <Transparency>0</Transparency>
-        <AnimRepeats>false</AnimRepeats>
         <FrameIndex>0</FrameIndex>
+        <Texture>textures/steel.jpg</Texture>
+        <AnimDuration>0</AnimDuration>
+        <AnimTime>0</AnimTime>
+        <AnimRepeats>false</AnimRepeats>
+        <Transparency>0</Transparency>
+        <FrameCount>1</FrameCount>
         <SkipSpace>(0, 0)</SkipSpace>
+        <FrameSize>(0, 0)</FrameSize>
       </Component>
       <Component Type="PolygonCollider">
+        <Restitution>0.5</Restitution>
         <Polygon>
           <Item>5.12 -5.12</Item>
           <Item>5.12 5.12</Item>
@@ -24,9 +25,45 @@
         </Polygon>
         <Friction>0.5</Friction>
         <Density>1</Density>
-        <Restitution>0.5</Restitution>
       </Component>
       <Component Type="StaticBody"></Component>
+    </Entity>
+    <Entity Name="Paddle" ID="-2" Tag="0" Transient="false">
+      <Component Type="Transform"></Component>
+      <Component Type="Sprite">
+        <FrameIndex>0</FrameIndex>
+        <Texture>textures/steel.jpg</Texture>
+        <AnimDuration>0</AnimDuration>
+        <AnimTime>0</AnimTime>
+        <AnimRepeats>false</AnimRepeats>
+        <Transparency>0</Transparency>
+        <FrameCount>1</FrameCount>
+        <SkipSpace>(0, 0)</SkipSpace>
+        <FrameSize>(0, 0)</FrameSize>
+      </Component>
+      <Component Type="PolygonCollider">
+        <Restitution>0.5</Restitution>
+        <Polygon>
+          <Item>5.12 -5.12</Item>
+          <Item>5.12 5.12</Item>
+          <Item>-5.12 5.12</Item>
+          <Item>-5.12 -5.12</Item>
+        </Polygon>
+        <Friction>0.5</Friction>
+        <Density>1</Density>
+      </Component>
+      <Component Type="DynamicBody">
+        <AngularDamping>0.5</AngularDamping>
+        <LinearDamping>0.1</LinearDamping>
+      </Component>
+      <Component Type="Script">
+        <ScriptTimes></ScriptTimes>
+        <ScriptStates></ScriptStates>
+        <ScriptTimeOut>1000</ScriptTimeOut>
+        <ScriptModules>
+          <Item>control/paddle.as</Item>
+        </ScriptModules>
+      </Component>
     </Entity>
   </Entities>
 </Prototypes>

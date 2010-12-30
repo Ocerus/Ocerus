@@ -83,6 +83,8 @@ namespace Utils
 
 		Vector2 VectorFromAngle(const float32 angle, const float32 size = 1.0f);
 
+		Vector2 RotateVector(const Vector2& vector, const float32 angle);
+
 		inline bool IsPowerOfTwo(const uint32 num) { return b2IsPowerOfTwo(num); }
 
 	}

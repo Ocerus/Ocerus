@@ -74,3 +74,8 @@ Vector2 MathUtils::VectorFromAngle( const float32 angle, const float32 size /*= 
 	return Multiply(Matrix22(angle), Vector2(size, 0.0f));
 }
 
+
+Vector2 Utils::MathUtils::RotateVector( const Vector2& vector, const float32 angle )
+{
+	return Multiply(Matrix22(angle), vector);
+}
