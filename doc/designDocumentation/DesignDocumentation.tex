@@ -243,9 +243,9 @@ In the following sections the concept of viewports and render targets will be de
 \section{Graphic viewport and render target}
 \label{sec:render-target}
 
-The \emph{GfxSystem::GfxViewport} class defines a place where all game entities will be rendered. It simply stores the information about a position and a size within the global window that can be obtained from some texture and also the data needed for drawing a grid which is useful in the edit mode. It has methods for getting and setting these properties as well as other ones for calculating its boundaries in the world or scene space.
+The \emph{GfxSystem::GfxViewport} class defines a place where all game entities will be rendered. It simply stores the information about a position and a size within the global window, that can be obtained from some texture, and also the data needed for drawing a grid, which is useful in the edit mode. It has methods for getting and setting these properties as well as other ones for calculating its boundaries in the world or scene space.
 
-For drawing the game entities it is also necessary to know from which position they are rendered so the \emph{GfxSystem::RenderTarget} type is defined which is a pair of a viewport and an entity handle that must point to an entity with a camera component. This type is used by renderer classes described below where it is indexed by the \emph{GfxSystem::RenderTargetID} type which is defined as an integer.
+For drawing the game entities it is also necessary to know from which position and where they are rendered, so the \emph{GfxSystem::RenderTarget} type is defined which is a pair of a viewport and an entity handle that must point to an entity with a camera component. This type is used by renderer classes described below where it is indexed by the \emph{GfxSystem::RenderTargetID} type defined as an integer.
 
 For easy moving and zooming a camera by a mouse in a render target the \emph{GfxSystem::DragDropCameraMover} class was defined. In its constructor or later by its setters it is possible to adjust a zoom sensitivity and a maximal and minimal allowed zoom.
 
@@ -398,7 +398,14 @@ There are two methods called in the application main loop. First the \emph{GUIMg
 
 A GUI resource is represented by the \emph{GUISystem::CEGUIResource} class. Since the CEGUI library is not designed to allow an automatic resource unloading and reloading on demand this class only loads raw data by the resource manager and after providing them to the CEGUI library by the \emph{CEGUIResource::GetResource} method it unloads them.
 
-When the CEGUI library needs a resource it calls an appropriate method of a resource provider class provided on an initialization of the library. In this engine it is the \emph{GUISystem::ResourceProvider} class and its method \emph{ResourceProvider::loadRawDataContainer} that gets the resource from the resource manager and forwards its data to the library.
+When the CEGUI library needs a resource it calls an appropriate method of a resource provider class provided on an initialization of the library. In this engine it is the \emph{GUISystem::ResourceProvider} class and its method \emph{ResourceProvider::loadRawDataContainer} that gets the resource from the resource manager and forwards its data to the library. In the figure \ref{fig:load-layout-sequence} there is an example of loading a GUI layout of the \emph{GUISystem::MessageBox} class.
+
+\begin{figure}[htbp]
+	\centering
+		\includegraphics[width=1\textwidth]{LoadLayoutSequence.pdf}
+	\caption{An example of loading a GUI layout}
+	\label{fig:load-layout-sequence}
+\end{figure}
 
 \section{Script provider}
 \label{sec:gui-script}
