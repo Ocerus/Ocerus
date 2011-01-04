@@ -1,1 +1,1 @@
-doxygen Ocerus.dox
+..\..\Win32\doxygen.exe Ocerus.dox

@@ -29,7 +29,7 @@ ENTITY_MESSAGE_TYPE(RESOURCE_UPDATE, "void OnResourceUpdate()", NO_PARAMS)
 ENTITY_MESSAGE_TYPE(COMPONENT_DESTROYED, "void OnComponentDestroyed(uint32)", Params(PT_UINT32))
 /// Sent when a component which was just created needs to notify other components of its creation. The component type is passed in the parameter.
 ENTITY_MESSAGE_TYPE(COMPONENT_CREATED, "void OnComponentCreated(uint32)", Params(PT_UINT32))
-/// Sent in every game loop.
+/// Sent when a scripts needs to synchronize or update itself.
 ENTITY_MESSAGE_TYPE(CHECK_ACTION, "void OnAction()", NO_PARAMS)
 /// Sent when the user presses a key.
 ENTITY_MESSAGE_TYPE(KEY_PRESSED, "void OnKeyPressed(eKeyCode, uint32)", Params(PT_KEYCODE, PT_UINT32))
