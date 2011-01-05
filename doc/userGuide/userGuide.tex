@@ -17,6 +17,9 @@
 }
 
 \usepackage{hyperref}
+\usepackage{listings}
+%\usepackage{lua}
+
 
 \begin{document}
 \maketitle
@@ -125,7 +128,8 @@ Click the \texttt{Platform} prototype in the \textbf{Prototypes} view and look a
 
 Select a \texttt{Platform} entity from the \textbf{Hierarchy} view and again look at the \textbf{Entity} view (see FIGURE). All properties that are shared have a lock icon on the right and cannot be edited.
 
-\textbf{Task 2.} Now with the knowledge of prototypes and shared properties you should be able to design your pinball machine, so it would look similar to figure FIGURE.
+\textbf{Task 2.} Now with the knowledge of prototypes and shared properties you should be able to design your pinball machine, so it would look similar to figure FIGURE. Use the \texttt{Platform} prototype to build all barriers. Also create the \texttt{Flipper} prototype that would be similar to \texttt{Platform} prototype, except that it will have \textbf{DynamicBody} component instead of \textbf{StaticBody} component. Create two instances of this prototype: \texttt{LeftFlipper} and \texttt{RightFlipper}. \textit{Hint: To create the \texttt{Flipper} prototype you can instantiate the \texttt{Platform} prototype and unlink it from the prototype by clicking the cross button on the right of the \textbf{Prototype} property in the \textbf{Entity} view. Then modify the entity and create a prototype from it.}
+%TODO: tady se predpoklada, ze prototyp se unlinkuje kliknutim na krizek u prototypu, coz neni soucasny stav - momentalne je tam tlacitko RM. Az to bude hotove, muzete tuto poznamku smazat.
 
 
 \section{Entity Hierarchy}
@@ -152,7 +156,31 @@ The graphical appearance of our scene is done, as well as the physics in our sce
 \section{Scripting}
 Ocerus engine allows to implement the game behavior using the scripting engine. Although writing scripts is indeed programming, it differs from core Ocerus programming in many ways. First, Ocerus scripting environment was designed for game designers, rather than senior C++ programmers. It does not overwhelm you with unnecessary complexity of the "guts" of the engine, but it rather provides only the relevant means that are used in most cases. Also the scripting language is simpler than C++.
 
+We are going to implement the main control of our game - the flippers. Make sure that you have already created the \texttt{Flipper} prototype, as well as both \texttt{Flipper} entities. Now select the \texttt{Flipper} prototype and add the \textbf{Script} component to it.
+
+The \textbf{Script} component allows to implement a custom behavior using the scripting language. As soon as you add the component, you can see the \textbf{ScriptModules} property in the \textbf{Entity} view. This property contains a list of script files that are associated with this entity. Now it's time to create our little script. Open your favorite text editor and copy the following code (or use the \texttt{flipper.as} file from the archive).
+
+\lstinputlisting[language=c,
+	basicstyle=\small,
+	stringstyle=\ttfamily,
+	showstringspaces=false,
+	breaklines=true,
+	caption=flipper.as,
+	label={flipper.as}]{flipper.as}
+
+
+Now save the file as \texttt{flipper.as} and copy it into the \texttt{scripts} subdirectory in your project. Back in Ocerus, select the \texttt{Flipper} prototype and click the \textbf{Add} button next to the \textbf{ScriptModules} property. Drag the \texttt{flipper.as} resource from the \textbf{Resources} view to the \textbf{NULL} field in the modules list and click the \textbf{Save} button.
+%TODO revidovat jakmile se opravi manipulace s poli (ikonky misto Add, Rvrt, Save).
+If everything went well, your script gets loaded and a couple of new properties appear in the \textbf{Script} component part of the \textbf{Entity} view. These properties are defined in the script and they allow to parametrize the scripted behavior. In our script, there are two properties: \textbf{LeftSided} and \textbf{Pivot}. The \textbf{LeftSided} property determines which flipper is the left one and which is the another one and the \textbf{Pivot} property defines the location of the pivot point.
+
+Select the \texttt{LeftFlipper} entity and check its \textbf{LeftSided} property checkbox. 
+%TODO jak nastavit spravne Pivot?? metodou pokus omyl?
+
+When you are ready, you can see your flippers in action. Start the action by pressing the \textbf{Play} button on the toolbar and try to control your flippers with the \textbf{Left} and the \textbf{Right} key.
+
+
 \section{GUI}
+In the last 
 
 
 
