@@ -38,6 +38,7 @@ scene=Scene
 new_scene=New Scene
 new_scene_hint=Creates a new scene. [CTRL + N]
 new_scene_error=Cannot create scene "%1".
+new_scene_error_empty_name=Cannot create scene with no name.
 new_scene_folder=Select the new scene location
 new_scene_filename=Scene filename:
 open_scene=Open Scene

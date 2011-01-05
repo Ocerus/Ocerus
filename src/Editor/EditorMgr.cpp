@@ -762,6 +762,14 @@ bool hasEnding (const string& fullString, const string& ending)
 
 void EditorMgr::CreateScene(const string& sceneFilename, const string& sceneName)
 {
+	if (sceneName.empty())
+	{
+		GUISystem::MessageBox* messageBox = new GUISystem::MessageBox(GUISystem::MessageBox::MBT_OK);
+		messageBox->SetText(TR("new_scene_error_empty_name"));
+		messageBox->Show();
+		return;
+	}
+
 	string fixedName = sceneName;
 	if (!hasEnding(fixedName, ".xml")) fixedName = fixedName + ".xml";
 	string fixedFilename = sceneFilename;

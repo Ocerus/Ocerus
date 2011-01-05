@@ -43,8 +43,6 @@ bool Editor::EditorMenu::OnTopMenuDeactivated(const CEGUI::EventArgs& e)
 /// Actions for all menu items are handled here.
 bool Editor::EditorMenu::OnMenuItemClicked(const CEGUI::EventArgs& e)
 {
-	UpdateSceneMenu();
-
 	const CEGUI::WindowEventArgs& args = static_cast<const CEGUI::WindowEventArgs&>(e);
 	CEGUI::Window* menuItem = args.window;
 	CEGUI::Window* submenu = menuItem->getParent();
@@ -86,9 +84,6 @@ bool Editor::EditorMenu::OnMenuItemClicked(const CEGUI::EventArgs& e)
 		case MI_SCENE_NEW:
 			gEditorMgr.ShowNewSceneDialog();
 			break;
-		case MI_SCENE_OPEN:
-			UpdateSceneMenu();
-			break;
 		case MI_SCENE_SAVE:
 			gEditorMgr.SaveOpenedScene();
 			break;
@@ -127,6 +122,46 @@ bool Editor::EditorMenu::OnMenuItemClicked(const CEGUI::EventArgs& e)
 			break;
 		}
 		
+	}
+	return true;
+}
+
+/// Actions for just-in-time generating submenu items are implemented here
+bool EditorMenu::OnMenuItemHovered(const CEGUI::EventArgs& e)
+{
+	const CEGUI::WindowEventArgs& args = static_cast<const CEGUI::WindowEventArgs&>(e);
+	CEGUI::MenuItem* menuItem = static_cast<CEGUI::MenuItem*>(args.window);
+
+	if (!menuItem->getPopupMenu())
+		return false;
+	
+	switch (menuItem->getID())
+	{
+		case MI_SCENE_OPEN:
+			UpdateSceneMenu();
+			break;
+		default:
+			break;
+	}
+
+	if (!menuItem->isOpened())
+	{
+		menuItem->openPopupMenu();
+	}
+	return true;
+}
+
+bool Editor::EditorMenu::OnPopupMenuClosed(const CEGUI::EventArgs& e)
+{
+	const CEGUI::WindowEventArgs& args = static_cast<const CEGUI::WindowEventArgs&>(e);
+	CEGUI::PopupMenu* popupMenu = static_cast<CEGUI::PopupMenu*>(args.window);
+	for (uint32 i = 0; i < popupMenu->getChildCount(); ++i)
+	{
+		CEGUI::MenuItem* menuItem = static_cast<CEGUI::MenuItem*>(popupMenu->getChildAtIdx(i));
+		if (menuItem->getPopupMenu())
+		{
+			menuItem->closePopupMenu();
+		}
 	}
 	return true;
 }
@@ -252,7 +287,7 @@ void EditorMenu::InitMenu()
 	fileSubmenu->addChildWindow(CreateMenuItem("Editor/TopMenu/File/CreateProject", TR("create_project"), TR("create_project_hint"), MI_FILE_CREATEPROJECT));
 	fileSubmenu->addChildWindow(CreateMenuItem("Editor/TopMenu/File/OpenProject", TR("open_project"), TR("open_project_hint"), MI_FILE_OPENPROJECT));
 	fileSubmenu->addChildWindow(CreateMenuItem("Editor/TopMenu/File/CloseProject", TR("close_project"), TR("close_project_hint"), MI_FILE_CLOSEPROJECT));
-	CEGUI::Window* itemDeployProject = CreateMenuItem("Editor/TopMenu/File/DeployProject", TR("deploy_project"), TR("deploy_project_hint"), MI_INVALID);
+	CEGUI::Window* itemDeployProject = CreateMenuItem("Editor/TopMenu/File/DeployProject", TR("deploy_project"), TR("deploy_project_hint"), MI_INVALID, true);
 	fileSubmenu->addChildWindow(itemDeployProject);
 	mDeploySubmenu = CreatePopupMenu("Editor/TopMenu/File/DeployProject/AutoPopup");
 	itemDeployProject->addChildWindow(mDeploySubmenu);
@@ -261,7 +296,7 @@ void EditorMenu::InitMenu()
 	if (availablePlatforms.empty())
 	{
 		bool enabled = false;
-		mDeploySubmenu->addChildWindow(CreateMenuItem("Editor/TopMenu/File/DeployProject/Empty", TR("no_platform"), "", MI_INVALID, enabled));
+		mDeploySubmenu->addChildWindow(CreateMenuItem("Editor/TopMenu/File/DeployProject/Empty", TR("no_platform"), "", MI_INVALID, false, enabled));
 	}
 	else
 	{
@@ -278,7 +313,7 @@ void EditorMenu::InitMenu()
 	CEGUI::Window* sceneSubmenu = CreatePopupMenu("Editor/TopMenu/Scene/AutoPopup");
 	itemScene->addChildWindow(sceneSubmenu);
 	sceneSubmenu->addChildWindow(CreateMenuItem("Editor/TopMenu/Scene/NewScene", TR("new_scene"), TR("new_scene_hint"), MI_SCENE_NEW));
-	CEGUI::Window* itemOpenScene = CreateMenuItem("Editor/TopMenu/Scene/OpenScene", TR("open_scene"), TR("open_scene_hint"), MI_SCENE_OPEN);
+	CEGUI::Window* itemOpenScene = CreateMenuItem("Editor/TopMenu/Scene/OpenScene", TR("open_scene"), TR("open_scene_hint"), MI_SCENE_OPEN, true);
 	sceneSubmenu->addChildWindow(itemOpenScene);
 	sceneSubmenu->addChildWindow(CreateMenuItem("Editor/TopMenu/Scene/SaveScene", TR("save_scene"), TR("save_scene_hint"), MI_SCENE_SAVE));
 	sceneSubmenu->addChildWindow(CreateMenuItem("Editor/TopMenu/Scene/CloseScene", TR("close_scene"), TR("close_scene_hint"), MI_SCENE_CLOSE));
@@ -293,7 +328,7 @@ void EditorMenu::InitMenu()
 	CEGUI::Window* editSubmenu = CreatePopupMenu("Editor/TopMenu/Edit/AutoPopup");
 	itemEdit->addChildWindow(editSubmenu);
 	editSubmenu->addChildWindow(CreateMenuItem("Editor/TopMenu/Edit/NewEntity", TR("new_entity"), TR("new_entity_hint"), MI_EDIT_NEWENTITY));
-	CEGUI::Window* itemNewComponent = CreateMenuItem("Editor/TopMenu/Edit/NewComponent", TR("new_component"), TR("new_component_hint"), MI_INVALID);
+	CEGUI::Window* itemNewComponent = CreateMenuItem("Editor/TopMenu/Edit/NewComponent", TR("new_component"), TR("new_component_hint"), MI_INVALID, true);
 	editSubmenu->addChildWindow(itemNewComponent);
 	editSubmenu->addChildWindow(CreateMenuItem("Editor/TopMenu/Edit/DuplicateEntity", TR("duplicate_entity"), TR("duplicate_entity_hint"), MI_EDIT_DUPLICATEENTITY));
 	editSubmenu->addChildWindow(CreateMenuItem("Editor/TopMenu/Edit/DuplicateSelectedEntities", TR("duplicate_selected_entities"), TR("duplicate_selected_entities_hint"), MI_EDIT_DUPLICATESELECTEDENTITIES));
@@ -344,7 +379,7 @@ void EditorMenu::InitToolbar()
 	SwitchToolButton(EditorMgr::ET_MOVE);
 }
 
-CEGUI::Window* Editor::EditorMenu::CreateMenuItem(const CEGUI::String& name, const CEGUI::String& text, const CEGUI::String& tooltip, size_t tag, bool enabled)
+CEGUI::Window* Editor::EditorMenu::CreateMenuItem(const CEGUI::String& name, const CEGUI::String& text, const CEGUI::String& tooltip, size_t tag, bool autoOpenSubmenu, bool enabled)
 {
 	CEGUI::Window* menuItem = gGUIMgr.CreateWindow("Editor/MenuItem", name);
 	menuItem->setID((CEGUI::uint)tag);
@@ -352,6 +387,11 @@ CEGUI::Window* Editor::EditorMenu::CreateMenuItem(const CEGUI::String& name, con
 	menuItem->setTooltipText(tooltip);
 	if (!enabled) menuItem->disable();
 	menuItem->subscribeEvent(CEGUI::MenuItem::EventClicked, CEGUI::Event::Subscriber(&Editor::EditorMenu::OnMenuItemClicked, this));
+	if (autoOpenSubmenu)
+	{
+		// When hovered, automatically open submenu
+		menuItem->subscribeEvent(CEGUI::MenuItem::EventMouseEnters, CEGUI::Event::Subscriber(&Editor::EditorMenu::OnMenuItemHovered, this));
+	}
 	return menuItem;
 }
 
@@ -363,6 +403,8 @@ CEGUI::Window* Editor::EditorMenu::CreatePopupMenu(const CEGUI::String& name)
 	popupMenu->setFadeOutTime((float)0.1);
 	popupMenu->setItemSpacing(2);
 	popupMenu->setAutoResizeEnabled(true);
+	popupMenu->subscribeEvent(CEGUI::PopupMenu::EventHidden,
+		CEGUI::Event::Subscriber(&Editor::EditorMenu::OnPopupMenuClosed, this));
 	return popupMenu;
 }
 

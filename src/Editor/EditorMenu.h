@@ -71,12 +71,14 @@ namespace Editor
 		//@{
 			bool OnTopMenuDeactivated(const CEGUI::EventArgs&);
 			bool OnMenuItemClicked(const CEGUI::EventArgs&);
+			bool OnMenuItemHovered(const CEGUI::EventArgs&);
+			bool OnPopupMenuClosed(const CEGUI::EventArgs&);
 			bool OnToolbarButtonStateChanged(const CEGUI::EventArgs&);
 		//@}
 
 		void InitMenu();
 		void InitToolbar();
-		CEGUI::Window* CreateMenuItem(const CEGUI::String& name, const CEGUI::String& text, const CEGUI::String& tooltip, size_t tag, bool enabled = true);
+		CEGUI::Window* CreateMenuItem(const CEGUI::String& name, const CEGUI::String& text, const CEGUI::String& tooltip, size_t tag, bool autoOpenSubmenu = false, bool enabled = true);
 		CEGUI::Window* CreatePopupMenu(const CEGUI::String& name);
 		CEGUI::RadioButton* CreateToolbarItem(const CEGUI::String& name, const CEGUI::String& imageName, const CEGUI::String& tooltip, size_t tag, size_t groupID);
 
