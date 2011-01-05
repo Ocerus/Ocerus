@@ -102,7 +102,7 @@ void EntityComponents::GUILayout::RegisterReflection()
 	RegisterProperty<ResourceSystem::ResourcePtr>("Layout", &GUILayout::GetLayout, &GUILayout::SetLayout, PA_FULL_ACCESS, "Layout used for defining the GUI.");
 	RegisterProperty<ResourceSystem::ResourcePtr>("Scheme", &GUILayout::GetScheme, &GUILayout::SetScheme, PA_FULL_ACCESS, "Scheme used for defining the GUI.");
 	RegisterProperty<ResourceSystem::ResourcePtr>("Callback", &GUILayout::GetCallback, &GUILayout::SetCallback, PA_FULL_ACCESS, "Script module with functions used as a callback for GUI events.");
-	RegisterProperty<uint32>("CallbackTimeOut", &GUILayout::GetCallbackTimeOut, &GUILayout::SetCallbackTimeOut, PA_FULL_ACCESS, "Maximum time of execution the callback scripts in ms (0 means infinity).");
+	RegisterProperty<uint32>("CallbackTimeOut", &GUILayout::GetCallbackTimeOut, &GUILayout::SetCallbackTimeOut, PA_FULL_ACCESS, "Maximum number of miliseconds a script can run before it is terminated (0 means unlimited).");
 	RegisterProperty<bool>("Visible", &GUILayout::GetVisible, &GUILayout::SetVisible, PA_FULL_ACCESS, "Whether the GUI layout is visible.");
 	RegisterProperty<bool>("Enabled", &GUILayout::GetEnabled, &GUILayout::SetEnabled, PA_FULL_ACCESS, "Whether the GUI layout reacts on an user input.");
 }

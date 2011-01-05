@@ -231,7 +231,7 @@ void Script::RegisterReflection()
 	RegisterProperty<Array<ResourceSystem::ResourcePtr>*>("ScriptModules", &Script::GetModules, &Script::SetModules, PA_INIT | PA_EDIT_READ | 
 		PA_EDIT_WRITE | PA_SCRIPT_READ, "Script modules that are searched for script message handlers.");
 	RegisterProperty<uint32>("ScriptTimeOut", &Script::GetTimeOut, &Script::SetTimeOut, 
-		PA_INIT | PA_EDIT_READ | PA_EDIT_WRITE | PA_SCRIPT_READ, "Maximum time of execution the scripts in ms (0 means infinity).");
+		PA_INIT | PA_EDIT_READ | PA_EDIT_WRITE | PA_SCRIPT_READ, "Maximum number of miliseconds a script can run before it is terminated (0 means unlimited).");
 	RegisterProperty<Array<int32>*>("ScriptStates", &Script::GetStates, &Script::SetStates,
 		PA_INIT, "States of the action handlers.");
 	RegisterProperty<Array<uint64>*>("ScriptTimes", &Script::GetTimes, &Script::SetTimes,

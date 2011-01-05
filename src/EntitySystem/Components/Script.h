@@ -33,10 +33,10 @@ namespace EntityComponents
 		/// Names of the script modules that are searched for script message handlers.
 		void SetModules(Utils::Array<ResourceSystem::ResourcePtr>* modules);
 
-		/// Maximum time of execution the scripts in ms (0 means infinity).
+		/// Maximum number of miliseconds a script can run before it is terminated (0 means unlimited).
 		uint32 GetTimeOut(void) const { return mTimeOut; }
 
-		/// Maximum time of execution the scripts in ms (0 means infinity).
+		/// Maximum number of miliseconds a script can run before it is terminated (0 means unlimited).
 		void SetTimeOut(const uint32 timeOut) { mTimeOut = timeOut; }
 
 		/// States of OnAction handlers.

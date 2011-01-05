@@ -55,10 +55,10 @@ namespace EntityComponents
 		/// Sets whether the GUI layout is enabled.
 		void SetEnabled(bool value);
 
-		/// Maximum time of execution the callback scripts in ms (0 means infinity).
+		/// Maximum number of miliseconds a script can run before it is terminated (0 means unlimited).
 		uint32 GetCallbackTimeOut(void) const { return mCallbackTimeOut; }
 
-		/// Maximum time of execution the callback scripts in ms (0 means infinity).
+		/// Maximum number of miliseconds a script can run before it is terminated (0 means unlimited).
 		void SetCallbackTimeOut(uint32 value) { mCallbackTimeOut = value; }
 
 	private:
