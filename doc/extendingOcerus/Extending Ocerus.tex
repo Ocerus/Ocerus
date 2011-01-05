@@ -5,6 +5,7 @@
 \usepackage[ansinew]{inputenc}
 \usepackage{lmodern} %Type1-font for non-english texts and characters
 \usepackage{graphicx}
+\usepackage[pdfborder={0 0 0}, pdffitwindow=true, pdfpagelayout=SinglePage]{hyperref}
 
 \newenvironment{titled-itemize}[1]
 {
@@ -54,9 +55,12 @@ namespace EntityComponents
 }
 \end{verbatim}
 
-There are few methods in this class that should be overridden. Namely, \emph{Create}, \emph{Destroy}, \emph{HandleMessage} and \emph{RegisterReflection}. \emph{Create} and \emph{Destroy} methods are called after the creation respectively before the destruction of the component. \emph{HandleMessage} and \emph{RegisterReflection} method will be described in a later sections.
+There are few methods in this class that should be overridden. Namely, \emph{Create}, \emph{Destroy}, \emph{HandleMessage} and \emph{RegisterReflection}. \emph{Create} and \emph{Destroy} methods are called after the creation respectively before the destruction of the component. \emph{HandleMessage} and \emph{RegisterReflection} method will be described in later sections.
 
-Then, the component type must be registered in the \emph{\_ComponentTypes.h} header file (located in \emph{EntitySystem/Components}). New line \emph{COMPONENT\_TYPE(ExampleComp)} should be added.
+Then, the component type must be registered in the \emph{\_ComponentTypes.h} header file (located in \emph{EntitySystem/Components}). To do so add:
+\begin{verbatim}
+COMPONENT_TYPE(ExampleComp)
+\end{verbatim}
 
 Finally the header file with the component class must be included in the \emph{\_ComponentHeaders.h} header file.
 
