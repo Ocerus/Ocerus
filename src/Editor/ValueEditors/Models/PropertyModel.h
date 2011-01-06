@@ -51,7 +51,14 @@ namespace Editor
 		virtual bool IsRemovable() const { return false; }
 
 		/// Returns whether the property belongs to a prototype and thus is shareable.
-		virtual bool IsShareable() const { return mEntity.IsValid() && mEntity.Exists() && gEntityMgr.IsEntityPrototype(mEntity); }
+		virtual bool IsShareable() const
+		{ 
+			bool shareable = mEntity.IsValid();
+			shareable = shareable && mEntity.Exists();
+			shareable = shareable && gEntityMgr.IsEntityPrototype(mEntity);
+			shareable = shareable && (mProperty.GetAccessFlags()&PA_INIT)!=0;
+			return shareable;
+		}
 
 		/// Returns whether the property is shared.
 		virtual bool IsShared() const { return IsShareable() && gEntityMgr.IsPrototypePropertyShared(mEntity, mProperty.GetKey()); }
