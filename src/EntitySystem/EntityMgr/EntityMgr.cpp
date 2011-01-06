@@ -134,7 +134,7 @@ void EntityMgr::BroadcastMessage(const EntityMessage& msg)
 	}
 }
 
-EntityHandle EntityMgr::CreateEntity(EntityDescription& desc, Editor::HierarchyWindow::eAddItemMode addMode)
+EntityHandle EntityMgr::CreateEntity(EntityDescription& desc, Editor::HierarchyWindow::eAddItemMode addMode, bool autoLinkToPrototype)
 {
 	OC_ASSERT(mComponentMgr);
 
@@ -198,7 +198,7 @@ EntityHandle EntityMgr::CreateEntity(EntityDescription& desc, Editor::HierarchyW
 	if (desc.mKind == EntityDescription::EK_PROTOTYPE) mPrototypes[entityHandle.GetID()] = new PrototypeInfo();
 
 	// link the entity to its prototype
-	if (mPrototypes.find(desc.mPrototype) != mPrototypes.end())
+	if (autoLinkToPrototype && mPrototypes.find(desc.mPrototype) != mPrototypes.end())
 	{
 		LinkEntityToPrototype(entityHandle.GetID(), desc.mPrototype);
 	}
@@ -730,7 +730,8 @@ void EntitySystem::EntityMgr::LoadEntityFromXML(ResourceSystem::XMLNodeIterator 
 	}
 
 	// create the entity
-	EntityHandle entity = CreateEntity(desc);
+	bool autoLink = false;
+	EntityHandle entity = CreateEntity(desc, Editor::HierarchyWindow::ADD_APPEND, autoLink);
 	if (!entity) return;
 
 	// setup the tag
@@ -773,6 +774,14 @@ void EntitySystem::EntityMgr::LoadEntityFromXML(ResourceSystem::XMLNodeIterator 
 	// note: the prototype copy can't be created here since all prototypes must be loaded first before any copy is created.
 	//       otherwise it would screw up their IDs.
 	entity.FinishInit();
+
+	// link the entity to its prototype if it has any
+	// note that we disabled auto linking when creating the entity
+	if (!autoLink && mPrototypes.find(desc.mPrototype) != mPrototypes.end())
+	{
+		LinkEntityToPrototype(entity.GetID(), desc.mPrototype);
+	}
+
 
 	ocTrace << "Entity loaded from XML: " << entity;
 }
@@ -1043,20 +1052,20 @@ bool EntitySystem::EntityMgr::UpdatePrototypeInstance( const EntityID prototype,
 	PrototypeInfo* prototypeInfo = mPrototypes[prototype];
 
 	ComponentTypeList prototypeComponentTypes;
-	ComponentTypeList instanceComponentTypes;
 	GetEntityComponentTypes(prototype, prototypeComponentTypes);
-	GetEntityComponentTypes(instance, instanceComponentTypes);
 
-	// if the instance has more components than its prototype, it must be unlinked
-	if (prototypeComponentTypes.size() < instanceComponentTypes.size())
+	EntityHandle instanceHandle = GetEntity(instance);
+
+	// if the instance has more components than its prototype they must be destroyed
+	while (prototypeComponentTypes.size() < (size_t)GetNumberOfEntityComponents(instanceHandle))
 	{
-		ocWarning << "Cannot propagate prototype " << prototype << " to instance " << instance << "; too many components in instance";
-		ocWarning << "Unlinking " << instance << " from " << prototype << ".";
-		UnlinkEntityFromPrototype(instance);
-		return false;
+		DestroyEntityComponent(instanceHandle, GetNumberOfEntityComponents(instanceHandle)-1);
 	}
 
-	// iterate through components of the instance. If there is mismath in component types with its protope, instance must be unlinked.
+	ComponentTypeList instanceComponentTypes;
+	GetEntityComponentTypes(instance, instanceComponentTypes);
+
+	// iterate through components of the instance. If there is mismatch in component types with its prototype, instance must be unlinked.
 	ComponentID currentComponent = 0;
 	ComponentTypeList::iterator protIt=prototypeComponentTypes.begin();
 	ComponentTypeList::iterator instIt=instanceComponentTypes.begin();
@@ -1074,8 +1083,7 @@ bool EntitySystem::EntityMgr::UpdatePrototypeInstance( const EntityID prototype,
 	// Add missing components from instance to match its prototype
 	for (; prototypeComponentTypes.size() < (size_t)currentComponent; ++protIt, ++currentComponent)
 	{
-		EntityHandle instHandle = GetEntity(instance);
-		AddComponentToEntity(instHandle, *protIt);
+		AddComponentToEntity(instanceHandle, *protIt);
 	}
 
 	// propagate some of the entity attributes of the prototype
@@ -1243,7 +1251,7 @@ void EntitySystem::EntityMgr::DestroyEntityComponent( const EntityHandle entity,
 		return;
 	}
 
-	// make a security check if we are not removing a component linked to the prototype
+	// this entity is linked to a prototype
 	if (entityIter->second->mPrototype.IsValid())
 	{
 		EntityID prototypeID = entityIter->second->mPrototype.GetID();
@@ -1259,14 +1267,25 @@ void EntitySystem::EntityMgr::DestroyEntityComponent( const EntityHandle entity,
 		}
 	}
 
-	// if this was a prototype mark the properties as not shared
+	// this entity is a prototype
 	if (IsEntityPrototype(entity))
 	{
+		// if this was a prototype mark the properties as not shared
 		PropertyList propList;
 		GetEntityComponentProperties(entity, componentToDestroy, propList);
 		for (PropertyList::iterator it=propList.begin(); it!=propList.end(); ++it)
 		{
 			SetPrototypePropertyNonShared(entity, it->GetName());
+		}
+
+		// remove the component from instances as well
+		// note that we assume the components in the instances have the same order and structure as in the prototype
+		for (EntityMap::iterator it=mEntities.begin(); it!=mEntities.end(); ++it)
+		{
+			if (it->second->mPrototype == entity)
+			{
+				DestroyEntityComponent(it->first, componentToDestroy);
+			}
 		}
 	}
 

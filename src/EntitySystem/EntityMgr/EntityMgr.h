@@ -55,8 +55,10 @@ namespace EntitySystem
 		/// @name Entity manipulation
 		//@{
 
-		/// Creates new entity accordingly to its description and returns its handle. AddMode means if it should be appended or prepended in HierarchyWindow.
-		EntityHandle CreateEntity(EntityDescription& desc, Editor::HierarchyWindow::eAddItemMode addMode = Editor::HierarchyWindow::ADD_APPEND);
+		/// Creates new entity accordingly to its description and returns its handle.
+		/// AddMode means if it should be appended or prepended in HierarchyWindow.
+		/// If autoLinkToPrototype is false the entity is not linked to its prototype even if it has any.
+		EntityHandle CreateEntity(EntityDescription& desc, Editor::HierarchyWindow::eAddItemMode addMode = Editor::HierarchyWindow::ADD_APPEND, bool autoLinkToPrototype = true);
 		
 		/// Creates new entity from prototype.
 		EntityHandle InstantiatePrototype(const EntityHandle prototype, const Vector2& position = Vector2_Zero, const string& newName = "");
