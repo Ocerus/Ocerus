@@ -268,13 +268,19 @@ void EditorMenu::UpdateItemsEnabled()
 void Editor::EditorMenu::SwitchToolButton( uint32 selectedButtonIndex )
 {
 	OC_ASSERT_MSG(selectedButtonIndex < mToolButtons.size(), "Invalid tool button index");
-	mToolButtons[selectedButtonIndex]->setSelected(true);
+	if (!mToolButtons[selectedButtonIndex]->isDisabled())
+	{
+		mToolButtons[selectedButtonIndex]->setSelected(true);
+	}
 }
 
 void Editor::EditorMenu::SwitchActionButton( uint32 selectedButtonIndex )
 {
 	OC_ASSERT_MSG(selectedButtonIndex < mActionButtons.size(), "Invalid tool button index");
-	mActionButtons[selectedButtonIndex]->setSelected(true);
+	if (!mActionButtons[selectedButtonIndex]->isDisabled())
+	{
+		mActionButtons[selectedButtonIndex]->setSelected(true);
+	}
 }
 
 void EditorMenu::InitMenu()
