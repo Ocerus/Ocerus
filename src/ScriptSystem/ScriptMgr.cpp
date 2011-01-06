@@ -538,15 +538,18 @@ bool RegisterDynamicProperty(const EntityHandle& self,
 		return false;
 	}
 
-	/*PropertyHolder prop = self.GetProperty(propertyName, accessFlags);
-	if (prop.IsValid() && PropertyTypes::GetTypeID<T>() != prop.GetType())
+	if (self.HasProperty(propertyName))
 	{
-		ePropertyType oldType = prop.GetType();
-		ePropertyType newType = PropertyTypes::GetTypeID<T>();
-		ocWarning << "Dynamic property " << propertyName << " (" << PropertyTypes::GetStringName(newType)
-			<< ") is already registered with a different type (" << PropertyTypes::GetStringName(oldType) << ").";
-		return false;
-	}*/
+		PropertyHolder prop = self.GetProperty(propertyName, accessFlags);
+		if (prop.IsValid() && PropertyTypes::GetTypeID<T>() != prop.GetType())
+		{
+			ePropertyType oldType = prop.GetType();
+			ePropertyType newType = PropertyTypes::GetTypeID<T>();
+			ocWarning << "Dynamic property " << propertyName << " (" << PropertyTypes::GetStringName(newType)
+				<< ") is already registered with a different type (" << PropertyTypes::GetStringName(oldType) << ").";
+			return false;
+		}
+	}
 
 	return self.RegisterDynamicPropertyOfComponent<T>(id, StringKey(propertyName), accessFlags, comment);
 }
