@@ -510,7 +510,7 @@ void Core::Project::RefreshSceneList()
 	for (SceneInfoList::iterator it=mSceneList.begin(); it!=mSceneList.end();)
 	{
 		ResourceSystem::ResourcePtr res = gResourceMgr.GetResource("Project", it->filename);
-		if (!res)
+		if (!res || res->GetState() == ResourceSystem::Resource::STATE_MISSING)
 		{
 			it = mSceneList.erase(it);
 		}

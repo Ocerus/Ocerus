@@ -81,9 +81,6 @@ bool Editor::EditorMenu::OnMenuItemClicked(const CEGUI::EventArgs& e)
 		case MI_FILE_QUIT:
 			gEditorMgr.ShowQuitDialog();
 			break;
-		case MI_SCENE:
-			UpdateSceneMenu();
-			break;
 		case MI_SCENE_NEW:
 			gEditorMgr.ShowNewSceneDialog();
 			break;
@@ -311,7 +308,7 @@ void EditorMenu::InitMenu()
 	fileSubmenu->addChildWindow(CreateMenuItem("Editor/TopMenu/File/Quit", TR("quit"), TR("quit_hint"), MI_FILE_QUIT));
 
 	// Scene submenu
-	CEGUI::Window* itemScene = CreateMenuItem("Editor/TopMenu/Scene", TR("scene"), "", MI_SCENE);
+	CEGUI::Window* itemScene = CreateMenuItem("Editor/TopMenu/Scene", TR("scene"), "", MI_INVALID);
 	mTopMenu->addChildWindow(itemScene);
 	CEGUI::Window* sceneSubmenu = CreatePopupMenu("Editor/TopMenu/Scene/AutoPopup");
 	itemScene->addChildWindow(sceneSubmenu);
