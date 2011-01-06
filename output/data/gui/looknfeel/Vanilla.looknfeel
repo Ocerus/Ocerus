@@ -630,7 +630,7 @@
 
 
     <WidgetLook name="Vanilla/Editbox">
-        <PropertyDefinition name="ReadOnlyBGColour" initialValue="FFDFDFDF" redrawOnWrite="true" />
+        <PropertyDefinition name="ReadOnlyBGColour" initialValue="FFBFBFBF" redrawOnWrite="true" />
         <PropertyDefinition name="NormalTextColour" initialValue="FF000000" redrawOnWrite="true" />
         <PropertyDefinition name="SelectedTextColour" initialValue="FFFFFFFF" redrawOnWrite="true" />
         <PropertyDefinition name="ActiveSelectionColour" initialValue="FF607FFF" redrawOnWrite="true" />
