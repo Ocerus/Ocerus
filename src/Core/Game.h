@@ -52,6 +52,9 @@ namespace Core
 		
 		/// Gets the root window for in-game GUI elements.
 		CEGUI::Window* GetRootWindow() { return mRootWindow; }
+
+		/// Invalidates the root GUI window thus updating all game GUI elements.
+		void UpdateRootWindow();
 		
 		/// Sets the root window for in-game GUI elements.
 		void SetRootWindow(CEGUI::Window* window);
@@ -202,6 +205,7 @@ namespace Core
 		GfxSystem::RenderTargetID mRenderTarget; ///< Where the game is to be rendered?
 		EntitySystem::EntityHandle mCamera; ///< Camera used for rendering.
 		CEGUI::Window* mRootWindow;  ///< Root window for in-game GUI elements.
+		int32 mUpdateRootWindowCounter; ///< Number of frames to keep updating the root window.
 		Reflection::PropertyMap mDynamicProperties; ///< Dymanic properties saved with the game accessible from scripts.
 		string mTempActionSave; ///< File for temporary save of the action.
 

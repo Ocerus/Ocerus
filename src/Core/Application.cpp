@@ -527,9 +527,9 @@ void Application::FrameUpdate(float32 delta)
 
 		break;
 	case AS_GAME:
+		gGUIMgr.Update(delta);
 		mGameProject->Update();
 		mGame->Update(delta);
-		gGUIMgr.Update(delta);
 		if (mEditMode)
 		{
 			gEditorMgr.Update(delta);

@@ -214,6 +214,8 @@ void EditorGUI::Update(float32 delta)
 	}
 
 	mEntityWindow->Update(delta);
+
+	//gGUIMgr.GetWindow("UserGUI_GameLayout")->invalidate(true);
 }
 
 bool Editor::EditorGUI::OnEditorViewportItemDropped( const CEGUI::EventArgs& e)

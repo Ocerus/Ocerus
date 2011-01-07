@@ -76,4 +76,16 @@ public:
 	/// Deactivates the window.
 	void Deactivate();
 
+	/// Returns the value of a property of the window. The property is specified by a string name. 
+	/// The available properties depend on the type of the window. To get the full list of properties you can use
+	/// <a href="http://www.cegui.org.uk/wiki/index.php/PropertyFinder">this tools</a> or see the list
+	/// <a href="http://www.cegui.org.uk/wiki/index.php/SetProperty">here</a>.
+	CEGUIString GetProperty(const CEGUIString& propertyName) const;
+
+	/// Sets a property of the window. The property is specified by a string name. The available properties depend
+	/// on the type of the window. To get the full list of properties you can use
+	/// <a href="http://www.cegui.org.uk/wiki/index.php/PropertyFinder">this tools</a> or see the list
+	/// <a href="http://www.cegui.org.uk/wiki/index.php/SetProperty">here</a>.
+	void SetProperty(const CEGUIString& propertyName, const CEGUIString& propertyValue);
+
 };

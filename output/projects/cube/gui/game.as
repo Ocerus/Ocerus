@@ -109,6 +109,10 @@ void LevelTitleAnimation(float32 delta)
 			GetWindow("GameLayout/LevelTitle").SetProperty("Alpha", "" + (3.0-TitleAnimState));
 		}
   }
+  else
+  {
+    GetWindow("GameLayout/LevelTitle").SetVisible(false);
+  }
 }
 
 void OnStateButtonClicked(Window@ wnd)

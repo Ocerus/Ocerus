@@ -1098,6 +1098,42 @@ bool WindowIsVisible(const CEGUI::Window* self)
 	return self->isVisible();
 }
 
+void WindowSetEnabled(const bool value, CEGUI::Window* self)
+{
+	OC_CEGUI_TRY;
+	{
+		if (!self->isDisabled(true) == value) return;
+		self->setEnabled(value);
+		GlobalProperties::Get<Core::Game>("Game").UpdateRootWindow();
+	}
+	OC_CEGUI_CATCH;
+}
+
+void WindowSetVisible(const bool value, CEGUI::Window* self)
+{
+	OC_CEGUI_TRY;
+	{
+		if (self->isVisible(true) == value) return;
+		self->setVisible(value);
+		GlobalProperties::Get<Core::Game>("Game").UpdateRootWindow();
+	}
+	OC_CEGUI_CATCH;
+}
+
+void WindowSetAlpha(const float32 value, CEGUI::Window* self)
+{
+	OC_CEGUI_TRY;
+	{
+		if (self->getAlpha() == value) return;
+		self->setAlpha(value);
+		if (value == 0.0f)
+		{
+			GlobalProperties::Get<Core::Game>("Game").UpdateRootWindow();
+		}
+	}
+	OC_CEGUI_CATCH;
+}
+
 CEGUI::String WindowGetProperty(const CEGUI::String& propertyName, const CEGUI::Window* self)
 {
 	OC_CEGUI_TRY;
@@ -1112,7 +1148,22 @@ void WindowSetProperty(const CEGUI::String& propertyName, const CEGUI::String& v
 {
 	OC_CEGUI_TRY;
 	{
-		self->setProperty(propertyName, value);
+		if (propertyName.compare("Visible") == 0)
+		{
+			WindowSetVisible(StringConverter::FromString<bool>(value.c_str()), self);
+		}
+		else if (propertyName.compare("Enabled") == 0)
+		{
+			WindowSetEnabled(StringConverter::FromString<bool>(value.c_str()), self);
+		}
+		else if (propertyName.compare("Alpha") == 0)
+		{
+			WindowSetAlpha(StringConverter::FromString<float32>(value.c_str()), self);
+		}
+		else
+		{
+			self->setProperty(propertyName, value);
+		}
 	}
 	OC_CEGUI_CATCH;
 }
@@ -1141,12 +1192,12 @@ void RegisterScriptWindowMembers(asIScriptEngine *engine, const char *type)
 	r = engine->RegisterObjectMethod(type, "Window@ GetParent() const", asMETHOD(T, getParent), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod(type, "const CEGUIString& GetTooltipText() const", asMETHOD(T, getTooltipText), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod(type, "bool InheritsTooltipText() const", asMETHOD(T, inheritsTooltipText), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-	r = engine->RegisterObjectMethod(type, "void SetEnabled(bool)", asMETHOD(T, setEnabled), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-	r = engine->RegisterObjectMethod(type, "void SetVisible(bool)", asMETHOD(T, setVisible), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod(type, "void SetEnabled(bool)", asFUNCTION(WindowSetEnabled), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod(type, "void SetVisible(bool)", asFUNCTION(WindowSetVisible), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod(type, "void Activate()", asMETHOD(T, activate), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod(type, "void Deactivate()", asMETHOD(T, deactivate), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod(type, "void SetText(const CEGUIString& in)", asMETHOD(T, setText), asCALL_THISCALL); OC_SCRIPT_ASSERT();
-	r = engine->RegisterObjectMethod(type, "void SetAlpha(float32)", asMETHOD(T, setAlpha), asCALL_THISCALL); OC_SCRIPT_ASSERT();
+	r = engine->RegisterObjectMethod(type, "void SetAlpha(float32)", asFUNCTION(WindowSetAlpha), asCALL_CDECL_OBJLAST); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod(type, "void SetInheritsAlpha(bool)", asMETHOD(T, setInheritsAlpha), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod(type, "void SetTooltipText(const CEGUIString& in)", asMETHOD(T, setTooltipText), asCALL_THISCALL); OC_SCRIPT_ASSERT();
 	r = engine->RegisterObjectMethod(type, "void SetInheritsTooltipText(bool)", asMETHOD(T, setInheritsTooltipText), asCALL_THISCALL); OC_SCRIPT_ASSERT();

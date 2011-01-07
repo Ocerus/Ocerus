@@ -159,6 +159,7 @@ void EntityComponents::GUILayout::SetVisible(bool value)
 		mRootWindow->setVisible(mVisible);
 		mRootWindow->moveToFront();
 	}
+	GlobalProperties::Get<Core::Game>("Game").UpdateRootWindow();
 }
 
 void EntityComponents::GUILayout::SetEnabled(bool value)
@@ -168,4 +169,5 @@ void EntityComponents::GUILayout::SetEnabled(bool value)
 	{
 		mRootWindow->setEnabled(mEnabled);
 	}
+	GlobalProperties::Get<Core::Game>("Game").UpdateRootWindow();
 }

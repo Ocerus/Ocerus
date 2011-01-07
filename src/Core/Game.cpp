@@ -56,6 +56,7 @@ Core::Game::Game(const string& tempDirectory):
 	mRenderTarget(GfxSystem::InvalidRenderTargetID),
 	mCamera(EntitySystem::EntityHandle::Null),
 	mRootWindow(0),
+	mUpdateRootWindowCounter(0),
 	mTempActionSave(""),
 	mPhysics(0),
 	mPhysicsCallbacks(0)
@@ -235,6 +236,19 @@ void Core::Game::Update(const float32 delta)
 		physicsDelta -= stepSize;
 	}
 	mPhysicsResidualDelta = physicsDelta;
+
+	if (mUpdateRootWindowCounter > 0) 
+	{
+		--mUpdateRootWindowCounter;
+		OC_ASSERT(mRootWindow);
+		mRootWindow->invalidate(true);
+	}
+}
+
+void Core::Game::UpdateRootWindow()
+{
+	// we must update it at least twice, so that there's one full redraw of GUI in between
+	mUpdateRootWindowCounter = 5;
 }
 
 void Core::Game::Draw(const float32 passedDelta)
