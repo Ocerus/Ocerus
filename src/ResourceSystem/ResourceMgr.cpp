@@ -285,6 +285,7 @@ bool ResourceMgr::RefreshPathToGroup(const string& path, const eBasePathType bas
 	if (!boost::filesystem::exists(boostPath))
 	{
 		ocError << "Path does not exist '" << boostPath.string() << "'";
+		return false;
 	}
 
 	// if the group is empty, add at least something so that it actually exists
