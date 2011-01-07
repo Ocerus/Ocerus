@@ -12,5 +12,5 @@ public:
 
 	/// Loads the project layout file and returns it as a root window. The widget names in the layout file
 	/// are prefixed with the given prefix.
-	Window@ LoadLayout(const CEGUIString& layout, const CEGUIString& widgetPrefix);
+	Window* LoadLayout(const CEGUIString& layout, const CEGUIString& widgetPrefix);
 };

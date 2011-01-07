@@ -50,7 +50,7 @@ public:
 	float32 GetEfectiveAlpha() const;
 
 	/// Returns the parent window.
-	Window@ GetParent() const;
+	Window* GetParent() const;
 
 	/// Returns the tooltip text.
 	const CEGUIString& GetTooltipText() const;

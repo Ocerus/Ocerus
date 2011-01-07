@@ -7,13 +7,13 @@
 
 /// @brief Returns the GUI window with the given name.
 /// Returns null if no such exists.
-Window@ GetWindow(const string& windowName);
+Window* GetWindow(const string& windowName);
 
 /// Returns the text data from the strings manager given the group and the key.
-const string& GetTextData(const StringKey& group, const StringKey& key);
+const string GetTextData(const StringKey& group, const StringKey& key);
 
 /// Returns the text data from the strings manager given the key in the default group.
-const string& GetTextData(const StringKey& key);
+const string GetTextData(const StringKey& key);
 
 
 //@}

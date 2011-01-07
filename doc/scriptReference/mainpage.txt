@@ -12,7 +12,14 @@ see <a href="../../doxygen">doxygen</a>.
 The scripting language used is <a href="http://www.angelcode.com/angelscript/">AngelScript</a>. This manual
 describes only functions specific to Ocerus. To see the documentation to the language itself (including
 the syntax, default types and constructs, built-in functions, etc.) visit
-the <a href="http://www.angelcode.com/angelscript/sdk/docs/manual/index.html">AngelScript manual</a> homepage.   
+the <a href="http://www.angelcode.com/angelscript/sdk/docs/manual/index.html">AngelScript manual</a> homepage.  
+
+
+@section references Important Notice
+
+Please note that since Doxygen doesn't support the @ character (object reference) it was replaced by * in
+the documentation. However, when you write the code you must use @ instead. AngelScript doesn't use *. 
+
 
 
 @section s2 How to write scripts

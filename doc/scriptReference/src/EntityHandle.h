@@ -39,7 +39,7 @@ public:
 	eEntityMessageResult PostMessage(eEntityMessageType type, PropertyFunctionParameters = PropertyFunctionParameters());
 
 	/// Calls a function on this entity with the given parameters.
-	void CallFunction(string& functionName, PropertyFunctionParameters parameters);
+	void CallFunction(const string& functionName, PropertyFunctionParameters parameters);
 
 	/// @name Property Manipulation
 	//@{
