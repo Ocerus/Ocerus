@@ -319,7 +319,7 @@ void EditorMenu::InitMenu()
 	CEGUI::Window* sceneSubmenu = CreatePopupMenu("Editor/TopMenu/Scene/AutoPopup");
 	itemScene->addChildWindow(sceneSubmenu);
 	sceneSubmenu->addChildWindow(CreateMenuItem("Editor/TopMenu/Scene/NewScene", TR("new_scene"), TR("new_scene_hint"), MI_SCENE_NEW));
-	CEGUI::Window* itemOpenScene = CreateMenuItem("Editor/TopMenu/Scene/OpenScene", TR("open_scene"), TR("open_scene_hint"), MI_SCENE_OPEN, true);
+	CEGUI::Window* itemOpenScene = CreateMenuItem("Editor/TopMenu/Scene/OpenScene", TR("open_scene") + "  ", TR("open_scene_hint"), MI_SCENE_OPEN, true);
 	sceneSubmenu->addChildWindow(itemOpenScene);
 	sceneSubmenu->addChildWindow(CreateMenuItem("Editor/TopMenu/Scene/SaveScene", TR("save_scene"), TR("save_scene_hint"), MI_SCENE_SAVE));
 	sceneSubmenu->addChildWindow(CreateMenuItem("Editor/TopMenu/Scene/CloseScene", TR("close_scene"), TR("close_scene_hint"), MI_SCENE_CLOSE));
