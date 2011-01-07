@@ -37,9 +37,13 @@ bool ScriptCallback::operator()(const CEGUI::EventArgs &args) const
 		}
 	}
 
-	int32 funcId = gScriptMgr.GetFunctionID(module.c_str(), (string("void ")
-	                                        + mFunctionName + "(Window@)").c_str());
-	if (funcId < 0) return false;
+	string functionName = string("void ") + mFunctionName + string("(Window@)");
+	int32 funcId = gScriptMgr.GetFunctionID(module.c_str(), functionName.c_str());
+	if (funcId < 0)
+	{
+		ocWarning << "Cannot find function " << functionName << " in the GUI callback script file " << module << ".";
+		return false;
+	}
 
 	AngelScript::asIScriptContext* ctx = gScriptMgr.PrepareContext(funcId);
 	if (ctx == 0) return false;

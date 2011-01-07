@@ -11,31 +11,26 @@
 	<Image Name="btnPauseActionPushed" XPos="16" YPos="32" Width="16" Height="16" />
 	<Image Name="btnPauseActionDisabled" XPos="16" YPos="48" Width="16" Height="16" />
 
-	<!-- TODO: draw icons -->
 	<Image Name="btnRestartActionNormal" XPos="32" YPos="0" Width="16" Height="16" />
 	<Image Name="btnRestartActionHover" XPos="32" YPos="16" Width="16" Height="16" />
 	<Image Name="btnRestartActionPushed" XPos="32" YPos="32" Width="16" Height="16" />
 	<Image Name="btnRestartActionDisabled" XPos="32" YPos="48" Width="16" Height="16" />
 
-	<!-- TODO: draw icons -->
 	<Image Name="btnEditToolMoveNormal" XPos="48" YPos="0" Width="16" Height="16" />
 	<Image Name="btnEditToolMoveHover" XPos="48" YPos="16" Width="16" Height="16" />
 	<Image Name="btnEditToolMovePushed" XPos="48" YPos="32" Width="16" Height="16" />
 	<Image Name="btnEditToolMoveDisabled" XPos="48" YPos="48" Width="16" Height="16" />
 
-	<!-- TODO: draw icons -->
 	<Image Name="btnEditToolRotateNormal" XPos="64" YPos="0" Width="16" Height="16" />
 	<Image Name="btnEditToolRotateHover" XPos="64" YPos="16" Width="16" Height="16" />
 	<Image Name="btnEditToolRotatePushed" XPos="64" YPos="32" Width="16" Height="16" />
 	<Image Name="btnEditToolRotateDisabled" XPos="64" YPos="48" Width="16" Height="16" />
 
-	<!-- TODO: draw icons -->
 	<Image Name="btnEditToolRotateZNormal" XPos="80" YPos="0" Width="16" Height="16" />
 	<Image Name="btnEditToolRotateZHover" XPos="80" YPos="16" Width="16" Height="16" />
 	<Image Name="btnEditToolRotateZPushed" XPos="80" YPos="32" Width="16" Height="16" />
 	<Image Name="btnEditToolRotateZDisabled" XPos="80" YPos="48" Width="16" Height="16" />
 
-	<!-- TODO: draw icons -->
 	<Image Name="btnEditToolScaleNormal" XPos="96" YPos="0" Width="16" Height="16" />
 	<Image Name="btnEditToolScaleHover" XPos="96" YPos="16" Width="16" Height="16" />
 	<Image Name="btnEditToolScalePushed" XPos="96" YPos="32" Width="16" Height="16" />
@@ -51,4 +46,28 @@
 	<Image Name="btnRemoveComponentPushed" XPos="32" YPos="160" Width="14" Height="14" />
 	<Image Name="btnRemoveComponentDisabled" XPos="48" YPos="160" Width="14" Height="14" />
 
+	<Image Name="btnAddNormal" XPos="0" YPos="176" Width="24" Height="24" />
+	<Image Name="btnAddHover" XPos="32" YPos="176" Width="24" Height="24" />
+	<Image Name="btnAddPushed" XPos="64" YPos="176" Width="24" Height="24" />
+	<Image Name="btnAddDisabled" XPos="96" YPos="176" Width="24" Height="24" />
+
+	<Image Name="btnRemoveNormal" XPos="0" YPos="208" Width="24" Height="24" />
+	<Image Name="btnRemoveHover" XPos="32" YPos="208" Width="24" Height="24" />
+	<Image Name="btnRemovePushed" XPos="64" YPos="208" Width="24" Height="24" />
+	<Image Name="btnRemoveDisabled" XPos="96" YPos="208" Width="24" Height="24" />
+
+	<Image Name="btnSaveNormal" XPos="0" YPos="240" Width="24" Height="24" />
+	<Image Name="btnSaveHover" XPos="32" YPos="240" Width="24" Height="24" />
+	<Image Name="btnSavePushed" XPos="64" YPos="240" Width="24" Height="24" />
+	<Image Name="btnSaveDisabled" XPos="96" YPos="240" Width="24" Height="24" />
+
+	<Image Name="btnCrossNormal" XPos="0" YPos="272" Width="24" Height="24" />
+	<Image Name="btnCrossHover" XPos="32" YPos="272" Width="24" Height="24" />
+	<Image Name="btnCrossPushed" XPos="64" YPos="272" Width="24" Height="24" />
+	<Image Name="btnCrossDisabled" XPos="96" YPos="272" Width="24" Height="24" />
+
+	<Image Name="btnCancelNormal" XPos="0" YPos="304" Width="24" Height="24" />
+	<Image Name="btnCancelHover" XPos="32" YPos="304" Width="24" Height="24" />
+	<Image Name="btnCancelPushed" XPos="64" YPos="304" Width="24" Height="24" />
+	<Image Name="btnCancelDisabled" XPos="96" YPos="304" Width="24" Height="24" />
 </Imageset>

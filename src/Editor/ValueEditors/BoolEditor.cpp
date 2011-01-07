@@ -68,9 +68,7 @@ void BoolEditor::InitWidget()
 	mEditorWidget->addChildWindow(mCheckboxWidget);
 
 	// Create remove button widget
-	CEGUI::Window* removeButton = gGUIMgr.CreateWindow("Editor/Button", editorName + "/RemoveButton");
-	removeButton->setText(TR("entity_editor_remove"));
-	removeButton->setSize(CEGUI::UVector2(CEGUI::UDim(0, GetEditboxHeight()), CEGUI::UDim(0, GetEditboxHeight())));
+	CEGUI::Window* removeButton = CreateRemoveButtonWidget(editorName + "/RemoveButton");
 	removeButton->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&BoolEditor::OnRemoveButtonClicked, this));
 	mEditorWidget->addChildWindow(removeButton);
 
@@ -96,7 +94,7 @@ void BoolEditor::SetupWidget(BoolEditor::Model* model)
 	// Set dimensions
 	CEGUI::UDim dimLeft = model->IsShareable() ? cegui_absdim(16) : cegui_absdim(0);
 	CEGUI::UDim dimMiddle = model->IsListElement() ? cegui_absdim(32) : cegui_reldim(0.5f);
-	CEGUI::UDim dimRight = model->IsRemovable() ? CEGUI::UDim(1, - GetEditboxHeight() - 2) : cegui_reldim(1);
+	CEGUI::UDim dimRight = model->IsRemovable() ? CEGUI::UDim(1, - 24 - 2) : cegui_reldim(1);
 	
 	// Setup label widget
 	CEGUI::Window* labelWidget = mEditorWidget->getChildAtIdx(0);

@@ -24,9 +24,15 @@ CEGUI::Window* AbstractValueEditor::CreateLabelWidget(const CEGUI::String& name)
 
 CEGUI::Window* Editor::AbstractValueEditor::CreateRemoveButtonWidget(const CEGUI::String& name)
 {
-	CEGUI::Window* removeButton = gGUIMgr.CreateWindow("Editor/Button", name);
-	removeButton->setText(TR("entity_editor_remove"));
-	removeButton->setSize(CEGUI::UVector2(CEGUI::UDim(0, GetEditboxHeight()), CEGUI::UDim(0, GetEditboxHeight())));
+	CEGUI::Window* removeButton = gGUIMgr.CreateWindow("Editor/ImageButton", name);
+	removeButton->setProperty("NormalImage", "set:EditorToolbar image:btnRemoveNormal");
+	removeButton->setProperty("HoverImage", "set:EditorToolbar image:btnRemoveHover");
+	removeButton->setProperty("PushedImage", "set:EditorToolbar image:btnRemovePushed");
+	removeButton->setProperty("DisabledImage", "set:EditorToolbar image:btnRemoveDisabled");
+	removeButton->setTooltipText(TR("entity_editor_remove_hint"));
+	removeButton->setVisible(true);
+	removeButton->setPosition(CEGUI::UVector2(cegui_absdim(-24), cegui_absdim(0)));
+	removeButton->setSize(CEGUI::UVector2(cegui_absdim(24), cegui_absdim(24)));
 	return removeButton;
 }
 

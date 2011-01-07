@@ -69,24 +69,42 @@ namespace Editor
 		mHeaderWidget->addChildWindow(labelWidget);
 
 		// Create add element button
-		mButtonAddElement = static_cast<CEGUI::PushButton*>(gGUIMgr.CreateWindow("Editor/Button", editorName + "/Header/AddElementButton"));
-		mButtonAddElement->setText(TR("entity_editor_add"));
-		mButtonAddElement->setArea(CEGUI::URect(CEGUI::UDim(0.5f, 1), CEGUI::UDim(0, 0), CEGUI::UDim(0.6666f, -1), CEGUI::UDim(0, GetEditboxHeight())));
+		mButtonAddElement = static_cast<CEGUI::PushButton*>(gGUIMgr.CreateWindow("Editor/ImageButton", editorName + "/Header/AddElementButton"));
+		mButtonAddElement->setProperty("NormalImage", "set:EditorToolbar image:btnAddNormal");
+		mButtonAddElement->setProperty("HoverImage", "set:EditorToolbar image:btnAddHover");
+		mButtonAddElement->setProperty("PushedImage", "set:EditorToolbar image:btnAddPushed");
+		mButtonAddElement->setProperty("DisabledImage", "set:EditorToolbar image:btnAddDisabled");
+		mButtonAddElement->setTooltipText(TR("entity_editor_add_hint"));
+		mButtonAddElement->setVisible(true);
+		mButtonAddElement->setSize(CEGUI::UVector2(cegui_absdim(24), cegui_absdim(24)));
+		mButtonAddElement->setPosition(CEGUI::UVector2(CEGUI::UDim(1, -80), CEGUI::UDim(0, 0)));
 		mButtonAddElement->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Editor::ArrayEditor<ElementType>::OnEventButtonAddPressed, this));
 		mHeaderWidget->addChildWindow(mButtonAddElement);
 
 		// Create revert button
-		mButtonRevert = static_cast<CEGUI::PushButton*>(gGUIMgr.CreateWindow("Editor/Button", editorName + "/Header/RevertButton"));
-		mButtonRevert->setText(TR("entity_editor_revert"));
-		mButtonRevert->setArea(CEGUI::URect(CEGUI::UDim(0.6666f, 1), CEGUI::UDim(0, 0), CEGUI::UDim(0.8333f, -1), CEGUI::UDim(0, GetEditboxHeight())));
+		mButtonRevert = static_cast<CEGUI::PushButton*>(gGUIMgr.CreateWindow("Editor/ImageButton", editorName + "/Header/RevertButton"));
+		mButtonRevert->setProperty("NormalImage", "set:EditorToolbar image:btnCancelNormal");
+		mButtonRevert->setProperty("HoverImage", "set:EditorToolbar image:btnCancelHover");
+		mButtonRevert->setProperty("PushedImage", "set:EditorToolbar image:btnCancelPushed");
+		mButtonRevert->setProperty("DisabledImage", "set:EditorToolbar image:btnCancelDisabled");
+		mButtonRevert->setTooltipText(TR("entity_editor_revert_hint"));
+		mButtonRevert->setVisible(true);
+		mButtonRevert->setSize(CEGUI::UVector2(cegui_absdim(24), cegui_absdim(24)));
+		mButtonRevert->setPosition(CEGUI::UVector2(CEGUI::UDim(1, -52), CEGUI::UDim(0, 0)));
 		mButtonRevert->setEnabled(false);
 		mButtonRevert->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Editor::ArrayEditor<ElementType>::OnEventButtonRevertPressed, this));
 		mHeaderWidget->addChildWindow(mButtonRevert);
 
 		// Create save button
-		mButtonSave = static_cast<CEGUI::PushButton*>(gGUIMgr.CreateWindow("Editor/Button", editorName + "/Header/SaveButton"));
-		mButtonSave->setText(TR("entity_editor_save"));
-		mButtonSave->setArea(CEGUI::URect(CEGUI::UDim(0.8333f, 1), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(0, GetEditboxHeight())));
+		mButtonSave = static_cast<CEGUI::PushButton*>(gGUIMgr.CreateWindow("Editor/ImageButton", editorName + "/Header/SaveButton"));
+		mButtonSave->setProperty("NormalImage", "set:EditorToolbar image:btnSaveNormal");
+		mButtonSave->setProperty("HoverImage", "set:EditorToolbar image:btnSaveHover");
+		mButtonSave->setProperty("PushedImage", "set:EditorToolbar image:btnSavePushed");
+		mButtonSave->setProperty("DisabledImage", "set:EditorToolbar image:btnSaveDisabled");
+		mButtonSave->setTooltipText(TR("entity_editor_save_hint"));
+		mButtonSave->setVisible(true);
+		mButtonSave->setSize(CEGUI::UVector2(cegui_absdim(24), cegui_absdim(24)));
+		mButtonSave->setPosition(CEGUI::UVector2(CEGUI::UDim(1, -24), CEGUI::UDim(0, 0)));
 		mButtonSave->setEnabled(false);
 		mButtonSave->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Editor::ArrayEditor<ElementType>::OnEventButtonSavePressed, this));
 		mHeaderWidget->addChildWindow(mButtonSave);
