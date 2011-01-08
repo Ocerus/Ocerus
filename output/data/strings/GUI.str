@@ -98,8 +98,8 @@ layer_entitymovedown_hint=Moves the selected entity to the layer below.
 layer_visibilitytoggle_hint=Toggles the visibility of the layer.
 
 # entity editor
-entity_editor=Entity Editor
-general_info=General Info
+entity_editor=Entity
+general_info=General
 remove_component_hint=Removes the component.
 remove_component_error_hint=This component cannot be removed because other components depend on it.
 remove_component_prototype_error_hint=Components of this entity cannot be removed as long as it is linked to a prototype.

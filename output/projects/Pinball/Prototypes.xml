@@ -5,18 +5,19 @@
     <Entity Name="Barrier" ID="-1" Tag="0" Transient="false">
       <Component Type="Transform"></Component>
       <Component Type="Sprite">
-        <FrameIndex>0</FrameIndex>
-        <Texture>textures/steel.jpg</Texture>
-        <AnimDuration>0</AnimDuration>
-        <AnimTime>0</AnimTime>
-        <AnimRepeats>false</AnimRepeats>
-        <Transparency>0</Transparency>
-        <FrameCount>1</FrameCount>
         <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
+        <Transparency>0</Transparency>
+        <FrameIndex>0</FrameIndex>
+        <AnimRepeats>false</AnimRepeats>
+        <AnimTime>0</AnimTime>
+        <Texture>textures/steel.jpg</Texture>
+        <FrameCount>1</FrameCount>
+        <AnimDuration>0</AnimDuration>
       </Component>
       <Component Type="PolygonCollider">
         <Restitution>0.5</Restitution>
+        <Density>1</Density>
         <Polygon>
           <Item>5.12 -5.12</Item>
           <Item>5.12 5.12</Item>
@@ -24,45 +25,46 @@
           <Item>-5.12 -5.12</Item>
         </Polygon>
         <Friction>0.5</Friction>
-        <Density>1</Density>
       </Component>
       <Component Type="StaticBody"></Component>
     </Entity>
-    <Entity Name="Paddle" ID="-2" Tag="0" Transient="false">
-      <Component Type="Transform"></Component>
+    <Entity Name="Flipper" ID="-3" Tag="0" Transient="false">
+      <Component Type="Transform">
+        <Scale>0.6 0.16</Scale>
+      </Component>
       <Component Type="Sprite">
-        <FrameIndex>0</FrameIndex>
-        <Texture>textures/steel.jpg</Texture>
-        <AnimDuration>0</AnimDuration>
-        <AnimTime>0</AnimTime>
-        <AnimRepeats>false</AnimRepeats>
-        <Transparency>0</Transparency>
-        <FrameCount>1</FrameCount>
         <SkipSpace>(0, 0)</SkipSpace>
         <FrameSize>(0, 0)</FrameSize>
+        <Transparency>0</Transparency>
+        <FrameIndex>0</FrameIndex>
+        <AnimRepeats>false</AnimRepeats>
+        <AnimTime>0</AnimTime>
+        <Texture>textures/yellow.jpg</Texture>
+        <FrameCount>1</FrameCount>
+        <AnimDuration>0</AnimDuration>
       </Component>
       <Component Type="PolygonCollider">
         <Restitution>0.5</Restitution>
+        <Density>1</Density>
         <Polygon>
-          <Item>5.12 -5.12</Item>
-          <Item>5.12 5.12</Item>
-          <Item>-5.12 5.12</Item>
-          <Item>-5.12 -5.12</Item>
+          <Item>2.56 -2.56</Item>
+          <Item>2.56 2.56</Item>
+          <Item>-2.56 2.56</Item>
+          <Item>-2.56 -2.56</Item>
         </Polygon>
         <Friction>0.5</Friction>
-        <Density>1</Density>
       </Component>
       <Component Type="DynamicBody">
-        <AngularDamping>0.5</AngularDamping>
         <LinearDamping>0.1</LinearDamping>
+        <AngularDamping>0.5</AngularDamping>
       </Component>
       <Component Type="Script">
         <ScriptTimes></ScriptTimes>
-        <ScriptStates></ScriptStates>
         <ScriptTimeOut>1000</ScriptTimeOut>
         <ScriptModules>
-          <Item>control/paddle.as</Item>
+          <Item>scripts/flipper.as</Item>
         </ScriptModules>
+        <ScriptStates></ScriptStates>
       </Component>
     </Entity>
   </Entities>
