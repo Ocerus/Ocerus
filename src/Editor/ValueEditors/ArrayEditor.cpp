@@ -74,6 +74,7 @@ namespace Editor
 		mButtonAddElement->setProperty("HoverImage", "set:EditorToolbar image:btnAddHover");
 		mButtonAddElement->setProperty("PushedImage", "set:EditorToolbar image:btnAddPushed");
 		mButtonAddElement->setProperty("DisabledImage", "set:EditorToolbar image:btnAddDisabled");
+		mButtonAddElement->setWantsMultiClickEvents(false);
 		mButtonAddElement->setTooltipText(TR("entity_editor_add_hint"));
 		mButtonAddElement->setVisible(true);
 		mButtonAddElement->setSize(CEGUI::UVector2(cegui_absdim(24), cegui_absdim(24)));
@@ -87,6 +88,7 @@ namespace Editor
 		mButtonRevert->setProperty("HoverImage", "set:EditorToolbar image:btnCancelHover");
 		mButtonRevert->setProperty("PushedImage", "set:EditorToolbar image:btnCancelPushed");
 		mButtonRevert->setProperty("DisabledImage", "set:EditorToolbar image:btnCancelDisabled");
+		mButtonRevert->setWantsMultiClickEvents(false);
 		mButtonRevert->setTooltipText(TR("entity_editor_revert_hint"));
 		mButtonRevert->setVisible(true);
 		mButtonRevert->setSize(CEGUI::UVector2(cegui_absdim(24), cegui_absdim(24)));
@@ -101,6 +103,7 @@ namespace Editor
 		mButtonSave->setProperty("HoverImage", "set:EditorToolbar image:btnSaveHover");
 		mButtonSave->setProperty("PushedImage", "set:EditorToolbar image:btnSavePushed");
 		mButtonSave->setProperty("DisabledImage", "set:EditorToolbar image:btnSaveDisabled");
+		mButtonSave->setWantsMultiClickEvents(false);
 		mButtonSave->setTooltipText(TR("entity_editor_save_hint"));
 		mButtonSave->setVisible(true);
 		mButtonSave->setSize(CEGUI::UVector2(cegui_absdim(24), cegui_absdim(24)));
