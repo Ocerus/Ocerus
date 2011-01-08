@@ -131,7 +131,7 @@ void EntityComponents::PolygonCollider::DestroyShape( void )
 	{
 		// remove the shape from the body
 		PhysicalBody* body = GetOwner().GetProperty("PhysicalBody").GetValue<PhysicalBody*>();
-		if (body)
+		if (body && mShape)
 		{
 			body->DestroyFixture(mShape);
 		}

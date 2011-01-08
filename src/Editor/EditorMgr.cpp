@@ -1079,6 +1079,11 @@ bool Editor::EditorMgr::DrawEntityPhysicalShape( const EntitySystem::EntityHandl
 		}
 		centre *= 1.0f / vertexCount;
 
+		if (vertexCount == 0)
+		{
+			centre = xf.position;
+		}
+
 		gGfxRenderer.DrawPolygon(vertices, vertexCount, shapeColor, false, shapeWidth);
 		const float32 squareRadius = 0.3f;
 		gGfxRenderer.DrawLine(centre + Vector2(-squareRadius, -squareRadius), centre + Vector2(squareRadius, -squareRadius), fillColor, shapeWidth);
