@@ -37,15 +37,16 @@ This document only shows how to make things work. If you want to understand how 
 
 \chapter{Components}
 
-Probably the first thing you would like to extend are the components. They can easily add functionality to game entities. Similar result can be achieved by using scripts but the logic in components is not limited to predefined script functions and runs faster. In the following sections, there will be a sequence of steps that are necessary  to do in order to create and use new component. 
+Probably the first thing you would like to extend are the components. They can easily add functionality to the game entities. Similar result can be achieved by using scripts but the logic in components is not limited to predefined script functions and runs faster. In the following sections, there will be a sequence of steps that are necessary to do in order to create and use a new component. 
 
-There will be also an example of simple component that will make an entity to move up and down. It would probably be better to implement this functionality by a script but it will serve well as a simple example.
+There will be also an example of a simple component that will make an entity to move up and down. It would probably be better to implement this particular functionality by a script but it will serve well as an example.
 
 \section{Creating Component Class}
-The first thing that needs to be done is creating new component class. Each component class is defined in separate header file, which are located in \emph{EntitySystem/Components}.
+The first thing that needs to be done is creating new component class. Each component class is defined in a separate header file, which are located in \emph{EntitySystem/Components}.
 
-The header file of a component must be defined in the \emph{EntityComponents} namespace and must publicly inherit from the  \emph{RTTIGlue< [Component Name], Component>}. So the example component class would look like this:
+The header file of a component must be defined in the \emph{EntityComponents} namespace and must publicly inherit from the  \emph{RTTIGlue< [Component Name], Component>}. So the example component class (named \emph{ExampleComp}) would look like this:
 
+\footnotesize 
 \begin{verbatim}
 namespace EntityComponents
 {
@@ -54,24 +55,29 @@ namespace EntityComponents
   }
 }
 \end{verbatim}
+\normalsize
 
-There are few methods in this class that should be overridden. Namely, \emph{Create}, \emph{Destroy}, \emph{HandleMessage} and \emph{RegisterReflection}. \emph{Create} and \emph{Destroy} methods are called after the creation respectively before the destruction of the component. \emph{HandleMessage} and \emph{RegisterReflection} method will be described in later sections.
+There are few methods in this class that should be overridden: \emph{Create}, \emph{Destroy}, \emph{HandleMessage} and \emph{RegisterReflection}. \emph{Create} and \emph{Destroy} methods are called after the creation respectively before the destruction of the component. \emph{HandleMessage} and \emph{RegisterReflection} methods will be described in later sections.
 
-Then, the component type must be registered in the \emph{\_ComponentTypes.h} header file (located in \emph{EntitySystem/Components}). To do so add:
+Then, the component type must be registered in the \emph{\_ComponentTypes.h} header file (located in \emph{EntitySystem/Components}). To do so, this line should be added:
+\footnotesize 
 \begin{verbatim}
 COMPONENT_TYPE(ExampleComp)
 \end{verbatim}
+\normalsize
 
-Finally the header file with the component class must be included in the \emph{\_ComponentHeaders.h} header file.
+Finally, the header file with the component class must be included in the \emph{\_ComponentHeaders.h} header file.
 
 \section{Adding Component Properties}
 
-The component properties are represented by class members. But just defining a class member is not enough to make it into a regular property. It needs to be registered in the RTI. Registering properties is done in static method \emph{RegisterReflection}. It is called during the initialization process of the \emph{EntitySystem}. In this method, there should be called the \emph{RegisterProperty} function. Usage of that function looks like this:
+The component properties are represented by the class member variables. But just defining a class member variable is not enough to make it into a regular property. It needs to be registered in the RTI. Registering properties is done in the static method \emph{RegisterReflection}. It is automatically called during the initialization process of the \emph{EntitySystem}. In this method, there should be called the \emph{RegisterProperty} function. Usage of that function looks like this:
 
+\footnotesize 
 \begin{verbatim}
 RegisterProperty<Property type>("Property name", &GetterMethod, 
   &SetterMethod, Access flag, "Property description");
 \end{verbatim}
+\normalsize
 
 \begin{itemize}
 \item
@@ -80,10 +86,12 @@ The Property type is obviously the data type of the property but is must be regi
 \item
 The property must have defined getter and setter methods. The methods signatures must look like this:
 
+\footnotesize 
 \begin{verbatim}
 [Property type] GetProp(void) const
-void SetZoom([Property type] value)
+void SetProp([Property type] value)
 \end{verbatim}
+\normalsize
 
 Addresses of those methods must be given as parameters to the \emph{RegisterProperty} function.
 
@@ -93,17 +101,20 @@ The Access flag defines ways how the property can be accessed from the editor or
 
 There can be also functions registered in order to be called from scripts. For that, there is the \emph{RegisterFunction} function. Usage of that function is similar to the \emph{RegisterProperty} and looks like this:
 
+\footnotesize 
 \begin{verbatim}
 RegisterFunction("Function Name", &Function, Access flag,
   "Function description");
 \end{verbatim}
+\normalsize
 
-Back to the example component. Let's say it will have three properties and one function. One property for the amplitude, second for the period of moving, third for the timer and function for reseting the timer. All three properties will be of the float32 data type. Setters and getters must be defined as well as the \emph{RegisterProperty} function. 
+Back to the example component. Let's say it will have three properties and one function. First property for the amplitude, second for the period of moving, third for the timer and function for reseting the timer. All three properties will be of the \emph{float32} data type. Setters and getters must be defined as well as the \emph{RegisterProperty} function. 
 
 The example component needs to access and change the position of the entity. The position is defined in the \emph{Transform} component. To ensure that the entity have \emph{Transform} component, the dependency must be added. For that purpose serves the \emph{AddDependency} function. It receives a component type as a parameter (component type is defined as \emph{CT\_[Component class name]}). It will also force the dependent component to initialize later than the other component.
 
 So the example component class will look like this: 
 
+\footnotesize 
 \begin{verbatim}
 namespace EntityComponents
 {
@@ -113,34 +124,42 @@ namespace EntityComponents
     virtual void Create(void){mAmplitude = mPeriod = mTimer = 0;}
     virtual void Destroy(void){}
 
-    void Reset(void)
+    void ResetTimer(void)
     {
        mTimer = 0;
     }
 
     static void RegisterReflection(void)
     {
+      // Register the Amplitude property
       RegisterProperty<float32>("Amplitude", &GetAmplitude,
         &SetAmplitude, PA_FULL_ACCESS, "Amplitude of moving.");
 
+      // Register the Period property
       RegisterProperty<float32>("Period", &GetPeriod, 
         &SetPeriod, PA_FULL_ACCESS, "Period of moving.");
 
+      // Register the Timer property
       RegisterProperty<float32>("Timer", &GetTimer, 
         &SetTimer,PA_FULL_ACCESS,"Time from the start.");
 
-      RegisterFunction("Reset", &Reset, PA_SCRIPT_WRITE,
+      // Register the ResetTimer function
+      RegisterFunction("ResetTimer", &ResetTimer, PA_SCRIPT_WRITE,
         "Resets the timer.");
 
+      // Add dependency on the Transform component
       AddComponentDependency(CT_Transform);
     }
 
+    // Getter and setter for the Amplitude property
     float32 GetAmplitude(void) const { return mAmplitude; }
     void SetAmplitude(float32 value) { mAmplitude = value; }
-		
+
+    // Getter and setter for the Period property
     float32 GetPeriod(void) const { return mPeriod; }
     void SetPeriod(float32 value) { mPeriod = value; }
-		
+
+    // Getter and setter for the Timer property	
     float32 GetTimer(void) const { return mTimer; }
     void SetTimer(float32 value) { mTimer = value; }
 
@@ -151,6 +170,7 @@ namespace EntityComponents
   }
 }
 \end{verbatim}
+\normalsize
 
 \section{Entity Messages}
 
@@ -161,24 +181,28 @@ A message that is sent to an entity is distributed to all its components. It can
 \subsection{Message Types}
 Message types are defined in the \emph{EntityMessageTypes.h} header file (located in \emph{EntitySystem/EntityMgr}). New message types can be easily added if needed. Declaration of the message type is done by macros and looks like this:
 
+\footnotesize 
 \begin{verbatim}
 ENTITY_MESSAGE_TYPE([Name], "[Script function]", [Parameters] )
 \end{verbatim}
+\normalsize
 
 \begin{itemize}
 \item
-Name is simply name of the message type. Must be unique.
+Name is simply the name of the message type. Must be unique.
 \item
 If an entity has a script component, then when it receives a message, a function in script is called. And that functions name and signature is defined by the second parameter in the \emph{ENTITY\_MESSAGE\_TYPE} macro.
 \item
-The third parameter defines parameters that can be added to the message. When no parameter is needed, then \emph{NO\_PARAMS} macro should be used. Otherwise, the \emph{Params} macro should be used. It accepts property types as parameters. So a message with float32 and int32 parameters will have \emph{Params(PT\_FLOAT32, PT\_INT32)}.
+The third parameter defines parameters that can be added to the message. When no parameter is needed, then \emph{NO\_PARAMS} macro should be used. Otherwise, the \emph{Params} macro should be used. It accepts property types as parameters. So a message with  \emph{float32} and  \emph{int32} parameters will have \emph{Params(PT\_FLOAT32, PT\_INT32)}.
 
 Note that the parameters must correspond to the script function signature defined in the second parameter of \emph{ENTITY\_MESSAGE\_TYPE} macro. So it could look like this: 
 
+\footnotesize 
 \begin{verbatim}
 ENTITY_MESSAGE_TYPE(HELLO, "void Hello(float32, int32)",
   Params(PT_FLOAT32, PT_INT32) )
 \end{verbatim}
+\normalsize
 
 \end{itemize}
 
@@ -190,13 +214,16 @@ The \emph{HandleMessage} method must return result. \emph{RESULT\_OK} if the mes
 
 The example component, which makes an entity to move up and down, could have the \emph{HandleMessage} method implemented like this:
 
+\footnotesize 
 \begin{verbatim}
 
 EntityMessage::eResult EntityComponents::ExampleComp::
   HandleMessage( const EntityMessage& msg )
 {
+  // Decide the type of the recieved message
   switch (msg.type)
   {
+  // Called when the component is initialized
   case EntityMessage::INIT:
     {
       // Get transform component
@@ -209,9 +236,11 @@ EntityMessage::eResult EntityComponents::ExampleComp::
 
       return EntityMessage::RESULT_OK;
     }
+  // Called when the logic is updated
   case EntityMessage::UPDATE_LOGIC:
     {
-      // Get first (and only) message parameter
+      // Get the first (and only) message parameter
+      // Here it is the time from the last logic update
       float32 delta = *msg.parameters.GetParameter(0).
         GetData<float32>();
 
@@ -224,6 +253,7 @@ EntityMessage::eResult EntityComponents::ExampleComp::
       float32 offset = mAmplitude * 
         MathUtils::Sin(mTimer / mPeriod * 2 * MathUtils::PI);
 
+      // Get transform component
       Component* transform = 
       gEntityMgr.GetEntityComponentPtr(GetOwner(), CT_Transform);
 
@@ -240,12 +270,13 @@ EntityMessage::eResult EntityComponents::ExampleComp::
   }
 }
 \end{verbatim}
+\normalsize
 
 \chapter{Script System}
 
 The Script system provides quite powerful tool for programming the game logic without having to modify and compile the source code. Even if there are hundreds of registered functions, classes, operators etc., it could be useful to register some more. The Script system is prepared for this so it is not difficult to register new stuff.
 
-Following sections will show simple example of how to register a new class with methods in the Script system. It will be described only briefly. For more details, please see the AngelScript documentation. Especially chapter \emph{Using AngelScript/Registering the application interface}.
+Following sections will show simple example of how to register a new class with methods in the Script system. It will be described only briefly. For more details, please see the AngelScript documentation \cite{angelscript}. Especially chapter \emph{Using AngelScript/Registering the application interface}.
 
 \section{Registering New Class}
 
@@ -253,11 +284,13 @@ All new classes and functions should be registered in the \emph{RegisterAllAddit
 
 Registering of new class looks like this:
 
+\footnotesize 
 \begin{verbatim}
 r = engine->RegisterObjectType("NewClass", sizeof(NewClass),
  asOBJ_VALUE | asOBJ_APP_CLASS_C);
 OC_SCRIPT_ASSERT();
 \end{verbatim}
+\normalsize
 
 \begin{itemize}
 \item
@@ -276,6 +309,7 @@ The last parameter is a flag defining the behavior. For details see the AngelScr
 \subsection{Class Methods}
 Class methods should be registered like this:
 
+\footnotesize 
 \begin{verbatim}
 int32 NewClass::ClassMethod(float32 f)
 {
@@ -288,6 +322,7 @@ r = engine->RegisterObjectMethod("NewClass",
   asCALL_THISCALL);
 OC_SCRIPT_ASSERT();
 \end{verbatim}
+\normalsize
 
 \begin{itemize}
 \item
@@ -304,6 +339,7 @@ The last parameter defines how the function should be called. \emph{asCALL\_THIS
 
 If a constructor or destructor is needed they shall be registered the following way:
 
+\footnotesize 
 \begin{verbatim}
 void Constructor(void *memory)
 {
@@ -318,22 +354,24 @@ void Destructor(void *memory)
   ((NewClass*)memory)->~NewClass();
 }
 
-// Register the behaviours
+// Register the constructor
 r = engine->RegisterObjectBehaviour("NewClass",
   asBEHAVE_CONSTRUCT, "void f()", asFUNCTION(Constructor),
   asCALL_CDECL_OBJLAST);
 OC_SCRIPT_ASSERT();
+// Register the destructor
 r = engine->RegisterObjectBehaviour("NewClass",
   asBEHAVE_DESTRUCT, "void f()", asFUNCTION(Destructor),
   asCALL_CDECL_OBJLAST);
 OC_SCRIPT_ASSERT();
 
 \end{verbatim}
+\normalsize
 
 
 \chapter{Resource Types}
 
-All resources in the Ocerus are managed by the Resource manager. Each resource have its type. There are some basic resource defined in the Resource manager but sometimes it would be nice to define some new. For example creating a new component that adds sounds would need a new resource type.
+All resources in the Ocerus are managed by the Resource manager. Each resource have its type. There are some basic resource types defined in the Resource manager but sometimes it would be nice to define some new.
 
 New resource types are defined as a class derived from the \emph{Resource} class. It is necessary to add the new resource type to the \emph{eResourceType} enum and resource type name to the \emph{ResourceTypeNames} string array. Both are defined in the \emph{ResourceType.h} header.
 
@@ -343,58 +381,68 @@ The new resource class has to override some methods:
 \item
 Constructor and destructor.
 \item
-Static \emph{CreateMe()} method. Returns special \emph{ResourceSystem::ResourcePtr} pointer that points to new resource class intance. So it should look like this:
+Static \emph{CreateMe()} method. Returns a special shared pointer (\emph{ResourceSystem::ResourcePtr}) that points to the new resource class intance. So it should look like this:
 
+\footnotesize 
 \begin{verbatim}
 ResourceSystem::ResourcePtr NewResource::CreateMe()
 {
   return ResourceSystem::ResourcePtr(new NewResource());
 }
 \end{verbatim}
+\normalsize
 
 \item
 Static method that returns the \emph{eResourceType} of the resource.
 
+\footnotesize 
 \begin{verbatim}
 static ResourceSystem::eResourceType GetResourceType() 
 { 
   return ResourceSystem::RESTYPE_NEWRESOURCE; 
 }
 \end{verbatim}
+\normalsize
 
 \item
 Protected abstract method \emph{LoadImpl}. This method is called when the resource is being loaded. It should parse the data from the file stream into something useful. It should use \emph{DataContainer} class and \emph{GetRawInputData} method for getting data from the source file.
 
-The \emph{LoadImpl} should look like this:
+So the \emph{LoadImpl} method will look like this:
 
+\footnotesize 
 \begin{verbatim}
-ResourceSystem::ResourcePtr NewResource::CreateMe()
-{
-  return ResourceSystem::ResourcePtr(new NewResource());
-}
 size_t NewResource::LoadImpl()
 {
   DataContainer dc;
   size_t dataSize = 0;
 
-  if (GetRawInputData(dc))
+  //loads data from the file to the data container
+  //returns true if successful
+  if (GetRawInputData(dc))	
   {
-    size_t dataSize = dc.GetSize();
-    uint8* data = new unit8[dataSize];
+    dataSize = dc.GetSize();
+
+    //get pointer to data byte stream
+    uint8* data = dc.GetData();
+
     // parse the data ...
+
     dc.Release();
   }
   return dataSize;
 }
 \end{verbatim}
+\normalsize
 
 \item
 Protected abstract method \emph{UnloadImpl}. This method is called when the resource is being unloaded. It should release all data the resource was using.
 
 \item
-The resource class can have additional methods for accessing the resource type specific structures. Those method should alway begin with \emph{EnsureLoaded()}. It (surprisingly) ensures that the resource is loaded (the \emph{LoadImpl} method was called).
+The resource class can have additional methods for accessing the resource type specific structures. Those method should always begin with calling the \emph{EnsureLoaded()} method. It ensures that the resource is loaded (the \emph{LoadImpl} method was called).
 
 \end{itemize}
+
+Defining new resource types is necessary when adding new functionality that requires data from external files. For example, a new component that adds sounds to an entity, would need a new resource type.
 
 \chapter{Renderer}
 
@@ -406,7 +454,9 @@ The resource class can have additional methods for accessing the resource type s
 %% The Bibliography 
 \begin{thebibliography}{9}
 \addcontentsline{toc}{chapter}{Bibliography} %'Bibliography' into toc
-\bibitem {angelscript}AngelScript -- http://www.angelcode.com/angelscript
+\bibitem {angelscript}AngelScript documentation -- 
+
+http://www.angelcode.com/angelscript/sdk/docs/manual/index.html
 
 \end{thebibliography}
 
