@@ -1054,10 +1054,27 @@ bool Editor::EditorMgr::DrawEntityPhysicalShape( const EntitySystem::EntityHandl
 {
 	EntitySystem::ComponentIdList components;
 	gEntityMgr.GetEntityComponentsOfType(entity, EntitySystem::CT_PolygonCollider, components);
-	bool noCollider = components.empty();
-	if (noCollider) gEntityMgr.GetEntityComponentsOfType(entity, EntitySystem::CT_Transform, components);
-	bool result = false;
 
+	// detect if there is actually any data to draw
+	bool noCollider = true;
+	for (EntitySystem::ComponentIdList::iterator it=components.begin(); it!=components.end(); ++it)
+	{
+		PhysicalShape* shape = gEntityMgr.GetEntityComponentProperty(entity, *it, "PhysicalShape").GetValue<PhysicalShape*>();
+		if (!shape) continue;
+		int32 vertexCount = ((b2PolygonShape*)shape->GetShape())->m_vertexCount;
+		if (vertexCount > 0) noCollider = false;
+	}
+
+	// there's no physical shape data, so we'll just use some dummy rectangle defined in the Transform component
+	if (noCollider)
+	{
+		components.clear();
+		gEntityMgr.GetEntityComponentsOfType(entity, EntitySystem::CT_Transform, components);
+	}
+
+	// now draw the physical stuff
+	bool drawn = false;
+	Vector2 centre = Vector2_Zero;
 	for (EntitySystem::ComponentIdList::iterator it=components.begin(); it!=components.end(); ++it)
 	{
 		PhysicalShape* shape = 0;
@@ -1071,7 +1088,6 @@ bool Editor::EditorMgr::DrawEntityPhysicalShape( const EntitySystem::EntityHandl
 		OC_ASSERT(vertexCount <= b2_maxPolygonVertices);
 		Vector2 vertices[b2_maxPolygonVertices];
 
-		Vector2 centre = Vector2_Zero;
 		for (int32 i = 0; i < vertexCount; ++i)
 		{
 			vertices[i] = MathUtils::Multiply(xf, poly->m_vertices[i]);
@@ -1079,21 +1095,32 @@ bool Editor::EditorMgr::DrawEntityPhysicalShape( const EntitySystem::EntityHandl
 		}
 		centre *= 1.0f / vertexCount;
 
-		if (vertexCount == 0)
-		{
-			centre = xf.position;
-		}
-
 		gGfxRenderer.DrawPolygon(vertices, vertexCount, shapeColor, false, shapeWidth);
+		drawn = true;
+	}
+
+	// nothing was drawn, so no center was computed; try to use the Transform component
+	bool canDrawSelector = drawn;
+	if (!drawn)
+	{
+		if (gEntityMgr.HasEntityProperty(entity, "Position"))
+		{
+			canDrawSelector = true;
+			centre = gEntityMgr.GetEntityProperty(entity, "Position").GetValue<Vector2>();
+		}
+	}
+
+	// selector square (sometimes the poly is too small to be visible; this makes the entity visible somehow)
+	if (canDrawSelector)
+	{
 		const float32 squareRadius = 0.3f;
 		gGfxRenderer.DrawLine(centre + Vector2(-squareRadius, -squareRadius), centre + Vector2(squareRadius, -squareRadius), fillColor, shapeWidth);
 		gGfxRenderer.DrawLine(centre + Vector2(squareRadius, -squareRadius), centre + Vector2(squareRadius, squareRadius), fillColor, shapeWidth);
 		gGfxRenderer.DrawLine(centre + Vector2(squareRadius, squareRadius), centre + Vector2(-squareRadius, squareRadius), fillColor, shapeWidth);
 		gGfxRenderer.DrawLine(centre + Vector2(-squareRadius, squareRadius), centre + Vector2(-squareRadius, -squareRadius), fillColor, shapeWidth);
-		result = true;
 	}
 
-	return result;
+	return drawn;
 }
 
 bool Editor::EditorMgr::IsEditingPrototype() const
