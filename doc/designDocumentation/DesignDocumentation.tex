@@ -123,11 +123,7 @@ and a section about a purpose of the described system and at the end of most cha
 	\label{fig:core-diagram}
 \end{figure}
 
-\section{Purpose of the core}
-
-The Core namespace is the main part of the whole system. It contains its entry point and other classes closely related to the application itself. Its main task is to initialize and configure other engine systems, invoke their update and draw methods in the main loop and in the end correctly finalize them.
-
-In the following sections the class representing the application as well as the classes corresponding to the application states (loading screen, game), configuration and project management will be introduced. In the last section there is a small glossary of used terms.
+The Core namespace is the main part of the engine. It contains its entry point and other classes closely related to the application itself, its states and configuration. Its main task is to initialize and configure other engine systems, invoke their update and draw methods in the main loop and in the end correctly finalize them.
 
 \section{Application}
 
@@ -226,76 +222,6 @@ This is a glossary of the most used terms in the previous sections:
 \end{description}
 
 
-
-\chapter{Gfx system}
-
-\begin{figure}[htbp]
-	\centering
-		\includegraphics[width=1\textwidth]{GfxSystemClassDiagram.pdf}
-	\caption{Class diagram of the GfxSystem namespace}
-	\label{fig:gfxsystem-diagram}
-\end{figure}
-
-\section{Purpose of the graphic system}
-
-The graphic system implements functionalities related to the rendering of game entities and the management of the application window. The design of this system is influenced by the requirement of platform independence. Note that the GUI system uses its own rendering system.
-
-In the following sections the concept of viewports and render targets will be described as well as the process of rendering game entities, the way of creating the application window will be revealed and the management of meshes and textures will be introduced. In the last section there is a small glossary of used terms.
-
-\section{Graphic viewport and render target}
-\label{sec:render-target}
-
-The \emph{GfxSystem::GfxViewport} class defines a place where all game entities will be rendered. It simply stores the information about a position and a size within the global window, that can be obtained from some texture, and also the data needed for drawing a grid, which is useful in the edit mode. It has methods for getting and setting these properties as well as other ones for calculating its boundaries in the world or scene space.
-
-For drawing the game entities it is also necessary to know from which position and where they are rendered, so the \emph{GfxSystem::RenderTarget} type is defined which is a pair of a viewport and an entity handle that must point to an entity with a camera component. This type is used by renderer classes described below where it is indexed by the \emph{GfxSystem::RenderTargetID} type defined as an integer.
-
-For easy moving and zooming a camera by a mouse in a render target the \emph{GfxSystem::DragDropCameraMover} class was defined. In its constructor or later by its setters it is possible to adjust a zoom sensitivity and a maximal and minimal allowed zoom.
-
-\section{Renderer and scene manager}
-
-The \emph{GfxSystem::GfxRenderer} is the main class that manages a rendering of entities to render targets. This is a platform independent abstract class handling a communication with other engine systems from which now derives only the \emph{GfxSystem::OglRenderer} class implementing a low level rendering in the OpenGL library\cite{opengl}. If it is necessary to implement a rendering for another library (i.e. DirectX) it should be done by deriving another class and implementing all abstract methods.
-
-\begin{figure}[htbp]
-	\centering
-		\includegraphics[width=1\textwidth]{RenderingActivityDiagram.pdf}
-	\caption{Activity diagram of the rendering process}
-	\label{fig:rendering-diagram}
-\end{figure}
-
-The abstract class has methods for managing its render targets, for drawing simple shapes as well as textures and meshes or for clearing the screen. As the diagram \ref{fig:rendering-diagram} shows, the rendering must be started by the \emph{GfxRenderer::BeginRendering} method, and then the current render target must be set and cleared. After everything is drawn the \emph{GfxRenderer\-::Finalize\-Render\-Target} method must be called and then another render target is set or the whole rendering is finished by the \emph{GfxRenderer::EndRendering} method.
-
-An important attribute of the \emph{GfxSystem::GfxRenderer} class is the point\-er to the \emph{GfxSystem::SceneMgr} class created on its initialization accessible by the \emph{GfxRenderer::GetSceneManager} method. This is the class to which all drawable components (sprites, models) must be registered along with a \emph{Transform} component of their entity by the \emph{SceneMgr::AddDrawable} method so then they are rendered by the \emph{SceneMgr::DrawVisibleDrawables} method if they are visible.
-
-To provide debug drawing of physics entities the \emph{GfxSystem::PhysicsDraw} proxy class was defined and registered as an implementation of the \emph{b2\-Debug\-Draw} class from the Box2D library. All methods are redirected to corresponding methods in the \emph{GfxSystem::GfxRenderer} class.
-
-\section{Application window}
-
-The graphic system also manages creating and handling the application window which depends on the used operating system. This functionality is implemented by the \emph{GfxSystem::GfxWindow} class with the usage of the SDL library. This class has methods for getting and setting a window position, size and title or a visibility of a mouse cursor, toggling a fullscreen mode and handling system window events. It is also possible to register a screen listener represented by a class implementing the \emph{GfxSystem::IGfxWindowListener} interface. This class will be informed when the screen resolution is changed.
-
-Note that the SDL library also provides features in low-level audio and input management but since audio is not yet implemented and input management is done by more specialized library, the only used SDL features used are window management and creating rendering context.
-
-\section{Mesh and texture}
-
-Meshes and textures are essential parts of the \emph{Model} and \emph{Sprite} components. They can be loaded via the \emph{GfxSystem::Mesh} and \emph{GfxSystem::Texture} classes that inherit from the \emph{ResourceSystem::Resource} class (for more information see chapter about the resource system).
-
-On loading of a texture resource the \emph{GfxRenderer::LoadTexture} abstract method is called. For OpenGL implementation the SOIL library is used which is a tiny C library used for uploading textures into the OpenGL and which supports most of the common image formats.
-
-For defining meshes the Wavefront OBJ file format \cite{obj} is used. Every texture used in the model definition is automatically loaded as a resource.
- 
-\section{Glossary}
-This is a glossary of the most used terms in the previous sections:
-
-\begin{description}
-  \item[Viewport] -- a region of the application window where entities are rendered to
-  \item[Render target] -- a pair or a viewport and a camera
-  \item[Sprite] -- a component for showing an entity as an image (even animated or transparent)
-  \item[Model] -- a component for showing an entity as a 3D-model
-  \item[Texture] -- a bitmap image applied to a surface of a graphic object
-  \item[Mesh] -- a collection of vertices, edges and faces that defines the shape of a polyhedral object
-\end{description}
-
-
-
 \chapter{Entity system}
 
 \begin{figure}[htbp]
@@ -305,11 +231,7 @@ This is a glossary of the most used terms in the previous sections:
 	\label{fig:entitysystem-diagram}
 \end{figure}
 
-\section{Purpose of the entity system}
-
 The entity system creates a common interface for a definition of all game objects such as a game environment, a player character, a camera etc. and their behavior such as a drawing on a screen, an interaction with other objects etc. The object creation is based on a composition of simple functionalities that can be reused in many of them. The advantage of this unified system is an easy creating and editing of new objects from the game editor or from scripts, the disadvantage is a slower access to the object properties and behavior. It cooperates with the other systems like the graphics one for displaying objects or the script one for an interaction from scripts.
-
-In the following sections the system of components and entities will be described as well as picking entities and organizing them in layers. In the last section there is a small glossary of used terms.
 
 \section{Components and their manager}
 
@@ -372,6 +294,71 @@ This is a glossary of the most used terms in the previous sections:
 \end{description}
 
 
+
+\chapter{Gfx system}
+
+\begin{figure}[htbp]
+	\centering
+		\includegraphics[width=1\textwidth]{GfxSystemClassDiagram.pdf}
+	\caption{Class diagram of the GfxSystem namespace}
+	\label{fig:gfxsystem-diagram}
+\end{figure}
+
+The graphic system implements functionalities related to the rendering of game entities and the management of the application window. Note that the GUI system uses its own rendering system.
+
+\section{Graphic viewport and render target}
+\label{sec:render-target}
+
+The \emph{GfxSystem::GfxViewport} class defines a place where all game entities will be rendered. It simply stores the information about a position and a size within the global window, that can be obtained from some texture, and also the data needed for drawing a grid, which is useful in the edit mode. It has methods for getting and setting these properties as well as other ones for calculating its boundaries in the world or scene space.
+
+For drawing the game entities it is also necessary to know from which position and where they are rendered, so the \emph{GfxSystem::RenderTarget} type is defined which is a pair of a viewport and an entity handle that must point to an entity with a camera component. This type is used by renderer classes described below where it is indexed by the \emph{GfxSystem::RenderTargetID} type defined as an integer.
+
+For easy moving and zooming a camera by a mouse in a render target the \emph{GfxSystem::DragDropCameraMover} class was defined. In its constructor or later by its setters it is possible to adjust a zoom sensitivity and a maximal and minimal allowed zoom.
+
+\section{Renderer and scene manager}
+
+The \emph{GfxSystem::GfxRenderer} is the main class that manages a rendering of entities to render targets. This is a platform independent abstract class handling a communication with other engine systems from which now derives only the \emph{GfxSystem::OglRenderer} class implementing a low level rendering in the OpenGL library\cite{opengl}. If it is necessary to implement a rendering for another library (i.e. DirectX) it should be done by deriving another class and implementing all abstract methods.
+
+\begin{figure}[htbp]
+	\centering
+		\includegraphics[width=1\textwidth]{RenderingActivityDiagram.pdf}
+	\caption{Activity diagram of the rendering process}
+	\label{fig:rendering-diagram}
+\end{figure}
+
+The abstract class has methods for managing its render targets, for drawing simple shapes as well as textures and meshes or for clearing the screen. As the diagram \ref{fig:rendering-diagram} shows, the rendering must be started by the \emph{GfxRenderer::BeginRendering} method, and then the current render target must be set and cleared. After everything is drawn the \emph{GfxRenderer\-::Finalize\-Render\-Target} method must be called and then another render target is set or the whole rendering is finished by the \emph{GfxRenderer::EndRendering} method.
+
+An important attribute of the \emph{GfxSystem::GfxRenderer} class is the point\-er to the \emph{GfxSystem::SceneMgr} class created on its initialization accessible by the \emph{GfxRenderer::GetSceneManager} method. This is the class to which all drawable components (sprites, models) must be registered along with a \emph{Transform} component of their entity by the \emph{SceneMgr::AddDrawable} method so then they are rendered by the \emph{SceneMgr::DrawVisibleDrawables} method if they are visible.
+
+To provide debug drawing of physics entities the \emph{GfxSystem::PhysicsDraw} proxy class was defined and registered as an implementation of the \emph{b2\-Debug\-Draw} class from the Box2D library. All methods are redirected to corresponding methods in the \emph{GfxSystem::GfxRenderer} class.
+
+\section{Application window}
+
+The graphic system also manages creating and handling the application window which depends on the used operating system. This functionality is implemented by the \emph{GfxSystem::GfxWindow} class with the usage of the SDL library. This class has methods for getting and setting a window position, size and title or a visibility of a mouse cursor, toggling a fullscreen mode and handling system window events. It is also possible to register a screen listener represented by a class implementing the \emph{GfxSystem::IGfxWindowListener} interface. This class will be informed when the screen resolution is changed.
+
+Note that the SDL library also provides features in low-level audio and input management but since audio is not yet implemented and input management is done by more specialized library, the only used SDL features used are window management and creating rendering context.
+
+\section{Mesh and texture}
+
+Meshes and textures are essential parts of the \emph{Model} and \emph{Sprite} components. They can be loaded via the \emph{GfxSystem::Mesh} and \emph{GfxSystem::Texture} classes that inherit from the \emph{ResourceSystem::Resource} class (for more information see chapter about the resource system).
+
+On loading of a texture resource the \emph{GfxRenderer::LoadTexture} abstract method is called. For OpenGL implementation the SOIL library is used which is a tiny C library used for uploading textures into the OpenGL and which supports most of the common image formats.
+
+For defining meshes the Wavefront OBJ file format \cite{obj} is used. Every texture used in the model definition is automatically loaded as a resource.
+ 
+\section{Glossary}
+This is a glossary of the most used terms in the previous sections:
+
+\begin{description}
+  \item[Viewport] -- a region of the application window where entities are rendered to
+  \item[Render target] -- a pair or a viewport and a camera
+  \item[Sprite] -- a component for showing an entity as an image (even animated or transparent)
+  \item[Model] -- a component for showing an entity as a 3D-model
+  \item[Texture] -- a bitmap image applied to a surface of a graphic object
+  \item[Mesh] -- a collection of vertices, edges and faces that defines the shape of a polyhedral object
+\end{description}
+
+
 \chapter{GUI system}
 
 \begin{figure}[htbp]
@@ -381,11 +368,7 @@ This is a glossary of the most used terms in the previous sections:
 	\label{fig:guisystem-diagram}
 \end{figure}
 
-\section{Purpose of the GUI system}
-
 The GUI system provides creating and drawing a graphic user interface based on the CEGUI library for the editor and the game itself. It also manages a user interaction with GUI elements, element layouts, viewports and GUI console.
-
-In the following sections the GUI manager and its resource and script providers will be described as well as concept of layouts, viewports, popup menus and the GUI console. In the last section there is a small glossary of used terms.
 
 \section{GUI manager}
 
@@ -463,11 +446,7 @@ This is a glossary of the most used terms in the previous sections:
 	\label{fig:editor-diagram}
 \end{figure}
 
-\section{Purpose of the editor}
-
 The editor is used for an easy creation of a new game based on this engine. It provides a well-arranged graphic user interface for managing everything from the whole project to each entity in several scenes. The main advantage is that every change made to a scene is immediately visible in the game window where the game action can be started anytime.
-
-In the following sections the classes providing the editor will be described. They do not have to be contained in the final distribution of the game if an editor support should not be allowed. First section is focused on the logical and graphical managers of the editor whereas the second section is about layouts used to build the GUI of the editor. In the last section a concept of value editors is introduced.
 
 \section{Editor managers}
 
@@ -507,11 +486,7 @@ There are another examples of value editors and its models in the code that can 
 	\label{fig:inputsystem-diagram}
 \end{figure}
 
-\section{Purpose of the input system}
-
 Since each game must somehow react to the input from the player, the input system was implemented which handles keyboard and mouse events and forwards them to other systems.
-
-In the following section the way of receiving and distributing input events is described.
 
 \section{Input manager}
 The needs of games are different, but the ways they want to access the input devices are still the same. Either they want to receive a notification when something interesting happens or they want to poll the device for its current state. The \emph{InputSystem::InputMgr} class implements both of the approaches.
@@ -534,11 +509,7 @@ The \emph{InputSystem::InputMgr} class is only a proxy class which calls methods
 	\label{fig:logsystem-diagram}
 \end{figure}
 
-\section{Purpose of the log system}
-
 The log system manages internal log messages that are used to provide information about application processes useful to debug the whole project. These messages can have various levels of a severity (from trace and debug messages to errors) and it is possible to set the minimal level of messages to show (i.e. only warning and errors). Another function of the log system is managing a real-time in-game profiling useful for a location of the most time critical parts of the project which can leads to effective optimization.
-
-In the following sections the process of logging messages will be described as well as using a profiler. In the last section there is a small glossary of used terms.
 
 \section{Logging messages}
 \label{sec:logging}
@@ -600,11 +571,7 @@ This is a glossary of the most used terms in the previous sections:
 	\label{fig:resourcesystem-diagram}
 \end{figure}
 
-\section{Purpose of the resource manager}
-
-Every game needs to load packs of data from external devices such as a hard drive or network. The data come in blocks belonging together and representing a unit of something usually called \emph{resource}. Since the games work with loads of resources it is necessary to organize them both in-game and on the disk. Also, the data loaded are usually quite large and it's necessary to free them when possible to save memory. All of these tasks are implemented in the resource system.
-
-In the following sections the mapping of a resource to the engine will be described as well as the resource manager. Also a way of loading and saving scenes will be introduced. In the last section there is a small glossary of used terms.
+Every game needs to load packs of data from external devices such as a hard drive or network. The data come in blocks belonging together and representing a unit of something usually called \emph{resource}. Since the games work with loads of resources it is necessary to organize them both in-game and on the disk. Also, the data loaded are usually quite large and it's necessary to free them when possible to save memory. All of these tasks are implemented in the resource system as well as loading and saving scenes.
 
 \section{Resources}
 
@@ -683,6 +650,61 @@ This is a glossary of the most used terms in the previous sections:
   \item[XML] -- Extensible Markup Language (XML) is a set of rules for encoding documents in machine-readable form
 \end{description}
 
+
+\chapter{Script system}
+
+\begin{figure}[htbp]
+	\centering
+		\includegraphics[width=1\textwidth]{ScriptSystemClassDiagram.pdf}
+	\caption{Class diagram of the Script system}
+	\label{fig:scriptsystem-diagram}
+\end{figure}
+
+The script system allows customizing reactions to application events such as messages sent to entities or GUI interactions without a compilation of a whole application to the users of the engine. The advantage of using scripts is an easier extension of the application which can be done even by non-professional users because in the script environment they cannot do any fatal errors that can corrupt the application and it is possible to have a full control of the script execution -- for example timeout of execution prevents cycling. The disadvantage is a slower execution of scripts than a native code so a user should decide which part of system will be native coded and which can be done by scripts.
+
+\section{Interface of the script manager}
+
+The script manager is represented by the class \emph{ScriptSystem::ScriptMgr} that encapsulates the script engine and manages an access to the script modules. This class is a singleton and it is created when the game starts. It initializes the AngelScript engine and registers all integral classes and functions (see the Script Reference documentation) as well as all user-defined ones.
+
+The first thing a caller of a script function must do is to obtain a function ID. It can be get from the method \emph{ScriptMgr::GetFunctionID} that needs the name of the module where the function is and its declaration. For example if the name of function to be called is \verb/IncreaseArgument/ and it receives one integer argument and returns also an integer, the declaration of it will be \verb/int32 IncreaseArgument(int32)/. This method returns an integer that means the desired function ID (greater than or equal to zero) or the error code (less than zero) which means the function with this declaration could not be find in the mentioned module or this module does not exist or cannot be built from sources (see log for further information). The function ID is valid all time the module exists in memory so it can be stored for later usage.
+
+The function mentioned above calls \emph{ScriptMgr::GetModule} to obtain desired module. This method returns the module from a memory or loads its sources from a disc and builds it if necessary. If it is inconvenient that the module is built at the first call of its function, this method can be called before to get a confidence that the module is ready to use.
+
+The calling of script functions can be done with three methods. First the caller calls the \emph{ScriptMgr::PrepareContext} which needs the function ID and returns context prepared for passing the argument values. Then the argument values can be passed with the \emph{SetFunctionArgument} method which needs the prepared context as the first argument, a parameter index as the second one and a parameter value in form of the \emph{PropertyFunctionParameter} as the last one. After that the \emph{ScriptMgr::ExecuteContext} should be called with the prepared context as the first argument and a maximum time of executing script in milliseconds (0 means infinity) to prevent cycling as the second one. This method executes the script with given arguments and returns whether the execution was successful. If so it is possible to get a return value of function with corresponding methods of context. In the end the context should be released to avoid memory leaks.
+
+There is a possibility to call a simple script string stored in a memory by the method \emph{ScriptMgr::ExecuteString} which accepts this string as the first parameter. The method wraps it to the function without parameters and builds it and calls it as a part of the module specified in the second optional parameter so it is possible to declare local variables and to call functions from the module. This is useful for example for implementing a user console.
+
+As mentioned in the User Guide documentation
+%todo check it
+it is possible to use a conditional compilation of scripts. The method \emph{ScriptMgr::DefineWord} adds a pre-processor define passed as the string argument. The \emph{ScriptMgr::UnloadModule} and \emph{ScriptMgr::ClearModules} methods unload one/all previously loaded and built modules. All function IDs and contexts associated with these modules will be superseded so the caller should inform all objects that holds them about it (use \emph{ResourceUnloadCallback} in ScriptRegister.cpp for specify actions done when modules are unloaded). These methods could be called when it is needed to reload modules or free all memory used by them but when it is better not to destroy the whole script engine. There are also two methods for getting time. The first one (\emph{ScriptMgr::GetGameTime}) returns the game time which does not increase when the game action is paused, whereas the second one (\emph{ScriptMgr::GetGlobalTime}) returns the engine time which does it.
+
+\section{The Script component}
+\label{sec:script-component}
+
+The purpose of the Script component is to provide a possibility for an entity to respond to a received message by a script. When the message is received it should find an appropriate handler, which is a script function with a strict declaration (see EntityMessageTypes.h for entity message handler declarations), in defined modules and call it with the arguments provided in the message data.
+
+The component has five registered properties. The first one is an array of module files that are searched for message handlers; the second represents the maximum script execution time in milliseconds after that the script will be aborted. For better performance this component caches function IDs founded in modules in a map so it is necessary to inform it when the modules are going to change by sending a message \verb/RESOURCE_UPDATE/ to its entity.
+
+The last three properties provide a support for scripts that should be called periodically and that should remember their state. These scripts are written to the \verb/void OnAction()/ message handlers which are called when the message \verb/CHECK_ACTION/ is received (which should be every game loop) and when the appropriate time in the \verb/ScriptTimes/ property is lower than the current game time. From these scripts it is possible to call the \verb/int32 GetState()/ function which returns the appropriate state from the \verb/ScriptStates/ property and to call the \verb/void SetAndSleep(int32, uint64)/ function which sets this state and sets the time to the current game time plus the second argument in milliseconds. The right time and state are got thanks to the \verb/ScriptCurrentArrayIndex/ property.
+
+The most important method of this component is the \emph{Script::Handle\-Me\-ssa\-ge} that accepts a message structure as parameter and returns if the message was processed well or it was ignored. First it checks whether the function IDs should be updated and if the message is \verb/RESOURCE_UPDATE/ it ensures to do an update before the next message processing. Then it gets an appropriate function ID depended on a message type, checks whether to continue in case of the \verb/CHECK_ACTION/ message and calls the script manager to prepare a new context with this function. After that the pointer to the parent entity is stored to the context data so the \verb/this/ property can be called from a script to get the current entity handle. Then it adds additional parameters to a function call from the message data according to the message type and executes the context with defined timeout. Finally it releases the context and returns whether the execution was successful.
+
+\section{Glossary}
+
+This is a glossary of the most used terms in the previous sections:
+
+\begin{description}
+	\item[Script function] -- a function defined and implemented in a script file
+	\item[Script file] -- one file containing script class and script function definitions, can include a code from other files
+	\item[Script module] -- one or more script files connected by include directives, which are managed and built together and have a common namespace
+	\item[Function ID] -- an identification of a script function based on a module name and a function declaration
+	\item[Script context] -- an object that wraps script function calling, it must be prepared with a function ID, executed and released, function arguments can be passed and a return value can be obtained
+	\item[Script engine] -- an object that registers C++ classes, global functions, properties etc. for usage in a script code and manages script modules and contexts
+	\item[Script manager] -- a class that encapsulated a script engine and provides methods for managing script modules and calling script functions
+	\item[Script component] -- a component that provides script callbacks to the messages for an entity
+\end{description}
+
+
 \chapter{String system}
 
 \begin{figure}[htbp]
@@ -692,11 +714,7 @@ This is a glossary of the most used terms in the previous sections:
 	\label{fig:stringsystem-diagram}
 \end{figure}
 
-\section{Purpose of the string system}
-
 The string system manages all texts that are visible to the user except internal log messages. It supports localization to various languages and their country-specific dialects and a switching among them on fly.
-
-In the following sections the interface of the string manager will be described as well as loading and formatting the desired localized text. In the last section there is a small glossary of used terms.
 
 \section{Interface of the string manager}
 
@@ -750,12 +768,9 @@ This is a glossary of the most used terms in the previous sections:
 	\label{fig:memory-diagram}
 \end{figure}
 
-\section{Purpose of the memory system}
 The memory system controls the memory allocation of the whole application. It attempts to work under the hood, so that the rest of the project does not need to know about that. It provides tools to override the default dynamic memory allocation as well as custom specialized allocators for small objects or containers.
 
 Since games are very different from other applications they also have specific memory requirements. However, the default managers in current compilers are targeted to common programs. The game is a real-time per\-for\-man\-ce-in\-ten\-si\-ve application while it also allocates and deallocates a lot of objects on a regular basis. An example of this might be graphical effects spawned and destroyed during the play to keep the action high. In this case it is much more efficient to pool the objects instead of allocating them on the general heap. Another problem arises on game consoles where the memory available to the game is very limited and the engine must hold a tight control on the state of the memory and dynamically clean it if necessary while the action is still running.
-
-In the following sections various forms of memory allocation will be described.
 
 \section{Global allocation}
 The main part of this system are overridden default memory allocation functions of the compiler. The memory subsystem provides alternatives to the \emph{malloc} and \emph{free} functions called the \emph{Memory::CustomMalloc} and \emph{Memory\-::\-Custom\-Free}. The \emph{new} and \emph{delete} operators are overridden automatically, so it is not necessary using the functions manually. Note that all this works in the whole application as well as in the libraries.
