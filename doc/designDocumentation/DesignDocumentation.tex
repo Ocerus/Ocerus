@@ -465,7 +465,14 @@ There are six layout classes for editor components. All of them have initializat
 	\label{fig:editor-value-editors-diagram}
 \end{figure}
 
-All value editors derive from the \emph{Editor::AbstractValueEditor} base class. This class has three abstract methods that every value editor must implement and some methods that can help with the implementation. The first is the \emph{AbstractValueEditor::CreateWidget} method with the parameter representing a string that should be used as a prefix for a name of every created component. This method should create a widget for editing a required kind of value and return it. The second is the \emph{AbstractValueEditor::Update} method which is called when the current value of the property should be displayed in the value editor and the last is the \emph{AbstractValueEditor::Submit} method which is called when the value of the property should be updated by the user input to the value editor.
+All value editors derive from the \emph{Editor::AbstractValueEditor} base class. This class has three abstract methods that every value editor must implement and some methods that can help with the implementation. The first is the \emph{AbstractValueEditor::CreateWidget} method with the parameter representing a string that should be used as a prefix for a name of every created component. This method should create a widget for editing a required kind of value and return it. The second is the \emph{AbstractValueEditor::Update} method which is called when the current value of the property should be displayed in the value editor and the last is the \emph{AbstractValueEditor::Submit} method which is called when the value of the property should be updated by the user input to the value editor. In the diagram \ref{fig:editor-value-sequence} there is an example how calling the last two methods is proceeded.
+
+\begin{figure}[htbp]
+	\centering
+		\includegraphics[width=1\textwidth]{EditorValueSequence.pdf}
+	\caption[Sequence diagram of getting and setting property value]{Sequence diagram of getting and setting property value in the editor}
+	\label{fig:editor-value-sequence}
+\end{figure}
 
 For an easier implementation of value editors the model classes with the \emph{Editor::IValueEditorModel} class as the base class were created. From the accessors of this class value editors should get the name and tool-tip for the edited property, whether the property is valid, read only, an element of a list, removable, shareable, shared and also they should be able to remove the property or set whether it is shared if is possible. It is recommended to derive own models from the \emph{Editor::ITypedValueEditor\-Model$<$T$>$} template class that also defines the getter and setter for the value of the edited property.
 
@@ -594,7 +601,27 @@ For example, the XML resource creates a tree structure for the parsed data and a
 
 Since the resources are passed all around the game system we must somehow prevent any memory leaks from appearing. Doing so is quite easy however -- we simply use the shared pointer mechanism. It points to the common abstract resource (the \emph{ResourceSystem::ResourcePtr} class) and to specific resources as well (the \emph{ScriptSystem::ScriptResourcePtr} or the \emph{ResourceSystem::XMLResourcePtr} classes for example). The abstract resource pointer can be automatically converted to any specific resource pointer, but if the type does not match an assertion fault will be raised to prevent a memory corruption. All resource pointers are defined in the \verb'Utils/ResourcePointers.h' file.
 
-For defining a new resource type see the Extending Ocerus document. To see all currently existing types of resources it is best to locate the \emph{ResourceSystem::Resource} class and see all classes derived from it.
+For defining a new resource type see the Extending Ocerus document. In the table \ref{tab:resource-types} there are all currently existing types of resources with a brief description.
+
+\begin{table}[htbp]
+	\centering
+		%{\scriptsize 
+		\begin{tabular}{|p{0.20\hsize}|p{0.73\hsize}|}
+			\hline
+			Resource type & Description and supported extensions\\
+			\hline
+			Texture & a bitmap picture (jpeg, png, bmp, psd, dds, hdr, tga)\\
+			Mesh & a 3D object (obj)\\
+			CEGUI & a GUI related resource (layout, scheme, font, imageset, looknfeel)\\
+			Text & a text in a specific language (str)\\
+			XML & an XML document (xml)\\
+			Script & a file with AngelScript script functions (as)\\
+			\hline
+		\end{tabular}
+		%}
+	\caption[List of defined resource types]{List of defined resource types with a brief description}
+	\label{tab:resource-types}
+\end{table}
 
 \section{Resource manager}
 
@@ -685,7 +712,14 @@ The component has five registered properties. The first one is an array of modul
 
 The last three properties provide a support for scripts that should be called periodically and that should remember their state. These scripts are written to the \verb/void OnAction()/ message handlers which are called when the message \verb/CHECK_ACTION/ is received (which should be every game loop) and when the appropriate time in the \verb/ScriptTimes/ property is lower than the current game time. From these scripts it is possible to call the \verb/int32 GetState()/ function which returns the appropriate state from the \verb/ScriptStates/ property and to call the \verb/void SetAndSleep(int32, uint64)/ function which sets this state and sets the time to the current game time plus the second argument in milliseconds. The right time and state are got thanks to the \verb/ScriptCurrentArrayIndex/ property.
 
-The most important method of this component is the \emph{Script::Handle\-Me\-ssa\-ge} that accepts a message structure as parameter and returns if the message was processed well or it was ignored. First it checks whether the function IDs should be updated and if the message is \verb/RESOURCE_UPDATE/ it ensures to do an update before the next message processing. Then it gets an appropriate function ID depended on a message type, checks whether to continue in case of the \verb/CHECK_ACTION/ message and calls the script manager to prepare a new context with this function. After that the pointer to the parent entity is stored to the context data so the \verb/this/ property can be called from a script to get the current entity handle. Then it adds additional parameters to a function call from the message data according to the message type and executes the context with defined timeout. Finally it releases the context and returns whether the execution was successful.
+The most important method of this component is the \emph{Script::Handle\-Me\-ssa\-ge} that accepts a message structure as parameter and returns if the message was processed well or it was ignored. First it checks whether the function IDs should be updated and if the message is \verb/RESOURCE_UPDATE/ it ensures to do an update before the next message processing. Then it gets an appropriate function ID depended on a message type, checks whether to continue in case of the \verb/CHECK_ACTION/ message and calls the script manager to prepare a new context with this function. After that the pointer to the parent entity is stored to the context data so the \verb/this/ property can be called from a script to get the current entity handle. Then it adds additional parameters to a function call from the message data according to the message type and executes the context with defined timeout. Finally it releases the context and returns whether the execution was successful. An example of a reaction to a message is shown in the diagram \ref{fig:scriptsystem-callback}.
+
+\begin{figure}[htbp]
+	\centering
+		\includegraphics[width=1\textwidth]{ScriptCallbackSequence.pdf}
+	\caption{An example of reaction of the Script component to a message}
+	\label{fig:scriptsystem-callback}
+\end{figure}
 
 \section{Glossary}
 
