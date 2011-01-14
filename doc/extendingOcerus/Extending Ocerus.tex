@@ -31,13 +31,13 @@
 
 \chapter{Introduction}
 
-The project Ocerus was designed to be easily extendable on well defined places in code. It allows developers to create even more diverse games. This document serves as a cookbook and shows a sequence of steps that will lead to extension of the Ocerus. There are several ways of extending the Ocerus. Each way will be discussed in separate chapters.
+The project Ocerus was designed to be easily extendable on well defined places in code. It allows developers to create even more diverse games. This document serves as a cookbook and shows a sequence of steps that will lead to the extension of the Ocerus. There are several ways of extending the Ocerus. Each way will be discussed in separate chapters.
 
 This document only shows how to make things work. If you want to understand how they work, you should see the Design documentation.
 
 \chapter{Components}
 
-Probably the first thing you would like to extend are the components. They can easily add functionality to the game entities. Similar result can be achieved by using scripts but the logic in components is not limited to predefined script functions and runs faster. In the following sections, there will be a sequence of steps that are necessary to do in order to create and use a new component. 
+Probably the first thing to extend are the components. They can easily add functionality to the game entities. Similar result can be achieved by using scripts but the logic in components is not limited to predefined script functions and runs faster. In the following sections, there will be a sequence of steps that are necessary in order to create and use a new component. 
 
 There will be also an example of a simple component that will make an entity to move up and down. It would probably be better to implement this particular functionality by a script but it will serve well as an example.
 
@@ -59,7 +59,7 @@ namespace EntityComponents
 
 There are few methods in this class that should be overridden: \emph{Create}, \emph{Destroy}, \emph{HandleMessage} and \emph{RegisterReflection}. \emph{Create} and \emph{Destroy} methods are called after the creation respectively before the destruction of the component. \emph{HandleMessage} and \emph{RegisterReflection} methods will be described in later sections.
 
-Then, the component type must be registered in the \emph{\_ComponentTypes.h} header file (located in \emph{EntitySystem/Components}). To do so, this line should be added:
+After that, the component type must be registered in the \emph{\_ComponentTypes.h} header file (located in \emph{EntitySystem/Components}). To do so, this line should be added:
 \footnotesize 
 \begin{verbatim}
 COMPONENT_TYPE(ExampleComp)
@@ -99,11 +99,11 @@ Addresses of those methods must be given as parameters to the \emph{RegisterProp
 The Access flag defines ways how the property can be accessed from the editor or a script or whether it should be saved/loaded to/from stream. The list of all flag states is in the \emph{PropertyAccess.h} header file (located in \emph{Utils/Properties}).
 \end{itemize}
 
-There can be also functions registered in order to be called from scripts. For that, there is the \emph{RegisterFunction} function. Usage of that function is similar to the \emph{RegisterProperty} and looks like this:
+Also component functions can be registered so they can be called from a script. For that, there is the \emph{RegisterFunction} function. Usage of that function is similar to the \emph{RegisterProperty} and looks like this:
 
 \footnotesize 
 \begin{verbatim}
-RegisterFunction("Function Name", &Function, Access flag,
+RegisterFunction("Function Name", &FunctionAddr, Access flag,
   "Function description");
 \end{verbatim}
 \normalsize
@@ -179,7 +179,7 @@ Entities can receive messages. They are sent by the engine when some event occur
 A message that is sent to an entity is distributed to all its components. It can also carry parameters.
 
 \subsection{Message Types}
-Message types are defined in the \emph{EntityMessageTypes.h} header file (located in \emph{EntitySystem/EntityMgr}). New message types can be easily added if needed. Declaration of the message type is done by macros and looks like this:
+Message types are defined in the \emph{EntityMessageTypes.h} header file (located in \emph{EntitySystem/EntityMgr}). New message types can be easily added if needed. The declaration of the message type is done by macros and looks like this:
 
 \footnotesize 
 \begin{verbatim}
@@ -239,7 +239,7 @@ EntityMessage::eResult EntityComponents::ExampleComp::
   // Called when the logic is updated
   case EntityMessage::UPDATE_LOGIC:
     {
-      // Get the first (and only) message parameter
+      // Get the first message parameter
       // Here it is the time from the last logic update
       float32 delta = *msg.parameters.GetParameter(0).
         GetData<float32>();
@@ -274,17 +274,17 @@ EntityMessage::eResult EntityComponents::ExampleComp::
 
 \section{Conclusion}
 
-After above described steps, the new component is ready to be used. It will appear in editor and components properties and functions will be accessible by script.
+After above described steps, the new component is ready to be used. It will appear in editor and components properties and functions will be accessible by a script.
 
 Note that most functionalities are easier to implement with scripts. The main advantage (and also the main disadvantage) of creating a new component is that it is defined in the source code. The new component can directly access the engine but the system has to be recompiled with every change to the component. 
 
-The scripts, on the other hand, can be changed real-time, when the editor is running. It makes developing scripts much easier. The disadvantage of scripts is that it has only a limited list of functions. But the list can be extended, see section \emph{Script System}.
+The scripts, on the other hand, can be changed real-time, when the editor is running. It makes developing scripts much easier. The disadvantage of scripts is that it has only a limited list of functions. But that list can be extended, see section \emph{Script System}.
 
 \chapter{Script System}
 
-The Script system provides quite powerful tool for programming the game logic without having to modify and compile the source code. Even if there are hundreds of registered functions, classes, operators etc., it could be useful to register some more. The Script system is prepared for this so it is not difficult to register a new stuff.
+The Script system provides quite a powerful tool for programming the game logic without having to modify and compile the source code. Even if there are hundreds of registered functions, classes, operators etc., it could be useful to register some more. The Script system is prepared for this so it is not difficult to register a new stuff.
 
-Following sections will show a simple example of how to register a new class with methods in the Script system. It will be described only briefly. For more details, please see the AngelScript documentation \cite{angelscript}. Especially chapter \emph{Using AngelScript/Registering the application interface}.
+The following section will show a simple example of how to register a new class with methods in the Script system. It will be described only briefly. For more details, please see the AngelScript documentation \cite{angelscript}. Especially chapter \emph{Using AngelScript/Registering the application interface}.
 
 \section{Registering New Class}
 
@@ -302,7 +302,7 @@ OC_SCRIPT_ASSERT();
 
 \begin{itemize}
 \item
-The method returns an integer typed result of the registering. The name of the variable, the result is being assigned to, should be \emph{r}, because it is then checked for an error in the \emph{OC\_SCRIPT\_ASSERT()} macro.
+The method returns an integer typed result. The name of the variable, the result is being assigned to, should be \emph{r}, because it is then checked for an error in the \emph{OC\_SCRIPT\_ASSERT()} macro.
 
 \item
 The first parameter of the method defines the name of the class in a script.
@@ -389,11 +389,13 @@ OC_SCRIPT_ASSERT();
 
 The parameters are the same as in \emph{RegisterObjectMethod} method, only the first one is missing.
 
+ It is also possible to register enumerations (\emph{RegisterEnum, RegisterEnumValue}) and typedefs for primitive types (\emph{RegisterTypedef}).
+
 \chapter{Resource Types}
 
 All resources in the Ocerus are managed by the Resource manager. Each resource have its type. There are some basic resource types defined in the Resource manager but sometimes it would be nice to define some new.
 
-New resource types are defined as a class derived from the \emph{Resource} class. It is necessary to add the new resource type to the \emph{eResourceType} enum and resource type name to the \emph{ResourceTypeNames} string array. Both are defined in the \emph{ResourceType.h} header.
+New resource types are defined as a class derived from the \emph{Resource} class. It is necessary to add a new resource type to the \emph{eResourceType} enum and a resource type name to the \emph{ResourceTypeNames} string array. Both are defined in the \emph{ResourceType.h} header.
 
 The new resource class has to override some methods:
 
@@ -425,7 +427,7 @@ static ResourceSystem::eResourceType GetResourceType()
 \normalsize
 
 \item
-Protected abstract method \emph{LoadImpl}. This method is called when the resource is being loaded. It should parse the data from the file stream into something useful. It should use \emph{DataContainer} class and \emph{GetRawInputData} method for getting data from the source file.
+Protected abstract method \emph{LoadImpl}. This method is called when the resource is being loaded. It should parse the data from the file stream into something useful. It should use the \emph{DataContainer} class and the \emph{GetRawInputData} method for getting data from the source file.
 
 So the \emph{LoadImpl} method will look like this:
 
@@ -454,8 +456,10 @@ size_t NewResource::LoadImpl()
 \end{verbatim}
 \normalsize
 
+The \emph{LoadImpl} method must return the size of the resource in the memory in bytes. If 0 is returned, it means that the resource failed to load.
+
 \item
-Protected abstract method \emph{UnloadImpl}. This method is called when the resource is being unloaded. It should release all data the resource was using.
+Protected abstract method \emph{UnloadImpl}. This method is called when the resource is being unloaded. It should release all the data the resource was using.
 
 \item
 The resource class can have additional methods for accessing the resource type specific structures. Those method should always begin with calling the \emph{EnsureLoaded()} method. It ensures that the resource is loaded (the \emph{LoadImpl} method was called).
@@ -466,7 +470,23 @@ Defining new resource types is necessary when adding new functionality that requ
 
 \chapter{Renderer}
 
-\section{blabla}
+The Ocerus uses an OpenGL renderer by default. But it is possible to implement an own renderer that uses a different graphic library.
+
+The only part of code, which uses the OpenGL, is the \emph{OglRenderer} class. It derives from the \emph{GfxRenderer} class and implements its abstract methods. There is about 20 methods that needs to be implemented by the new renderer. They are described in the Doxygen documentation.
+
+After the new renderer class is implemented, it must be initialized instead of old renderer. In the \emph{Application.cpp} file (located in \emph{Core}), the line:
+
+\begin{verbatim}
+GfxSystem::GfxRenderer::CreateSingleton<GfxSystem::OglRenderer>();
+\end{verbatim}
+\normalsize
+
+should be replaced by:
+
+\begin{verbatim}
+GfxSystem::GfxRenderer::CreateSingleton<GfxSystem::NewRenderer>();
+\end{verbatim}
+\normalsize
 
 %% A small distance to the other stuff in the table of contents (toc)
 \addtocontents{toc}{\protect\vspace*{\baselineskip}}
