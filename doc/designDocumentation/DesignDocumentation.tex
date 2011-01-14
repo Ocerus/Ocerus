@@ -28,17 +28,17 @@
 \pagestyle{plain} %Now display headings: headings / fancy / ...
 \setcounter{page}{2}
 
+\addcontentsline{toc}{chapter}{Contents}
 \tableofcontents %Table of contents
 \cleardoublepage %The first chapter should start on an odd page.
 
 \chapter{Introduction}
 
-\section{Purpose of this document}
-%todo
+This is the design documentation of the project Ocerus. It should be read by developers who want to change some parts of the game engine or to add new features to it. It may be useful for everyone who is curious how this application is designed or how libraries listed in the table \ref{tab:library-list} can be used.
 
 \section{Project architecture}
 
-The project Ocerus is logically divided into several relatively independent systems which cooperate with each other. Every system maintains its part of the application such as graphics, resources, scripts etc. and provides it to other ones. In the picture \ref{fig:system-connection} the relations among all systems are displayed with a brief description of what the systems provide to each other.
+The project Ocerus is logically divided into several relatively independent systems which cooperate with each other. Every system maintains its part of the application such as graphics, resources, scripts etc. and provides it to other ones. In the figure \ref{fig:system-connection} the relations among all systems are displayed with a brief description of what the systems provide to each other.
 
 \begin{figure}[htbp]
 	\centering
@@ -47,7 +47,7 @@ The project Ocerus is logically divided into several relatively independent syst
 	\label{fig:system-connection}
 \end{figure}
 
-The project has not been created from scratch but it is based on several libraries to allow the developers to focus on important features for the end users and top-level design rather than low-level programming. All used libraries support many platforms, have free licenses and have been heavily tested in a lot of other projects. All of them are used directly by one to three subsystems except the library for unit testing. The library dependences of each system are displayed in the picture \ref{fig:library-dependence}.
+The project has not been created from scratch but it is based on several libraries to allow the developers to focus on important features for the end users and top-level design rather than low-level programming. All used libraries support many platforms, have free licenses and have been heavily tested in a lot of other projects. All of them are used directly by one to three subsystems except the library for unit testing. The library dependences of each system are displayed in the figure \ref{fig:library-dependence}.
 
 \begin{figure}[htbp]
 	\centering
@@ -109,9 +109,7 @@ Except these libraries some small pieces of a third party code were used that ar
 	\label{tab:code-list}
 \end{table}
 
-In the following chapters each of the project systems will be described from the design view. At the beginning of each chapter there are a UML class diagram
-%todo explanation of stereotypes
-and a section about a purpose of the described system and at the end of most chapters there is a small glossary of terms used in that chapter.
+In the following chapters each of the project systems will be described from the design view. At the beginning of each chapter there are a UML class diagram and a paragraph about a purpose of the described system and at the end of most chapters there is a small glossary of terms used in that chapter. In UML class diagrams two specific stereotypes are used. The first one is the \verb/<<singleton>>/ stereotype used in classes derived from the \emph{Utils::Singleton<T>} class, which is an implementation of the singleton design pattern. The second one is the \verb/<<external>>/ stereotype used in classes defined and implemented in some library specified in the table \ref{tab:library-list}.
 
 
 \chapter{Core}
@@ -322,7 +320,7 @@ The \emph{GfxSystem::GfxRenderer} is the main class that manages a rendering of 
 	\label{fig:rendering-diagram}
 \end{figure}
 
-The abstract class has methods for managing its render targets, for drawing simple shapes as well as textures and meshes or for clearing the screen. As the diagram \ref{fig:rendering-diagram} shows, the rendering must be started by the \emph{GfxRenderer::BeginRendering} method, and then the current render target must be set and cleared. After everything is drawn the \emph{GfxRenderer\-::Finalize\-Render\-Target} method must be called and then another render target is set or the whole rendering is finished by the \emph{GfxRenderer::EndRendering} method.
+The abstract class has methods for managing its render targets, for drawing simple shapes as well as textures and meshes or for clearing the screen. As the figure \ref{fig:rendering-diagram} shows, the rendering must be started by the \emph{GfxRenderer::BeginRendering} method, and then the current render target must be set and cleared. After everything is drawn the \emph{GfxRenderer\-::Finalize\-Render\-Target} method must be called and then another render target is set or the whole rendering is finished by the \emph{GfxRenderer::EndRendering} method.
 
 An important attribute of the \emph{GfxSystem::GfxRenderer} class is the point\-er to the \emph{GfxSystem::SceneMgr} class created on its initialization accessible by the \emph{GfxRenderer::GetSceneManager} method. This is the class to which all drawable components (sprites, models) must be registered along with a \emph{Transform} component of their entity by the \emph{SceneMgr::AddDrawable} method so then they are rendered by the \emph{SceneMgr::DrawVisibleDrawables} method if they are visible.
 
@@ -340,7 +338,7 @@ Meshes and textures are essential parts of the \emph{Model} and \emph{Sprite} co
 
 On loading of a texture resource the \emph{GfxRenderer::LoadTexture} abstract method is called. For OpenGL implementation the SOIL library is used which is a tiny C library used for uploading textures into the OpenGL and which supports most of the common image formats.
 
-For defining meshes the Wavefront OBJ file format \cite{obj} is used. Every texture used in the model definition is automatically loaded as a resource.
+For defining meshes the Wavefront OBJ file format \cite{obj} is used with content of all material files (.mtl extension) at the beginning of the file with the .model extension. Every texture used in the model definition is automatically loaded as a resource.
  
 \section{Glossary}
 This is a glossary of the most used terms in the previous sections:
@@ -465,12 +463,12 @@ There are six layout classes for editor components. All of them have initializat
 	\label{fig:editor-value-editors-diagram}
 \end{figure}
 
-All value editors derive from the \emph{Editor::AbstractValueEditor} base class. This class has three abstract methods that every value editor must implement and some methods that can help with the implementation. The first is the \emph{AbstractValueEditor::CreateWidget} method with the parameter representing a string that should be used as a prefix for a name of every created component. This method should create a widget for editing a required kind of value and return it. The second is the \emph{AbstractValueEditor::Update} method which is called when the current value of the property should be displayed in the value editor and the last is the \emph{AbstractValueEditor::Submit} method which is called when the value of the property should be updated by the user input to the value editor. In the diagram \ref{fig:editor-value-sequence} there is an example how calling the last two methods is proceeded.
+All value editors derive from the \emph{Editor::AbstractValueEditor} base class (see the figure \ref{fig:editor-value-editors-diagram}). This class has three abstract methods that every value editor must implement and some methods that can help with the implementation. The first is the \emph{AbstractValueEditor::CreateWidget} method with the parameter representing a string that should be used as a prefix for a name of every created component. This method should create a widget for editing a required kind of value and return it. The second is the \emph{AbstractValueEditor::Update} method which is called when the current value of the property should be displayed in the value editor and the last is the \emph{AbstractValueEditor::Submit} method which is called when the value of the property should be updated by the user input to the value editor. In the figure \ref{fig:editor-value-sequence} there is an example how calling the last two methods is proceeded.
 
 \begin{figure}[htbp]
 	\centering
 		\includegraphics[width=1\textwidth]{EditorValueSequence.pdf}
-	\caption[Sequence diagram of getting and setting property value]{Sequence diagram of getting and setting property value in the editor}
+	\caption[Sequence diagram of getting and setting property value]{Sequence diagram of getting and setting property value in the editor (the boolean property \emph{Visible} of the \emph{GUILayout} component is used as an example)}
 	\label{fig:editor-value-sequence}
 \end{figure}
 
@@ -610,9 +608,9 @@ For defining a new resource type see the Extending Ocerus document. In the table
 			\hline
 			Resource type & Description and supported extensions\\
 			\hline
-			Texture & a bitmap picture (jpeg, png, bmp, psd, dds, hdr, tga)\\
-			Mesh & a 3D object (obj)\\
-			CEGUI & a GUI related resource (layout, scheme, font, imageset, looknfeel)\\
+			Texture & a bitmap picture (jpg, png, bmp, psd, dds, hdr, tga)\\
+			Mesh & a 3D object (model)\\
+			CEGUI & a GUI related resource (layout, scheme, font, imageset, looknfeel, ttf)\\
 			Text & a text in a specific language (str)\\
 			XML & an XML document (xml)\\
 			Script & a file with AngelScript script functions (as)\\
@@ -712,7 +710,7 @@ The component has five registered properties. The first one is an array of modul
 
 The last three properties provide a support for scripts that should be called periodically and that should remember their state. These scripts are written to the \verb/void OnAction()/ message handlers which are called when the message \verb/CHECK_ACTION/ is received (which should be every game loop) and when the appropriate time in the \verb/ScriptTimes/ property is lower than the current game time. From these scripts it is possible to call the \verb/int32 GetState()/ function which returns the appropriate state from the \verb/ScriptStates/ property and to call the \verb/void SetAndSleep(int32, uint64)/ function which sets this state and sets the time to the current game time plus the second argument in milliseconds. The right time and state are got thanks to the \verb/ScriptCurrentArrayIndex/ property.
 
-The most important method of this component is the \emph{Script::Handle\-Me\-ssa\-ge} that accepts a message structure as parameter and returns if the message was processed well or it was ignored. First it checks whether the function IDs should be updated and if the message is \verb/RESOURCE_UPDATE/ it ensures to do an update before the next message processing. Then it gets an appropriate function ID depended on a message type, checks whether to continue in case of the \verb/CHECK_ACTION/ message and calls the script manager to prepare a new context with this function. After that the pointer to the parent entity is stored to the context data so the \verb/this/ property can be called from a script to get the current entity handle. Then it adds additional parameters to a function call from the message data according to the message type and executes the context with defined timeout. Finally it releases the context and returns whether the execution was successful. An example of a reaction to a message is shown in the diagram \ref{fig:scriptsystem-callback}.
+The most important method of this component is the \emph{Script::Handle\-Me\-ssa\-ge} that accepts a message structure as parameter and returns if the message was processed well or it was ignored. First it checks whether the function IDs should be updated and if the message is \verb/RESOURCE_UPDATE/ it ensures to do an update before the next message processing. Then it gets an appropriate function ID depended on a message type, checks whether to continue in case of the \verb/CHECK_ACTION/ message and calls the script manager to prepare a new context with this function. After that the pointer to the parent entity is stored to the context data so the \verb/this/ property can be called from a script to get the current entity handle. Then it adds additional parameters to a function call from the message data according to the message type and executes the context with defined timeout. Finally it releases the context and returns whether the execution was successful. An example of a reaction to a message is shown in the figure \ref{fig:scriptsystem-callback}.
 
 \begin{figure}[htbp]
 	\centering
@@ -871,7 +869,7 @@ To make use of properties the class must already using RTTI. A getter and setter
 
 It is also possible to set a custom function as a special property. The function must take the \emph{PropertyFunctionParameters} class as a single parameter and return \verb/void/. It must be registered by using the \emph{RegisterFunction} method. The function can be then used in a similar way as the common properties, but the \emph{CallFunction} method is used instead of the \emph{SetValue} one.
 
-%todo Dynamic properties
+Each object instantiated from a class using RTTI can register its own properties which are related to an object instead of a class. They are called dynamic properties and they can be registered by the \emph{RegisterDynamicProperty} template method and unregistered by the \emph{UnregisterDynamicProperty} method whenever during an object life cycle. The class can react on a (un)registration of a property by overriding the \emph{DynamicPropertyChanged} method. Dynamic properties are accessible in the same way as regular ones. If a dynamic property has a same name as some regular one, the dynamic one is returned.
 
 
 \section{Glossary}
@@ -880,6 +878,7 @@ This is a glossary of the most used terms in the previous sections:
 \begin{description}
   \item[RTTI] -- a system for getting type information on run-time
   \item[Property] -- a class attribute accessible by its name that must be registered to the RTTI system
+  \item[Dynamic property] -- data of any defined type associated to an object with RTTI that can be added and removed any time
 \end{description}
 
 
@@ -918,12 +917,12 @@ This is a glossary of the most used terms in the previous sections:
 
 %% The List of Figures
 \clearpage
-\addcontentsline{toc}{chapter}{List of Figures}
 \listoffigures
+\addcontentsline{toc}{chapter}{List of Figures}
 
 %% The List of Tables
 \clearpage
-\addcontentsline{toc}{chapter}{List of Tables}
 \listoftables
+\addcontentsline{toc}{chapter}{List of Tables}
 
 \end{document}
