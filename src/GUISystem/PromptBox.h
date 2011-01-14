@@ -25,7 +25,11 @@ namespace GUISystem
 		/// Destroys the PromptBox.
 		~PromptBox();
 
-		/// Sets the prompt box text to be displayed.
+		/// Sets the prompt box message text to be displayed.
+		/// Also makes sure the window is wide enough to display the text.
+		void SetLabel(const CEGUI::String& text);
+
+		/// Sets the edit box text.
 		void SetText(const CEGUI::String& text);
 
 		/// Shows the prompt box.
@@ -55,10 +59,11 @@ namespace GUISystem
 	};
 
 	/// Creates and shows a prompt box with specified parameters.
-	/// @param text The displayed text.
+	/// @param label The displayed message text.
+	/// @param text The editbox text.
 	/// @param callback The function or method which will be called after the user clicks on some button.
 	/// @param tag The ID which will be sent as a parameter to the callback method.
-	void ShowPromptBox(const CEGUI::String& text, PromptBox::Callback callback = PromptBox::Callback(), int32 tag = 0);
+	void ShowPromptBox(const CEGUI::String& label, const CEGUI::String& text, PromptBox::Callback callback = PromptBox::Callback(), int32 tag = 0);
 }
 
 #endif // _GUISYSTEM_PROMPTBOX_H_

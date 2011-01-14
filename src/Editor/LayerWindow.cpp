@@ -54,7 +54,7 @@ void LayerWindow::Deinit()
 void LayerWindow::ShowNewLayerPrompt(EntitySystem::LayerID layerID)
 {
 	GUISystem::PromptBox* prompt = new GUISystem::PromptBox(layerID);
-	prompt->SetText(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "layer_new_prompt"));
+	prompt->SetLabel(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "layer_new_prompt"));
 	prompt->RegisterCallback(GUISystem::PromptBox::Callback(this, &LayerWindow::NewLayerPromptCallback));
 	prompt->Show();
 }
@@ -81,7 +81,7 @@ void LayerWindow::MoveLayerDown(EntitySystem::LayerID layerID)
 void LayerWindow::ShowRenameLayerPrompt(EntitySystem::LayerID layerID)
 {
 	GUISystem::PromptBox* prompt = new GUISystem::PromptBox(layerID);
-	prompt->SetText(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "layer_rename_prompt"));
+	prompt->SetLabel(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "layer_rename_prompt"));
 	prompt->RegisterCallback(GUISystem::PromptBox::Callback(this, &LayerWindow::RenameLayerPromptCallback));
 	prompt->Show();
 }

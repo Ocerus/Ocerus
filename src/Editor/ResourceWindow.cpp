@@ -4,6 +4,7 @@
 #include "Core/Project.h"
 #include "GUISystem/CEGUICommon.h"
 #include "GUISystem/PopupMgr.h"
+#include "GUISystem/PromptBox.h"
 #include "ResourceSystem/ResourceMgr.h"
 #include "Core/Application.h"
 
@@ -181,6 +182,7 @@ void ResourceWindow::CreatePopupMenu()
 	CEGUI::Window* changeTypeMenuItem = gPopupMgr->CreateMenuItem("Editor/ResourceWindow/Popup/ChangeType", TR("resource_change_type"), TR("resource_change_type_hint"), PI_INVALID);
 	mPopupMenu->addChildWindow(changeTypeMenuItem);
 	mPopupMenu->addChildWindow(gPopupMgr->CreateMenuItem("Editor/ResourceWindow/Popup/OpenScene", TR("open_scene"), TR("open_scene_hint"), PI_OPEN_SCENE));
+	mPopupMenu->addChildWindow(gPopupMgr->CreateMenuItem("Editor/ResourceWindow/Popup/RenameScene", TR("rename_scene"), TR("rename_scene_hint"), PI_RENAME_SCENE));
 
 	mResourceTypesPopupMenu = gPopupMgr->CreatePopupMenu("Editor/ResourceWindow/Popup/ChangeType/Popup");
 	for (size_t resType = 0; resType < ResourceSystem::NUM_RESTYPES; ++resType)
@@ -204,10 +206,15 @@ void ResourceWindow::OpenPopupMenu(ResourceSystem::ResourcePtr resource, float32
 	if (mCurrentPopupResource.get())
 	{
 		// Enable/disable menu items
-		if (gEditorMgr.GetCurrentProject()->IsResourceScene(mCurrentPopupResource))
-			mPopupMenu->getChildAtIdx(1)->setEnabled(true);
-		else
-			mPopupMenu->getChildAtIdx(1)->setEnabled(false);
+		bool isScene = gEditorMgr.GetCurrentProject()->IsResourceScene(mCurrentPopupResource);
+		for (size_t i=0; i<mPopupMenu->getChildCount(); ++i)
+		{
+			CEGUI::uint id = mPopupMenu->getChildAtIdx(i)->getID();
+			if (id == PI_OPEN_SCENE || id == PI_RENAME_SCENE)
+			{
+				mPopupMenu->getChildAtIdx(i)->setEnabled(isScene);
+			}
+		}
 
 		// Check current resource type
 		for (size_t idx = 0; idx < mResourceTypesPopupMenu->getChildCount(); ++idx)
@@ -230,6 +237,7 @@ void ResourceWindow::OnPopupMenuItemClicked(CEGUI::Window* menuItem)
 		ResourceSystem::eResourceType newType = (ResourceSystem::eResourceType)menuItem->getID();
 		gEditorMgr.ChangeResourceType(mCurrentPopupResource, newType);
 		Update();
+		mCurrentPopupResource.reset();
 	}
 	else
 	{
@@ -237,12 +245,42 @@ void ResourceWindow::OnPopupMenuItemClicked(CEGUI::Window* menuItem)
 		{
 		case PI_OPEN_SCENE:
 			gEditorMgr.GetCurrentProject()->OpenScene(mCurrentPopupResource);
+			mCurrentPopupResource.reset();
+			break;
+		case PI_RENAME_SCENE:
+			GUISystem::ShowPromptBox(TR("enter_scene_name"), mCurrentPopupResource->GetName(), GUISystem::PromptBox::Callback(this, &ResourceWindow::OnRenameScenePromtboxConfirmed));
 			break;
 		default:
 			OC_NOT_REACHED();
 		}
 	}
+}
+
+void Editor::ResourceWindow::OnRenameScenePromtboxConfirmed( bool clickedOK, const string& text, int32 tag )
+{
+	if (!clickedOK) return;
+	if (text.empty()) return;
+
+	// here we assume the scene filename is the same as the scene resource name
+	string sceneName = Core::Project::FixSceneName(text);
+	string sceneFilename = Core::Project::FixSceneFilename(mCurrentPopupResource->GetFileDir() + "/" + sceneName);
+
+	// rename
+	gEditorMgr.GetCurrentProject()->RenameScene(mCurrentPopupResource->GetName(), sceneName, sceneName);
+	gResourceMgr.RenameResource(mCurrentPopupResource, sceneName, sceneFilename);
+	
+	// delete the resource from the pool so that it gets updated
+	for (ResourceList::iterator it = mResourcePool.begin(); it != mResourcePool.end(); ++it)
+	{
+		if (mCurrentPopupResource == (*it))
+		{
+			// setting null will make it removed and added again
+			(*it) = ResourceSystem::ResourcePtr();
+		}
+	}
+
 	mCurrentPopupResource.reset();
+	Update();
 }
 
 bool Editor::ResourceWindow::OnTreeItemClicked(const CEGUI::EventArgs& e)

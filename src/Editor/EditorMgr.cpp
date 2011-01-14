@@ -219,7 +219,7 @@ void EditorMgr::CenterCameraOnSelectedEntity()
 void Editor::EditorMgr::ShowCreateEntityPrompt(EntityHandle parent)
 {
 	GUISystem::PromptBox* prompt = new GUISystem::PromptBox(parent != EntitySystem::EntityHandle::Null ? parent.GetID() : 0);
-	prompt->SetText(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "new_entity_prompt"));
+	prompt->SetLabel(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup, "new_entity_prompt"));
 	prompt->RegisterCallback(GUISystem::PromptBox::Callback(this, &Editor::EditorMgr::CreateEntityPromptCallback));
 	prompt->Show();
 }
@@ -255,7 +255,6 @@ void Editor::EditorMgr::OnCloseProjSaveMessageBoxClicked(GUISystem::MessageBox::
 void Editor::EditorMgr::OnNewSceneSaveMessageBoxClicked(GUISystem::MessageBox::eMessageBoxButton button, int32 t)
 {
 	ResolveSaveMessageBoxClicked(button, t);
-
 	
 	const string& projectPath = gEditorMgr.GetCurrentProject()->GetAbsoluteOpenedProjectPath();
 	GUISystem::FolderSelector* folderSelector = new GUISystem::FolderSelector(projectPath, (int)EditorMgr::FST_NEWSCENE);
@@ -751,15 +750,6 @@ void EditorMgr::CloseScene()
 	}
 }
 
-bool hasEnding (const string& fullString, const string& ending)
-{
-	if (fullString.length() > ending.length()) {
-		return (0 == fullString.compare (fullString.length() - ending.length(), ending.length(), ending));
-	} else {
-		return false;
-	}
-}
-
 void EditorMgr::CreateScene(const string& sceneFilename, const string& sceneName)
 {
 	if (sceneName.empty())
@@ -770,10 +760,8 @@ void EditorMgr::CreateScene(const string& sceneFilename, const string& sceneName
 		return;
 	}
 
-	string fixedName = sceneName;
-	if (!hasEnding(fixedName, ".xml")) fixedName = fixedName + ".xml";
-	string fixedFilename = sceneFilename;
-	if (!hasEnding(fixedFilename, ".xml")) fixedFilename = fixedFilename + ".xml";
+	string fixedName = Core::Project::FixSceneName(sceneName);
+	string fixedFilename = Core::Project::FixSceneFilename(sceneFilename);
 
 	if (!mCurrentProject->CreateScene(fixedFilename, fixedName))
 	{

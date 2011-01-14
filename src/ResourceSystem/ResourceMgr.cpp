@@ -657,3 +657,33 @@ void ResourceSystem::ResourceMgr::EnableMemoryLimitEnforcing( void )
 	mEnforceMemoryLimit = true;
 	CheckMemoryUsage();
 }
+
+void ResourceSystem::ResourceMgr::RenameResource( ResourcePtr res, const string& newName, const string& newFilePath )
+{
+	string oldName = res->GetName();
+
+	// find the resource
+	ResourceGroupMap::iterator gi = mResourceGroups.find(res->GetGroup());
+	if (gi == mResourceGroups.end()){
+		ocError << "Dangling resource; Resource group '" << res->GetGroup() << "' not found";
+		return;
+	}
+	ResourceMap& resmap = *gi->second;
+	ResourceMap::iterator ri = resmap.find(oldName);
+	if (ri == resmap.end())
+	{
+		ocError << "Dangling resource; Resource '" << oldName << "' in group '" << res->GetGroup() << "' not found";
+		return;
+	}
+
+	// rename the file on the disk
+	boost::filesystem::rename(res->GetFilePath(), newFilePath);
+
+	// rename it in the internal structures
+	resmap.erase(ri);
+	resmap[newName] = res;
+	res->SetName(newName);
+	res->SetFilePath(newFilePath);
+
+	ocInfo << "Renamed resource " << oldName << " to " << newName;
+}

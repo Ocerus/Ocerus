@@ -248,14 +248,14 @@ void Project::CreateDefaultProjectStructure()
 	}
 }
 
-bool Project::CreateScene(string sceneFilename, const string& sceneName)
+bool Project::CreateScene(const string& sceneInputFilename, const string& sceneName)
 {
 	if (!IsProjectOpened()) return false;
-	if (IsSceneOpened())
-		CloseOpenedScene();
+	if (IsSceneOpened()) CloseOpenedScene();
 
-	if (sceneFilename.at(0) == '/')
-		sceneFilename = sceneFilename.substr(1);
+	string sceneFilename = sceneInputFilename;
+
+	if (sceneFilename.at(0) == '/')	sceneFilename = sceneFilename.substr(1);
 
 	string filename = mProjectPath + "/" + sceneFilename;
 	if (boost::filesystem::exists(filename))
@@ -524,4 +524,42 @@ void Core::Project::RefreshSceneList()
 			++it;
 		}
 	}
+}
+
+void Core::Project::RenameScene( const string& oldName, const string& newName, const string& newFilename )
+{
+	SceneInfoList::iterator it = Containers::find(mSceneList.begin(), mSceneList.end(), oldName);
+	if (it == mSceneList.end())
+	{
+		ocError << "Cant' rename scene " << oldName << "; it's not in the list";
+		return;
+	}
+
+	it->name = newName;
+	it->filename = newFilename;
+
+	ocInfo << "Scene " << oldName << " was renamed to " << newName;
+}
+
+bool hasEnding (const string& fullString, const string& ending)
+{
+	if (fullString.length() > ending.length()) {
+		return (0 == fullString.compare (fullString.length() - ending.length(), ending.length(), ending));
+	} else {
+		return false;
+	}
+}
+
+string Core::Project::FixSceneName( const string& oldName )
+{
+	string fixedName = oldName;
+	if (!hasEnding(fixedName, ".xml")) fixedName = fixedName + ".xml";
+	return fixedName;
+}
+
+string Core::Project::FixSceneFilename( const string& oldName )
+{
+	string fixedName = oldName;
+	if (!hasEnding(fixedName, ".xml")) fixedName = fixedName + ".xml";
+	return fixedName;
 }

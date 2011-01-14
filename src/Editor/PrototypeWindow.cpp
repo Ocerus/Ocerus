@@ -99,7 +99,7 @@ void Editor::PrototypeWindow::SetSelectedEntity( const EntitySystem::EntityHandl
 void PrototypeWindow::ShowCreatePrototypePrompt()
 {
 	GUISystem::PromptBox* prompt = new GUISystem::PromptBox();
-	prompt->SetText(TR("prototype_new_prompt"));
+	prompt->SetLabel(TR("prototype_new_prompt"));
 	prompt->RegisterCallback(GUISystem::PromptBox::Callback(this, &PrototypeWindow::CreatePrototypePromptCallback));
 	prompt->Show();
 }

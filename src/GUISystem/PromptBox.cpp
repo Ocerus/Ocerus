@@ -34,7 +34,7 @@ PromptBox::~PromptBox()
 	gGUIMgr.DestroyWindow(mPromptBox);
 }
 
-void PromptBox::SetText(const CEGUI::String& text)
+void PromptBox::SetLabel(const CEGUI::String& text)
 {
 	OC_CEGUI_TRY;
 	{
@@ -112,9 +112,20 @@ void GUISystem::PromptBox::EnsureWindowIsWideEnough()
 	}
 }
 
-void GUISystem::ShowPromptBox(const CEGUI::String& text, PromptBox::Callback callback, int32 tag)
+void GUISystem::PromptBox::SetText( const CEGUI::String& text )
+{
+	OC_CEGUI_TRY;
+	{
+		CEGUI::Window* editbox = mPromptBox->getChild(mPromptBox->getName() + "/Editbox");
+		editbox->setText(text);
+	}
+	OC_CEGUI_CATCH;
+}
+
+void GUISystem::ShowPromptBox(const CEGUI::String& label, const CEGUI::String& text, PromptBox::Callback callback, int32 tag)
 {
 	PromptBox* promptBox = new PromptBox(tag);
+	promptBox->SetLabel(label);
 	promptBox->SetText(text);
 	promptBox->RegisterCallback(callback);
 	promptBox->Show();

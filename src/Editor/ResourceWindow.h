@@ -49,13 +49,15 @@ namespace Editor
 			enum ePopupItem
 			{
 				PI_INVALID = 0,
-				PI_OPEN_SCENE
+				PI_OPEN_SCENE,
+				PI_RENAME_SCENE
 			};
 
 			void CreatePopupMenu();
 			void DestroyPopupMenu();
 			void OpenPopupMenu(ResourceSystem::ResourcePtr resource, float32 posX, float32 posY);
 			void OnPopupMenuItemClicked(CEGUI::Window* menuItem);
+			void OnRenameScenePromtboxConfirmed(bool clickedOK, const string& text, int32 tag);
 
 			CEGUI::Window* mPopupMenu;
 			CEGUI::Window* mResourceTypesPopupMenu;

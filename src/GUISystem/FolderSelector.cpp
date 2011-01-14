@@ -109,7 +109,7 @@ bool FolderSelector::OnButtonClicked(const CEGUI::EventArgs& e)
 bool FolderSelector::OnCreateDirectoryClicked(const CEGUI::EventArgs& e)
 {
 	OC_UNUSED(e);
-	ShowPromptBox(TR("create_directory_prompt"),
+	ShowPromptBox(TR("create_directory_prompt"), "",
 			PromptBox::Callback(this, &FolderSelector::CreateDirectoryPromptCallback));
 	return true;
 }

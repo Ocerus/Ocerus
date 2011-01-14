@@ -87,7 +87,10 @@ namespace ResourceSystem
 		bool RefreshAllResources(void);
 
 		/// Reloads all textures. Needed when recreating drawing context.
-		void RefreshAllTextures( void );
+		void RefreshAllTextures(void);
+
+		/// Renames the given resource. It renames the file on the disk as well if it belongs to the resource.
+		void RenameResource(ResourcePtr res, const string& newName, const string& newFilePath);
 
 		/// Performs a periodic test on resources to determine if they're up to date. The function is non-blocking.
 		/// The function is meant to be called each frame.

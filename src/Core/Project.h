@@ -13,6 +13,9 @@ namespace Core
 	{
 		string name;       ///< Name of the scene
 		string filename;   ///< Name of the XML file with scene (name of resource)
+
+		/// Operator for comparing to scene names.
+		bool operator==(const string& sceneName) const { return name == sceneName; }
 	};
 
 	/// The list of scenes.
@@ -77,9 +80,15 @@ namespace Core
 		/// @name Scene-related methods
 		//@{
 
+			/// Makes sure the scene name is correct and returns it as a result.
+			static string FixSceneName(const string& oldName);
+
+			/// Makes sure the scene filename is correct and returns it as a result.
+			static string FixSceneFilename(const string& oldName);
+
 			/// Creates the scene with a given file name and scene name.
 			/// @return False, if scene cannot be created, or another scene is already opened; otherwise returns True.
-			bool CreateScene(string sceneFilename, const string& sceneName);
+			bool CreateScene(const string& sceneFilename, const string& sceneName);
 
 			/// Opens the scene at given index in SceneList.
 			/// @return False, if scene is not found, or another scene is already opened; otherwise returns True.
@@ -102,6 +111,9 @@ namespace Core
 
 			/// Closes the opened scene.
 			void CloseOpenedScene();
+
+			/// Renames the scene in the list.
+			void RenameScene(const string& oldName, const string& newName, const string& newFilename);
 
 			/// Saves the association between specified resource and resource type to the resource type map.
 			void SetResourceType(ResourceSystem::ResourcePtr resource, ResourceSystem::eResourceType newType);
