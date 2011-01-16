@@ -474,7 +474,7 @@ The Ocerus uses an OpenGL renderer by default. But it is possible to implement a
 
 The only part of code, which uses the OpenGL, is the \emph{OglRenderer} class. It derives from the \emph{GfxRenderer} class and implements its abstract methods. There is about 20 methods that needs to be implemented by the new renderer. They are described in the Doxygen documentation.
 
-After the new renderer class is implemented, it must be initialized instead of old renderer. In the \emph{Application.cpp} file (located in \emph{Core}), the line:
+After the new renderer class is implemented, the initialization of the renderer must be changed. In the \emph{Application.cpp} file (located in \emph{Core}), the line:
 
 \begin{verbatim}
 GfxSystem::GfxRenderer::CreateSingleton<GfxSystem::OglRenderer>();
