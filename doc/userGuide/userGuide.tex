@@ -116,7 +116,7 @@ Make sure that the \texttt{Ball} entity is selected, then click the \textbf{Edit
 \section{Adding graphics content}
 Every file and directory that is placed into the project directory hierarchy is visible in the \textbf{Resources} view. To put files with your textures into the project, simply copy them somewhere into the project directory. When you add a file into the project directory, Ocerus automatically detects the type of the file and creates the suitable type of resource. The type of the resource is represented by an icon next to the resource name in the \textbf{Resource} view.
 
-You can either use the \texttt{ball.png} texture from the archive provided with this document, or you can create or get any texture you like. Either way, copy it to textures subdirectory of your project directory. Switch back to Ocerus and see that \texttt{ball.png} has appeared in the \textbf{Resources} view (see figure~\ref{fig:link_texture}).
+You can either use the \texttt{ball.png} texture from the archive provided with this document, or you can create or get any texture you like (see supported formats on page \pageref{sec:supported_formats}). Either way, copy it to textures subdirectory of your project directory. Switch back to Ocerus and see that \texttt{ball.png} has appeared in the \textbf{Resources} view (see figure~\ref{fig:link_texture}).
 
 Now Ocerus is aware of our texture. Let's use it as a \textbf{texture} property of our entity.
 
@@ -354,6 +354,14 @@ GUI layouts that are visible in your games are included into a scene by creating
 
 First, drag the \texttt{pinball.scheme} file from the \textbf{Resource} view to the \textbf{Scheme} property in the \textbf{Entity} view. Then drag the \texttt{gameplay.layout} file to the \textbf{Layout} property. Finally check the \textbf{Enabled} and \textbf{Visible} checkboxes.
 
+
+
+
+\section{Supported formats}
+\label{sec:supported_formats}
+Texture resources: JPEG, PNG, TGA, BMP, PSD, DDS, HDR \\
+Model resources: OBJ\footnote{Content of the corresponding MTL file must be inserted to the beginning of the file. When exported from Blender, following options should be checked: "Copy Images", "Normals", "Polygroups", "Objects", "Groups", "Material Groups".} \\
+CEGUI image resources: JPEG, PNG, TGA
 
 
 
