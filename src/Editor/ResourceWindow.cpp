@@ -258,6 +258,7 @@ void ResourceWindow::OnPopupMenuItemClicked(CEGUI::Window* menuItem)
 
 void Editor::ResourceWindow::OnRenameScenePromtboxConfirmed( bool clickedOK, const string& text, int32 tag )
 {
+	OC_UNUSED(tag);
 	if (!clickedOK) return;
 	if (text.empty()) return;
 

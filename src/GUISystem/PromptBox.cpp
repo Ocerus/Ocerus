@@ -75,6 +75,7 @@ bool PromptBox::OnButtonClicked(const CEGUI::EventArgs& e)
 	return true;
 }
 
+/// This method handles submitting the dialog with the ENTER key and rejecting it with the ESC key.
 bool PromptBox::OnEditboxKeyDown(const CEGUI::EventArgs& e)
 {
 	const CEGUI::KeyEventArgs& args = static_cast<const CEGUI::KeyEventArgs&>(e);

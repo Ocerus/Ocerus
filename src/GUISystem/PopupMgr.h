@@ -6,14 +6,16 @@
 #include "Base.h"
 #include "CEGUIForwards.h"
 #include "Utils/Callback.h"
-#include <CEGUIEvent.h>
 
 /// Fast access to the popup manager.
 #define gPopupMgr GUISystem::GUIMgr::GetSingleton().GetPopupMgr()
 
 namespace GUISystem
 {
-	/// The PopupMgr class manages popup menus.
+	/// The PopupMgr class manages popup menus. To add a popup menu to your code, use the CreatePopupMenu
+	/// and the CreateMenuItem method to create the menu and its items. When your popup menu is constructed,
+	/// save a pointer to it and whenever you wish to display it, pass it to the ShowPopup() method, together
+	/// with a callback to your callback method.
 	class PopupMgr
 	{
 	public:
@@ -46,7 +48,8 @@ namespace GUISystem
 		/// Destroys a popup menu. You should always use this method to destroy popup menus created by CreatePopupMenu(),
 		void DestroyPopupMenu(CEGUI::Window* popupMenu);
 		
-		/// Constructs a menu item that can be inserted into a popup menu.
+		/// Constructs a menu item that can be inserted into a popup menu. Do not forget to insert it into your
+		/// popup menu by calling the CEGUI::Window::addChild() method of the popup menu object.
 		/// @param windowName The CEGUI name of the window to be created.
 		/// @param text Text of the menu item.
 		/// @param tooltip Tooltip of the menu item.
@@ -60,15 +63,17 @@ namespace GUISystem
 		void DoAutoHide(float posX, float posY);
 
 	private:
+		/// Called when a menuitem of the current popup menu is clicked.
 		bool OnMenuItemClicked(const CEGUI::EventArgs&);
+
+		/// Called when the popup menu is opened.
 		bool OnPopupMenuOpened(const CEGUI::EventArgs&);
-		void CloseSubmenus(CEGUI::Window*);
+
+		/// Closes all submenus of the specified popupMenu.
+		void CloseSubmenus(CEGUI::Window* popupMenu);
 
 		CEGUI::Window* mCurrentPopupWindow;
 		Callback mCurrentCallback;
-
-		typedef list<CEGUI::Event::Connection> EventConnectionList;
-		EventConnectionList mEventConnections;
 	};
 }
 

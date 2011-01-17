@@ -9,7 +9,8 @@
 namespace GUISystem
 {
 	/// The MessageBox class provides a modal dialog for informing the user or for asking the user a question
-	/// and receiving the answer.
+	/// and receiving the answer. To use it, create and setup the MessageBox, register a callback to your callback
+	/// function and then call Show(). You can use the ShowMessageBox function that does this in one step.
 	class MessageBox
 	{
 	public:

@@ -9,6 +9,13 @@
 namespace GUISystem
 {
 	/// The PromptBox class provides a modal dialog for allowing user enter a string.
+	/// Usage:
+	/// 	1. Create it.
+	/// 	2. Use SetLabel and SetText methods to set it up.
+	/// 	3. Register a callback to your callback function using the RegisterCallback() With the RegisterCallback() method.
+	/// 	4. Call the Show() method.
+	/// 	5. As soon as the user either accepts or rejects the dialog, your callback function gets called.
+	/// Note that you can use the ShowPromptBox function to do that all in one step.
 	class PromptBox
 	{
 	public:
@@ -42,7 +49,10 @@ namespace GUISystem
 	private:
 		/// @name CEGUI Callbacks
 		//@{
+			/// A button in the dialog has been clicked.
 			bool OnButtonClicked(const CEGUI::EventArgs&);
+
+			/// A key in the dialog has been pressed.
 			bool OnEditboxKeyDown(const CEGUI::EventArgs&);
 		//@}
 

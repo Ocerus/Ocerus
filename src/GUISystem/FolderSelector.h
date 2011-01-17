@@ -10,6 +10,11 @@
 namespace GUISystem {
 
 	/// The FolderSelector class provides a modal dialog for selecting a folder.
+	/// Usage:
+	/// 	1. Create it.
+	/// 	2. Register a callback to your callback function using the RegisterCallback() With the RegisterCallback() method.
+	/// 	3. Call the Show() method.
+	/// 	4. As soon as the user either accepts or rejects the dialog, your callback function gets called.
 	class FolderSelector
 	{
 	public:
