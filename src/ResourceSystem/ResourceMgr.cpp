@@ -691,3 +691,18 @@ void ResourceSystem::ResourceMgr::RenameResource( ResourcePtr res, const string&
 
 	ocInfo << "Renamed resource " << oldName << " to " << newName;
 }
+
+bool ResourceSystem::ResourceMgr::ResourceExists( const StringKey& group, const StringKey& name )
+{
+	ResourceGroupMap::const_iterator gi = mResourceGroups.find(group);
+	if (gi == mResourceGroups.end()){
+		return false;
+	}
+	const ResourceMap& resmap = *gi->second;
+	ResourceMap::const_iterator ri = resmap.find(name);
+	if (ri == resmap.end())
+	{
+		return false;
+	}
+	return true;
+}

@@ -105,6 +105,9 @@ namespace ResourceSystem
 		/// Loading listener receives callbacks from the manager when a resource is being loaded.
 		void SetLoadingListener(IResourceLoadingListener* listener);
 
+		/// Returns true if the resource exists in the manager.
+		bool ResourceExists(const StringKey& group, const StringKey& name);
+
 		/// Retrieves a resource from the manager. If the resource can't be found, null ResourcePtr is returned.
 		/// @param groupSlashName Full name of the resource including group name/resource's filename.
 		ResourcePtr GetResource(const char* groupSlashName);

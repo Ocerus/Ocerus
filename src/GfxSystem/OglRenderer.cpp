@@ -271,9 +271,16 @@ void GfxSystem::OglRenderer::DrawTexturedMesh( const TexturedMesh& mesh ) const
 		if (!objMaterial->colorMapFilename.empty())
 		{
 			glEnable(GL_TEXTURE_2D);
-			TexturePtr texRes = (TexturePtr)gResourceMgr.GetResource("MeshTextures", objMaterial->colorMapFilename);
-			if (!texRes)
+			TexturePtr texRes;
+			if (gResourceMgr.ResourceExists("MeshTextures", objMaterial->colorMapFilename))
+			{
+				texRes = (TexturePtr)gResourceMgr.GetResource("MeshTextures", objMaterial->colorMapFilename);
+			}
+			else
+			{
 				texRes = (TexturePtr)gResourceMgr.GetResource("General", ResourceSystem::RES_NULL_TEXTURE);
+			}
+			OC_ASSERT((bool)texRes);
 
 			glBindTexture(GL_TEXTURE_2D, texRes->GetTexture());
 		}
