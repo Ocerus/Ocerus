@@ -1,0 +1,11 @@
+<?xml version="1.0" ?>
+
+<Imageset Name="Buttons" Imagefile="gui/buttons.png">
+	<Image Name="LeftFlipperOn" XPos="0" YPos="0" Width="128" Height="128" />
+	<Image Name="LeftFlipperOff" XPos="128" YPos="0" Width="128" Height="128" />
+	<Image Name="LeftFlipperHover" XPos="256" YPos="0" Width="128" Height="128" />
+
+	<Image Name="RightFlipperOn" XPos="0" YPos="129" Width="128" Height="128" />
+	<Image Name="RightFlipperOff" XPos="128" YPos="129" Width="128" Height="128" />
+	<Image Name="RightFlipperHover" XPos="256" YPos="129" Width="128" Height="128" />
+</Imageset>

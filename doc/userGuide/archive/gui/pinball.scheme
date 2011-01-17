@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<GUIScheme Name="Pinball">
+
+	<Imageset Filename="gui/buttons.imageset" />
+	
+	<FalagardMapping WindowType="Pinball/Button" TargetType="CEGUI/PushButton" Renderer="Falagard/Button" LookNFeel="TaharezLook/Button" />
+	<FalagardMapping WindowType="Pinball/ImageButton" TargetType="CEGUI/PushButton" Renderer="Falagard/Button" LookNFeel="TaharezLook/ImageButton" />
+	<FalagardMapping WindowType="Pinball/StaticText" TargetType="DefaultWindow" Renderer="Falagard/StaticText" LookNFeel="TaharezLook/StaticText" />
+	<FalagardMapping WindowType="Pinball/StaticImage" TargetType="DefaultWindow" Renderer="Falagard/StaticImage" LookNFeel="TaharezLook/StaticImage" />
+	<FalagardMapping WindowType="Pinball/FrameWindow"  TargetType="CEGUI/FrameWindow" Renderer="Falagard/FrameWindow"  LookNFeel="TaharezLook/FrameWindow" />
+	<FalagardMapping WindowType="Pinball/GroupBox" TargetType="CEGUI/GroupBox"   Renderer="Falagard/Default"   LookNFeel="TaharezLook/GroupBox" />
+
+</GUIScheme>

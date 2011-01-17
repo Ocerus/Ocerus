@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+
+<GUILayout>
+<Window Type="DefaultWindow" Name="GameLayout">
+	<Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{1,0},{1,0}}" />
+	<Window Type="Pinball/ImageButton" Name="GameLayout/FlipperLeftButton">
+		<Property Name="UnifiedAreaRect" Value="{{0,2},{1,-52},{0,52},{1,-2}}" />
+		<Property Name="NormalImage" Value="set:Buttons image:LeftFlipperOn"/>
+		<Property Name="HoverImage" Value="set:Buttons image:LeftFlipperOn"/>
+		<Property Name="PushedImage" Value="set:Buttons image:LeftFlipperHover"/>
+		<Property Name="DisabledImage" Value="set:Buttons image:LeftFlipperOff"/>
+		<Event Name="MouseButtonDown" Function="OnFlipperLeftButtonDown"/>
+		<Event Name="MouseButtonUp" Function="OnFlipperLeftButtonUp"/>
+	</Window>  
+	<Window Type="Pinball/ImageButton" Name="GameLayout/FlipperRightButton">
+		<Property Name="UnifiedAreaRect" Value="{{1,-52},{1,-52},{1,-2},{1,-2}}" />
+		<Property Name="NormalImage" Value="set:Buttons image:RightFlipperOn"/>
+		<Property Name="HoverImage" Value="set:Buttons image:RightFlipperOn"/>
+		<Property Name="PushedImage" Value="set:Buttons image:RightFlipperHover"/>
+		<Property Name="DisabledImage" Value="set:Buttons image:RightFlipperOff"/>
+		<Event Name="MouseButtonDown" Function="OnFlipperRightButtonDown"/>
+		<Event Name="MouseButtonUp" Function="OnFlipperRightButtonUp"/>
+	</Window>  
+</Window>
+</GUILayout>
