@@ -37,7 +37,9 @@ This document only shows how to make things work. If you want to understand how 
 
 \chapter{Components}
 
-Probably the first thing to extend are the components. They can easily add functionality to the game entities. Similar result can be achieved by using scripts but the logic in components is not limited to predefined script functions and runs faster. In the following sections, there will be a sequence of steps that are necessary in order to create and use a new component. 
+Every game object is represented by an entity which is a compound of components that provides it with various functionalities. A component can have several properties (and functions) which can be read or written (called) via their getters and setters (or functions themselves) and which are accessible through their unique name. It can also react to sent messages such as an initialization, a drawing, a logic update etc. by its own behavior.
+
+The Ocerus provides some predefined components that provides basic features such as a graphic representation,  physics, scripts etc. It is possible to define new components. They can add new functionality to the game entities. Similar result can be achieved by using scripts but the logic in components is not limited to predefined script functions and runs faster. In the following sections, there will be a sequence of steps that are necessary to create and use a new component. 
 
 There will be also an example of a simple component that will make an entity to move up and down. It would probably be better to implement this particular functionality by a script but it will serve well as an example.
 
@@ -70,7 +72,7 @@ Finally, the header file with the component class must be included in the \emph{
 
 \section{Adding Component Properties}
 
-The component properties are represented by the class member variables. But just defining a class member variable is not enough to make it into a regular property. It needs to be registered in the RTI. Registering properties is done in the static method \emph{RegisterReflection}. It is automatically called during the initialization process of the \emph{EntitySystem}. In this method, there should be called the \emph{RegisterProperty} function. Usage of that function looks like this:
+The component properties are represented by the class member variables. But just defining a class member variable is not enough to make it into a regular property. It needs to be registered in the RTTI. Registering properties is done in the static method \emph{void RegisterReflection()}. It is automatically called during the initialization process of the \emph{EntitySystem}. In this method, there should be called the \emph{RegisterProperty} function. Usage of that function looks like this:
 
 \footnotesize 
 \begin{verbatim}
@@ -103,12 +105,12 @@ Also component functions can be registered so they can be called from a script. 
 
 \footnotesize 
 \begin{verbatim}
-RegisterFunction("Function Name", &FunctionAddr, Access flag,
+RegisterFunction("Function Name", &Function, Access flag,
   "Function description");
 \end{verbatim}
 \normalsize
 
-Back to the example component. Let's say it will have three properties and one function. First property for the amplitude, second for the period of moving, third for the timer and function for reseting the timer. All three properties will be of the \emph{float32} data type. Setters and getters must be defined as well as the \emph{RegisterProperty} function. 
+Back to the example component. Let's say it will have three properties and one function. First property for the amplitude, second for the period of moving, third for the timer and a function for reseting the timer. All three properties will be of the \emph{float32} data type. Setters and getters must be defined as well as the \emph{RegisterReflection} function. 
 
 The example component needs to access and change the position of the entity. The position is defined in the \emph{Transform} component. To ensure that the entity have \emph{Transform} component, the dependency must be added. For that purpose serves the \emph{AddDependency} function. It receives a component type as a parameter (component type is defined as \emph{CT\_[Component class name]}). It will also force the dependent component to initialize later than the other component.
 
@@ -121,9 +123,12 @@ namespace EntityComponents
   class ExampleComp : public RTTIGlue<ExampleComp, Component>
   {
   public:
+    // Creation of the component. Sets all properties to 0.
     virtual void Create(void){mAmplitude = mPeriod = mTimer = 0;}
+    // Destruction of the component. Nothing needs to be destructed.
     virtual void Destroy(void){}
 
+    // Function for reseting the timer.
     void ResetTimer(void)
     {
        mTimer = 0;
@@ -164,6 +169,7 @@ namespace EntityComponents
     void SetTimer(float32 value) { mTimer = value; }
 
   private:
+    // Definition of member variables that are used as properties.
     float32 mAplitude;
     float32 mPeriod;
     float32 mTimer;
@@ -174,7 +180,7 @@ namespace EntityComponents
 
 \section{Entity Messages}
 
-Entities can receive messages. They are sent by the engine when some event occurs. It can be initialization of the entity, update in physics, pressed key etc. Messages can be also sent from a script.
+Entities can receive messages. They are sent by the engine when some event occurs. It can be an initialization of the entity, an update in physics, a pressed key etc. Messages can be also sent from a script.
 
 A message that is sent to an entity is distributed to all its components. It can also carry parameters.
 
@@ -282,7 +288,7 @@ The scripts, on the other hand, can be changed real-time, when the editor is run
 
 \chapter{Script System}
 
-The Script system provides quite a powerful tool for programming the game logic without having to modify and compile the source code. Even if there are hundreds of registered functions, classes, operators etc., it could be useful to register some more. The Script system is prepared for this so it is not difficult to register a new stuff.
+The Script system provides quite a powerful tool for programming the game logic without having to modify and compile the source code. Even if there are hundreds of registered functions, classes, operators etc., it could be useful to register some more. The Script system is prepared for this so it is not difficult to register some new stuff.
 
 The following section will show a simple example of how to register a new class with methods in the Script system. It will be described only briefly. For more details, please see the AngelScript documentation \cite{angelscript}. Especially chapter \emph{Using AngelScript/Registering the application interface}.
 
@@ -294,6 +300,11 @@ Registering of new class (named \emph{NewClass}) looks like this:
 
 \footnotesize 
 \begin{verbatim}
+class NewClass
+{
+  ...
+};
+
 r = engine->RegisterObjectType("NewClass", sizeof(NewClass),
  asOBJ_VALUE | asOBJ_APP_CLASS_C);
 OC_SCRIPT_ASSERT();
@@ -319,10 +330,14 @@ Class methods should be registered like this:
 
 \footnotesize 
 \begin{verbatim}
-int32 NewClass::ClassMethod(float32 f)
+class NewClass
 {
-  // Do something
-}
+  int32 ClassMethod(float32 f)
+  {
+    // Do something
+  }
+  ...
+};
 
 r = engine->RegisterObjectMethod("NewClass",
  "int32 class_method(float32)", 
@@ -389,7 +404,21 @@ OC_SCRIPT_ASSERT();
 
 The parameters are the same as in \emph{RegisterObjectMethod} method, only the first one is missing.
 
- It is also possible to register enumerations (\emph{RegisterEnum, RegisterEnumValue}) and typedefs for primitive types (\emph{RegisterTypedef}).
+ It is also possible to register enumerations (\emph{RegisterEnum, RegisterEnumValue}) and typedefs for primitive types (\emph{RegisterTypedef}). The usage is quite easy and can be found in the AngelScript documentation\cite{angelscript}.
+
+\section{Usage of the new class in a script}
+After the new class was registered, it can be used in a script just like in normal C++ code.
+\footnotesize 
+\begin{verbatim}
+  NewClass c;
+  c.class_method(0);
+\end{verbatim}
+\normalsize
+
+\section{Conclusion}
+Scripts should be used for most of the game logic including AI, GUI control, input etc.
+Registering new functions to the Script system can add some new functionality but it could also help performance. The logic in scripts runs slower than the logic in the source code. For example the pathfinding could be too slow, when implemented in a script. A faster solution would be to define functions that compute the pathfinding in the source code and then register the functions that return the result to the Script system.
+
 
 \chapter{Resource Types}
 
@@ -403,7 +432,7 @@ The new resource class has to override some methods:
 \item
 Constructor and destructor.
 \item
-Static \emph{CreateMe()} method. Returns a special shared pointer (\emph{ResourceSystem::ResourcePtr}) that points to the new resource class intance. So it should look like this:
+Static \emph{CreateMe()} method. Returns a special shared pointer (\emph{ResourceSystem::ResourcePtr}) that points to the new resource class intance. This pointer allows type-checked casting to specific resource pointers. So it should look like this:
 
 \footnotesize 
 \begin{verbatim}
@@ -438,16 +467,17 @@ size_t NewResource::LoadImpl()
   DataContainer dc;
   size_t dataSize = 0;
 
-  //loads data from the file to the data container
-  //returns true if successful
+  // loads data from the file to the data container
+  // returns true if successful
   if (GetRawInputData(dc))	
   {
     dataSize = dc.GetSize();
 
-    //get pointer to data byte stream
+    // get pointer to data byte stream
     uint8* data = dc.GetData();
 
-    // parse the data ...
+    // parse the data
+    // save the data into own data structure
 
     dc.Release();
   }
@@ -466,7 +496,7 @@ The resource class can have additional methods for accessing the resource type s
 
 \end{itemize}
 
-Defining new resource types is necessary when adding new functionality that requires a data from external files. For example, a new component that adds sounds to an entity would need a new resource type.
+Defining new resource types is necessary when adding new functionality that requires a data from external files. For example, a new component that adds sounds to an entity would need a new resource type. The component should have a \emph{ResourcePtr} typed property, through which it could access the resource data, and it should define and export functions that will allow to play the sound from a script.
 
 \chapter{Renderer}
 
