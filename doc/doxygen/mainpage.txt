@@ -11,7 +11,7 @@ This is a reference manual to Ocerus - a game engine suited for middle-sized <a 
 
 
 @subsection s2 Where to start?
-It's probably best starting with the <a href="../../userDocumentation/Documentation.pdf">user guide</a> to Ocerus. It will give you a basic idea about the architecture of the engine and help you orient in the code.
+If you're unfamiliar with the controls of the editor you should read the <a href="../UserGuide.pdf">user guide</a> to Ocerus. It covers the basic controls and shows you how to create a simple game. Then, if you're interested in extending the engine you want to read this <a href="../ExtendingOcerus.pdf">extensions guide</a>. Finally, if you want to get deep into the inner stuff of the engine you can read the detailed description of its parts in the <a href="../DesignDocumentation.pdf">design documentation</a>.
 
 
 @section architecture Architecture
@@ -53,8 +53,12 @@ There is a project development timeline in the following list:
 
 10/2010 - GUI layout component, sample game GUI, shortcuts, documentation, game deploy
 
-11/2010 - testing, reviewing documentation, project deploy
-  
+11/2010 - testing, reviewing documentation
+
+12/2010 - bug fixing, reviewing documentation
+
+1/2011 - reviewing documentation
+
 
 @section conclusion Conclusion
 This project had two main objectives: to make game objects generic by constructing them from components and to make it possible to edit the game while it's running. We find these two things crucial while developing a game in a small team. That said we believe we've successfuly put these features into the final application.

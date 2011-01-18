@@ -7,7 +7,7 @@
 @section intro Introduction
   
 This is a reference manual to the scripting language used in Ocerus. To see the C++ reference manual to Ocerus
-see <a href="../../doxygen">doxygen</a>.
+visit <a href="../Doxygen.html">doxygen</a>.
 
 The scripting language used is <a href="http://www.angelcode.com/angelscript/">AngelScript</a>. This manual
 describes only functions specific to Ocerus. To see the documentation to the language itself (including
@@ -25,7 +25,7 @@ the documentation. However, when you write the code you must use @ instead. Ange
 
 @section howtowrite How to write scripts
 
-First of all make sure to read the <a href="../../userGuide">user guide</a> which will teach you how to create
+First of all make sure to read the <a href="../UserGuide.pdf">user guide</a> which will teach you how to create
 and set up a project and create your first script. Script are connected to the other parts of the engine
 by using entity components. So to write a script you add a component to the entity related to your script.
 Then link the script file to the component by dragging it there from the resource window. Once this is done

@@ -108,11 +108,23 @@ bool Editor::EditorMenu::OnMenuItemClicked(const CEGUI::EventArgs& e)
 		case MI_EDIT_CREATEPROTOTYPE:
 			gEditorMgr.CreatePrototypeFromSelectedEntity();
 			break;
-		case MI_HELP_USERDOCUMENTATION:
-			gApp.OpenFileInExternalApp("data/docs/Documentation.pdf");
+		case MI_HELP_DESIGNDOCUMENTATION:
+			gApp.OpenFileInExternalApp("docs/DesignDocumentation.pdf");
+			break;
+		case MI_HELP_EXTENDINGOCERUS:
+			gApp.OpenFileInExternalApp("docs/ExtendingOcerus.pdf");
+			break;
+		case MI_HELP_SCRIPTREFERENCE:
+			gApp.OpenFileInExternalApp("docs/ScriptReference.html");
+			break;
+		case MI_HELP_DOXYGEN:
+			gApp.OpenFileInExternalApp("docs/Doxygen.html");
 			break;
 		case MI_HELP_SHORTCUTS:
-			gApp.OpenFileInExternalApp("data/docs/Shortcuts.pdf");
+			gApp.OpenFileInExternalApp("docs/Shortcuts.pdf");
+			break;
+		case MI_HELP_USERGUIDE:
+			gApp.OpenFileInExternalApp("docs/UserGuide.pdf");
 			break;
 		case MI_HELP_ABOUT:
 			GUISystem::ShowMessageBox(gStringMgrSystem.GetTextData(GUISystem::GUIMgr::GUIGroup,
@@ -357,9 +369,13 @@ void EditorMenu::InitMenu()
 	mTopMenu->addChildWindow(itemHelp);
 	CEGUI::Window* helpSubmenu = CreatePopupMenu("Editor/TopMenu/Help/AutoPopup");
 	itemHelp->addChildWindow(helpSubmenu);
-	helpSubmenu->addChildWindow(CreateMenuItem("Editor/TopMenu/Help/UserDocumentation", TR("user_documentation"), TR("user_documentation_hint"), MI_HELP_USERDOCUMENTATION));
-	helpSubmenu->addChildWindow(CreateMenuItem("Editor/TopMenu/Help/Shortcuts", TR("shortcuts"), TR("shortcuts"), MI_HELP_SHORTCUTS));
 	helpSubmenu->addChildWindow(CreateMenuItem("Editor/TopMenu/Help/About", TR("about"), TR("about_hint"), MI_HELP_ABOUT));
+	helpSubmenu->addChildWindow(CreateMenuItem("Editor/TopMenu/Help/UserGuide", TR("user_guide"), TR("user_guide_hint"), MI_HELP_USERGUIDE));
+	helpSubmenu->addChildWindow(CreateMenuItem("Editor/TopMenu/Help/Shortcuts", TR("shortcuts"), TR("shortcuts"), MI_HELP_SHORTCUTS));
+	helpSubmenu->addChildWindow(CreateMenuItem("Editor/TopMenu/Help/ScriptReference", TR("script_reference"), TR("script_reference_hint"), MI_HELP_SCRIPTREFERENCE));
+	helpSubmenu->addChildWindow(CreateMenuItem("Editor/TopMenu/Help/ExtendingOcerus", TR("extending_ocerus"), TR("extending_ocerus_hint"), MI_HELP_EXTENDINGOCERUS));
+	helpSubmenu->addChildWindow(CreateMenuItem("Editor/TopMenu/Help/DesignDocumentation", TR("design_documentation"), TR("design_documentation_hint"), MI_HELP_DESIGNDOCUMENTATION));
+	helpSubmenu->addChildWindow(CreateMenuItem("Editor/TopMenu/Help/Doxygen", TR("doxygen"), TR("doxygen_hint"), MI_HELP_DOXYGEN));
 }
 
 void EditorMenu::InitToolbar()

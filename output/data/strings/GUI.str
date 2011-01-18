@@ -68,16 +68,26 @@ delete_selected_entities_hint=Deletes selected entities.
 create_prototype=Create Prototype
 create_prototype_hint=Exports the current entity to a prototype.
 help=Help
-user_documentation=User Documentation
-user_documentation_hint=Opens the user documentation document.
-shortcuts=Shorcuts
-shortcuts_hint=Displays a list of shortcuts of the editor.
-about=About
-about_hint=Displays the info about the application.
-about_message_text=Ocerus\na game development environment\nhttp://ocerus.sourceforge.net
 deploy_project=Deploy
 deploy_project_hint=Deploys the game for a specific platform.
 no_platform=empty
+
+# help
+about=About
+about_hint=Displays the info about the application.
+about_message_text=Ocerus\na game development environment\nhttp://ocerus.sourceforge.net
+user_guide=User Guide
+user_guide_hint=Tutorial and a description of the editor.
+shortcuts=Shorcuts
+shortcuts_hint=List of shortcuts of the editor.
+script_reference=Script Reference
+script_reference_hint=Reference documentation of the scripts.
+extending_ocerus=Extending Ocerus
+extending_ocerus_hint=A guide on how to extend the Ocerus engine.
+design_documentation=Design Documentation
+design_documentation_hint=Detailed description of the Ocerus engine.
+doxygen=Doxygen
+doxygen_hint=Reference documentation of the engine.
 
 # layer manager
 layers=Layers

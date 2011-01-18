@@ -1,73 +1,15 @@
 #!/bin/bash
-set -e
-
-function clearDirectory {
-	echo "Removing `pwd`/$1"
-	rm -rf `pwd`/"$1"
-}
-
-function processDirectory {
-	# copies the directory into the output
-	# parameters: runDirectory source destination inclusionRegex=".*" exclusionRegex=""
-	
-	if [ $# -lt 4 ]; then
-		INC_REGEX='.*'
-	else
-		INC_REGEX=$4
-	fi
-	
-	if [ $# -lt 5 ]; then
-		EXC_REGEX='.*\.svn\(/.*\)?'
-	else
-		EXC_REGEX='\(.*\.svn\(/.*\)?\|'$5'\)'
-	fi
-	
-	echo "Changing to $1 and processing $2 to $3 included $INC_REGEX excluded $EXC_REGEX"
-	DEST=`pwd`/$3
-	
-	cd "$1"	
-	
-	NEW_DIRS=`find "$2" -type d -iregex "$INC_REGEX" -and -not -iregex "$EXC_REGEX" -printf "$DEST/%p " `
-	FILES=`find "$2" -type f -iregex "$INC_REGEX" -and -not -iregex "$EXC_REGEX"`
-	
-	mkdir -p "$DEST"
-	if [ -n "$NEW_DIRS" ]; then
-		mkdir -p $NEW_DIRS
-	fi
-	
-	if [ -z "$FILES" ]; then
-		echo "No files to copy"
-	else
-		cp --parents $FILES $DEST
-	fi
-	
-	cd - > /dev/null
-}
-
-function excludeDir {
-	echo -n '.*/'"$1"'\(/.*\)?$'
-}
-
-function excludeDirs {
-	for dir in "$@"; do
-		echo -n '.*/'"$dir"'\(/.*\)?$\|'
-	done
-}
-
-
-
-CUR_DIR_NAME=`basename \`pwd\``
-if [ "$CUR_DIR_NAME" != "tools" ]; then
+if [ `basename \`pwd\`` != "tools" ]; then
 	echo "The script must be run from the tools/ directory"
 	exit
 fi
+source ./common.sh
 
 
-OS=`uname | tr [A-Z] [a-z]`
 if [[ "$OS" == cygwin* ]]; then
 	echo "\n\n"
 	echo "------MAKE SURE YOU BUILD THE FOLLOWING PROJECTS FIRST:"
-	echo "* doc/userDocumentation/doc"
+	echo "* documentation"
 	echo "* Win32/_Ocerus in Release"
 	echo "* Win32/_Ocerus in Deploy"
 	echo "\n\n"
@@ -80,7 +22,6 @@ cd ..
 OUTPUT_DIR=../output
 
 clearDirectory $OUTPUT_DIR/bin/Win32
-clearDirectory $OUTPUT_DIR/doc
 clearDirectory $OUTPUT_DIR/shared
 clearDirectory $OUTPUT_DIR/sources/cmake
 clearDirectory $OUTPUT_DIR/sources/externalLibs
@@ -90,8 +31,6 @@ clearDirectory $OUTPUT_DIR/sources/Win32
 
 processDirectory Win32/bin/Release . $OUTPUT_DIR/bin/Win32 '.*Ocerus\.exe$\|.*Ocerus\.pdb$\|.*libexpat\.dll$'
 processDirectory output . $OUTPUT_DIR/bin/Win32 '.*dbghelp\.dll$\|.*SDL\.dll$\|.*SILLY\.dll$\|.*SILLY_d\.dll$'
-processDirectory . doc/doxygen $OUTPUT_DIR '.*/html/.*$\|.*index\.html$\|.*mainpage\.txt$\|.*Ocerus\.dox$'
-processDirectory . doc/userDocumentation $OUTPUT_DIR '.*Documentation\.pdf$'
 processDirectory output . $OUTPUT_DIR/shared '.*/data/.*\|.*/deploy/.*\|.*/test/.*' '.*ActionSave\.xml$'
 processDirectory output/projects . $OUTPUT_DIR/shared/samples
 processDirectory . src $OUTPUT_DIR/sources
@@ -112,6 +51,7 @@ processDirectory . externalLibs/rudeconfig $OUTPUT_DIR/sources '.*' $LIBS_EXCLUD
 processDirectory . externalLibs/SDL $OUTPUT_DIR/sources '.*' $LIBS_EXCLUDE
 processDirectory . externalLibs/SOIL $OUTPUT_DIR/sources '.*' $LIBS_EXCLUDE`excludeDir lib`
 processDirectory . externalLibs/UnitTest++ $OUTPUT_DIR/sources '.*' $LIBS_EXCLUDE
+tools/documentation.sh $OUTPUT_DIR/shared/docs
 
 processDirectory ../cd . $OUTPUT_DIR
 
