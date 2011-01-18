@@ -85,7 +85,7 @@ In the table \ref{tab:library-list} a brief description of all used libraries is
 	\label{tab:library-list}
 \end{table}
 
-Except these libraries some small pieces of a third party code were used that are listed in the table \ref{tab:code-list}.
+Except these libraries, some small pieces of a third party code that were used are listed in the table \ref{tab:code-list}.
 
 \begin{table}[htbp]
 	\centering
@@ -109,7 +109,7 @@ Except these libraries some small pieces of a third party code were used that ar
 	\label{tab:code-list}
 \end{table}
 
-In the following chapters each of the project systems will be described from the design view. At the beginning of each chapter there are a UML class diagram and a paragraph about a purpose of the described system and at the end of most chapters there is a small glossary of terms used in that chapter. In UML class diagrams two specific stereotypes are used. The first one is the \verb/<<singleton>>/ stereotype used in classes derived from the \emph{Utils::Singleton<T>} class, which is an implementation of the singleton design pattern. The second one is the \verb/<<external>>/ stereotype used in classes defined and implemented in some library specified in the table \ref{tab:library-list}.
+In the following chapters each of the project systems will be described from the design view. At the beginning of each chapter there is an UML class diagram and a paragraph about a purpose of the described system and at the end of most chapters there is a small glossary of terms used in that chapter. In UML class diagrams, two specific stereotypes are used. The first one is the \verb/<<singleton>>/ stereotype used in classes derived from the \emph{Utils::Singleton<T>} class, which is an implementation of the singleton design pattern. The second one is the \verb/<<external>>/ stereotype used in classes defined and implemented in some library specified in the table \ref{tab:library-list}.
 
 
 \chapter{Core}
@@ -125,7 +125,7 @@ The Core namespace is the main part of the engine. It contains its entry point a
 
 \section{Application}
 
-When the program starts it creates an instance of the class \emph{Core::Application}, initializes it by calling its method \emph{Init} and calls the \emph{RunMainLoop} method which runs until the application is shutdown, then the instance is deleted and the program finishes (see figure \ref{fig:application-states}).
+When the program starts, it creates an instance of the class \emph{Core::Application}, initializes it by calling its method \emph{Init} and calls the \emph{RunMainLoop} method which runs until the application is shutdown, then the instance is deleted and the program finishes (see figure \ref{fig:application-states}).
 
 \begin{figure}[htbp]
 	\centering
@@ -134,7 +134,7 @@ When the program starts it creates an instance of the class \emph{Core::Applicat
 	\label{fig:application-states}
 \end{figure}
 
-On the initialization of the application the configuration is read (see section \ref{sec:config}) and all engine systems are created and initialized as well as the loading screen and game classes. The state of application is changed to \emph{loading} and the main loop is running until the state is changed to \emph{shutdown}. At the main loop window messages are processed, performance statistic are updated and other engine systems including the game class are loaded (in the \emph{loading} state) or updated and drawn (in the \emph{game} state).
+On the initialization of the application, the configuration is read (see section \ref{sec:config}) and all engine systems are created and initialized as well as the loading screen and game classes. The state of application is changed to \emph{loading} and the main loop is running until the state is changed to \emph{shutdown}. At the main loop window messages are processed, performance statistic are updated and other engine systems including the game class are loaded (in the \emph{loading} state) or updated and drawn (in the \emph{game} state).
 
 In the application class there are also methods for getting an average and last FPS statistic, methods for showing and hiding a debug console as well as writing message to it or a method for executing an external file. There are also the variables indicating whether the current application instance includes the editor (in a game distribution the editor should be disabled) and whether the editor is currently turned on so the game is running only in a small window instead of a full screen mode. From this class it is possible to get the current project as well as deploy it to the specific platform and destination.
 
@@ -171,25 +171,25 @@ The \emph{Core::Game} class manages the most important stuff needed to run the g
 \end{table}
 
 
-Before the game initialization at the method \emph{Init} a valid render target (a camera and a viewport, see section \ref{sec:render-target}) must be set by the method \emph{SetRenderTarget} or the default one must be created by the method \emph{CreateDefaultRenderTarget} to know where to draw the game content. This is done by the \emph{Core::Project} class when a scene is being opened and it can delegate it to the editor if it is available. Then physics, time, an action etc. are initialized and in the \emph{Update} method called in the main loop they are updated.
+Before the game initialization at the method \emph{Init}, a valid render target (a camera and a viewport, see section \ref{sec:render-target}) must be set by the method \emph{SetRenderTarget} or the default one must be created by the method \emph{CreateDefaultRenderTarget} to know where to draw the game content. This is done by the \emph{Core::Project} class when a scene is being opened and it can delegate it to the editor if it is available. Then physics, time, an action etc. are initialized and in the \emph{Update} method called in the main loop they are updated.
 
 The drawing of a scene is invoked in the method \emph{Draw}. The render target is cleared, all entities in the current scene are drawn by a renderer and the rendering is finalized.
 
-There are several methods for handling a game action which can be in two states -- paused or running. When the action is running physics and logic of entities are updated in the method \emph{Update} which means the corresponding messages are broadcast to all entities before and after the update of the physical engine. The action can be paused, resumed and restarted to previously saved position. There is a global timer that measures game time (can be obtain by the method \emph{GetTimeMillis}) when the game is running which is used by other systems such as the script system.
+There are several methods for handling a game action that can be in two states -- paused or running. When the action is running, the physics and the logic of entities is being updated in the method \emph{Update}, which means that the corresponding messages are being broadcast to all entities before and after the update of the physical engine. The action can be paused, resumed and restarted to a previously saved position. There is a global timer that measures the game time (can be obtained by the method \emph{GetTimeMillis}), when the game is running, which is used by other systems, such as the script system.
 
-Since the class \emph{Core::Game} registers the input listener to itself there are callbacks where it is possible to react to keyboard and mouse events such as a key or mouse button press/release or a mouse move. The corresponding information such as a current mouse position is available through the callback parameters.
+Since the class \emph{Core::Game} registers the input listener to itself, there are callbacks where it is possible to react to keyboard and mouse events such as a key or a mouse button press/release or a mouse move. The corresponding information such as a current mouse position is available through the callback parameters.
 
 If it is necessary to store some extra information that is shared among the game scenes (i.e. total score) the dynamic properties of this class should be used. There are template methods for getting or setting any kind of value under its name as well as methods for deleting one or all properties and for loading and saving them from/to a file. The properties are now stored along with other game stuff. For more information about using dynamic properties see the section \ref{sec:utils-properties}.
 
 \section{Loading screen}
 
-The \emph{Core::LoadingScreen} class loads resource groups into the memory and displays information about the loading progress. It is connected to the resource manager that calls its listener methods when a resource or a whole resource group is going to be loaded or has been already loaded so it can update progress information.
+The \emph{Core::LoadingScreen} class loads resource groups into the memory and displays information about the loading progress. It is connected to the resource manager that calls its listener methods when a resource or a whole resource group is going to be loaded or has been already loaded so it can update the progress information.
 
-First it is necessary to create an instance of the \emph{Core::LoadingScreen} class. The only method of this class that should be called explicitly is the \emph{DoLoading} one. The first parameter represents the kind of data to be loaded. Basic resources containing necessary pictures for a loading screen must be loaded first, then general resources needed in most of the states of the application should be loaded. If the editor should be available its resources must be in the memory too. The last usage of this method is the loading of scenes where the second parameter (a name of a scene) must be filled.
+First it is necessary to create an instance of the \emph{Core::LoadingScreen} class. The only method of this class that should be called explicitly is the \emph{DoLoading} one. The first parameter represents the kind of data to be loaded. Basic resources containing necessary pictures for a loading screen must be loaded first, then general resources needed in most of the states of the application should be loaded. If the editor should be available, its resources must be in the memory too. The last usage of this method is the loading of scenes where the second parameter (a name of a scene) must be filled.
 
 The \emph{DoLoading} method invokes the resource manager for loading corresponding resources and the manager calls callback methods informing about the state of loading. For each resource group the \emph{ResourceGroupLoadStarted} method is called first with the group name and a count of resources in the group. Then for each resource in the group the \emph{ResourceLoadStarted} method with a pointer to the resource class is called before the loading starts and the \emph{ResourceLoadEnded} method is called after the loading ends. Finally when a whole resource group is loaded the \emph{ResourceGroupLoadEnded} is called. Each of these methods calls the \emph{Draw} method that shows the loading progress to the user.
 
-In the present implementation the loading progress is shown as a ring divided to eight parts that one of them is drawn brighter than the others. Once a while the next part (in a clockwise order) is selected as a brighter one. Since this implementation shows only that something is loading but not the real progress it can be changed if it is necessary.
+In the present implementation, the loading progress is shown as a ring divided into eight parts and one of them is drawn brighter than the others. Once in a while the next part (in a clockwise order) is selected as a brighter one. Since this implementation shows only that something is loading, but not the real progress, it can be changed if it is necessary.
 
 \section{Configuration}
 \label{sec:config}
@@ -198,18 +198,18 @@ The \emph{Core::Config} class allows storing a configuration data needed by vari
 
 This class is initialized by a name of the file where data are or will be stored. Although changes to a configuration are saved when the class is being destructed it is possible to force it and get the result of this action by the method \emph{Save}.
 
-There are several getter and setter methods for each data type that get or set data according to a key and a section name. A section parameter is optional, the section named \verb|General| is used as a default. The getter methods have also a default value parameter that is returned when a specific key and section do not exist in a configuration file. It is possible to get all keys in a specific section to a vector with the method \emph{GetSectionKeys} or remove one key (\emph{RemoveKey}) or a whole section (\emph{RemoveSection}).
+There are several getter and setter methods for each data type that get or set the data according to a key and a section name. A section parameter is optional, the section named \verb|General| is used as a default. The getter methods have also a default value parameter that is returned when a specific key and section do not exist in a configuration file. It is possible to get all keys in a specific section to a vector with the method \emph{GetSectionKeys} or remove one key (\emph{RemoveKey}) or a whole section (\emph{RemoveSection}).
 
 \section{Project}
 
-The \emph{Core::Project} class manages the project and its scenes both in the editor and in the game. There are methods for creating and opening a project in a specific path as well as closing it and getting or setting project information (a name, a version, an author). Other methods of this class manage scenes of the project -- creating, opening, saving, closing etc. Some methods like creating or saving scenes can be called only in the editor mode and are not accessible from scripts.
+The \emph{Core::Project} class manages the project and its scenes in both the editor and the game. There are methods for creating and opening a project in a specific path as well as closing it and getting or setting project information (a name, a version, an author). Other methods of this class manage scenes of the project -- creating, opening, saving, closing etc. Some methods like creating or saving scenes can be called only in the editor mode and are not accessible from scripts.
 
 \section{Glossary}
 This is a glossary of the most used terms in the previous sections:
 
 \begin{description}
   \item[Loading screen] -- a screen visible during a loading of the game indicating a loading progress
-  \item[Main loop] -- a code where an input from user is handled, an application logic is updated and a scene is drawn in a cycle until an application shut down
+  \item[Main loop] -- a code where an input from user is handled, an application logic is updated and a scene is drawn in a cycle until an application shuts down
   \item[FPS] -- a count of frames per second that are drawn indicates a performance of a game
   \item[Render target] -- a region in an application window where a game content is drawn to
   \item[Resource] -- any kind of data that an application needs for its running (i.e. pictures, scripts, texts etc.)
