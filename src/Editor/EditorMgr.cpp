@@ -701,6 +701,7 @@ void EditorMgr::SaveOpenedScene()
 	if (mCurrentProject->IsSceneOpened() && !IsLockedToGame())
 	{
 		mCurrentProject->SaveOpenedScene();
+		GUISystem::ShowMessageBox(TR("info_scene_saved"));
 	}
 }
 
@@ -1452,6 +1453,18 @@ bool Editor::EditorMgr::OnEditorViewportDeactivated( const CEGUI::EventArgs& )
 bool Editor::EditorMgr::IsCurrentSceneUnsaved() const
 {
 	return mCurrentProject && mCurrentProject->IsSceneOpened();
+}
+
+void Editor::EditorMgr::PropertyValueSetterFailed( PropertyHolder prop )
+{
+	if (prop.GetType() == Reflection::PT_RESOURCE)
+	{
+		GUISystem::ShowMessageBox(TR("error_drag_wrong_resource") + "\"" + prop.GetName() + "\".");
+	}
+	else if (Reflection::PropertyTypes::IsArray(prop.GetType()))
+	{
+		GUISystem::ShowMessageBox(TR("error_property_array_save"));
+	}
 }
 
 void EditorMgr::OnProjectOpened()

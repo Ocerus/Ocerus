@@ -8,8 +8,12 @@ using namespace GUISystem;
 const float32 INNER_FRAME_OFFSET = 20.0f;
 const float32 BUTTON_MARGIN = 10.0f;
 
+int32 MessageBox::sDisplayedCounter = 0;
+
 MessageBox::MessageBox(MessageBox::eMessageBoxType type, int32 tag): mType(type), mTag(tag), mMessageBox(0), mMinWidth(0)
 {
+	++sDisplayedCounter;
+
 	mMessageBox = gGUIMgr.LoadSystemLayout("MessageBox.layout", "MessageBox");
 	OC_ASSERT(mMessageBox);
 	mMessageBox->setModalState(true);
@@ -55,6 +59,7 @@ MessageBox::MessageBox(MessageBox::eMessageBoxType type, int32 tag): mType(type)
 MessageBox::~MessageBox()
 {
 	gGUIMgr.DestroyWindow(mMessageBox);
+	--sDisplayedCounter;
 }
 
 void MessageBox::SetText(const CEGUI::String& text)
@@ -146,4 +151,9 @@ void GUISystem::MessageBox::EnsureWindowIsWideEnough()
 	{
 		mMessageBox->setWidth(CEGUI::UDim(0, mMinWidth + INNER_FRAME_OFFSET));
 	}
+}
+
+bool GUISystem::MessageBox::IsAnyMessageBoxDisplayed()
+{
+	return sDisplayedCounter > 0;
 }

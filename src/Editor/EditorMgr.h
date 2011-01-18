@@ -238,6 +238,9 @@ namespace Editor
 		/// Called by the value editors when their value changes.
 		void PropertyValueChanged();
 
+		/// Called by the value editors when the setter failed.
+		void PropertyValueSetterFailed(PropertyHolder prop);
+
 		/// Shows a prompt for entering new entity name.
 		void ShowCreateEntityPrompt(EntitySystem::EntityHandle parent = EntitySystem::EntityHandle::Null);
 

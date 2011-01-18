@@ -14,6 +14,11 @@ namespace GUISystem
 	class MessageBox
 	{
 	public:
+
+		/// Returns true if there is any message box currently displayed.
+		static bool IsAnyMessageBoxDisplayed();
+
+	public:
 		/// The type of message box.
 		enum eMessageBoxType
 		{
@@ -82,6 +87,8 @@ namespace GUISystem
 		CEGUI::Window* mMessageBox;
 		Buttons mButtons;
 		float32 mMinWidth;
+
+		static int32 sDisplayedCounter;
 	};
 
 	/// Creates and shows a message box with specified parameters.

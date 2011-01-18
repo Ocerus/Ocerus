@@ -34,8 +34,13 @@ void MessageCallback(const asSMessageInfo* msg, void* param)
 	}
 	else
 	{
-		ocInfo << "Script: " << msg->section << "(" << msg->row << ", " << msg->col << ") : "
-			<< messageType[msg->type] << ": " << msg->message;
+		ocInfo << msg->section << "(" << msg->row << ", " << msg->col << "): " << messageType[msg->type] << ": " << msg->message;
+		if (msg->type == 0 && !MessageBox::IsAnyMessageBoxDisplayed())
+		{
+			stringstream ss;
+			ss << msg->section << "(" << msg->row << ", " << msg->col << "): " << msg->message;
+			ShowMessageBox(ss.str());
+		}
 	}
 }
 

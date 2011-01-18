@@ -61,5 +61,19 @@ namespace Reflection
 		return PC_SHALLOW;
 	}
 
+	bool PropertyTypes::IsArray( const ePropertyType type )
+	{
+		switch (type)
+		{
+		#define PROPERTY_TYPE(typeID, typeClass, defaultValue, typeName, scriptSetter, cloning) \
+			case ARRAY_PROPERTY_TYPE_ID(typeID):
+		#include "PropertyTypes.h"
+		#undef PROPERTY_TYPE
+				return true;
+		}
+
+		return false;	
+	}
 }
+
 

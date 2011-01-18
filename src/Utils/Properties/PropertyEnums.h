@@ -87,6 +87,9 @@ namespace Reflection
 		/// Returns the way the property type can be cloned.
 		ePropertyCloning GetCloning(const ePropertyType type);
 
+		/// Returns true if the property type is an array.
+		bool IsArray(const ePropertyType type);
+
 	}
 }
 

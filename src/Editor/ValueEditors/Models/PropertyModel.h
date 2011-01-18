@@ -87,7 +87,14 @@ namespace Editor
 		virtual void SetValue(const T& newValue)\
 		{
 			mProperty.SetValue<T>(newValue);
-			gEditorMgr.PropertyValueChanged();
+			if (!(mProperty.GetValue<T>() == newValue))
+			{
+				gEditorMgr.PropertyValueSetterFailed(mProperty);
+			}
+			else
+			{
+				gEditorMgr.PropertyValueChanged();
+			}
 		}
 
 	protected:
