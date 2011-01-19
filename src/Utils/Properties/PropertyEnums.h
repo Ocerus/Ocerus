@@ -89,7 +89,6 @@ namespace Reflection
 
 		/// Returns true if the property type is an array.
 		bool IsArray(const ePropertyType type);
-
 	}
 }
 

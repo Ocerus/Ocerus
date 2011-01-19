@@ -84,16 +84,31 @@ namespace Editor
 		virtual T GetValue() const { return mProperty.GetValue<T>(); }
 
 		/// Sets the newValue to the property.
-		virtual void SetValue(const T& newValue)\
+		virtual void SetValue(const T& newValue)
 		{
-			mProperty.SetValue<T>(newValue);
-			if (!(mProperty.GetValue<T>() == newValue))
+			if (PropertyTypes::IsArray(mProperty.GetType()))
 			{
-				gEditorMgr.PropertyValueSetterFailed(mProperty);
+				mProperty.SetValue<T>(newValue);
+				if (!mProperty.IsEqualToArray<T>(newValue))
+				{
+					gEditorMgr.PropertyValueSetterFailed(mProperty);
+				}
+				else
+				{
+					gEditorMgr.PropertyValueChanged();
+				}
 			}
 			else
 			{
-				gEditorMgr.PropertyValueChanged();
+				mProperty.SetValue<T>(newValue);
+				if (!(mProperty.GetValue<T>() == newValue))
+				{
+					gEditorMgr.PropertyValueSetterFailed(mProperty);
+				}
+				else
+				{
+					gEditorMgr.PropertyValueChanged();
+				}
 			}
 		}
 

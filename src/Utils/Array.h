@@ -80,6 +80,17 @@ namespace Utils
 			}
 		}
 
+		/// Comparison operator.
+		bool operator==(const Array<T>& other) const
+		{
+			if (other.GetSize() != GetSize()) return false;
+			for (int32 i=0; i<mSize; ++i)
+			{
+				if (!(mData[i] == other.mData[i])) return false;
+			}
+			return true;
+		}
+
 	private:
 		T* mData;
 		int32 mSize;
