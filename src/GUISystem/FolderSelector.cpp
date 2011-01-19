@@ -259,7 +259,7 @@ string GUISystem::FolderSelector::GetRelativePath(const string& absolutePath)
 	{
 		return "";
 	}
-	else if (absolutePath.size() >= mRootPath.size()+1)
+	else if (!mRootPath.empty() && absolutePath.size() >= mRootPath.size()+1)
 	{
 		return absolutePath.substr(mRootPath.size()+1);
 	}
