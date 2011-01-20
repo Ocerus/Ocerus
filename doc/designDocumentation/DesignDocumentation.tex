@@ -440,13 +440,13 @@ This is a glossary of the most used terms in the previous sections:
 	\label{fig:editor-diagram}
 \end{figure}
 
-The editor is used for an easy creation of a new game based on this engine. It provides a well-arranged graphic user interface for managing everything from the whole project to each entity in several scenes. The main advantage is that every change made to a scene is immediately visible in the game window where the game action can be started anytime.
+The editor is used for an easy creation of a new game based on this engine. It provides a well-arranged graphic user interface for managing everything from the whole project to each entity in several scenes. The main advantage is that every change made to a scene is immediately visible in the game window, where the game action can be started anytime.
 
 \section{Editor managers}
 
 The \emph{Editor::EditorMgr} class manages the logical part of the editor and it owns an instance of the \emph{Editor::EditorGUI} class that focuses to the GUI of the editor. Both of them have methods called at the loading and the unloading of the editor and also methods for updating logic and drawing in the application loop.
 
-The first mentioned class has methods for managing projects, scene and entities. It manages selecting entities and editing the current one, it reacts on choosing all items in the main menu such as creating a new entity, duplicating and deleting current or selected entities, adding and removing entity components, creating a prototype from a current entity, creating or loading a project or a scene and it solves changing an entity name or an entity property. It also provides a function for all edit tools such as moving, rotating or scaling of a chosen entity and for resuming, pausing and restarting the game action. Finally there are methods for getting reference to all editor windows and for updating them.
+The first mentioned class has methods for managing projects, scene and entities. It manages selecting entities and editing the current one, it reacts on choosing all items in the main menu such as creating a new entity, duplicating and deleting current or selected entities, adding and removing entity components, creating a prototype from a current entity, creating or loading a project or a scene and it solves changing an entity name or an entity property. It also provides a function for all edit tools such as moving, rotating or scaling of a chosen entity and for resuming, pausing and restarting the game action. Finally, there are methods for getting a reference to all editor windows and for updating them.
 
 The second class compounds all editor layouts such as the game and editor viewports, the resource, prototype and layer windows and the editor menu and initializes and updates them. It directly updates the entity editor window according to the current entity that uses the vertical layout for positioning entity components and various value editors for showing and editing all kinds of entity properties such as strings, vectors, resources and arrays.
 
@@ -487,18 +487,18 @@ There are another examples of value editors and its models in the code that can 
 	\label{fig:inputsystem-diagram}
 \end{figure}
 
-Since each game must somehow react to the input from the player, the input system was implemented which handles keyboard and mouse events and forwards them to other systems.
+Since every game must somehow react to the input from the player, the input system, which handles keyboard and mouse events and forwards them to other systems, was implemented.
 
 \section{Input manager}
-The needs of games are different, but the ways they want to access the input devices are still the same. Either they want to receive a notification when something interesting happens or they want to poll the device for its current state. The \emph{InputSystem::InputMgr} class implements both of the approaches.
+The needs of games are different, but the ways they want to access the input devices are still the same. Either they want to receive a notification when something interesting happens or they want to poll the device for its current state. The \emph{InputSystem::InputMgr} class implements both of these approaches.
 
-The first one is provided via the \emph{InputSystem::IInputListener} interface which should be implemented and then registered by using the \emph{InputMgr::\-AddInputListener} method for receiving the notification in callbacks of the interface.
+The first one is provided via the \emph{InputSystem::IInputListener} interface, which should be implemented and then registered by using the \emph{InputMgr::\-AddInputListener} method for receiving the notification in callbacks of the interface.
 
-The second approach is supported by multiple methods for querying the device state. The \emph{InputMgr::IsKeyDown} method returns whether any specific key is currently held down while the \emph{InputMgr::IsMouseButtonPressed} method does the same with the currently pressed mouse button. Finally the \emph{InputMgr::GetMouseState} returns a whole bunch of mouse related information such as a cursor and wheel position or pressed buttons.
+The second approach is supported by multiple methods for querying the device state. The \emph{InputMgr::IsKeyDown} method returns whether any specific key is currently held down, while the \emph{InputMgr::IsMouseButtonPressed} method does the same with the currently pressed mouse button. Finally, the \emph{InputMgr::GetMouseState} returns a whole bunch of mouse related information such as a cursor and wheel position or pressed buttons.
 
-To keep things synchronized the event processing is executed in the main game thread. At the beginning of the application main loop the \emph{InputMgr::CaptureInput} method is called where the events are recognized and then distributed to the listeners.
+To keep things synchronized, the event processing is executed in the main game thread. At the beginning of the application main loop, the \emph{InputMgr::CaptureInput} method is called, where the events are recognized and then distributed to the listeners.
 
-The \emph{InputSystem::InputMgr} class is only a proxy class which calls methods of the implementation specific class \emph{InputSystem::OISListener} which implements the \emph{OIS::MouseListener} and \emph{OIS::KeyListener} interfaces from the OIS library used for the platform independent input management.
+The \emph{InputSystem::InputMgr} class is only a proxy class that calls methods of the implementation specific class \emph{InputSystem::OISListener}, which implements the \emph{OIS::MouseListener} and \emph{OIS::KeyListener} interfaces from the OIS library used for the platform independent input management.
 
 
 \chapter{Log system}
@@ -510,16 +510,16 @@ The \emph{InputSystem::InputMgr} class is only a proxy class which calls methods
 	\label{fig:logsystem-diagram}
 \end{figure}
 
-The log system manages internal log messages that are used to provide information about application processes useful to debug the whole project. These messages can have various levels of a severity (from trace and debug messages to errors) and it is possible to set the minimal level of messages to show (i.e. only warning and errors). Another function of the log system is managing a real-time in-game profiling useful for a location of the most time critical parts of the project which can leads to effective optimization.
+The log system manages internal log messages that are used for providing informations about application processes. It is useful for debugging the project. These messages can have various levels of a severity (from trace and debug messages to errors) and it is possible to set the minimal level of messages to show (i.e. only warning and errors). Another function of the log system is managing a real-time in-game profiling, useful for a location of the most time critical parts of the project that can leads to effective optimization.
 
 \section{Logging messages}
 \label{sec:logging}
 
-The main class responsible for logging messages is the \emph{LogSystem::LogMgr}. At the application start it is initialized with a name of the file to which the messages are also written. There is only one method which logs a message of a certain severity to the file and consoles if exist. This method should not be used directly but via the class \emph{LogSystem::Logger}.
+The main class responsible for logging messages is the \emph{LogSystem::LogMgr}. At the application start it is initialized with a name of the file to which the messages are also written. There is only one method that logs a message of a certain severity to the file and consoles if exist. This method should not be used directly but via the class \emph{LogSystem::Logger}.
 
-The lifetime of the \emph{Logger} should be only one code statement and it represents one message. In the constructor a level of the message and whether to generate a stack trace are specified. Then a sequence of the operator $<<$ is used to build the message from strings, numbers and other common types (any user type can be supported by specifying an own operator $<<$ overloading). At the end of the statement the destructor is automatically called (if the instance is not assigned to a variable) that called the \emph{LogMgr}'s method with the built message.
+The lifetime of the \emph{Logger} should be only one code statement and it represents one message. In the constructor, the level of the message and whether to generate a stack trace are specified. Then a sequence of the operator $<<$ is used to build the message from strings, numbers and other common types (any user type can be supported by specifying an own operator $<<$ overloading). At the end of the statement, the destructor is automatically called (if the instance is not assigned to a variable).
 
-For an even easier logging of messages log macros are defined for every supported level of severity, adding the information about the file and the line where it is logged from in case of error or warning message. Thanks to macros it is possible to define the minimum level of severity that should be logged at the compile time so the messages with a lower level are even not compiled to the final program which saves time and memory. In the table \ref{tab:log-macros} there are the macros associated with the levels of severity.
+For an even easier logging, macros are defined for every supported level of severity, adding the information about the file and the line, where it is logged from in case of error or warning message. Thanks to macros, it is possible to define the minimum level of severity that should be logged at the compile time, so the messages with a lower level are even not compiled to the final program, which saves time and memory. In the table \ref{tab:log-macros}, there are the macros associated with the levels of severity.
 
 \begin{table}[htbp]
 	\centering
@@ -538,7 +538,7 @@ For an even easier logging of messages log macros are defined for every supporte
 	\label{tab:log-macros}
 \end{table}
 
-If it is for example necessary to inform that the entity (of which the handle is available) is created the following statement should be written anywhere in the code: \verb/ocInfo << handle << " was created.";/. When the process passed this code and the minimum level of messages to log is lower than the information one then for example the following message will be generated: \verb/13:05:18: Entity(25) was created./
+If it is for example necessary to inform that the entity (of which the handle is available) is created, the following statement should be written anywhere in the code: \verb/ocInfo << handle << " was created.";/. When the process passed this code and the minimum level of messages to log is lower than the information one, then for example, the following message will be generated: \verb/13:05:18: Entity(25) was created./
 
 \section{Profiling functions}
 \label{sec:profiling}
@@ -547,7 +547,7 @@ The profiling of a block of a code or a whole function is really easy. First the
 
 Then anywhere in a code the \verb/PROFILE(name)/ macro can be typed where the parameter \verb/name/ is used for identification of the corresponding results (the abbreviation \verb/PROFILE_FNC()/ uses the current function name). From that line the profiler will start measuring time and it will stop at the end of the current block or function.
 
-Finally when the application runs a call of \emph{Profiler}'s method \emph{Start} (which can be invoked with a keyboard shortcut \emph{CTRL+F5}) activates a profiling and a call of its methods \emph{Stop} and \emph{DumpIntoConsole} (another press of \emph{CTRL+F5}) deactivates it and writes results to the text console. In addition it is possible to ask whether the profiler is active via the method \emph{IsRunning}.
+Finally, when the application runs a call of \emph{Profiler}'s method \emph{Start} (which can be invoked with a keyboard shortcut \emph{CTRL+F5}), the profiling is activated and a call of its methods \emph{Stop} and \emph{DumpIntoConsole} (another press of \emph{CTRL+F5}) deactivates it and writes results to the text console. In addition, it is possible to ask whether the profiler is active via the method \emph{IsRunning}.
 
 \section{Glossary}
 This is a glossary of the most used terms in the previous sections:
@@ -576,7 +576,7 @@ Every game needs to load packs of data from external devices such as a hard driv
 
 \section{Resources}
 
-The resource is a group of data belonging together. In the engine this is represented by the abstract \emph{ResourceSystem::Resource} class. It contains all basic attributes of a resource and allows its users to load or unload it, but the actual implementation depends on the specific type of the resource. For example, an XML file is loaded and parsed in a different way then an OpenGL texture. However, for the user it is never really necessary to know what type of the resource he is working with, so using this class as an abstraction is enough. Only the endpoint subsystem needs to work with the specific type to be able to grab the parsed data out of it. For example, the texture resource can be carried around the system as a common \emph{ResourceSystem::Resource} class until it reaches the graphical subsystem which converts it to the texture resource and grabs the implementation specific texture data out of it.
+The resource is a group of data belonging together. In the engine this is represented by the abstract \emph{ResourceSystem::Resource} class. It contains all basic attributes of a resource and allows its users to load or unload it, but the actual implementation depends on the specific type of the resource. For example, an XML file is loaded and parsed in a different way then an OpenGL texture. However, for the user it is never really necessary to know what type of the resource he is working with, so using this class as an abstraction is enough. Only the endpoint subsystem needs to work with the specific type to be able to grab the parsed data out of it. For example, the texture resource can be carried around the system as a common \emph{ResourceSystem::Resource} class until it reaches the graphical subsystem, which converts it to the texture resource and grabs the implementation specific texture data out of it.
 
 \subsection{Resource states}
 
@@ -591,15 +591,15 @@ Each resource can be in one of the states described in the figure \ref{fig:resou
 
 \subsection{Content of the resource}
 
-Once the data for the resource are loaded it must be parsed into the desired format. This can mean a data structure stored directly inside the resource class or just a handle to the data stored in other parts of the system. However, both of these must exist only in single instance in the whole system -- in the resource which parsed the data. Otherwise the data could become desynchronized. If the resource was unloaded, a pointer to its data could still exist somewhere. 
+Once the data for the resource are loaded, it must be parsed into the desired format. This can mean a data structure stored directly inside the resource class or just a handle to the data stored in other parts of the system. However, both of these must exist only in single instance in the whole system -- in the resource which parsed the data. Otherwise the data could become desynchronized. If the resource was unloaded, a pointer to its data could still exist somewhere. 
 
-For example, the XML resource creates a tree structure for the parsed data and allows its users to traverse the tree. But nowhere in the system a pointer to the same tree or any of its parts exists. Another example is a texture. After it loads data they are passed into the graphical subsystem which creates a platform specific texture out of it and returns only a texture handle. This handle is then stored only in the resource.
+For example, the XML resource creates a tree structure for the parsed data and allows its users to traverse the tree. But nowhere in the system a pointer to the same tree or any of its parts exists. Another example is a texture. After it loads data, they are passed into the graphical subsystem, which creates a platform specific texture out of it and returns only a texture handle. This handle is then stored only in the resource.
 
 \subsection{Resource pointers}
 
-Since the resources are passed all around the game system we must somehow prevent any memory leaks from appearing. Doing so is quite easy however -- we simply use the shared pointer mechanism. It points to the common abstract resource (the \emph{ResourceSystem::ResourcePtr} class) and to specific resources as well (the \emph{ScriptSystem::ScriptResourcePtr} or the \emph{ResourceSystem::XMLResourcePtr} classes for example). The abstract resource pointer can be automatically converted to any specific resource pointer, but if the type does not match an assertion fault will be raised to prevent a memory corruption. All resource pointers are defined in the \verb'Utils/ResourcePointers.h' file.
+Since the resources are passed all around the game system, we must somehow prevent any memory leaks from appearing. Doing so is quite easy however -- we simply use the shared pointer mechanism. It points to the common abstract resource (the \emph{ResourceSystem::ResourcePtr} class) and to specific resources as well (the \emph{ScriptSystem::ScriptResourcePtr} or the \emph{ResourceSystem::XMLResourcePtr} classes for example). The abstract resource pointer can be automatically converted to any specific resource pointer, but if the type does not match, an assertion fault will be raised to prevent a memory corruption. All resource pointers are defined in the \verb'Utils/ResourcePointers.h' file.
 
-For defining a new resource type see the Extending Ocerus document. In the table \ref{tab:resource-types} there are all currently existing types of resources with a brief description.
+For defining a new resource type, see the Extending Ocerus document. In the table \ref{tab:resource-types} there are all currently existing types of resources with a brief description.
 
 \begin{table}[htbp]
 	\centering
@@ -627,15 +627,15 @@ The resource manager represented by the \emph{ResourceSystem::ResourceMgr} class
 
 To make game development easier, the source of each resource is automatically checked for an update. If it has changed, the resource is automatically reloaded if it was previously loaded. So, for example, if the user changes a currently loaded texture in an image editor and saves it, it will be immediately updated in the game.
 
-Since gaming systems have limited memory it is possible to limit the memory used by resources. Resources usually take the biggest chunk of memory, so when lowering the memory usage it is best to start here. Hopefully, the resource manager allows defining a limit which it will try to keep. When the memory is running out, it will attempt to unload resources which were not used for a long time. These resources will remain in the system and will be ready to be loaded as soon as they are needed. However, there are certain circumstances under which the resources must not be unloaded. An example of such is rendering -- no texture can be unloaded until the frame is ready. For this reason the unloading can be temporarily disabled.
+Since gaming systems have limited memory it is possible to limit the memory used by resources. Resources usually take the biggest chunk of memory, so when lowering the memory usage it is best to start here. Hopefully, the resource manager allows defining a limit which it will try to keep. When the memory is running out, it will attempt to unload resources that were not used for a long time. These resources will remain in the system and will be ready to be loaded as soon as they are needed. However, there are certain circumstances under which the resources must not be unloaded. An example of such is rendering -- no texture can be unloaded until the frame is ready. For this reason the unloading can be temporarily disabled.
 
 If it is necessary to track the resource loading progress (for example when a scene is loading), there is the \emph{ResourceSystem::IResourceLoadingListener} interface that should be implemented and registered by the \emph{ResourceMgr\-::\-Set\-Loading\-Listener} method. Its methods are called when the loading of one resource or a resource group starts and ends.
 
 \section{Loading and saving scenes}
 
-For storing a state of a scene from the editor or from the game itself to a file an XML format is used. There are two classes that help with saving data to a file and loading them back.
+For storing a state of a scene from the editor or from the game itself to a file, an XML format is used. There are two classes that help with saving data to a file and loading them back.
 
-The \emph{ResourceSystem::XMLOutput} class provides a formatted XML output to a file. First when the instance is created a file specified in a constructor parameter is opened. Then some methods for writing XML elements and attributes are used. Finally the file is closed in the destructor or in the method \emph{XMLOutput::CloseAndReport}. For example the file named \verb/file.xml/ with the XML structure
+The \emph{ResourceSystem::XMLOutput} class provides a formatted XML output to a file. First when the instance is created, a file specified in a constructor parameter is opened. Then some methods for writing XML elements and attributes are used. Finally the file is closed in the destructor or in the method \emph{XMLOutput::CloseAndReport}. For example the file named \verb/file.xml/ with the XML structure
 
 \begin{verbatim}
 <?xml version="1.0" encoding="UTF-8"?>
@@ -659,7 +659,7 @@ out.EndElement(); // writes </element>
 
 \noindent As the example shows the class does an indent, remembers names of open elements and automatically closes all open elements in the end.
 
-The \emph{ResourceSystem::XMLResource} class on the other hand loads an XML file and iterates over its elements and attributes. Since this class derives from the \emph{ResourceSystem::Resource} class first a resource pointer to the file must be get by \emph{ResourceMgr::GetResource} method and retyped to the \emph{ResourceSystem::XMLResourcePtr}. Then the top level elements can be iterated by \emph{XMLResource::IterateTopLevel} method which returns \emph{ResourceSystem::XMLNodeIterator} class which serves as an iterator and which should be compared with a result of the \emph{XMLResource::EndTopLevel} method for a detection of the end of top level elements. The iterator class has analogical methods (\emph{XMLNodeIterator::IterateChildren} and \emph{XMLNodeIterator::EndChildren}) for iteration over children of the element it represents. Beside them it has also methods for getting an element's value, a value of its child or of its specific attribute. Since these methods are templates every value can be converted from a string to any chosen data type.
+The \emph{ResourceSystem::XMLResource} class on the other hand loads an XML file and iterates over its elements and attributes. Since this class derives from the \emph{ResourceSystem::Resource} class first a resource pointer to the file must be get by \emph{ResourceMgr::GetResource} method and retyped to the \emph{ResourceSystem::XMLResourcePtr}. Then the top level elements can be iterated by the \emph{XMLResource::IterateTopLevel} method, which returns \emph{ResourceSystem::XMLNodeIterator} class, which serves as an iterator and which should be compared with a result of the \emph{XMLResource::EndTopLevel} method for a detection of the end of top level elements. The iterator class has analogical methods (\emph{XMLNodeIterator::IterateChildren} and \emph{XMLNodeIterator::EndChildren}) for iteration over children of the element it represents. Beside them it has also methods for getting an element's value, a value of its child or of its specific attribute. Since these methods are templates every value can be converted from a string to any chosen data type.
 
 \section{Glossary}
 This is a glossary of the most used terms in the previous sections:
