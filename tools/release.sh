@@ -6,6 +6,15 @@ fi
 source ./common.sh
 
 
+echo "Make sure the following items are up to date:"
+echo "- Deploy build"
+echo "- Release build"
+echo "- doxygen"
+echo "- script reference"
+echo "... press any key"
+read NIC
+
+
 cd ..
 
 OUTPUT_DIR=../release

@@ -110,7 +110,7 @@ RegisterFunction("Function Name", &Function, Access flag,
 \end{verbatim}
 \normalsize
 
-Back to the example component. Let's say it will have three properties and one function. First property for the amplitude, second for the period of moving, third for the timer and a function for reseting the timer. All three properties will be of the \emph{float32} data type. Setters and getters must be defined as well as the \emph{RegisterReflection} function. 
+Back to the example component. Let's say it will have three properties and one function. First property for the amplitude, second for the period of moving, third for the timer and a function for resetting the timer. All three properties will be of the \emph{float32} data type. Setters and getters must be defined as well as the \emph{RegisterReflection} function. 
 
 The example component needs to access and change the position of the entity. The position is defined in the \emph{Transform} component. To ensure that the entity have \emph{Transform} component, the dependency must be added. For that purpose serves the \emph{AddDependency} function. It receives a component type as a parameter (component type is defined as \emph{CT\_[Component class name]}). It will also force the dependent component to initialize later than the other component.
 
@@ -128,7 +128,7 @@ namespace EntityComponents
     // Destruction of the component. Nothing needs to be destructed.
     virtual void Destroy(void){}
 
-    // Function for reseting the timer.
+    // Function for resetting the timer.
     void ResetTimer(void)
     {
        mTimer = 0;
@@ -226,7 +226,7 @@ The example component, which makes an entity to move up and down, could have the
 EntityMessage::eResult EntityComponents::ExampleComp::
   HandleMessage( const EntityMessage& msg )
 {
-  // Decide the type of the recieved message
+  // Decide the type of the received message
   switch (msg.type)
   {
   // Called when the component is initialized
@@ -373,7 +373,7 @@ void Constructor(void *memory)
 
 void Destructor(void *memory)
 {
-  // Uninitialize the memory by calling the object destructor
+  // Finalize the memory by calling the object destructor
   ((NewClass*)memory)->~NewClass();
 }
 
@@ -432,7 +432,7 @@ The new resource class has to override some methods:
 \item
 Constructor and destructor.
 \item
-Static \emph{CreateMe()} method. Returns a special shared pointer (\emph{ResourceSystem::ResourcePtr}) that points to the new resource class intance. This pointer allows type-checked casting to specific resource pointers. So it should look like this:
+Static \emph{CreateMe()} method. Returns a special shared pointer (\emph{ResourceSystem::ResourcePtr}) that points to the new resource class instance. This pointer allows type-checked casting to specific resource pointers. So it should look like this:
 
 \footnotesize 
 \begin{verbatim}

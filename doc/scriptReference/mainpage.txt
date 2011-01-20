@@ -53,9 +53,9 @@ could use global variables as defined in AngelScript but it's not the recommende
 are also shared among all instances of the script. So if you have multiple entities using the same
 script file they will all share the values of the variables.
 
-Instead it's better to create the variable as a dynamic property using methonds such as
+Instead it's better to create the variable as a dynamic property using methods such as
 EntityHandle::RegisterDynamicProperty_bool(). These variables then appear in the entity editor window as well as
-common properties and the user can see or edit them. This way the user can influence the behaviour
+common properties and the user can see or edit them. This way the user can influence the behavior
 of your script and it makes it easier to re-use the script.
 
 
