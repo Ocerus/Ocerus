@@ -1,33 +1,7 @@
-\documentclass[a4paper, 12pt]{report}
+\newcommand{\TitleText}{Ocerus Extension Guide}
+\documentclass[a4paper,12pt]{report}
+\input{../CommonHeader.tex}
 
-\usepackage[USenglish]{babel}
-\usepackage[T1]{fontenc}
-\usepackage[ansinew]{inputenc}
-\usepackage{lmodern} %Type1-font for non-english texts and characters
-\usepackage{graphicx}
-\usepackage[pdfborder={0 0 0}, pdffitwindow=true, pdfpagelayout=SinglePage]{hyperref}
-
-\newenvironment{titled-itemize}[1]
-{
-\vspace{5mm}
-\noindent\emph{#1}
-\begin{itemize}
-}
-{
-\end{itemize}
-}
-
-\begin{document}
-
-\pagestyle{empty} %No headings for the first pages.
-
-\title{Guide for extending the Ocerus project}
-\author{Lukas Hermann, Ondrej Mocny, Tomas Svoboda, Michal Cevora}
-
-\pagestyle{plain} %Now display headings: headings / fancy / ...
-
-\tableofcontents %Table of contents
-\cleardoublepage %The first chapter should start on an odd page.
 
 \chapter{Introduction}
 

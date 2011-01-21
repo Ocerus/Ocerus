@@ -1,0 +1,36 @@
+\usepackage[utf8x]{inputenc}
+
+\title{\TitleText}
+\author{http://ocerus.sourceforge.net}
+
+\pdfinfo{%
+  /Title    (\TitleText)
+  /Author   (Michal Cevora, Lukas Hermann,Ondrej Mocny, Tomas Svoboda)
+  /Creator  ()
+  /Producer ()
+  /Subject  ()
+  /Keywords ()
+}
+
+\usepackage{fullpage} % koneckoncu je to neformalni dokument, takze k certu s akademickou konvenci
+\usepackage[pdfborder={0 0 0}, pdfpagelayout=OneColumn]{hyperref}
+\usepackage[USenglish]{babel}
+\usepackage{hyperref}
+\usepackage[all]{hypcap}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+
+
+\begin{document}
+
+\maketitle
+\clearpage
+
+{
+	\renewcommand\thepage{}
+	\tableofcontents
+	\clearpage
+}
+
+\setcounter{page}{1}
