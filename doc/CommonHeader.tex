@@ -13,9 +13,8 @@
 }
 
 \usepackage{fullpage} % koneckoncu je to neformalni dokument, takze k certu s akademickou konvenci
-\usepackage[pdfborder={0 0 0}, pdfpagelayout=OneColumn]{hyperref}
+\usepackage[colorlinks=true, pdfborder={0 0 0}, pdfpagelayout=OneColumn]{hyperref}
 \usepackage[USenglish]{babel}
-\usepackage{hyperref}
 \usepackage[all]{hypcap}
 \usepackage{listings}
 \usepackage{graphicx}
@@ -29,6 +28,7 @@
 
 {
 	\renewcommand\thepage{}
+	\hypersetup{linkcolor=black}
 	\tableofcontents
 	\clearpage
 }

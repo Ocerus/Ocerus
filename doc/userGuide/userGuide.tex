@@ -18,6 +18,10 @@ The Ocerus project is currently hosted at SourceForge and its homepage is \url{h
 \section{Installation}
 To install Ocerus, launch the installation file. Installation process is rather straightforward, so a few next button clicks will do the job. We are ready for our first launch.
 
+\section{Resources archive}
+\label{sec:archive}
+Resources needed to create the game described in this guide are accompanying the PDF. If you have opened the guide from the editor the resources are likely to be in the \href{run:./archive/}{archive/} directory. Otherwise you need to download the archive package from the project website. It should be somewhere near the user guide.
+
 \section{First steps}
 To start Ocerus, click the Ocerus icon on your desktop or in the start menu. In a few moments, the main Ocerus window appears (see figure~\ref{fig:ocerus_initial}). In the top edge of the window there is main menu. You can use this menu to carry out various actions in the editor. The rest of the window contains views that will be discussed later. Let's start with creating a new project.
 
@@ -94,7 +98,7 @@ Make sure that the \texttt{Ball} entity is selected, then click the \textbf{Edit
 \section{Adding graphics content}
 Every file and directory that is placed into the project directory hierarchy is visible in the \textbf{Resources} view. To put files with your textures into the project, simply copy them somewhere into the project directory. When you add a file into the project directory, Ocerus automatically detects the type of the file and creates the suitable type of resource. The type of the resource is represented by an icon next to the resource name in the \textbf{Resource} view.
 
-You can either use the \texttt{ball.png} texture from the \texttt{textures} directory in the archive provided with this document, or you can create or get any texture you like (see supported formats on page \pageref{sec:supported_formats}). Either way, copy it to textures subdirectory of your project directory. Switch back to Ocerus and see that \texttt{ball.png} has appeared in the \textbf{Resources} view (see figure~\ref{fig:link_texture}).
+You can either use the \texttt{ball.png} texture from the \texttt{textures} directory in the \hyperref[sec:archive]{archive} provided with this document, or you can create or get any texture you like (see supported formats on page \pageref{sec:supported_formats}). Either way, copy it to textures subdirectory of your project directory. Switch back to Ocerus and see that \texttt{ball.png} has appeared in the \textbf{Resources} view (see figure~\ref{fig:link_texture}).
 
 Now Ocerus is aware of our texture. Let's use it as a \textbf{texture} property of our entity.
 
@@ -128,9 +132,6 @@ We have already discussed the way to move, rotate and scale an entity by editing
 
 When the \textbf{move} tool is active, you can move the selected entity by dragging it in the editor viewport. By selecting the \textbf{rotate} tool and dragging the entity back and forth, you can rotate the entity and lastly the scale tool allows you to change the size of the entity, again, by dragging the entity in the editor viewport. Take some time to familiarize with these tools as they are vital for rapid development in Ocerus. Consider using keyboard shortcuts to become even faster (click the \textbf{Help $\to$ Shortcuts} action in the main menu to display the list of keyboard shortcuts).
 
-\section{Defining a collision polygon}
-Although our ball has a texture already, Ocerus has no clue what its shape is. As soon as we introduce physics into our game, it is necessary that every entity that is influenced by physic has a collision polygon defined. Ocerus needs to know these polygons in order to properly determine whether two entities collide with each other or not. To define a collision polygon, add the \textbf{PolygonCollider} component to our \texttt{Ball} entity (select \textbf{Edit $\to$ New Component $\to$ PolygonCollider}). New component now appears under the \textbf{Sprite} component in the \textbf{Entity} view. The polygon is then defined as a list of points in the \textbf{polygon} property of the component. For our ball we will create an octagon with the following points: [0, -0,5], [0.35, -0.35], [0.5, 0], [0.35, 0.35], [0, 0.5], [-0,35, 0.35], [-0.5, 0] and [-0.35, -0.35].
-
 \begin{wrapfigure}{r}{0.35\textwidth}
 \capstart
 \begin{center}
@@ -139,6 +140,9 @@ Although our ball has a texture already, Ocerus has no clue what its shape is. A
  \caption{Defining octagon collision polygon}
  \label{fig:polygon_collider}
 \end{wrapfigure}
+
+\section{Defining a collision polygon}
+Although our ball has a texture already, Ocerus has no clue what its shape is. As soon as we introduce physics into our game, it is necessary that every entity that is influenced by physic has a collision polygon defined. Ocerus needs to know these polygons in order to properly determine whether two entities collide with each other or not. To define a collision polygon, add the \textbf{PolygonCollider} component to our \texttt{Ball} entity (select \textbf{Edit $\to$ New Component $\to$ PolygonCollider}). New component now appears under the \textbf{Sprite} component in the \textbf{Entity} view. The polygon is then defined as a list of points in the \textbf{polygon} property of the component. For our ball we will create an octagon with the following points: [0, -0,5], [0.35, -0.35], [0.5, 0], [0.35, 0.35], [0, 0.5], [-0,35, 0.35], [-0.5, 0] and [-0.35, -0.35].
 
 Use the green plus button to add eight vertices to the \textbf{Polygon} property and then enter the points according to figure~\ref{fig:polygon_collider}. When you are ready, click the blue diskette button to save the list. After the new collision polygon is saved to our entity, it is displayed as a blue outline in the editor viewport. If you used your own texture, you may need to modify these points to make the polygon aligned with the texture.
 
@@ -153,7 +157,7 @@ By selecting the \textbf{Edit $\to$ New Component $\to$ DynamicBody} action, add
 
 Ocerus does not implement the real gravitation force in the sense that all objects attract themselves. Instead, all objects are attracted straight down. It means that as soon as we start our so far created game, our ball would infinitely fall down. Let's create some barriers in our world.
 
-\textbf{Task 1.} Create a new entity called \texttt{Platform}, add \textbf{Sprite} component and use the \texttt{textures\textbackslash steel.jpg} file from the archive as the texture. Add the \textbf{PolygonCollider} component and set polygon points to [5.12, -5.12], [5.12, 5.12], [-5.12, 5.12], [-5.12, -5.12]. Add the \textbf{StaticBody} component and finally use edit tools to shape the square into a slightly sloped platform and place it under the ball (see figure~\ref{fig:task_1}). If you have any problems with this task, please read the corresponding sections above.
+\textbf{Task 1.} Create a new entity called \texttt{Platform}, add \textbf{Sprite} component and use the \texttt{textures\textbackslash steel.jpg} file from the \hyperref[sec:archive]{archive} as the texture. Add the \textbf{PolygonCollider} component and set polygon points to [5.12, -5.12], [5.12, 5.12], [-5.12, 5.12], [-5.12, -5.12]. Add the \textbf{StaticBody} component and finally use edit tools to shape the square into a slightly sloped platform and place it under the ball (see figure~\ref{fig:task_1}). If you have any problems with this task, please read the corresponding sections above.
 
 \begin{figure}[ht]
  \begin{center}
@@ -221,7 +225,7 @@ Click the \texttt{Platform} prototype in the \textbf{Prototypes} view and look a
 
 Select a \texttt{Platform} entity from the \textbf{Hierarchy} view and again look at the \textbf{Entity} view (see figure~\ref{fig:locked_properties}). All properties that are shared have a lock icon on the right and cannot be edited.
 
-\textbf{Task 2.} Now with the knowledge of prototypes and shared properties you should be able to design your pinball machine, so it would look similar to figure \ref{fig:task_2}. Use the \texttt{Platform} prototype to build all barriers. Also create the \texttt{Flipper} prototype that would be similar to \texttt{Platform} prototype, except that it will use the \texttt{textures\textbackslash yellow.jpg} texture from the archive and it will have \textbf{DynamicBody} component instead of \textbf{StaticBody} component. Create two instances of this prototype called \texttt{LeftFlipper} and \texttt{RightFlipper}.
+\textbf{Task 2.} Now with the knowledge of prototypes and shared properties you should be able to design your pinball machine, so it would look similar to figure \ref{fig:task_2}. Use the \texttt{Platform} prototype to build all barriers. Also create the \texttt{Flipper} prototype that would be similar to \texttt{Platform} prototype, except that it will use the \texttt{textures\textbackslash yellow.jpg} texture from the \hyperref[sec:archive]{archive} and it will have \textbf{DynamicBody} component instead of \textbf{StaticBody} component. Create two instances of this prototype called \texttt{LeftFlipper} and \texttt{RightFlipper}.
 
 \textit{Hint: To create the \texttt{Flipper} prototype you can instantiate the \texttt{Platform} prototype and unlink it from the prototype by clicking the remove button on the right of the \textbf{Prototype} property in the \textbf{Entity} view. Then modify the entity and create a prototype from it.}
 
@@ -271,7 +275,7 @@ Ocerus engine allows to implement the game behavior using the scripting engine. 
 
 We are going to implement the main control of our game - the flippers. Make sure that you have already created the \texttt{Flipper} prototype, as well as both \texttt{Flipper} entities. Now select the \texttt{Flipper} prototype and add the \textbf{Script} component to it.
 
-The \textbf{Script} component allows to implement a custom behavior using the scripting language. As soon as you add the component, you can see the \textbf{ScriptModules} property in the \textbf{Entity} view. This property contains a list of script files that are associated with this entity. Now it's time to create our little script. Open your favorite text editor and copy the following code (or use the \texttt{scripts\textbackslash flipper.as} file from the archive).
+The \textbf{Script} component allows to implement a custom behavior using the scripting language. As soon as you add the component, you can see the \textbf{ScriptModules} property in the \textbf{Entity} view. This property contains a list of script files that are associated with this entity. Now it's time to create our little script. Open your favorite text editor and copy the following code (or use the \texttt{scripts\textbackslash flipper.as} file from the \hyperref[sec:archive]{archive}).
 
 \lstinputlisting[language=c,
 	basicstyle=\scriptsize,
@@ -320,7 +324,7 @@ The \textbf{Layout} files define the layout of your GUI elements. Take a look at
 
 Finally, the purpose of the \textbf{Scheme} files is to group other data files and resources together, and to define some of their interactions. It usually contains a list of \textbf{Imageset}, files \textbf{Font} files and \textbf{Looknfeel} files.
 
-To add the GUI to the project, copy the \texttt{gui} directory from the archive to the project directory. Then switch back to Ocerus and look at the \textbf{Resources} view. Ocerus tries to auto-detect types of the resources and usually does a great job. However, when it encounters the \texttt{.png} file, it identifies it as a \textbf{Texture} resource. To make it work with CEGUI, the type of these image files needs to be changed to the \textbf{CEGUI} resource. Right click the \texttt{buttons.png} file in the view and select the \textbf{Change Type $\to$ CEGUI} from the context menu. Now you are ready to put the layout with flipper buttons into the scene.
+To add the GUI to the project, copy the \texttt{gui} directory from the \hyperref[sec:archive]{archive} to the project directory. Then switch back to Ocerus and look at the \textbf{Resources} view. Ocerus tries to auto-detect types of the resources and usually does a great job. However, when it encounters the \texttt{.png} file, it identifies it as a \textbf{Texture} resource. To make it work with CEGUI, the type of these image files needs to be changed to the \textbf{CEGUI} resource. Right click the \texttt{buttons.png} file in the view and select the \textbf{Change Type $\to$ CEGUI} from the context menu. Now you are ready to put the layout with flipper buttons into the scene.
 
 GUI layouts that are visible in your games are included into a scene by creating an entity with the \textbf{GUILayout} component. Create an entity named \texttt{GUILayout}, remove its \textbf{Transform} component and add the \textbf{GUILayout} component. Look at its properties (figure~\ref{fig:guilayout_component}).
 
@@ -333,6 +337,7 @@ GUI layouts that are visible in your games are included into a scene by creating
 \end{figure}
 
 First, drag the \texttt{pinball.scheme} file from the \textbf{Resource} view to the \textbf{Scheme} property in the \textbf{Entity} view. Then drag the \texttt{gameplay.layout} file to the \textbf{Layout} property. Finally check the \textbf{Enabled} and \textbf{Visible} checkboxes.
+
 
 
 \section{Supported formats}
