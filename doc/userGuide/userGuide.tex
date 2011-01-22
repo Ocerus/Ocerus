@@ -23,7 +23,7 @@ To install Ocerus, launch the installation file. Installation process is rather 
 Resources needed to create the game described in this guide are accompanying the PDF. If you have opened the guide from the editor the resources are likely to be in the \href{run:./archive/}{archive/} directory. Otherwise you need to download the archive package from the project website. It should be somewhere near the user guide.
 
 \section{First steps}
-To start Ocerus, click the Ocerus icon on your desktop or in the start menu. In a few moments, the main Ocerus window appears (see figure~\ref{fig:ocerus_initial}). In the top edge of the window there is main menu. You can use this menu to carry out various actions in the editor. The rest of the window contains views that will be discussed later. Let's start with creating a new project.
+To start Ocerus, click the Ocerus icon on your desktop or in the start menu. In a few moments, the main Ocerus window appears (see figure~\ref{fig:ocerus_initial}). In the top edge of the window there is a main menu. You can use this menu to carry out various actions in the editor. The rest of the window contains views that will be discussed later. Let's start with creating a new project.
 
 \begin{figure}[ht]
  \begin{center}
@@ -34,7 +34,7 @@ To start Ocerus, click the Ocerus icon on your desktop or in the start menu. In 
 \end{figure}
 
 \section{Creating the project}
-By selecting the \textbf{File $\to$ Create Project} command from the main menu, open the \textbf{Create Project} dialog. Type \texttt{Pinball} into the name field and browse the location where your project will reside. Note that a new subdirectory in the chosen location will be created and it will be named the same as the project. That is why you should avoid using any nonstandard characters in the project name. Name the project \texttt{Pinball} and use any location you like. When the \textbf{OK} button is clicked, the new project is created.
+By selecting the \textbf{File $\to$ Create Project} command from the main menu, open the \textbf{Create Project} dialog. Type \texttt{Pinball} into the name field and browse the location where your project will reside. Note that a new subdirectory in the chosen location will be created and it will be named the same as the project. That is why you should avoid using any nonstandard characters in the project name. When the \textbf{OK} button is clicked, the new project is created.
 
 A project in Ocerus represents a single game, so for every single game that you design, you need to create another project. Behind the scene, projects are ordinary directories on your file system with resource files representing your game content, such as images, models, scripts, etc. Structure of the project directory is on your own consideration, but it's recommended to stick with the default structure that is created for new projects.
 
@@ -80,7 +80,7 @@ As soon as an entity is selected, the \textbf{Entity} view shows related informa
 \end{figure}
 
 
-Entities in Ocerus are composed of components that determine their behavior and functionality and these components can have another properties. All components and their properties are shown just under the \textbf{General} section in the \textbf{Entity} view and these properties can be edited the same way as the ID and name property above.
+Entities in Ocerus are composed of components that determine their behavior and functionality and these components can have other properties. All components and their properties are shown just under the \textbf{General} section in the \textbf{Entity} view and these properties can be edited the same way as the ID and name property above.
 
 Almost any entity that you will create is composed at least of the \textbf{Transform} component. Roughly speaking, entities with this component are such entities that are placed to a specific position in our virtual 2D world. They can move around, change its size and rotate. These transformations are represented by the \textbf{position}, \textbf{scale} and \textbf{angle} properties. These properties are also reflected in the \textbf{Editor Viewport}. Although our ball does not have a graphics yet, it is represented in the viewport as a red square. You can try to modify the \textbf{position} property and see the red square move to another spot. However, if you change the \textbf{scale} property, you won't see any difference at all. We need to give our entity a visual form. This can be achieved with the \textbf{Sprite} component.
 
@@ -142,9 +142,9 @@ When the \textbf{move} tool is active, you can move the selected entity by dragg
 \end{wrapfigure}
 
 \section{Defining a collision polygon}
-Although our ball has a texture already, Ocerus has no clue what its shape is. As soon as we introduce physics into our game, it is necessary that every entity that is influenced by physic has a collision polygon defined. Ocerus needs to know these polygons in order to properly determine whether two entities collide with each other or not. To define a collision polygon, add the \textbf{PolygonCollider} component to our \texttt{Ball} entity (select \textbf{Edit $\to$ New Component $\to$ PolygonCollider}). New component now appears under the \textbf{Sprite} component in the \textbf{Entity} view. The polygon is then defined as a list of points in the \textbf{polygon} property of the component. For our ball we will create an octagon with the following points: [0, -0,5], [0.35, -0.35], [0.5, 0], [0.35, 0.35], [0, 0.5], [-0,35, 0.35], [-0.5, 0] and [-0.35, -0.35].
+Although our ball has a texture already, Ocerus has no clue what its shape is. As soon as we introduce physics into our game, it is necessary that every entity that is influenced by physics has a collision polygon defined. Ocerus needs to know these polygons in order to properly determine whether two entities collide with each other or not. To define a collision polygon, add the \textbf{PolygonCollider} component to our \texttt{Ball} entity (select \textbf{Edit $\to$ New Component $\to$ PolygonCollider}). New component now appears under the \textbf{Sprite} component in the \textbf{Entity} view. The polygon is then defined as a list of points in the \textbf{polygon} property of the component. For our ball we will create an octagon with the following points: [0, -0,5], [0.35, -0.35], [0.5, 0], [0.35, 0.35], [0, 0.5], [-0,35, 0.35], [-0.5, 0] and [-0.35, -0.35].
 
-Use the green plus button to add eight vertices to the \textbf{Polygon} property and then enter the points according to figure~\ref{fig:polygon_collider}. When you are ready, click the blue diskette button to save the list. After the new collision polygon is saved to our entity, it is displayed as a blue outline in the editor viewport. If you used your own texture, you may need to modify these points to make the polygon aligned with the texture.
+Use the green plus button to add eight vertices to the \textbf{Polygon} property and then enter the points according to the figure~\ref{fig:polygon_collider}. When you are ready, click the blue diskette button to save the list. After the new collision polygon is saved to our entity, it is displayed as a blue outline in the editor viewport. If you used your own texture, you may need to modify these points to make the polygon aligned with the texture.
 
 Our ball entity has a collision polygon now, which means that if physics is applied to that entity, it will collide with another entities according to their collision polygons. So to really see the \textbf{PolygonCollider} in action, we have to add physics.
 
@@ -223,9 +223,9 @@ Click the \texttt{Platform} prototype in the \textbf{Prototypes} view and look a
  \vspace{-10pt}
 \end{wrapfigure}
 
-Select a \texttt{Platform} entity from the \textbf{Hierarchy} view and again look at the \textbf{Entity} view (see figure~\ref{fig:locked_properties}). All properties that are shared have a lock icon on the right and cannot be edited.
+Select the \texttt{Platform} entity from the \textbf{Hierarchy} view and again look at the \textbf{Entity} view (see figure~\ref{fig:locked_properties}). All properties that are shared have a lock icon on the right and cannot be edited.
 
-\textbf{Task 2.} Now with the knowledge of prototypes and shared properties you should be able to design your pinball machine, so it would look similar to figure \ref{fig:task_2}. Use the \texttt{Platform} prototype to build all barriers. Also create the \texttt{Flipper} prototype that would be similar to \texttt{Platform} prototype, except that it will use the \texttt{textures\textbackslash yellow.jpg} texture from the \hyperref[sec:archive]{archive} and it will have \textbf{DynamicBody} component instead of \textbf{StaticBody} component. Create two instances of this prototype called \texttt{LeftFlipper} and \texttt{RightFlipper}.
+\textbf{Task 2.} Now with the knowledge of prototypes and shared properties you should be able to design your pinball machine, so it would look similar to the figure \ref{fig:task_2}. Use the \texttt{Platform} prototype to build all barriers. Also create the \texttt{Flipper} prototype that would be similar to \texttt{Platform} prototype, except that it will use the \texttt{textures\textbackslash yellow.jpg} texture from the \hyperref[sec:archive]{archive} and it will have \textbf{DynamicBody} component instead of \textbf{StaticBody} component. Create two instances of this prototype called \texttt{LeftFlipper} and \texttt{RightFlipper}.
 
 \textit{Hint: To create the \texttt{Flipper} prototype you can instantiate the \texttt{Platform} prototype and unlink it from the prototype by clicking the remove button on the right of the \textbf{Prototype} property in the \textbf{Entity} view. Then modify the entity and create a prototype from it.}
 
@@ -238,7 +238,7 @@ Select a \texttt{Platform} entity from the \textbf{Hierarchy} view and again loo
 \end{figure}
 
 \section{Entity Hierarchy}
-As the number of entities in your scene grows, it becomes harder not to get lost. Fortunately, Ocerus provides means for hierarchical organization through the \textbf{Hierarchy} view. Unlike file system organization, each and every entity can become a parent of another entities, so there are no folders in this concept. In fact, it's not an issue at all. Not only that you can use dummy entities (entities with no components) as folders, you are even encouraged to do so.
+As the number of entities in your scene grows, it becomes harder not to get lost. Fortunately, Ocerus provides means for hierarchical organization through the \textbf{Hierarchy} view. Unlike file system organization, each and every entity can become a parent of other entities, so there are no folders in this concept. In fact, it's not an issue at all. Not only that you can use dummy entities (entities with no components) as folders, you are even encouraged to do so.
 
 Entities can be organized into a hierarchy by dragging them to their parents. This way you can move any entity to become a child of another entity. To move the entity to the top of the hierarchy (next to another top level elements), you need to use the \textbf{reparent up} action a couple of times. Just right click on the entity and select the \textbf{reparent up} action and the entity will move one level upwards in the hierarchy.
 
@@ -300,7 +300,7 @@ The last topic that is covered in this user guide is the GUI creation. Ocerus us
 
 The \textbf{Looknfeel} files define the visual appearance of the GUI elements. As a reasonable default \textbf{Looknfeel} is provided to you, we will not cover editing these files. You can find more on this topic in the \href{http://www.cegui.org.uk/api_reference/fal_man.html}{CEGUI manual}.
 
-The \textbf{Font} files allow to define fonts for your GUI, whether they are TrueType fonts or bitmap fonts. Again, Ocerus provide a reasonable default font so neither \textbf{Font} files are discussed in detail here. See the\href{http://www.cegui.org.uk/api_reference/xml_font.html}{CEGUI manual} to get more info on \textbf{Font} files.
+The \textbf{Font} files allow to define fonts for your GUI, whether they are TrueType fonts or bitmap fonts. Again, Ocerus provide a reasonable default font so neither \textbf{Font} files are discussed in detail here. See the \href{http://www.cegui.org.uk/api_reference/xml_font.html}{CEGUI manual} to get more info on \textbf{Font} files.
 
 The \textbf{Imageset} files allow to define your custom images that can be used in GUI. CEGUI allows to put multiple images into a large image file and specify which parts of the large image correspond to particular images. This map is defined in \textbf{Imageset} files. In our \texttt{Pinball} project, we will define faces of two buttons that allow to trigger flippers by clicking them. Look at the \textbf{Imageset} file for our buttons.
 \lstinputlisting[language=xml,
