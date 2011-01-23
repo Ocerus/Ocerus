@@ -6,11 +6,11 @@
 
 \section{Introduction}
 
-Welcome to the Ocerus User guide. With Ocerus you can create modern 2D games in an easy and straightforward manner. Ocerus can also handle 3D objects, so you can easily place your 3D models onto the 2D game plane.
+Welcome to the Ocerus User guide. With the Ocerus you can create modern 2D games in an easy and straightforward manner. Ocerus can also handle 3D objects, so you can easily place your 3D models onto the 2D game plane.
 
-The aim of this guide is to teach you the basics of the Ocerus usage and by a simple project demonstration it should help you get set up and creating wonderful games in no time. 
+The aim of this guide is to teach you the basics of the Ocerus usage, and by a simple project demonstration, it should help you get set up and begin creating wonderful games in no time. 
 
-Throughout the user guide, the basic game editing techniques will be presented on a sample pinball game, that will be created from scratch. This guide concentrates only on real basics, so the game will be rather simple, but complex enough to demonstrate all necessary use cases.
+Throughout the user guide, the basic game editing techniques will be presented on a sample pinball game, which will be created from scratch. This guide concentrates only on real basics, so the game will be rather simple but complex enough to demonstrate all necessary use cases.
 
 \section{Getting Ocerus}
 The Ocerus project is currently hosted at SourceForge and its homepage is \url{http://ocerus.sourceforge.net}. On that page, you can find the brief description of the project, location of project resources, such as source code repository and installation packages. To download the latest installation package, navigate your browser to the \href{http://sourceforge.net/projects/ocerus/files/}{Ocerus download page} and download the latest version.
@@ -20,10 +20,10 @@ To install Ocerus, launch the installation file. Installation process is rather 
 
 \section{Resources archive}
 \label{sec:archive}
-Resources needed to create the game described in this guide are accompanying the PDF. If you have opened the guide from the editor the resources are likely to be in the \href{run:./archive/}{archive/} directory. Otherwise you need to download the archive package from the project website. It should be somewhere near the user guide.
+Resources needed to create the game described in this guide are accompanying the PDF. If you have opened the guide from the editor, the resources are likely to be in the \href{run:./archive/}{archive/} directory. Otherwise, you need to download the archive package from the project website. It should be somewhere near the user guide.
 
 \section{First steps}
-To start Ocerus, click the Ocerus icon on your desktop or in the start menu. In a few moments, the main Ocerus window appears (see figure~\ref{fig:ocerus_initial}). In the top edge of the window there is a main menu. You can use this menu to carry out various actions in the editor. The rest of the window contains views that will be discussed later. Let's start with creating a new project.
+To start Ocerus, click the Ocerus icon on your desktop or in the start menu. In a few moments, the main Ocerus window appears (see figure~\ref{fig:ocerus_initial}). In the top edge of the window is a main menu. You can use this menu to carry out various actions in the editor. The rest of the window contains views that will be discussed later. Let's start with creating a new project.
 
 \begin{figure}[ht]
  \begin{center}
@@ -43,7 +43,7 @@ Although a default scene was automatically created together with the project, we
 \section{Creating scenes}
 Select the \textbf{Scene $\to$ New Scene} command from the main menu. Ocerus can ask you whether you want to save the current scene (this is the default scene that was automatically created). In that case, click \textbf{No} and the \textbf{New Scene} dialog should appear.
 
-In the \textbf{New Scene} dialog select the scenes sub-directory and type \texttt{gameplay} as the scene filename (see figure~\ref{fig:new_scene}). When you are ready, click the \textbf{OK} button and the new scene will be created and automatically opened.
+In the \textbf{New Scene} dialog, select the scenes sub-directory and type \texttt{gameplay} as the scene filename (see figure~\ref{fig:new_scene}). When you are ready, click the \textbf{OK} button and the new scene will be created and automatically opened.
 
 \begin{figure}[ht]
  \begin{center}
@@ -54,7 +54,7 @@ In the \textbf{New Scene} dialog select the scenes sub-directory and type \textt
 \end{figure}
 
 
-After a scene is opened, viewports and views are displayed (see figure~\ref{fig:new_scene_created}). Viewports are framed areas that provide a view to the current scene. There are two viewports in Ocerus editor. The \textbf{Game Viewport} (the upper one) shows the scene in the same way as it is rendered in the resulting game, whereas the \textbf{Editor Viewport} (the lower one) shows the scene with editing tools visible. Viewports are surrounded with views that provide information related to current scene or current entity. There are five views: \textbf{Entity}, \textbf{Hierarchy}, 
+After a scene is opened, viewports and views are displayed (see figure~\ref{fig:new_scene_created}). Viewports are framed areas that provide a view to the current scene. There are two viewports in the Ocerus editor. The \textbf{Game Viewport} (the upper one) shows the scene in the same way as it is rendered in the resulting game, whereas the \textbf{Editor Viewport} (the lower one) shows the scene with editing tools visible. Viewports are surrounded with views that provide information related to the current scene or current entity. There are five views: \textbf{Entity}, \textbf{Hierarchy}, 
 \textbf{Layers}, \textbf{Prototypes} and \textbf{Resources}. All these views will be discussed later, now we move on creating an entity.
 
 \begin{figure}[ht]
@@ -98,7 +98,7 @@ Make sure that the \texttt{Ball} entity is selected, then click the \textbf{Edit
 \section{Adding graphics content}
 Every file and directory that is placed into the project directory hierarchy is visible in the \textbf{Resources} view. To put files with your textures into the project, simply copy them somewhere into the project directory. When you add a file into the project directory, Ocerus automatically detects the type of the file and creates the suitable type of resource. The type of the resource is represented by an icon next to the resource name in the \textbf{Resource} view.
 
-You can either use the \texttt{ball.png} texture from the \texttt{textures} directory in the \hyperref[sec:archive]{archive} provided with this document, or you can create or get any texture you like (see supported formats on page \pageref{sec:supported_formats}). Either way, copy it to textures subdirectory of your project directory. Switch back to Ocerus and see that \texttt{ball.png} has appeared in the \textbf{Resources} view (see figure~\ref{fig:link_texture}).
+You can either use the \texttt{ball.png} texture from the \texttt{textures} directory in the \hyperref[sec:archive]{archive} provided with this document, or you can create or get any texture you like (see supported formats on page \pageref{sec:supported_formats}). Either way, copy it to the textures subdirectory of your project directory. Switch back to Ocerus and see that \texttt{ball.png} has appeared in the \textbf{Resources} view (see figure~\ref{fig:link_texture}).
 
 Now Ocerus is aware of our texture. Let's use it as a \textbf{texture} property of our entity.
 
@@ -130,7 +130,7 @@ We have already discussed the way to move, rotate and scale an entity by editing
 \end{figure}
 
 
-When the \textbf{move} tool is active, you can move the selected entity by dragging it in the editor viewport. By selecting the \textbf{rotate} tool and dragging the entity back and forth, you can rotate the entity and lastly the scale tool allows you to change the size of the entity, again, by dragging the entity in the editor viewport. Take some time to familiarize with these tools as they are vital for rapid development in Ocerus. Consider using keyboard shortcuts to become even faster (click the \textbf{Help $\to$ Shortcuts} action in the main menu to display the list of keyboard shortcuts).
+When the \textbf{move} tool is active, you can move the selected entity by dragging it in the editor viewport. By selecting the \textbf{rotate} tool and dragging the entity back and forth, you can rotate the entity and lastly the scale tool allows you to change the size of the entity, again, by dragging the entity in the editor viewport. Take some time to familiarize with these tools as they are vital for rapid development in the Ocerus. Consider using keyboard shortcuts to become even faster (click the \textbf{Help $\to$ Shortcuts} action in the main menu to display the list of keyboard shortcuts).
 
 \begin{wrapfigure}{r}{0.35\textwidth}
 \capstart
@@ -170,7 +170,7 @@ Ocerus does not implement the real gravitation force in the sense that all objec
 If you are done, let's see what happens if we start the simulation.
 
 \section{Starting the action}
-While we were building our scene so far, everything was static even though we added physics to our entities. This is because the action is stopped. During the editing you can arrange the initial state of your scene and when you feel like testing everything, you can animate the scene by starting the action. Action is controlled by the action toolbar (see figure~\ref{fig:action_toolbar}) that is composed of three buttons. Clicking the \textbf{Play} button will start the action from the current state, clicking the \textbf{Pause} button will pause action in the current state and clicking the \textbf{Stop} button will stop the action and resets the scene to the initial state. After the action is started, you can still use edit tools and edit entity properties. Changes that you make will be discarded as soon as you stop the action however.
+While we were building our scene so far, everything was static even though we added physics to our entities. This is because the action is stopped. During the editing you can arrange the initial state of your scene and when you feel like testing everything, you can animate the scene by starting the action. Action is controlled by the action toolbar (see figure~\ref{fig:action_toolbar}), which is composed of three buttons. Clicking the \textbf{Play} button will start the action from the current state, clicking the \textbf{Pause} button will pause action in the current state and clicking the \textbf{Stop} button will stop the action and resets the scene to the initial state. After the action is started, you can still use edit tools and edit entity properties. Changes that you make will be discarded as soon as you stop the action however.
 
 \begin{figure}[ht]
  \begin{center}
@@ -183,14 +183,14 @@ While we were building our scene so far, everything was static even though we ad
 
 Click the \textbf{Play} button and see the ball fall down on the platform. If your platform is sloped enough, you will see the ball roll down on the platform. You will probably see that the movement is not really smooth. This is because we used a collision polygon with only eight vertices for our ball. Try to double or even triple the number of the vertices and the movement will be more smooth. Note that Ocerus does not provide colliders with rounded shapes.
  
-Now it's time to design our pinball machine. The pinball machine will be composed of many platforms, so we need to create a lot of new entities. As you could see when you created the first platform entity, the process is not quite short and you probably don't want to imagine how long it would take to create all those new entities the same way. For purposes of reusing existing entities there are a few tricks in Ocerus. The first one is to use the \textbf{Edit $\to$ Duplicate Entity} action in the main menu. This action will duplicate the selected entity. You can duplicate the first platform entity a couple of times to have enough entities to design the pinball machine. Nevertheless, duplicating entities is not recommended in this case. 
+Now it's time to design our pinball machine. The pinball machine will be composed of many platforms, so we need to create a lot of new entities. As you could see when you created the first platform entity, the process is not quite short and you probably don't want to imagine how long it would take to create all those new entities the same way. For purposes of reusing existing entities there are few tricks in the Ocerus. The first one is to use the \textbf{Edit $\to$ Duplicate Entity} action in the main menu. This action will duplicate the selected entity. You can duplicate the first platform entity a couple of times to have enough entities to design the pinball machine. Nevertheless, duplicating entities is not recommended in this case. 
 
 Imagine that you decide to change the texture property of all your platform entities one day. If you used the duplicate entity method, you need to modify the texture property of every platform entity in each scene in your project. This issue is addressed by using prototypes, that allow some properties to be shared among multiple entities.
 
 \section{Using prototypes}
 Prototypes are special entity templates. They are not related to a concrete scene, rather they are saved in \texttt{Prototypes.xml} file and can be accessed from any scene in the project. When you need to create a specific entity many times, you can create it once and then create a prototype from it. Then you can use this prototype as many times as you like.
 
-To create a prototype from the \texttt{Platform} entity, make sure it is selected and then select the \textbf{Edit $\to$ Create Prototype} action from the main menu. A new item appears in the \textbf{Prototypes} view. All prototypes in your project are displayed there and instantiation of prototypes is as easy as dragging the prototype from the view to the \textbf{Editor viewport}. Drag your new prototype to the viewport a couple of times to have enough entities to build the pinball machine.
+To create a prototype from the \texttt{Platform} entity, make sure it is selected and then select the \textbf{Edit $\to$ Create Prototype} action from the main menu. A new item appears in the \textbf{Prototypes} view. All prototypes in your project are displayed there and instantiation of prototypes is as easy as dragging the prototype from the \textbf{Prototypes} view to the \textbf{Editor viewport}. Drag your new prototype to the viewport a couple of times to have enough entities to build the pinball machine.
 
 When an entity is created from a prototype, this entity is linked to that prototype. This means that changes made to the prototype are propagated to all entities linked to it. However, this behavior is limited to only shared properties.
 
@@ -209,7 +209,7 @@ When an entity is created from a prototype, this entity is linked to that protot
 \end{wrapfigure}
 
 
-Click the \texttt{Platform} prototype in the \textbf{Prototypes} view and look at the \textbf{Entity} view (see figure~\ref{fig:shared_properties}). On the left of every property there is a check box that controls, whether the property is shared. If you change a property that has this check box checked, the change will be propagated to its linked entities. This concept is very handy if you need to globally change some properties across several scenes in your project. You only have to change the prototype and Ocerus will do the rest.
+Click the \texttt{Platform} prototype in the \textbf{Prototypes} view and look at the \textbf{Entity} view (see figure~\ref{fig:shared_properties}). On the left of every property there is a check box that controls, whether the property is shared. If you change a property that has this check box checked, the change will be propagated to its linked entities. This concept is very handy if you need to globally change some properties across several scenes in your project. You only have to change the prototype and the Ocerus will do the rest.
 
 \begin{wrapfigure}{r}{0.35\textwidth}
 \vspace{-20pt}
@@ -238,7 +238,7 @@ Select the \texttt{Platform} entity from the \textbf{Hierarchy} view and again l
 \end{figure}
 
 \section{Entity Hierarchy}
-As the number of entities in your scene grows, it becomes harder not to get lost. Fortunately, Ocerus provides means for hierarchical organization through the \textbf{Hierarchy} view. Unlike file system organization, each and every entity can become a parent of other entities, so there are no folders in this concept. In fact, it's not an issue at all. Not only that you can use dummy entities (entities with no components) as folders, you are even encouraged to do so.
+As the number of entities in your scene grows, it becomes harder not to get lost. Fortunately, the Ocerus provides means for hierarchical organization through the \textbf{Hierarchy} view. Unlike file system organization, each and every entity can become a parent of other entities, so there are no folders in this concept. In fact, it's not an issue at all. Not only that you can use dummy entities (entities with no components) as folders, you are even encouraged to do so.
 
 Entities can be organized into a hierarchy by dragging them to their parents. This way you can move any entity to become a child of another entity. To move the entity to the top of the hierarchy (next to another top level elements), you need to use the \textbf{reparent up} action a couple of times. Just right click on the entity and select the \textbf{reparent up} action and the entity will move one level upwards in the hierarchy.
 
@@ -296,11 +296,11 @@ When you are ready, you can see your flippers in action. Start the action by pre
 
 
 \section{GUI}
-The last topic that is covered in this user guide is the GUI creation. Ocerus uses the CEGUI library that provides the GUI functionality. It uses several files that define particular building blocks of your GUI. These are the \textbf{Looknfeel} files, the \textbf{Font} files, the \textbf{Imageset} files, the \textbf{Layout} files and the \textbf{Scheme} files. All these files can be edited with a simple text editor as they are just XML files, however CEGUI provides visual editors for some of them, namely Layout editor and Imageset editor.
+The last topic that is covered in this user guide is the GUI creation. The Ocerus uses the CEGUI library that provides the GUI functionality. It uses several files that define particular building blocks of your GUI. These are the \textbf{Looknfeel} files, the \textbf{Font} files, the \textbf{Imageset} files, the \textbf{Layout} files and the \textbf{Scheme} files. All these files can be edited with a simple text editor as they are just XML files, however CEGUI provides visual editors for some of them, namely Layout editor and Imageset editor.
 
 The \textbf{Looknfeel} files define the visual appearance of the GUI elements. As a reasonable default \textbf{Looknfeel} is provided to you, we will not cover editing these files. You can find more on this topic in the \href{http://www.cegui.org.uk/api_reference/fal_man.html}{CEGUI manual}.
 
-The \textbf{Font} files allow to define fonts for your GUI, whether they are TrueType fonts or bitmap fonts. Again, Ocerus provide a reasonable default font so neither \textbf{Font} files are discussed in detail here. See the \href{http://www.cegui.org.uk/api_reference/xml_font.html}{CEGUI manual} to get more info on \textbf{Font} files.
+The \textbf{Font} files allow to define fonts for your GUI, whether they are TrueType fonts or bitmap fonts. Again, the Ocerus provide a reasonable default font so neither \textbf{Font} files are discussed in detail here. See the \href{http://www.cegui.org.uk/api_reference/xml_font.html}{CEGUI manual} to get more info on \textbf{Font} files.
 
 The \textbf{Imageset} files allow to define your custom images that can be used in GUI. CEGUI allows to put multiple images into a large image file and specify which parts of the large image correspond to particular images. This map is defined in \textbf{Imageset} files. In our \texttt{Pinball} project, we will define faces of two buttons that allow to trigger flippers by clicking them. Look at the \textbf{Imageset} file for our buttons.
 \lstinputlisting[language=xml,
@@ -324,7 +324,7 @@ The \textbf{Layout} files define the layout of your GUI elements. Take a look at
 
 Finally, the purpose of the \textbf{Scheme} files is to group other data files and resources together, and to define some of their interactions. It usually contains a list of \textbf{Imageset}, files \textbf{Font} files and \textbf{Looknfeel} files.
 
-To add the GUI to the project, copy the \texttt{gui} directory from the \hyperref[sec:archive]{archive} to the project directory. Then switch back to Ocerus and look at the \textbf{Resources} view. Ocerus tries to auto-detect types of the resources and usually does a great job. However, when it encounters the \texttt{.png} file, it identifies it as a \textbf{Texture} resource. To make it work with CEGUI, the type of these image files needs to be changed to the \textbf{CEGUI} resource. Right click the \texttt{buttons.png} file in the view and select the \textbf{Change Type $\to$ CEGUI} from the context menu. Now you are ready to put the layout with flipper buttons into the scene.
+To add the GUI to the project, copy the \texttt{gui} directory from the \hyperref[sec:archive]{archive} to the project directory. Then switch back to the Ocerus and look at the \textbf{Resources} view. Ocerus tries to auto-detect types of the resources and usually does a great job. However, when it encounters the \texttt{.png} file, it identifies it as a \textbf{Texture} resource. To make it work with CEGUI, the type of these image files needs to be changed to the \textbf{CEGUI} resource. Right click the \texttt{buttons.png} file in the view and select the \textbf{Change Type $\to$ CEGUI} from the context menu. Now you are ready to put the layout with flipper buttons into the scene.
 
 GUI layouts that are visible in your games are included into a scene by creating an entity with the \textbf{GUILayout} component. Create an entity named \texttt{GUILayout}, remove its \textbf{Transform} component and add the \textbf{GUILayout} component. Look at its properties (figure~\ref{fig:guilayout_component}).
 
