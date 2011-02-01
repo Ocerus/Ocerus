@@ -11,14 +11,14 @@ This document only shows how to make things work. If you want to understand how 
 
 \chapter{Components}
 
-Every game object is represented by an entity which is a compound of components that provides it with various functionalities. A component can have several properties (and functions), which can be read or written (called) via their getters and setters (or functions themselves), and which are accessible through their unique name. It can also react to sent messages such as an initialization, a drawing, a logic update etc. by its own behavior.
+Every game object is represented by an entity which is a compound of components that provide it with various functionalities. A component can have several properties (and functions), which can be read or written (called) via their getters and setters (or functions themselves), and which are accessible through their unique name. It can also react to sent messages such as an initialization, a drawing, a logic update etc. by its own behavior.
 
-The Ocerus provides some predefined components that provides basic features such as a graphic representation,  physics, scripts etc. It is possible to define new components. They can add new functionality to the game entities. Similar result can be achieved by using scripts but the logic in components is not limited to predefined script functions and runs faster. In the following sections, there will be a sequence of steps that are necessary to create and use a new component. 
+The Ocerus provides some predefined components that provide basic features such as a graphic representation,  physics, scripts etc. It is possible to define new components. They can add new functionality to the game entities. Similar result can be achieved by using scripts but the logic in components is not limited to predefined script functions and runs faster. In the following sections, there will be a sequence of steps that are necessary to create and use a new component. 
 
 There will be also an example of a simple component that will make an entity to move up and down. It would probably be better to implement this particular functionality by a script but it will serve well as an example.
 
 \section{Creating a component class}
-The first thing that needs to be done is creating a new component class. Each component class is defined in a separate header file, which are located in \emph{EntitySystem/Components}.
+The first thing that needs to be done is creating a new component class. Each component class is defined in a separate header file. These files are located in \emph{EntitySystem/Components}.
 
 The header file of a component must be defined in the \emph{EntityComponents} namespace and must publicly inherit from the  \emph{RTTIGlue$<$[Component Name], Component$>$}. So the example component class (named \emph{ExampleComp}) would look like this:
 
@@ -33,7 +33,7 @@ namespace EntityComponents
 \end{verbatim}
 \normalsize
 
-There are few methods in this class that should be overridden: \emph{Create}, \emph{Destroy}, \emph{HandleMessage} and \emph{RegisterReflection}. \emph{Create} and \emph{Destroy} methods are called after the creation respectively before the destruction of the component. \emph{HandleMessage} and \emph{RegisterReflection} methods will be described in later sections.
+There are few methods in this class that should be overridden: \emph{Create}, \emph{Destroy}, \emph{HandleMessage} and \emph{RegisterReflection}. \emph{Create} and \emph{Destroy} methods are called after the creation and before the destruction of the component, respectively. \emph{HandleMessage} and \emph{RegisterReflection} methods will be described in later sections.
 
 After that, the component type must be registered in the \emph{\_ComponentTypes.h} header file (located in \emph{EntitySystem/Components}). To do so, this line should be added:
 \footnotesize 
@@ -46,7 +46,7 @@ Finally, the header file with the component class must be included in the \emph{
 
 \section{Adding component properties}
 
-The component properties are represented by the class member variables. But just defining a class member variable is not enough to make it into a regular property. It needs to be registered in the RTTI. Registering properties is done in the static method \emph{void RegisterReflection()}. It is automatically called during the initialization process of the \emph{EntitySystem}. In this method, there should be called the \emph{RegisterProperty} function. Usage of that function looks like this:
+The component properties are represented by the class member variables. But just defining a class member variable is not enough to turn it into a regular property. It needs to be registered in the RTTI. Registering properties is done in the static method \emph{void RegisterReflection()}. It is automatically called during the initialization process of the \emph{EntitySystem}. In this method, there should be called the \emph{RegisterProperty} function. Usage of that function looks like this:
 
 \footnotesize 
 \begin{verbatim}
@@ -60,7 +60,7 @@ RegisterProperty<Property type>("Property name", &GetterMethod,
 The Property type is obviously the data type of the property but is must be registered in the \emph{PropertyTypes.h} header file (located in \emph{Utils/Properties}). All regular property types are already registered there. There is also a short description of how to register new property types.
 
 \item
-The property must have defined getter and setter methods. The methods signatures must look like this:
+The property must have getter and setter methods defined. The methods signatures must look like this:
 
 \footnotesize 
 \begin{verbatim}
@@ -69,10 +69,10 @@ void SetProp([Property type] value)
 \end{verbatim}
 \normalsize
 
-Addresses of those methods must be given as parameters to the \emph{RegisterProperty} function.
+Addresses of these methods must be passed to the \emph{RegisterProperty} function.
 
 \item
-The Access flag defines ways how the property can be accessed from the editor or a script or whether it should be saved/loaded to/from stream. The list of all flag states is in the \emph{PropertyAccess.h} header file (located in \emph{Utils/Properties}).
+The Access flag defines ways how the property can be accessed from the editor or a script or whether it should be saved/loaded to/from a stream. The list of all flag states is in the \emph{PropertyAccess.h} header file (located in \emph{Utils/Properties}).
 \end{itemize}
 
 Also component functions can be registered so they can be called from a script. For that, there is the \emph{RegisterFunction} function. Usage of that function is similar to the \emph{RegisterProperty} and looks like this:
@@ -254,9 +254,10 @@ After above described steps, the new component is ready to be used. It will appe
 
 Note that most functionalities are easier to implement with scripts. The main advantage (and also the main disadvantage) of creating a new component is that it is defined in the source code. The new component can directly access the engine but the system has to be recompiled with every change to the component. 
 
-The scripts, on the other hand, can be changed real-time, when the editor is running. It makes developing scripts much easier. The disadvantage of scripts is that it has only a limited list of functions. But that list can be extended, see section \emph{Script System}.
+The scripts, on the other hand, can be changed real-time, when the editor is running. It makes developing scripts much easier. The disadvantage of scripts is that it has only a limited list of functions. But that list can be extended, see chapter \emph{\nameref{chap:script_system}}.
 
 \chapter{Script system}
+\label{chap:script_system}
 
 The Script system provides quite a powerful tool for programming the game logic without having to modify and compile the source code. Even if there are hundreds of registered functions, classes, operators etc., it could be useful to register some more. The Script system is prepared for this so it is not difficult to register some new stuff.
 
@@ -459,7 +460,7 @@ The resource class can have additional methods for accessing the resource type s
 
 \end{itemize}
 
-Defining new resource types is necessary when adding new functionality that requires a data from external files. For example, a new component that adds sounds to an entity would need a new resource type. The component should have a \emph{ResourcePtr} typed property, through which it could access the resource data, and it should define and export functions that will allow to play the sound from a script.
+Defining new resource types is necessary when adding new functionality that requires data from external files. For example, a new component that adds sounds to an entity would need a new resource type. The component should have a \emph{ResourcePtr} typed property, through which it could access the resource data, and it should define and export functions that will allow to play the sound from a script.
 
 \chapter{Renderer}
 
