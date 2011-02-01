@@ -13,15 +13,15 @@ game plane.
 The aim of this guide is to teach you the basics of the Ocerus usage, and by a simple project demonstration,
 it should help you get set up and begin creating wonderful games in no time. 
 
-Throughout the user guide, the basic game editing techniques will be presented on a sample pinball game, which
-will be created from scratch. This guide concentrates only on real basics, so the game will be rather simple
-but complex enough to demonstrate all necessary use cases.
+Throughout the user guide, we are going to show you basic game editing techniques on a sample pinball
+game, that you create from scratch. This guide concentrates only on real basics, so the game is rather
+simple but complex enough to demonstrate all necessary use cases.
 
 \section{Getting Ocerus}
 The Ocerus project is currently hosted at SourceForge and its homepage is \url{http://ocerus.sourceforge.net}.
-On that page, you can find the brief description of the project, location of project resources, such as source
-code repository and installation packages. To download the latest installation package, navigate your browser
-to the \href{http://sourceforge.net/projects/ocerus/files/}{Ocerus download page} and download the latest
+On that page, you can find project resources, such as source code repository and installation packages. To
+download the latest installation package, navigate your browser to
+the \href{http://sourceforge.net/projects/ocerus/files/}{Ocerus download page} and download the latest
 version.
 
 \section{Installation}
@@ -31,9 +31,9 @@ button clicks will do the job. We are ready for our first launch.
 \section{Resources archive}
 \label{sec:archive}
 Resources needed to create the game described in this guide are accompanying the PDF. If you have opened the
-guide from the editor, the resources are likely to be in the \href{run:./archive/}{archive/} directory.
-Otherwise, you need to download the archive package from the project website. It should be somewhere near the
-user guide.
+guide from the editor, the resources are likely to be in the \texttt{\href{run:./archive/}{archive}}
+directory. Otherwise, you need to download the archive package from the project website. See the
+\href{http://sourceforge.net/projects/ocerus/files/}{Ocerus download page}.
 
 \section{First steps}
 To start Ocerus, click the Ocerus icon on your desktop or in the start menu. In a few moments, the main Ocerus
@@ -56,11 +56,13 @@ reside. Note that a new subdirectory in the chosen location will be created and 
 the project. That is why you should avoid using any nonstandard characters in the project name. When the
 \textbf{OK} button is clicked, the new project is created.
 
+{\itshape
 A project in Ocerus represents a single game, so for every single game that you design, you need to create
 another project. Behind the scene, projects are ordinary directories on your file system with resource files
 representing your game content, such as images, models, scripts, etc. Structure of the project directory is on
-your own consideration, but it's recommended to stick with the default structure that is created for new
+your own consideration, but we recommend to stick with the default structure that is created for new
 projects.
+}
 
 Although a default scene was automatically created together with the project, we are going to create another
 one. So let's create a \textbf{scene}.
@@ -82,14 +84,20 @@ will be created and automatically opened.
  \label{fig:new_scene}
 \end{figure}
 
+{\itshape
+Scenes are your virtual playgrounds where your game takes place. Generally speaking they consist of an
+indefinite plane with your game elements, such as player's avatar or enemies, on it. You can think of a scene
+as a game level. 
+}
 
 After a scene is opened, viewports and views are displayed (see figure~\ref{fig:new_scene_created}). Viewports
 are framed areas that provide a view to the current scene. There are two viewports in the Ocerus editor. The
 \textbf{Game Viewport} (the upper one) shows the scene in the same way as it is rendered in the resulting
 game, whereas the \textbf{Editor Viewport} (the lower one) shows the scene with editing tools visible.
 Viewports are surrounded with views that provide information related to the current scene or current entity.
-There are five views: \textbf{Entity}, \textbf{Hierarchy}, 
-\textbf{Layers}, \textbf{Prototypes} and \textbf{Resources}. All these views will be discussed later, now we move on creating an entity.
+There are five views: \textbf{Entity}, \textbf{Hierarchy}, \textbf{Layers}, \textbf{Prototypes} and
+\textbf{Resources}. All these views will be discussed later, now we move on creating the protagonist of our
+game. You are right, we are talking about the ball.
 
 \begin{figure}[ht]
  \begin{center}
@@ -118,7 +126,6 @@ Note that if the property value is grayed, then it cannot be edited directly, or
  \caption{Newly created entity}
  \label{fig:new_entity_created}
 \end{figure}
-
 
 Entities in Ocerus are composed of components that determine their behavior and functionality and these
 components can have other properties. All components and their properties are shown just under the
@@ -306,7 +313,7 @@ is not quite short and you probably don't want to imagine how long it would take
 entities the same way. For purposes of reusing existing entities there are few tricks in the Ocerus. The first
 one is to use the \textbf{Edit $\to$ Duplicate Entity} action in the main menu. This action will duplicate the
 selected entity. You can duplicate the first platform entity a couple of times to have enough entities to
-design the pinball machine. Nevertheless, duplicating entities is not recommended in this case. 
+design the pinball machine. Nevertheless, duplicating entities is not really recommended in this case. 
 
 Imagine that you decide to change the texture property of all your platform entities one day. If you used the
 duplicate entity method, you need to modify the texture property of every platform entity in each scene in
@@ -560,6 +567,8 @@ Finally check the \textbf{Enabled} and \textbf{Visible} checkboxes.
 
 \section{Supported formats}
 \label{sec:supported_formats}
+Ocerus supports following file formats in your games.\\
+\\
 Texture resources: JPEG, PNG, TGA, BMP, PSD, DDS, HDR \\
 Model resources: OBJ\footnote{Content of the corresponding MTL file must be inserted to the beginning of the file. When exported from Blender, following options should be checked: "Copy Images", "Normals", "Polygroups", "Objects", "Groups", "Material Groups".} \\
 CEGUI image resources: JPEG, PNG, TGA

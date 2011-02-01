@@ -33,7 +33,6 @@ void OnUpdateLogic(float32 delta)
   float32 change = ANGLE_CHANGE_RATIO * delta;
   if (this.Get_bool("LeftSided"))
   {
-    //if (gInputMgr.IsKeyDown(KC_LEFT))
     if (gInputMgr.IsKeyDown(KC_LEFT) || this.Get_bool("IsPressed"))
     {
       // not entirely in the upper position yet
@@ -49,7 +48,6 @@ void OnUpdateLogic(float32 delta)
   else
   {
 
-    //if (gInputMgr.IsKeyDown(KC_RIGHT))
     if (gInputMgr.IsKeyDown(KC_RIGHT) || this.Get_bool("IsPressed"))
     {
       // not entirely in the upper position yet
