@@ -70,6 +70,8 @@ namespace Reflection
 		#include "PropertyTypes.h"
 		#undef PROPERTY_TYPE
 				return true;
+			default:
+				return false;
 		}
 
 		return false;	

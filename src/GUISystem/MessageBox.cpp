@@ -12,9 +12,10 @@ int32 MessageBox::sDisplayedCounter = 0;
 
 MessageBox::MessageBox(MessageBox::eMessageBoxType type, int32 tag): mType(type), mTag(tag), mMessageBox(0), mMinWidth(0)
 {
+	static uint32 messageBoxID = 0;
 	++sDisplayedCounter;
 
-	mMessageBox = gGUIMgr.LoadSystemLayout("MessageBox.layout", "MessageBox");
+	mMessageBox = gGUIMgr.LoadSystemLayout("MessageBox.layout", "MessageBox" + Utils::StringConverter::ToString(messageBoxID++));
 	OC_ASSERT(mMessageBox);
 	mMessageBox->setModalState(true);
 
