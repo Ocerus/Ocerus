@@ -396,7 +396,7 @@ The new resource class has to override some methods:
 \item
 Constructor and destructor.
 \item
-Static \emph{CreateMe()} method that returns a special shared pointer (\emph{ResourceSystem\-::ResourcePtr}) that points to the new resource class instance. This pointer allows type-checked casting to specific resource pointers. So it should look like this:
+Static \emph{CreateMe()} method that returns a special shared pointer (\emph{ResourceSystem\::ResourcePtr}) that points to the new resource class instance. This pointer allows type-checked casting to specific resource pointers. So it should look like this:
 
 \footnotesize 
 \begin{verbatim}
