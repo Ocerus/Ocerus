@@ -13,11 +13,6 @@ BoolEditor::~BoolEditor()
 	DeinitWidget();
 }
 
-CEGUI::Window* BoolEditor::GetWidget()
-{
-	return mEditorWidget;
-}
-
 void BoolEditor::SetModel(BoolEditor::Model* newModel)
 {
 	if (mEditorWidget == 0)

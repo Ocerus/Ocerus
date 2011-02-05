@@ -14,11 +14,6 @@ TwoDimEditor::~TwoDimEditor()
 	DeinitWidget();
 }
 
-CEGUI::Window* TwoDimEditor::GetWidget()
-{
-	return mEditorWidget;
-}
-
 void TwoDimEditor::Submit()
 {
 	float32 x = Utils::StringConverter::FromString<float32>(GetEditbox1Widget()->getText().c_str());

@@ -199,12 +199,6 @@ namespace Editor
 	}
 
 	template<class ElementType>
-	CEGUI::Window* ArrayEditor<ElementType>::GetWidget()
-	{
-		return mEditorWidget;
-	}
-
-	template<class ElementType>
 	void ArrayEditor<ElementType>::Submit()
 	{
 		SubmitEditors();

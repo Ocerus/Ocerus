@@ -21,10 +21,11 @@ namespace Editor {
 		/// Destroys the TwoDimEditor.
 		virtual ~TwoDimEditor();
 
-		virtual CEGUI::Window* GetWidget();
-
+		/// Submits the value from editor widget to the model.
 		virtual void Submit();
 		
+		/// Polls the model for current value and updates the editor widget, unless
+		/// the editor is locked for updates.
 		virtual void Update();
 		
 	protected:
@@ -94,6 +95,7 @@ namespace Editor {
 			SetupWidget(mModel);
 		}
 		
+		/// Destroys the model.
 		virtual void DestroyModel()
 		{
 			delete mModel;

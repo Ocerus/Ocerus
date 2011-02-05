@@ -28,10 +28,6 @@ namespace Editor {
 
 		/// Destroys the model.
 		virtual void DestroyModel();
-
-		/// Creates the main widget of this editor and returns it.
-		virtual CEGUI::Window* GetWidget();
-
 		
 		/// Submits the value from editor widget to the model.
 		virtual void Submit();

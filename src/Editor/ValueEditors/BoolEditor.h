@@ -27,10 +27,7 @@ namespace Editor {
 		void SetModel(Model* newModel);
 
 		/// Destroys the model.
-		virtual void DestroyModel();
-
-		/// Creates the main widget of this editor and returns it.
-		virtual CEGUI::Window* GetWidget();
+		virtual void DestroyModel();	
 
 		/// Submits the value from editor widget to the model.
 		virtual void Submit();
@@ -39,6 +36,7 @@ namespace Editor {
 		/// the editor is locked for updates.
 		virtual void Update();
 
+		/// Returns the type of value editor.
 		virtual eValueEditorType GetType() { return VET_PT_BOOL; }
 		
 		static const eValueEditorType Type;

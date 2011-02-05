@@ -28,8 +28,10 @@ namespace Editor
 		/// Sets the model of the editor.
 		void SetModel(Model* newModel);
 
+		/// Submits the value from editor widget to the model.
 		virtual void Submit() {};
 
+		/// Returns the type of value editor.
 		virtual eValueEditorType GetType() { return VET_PT_PROTOTYPE; }
 
 		static const eValueEditorType Type;

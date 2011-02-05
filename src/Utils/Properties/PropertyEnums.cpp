@@ -72,9 +72,7 @@ namespace Reflection
 				return true;
 			default:
 				return false;
-		}
-
-		return false;	
+		}	
 	}
 }
 

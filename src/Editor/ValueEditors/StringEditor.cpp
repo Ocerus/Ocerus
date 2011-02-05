@@ -28,12 +28,6 @@ void StringEditor::DestroyModel()
 	mModel = 0;
 }
 
-CEGUI::Window* StringEditor::GetWidget()
-{
-	OC_DASSERT(mEditorWidget != 0);
-	return mEditorWidget;
-}
-
 void StringEditor::Submit()
 {
 	OC_DASSERT(mEditboxWidget != 0);
