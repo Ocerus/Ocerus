@@ -13,7 +13,7 @@
 }
 
 \usepackage{fullpage} % koneckoncu je to neformalni dokument, takze k certu s akademickou konvenci
-\usepackage[pdfborder={0 0 0}, pdfpagelayout=OneColumn, pdftitle={\TitleText}, pdfauthor={Michal Cevora, Lukas Hermann, Ondrej Mocny, Tomas Svoboda}]{hyperref}
+\usepackage[colorlinks=true, pdfborder={0 0 0}, pdftitle={\TitleText}, pdfauthor={Michal Cevora, Lukas Hermann, Ondrej Mocny, Tomas Svoboda}]{hyperref}
 \usepackage[USenglish]{babel}
 \usepackage[all]{hypcap}
 \usepackage{listings}
@@ -30,6 +30,7 @@
 
 {
 	\renewcommand\thepage{}
+	\hypersetup{linkcolor=black}
 	\tableofcontents
 	\clearpage
 }
