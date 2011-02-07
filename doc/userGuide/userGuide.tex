@@ -492,6 +492,23 @@ Select the \texttt{LeftFlipper} entity and check its \textbf{LeftSided} property
 When you are ready, you can see your flippers in action. Start the action by pressing the \textbf{Play} button
 on the toolbar and try to control your flippers with the \textbf{Left} and the \textbf{Right} key.
 
+
+\subsection{Includes}
+Including other script files is a bit advanced concept which you don't necessarily need to understand but which comes handy from time to time. It allows you to split the code into better manageble chunks and share functionality with other script files. You can include another script file into the current file by placing the following line to the top of the file:
+\begin{verbatim}
+#include "fileToInclude.as"
+\end{verbatim}
+What the command does is it basically pastes the content of \texttt{fileToInclude.as} at the position of the command in the current script file. So when you use this command in multiple script files you can share the code inside \texttt{fileToInclude.as}. Note that the included file must contain the full path in the project folder.
+
+
+
+
+
+
+
+
+
+
 \section{GUI}
 The last topic that is covered in this user guide is the GUI creation. The Ocerus uses the CEGUI library that
 provides the GUI functionality. It uses several files that define particular building blocks of your GUI.
@@ -527,7 +544,7 @@ file that contains the images. It consists of several \texttt{Image} tags, that 
 their name, size and position within the file.
 
 The \textbf{Layout} files define the layout of your GUI elements. Take a look at the \textbf{Layout} file for
-our scene that defines two flipper buttons.
+our scene that defines two flipper buttons. For now you can just use it as it is and we'll explain what it does later.
 \lstinputlisting[language=xml,
 	basicstyle=\scriptsize,
 	stringstyle=\ttfamily,
@@ -563,7 +580,50 @@ component and add the \textbf{GUILayout} component. Look at its properties
 
 First, drag the \texttt{pinball.scheme} file from the \textbf{Resource} view to the \textbf{Scheme} property
 in the \textbf{Entity} view. Then drag the \texttt{gameplay.layout} file to the \textbf{Layout} property.
-Finally check the \textbf{Enabled} and \textbf{Visible} checkboxes.
+Finally check the \textbf{Enabled} and \textbf{Visible} checkboxes. Now if you start the game the GUI should be working as promised!
+
+
+\subsection{Layout}
+Now it's time to understand what the layout file actually does and how it is structured. The GUI layout for the game should be defined in a file with the \texttt{.layout} extension and the XML internal structure. Since the CEGUI library is used for the GUI system a layout must fulfill its specification. It is broadly described in its documentation, so here's only a short description.
+
+The \verb/<GUILayout>/ element is the root element in layout XML files. It must contain a single \verb/<Window>/ element representing the root GUI element. The \verb/<Window>/ element must have the \verb/Type/ attribute which specifies the type of the window to be created. This may refer to a concrete window type, an alias, or a falagard mapped type (see the next paragraph). It can also have the \verb/Name/ attribute specifying a unique name of the window. This element may contain \verb/<Property>/ elements with the \verb/Name/ and \verb/Value/ attributes. They are used to set properties of the window. It may also contain \verb/<Event>/ elements with the \verb/Name/ and \verb/Function/ attributes which are then used to create bindings between the window and script functions (see the next section). Also, it can contain another \verb/<Window>/ elements as its child windows. For supported window types, properties and events see the CEGUI documentation.
+
+Note that there's a feature of the layouts specific to this engine. That is the translation of texts. While using the \verb/Text/ and \verb/Tooltip/ properties you can surround the value by \$ (i.e. \verb/Text=$text$/). That text is then used as a key to search for the text in the \verb/GUI/ group of the string manager. The string manager automatically loads the string files in the \verb/strings/ directory according to the currently selected language. The structure of the strings file should be pretty clear once you open the default one which will appear there automatically after you create a new project.
+
+
+\subsection{Events}
+To be able to react when a user does something with the GUI you must connect the GUI layout to scripts. This can be done by placing the script into the \textbf{Callback} property of the \textbf{GUILayout} component. To subscribe to an event add the \textbf{Event} element to the window. Use its \textbf{Name} attribute to specify the event you want to react on. Use the \textbf{Function} attribute to set the name of the function in your script which will be executed when the event fires. The function must take a single parameter of the \textbf{Window@} type which holds a reference to the window which generated the event.
+
+For example assume this is a part of a layout
+
+\begin{verbatim}
+<Window Type="CEGUI/PushButton" Name="Continue">
+  ...
+  <Event Name="MouseClick" Function="ContinueClick">
+  ...
+</Window>
+\end{verbatim}
+
+\noindent and this is a part of a script module
+
+\begin{verbatim}
+void ContinueClick(Window@ window)
+{
+  Println(window.GetName());
+}
+\end{verbatim}
+
+\noindent connected via the \textbf{GUILayout} component together. The component can be in any active entity in the scene. Then  every click on the button named \textbf{Continue} will print the message \textbf{Continue} into the log.
+
+
+
+
+
+
+
+\appendix
+
+
 
 \section{Supported formats}
 \label{sec:supported_formats}
@@ -574,8 +634,6 @@ Model resources: OBJ\footnote{Content of the corresponding MTL file must be inse
 CEGUI image resources: JPEG, PNG, TGA
 
 
-
-\appendix
 
 \section{Editor controls}
 \label{sec:editor_controls}
