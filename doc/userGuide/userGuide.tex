@@ -28,13 +28,6 @@ version.
 To install Ocerus, launch the installation file. Installation process is rather straightforward, so a few next
 button clicks will do the job. We are ready for our first launch.
 
-\section{Resources archive}
-\label{sec:archive}
-Resources needed to create the game described in this guide are accompanying the PDF. If you have opened the
-guide from the editor, the resources are likely to be in the \texttt{\href{run:./archive/}{archive}}
-directory. Otherwise, you need to download the archive package from the project website. See the
-\href{http://sourceforge.net/projects/ocerus/files/}{Ocerus download page}.
-
 \section{First steps}
 To start Ocerus, click the Ocerus icon on your desktop or in the start menu. In a few moments, the main Ocerus
 window appears (see figure~\ref{fig:ocerus_initial}). In the top edge of the window is a main menu. You can
@@ -492,6 +485,8 @@ Select the \texttt{LeftFlipper} entity and check its \textbf{LeftSided} property
 When you are ready, you can see your flippers in action. Start the action by pressing the \textbf{Play} button
 on the toolbar and try to control your flippers with the \textbf{Left} and the \textbf{Right} key.
 
+To get more info on how to write scripts please see the \texttt{\href{run:./ScriptReference.html}{script reference}} documentation.
+
 
 \subsection{Includes}
 Including other script files is a bit advanced concept which you don't necessarily need to understand but which comes handy from time to time. It allows you to split the code into better manageble chunks and share functionality with other script files. You can include another script file into the current file by placing the following line to the top of the file:
@@ -588,7 +583,9 @@ Now it's time to understand what the layout file actually does and how it is str
 
 The \verb/<GUILayout>/ element is the root element in layout XML files. It must contain a single \verb/<Window>/ element representing the root GUI element. The \verb/<Window>/ element must have the \verb/Type/ attribute which specifies the type of the window to be created. This may refer to a concrete window type, an alias, or a falagard mapped type (see the next paragraph). It can also have the \verb/Name/ attribute specifying a unique name of the window. This element may contain \verb/<Property>/ elements with the \verb/Name/ and \verb/Value/ attributes. They are used to set properties of the window. It may also contain \verb/<Event>/ elements with the \verb/Name/ and \verb/Function/ attributes which are then used to create bindings between the window and script functions (see the next section). Also, it can contain another \verb/<Window>/ elements as its child windows. For supported window types, properties and events see the CEGUI documentation.
 
-Note that there's a feature of the layouts specific to this engine. That is the translation of texts. While using the \verb/Text/ and \verb/Tooltip/ properties you can surround the value by \$ (i.e. \verb/Text=$text$/). That text is then used as a key to search for the text in the \verb/GUI/ group of the string manager. The string manager automatically loads the string files in the \verb/strings/ directory according to the currently selected language. The structure of the strings file should be pretty clear once you open the default one which will appear there automatically after you create a new project.
+
+\subsection{String files}
+Note that there's a feature of the layouts specific to this engine. That is the translation of texts. While using the \verb/Text/ and \verb/Tooltip/ properties you can surround the value by \$ (i.e. \verb/Text=$text$/). That text is then used as a key to search for the text in the \verb/GUI/ group of the string manager. The string manager automatically loads the string files in the \verb/strings/ directory according to the currently selected language. More on that in the sections below.
 
 
 \subsection{Events}
@@ -616,12 +613,98 @@ void ContinueClick(Window@ window)
 \noindent connected via the \textbf{GUILayout} component together. The component can be in any active entity in the scene. Then  every click on the button named \textbf{Continue} will print the message \textbf{Continue} into the log.
 
 
+\section{Strings}
+In the game you sometimes want to tell the player something. To keep the project manageable it's better to separate the strings from the rest of the game. To do that the engine loads strings from the text files in the \texttt{strings/} directory. By default only the \texttt{GUI.str} file is there. If you open it you'll see it has a very simple structure. It consists of text items and comments. The pattern of a text item is \textbf{Key=Value}, where \textbf{Key} is an ID that is used for indexing a text represented by \textbf{Value}. If the \textbf{Key} contains the \textbf{group} value it places all texts under it into the group defined by \textbf{Value}. The \textbf{Key} must be unique within a group. Comments start with the \verb/#/ character. Here is an example of a correct text file:
+
+\begin{verbatim}
+# the name of the group to which the following texts belong
+group=ExampleGroup
+# comment to the text item below
+example_key=Example text.
+another_key=Another text.
+\end{verbatim}
+
+The encoding of text files must be ASCII or UTF8. It is possible to end lines in Windows (\verb/\r\n/) or UNIX (\verb/\n/) style.
+
+
+
+\section{Directory layout}
+\label{sec:dir-layout}
+
+The directory in which the text files are stored must follow a specific layout. In the root directory there are files with default language texts. These texts are used when the engine can't locate the text in the subdirectory of the current language. These subdirectories should contain the same files as the root directory. If any text varies in countries that use a common language it should be placed in a subdirectory of the language directory. It is recommended that the language and country names correspond with common norms. Here is an example of a directory layout:
+
+\begin{verbatim}
+-en
+ -GB
+  -textfile.str (1)
+ -US
+  -textfile.str (2)
+ -textfile.str  (3)
+-fr
+ -textfile.str  (4)
+-textfile.str   (5)
+\end{verbatim}
+
+\noindent Assume that the files from the above example have the following content:
+
+\begin{verbatim}
+(1)
+group=Group
+country_specific=Country
+(3)
+group=Group
+language_specific=Language
+country_specific=Language
+(5)
+group=Group
+default_string=Default
+language_specific=Default
+country_specific=Default
+\end{verbatim}
+
+\noindent Now this table shows what will be actually displayed for different languages.\newline
+	\begin{tabular}{|l|l|}
+	\hline
+	Text ID & Text value\\
+	\hline
+	\multicolumn{2}{|c|}{\emph{Language: en-GB}}\\
+	\hline
+	default\_string & Default\\
+	language\_specific & Language\\
+	country\_specific & Country\\
+	\hline
+	\multicolumn{2}{|c|}{\emph{Language: en}}\\
+	\hline
+	default\_string & Default\\
+	language\_specific & Language\\
+	country\_specific & Language\\
+	\hline
+	\multicolumn{2}{|c|}{\emph{Language: default}}\\
+	\hline
+	default\_string & Default\\
+	language\_specific & Default\\
+	country\_specific & Default\\
+	\hline
+	\end{tabular}
+
+
+\section{Conclusion}
+blablaTODOdobrounoc.
 
 
 
 
 
 \appendix
+
+
+
+\section{Resources archive}
+\label{sec:archive}
+Resources needed to create the game described in this guide are accompanying the PDF. If you have opened the
+guide from the editor, the resources are likely to be in the \texttt{\href{run:./archive/}{archive}}
+directory. Otherwise, you need to download the archive package from the project website. See the
+\href{http://sourceforge.net/projects/ocerus/files/}{Ocerus download page}.
 
 
 
