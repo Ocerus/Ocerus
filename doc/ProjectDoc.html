@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>Ocerus: Ocerus Reference Manual</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div class="header">
+<div class="contents">
+<h2><a class="anchor" id="intro"></a>
+Introduction</h2>
+
+<p>The Ocerus is a game engine suited for middle-sized <a href="http://en.wikipedia.org/wiki/2.5D">2.5D</a> projects. 2.5D means the physics and most of the graphics are in two dimensions, but some 3D objects are supported as well. The main focus lies on the editing tools integrated to the engine. So every change is immediately visible in the game context and can be tested in a real time. The engine takes care of rendering, physics, customization of a game object behavior by scripts, resource management and input devices. The game objects are easily expandable using new components or scripts.</p>
+<h2><a class="anchor" id="otherProjects"></a>
+Similar Projects</h2>
+<p>A tool for game development is nothing new. Every development studio has its own tools for creating certain aspects of the game, but only few of those are generic enough to make them usable for other people as well. An example of these might be <a href="http://www.unreal.com/">Unreal Technology</a>, which provides very complex and sophisticated tool for AAA developers. Unfortunately it is also very heavyweight and expensive, so it's not so useful for small development studios. On the other side of the spectrum, there are simple tools like <a href="http://www.yoyogames.com/gamemaker">Game Maker</a>, which are very easy to use but lack a lot of features and performance and generally are considered to be targeted at hobbyists instead of professional developers.</p>
+
+<p>Our project attempts to fit into the middle of the spectrum. It is not too simple but at the same it is not too complex either. We do this mostly by putting our hands away from the 3D and focusing on 2D (or 2.5D) instead. In this field, the biggest competitor is probably <a href="http://unity3d.com/">Unity</a>, which grew into a very powerful tool during the last year. It surpasses ours in many ways but for a price, of course: there is no source code available, and it's targeted to 3D games which makes its use for 2D somewhat complicated.</p>
+<h2><a class="anchor" id="timeline"></a>
+Project Timeline</h2>
+<p>There is a project development timeline in the following list:</p>
+<p>01/2010 - reviewing existing code, use cases, unit test framework, library structure, log system, utilities</p>
+<p>02/2010 - script system, graphic system, entity system, 2D graphic components</p>
+<p>03/2010 - entity messages, camera and script component, profiler, memory management</p>
+<p>04/2010 - gui system, entity picking, dynamic properties</p>
+
+<p>05/2010 - rendering, gui console, resource system, input system, layer manager</p>
+<p>06/2010 - physic and model components, string manager, project management, editor</p>
+<p>07/2010 - documentation, poligon collider component</p>
+<p>08/2010 - loading screen, resource refreshing, hierarchy window</p>
+<p>09/2010 - configuration, sprite animation, testing, sample game</p>
+<p>10/2010 - GUI layout component, sample game GUI, shortcuts, documentation, game deploy</p>
+<p>11/2010 - testing, reviewing documentation</p>
+<p>12/2010 - bug fixing, reviewing documentation</p>
+<p>1/2011 - reviewing documentation</p>
+
+<h2><a class="anchor" id="conclusion"></a>
+Conclusion</h2>
+<p>This project had two main objectives: to make game objects generic by constructing them from components and to make it possible to edit the game while it's running. We find these two things crucial during the development of a game in a small team. That said we believe we've successfuly put these features into the final application.</p>
+<p>However, everything wasn't working as smooth as we intended. The main source of problems was our decision to use <a href="http://www.cegui.org.uk">CEGUI</a> for the GUI of the editor. CEGUI is designed to work inside the game itself and it turned out the editor has very different needs. This led to a lot of troubles; be it a poor performance or missing features that we had to implement by ourselves. It caused the delay of the first version that was able to display something. Until then we had to work on the engine itself without being able to debug features visually.</p>
+<p>There are also things we were not able to implement due to the time limit set on the project. This includes sound and music support and certain performance optimizations. Also parts of the engine would need porting to make them run on game consoles. Due to the need of being an officially registered developer at the consoles' manufacturers we opted not to focus on this. And as it was mentioned before the editor's GUI is currently far from perfect due to the bad choice of the GUI system. So it would make sense to rewrite it to use another library; <a href="http://qt.nokia.com/">Qt</a> being an example. </p>
+</div>
+</body>
+</html>
