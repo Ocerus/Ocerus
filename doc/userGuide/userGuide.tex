@@ -552,6 +552,16 @@ Finally, the purpose of the \textbf{Scheme} files is to group other data files a
 define some of their interactions. It usually contains a list of \textbf{Imageset}, files \textbf{Font} files
 and \textbf{Looknfeel} files.
 
+However, so far we've only covered how the GUI looks but we still need to connect its events to gameplay. This is done using callbacks into a script. In our case we have the following script which reacts on button presses.
+\lstinputlisting[language=c,
+	basicstyle=\scriptsize,
+	stringstyle=\ttfamily,
+	showstringspaces=false,
+	breaklines=true,
+	caption=gameplay.as,
+	label={flipper.as}]{archive/gui/gameplay.as}
+You may have noticed that the GUI windows above contain the \textbf{Event} element. What it does exactly is described in the sections below but basically when the event is generated it attempts to execute the given function in the callback script attached to the layout.	
+
 To add the GUI to the project, copy the \texttt{gui} directory from the \hyperref[sec:archive]{archive} to the
 project directory. Then switch back to the Ocerus and look at the \textbf{Resources} view. Ocerus tries to
 auto-detect types of the resources and usually does a great job. However, when it encounters the \texttt{.png}
@@ -574,7 +584,7 @@ component and add the \textbf{GUILayout} component. Look at its properties
 \end{figure}
 
 First, drag the \texttt{pinball.scheme} file from the \textbf{Resource} view to the \textbf{Scheme} property
-in the \textbf{Entity} view. Then drag the \texttt{gameplay.layout} file to the \textbf{Layout} property.
+in the \textbf{Entity} view. Then drag the \texttt{gameplay.layout} file to the \textbf{Layout} property. Now drag the \texttt{gameplay.as} script to the \textbf{Callback} property.
 Finally check the \textbf{Enabled} and \textbf{Visible} checkboxes. Now if you start the game the GUI should be working as promised!
 
 
@@ -688,8 +698,9 @@ country_specific=Default
 	\end{tabular}
 
 
+
 \section{Conclusion}
-blablaTODOdobrounoc.
+Ok this is it! Now you have your first game fully working. What we've shown you is just a basic functionality of the editor but you can do much more, of course! The scripting system together with components is quite powerful to allow you to build different types of games. It might be also useful for you to take a look at the \textbf{Cube} project and explore what it actually does. Also, listed below are few sections about some general topic related to the editor itself and its behaviour from the user point of view.
 
 
 
