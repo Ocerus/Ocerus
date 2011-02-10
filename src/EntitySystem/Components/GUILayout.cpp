@@ -10,11 +10,13 @@ void EntityComponents::GUILayout::Create(void)
 	mRootWindow = 0;
 	mScriptUpdateError = false;
 	mCallbackTimeOut = 1000;
+	mCurrentSchemeName.clear();
 }
 
 void EntityComponents::GUILayout::Destroy(void)
 {
 	if (mRootWindow) gGUIMgr.DestroyWindow(mRootWindow);
+	UnloadScheme();
 }
 
 void EntityComponents::GUILayout::ReloadWindow(void)
@@ -22,7 +24,15 @@ void EntityComponents::GUILayout::ReloadWindow(void)
 	if (mRootWindow) gGUIMgr.DestroyWindow(mRootWindow);
 	if (mLayout)
 	{
-		if (mScheme) gGUIMgr.LoadProjectScheme(mScheme->GetName());
+		if (mScheme)
+		{
+			string schemeName = gGUIMgr.LoadProjectScheme(mScheme->GetName());
+			if (mCurrentSchemeName.compare(schemeName) != 0)
+			{
+				UnloadScheme();
+			}
+			mCurrentSchemeName = schemeName;
+		}
 		mRootWindow = gGUIMgr.LoadProjectLayout(mLayout->GetName(), ScriptSystem::USER_GUI_WINDOWS_PREFIX);
 		if (mRootWindow)
 		{
@@ -170,4 +180,12 @@ void EntityComponents::GUILayout::SetEnabled(bool value)
 		mRootWindow->setEnabled(mEnabled);
 	}
 	GlobalProperties::Get<Core::Game>("Game").UpdateRootWindow();
+}
+
+void EntityComponents::GUILayout::UnloadScheme( void )
+{
+	if (mCurrentSchemeName.empty()) return;
+	
+	gGUIMgr.UnloadProjectScheme(mCurrentSchemeName);
+	mCurrentSchemeName.clear();
 }

@@ -46,11 +46,14 @@ namespace GUISystem
 		/// Loads the system scheme file.
 		void LoadSystemScheme(const string& filename);
 		
-		/// Loads the project scheme file.
-		void LoadProjectScheme(const string& filename);
+		/// Loads the project scheme file. Returns the scheme name.
+		string LoadProjectScheme(const string& filename);
         
 		/// Loads the system imageset file.
 		void LoadSystemImageset(const string& filename);
+
+		/// Unloads all resources related to the project scheme.
+		void UnloadProjectScheme(const string& schemeName);
 
 		/// Loads the system layout file and returns it.
 		/// @param filename The layout filename.

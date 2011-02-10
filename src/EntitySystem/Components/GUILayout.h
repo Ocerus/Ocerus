@@ -67,13 +67,14 @@ namespace EntityComponents
 		ResourceSystem::ResourcePtr mScheme;
 		ResourceSystem::ResourcePtr mCallback;
 		uint32 mCallbackTimeOut;
+		CEGUI::Window* mRootWindow;
+		string mCurrentSchemeName;
 		bool mVisible;
 		bool mEnabled;
-		
-		CEGUI::Window* mRootWindow;
 		bool mScriptUpdateError;
 		
-    void ReloadWindow(void);
+	    void ReloadWindow(void);
+		void UnloadScheme(void);
 	};
 }
 
