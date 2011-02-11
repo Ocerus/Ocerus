@@ -321,14 +321,14 @@ The first parameter is the name of the methods class.
 \item
 The second parameter defines name and signature of the method in a script.
 \item
-The third parameter defines type and C++ name of the function. When the function is method of some class (as in this example), then \emph{asMETHODPR} macro is used with parameters: name of class, name of method, parameter types and return type.
+The third parameter defines type and C++ name of the function. When the function is a method of some class (as in this example), then \emph{asMETHODPR} macro is used with parameters: name of class, name of method, parameter types and return type.
 \item
-The last parameter defines how the function should be called. \emph{asCALL\_THISCALL} means that it should be called as a class method. Details in the AngelScript documentation\cite{angelscript}.
+The last parameter defines how the function should be called. \emph{asCALL\_THISCALL} means that it should be called as a class method. See details in the AngelScript documentation\cite{angelscript}.
 \end{itemize}
 
 \subsection{Constructor and Destructor}
 
-If a constructor or destructor is needed they shall be registered the following way:
+If a constructor or a destructor are needed, they shall be registered the following way:
 
 \footnotesize 
 \begin{verbatim}
