@@ -1,43 +1,13 @@
 \newcommand{\TitleText}{Project Documentation}
-\documentclass[a4paper,12pt]{article}
-
-\usepackage[utf8x]{inputenc}
-
-\title{\TitleText}
-\author{http://ocerus.sourceforge.net}
-
-\pdfinfo{%
-  /Title    (\TitleText)
-  /Author   (Michal Cevora, Lukas Hermann, Ondrej Mocny, Tomas Svoboda)
-  /Creator  ()
-  /Producer ()
-  /Subject  ()
-  /Keywords ()
-}
-
-\usepackage{fullpage} % koneckoncu je to neformalni dokument, takze k certu s akademickou konvenci
-\usepackage[colorlinks=true, pdfborder={0 0 0}, pdftitle={\TitleText}, pdfauthor={Michal Cevora, Lukas Hermann, Ondrej Mocny, Tomas Svoboda}]{hyperref}
-\usepackage[USenglish]{babel}
-\usepackage[all]{hypcap}
-\usepackage{listings}
-\usepackage{graphicx}
-\usepackage{wrapfig}
-\usepackage{hyphenat}
-
-\def\::{\hskip 0pt\discretionary{::}{}{::}\hskip 0pt} % Pokud pisete nazvy trid, pouzivejte \::
-
-\begin{document}
-
-\maketitle
-\clearpage
-
+\documentclass[a4paper,12pt,titlepage]{article}
+\input{../CommonHeader.tex}
 
 \section{Introduction}
 
 The Ocerus is a game engine suited for middle-sized 2.5D projects. 2.5D means the physics and most of the graphics are in two dimensions, but some 3D objects are supported as well. The main focus lies on the editing tools integrated to the engine. So every change is immediately visible in the game context and can be tested in a real time. The engine takes care of rendering, physics, customization of a game object behavior by scripts, resource management and input devices. The game objects are easily expandable using new components or scripts.
 
 \section{Similar Projects}
-A tool for game development is nothing new. Every development studio has its own tools for creating certain aspects of the game, but only few of those are generic enough to make them usable for other people as well. An example of these might be Unreal Technology, which provides very complex and sophisticated tool for AAA developers. Unfortunately it is also very heavyweight and expensive, so it's not so useful for small development studios. On the other side of the spectrum, there are simple tools likeGame Maker, which are very easy to use but lack a lot of features and performance and generally are considered to be targeted at hobbyists instead of professional developers.
+A tool for game development is nothing new. Every development studio has its own tools for creating certain aspects of the game, but only few of those are generic enough to make them usable for other people as well. An example of these might be Unreal Technology, which provides very complex and sophisticated tool for AAA developers. Unfortunately it is also very heavyweight and expensive, so it's not so useful for small development studios. On the other side of the spectrum, there are simple tools like Game Maker, which are very easy to use but lack a lot of features and performance and generally are considered to be targeted at hobbyists instead of professional developers.
 
 Our project attempts to fit into the middle of the spectrum. It is not too simple but at the same it is not too complex either. We do this mostly by putting our hands away from the 3D and focusing on 2D (or 2.5D) instead. In this field, the biggest competitor is probably Unity, which grew into a very powerful tool during the last year. It surpasses ours in many ways but for a price, of course: there is no source code available, and it's targeted to 3D games which makes its use for 2D somewhat complicated.
 
@@ -45,52 +15,35 @@ Our project attempts to fit into the middle of the spectrum. It is not too simpl
 
 There is a project development timeline in the following list:
 \begin{itemize}
-\item
-01/2010 - reviewing existing code, use cases, unit test framework, library structure, log system, utilities
-\item
-02/2010 - script system, graphic system, entity system, 2D graphic components
-\item
-03/2010 - entity messages, camera and script component, profiler, memory management
-\item
-04/2010 - gui system, entity picking, dynamic properties
-\item
-05/2010 - rendering, gui console, resource system, input system, layer manager
-\item
-06/2010 - physic and model components, string manager, project management, editor
-\item
-07/2010 - documentation, poligon collider component
-\item
-08/2010 - loading screen, resource refreshing, hierarchy window
-\item
-09/2010 - configuration, sprite animation, testing, sample game
-\item
-10/2010 - GUI layout component, sample game GUI, shortcuts, documentation, game deploy
-\item
-11/2010 - testing, reviewing documentation
-\item
-12/2010 - bug fixing, reviewing documentation
-\item
-1/2011 - reviewing documentation
+  \item 01/2010 -- reviewing existing code, use cases, unit test framework, library structure, log system, utilities
+  \item 02/2010 -- script system, graphic system, entity system, 2D graphic components
+  \item 03/2010 -- entity messages, camera and script component, profiler, memory management
+  \item 04/2010 -- gui system, entity picking, dynamic properties
+  \item 05/2010 -- rendering, gui console, resource system, input system, layer manager
+  \item 06/2010 -- physic and model components, string manager, project management, editor
+  \item 07/2010 -- documentation, poligon collider component
+  \item 08/2010 -- loading screen, resource refreshing, hierarchy window
+  \item 09/2010 -- configuration, sprite animation, testing, sample game
+  \item 10/2010 -- GUI layout component, sample game GUI, shortcuts, documentation, game deploy
+  \item 11/2010 -- testing, reviewing documentation
+  \item 12/2010 -- bug fixing, reviewing documentation
+  \item 01/2011 -- reviewing documentation
 \end{itemize}
 
 \section{Conclusion}
-This project had two main objectives: to make game objects generic by constructing them from components and to make it possible to edit the game while it's running. We find these two things crucial during the development of a game in a small team. That said we believe we've successfuly put these features into the final application.
+This project had two main objectives: to make game objects generic by constructing them from components and to make it possible to edit the game while it's running. We find these two things crucial during the development of a game in a small team. That said we believe we have successfully put these features into the final application.
 
-However, everything wasn't working as smooth as we intended. The main source of problems was our decision to use CEGUI for the GUI of the editor. CEGUI is designed to work inside the game itself and it turned out the editor has very different needs. This led to a lot of troubles; be it a poor performance or missing features that we had to implement by ourselves. It caused the delay of the first version that was able to display something. Until then we had to work on the engine itself without being able to debug features visually.
+However, everything wasn't working as smooth as we intended. The main source of problems was our decision to use CEGUI for the GUI of the editor. CEGUI is designed to work inside the game itself and creating the editor has very different needs. This led to a lot of troubles; be it a poor performance or missing features that we had to implement by ourselves. It caused the delay of the first version that was able to display something. Until then we had to work on the engine itself without being able to debug features visually.
 
 There are also things we were not able to implement due to the time limit set on the project. This includes sound and music support and certain performance optimizations. Also parts of the engine would need porting to make them run on game consoles. Due to the need of being an officially registered developer at the consoles' manufacturers we opted not to focus on this. And as it was mentioned before the editor's GUI is currently far from perfect due to the bad choice of the GUI system. So it would make sense to rewrite it to use another library; Qt being an example.
 
 \section{Development Team}
 This is a list of people contributing to this project:
 \begin{itemize}
-\item
- Michal Cevora - the GUI system and the editor
- \item
-Lukas Hermann - the scripting system and the documentation
-\item
-Ondrej Mocny - the project lead; the entity and the resource system
-\item
-Tomas Svoboda - rendering
+  \item Michal Cevora -- the GUI system and the editor
+  \item Lukas Hermann -- the scripting system and the documentation
+  \item Ondrej Mocny -- the project lead; the entity and the resource system
+  \item Tomas Svoboda -- rendering
 \end{itemize}
 
 \end{document}

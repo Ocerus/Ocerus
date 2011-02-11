@@ -1,6 +1,7 @@
 \newcommand{\TitleText}{Ocerus User Guide}
 \documentclass[a4paper,12pt,titlepage]{article}
 \input{../CommonHeader.tex}
+\input{../TableOfContents.tex}
 \graphicspath{{./screenshots/}}
 
 
@@ -256,7 +257,7 @@ Ocerus does not implement the real gravitation force in the sense that all objec
 Instead, all objects are dragged straight down. It means that as soon as we start the game our ball will infinitely fall down. To stop it we need to create some barriers in our world.
 
 \textbf{Task 1.} Create a new entity called \texttt{Platform}, add \textbf{Sprite} component and use the
-\texttt{textures\textbackslash steel.jpg} file from the \hyperref[sec:archive]{archive} as the texture. Add
+\texttt{textures$\backslash$steel.jpg} file from the \hyperref[sec:archive]{archive} as the texture. Add
 the \textbf{PolygonCollider} component and set the polygon points to [5.12, -5.12], [5.12, 5.12], [-5.12, 5.12],
 [-5.12, -5.12]. Add the \textbf{StaticBody} component and finally use the edit tools to shape the square into a
 slightly sloped platform and place it under the ball (see figure~\ref{fig:task_1}). If you have any problems
@@ -362,7 +363,7 @@ view again (see figure~\ref{fig:locked_properties}). All properties that are sha
 \textbf{Task 2.} Now with the knowledge of prototypes and shared properties you should be able to design your
 pinball machine, so it would look similar to the figure \ref{fig:task_2}. Use the \texttt{Platform} prototype
 to build all barriers. Also create the \texttt{Flipper} prototype that would be similar to the \texttt{Platform}
-prototype, except that it will use the \texttt{textures\textbackslash yellow.jpg} texture from the
+prototype, except that it will use the \texttt{textures$\backslash$yellow.jpg} texture from the
 \hyperref[sec:archive]{archive} and it will contain the \textbf{DynamicBody} component instead of the \textbf{StaticBody}
 component. Create two instances of this prototype called \texttt{LeftFlipper} and \texttt{RightFlipper}.
 
@@ -451,7 +452,7 @@ The \textbf{Script} component allows you to implement a custom behavior using th
 you add the component, you can see the \textbf{ScriptModules} property in the \textbf{Entity} view. This
 property contains a list of script files that are associated with this entity. Now it's time to create our
 little script. Open your favorite text editor and copy the following code (or use the
-\texttt{scripts\textbackslash flipper.as} file from the \hyperref[sec:archive]{archive}).
+\texttt{scripts$\backslash$flipper.as} file from the \hyperref[sec:archive]{archive}).
 
 \lstinputlisting[language=c,
 	basicstyle=\scriptsize,
@@ -551,7 +552,7 @@ However, so far we've only covered how the GUI looks but we still need to connec
 	showstringspaces=false,
 	breaklines=true,
 	caption=gameplay.as,
-	label={flipper.as}]{archive/gui/gameplay.as}
+	label={gameplay.as}]{archive/gui/gameplay.as}
 You may have noticed that the GUI windows above contain the \textbf{Event} element. What it does exactly is described in the sections below but basically when an event is generated it attempts to execute the given function in the callback script attached to the layout.	
 
 To add the GUI to the project, copy the \texttt{gui} directory from the \hyperref[sec:archive]{archive} to the
