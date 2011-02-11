@@ -6,12 +6,12 @@
 
 \section{Introduction}
 
-Welcome to the Ocerus User guide. With the Ocerus you can create modern 2D games in an easy and
+Welcome to the Ocerus user guide. With Ocerus you can create modern 2D games in an easy and
 straightforward manner. Ocerus can also handle 3D objects, so you can easily place your 3D models onto the 2D
 game plane.
 
 The aim of this guide is to teach you the basics of the Ocerus usage, and by a simple project demonstration,
-it should help you get set up and begin creating wonderful games in no time. 
+it should help you set up and begin creating wonderful games in no time. 
 
 Throughout the user guide, we are going to show you basic game editing techniques on a sample pinball
 game, that you create from scratch. This guide concentrates only on real basics, so the game is rather
@@ -19,7 +19,7 @@ simple but complex enough to demonstrate all necessary use cases.
 
 \section{Getting Ocerus}
 The Ocerus project is currently hosted at SourceForge and its homepage is \url{http://ocerus.sourceforge.net}.
-On that page, you can find project resources, such as source code repository and installation packages. To
+On that page, you can find project resources, such as the source code repository and installation packages. To
 download the latest installation package, navigate your browser to
 the \href{http://sourceforge.net/projects/ocerus/files/}{Ocerus download page} and download the latest
 version.
@@ -30,7 +30,7 @@ button clicks will do the job. We are ready for our first launch.
 
 \section{First steps}
 To start Ocerus, click the Ocerus icon on your desktop or in the start menu. In a few moments, the main Ocerus
-window appears (see figure~\ref{fig:ocerus_initial}). In the top edge of the window is a main menu. You can
+window appears (see figure~\ref{fig:ocerus_initial}). Near the upper edge of the window there is the main menu. You can
 use this menu to carry out various actions in the editor. The rest of the window contains views that will be
 discussed later. If something is unclear you can see the description of all editor controls in the appendix \ref{sec:editor_controls}. For now let's start with creating a new project.
 
@@ -44,15 +44,15 @@ discussed later. If something is unclear you can see the description of all edit
 
 \section{Creating the project}
 By selecting the \textbf{File $\to$ Create Project} command from the main menu, open the \textbf{Create
-Project} dialog. Type \texttt{Pinball} into the name field and browse the location where your project will
+Project} dialog. Type \texttt{Pinball} into the name field and browse to the location where your project will
 reside. Note that a new subdirectory in the chosen location will be created and it will be named the same as
 the project. That is why you should avoid using any nonstandard characters in the project name. When the
 \textbf{OK} button is clicked, the new project is created.
 
 {\itshape
 A project in Ocerus represents a single game, so for every single game that you design, you need to create
-another project. Behind the scene, projects are ordinary directories on your file system with resource files
-representing your game content, such as images, models, scripts, etc. Structure of the project directory is on
+another project. Behind the scene, projects are ordinary directories in your file system with resource files
+representing your game content, such as images, models, scripts, etc. The structure of the project directory is on
 your own consideration, but we recommend to stick with the default structure that is created for new
 projects.
 }
@@ -65,7 +65,7 @@ Select the \textbf{Scene $\to$ New Scene} command from the main menu. Ocerus can
 save the current scene (this is the default scene that was automatically created). In that case, click
 \textbf{No} and the \textbf{New Scene} dialog should appear.
 
-In the \textbf{New Scene} dialog click on the folder icon to create a subfolder. Name it \texttt{scenes} and enter the subfolder. Then type in \texttt{gameplay} as the scene
+In the \textbf{New Scene} dialog click on the folder icon to create a subfolder. Name it \texttt{scenes} and enter it after it's created. Then type in \texttt{gameplay} as the scene
 filename (see figure~\ref{fig:new_scene}). When you are ready, click the \textbf{OK} button and the new scene
 will be created and automatically opened.
 
@@ -78,18 +78,18 @@ will be created and automatically opened.
 \end{figure}
 
 {\itshape
-Scenes are your virtual playgrounds where your game takes place. Generally speaking they consist of an
-indefinite plane with your game elements, such as player's avatar or enemies, on it. You can think of a scene
+Scenes are your virtual playgrounds where the game takes place. Generally speaking they consist of an
+indefinite plane with your game elements, such as the player's avatar or enemies, on it. You can think of a scene
 as a game level. 
 }
 
 After a scene is opened, viewports and views are displayed (see figure~\ref{fig:new_scene_created}). Viewports
-are framed areas that provide a view to the current scene. There are two viewports in the Ocerus editor. The
+are framed areas that provide a view of the current scene. There are two viewports in the Ocerus editor. The
 \textbf{Game Viewport} (the upper one) shows the scene in the same way as it is rendered in the resulting
 game, whereas the \textbf{Editor Viewport} (the lower one) shows the scene with editing tools visible.
-Viewports are surrounded with views that provide information related to the current scene or current entity.
+Viewports are surrounded by views that provide information related to the current scene or the current entity.
 There are five views: \textbf{Entity}, \textbf{Hierarchy}, \textbf{Layers}, \textbf{Prototypes} and
-\textbf{Resources}. All these views will be discussed later, now we move on creating the protagonist of our
+\textbf{Resources}. All of these will be discussed later. Now let's move on to create the protagonist of our
 game. You are right, we are talking about the ball.
 
 \begin{figure}[ht]
@@ -102,12 +102,12 @@ game. You are right, we are talking about the ball.
 
 
 \section{Creating entities}
-To create an entity, select the \textbf{Edit $\to$ New Entity} command from the main menu and type the entity
+To create an entity, select the \textbf{Edit $\to$ New Entity} command from the main menu and type in the entity
 name. In our sample project there will be a ball that will bounce over the area, so we name the entity
 \texttt{Ball}. Click the \textbf{OK} button and the new entity appears in the \textbf{Hierarchy} view. Select
 the entity by clicking it in the view.
 
-As soon as an entity is selected, the \textbf{Entity} view shows related information about it (see
+As soon as an entity is selected, the \textbf{Entity} view shows information related to it (see
 figure~\ref{fig:new_entity_created}). First section in the view shows basic properties of the entity, such as
 its ID and its name. Some of these properties can be modified by clicking the property value and editing it.
 Note that if the property value is grayed, then it cannot be edited directly, or it cannot be edited at all.
@@ -122,8 +122,7 @@ Note that if the property value is grayed, then it cannot be edited directly, or
 
 Entities in Ocerus are composed of components that determine their behavior and functionality and these
 components can have other properties. All components and their properties are shown just under the
-\textbf{General} section in the \textbf{Entity} view and these properties can be edited the same way as the ID
-and name property above.
+\textbf{General} section in the \textbf{Entity} view and these properties can be edited the same way as the name property mentioned above.
 
 Almost any entity that you will create is composed at least of the \textbf{Transform} component. Roughly
 speaking, entities with this component are such entities that are placed to a specific position in our virtual
@@ -152,10 +151,9 @@ give our ball a more appealing appearance, we have to change the \textbf{texture
 \end{figure}
 
 \section{Adding graphics content}
-Every file and directory that is placed into the project directory hierarchy is visible in the
+Every file and directory that is placed in the project directory hierarchy is visible in the
 \textbf{Resources} view. To put files with your textures into the project, simply copy them somewhere into the
-project directory. When you add a file into the project directory, Ocerus automatically detects the type of
-the file and creates the suitable type of resource. The type of the resource is represented by an icon next to
+project directory. When you add a file into the project directory, Ocerus automatically detects the file and creates a suitable resource representing it. The type of the resource is shown by an icon next to
 the resource name in the \textbf{Resource} view.
 
 You can either use the \texttt{ball.png} texture from the \texttt{textures} directory in the
@@ -181,9 +179,9 @@ successful, you should end up with a ball image displayed in both viewports.
  \label{fig:link_texture}
 \end{figure}
 
-Now that we have an entity with a transform and sprite component, we can take a look at using editing tools.
+Now that we have an entity with a transform and a sprite component, we can take a look at how to use the editing tools.
 
-\section{Controlling editor camera}
+\section{Controlling the editor camera}
 To look around in your scene, you need to control the camera of the \textbf{Editor viewport}. Use the
 \textbf{arrow keys} on your keyboard to \textbf{move} the camera in the viewport. You can also move the camera
 with the \textbf{middle mouse button}. Simply click somewhere in the viewport with the middle mouse button and
@@ -192,11 +190,10 @@ mouse.
 
 \section{Moving, rotating and scaling entities}
 We have already discussed the way to move, rotate and scale an entity by editing its transform properties.
-This is, however, very uncomfortable. Ocerus provides editing tools to facilitate these operations. There are
-four editing tools in Ocerus: \textbf{move} tool, \textbf{rotate} tool, \textbf{rotate-y} tool and
-\textbf{scale} tool and they are accessible from the toolbar right from the main menu (see
-figure~\ref{fig:editing_tools}). You can switch among these editing tools by clicking the corresponding icon,
-which becomes pressed.
+This is, however, very uncomfortable. Ocerus provides editing tools to do this easily. There are
+four editing tools in Ocerus: the \textbf{move} tool, the \textbf{rotate} tool, the \textbf{rotate-y} tool and
+the \textbf{scale} tool. They are accessible from the toolbar located to the right from the main menu (see
+figure~\ref{fig:editing_tools}). You can switch between the editing tools by clicking the corresponding icon.
 
 \begin{figure}[ht]
  \begin{center}
@@ -227,7 +224,7 @@ Although our ball has a texture already, Ocerus has no clue what its shape is. A
 into our game, it is necessary that every entity that is influenced by physics has a collision polygon
 defined. Ocerus needs to know these polygons in order to properly determine whether two entities collide with
 each other or not. To define a collision polygon, add the \textbf{PolygonCollider} component to our
-\texttt{Ball} entity (select \textbf{Edit $\to$ New Component $\to$ PolygonCollider}). New component now
+\texttt{Ball} entity (select \textbf{Edit $\to$ New Component $\to$ PolygonCollider}). The new component now
 appears under the \textbf{Sprite} component in the \textbf{Entity} view. The polygon is then defined as a list
 of points in the \textbf{polygon} property of the component. For our ball we will create an octagon with the
 following points: [0, -0,5], [0.35, -0.35], [0.5, 0], [0.35, 0.35], [0, 0.5], [-0,35, 0.35], [-0.5, 0] and
@@ -236,33 +233,32 @@ following points: [0, -0,5], [0.35, -0.35], [0.5, 0], [0.35, 0.35], [0, 0.5], [-
 Use the green plus button to add eight vertices to the \textbf{Polygon} property and then enter the points
 according to the figure~\ref{fig:polygon_collider}. When you are ready, click the blue diskette button to save
 the list. After the new collision polygon is saved to our entity, it is displayed as a blue outline in the
-editor viewport. If you used your own texture, you may need to modify these points to make the polygon aligned
+editor viewport. If you have used your own texture, you may need to modify these points to make the polygon aligned
 with the texture.
 
 Our ball entity has a collision polygon now, which means that if physics is applied to that entity, it will
-collide with another entities according to their collision polygons. So to really see the
+collide with another entities accordingly to their collision polygons. So to really see the
 \textbf{PolygonCollider} in action, we have to add physics.
 
 \section{Adding physics}
 If you want an entity to be affected by the Ocerus physical engine, you need to add either of the following
-components to the entity. These components are \textbf{StaticBody} and \textbf{DynamicBody}.
+components to the entity: \textbf{StaticBody} or \textbf{DynamicBody}.
 
 Entities with the \textbf{StaticBody} component are stationary building blocks in your world. They are never
 moved by the physical engine and their primary function is to build borders and walls. On the other hand,
-entities with the \textbf{DynamicBody} component are used for objects that are affected by gravitation force
-and other forces. Our ball entity is an example of entity with the \textbf{DynamicBody} component.
+entities with the \textbf{DynamicBody} component are used for objects that are affected by the gravitation force
+and other forces. Our ball entity is an example of an entity with the \textbf{DynamicBody} component.
 
 By selecting the \textbf{Edit $\to$ New Component $\to$ DynamicBody} action, add the \textbf{DynamicBody}
 component to the \texttt{Ball} entity. Now the ball is affected by the gravitation force.
 
 Ocerus does not implement the real gravitation force in the sense that all objects attract themselves.
-Instead, all objects are attracted straight down. It means that as soon as we start our so far created game,
-our ball would infinitely fall down. Let's create some barriers in our world.
+Instead, all objects are dragged straight down. It means that as soon as we start the game our ball will infinitely fall down. To stop it we need to create some barriers in our world.
 
 \textbf{Task 1.} Create a new entity called \texttt{Platform}, add \textbf{Sprite} component and use the
 \texttt{textures\textbackslash steel.jpg} file from the \hyperref[sec:archive]{archive} as the texture. Add
-the \textbf{PolygonCollider} component and set polygon points to [5.12, -5.12], [5.12, 5.12], [-5.12, 5.12],
-[-5.12, -5.12]. Add the \textbf{StaticBody} component and finally use edit tools to shape the square into a
+the \textbf{PolygonCollider} component and set the polygon points to [5.12, -5.12], [5.12, 5.12], [-5.12, 5.12],
+[-5.12, -5.12]. Add the \textbf{StaticBody} component and finally use the edit tools to shape the square into a
 slightly sloped platform and place it under the ball (see figure~\ref{fig:task_1}). If you have any problems
 with this task, please read the corresponding sections above.
 
@@ -274,17 +270,16 @@ with this task, please read the corresponding sections above.
  \label{fig:task_1}
 \end{figure}
 
-If you are done, let's see what happens if we start the simulation.
+When you are done, let's see what happens if we start the simulation.
 
 \section{Starting the action}
 While we were building our scene so far, everything was static even though we added physics to our entities.
-This is because the action is stopped. During the editing you can arrange the initial state of your scene and
-when you feel like testing everything, you can animate the scene by starting the action. Action is controlled
+This is because the action is stopped. While editing you can arrange the initial state of your scene. Then, when you want to test what you have done, you can animate the scene by starting the action. Action is controlled
 by the action toolbar (see figure~\ref{fig:action_toolbar}), which is composed of three buttons. Clicking the
 \textbf{Play} button will start the action from the current state, clicking the \textbf{Pause} button will
 pause action in the current state and clicking the \textbf{Stop} button will stop the action and resets the
-scene to the initial state. After the action is started, you can still use edit tools and edit entity
-properties. Changes that you make will be discarded as soon as you stop the action however.
+scene to the initial state. After the action is started, you can still use the edit tools and edit entity
+properties. However, changes that you make will be discarded as soon as you stop the action.
 
 \begin{figure}[ht]
  \begin{center}
@@ -297,13 +292,13 @@ properties. Changes that you make will be discarded as soon as you stop the acti
 Click the \textbf{Play} button and see the ball fall down on the platform. If your platform is sloped enough,
 you will see the ball roll down on the platform. You will probably see that the movement is not really smooth.
 This is because we used a collision polygon with only eight vertices for our ball. Try to double or even
-triple the number of the vertices and the movement will be more smooth. Note that Ocerus does not provide
-colliders with rounded shapes.
+triple the number of the vertices and the movement will be smoother. Note that Ocerus does not provide
+colliders for round shapes.
  
 Now it's time to design our pinball machine. The pinball machine will be composed of many platforms, so we
 need to create a lot of new entities. As you could see when you created the first platform entity, the process
-is not quite short and you probably don't want to imagine how long it would take to create all those new
-entities the same way. For purposes of reusing existing entities there are few tricks in the Ocerus. The first
+is not exactly short and you probably don't want to imagine how long it would take to create all those new
+entities the same way. For purposes of reusing existing entities there are few tricks in Ocerus. The first
 one is to use the \textbf{Edit $\to$ Duplicate Entity} action in the main menu. This action will duplicate the
 selected entity. You can duplicate the first platform entity a couple of times to have enough entities to
 design the pinball machine. Nevertheless, duplicating entities is not really recommended in this case. 
@@ -315,7 +310,7 @@ multiple entities.
 
 \section{Using prototypes}
 Prototypes are special entity templates. They are not related to a concrete scene, rather they are saved in
-\texttt{Prototypes.xml} file and can be accessed from any scene in the project. When you need to create a
+the \texttt{Prototypes.xml} file and can be accessed from any scene in the project. When you need to create a
 specific entity many times, you can create it once and then create a prototype from it. Then you can use this
 prototype as many times as you like.
 
@@ -323,7 +318,7 @@ To create a prototype from the \texttt{Platform} entity, make sure it is selecte
 \textbf{Edit $\to$ Create Prototype} action from the main menu. A new item appears in the \textbf{Prototypes}
 view. All prototypes in your project are displayed there and instantiation of prototypes is as easy as
 dragging the prototype from the \textbf{Prototypes} view to the \textbf{Editor viewport}. Drag your new
-prototype to the viewport a couple of times to have enough entities to build the pinball machine.
+prototype to the viewport couple of times to have enough entities to build the pinball machine.
 
 When an entity is created from a prototype, this entity is linked to that prototype. This means that changes
 made to the prototype are propagated to all entities linked to it. However, this behavior is limited to only
@@ -347,7 +342,7 @@ Click the \texttt{Platform} prototype in the \textbf{Prototypes} view and look a
 (see figure~\ref{fig:shared_properties}). On the left of every property there is a check box that controls,
 whether the property is shared. If you change a property that has this check box checked, the change will be
 propagated to its linked entities. This concept is very handy if you need to globally change some properties
-across several scenes in your project. You only have to change the prototype and the Ocerus will do the rest.
+across several scenes in your project. You only have to change the prototype and Ocerus will do the rest.
 
 \begin{wrapfigure}{r}{0.35\textwidth}
 \vspace{-20pt}
@@ -361,19 +356,18 @@ across several scenes in your project. You only have to change the prototype and
  \vspace{-10pt}
 \end{wrapfigure}
 
-Select the \texttt{Platform} entity from the \textbf{Hierarchy} view and again look at the \textbf{Entity}
-view (see figure~\ref{fig:locked_properties}). All properties that are shared have a lock icon on the right
-and cannot be edited.
+Select the \texttt{Platform} entity from the \textbf{Hierarchy} view and take a look at the \textbf{Entity}
+view again (see figure~\ref{fig:locked_properties}). All properties that are shared have a lock icon to the right from them. That means they can only be edited in the prototype.
 
 \textbf{Task 2.} Now with the knowledge of prototypes and shared properties you should be able to design your
 pinball machine, so it would look similar to the figure \ref{fig:task_2}. Use the \texttt{Platform} prototype
-to build all barriers. Also create the \texttt{Flipper} prototype that would be similar to \texttt{Platform}
+to build all barriers. Also create the \texttt{Flipper} prototype that would be similar to the \texttt{Platform}
 prototype, except that it will use the \texttt{textures\textbackslash yellow.jpg} texture from the
-\hyperref[sec:archive]{archive} and it will have \textbf{DynamicBody} component instead of \textbf{StaticBody}
+\hyperref[sec:archive]{archive} and it will contain the \textbf{DynamicBody} component instead of the \textbf{StaticBody}
 component. Create two instances of this prototype called \texttt{LeftFlipper} and \texttt{RightFlipper}.
 
 \textit{Hint: To create the \texttt{Flipper} prototype you can instantiate the \texttt{Platform} prototype and
-unlink it from the prototype by clicking the remove button on the right of the \textbf{Prototype} property in
+unlink it by clicking the remove button on the right of the \textbf{Prototype} property in
 the \textbf{Entity} view. Then modify the entity and create a prototype from it.}
 
 \begin{figure}[ht]
@@ -384,19 +378,18 @@ the \textbf{Entity} view. Then modify the entity and create a prototype from it.
  \label{fig:task_2}
 \end{figure}
 
-\section{Entity Hierarchy}
-As the number of entities in your scene grows, it becomes harder not to get lost. Fortunately, the Ocerus
-provides means for hierarchical organization through the \textbf{Hierarchy} view. Unlike file system
-organization, each and every entity can become a parent of other entities, so there are no folders in this
+\section{Entity hierarchy}
+As the number of entities in your scene grows, it becomes harder not to get lost. Fortunately, Ocerus
+provides means for hierarchical organization through the \textbf{Hierarchy} view. Unlike the file system, each and every entity can become a parent of other entities, so there are no folders in this
 concept. In fact, it's not an issue at all. Not only that you can use dummy entities (entities with no
 components) as folders, you are even encouraged to do so.
 
 Entities can be organized into a hierarchy by dragging them to their parents. This way you can move any entity
 to become a child of another entity. To move the entity to the top of the hierarchy (next to another top level
-elements), you need to use the \textbf{reparent up} action a couple of times. Just right click on the entity
+elements), you need to use the \textbf{reparent up} action of the context menu couple of times. Just right click on the entity
 and select the \textbf{reparent up} action and the entity will move one level upwards in the hierarchy.
 
-Entities can be also ordered among theirs siblings. Use the \textbf{move up} and \textbf{move down} commands
+Entities can also be ordered among theirs siblings. Use the \textbf{move up} and \textbf{move down} commands
 to move an entity before its preceding sibling or after its succeeding sibling.
 
 \begin{wrapfigure}{r}{0.25\textwidth}
@@ -412,20 +405,20 @@ to move an entity before its preceding sibling or after its succeeding sibling.
 \end{wrapfigure}
 
 Now try to organize entities in your pinball scene. Create a dummy entity called \texttt{Platforms}, remove
-the \textbf{Transform} component by clicking the red cross on the right of the component title in the
-\textbf{Entity} view and move all platform entities under the Platforms entity. Do the same with flippers (see
+the \textbf{Transform} component by clicking the red cross to the right of the component title in the
+\textbf{Entity} view. Then move all platform entities to the Platforms entity. Do the same with flippers (see
 figure \ref{fig:hierarchy}).
 
-To further improve the graphics appearance of our scene, we will add a background picture behind our pinball
+To further improve the visual appearance of the scene, we will add a background picture behind our pinball
 machine. Create an entity called \texttt{Background} and add the \textbf{Sprite} component to it. Use the
 \texttt{background.jpg} image as its texture. Notice that the \texttt{Background} entity is displayed above
-your pinball machine. So far we didn't have to take the entities' sprite order into account, but now we need
-to make sure that background stays behind the pinball machine. This can be achieved by using layers.  
+your pinball machine. So far we didn't have to take the order of sprites into account, but now we need
+to make sure that background stays behind the pinball machine. This can be achieved by layers.  
 
 \section{Using layers}
 
-If you look at the \textbf{Layers} view, you can see the \texttt{Initial Layer} there. Every scene has to have
-at least one layer and this one is automatically created. You can click on the plus sign on the left of the
+If you look at the \textbf{Layers} view, you can see the \texttt{Initial Layer} there. Every scene must have
+at least one layer and this one is automatically created. You can click on the plus sign to the left of the
 layer name to expand it. Every entity that you created so far is located in this layer. To make sure that our
 \texttt{Background} entity will stay behind all other entities, you have to create a new layer.
 
@@ -437,24 +430,24 @@ to the background layer (or use the \textbf{move down} command in the entity's c
 
 Notice that the initial layer is printed in boldface. This means that the initial layer the active one. If you
 are selecting an entity in the editor viewport, only entities in the active layer are selectable. To switch
-the active layer, double click on the another layer and it becomes active. You can also toggle the layer
-visibility by clicking the eye icon on the right of the layer.
+the active layer, double click on another layer and it becomes active. You can also toggle the layer
+visibility by clicking the eye icon to the right of the layer.
 
-The graphical appearance of our scene is done, as well as the physics in our scene. Now it's time to write the
+The visual appearance of our scene is done, as is physics. Now it's time to write the
 underlying scripts to implement the game logic.
 
 \section{Scripting}
-Ocerus engine allows to implement the game behavior using the scripting engine. Although writing scripts is
-indeed programming, it differs from core Ocerus programming in many ways. First, Ocerus scripting environment
+The Ocerus engine allows you to implement the game behavior using scripts. Although writing scripts is
+indeed programming, it differs from the core Ocerus programming in many ways. First, the Ocerus scripting environment
 was designed for game designers, rather than senior C++ programmers. It does not overwhelm you with
-unnecessary complexity of the "guts" of the engine, but it rather provides only the relevant means that are
+unnecessary complexity of the "guts" of the engine, but it rather provides only the relevant things that are
 used in most cases. Also the scripting language is simpler than C++.
 
 We are going to implement the main control of our game - the flippers. Make sure that you have already created
 the \texttt{Flipper} prototype, as well as both \texttt{Flipper} entities. Now select the \texttt{Flipper}
 prototype and add the \textbf{Script} component to it.
 
-The \textbf{Script} component allows to implement a custom behavior using the scripting language. As soon as
+The \textbf{Script} component allows you to implement a custom behavior using the scripting language. As soon as
 you add the component, you can see the \textbf{ScriptModules} property in the \textbf{Entity} view. This
 property contains a list of script files that are associated with this entity. Now it's time to create our
 little script. Open your favorite text editor and copy the following code (or use the
@@ -474,26 +467,26 @@ Back in Ocerus, select the \texttt{Flipper} prototype and click the \textbf{Add}
 \textbf{NULL} field in the modules list and click the \textbf{Save} button.
 %TODO revidovat jakmile se opravi manipulace s poli (ikonky misto Add, Rvrt, Save).
 If everything went well, your script gets loaded and a couple of new properties appear in the \textbf{Script}
-component part of the \textbf{Entity} view. These properties are defined in the script and they allow to
-parametrize the scripted behavior. In our script, there are two properties: \textbf{LeftSided} and
+component part of the \textbf{Entity} view. These properties are defined in the script and they allow you to
+control the scripted behavior. In our script, there are two properties: \textbf{LeftSided} and
 \textbf{Pivot}. The \textbf{LeftSided} property determines which flipper is the left one and which is the
-another one and the \textbf{Pivot} property defines the location of the pivot point.
+other one and the \textbf{Pivot} property defines the location of the pivot point.
 
 Select the \texttt{LeftFlipper} entity and check its \textbf{LeftSided} property checkbox. 
 %TODO jak nastavit spravne Pivot?? metodou pokus omyl?
 
 When you are ready, you can see your flippers in action. Start the action by pressing the \textbf{Play} button
-on the toolbar and try to control your flippers with the \textbf{Left} and the \textbf{Right} key.
+on the toolbar and try to control your flippers with the \textbf{Left} and \textbf{Right} keys.
 
 To get more info on how to write scripts please see the \texttt{\href{run:./ScriptReference.html}{script reference}} documentation.
 
 
 \subsection{Includes}
-Including other script files is a bit advanced concept which you don't necessarily need to understand but which comes handy from time to time. It allows you to split the code into better manageble chunks and share functionality with other script files. You can include another script file into the current file by placing the following line to the top of the file:
+Including other script files is a bit advanced concept which you don't necessarily need to understand but which comes handy from time to time. It allows you to split the code into manageble chunks and share functionality with other script files. You can include another script file into the current file by placing the following line to the top of the file:
 \begin{verbatim}
 #include "fileToInclude.as"
 \end{verbatim}
-What the command does is it basically pastes the content of \texttt{fileToInclude.as} at the position of the command in the current script file. So when you use this command in multiple script files you can share the code inside \texttt{fileToInclude.as}. Note that the included file must contain the full path in the project folder.
+What the command does is it basically pastes the content of \texttt{fileToInclude.as} at the position of the command in the current script file. So when you use this command in multiple script files you can share the code inside \texttt{fileToInclude.as}. Note that you must also include the subfolders in the path to the included file.
 
 
 
@@ -505,26 +498,25 @@ What the command does is it basically pastes the content of \texttt{fileToInclud
 
 
 \section{GUI}
-The last topic that is covered in this user guide is the GUI creation. The Ocerus uses the CEGUI library that
+The last topic that is covered in this user guide is GUI creation. Ocerus uses the CEGUI library that
 provides the GUI functionality. It uses several files that define particular building blocks of your GUI.
 These are the \textbf{Looknfeel} files, the \textbf{Font} files, the \textbf{Imageset} files, the
 \textbf{Layout} files and the \textbf{Scheme} files. All these files can be edited with a simple text editor
-as they are just XML files, however CEGUI provides visual editors for some of them, namely Layout editor and
-Imageset editor.
+as they are just XML files, however CEGUI provides visual editors for some of them. You can download them at the CEGUI website.
 
 The \textbf{Looknfeel} files define the visual appearance of the GUI elements. As a reasonable default
 \textbf{Looknfeel} is provided to you, we will not cover editing these files. You can find more on this topic
 in the \href{http://www.cegui.org.uk/api_reference/fal_man.html}{CEGUI manual}.
 
-The \textbf{Font} files allow to define fonts for your GUI, whether they are TrueType fonts or bitmap fonts.
-Again, the Ocerus provide a reasonable default font so neither \textbf{Font} files are discussed in detail
-here. See the \href{http://www.cegui.org.uk/api_reference/xml_font.html}{CEGUI manual} to get more info on
+The \textbf{Font} files allow you to define fonts for your GUI, whether they are TrueType fonts or bitmap fonts.
+Again, Ocerus provide a reasonable default font so neither \textbf{Font} files are discussed in detail
+here. See the \href{http://www.cegui.org.uk/api_reference/xml_font.html}{CEGUI manual} to get more info about the
 \textbf{Font} files.
 
-The \textbf{Imageset} files allow to define your custom images that can be used in GUI. CEGUI allows to put
-multiple images into a large image file and specify which parts of the large image correspond to particular
-images. This map is defined in \textbf{Imageset} files. In our \texttt{Pinball} project, we will define faces
-of two buttons that allow to trigger flippers by clicking them. Look at the \textbf{Imageset} file for our
+The \textbf{Imageset} files allow to define your custom images that can be used in GUI. CEGUI allows you to put
+multiple images into a single big image file and then specify which parts of the big image correspond to particular
+images. This map is defined in the \textbf{Imageset} files. In our \texttt{Pinball} project, we will define faces
+of two buttons that allow the player to trigger flippers by clicking them. Look at the \textbf{Imageset} file for our
 buttons.
 \lstinputlisting[language=xml,
 	basicstyle=\scriptsize,
@@ -536,7 +528,7 @@ buttons.
 
 The \texttt{Imageset} tag of the \textbf{Imageset} file specifies the name of the \textbf{Imageset} and the
 file that contains the images. It consists of several \texttt{Image} tags, that specify the particular images;
-their name, size and position within the file.
+their name, size and position within the image.
 
 The \textbf{Layout} files define the layout of your GUI elements. Take a look at the \textbf{Layout} file for
 our scene that defines two flipper buttons. For now you can just use it as it is and we'll explain what it does later.
@@ -549,7 +541,7 @@ our scene that defines two flipper buttons. For now you can just use it as it is
 	label={gameplay.layout}]{archive/gui/gameplay.layout}
 
 Finally, the purpose of the \textbf{Scheme} files is to group other data files and resources together, and to
-define some of their interactions. It usually contains a list of \textbf{Imageset}, files \textbf{Font} files
+define some of their interactions. It usually contains a list of \textbf{Imageset} files, \textbf{Font} files
 and \textbf{Looknfeel} files.
 
 However, so far we've only covered how the GUI looks but we still need to connect its events to gameplay. This is done using callbacks into a script. In our case we have the following script which reacts on button presses.
@@ -560,13 +552,13 @@ However, so far we've only covered how the GUI looks but we still need to connec
 	breaklines=true,
 	caption=gameplay.as,
 	label={flipper.as}]{archive/gui/gameplay.as}
-You may have noticed that the GUI windows above contain the \textbf{Event} element. What it does exactly is described in the sections below but basically when the event is generated it attempts to execute the given function in the callback script attached to the layout.	
+You may have noticed that the GUI windows above contain the \textbf{Event} element. What it does exactly is described in the sections below but basically when an event is generated it attempts to execute the given function in the callback script attached to the layout.	
 
 To add the GUI to the project, copy the \texttt{gui} directory from the \hyperref[sec:archive]{archive} to the
-project directory. Then switch back to the Ocerus and look at the \textbf{Resources} view. Ocerus tries to
+project directory. Then switch back to Ocerus and look at the \textbf{Resources} view. Ocerus tries to
 auto-detect types of the resources and usually does a great job. However, when it encounters the \texttt{.png}
 file, it identifies it as a \textbf{Texture} resource. To make it work with CEGUI, the type of these image
-files needs to be changed to the \textbf{CEGUI} resource. Right click the \texttt{buttons.png} file in the
+files must to be changed to the \textbf{CEGUI} resource. Right click the \texttt{buttons.png} file in the
 view and select the \textbf{Change Type $\to$ CEGUI} from the context menu. Now you are ready to put the
 layout with flipper buttons into the scene.
 
@@ -591,7 +583,7 @@ Finally check the \textbf{Enabled} and \textbf{Visible} checkboxes. Now if you s
 \subsection{Layout}
 Now it's time to understand what the layout file actually does and how it is structured. The GUI layout for the game should be defined in a file with the \texttt{.layout} extension and the XML internal structure. Since the CEGUI library is used for the GUI system a layout must fulfill its specification. It is broadly described in its documentation, so here's only a short description.
 
-The \verb/<GUILayout>/ element is the root element in layout XML files. It must contain a single \verb/<Window>/ element representing the root GUI element. The \verb/<Window>/ element must have the \verb/Type/ attribute which specifies the type of the window to be created. This may refer to a concrete window type, an alias, or a falagard mapped type (see the next paragraph). It can also have the \verb/Name/ attribute specifying a unique name of the window. This element may contain \verb/<Property>/ elements with the \verb/Name/ and \verb/Value/ attributes. They are used to set properties of the window. It may also contain \verb/<Event>/ elements with the \verb/Name/ and \verb/Function/ attributes which are then used to create bindings between the window and script functions (see the next section). Also, it can contain another \verb/<Window>/ elements as its child windows. For supported window types, properties and events see the CEGUI documentation.
+The \verb/<GUILayout>/ element is the root element in the XML file. It must contain a single \verb/<Window>/ element representing the root GUI element. The \verb/<Window>/ element must have the \verb/Type/ attribute which specifies the type of the window to be created. This may refer to a concrete window type, an alias, or a falagard mapped type. It can also have the \verb/Name/ attribute specifying a unique name of the window. This element may contain \verb/<Property>/ elements with the \verb/Name/ and \verb/Value/ attributes. They are used to set properties of the window. It may also contain \verb/<Event>/ elements with the \verb/Name/ and \verb/Function/ attributes which are then used to create bindings between the window and script functions (see section \ref{sec:events}). Also, it can contain another \verb/<Window>/ elements as its child windows. For supported window types, properties and events see the \href{http://www.cegui.org.uk/api_reference/fal_man.html}{CEGUI documentation}.
 
 
 \subsection{String files}
@@ -599,6 +591,7 @@ Note that there's a feature of the layouts specific to this engine. That is the 
 
 
 \subsection{Events}
+\label{sec:events}
 To be able to react when a user does something with the GUI you must connect the GUI layout to scripts. This can be done by placing the script into the \textbf{Callback} property of the \textbf{GUILayout} component. To subscribe to an event add the \textbf{Event} element to the window. Use its \textbf{Name} attribute to specify the event you want to react on. Use the \textbf{Function} attribute to set the name of the function in your script which will be executed when the event fires. The function must take a single parameter of the \textbf{Window@} type which holds a reference to the window which generated the event.
 
 For example assume this is a part of a layout
@@ -624,7 +617,7 @@ void ContinueClick(Window@ window)
 
 
 \section{Strings}
-In the game you sometimes want to tell the player something. To keep the project manageable it's better to separate the strings from the rest of the game. To do that the engine loads strings from the text files in the \texttt{strings/} directory. By default only the \texttt{GUI.str} file is there. If you open it you'll see it has a very simple structure. It consists of text items and comments. The pattern of a text item is \textbf{Key=Value}, where \textbf{Key} is an ID that is used for indexing a text represented by \textbf{Value}. If the \textbf{Key} contains the \textbf{group} value it places all texts under it into the group defined by \textbf{Value}. The \textbf{Key} must be unique within a group. Comments start with the \verb/#/ character. Here is an example of a correct text file:
+In the game you sometimes want to tell the player something. To keep the project simple it's better to separate the strings from the rest of the game. To do that the engine loads strings from the text files in the \texttt{strings/} directory. By default only the \texttt{GUI.str} file is there. If you open it you'll see it has a very simple structure. It consists of text items and comments. The pattern of a text item is \textbf{Key=Value}, where \textbf{Key} is an ID that is used for indexing a text representing \textbf{Value}. If \textbf{Key} equals \textbf{group} then it places all texts under that line into the group defined by \textbf{Value}. The \textbf{Key} must be unique within a group. Comments start with the \verb/#/ character. Here is an example of a correct text file:
 
 \begin{verbatim}
 # the name of the group to which the following texts belong
@@ -634,14 +627,14 @@ example_key=Example text.
 another_key=Another text.
 \end{verbatim}
 
-The encoding of text files must be ASCII or UTF8. It is possible to end lines in Windows (\verb/\r\n/) or UNIX (\verb/\n/) style.
+The encoding of text files must be ASCII or UTF8. It is possible to end lines in the Windows (\verb/\r\n/) or the UNIX (\verb/\n/) style.
 
 
 
-\section{Directory layout}
+\subsection{Directory layout}
 \label{sec:dir-layout}
 
-The directory in which the text files are stored must follow a specific layout. In the root directory there are files with default language texts. These texts are used when the engine can't locate the text in the subdirectory of the current language. These subdirectories should contain the same files as the root directory. If any text varies in countries that use a common language it should be placed in a subdirectory of the language directory. It is recommended that the language and country names correspond with common norms. Here is an example of a directory layout:
+The directory in which the text files are stored must follow a specific layout. In the root directory there are files with default texts. These texts are used when the engine can't locate the text in the subdirectory of the current language. These subdirectories should contain the same files as the root directory. If any text varies in countries that use a common language it should be placed in a subdirectory of the language directory. It is recommended that the language and country names correspond with common norms. Here is an example of a directory layout:
 
 \begin{verbatim}
 -en
@@ -731,7 +724,7 @@ CEGUI image resources: JPEG, PNG, TGA
 
 \section{Editor controls}
 \label{sec:editor_controls}
-In this part you can see the description of all features the editor can perform using menus and other mouse actions. First of all take a look at picture \ref{fig:editor_description}. There you can see parts of the editor which will be described in the sections below. What is not visible in the picture is a developer console. It can be opened and close by pressing the ` key.
+In this part you can see the description of all features the editor can perform using menus and other mouse actions. First of all take a look at picture \ref{fig:editor_description}. There you can see parts of the editor which will be described in the sections below. What is not visible in the picture is a developer console. It can be opened and closed by pressing the ` key.
 
 \begin{figure}[ht]
  \begin{center}
@@ -748,7 +741,7 @@ In this part you can see the description of all features the editor can perform 
 			File & Function\\
 			\hline
 			Create Project & creates a new project with default resources\\
-			Open Project & open an existing project from a folder location; the editor will need the project.ini file there\\
+			Open Project & opens an existing project from a folder location; the editor will need the project.ini file there\\
 			Close Project & closes the current project\\
 			Deploy Project & opens a dropdown menu with available platforms; after clicking on a platform and choosing a folder the application will be deployed there for the given platform\\
 			Quit & saves the project and closes the editor\\
@@ -756,7 +749,7 @@ In this part you can see the description of all features the editor can perform 
 			Scene & Function\\
 			\hline
 			New Scene & creates an empty scene of the specified name\\
-			Open Scene & opens a list of available scene; opens the scene after you click it\\
+			Open Scene & opens a list of available scenes; opens the scene after you click it\\
 			Save Scene & saves the current scene\\
 			Close Scene & closes the current scene\\
 			\hline
@@ -764,7 +757,7 @@ In this part you can see the description of all features the editor can perform 
 			\hline
 			New Entity & creates empty entity at the zero position\\
 			New Component & after you select the component type from the dropdown list it will be added to the current entity\\
-			Duplicate Entity & creates new entity identical to the currently selected at the place of the old entity\\
+			Duplicate Entity & creates new entity identical to the currently selected entity at the place of the old one\\
 			Duplicate Selected Entities & if you have multiple entities selected this will duplicate them all\\
 			Delete Entity & deletes the currently selected entity\\
 			Delete Selected Entities & if you have multiple entities selected this will delete them all\\
@@ -815,7 +808,7 @@ When you save the scene all components and properties are automatically saved in
 
 
 \subsection{Hierarchy view}
-Here you can see all entities in the game structured as a tree. If you click an item the entity gets selected and will appear both in the Entity view and in the Editor viewport as such. If you double-click the item the Editor viewport will pan to the entity (if it has the Transform component, so to speak). You can drag the entities around in the Hierarchy view to change the structure of the tree. Right-clicking an item will bring up the following menu:
+Here you can see all entities in the game structured as a tree. If you click an item the entity gets selected and will appear both in the Entity view and in the Editor viewport as well. If you double-click the item the Editor viewport will pan to the entity (if it has the Transform component, so to speak). You can drag the entities around in the Hierarchy view to change the structure of the tree. Right-clicking an item will bring up the following menu:
 		\begin{tabular}{|p{0.23\hsize}|p{0.70\hsize}|}
 			\hline
 			Move Up & moves the entity up in the list\\
@@ -835,7 +828,7 @@ In the Game viewport the game is displayed as it will look in the result. Once t
 
 
 \subsection{Editor viewport}
-The Editor viewport allows you to select and edit entities and see the changes in the Game viewport. You can pan the camera unsing the arrow keys or by holding the middle mouse button and moving the mouse. Zoom out or in using the mouse wheel. Select entities by left-clicking them. You can select multiple entities by holding the shift key while left-dragging the mouse. Note that you can only select entities in the currently selected layer (in the Layer view). If you have an entity selected you can mouse-edit it by dragging it while the left button is down. The action what happens depends on what edit tool you have selected in the Toolbar. If you right-click and entity a context menu appears. It contains some of the items of the Edit submenu of the Main menu. They behave exactly the same, so read the description of the Main menu for more info.
+The Editor viewport allows you to select and edit entities and see the changes in the Game viewport. You can pan the camera using the arrow keys or by holding the middle mouse button and moving the mouse. Zoom out or in using the mouse wheel. Select entities by left-clicking them. You can select multiple entities by holding the shift key while left-dragging the mouse. Note that you can only select entities in the currently selected layer (in the Layer view). If you have an entity selected you can mouse-edit it by dragging it while the left button is down. The action what happens depends on what edit tool you have selected in the Toolbar. If you right-click and entity a context menu appears. It contains some of the items of the Edit submenu of the Main menu. They behave exactly the same, so read the description of the Main menu for more info.
 
 
 \subsection{Layers view}
@@ -876,7 +869,7 @@ Here you can see all resources usable in the project. It lists them in the same 
 \subsection{Developer console}
 The console can be opened and closed by pressing the ` key. It displays the editor log. It is usefull to see what's going on in the editor as well as scripts. If there is an error in the script it will be displayed here. Note that the editor log is automatically saved in the current folder in the \emph{Core.log} file.
 
-You can also use the console to try simple script commands. Simply type the command into the edit box and press enter. The command will get compiled and immediately executed.
+You can also use the console to try simple script commands. Simply type the command into the edit box and press enter. The command will be compiled and immediately executed.
 
 
 
