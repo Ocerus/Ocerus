@@ -5,22 +5,22 @@
 
 \chapter{Introduction}
 
-The project Ocerus was designed to be easily extendable on well defined places in code. It allows developers to create even more diverse games. This document serves as a cookbook and shows a sequence of steps that will lead to the extension of the Ocerus. There are several ways of extending the Ocerus. Each way will be discussed in separate chapters.
+The Ocerus project was designed to be easily extendable at only few points in the engine. It allows developers to create more diverse games and meet the specific needs their project might have. This document serves as a cookbook and shows a sequence of steps that will implement sample extensions of the engine. The following chapters are divided by the points in the engine where it can be extended as stated before.
 
-This document only shows how to make things work. If you want to understand how they work, you should see the Design documentation.
+This document only shows how to make things work. If you want to understand the engine from inside you should read the Design Documentation.
 
 \chapter{Components}
 
-Every game object is represented by an entity which is a compound of components that provide it with various functionalities. A component can have several properties (and functions), which can be read or written (called) via their getters and setters (or functions themselves), and which are accessible through their unique name. It can also react to sent messages such as an initialization, a drawing, a logic update etc. by its own behavior.
+Every game object is represented by an entity which is a compound of components that provide various functionalities. A component can have several properties (and functions), which can be read or written (called) via their getters and setters (or functions themselves). They are accessible through their unique name. The component can also react to messages such as initialization, drawing, logic update etc. which are send from a component to entities or broadcastet by the engine to all entities.
 
-The Ocerus provides some predefined components that provide basic features such as a graphic representation,  physics, scripts etc. It is possible to define new components. They can add new functionality to the game entities. Similar result can be achieved by using scripts but the logic in components is not limited to predefined script functions and runs faster. In the following sections, there will be a sequence of steps that are necessary to create and use a new component. 
+Ocerus provides several predefined components that implement basic features such as the visual representation, physics, scripts etc. But it is also possible to define new components. They can add new functionality to the game entities. Similar result can be achieved by using scripts but the logic in components is not limited to predefined script functions and it also runs faster. In the following sections, there will be a sequence of steps that are necessary to create and use a new component. 
 
-There will be also an example of a simple component that will make an entity to move up and down. It would probably be better to implement this particular functionality by a script but it will serve well as an example.
+There will also be an example of a simple component that will make an entity to move up and down. It would probably be better to implement this particular functionality by a script but it will serve well as an example.
 
 \section{Creating a component class}
-The first thing that needs to be done is creating a new component class. Each component class is defined in a separate header file. These files are located in \emph{EntitySystem/Components}.
+The first thing that must be done is to create a new component class. Each component class is defined in a separate header file. These files are located in \emph{EntitySystem/Components}.
 
-The header file of a component must be defined in the \emph{EntityComponents} namespace and must publicly inherit from the  \emph{RTTIGlue$<$[Component Name], Component$>$}. So the example component class (named \emph{ExampleComp}) would look like this:
+The header file of a component must exist in the \emph{EntityComponents} namespace and must publicly inherit from the  \emph{RTTIGlue$<$[Component Name], Component$>$} template. So, the example component class (named \emph{ExampleComp}) would look like this:
 
 \footnotesize 
 \begin{verbatim}
@@ -33,7 +33,7 @@ namespace EntityComponents
 \end{verbatim}
 \normalsize
 
-There are few methods in this class that should be overridden: \emph{Create}, \emph{Destroy}, \emph{HandleMessage} and \emph{RegisterReflection}. \emph{Create} and \emph{Destroy} methods are called after the creation and before the destruction of the component, respectively. \emph{HandleMessage} and \emph{RegisterReflection} methods will be described in later sections.
+There are few methods in this class that should be overridden: \emph{Create}, \emph{Destroy}, \emph{HandleMessage} and \emph{RegisterReflection}. \emph{Create} and \emph{Destroy} methods are called after the creation and before the destruction of the component, respectively. The \emph{HandleMessage} and \emph{RegisterReflection} methods will be described in later sections.
 
 After that, the component type must be registered in the \emph{\_ComponentTypes.h} header file (located in \emph{EntitySystem/Components}). To do so, this line should be added:
 \footnotesize 
@@ -46,7 +46,7 @@ Finally, the header file with the component class must be included in the \emph{
 
 \section{Adding component properties}
 
-The component properties are represented by the class member variables. But just defining a class member variable is not enough to turn it into a regular property. It needs to be registered in the RTTI. Registering properties is done in the static method \emph{void RegisterReflection()}. It is automatically called during the initialization process of the \emph{EntitySystem}. In this method, there should be called the \emph{RegisterProperty} function. Usage of that function looks like this:
+The component properties are represented by class member variables. But defining a class member variable is not enough to turn it into a regular property. It needs to be registered in the RTTI. Registering properties is done in the static method \emph{void RegisterReflection()}. It is automatically called during the initialization process of the \emph{EntitySystem}. In this method the registration is done by calling the \emph{RegisterProperty} function like this:
 
 \footnotesize 
 \begin{verbatim}
@@ -57,10 +57,10 @@ RegisterProperty<Property type>("Property name", &GetterMethod,
 
 \begin{itemize}
 \item
-The Property type is obviously the data type of the property but is must be registered in the \emph{PropertyTypes.h} header file (located in \emph{Utils/Properties}). All regular property types are already registered there. There is also a short description of how to register new property types.
+The Property type is the data type of the property but is must exist in the \emph{PropertyTypes.h} header file (located in \emph{Utils/Properties}). All regular property types are already registered there. There is also a short description of how to register new property types.
 
 \item
-The property must have getter and setter methods defined. The methods signatures must look like this:
+The property must have the getter and setter methods defined. The methods signatures must look like this:
 
 \footnotesize 
 \begin{verbatim}
@@ -69,13 +69,13 @@ void SetProp([Property type] value)
 \end{verbatim}
 \normalsize
 
-Addresses of these methods must be passed to the \emph{RegisterProperty} function.
+Addresses of these methods are then passed to the \emph{RegisterProperty} function.
 
 \item
 The Access flag defines ways how the property can be accessed from the editor or a script or whether it should be saved/loaded to/from a stream. The list of all flag states is in the \emph{PropertyAccess.h} header file (located in \emph{Utils/Properties}).
 \end{itemize}
 
-Also component functions can be registered so they can be called from a script. For that, there is the \emph{RegisterFunction} function. Usage of that function is similar to the \emph{RegisterProperty} and looks like this:
+Also component functions can be registered so they can be called from a script. To do so, there is the \emph{RegisterFunction} function. The usage of this function is similar to \emph{RegisterProperty} and looks like this:
 
 \footnotesize 
 \begin{verbatim}
@@ -83,9 +83,9 @@ RegisterFunction("Function Name", &Function, Access flag, "Function description"
 \end{verbatim}
 \normalsize
 
-Back to the example component. Let's say it will have three properties and one function. First property for the amplitude, second for the period of moving, third for the timer and a function for resetting the timer. All three properties will be of the \emph{float32} data type. Setters and getters must be defined as well as the \emph{RegisterReflection} function. 
+Back to the example component. Let's say it will have three properties and one function. A property for the amplitude, another one for the period of movement and another one for the timer. The function will reset the timer. All the properties will be of the \emph{float32} data type. Setters and getters must be defined as well for the \emph{RegisterReflection} function. 
 
-The example component needs to access and change the position of the entity. The position is defined in the \emph{Transform} component. To ensure that the entity has the \emph{Transform} component, the dependency must be added. For that purpose the \emph{AddDependency} function serves. It receives a component type as a parameter (component type is defined as \emph{CT\_[Component class name]}). It will also force the dependent component to initialize later than the other component.
+The example component will access and change the position of the entity. The position is defined in the \emph{Transform} component. To ensure that the entity has the \emph{Transform} component, a component dependency must be declared. To do so there's the \emph{AddDependency} function. It takes a component type as a parameter (the component type is defined as \emph{CT\_[Component class name]}). It will also force the dependant component to initialize later than the other component.
 
 So the example component class will look like this: 
 
@@ -96,9 +96,9 @@ namespace EntityComponents
   class ExampleComp : public RTTIGlue<ExampleComp, Component>
   {
   public:
-    // Creation of the component. Sets all properties to 0.
+    // Component construction. Sets all properties to 0.
     virtual void Create(void) {mAmplitude = mPeriod = mTimer = 0;}
-    // Destruction of the component. Nothing needs to be destructed.
+    // Component destruction. Nothing needs to be destructed.
     virtual void Destroy(void) {}
     
     // Function for resetting the timer.
@@ -153,9 +153,9 @@ namespace EntityComponents
 
 \section{Entity messages}
 
-Entities can receive messages. They are sent by the engine when some event occurs. It can be an initialization of the entity, an update in physics, a pressed key etc. Messages can be also sent from a script.
+Entities can receive messages. They are sent by the engine when an event occurs. Or they can be send from an entity to another entity to inform it of a change. It can be an initialization of the entity, an update in physics, a pressed key etc. Messages can also be sent from a script.
 
-A message that is sent to an entity is distributed to all its components. It can also carry parameters.
+A message that is sent to an entity is distributed to all of its components. Some of them may carry parameters.
 
 \subsection{Message types}
 Message types are defined in the \emph{EntityMessageTypes.h} header file (located in \emph{EntitySystem/EntityMgr}). New message types can be easily added if needed. The declaration of the message type is done by macros and looks like this:
@@ -187,37 +187,36 @@ ENTITY_MESSAGE_TYPE(HELLO, "void Hello(float32, int32)",
 
 \subsection{Handling messages}
 
- The handling of messages is done by the \emph{HandleMessage} method of the component class. It accepts the \emph{EntityMessage} as a parameter. The \emph{EntityMessage} contains the message type and message parameters. 
+ The handling of messages is done by the \emph{HandleMessage} method of the component class. It accepts \emph{EntityMessage} as a parameter. \emph{EntityMessage} contains the message type and the message parameters. 
 
-The \emph{HandleMessage} method must return result: \emph{RESULT\_OK} if the message was accepted, \emph{RESULT\_IGNORED} when the message was ignored and \emph{RESULT\_ERROR} if an error occurred.
+The \emph{HandleMessage} method must return a result: \emph{RESULT\_OK} if the message was accepted, \emph{RESULT\_IGNORED} when the message was ignored and \emph{RESULT\_ERROR} if an error occurred.
 
-The example component, which makes an entity to move up and down, could have the \emph{HandleMessage} method implemented like this:
+The example component which makes an entity move up and down can have the \emph{HandleMessage} method implemented like this:
 
 \footnotesize 
 \begin{verbatim}
 EntityMessage::eResult EntityComponents::ExampleComp::
   HandleMessage( const EntityMessage& msg )
 {
-  // Decide the type of the received message
   switch (msg.type)
   {
   // Called when the component is initialized
   case EntityMessage::INIT:
     {
-      // Get transform component
+      // Get the transform component
       Component* transform = gEntityMgr.
         GetEntityComponentPtr(GetOwner(), CT_Transform);
-      // Get position property from component
+      // Get the position property
       // mStartPosition must be declared as a member variable
       mStartPosition = transform->GetProperty("Position").GetValue<Vector2>();
 
       return EntityMessage::RESULT_OK;
     }
-  // Called when the logic is updated
+  // Called when the logic is updated (once per frame)
   case EntityMessage::UPDATE_LOGIC:
     {
       // Get the first message parameter
-      // Here it is the time from the last logic update
+      // It is the time from the last logic update
       float32 delta = *msg.parameters.GetParameter(0).GetData<float32>();
 
       if ((delta <= 0) || (mPeriod <= 0))
@@ -229,14 +228,14 @@ EntityMessage::eResult EntityComponents::ExampleComp::
       float32 offset = mAmplitude * 
         MathUtils::Sin(mTimer / mPeriod * 2 * MathUtils::PI);
 
-      // Get transform component
+      // Get the transform component
       Component* transform = gEntityMgr.
         GetEntityComponentPtr(GetOwner(), CT_Transform);
 
       Vector2 pos = mStartPosition;
       pos.y += offset;
 
-      // Set new value to the position property
+      // Set the new value to the position property
       transform->GetProperty("Position").SetValue(pos);
 
       return EntityMessage::RESULT_OK;
@@ -250,24 +249,24 @@ EntityMessage::eResult EntityComponents::ExampleComp::
 
 \section{Conclusion}
 
-After above described steps, the new component is ready to be used. It will appear in the editor and component properties and functions will be accessible by a script.
+After finishing the steps above the new component is ready to be used. It will appear in the editor and component properties and functions will be accessible by a script.
 
-Note that most functionalities are easier to implement with scripts. The main advantage (and also the main disadvantage) of creating a new component is that it is defined in the source code. The new component can directly access the engine but the system has to be recompiled with every change to the component. 
+Note that most features are easier to implement with scripts. The main advantage (and also the main disadvantage) of creating a new component is that it is defined in the source code. The new component can directly access the engine but the system has to be recompiled with every change to the component. 
 
 The scripts, on the other hand, can be changed real-time, when the editor is running. It makes developing scripts much easier. The disadvantage of scripts is that it has only a limited list of functions. But that list can be extended, see chapter \emph{\nameref{chap:script_system}}.
 
 \chapter{Script system}
 \label{chap:script_system}
 
-The Script system provides quite a powerful tool for programming the game logic without having to modify and compile the source code. Even if there are hundreds of registered functions, classes, operators etc., it could be useful to register some more. The Script system is prepared for this so it is not difficult to register some new stuff.
+The Script system provides quite a powerful tool for programming the game logic without having to modify and compile the source code. Even if there are hundreds of registered functions, classes, operators etc., it could be useful to register some more. The Script system is prepared for this so it is not difficult to register new features.
 
-The following section will show a simple example of how to register a new class with methods in the Script system. It will be described only briefly. For more details, please see the AngelScript documentation \cite{angelscript}. Especially chapter \emph{Using AngelScript/Registering the application interface}.
+The following section will show a simple example of how to register a new class. Some details will be skipped for the sake of readability. You can find the details in the AngelScript documentation \cite{angelscript}. Especially chapter \emph{Using AngelScript/Registering the application interface}.
 
 \section{Registering a new class}
 
 All new classes and functions should be registered in the \emph{RegisterAllAdditions} function in the \emph{ScriptRegister.cpp} file (located in \emph{ScriptSystem}).
 
-Registering of new class (named \emph{NewClass}) looks like this:
+To register a new class (named \emph{NewClass}) we can do something like this:
 
 \footnotesize 
 \begin{verbatim}
@@ -283,7 +282,7 @@ r = engine->RegisterObjectType("NewClass", sizeof(NewClass),
 
 \begin{itemize}
 \item
-The method returns an integer typed result. The name of the variable, the result is being assigned to, should be \emph{r}, because it is then checked for an error in the \emph{OC\_SCRIPT\_ASSERT()} macro.
+The method returns an integer result. The name of the variable where the result is assigned should be \emph{r} because it is then checked for an error in the \emph{OC\_SCRIPT\_ASSERT()} macro.
 
 \item
 The first parameter of the method defines the name of the class in a script.
@@ -292,7 +291,7 @@ The first parameter of the method defines the name of the class in a script.
 The second parameter defines the size of the class in bytes.
 
 \item
-The last parameter is a flag defining the behavior. For details see the AngelScript documentation \cite{angelscript}. This particular combination means that the class is handled as object value (not reference) and needs to be constructed and destructed by constructor and destructor.
+The last parameter is a flag defining the behavior. For details see the AngelScript documentation \cite{angelscript}. This particular combination means that the class is handled as object value (not reference) and is created and destroyed by a constructor and a destructor.
 \end{itemize}
 
 \subsection{Class Methods}
@@ -317,18 +316,18 @@ r = engine->RegisterObjectMethod("NewClass", "int32 class_method(float32)",
 
 \begin{itemize}
 \item
-The first parameter is the name of the methods class.
+The first parameter is the name of the class the method belongs to.
 \item
-The second parameter defines name and signature of the method in a script.
+The second parameter defines the name and the signature of the method in a script.
 \item
-The third parameter defines type and C++ name of the function. When the function is a method of some class (as in this example), then \emph{asMETHODPR} macro is used with parameters: name of class, name of method, parameter types and return type.
+The third parameter defines the C++ signature of the function. When the function is a method of a class (as in this example), then \emph{asMETHODPR} macro is used with the following parameters: name of the class, name of the method, the parameter types and the return type.
 \item
 The last parameter defines how the function should be called. \emph{asCALL\_THISCALL} means that it should be called as a class method. See details in the AngelScript documentation\cite{angelscript}.
 \end{itemize}
 
 \subsection{Constructor and Destructor}
 
-If a constructor or a destructor are needed, they shall be registered the following way:
+If a constructor or a destructor is needed, it is to be registered in the following way:
 
 \footnotesize 
 \begin{verbatim}
@@ -371,7 +370,7 @@ The parameters are the same as in the \emph{RegisterObjectMethod} method, only t
  It is also possible to register enumerations (\emph{RegisterEnum, RegisterEnumValue}) and typedefs for primitive types (\emph{RegisterTypedef}). The usage is quite easy and can be found in the AngelScript documentation\cite{angelscript}.
 
 \section{Usage of the new class in a script}
-After the new class was registered, it can be used in a script just like in normal C++ code.
+After the new class was registered, it can be used in a script just like in the C++ code.
 \footnotesize 
 \begin{verbatim}
   NewClass c;
@@ -381,12 +380,12 @@ After the new class was registered, it can be used in a script just like in norm
 
 \section{Conclusion}
 Scripts should be used for most of the game logic including AI, GUI control, input etc.
-Registering new functions to the Script system can add some new functionality but it could also help performance. The logic in scripts runs slower than the logic in the source code. For example the pathfinding could be too slow, when implemented in a script. A faster solution would be to define functions that compute the pathfinding in the source code and then register the functions that return the result to the Script system.
+Registering new functions to the Script system can add new functionality but it could also help to boost the performance. The logic in scripts runs slower than the native code. For example the pathfinding could be too slow when implemented in a script. A faster solution would be to write functions that compute the pathfinding in the native code and then register the functions that return the result to the script.
 
 
 \chapter{Resource types}
 
-All resources in the Ocerus are managed by the Resource manager. Each resource has its type. There are some basic resource types defined in the Resource manager but sometimes it would be nice to define some new.
+All resources in Ocerus are managed by the Resource manager. Every resource has its type. There are some basic resource types defined in the Resource manager but sometimes it would be nice to define a new one.
 
 New resource types are defined as a class derived from the \emph{Resource} class. It is necessary to add a new resource type to the \emph{eResourceType} enum and a resource type name to the \emph{ResourceTypeNames} string array. Both are defined in the \emph{ResourceType.h} header.
 
