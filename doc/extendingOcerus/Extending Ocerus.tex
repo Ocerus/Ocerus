@@ -383,7 +383,10 @@ Scripts should be used for most of the game logic including AI, GUI control, inp
 Registering new functions to the Script system can add new functionality but it could also help to boost the performance. The logic in scripts runs slower than the native code. For example the pathfinding could be too slow when implemented in a script. A faster solution would be to write functions that compute the pathfinding in the native code and then register the functions that return the result to the script.
 
 
-\chapter{Resource types}
+
+
+
+\chapter{Resources}
 
 All resources in Ocerus are managed by the Resource manager. Every resource has its type. There are some basic resource types defined in the Resource manager but sometimes it would be nice to define a new one.
 
@@ -407,7 +410,7 @@ ResourceSystem::ResourcePtr NewResource::CreateMe()
 \normalsize
 
 \item
-Static GetResourceType() method that returns the \emph{eResourceType} of the resource.
+Static GetResourceType() method that returns \emph{eResourceType}. That is the type you added to the enum.
 
 \footnotesize 
 \begin{verbatim}
@@ -419,9 +422,9 @@ static ResourceSystem::eResourceType GetResourceType()
 \normalsize
 
 \item
-Protected abstract method \emph{LoadImpl}. This method is called when the resource is being loaded. It should parse the data from the file stream into something useful. It should use the \emph{DataContainer} class and the \emph{GetRawInputData} method for getting data from the source file.
+Protected abstract \emph{LoadImpl}. This method is called when the resource is being loaded. It should parse the data from the file stream into something useful. It should use the \emph{DataContainer} class and the \emph{GetRawInputData} method to get the data from the source.
 
-So the \emph{LoadImpl} method will look like this:
+So, the \emph{LoadImpl} method will look like this:
 
 \footnotesize 
 \begin{verbatim}
@@ -430,17 +433,17 @@ size_t NewResource::LoadImpl()
   DataContainer dc;
   size_t dataSize = 0;
 
-  // loads data from the file to the data container
+  // loads the data from the input to the data container
   // returns true if successful
   if (GetRawInputData(dc))	
   {
     dataSize = dc.GetSize();
 
-    // get pointer to data byte stream
+    // get a pointer to the data byte stream
     uint8* data = dc.GetData();
 
     // parse the data
-    // save the data into own data structure
+    // save the data into its own data structure
 
     dc.Release();
   }
@@ -449,23 +452,26 @@ size_t NewResource::LoadImpl()
 \end{verbatim}
 \normalsize
 
-The \emph{LoadImpl} method must return the size of the resource in the memory in bytes. If 0 is returned, it means that the resource failed to load.
+The \emph{LoadImpl} method must return the size of the resource in memory in bytes. If 0 is returned, it means that the resource failed to load.
 
 \item
 Protected abstract method \emph{UnloadImpl}. This method is called when the resource is being unloaded. It should release all the data the resource was using.
 
 \item
-The resource class can have additional methods for accessing the resource type specific structures. Those method should always begin with calling the \emph{EnsureLoaded()} method. It ensures that the resource is loaded (the \emph{LoadImpl} method was called).
+The resource class can have additional methods for accessing the resource type specific structures. Those method should always call \emph{EnsureLoaded()} as the first thing to do. It makes sure the resource is loaded. Otherwise the data could be invalid.
 
 \end{itemize}
 
-Defining new resource types is necessary when adding new functionality that requires data from external files. For example, a new component that adds sounds to an entity would need a new resource type. The component should have a \emph{ResourcePtr} typed property, through which it could access the resource data, and it should define and export functions that will allow to play the sound from a script.
+Defining new resource types is necessary when adding functionality that requires data from external files. For example, a new component that adds sounds to an entity would need a new resource type for the sound files. The component should have a \emph{ResourcePtr} typed property, through which it could access the resource data, and it should define and export functions that will allow to play the sound from a script.
+
+
+
 
 \chapter{Renderer}
 
-The Ocerus uses an OpenGL renderer by default. But it is possible to implement an own renderer that uses a different graphic library.
+Ocerus uses the OpenGL renderer by default. But it is possible to implement a different renderer that uses another graphical library.
 
-The only part of code, which uses the OpenGL, is the \emph{OglRenderer} class. It derives from the \emph{GfxRenderer} class and implements its abstract methods. There is about 20 methods that needs to be implemented by the new renderer. They are described in the Doxygen documentation.
+The only part of the code which uses OpenGL directly is the \emph{OglRenderer} class. It derives from the \emph{GfxRenderer} class and implements its abstract methods. There are about twenty methods that must be implemented by the new renderer. They are described in the Doxygen documentation.
 
 After the new renderer class is implemented, the initialization of the renderer must be changed. In the \emph{Application.cpp} file (located in \emph{Core}), the line:
 
@@ -481,6 +487,12 @@ GfxSystem::GfxRenderer::CreateSingleton<GfxSystem::NewRenderer>();
 \end{verbatim}
 \normalsize
 
+
+
+\chapter{Conclusion}
+TODO.
+
+
 %% A small distance to the other stuff in the table of contents (toc)
 \addtocontents{toc}{\protect\vspace*{\baselineskip}}
 
@@ -492,5 +504,6 @@ GfxSystem::GfxRenderer::CreateSingleton<GfxSystem::NewRenderer>();
 http://www.angelcode.com/angelscript/sdk/docs/manual/index.html
 
 \end{thebibliography}
+
 
 \end{document}
