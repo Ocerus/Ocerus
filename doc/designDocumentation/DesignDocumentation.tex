@@ -5,11 +5,11 @@
 
 \chapter{Introduction}
 
-This is the design documentation of the project Ocerus. It should be read by developers who want to change some parts of the game engine or to add new features to it. It may be useful for everyone who is curious how this application is designed or how libraries listed in the table \ref{tab:library-list} can be used.
+This is the design documentation of the Ocerus project. It is written for developers who want to understand how the engine work or need to change some parts of the engine. It may be useful for everyone who is curious how the application is designed or how libraries listed in the table \ref{tab:library-list} can be used. However, it is not intended for developers who want to extend Ocerus. For this purpose there is the Extending Ocerus guide.
 
 \section{Project architecture}
 
-The project Ocerus is logically divided into several relatively independent systems which cooperate with each other. Every system maintains its part of the application such as graphics, resources, scripts etc. and provides it to other ones. In the figure \ref{fig:system-connection} the relations among all systems are displayed with a brief description of what the systems provide to each other.
+The Ocerus project is divided into several relatively independent systems which cooperate with each other. Every system maintains its part of the application such as graphics, resources, scripts etc. and provides and interface to the other ones. In the figure \ref{fig:system-connection} the relations among all systems are displayed with a brief description of what the systems provide to each other.
 
 \begin{figure}[htbp]
 	\centering
@@ -18,7 +18,7 @@ The project Ocerus is logically divided into several relatively independent syst
 	\label{fig:system-connection}
 \end{figure}
 
-The project has not been created from scratch but it is based on several libraries to allow the developers to focus on important features for the end users and top-level design rather than low-level programming. All used libraries support many platforms, have free licenses and have been heavily tested in a lot of other projects. All of them are used directly by one to four subsystems except the library for unit testing. The library dependencies of each system are displayed in the figure \ref{fig:library-dependence}.
+The project has not been created from scratch but it is based on several libraries to allow the developers to focus on important features for the end users and top-level design rather than the low-level programming. All libraries used support many platforms, have free licenses and have been heavily tested in a lot of other projects. All of them are used directly by one to four subsystems except the library for unit testing. The library dependencies of each system are displayed in the figure \ref{fig:library-dependence}.
 
 \begin{figure}[htbp]
 	\centering
@@ -27,7 +27,7 @@ The project has not been created from scratch but it is based on several librari
 	\label{fig:library-dependence}
 \end{figure}
 
-In the table \ref{tab:library-list} a brief description of all used libraries is provided.
+In the table \ref{tab:library-list} thre's a brief description of all libraries used.
 
 \begin{table}[htbp]
 	\centering
@@ -52,7 +52,7 @@ In the table \ref{tab:library-list} a brief description of all used libraries is
 			\hline
 		\end{tabular}
 		%}
-	\caption[Used libraries with the description]{Used libraries with the description}
+	\caption[Used libraries with the description]{Libraries and their description}
 	\label{tab:library-list}
 \end{table}
 
@@ -80,7 +80,7 @@ Except these libraries, some small pieces of a third party code that were used a
 	\label{tab:code-list}
 \end{table}
 
-In the following chapters each of the project systems will be described from the design view. At the beginning of each chapter there is a UML class diagram and a paragraph about a purpose of the described system and at the end of most chapters there is a small glossary of terms used in that chapter. In UML class diagrams, two specific stereotypes are used. The first one is the \texttt{<<singleton>>} stereotype used in classes derived from the \emph{Utils\::Singleton\textless T\textgreater} class, which is an implementation of the singleton design pattern. The second one is the \texttt{<<external>>} stereotype used in classes defined and implemented in some library specified in the table \ref{tab:library-list}.
+In the following chapters each of the project systems will be described from the design point of view. At the beginning of each chapter there is a UML class diagram and a paragraph about the purpose of the described system and at the end of most chapters there is a small glossary of terms used in that chapter. In the UML class diagrams, two stereotypes are used. The first one is the \texttt{<<singleton>>} stereotype used in classes derived from the \emph{Utils\::Singleton\textless T\textgreater} class, which is an implementation of the singleton design pattern. The second one is the \texttt{<<external>>} stereotype used in classes defined and implemented in some of the libraries described in the table \ref{tab:library-list}.
 
 
 \chapter{Core}
@@ -92,11 +92,11 @@ In the following chapters each of the project systems will be described from the
 	\label{fig:core-diagram}
 \end{figure}
 
-The Core namespace is the main part of the engine. It contains its entry point and other classes closely related to the application itself, its states and configuration. Its main task is to initialize and configure other engine systems, invoke their update and draw methods in the main loop and in the end correctly finalize them.
+The Core namespace is the main part of the engine. It contains its entry point and other classes closely related to the application itself, its states and configuration. Its main task is to initialize and configure other engine systems, invoke their update and draw methods in the main loop and correctly finalize them at the shutdown.
 
 \section{Application}
 
-When the program starts, it creates an instance of the class \emph{Core\::Application}, initializes it by calling its method \emph{Init} and calls the \emph{RunMainLoop} method which runs until the application is shutdown, then the instance is deleted and the program finishes (see figure \ref{fig:application-states}).
+When the program starts, it creates an instance of the class \emph{Core\::Application}, initializes it by calling the \emph{Init} method and calls the \emph{RunMainLoop} method which runs until the application is stopped. Then the instance is deleted and the program finishes (see figure \ref{fig:application-states}).
 
 \begin{figure}[htbp]
 	\centering
@@ -105,13 +105,13 @@ When the program starts, it creates an instance of the class \emph{Core\::Applic
 	\label{fig:application-states}
 \end{figure}
 
-On the initialization of the application, the configuration is read (see section \ref{sec:config}) and all engine systems are created and initialized as well as the loading screen and game classes. The state of application is changed to \emph{loading} and the main loop is running until the state is changed to \emph{shutdown}. At the main loop window messages are processed, performance statistic are updated and other engine systems including the game class are loaded (in the \emph{loading} state) or updated and drawn (in the \emph{game} state).
+At the initialization of the application, the configuration is read (see section \ref{sec:config}) and all engine systems are created and initialized as well as the loading screen and game classes. The state of the application is changed to \emph{loading} and the main loop runs until the state is changed to \emph{shutdown}. At the main loop window messages are processed, performance statistic are updated and other engine systems including the game class are loaded (in the \emph{loading} state) or updated and drawn (in the \emph{game} state).
 
-In the application class there are also methods for getting an average and last FPS statistic, methods for showing and hiding a debug console as well as writing message to it or a method for executing an external file. There are also the variables indicating whether the current application instance includes the editor (in a game distribution the editor should be disabled) and whether the editor is currently turned on so the game is running only in a small window instead of a full screen mode. From this class it is possible to get the current project as well as deploy it to the specific platform and destination.
+In the application class there are also methods for getting the average and the last-frame FPS number. Then there are methods for showing and hiding the debug console as well as writing message to it or a method for executing an external file in the OS shell. There are also variables indicating whether the current application instance includes the editor (in a game distribution the editor should be disabled) and whether the editor is currently turned on. If so it means the game is running only in a small window instead of the full screen mode. From this class it is possible to get the currently opened project as well as deploy it to a specific platform.
 
 \section{Game}
 
-The \emph{Core\::Game} class manages the most important stuff needed to run the game such as drawing a scene, updating physics and logic of entities, measuring time, handling a game action or resolving an user interaction. Of course it mostly delegates this work to other parts of the engine (see table \ref{tab:game-relation}).
+The \emph{Core\::Game} class manages the most important stuff needed to run the game such as drawing of a scene, updating physics and logic of entities, measuring time, handling of the game action or resolving the user input. Of course, it mostly delegates this work to other parts of the engine (see table \ref{tab:game-relation}).
 
 \begin{table}[htbp]
 	\centering
@@ -123,14 +123,14 @@ The \emph{Core\::Game} class manages the most important stuff needed to run the 
 			\multicolumn{2}{|c|}{Game is affected by}\\
 			\hline
 			Application & initializes, updates, destroys it\\
-			Editor & sets render target, can delegate input\\
+			Editor & sets render target; can delegate input\\
 			InputMgr & can delegate input\\
 			ResourceMgr & loads the saved game\\
 			\hline
 			\multicolumn{2}{|c|}{Game affects what}\\
 			\hline
 			GfxRenderer & invokes drawing entities\\
-			Physics & initializes, updates and destroys it, processes its events\\
+			Physics & initializes, updates and destroys it; processes its events\\
 			EntityMgr & broadcasts update and draw messages to entities\\
 			ScriptMgr & gives the game time\\
 			GUIMgr & stores the root window for the game GUI\\
@@ -142,13 +142,13 @@ The \emph{Core\::Game} class manages the most important stuff needed to run the 
 \end{table}
 
 
-Before the game initialization at the method \emph{Init}, a valid render target (a camera and a viewport, see section \ref{sec:render-target}) must be set by the method \emph{SetRenderTarget} or the default one must be created by the method \emph{CreateDefaultRenderTarget} to know where to draw the game content. This is done by the \emph{Core\::Project} class when a scene is being opened and it can delegate it to the editor if it is available. Then physics, time, an action etc. are initialized and in the \emph{Update} method called in the main loop they are updated.
+Before the game is initialized by the \emph{Init} method a valid render target (a camera and a viewport, see section \ref{sec:render-target}) must be set by the \emph{SetRenderTarget} method. If it's not set the game will attempt to use the default render target by calling the \emph{CreateDefaultRenderTarget} method. The render target is pasesd to the game from the \emph{Core\::Project} class when a scene is being opened and it can delegate it to the editor if it is available. Then physics, time, an action etc. are initialized and in the \emph{Update} method of the main loop they are updated.
 
 The drawing of a scene is invoked in the method \emph{Draw}. The render target is cleared, all entities in the current scene are drawn by a renderer and the rendering is finalized.
 
-There are several methods for handling a game action that can be in two states -- paused or running. When the action is running, the physics and the logic of entities is being updated in the method \emph{Update}, which means that the corresponding messages are being broadcast to all entities before and after the update of the physical engine. The action can be paused, resumed and restarted to a previously saved position. There is a global timer that measures the game time (can be obtained by the method \emph{GetTimeMillis}), when the game is running, which is used by other systems, such as the script system.
+There are several methods for handling a game action that can be in two states -- paused or running. When the action is running, the physics and the logic of the entities is being updated in the method \emph{Update}, which means that the corresponding messages are broadcasted to all entities before and after the update of the physical engine. The action can be paused, resumed and restarted to a previously saved position. There is a global timer that measures the game time (can be obtained by the method \emph{GetTimeMillis}), when the game is running, which is used by other systems, such as the script system.
 
-Since the class \emph{Core\::Game} registers the input listener to itself, there are callbacks where it is possible to react to keyboard and mouse events such as a key or a mouse button press/release or a mouse move. The corresponding information such as a current mouse position is available through the callback parameters.
+Since the class \emph{Core\::Game} registers the input listener to itself, there are callbacks where it is possible to react to the keyboard and mouse events such as the key or the mouse button press/release or a mouse movement. The corresponding information such as the current mouse position is available through the callback parameters.
 
 If it is necessary to store some extra information that is shared among the game scenes (i.e. total score) the dynamic properties of this class should be used. There are template methods for getting or setting any kind of value under its name as well as methods for deleting one or all properties and for loading and saving them from/to a file. The properties are now stored along with other game stuff. For more information about using dynamic properties see the section \ref{sec:utils-properties}.
 
@@ -176,16 +176,16 @@ There are several getter and setter methods for each data type that get or set t
 The \emph{Core\::Project} class manages the project and its scenes in both the editor and the game. There are methods for creating and opening a project in a specific path as well as closing it and getting or setting project information (a name, a version, an author). Other methods of this class manage scenes of the project -- creating, opening, saving, closing etc. Some methods like creating or saving scenes can be called only in the editor mode and are not accessible from scripts.
 
 \section{Glossary}
-This is a glossary of the most used terms in the previous sections:
+This is a glossary of the most common terms used in the previous sections:
 
 \begin{description}
-  \item[Loading screen] -- a screen visible during a loading of the game indicating a loading progress
-  \item[Main loop] -- a code where an input from user is handled, an application logic is updated and a scene is drawn in a cycle until an application shuts down
-  \item[FPS] -- a count of frames per second that are drawn indicates a performance of a game
-  \item[Render target] -- a region in an application window where a game content is drawn to
-  \item[Resource] -- any kind of data that an application needs for its running (i.e. pictures, scripts, texts etc.)
-  \item[Configuration data] -- data that parametrizes the application running (i.e. a screen resolution, a game language etc.)
-  \item[Project] -- represents one game created in the editor that can be run independently, it is divided to scenes
+  \item[Loading screen] -- a screen visible during the loading of the game indicating a loading progress
+  \item[Main loop] -- a piece of code where an input from the user is handled, the application logic is updated and the scene is drawn in a cycle until an application shuts down
+  \item[FPS] -- a count of frames per second that indicates the performance of a game
+  \item[Render target] -- a region in an application window where the game content is drawn
+  \item[Resource] -- any kind of data that an application needs for its runtime (i.e. pictures, scripts, texts etc.)
+  \item[Configuration data] -- data that parametrizes the application runtime (i.e. a screen resolution, a game language etc.)
+  \item[Project] -- represents a single game created in the editor that can be run independently; it is divided to scenes
   \item[Scene] -- represents one part of the game that is loaded at once (i.e. a game level, a game menu etc.)
 \end{description}
 
@@ -199,11 +199,11 @@ This is a glossary of the most used terms in the previous sections:
 	\label{fig:entitysystem-diagram}
 \end{figure}
 
-The entity system creates a common interface for a definition of all game objects such as a game environment, a player character, a camera etc. and their behavior such as a drawing on a screen, an interaction with other objects etc. The object creation is based on a composition of simple functionalities that can be reused in many of them. The advantage of this unified system is an easy creating and editing of new objects from the game editor or from scripts. The disadvantage is a slower access to the object properties and behavior. It cooperates with the other systems like the graphics one for displaying objects or the script one for an interaction from scripts.
+The entity system creates a common interface for a definition of all game objects such as a game environment, a player character, a camera etc. and their behavior such as a drawing on a screen, an interaction with other objects etc. The object creation is based on a composition of simple functionalities that can be reused in many of them. The advantage of this unified system is an easy creating and editing of new objects from the game editor or from scripts. The disadvantage is slower access to the object properties and behavior. It cooperates with other systems like the graphical renderer to display objects or the script system to interact with the game from scripts.
 
 \section{Components and their manager}
 
-Every game object is represented by an entity, which is a compound of components that provides it with various functionalities. A component can have several properties (and functions), which can be read or written (called) via their getters and setters (or functions themselves), and which are accessible through their unique name. It can also react to sent messages such as an initialization, a drawing, a logic update etc. by its own behavior. Component properties and behaviors are accessible only through an owner entity, so it is possible to read or write a specific property of an entity, if it contains a component with this property and it is also possible to send a message to an entity that dispatches it to all its components that can react on it.
+Every game object is represented by an entity, which is a compound of components that provides it with various functionalities. A component can have several properties (and functions), which can be read or written (called) via their getters and setters (or functions themselves), and which are accessible through their unique name. It can also react to messages such as initialization, drawing, logic update etc. by its own behavior. Component properties and behaviors are accessible only through the entity owning the component. So, it is possible to read or write a specific property of an entity, if it contains a component with this property. It is also possible to send a message to an entity that dispatches it to all of its components that can then handle it.
 
 The \emph{EntitySystem\::Component} class is a base class for all components used in the entity system. It inherits from the \emph{Reflection\::RTTIBaseClass} class, which provides the methods for working with RTTI (registering properties and functions of component, see section \ref{sec:utils-rtti}). It has methods for getting the owner entity, the component type (defined in ComponentEnums.h) and the component property from its name and for posting a message to the owner entity. It also introduces methods, which should be overridden by specific components, that are used for handling messages and the component creation and destruction (see the Extending Ocerus document).
 
@@ -269,14 +269,14 @@ This is a glossary of the most used terms in the previous sections:
 	\label{fig:gfxsystem-diagram}
 \end{figure}
 
-The graphic system implements functionalities related to the rendering of game entities and the management of the application window. Note that the GUI system uses its own rendering system.
+The graphical system implements functionalities related to the rendering of game entities and the management of the application window. Note that the GUI system uses its own rendering system.
 
 \section{Graphic viewport and render target}
 \label{sec:render-target}
 
-The \emph{GfxSystem\::GfxViewport} class defines a place where all game entities will be rendered. It simply stores the information about a position and a size within the global window, which can be obtained from some texture, and also the data needed for drawing a grid, which is useful in the edit mode. It has methods for getting and setting these properties as well as other ones for calculating its boundaries in the world or scene space.
+The \emph{GfxSystem\::GfxViewport} class defines a place where all game entities will be rendered. It simply stores the information about a position and a size of the viewport within the global window. It can also be obtained from a texture. As an extra feature it carries data necessary to draw a grid used in the edit mode. It has methods for getting and setting these properties as well as other ones for calculating its boundaries in the world or scene space.
 
-For drawing the game entities it is also necessary to know from which position and where they are rendered, so the \emph{GfxSystem\::RenderTarget} type is defined, which is a pair of a viewport and an entity handle that must point to an entity with a camera component. This type is used by renderer classes described below where it is indexed by the \emph{GfxSystem\::RenderTargetID} type defined as an integer.
+For drawing the game entities it is also necessary to know from which position and where they are rendered, so the \emph{GfxSystem\::RenderTarget} type is defined. It's a pair of a viewport and an entity handle that must point to an entity with a camera component. This type is used by renderer classes described below where it is indexed by the \emph{GfxSystem\::RenderTargetID} type defined as an integer.
 
 For easy moving and zooming a camera by a mouse in a render target the \emph{GfxSystem\::DragDropCameraMover} class was defined. In its constructor or later by its setters it is possible to adjust a zoom sensitivity and a maximal and minimal allowed zoom.
 
@@ -333,13 +333,13 @@ This is a glossary of the most used terms in the previous sections:
 	\label{fig:guisystem-diagram}
 \end{figure}
 
-The GUI system provides creating and drawing a graphic user interface based on the CEGUI library for the editor and the game itself. It also manages a user interaction with GUI elements, element layouts, viewports and GUI console.
+The GUI system manages the graphical user interface. It is based the CEGUI library. In the engine it is used to implement the editor but the game uses it to display its own gameplay interface as well. The GUI system also takes care about the user input and how it interacts with GUI elements, element layouts, viewports and the GUI console.
 
 \section{GUI manager}
 
-The main class of the GUI system is the \emph{GUISystem\::GUIMgr}, which is a connector for drawing, input handling and resource and script providing between the CEGUI library and the engine. On its initialization in the method \emph{GUIMgr\::Init}), it
+The main class of the GUI system is \emph{GUISystem\::GUIMgr}, which is a connector for drawing, input handling and resource and script providing between the CEGUI library and the engine. On its initialization in the method \emph{GUIMgr\::Init}), it
 \begin{itemize}
-	\item creates a CEGUI renderer,
+	\item creates the CEGUI renderer,
 	\item connects the resource manager with the CEGUI system via the \emph{GUISystem\::ResourceProvider} class (see section \ref{sec:gui-resources}),
 	\item connects the script manager with the CEGUI system via the \emph{GUISystem\::ScriptProvider} class (see section \ref{sec:gui-script}),
 	\item provides itself as an input and screen listener,
@@ -423,13 +423,13 @@ This is a glossary of the most used terms in the previous sections:
 	\label{fig:editor-diagram}
 \end{figure}
 
-The editor is used for an easy creation of a new game based on this engine. It provides a well-arranged graphic user interface for managing everything from the whole project to each entity in several scenes. The main advantage is that every change made to a scene is immediately visible in the game window, where the game action can be started anytime.
+The editor is a graphical user interface allowing developers to visually create games using the game engine. It provides GUI elements for managing everything from the whole project to each entity in every scene. The main advantage is that every change made to a scene is immediately visible in the game window where the game action can be started anytime.
 
 \section{Editor managers}
 
-The \emph{Editor\::EditorMgr} class manages the logical part of the editor and it owns an instance of the \emph{Editor\::EditorGUI} class that focuses to the GUI of the editor. Both of them have methods called at the loading and the unloading of the editor and also methods for updating logic and drawing in the application loop.
+The \emph{Editor\::EditorMgr} class manages the logic of the editor while the \emph{Editor\::EditorGUI} class takes care of the GUI elements. The latter is instantiated by the former. Both of the classes have methods called by the application when the editor is loading or unloading. They also have methods to update the logic of the editor as well as methods to draw itself. These are called from the main loop of the application.
 
-The first mentioned class has methods for managing projects, scene and entities. It manages selecting entities and editing the current one, it reacts on choosing all items in the main menu such as creating a new entity, duplicating and deleting current or selected entities, adding and removing entity components, creating a prototype from a current entity, creating or loading a project or a scene and it solves changing an entity name or an entity property. It also provides a function for all edit tools such as moving, rotating or scaling of a chosen entity and for resuming, pausing and restarting the game action. Finally, there are methods for getting a reference to all editor windows and for updating them.
+The first class has methods for managing projects, scene and entities. It manages selecting entities and editing the current one, it reacts on choosing all items in the main menu such as creating a new entity, duplicating and deleting current or selected entities, adding and removing entity components, creating a prototype from a current entity, creating or loading a project or a scene and it solves changing an entity name or an entity property. It also provides a function for all edit tools such as moving, rotating or scaling of a chosen entity and for resuming, pausing and restarting the game action. Finally, there are methods for getting a reference to all editor windows and for updating them.
 
 The second class compounds all editor layouts such as the game and editor viewports, the resource, prototype and layer windows and the editor menu and it initializes and updates them. It directly updates the entity editor window according to the current entity that uses the vertical layout for positioning entity components and various value editors for showing and editing all kinds of entity properties such as strings, vectors, resources and arrays.
 
@@ -500,7 +500,7 @@ The \emph{InputSystem\::InputMgr} class is only a proxy class that calls methods
 	\label{fig:logsystem-diagram}
 \end{figure}
 
-The log system manages internal log messages that are used for providing informations about application processes. It is useful for debugging the project. These messages can have various levels of a severity (from trace and debug messages to errors) and it is possible to set the minimal level of messages to show (i.e. only warning and errors). Another function of the log system is managing a real-time in-game profiling, useful for a location of the most time critical parts of the project that can leads to effective optimization.
+The log system manages internal log messages that are used for providing informations about application processes. It is useful for debugging the project. These messages can have various levels of a severity (from trace and debug messages to errors) and it is possible to set the minimal level of messages to show (i.e. only warning and errors). Another function of the log system is managing a real-time in-game profiling, useful for a location of the most time critical parts of the project that help to optimize the application effectively.
 
 \section{Logging messages}
 \label{sec:logging}
@@ -671,7 +671,7 @@ This is a glossary of the most used terms in the previous sections:
 	\label{fig:scriptsystem-diagram}
 \end{figure}
 
-The script system allows customizing reactions to application events such as messages sent to entities or GUI interactions without a compilation of a whole application to the users of the engine. The advantage of using scripts is an easier extension of the application, which can be done even by non-professional users because in the script environment, they cannot do any fatal errors that can corrupt the application and it is possible to have a full control of the script execution -- for example timeout of execution prevents cycling. The disadvantage is a slower execution of scripts than a native code, so a user should decide which part of system will be native coded and which can be done by scripts.
+The script system allows customizing reactions to application events such as messages sent to entities or GUI interactions without the recompilation of the whole application. The advantage of using scripts is that it's much easier to extend the application. Also, it can be done even by non-professional users because in the script environment they cannot do any fatal errors that could corrupt the application. Also, the engine controls the script execution -- for example, there's a timeout of execution preventing cycling. The disadvantage is slower execution of scripts than a native code, so the user should decide which part of the system will be the native coded and what can be done by scripts.
 
 \section{Interface of the script manager}
 
@@ -734,11 +734,11 @@ This is a glossary of the most used terms in the previous sections:
 	\label{fig:stringsystem-diagram}
 \end{figure}
 
-The string system manages all texts that are visible to the user except internal log messages. It supports localization to various languages and their country-specific dialects and a switching among them on fly.
+The string system manages all texts that are visible to the user except internal log messages. It supports localization to various languages and their country-specific dialects and a switching among them on the fly.
 
 \section{Interface of the string manager}
 
-The string manager is represented by the class \emph{StringSystem\::StringMgr} that provides all necessary services. There are two instances of this class when the application runs. The first one manages system texts (i.e. labels in editor, common error messages etc.), the second one provides an access to project specific texts, so they differs only in a path to the root directory, where the text resources are loaded from. Both are initialized when the application starts and destroyed on an application shutdown. The class provides static methods that returns these instances, or it is possible to use defined macros.
+The string manager is represented by the class \emph{StringSystem\::StringMgr} that provides all necessary services. There are two instances of this class when the application runs. The first one manages system texts (i.e. labels in the editor, common error messages etc.). The second one provides an access to project specific texts, so they differs only in a path to the root directory where the text resources are loaded from. Both are initialized when the application starts and destroyed on the application shutdown. The class provides static methods that return these instances. Or it is possible to use defined macros.
 
 The first method that is necessary to call before using the others is the \emph{StringMgr\::LoadLanguagePack}, which expects the language and the country code. Both parameters can be omitted and their meaning is widely explained in the User Guide documentation.
 %todo check whether this directory layout is described in User Guide documentation
@@ -746,7 +746,7 @@ It removes old text items and loads new ones according to a specific language se
 
 There are several methods in the class for getting the text data according to its group name and key, which differs in returning a pointer to the data or the data itself and in specifying or omitting the group name (using the default one instead). If the text data of a specified group name and key does not exist, an empty string is returned and an error message is written to the log.
 
-\section{Using a variable text}
+\section{Using variable text}
 \label{sec:text-format}
 
 If the loaded text data contains character sequences in a form of \texttt{\%x} (\texttt{x} is a number from 1 to 9), it is possible to replace them by another text using the class \texttt{StringSystem\\::TextFormat}. Just construct the instance of this class with the loaded text as a parameter, then use a sequence of \texttt{<<} operators to replace all well formatted character sequences and store it to another text data variable.
@@ -788,7 +788,7 @@ This is a glossary of the most used terms in the previous sections:
 	\label{fig:memory-diagram}
 \end{figure}
 
-The memory system controls the memory allocation of the whole application. It attempts to work under the hood, so that the rest of the project does not need to know about that. It provides tools to override the default dynamic memory allocation as well as custom specialized allocators for small objects or containers.
+The memory system controls the memory allocation of the whole application. It attempts to work under the hood, so that the rest of the project does not need to know about it. It provides tools to override the default dynamic memory allocation as well as custom specialized allocators for small objects or containers.
 
 Since games are very different from other applications, they also have specific memory requirements. However, the default managers in current compilers are targeted to common programs. The game is a real-time per\-for\-man\-ce-in\-ten\-si\-ve application while it also allocates and deallocates a lot of objects on a regular basis. An example of this might be graphical effects spawned and destroyed during the play to keep the action high. In this case it is much more efficient to pool the objects instead of allocating them on the general heap. Another problem arises on game consoles where the memory available to the game is very limited and the engine must hold a tight control on the state of the memory and dynamically clean it if necessary while the action is still running.
 
@@ -821,7 +821,7 @@ In \texttt{Platform.h} you can find macros defining the currently used platform.
 
 \chapter{Utilities and reflection}
 
-During the development of a game, usually several helper classes and methods are needed such as those for math or containers. This kind of stuff does not fit anywhere because it is too general. Placing it in a specific subsystem would make it unusable anywhere else so they were aggregated in this namespace.
+During the development of a game, usually several helper classes and methods are needed such as those for math or containers. This kind of functionality does not fit anywhere because it is too general. Placing it in a specific subsystem made it unusable anywhere else so they were aggregated in this namespace.
 
 \section{Helper classes and methods}
 There are several categories of utilities: containers (i.e. tree), math functions (i.e. hash) and design patterns (i.e. singleton). Here is the list of them with a brief description:
@@ -870,6 +870,11 @@ This is a glossary of the most used terms in the previous sections:
   \item[Property] -- a class attribute accessible by its name that must be registered to the RTTI system
   \item[Dynamic property] -- data of any defined type associated to an object with RTTI that can be added and removed any time
 \end{description}
+
+
+
+\chapter{Conclusion}
+In this document the architecture of the Ocerus engine was described. Each of the chapters cover the design of a certain bigger part of the engine. It goes quite deep into describing how it works inside but the little details are left for the Doxygen reference documentation.
 
 
 

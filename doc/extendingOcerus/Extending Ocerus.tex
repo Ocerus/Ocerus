@@ -11,7 +11,7 @@ This document only shows how to make things work. If you want to understand the 
 
 \chapter{Components}
 
-Every game object is represented by an entity which is a compound of components that provide various functionalities. A component can have several properties (and functions), which can be read or written (called) via their getters and setters (or functions themselves). They are accessible through their unique name. The component can also react to messages such as initialization, drawing, logic update etc. which are send from a component to entities or broadcastet by the engine to all entities.
+Every game object is represented by an entity which is a compound of components that provide various functionalities. A component can have several properties (and functions), which can be read or written (called) via their getters and setters (or functions themselves). They are accessible through their unique name. The component can also react to messages such as initialization, drawing, logic update etc. which are send from a component to entities or broadcasted by the engine to all entities.
 
 Ocerus provides several predefined components that implement basic features such as the visual representation, physics, scripts etc. But it is also possible to define new components. They can add new functionality to the game entities. Similar result can be achieved by using scripts but the logic in components is not limited to predefined script functions and it also runs faster. In the following sections, there will be a sequence of steps that are necessary to create and use a new component. 
 
@@ -490,7 +490,15 @@ GfxSystem::GfxRenderer::CreateSingleton<GfxSystem::NewRenderer>();
 
 
 \chapter{Conclusion}
-TODO.
+In this document several ways of extending the Ocerus engine were described. First of them was adding new features by implementing new components. These components are then used by the game entities. Since they can access any part of the game engine it is a very powerful way to allow games to do more.
+
+Another way described was to extend the scripting system. From scripts the game designer can do only what we allow him by exposing certain functions to scripts. So, if we want to allow him to use more functionality we must add the appropriate functions to the scripting system.
+
+As the third point where the engine can be enhanced the resource system was described. As it was shown it is possible to add new types of resources fairly easily. The new resource can then load special type of content and use it in a different way. An example of this might be sound and music resources.
+
+And lastly the renderer was described. It was shown how the current OpenGL renderer implements the abstract interface and how it is possible to implement another one - let's say using DirectX.
+
+It should be noted that this guide serves only for the purpose of describing how to extend Ocerus but it doesn't get very deep into the details of how it actually works. These informarions are provided in the Design Documentation document.
 
 
 %% A small distance to the other stuff in the table of contents (toc)
