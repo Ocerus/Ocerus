@@ -66,7 +66,8 @@ Select the \textbf{Scene $\to$ New Scene} command from the main menu. Ocerus can
 save the current scene (this is the default scene that was automatically created). In that case, click
 \textbf{No} and the \textbf{New Scene} dialog should appear.
 
-In the \textbf{New Scene} dialog click on the folder icon to create a subfolder. Name it \texttt{scenes} and enter it after it's created. Then type in \texttt{gameplay} as the scene
+In the \textbf{New Scene} dialog click on the folder icon to create a subfolder. Name it \texttt{scenes} and then
+enter this directory after it's created. Then type in \texttt{gameplay} as the scene
 filename (see figure~\ref{fig:new_scene}). When you are ready, click the \textbf{OK} button and the new scene
 will be created and automatically opened.
 
@@ -103,8 +104,7 @@ game. You are right, we are talking about the ball.
 
 
 \section{Creating entities}
-To create an entity, select the \textbf{Edit $\to$ New Entity} command from the main menu and type in the entity
-name. In our sample project there will be a ball that will bounce over the area, so we name the entity
+To create an entity, select the \textbf{Edit $\to$ New Entity} command from the main menu and type the desired name of the entity into the edit box that has appeared. In our sample project there will be a ball that will bounce over the area, so we name the entity
 \texttt{Ball}. Click the \textbf{OK} button and the new entity appears in the \textbf{Hierarchy} view. Select
 the entity by clicking it in the view.
 
@@ -152,10 +152,14 @@ give our ball a more appealing appearance, we have to change the \textbf{texture
 \end{figure}
 
 \section{Adding graphics content}
-Every file and directory that is placed in the project directory hierarchy is visible in the
-\textbf{Resources} view. To put files with your textures into the project, simply copy them somewhere into the
-project directory. When you add a file into the project directory, Ocerus automatically detects the file and creates a suitable resource representing it. The type of the resource is shown by an icon next to
-the resource name in the \textbf{Resource} view.
+Every file and directory that is placed into the project directory is visible in the
+\textbf{Resources} view. To put files with your textures into the project, simply copy
+them somewhere into the project directory. Remember that you cannot achieve this from
+Ocerus, so use your favorite file manager to do this.
+
+When you add a file into the project directory, Ocerus automatically detects the file
+and creates an appropriate resource representing it. You can tell the type of the resource
+by the icon next to the resource name in the \textbf{Resource} view.
 
 You can either use the \texttt{ball.png} texture from the \texttt{textures} directory in the
 \hyperref[sec:archive]{archive} provided with this document, or you can create or get any texture you like
