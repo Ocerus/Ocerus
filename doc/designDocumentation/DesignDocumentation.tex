@@ -425,15 +425,16 @@ This is a glossary of the most used terms in the previous sections:
 
 The editor is a graphical user interface allowing developers to visually create games using the game engine. It provides GUI elements for managing everything from the whole project to each entity in every scene. The main advantage is that every change made to a scene is immediately visible in the game window where the game action can be started anytime.
 
-\section{Editor managers}
+\section{Editor manager}
 
 The \emph{Editor\::EditorMgr} class manages the logic of the editor while the \emph{Editor\::EditorGUI} class takes care of the GUI elements. The latter is instantiated by the former. Both of the classes have methods called by the application when the editor is loading or unloading. They also have methods to update the logic of the editor as well as methods to draw itself. These are called from the main loop of the application.
 
 The first class has methods for managing projects, scene and entities. It manages selecting entities and editing the current one, it reacts on choosing all items in the main menu such as creating a new entity, duplicating and deleting current or selected entities, adding and removing entity components, creating a prototype from a current entity, creating or loading a project or a scene and it solves changing an entity name or an entity property. It also provides a function for all edit tools such as moving, rotating or scaling of a chosen entity and for resuming, pausing and restarting the game action. Finally, there are methods for getting a reference to all editor windows and for updating them.
 
-The second class compounds all editor layouts such as the game and editor viewports, the resource, prototype and layer windows and the editor menu and it initializes and updates them. It directly updates the entity editor window according to the current entity that uses the vertical layout for positioning entity components and various value editors for showing and editing all kinds of entity properties such as strings, vectors, resources and arrays.
+The second class compounds all editor GUI layouts such as the game and editor viewports, the entity, resource, prototype and layer views and the editor menu and it initializes and updates them.
 
-\section{Used layouts}
+\section{Editor views}
+There are five classes that provide five views in the editor. The \emph{Editor\::EntityWindow} class manages the Entity view.
 
 There are seven layout classes for editor components. All of them have initialization and update methods and callbacks for significant events and load their look from an external XML file and introduce the reactions on events and loading data from the application. The \emph{Editor\::CreateProjectDialog} represents the dialog for creating a new project, the \emph{Editor\::HierarchyWindow} manages the hierarchy of entities, the \emph{Editor\::LayerWindow} manages the layers the entities are put to, the \emph{Editor\::PrototypeWindow} manages the prototypes of entities, the \emph{Editor\::EntityWindow} manages components and properties of entities, the \emph{Editor\::ResourceWindow} manages the resources that the entities can use and the \emph{Editor\::EditorMenu} represents the main menu and toolbar.
 
