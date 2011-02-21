@@ -142,7 +142,7 @@ namespace Editor
 		// Setup label widget
 		CEGUI::Window* labelWidget = mHeaderWidget->getChildAtIdx(0);
 		labelWidget->setArea(CEGUI::URect(dimLeft, cegui_absdim(0), CEGUI::UDim(0.5f, -2), cegui_reldim(1)));
-		labelWidget->setText(model->GetName());
+		labelWidget->setText(utf8StringToCEGUI(model->GetName()));
 		labelWidget->setTooltipText(model->GetTooltip());
 
 		// Setup buttons

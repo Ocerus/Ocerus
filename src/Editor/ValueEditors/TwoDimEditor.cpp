@@ -160,7 +160,7 @@ void TwoDimEditor::SetupWidget(IValueEditorModel* model)
 	// Setup label widget
 	CEGUI::Window* labelWidget = mEditorWidget->getChildAtIdx(0);
 	labelWidget->setArea(CEGUI::URect(dimLeft, cegui_absdim(0), dimMiddle + cegui_absdim(-2), cegui_reldim(1)));
-	labelWidget->setText(model->GetName());
+	labelWidget->setText(utf8StringToCEGUI(model->GetName()));
 	labelWidget->setTooltipText(model->GetTooltip());
 
 	CEGUI::Window* labelXWidget = mEditorWidget->getChildAtIdx(1);

@@ -95,7 +95,7 @@ void BoolEditor::SetupWidget(BoolEditor::Model* model)
 	CEGUI::Window* labelWidget = mEditorWidget->getChildAtIdx(0);
 	labelWidget->setArea(CEGUI::URect(dimLeft, cegui_absdim(0), dimMiddle + cegui_absdim(-2), cegui_reldim(1)));
 	labelWidget->setProperty("HorzFormatting", model->IsListElement() ? "RightAligned" : "LeftAligned");
-	labelWidget->setText(model->GetName());
+	labelWidget->setText(utf8StringToCEGUI(model->GetName()));
 	labelWidget->setTooltipText(model->GetTooltip());
 
 	// Setup checkbox widget

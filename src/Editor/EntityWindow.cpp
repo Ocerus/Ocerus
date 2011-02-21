@@ -276,11 +276,11 @@ void EntityWindow::SetupComponentGroup(const Editor::EntityWindow::ComponentGrou
 
 void EntityWindow::SetupComponentGroup(const Editor::EntityWindow::ComponentGroup& componentGroup, EntitySystem::EntityHandle entity, int componentID)
 {
-	const string componentName = EntitySystem::GetComponentTypeName(gEntityMgr.GetEntityComponentType(entity, componentID));
+	const string& componentName = EntitySystem::GetComponentTypeName(gEntityMgr.GetEntityComponentType(entity, componentID));
 
 	// Setup label
 	componentGroup.widget->setVisible(true);
-	componentGroup.widget->setText(componentName);
+	componentGroup.widget->setText(utf8StringToCEGUI(componentName));
 
 
 	// Setup remove component button

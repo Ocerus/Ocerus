@@ -190,11 +190,11 @@ void GUIConsole::LoadCurrentHistoryCommand()
 {
 	if (!mCurrentHistoryItem->modifiedCommand.empty())
 	{
-		mPromptBoxWidget->setText(mCurrentHistoryItem->modifiedCommand);
+		mPromptBoxWidget->setText(utf8StringToCEGUI(mCurrentHistoryItem->modifiedCommand));
 	}
 	else
 	{
-		mPromptBoxWidget->setText(mCurrentHistoryItem->originalCommand);
+		mPromptBoxWidget->setText(utf8StringToCEGUI(mCurrentHistoryItem->originalCommand));
 	}
 }
 

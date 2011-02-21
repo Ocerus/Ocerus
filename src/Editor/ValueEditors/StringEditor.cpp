@@ -39,8 +39,8 @@ void StringEditor::Update()
 {
 	OC_DASSERT(mEditboxWidget != 0);
 	if (UpdatesLocked()) return;
-	mEditboxWidget->setText(mModel->IsValid() ? this->mModel->GetValue() : "");
-	mEditboxWidget->setTooltipText(mModel->IsValid() ? this->mModel->GetValue() : "");
+	mEditboxWidget->setText(mModel->IsValid() ? utf8StringToCEGUI(this->mModel->GetValue()) : "");
+	mEditboxWidget->setTooltipText(mModel->IsValid() ? utf8StringToCEGUI(this->mModel->GetValue()) : "");
 }
 
 bool StringEditor::OnEventIsSharedCheckboxChanged(const CEGUI::EventArgs& args)
@@ -140,7 +140,7 @@ void StringEditor::SetupWidget(StringEditor::Model* model)
 	CEGUI::Window* labelWidget = mEditorWidget->getChildAtIdx(0);
 	labelWidget->setArea(CEGUI::URect(dimLeft, cegui_absdim(0), dimMiddle + cegui_absdim(-2), cegui_reldim(1)));
 	labelWidget->setProperty("HorzFormatting", model->IsListElement() ? "RightAligned" : "LeftAligned");
-	labelWidget->setText(model->GetName());
+	labelWidget->setText(utf8StringToCEGUI(model->GetName()));
 	labelWidget->setTooltipText(model->GetTooltip());
 
 	// Setup editbox widget

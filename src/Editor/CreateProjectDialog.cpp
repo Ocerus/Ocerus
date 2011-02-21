@@ -117,7 +117,7 @@ void CreateProjectDialog::OnFolderSelected(const string& path, const string& edi
 	mDialog->setModalState(true);
 	if (canceled)
 		return;
-	mLocationValue->setText(path);
+	mLocationValue->setText(utf8StringToCEGUI(path));
 }
 
 

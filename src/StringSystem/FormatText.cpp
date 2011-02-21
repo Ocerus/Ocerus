@@ -51,6 +51,16 @@ FormatText& FormatText::operator<<(const TextData& newText)
 	return *this;
 }
 
+FormatText& FormatText::operator<<(const string& newText)
+{
+	return operator<<(CEGUI::String((CEGUI::utf8*)(newText.c_str())));
+}
+
+FormatText& FormatText::operator<<(const char* newText)
+{
+	return operator<<(CEGUI::String((CEGUI::utf8*)(newText)));
+}
+
 FormatText::operator const TextData& (void) const
 {
 	return mTextData;

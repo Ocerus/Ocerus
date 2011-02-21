@@ -219,7 +219,7 @@ void ResourceWindow::OpenPopupMenu(ResourceSystem::ResourcePtr resource, float32
 		// Check current resource type
 		for (size_t idx = 0; idx < mResourceTypesPopupMenu->getChildCount(); ++idx)
 		{
-			mResourceTypesPopupMenu->getChildAtIdx(idx)->setText(ResourceSystem::GetResourceTypeName((ResourceSystem::eResourceType)idx));
+			mResourceTypesPopupMenu->getChildAtIdx(idx)->setText(utf8StringToCEGUI(ResourceSystem::GetResourceTypeName((ResourceSystem::eResourceType)idx)));
 			if ((ResourceSystem::eResourceType)idx == mCurrentPopupResource->GetType())
 				mResourceTypesPopupMenu->getChildAtIdx(idx)->appendText(" *");
 		}
@@ -401,7 +401,7 @@ void ResourceWindow::SetupResourceItemEntry(CEGUI::Window* itemEntry, uint32 res
 	dragContainer->setID(resourceIndex);
 
 	CEGUI::Window* itemEntryText = dragContainer->getChildAtIdx(0);
-	itemEntryText->setText(boost::filesystem::path(res->GetName()).filename());
+	itemEntryText->setText(utf8StringToCEGUI(boost::filesystem::path(res->GetName()).filename()));
 }
 
 void ResourceWindow::SetupDirectoryItemEntry(CEGUI::Window* itemEntry, const string& parentPath, const string& directory)
@@ -411,7 +411,7 @@ void ResourceWindow::SetupDirectoryItemEntry(CEGUI::Window* itemEntry, const str
 	uint32 indentLevel = GetPathIndentLevel(parentPath);
 
 	dragContainer->setArea(CEGUI::URect(CEGUI::UDim(0, (float32)(indentLevel * 16)), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
-	itemEntryText->setText(directory);
+	itemEntryText->setText(utf8StringToCEGUI(directory));
 	itemEntry->setUserString("ResourceDir", parentPath);
 	itemEntry->setUserString("ResourcePath", parentPath + directory);
 }

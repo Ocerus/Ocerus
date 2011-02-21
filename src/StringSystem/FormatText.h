@@ -27,6 +27,12 @@ namespace StringSystem
 		/// @param newText The text that replace the variable sequence. 
 		FormatText& operator<<(const TextData& newText);
 
+		/// This method is provided for convenience and accepts standard strings encoded in utf8.
+		FormatText& operator<<(const string& newText);
+
+		/// This method is provided for convenience and accepts char* strings encoded in utf8.
+		FormatText& operator<<(const char* newText);
+
 		/// Returns the edited text.
 		operator const TextData& (void) const;
 

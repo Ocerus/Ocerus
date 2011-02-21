@@ -188,7 +188,7 @@ CEGUI::ItemEntry* PrototypeWindow::CreatePrototypeItem()
 void PrototypeWindow::SetupPrototypeItem(CEGUI::ItemEntry* prototypeItem, EntitySystem::EntityHandle mPrototype)
 {
 	prototypeItem->setID(mPrototype.GetID());
-	prototypeItem->getChildAtIdx(0)->getChildAtIdx(0)->setText(gEntityMgr.GetEntityName(mPrototype));
+	prototypeItem->getChildAtIdx(0)->getChildAtIdx(0)->setText(utf8StringToCEGUI(gEntityMgr.GetEntityName(mPrototype)));
 	prototypeItem->getChildAtIdx(0)->setID(mPrototype.GetID());
 }
 

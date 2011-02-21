@@ -607,7 +607,7 @@ void Editor::HierarchyWindow::SetupTreeItem(CEGUI::ItemEntry* treeItem, EntityHa
 	dragContainer->setID(entity.GetID());
 
 	CEGUI::Window* treeItemText = dragContainer->getChildAtIdx(0);
-	treeItemText->setText(entity.GetName());
+	treeItemText->setText(utf8StringToCEGUI(entity.GetName()));
 }
 
 void Editor::HierarchyWindow::StoreTreeItem(CEGUI::ItemEntry* treeItem)

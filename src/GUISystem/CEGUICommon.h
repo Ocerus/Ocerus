@@ -27,5 +27,12 @@
 		}
 //@}
 
+/// This function converts standard string to CEGUI string. It is necessary to use this function
+/// in favor to the implicit conversion if your strings are UTF8 encoded.
+inline CEGUI::String utf8StringToCEGUI(const string& utf8String)
+{
+	return CEGUI::String((CEGUI::utf8*)(utf8String.c_str()));
+}
+
 
 #endif // _GUISYSTEM_CEGUICOMMON_H_

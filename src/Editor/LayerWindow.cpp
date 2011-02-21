@@ -428,7 +428,7 @@ void LayerWindow::UpdateLayerItem(CEGUI::ItemEntry* layerItem, EntitySystem::Lay
 	
 	// update layer name
 	if (layerItemText->getText() != gLayerMgr.GetLayerName(layerID))
-		layerItemText->setText(gLayerMgr.GetLayerName(layerID));
+		layerItemText->setText(utf8StringToCEGUI(gLayerMgr.GetLayerName(layerID)));
 
 	// update whether layer is active
 	if (gLayerMgr.GetActiveLayer() == layerID)
@@ -457,7 +457,7 @@ void LayerWindow::UpdateEntityItem(CEGUI::ItemEntry* entityItem, EntitySystem::E
 	
 	// update entity name
 	if (entityItemText->getText() != gEntityMgr.GetEntityName(entity))
-		entityItemText->setText(gEntityMgr.GetEntityName(entity));
+		entityItemText->setText(utf8StringToCEGUI(gEntityMgr.GetEntityName(entity)));
 
 	if (gEditorMgr.GetSelectedEntity() == entity)
 		entityItem->setSelected(true);

@@ -241,12 +241,12 @@ void GUISystem::FolderSelector::UpdateFolderList()
 	}
 	Containers::sort(mFolders.begin(), mFolders.end());
 
-	mPathBox->setText(GetRelativePath(mCurrentPath));
+	mPathBox->setText(utf8StringToCEGUI(GetRelativePath(mCurrentPath)));
 	mFolderList->resetList();
 
 	for (vector<string>::iterator it = mFolders.begin(); it != mFolders.end(); ++it)
 	{
-		CEGUI::ListboxTextItem* item = new CEGUI::ListboxTextItem(*it);
+		CEGUI::ListboxTextItem* item = new CEGUI::ListboxTextItem(utf8StringToCEGUI(*it));
 		item->setSelectionBrushImage("Vanilla-Images", "GenericBrush");
 		item->setID(it - mFolders.begin());
 		mFolderList->addItem(item);
