@@ -21,6 +21,7 @@ create_project_folder=Select the new project location
 open_project=Open Project
 open_project_hint=Opens a project. [CTRL + O]
 open_project_error=Cannot open project "%1".
+open_project_error_wrong_path=The path to "%1" contains some invalid characters.
 open_project_folder=Select the project to open
 deploy_project=Deploy Project
 deploy_project_hint=Deploys the project.

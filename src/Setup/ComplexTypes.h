@@ -29,6 +29,8 @@ typedef b2Fixture PhysicalShape;
 
 #include <string>
 typedef std::string string;
+bool IsStringValid(const std::string& str);
+
 
 #include "Containers.h"
 

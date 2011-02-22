@@ -65,6 +65,12 @@ bool Project::CreateProject(const string& name, const string& path)
 
 bool Project::OpenProject(const string& path)
 {
+	if (!IsStringValid(path))
+	{
+		ocWarning << "Project path contains diacritics: " << path;
+		return false;
+	}
+
 	string configFile = path + "/" + PROJECT_FILE_NAME;
 	bool projectOk = false;
 	try

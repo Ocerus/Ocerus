@@ -277,7 +277,7 @@ void GUISystem::FolderSelector::ListDirectoryContent( const string& directory, v
 		boost::filesystem::directory_iterator endIt;
 		for (boost::filesystem::directory_iterator it(directory); it != endIt; ++it)
 		{
-			if (boost::filesystem::is_directory(it->path()))
+			if (boost::filesystem::is_directory(it->path()) && IsStringValid(it->filename()))
 			{
 				out.push_back(it->filename());
 			}

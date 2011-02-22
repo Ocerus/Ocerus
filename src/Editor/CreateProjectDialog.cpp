@@ -129,6 +129,9 @@ bool CreateProjectDialog::IsValid()
 	boost::filesystem::path projectLocation = mLocationValue->getText().c_str();
 	boost::filesystem::path projectPath = projectLocation / mNameValue->getText().c_str();
 
+	// Not valid if the path string has invalid characters
+	if (!IsStringValid(projectPath.string())) return false;
+
 	// Not valid, if project location does not exist.
 	if (!boost::filesystem::exists(projectLocation)) return false;
 

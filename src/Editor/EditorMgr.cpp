@@ -639,7 +639,14 @@ void EditorMgr::OpenProject(const string& projectPath)
 {
 	if (projectPath.empty()) return;
 
-	if (!mCurrentProject->OpenProject(projectPath))
+	if (!IsStringValid(projectPath))
+	{
+		GUISystem::MessageBox* messageBox = new GUISystem::MessageBox(GUISystem::MessageBox::MBT_OK);
+		messageBox->SetText(StringSystem::FormatText(gStringMgrSystem.GetTextData
+			(GUISystem::GUIMgr::GUIGroup, "open_project_error_wrong_path")) << projectPath);
+		messageBox->Show();
+	}
+	else if (!mCurrentProject->OpenProject(projectPath))
 	{
 		GUISystem::MessageBox* messageBox = new GUISystem::MessageBox(GUISystem::MessageBox::MBT_OK);
 		messageBox->SetText(StringSystem::FormatText(gStringMgrSystem.GetTextData
