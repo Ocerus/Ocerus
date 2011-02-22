@@ -397,11 +397,11 @@ and select the \textbf{reparent up} action and the entity will move one level up
 Entities can also be ordered among theirs siblings. Use the \textbf{move up} and \textbf{move down} commands
 to move an entity before its preceding sibling or after its succeeding sibling.
 
-\begin{wrapfigure}{r}{0.25\textwidth}
+\begin{wrapfigure}{r}{0.3\textwidth}
 \vspace{-20pt}
 \capstart
 \begin{center}
-  \includegraphics[scale=0.65]{Hierarchy}
+  \includegraphics[scale=0.8]{Hierarchy}
  \end{center}
  \vspace{-20pt}
  \caption{Hierarchy View}
@@ -427,11 +427,24 @@ at least one layer and this one is automatically created. You can click on the p
 layer name to expand it. Every entity that you created so far is located in this layer. To make sure that our
 \texttt{Background} entity will stay behind all other entities, you have to create a new layer.
 
+\begin{wrapfigure}{r}{0.3\textwidth}
+\vspace{-20pt}
+\capstart
+ \begin{center}
+  \includegraphics[scale=0.8]{LayersView}
+ \end{center}
+ \vspace{-20pt}
+ \caption{Layers view}
+ \label{fig:script_component}
+ \vspace{-10pt}
+\end{wrapfigure}
+
 To create a layer, right click on an existing layer in the layer view and select the \textbf{new layer}
 command. A prompt asking for the layer name will pop up. Type \texttt{Background} and click the \textbf{OK}
 button. In case the \texttt{Background} layer is not under the \texttt{Initial Layer}, use the \textbf{move
 down} command in the layer's context menu. Finally expand both layers and drag the \texttt{Background} entity
 to the background layer (or use the \textbf{move down} command in the entity's context menu).
+
 
 Notice that the initial layer is printed in boldface. This means that the initial layer the active one. If you
 are selecting an entity in the editor viewport, only entities in the active layer are selectable. To switch
@@ -467,15 +480,26 @@ little script. Open your favorite text editor and copy the following code (or us
 	label={flipper.as}]{archive/scripts/flipper.as}
 
 Now save the file as \texttt{flipper.as} and copy it into the \texttt{scripts} subdirectory in your project.
-Back in Ocerus, select the \texttt{Flipper} prototype and click the \textbf{Add} button next to the
+Back in Ocerus, select the \texttt{Flipper} prototype and click the green plus button next to the
 \textbf{ScriptModules} property. Drag the \texttt{flipper.as} resource from the \textbf{Resources} view to the
-\textbf{NULL} field in the modules list and click the \textbf{Save} button.
-%TODO revidovat jakmile se opravi manipulace s poli (ikonky misto Add, Rvrt, Save).
+\textbf{NULL} field in the modules list and click the blue diskette button.
+
+\begin{figure}[ht]
+ \begin{center}
+  \includegraphics[scale=0.70]{ScriptComponent}
+ \end{center}
+ \caption{Script component of Flipper prototype}
+ \label{fig:script_component}
+\end{figure}
+
 If everything went well, your script gets loaded and a couple of new properties appear in the \textbf{Script}
-component part of the \textbf{Entity} view. These properties are defined in the script and they allow you to
-control the scripted behavior. In our script, there are two properties: \textbf{LeftSided} and
-\textbf{Pivot}. The \textbf{LeftSided} property determines which flipper is the left one and which is the
-other one and the \textbf{Pivot} property defines the location of the pivot point.
+component part of the \textbf{Entity} view (see figure~\ref{fig:script_component}). These properties are defined
+in the script and they allow you to control the scripted behavior. In our script, there are two properties:
+\textbf{LeftSided} and \textbf{Pivot}. The \textbf{LeftSided} property determines which flipper is the left
+one and which is the other one and the \textbf{Pivot} property defines the location of the pivot point.
+
+
+
 
 Select the \texttt{LeftFlipper} entity and check its \textbf{LeftSided} property checkbox. 
 %TODO jak nastavit spravne Pivot?? metodou pokus omyl?
