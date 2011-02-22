@@ -215,16 +215,20 @@ viewport. Take some time to familiarize with these tools as they are vital for r
 Ocerus. Consider using keyboard shortcuts to become even faster (click the \textbf{Help $\to$ Shortcuts}
 action in the main menu to display the list of keyboard shortcuts).
 
+\section{Defining a collision polygon}
+
 \begin{wrapfigure}{r}{0.35\textwidth}
+\vspace{-20pt}
 \capstart
 \begin{center}
-  \includegraphics[scale=0.65]{PolygonCollider}
+  \includegraphics[scale=0.8]{PolygonCollider}
  \end{center}
+ \vspace{-20pt}
  \caption{Defining octagon collision polygon}
  \label{fig:polygon_collider}
+ \vspace{-10pt}
 \end{wrapfigure}
 
-\section{Defining a collision polygon}
 Although our ball has a texture already, Ocerus has no clue what its shape is. As soon as we introduce physics
 into our game, it is necessary that every entity that is influenced by physics has a collision polygon
 defined. Ocerus needs to know these polygons in order to properly determine whether two entities collide with
@@ -240,6 +244,11 @@ according to the figure~\ref{fig:polygon_collider}. When you are ready, click th
 the list. After the new collision polygon is saved to our entity, it is displayed as a blue outline in the
 editor viewport. If you have used your own texture, you may need to modify these points to make the polygon aligned
 with the texture.
+
+You may wonder how we have figured out these numbers. Polygon vertices are defined in game coordinates and the point
+with both values set to zero is the center of the entity. One unit in game coodrinates corresponds to 50 pixels of
+your texture. Let's consider the following example: we want to find a collision polygon that would outline a square
+image with dimensions $100 \times 100$ pixels. The polygon will have points [-1, -1], [1, -1], [1, 1] and [-1, 1].
 
 Our ball entity has a collision polygon now, which means that if physics is applied to that entity, it will
 collide with another entities accordingly to their collision polygons. So to really see the
@@ -335,12 +344,12 @@ shared properties.
 \vspace{-20pt}
 \capstart
 \begin{center}
-  \includegraphics[scale=0.65]{SharedProperties}
+  \includegraphics[scale=0.8]{SharedProperties}
  \end{center}
  \vspace{-20pt}
  \caption{Shared Properties}
  \label{fig:shared_properties}
- \vspace{-10pt}
+ \vspace{30pt}
 \end{wrapfigure}
 
 Click the \texttt{Platform} prototype in the \textbf{Prototypes} view and look at the \textbf{Entity} view
@@ -353,12 +362,11 @@ across several scenes in your project. You only have to change the prototype and
 \vspace{-20pt}
 \capstart
 \begin{center}
-  \includegraphics[scale=0.65]{LockedProperties}
+  \includegraphics[scale=0.8]{LockedProperties}
  \end{center}
  \vspace{-20pt}
  \caption{Locked Properties}
  \label{fig:locked_properties}
- \vspace{-10pt}
 \end{wrapfigure}
 
 Select the \texttt{Platform} entity from the \textbf{Hierarchy} view and take a look at the \textbf{Entity}
@@ -435,7 +443,7 @@ layer name to expand it. Every entity that you created so far is located in this
  \end{center}
  \vspace{-20pt}
  \caption{Layers view}
- \label{fig:script_component}
+ \label{fig:layers_view}
  \vspace{-10pt}
 \end{wrapfigure}
 
@@ -498,17 +506,12 @@ in the script and they allow you to control the scripted behavior. In our script
 \textbf{LeftSided} and \textbf{Pivot}. The \textbf{LeftSided} property determines which flipper is the left
 one and which is the other one and the \textbf{Pivot} property defines the location of the pivot point.
 
-
-
-
 Select the \texttt{LeftFlipper} entity and check its \textbf{LeftSided} property checkbox. 
-%TODO jak nastavit spravne Pivot?? metodou pokus omyl?
 
 When you are ready, you can see your flippers in action. Start the action by pressing the \textbf{Play} button
 on the toolbar and try to control your flippers with the \textbf{Left} and \textbf{Right} keys.
 
 To get more info on how to write scripts please see the \texttt{\href{run:./ScriptReference.html}{script reference}} documentation.
-
 
 \subsection{Includes}
 Including other script files is a bit advanced concept which you don't necessarily need to understand but which comes handy from time to time. It allows you to split the code into manageble chunks and share functionality with other script files. You can include another script file into the current file by placing the following line to the top of the file:
