@@ -434,9 +434,7 @@ The first class has methods for managing projects, scene and entities. It manage
 The second class compounds all editor GUI layouts such as the game and editor viewports, the entity, resource, prototype and layer views and the editor menu and it initializes and updates them.
 
 \section{Editor views}
-There are five classes that provide five views in the editor. The \emph{Editor\::EntityWindow} class manages the Entity view.
-
-There are seven layout classes for editor components. All of them have initialization and update methods and callbacks for significant events and load their look from an external XML file and introduce the reactions on events and loading data from the application. The \emph{Editor\::CreateProjectDialog} represents the dialog for creating a new project, the \emph{Editor\::HierarchyWindow} manages the hierarchy of entities, the \emph{Editor\::LayerWindow} manages the layers the entities are put to, the \emph{Editor\::PrototypeWindow} manages the prototypes of entities, the \emph{Editor\::EntityWindow} manages components and properties of entities, the \emph{Editor\::ResourceWindow} manages the resources that the entities can use and the \emph{Editor\::EditorMenu} represents the main menu and toolbar.
+There are seven layout classes for editor components, five of them provide five views in the editor. All of them have initialization and update methods and callbacks for significant events and load their look from an external XML file and introduce the reactions on events and loading data from the application. The \emph{Editor\::CreateProjectDialog} represents the dialog for creating a new project, the \emph{Editor\::HierarchyWindow} manages the hierarchy of entities, the \emph{Editor\::LayerWindow} manages the layers the entities are put to, the \emph{Editor\::PrototypeWindow} manages the prototypes of entities, the \emph{Editor\::EntityWindow} manages components and properties of entities, the \emph{Editor\::ResourceWindow} manages the resources that the entities can use and the \emph{Editor\::EditorMenu} represents the main menu and toolbar.
 
 \section{Value editors}
 
