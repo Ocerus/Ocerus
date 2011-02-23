@@ -241,7 +241,9 @@ void GUISystem::FolderSelector::UpdateFolderList()
 	}
 	Containers::sort(mFolders.begin(), mFolders.end());
 
-	mPathBox->setText(utf8StringToCEGUI(GetRelativePath(mCurrentPath)));
+	if (IsStringValid(mCurrentPath)) mPathBox->setText(utf8StringToCEGUI(GetRelativePath(mCurrentPath)));
+	else mPathBox->setText("!INVALID-PATH!");
+
 	mFolderList->resetList();
 
 	for (vector<string>::iterator it = mFolders.begin(); it != mFolders.end(); ++it)
