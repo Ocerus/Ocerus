@@ -48,13 +48,13 @@ Konec:
 
 - dobry den, ja jsem Ondrej Mocny a chci vam tu predstavit softwarovy projekt Ocerus
 - nejdriv kratce popisu, co Ocerus je, zminim se o jeho autorech, a pak budu mluvit o hlavnich vlasnostech aplikace
-- na zaver tu bude urcite cas na dotazy
+- na zaver bude cas na dotazy
 - Ocerus je nastroj pro tvorbu 2.5D her
 - 2.5D, alespon v nasem pojeti, znamena, ze vetsina herni akce i zobrazovani se deje ve 2 rozmerech, ale nektere objekty mohou byt trojrozmerne
 - Ocerus integruje dohromady herni engine s editorem
 - a abysme tohle demonstrovali, tak jsme prezentaci pripravili primo v nasem editoru jako hru, ve ktere hrac ovlada rotujici krabici
 - takze budeme moct primo ukazovat to, o cem budu dal mluvit
-- tady muzete videt portrety nas-autoru
+- tady muzeme videt portrety nas-autoru
 - pokud nas nepoznavate, tak ja jsem Ondrej Mocny, tohle je Lukas Herman, tohle Tomas Svoboda a Michal Cevora tu neska neni
 - kdyz se posunem dal, tak je tu seznam takovych standardnich veci, ktere herni engine musi umet k tomu, aby na nem nejaka hra bezela
 - takze, jak muzete videt z padajicich bedynek, mame tu fyzikalni engine, podporu pro GUI, viz tlacitka na stranach obrazovky, mame podporu pro skipty, atd.
